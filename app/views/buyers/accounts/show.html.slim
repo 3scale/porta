@@ -7,7 +7,7 @@ h1 data-hook="account-show"
               class: 'action edit'
 #twoCol.equal-width
   .left
-    .wide_dashboard_bubble.round
+    .wide_dashboard_card.round
       table.list
         tr
           th = @account.field_label("org_name")
@@ -77,7 +77,7 @@ h1 data-hook="account-show"
     - if can?(:update, :provider_plans) && can?(:update, @account.bought_cinstance.service)
       = render 'master/providers/plans/widget', provider: @account
     - if can?(:manage, :finance)
-      .dashboard_bubble.round
+      .dashboard_card.round
         = render 'monthly_charging', account: @account
 
   .right_narrow
@@ -90,7 +90,7 @@ h1 data-hook="account-show"
 
       - if can?(:manage, :plans) \
            && @account.provider_account.account_plans.stock.published.size > 1
-        .dashboard_bubble.round
+        .dashboard_card.round
           h3
             label for="cinstance_plan_id" Change Plan
 
