@@ -260,10 +260,6 @@ class Api::IntegrationsController < Api::BaseController
     "#{current_account.id}/deploying_hosted"
   end
 
-  def proxy_rules_added_for_last_method_metric?
-    @proxy.proxy_rules.size > 1
-  end
-
   def toggle_land_path
     @proxy.apicast_configuration_driven ? admin_service_integration_path(@service) : edit_admin_service_integration_path(@service)
   end

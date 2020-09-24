@@ -124,16 +124,8 @@ class Api::ServicesController < Api::BaseController
     apiap? ? 'Product' : 'Service'
   end
 
-  def service_name_changed?
-    @service.previous_changes['name']
-  end
-
   def integration_method_changed?
     @service.previous_changes['deployment_option']
-  end
-
-  def integration_method_self_managed?
-    @service.proxy.self_managed?
   end
 
   def collection
