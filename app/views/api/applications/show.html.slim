@@ -8,7 +8,7 @@ h1
 
 div#twoCol.equal-width
   div.left
-    div.wide_dashboard_bubble.round
+    div.wide_dashboard_card.round
       table.list
         tr
           th Account
@@ -24,24 +24,24 @@ div#twoCol.equal-width
             td
               = link_to service.name, admin_service_path(service)
       = render '/buyers/applications/state'
-    div.wide_dashboard_bubble.round#application_keys data-object="cinstance" data-url=(admin_service_application_path(@cinstance.service, @cinstance, format: :json))
+    div.wide_dashboard_card.round#application_keys data-object="cinstance" data-url=(admin_service_application_path(@cinstance.service, @cinstance, format: :json))
       h3 API Credentials
       = render partial: 'provider/admin/keys/widget',
                locals: { cinstance: @cinstance }
 
 
     - if @cinstance.service.referrer_filters_required?
-      div.wide_dashboard_bubble.round
+      div.wide_dashboard_card.round
         = render partial: 'provider/admin/referrer_filters/widget',
                locals: { cinstance: @cinstance }
 
-    div.wide_dashboard_bubble.round
+    div.wide_dashboard_card.round
       h3 Usage in last 30 Days
       = render 'stats/inlinechart',
                cinstance: @cinstance,
                metrics: @cinstance.service.metrics.top_level
 
-    div.wide_dashboard_bubble.round
+    div.wide_dashboard_card.round
       h3 Current Utilization
       = render partial: 'buyers/applications/utilization',
                locals: { utilization: @utilization, cinstance: @cinstance }
