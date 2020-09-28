@@ -1,4 +1,4 @@
-<div class="dashboard_bubble round">
+<div class="dashboard_card round">
   <h3>Sample Data</h3>
 
   <p>
@@ -10,11 +10,6 @@
   <p>
     <%= fancy_link_to 'Create Sample Data', provider_admin_sample_data_path,
                        :method => :post, :class => 'sample-data' %>
-    <% help_bubble 'sample-data' do %>
-      We will create 2 sample accounts, plans and applications for you.
-      You can use them as testing data and delete them when you no longer need them.
-      They are in no way special or necessary once you have your own settings in place.
-    <% end %>
   </p>
 
   </p>

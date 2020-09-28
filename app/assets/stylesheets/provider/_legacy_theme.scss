@@ -1,6 +1,8 @@
 @import 'provider/layouts/main';
 
-div.dashboard_bubble, div.wide_dashboard_bubble, div.narrow_dashboard_bubble {
+div.dashboard_card,
+div.wide_dashboard_card,
+div.narrow_dashboard_card {
   @include white-box-shadow;
   border: 0;
   margin-bottom: line-height-times(1);

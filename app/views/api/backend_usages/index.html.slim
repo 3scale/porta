@@ -9,7 +9,6 @@ table#backend_api_configs.data
       th = sortable('backend_apis.private_endpoint', 'Private Base URL')
       th
         = sortable('backend_api_configs.path', 'Public Path')
-        = help_bubble( 'api_endpoint_bubble', t('api.backend_apis.public_path_help_html'))
       th.actions
         = action_link_to :add, new_admin_service_backend_usage_path(@service), label: 'Add Backend'
   tbody

@@ -422,7 +422,7 @@ form.formtastic .radio fieldset {
   margin: 0 0 line-height-times(1/4) 0;
 }
 
-.dashboard_bubble form.formtastic fieldset > ol > li.boolean label {
+.dashboard_card form.formtastic fieldset>ol>li.boolean label {
   padding-left:0;
 }
 
@@ -569,7 +569,7 @@ li.hidden {
 }
 
 
-.dashboard_bubble form.formtastic {
+.dashboard_card form.formtastic {
   box-shadow: none;
   margin: 0;
   padding: line-height-times(1) 0 0;

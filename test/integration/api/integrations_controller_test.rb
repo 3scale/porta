@@ -309,35 +309,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_match "Promote v. #{config.version} to Production APIcast", response.body
   end
 
-  test 'update should change api bubble state to done' do
-    provider.create_onboarding
-    FactoryBot.create(:service_token, service: service)
-
-    rolling_updates_on
-    Account.any_instance.expects(:provider_can_use?).returns(false).at_least_once
-    ProxyTestService.any_instance.stubs(:disabled?).returns(true)
-    Proxy.any_instance.stubs(:deploy).returns(true)
-
-    put admin_service_integration_path(proxy: {api_backend: 'http://some-api.example.com:443'}, service_id: service.id)
-    assert_response :redirect
-
-    assert_equal 'api_done', provider.reload.onboarding.bubble_api_state
-  end
-
-  test 'update production should change deployment bubble state to done' do
-    provider.create_onboarding
-    FactoryBot.create(:service_token, service: service)
-    backend_api = service.backend_apis.first!
-
-    rolling_updates_on
-    backend_api.update_column(:private_endpoint, 'http://some-api.example.com')
-
-    patch update_production_admin_service_integration_path(proxy: { api_backend: 'http://some-api.example.com:443'}, service_id: service.id)
-    assert_response :redirect
-
-    assert_equal 'deployment_done', provider.reload.onboarding.bubble_deployment_state
-  end
-
   test 'download nginx config' do
     provider.create_onboarding
     get admin_service_integration_path(service_id: service.id, format: :zip)
@@ -352,7 +323,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
       assert zip.get_next_entry
     end
 
-    assert_equal 'deployment_done', provider.reload.onboarding.bubble_deployment_state
   end
 
   test 'cannot update custom public endpoint when using APIcast' do

@@ -35,8 +35,6 @@ table class="data"
       - if current_account.settings.finance.allowed?
         th
           ' Paid?
-          = help_bubble 'free_or_paid' do
-            | 'Free' applications are those, whose plan has no billing rules associated. 'Paid' are all the others.
 
       th = sortable('cinstances.created_at', 'Created At')
       th = sortable('cinstances.first_daily_traffic_at', 'Traffic On')

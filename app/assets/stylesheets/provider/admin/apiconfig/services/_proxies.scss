@@ -294,13 +294,6 @@ form.formtastic fieldset > ol > li.radio--iconic {
 }
 
 #integration-tabs {
-
-  .inlineHelper {
-    left: auto !important;
-    right: line-height-times(-1/4);
-    border-top-right-radius: 0;
-  }
-
   .ui-tabs-panel {
     padding: 2em;
     background-color: $integration-tab-active-bg-color;
@@ -477,16 +470,6 @@ form.proxy {
     text-align: center;
     color: transparent;
   }
-
-  #help_layer_proxy_rule_bubble {
-      ul { list-style: circle; }
-      p, table { margin-bottom: 1em; }
-      table {
-          width: 100%;
-          padding-left: 1em;
-      }
-  }
-
   table#backend_apis {
     input.backend_usage_path {
       margin-left: line-height-times(1/2);

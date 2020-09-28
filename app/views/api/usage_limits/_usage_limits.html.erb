@@ -3,15 +3,6 @@
     <thead>
       <tr class="table_title">
         <th colspan='2'>Usage Limits
-          <%= help_bubble do %>
-            <h3>Limits</h3>
-            <p>Limits define the maximum value a metric can take on a contract before the user is no
-            longer authorized to use resources. Once a limit has been passed in a given
-            period, reject messages will be issued if the service is accessed under this
-            contract. See the 3scale FAQ for more.</p>
-
-            <p>Limits have no impact on billing.</p>
-          <% end %>
         </th>
         <th class="operations">
           <%= link_to 'New usage limit', new_polymorphic_path([:admin, @plan, @metric, :usage_limit]), :class => 'fancybox action add', 'data-autodimensions' => 'true' %>

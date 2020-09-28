@@ -5,24 +5,12 @@
     <tr>
       <th>Month</th>
       <th class="u-amount">Total
-        <%= help_bubble 'all' do %>
-          All invoices excluding cancelled
-        <% end %>
       </th>
       <th class="u-amount">In process
-        <%= help_bubble 'in_process' do %>
-          Open, Finalized and Pending invoices
-        <% end %>
       </th>
       <th class="u-amount">Overdue
-        <%= help_bubble 'overdue' do %>
-           Failed and Unpaid invoices
-        <% end %>
       </th>
       <th class="u-amount">Paid
-        <%= help_bubble 'paid' do %>
-          Paid invoices
-        <% end %>
       </th>
     </tr>
   </thead>

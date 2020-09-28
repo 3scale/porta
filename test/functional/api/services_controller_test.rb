@@ -87,18 +87,6 @@ class Api::ServicesControllerTest < ActionController::TestCase
     assert_response 400
   end
 
-  def test_service_create_should_change_api_bubble_state
-    @provider.create_onboarding
-
-    @controller.stubs(:authorize_plans)
-    @controller.stubs(:can_create?).returns(true)
-
-    post :create, service: { name: 'Test bubbles' }
-
-    assert_response 302
-    assert_equal 'api_done', @provider.reload.onboarding.bubble_api_state
-  end
-
   def test_update
     assert_not_equal @service.name, 'Supetramp'
 

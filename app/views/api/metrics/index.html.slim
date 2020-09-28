@@ -2,9 +2,6 @@
 
 = javascript_include_tag 'vendor/jquery/extensions/jquery.cookie.js'
 
-- content_for :javascripts do
-  = javascript_pack_tag 'bubbles'
-
 section.Section.u-toggleableBySettingsBox data-state="open"
   h2 Methods
   p
@@ -49,9 +46,6 @@ section.Section.u-toggleableBySettingsBox data-state="open"
               td.actions
 
           javascript:
-            document.addEventListener('DOMContentLoaded', function () {
-              showBubble(#{json bubbles.take(1).as_json})
-            })
             $(document).on('click', 'a[data-behavior~=open-mapping-rules]', function(event){
               // Unfold the mapping section of the integration page by
               // setting the cookie value that controls it
