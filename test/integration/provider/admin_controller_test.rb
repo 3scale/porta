@@ -23,8 +23,6 @@ class Provider::AdminControllerTest < ActionDispatch::IntegrationTest
     get provider_admin_path # for the second time
     assert_redirected_to provider_admin_dashboard_path
 
-    provider.onboarding.finish_process!
-
     get provider_admin_path # when all finished
     assert_redirected_to provider_admin_dashboard_path
   end

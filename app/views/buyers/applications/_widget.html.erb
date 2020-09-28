@@ -2,7 +2,7 @@
 <%- cinstance = cinstances.first! if cinstances.count == 1 -%>
 
 <%- if cinstance && can?(:read, cinstance) -%>
-  <div class="dashboard_bubble round">
+  <div class="dashboard_card round">
     <div id="applications_widget">
       <h2>Application</h2>
       <table class="list">

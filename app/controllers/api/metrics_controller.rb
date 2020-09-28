@@ -35,7 +35,6 @@ class Api::MetricsController < Api::BaseController
     respond_to do |format|
       if @metric.save
         flash.now[:notice] = 'Metric has been created.'
-        onboarding.bubble_update('metric')
         format.html do
           flash[:notice] = "The #{@metric.child? ? 'method' : 'metric'} was created"
           redirect_to admin_service_metrics_path(@service)

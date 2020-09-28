@@ -24,7 +24,6 @@
       i.fa.fa-puzzle-piece
       = f.inputs "API" do
         = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend } }, hint: api_backend_hint(@proxy.api_backend)
-        = help_bubble( 'api_endpoint_bubble', t('api.integrations.proxy.api_endpoint_help_html'))
 
     div class=("feedback proxy #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-hdd-o
@@ -33,7 +32,6 @@
           = f.input :endpoint
         - else
           = f.input :sandbox_endpoint, input_html: { data: { default: @proxy.sandbox_endpoint}, readonly: true }
-        = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
         div.help-button-constrainer
           = render 'api/integrations/apicast/shared/mapping_rules', f: f
         div.help-button-constrainer

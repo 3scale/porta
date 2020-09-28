@@ -11,24 +11,6 @@ class Onboarding < ApplicationRecord
   end
 
 
-  BUBBLES = %I[api metric mapping limit deployment].freeze.each do |name|
-    initial = "#{name}_pending"
-    done = "#{name}_done"
-    trigger =  "set_#{name}"
-
-    state_machine "bubble_#{name}_state", :initial => initial do
-      state initial
-      state done
-
-      event trigger do
-        transition initial => done
-      end
-    end
-
-    private trigger
-  end
-
-
   state_machine :wizard_state, :initial => :initial, :namespace => 'wizard' do
 
     event :start do
@@ -42,15 +24,7 @@ class Onboarding < ApplicationRecord
   end
 
   def active?
-    persisted? && !process_finished?
-  end
-
-  def process_finished?
-    BUBBLES.all? { |bubble| public_send "#{bubble}_done?" }
-  end
-
-  def finish_process!
-    BUBBLES.map(&method(:bubble_update)).all?
+    persisted?
   end
 
   def wizard_started?
@@ -65,20 +39,4 @@ class Onboarding < ApplicationRecord
     finish_wizard
   end
 
-  def bubble_update(bubble_name)
-    updated = fire_events("set_#{bubble_name}")
-
-    if updated
-      ThreeScale::Analytics.current_user.track('Finished Onboarding Bubble', bubble: bubble_name)
-    end
-
-    updated
-  end
-
-
-  def bubbles
-    BUBBLES.map do |bubble|
-      bubble if public_send("#{bubble}_pending?")
-    end.compact
-  end
 end

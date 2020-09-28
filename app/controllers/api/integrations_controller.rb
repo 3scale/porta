@@ -30,14 +30,12 @@ class Api::IntegrationsController < Api::BaseController
     elsif @proxy.save_and_deploy(proxy_params)
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
       flash[:notice] = flash_message(:update_success, environment: environment)
-      update_onboarding_mapping_bubble
       update_mapping_rules_position
 
       return redirect_to admin_service_integration_path(@service) if apiap?
 
       if @proxy.send_api_test_request!
         api_backend = @proxy.api_backend
-        onboarding.bubble_update('api')
         done_step(:api_sandbox_traffic) if api_backend.present? && ApiClassificationService.test(api_backend).real_api?
         return redirect_to edit_path
       end
@@ -64,7 +62,6 @@ class Api::IntegrationsController < Api::BaseController
     flash[:notice] = flash_message(:update_production_success)
 
     done_step(:apicast_gateway_deployed, final_step=true) if ApiClassificationService.test(@proxy.api_backend).real_api?
-    onboarding.bubble_update('deployment')
 
     redirect_to action: :edit, anchor: 'proxy'
   end
@@ -94,7 +91,6 @@ class Api::IntegrationsController < Api::BaseController
       end
 
       format.zip do
-        onboarding.bubble_update('deployment')
 
         source = if provider_can_use?(:apicast_per_service)
                    Apicast::UserSource.new(current_user)
@@ -159,8 +155,6 @@ class Api::IntegrationsController < Api::BaseController
 
   def proxy_pro_update
     if @proxy.update_attributes(proxy_params)
-      update_onboarding_mapping_bubble
-      onboarding.bubble_update('api')
       update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
       redirect_to_edit_or_show
@@ -264,14 +258,6 @@ class Api::IntegrationsController < Api::BaseController
 
   def deploying_hosted_proxy_key
     "#{current_account.id}/deploying_hosted"
-  end
-
-  def update_onboarding_mapping_bubble
-    onboarding.bubble_update('mapping') if proxy_rules_added_for_last_method_metric?
-  end
-
-  def proxy_rules_added_for_last_method_metric?
-    @proxy.proxy_rules.size > 1
   end
 
   def toggle_land_path

@@ -25,11 +25,6 @@ class ProxyDeploymentWorker
       analytics.track('Sandbox Proxy Deploy', success: deployed, errors: proxy.errors[:sandbox_endpoint], id: deployment_id)
 
       if deployed
-        if (api_test_result = proxy.send_api_test_request!)
-          if ApiClassificationService.test(proxy.api_backend).real_api?
-            provider.onboarding.bubble_update('api')
-          end
-        end
 
         message_bus.publish('/apicast/test',
                             { id: deployment_id, test: api_test_result, errors: proxy.errors },

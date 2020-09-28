@@ -3,5 +3,5 @@
   = link_to (apiap? ? admin_service_proxy_rules_path(@service) : edit_mapping_rule_url) do
     i.fa.fa-check
 - else
-  = link_to 'Add a mapping rule', (apiap? ? new_admin_service_proxy_rule_path(@service) : edit_mapping_rule_url), data: { behavior: 'open-mapping-rules', bubble: 'mapping' }
+  = link_to 'Add a mapping rule', (apiap? ? new_admin_service_proxy_rule_path(@service) : edit_mapping_rule_url), data: { behavior: 'open-mapping-rules' }
 
