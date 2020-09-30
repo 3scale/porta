@@ -13,6 +13,11 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
 
   attr_reader :provider
 
+  test '#index' do
+    get provider_admin_backend_apis_path
+    assert_response :success
+  end
+
   test '#new' do
     get new_provider_admin_backend_api_path
     assert_response :success

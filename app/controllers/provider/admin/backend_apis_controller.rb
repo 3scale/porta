@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 class Provider::Admin::BackendApisController < Provider::Admin::BaseController
-  before_action :find_backend_api, except: %i[new create]
+  include ThreeScale::Search::Helpers
+
+  before_action :find_backend_api, except: %i[index new create]
   before_action :authorize
 
   activate_menu :backend_api, :overview
   layout 'provider'
+
+  def index
+    activate_menu :dashboard
+    @backend_apis = current_account.backend_apis
+                                   .paginate(pagination_params)
+  end
 
   def new
     activate_menu :dashboard
