@@ -2,10 +2,10 @@
 
 class MessageRecipientDecorator < ApplicationDecorator
   def receiver
-    @receiver ||= super.decorate
+    @receiver ||= super&.decorate
   end
 
   def sender
-    @sender ||= super.decorate
+    @sender ||= super&.decorate
   end
 end
