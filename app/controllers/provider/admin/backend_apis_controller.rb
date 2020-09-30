@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 
 class Provider::Admin::BackendApisController < Provider::Admin::BaseController
+  include ThreeScale::Search::Helpers
+
   load_and_authorize_resource :backend_api, through: :current_user, through_association: :accessible_backend_apis
 
   activate_menu :backend_api, :overview
   layout 'provider'
+
+  def index
+    activate_menu :dashboard
+    @backend_apis = current_account.backend_apis
+                                   .paginate(pagination_params)
+  end
 
   def new
     activate_menu :dashboard

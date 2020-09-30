@@ -199,7 +199,7 @@ without fake Core server your after commit callbacks will crash and you might ge
     get 'admin', to: 'admin#show'
 
     namespace :admin do
-      resources :backend_apis, :except => [:index] do
+      resources :backend_apis do
         scope module: :backend_apis do
           resources :metrics, :except => [:show] do
             resources :children, :controller => 'metrics', :only => [:new, :create]
@@ -763,7 +763,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :usage_limits, only: %i[edit update destroy]
         end
 
-        resources :services, except: :index do
+        resources :services do
           member do
             get :settings
             get :usage_rules
