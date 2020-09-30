@@ -23,7 +23,7 @@ module TopicIndex
   end
 
   def sphinx_post_bodies
-    posts.pluck(:body).join(' ')
+    posts.pluck(:body).join(' ').to_s[0...8_000_000]
   end
 
   module ForPost
