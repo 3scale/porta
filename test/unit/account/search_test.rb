@@ -65,18 +65,46 @@ class Account::SearchTest < ActiveSupport::TestCase
     assert_equal 'fo\/o', Account.search_ids('fo/o').query
   end
 
-  test 'search with query by email' do
+  test 'search with query by org name' do
+    NAMES = ['Pepe&co', 'University of Mars', 'One, Two and Three', 'Queco-Jones', 'Something-Else'].freeze
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
         provider = FactoryBot.create(:simple_provider)
-        buyers = FactoryBot.create_list(:simple_buyer, 2, provider_account: provider)
-        ['foo@bar.co.example.com', 'foo@example.org'].each_with_index do |email, buyer_index|
-          FactoryBot.create(:admin, account: buyers[buyer_index], email: email)
-        end
 
-        buyers = provider.buyer_accounts.scope_search(:query => 'foo@bar.co.example.com')
-        expected_buyer = User.find_by!(email: 'foo@bar.co.example.com').account
-        assert_equal [expected_buyer], buyers
+        NAMES
+          .each do |name|
+            buyer = FactoryBot.create(:simple_buyer, provider_account: provider, org_name: name)
+            FactoryBot.create(:admin, account: buyer)
+          end
+
+        NAMES
+          .each do |name|
+            buyers = provider.buyer_accounts.scope_search(:query => name)
+            expected_buyer = Account.find_by!(org_name: name)
+            assert_equal [expected_buyer], buyers
+          end
+      end
+    end
+  end
+
+  test 'search with query by email' do
+    EMAILS = %w[foo@bar.co.example.com foo@example.org foo@u.example.com].freeze
+    ThinkingSphinx::Test.rt_run do
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+        provider = FactoryBot.create(:simple_provider)
+
+        EMAILS
+          .each do |email|
+            buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+            FactoryBot.create(:admin, account: buyer, email: email)
+          end
+
+        EMAILS
+          .each do |email|
+            buyers = provider.buyer_accounts.scope_search(:query => email)
+            expected_buyer = User.find_by!(email: email).account
+            assert_equal [expected_buyer], buyers
+          end
       end
     end
   end

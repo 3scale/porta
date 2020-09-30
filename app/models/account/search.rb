@@ -56,7 +56,7 @@ class Account
         return [] if query.blank?
 
         options = options
-                  .reverse_merge(ids_only: true, per_page: 1_000_000, star: true,
+                  .reverse_merge(ids_only: true, per_page: 1_000_000, star: false,
                                  ignore_scopes: true, with: { })
 
         if (tenant_id = User.tenant_id)
