@@ -53,10 +53,8 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
 
   test '#create' do
     assert_change of: -> { service.backend_api_configs.count }, by: 1 do
-      post admin_service_backend_usages_path(service), backend_api_config: {
-        backend_api_id: backend_api.id,
-        path: 'foo'
-      }
+      backend_api_config_params = { backend_api_id: backend_api.id, path: 'foo' }
+      post admin_service_backend_usages_path(service), params: { backend_api_config: backend_api_config_params }
       assert_redirected_to admin_service_backend_usages_path(service)
       assert_equal 'Backend added to Product.', flash[:notice]
       assert_equal backend_api, service.backend_api_configs.find_by(path: '/foo').backend_api
@@ -68,10 +66,8 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     other_backend_api_id = FactoryBot.create(:backend_api, account: service.account).id
 
     assert_no_change of: -> { service.backend_api_configs.count } do
-      post admin_service_backend_usages_path(service), backend_api_config: {
-        backend_api_id: other_backend_api_id,
-        path: 'foo'
-      }
+      backend_api_config_params = { backend_api_id: other_backend_api_id, path: 'foo' }
+      post admin_service_backend_usages_path(service), params: { backend_api_config: backend_api_config_params }
       assert_equal "Couldn't add Backend to Product", flash[:error]
       refute service.backend_api_configs.find_by(backend_api_id: other_backend_api_id)
     end
@@ -82,10 +78,8 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     backend_api.update_column(:account_id, other_provider.id)
 
     assert_no_change of: -> { service.backend_api_configs.count } do
-        post admin_service_backend_usages_path(service), backend_api_config: {
-        backend_api_id: backend_api.id,
-        path: 'foo'
-      }
+      backend_api_config_params = { backend_api_id: backend_api.id, path: 'foo' }
+      post admin_service_backend_usages_path(service), params: { backend_api_config: backend_api_config_params }
       assert_response :not_found
     end
   end
@@ -99,7 +93,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
 
   test '#update' do
     config = service.backend_api_configs.create(backend_api: backend_api, path: 'foo')
-    put admin_service_backend_usage_path(service, config), backend_api_config: { path: 'bar' }
+    put admin_service_backend_usage_path(service, config), params: { backend_api_config: { path: 'bar' } }
     assert_redirected_to admin_service_backend_usages_path(service)
     assert_equal 'Backend usage was updated.', flash[:notice]
     assert_equal '/bar', config.reload.path
@@ -108,7 +102,7 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
   test 'cannot change backend_api' do
     config = service.backend_api_configs.create(backend_api: backend_api, path: 'whatever')
     other_backend_api = FactoryBot.create(:backend_api, account: service.account)
-    put admin_service_backend_usage_path(service, config), backend_api_config: { backend_api_id: other_backend_api.id }
+    put admin_service_backend_usage_path(service, config), params: { backend_api_config: { backend_api_id: other_backend_api.id } }
     assert_redirected_to admin_service_backend_usages_path(service)
     assert_equal backend_api.id, config.reload.backend_api_id
   end
@@ -121,16 +115,6 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'The Backend was removed from the Product', flash[:notice]
       refute service.backend_api_configs.find_by(path: 'foo')
     end
-  end
-
-  test 'permission' do
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
-    get admin_service_backend_usages_path(service)
-    assert_response :forbidden
-
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
-    get admin_service_backend_usages_path(service)
-    assert_response :success
   end
 
   test 'member user' do

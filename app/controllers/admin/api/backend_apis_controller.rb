@@ -129,7 +129,8 @@ class Admin::Api::BackendApisController < Admin::Api::BaseController
   private_constant :DEFAULT_PARAMS
 
   def authorize
-    authorize! :manage, BackendApi
+    return unless current_user # provider_key access
+    authorize! action_name.to_sym, BackendApi
   end
 
   def backend_api
