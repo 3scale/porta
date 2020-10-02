@@ -14,7 +14,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   test 'index' do
     get admin_services_path
-    assert response
+    assert_response :success
   end
 
   class SettingsTest < self
