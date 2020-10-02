@@ -26,7 +26,7 @@ class Provider::AdminController < FrontendController
   end
 
   def onboarding_active?
-    onboarding.active?
+    onboarding.persisted?
   end
 
   def has_permission?
