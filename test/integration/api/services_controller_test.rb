@@ -12,6 +12,11 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   attr_reader :service
 
+  test 'index' do
+    get admin_services_path
+    assert response
+  end
+
   class SettingsTest < Api::ServicesControllerTest
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
