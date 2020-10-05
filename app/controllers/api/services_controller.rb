@@ -124,10 +124,6 @@ class Api::ServicesController < Api::BaseController
     apiap? ? 'Product' : 'Service'
   end
 
-  def integration_method_changed?
-    @service.previous_changes['deployment_option']
-  end
-
   def collection
     current_user.accessible_services
   end
