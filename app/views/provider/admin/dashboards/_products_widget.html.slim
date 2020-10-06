@@ -1,0 +1,4 @@
+div#products-widget data-products-widget={ products: @widget_products,
+                                           newProductPath: new_admin_service_path,
+                                           productsPath: admin_services_path }.to_json
+  = javascript_pack_tag 'dashboard_products_widget'
