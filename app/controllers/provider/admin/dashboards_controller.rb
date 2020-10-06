@@ -14,6 +14,14 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
+
+    # Refactor these two into a decorator and add missing data
+    @widget_products = @services.order(updated_at: :desc)
+                                .take(5)
+                                .to_json(root: false, only: [:name, :updated_at, :id])
+    @widget_backends = current_account.backend_apis.includes(:services).order(updated_at: :desc)
+                                                                       .take(5)
+                                                                       .to_json(root: false, only: [:name, :updated_at, :id])
   end
 
   include DashboardTimeRange
