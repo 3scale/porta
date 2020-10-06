@@ -1,0 +1,10 @@
+table#services
+  thead
+    tr
+      th Name
+      th System name
+  tbody
+    - @services.each do |service|
+      tr
+        td = link_to service.name, admin_service_path(service)
+        td = service.system_name

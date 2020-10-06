@@ -2,6 +2,7 @@
 
 class Api::ServicesController < Api::BaseController
   include ServiceDiscovery::ControllerMethods
+  include ThreeScale::Search::Helpers
 
   activate_menu :serviceadmin, :overview
 
@@ -14,6 +15,12 @@ class Api::ServicesController < Api::BaseController
 
   with_options only: %i[edit update settings usage_rules] do |actions|
     actions.sublayout 'api/service'
+  end
+
+  def index
+    activate_menu :dashboard
+    @services = current_user.accessible_services
+                            .paginate(pagination_params)
   end
 
   def show
