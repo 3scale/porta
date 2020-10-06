@@ -35,14 +35,12 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
 }
 
 const injectParametersToPathOperation = (pathOperation: PathOperationObject, accountData: AccountData): PathOperationObject => {
-  const operationParameters = pathOperation.parameters || undefined
-  if (!operationParameters) {
-    return pathOperation
-  }
+  const operationParameters = pathOperation.parameters
+  if (!operationParameters) return pathOperation
   const parametersWithAutocompleteData = operationParameters.map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
   return {
     ...pathOperation,
-    'parameters': parametersWithAutocompleteData
+    parameters: parametersWithAutocompleteData
   }
 }
 
@@ -52,11 +50,9 @@ const injectAutocompleteToCommonParameters = (parameters: Array<Param>, accountD
 
 const injectParametersToPath = (path: PathItemObject, commonParameters: Array<Param>, accountData: AccountData): PathItemObject => (
   Object.keys(path).reduce((updatedPath, item) => {
-    if (item === 'parameters' && commonParameters) {
-      updatedPath[item] = injectAutocompleteToCommonParameters(commonParameters, accountData)
-    } else {
-      updatedPath[item] = injectParametersToPathOperation(path[item], accountData)
-    }
+    updatedPath[item] = (item === 'parameters' && commonParameters)
+      ? injectAutocompleteToCommonParameters(commonParameters, accountData)
+      : injectParametersToPathOperation(path[item], accountData)
     return updatedPath
   }, {})
 )
