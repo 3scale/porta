@@ -1,6 +1,9 @@
 // @flow
 
-import React from 'react'
+import React from 'react';
+import { Card } from '@patternfly/react-core';
+import 'Dashboard/styles/dashboard.scss';
+import 'patternflyStyles/dashboard';
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
@@ -22,7 +25,9 @@ const BackendsWidget = (props: Props) => {
   console.log(props)
 
   return (
-    <div>Backends</div>
+    <Card>
+      Backends go here
+    </Card>
   )
 }
 
