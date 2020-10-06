@@ -9,7 +9,6 @@ $border-radius: 4px;
 $font-color: $outerSpaceGray;
 
 .ApiFilter {
-
   float: left;
   width: auto;
   border: $border-width solid $border-color;
@@ -28,4 +27,36 @@ $font-color: $outerSpaceGray;
     width: auto;
     padding: 0.5rem;
   }
+}
+
+.dashboard-list-icon-title-layout {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-list-icon-title-layout svg {
+  font-size: 28px;
+  margin-right: 8px;
+}
+
+.dashboard-list-subtitle {
+  margin-top: 8px;
+}
+
+.pf-c-card__footer {
+  margin-left: auto;
+}
+
+.pf-c-data-list__item-row {
+  --pf-c-data-list__item-row--PaddingLeft: 0;
+}
+
+.dashboard-list-secondary {
+  color: var(--pf-global--disabled-color--100);
+  font-size: var(--pf-global--FontSize--sm);
+}
+
+.dashboard-list-item-action > button.pf-c-dropdown__toggle {
+  border-width: 0 !important;
+  border: 0 !important;
 }
