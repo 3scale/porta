@@ -4,6 +4,8 @@ import { fetchData } from 'utilities/utils'
 import type {
   AccountData,
   Param,
+  PathItemObject,
+  PathOperationObject,
   ResponseBody,
   SwaggerResponse
 } from 'Types/SwaggerTypes'
@@ -32,7 +34,7 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
     : param
 }
 
-const injectParametersToPathOperation = (pathOperation, accountData) => {
+const injectParametersToPathOperation = (pathOperation: PathOperationObject, accountData: AccountData): PathOperationObject => {
   const operationParameters = pathOperation.parameters || undefined
   if (!operationParameters) {
     return pathOperation
@@ -44,11 +46,11 @@ const injectParametersToPathOperation = (pathOperation, accountData) => {
   }
 }
 
-const injectAutocompleteToCommonParameters = (parameters, accountData) => parameters.map(
+const injectAutocompleteToCommonParameters = (parameters: Array<Param>, accountData: AccountData): Array<Param> => parameters.map(
   param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param
 )
 
-const injectParametersToPath = (path, commonParameters, accountData) => (
+const injectParametersToPath = (path: PathItemObject, commonParameters: Array<Param>, accountData: AccountData): PathItemObject => (
   Object.keys(path).reduce((updatedPath, item) => {
     if (item === 'parameters' && commonParameters) {
       updatedPath[item] = injectAutocompleteToCommonParameters(commonParameters, accountData)
