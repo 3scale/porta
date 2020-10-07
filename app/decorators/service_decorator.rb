@@ -52,7 +52,6 @@ class ServiceDecorator < ApplicationDecorator
     false
   end
 
-  # add missing links
   def links
     [
       { name: 'Edit', path: '' },
