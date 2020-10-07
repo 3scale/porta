@@ -22,11 +22,11 @@ class BackendApiDecorator < ApplicationDecorator
   # TODO: add missing links
   def links
     [
-      { name: 'Edit', path: h.edit_provider_admin_backend_api_path(@object) },
-      { name: 'Overview', path: '' },
-      { name: 'Analytics', path: '' },
-      { name: 'Methods & Metrics', path: '' },
-      { name: 'Mapping Rules', path: '' },
+      { name: 'Edit', path: h.edit_provider_admin_backend_api_path(object) },
+      { name: 'Overview', path: h.provider_admin_backend_api_path(object) },
+      { name: 'Analytics', path: h.provider_admin_backend_api_stats_usage_path(object) },
+      { name: 'Methods & Metrics', path: h.provider_admin_backend_api_metrics_path(object) },
+      { name: 'Mapping Rules', path: h.provider_admin_backend_api_mapping_rules_path(object) },
     ]
   end
 
