@@ -15,7 +15,7 @@ class ApplicationDecorator < Draper::Decorator
 
   private
 
-  API_KEYS = %w[id name system_name].freeze
+  API_KEYS = %w[id name system_name links apps_count backends_count unread_alerts_count products_count].freeze
 
   # FIXME: slice makes the presented very rigid. Better use option :only and :methods when calling to_json
   def parse_api(api_hash)

@@ -5,8 +5,6 @@ import React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Props = {
-  newBackendPath: string,
-  backendsPath: string,
   backends: Array<{
     id: number,
     link: string,
@@ -15,19 +13,20 @@ type Props = {
       path: string
     }>,
     name: string,
+    products_count: number,
     type: string,
-    updated_at: string
+    updated_at: string,
   }>
 }
 
-const BackendsWidget = (props: Props) => {
+const BackendsIndexPage = (props: Props) => {
   console.log(props)
 
   return (
-    <div>Backends</div>
+    <div>Backends Index</div>
   )
 }
 
-const BackendsWidgetWrapper = (props: Props, containerId: string) => createReactWrapper(<BackendsWidget {...props} />, containerId)
+const BackendsIndexPageWrapper = (props: Props, containerId: string) => createReactWrapper(<BackendsIndexPage {...props} />, containerId)
 
-export { BackendsWidgetWrapper }
+export { BackendsIndexPageWrapper }

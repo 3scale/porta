@@ -5,9 +5,9 @@ import React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Props = {
-  newProductPath: string,
-  productsPath: string,
   products: Array<{
+    apps_count: number,
+    backends_count: number,
     id: number,
     link: string,
     links: Array<{
@@ -16,18 +16,19 @@ type Props = {
     }>,
     name: string,
     type: string,
+    unread_alerts_count: number,
     updated_at: string
   }>
 }
 
-const ProductsWidget = (props: Props) => {
+const ProductsIndexPage = (props: Props) => {
   console.log(props)
 
   return (
-    <div>Products</div>
+    <div>Products Index</div>
   )
 }
 
-const ProductsWidgetWrapper = (props: Props, containerId: string) => createReactWrapper(<ProductsWidget {...props} />, containerId)
+const ProductsIndexPageWrapper = (props: Props, containerId: string) => createReactWrapper(<ProductsIndexPage {...props} />, containerId)
 
-export { ProductsWidgetWrapper }
+export { ProductsIndexPageWrapper }

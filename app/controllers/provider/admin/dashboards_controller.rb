@@ -18,12 +18,12 @@ class Provider::Admin::DashboardsController < FrontendController
     @widget_products = @services.order(updated_at: :desc)
                                 .decorate
                                 .take(5)
-                                .to_json(only: %i[name updated_at id])
+                                .to_json(only: %i[name updated_at id], methods: %i[links])
     @widget_backends = current_account.backend_apis.includes(:services)
                                                     .order(updated_at: :desc)
                                                     .decorate
                                                     .take(5)
-                                                    .to_json(only: %i[name updated_at id])
+                                                    .to_json(only: %i[name updated_at id], methods: %i[links])
   end
 
   include DashboardTimeRange
