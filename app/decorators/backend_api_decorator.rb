@@ -19,7 +19,6 @@ class BackendApiDecorator < ApplicationDecorator
     true
   end
 
-  # TODO: add missing links
   def links
     [
       { name: 'Edit', path: h.edit_provider_admin_backend_api_path(object) },
