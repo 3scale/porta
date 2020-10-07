@@ -18,7 +18,10 @@ class Api::ServicesController < Api::BaseController
   def index
     activate_menu :dashboard
     @services = current_user.accessible_services
+                            .order(updated_at: :desc)
                             .paginate(pagination_params)
+                            .decorate
+                            .to_json(only: %i[name updated_at id], methods: %i[links apps_count backends_count unread_alerts_count])
   end
 
   def show
