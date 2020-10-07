@@ -17,8 +17,9 @@ class ApplicationDecorator < Draper::Decorator
 
   API_KEYS = %w[id name system_name].freeze
 
+  # FIXME: slice makes the presented very rigid. Better use option :only and :methods when calling to_json
   def parse_api(api_hash)
-    add_link(add_api_type(api_hash.slice(*API_KEYS)))
+    add_updated_at(add_link(add_api_type(api_hash.slice(*API_KEYS))))
   end
 
   def add_link(api_hash)
@@ -28,6 +29,11 @@ class ApplicationDecorator < Draper::Decorator
 
   def add_api_type(api_hash)
     api_hash[:type] = backend_api? ? 'backend' : 'product'
+    api_hash
+  end
+
+  def add_updated_at(api_hash)
+    api_hash[:updated_at] = object.updated_at.to_s :long if object.updated_at?
     api_hash
   end
 
