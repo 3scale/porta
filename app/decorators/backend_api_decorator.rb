@@ -13,4 +13,19 @@ class BackendApiDecorator < ApplicationDecorator
   def backend_api?
     true
   end
+
+  # TODO: add missing links
+  def links
+    [
+      { name: 'Edit', path: h.edit_provider_admin_backend_api_path(@object) },
+      { name: 'Overview', path: '' },
+      { name: 'Analytics', path: '' },
+      { name: 'Methods & Metrics', path: '' },
+      { name: 'Mapping Rules', path: '' },
+    ]
+  end
+
+  def products_count
+    object.services.size
+  end
 end

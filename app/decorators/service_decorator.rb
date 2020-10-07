@@ -51,4 +51,31 @@ class ServiceDecorator < ApplicationDecorator
   def backend_api?
     false
   end
+
+  # add missing links
+  def links
+    [
+      { name: 'Edit', path: '' },
+      { name: 'Overview', path: '' },
+      { name: 'Analytics', path: '' },
+      { name: 'Applications', path: '' },
+      { name: 'ActiveDocs', path: '' },
+      { name: 'Integration', path: '' },
+    ]
+  end
+
+  def apps_count
+    cinstances.size
+  end
+
+  def backends_count
+    backend_apis.size
+  end
+
+  def unread_alerts_count
+    account.buyer_alerts
+           .by_service(object)
+           .unread
+           .size
+  end
 end

@@ -34,13 +34,15 @@ type Props = {
   newProductPath: string,
   productsPath: string,
   products: Array<{
-    name: string,
-    path: string,
-    updatedAt: string,
+    id: number,
+    link: string,
     links: Array<{
       name: string,
       path: string
-    }>
+    }>,
+    name: string,
+    type: string,
+    updated_at: string
   }>
 }
 

@@ -11,13 +11,15 @@ type Props = {
   newBackendPath: string,
   backendsPath: string,
   backends: Array<{
-    name: string,
-    path: string,
-    updatedAt: string,
+    id: number,
+    link: string,
     links: Array<{
       name: string,
       path: string
-    }>
+    }>,
+    name: string,
+    type: string,
+    updated_at: string
   }>
 }
 
