@@ -3,3 +3,6 @@
 @import '~@patternfly/patternfly/components/Button/button.css';
 @import '~@patternfly/patternfly/components/DataList/data-list.css';
 @import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
+@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '~@patternfly/patternfly/layouts/Level/level.css';

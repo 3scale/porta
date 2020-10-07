@@ -1,17 +1,13 @@
 // @flow
 
-import React, {useState} from 'react';
+import React, {useState} from 'react'
 import {
   Button,
   Card,
   CardActions,
-  CardTitle,
   CardBody,
   CardHeader,
   CardFooter,
-  PageSection,
-  Grid,
-  GridItem,
   Title,
   Dropdown,
   DropdownItem,
@@ -23,10 +19,10 @@ import {
   DataListItemRow,
   DataListItemCells,
   DataListAction
-} from '@patternfly/react-core';
-import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon';
-import 'Dashboard/styles/dashboard.scss';
-import 'patternflyStyles/dashboard';
+} from '@patternfly/react-core'
+import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
+import 'Dashboard/styles/dashboard.scss'
+import 'patternflyStyles/dashboard'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
@@ -47,91 +43,105 @@ type Props = {
 }
 
 const ProductsWidget = (props: Props) => {
-  console.log('what are the props' + JSON.stringify(props));
-  console.log('what are the props 2' + JSON.stringify(props.products[0].name));
+  console.log('what are the props' + JSON.stringify(props))
+  console.log('what are the props 2' + JSON.stringify(props.products[0].name))
 
-  const [ isOpen, setIsOpen ] = useState(true);
+  const [ isOpenArray, setIsOpenArray ] = useState([])
 
-  const dateUpdatedAt = new Date(props.products[0].updated_at);
-  console.log('newdate' + dateUpdatedAt);
+  function handleChange (e) {
+    const item = e.target.id
+    var indexOfItem = isOpenArray.indexOf(item)
 
-  const onSelect = () => {
-    setIsOpen(isOpen);
-  };
+    if (indexOfItem !== -1) {
+      var array = [...isOpenArray]
+      if (indexOfItem === 0) {
+        array.shift()
+        setIsOpenArray(array)
+      } else {
+        var newArray = array.splice(indexOfItem, 1)
+        setIsOpenArray(newArray)
+      }
+    } else {
+      setIsOpenArray([item, ...isOpenArray])
+    }
+  }
 
-  const onToggle = () => {
-    setIsOpen(isOpen);
-  };
+  const APIDataListItem = props.products.map((api, index) => {
+    let dateUpdatedAt = new Date(api.updated_at)
 
-  const APIDataListItem = (
+    return (
       <DataListItem aria-labelledby="single-action-item1">
-      <DataListItemRow>
-        <DataListItemCells
-          dataListCells={[
-            <DataListCell key="primary content">
-              <a href={props.productsPath + '/' + props.products[0].id} id="single-action-item1">
-                {props.products[0].name}
-              </a>
-            </DataListCell>,
-            <DataListCell key="secondary content" className="dashboard-list-secondary">
-              {dateUpdatedAt.toUTCString()}
-            </DataListCell>
-          ]}
-        />
-        <DataListAction
-          aria-labelledby="multi-actions-item1 multi-actions-action1"
-          id="actions-menu"
-          aria-label="Actions"
-          isPlainButtonAction
-        >
-          <Dropdown
-            isPlain
-            id="actions-menu"
-            position={DropdownPosition.right}
-            isOpen={isOpen}
-            onSelect={onSelect}
-            className="dashboard-list-item-action"
-            toggle={<KebabToggle onToggle={onToggle} />}
-            dropdownItems={[
-              <DropdownItem key="link" href={props.productsPath + '/' + props.products[0].id}>
-                Overview
-              </DropdownItem>,
-              <DropdownItem key="link" href={props.productsPath + '/' + props.products[0].id}>
-                Analytics
-              </DropdownItem>,
-              <DropdownItem key="link" href={props.productsPath + '/' + props.products[0].id + '/applications'}>
-                Applications
-              </DropdownItem>,
-              <DropdownItem key="link" href={props.productsPath + '/' + props.products[0].id + "/api_docs"}>
-                ActiveDocs
-              </DropdownItem>,
-              <DropdownItem key="link" href={props.productsPath + '/' + props.products[0].id + "/integration"}>
-                Integration
-              </DropdownItem>
+        <DataListItemRow>
+          <DataListItemCells
+            dataListCells={[
+              <DataListCell key="primary content">
+                <a href={api.link} id="single-action-item1">
+                  {api.name}
+                </a>
+              </DataListCell>,
+              <DataListCell key="secondary content" className="dashboard-list-secondary">
+                {dateUpdatedAt.toUTCString()}
+              </DataListCell>
             ]}
           />
-        </DataListAction>
-      </DataListItemRow>
-    </DataListItem>
-  );
+          <DataListAction
+            aria-labelledby="multi-actions-item1 multi-actions-action1"
+            id="actions-menu"
+            aria-label="Actions"
+            isPlainButtonAction
+          >
+            <Dropdown
+              isPlain
+              id="actions-menu"
+              position={DropdownPosition.right}
+              isOpen={isOpenArray.indexOf(`toggle-${index}`) !== -1}
+              className="dashboard-list-item-action"
+              onClick={handleChange}
+              toggle={<KebabToggle id={`toggle-${index}`} />}
+              dropdownItems={[
+                <DropdownItem key={`link-${index}`} href={api.link + '/' + api.links[0].path}>
+                  Edit
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.link + '/' + api.links[1].path}>
+                  Overview
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.link + '/' + api.links[2].path}>
+                  Analytics
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.link + '/' + api.links[3].path}>
+                  Applications
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.link + '/' + api.links[4].path}>
+                  ActiveDocs
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.link + '/' + api.links[5].path}>
+                  Integration
+                </DropdownItem>
+              ]}
+            />
+          </DataListAction>
+        </DataListItemRow>
+      </DataListItem>
+    )
+  })
 
   return (
     <Card className="pf-c-card">
       <CardHeader>
-          <div className="dashboard-list-icon-title-layout">
-            <CubesIcon/>
-            <Title headingLevel="h1" size="xl">
-              Backends
-            </Title>
-            <CardActions>
+        <div className="dashboard-list-icon-title-layout">
+          <CubesIcon/>
+          <Title headingLevel="h1" size="xl">
+            Products
+          </Title>
+          <CardActions>
             <Button component="a" variant="primary" href={props.newProductPath}>
               New Product
             </Button>
           </CardActions>
-          </div>
-          <div className="dashboard-list-subtitle">
-            Most recently created
-          </div>
+        </div>
+        <div className="dashboard-list-subtitle">
+          Most recently updated
+        </div>
       </CardHeader>
       <CardBody>
         <DataList>
@@ -139,7 +149,7 @@ const ProductsWidget = (props: Props) => {
         </DataList>
       </CardBody>
       <CardFooter>
-        <Button variant="link" component="a" isInline href="">
+        <Button variant="link" component="a" isInline href="/apiconfig/services">
           Go to Products
         </Button>
       </CardFooter>
