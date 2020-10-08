@@ -47,23 +47,3 @@ it('should call onServiceSelected with the service id when being selected', () =
 
   expect(onServiceSelected).toHaveBeenCalledWith(service.id)
 })
-
-describe('FeatureIndicators', () => {
-  const FEATURES_FOR_SERVICES = ['partners', 'monitoring', 'plans']
-
-  it('there should be one per relevant feature, in every service input', () => {
-    const serviceHasFeatureIndicators = service => {
-      return FEATURES_FOR_SERVICES.every(feature => service.find(`.ServiceAccessList-sectionItem--${feature}`).exists())
-    }
-    expect(wrapper.find('.ServiceAccessList-item').everyWhere(serviceHasFeatureIndicators)).toBe(true)
-  })
-
-  it('should render available if the feature is selected', () => {
-    getWrapper({ selectedSections: 'plans' })
-    expect(wrapper.find('.ServiceAccessList-sectionItem--plans').exists()).toBe(true)
-    expect(wrapper.find('.ServiceAccessList-sectionItem--plans.is-unavailable').exists()).toBe(false)
-
-    expect(wrapper.find('.ServiceAccessList-sectionItem--partners.is-unavailable').exists()).toBe(true)
-    expect(wrapper.find('.ServiceAccessList-sectionItem--monitoring.is-unavailable').exists()).toBe(true)
-  })
-})

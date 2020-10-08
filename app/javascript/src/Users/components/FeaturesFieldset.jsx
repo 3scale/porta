@@ -51,7 +51,7 @@ const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible 
  */
 const LabelDescriptionItems = ({ descriptionItems }: { descriptionItems: Array<string> }) => {
   return (
-    <ul className='FeatureAccessList-item--labelDescription'>
+    <ul className="FeatureAccessList-item--labelDescription">
       {descriptionItems.map(item => (<li key={ item }>
         {ReactHtmlParser(item)}
       </li>
@@ -88,7 +88,7 @@ const FeatureCheckbox = ({ value, checked, onChange }: {
           onChange={() => onChange(value)}
         />
         { ReactHtmlParser(getFeatureName(value)) }
-        {descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
+        { descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
       </label>
     </li>
   )
