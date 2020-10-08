@@ -1,6 +1,15 @@
 class AdminSection
 
   PERMISSIONS = %I[ portal finance settings partners monitoring plans policy_registry ].freeze
+  LABELS_RESUME = {
+    portal: 'developer portal',
+    finance: 'customer billing',
+    settings: 'feature settings',
+    partners: 'developer accounts, applications',
+    monitoring: 'analytics',
+    plans: 'API backends, API products',
+    policy_registry: 'policies'
+  }
 
   def self.permissions
     if ThreeScale.master_on_premises?
@@ -28,5 +37,9 @@ class AdminSection
 
   def self.labels(roles)
     LABELS.values_at(*Array(roles).map(&:to_sym)).join(', ')
+  end
+
+  def self.labels_resume(roles)
+    LABELS_RESUME.values_at(*Array(roles).map(&:to_sym)).join(', ')
   end
 end

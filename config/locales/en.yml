@@ -130,17 +130,17 @@ en:
   admin_sections:
     partners: 'Create, read, update and delete:<br/>
       - developer <strong>accounts</strong><br/>
-      - <strong>applications</strong> of selected API Products'
+      - <strong>applications</strong> of selected API products'
     monitoring: 'Access & query <strong>analytics</strong> of:<br/>
-      - all API BAckends<br/>
-      - selected API Products'
+      - all API backends<br/>
+      - selected API products'
     portal: 'Create, read, update, and delete content & code of the <strong>developer portal</strong>'
     finance: 'Setup and manage <strong>customer billing</strong>'
     settings: 'Update <strong>feature settings</strong>'
     services: Selected APIs
     plans: 'Create, read, update and delete:<br/>
-      - <strong>attribues, metrics, methods, and mapping rules of all existing API Backends</strong><br/>
-      - <strong>attribues, application plans, active docs, and integration</strong> of selected existing API Products'
+      - <strong>attribues, metrics, methods, and mapping rules of all existing API backends</strong><br/>
+      - <strong>attribues, application plans, active docs, and integration</strong> of selected existing API products'
     policy_registry: 'Create, read, update and delete:<br/>
       - the APIcast <strong>policy chain and its policies</strong>'
 

@@ -6,7 +6,7 @@ import ReactHtmlParser from 'react-html-parser'
 import type { Role } from 'Users/types'
 
 const ADMIN_LABEL = 'Admin (full access)'
-const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API Products  or API Backends</strong>)`
+const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API products  or API backends</strong>)`
 
 /**
  * A radio group to select the user's role: Admin or Member.
