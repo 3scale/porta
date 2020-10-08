@@ -1,1 +1,7 @@
-#api_selector data-api={currentApi: current_api, apis: api_selector_services, activeMenu: active_menu, audienceLink: audience_link, apiap: current_account.provider_can_use?(:api_as_product)}.to_json
+= javascript_pack_tag 'api_selector'
+
+#api_selector data={ 'current-api': current_api.to_json,
+                     'active-menu': active_menu,
+                     'audience-link': audience_link,
+                     'products-link': admin_services_path,
+                     'backends-link': provider_admin_backend_apis_path }
