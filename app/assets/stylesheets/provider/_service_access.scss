@@ -25,7 +25,7 @@ form.formtastic fieldset > ol > li fieldset {
 
       &--labelDescription {
         li::before {
-          content: "- ";
+          content: '- ';
           margin-left: line-height-times(1);
         }
       }
@@ -46,8 +46,8 @@ form.formtastic fieldset > ol > li fieldset {
       &--plans::after {
         background-color: transparent;
         border-right: $border-width dotted $border-color;
-        border-top-right-radius: $border-radius;
         border-top: $border-width dotted $border-color;
+        border-top-right-radius: $border-radius;
         content: "";
         display: block;
         height: line-height-times(200);
