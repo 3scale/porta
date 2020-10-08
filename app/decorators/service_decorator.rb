@@ -57,15 +57,14 @@ class ServiceDecorator < ApplicationDecorator
     false
   end
 
-  # add missing links
   def links
     [
       { name: 'Edit', path: '' },
-      { name: 'Overview', path: '' },
-      { name: 'Analytics', path: '' },
-      { name: 'Applications', path: '' },
-      { name: 'ActiveDocs', path: '' },
-      { name: 'Integration', path: '' },
+      { name: 'Overview', path: h.admin_service_path(object) },
+      { name: 'Analytics', path: h.admin_service_stats_usage_path(object) },
+      { name: 'Applications', path: h.admin_service_applications_path(object) },
+      { name: 'ActiveDocs', path: h.admin_service_api_docs_path(object) },
+      { name: 'Integration', path: h.path_to_service(object) },
     ]
   end
 
