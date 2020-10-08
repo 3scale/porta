@@ -108,8 +108,6 @@ const ProductsIndexPage = (props: Props) => {
     }
   ]
 
-  console.log('what is tableActions' + JSON.stringify(tableActions()) + typeof (tableActions()))
-
   const onSetPage = (_event, pageNumber) => {
     setPage(pageNumber)
   }
@@ -119,14 +117,14 @@ const ProductsIndexPage = (props: Props) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
         <Level>
           <LevelItem>
             <Title headingLevel="h1" size="2xl">API Products</Title>
           </LevelItem>
           <LevelItem>
-            <Button variant="primary">
+            <Button variant="primary" component="a" href="/apiconfig/services/new">
               New Product
             </Button>
           </LevelItem>
@@ -175,7 +173,7 @@ const ProductsIndexPage = (props: Props) => {
           </div>
         </Toolbar>
       </PageSection>
-    </React.Fragment>
+    </>
   )
 }
 

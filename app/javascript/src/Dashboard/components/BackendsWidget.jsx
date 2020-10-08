@@ -70,7 +70,7 @@ const BackendsWidget = (props: Props) => {
     let dateUpdatedAt = new Date(api.updated_at)
 
     return (
-      <DataListItem aria-labelledby="single-action-item1">
+      <DataListItem key={api.id} aria-labelledby="single-action-item1">
         <DataListItemRow>
           <DataListItemCells
             dataListCells={[
@@ -146,7 +146,7 @@ const BackendsWidget = (props: Props) => {
         </DataList>
       </CardBody>
       <CardFooter>
-        <Button variant="link" component="a" isInline href="/p/admin/backend_apis">
+        <Button variant="link" component="a" isInline href={props.backendsPath}>
           Go to Backends
         </Button>
       </CardFooter>

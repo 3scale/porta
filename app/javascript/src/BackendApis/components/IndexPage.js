@@ -46,10 +46,10 @@ type Props = {
 const BackendsIndexPage = (props: Props) => {
   console.log('THIS IS THE PROPS' + JSON.stringify(props))
 
+  const [passedInProps, setPassedInProps] = useState(props)
+  console.log('what is the state' + setPassedInProps)
   const [perPage, setPerPage] = useState(20)
   const [page, setPage] = useState(1)
-  const [passedInProps, setPassedInProps] = useState(props)
-
   const tableColumns = [
     'Name',
     'System name',
@@ -58,17 +58,14 @@ const BackendsIndexPage = (props: Props) => {
     'Products using'
   ]
 
-  console.log('what is the state' + setPassedInProps)
-
   const tableRows = props.backends.map((tableRow) => {
     return {
       cells: [
         { title: <a href="/">{tableRow.name}</a> },
         tableRow.system_name,
         <span className="api-table-timestamp">{tableRow.updated_at}</span>,
-        tableRow.apps_count,
-        tableRow.products_count,
-        tableRow.unread_alerts_count
+        '',
+        tableRow.products_count
       ]
     }
   })
@@ -78,7 +75,7 @@ const BackendsIndexPage = (props: Props) => {
     window.location.href = path
   }
 
-  const tableActions = (products) => [
+  const tableActions = [
     {
       title: 'Edit',
       onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 0)
@@ -101,8 +98,6 @@ const BackendsIndexPage = (props: Props) => {
     }
   ]
 
-  console.log('what is tableActions' + JSON.stringify(tableActions()) + typeof (tableActions()))
-
   const onSetPage = (_event, pageNumber) => {
     setPage(pageNumber)
   }
@@ -112,25 +107,25 @@ const BackendsIndexPage = (props: Props) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
         <Level>
           <LevelItem>
-            <Title headingLevel="h1" size="2xl">API Products</Title>
+            <Title headingLevel="h1" size="2xl">API Backends</Title>
           </LevelItem>
           <LevelItem>
-            <Button variant="primary">
-              New Product
+            <Button variant="primary" component="a" href="/p/admin/backend_apis/new">
+              New Backend
             </Button>
           </LevelItem>
         </Level>
-        <p className="api-table-description">Here is some content about Products. We could also include a link to documentation.</p>
+        <p className="api-table-description">Here is some content about Backends. We could also include a link to documentation.</p>
         <Divider/>
         <Toolbar id="top-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem>
               <InputGroup className="api-table-search">
-                <TextInput placeholder="Find a product" name="findProduct" id="findProduct" type="search" aria-label="Find a product" />
+                <TextInput placeholder="Find a backend" name="findBackend" id="findProduct" type="search" aria-label="Find a product" />
                 <Button variant={ButtonVariant.control} aria-label="search button for search input">
                   <SearchIcon />
                 </Button>
@@ -148,7 +143,7 @@ const BackendsIndexPage = (props: Props) => {
             </ToolbarItem>
           </div>
         </Toolbar>
-        <Table aria-label="Actions Table" actions={tableActions(props.backends)} cells={tableColumns} rows={tableRows}>
+        <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
           <TableHeader />
           <TableBody />
         </Table>
@@ -168,7 +163,7 @@ const BackendsIndexPage = (props: Props) => {
           </div>
         </Toolbar>
       </PageSection>
-    </React.Fragment>
+    </>
   )
 }
 
