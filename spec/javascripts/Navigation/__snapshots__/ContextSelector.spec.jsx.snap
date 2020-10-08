@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should have Dashboard, Audience, Products and Backends 1`] = `
+<ContextSelector
+  activeMenu=""
+  audienceLink="/audience"
+  backendsLink="/backends"
+  currentApi={null}
+  productsLink="/products"
+>
+  <div
+    className="PopNavigation PopNavigation--context"
+  >
+    <a
+      className="PopNavigation-trigger"
+      href="#context-menu"
+      onClick={[Function]}
+      title="Context Selector"
+    >
+      <ActiveMenuTitle
+        activeMenu=""
+        apiap={true}
+        currentApi={null}
+      >
+        <span
+          className="ActiveMenuTitle"
+        >
+          <i
+            className="fa fa-puzzle-piece"
+          />
+          Choose an API
+          <i
+            className="fa fa-chevron-down"
+          />
+        </span>
+      </ActiveMenuTitle>
+    </a>
+    <ul
+      className="PopNavigation-list"
+      id="context-menu"
+    >
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/p/admin/dashboard"
+        >
+          <i
+            className="fa fa-home"
+          />
+          Dashboard
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/audience"
+        >
+          <i
+            className="fa fa-bullseye"
+          />
+          Audience
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/products"
+        >
+          <i
+            className="fa fa-cubes"
+          />
+          Products
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/backends"
+        >
+          <i
+            className="fa fa-cube"
+          />
+          Backends
+        </a>
+      </li>
+    </ul>
+  </div>
+</ContextSelector>
+`;
+
+exports[`should not have Audience if not provided 1`] = `
+<ContextSelector
+  activeMenu=""
+  backendsLink="/backends"
+  currentApi={null}
+  productsLink="/products"
+>
+  <div
+    className="PopNavigation PopNavigation--context"
+  >
+    <a
+      className="PopNavigation-trigger"
+      href="#context-menu"
+      onClick={[Function]}
+      title="Context Selector"
+    >
+      <ActiveMenuTitle
+        activeMenu=""
+        apiap={true}
+        currentApi={null}
+      >
+        <span
+          className="ActiveMenuTitle"
+        >
+          <i
+            className="fa fa-puzzle-piece"
+          />
+          Choose an API
+          <i
+            className="fa fa-chevron-down"
+          />
+        </span>
+      </ActiveMenuTitle>
+    </a>
+    <ul
+      className="PopNavigation-list"
+      id="context-menu"
+    >
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/p/admin/dashboard"
+        >
+          <i
+            className="fa fa-home"
+          />
+          Dashboard
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/products"
+        >
+          <i
+            className="fa fa-cubes"
+          />
+          Products
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/backends"
+        >
+          <i
+            className="fa fa-cube"
+          />
+          Backends
+        </a>
+      </li>
+    </ul>
+  </div>
+</ContextSelector>
+`;
