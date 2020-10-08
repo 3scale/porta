@@ -73,7 +73,7 @@ class ServiceDecorator < ApplicationDecorator
   end
 
   def backends_count
-    backend_apis.size
+    backend_api_configs.size
   end
 
   def unread_alerts_count
