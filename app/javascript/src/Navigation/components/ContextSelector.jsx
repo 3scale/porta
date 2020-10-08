@@ -56,12 +56,12 @@ const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, b
             </li>
           )}
           <li className="PopNavigation-listItem">
-            <a className={getClassNamesForMenu('products')} href={productsLink}>
+            <a className="PopNavigation-link" href={productsLink}>
               <i className='fa fa-cubes' />Products
             </a>
           </li>
           <li className="PopNavigation-listItem">
-            <a className={getClassNamesForMenu('backends')} href={backendsLink}>
+            <a className="PopNavigation-link" href={backendsLink}>
               <i className='fa fa-cube' />Backends
             </a>
           </li>
