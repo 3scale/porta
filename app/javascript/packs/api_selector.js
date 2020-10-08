@@ -1,4 +1,3 @@
-import { ContaoIcon } from '@patternfly/react-icons'
 import { ContextSelectorWrapper } from 'Navigation/components/ContextSelector'
 
 const containerId = 'api_selector'
