@@ -149,7 +149,7 @@ const ProductsWidget = (props: Props) => {
         </DataList>
       </CardBody>
       <CardFooter>
-        <Button variant="link" component="a" isInline href="/apiconfig/services">
+        <Button variant="link" component="a" isInline href={props.productsPath}>
           Go to Products
         </Button>
       </CardFooter>
