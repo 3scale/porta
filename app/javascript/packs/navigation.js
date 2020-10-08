@@ -1,15 +1,8 @@
 import '@babel/polyfill'
 
 import { toggleNavigation, hideAllToggleable } from 'Navigation/utils/toggle_navigation'
-import { ContextSelectorWrapper } from 'Navigation/components/ContextSelector'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const apiSelector = 'api_selector'
-  const apiSelectorNode = document.getElementById(apiSelector)
-  const apiSelectorData = JSON.parse(apiSelectorNode.dataset.api)
-
-  ContextSelectorWrapper({...apiSelectorData}, apiSelector)
-
   let store = window.localStorage
   const togglers = document.getElementsByClassName('u-toggler')
   const vertNavTogglers = document.getElementsByClassName('vert-nav-toggle')

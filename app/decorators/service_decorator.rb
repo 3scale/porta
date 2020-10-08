@@ -46,11 +46,6 @@ class ServiceDecorator < ApplicationDecorator
     end
   end
 
-  def as_json(options = {})
-    hash = super(options)
-    parse_api hash
-  end
-
   private
 
   def backend_api?
