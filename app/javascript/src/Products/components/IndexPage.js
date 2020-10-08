@@ -15,8 +15,7 @@ import {
   Title,
   Divider,
   Toolbar,
-  ToolbarItem,
-  ToolbarContent
+  ToolbarItem
 } from '@patternfly/react-core'
 import {
   Table,
@@ -118,8 +117,8 @@ const ProductsIndexPage = (props: Props) => {
       </PageSection>
       <Divider/>
       <PageSection variant={PageSectionVariants.light}>
-        <Toolbar id="top-toolbar">
-          <ToolbarContent>
+        <Toolbar id="top-toolbar" className="pf-c-toolbar">
+          <div className="pf-c-toolbar__content">
             <ToolbarItem>
               <InputGroup className="api-table-search">
                 <TextInput placeholder="Find a product" name="findProduct" id="findProduct" type="search" aria-label="Find a product" />
@@ -128,7 +127,7 @@ const ProductsIndexPage = (props: Props) => {
                 </Button>
               </InputGroup>
             </ToolbarItem>
-            <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
+            <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
                 itemCount={37}
                 perPage={perPage}
@@ -138,7 +137,7 @@ const ProductsIndexPage = (props: Props) => {
                 onPerPageSelect={onPerPageSelect}
               />
             </ToolbarItem>
-          </ToolbarContent>
+          </div>
         </Toolbar>
         <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
           <TableHeader />
