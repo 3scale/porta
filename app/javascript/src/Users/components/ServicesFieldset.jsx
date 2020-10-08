@@ -55,13 +55,6 @@ const ServiceCheckbox = ({ service = {}, selectedSections, checked, disabled, on
 }) => {
   const { id, name } = service
 
-  const FeatureIndicator = ({ name, text }: { name: string, text: string }) => {
-    const available = selectedSections.includes(name)
-    const featureIndicatorClassName = `ServiceAccessList-sectionItem ServiceAccessList-sectionItem--${name} ${available ? '' : 'is-unavailable'}`
-
-    return <li className={featureIndicatorClassName}>{text}</li>
-  }
-
   return (
     <li className='ServiceAccessList-item'>
       <label className='ServiceAccessList-label is-checked' htmlFor={`user_member_permission_service_ids_${id}`}>
@@ -77,11 +70,6 @@ const ServiceCheckbox = ({ service = {}, selectedSections, checked, disabled, on
         />
         <span className='ServiceAccessList-labelText'>{name}</span>
       </label>
-      <ul className='ServiceAccessList-sections'>
-        <FeatureIndicator name='plans' text='Integration & Application Plans'/>
-        <FeatureIndicator name='monitoring' text='Analytics'/>
-        <FeatureIndicator name='partners' text='Applications'/>
-      </ul>
     </li>
   )
 }

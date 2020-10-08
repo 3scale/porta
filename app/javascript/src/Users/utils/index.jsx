@@ -19,8 +19,8 @@ const FEATURE_NAMES_DESCRIPTION_ITEMS: { [string]: Array<string> } = {
   ],
   monitoring: ['all API BAckends', 'selected API Products'],
   plans: [
-    '<strong>attribues, metrics, methods, and mapping rules of all existing API Backends</strong><br/>',
-    '<strong>attribues, application plans, active docs, and integration</strong> of selected existing API Products'
+    '<strong>attribues, metrics, methods, and mapping rules</strong><br/> of all existing API Backends<br/>',
+    '<strong>attribues, application plans, active docs, and integration</strong> of<br/> selected existing API Products'
   ],
   policy_registry: ['the APIcast <strong>policy chain and its policies</strong>']
 }
