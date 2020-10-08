@@ -10,7 +10,7 @@ import {
   ButtonVariant,
   PageSection,
   Pagination,
-  // PaginationVariant,
+  PaginationVariant,
   PageSectionVariants,
   Title,
   Divider,
@@ -54,19 +54,21 @@ const ProductsIndexPage = (props: Props) => {
     'Name',
     'System name',
     'Recently updated',
-    'Hits (last 30 days)',
     'Applications',
     'Backends used',
     'Unread alerts'
   ]
 
+  const [passedInProps, setPassedInProps] = useState(props)
+
+  console.log('what is the state' + setPassedInProps)
+
   const tableRows = props.products.map((tableRow) => {
     return {
       cells: [
         { title: <a href="/">{tableRow.name}</a> },
-        '',
+        tableRow.system_name,
         <span className="api-table-timestamp">{tableRow.updated_at}</span>,
-        '',
         tableRow.apps_count,
         tableRow.backends_count,
         tableRow.unread_alerts_count
@@ -74,23 +76,39 @@ const ProductsIndexPage = (props: Props) => {
     }
   })
 
-  const tableActions = [
+  const linkToPage = (event, rowId, rowData, extra, actionNumber) => {
+    const path = passedInProps && passedInProps.products[rowId].links[actionNumber].path
+    window.location.href = path
+  }
+
+  const tableActions = (products) => [
     {
-      title: <a href="/">Overview</a>
+      title: 'Edit',
+      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 0)
     },
     {
-      title: <a href="/">Analytics</a>
+      title: 'Overview',
+      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 1)
     },
     {
-      title: <a href="/">Applications</a>
+      title: 'Analytics',
+      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 2)
     },
     {
-      title: <a href="/">ActiveDocs</a>
+      title: 'Applications',
+      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 3)
     },
     {
-      title: <a href="/">Integration</a>
+      title: 'ActiveDocs',
+      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 4)
+    },
+    {
+      title: 'Integration',
+      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 5)
     }
   ]
+
+  console.log('what is tableActions' + JSON.stringify(tableActions()) + typeof (tableActions()))
 
   const onSetPage = (_event, pageNumber) => {
     setPage(pageNumber)
@@ -102,7 +120,7 @@ const ProductsIndexPage = (props: Props) => {
 
   return (
     <React.Fragment>
-      <PageSection variant={PageSectionVariants.light}>
+      <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
         <Level>
           <LevelItem>
             <Title headingLevel="h1" size="2xl">API Products</Title>
@@ -114,9 +132,7 @@ const ProductsIndexPage = (props: Props) => {
           </LevelItem>
         </Level>
         <p className="api-table-description">Here is some content about Products. We could also include a link to documentation.</p>
-      </PageSection>
-      <Divider/>
-      <PageSection variant={PageSectionVariants.light}>
+        <Divider/>
         <Toolbar id="top-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem>
@@ -139,13 +155,13 @@ const ProductsIndexPage = (props: Props) => {
             </ToolbarItem>
           </div>
         </Toolbar>
-        <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
+        <Table aria-label="Actions Table" actions={tableActions(props.products)} cells={tableColumns} rows={tableRows}>
           <TableHeader />
           <TableBody />
         </Table>
-        {/* <Toolbar id="bottom-toolbar">
-          <ToolbarContent>
-            <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
+        <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
+          <div className="pf-c-toolbar__content">
+            <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
                 itemCount={37}
                 perPage={perPage}
@@ -156,8 +172,8 @@ const ProductsIndexPage = (props: Props) => {
                 onPerPageSelect={onPerPageSelect}
               />
             </ToolbarItem>
-          </ToolbarContent>
-        </Toolbar> */}
+          </div>
+        </Toolbar>
       </PageSection>
     </React.Fragment>
   )
