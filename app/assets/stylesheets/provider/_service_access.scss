@@ -23,6 +23,13 @@ form.formtastic fieldset > ol > li fieldset {
     &-item {
       position: relative;
 
+      &--labelDescription {
+        li::before {
+          content: "- ";
+          margin-left: line-height-times(1);
+        }
+      }
+
       &--partners {
         margin-top: line-height-times(2);
       }
@@ -37,28 +44,33 @@ form.formtastic fieldset > ol > li fieldset {
       &--monitoring::after,
       &--partners::after,
       &--plans::after {
-        position: absolute;
         background-color: transparent;
-        width: 53%;
-        margin-top: line-height-times(-1/2);
-        border-top: $border-width dotted $border-color;
-        display: block;
-        content: "";
-        margin-left: 40%;
-        height: line-height-times(200);
         border-right: $border-width dotted $border-color;
-        z-index: 0;
         border-top-right-radius: $border-radius;
+        border-top: $border-width dotted $border-color;
+        content: "";
+        display: block;
+        height: line-height-times(200);
+        margin-left: 37%;
+        margin-top: line-height-times(-1/2);
+        position: absolute;
+        top: line-height-times(1);
+        width: 56%;
+        z-index: 0;
       }
 
       &--monitoring:after {
-        margin-left: 13.5%;
-        width: 64%;
+        margin-left: 37%;
+        position: absolute;
+        top: line-height-times(1);
+        width: 40%;
       }
 
       &--plans:after {
-        margin-left: 35%;
-        width: 20%;
+        margin-left: 37%;
+        position: absolute;
+        top: line-height-times(1);
+        width: 18%;
       }
 
       &--services {

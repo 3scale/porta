@@ -21,7 +21,7 @@
         class="radio optional <%= 'u-servicePermissionsDisabled' unless current_account.provider_can_use?(:service_permissions) %>">
       <fieldset>
         <legend class="label">
-          <label>This user can access</label>
+          <label>This member user can:</label>
         </legend>
         <ol class="FeatureAccessList">
           <% AdminSection.permissions.each do |role| %>
@@ -33,7 +33,7 @@
                        type="checkbox"
                        value="<%= role %>"
                       <%= "checked" if @user.admin_sections.include?(role) %>  >
-                <%= AdminSection.labels(role) %>
+                <%= sanitize AdminSection.labels(role).html_safe %>
               </label>
           <% end -%>
         </ol>
