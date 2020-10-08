@@ -21,7 +21,7 @@ class Api::ServicesController < Api::BaseController
                             .order(updated_at: :desc)
                             .paginate(pagination_params)
                             .decorate
-                            .to_json(only: %i[name updated_at id], methods: %i[links apps_count backends_count unread_alerts_count])
+                            .to_json(only: %i[name updated_at id system_name], methods: %i[links apps_count backends_count unread_alerts_count])
   end
 
   def show
