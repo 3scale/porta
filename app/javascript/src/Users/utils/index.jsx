@@ -15,12 +15,12 @@ const FEATURE_NAMES: { [feature: Feature]: string } = {
 const FEATURE_NAMES_DESCRIPTION_ITEMS: { [string]: Array<string> } = {
   partners: [
     'developer <strong>accounts</strong></span>',
-    '<strong>applications</strong> of selected API products'
+    '<strong>applications</strong> of <em>selected API products</em>'
   ],
   monitoring: ['all API backends', 'selected API products'],
   plans: [
-    '<strong>attribues, metrics, methods, and mapping rules</strong><br/> of all existing API backends<br/>',
-    '<strong>attribues, application plans, active docs, and integration</strong> of<br/> selected existing API products'
+    '<strong>attributes, metrics, methods, and mapping rules</strong><br/> of all existing API backends<br/>',
+    '<strong>attributes, application plans, active docs, and integration</strong> of<br/> <em>selected API products</em>'
   ],
   policy_registry: ['the APIcast <strong>policy chain and its policies</strong>']
 }
