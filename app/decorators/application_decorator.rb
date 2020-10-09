@@ -13,6 +13,7 @@ class ApplicationDecorator < Draper::Decorator
     PaginatingDecorator
   end
 
+<<<<<<< HEAD
   private
 
   API_KEYS = %w[id name system_name links apps_count backends_count unread_alerts_count products_count].freeze
@@ -39,5 +40,9 @@ class ApplicationDecorator < Draper::Decorator
 
   def backend_api?
     raise NoMethodError, __method__
+=======
+  def updated_at
+    object.updated_at.to_s :long if object.updated_at?
+>>>>>>> af67a08305957eb50ec8ff5be64adf71f3e41ef3
   end
 end

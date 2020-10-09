@@ -4,20 +4,68 @@ require 'test_helper'
 
 class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
-  setup do
+  def setup
     @provider = FactoryBot.create(:provider_account)
-    @service = @provider.default_service
-    login! @provider
+    @service = provider.default_service
+    login! provider
   end
 
-  attr_reader :service
+  attr_reader :provider, :service
 
   test 'index' do
     get admin_services_path
     assert_response :success
   end
 
+  class SettingsTest < self
+    test 'settings' do
+      get settings_admin_service_path(service)
+      assert_response :success
+    end
+
+    test 'settings with finance allowed' do
+      Account.any_instance.stubs(:provider_can_use?).returns(true)
+      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false | true)
+      rolling_update(:api_as_product, enabled: false)
+
+      provider.settings.finance.allow
+
+      get settings_admin_service_path(service)
+
+      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]"
+      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]"
+    end
+
+    test 'settings with finance denied' do
+      provider.settings.finance.deny
+
+      get settings_admin_service_path(service)
+
+      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]", false
+      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]", false
+    end
+
+    test 'settings with finance globally denied' do
+      provider = master_account
+      provider.settings.stubs(globally_denied_switches: [:finance])
+      provider.settings.finance.allow
+
+      logout! && login!(provider)
+      get settings_admin_service_path(provider.default_service)
+
+      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]", 0
+      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]", 0
+    end
+
+<<<<<<< HEAD
+  test 'index' do
+    get admin_services_path
+    assert_response :success
+  end
+
   class SettingsTest < Api::ServicesControllerTest
+=======
+>>>>>>> af67a08305957eb50ec8ff5be64adf71f3e41ef3
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: false)
@@ -40,7 +88,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       service.proxy.oidc_configuration.save!
       previous_oidc_config_id = service.proxy.reload.oidc_configuration.id
 
-      put admin_service_path(service), update_params(oidc_id: previous_oidc_config_id)
+      put admin_service_path(service), params: update_params(oidc_id: previous_oidc_config_id)
 
       assert_equal 'Service information updated.', flash[:notice]
 
@@ -77,7 +125,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       another_oidc_config = FactoryBot.create(:oidc_configuration)
       oidc_params = {oidc_configuration_attributes: {direct_access_grants_enabled: true, id: another_oidc_config.id}}
       assert_no_change of: -> { service.proxy.reload.oidc_configuration.id } do
-        put admin_service_path(service), {service: {proxy_attributes: oidc_params}}
+        put admin_service_path(service), params: { service: { proxy_attributes: oidc_params } }
       end
       assert_response :not_found
     end
@@ -92,7 +140,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       proxy.update_columns(endpoint: 'http://old-api.example.com:8080',
                            sandbox_endpoint: 'http://old-api.staging.example.com:8080')
 
-      put admin_service_path(service), update_params
+      put admin_service_path(service), params: update_params
       proxy.reload
       assert_equal 'Service information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
@@ -110,14 +158,14 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
                            sandbox_endpoint: 'http://old-api.staging.example.com:8080')
 
       # hosted apicast
-      put admin_service_path(service), update_params
+      put admin_service_path(service), params: update_params
       proxy.reload
       assert_equal 'http://old-api.example.com:8080', proxy.endpoint
       assert_equal 'http://old-api.staging.example.com:8080', proxy.sandbox_endpoint
 
       # self-menaged apicast
       service.update!(deployment_option: 'self_managed')
-      put admin_service_path(service), update_params
+      put admin_service_path(service), params: update_params
       proxy.reload
       assert_equal 'Service information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
@@ -128,7 +176,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: true)
 
-      put admin_service_path(service), update_params
+      put admin_service_path(service), params: update_params
       assert_equal 'Product information updated.', flash[:notice]
     end
 
@@ -140,7 +188,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: true)
 
-      put admin_service_path(service), update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
+      put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
       assert_equal 'http://old.backend:80', proxy.reload.api_backend
     end
 
@@ -152,7 +200,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: false)
 
-      put admin_service_path(service), update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
+      put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
       assert_equal 'Service information updated.', flash[:notice]
       assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
@@ -191,7 +239,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  class BackendApiCreationTest < Api::ServicesControllerTest
+  class BackendApiCreationTest < self
     def setup
       super
       Logic::RollingUpdates.stubs(enabled?: true)
@@ -203,11 +251,14 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
 
       assert_no_change of: -> { BackendApi.count } do
-        post admin_services_path, service: {
-          system_name: 'my_new_product',
-          name: 'My new Product',
-          description: 'This will act as product'
+        params = {
+          service: {
+            system_name: 'my_new_product',
+            name: 'My new Product',
+            description: 'This will act as product'
+          }
         }
+        post admin_services_path, params: params
       end
 
       assert_equal 0, Service.last.backend_api_configs.count
@@ -217,29 +268,152 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
 
       assert_change of: -> { BackendApi.count }, by: 1 do
-        post admin_services_path, service: {
-          system_name: 'my_new_product',
-          name: 'My new Product',
-          description: 'This will act as product'
+        params = {
+          service: {
+            system_name: 'my_new_product',
+            name: 'My new Product',
+            description: 'This will act as product'
+          }
         }
+        post admin_services_path, params: params
       end
 
       assert_equal 1, Service.last.backend_api_configs.count
     end
   end
 
-  class ServiceCreateTest < Api::ServicesControllerTest
+  class ServiceCreateTest < self
     test 'create error shows the right flash message' do
-      post admin_services_path, service: { name: '' }
+      post admin_services_path, params: { service: { name: '' } }
       assert_equal 'Couldn\'t create Product. Check your Plan limits', flash[:error]
 
       @provider.settings.allow_multiple_services!
 
-      post admin_services_path, service: { name: '' }
+      post admin_services_path, params: { service: { name: '' } }
       assert_equal 'Name can\'t be blank', flash[:error]
 
-      post admin_services_path, service: { name: 'example-service', system_name: '###' }
+      post admin_services_path, params: { service: { name: 'example-service', system_name: '###' } }
       assert_equal 'System name invalid. Only ASCII letters, numbers, dashes and underscores are allowed.', flash[:error]
+    end
+  end
+
+  class ServiceUpdateTest < self
+    test 'update' do
+      assert_not_equal @service.name, 'Supetramp'
+      put admin_service_path(service), params: { service: { name: 'Supetramp' } }
+      assert_response :redirect
+      assert_equal service.reload.name, 'Supetramp'
+    end
+
+    test 'update handles missing referrer' do
+      put admin_service_path(service)
+      assert_response :bad_request
+    end
+
+    test 'not success update' do
+      Service.any_instance.stubs(update_attributes: false)
+      put admin_service_path(service), params: { service: { name: 'Supetramp' } }
+      assert_response :redirect
+    end
+  end
+
+  class MemberPermissions < self
+    def setup
+      super
+
+      @member = FactoryBot.create(:member, account: provider)
+      member.activate!
+
+      logout! && login!(provider, user: member)
+    end
+
+    attr_reader :member
+
+    test 'member missing right permission' do
+      get new_admin_service_path
+      assert_response :forbidden
+
+      post admin_services_path, params: create_params
+      assert_response :forbidden
+
+      get admin_service_path(service)
+      assert_response :forbidden
+
+      get edit_admin_service_path(service)
+      assert_response :forbidden
+
+      put admin_service_path(service), params: update_params
+      assert_response :forbidden
+
+      delete admin_service_path(service)
+      assert_response :forbidden
+    end
+
+    test 'member with right permission and access to all services' do
+      member.admin_sections = %w[plans]
+      member.save!
+
+      get new_admin_service_path
+      assert_response :forbidden
+
+      post admin_services_path, params: create_params
+      assert_response :forbidden
+
+      get admin_service_path(service)
+      assert_response :success
+
+      get edit_admin_service_path(service)
+      assert_response :success
+
+      put admin_service_path(service), params: update_params
+      assert_response :redirect
+
+      delete admin_service_path(service)
+      assert_response :forbidden
+    end
+
+    test 'member with right permission and restricted access to services' do
+      forbidden_service = FactoryBot.create(:simple_service, account: provider)
+      member.admin_sections = %w[plans]
+      member.member_permission_service_ids = [service.id]
+      member.save!
+
+      get new_admin_service_path
+      assert_response :forbidden
+
+      post admin_services_path, params: create_params
+      assert_response :forbidden
+
+      get admin_service_path(service)
+      assert_response :success
+
+      get edit_admin_service_path(service)
+      assert_response :success
+
+      put admin_service_path(service), params: update_params
+      assert_response :redirect
+
+      get admin_service_path(forbidden_service)
+      assert_response :not_found
+
+      get edit_admin_service_path(forbidden_service)
+      assert_response :not_found
+
+      put admin_service_path(forbidden_service), params: update_params
+      assert_response :not_found
+
+      delete admin_service_path(service)
+      assert_response :forbidden
+    end
+
+    protected
+
+    def create_params
+      { service: { name: 'My API', system_name: 'my-api' } }
+    end
+
+    def update_params
+      { service: { description: 'New description for my API' } }
     end
   end
 end

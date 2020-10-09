@@ -31,10 +31,16 @@
         = render 'shared/service_access'
       - else
         h1 APIs
+<<<<<<< HEAD
         div.apiContainer
           = render 'products_widget'
           = render 'backends_widget'
         
+=======
+        = render 'products_widget'
+        = render 'backends_widget'
+
+>>>>>>> af67a08305957eb50ec8ff5be64adf71f3e41ef3
   div.Dashboard-events
     section.DashboardStream
       = raw(@messages_presenter.render)

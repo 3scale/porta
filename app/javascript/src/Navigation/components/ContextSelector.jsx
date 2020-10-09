@@ -1,64 +1,31 @@
 // @flow
 
-import 'raf/polyfill'
-import 'core-js/es6/map'
-import 'core-js/es6/set'
-import 'core-js/es6/array'
+import React, { useState, useRef } from 'react'
 
-import React from 'react'
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 import { createReactWrapper } from 'utilities/createReactWrapper'
+import { useClickOutside } from 'utilities/useClickOutside'
 
 import 'Navigation/styles/ContextSelector.scss'
 
 import type { Api, Menu } from 'Types'
 
 type Props = {
-  apis: Api[],
   currentApi: Api,
   activeMenu: Menu,
   audienceLink: string,
-  apiap?: boolean
-}
-
-type State = {
-  filterQuery: string
+  productsLink: string,
+  backendsLink: string
 }
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-class ContextSelector extends React.Component<Props, State> {
-  state = {
-    filterQuery: ''
-  }
+const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, backendsLink }: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef(null)
+  useClickOutside(ref, () => setIsOpen(false))
 
-  onFilterChange (event: SyntheticInputEvent<HTMLInputElement>) {
-    const filterQuery = event.target.value.toLowerCase()
-    this.setState({ filterQuery })
-  }
-
-  renderInput () {
-    const { apis = [] } = this.props
-
-    if (apis.length < 2) {
-      return null
-    }
-
-    return (
-      <li className="PopNavigation-listItem nav-search-widget docs-search" id="context-widget">
-        <input
-          onChange={(e: SyntheticInputEvent<HTMLInputElement>) => this.onFilterChange(e)}
-          type="search"
-          className="docs-search-input"
-          placeholder="Type the API name"
-        />
-      </li>
-    )
-  }
-
-  getClassNamesForMenu (menu: Menu): string {
-    const { activeMenu } = this.props
-
+  function getClassNamesForMenu (menu: Menu): string {
     const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
     const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)
 
@@ -69,84 +36,38 @@ class ContextSelector extends React.Component<Props, State> {
     return 'PopNavigation-link'
   }
 
-  getClassNamesForService (api: Api): string {
-    const { activeMenu, currentApi } = this.props
-    let classNames = 'PopNavigation-link'
-
-    if (['serviceadmin', 'monitoring', 'backend_api'].indexOf(activeMenu) !== -1 &&
-      `${api.type}${api.id}` === `${currentApi.type}${currentApi.id}`) {
-      classNames += ' current-context'
-    }
-
-    if (!api.link) {
-      classNames += ' unauthorized'
-    }
-
-    return classNames
-  }
-
-  renderOptions () {
-    const { apis, apiap } = this.props
-    const { filterQuery } = this.state
-    const filteredApis = apis.filter(api => api.name.toLowerCase().indexOf(filterQuery) !== -1)
-
-    if (filteredApis.length === 0) {
-      return null
-    }
-
-    const displayedApis = filteredApis.map(api => (
-      <li key={`${api.type}-${api.id}`} className="PopNavigation-listItem">
-        <a className={this.getClassNamesForService(api)} href={api.link}>
-          <Icon apiap={apiap} apiType={api.type} />{api.name}
-        </a>
-      </li>
-    ))
-
-    return (
-      <li className="PopNavigation-listItem">
-        <ul className="PopNavigation-results">
-          {displayedApis}
-        </ul>
-      </li>
-    )
-  }
-
-  render () {
-    const { currentApi, activeMenu, audienceLink, apiap } = this.props
-
-    return (
-      <div className="PopNavigation PopNavigation--context">
-        <a className="PopNavigation-trigger u-toggler" href="#context-menu" title="Context Selector">
-          <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} apiap={apiap}/>
-        </a>
-        <ul id="context-menu" className="PopNavigation-list u-toggleable">
+  return (
+    <div className="PopNavigation PopNavigation--context" ref={ref}>
+      <a className="PopNavigation-trigger" href="#context-menu" title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
+        <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} apiap={true}/>
+      </a>
+      {isOpen && (
+        <ul id="context-menu" className="PopNavigation-list">
           <li className="PopNavigation-listItem">
-            <a className={this.getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
+            <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
               <i className='fa fa-home' />Dashboard
             </a>
           </li>
-          {audienceLink ? (
+          {audienceLink && (
             <li className="PopNavigation-listItem">
-              <a className={this.getClassNamesForMenu('audience')} href={audienceLink}>
+              <a className={getClassNamesForMenu('audience')} href={audienceLink}>
                 <i className='fa fa-bullseye' />Audience
               </a>
             </li>
-          ) : null}
-          {this.renderInput()}
-          {this.renderOptions()}
+          )}
+          <li className="PopNavigation-listItem">
+            <a className="PopNavigation-link" href={productsLink}>
+              <i className='fa fa-cubes' />Products
+            </a>
+          </li>
+          <li className="PopNavigation-listItem">
+            <a className="PopNavigation-link" href={backendsLink}>
+              <i className='fa fa-cube' />Backends
+            </a>
+          </li>
         </ul>
-      </div >
-    )
-  }
-}
-
-const Icon = ({ apiType, apiap }: {apiType: string, apiap: ?boolean}) => {
-  const iconClassName = apiap
-    ? (apiType === 'product' ? 'fa-cubes' : 'fa-cube')
-    : 'fa-puzzle-piece'
-
-  return (
-    <i className={`fa ${iconClassName}`} />
+      )}
+    </div >
   )
 }
 

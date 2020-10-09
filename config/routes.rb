@@ -747,21 +747,20 @@ without fake Core server your after commit callbacks will crash and you might ge
 
         resources :application_plans, only: [] do
           resources :metrics, only: [] do
-            member do
-              put :toggle_visible
-              put :toggle_enabled
-              put :toggle_limits_only_text
+            resource :metric_visibility, only: [], path: '', as: 'visibility' do
+              member do
+                put :toggle_visible
+                put :toggle_enabled
+                put :toggle_limits_only_text
+              end
             end
 
-            resources :pricing_rules, :only => [:index, :new, :create]
-            resources :usage_limits, :only => [:index, :new, :create]
+            resources :pricing_rules, only: %i[index new create]
+            resources :usage_limits, only: %i[index new create]
           end
 
-          resources :usage_limits, :only => [:edit, :update, :destroy]
-        end
-
-        resources :application_plans, only: [] do
-          resources :pricing_rules, :only => [:edit, :update, :destroy]
+          resources :pricing_rules, only: %i[edit update destroy]
+          resources :usage_limits, only: %i[edit update destroy]
         end
 
         resources :services do

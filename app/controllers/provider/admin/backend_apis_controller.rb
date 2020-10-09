@@ -14,7 +14,11 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
                                    .order(updated_at: :desc)
                                    .paginate(pagination_params)
                                    .decorate
+<<<<<<< HEAD
                                    .to_json(only: %i[name updated_at id private_url system_name], methods: %i[links products_count])
+=======
+                                   .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
+>>>>>>> af67a08305957eb50ec8ff5be64adf71f3e41ef3
   end
 
   def new

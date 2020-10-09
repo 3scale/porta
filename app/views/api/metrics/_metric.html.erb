@@ -20,7 +20,7 @@
 
 <td class="operations">
   <span id="<%= dom_id(metric) %>_status" class="<%= @plan.metric_enabled?(metric) ? 'enabled' : 'disabled' %>">
-    <%= link_to polymorphic_path([:toggle_enabled, :admin, @plan, metric]),
+    <%= link_to polymorphic_path([:toggle_enabled, :admin, @plan, metric, :visibility]),
                 :method => :put,
                 :remote => true,
                 title: "#{@plan.metric_enabled?(metric) ? 'Disable' : 'Enable'} metric #{metric.friendly_name}",
@@ -35,7 +35,7 @@
 </td>
 <td class="operations">
   <span id="<%= dom_id(metric) %>_visible" class="<%= @plan.metric_visible?(metric) ? 'visible' : 'hidden' %>">
-    <%= link_to polymorphic_path([:toggle_visible, :admin, @plan, metric]),
+    <%= link_to polymorphic_path([:toggle_visible, :admin, @plan, metric, :visibility]),
                       :method => :put,
                       :remote => true,
                       title: "Make metric #{metric.friendly_name} #{@plan.metric_visible?(metric) ? 'invisible' : 'visible'}",
@@ -50,7 +50,7 @@
 </td>
 <td class="operations">
   <span id="<%= dom_id(metric) %>_icons" class="<%= @plan.limits_only_text?(metric) ? 'text' : 'icon' %>">
-    <%= link_to polymorphic_path([:toggle_limits_only_text, :admin, @plan, metric]),
+    <%= link_to polymorphic_path([:toggle_limits_only_text, :admin, @plan, metric, :visibility]),
                       :method => :put,
                       :remote => true,
                       class: 'action' do -%>

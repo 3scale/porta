@@ -4,6 +4,8 @@ import { fetchData } from 'utilities/utils'
 import type {
   AccountData,
   Param,
+  PathItemObject,
+  PathOperationObject,
   ResponseBody,
   SwaggerResponse
 } from 'Types/SwaggerTypes'
@@ -32,41 +34,36 @@ const addAutocompleteToParam = (param: Param, accountData: AccountData): Param =
     : param
 }
 
-const getPathParameters = (path) => (
-  Object.keys(path).reduce((params, item) => (
-    {
-      ...path[item],
-      [item]: item === 'parameters'
-        ? path.parameters
-        : path[item].parameters
-    }
-  ), {})
-)
-
-const injectParametersField = (key, value, accountData) => {
-  const parametersArray = value.map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
-  return (key === 'parameters') ? parametersArray : { ...value, parameters: parametersArray }
+const injectParametersToPathOperation = (pathOperation: PathOperationObject, accountData: AccountData): PathOperationObject => {
+  const operationParameters = pathOperation.parameters
+  if (!operationParameters) return pathOperation
+  const parametersWithAutocompleteData = operationParameters.map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
+  return {
+    ...pathOperation,
+    parameters: parametersWithAutocompleteData
+  }
 }
 
-const injectParametersToPath = (path, pathParameters, accountData) => (
-  Object.keys(pathParameters).reduce((parameters, item) => (
-    {
-      ...parameters,
-      [item]: pathParameters[item]
-        ? injectParametersField(item, pathParameters[item], accountData)
-        : path[item]
-    }), {})
+const injectAutocompleteToCommonParameters = (parameters: Array<Param>, accountData: AccountData): Array<Param> => parameters.map(
+  param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param
+)
+
+const injectParametersToPath = (path: PathItemObject, commonParameters: Array<Param>, accountData: AccountData): PathItemObject => (
+  Object.keys(path).reduce((updatedPath, item) => {
+    updatedPath[item] = (item === 'parameters' && commonParameters)
+      ? injectAutocompleteToCommonParameters(commonParameters, accountData)
+      : injectParametersToPathOperation(path[item], accountData)
+    return updatedPath
+  }, {})
 )
 
 const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
   {
     ...responseBody,
     paths: Object.keys(responseBody.paths).reduce(
-      (paths, key) => {
-        const pathParameters = getPathParameters(responseBody.paths[key])
-        if (pathParameters) {
-          paths[key] = injectParametersToPath(responseBody.paths[key], pathParameters, accountData)
-        }
+      (paths, path) => {
+        const commonParameters = responseBody.paths[path].parameters
+        paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
         return paths
       }, {})
   }

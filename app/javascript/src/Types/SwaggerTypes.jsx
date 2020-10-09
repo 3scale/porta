@@ -27,6 +27,21 @@ export type Param = {
  examples?: Examples
 }
 
+export type PathOperationObject = {
+  [string]: ?string,
+  servers?: {},
+  responses?: {},
+  parameters?: Array<Param>,
+  ...
+}
+
+export type PathItemObject = {
+  [string]: ?string,
+  [string]: ?PathOperationObject,
+  parameters?: Array<Param>,
+  ...
+}
+
 export type ResponseBody = {
  paths: {
    [string]: {
