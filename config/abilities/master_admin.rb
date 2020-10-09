@@ -22,18 +22,20 @@ Ability.define do |user|
     can :manage, user.account
     can(:create, Account, &:signup_provider_possible?)
 
+    can :manage, :plans
+    can :manage, Service
+
     if ThreeScale.config.onpremises
       cannot :manage, :multiple_services
       cannot :manage, :service_plans
       cannot :manage, :provider_plans
       cannot %i[see read admin manage], :account_plans
-      cannot %i[create manage], :plans
-      can :admin, :plans
+      cannot :create, :plans
+      cannot %i[create destroy], Service
     else
       can :manage, :multiple_services
       can :manage, :provider_plans
       can :read, :account_plans
-      can :manage, :plans
       can :manage, :service_contracts
     end
     can :manage, :partners
@@ -57,8 +59,6 @@ Ability.define do |user|
       category.forum.account = user.account
     end
 
-    can :update, Service, :account_id => user.account_id
-    can :create, Service
     can :manage, :multiple_users
     can :manage, User
     can :manage, Invitation

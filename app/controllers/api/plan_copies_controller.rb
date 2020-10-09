@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class Api::PlanCopiesController < FrontendController
-
   before_action :find_plan
-  before_action :authorize_manage_plans, only: %i[new create]
+  before_action :find_service
+  before_action :authorize_section, only: %i[new create]
+  before_action :authorize_action, only: %i[new create]
 
-  def new
-  end
+  def new; end
 
   def create
     @plan = @original.copy(params[@type] || {})
@@ -33,11 +35,18 @@ class Api::PlanCopiesController < FrontendController
     @original = current_account.provided_plans.find(params[:plan_id])
     @type = @original.class.to_s.underscore
     @issuer = @original.issuer
-    @service = @original.service if @original.respond_to?(:service)
   end
 
-  def authorize_manage_plans
+  def find_service
+    return unless @original.respond_to?(:service)
+    @service = current_user.accessible_services.find(@original.issuer_id)
+  end
+
+  def authorize_section
     authorize! :manage, :plans
   end
 
+  def authorize_action
+    authorize! :create, :plans
+  end
 end

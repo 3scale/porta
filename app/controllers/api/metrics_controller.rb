@@ -4,11 +4,8 @@ class Api::MetricsController < Api::BaseController
   include ServiceDiscovery::ControllerMethods
   include MetricParams
 
-  before_action :find_service, except: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
-  before_action :find_plan_and_service, only: [:toggle_visible, :toggle_limits_only_text, :toggle_enabled]
-
+  before_action :find_service
   before_action :find_metric, only: %i[edit update destroy]
-  before_action :find_metric_all, only: %i[toggle_visible toggle_limits_only_text toggle_enabled]
 
   activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
@@ -80,47 +77,6 @@ class Api::MetricsController < Api::BaseController
     end
   end
 
-  #TODO: move this one to own controller?
-  def toggle_visible
-    @metric.toggle_visible_for_plan @plan
-
-    respond_to do |format|
-      format.html { redirect_to edit_admin_application_plan_path(@plan) }
-      format.js
-    end
-  end
-
-  #TODO: move this one to own controller?
-  def toggle_limits_only_text
-    @metric.toggle_limits_only_text_for_plan @plan
-
-    respond_to do |format|
-      format.html { redirect_to edit_admin_application_plan_path(@plan) }
-      format.js
-    end
-  end
-
-  def toggle_enabled
-    if @metric.enabled_for_plan? @plan
-      @metric.disable_for_plan @plan
-    else
-      @metric.enable_for_plan @plan
-    end
-
-    respond_to do |format|
-      format.html do
-        if @metric.errors.present?
-          flash[:error] = @metric.errors.full_messages.to_sentence
-        end
-
-        redirect_to edit_admin_application_plan_path(@plan)
-      end
-      format.js do
-        @usage_limits = @plan.usage_limits.where(metric_id: @metric.id)
-      end
-    end
-  end
-
   private
 
   def find_service
@@ -135,18 +91,8 @@ class Api::MetricsController < Api::BaseController
     @metric = service_metrics.find(params[:id])
   end
 
-  def find_metric_all
-    @metric = @service.all_metrics.find(params[:id])
-  end
-
   def collection
     metric_id = params[:metric_id]
     metric_id ? service_metrics.find(metric_id).children : service_metrics
-  end
-
-  def find_plan_and_service
-    id = params[:application_plan_id]
-    @plan = current_account.application_plans.find(id) if id
-    @service = @plan.service if @plan
   end
 end

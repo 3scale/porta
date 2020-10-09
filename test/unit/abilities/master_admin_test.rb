@@ -69,11 +69,15 @@ module Abilities
     def test_plans
       ThreeScale.config.stubs(onpremises: false)
       assert_can ability, :manage, :plans
+      assert_can ability, :create, :plans
+      assert_can ability, :create, Service
+      assert_can ability, :destroy, Service
 
       ThreeScale.config.stubs(onpremises: true)
-      assert_cannot ability, :manage, :plans
+      assert_can ability, :manage, :plans
       assert_cannot ability, :create, :plans
-      assert_can ability, :admin, :plans
+      assert_cannot ability, :create, Service
+      assert_cannot ability, :destroy, Service
     end
 
     def test_finance_on_saas

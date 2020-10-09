@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class Provider::Admin::ServiceDiscovery::ServicesController < Provider::Admin::BaseController
-  before_action :autorize_create, only: :create
-  before_action :autorize_update, only: :update
-
-  load_and_authorize_resource :service, through: :current_user,
-    through_association: :accessible_services, only: %i[update]
+  before_action :deny_on_premises_for_master
+  before_action :authorize_section
+  before_action :autorize_action, only: :create
+  load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services, only: %i[update]
 
   def create
     if can_create?
@@ -35,15 +34,16 @@ class Provider::Admin::ServiceDiscovery::ServicesController < Provider::Admin::B
     params.require(:service).permit(:name, :namespace)
   end
 
-  def can_create?
-    can? :create, Service
-  end
-
-  def autorize_create
+  def authorize_section
     authorize! :manage, :plans
   end
 
-  def autorize_update
-    authorize! :admin, :plans
+  def autorize_action
+    return if current_user.admin? # We want to postpone for admins so we can use #can_create? and provide better error messages
+    authorize! action_name.to_sym, Service
+  end
+
+  def can_create?
+    can? :create, Service
   end
 end
