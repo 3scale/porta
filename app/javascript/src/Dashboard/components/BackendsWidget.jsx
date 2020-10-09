@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import React, {useState} from 'react'
 import {
   Button,
   Card,
@@ -9,10 +9,18 @@ import {
   CardHeader,
   CardFooter,
   Title,
-  DataList
+  Dropdown,
+  DropdownItem,
+  DropdownPosition,
+  KebabToggle,
+  DataList,
+  DataListItem,
+  DataListCell,
+  DataListItemRow,
+  DataListItemCells,
+  DataListAction
 } from '@patternfly/react-core'
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
-import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 import 'Dashboard/styles/dashboard.scss'
 import 'patternflyStyles/dashboard'
 
@@ -38,6 +46,82 @@ const BackendsWidget = (props: Props) => {
   console.log('what are the props' + JSON.stringify(props))
   console.log('what are the props 2' + JSON.stringify(props.backends[0].name))
 
+  const [ isOpenArray, setIsOpenArray ] = useState([])
+
+  function handleChange (e) {
+    const item = e.target.id
+    var indexOfItem = isOpenArray.indexOf(item)
+
+    if (indexOfItem !== -1) {
+      var array = [...isOpenArray]
+      if (indexOfItem === 0) {
+        array.shift()
+        setIsOpenArray(array)
+      } else {
+        var newArray = array.splice(indexOfItem, 1)
+        setIsOpenArray(newArray)
+      }
+    } else {
+      setIsOpenArray([item, ...isOpenArray])
+    }
+  }
+
+  const APIDataListItem = props.backends.map((api, index) => {
+    let dateUpdatedAt = new Date(api.updated_at)
+
+    return (
+      <DataListItem key={api.id} aria-labelledby="single-action-item1">
+        <DataListItemRow>
+          <DataListItemCells
+            dataListCells={[
+              <DataListCell key="primary content">
+                <a href={api.link} id="single-action-item1">
+                  {api.name}
+                </a>
+              </DataListCell>,
+              <DataListCell key="secondary content" className="dashboard-list-secondary">
+                {dateUpdatedAt.toUTCString()}
+              </DataListCell>
+            ]}
+          />
+          <DataListAction
+            aria-labelledby="multi-actions-item1 multi-actions-action1"
+            id="actions-menu"
+            aria-label="Actions"
+            isPlainButtonAction
+          >
+            <Dropdown
+              isPlain
+              id="actions-menu"
+              position={DropdownPosition.right}
+              isOpen={isOpenArray.indexOf(`toggle-${index}`) !== -1}
+              className="dashboard-list-item-action"
+              onClick={handleChange}
+              toggle={<KebabToggle id={`toggle-${index}`} />}
+              dropdownItems={[
+                <DropdownItem key={`link-${index}`} href={api.links[0].path}>
+                  Edit
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.links[1].path}>
+                  Overview
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.links[2].path}>
+                  Analytics
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.links[3].path}>
+                  Methods and Metrics
+                </DropdownItem>,
+                <DropdownItem key={`link-${index}`} href={api.links[4].path}>
+                  Mapping Rules
+                </DropdownItem>
+              ]}
+            />
+          </DataListAction>
+        </DataListItemRow>
+      </DataListItem>
+    )
+  })
+
   return (
     <Card className="pf-c-card">
       <CardHeader>
@@ -58,7 +142,7 @@ const BackendsWidget = (props: Props) => {
       </CardHeader>
       <CardBody>
         <DataList>
-          {props.backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
+          {APIDataListItem}
         </DataList>
       </CardBody>
       <CardFooter>
