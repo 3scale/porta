@@ -4,7 +4,7 @@ class AdminSection
   LABELS_RESUME = {
     portal: 'developer portal',
     finance: 'customer billing',
-    settings: 'feature settings',
+    settings: 'settings pages',
     partners: 'developer accounts, applications',
     monitoring: 'analytics',
     plans: 'API backends, API products',
