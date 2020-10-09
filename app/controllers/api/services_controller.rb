@@ -6,11 +6,9 @@ class Api::ServicesController < Api::BaseController
   activate_menu :serviceadmin, :overview
 
   before_action :deny_on_premises_for_master
-  before_action :authorize_manage_plans, only: %i[create destroy]
-  before_action :authorize_admin_plans, except: %i[create destroy]
-
-  load_and_authorize_resource :service, through: :current_user,
-    through_association: :accessible_services, except: [:create]
+  before_action :authorize_section
+  before_action :authorize_action, only: %i[new create]
+  load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services, except: [:create]
 
   with_options only: %i[edit update settings usage_rules] do |actions|
     actions.sublayout 'api/service'
@@ -128,15 +126,16 @@ class Api::ServicesController < Api::BaseController
     current_user.accessible_services
   end
 
-  def can_create?
-    can? :create, Service
-  end
-
-  def authorize_manage_plans
+  def authorize_section
     authorize! :manage, :plans
   end
 
-  def authorize_admin_plans
-    authorize! :admin, :plans
+  def authorize_action
+    return if current_user.admin? # We want to postpone for admins so we can use #can_create? and provide better error messages
+    authorize! action_name.to_sym, Service
+  end
+
+  def can_create?
+    can? :create, Service
   end
 end

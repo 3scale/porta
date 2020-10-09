@@ -53,7 +53,7 @@ section class="service-widget"
               span.name
                 = alert.message
 
-      - if can? :admin, :plans
+      - if can? :manage, :plans
         h2
           '  Published
           => link_to 'Application Plans', admin_service_application_plans_path(service)
