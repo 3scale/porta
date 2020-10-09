@@ -10,7 +10,7 @@ import {
   ButtonVariant,
   PageSection,
   Pagination,
-  PaginationVariant,
+  // PaginationVariant,
   PageSectionVariants,
   Title,
   Divider,
@@ -48,20 +48,22 @@ type Props = {
 const ProductsIndexPage = (props: Props) => {
   console.log('THIS IS THE PROPS' + JSON.stringify(props))
 
-  const [perPage, setPerPage] = useState(20)
-  const [page, setPage] = useState(1)
+  // const [perPage, setPerPage] = useState(url.searchParams.get('per_page'))
+  // const [page, setPage] = useState(url.searchParams.get('page'))
   const tableColumns = [
     'Name',
     'System name',
-    'Recently updated',
+    'Last updated',
     'Applications',
-    'Backends used',
+    'Backends contained',
     'Unread alerts'
   ]
 
   const [passedInProps, setPassedInProps] = useState(props)
 
   console.log('what is the state' + setPassedInProps)
+
+  console.log('what is the length' + props.products.length)
 
   const tableRows = props.products.map((tableRow) => {
     return {
@@ -81,7 +83,7 @@ const ProductsIndexPage = (props: Props) => {
     window.location.href = path
   }
 
-  const tableActions = (products) => [
+  const tableActions = () => [
     {
       title: 'Edit',
       onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 0)
@@ -108,12 +110,38 @@ const ProductsIndexPage = (props: Props) => {
     }
   ]
 
-  const onSetPage = (_event, pageNumber) => {
-    setPage(pageNumber)
-  }
+  // const onSetPage = (_event, pageNumber) => {
+  //   setPage(pageNumber)
+  // }
 
-  const onPerPageSelect = (_event, perPage) => {
-    setPerPage(perPage)
+  // const onPerPageSelect = (_event, perPage) => {
+  //   setPerPage(perPage)
+  // }
+
+  const url = new URL(window.location.href)
+  console.log('what is the url' + url)
+  // const perPage = url.searchParams.get('per_page')
+
+  const page = url.searchParams.get('page')
+  console.log('what is the page' + page)
+
+  // const selectPerPage = (perPage) => {
+  //   if (perPage === null) {
+  //     perPage = 20
+  //   }
+  //   url.searchParams.set('per_page', perPage)
+  //   url.searchParams.delete('page')
+  //   window.location.href = url.toString()
+  // }
+
+  const goToPage = (page) => {
+    console.log('what is page' + page)
+    var localPage = page === null ? 1 : page
+
+    console.log('WHAT IS LCOAL PAGE LOCAL PAGE' + localPage)
+    url.searchParams.set('page', localPage)
+    console.log('what is urlllll' + url.toString())
+    window.location.href = url.toString()
   }
 
   return (
@@ -121,21 +149,23 @@ const ProductsIndexPage = (props: Props) => {
       <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
         <Level>
           <LevelItem>
-            <Title headingLevel="h1" size="2xl">API Products</Title>
+            <Title headingLevel="h1" size="2xl">Products</Title>
           </LevelItem>
           <LevelItem>
             <Button variant="primary" component="a" href="/apiconfig/services/new">
-              New Product
+              Create Product
             </Button>
           </LevelItem>
         </Level>
-        <p className="api-table-description">Here is some content about Products. We could also include a link to documentation.</p>
+        <p className="api-table-description">
+          Explore and manage all customer-facing APIs that contain one or more of your Backends.
+        </p>
         <Divider/>
         <Toolbar id="top-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem>
               <InputGroup className="api-table-search">
-                <TextInput placeholder="Find a product" name="findProduct" id="findProduct" type="search" aria-label="Find a product" />
+                <TextInput placeholder="Find a Product" name="findProduct" id="findProduct" type="search" aria-label="Find a product" />
                 <Button variant={ButtonVariant.control} aria-label="search button for search input">
                   <SearchIcon />
                 </Button>
@@ -143,21 +173,22 @@ const ProductsIndexPage = (props: Props) => {
             </ToolbarItem>
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
-                itemCount={37}
-                perPage={perPage}
-                page={page}
-                onSetPage={onSetPage}
+                itemCount={26}
+                perPage={20}
+                page={page === null ? 1 : page}
+                // onSetPage={goToPage}
+                onNextClick={goToPage}
                 widgetId="pagination-options-menu-top"
-                onPerPageSelect={onPerPageSelect}
+                // onPerPageSelect={selectPerPage}
               />
             </ToolbarItem>
           </div>
         </Toolbar>
-        <Table aria-label="Actions Table" actions={tableActions(props.products)} cells={tableColumns} rows={tableRows}>
+        <Table aria-label="Actions Table" actions={tableActions()} cells={tableColumns} rows={tableRows}>
           <TableHeader />
           <TableBody />
         </Table>
-        <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
+        {/* <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
@@ -165,13 +196,13 @@ const ProductsIndexPage = (props: Props) => {
                 perPage={perPage}
                 page={page}
                 variant={PaginationVariant.bottom}
-                onSetPage={onSetPage}
+                // onSetPage={onSetPage}
                 widgetId="pagination-options-menu-top"
-                onPerPageSelect={onPerPageSelect}
+                // onPerPageSelect={onPerPageSelect}
               />
             </ToolbarItem>
           </div>
-        </Toolbar>
+        </Toolbar> */}
       </PageSection>
     </>
   )
