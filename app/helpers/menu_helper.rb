@@ -84,12 +84,6 @@ module MenuHelper
     account.settings.public_send(switch).is_a?(Settings::SwitchDenied)
   end
 
-  def api_selector_services
-    @api_selector_services ||= (site_account.provider? && logged_in? ? current_user.accessible_services : Service.none).decorate
-    @api_selector_services.concat(current_user.account.backend_apis.decorate) if current_account.provider_can_use?(:api_as_product)
-    @api_selector_services
-  end
-
   def audience_link
     if can?(:manage, :partners)
       admin_buyers_accounts_path

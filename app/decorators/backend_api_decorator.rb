@@ -8,11 +8,6 @@ class BackendApiDecorator < ApplicationDecorator
     h.provider_admin_backend_api_path(object)
   end
 
-  def as_json(options = {})
-    hash = super(options)
-    parse_api hash
-  end
-
   private
 
   def backend_api?
