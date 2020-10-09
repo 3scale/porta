@@ -49,16 +49,11 @@ const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible 
  * A list describing member permissions for each label.
  * @param {Array} descriptionItems - An array of strings containing the description of the label.
  */
-const LabelDescriptionItems = ({ descriptionItems }: { descriptionItems: Array<string> }) => {
-  return (
-    <ul className="FeatureAccessList-item--labelDescription">
-      {descriptionItems.map(item => (<li key={ item }>
-        {ReactHtmlParser(item)}
-      </li>
-      ))}
-    </ul>
-  )
-}
+const LabelDescriptionItems = ({ descriptionItems }: { descriptionItems: Array<string> }) => (
+  <ul className="FeatureAccessList-item--labelDescription">
+    {descriptionItems.map(item => <li key={item}>{ReactHtmlParser(item)}</li>)}
+  </ul>
+)
 
 /**
  * A checkbox representing a Feature the user will have access to.
