@@ -57,15 +57,12 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]", 0
     end
 
-<<<<<<< HEAD
   test 'index' do
     get admin_services_path
     assert_response :success
   end
 
   class SettingsTest < Api::ServicesControllerTest
-=======
->>>>>>> af67a08305957eb50ec8ff5be64adf71f3e41ef3
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       rolling_update(:api_as_product, enabled: false)
