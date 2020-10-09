@@ -53,9 +53,9 @@ const BackendsIndexPage = (props: Props) => {
   const tableColumns = [
     'Name',
     'System name',
-    'Recently updated',
+    'Last updated',
     'Private base URL',
-    'Products using'
+    'Linked products'
   ]
 
   const tableRows = props.backends.map((tableRow) => {
@@ -64,7 +64,7 @@ const BackendsIndexPage = (props: Props) => {
         { title: <a href="/">{tableRow.name}</a> },
         tableRow.system_name,
         <span className="api-table-timestamp">{tableRow.updated_at}</span>,
-        '',
+        tableRow.private_endpoint,
         tableRow.products_count
       ]
     }
@@ -89,7 +89,7 @@ const BackendsIndexPage = (props: Props) => {
       onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 2)
     },
     {
-      title: 'Methods & Metrics',
+      title: 'Methods and Metrics',
       onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 3)
     },
     {
@@ -111,21 +111,23 @@ const BackendsIndexPage = (props: Props) => {
       <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
         <Level>
           <LevelItem>
-            <Title headingLevel="h1" size="2xl">API Backends</Title>
+            <Title headingLevel="h1" size="2xl">Backends</Title>
           </LevelItem>
           <LevelItem>
             <Button variant="primary" component="a" href="/p/admin/backend_apis/new">
-              New Backend
+              Create Backend
             </Button>
           </LevelItem>
         </Level>
-        <p className="api-table-description">Here is some content about Backends. We could also include a link to documentation.</p>
+        <p className="api-table-description">
+          Explore and manage all your internal APIs.
+        </p>
         <Divider/>
         <Toolbar id="top-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem>
               <InputGroup className="api-table-search">
-                <TextInput placeholder="Find a backend" name="findBackend" id="findProduct" type="search" aria-label="Find a product" />
+                <TextInput placeholder="Find a Backend" name="findBackend" id="findProduct" type="search" aria-label="Find a product" />
                 <Button variant={ButtonVariant.control} aria-label="search button for search input">
                   <SearchIcon />
                 </Button>
