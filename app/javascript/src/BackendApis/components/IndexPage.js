@@ -48,8 +48,7 @@ const BackendsIndexPage = (props: Props) => {
 
   const [passedInProps, setPassedInProps] = useState(props)
   console.log('what is the state' + setPassedInProps)
-  const [perPage, setPerPage] = useState(20)
-  const [page, setPage] = useState(1)
+
   const tableColumns = [
     'Name',
     'System name',
@@ -98,12 +97,34 @@ const BackendsIndexPage = (props: Props) => {
     }
   ]
 
-  const onSetPage = (_event, pageNumber) => {
-    setPage(pageNumber)
+  const url = new URL(window.location.href)
+  var perPage = url.searchParams.get('per_page')
+  var page = url.searchParams.get('page')
+
+  const selectPerPage = (_event, selectedPerPage) => {
+    url.searchParams.set('per_page', selectedPerPage)
+    url.searchParams.delete('page')
+    window.location.href = url.toString()
   }
 
-  const onPerPageSelect = (_event, perPage) => {
-    setPerPage(perPage)
+  const goToNextPage = (_event, number) => {
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
+  }
+
+  const goToPreviousPage = (_event, number) => {
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
+  }
+
+  const onFirstClick = (_event, number) => {
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
+  }
+
+  const onLastClick = (_event, number) => {
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
   }
 
   return (
@@ -135,12 +156,17 @@ const BackendsIndexPage = (props: Props) => {
             </ToolbarItem>
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
-                itemCount={37}
-                perPage={perPage}
-                page={page}
-                onSetPage={onSetPage}
                 widgetId="pagination-options-menu-top"
-                onPerPageSelect={onPerPageSelect}
+                itemCount={26}
+                perPage={Number(perPage) === 0 ? 20 : perPage}
+                page={Number(page)}
+                onNextClick={goToNextPage}
+                onPreviousClick={goToPreviousPage}
+                onPerPageSelect={selectPerPage}
+                onFirstClick={onFirstClick}
+                onLastClick={onLastClick}
+                perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
+              />
               />
             </ToolbarItem>
           </div>
@@ -153,13 +179,17 @@ const BackendsIndexPage = (props: Props) => {
           <div className="pf-c-toolbar__content">
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
-                itemCount={37}
-                perPage={perPage}
-                page={page}
-                variant={PaginationVariant.bottom}
-                onSetPage={onSetPage}
                 widgetId="pagination-options-menu-top"
-                onPerPageSelect={onPerPageSelect}
+                itemCount={26}
+                perPage={Number(perPage) === 0 ? 20 : perPage}
+                page={Number(page)}
+                variant={PaginationVariant.bottom}
+                onNextClick={goToNextPage}
+                onPreviousClick={goToPreviousPage}
+                onPerPageSelect={selectPerPage}
+                onFirstClick={onFirstClick}
+                onLastClick={onLastClick}
+                perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
               />
             </ToolbarItem>
           </div>
