@@ -38,6 +38,8 @@ const ProductsWidget = (props: Props) => {
   console.log('what are the props' + JSON.stringify(props))
   console.log('what are the props 2' + JSON.stringify(props.products[0].name))
 
+  console.log('what is props length' + props.products.length)
+
   return (
     <Card className="pf-c-card">
       <CardHeader>

@@ -10,7 +10,7 @@ import {
   ButtonVariant,
   PageSection,
   Pagination,
-  // PaginationVariant,
+  PaginationVariant,
   PageSectionVariants,
   Title,
   Divider,
@@ -48,8 +48,6 @@ type Props = {
 const ProductsIndexPage = (props: Props) => {
   console.log('THIS IS THE PROPS' + JSON.stringify(props))
 
-  // const [perPage, setPerPage] = useState(url.searchParams.get('per_page'))
-  // const [page, setPage] = useState(url.searchParams.get('page'))
   const tableColumns = [
     'Name',
     'System name',
@@ -60,15 +58,12 @@ const ProductsIndexPage = (props: Props) => {
   ]
 
   const [passedInProps, setPassedInProps] = useState(props)
-
   console.log('what is the state' + setPassedInProps)
 
-  console.log('what is the length' + props.products.length)
-
-  const tableRows = props.products.map((tableRow) => {
+  const tableRows = props.products.map((tableRow, index) => {
     return {
       cells: [
-        { title: <a href="/">{tableRow.name}</a> },
+        { title: <Button href={tableRow.links[1].path} component="a" variant="link" isInline>{tableRow.name}</Button> },
         tableRow.system_name,
         <span className="api-table-timestamp">{tableRow.updated_at}</span>,
         tableRow.apps_count,
@@ -110,37 +105,37 @@ const ProductsIndexPage = (props: Props) => {
     }
   ]
 
-  // const onSetPage = (_event, pageNumber) => {
-  //   setPage(pageNumber)
-  // }
-
-  // const onPerPageSelect = (_event, perPage) => {
-  //   setPerPage(perPage)
-  // }
-
   const url = new URL(window.location.href)
-  console.log('what is the url' + url)
-  // const perPage = url.searchParams.get('per_page')
+  var perPage = url.searchParams.get('per_page')
+  console.log('what is perPage' + perPage)
+  var page = url.searchParams.get('page')
+  console.log('what is page' + page)
 
-  const page = url.searchParams.get('page')
-  console.log('what is the page' + page)
+  const selectPerPage = (_event, selectedPerPage) => {
+    url.searchParams.set('per_page', selectedPerPage)
+    url.searchParams.delete('page')
+    window.location.href = url.toString()
+  }
 
-  // const selectPerPage = (perPage) => {
-  //   if (perPage === null) {
-  //     perPage = 20
-  //   }
-  //   url.searchParams.set('per_page', perPage)
-  //   url.searchParams.delete('page')
-  //   window.location.href = url.toString()
-  // }
+  const goToNextPage = (_event, number) => {
+    console.log('what is number' + number)
+    console.log('NEXT PAGEEEEE')
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
+  }
 
-  const goToPage = (page) => {
-    console.log('what is page' + page)
-    var localPage = page === null ? 1 : page
+  const goToPreviousPage = (_event, number) => {
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
+  }
 
-    console.log('WHAT IS LCOAL PAGE LOCAL PAGE' + localPage)
-    url.searchParams.set('page', localPage)
-    console.log('what is urlllll' + url.toString())
+  const onFirstClick = (_event, number) => {
+    url.searchParams.set('page', number)
+    window.location.href = url.toString()
+  }
+
+  const onLastClick = (_event, number) => {
+    url.searchParams.set('page', number)
     window.location.href = url.toString()
   }
 
@@ -173,13 +168,16 @@ const ProductsIndexPage = (props: Props) => {
             </ToolbarItem>
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
-                itemCount={26}
-                perPage={20}
-                page={page === null ? 1 : page}
-                // onSetPage={goToPage}
-                onNextClick={goToPage}
                 widgetId="pagination-options-menu-top"
-                // onPerPageSelect={selectPerPage}
+                itemCount={26}
+                perPage={Number(perPage) === 0 ? 20 : perPage}
+                page={Number(page)}
+                onNextClick={goToNextPage}
+                onPreviousClick={goToPreviousPage}
+                onPerPageSelect={selectPerPage}
+                onFirstClick={onFirstClick}
+                onLastClick={onLastClick}
+                perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
               />
             </ToolbarItem>
           </div>
@@ -188,21 +186,25 @@ const ProductsIndexPage = (props: Props) => {
           <TableHeader />
           <TableBody />
         </Table>
-        {/* <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
+        <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
-                itemCount={37}
-                perPage={perPage}
-                page={page}
-                variant={PaginationVariant.bottom}
-                // onSetPage={onSetPage}
                 widgetId="pagination-options-menu-top"
-                // onPerPageSelect={onPerPageSelect}
+                itemCount={26}
+                perPage={Number(perPage) === 0 ? 20 : perPage}
+                page={Number(page)}
+                variant={PaginationVariant.bottom}
+                onNextClick={goToNextPage}
+                onPreviousClick={goToPreviousPage}
+                onPerPageSelect={selectPerPage}
+                onFirstClick={onFirstClick}
+                onLastClick={onLastClick}
+                perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
               />
             </ToolbarItem>
           </div>
-        </Toolbar> */}
+        </Toolbar>
       </PageSection>
     </>
   )
