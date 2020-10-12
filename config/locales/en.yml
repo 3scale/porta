@@ -128,14 +128,21 @@ en:
           update_link: "%{docs_base_url}/api-documentation/activedocs-migrate"
           # end documentation links
   admin_sections:
-    partners: Accounts -- Applications
-    monitoring: Analytics
-    portal: Developer Portal
-    finance: Billing
-    settings: Settings
+    partners: 'Create, read, update and delete:<br/>
+      - developer <strong>accounts</strong><br/>
+      - <strong>applications</strong> of <em>selected API products</em>'
+    monitoring: 'Access & query <strong>analytics</strong> of:<br/>
+      - all API backends<br/>
+      - <em>selected API products</em>'
+    portal: 'Create, read, update, and delete content & code of the <strong>developer portal</strong>'
+    finance: 'Setup and manage <strong>customer billing</strong>'
+    settings: 'Update <strong>settings pages</strong>'
     services: Selected APIs
-    plans: Integration & Application Plans
-    policy_registry: Policy Registry
+    plans: 'Create, read, update and delete:<br/>
+      - <strong>attribues, metrics, methods, and mapping rules of all existing API backends</strong><br/>
+      - <strong>attributes, application plans, active docs, and integration</strong> of <em>selected API products</em>'
+    policy_registry: 'Create, read, update and delete:<br/>
+      - the APIcast <strong>policy chain and its policies</strong>'
 
   go_live_states:
     api_sandbox_traffic: "Done: Add your API endpoint and hit save & test"

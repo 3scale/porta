@@ -1,8 +1,12 @@
 // @flow
 
 import React from 'react'
+import ReactHtmlParser from 'react-html-parser'
 
 import type { Role } from 'Users/types'
+
+const ADMIN_LABEL = 'Admin (full access)'
+const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API products  or API backends</strong>)`
 
 /**
  * A radio group to select the user's role: Admin or Member.
@@ -19,8 +23,8 @@ const RoleRadioGroup = ({ selectedRole, onRoleChanged }: {
         <label>Role</label>
       </legend>
       <ol>
-        <UserRole role='admin' label='Admin (full access)' checked={selectedRole === 'admin'} onChange={onRoleChanged}/>
-        <UserRole role='member' label='Member' checked={selectedRole === 'member'} onChange={onRoleChanged}/>
+        <UserRole role='admin' label={ADMIN_LABEL} checked={selectedRole === 'admin'} onChange={onRoleChanged}/>
+        <UserRole role='member' label={MEMBER_LABEL} checked={selectedRole === 'member'} onChange={onRoleChanged}/>
       </ol>
     </fieldset>
   </li>
@@ -50,7 +54,7 @@ const UserRole = ({ role, label, checked, onChange }: {
         value={role}
         onChange={() => onChange(role) }
       />
-      {label}
+      { ReactHtmlParser(label) }
     </label>
   </li>
 )

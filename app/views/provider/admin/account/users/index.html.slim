@@ -43,7 +43,7 @@ table class="data" id="users"
             - if user.admin?
               | Unlimited Access
             - else
-              = user.admin_sections.any? ? AdminSection.labels(user.admin_sections) : '-'
+              = user.admin_sections.any? ? AdminSection.labels_resume(user.admin_sections) : '-'
 
         td.operations
           - if can? :destroy, user

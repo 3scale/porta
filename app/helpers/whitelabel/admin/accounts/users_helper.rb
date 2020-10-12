@@ -6,7 +6,7 @@ module Whitelabel::Admin::Accounts::UsersHelper
     roles.map do |role|
       text = role.to_s.capitalize
       text << ' (full access)' if role == :admin
-      text << ' (access control by group)' if role == :member && can?(:create_contributors, current_user.account)
+      text << ' (limited access, <strong>cannot create new API products  or API backends, cannot access or change account-level settings</strong>)' if role == :member && can?(:create_contributors, current_user.account)
       # text << ' (can update/create content)'     if role == :contributor
       [text, role]
     end

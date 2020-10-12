@@ -1,8 +1,13 @@
 // @flow
 
 import React from 'react'
+import ReactHtmlParser from 'react-html-parser'
 
-import { getFeatureName, canFeatureSetServicePermissions } from 'Users/utils'
+import {
+  getFeatureName,
+  getFeatureNameDescription,
+  canFeatureSetServicePermissions
+} from 'Users/utils'
 
 import type { Feature, AdminSection } from 'Users/types'
 
@@ -26,7 +31,7 @@ const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible 
 
   return (
     <fieldset>
-      <legend className='label'>This user can access</legend>
+      <legend className='label'>This member user can:</legend>
       <ol className={featuresListClassName}>
         <input type='hidden' name='user[member_permission_ids][]' />
         {features.map(feature =>
@@ -41,6 +46,16 @@ const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible 
 }
 
 /**
+ * A list describing member permissions for each label.
+ * @param {Array} descriptionItems - An array of strings containing the description of the label.
+ */
+const LabelDescriptionItems = ({ descriptionItems }: { descriptionItems: Array<string> }) => (
+  <ul className="FeatureAccessList-item--labelDescription">
+    {descriptionItems.map(item => <li key={item}>{ReactHtmlParser(item)}</li>)}
+  </ul>
+)
+
+/**
  * A checkbox representing a Feature the user will have access to.
  * @param {Feature}   value     - The feature this checkbox represents.
  * @param {boolean}   checked   - Whether or not this checkbox is selected.
@@ -53,6 +68,7 @@ const FeatureCheckbox = ({ value, checked, onChange }: {
 }) => {
   const featuresListItemClassName = `FeatureAccessList-item FeatureAccessList-item--${value} ${checked ? 'is-checked' : 'is-unchecked'}`
   const featureCheckboxClassName = `user_member_permission_ids ${canFeatureSetServicePermissions(value) ? 'user_member_permission_ids--service' : ''}`
+  const descriptionItems = getFeatureNameDescription(value)
 
   return (
     <li className={featuresListItemClassName}>
@@ -66,7 +82,8 @@ const FeatureCheckbox = ({ value, checked, onChange }: {
           checked={checked}
           onChange={() => onChange(value)}
         />
-        {getFeatureName(value)}
+        { ReactHtmlParser(getFeatureName(value)) }
+        { descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
       </label>
     </li>
   )
@@ -97,7 +114,7 @@ const AllServicesCheckbox = ({ checked, onChange }: {
           checked={checked}
           onChange={() => onChange('services')}
         />
-        All current and future APIs
+        All current and future existing API products
       </label>
       {blankServiceIdsInput}
     </li>

@@ -23,6 +23,18 @@ form.formtastic fieldset > ol > li fieldset {
     &-item {
       position: relative;
 
+      &--labelDescription {
+
+        li {
+          padding-left: line-height-times(1);
+
+          &::before {
+            content: '- ';
+          }
+        }
+
+      }
+
       &--partners {
         margin-top: line-height-times(2);
       }
@@ -37,28 +49,33 @@ form.formtastic fieldset > ol > li fieldset {
       &--monitoring::after,
       &--partners::after,
       &--plans::after {
-        position: absolute;
         background-color: transparent;
-        width: 53%;
-        margin-top: line-height-times(-1/2);
-        border-top: $border-width dotted $border-color;
-        display: block;
-        content: "";
-        margin-left: 40%;
-        height: line-height-times(200);
         border-right: $border-width dotted $border-color;
-        z-index: 0;
+        border-top: $border-width dotted $border-color;
         border-top-right-radius: $border-radius;
+        content: '';
+        display: block;
+        height: line-height-times(200);
+        position: absolute;
+        z-index: 0;
+      }
+
+      &--partners:after {
+        margin-left: 43%;
+        top: line-height-times(275 / 100);
+        width: 50%;
       }
 
       &--monitoring:after {
-        margin-left: 13.5%;
-        width: 64%;
+        margin-left: 27%;
+        top: line-height-times(275 / 100);
+        width: 50%;
       }
 
       &--plans:after {
-        margin-left: 35%;
-        width: 20%;
+        margin-left: 34%;
+        top: line-height-times(475 / 100);
+        width: 21%;
       }
 
       &--services {
@@ -108,24 +125,6 @@ form.formtastic fieldset > ol > li fieldset {
       }
     }
 
-    &-sections {
-      white-space: nowrap;
-      text-align: right;
-      width: 70%;
-      position: absolute;
-      top: line-height-times(1/2);
-      right: line-height-times(1/2);
-    }
-
-    &-sectionItem {
-      display: inline;
-      margin-left: 8% !important;
-      font-weight: $font-weight-normal;
-
-      &:first-child {
-        margin-left: 0 !important;
-      }
-    }
   }
 }
 
