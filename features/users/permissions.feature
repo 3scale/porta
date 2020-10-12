@@ -10,11 +10,11 @@ Feature: Member permissions
   Scenario: Enable and disable billing section
     When I have opened edit page for the active member
       Then no permissions should be checked
-    When I check "Billing"
+    When I check "Setup and manage customer billing"
       And I press "Update User"
       And I have opened edit page for the active member
-      Then the "Billing" checkbox should be checked
-    When I uncheck "Billing"
+      Then the "Setup and manage customer billing" checkbox should be checked
+    When I uncheck "Setup and manage customer billing"
       And I press "Update User"
       And I have opened edit page for the active member
       Then no permissions should be checked

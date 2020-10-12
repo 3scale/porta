@@ -57,6 +57,11 @@ it('should call onAdminSectionSelected when a selecting a checkbox', () => {
   expect(onAdminSectionSelected).toHaveBeenCalledWith('plans')
 })
 
+it('should render label description items', () => {
+  getWrapper()
+  expect(wrapper.find('.FeatureAccessList-item--labelDescription').exists()).toBe(true)
+})
+
 describe('when services are hidden', () => {
   beforeEach(() => {
     getWrapper({ areServicesVisible: false })
