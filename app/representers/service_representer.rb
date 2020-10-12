@@ -15,7 +15,6 @@ module ServiceRepresenter
   property :support_email
   property :description
 
-  property :intentions_required
   property :buyers_manage_apps
   property :buyers_manage_keys
   property :referrer_filters_required

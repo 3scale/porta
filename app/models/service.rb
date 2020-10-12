@@ -354,7 +354,6 @@ class Service < ApplicationRecord
       xml.backend_version proxy&.authentication_method
       xml.description description
 
-      xml.intentions_required intentions_required
       xml.buyers_manage_apps buyers_manage_apps
       xml.buyers_manage_keys buyers_manage_keys
       xml.referrer_filters_required referrer_filters_required

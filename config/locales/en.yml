@@ -1234,7 +1234,6 @@ en:
 
 
       service:
-        intentions_required: "Developers requesting access to your API will be asked about the purpose of their API."
         buyers_manage_apps: "Developers with access to your API will be able to manage applications and their access keys."
         buyers_manage_keys: "Makes applications Keys visible on the developer dashboard. This setting makes sense only when former one is checked."
         referrer_filters_required: "Developers with access to your API must indicate allowed domain / IP referrers."
@@ -1253,7 +1252,6 @@ en:
         update: "Update Policy Chain"
     labels:
       service:
-        intentions_required: "Signup requires a description of intended use"
         buyers_manage_apps: "Developers can manage applications"
         buyers_manage_keys: "Developers can manage Keys"
         referrer_filters_required: "Require referrer filtering"

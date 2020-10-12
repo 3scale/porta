@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200629110740) do
+ActiveRecord::Schema.define(version: 20201012071402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1147,7 +1147,6 @@ ActiveRecord::Schema.define(version: 20200629110740) do
     t.string   "logo_content_type",            limit: 255
     t.integer  "logo_file_size"
     t.string   "state",                        limit: 255,                     null: false
-    t.boolean  "intentions_required",                      default: false
     t.text     "terms"
     t.boolean  "buyers_manage_apps",                       default: true
     t.boolean  "buyers_manage_keys",                       default: true

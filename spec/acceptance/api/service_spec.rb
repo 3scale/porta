@@ -15,7 +15,7 @@ resource "Service" do
       email_buyer: ['', '50', '100', '300']
     }
   )}
-  let(:attributes) { %w[id system_name intentions_required buyers_manage_apps buyers_manage_keys referrer_filters_required custom_keys_enabled buyer_key_regenerate_enabled mandatory_app_key buyer_can_select_plan buyer_plan_change_permission] }
+  let(:attributes) { %w[id system_name buyers_manage_apps buyers_manage_keys referrer_filters_required custom_keys_enabled buyer_key_regenerate_enabled mandatory_app_key buyer_can_select_plan buyer_plan_change_permission] }
 
   before do
     provider.settings.allow_multiple_services!

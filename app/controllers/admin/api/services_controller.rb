@@ -117,7 +117,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
 
   def service_params
     permitted_params = [:name, :system_name, :description, :support_email, :deployment_option, :backend_version,
-                        :intentions_required, :buyers_manage_apps, :referrer_filters_required,
+                        :buyers_manage_apps, :referrer_filters_required,
                         :buyer_can_select_plan, :buyer_plan_change_permission, :buyers_manage_keys,
                         :buyer_key_regenerate_enabled, :mandatory_app_key, :custom_keys_enabled, :state_event,
                         :txt_support, :terms,

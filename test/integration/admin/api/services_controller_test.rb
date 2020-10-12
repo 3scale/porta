@@ -201,7 +201,6 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
         buyers_manage_keys: false,
         buyer_key_regenerate_enabled: false,
         mandatory_app_key: false,
-        intentions_required: true,
         buyers_manage_apps: false,
         referrer_filters_required: true,
         custom_keys_enabled: false,

@@ -238,9 +238,6 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'api signup should not raise if cinstance validations are enforced' do
-    @application_plan1.service.update_attribute :intentions_required, true
-    assert @application_plan1.service.intentions_required?
-
     @provider.settings.allow_multiple_applications
 
     UserMailer.expects(:deliver_signup_notification).never

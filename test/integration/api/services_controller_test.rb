@@ -84,7 +84,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       expected_notification_settings = update_service_params[:notification_settings].transform_values { |notifications| notifications.map(&:to_i) }
       expected_buyer_plan_change_permission = update_service_params[:buyer_plan_change_permission]
       expected_signup_and_use = update_service_params
-                                  .slice(:intentions_required, :buyers_manage_apps, :referrer_filters_required, :custom_keys_enabled, :buyer_can_select_plan)
+                                  .slice(:buyers_manage_apps, :referrer_filters_required, :custom_keys_enabled, :buyer_can_select_plan)
                                   .transform_values { |value| (value.to_i == 1) }
 
       service.reload
@@ -195,8 +195,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def update_params(oidc_id: nil)
       @update_params ||= { service:
-        { intentions_required: '0',
-          buyers_manage_apps: '0',
+        { buyers_manage_apps: '0',
           referrer_filters_required: '1',
           custom_keys_enabled: '1',
           buyer_can_select_plan: '1',

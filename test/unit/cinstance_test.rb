@@ -74,25 +74,6 @@ class CinstanceTest < ActiveSupport::TestCase
 
       end # provider has multi apps enabled
 
-      context 'service requires intentions' do
-        setup do
-          @service.update_attribute :intentions_required, true
-        end
-
-        should 'not require description' do
-          assert @cinstance.valid?
-        end
-
-        should 'require description if a human interaction is happening' do
-          @cinstance.validate_human_edition!
-
-          assert !@cinstance.valid?
-          assert @cinstance.errors[:description].presence
-        end
-
-      end # service requires intentions
-    end #description
-
     context 'plan class validation' do
 
       should 'be valid with an application plan' do

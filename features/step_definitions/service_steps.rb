@@ -22,15 +22,6 @@ Given /^the service of (provider "[^\"]*") has terms$/ do |account|
   account.first_service!.update_attributes!(:terms => 'Some terms and conditions...')
 end
 
-Given /^the service of (provider "[^\"]*") requires intentions of use$/ do |account|
-  account.first_service!.update_attribute(:intentions_required, true)
-end
-
-Given /^the service of (provider "[^\"]*") does not require intentions of use$/ do |account|
-  account.first_service!.update_attribute(:intentions_required, false)
-end
-
-
 Given /^(buyer "[^"]*") subscribed to (service plan "[^"]*")$/ do |buyer, plan|
   buyer.buy!(plan)
 end
