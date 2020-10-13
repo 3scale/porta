@@ -21,7 +21,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
 
   def proxy_configs
     accessible_services_ids = System::Database.oracle? ? accessible_services.pluck(:id) : accessible_services.select(:id)
-    ProxyConfig.joins(:proxy).where("proxies.service_id in (?)", accessible_services_ids).by_environment(environment)
+    ProxyConfig.joins(:proxy).where(proxies: { service_id: accessible_services_ids }).by_environment(environment)
   end
 
   def accessible_services

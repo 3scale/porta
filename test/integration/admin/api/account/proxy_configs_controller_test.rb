@@ -29,7 +29,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
       proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
       expected_ids = ProxyConfig
                       .joins(:proxy)
-                      .where("proxies.service_id in (?)", [accessible_service_1, accessible_service_2].map(&:id))
+                      .where(proxies: { service_id: [accessible_service_1, accessible_service_2].map(&:id) })
                       .by_environment(environment)
                       .order(:id)
                       .pluck(:id)
