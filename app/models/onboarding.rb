@@ -1,6 +1,5 @@
 class Onboarding < ApplicationRecord
-  attr_accessible :bubble_api_state, :bubble_deployment_state, :bubble_metric_state,
-                  :bubble_mapping_state, :bubble_limit_state, :wizard_state
+  attr_accessible :wizard_state
 
   belongs_to :account
 
@@ -21,10 +20,6 @@ class Onboarding < ApplicationRecord
       transition any => :completed
     end
 
-  end
-
-  def active?
-    persisted?
   end
 
   def wizard_started?

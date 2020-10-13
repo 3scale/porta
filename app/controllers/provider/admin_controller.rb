@@ -6,7 +6,7 @@ class Provider::AdminController < FrontendController
 
     if start_onboarding_wizard
       redirect_to provider_admin_onboarding_wizard_root_path
-    elsif has_permission? && onboarding_active?
+    elsif has_permission? && onboarding.persisted?
       redirect_to provider_admin_dashboard_path
     else
       redirect_back_or_default provider_admin_dashboard_path
@@ -23,10 +23,6 @@ class Provider::AdminController < FrontendController
     false
   ensure
     analytics.track('Wizard Step', step: 'started') if started
-  end
-
-  def onboarding_active?
-    onboarding.active?
   end
 
   def has_permission?
