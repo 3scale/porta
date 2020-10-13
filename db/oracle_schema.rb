@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200629110740) do
+ActiveRecord::Schema.define(version: 20200921135637) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -1223,6 +1223,7 @@ ActiveRecord::Schema.define(version: 20200629110740) do
     t.string   "kubernetes_service_link"
   end
 
+  add_index "services", ["account_id", "state"], name: "index_services_on_account_id_and_state"
   add_index "services", ["account_id"], name: "idx_account_id"
   add_index "services", ["system_name", "account_id"], name: "index_services_on_system_name_and_account_id_and_deleted_at", unique: true
 

@@ -73,7 +73,7 @@ FactoryBot.define do
 
   factory(:simple_service, :class => Service) do
     mandatory_app_key { false }
-    sequence(:name) { |n| "service#{n}" }
+    sequence(:name) { |n| "simpleservice#{n}" }
     association(:account, :factory => :simple_provider)
     after(:create) do |record|
       record.service_tokens.first_or_create!(value: 'token')

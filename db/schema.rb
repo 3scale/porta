@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200629110740) do
+ActiveRecord::Schema.define(version: 20200921135637) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                 null: false
@@ -1166,6 +1166,7 @@ ActiveRecord::Schema.define(version: 20200629110740) do
     t.boolean  "referrer_filters_required",                  default: false
     t.string   "deployment_option",                          default: "hosted"
     t.string   "kubernetes_service_link"
+    t.index ["account_id", "state"], name: "index_services_on_account_id_and_state", using: :btree
     t.index ["account_id"], name: "idx_account_id", using: :btree
     t.index ["system_name", "account_id"], name: "index_services_on_system_name_and_account_id_and_deleted_at", unique: true, using: :btree
   end
