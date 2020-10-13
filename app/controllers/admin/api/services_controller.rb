@@ -7,6 +7,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   before_action :deny_on_premises_for_master
   before_action :can_create, only: :create
 
+  paginate only: :index
 
   # swagger
   ##~ sapi = source2swagger.namespace("Account Management API")
@@ -23,7 +24,8 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    respond_with(accessible_services)
+    services = accessible_services.includes(:proxy, :account).order(:id).paginate(pagination_params)
+    respond_with(services)
   end
 
   # swagger

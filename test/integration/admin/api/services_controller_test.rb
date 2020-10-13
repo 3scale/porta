@@ -67,6 +67,14 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     attr_reader :provider, :service
 
+    test 'index can be paginated' do
+      FactoryBot.create_list(:simple_service, 5, account: provider)
+      get admin_api_services_path(access_token: access_token_value, format: :json, per_page: 3, page: 2)
+      assert_response :success
+      response_service_ids = JSON.parse(response.body)['services'].map { |response_service| response_service.dig('service', 'id') }
+      assert_equal provider.accessible_services.order(:id).offset(3).limit(3).pluck(:id), response_service_ids
+    end
+
     test 'delete with api_key' do
       assert_change(of: -> { service.reload.deleted? }, from: false, to: true) do
         delete admin_api_service_path(service, provider_key: provider.api_key)
