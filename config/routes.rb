@@ -510,6 +510,7 @@ without fake Core server your after commit callbacks will crash and you might ge
             put :change_published
           end
         end
+        resources :proxy_configs, path: 'proxy_configs/:environment', only: %i[index], defaults: { format: :json }
       end
 
       namespace(:cms) do
