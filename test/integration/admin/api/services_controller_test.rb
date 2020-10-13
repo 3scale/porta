@@ -72,7 +72,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       get admin_api_services_path(access_token: access_token_value, format: :json, per_page: 3, page: 2)
       assert_response :success
       response_service_ids = JSON.parse(response.body)['services'].map { |response_service| response_service.dig('service', 'id') }
-      assert_equal provider.accessible_services.order(:id).offset(3).limit(3).pluck(:id), response_service_ids
+      assert_equal provider.accessible_services.order(:id).offset(3).limit(3).select(:id).map(&:id), response_service_ids
     end
 
     test 'delete with api_key' do
