@@ -29,6 +29,7 @@ import 'patternflyStyles/dashboard'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Props = {
+  backendsCount: number,
   backends: Array<{
     id: number,
     link: string,
@@ -157,7 +158,7 @@ const BackendsIndexPage = (props: Props) => {
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
                 widgetId="pagination-options-menu-top"
-                itemCount={26}
+                itemCount={props.backendsCount}
                 perPage={Number(perPage) === 0 ? 20 : perPage}
                 page={Number(page)}
                 onNextClick={goToNextPage}
@@ -180,7 +181,7 @@ const BackendsIndexPage = (props: Props) => {
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
               <Pagination
                 widgetId="pagination-options-menu-top"
-                itemCount={26}
+                itemCount={props.backendsCount}
                 perPage={Number(perPage) === 0 ? 20 : perPage}
                 page={Number(page)}
                 variant={PaginationVariant.bottom}

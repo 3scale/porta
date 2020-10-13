@@ -6,9 +6,10 @@ const containerId = 'products'
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
 
-  const products = safeFromJsonString(container.dataset.products)
+  const { products, productsCount } = container.dataset
 
   ProductsIndexPageWrapper({
-    products
+    products: safeFromJsonString(products),
+    productsCount: safeFromJsonString(productsCount)
   }, containerId)
 })

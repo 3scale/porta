@@ -6,9 +6,10 @@ const containerId = 'backend-apis'
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
 
-  const backends = safeFromJsonString(container.dataset.backends)
+  const { backends, backendsCount } = container.dataset
 
   BackendsIndexPageWrapper({
-    backends
+    backends: safeFromJsonString(backends),
+    backendsCount: safeFromJsonString(backendsCount)
   }, containerId)
 })
