@@ -1,6 +1,6 @@
 // @flow
 
-import React, {useState} from 'react'
+import React from 'react'
 import {
   Level,
   LevelItem,
@@ -58,9 +58,6 @@ const ProductsIndexPage = (props: Props) => {
     'Unread alerts'
   ]
 
-  const [passedInProps, setPassedInProps] = useState(props)
-  console.log('what is the state' + setPassedInProps)
-
   const tableRows = props.products.map((tableRow, index) => {
     return {
       cells: [
@@ -74,43 +71,19 @@ const ProductsIndexPage = (props: Props) => {
     }
   })
 
-  const linkToPage = (event, rowId, rowData, extra, actionNumber) => {
-    const path = passedInProps && passedInProps.products[rowId].links[actionNumber].path
+  const linkToPage = (rowId, actionNumber) => {
+    const path = props && props.products[rowId].links[actionNumber].path
     window.location.href = path
   }
 
-  const tableActions = () => [
-    {
-      title: 'Edit',
-      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 0)
-    },
-    {
-      title: 'Overview',
-      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 1)
-    },
-    {
-      title: 'Analytics',
-      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 2)
-    },
-    {
-      title: 'Applications',
-      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 3)
-    },
-    {
-      title: 'ActiveDocs',
-      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 4)
-    },
-    {
-      title: 'Integration',
-      onClick: (event, rowId, rowData, extra) => linkToPage(event, rowId, rowData, extra, 5)
-    }
-  ]
+  const tableActions = () => ['Edit', 'Overview', 'Analytics', 'Applications', 'ActiveDocs', 'Integration'].map((title, i) => ({
+    title,
+    onClick: (_event, rowId) => linkToPage(rowId, i)
+  }))
 
   const url = new URL(window.location.href)
   var perPage = url.searchParams.get('per_page')
-  console.log('what is perPage' + perPage)
   var page = url.searchParams.get('page')
-  console.log('what is page' + page)
 
   const selectPerPage = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', selectedPerPage)
@@ -118,26 +91,27 @@ const ProductsIndexPage = (props: Props) => {
     window.location.href = url.toString()
   }
 
-  const goToNextPage = (_event, number) => {
-    console.log('what is number' + number)
-    console.log('NEXT PAGEEEEE')
-    url.searchParams.set('page', number)
+  const goToPage = (page) => {
+    url.searchParams.set('page', page)
     window.location.href = url.toString()
   }
 
-  const goToPreviousPage = (_event, number) => {
-    url.searchParams.set('page', number)
-    window.location.href = url.toString()
-  }
-
-  const onFirstClick = (_event, number) => {
-    url.searchParams.set('page', number)
-    window.location.href = url.toString()
-  }
-
-  const onLastClick = (_event, number) => {
-    url.searchParams.set('page', number)
-    window.location.href = url.toString()
+  const pagination = (bottomTrue) => {
+    return (
+      <Pagination
+        widgetId="pagination-options-menu-top"
+        itemCount={props.productsCount}
+        perPage={Number(perPage) === 0 ? 20 : Number(perPage)}
+        page={Number(page)}
+        onPerPageSelect={selectPerPage}
+        onNextClick={(_ev, page) => goToPage(page)}
+        onPreviousClick={(_ev, page) => goToPage(page)}
+        onFirstClick={(_ev, page) => goToPage(page)}
+        onLastClick={(_ev, page) => goToPage(page)}
+        perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
+        variant={ bottomTrue && PaginationVariant.bottom}
+      />
+    )
   }
 
   return (
@@ -168,18 +142,7 @@ const ProductsIndexPage = (props: Props) => {
               </InputGroup>
             </ToolbarItem>
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
-              <Pagination
-                widgetId="pagination-options-menu-top"
-                itemCount={props.productsCount}
-                perPage={Number(perPage) === 0 ? 20 : perPage}
-                page={Number(page)}
-                onNextClick={goToNextPage}
-                onPreviousClick={goToPreviousPage}
-                onPerPageSelect={selectPerPage}
-                onFirstClick={onFirstClick}
-                onLastClick={onLastClick}
-                perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
-              />
+              {pagination()}
             </ToolbarItem>
           </div>
         </Toolbar>
@@ -190,19 +153,7 @@ const ProductsIndexPage = (props: Props) => {
         <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
           <div className="pf-c-toolbar__content">
             <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
-              <Pagination
-                widgetId="pagination-options-menu-top"
-                itemCount={props.productsCount}
-                perPage={Number(perPage) === 0 ? 20 : perPage}
-                page={Number(page)}
-                variant={PaginationVariant.bottom}
-                onNextClick={goToNextPage}
-                onPreviousClick={goToPreviousPage}
-                onPerPageSelect={selectPerPage}
-                onFirstClick={onFirstClick}
-                onLastClick={onLastClick}
-                perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
-              />
+              {pagination(true)}
             </ToolbarItem>
           </div>
         </Toolbar>
