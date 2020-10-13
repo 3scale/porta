@@ -11,6 +11,7 @@ import {
   DataListItemCells,
   DataListAction
 } from '@patternfly/react-core'
+import { useClickOutside } from 'utilities/useClickOutside'
 
 type Props = {
   api: {
@@ -26,13 +27,11 @@ type Props = {
   }
 }
 
-const APIDataListItem = ({ api }: Props, isProduct) => {
-  const { id, name, updated_at: updatedAt, link, links } = api
+const APIDataListItem = ({ api }: Props) => {
+  const { id, name, updated_at: updatedAt, link } = api
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
-  // TODO: useClickOutside(ref, () => setIsOpen(false))
-
-  console.log('what is type' + isProduct)
+  useClickOutside(ref, () => setIsOpen(false))
 
   return (
     <DataListItem key={id} aria-labelledby="single-action-item1">
@@ -55,49 +54,19 @@ const APIDataListItem = ({ api }: Props, isProduct) => {
           aria-label="Actions"
           isPlainButtonAction
         >
-          { isProduct ? (
-            <Dropdown
-              isPlain
-              id="actions-menu"
-              ref={ref}
-              position={DropdownPosition.right}
-              isOpen={isOpen}
-              className="dashboard-list-item-action"
-              onClick={() => setIsOpen(!isOpen)}
-              toggle={<KebabToggle id={id.toString()} />}
-              dropdownItems={api.links.map(({ name, path }) => (
-                <DropdownItem key={name} href={path}>{name}</DropdownItem>
-              ))}
-            />
-          ) : (
-            <Dropdown
-              isPlain
-              id="actions-menu"
-              ref={ref}
-              position={DropdownPosition.right}
-              isOpen={isOpen}
-              className="dashboard-list-item-action"
-              onClick={() => setIsOpen(!isOpen)}
-              toggle={<KebabToggle id={id.toString()} />}
-              dropdownItems={[
-                <DropdownItem key={`link-${links[0].path}`} href={links[0].path}>
-                  Edit
-                </DropdownItem>,
-                <DropdownItem key={`link-${links[1].path}`} href={links[1].path}>
-                  Overview
-                </DropdownItem>,
-                <DropdownItem key={`link-${links[2].path}`} href={links[2].path}>
-                  Analytics
-                </DropdownItem>,
-                <DropdownItem key={`link-${links[3].path}`} href={links[3].path}>
-                  Methods and Metrics
-                </DropdownItem>,
-                <DropdownItem key={`link-${links[4].path}`} href={links[4].path}>
-                  Mapping Rules
-                </DropdownItem>
-              ]}
-            />
-          )}
+          <Dropdown
+            isPlain
+            id="actions-menu"
+            ref={ref}
+            position={DropdownPosition.right}
+            isOpen={isOpen}
+            className="dashboard-list-item-action"
+            onClick={() => setIsOpen(!isOpen)}
+            toggle={<KebabToggle id={id.toString()} />}
+            dropdownItems={api.links.map(({ name, path }) => (
+              <DropdownItem key={name} href={path}>{name}</DropdownItem>
+            ))}
+          />
         </DataListAction>
       </DataListItemRow>
     </DataListItem>
