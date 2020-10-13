@@ -10,11 +10,11 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
 
   def index
     activate_menu :dashboard
-    @backend_apis = current_account.backend_apis
-                                   .order(updated_at: :desc)
-                                   .paginate(pagination_params)
-                                   .decorate
-                                   .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
+    @raw_backend_apis = current_account.backend_apis
+    @backend_apis = @raw_backend_apis.order(updated_at: :desc)
+                                     .paginate(pagination_params)
+                                     .decorate
+                                     .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
   end
 
   def new
