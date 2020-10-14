@@ -8,6 +8,8 @@ class BackendApiDecorator < ApplicationDecorator
     h.provider_admin_backend_api_path(object)
   end
 
+  alias link api_selector_api_link
+
   private
 
   def backend_api?

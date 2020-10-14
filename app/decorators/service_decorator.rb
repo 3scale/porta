@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ServiceDecorator < ApplicationDecorator
-
   self.include_root_in_json = false
 
   def link_to_application_plans
@@ -45,6 +44,8 @@ class ServiceDecorator < ApplicationDecorator
       h.admin_service_applications_path(object)
     end
   end
+
+  alias link api_selector_api_link
 
   private
 
