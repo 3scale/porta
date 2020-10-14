@@ -1,3 +1,4 @@
+@javascript
 Feature: API menu
   In order to manage my API
   As a provider
@@ -9,7 +10,7 @@ Feature: API menu
       And all the rolling updates features are on
       And I log in as provider "foo.example.com"
       And I go to the provider dashboard
-      And I follow "Overview"
+      And I follow "API"
 
   Scenario: API menu structure
     Then I should see menu items

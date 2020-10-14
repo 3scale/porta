@@ -2,6 +2,8 @@
 
 class Api::ServicesController < Api::BaseController
   include ServiceDiscovery::ControllerMethods
+  include SearchSupport
+  include ThreeScale::Search::Helpers
 
   activate_menu :serviceadmin, :overview
 
@@ -12,6 +14,17 @@ class Api::ServicesController < Api::BaseController
 
   with_options only: %i[edit update settings usage_rules] do |actions|
     actions.sublayout 'api/service'
+  end
+
+  def index
+    activate_menu :dashboard
+    search = ThreeScale::Search.new(params[:search] || params)
+    @raw_services = current_user.accessible_services
+    @services = @raw_services.order(updated_at: :desc)
+                             .paginate(pagination_params)
+                             .scope_search(search)
+                             .decorate
+                             .to_json(only: %i[name updated_at id system_name], methods: %i[links apps_count backends_count unread_alerts_count])
   end
 
   def show

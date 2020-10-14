@@ -14,6 +14,16 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
+
+    @widget_products = @services.order(updated_at: :desc)
+                                .decorate
+                                .take(5)
+                                .to_json(only: %i[name updated_at id], methods: %i[link links])
+    @widget_backends = current_account.backend_apis.includes(:services)
+                                                    .order(updated_at: :desc)
+                                                    .decorate
+                                                    .take(5)
+                                                    .to_json(only: %i[name updated_at id], methods: %i[link links])
   end
 
   include DashboardTimeRange

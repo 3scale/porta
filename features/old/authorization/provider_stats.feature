@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider stats section authorization
   In order to manage my stats
   As a provider
@@ -15,8 +16,7 @@ Feature: Provider stats section authorization
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
     When I go to the provider dashboard
-    Then I should see the link "Analytics" in the apis dashboard widget
-    When I follow "Analytics"
+    And I follow "API"
     Then I should see the link "Analytics" in the main menu
 
     When I go to the <page> page
@@ -52,8 +52,7 @@ Feature: Provider stats section authorization
      And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "member"
      And I go to the provider dashboard
-    Then I should see "Analytics" in the apis dashboard widget
-    When I follow "Analytics"
+    When I follow "API"
     Then I should see the link "Analytics" in the main menu
 
     When I go to the <page> page

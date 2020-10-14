@@ -1,3 +1,4 @@
+@javascript
 Feature: Services switch
   To have different provider plans
   As a member or admin
@@ -11,18 +12,18 @@ Feature: Services switch
     Given current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
 
+  @wip
   Scenario: In denied state, I should see link to upgrade warning
     Given I am on the provider dashboard
-      And I follow "New Product"
+      And I follow "Create Product"
     Then I should be on the upgrade notice page for "multiple_services"
 
   Scenario: In allowed state (hidden and visible), I should have the functionality enabled
     Given provider "foo.example.com" has "multiple_services" switch allowed
       And I am on the provider dashboard
-      And I follow "New Product"
+      And I follow "Create Product"
     Then I should be on the new service page
 
-  @javascript
   Scenario: In allowed state (hidden and visible), I should be able to access the page by url
     Given provider "foo.example.com" has "multiple_services" switch allowed
       And I go to the new service page

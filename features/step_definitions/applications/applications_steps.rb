@@ -168,7 +168,7 @@ end
 
 Given(/^I'm on that application page$/) do
   click_on 'Dashboard'
-  click_on 'Overview'
+  click_on 'API' # this is supposed to be the name of the service
   click_on 'Apps'
   assert @application, '@application is missing'
   click_on @application.name
