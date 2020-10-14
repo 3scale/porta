@@ -12,11 +12,11 @@ import {
   DataList
 } from '@patternfly/react-core'
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
-import 'Dashboard/styles/dashboard.scss'
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
-import 'patternflyStyles/dashboard'
-
 import { createReactWrapper } from 'utilities/createReactWrapper'
+
+import 'Dashboard/styles/dashboard.scss'
+import 'patternflyStyles/dashboard'
 
 type Props = {
   newProductPath: string,
