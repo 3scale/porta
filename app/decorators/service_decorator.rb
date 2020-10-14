@@ -55,7 +55,7 @@ class ServiceDecorator < ApplicationDecorator
 
   def links
     [
-      { name: 'Edit', path: '' },
+      { name: 'Edit', path: h.edit_admin_service_path(object) },
       { name: 'Overview', path: h.admin_service_path(object) },
       { name: 'Analytics', path: h.admin_service_stats_usage_path(object) },
       { name: 'Applications', path: h.admin_service_applications_path(object) },
