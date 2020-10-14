@@ -13,10 +13,10 @@ Feature: Dashboard search bar
 
   @javascript
   Scenario: Products widget
-    Given I should see "My Fancy Product" in the apis dashboard products tabs section
-    And I should see "My Regular Product" in the apis dashboard products tabs section
+    Given I should see "My Fancy Product" in the apis dashboard products widget
+    And I should see "My Regular Product" in the apis dashboard products widget
 
   @javascript
   Scenario: Backends widget
-    Given I should see "My Fancy Backend API" in the apis dashboard backends tabs section
-    And I should see "My Regular Backend API" in the apis dashboard backends tabs section
+    Given I should see "My Fancy Backend API" in the apis dashboard backends widget
+    And I should see "My Regular Backend API" in the apis dashboard backends widget

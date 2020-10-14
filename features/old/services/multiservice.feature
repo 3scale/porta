@@ -9,12 +9,13 @@ Feature: Multiservice feature
     And a service "Second service" of provider "foo.example.com"
     And current domain is the admin domain of provider "foo.example.com"
 
+  @javascript
   Scenario: Can create new service setting
     Given I am logged in as provider "foo.example.com"
      And provider "foo.example.com" has "can create service" set to "true"
     When I am on the provider dashboard
-    Then I should see "New Product"
-    Then I should see "New Backend"
+    Then I should see "Create Product"
+    Then I should see "Create Backend"
 
   @javascript
   Scenario: Create new product
@@ -22,7 +23,7 @@ Feature: Multiservice feature
       And provider "foo.example.com" has "multiple_services" switch allowed
       And service discovery is not enabled
     When I am on the provider dashboard
-     And I follow "New Product"
+     And I follow "Create Product"
      And I fill in "Name" with "Less fancy API"
      And I press "Create Product"
     Then I should see "Less fancy API"
@@ -33,7 +34,7 @@ Feature: Multiservice feature
     And provider "foo.example.com" has "multiple_services" switch allowed
     And service discovery is not enabled
     When I am on the provider dashboard
-    And I follow "New Product"
+    And I follow "Create Product"
     And I fill in "Name" with "Invalid API"
     And I fill in "System name" with "I am using spaces"
     And I press "Create Product"
@@ -45,7 +46,7 @@ Feature: Multiservice feature
       And provider "foo.example.com" has "multiple_services" switch allowed
       And service discovery is not enabled
     When I am on the provider dashboard
-     And I follow "New Backend"
+     And I follow "Create Backend"
     #  And I fill in "Name" with "Less fancy Backend"
     #  And I press "Add Backend"
     # Then I should see "Less fancy Backend"
@@ -77,11 +78,3 @@ Feature: Multiservice feature
     And I am on the edit page for service "Second service" of provider "foo.example.com"
     When I follow "I understand the consequences, proceed to delete 'Second service' service" and I confirm dialog box
     Then I should see "Service 'Second service' will be deleted shortly."
-
-  @javascript
-  Scenario: Folded services have no overview data
-    Given I am logged in as provider "foo.example.com"
-    And provider "foo.example.com" has "multiple_services" switch allowed
-    When I am on the provider dashboard
-    And service "Fancy API" is folded
-    Then I should not see "Fancy API" overview data

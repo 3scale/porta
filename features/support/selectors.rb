@@ -12,11 +12,11 @@ module HtmlSelectorsHelper
     when 'the audience dashboard widget', :audience_dashboard_widget
       '#audience'
     when 'the apis dashboard widget', :apis_dashboard_widget
-      '#apis'
-    when 'the apis dashboard products tabs section'
-      '#products'
-    when 'the apis dashboard backends tabs section'
-      '#backends'
+      '.apiContainer'
+    when 'the apis dashboard products widget'
+      '#products-widget'
+    when 'the apis dashboard backends widget'
+      '#backends-widget'
     when 'the first api dashboard widget'
       "#service_#{provider_first_service!.id}"
     when 'the subsubmenu'
