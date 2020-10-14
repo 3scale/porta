@@ -12,11 +12,11 @@ Feature: Services switch
     Given current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "foo.example.com"
 
-  # FIXME!!
+  @wip
   Scenario: In denied state, I should see link to upgrade warning
     Given I am on the provider dashboard
       And I follow "Create Product"
-    # Then I should be on the upgrade notice page for "multiple_services"
+    Then I should be on the upgrade notice page for "multiple_services"
 
   @wip
   Scenario: In allowed state (hidden and visible), I should have the functionality enabled
