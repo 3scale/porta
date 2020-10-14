@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {
+  Form,
   Level,
   LevelItem,
   InputGroup,
@@ -129,12 +130,15 @@ const ProductsIndexPage = ({ productsCount, products }: Props) => {
       <Toolbar id="top-toolbar" className="pf-c-toolbar">
         <div className="pf-c-toolbar__content">
           <ToolbarItem>
-            <InputGroup className="api-table-search">
-              <TextInput placeholder="Find a Product" name="findProduct" id="findProduct" type="search" aria-label="Find a product" />
-              <Button variant={ButtonVariant.control} aria-label="search button for search input">
-                <SearchIcon />
-              </Button>
-            </InputGroup>
+            <Form id="new_search" action="/apiconfig/services" acceptCharset="UTF-8" method="get">
+              <InputGroup className="api-table-search">
+                <input name="utf8" type="hidden" value="✓" />
+                <TextInput placeholder="Find a Product" name="search[query]" id="findProduct" type="search" aria-label="Find a product" />
+                <Button variant={ButtonVariant.control} aria-label="search button for search input" type="submit">
+                  <SearchIcon />
+                </Button>
+              </InputGroup>
+            </Form>
           </ToolbarItem>
           <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
             <Pagination />
