@@ -247,6 +247,36 @@
       ]
     },
     {
+      "path": "/admin/api/account/proxy_configs/{environment}.json",
+      "responseClass": "proxy_config",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Proxy Configs List (Provider)",
+          "description": "Returns the Proxy Configs of the provider",
+          "group": "proxy_config",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "environment",
+              "description": "Gateway environment. Must be 'sandbox' or 'production'",
+              "dataType": "string",
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "environment"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/features.xml",
       "responseClass": "List[feature]",
       "operations": [
@@ -7036,7 +7066,7 @@
       "operations": [
         {
           "httpMethod": "GET",
-          "summary": "Proxy Configs List",
+          "summary": "Proxy Configs List (Service)",
           "description": "Returns the Proxy Configs of a Service",
           "group": "proxy_config",
           "parameters": [
