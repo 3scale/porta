@@ -1,6 +1,20 @@
 // @flow
 
 import React from 'react'
+import {
+  Button,
+  Card,
+  CardActions,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Title,
+  DataList
+} from '@patternfly/react-core'
+import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
+import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
+import 'Dashboard/styles/dashboard.scss'
+import 'patternflyStyles/dashboard'
 
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
@@ -21,10 +35,38 @@ type Props = {
 }
 
 const BackendsWidget = (props: Props) => {
-  console.log(props)
+  console.log('what are the props' + JSON.stringify(props))
+  console.log('what are the props 2' + JSON.stringify(props.backends[0].name))
 
   return (
-    <div>Backends</div>
+    <Card className="pf-c-card">
+      <CardHeader>
+        <div className="dashboard-list-icon-title-layout">
+          <CubesIcon/>
+          <Title headingLevel="h1" size="xl">
+            Backends
+          </Title>
+          <CardActions>
+            <Button component="a" variant="primary" href={props.newBackendPath}>
+              Create Backend
+            </Button>
+          </CardActions>
+        </div>
+        <div className="dashboard-list-subtitle">
+          Recently updated
+        </div>
+      </CardHeader>
+      <CardBody>
+        <DataList>
+          {props.backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
+        </DataList>
+      </CardBody>
+      <CardFooter>
+        <Button variant="link" component="a" isInline href={props.backendsPath}>
+          Explore all Backends
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }
 
