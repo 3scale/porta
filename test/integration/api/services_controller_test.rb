@@ -12,6 +12,13 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
   attr_reader :provider, :service
 
+  class IndexTest < self
+    test 'index page' do
+      get admin_services_path
+      assert_response :success
+    end
+  end
+
   class SettingsTest < self
     test 'settings' do
       get settings_admin_service_path(service)

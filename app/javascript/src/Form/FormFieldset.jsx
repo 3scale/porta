@@ -7,7 +7,7 @@ import { FormContext } from '@patternfly/react-core/dist/js/components/Form/Form
 // $FlowFixMe Flow has troubles with @patternfly modules
 import styles from '@patternfly/react-styles/css/components/Form/form'
 // $FlowFixMe Flow has troubles with @patternfly modules
-import { css, getModifier } from '@patternfly/react-styles'
+import { css } from '@patternfly/react-styles'
 
 type Props = {
   children?: React.Node,
@@ -25,7 +25,7 @@ const FormFieldset = ({
     {({ isHorizontal }: { isHorizontal: boolean }) => (
       <fieldset
         {...props}
-        className={css(styles.formFieldset, isInline ? getModifier(styles, 'inline', className) : className)}
+        className={css(styles.formFieldset, isInline ? styles.modifiers.inline : className)}
       >
         {isHorizontal ? <div className={css(styles.formHorizontalGroup)}>{children}</div> : children}
       </fieldset>

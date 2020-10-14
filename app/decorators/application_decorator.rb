@@ -12,4 +12,8 @@ class ApplicationDecorator < Draper::Decorator
   def self.collection_decorator_class
     PaginatingDecorator
   end
+
+  def updated_at
+    object.updated_at.to_s :long if object.updated_at?
+  end
 end

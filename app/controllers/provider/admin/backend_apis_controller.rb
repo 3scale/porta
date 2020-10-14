@@ -1,10 +1,24 @@
 # frozen_string_literal: true
 
 class Provider::Admin::BackendApisController < Provider::Admin::BaseController
+  include SearchSupport
+  include ThreeScale::Search::Helpers
+
   load_and_authorize_resource :backend_api, through: :current_user, through_association: :accessible_backend_apis
 
   activate_menu :backend_api, :overview
   layout 'provider'
+
+  def index
+    activate_menu :dashboard
+    search = ThreeScale::Search.new(params[:search] || params)
+    @raw_backend_apis = current_account.backend_apis
+    @backend_apis = @raw_backend_apis.order(updated_at: :desc)
+                                     .paginate(pagination_params)
+                                     .scope_search(search)
+                                     .decorate
+                                     .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
+  end
 
   def new
     activate_menu :dashboard

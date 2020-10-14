@@ -3,6 +3,7 @@ Feature: Plans management
   As a provider
   I want to be able to manage the plans
 
+  @javascript
   Scenario: Navigating to plans admin page in enterprise mode
     Given a provider "foo.example.com"
       And current domain is the admin domain of provider "foo.example.com"
@@ -10,7 +11,7 @@ Feature: Plans management
       And I am logged in as provider "foo.example.com"
 
     When I follow "Dashboard"
-     And I follow "Overview"
+     And I follow "API"
      And I follow "0 application plans"
     Then I should be on the application plans admin page
     When I follow "Subscriptions"

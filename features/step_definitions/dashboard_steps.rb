@@ -19,13 +19,6 @@ def top_traffic_for_name(name, opts = {})
   page.find_by_id("dashboard-widget-service_id-#{service_id}service_top_traffic", opts)
 end
 
-When(/^service "([^"]*)" is (folded|unfolded)$/) do |service_name, state|
-  service = service_for_name(service_name)
-
-  assert     service[:class].include? 'is-closed' if state == 'folded'
-  assert_not service[:class].include? 'is-closed' if state == 'unfolded'
-end
-
 Then(/^I should not see "([^"]*)" overview data$/) do |service_name|
   hits = hits_for_name(service_name, visible: false)
   top_traffic = top_traffic_for_name(service_name, visible: false)
@@ -40,13 +33,6 @@ When(/^overview data of "([^"]*)" is displayed$/) do |service_name|
 
   assert hits.has_css? '.Dashboard-chart'
   assert top_traffic.has_css? '.Dashboard-chart'
-end
-
-When(/^I (fold|unfold) service "([^"]*)"$/) do |action, service_name|
-  step %(service "#{service_name}" is #{action == 'fold' ? 'unfolded' : 'folded'})
-
-  service = service_for_name(service_name)
-  service.find('.DashboardSection-toggle').click
 end
 
 When(/^I select the (products|backends) tab$/) do |tab|

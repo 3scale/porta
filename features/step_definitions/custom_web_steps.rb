@@ -238,7 +238,7 @@ When /^(.*) within ([^:"]+)$/ do |lstep, scope|
 end
 
 [ 'the audience dashboard widget', 'the apis dashboard widget',
-  'the apis dashboard products tabs section', 'the apis dashboard backends tabs section',
+  'the apis dashboard products widget', 'the apis dashboard backends widget',
   'the first api dashboard widget',
   'the main menu',
   'the subsubmenu','the user widget',

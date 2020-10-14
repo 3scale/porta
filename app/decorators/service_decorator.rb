@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ServiceDecorator < ApplicationDecorator
-
   self.include_root_in_json = false
 
   def link_to_application_plans
@@ -46,9 +45,37 @@ class ServiceDecorator < ApplicationDecorator
     end
   end
 
+  alias link api_selector_api_link
+
   private
 
   def backend_api?
     false
+  end
+
+  def links
+    [
+      { name: 'Edit', path: h.edit_admin_service_path(object) },
+      { name: 'Overview', path: h.admin_service_path(object) },
+      { name: 'Analytics', path: h.admin_service_stats_usage_path(object) },
+      { name: 'Applications', path: h.admin_service_applications_path(object) },
+      { name: 'ActiveDocs', path: h.admin_service_api_docs_path(object) },
+      { name: 'Integration', path: h.path_to_service(object) },
+    ]
+  end
+
+  def apps_count
+    cinstances.size
+  end
+
+  def backends_count
+    backend_api_configs.size
+  end
+
+  def unread_alerts_count
+    account.buyer_alerts
+           .by_service(object)
+           .unread
+           .size
   end
 end
