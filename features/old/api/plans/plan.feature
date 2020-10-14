@@ -11,7 +11,7 @@ Feature: Plans management
       And I am logged in as provider "foo.example.com"
 
     When I follow "Dashboard"
-     And I follow "default"
+     And I follow "API"
      And I follow "0 application plans"
     Then I should be on the application plans admin page
     When I follow "Subscriptions"
