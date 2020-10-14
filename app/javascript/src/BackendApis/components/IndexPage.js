@@ -9,7 +9,7 @@ import {
   Button,
   ButtonVariant,
   PageSection,
-  Pagination,
+  Pagination as PFPagination,
   PaginationVariant,
   PageSectionVariants,
   Title,
@@ -32,6 +32,8 @@ type Props = {
   backendsCount: number,
   backends: Array<{
     id: number,
+    system_name: string,
+    private_endpoint: string,
     link: string,
     links: Array<{
       name: string,
@@ -44,7 +46,7 @@ type Props = {
   }>
 }
 
-const BackendsIndexPage = (props: Props) => {
+const BackendsIndexPage = ({ backendsCount, backends }: Props) => {
   const tableColumns = [
     'Name',
     'System name',
@@ -53,31 +55,27 @@ const BackendsIndexPage = (props: Props) => {
     'Linked products'
   ]
 
-  const tableRows = props.backends.map((tableRow) => {
-    return {
-      cells: [
-        { title: <Button href={tableRow.links[1].path} component="a" variant="link" isInline>{tableRow.name}</Button> },
-        tableRow.system_name,
-        <span className="api-table-timestamp">{tableRow.updated_at}</span>,
-        tableRow.private_endpoint,
-        tableRow.products_count
-      ]
-    }
-  })
+  const tableRows = backends.map((tableRow) => ({
+    cells: [
+      { title: <Button href={tableRow.links[1].path} component="a" variant="link" isInline>{tableRow.name}</Button> },
+      tableRow.system_name,
+      <span className="api-table-timestamp">{tableRow.updated_at}</span>,
+      tableRow.private_endpoint,
+      tableRow.products_count
+    ]
+  }))
 
   const linkToPage = (rowId, actionNumber) => {
-    const path = props && props.backends[rowId].links[actionNumber].path
+    const { path } = backends[rowId].links[actionNumber]
     window.location.href = path
   }
 
-  const tableActions = () => ['Edit', 'Overview', 'Analytics', 'Methods and Metrics', 'Mapping Rules'].map((title, i) => ({
+  const tableActions = ['Edit', 'Overview', 'Analytics', 'Methods and Metrics', 'Mapping Rules'].map((title, i) => ({
     title,
     onClick: (_event, rowId) => linkToPage(rowId, i)
   }))
 
   const url = new URL(window.location.href)
-  var perPage = url.searchParams.get('per_page')
-  var page = url.searchParams.get('page')
 
   const selectPerPage = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', selectedPerPage)
@@ -90,12 +88,14 @@ const BackendsIndexPage = (props: Props) => {
     window.location.href = url.toString()
   }
 
-  const pagination = (bottomTrue) => {
+  const Pagination = ({ variant }: { variant?: string }) => {
+    const perPage = url.searchParams.get('per_page')
+    const page = url.searchParams.get('page')
     return (
-      <Pagination
+      <PFPagination
         widgetId="pagination-options-menu-top"
-        itemCount={props.productsCount}
-        perPage={Number(perPage) === 0 ? 20 : Number(perPage)}
+        itemCount={backendsCount}
+        perPage={Number(perPage) || 20}
         page={Number(page)}
         onPerPageSelect={selectPerPage}
         onNextClick={(_ev, page) => goToPage(page)}
@@ -103,56 +103,54 @@ const BackendsIndexPage = (props: Props) => {
         onFirstClick={(_ev, page) => goToPage(page)}
         onLastClick={(_ev, page) => goToPage(page)}
         perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
-        variant={ bottomTrue && PaginationVariant.bottom}
+        variant={variant}
       />
     )
   }
 
   return (
-    <>
-      <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
-        <Level>
-          <LevelItem>
-            <Title headingLevel="h1" size="2xl">Backends</Title>
-          </LevelItem>
-          <LevelItem>
-            <Button variant="primary" component="a" href="/p/admin/backend_apis/new">
+    <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
+      <Level>
+        <LevelItem>
+          <Title headingLevel="h1" size="2xl">Backends</Title>
+        </LevelItem>
+        <LevelItem>
+          <Button variant="primary" component="a" href="/p/admin/backend_apis/new">
               Create Backend
-            </Button>
-          </LevelItem>
-        </Level>
-        <p className="api-table-description">
+          </Button>
+        </LevelItem>
+      </Level>
+      <p className="api-table-description">
           Explore and manage all your internal APIs.
-        </p>
-        <Divider/>
-        <Toolbar id="top-toolbar" className="pf-c-toolbar">
-          <div className="pf-c-toolbar__content">
-            <ToolbarItem>
-              <InputGroup className="api-table-search">
-                <TextInput placeholder="Find a Backend" name="findBackend" id="findProduct" type="search" aria-label="Find a product" />
-                <Button variant={ButtonVariant.control} aria-label="search button for search input">
-                  <SearchIcon />
-                </Button>
-              </InputGroup>
-            </ToolbarItem>
-            <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
-              {pagination()}
-            </ToolbarItem>
-          </div>
-        </Toolbar>
-        <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
-          <TableHeader />
-          <TableBody />
-        </Table>
-        <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
-          <div className="pf-c-toolbar__content">
-            <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
-              {pagination(true)}
-            </ToolbarItem>
-          </div>
-        </Toolbar>
-      </PageSection>
-    </>
+      </p>
+      <Divider/>
+      <Toolbar id="top-toolbar" className="pf-c-toolbar">
+        <div className="pf-c-toolbar__content">
+          <ToolbarItem>
+            <InputGroup className="api-table-search">
+              <TextInput placeholder="Find a Backend" name="findBackend" id="findProduct" type="search" aria-label="Find a product" />
+              <Button variant={ButtonVariant.control} aria-label="search button for search input">
+                <SearchIcon />
+              </Button>
+            </InputGroup>
+          </ToolbarItem>
+          <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
+            <Pagination />
+          </ToolbarItem>
+        </div>
+      </Toolbar>
+      <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
+        <TableHeader />
+        <TableBody />
+      </Table>
+      <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
+        <div className="pf-c-toolbar__content">
+          <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
+            <Pagination variant={PaginationVariant.bottom} />
+          </ToolbarItem>
+        </div>
+      </Toolbar>
+    </PageSection>
   )
 }
 

@@ -34,7 +34,7 @@ type Props = {
   }>
 }
 
-const ProductsWidget = (props: Props) => (
+const ProductsWidget = ({ newProductPath, productsPath, products }: Props) => (
   <Card className="pf-c-card">
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
@@ -43,7 +43,7 @@ const ProductsWidget = (props: Props) => (
           Products
         </Title>
         <CardActions>
-          <Button component="a" variant="primary" href={props.newProductPath}>
+          <Button component="a" variant="primary" href={newProductPath}>
             Create Product
           </Button>
         </CardActions>
@@ -53,12 +53,12 @@ const ProductsWidget = (props: Props) => (
       </div>
     </CardHeader>
     <CardBody>
-      <DataList>
-        {props.products.map(api => <APIDataListItem api={api} key={api.id}/>)}
+      <DataList aria-label="">
+        {products.map(api => <APIDataListItem api={api} key={api.id}/>)}
       </DataList>
     </CardBody>
     <CardFooter>
-      <Button variant="link" component="a" isInline href={props.productsPath}>
+      <Button variant="link" component="a" isInline href={productsPath}>
         Explore all Products
       </Button>
     </CardFooter>

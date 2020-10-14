@@ -34,7 +34,7 @@ type Props = {
   }>
 }
 
-const BackendsWidget = (props: Props) => (
+const BackendsWidget = ({ newBackendPath, backendsPath, backends }: Props) => (
   <Card className="pf-c-card">
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
@@ -43,7 +43,7 @@ const BackendsWidget = (props: Props) => (
           Backends
         </Title>
         <CardActions>
-          <Button component="a" variant="primary" href={props.newBackendPath}>
+          <Button component="a" variant="primary" href={newBackendPath}>
             Create Backend
           </Button>
         </CardActions>
@@ -53,12 +53,12 @@ const BackendsWidget = (props: Props) => (
       </div>
     </CardHeader>
     <CardBody>
-      <DataList>
-        {props.backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
+      <DataList aria-label="">
+        {backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
       </DataList>
     </CardBody>
     <CardFooter>
-      <Button variant="link" component="a" isInline href={props.backendsPath}>
+      <Button variant="link" component="a" isInline href={backendsPath}>
         Explore all Backends
       </Button>
     </CardFooter>
