@@ -119,12 +119,12 @@ const ProductsIndexPage = ({ productsCount, products }: Props) => {
         </LevelItem>
         <LevelItem>
           <Button variant="primary" component="a" href="/apiconfig/services/new">
-              Create Product
+            Create Product
           </Button>
         </LevelItem>
       </Level>
       <p className="api-table-description">
-          Explore and manage all customer-facing APIs that contain one or more of your Backends.
+        Explore and manage all customer-facing APIs that contain one or more of your Backends.
       </p>
       <Divider/>
       <Toolbar id="top-toolbar" className="pf-c-toolbar">
