@@ -11,12 +11,12 @@ Feature: Provider stats section authorization
     And a service plan "serv plan" of provider "foo.example.com"
     And all the rolling updates features are off
 
+  @javascript
   Scenario Outline: Provider admin can access stats
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
     When I go to the provider dashboard
-    Then I should see the link "Analytics" in the apis dashboard widget
-    When I follow "Analytics"
+    And I follow "default"
     Then I should see the link "Analytics" in the main menu
 
     When I go to the <page> page
@@ -52,8 +52,7 @@ Feature: Provider stats section authorization
      And current domain is the admin domain of provider "foo.example.com"
     When I log in as provider "member"
      And I go to the provider dashboard
-    Then I should see "Analytics" in the apis dashboard widget
-    When I follow "Analytics"
+    When I follow "default"
     Then I should see the link "Analytics" in the main menu
 
     When I go to the <page> page
