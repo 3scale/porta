@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 
 import {
   Dropdown,
@@ -11,7 +11,6 @@ import {
   DataListItemCells,
   DataListAction
 } from '@patternfly/react-core'
-import { useClickOutside } from 'utilities/useClickOutside'
 
 type Props = {
   api: {
@@ -28,10 +27,23 @@ type Props = {
 }
 
 const APIDataListItem = ({ api }: Props) => {
-  const { id, name, updated_at: updatedAt, link } = api
+  const { id, name, updated_at: updatedAt, link, links } = api
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
-  useClickOutside(ref, () => setIsOpen(false))
+
+  const handleClickOutside = useCallback((event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsOpen(false)
+    }
+  }, [ref])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside, false)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside, false)
+    }
+  }, [isOpen])
 
   return (
     <DataListItem key={id} aria-labelledby="single-action-item1">
@@ -52,21 +64,23 @@ const APIDataListItem = ({ api }: Props) => {
           aria-labelledby="multi-actions-item1 multi-actions-action1"
           id="actions-menu"
           aria-label="Actions"
+          // TODO: throwing a warning, does this prop really exist?
           isPlainButtonAction
         >
-          <Dropdown
-            isPlain
-            id="actions-menu"
-            ref={ref}
-            position={DropdownPosition.right}
-            isOpen={isOpen}
-            className="dashboard-list-item-action"
-            onClick={() => setIsOpen(!isOpen)}
-            toggle={<KebabToggle id={id.toString()} />}
-            dropdownItems={api.links.map(({ name, path }) => (
-              <DropdownItem key={name} href={path}>{name}</DropdownItem>
-            ))}
-          />
+          <div ref={ref}>
+            <Dropdown
+              isPlain
+              id="actions-menu"
+              position={DropdownPosition.right}
+              isOpen={isOpen}
+              className="dashboard-list-item-action"
+              onClick={() => setIsOpen(!isOpen)}
+              toggle={<KebabToggle id={id.toString()} />}
+              dropdownItems={links.map(({ name, path }) => (
+                <DropdownItem key={name} href={path}>{name}</DropdownItem>
+              ))}
+            />
+          </div>
         </DataListAction>
       </DataListItemRow>
     </DataListItem>
