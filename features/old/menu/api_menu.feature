@@ -1,3 +1,4 @@
+@javascript
 Feature: API menu
   In order to manage my API
   As a provider
@@ -36,11 +37,10 @@ Feature: API menu
     | Listing                   |
     | Application Plans         |
 
-  @javascript
   Scenario: Integration sub menu structure provider has api as product enabled
     Given the account has api_as_product rolling update enabled
     And I have api_as_product feature disabled
-    When I follow "API"
+    When I follow "Overview"
     When I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
@@ -48,20 +48,18 @@ Feature: API menu
     | Mapping Rules             |
     | Settings                  |
 
-  @javascript
   Scenario: Integration sub menu structure when provider does not have api as product enabled
     Given I have api_as_product feature disabled
-    When I follow "API"
+    When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
     | Methods & Metrics         |
     | Settings                  |
 
-  @javascript
   Scenario: Integration sub menu structure for API as Product
     Given I have api_as_product feature enabled
-    When I follow "API"
+    When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
