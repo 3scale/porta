@@ -16,7 +16,6 @@ import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import 'Dashboard/styles/dashboard.scss'
-import 'patternflyStyles/dashboard'
 
 type Props = {
   newProductPath: string,
