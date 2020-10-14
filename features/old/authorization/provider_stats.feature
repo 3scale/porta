@@ -1,3 +1,4 @@
+@javascript
 Feature: Provider stats section authorization
   In order to manage my stats
   As a provider
@@ -11,7 +12,6 @@ Feature: Provider stats section authorization
     And a service plan "serv plan" of provider "foo.example.com"
     And all the rolling updates features are off
 
-  @javascript
   Scenario Outline: Provider admin can access stats
     Given current domain is the admin domain of provider "foo.example.com"
       And I am logged in as provider "foo.example.com"
