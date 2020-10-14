@@ -21,7 +21,7 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
   #
   ##~ op             = e.operations.add
   ##~ op.httpMethod  = "GET"
-  ##~ op.summary     = "Proxy Configs List"
+  ##~ op.summary     = "Proxy Configs List (Service)"
   ##~ op.description = "Returns the Proxy Configs of a Service"
   ##~ op.group       = "proxy_config"
   #
