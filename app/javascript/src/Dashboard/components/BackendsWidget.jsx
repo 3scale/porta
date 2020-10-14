@@ -11,7 +11,7 @@ import {
   Title,
   DataList
 } from '@patternfly/react-core'
-import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
+import { CubeIcon } from '@patternfly/react-icons'
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
@@ -37,7 +37,7 @@ const BackendsWidget = ({ newBackendPath, backendsPath, backends }: Props) => (
   <Card className="pf-c-card">
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
-        <CubesIcon/>
+        <CubeIcon/>
         <Title headingLevel="h1" size="xl">
           Backends
         </Title>
