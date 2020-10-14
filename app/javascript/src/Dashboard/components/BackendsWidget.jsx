@@ -34,41 +34,36 @@ type Props = {
   }>
 }
 
-const BackendsWidget = (props: Props) => {
-  console.log('what are the props' + JSON.stringify(props))
-  console.log('what are the props 2' + JSON.stringify(props.backends[0].name))
-
-  return (
-    <Card className="pf-c-card">
-      <CardHeader>
-        <div className="dashboard-list-icon-title-layout">
-          <CubesIcon/>
-          <Title headingLevel="h1" size="xl">
-            Backends
-          </Title>
-          <CardActions>
-            <Button component="a" variant="primary" href={props.newBackendPath}>
-              Create Backend
-            </Button>
-          </CardActions>
-        </div>
-        <div className="dashboard-list-subtitle">
-          Recently updated
-        </div>
-      </CardHeader>
-      <CardBody>
-        <DataList>
-          {props.backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
-        </DataList>
-      </CardBody>
-      <CardFooter>
-        <Button variant="link" component="a" isInline href={props.backendsPath}>
-          Explore all Backends
-        </Button>
-      </CardFooter>
-    </Card>
-  )
-}
+const BackendsWidget = (props: Props) => (
+  <Card className="pf-c-card">
+    <CardHeader>
+      <div className="dashboard-list-icon-title-layout">
+        <CubesIcon/>
+        <Title headingLevel="h1" size="xl">
+          Backends
+        </Title>
+        <CardActions>
+          <Button component="a" variant="primary" href={props.newBackendPath}>
+            Create Backend
+          </Button>
+        </CardActions>
+      </div>
+      <div className="dashboard-list-subtitle">
+        Recently updated
+      </div>
+    </CardHeader>
+    <CardBody>
+      <DataList>
+        {props.backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
+      </DataList>
+    </CardBody>
+    <CardFooter>
+      <Button variant="link" component="a" isInline href={props.backendsPath}>
+        Explore all Backends
+      </Button>
+    </CardFooter>
+  </Card>
+)
 
 const BackendsWidgetWrapper = (props: Props, containerId: string) => createReactWrapper(<BackendsWidget {...props} />, containerId)
 
