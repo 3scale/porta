@@ -24,9 +24,10 @@ Feature: API Usage alerts
     Given current domain is the admin domain of provider "foo.example.com"
     Given I am logged in as provider "foo.example.com"
 
+  @javascript
   Scenario: Navigation
     When I go to the provider dashboard
-     And I follow "Overview"
+     And I follow "default"
      And I follow "Show all limit alerts for this service"
     Then I should be on the API alerts page of service "API" of provider "foo.example.com"
 
