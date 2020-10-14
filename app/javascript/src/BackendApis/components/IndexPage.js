@@ -23,10 +23,10 @@ import {
   TableBody
 } from '@patternfly/react-table'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+
 import 'BackendApis/styles/backends.scss'
 import 'patternflyStyles/dashboard'
-
-import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Props = {
   backendsCount: number,
