@@ -64,8 +64,6 @@ const APIDataListItem = ({ api }: Props) => {
           aria-labelledby="multi-actions-item1 multi-actions-action1"
           id="actions-menu"
           aria-label="Actions"
-          // TODO: throwing a warning, does this prop really exist?
-          isPlainButtonAction
         >
           <div ref={ref}>
             <Dropdown
