@@ -18,7 +18,6 @@ Feature: Services switch
       And I follow "Create Product"
     Then I should be on the upgrade notice page for "multiple_services"
 
-  @wip
   Scenario: In allowed state (hidden and visible), I should have the functionality enabled
     Given provider "foo.example.com" has "multiple_services" switch allowed
       And I am on the provider dashboard
