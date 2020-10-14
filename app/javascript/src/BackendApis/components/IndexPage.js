@@ -116,12 +116,12 @@ const BackendsIndexPage = ({ backendsCount, backends }: Props) => {
         </LevelItem>
         <LevelItem>
           <Button variant="primary" component="a" href="/p/admin/backend_apis/new">
-              Create Backend
+            Create Backend
           </Button>
         </LevelItem>
       </Level>
       <p className="api-table-description">
-          Explore and manage all your internal APIs.
+        Explore and manage all your internal APIs.
       </p>
       <Divider/>
       <Toolbar id="top-toolbar" className="pf-c-toolbar">
