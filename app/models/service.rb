@@ -3,6 +3,7 @@
 require 'backend_client'
 
 class Service < ApplicationRecord
+  include ThreeScale::Search::Scopes
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service

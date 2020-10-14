@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class BackendApi < ApplicationRecord
+  include ThreeScale::Search::Scopes
   include SystemName
   include ProxyConfigAffectingChanges::ModelExtension
 
