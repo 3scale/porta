@@ -45,8 +45,6 @@ type Props = {
 }
 
 const BackendsIndexPage = (props: Props) => {
-  console.log('THIS IS THE PROPS' + JSON.stringify(props))
-
   const tableColumns = [
     'Name',
     'System name',
