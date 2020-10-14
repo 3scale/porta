@@ -74,9 +74,9 @@ Feature: Invitations
   Scenario: Accepting an invitation
     Given an invitation from account "foo.example.com" sent to "alice@foo.example.com"
      And all the rolling updates features are off
+     Given current domain is the admin domain of provider "foo.example.com"
     When I follow the link to signup in the invitation sent to "alice@foo.example.com"
       And I fill in the invitation signup as "alice"
-
      And current domain is the admin domain of provider "foo.example.com"
     When I try to log in as provider "alice"
     Then I should be logged in as "alice"
