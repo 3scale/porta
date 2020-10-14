@@ -26,7 +26,6 @@ import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import 'Products/components/styles/products.scss'
-import 'patternflyStyles/dashboard'
 
 type Props = {
   productsCount: number,
