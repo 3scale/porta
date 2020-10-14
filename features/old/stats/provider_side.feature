@@ -13,10 +13,12 @@ Feature: Provider stats
     And all the rolling updates features are off
     And All Dashboard widgets are loaded
 
+  @javascript
   Scenario: Stats access
     When I log in as provider "foo.example.com"
     And I follow "API"
-    And I follow "Analytics"
+    And I click on "Analytics"
+    And I follow "Traffic"
     Then I should be on the provider stats usage page
 
   Scenario: Usage stats
