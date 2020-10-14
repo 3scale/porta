@@ -80,7 +80,7 @@ Feature: Invitations
      And current domain is the admin domain of provider "foo.example.com"
     When I try to log in as provider "alice"
     Then I should be logged in as "alice"
-    And follow "default"
+    And follow "API"
     And I should see "Analytics"
 
   Scenario: Managing sent invitations
