@@ -7,7 +7,7 @@ class DeveloperPortal::Swagger::SpecController < DeveloperPortal::BaseController
 
   # This is only for 1.2 specs
   def index
-    apis = site_account.api_docs_services
+    apis = site_account.all_api_docs
       .published
       .with_system_names((params[:services] || "").split(","))
       .select{ |api| api.specification.swagger_1_2? }
@@ -23,8 +23,8 @@ class DeveloperPortal::Swagger::SpecController < DeveloperPortal::BaseController
   #   - if basePath ends with / and in operations path starts with / then the url will contain //
   #   and somehow the call fails somewhere in the chain (api-docs-proxy/apache/nginx)
   def show
-
-    active_doc = site_account.api_docs_services.published.find_by_id_or_system_name! params[:id]
+    published_api_docs = site_account.all_api_docs.published
+    active_doc = published_api_docs.where(id: params[:id]).or(published_api_docs.where(system_name: params[:id])).first!
 
     json = if active_doc.specification.swagger_2_0?
       active_doc.specification.as_json

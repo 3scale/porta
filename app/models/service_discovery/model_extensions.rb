@@ -18,7 +18,7 @@ module ServiceDiscovery
       end
 
       def discovered_api_docs_service
-        api_docs_services.discovered.first
+        api_docs.discovered.first
       end
     end
 

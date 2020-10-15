@@ -11,11 +11,13 @@ class Admin::ApiDocs::BaseController < FrontendController
   end
 
   def new
-    @api_docs_service = api_docs_services.new
+    @api_docs_service = current_scope.api_docs.new
   end
 
   def create
-    @api_docs_service = api_docs_services.new(api_docs_params(:system_name), without_protection: true)
+    @api_docs_service = api_docs_collection.new
+    @api_docs_service.assign_attributes(api_docs_params(:system_name), without_protection: true)
+
     if @api_docs_service.save
       redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: 'ActiveDocs Spec was successfully saved.')
     else
@@ -84,13 +86,25 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   attr_reader :api_docs_service
 
+  def api_docs_collection
+    raise NoMethodError, "#{__method__} not implemented in #{self.class}"
+  end
+
   def current_scope
     raise NoMethodError, "#{__method__} not implemented in #{self.class}"
   end
 
   def api_docs_params(*extra_params)
     permit_params = %i[name body description published skip_swagger_validations service_id] + extra_params
-    params.require(:api_docs_service).permit(*permit_params)
+    permitted_params = params.require(:api_docs_service).permit(*permit_params)
+
+    service_id = permitted_params[:service_id]
+    if service_id.present?
+      permitted_params[:owner_id] = service_id
+      permitted_params[:owner_type] = 'Service'
+    end
+
+    permitted_params
   end
 
   def api_docs_services

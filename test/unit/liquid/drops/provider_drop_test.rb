@@ -79,8 +79,8 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
     valid_attributes = {name: 'name', body: '{"apis": [], "basePath": "http://example.com"}'}
     services = FactoryBot.create_list(:service, 2, account: @provider)
     @provider.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
-    services.first.api_docs_services.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
-    services.last.api_docs_services.create!(valid_attributes.merge({name: 'service-deleted'})) # non-accessible with service
+    services.first.api_docs.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
+    services.last.api_docs.create!(valid_attributes.merge({name: 'service-deleted'})) # non-accessible with service
     services.last.mark_as_deleted!
 
     api_specs_collection_drop = @drop.api_specs
@@ -90,5 +90,4 @@ class Liquid::Drops::ProviderDropTest < ActiveSupport::TestCase
       assert_includes %w[accessible service_accessible], api_spec_drop.system_name
     end
   end
-
 end

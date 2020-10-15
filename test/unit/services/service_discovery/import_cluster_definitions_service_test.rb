@@ -105,7 +105,7 @@ module ServiceDiscovery
     test 'import api_doc' do
       @import_service.stubs(cluster_service: @cluster_service)
 
-      assert_difference @service.api_docs_services.method(:count) do
+      assert_difference @service.api_docs.method(:count) do
         @import_service.send(:import_cluster_active_docs_to, @service)
 
         discovered_api_docs_service = @service.discovered_api_docs_service
@@ -119,7 +119,7 @@ module ServiceDiscovery
 
       discovered_api_docs_service = FactoryBot.create(:api_docs_service, account: @account, service: @service, discovered: true)
 
-      assert_no_difference @service.api_docs_services.method(:count) do
+      assert_no_difference @service.api_docs.method(:count) do
         @import_service.send(:import_cluster_active_docs_to, @service)
 
         discovered_api_docs_service = @service.discovered_api_docs_service

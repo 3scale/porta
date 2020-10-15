@@ -46,7 +46,7 @@ nav.DashboardNavigation id=widget.id
       - if can?(:manage, :plans)
         li.DashboardNavigation-list-item
           = dashboard_collection_link 'ActiveDoc',
-                                      service.api_docs_services,
+                                      service.api_docs,
                                       admin_service_api_docs_path(service),
                                       icon_name: 'file-text'
       // Integration

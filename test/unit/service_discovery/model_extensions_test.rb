@@ -41,7 +41,7 @@ module ServiceDiscovery
       end
 
       test 'discovered scope' do
-        api_docs =  FactoryBot.create_list(:api_docs_service, 2, discovered: true)
+        api_docs = FactoryBot.create_list(:api_docs_service, 2, discovered: true)
         api_docs += FactoryBot.create_list(:api_docs_service, 3, discovered: false)
 
         assert_same_elements api_docs[0..1].map(&:id), ::ApiDocs::Service.discovered.pluck(:id)

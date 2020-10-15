@@ -170,6 +170,10 @@ class Admin::Api::BaseController < ApplicationController
 
   ##~ @parameter_active_doc_id_by_id = {:name => "id", :description => "ID of the ActiveDocs spec", :dataType => "int", :required => true, :paramType => "path"}
 
+  ## Backend API ActiveDocs
+
+  ##~ @parameter_active_backend_api_doc_id_by_id = {:name => "id", :description => "ID of the API Backend ActiveDocs spec", :dataType => "int", :required => true, :paramType => "path"}
+
   ## MappingRules
 
   ##~ @parameter_mapping_rule_id_by_id = {name: "id", description: "Mapping Rule ID.", dataType: "int", paramType: "path", required: true}

@@ -517,27 +517,27 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'It validates the Service belongs to the Account if both are set' do
-    service          = FactoryBot.create(:simple_service, account: account)
+    service = FactoryBot.create(:simple_service, account: account)
     another_account  = FactoryBot.create(:simple_provider)
 
-    api_doc = service.api_docs_services.new(valid_attributes)
+    api_doc = service.api_docs.new(valid_attributes)
     api_doc.account = account
     assert api_doc.valid?
 
-    api_doc = account.api_docs_services.new(valid_attributes)
+    api_doc = account.api_docs.new(valid_attributes)
     assert api_doc.valid?
 
-    api_doc = service.api_docs_services.new(valid_attributes)
+    api_doc = service.api_docs.new(valid_attributes)
     api_doc.account = another_account
     refute api_doc.valid?
     assert_includes api_doc.errors[:service], 'not found'
 
-    api_doc = another_account.api_docs_services.new(valid_attributes)
+    api_doc = another_account.api_docs.new(valid_attributes)
     api_doc.service = service
     refute api_doc.valid?
     assert_includes api_doc.errors[:service], 'not found'
 
-    api_doc = account.api_docs_services.new(valid_attributes.merge({service_id: service.id + 1000}), without_protection: true)
+    api_doc = account.api_docs.new(valid_attributes.merge({service_id: service.id + 1000}), without_protection: true)
     refute api_doc.valid?
     assert_includes api_doc.errors[:service], 'not found'
   end
@@ -545,18 +545,14 @@ class ApiDocs::ServiceTest < ActiveSupport::TestCase
   test 'scope accessible' do
     services = FactoryBot.create_list(:simple_service, 2, account: account)
     api_docs = []
-    api_docs << account.api_docs_services.create!(valid_attributes.merge({name: 'accessible'})) # accessible without service
-    api_docs << services.first.api_docs_services.create!(valid_attributes.merge({name: 'service-accessible'})) # accessible with service
-    api_docs << services.last.api_docs_services.create!(valid_attributes.merge({name: 'service-deleted'})) # non-accessible wit service
+    api_docs << services.first.api_docs.create!(valid_attributes.merge({name: 'service-accessible'}))
+    api_docs << services.last.api_docs.create!(valid_attributes.merge({name: 'service-deleted'}))
     services.last.mark_as_deleted!
-    assert_same_elements api_docs[0..1].map(&:id), ApiDocs::Service.accessible.pluck(:id)
-  end
 
-  test 'scope without_service' do
-    api_docs_services = FactoryBot.create_list(:api_docs_service, 2)
-    service = FactoryBot.create(:simple_service, account: api_docs_services.first.account)
-    api_docs_services.first.update_column(:service_id, service.id)
-    assert_equal [api_docs_services.last.id], ApiDocs::Service.without_service.pluck(:id)
+    accessible_ids = account.all_api_docs.accessible(Service).pluck(:id)
+    accessible_ids += account.all_api_docs.deprecated_service_accessible.pluck(:id)
+
+    assert_same_elements [api_docs.first.id], accessible_ids.uniq
   end
 
   test 'scope permitted_for' do

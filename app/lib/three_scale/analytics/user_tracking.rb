@@ -133,16 +133,14 @@ module ThreeScale
             "developer_applications_#{state}".to_sym
           end
 
-          {  # TODO: this is making two counts in db every request
-             # caused by: b1e21a9a7a638c4f51d997452bd4c0be05209944
-             active_docs: @account.api_docs_services.count,
-             active_docs_published: @account.api_docs_services.published.count,
-
-             deployment_options: deployment_options.join(','),
-             deployment_option: deployment_options.group_by{|o| o }.values.max_by(&:size).try!(:first),
-             services: @account.services.size,
-
-             plan: @account.bought_plan.name,
+          { # TODO: this is making two counts in db every request
+            # caused by: b1e21a9a7a638c4f51d997452bd4c0be05209944
+            active_docs: @account.all_api_docs.count,
+            active_docs_published: @account.all_api_docs.published.count,
+            deployment_options: deployment_options.join(','),
+            deployment_option: deployment_options.group_by{|o| o }.values.max_by(&:size).try!(:first),
+            services: @account.services.size,
+            plan: @account.bought_plan.name,
           }.merge(developer_accounts).merge(developer_applications)
         end
       end

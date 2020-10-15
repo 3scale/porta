@@ -18,7 +18,6 @@ Feature: ActiveDocs pages
     Then the api doc spec is saved with this service linked
 
   Scenario: Create with failures and retry
-     And the service selector is not in the form
+    And the service selector is not in the form
     When I try to create the active docs of the service with invalid data
     Then I should see the active docs errors in the page
-     And the service selector is not in the form

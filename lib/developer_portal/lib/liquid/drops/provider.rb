@@ -215,7 +215,16 @@ module Liquid
         </ul>
       )
       def api_specs
-        Drops::Collection.for_drop(Drops::ApiSpec).new(@model.api_docs_services.accessible)
+        all_api_docs = @model.all_api_docs
+        account_api_specs = all_api_docs.accessible(::Account)
+        backend_api_api_specs = all_api_docs.accessible(::BackendApi)
+        accessible_api_specs = ApiDocs::Service.where(id: account_api_specs | backend_api_api_specs)
+
+        # [Deprecated][TODO] remove with service_id
+        deprecated_service_api_specs = all_api_docs.where.not(service_id: nil).deprecated_service_accessible
+        api_specs = ApiDocs::Service.where(id: accessible_api_specs.select(:id)).or(ApiDocs::Service.where(id: deprecated_service_api_specs.select(:id)))
+
+        Drops::Collection.for_drop(Drops::ApiSpec).new(api_specs)
       end
 
       private

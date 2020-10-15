@@ -56,7 +56,7 @@ class Account < ApplicationRecord
   self.background_deletion = [
     :users,
     :mail_dispatch_rules,
-    [:api_docs_services, { class_name: 'ApiDocs::Service' }],
+    [:all_api_docs, { class_name: 'ApiDocs::Service' }],
     :services,
     :contracts,
     :account_plans,
@@ -160,8 +160,11 @@ class Account < ApplicationRecord
   has_many :hidden_messages, -> { latest_first.received.hidden }, as: :receiver, class_name: 'MessageRecipient'
   has_many :received_messages, -> { latest_first.received.visible }, as: :receiver, class_name: 'MessageRecipient'
 
-  has_many :api_docs_services, class_name: 'ApiDocs::Service', dependent: :destroy
+  has_many :api_docs, as: :owner, class_name: 'ApiDocs::Service', dependent: :destroy, inverse_of: :owner
+  has_many :all_api_docs, class_name: 'ApiDocs::Service', dependent: :destroy
   has_many :log_entries, foreign_key: 'provider_id'
+
+  alias api_docs_services api_docs
 
   has_many :events, class_name: EventStore::Event, foreign_key: :provider_id, inverse_of: :account
   has_many :access_tokens, through: :users

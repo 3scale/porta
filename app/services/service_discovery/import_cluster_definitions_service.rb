@@ -91,7 +91,7 @@ module ServiceDiscovery
     end
 
     def build_api_doc_service(service)
-      service.api_docs_services.build({ name: cluster_service.name, published: true, discovered: true }, without_protection: true)
+      service.api_docs.build({ name: cluster_service.name, published: true, discovered: true }, without_protection: true)
     end
 
     def valid_cluster_service_spec?(service)

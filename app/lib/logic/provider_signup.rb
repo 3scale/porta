@@ -11,7 +11,7 @@ module Logic
 
     class SampleData
       delegate :account_plans, :provided_plans, :default_service,
-               :buyers, :api_docs_services, to: :@provider
+               :buyers, :api_docs, to: :@provider
       delegate :service_plans, :application_plans, to: :default_service
 
       alias service default_service
@@ -100,7 +100,7 @@ module Logic
       end
 
       def create_active_docs_service!
-        default_service.api_docs_services.where(name: 'Echo').first_or_create!(body: simple_api_oas, published: true)
+        default_service.api_docs.where(name: 'Echo').first_or_create!(body: simple_api_oas, published: true)
       end
 
       protected

@@ -14,7 +14,7 @@ class BackendApi < ApplicationRecord
 
   define_proxy_config_affecting_attributes :private_endpoint
 
-  self.background_deletion = %i[proxy_rules metrics backend_api_configs]
+  self.background_deletion = [:proxy_rules, :metrics, :backend_api_configs, [:api_docs, class_name: 'ApiDocs::Service']]
 
   DELETED_STATE = :deleted
   ECHO_API_HOST = 'echo-api.3scale.net'
@@ -28,6 +28,7 @@ class BackendApi < ApplicationRecord
   has_many :backend_api_configs, inverse_of: :backend_api, dependent: :destroy
   has_many :services, through: :backend_api_configs
   has_many :proxies, through: :services
+  has_many :api_docs, as: :owner, class_name: 'ApiDocs::Service', dependent: :destroy, inverse_of: :owner
 
   belongs_to :account, inverse_of: :backend_apis
 

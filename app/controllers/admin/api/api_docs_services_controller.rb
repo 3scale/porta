@@ -32,8 +32,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    @api_docs_services = api_docs_services.all
-    respond_with(@api_docs_services)
+    respond_with(api_docs)
   end
 
   # swagger
@@ -60,7 +59,7 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "skip_swagger_validations", :description => "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec. The default value is 'false'", :dataType => "boolean", :paramType => "query"
   #
   def create
-    @api_docs_service = current_account.api_docs_services.create(api_docs_params(:system_name), without_protection: true)
+    @api_docs_service = api_docs.create(api_docs_params(:system_name), without_protection: true)
     respond_with(@api_docs_service)
   end
 
@@ -136,12 +135,12 @@ class Admin::Api::ApiDocsServicesController < Admin::Api::BaseController
     params.require(:api_docs_service).permit(*permit_params)
   end
 
-  def api_docs_services
-    current_account.api_docs_services.accessible.permitted_for(current_user)
+  def api_docs
+    current_account.all_api_docs.service_accessible.permitted_for(current_user)
   end
 
   def find_api_docs_service
-    @api_docs_service = api_docs_services.find(params[:id])
+    @api_docs_service = api_docs.find(params[:id])
   end
 
   def new_service_id_permitted

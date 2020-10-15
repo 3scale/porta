@@ -2526,6 +2526,207 @@
       ]
     },
     {
+      "path": "/admin/api/backend_apis/{backend_api_id}/api_docs.json",
+      "responseClass": "backend_api_active_doc",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Backend API ActiveDocs Spec List",
+          "description": "Lists all Backend API ActiveDocs specs",
+          "group": "backend_api_active_docs",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "Backend API ID of the Backend API ActiveDocs spec",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/api_docs.json",
+      "responseClass": "backend_api_active_doc",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Backend API ActiveDocs Spec Create",
+          "description": "Creates a new Backend API ActiveDocs spec",
+          "group": "backend_api_active_docs",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "name",
+              "description": "Name of the Backend API ActiveDocs spec",
+              "required": true,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "system_name",
+              "description": "System Name of the Backend API ActiveDocs spec. Only ASCII letters, numbers, dashes and underscores are allowed. If blank, 'system_name' will be generated from the 'name' parameter",
+              "required": false,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "Backend API ID of the Backend API ActiveDocs spec",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "body",
+              "description": "Backend API ActiveDocs specification in JSON format (based on Swagger)",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the Backend API ActiveDocs spec",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "published",
+              "description": "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it. The default value is 'false'",
+              "dataType": "boolean",
+              "paramType": "query"
+            },
+            {
+              "name": "skip_swagger_validations",
+              "description": "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec. The default value is 'false'",
+              "dataType": "boolean",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/api_docs/{id}.json",
+      "responseClass": "backend_api_active_doc",
+      "operations": [
+        {
+          "httpMethod": "PUT",
+          "summary": "Backend API ActiveDocs Spec Update",
+          "description": "Updates the Backend API ActiveDocs spec by ID",
+          "group": "backend_api_active_docs",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the API Backend ActiveDocs spec",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "name",
+              "description": "Name of the Backend API ActiveDocs spec",
+              "required": true,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "Backend API ID of the Backend API ActiveDocs spec",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
+            },
+            {
+              "name": "body",
+              "description": "Backend API ActiveDocs specification in JSON format (based on Swagger)",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "description",
+              "description": "Description of the Backend API ActiveDocs spec",
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "published",
+              "description": "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it",
+              "dataType": "boolean",
+              "paramType": "query"
+            },
+            {
+              "name": "skip_swagger_validations",
+              "description": "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec",
+              "dataType": "boolean",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/backend_apis/{backend_api_id}/api_docs/{id}.json",
+      "responseClass": "backend_api_active_doc",
+      "operations": [
+        {
+          "httpMethod": "DELETE",
+          "summary": "Backend API ActiveDocs Spec Delete",
+          "description": "Deletes the Backend API ActiveDocs spec by ID",
+          "group": "backend_api_active_docs",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the API Backend ActiveDocs spec",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "backend_api_id",
+              "description": "Backend API ID of the Backend API ActiveDocs spec",
+              "dataType": "int",
+              "paramType": "query",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/backend_apis/{backend_api_id}/mapping_rules.json",
       "responseClass": "List[mapping_rule]",
       "operations": [

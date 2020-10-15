@@ -27,7 +27,7 @@ class Service < ApplicationRecord
   self.background_deletion = [
     :service_plans,
     :application_plans,
-    [:api_docs_services, class_name: 'ApiDocs::Service'],
+    [:api_docs, class_name: 'ApiDocs::Service'],
     :backend_api_configs,
     :metrics,
     [:proxy, { action: :destroy, has_many: false }]
@@ -64,8 +64,8 @@ class Service < ApplicationRecord
   with_options(dependent: :destroy, inverse_of: :service) do |service|
     service.has_many :service_plans, as: :issuer, &DefaultPlanProxy
     service.has_many :application_plans, as: :issuer, &DefaultPlanProxy
-    service.has_many :api_docs_services, class_name: 'ApiDocs::Service'
   end
+  has_many :api_docs, class_name: 'ApiDocs::Service', dependent: :destroy, inverse_of: :service
 
   scope :of_account, ->(account) { where.has { account_id == account.id } }
 

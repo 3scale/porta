@@ -789,6 +789,8 @@ en:
           attributes:
             service:
               not_found: 'not found'
+            owner:
+              not_found: 'not found'
 
         metric:
           attributes:

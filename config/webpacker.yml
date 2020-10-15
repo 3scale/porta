@@ -1,6 +1,7 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
 
 default: &default
+  check_yarn_integrity: false
   source_path: app/javascript
   source_entry_path: packs
   public_output_path: packs
