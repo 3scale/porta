@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BackendApi < ApplicationRecord
-  include BackendApi::Search
+  include Searchable
   include SystemName
   include ProxyConfigAffectingChanges::ModelExtension
 

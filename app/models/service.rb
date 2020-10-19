@@ -3,7 +3,7 @@
 require 'backend_client'
 
 class Service < ApplicationRecord
-  include Service::Search
+  include Searchable
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service
