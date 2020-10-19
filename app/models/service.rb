@@ -3,7 +3,7 @@
 require 'backend_client'
 
 class Service < ApplicationRecord
-  include ThreeScale::Search::Scopes
+  include Service::Search
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
   include Logic::PlanChanges::Service
@@ -14,13 +14,6 @@ class Service < ApplicationRecord
   extend System::Database::Scopes::IdOrSystemName
   include ServiceDiscovery::ModelExtensions::Service
   include ProxyConfigAffectingChanges::ModelExtension
-
-  self.allowed_search_scopes = %i[query]
-
-  scope :by_query, ->(query) do
-    options = {ids_only: true, per_page: 1_000_000, star: true, ignore_scopes: true, with: { }}
-    where(id: search(ThinkingSphinx::Query.escape(query), options))
-  end
 
   define_proxy_config_affecting_attributes :backend_version
 
