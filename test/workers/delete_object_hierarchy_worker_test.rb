@@ -176,13 +176,13 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
 
     def test_defined_background_destroy_associations
       double_object = DoubleWithBackgroundDestroyAssociation.new
-      DeleteServiceHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'destroy').once
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'destroy').once
       DeleteObjectHierarchyWorker.perform_now(double_object)
     end
 
     def test_defined_background_delete_associations
       double_object = DoubleWithBackgroundDeleteAssociation.new
-      DeleteServiceHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'delete').once
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(double_object.service, anything, 'delete').once
       DeleteObjectHierarchyWorker.perform_now(double_object)
     end
   end
