@@ -146,11 +146,15 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     attr_reader :service, :service_plan, :application_plan, :metrics, :api_docs_service, :backend_api, :backend_api_config
 
     def perform_expectations
+      DeletePlainObjectWorker.stubs(:perform_later)
+      DeleteObjectHierarchyWorker.stubs(:perform_later)
+
       [service_plan, application_plan].each do |association|
         DeleteObjectHierarchyWorker.expects(:perform_later).with(association, anything, 'destroy')
       end
       metrics.each { |metric| DeleteObjectHierarchyWorker.expects(:perform_later).with(metric, anything, 'destroy') }
       DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(service.proxy, anything, 'destroy')
 
       DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api_config, anything, 'destroy').once
       DeleteObjectHierarchyWorker.expects(:perform_later).with(backend_api, anything, 'destroy').never
