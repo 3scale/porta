@@ -11,10 +11,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"]
   s.test_files = Dir["test/**/*"]
 
+  s.add_dependency 'liquid', '~>4.0.3'
   s.add_dependency "railties", ">= 3.2"
-  s.add_dependency 'liquid', '~>3.0.6'
-
 
   # s.add_dependency "jquery-rails"
-
 end
