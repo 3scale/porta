@@ -3,18 +3,28 @@ const NO_CACHE_HEADERS = {
 }
 
 const proxiedRequest = (req) => {
+  if (originHttps()) {
+    req.url = forceHttpsProtocol(req.url)
+  }
   const linkElement = createLinkElement(req.url)
-  let method = req.method
+  req.originalUrl = req.url
+  console.log(`[ApiDocsProxy] incoming url ${req.url}`)
+  // let method = req.method
   if (!sameOrigin(linkElement)) {
     if (!req.method) {
-      method = req.type || 'POST'
+      req.method = req.type || 'POST' // fallback to POST
     }
+    req.url = locationOrigin() + '/api_docs/proxy' + '?_=' + new Date().getTime() // cache buster
+    console.log(`[ApiDocsProxy] proxying ${req.originalUrl}`)
+    $.extend(req.headers, NO_CACHE_HEADERS, apiDocsHeaders(req, linkElement))
   }
+  // result = httpClient.execute(obj)
+  if (!sameOrigin(linkElement)) {
+    req.url = req.originalUrl
+  }
+
   return {
-    ...req,
-    headers: $.extend(req.headers, NO_CACHE_HEADERS, apiDocsHeaders(req, linkElement)),
-    url: locationOrigin() + '/api_docs/proxy' + '?_=' + new Date().getTime(),
-    method
+    ...req
   }
 }
 
@@ -68,21 +78,6 @@ const originHttps = function () {
   return window.top.location.protocol === 'https:'
 }
 
-export const proxyOAS3 = (req, proxyDisabled) => {
-  if (proxyDisabled) {
-    return req
-  }
-  if (proxyDisabled && originHttps()) {
-    req.url = forceHttpsProtocol(req.url)
-    return req
-  }
-
-  const url = new URL(req.url)
-  const urlIsProxied = url.hostname.includes('apicast.')
-
-  if (urlIsProxied) {
-    return proxiedRequest(req)
-  } else {
-    return req
-  }
+export const proxyOAS3 = (req, activeDocsProxyDisabled) => {
+  return activeDocsProxyDisabled ? req : proxiedRequest(req)
 }

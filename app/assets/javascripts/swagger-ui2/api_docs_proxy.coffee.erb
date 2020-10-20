@@ -14,7 +14,7 @@ class ApiDocsProxy
     <% end %>
     @createLinkElement obj.url
     obj.originalUrl = obj.url
-    # console.log "[ApiDocsProxy] incoming url #{obj.url}"
+    console.log "[ApiDocsProxy] incoming url #{obj.url}"
     if not @sameOrigin()
       if _.isUndefined obj.method
         obj.method = obj.type || "POST" # fallback to POST
@@ -22,11 +22,12 @@ class ApiDocsProxy
       obj.url = @locationOrigin() + '/api_docs/proxy'
       obj.url += '?_=' + (new Date).getTime() # cache buster
 
-      # console.log "[ApiDocsProxy] proxying #{obj.originalUrl}"
+      console.log "[ApiDocsProxy] proxying #{obj.originalUrl}"
       $.extend obj.headers, NO_CACHE_HEADERS, @apiDocsHeaders(obj)
     result = httpClient.execute(obj)
     if not @sameOrigin()
       obj.url = obj.originalUrl
+    console.log "----->> result: #{result}"
     result
 
   apiDocsHeaders: (obj) -> {
