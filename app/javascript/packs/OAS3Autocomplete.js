@@ -72,10 +72,11 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
 const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint: string): ResponseBody => {
   const originalServers = responseBody.servers || []
   const servers = serviceEndpoint ? [{ url: serviceEndpoint }] : originalServers
+  console.log(servers)
 
   return {
     ...responseBody,
-    servers
+    servers: originalServers
   }
 }
 
