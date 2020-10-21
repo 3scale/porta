@@ -4,7 +4,7 @@ class ServiceDeletionSubscriber < AfterCommitSubscriber
   def after_commit(event)
     case event
     when Services::ServiceScheduledForDeletionEvent
-      DeleteServiceHierarchyWorker.perform_later(Service.find(event.service_id))
+      DeleteObjectHierarchyWorker.perform_later(Service.find(event.service_id))
     else
       raise "Unknown event type #{event.class}"
     end
