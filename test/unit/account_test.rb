@@ -807,6 +807,10 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal account.object_id, settings.account.object_id
   end
 
+  test 'multiple_applications_allowed? does not crash when the account does not have settings (already deleted)' do
+    refute Account.new.multiple_applications_allowed?
+  end
+
   test 'fetch_dispatch_rule' do
     account = FactoryBot.create(:simple_account)
 
