@@ -99,6 +99,14 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     end
   end
 
+  test 'xss' do
+    backend_api = @provider.backend_apis.last
+    backend_api.update_column(:description, "<script>alert('XSS')</script>")
+    get provider_admin_backend_api_path(backend_api)
+    page = Nokogiri::HTML::Document.parse(response.body)
+    assert_equal "<script>alert('XSS')</script>", page.xpath("//dt[text() = 'Description']/following-sibling::dd").first.text
+  end
+
   test 'member permissions' do
     backend_api = FactoryBot.create(:backend_api, account: provider)
     member = FactoryBot.create(:member, account: provider)
