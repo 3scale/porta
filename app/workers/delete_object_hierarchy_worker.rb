@@ -137,8 +137,6 @@ class DeleteObjectHierarchyWorker < ApplicationJob
       case reflection.class_name
       when Account.name
         DeleteAccountHierarchyWorker
-      when Service.name
-        DeleteServiceHierarchyWorker
       when PaymentGatewaySetting.name
         DeletePaymentSettingHierarchyWorker
       else

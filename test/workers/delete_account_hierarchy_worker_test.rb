@@ -32,7 +32,7 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
 
     DeleteObjectHierarchyWorker.stubs(:perform_later)
     users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy') }
-    services.each { |service| DeleteServiceHierarchyWorker.expects(:perform_later).with(service, anything, 'destroy') }
+    services.each { |service| DeleteObjectHierarchyWorker.expects(:perform_later).with(service, anything, 'destroy') }
     contracts.each do |contract|
       DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
     end
