@@ -7,7 +7,7 @@ namespace :sphinx do
   task enqueue: :environment do |_task, args|
     klasses_index = args.to_a
     indices = ThinkingSphinx::RakeInterface.new.rt.send(:indices)
-    indices = indices.select { |ind| klasses_index.include?(ind.model.name) } if klasses_index.any?
+    indices.select! { |ind| klasses_index.include?(ind.model.name) } if klasses_index.any?
 
     indices.each do |index|
       scope = index.scope
