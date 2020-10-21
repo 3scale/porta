@@ -470,6 +470,7 @@ class Account < ApplicationRecord
   # TODO: should be multiple_applications_enabled?
   # don't freak out, this is a legacy naming
   def multiple_applications_allowed?
+    return false unless settings
     settings.multiple_applications.visible?
   end
 
