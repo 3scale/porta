@@ -1,8 +1,8 @@
-<% std_opts = "--strict --tags ~@wip #{ENV['CUCUMBER_OPTIONS']}" %>
+<% std_opts = "--strict --tags 'not @wip' #{ENV['CUCUMBER_OPTIONS']}" %>
 default: <%= std_opts %>
 <% tags = %w[ @backend @emails @stats @no-txn ] %>
 list: --dry-run --format Cucumber::Formatter::List
 ci: --profile default --backtrace --strict --verbose --format junit --out tmp/junit/cucumber --format progress
-txn: --profile default --tags=~@javascript <%= tags.map { |tag| "--tags=~#{tag}" }.join(' ') %>
-no-txn: --profile default --tags=~@javascript --tags=<%= tags.join(',') %>
-javascript: --profile default --tags=~@ignore --tags=@javascript
+txn: --profile default --tags='not @javascript' <%= tags.map { |tag| "--tags='not #{tag}'" }.join(' ') %>
+no-txn: --profile default --tags='not @javascript' --tags=<%= tags.join(',') %>
+javascript: --profile default --tags='not @ignore' --tags=@javascript
