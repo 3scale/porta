@@ -6,5 +6,3 @@ module XPathOriginalTitle
     super + link[attr_reader(:'original-title').contains(locator)]
   end
 end
-
-XPath::HTML.prepend(XPathOriginalTitle)

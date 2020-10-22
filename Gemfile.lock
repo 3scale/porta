@@ -185,6 +185,7 @@ GEM
       join_dependency (~> 0.1.2)
       polyamorous (~> 1.3)
     backport (1.1.2)
+    backports (3.18.2)
     bcrypt (3.1.13)
     benchmark (0.1.0)
     binding_of_caller (0.8.0)
@@ -202,13 +203,14 @@ GEM
       uniform_notifier (~> 1.10.0)
     byebug (11.1.3)
     cancancan (2.3.0)
-    capybara (2.18.0)
+    capybara (3.33.0)
       addressable
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (>= 2.0, < 4.0)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (~> 1.5)
+      xpath (~> 3.2)
     childprocess (3.0.0)
     chronic (0.10.2)
     chunky_png (1.3.10)
@@ -253,22 +255,27 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
-    cucumber (2.99.0)
+    cucumber (3.0.2)
       builder (>= 2.1.2)
-      cucumber-core (~> 1.5.0)
+      cucumber-core (~> 3.0.0)
+      cucumber-expressions (~> 4.0.3)
       cucumber-wire (~> 0.0.1)
-      diff-lcs (>= 1.1.3)
+      diff-lcs (~> 1.3)
       gherkin (~> 4.0)
       multi_json (>= 1.7.5, < 2.0)
       multi_test (>= 0.1.2)
-    cucumber-core (1.5.0)
-      gherkin (~> 4.0)
-    cucumber-rails (1.5.0)
-      capybara (>= 1.1.2, < 3)
-      cucumber (>= 1.3.8, < 4)
-      mime-types (>= 1.17, < 4)
-      nokogiri (~> 1.5)
-      railties (>= 4, < 5.2)
+    cucumber-core (3.0.0)
+      backports (>= 3.8.0)
+      cucumber-tag_expressions (>= 1.0.1)
+      gherkin (>= 4.1.3)
+    cucumber-expressions (4.0.4)
+    cucumber-rails (2.0.0)
+      capybara (>= 2.12, < 4)
+      cucumber (>= 3.0.2, < 4)
+      mime-types (>= 2.0, < 4)
+      nokogiri (~> 1.8)
+      railties (>= 4.2, < 7)
+    cucumber-tag_expressions (2.0.2)
     cucumber-wire (0.0.1)
     daemons (1.3.1)
     dalli (2.7.10)
@@ -796,8 +803,8 @@ GEM
     will_paginate (3.1.6)
     with_env (1.1.0)
     xml-simple (1.1.5)
-    xpath (2.1.0)
-      nokogiri (~> 1.3)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     yabeda (0.8.0)
       concurrent-ruby
       dry-initializer
@@ -842,7 +849,7 @@ DEPENDENCIES
   bugsnag (~> 6.11)
   bullet (~> 5.6)
   cancancan (~> 2.3.0)
-  capybara (~> 2.18)!
+  capybara (~> 3.33)!
   childprocess
   chronic
   ci_reporter_shell!
@@ -852,8 +859,8 @@ DEPENDENCIES
   colorize
   commonmarker
   compass-rails (~> 3.0.2)
-  cucumber (~> 2.0)
-  cucumber-rails
+  cucumber (~> 3.0.2)
+  cucumber-rails (~> 2.0.0)
   dalli (~> 2.7)
   database_cleaner (~> 1.7)
   developer_portal!
@@ -978,7 +985,7 @@ DEPENDENCIES
   webpacker (~> 4)
   whenever (~> 0.9.7)
   will_paginate (~> 3.1.6)
-  xpath (~> 2.1)
+  xpath (~> 3.2)
   yabeda-prometheus-mmap
   yabeda-rails
   yabeda-sidekiq

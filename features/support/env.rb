@@ -24,7 +24,7 @@ non_transactional = %w[
   @commit-transactions
 ].freeze
 
-transactional = non_transactional.map {|t| "~#{t}" }
+transactional = non_transactional.map {|t| "not #{t}" }
 
 Before transactional.join(' or ') do
   Cucumber::Rails::Database.before_js if Cucumber::Rails::Database.autorun_database_cleaner
@@ -35,16 +35,14 @@ Before non_transactional.join(' or ') do
 end
 
 require 'cucumber/rails'
-require 'cucumber/rails/rspec'
 
+# Lets you click links with onclick javascript handlers without using @culerity or @javascript
+# require 'cucumber/rails/capybara_javascript_emulation'
 
-# require 'cucumber/rails/capybara_javascript_emulation' # Lets you click links with onclick javascript handlers without using @culerity or @javascript
-#
-# Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
-# order to ease the transition to Capybara we set the default here. If you'd
-# prefer to use XPath just remove this line and adjust any selectors in your
-# steps to use the XPath syntax.
-Capybara.default_selector = :css
+# Capybara defaults to CSS3 selectors rather than XPath.
+# If you'd prefer to use XPath, just uncomment this line and adjust any
+# selectors in your step definitions to use the XPath syntax.
+# Capybara.default_selector = :xpath
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -63,14 +61,28 @@ Capybara.default_selector = :css
 #
 ActionController::Base.allow_rescue = false
 
-# Possible values are :truncation and :transaction
-# The :transaction strategy is faster, but might give you threading problems.
-# See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
-Cucumber::Rails::Database.javascript_strategy = :truncation
+# Remove/comment out the lines below if your app doesn't have a database.
+# For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
+begin
+  # Possible values are :truncation and :transaction
+  # The :transaction strategy is faster, but might give you threading problems.
+  # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
+  Cucumber::Rails::Database.javascript_strategy = :truncation
+rescue NameError
+  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
+end
 
-DatabaseCleaner.clean_with(:truncation)
-
-# lets load webmock as soon as possible,
-# because we load all test helpers (yikes) in support/test_helpers.rb
-# and there the webmock is not initialized properly
-require_relative 'webmock'
+# You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
+# See the DatabaseCleaner documentation for details. Example:
+#
+#   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
+#     # { except: [:widgets] } may not do what you expect here
+#     # as Cucumber::Rails::Database.javascript_strategy overrides
+#     # this setting.
+#     DatabaseCleaner.strategy = :truncation
+#   end
+#
+#   Before('not @no-txn', 'not @selenium', 'not @culerity', 'not @celerity', 'not @javascript') do
+#     DatabaseCleaner.strategy = :transaction
+#   end
+#
