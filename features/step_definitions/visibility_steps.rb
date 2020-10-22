@@ -1,16 +1,11 @@
-Then /"(.+?)"(?: within "([^"]*)")? should be visible$/ do |text, selector|
-  with_scope(selector) do
-    node_with_text(text, :visible).visible?.should be true
-  end
-end
+# frozen_string_literal: true
 
-Then /"(.+?)"(?: within "([^"]*)")? should not be visible$/ do |text, selector|
+Then "{string} within {string} {should} be visible" do |text, selector, visible|
   with_scope(selector) do
-    node_with_text(text, :hidden).visible?.should be false
+    node_with_text(text, :visible).visible?.should be visible
   end
 end
 
 def node_with_text(text, visible)
   find(:xpath, "//*[text() = #{text.inspect}]", visible: visible)
 end
-

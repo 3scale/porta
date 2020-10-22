@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
+DRIVERS = %i[webkit selenium webkit_debug headless_chrome chrome headless_firefox firefox].freeze
+
 Then /^(.+) and I confirm dialog box(?: "(.*)")?$/ do |original, text|
-  if [:webkit, :selenium, :webkit_debug, :headless_chrome, :chrome, :headless_firefox, :firefox].include? Capybara.current_driver
+  if DRIVERS.include? Capybara.current_driver
     accept_confirm(text) do
       step original
     end

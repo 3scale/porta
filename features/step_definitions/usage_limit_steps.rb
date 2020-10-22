@@ -1,17 +1,19 @@
-Given /^an usage limit on (.*?plan "[^"]*") for metric "([^"]*)" with period ([a-z]+) and value (\d+)$/ do |plan, metric_name, period, value|
-  metric = plan.metrics.find_by_system_name!(metric_name)
-  ul = metric.usage_limits.new :period => period, :value => value
+# frozen_string_literal: true
+
+Given "an usage limit on {plan} for metric {string} with period {word} and value {int}" do |plan, metric_name, period, value|
+  metric = plan.metrics.find_by!(system_name: metric_name)
+  ul = metric.usage_limits.new period: period, value: value
   ul.plan = plan
   ul.save!
 end
 
-Then /^I should see hourly usage limit of (\d+) for (metric "[^"]*")$/ do |value, metric|
+Then "I should see hourly usage limit of {int} for {metric}" do |value, metric|
   within "##{dom_id(metric)}_slot #usage_limits_table" do
     assert has_table_row_with_cells?('1 hour', value)
   end
 end
 
-Then /^I should see a usage limit of (\d+) for (metric "[^"]*" on application plan "[^"]*") per "(.+?)"$/ do |value, metric, period|
+Then "I should see a usage limit of {int} for {metric_on_application_plan} per {string}" do |value, metric, period|
   within "##{dom_id(metric)}_slot #usage_limits_table" do
     assert has_table_row_with_cells?(period, value)
   end
@@ -41,44 +43,44 @@ def refute_metric_within_usage_limits(metric)
   end
 end
 
-Then /^I should see hourly usage limit for (metric "[^"]*")$/ do |metric|
+Then "I should see hourly usage limit for {metric}" do |metric|
   assert_metric_within_usage_limits(metric)
 end
 
-Then /^I should see hourly usage limit for (metric "[^"]*" on application plan "[^"]*")$/ do |metric|
+Then "I should see hourly usage limit for {metric_on_application_plan}" do |metric|
   assert_metric_within_usage_limits(metric)
 end
 
-Then /^I should not see hourly usage limit for (metric "[^"]*")$/ do |metric|
+Then "I should not see hourly usage limit for {metric}" do |metric|
   refute_metric_within_usage_limits(metric)
 end
 
-Then /^I should not see hourly usage limit for (metric "[^"]*" on application plan "[^"]*")$/ do |metric|
+Then "I should not see hourly usage limit for {metric_on_application_plan}" do |metric|
   refute_metric_within_usage_limits(metric)
 end
 
-Then /^(.*?plan ".+?") should have a usage limit of (\d+) for metric "(.+?)" per "(.+?)"$/ do |plan, value, metric_name, period|
+Then "{plan} should have a usage limit of {int} for metric {string} per {string}" do |plan, value, metric_name, period|
   wait_for_requests
-  metric = plan.service.metrics.find_by_system_name!(metric_name)
-  assert_not_nil plan.usage_limits.find_by_metric_id_and_period_and_value(metric.id, period, value)
+  metric = plan.service.metrics.find_by!(system_name: metric_name)
+  assert_not_nil plan.usage_limits.find_by(metric_id: metric.id, period: period, value: value)
 end
 
-Then /^(.*?plan ".+?") should not have hourly usage limit for metric "(.+?)"$/ do |plan, metric_name|
-  metric = plan.metrics.find_by_system_name!(metric_name)
-  assert_nil plan.usage_limits.find_by_metric_id_and_period(metric.id, 'hour')
+Then "{plan} should not have hourly usage limit for metric {string}" do |plan, metric_name|
+  metric = plan.metrics.find_by!(system_name: metric_name)
+  assert_nil plan.usage_limits.find_by(metric_id: metric.id, period: 'hour')
 end
 
-When /^I (press|follow) "([^"]*)" for the hourly usage limit for (metric "[^"]*")$/ do |action, label, metric|
-  usage_limit = metric.usage_limits.find_by_period('hour')
+When "I {word} {string} for the hourly usage limit for {string}" do |action, label, metric|
+  usage_limit = metric.usage_limits.find_by!(period: 'hour')
   step %(I #{action} "#{label}" within "##{dom_id(usage_limit)}")
 end
 
-When /^I (press|follow) "([^"]*)" for the hourly usage limit for (metric "[^"]*" on application plan "[^"]*")$/ do |action, label, metric|
-  usage_limit = metric.usage_limits.find_by_period('hour')
+When "I {word} {string} for the hourly usage limit for {metric_on_application_plan}" do |action, label, metric|
+  usage_limit = metric.usage_limits.find_by!(period: 'hour')
   step %(I #{action} "#{label}" within "##{dom_id(usage_limit)}")
 end
 
-When /^I follow "([^"]*)" within usage limits panel for (metric "[^"]*" on application plan "[^"]*")$/ do |label, metric|
+When "I follow {string} within usage limits panel for {metric_on_application_plan}" do |label, metric|
   step %(I follow "#{label}" within "##{dom_id(metric)}_slot")
 end
 
@@ -90,7 +92,7 @@ def plans
   find(:css, '#plans')
 end
 
-And(/^limits hits of that plan to (\d+)$/) do |number|
+And "limits hits of that plan to {int}" do |number|
   visit_edit_plan(@plan)
 
   within metrics do
@@ -107,15 +109,15 @@ And(/^limits hits of that plan to (\d+)$/) do |number|
 end
 
 
-Then(/^the plan should (not )?have visible usage limits$/) do |negate|
+Then "the plan {should} have visible usage limits" do |should_have|
   @plan.should be
-  @plan.usage_limits.visible.count.should be.send(negate ? :== : :>, 0)
+  @plan.usage_limits.visible.count.should be.send(should_have ? :> : :==, 0)
 end
 
 def visit_edit_plan(plan)
   plan.should be
 
-  step 'I go to the application plans admin page'
+  step %(I go to the application plans admin page)
 
   within plans do
     click_on "Edit Application plan '#{plan.name}'"

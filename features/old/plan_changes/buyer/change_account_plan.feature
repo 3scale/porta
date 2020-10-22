@@ -40,7 +40,7 @@ Feature: Account Plan Change
      And I press invisible "Request Plan Change"
     Then I should see "The plan change has been requested."
 
-    Given buyer "bob" has valid credit card with lots of money
+    Given buyer "bob" has a valid credit card with lots of money
      And I go to the account plans page
      And I select "Advanced" from "View plan"
      And I press invisible "Change Plan"

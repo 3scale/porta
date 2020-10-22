@@ -1,17 +1,18 @@
-Given /^(provider "[^\"]*") has no site access code$/ do |account|
-  account.update_attribute(:site_access_code, nil)
+# frozen_string_literal: true
+
+Given "{provider} has no site access code" do |provider|
+  provider.update!(site_access_code: nil)
 end
 
-Given /^(provider "[^\"]*") has site access code "([^\"]*)"$/ do |account, code|
-  account.update_attribute(:site_access_code, code)
+Given "{provider} has site access code {string}" do |provider, code|
+  provider.update!(site_access_code: code)
 end
 
-
-When /^I enter "([^\"]*)" as access code$/ do |code|
-  fill_in("Access code", :with => code)
-  click_button "Enter"
+When "I enter {string} as access code" do |code|
+  fill_in('Access code', with: code)
+  click_button 'Enter'
 end
 
-Then /^I should not be in the access code page$/ do
-  assert has_no_content?("Access code")
+Then "I should not be in the access code page" do
+  assert has_no_content?('Access code')
 end

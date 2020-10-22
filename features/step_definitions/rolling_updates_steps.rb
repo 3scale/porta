@@ -1,24 +1,22 @@
-# DEPRECATED: do not use it
-When(/^RollingUpdates is (enabled|disabled)$/) do |switch|
-  Logic::RollingUpdates.stubs(enabled?: switch == 'enabled')
-end
+# frozen_string_literal: true
 
-And(/^all the rolling updates features are (on|off)$/) do |state|
-  if state
+# TODO: check this cucumber expression works
+And "all the rolling updates features are {on_off}" do |state|
+  if state == 'on'
     TestHelpers::RollingUpdates.rolling_updates_on
   else
     TestHelpers::RollingUpdates.rolling_updates_off
   end
 end
 
-When(/^I have (\w+) feature (enabled|disabled)$/) do |feature, enabled|
-  TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
+When "I have {word} feature {enabled}" do |feature, enabled|
+  TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled)
 end
 
-Given(/^I have rolling updates "([^"]*)" (enabled|disabled)$/) do |features, enabled|
+Given "I have rolling updates {string} {enabled}" do |features, enabled|
   Account.any_instance.stubs(:provider_can_use?).returns(true)
   features.split(',').each do |feature|
-    Account.any_instance.stubs(:provider_can_use?).with(feature).returns(enabled == 'enabled')
-    TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled == 'enabled')
+    Account.any_instance.stubs(:provider_can_use?).with(feature).returns(enabled)
+    TestHelpers::RollingUpdates.rolling_update(feature, enabled: enabled)
   end
 end

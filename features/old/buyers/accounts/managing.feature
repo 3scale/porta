@@ -41,12 +41,12 @@ Feature: Buyer accounts management
     When I go to the buyer accounts page
     And I follow "Bob's Apps"
     Then I should see "Account" in a header
-    And I should see link "Edit"
+    And I should see the link "Edit"
 
   Scenario: Editing buyer accounts from the account page
     When I go to the buyer account page for "Bob's Apps"
     And I follow "Edit"
-    Then I should see link "Delete"
+    Then I should see the link "Delete"
     And I fill in "Organization/Group Name" with "Bob's Web Stuff"
     And I press "Update Account"
     Then I should see "Bob's Web Stuff"

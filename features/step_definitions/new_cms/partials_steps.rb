@@ -1,4 +1,6 @@
-Then /^(CMS Partial ".+?") should have:/ do |page, table|
+# frozen_string_literal: true
+
+Then "{cms_partial should have:" do |page, table|
   table = table.transpose
   actual = table.headers.map do |header|
 

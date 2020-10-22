@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 
-Given /^provider "([^\"]*)" has valid payment gateway$/ do |provider_name|
-  provider_account = Account.find_by_org_name!(provider_name)
-  provider_account.update_attribute(:payment_gateway_type, :bogus)
+Given "provider {string} has valid payment gateway" do |provider_name|
+  provider_account = Account.find_by!(org_name: provider_name)
+  provider_account.update!(payment_gateway_type: :bogus)
 end
 
-Given /^the provider has a deprecated payment gateway$/ do
+Given "the provider has a deprecated payment gateway" do
   @provider.gateway_setting.attributes = {
     gateway_type: :authorize_net,
     gateway_settings: { login: 'foo', password: 'bar' }

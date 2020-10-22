@@ -1,38 +1,38 @@
-Then /^I should see the hits metric for cinstance belonging to "([^"]*)"$/ do |buyer_name|
-  buyer_account = Account.find_by_org_name!(buyer_name)
+# frozen_string_literal: true
+
+Then "I should see the hits metric for cinstance belonging to {string}" do |buyer_name|
+  buyer_account = Account.find_by!(org_name: buyer_name)
   metric = buyer_account.bought_cinstance.metrics.hits
 
   selector = XPath.generate { |x| x.descendant(:div)[x.attr(:'data-metric') == metric.name ] }
   should have_xpath(selector)
 end
 
-
-Then /^I should see a sparkline for "([^\"]*)"$/ do |metric|
-  within(".DashboardSection--audience") do
+Then "I should see a sparkline for {string}" do |metric|
+  within ".DashboardSection--audience" do
     assert_selector 'div.Dashboard-chart'
   end
 end
 
-Then /^I should see a chart called "([^\"]*)"$/ do |chart|
-  within("##{chart}") do
+Then "I should see a chart called {string}" do |chart|
+  within "##{chart}" do
     assert has_css?("svg")
   end
 end
 
-Then /^I should see a list of metrics:$/ do |table|
+Then "I should see a list of metrics:" do |table|
   table.hashes.each_with_index do |row, index|
-    within(".StatsSelector-container") do
+    within ".StatsSelector-container" do
       assert_text :all, row['Buyer']
     end
   end
 end
 
-Then(/^I should see that application stats$/) do
+Then "I should see that application stats" do
   page.should have_content "Traffic statistics for #{@application.name}"
 end
 
-
-And(/^I select (.+?) from the datepicker$/) do |date|
+And "I select (.+?) from the datepicker" do |date|
   page.evaluate_script <<-JS
     (function(){
       var date = #{date.to_s.to_json}
@@ -43,6 +43,6 @@ And(/^I select (.+?) from the datepicker$/) do |date|
   JS
 end
 
-Then(/^the stats should load$/) do
+Then "the stats should load" do
   page.should_not have_selector('.loading', visible: true)
 end

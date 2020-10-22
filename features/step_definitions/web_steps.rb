@@ -6,7 +6,6 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-
 require 'uri'
 require 'cgi'
 
@@ -17,40 +16,46 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
-Given /^(?:|I )am on (.+)$/ do |page_name|
-  visit path_to(page_name)
+Given "(I )am on {link_to_page}" do |path|
+  visit path
 end
 
-When /^(?:|I )go to (.+)$/ do |page_name|
-  visit path_to(page_name)
+When "(I )go to {link_to_page}" do |path|
+  visit path
 end
 
-When /^(?:|I )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
-  with_scope(selector) do
-    click_button(button, visible: !invisible)
+Then /^(.*) within "([^"]*)"$/ do |action, selector|
+  with_scope selector do
+    step action
   end
 end
 
-When /^(?:|I )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
-  with_scope(selector) do
-    click_link(link, exact: true, visible: !invisible)
-  end
+When "(I )press {string}" do |button|
+  click_button(button, visible: true)
 end
 
-When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
-  with_scope(selector) do
-    fill_in(field, :with => value, visible: true)
-  end
+When "(I )press invisible {string}" do |button|
+  click_button(button, visible: false)
 end
 
-When /^I fill in "(.+?)" with:$/ do |field, text|
-  fill_in(field, :with => text, visible: true)
+When "(I )follow invisible {string}" do |invisible, link|
+  click_link(link, exact: true, visible: false)
 end
 
-When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do
-    fill_in(field, :with => value, visible: true)
-  end
+When "(I )follow {string}" do |invisible, link|
+  click_link(link, exact: true, visible: true)
+end
+
+When "(I )fill in {string} with {string}" do |field, value|
+  fill_in(field, with: value, visible: true)
+end
+
+When "I fill in {string} with:" do |field, text|
+  fill_in(field, with: text, visible: true)
+end
+
+When "(I )fill in {string} for {string}" do |value, field, selector|
+  fill_in(field, with: value, visible: true)
 end
 
 # Use this to fill in an entire form with data from a table. Example:
@@ -64,157 +69,136 @@ end
 # TODO: Add support for checkbox, select og option
 # based on naming conventions.
 #
-When /^(?:|I )fill in the following(?: within "([^"]*)")?:$/ do |selector, fields|
-  with_scope(selector) do
-    fields.rows_hash.each do |name, value|
-      step %(I fill in "#{name}" with "#{value}")
-    end
+When "(I )fill in the following" do |selector, fields|
+  fields.rows_hash.each do |name, value|
+    step %(I fill in "#{name}" with "#{value}")
   end
 end
 
-When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do
-    select = find(:xpath, XPath::HTML.select(field))
-    if select.native.is_a?(Nokogiri::XML::Element) || select.native.is_a?(String) # a String means capybara-webkit
-      select.find(:xpath, XPath::HTML.option(value)).select_option
-    else # this is selenium, needs slightly different treatment
-      select.find(:xpath, XPath::HTML.option(value)).click
-    end
-  end
+When "(I )select {string} from {string}" do |value, field|
+  page.select value, from: field
+  # option = find(:select).find(:option, text: value)
+
+  # # TODO: this necessary?
+  # if option.native.is_a?(Nokogiri::XML::Element) || option.native.is_a?(String) # a String means capybara-webkit
+  #   option.select_option
+  # else # this is selenium, needs slightly different treatment
+  #   page.select value, from: field
+  # end
 end
 
-When /^(?:|I )check "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    check(field)
-  end
+When "(I ){check} {string}" do |check, field|
+  check ? check(field) : uncheck(field)
 end
 
-When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    uncheck(field)
-  end
+When "(I )attach the file {string} to {string}" do |path, field|
+  attach_file(field, File.join(Rails.root,path))
 end
 
-
-When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
-  with_scope(selector) do
-    attach_file(field, File.join(Rails.root,path))
-  end
-end
-
-Then /^(?:|I )should see JSON:$/ do |expected_json|
+Then "(I )should see JSON:" do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
   actual   = JSON.pretty_generate(JSON.parse(response.body))
-  expected.should == actual
+  expected.should be actual
 end
 
-Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then "(I )should see {string}" do |text|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_content(regex)
-    else
-      assert page.has_content?(regex)
-    end
+  if page.respond_to? :should
+    page.should have_content(:all, regex)
+  else
+    assert page.has_content?(:all, regex)
   end
 end
 
-Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
-  regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_xpath('//*', :text => regexp)
-    else
-      assert page.has_xpath?('//*', :text => regexp)
-    end
-  end
-end
-
-Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then "(I )should not see {string}" do |text|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
-  with_scope(selector) do
-    refute_text :visible, regex
+  refute_text :visible, regex
+end
+
+Then "(I )should see {regexp}" do |regexp, selector|
+  if page.respond_to? :should
+    page.should have_xpath('//*', text: regexp)
+  else
+    assert page.has_xpath?('//*', text: regexp)
   end
 end
 
-Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
-  regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_no_xpath('//*', :text => regexp)
-    else
-      assert page.has_no_xpath?('//*', :text => regexp)
-    end
+Then "(I )should not see {regexp}" do |regexp|
+  if page.respond_to? :should
+    page.should have_no_xpath('//*', text: regexp)
+  else
+    assert page.has_no_xpath?('//*', text: regexp)
   end
 end
 
-Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |field, selector, value|
-  with_scope(selector) do
-    field = find_field(field)
-    field_value = field['value'] || field.native.attribute('value').to_s
-    if field_value.respond_to? :should
-      field_value.should =~ /#{value}/
-    else
-      assert_match(/#{value}/, field_value)
-    end
+Then "the {string} field within {string} should contain {string}" do |field, selector, value|
+  step %(the "#{field}" field should contain "#{value}" within "#{selector}")
+end
+
+Then "the {string} field should contain {string}" do |field, selector, value|
+  field = find_field(field)
+  field_value = field['value'] || field.native.attribute('value').to_s
+  if field_value.respond_to? :should
+    field_value.should =~ /#{value}/
+  else
+    assert_match(/#{value}/, field_value)
   end
 end
 
-Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ do |field, selector, value|
-  with_scope(selector) do
-    field = find_field(field)
-    field_value = field.tag_name == 'textarea' ? field.text : field.value
-    if field_value.respond_to? :should_not
-      field_value.should_not =~ /#{value}/
-    else
-      refute_match(/#{value}/, field_value)
-    end
+Then "the {string} field within {string} should not contain {string}" do |field, selector, value|
+  step %(the "#{field}" field should not contain "#{value}" within "#{selector}")
+end
+
+Then "the {string} field should contain {string}" do |field, selector, value|
+  field = find_field(field)
+  field_value = field.tag_name == 'textarea' ? field.text : field.value
+  if field_value.respond_to? :should_not
+    field_value.should_not =~ /#{value}/
+  else
+    refute_match(/#{value}/, field_value)
   end
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_truthy
-  end
+Then "the {string} checkbox within {string} should be checked" do |label, selector|
+  step %(the "#{field}" checkbox should be checked within "#{selector}")
 end
 
-Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_falsy
-  end
+Then "the {string} checkbox within {string} should not be checked" do |label, selector|
+  step %(the "#{field}" checkbox should unchecked within "#{selector}")
 end
 
-Then /^(?:|I )should be on (.+)$/ do |page_name|
+Then "the {string} checkbox should be {checked}" do |label, checked|
+  field_checked = find_field(label)['checked']
+  expect(field_checked).to checked ? be_truthy : be_falsy
+end
+
+Then "(I )should be on {}" do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
-    current_path.should == path_to(page_name)
+    current_path.should be path_to(page_name)
   else
     assert_equal path_to(page_name), current_path
   end
 end
 
-Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
+Then "(I )should have the following query string:" do |expected_pairs|
   query = URI.parse(current_url).query
   actual_params = query ? CGI.parse(query) : {}
   expected_params = {}
   expected_pairs.rows_hash.each_pair {|k,v| expected_params[k] = v.split(',')}
 
   if actual_params.respond_to? :should
-    actual_params.should == expected_params
+    actual_params.should be expected_params
   else
     assert_equal expected_params, actual_params
   end
 end
 
-When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    choose(field)
-  end
+When "(I )choose {string}" do |field|
+  choose(field)
 end
 
-Then /^show me the page$/ do
+Then "show me the page" do
   save_and_open_page
 end

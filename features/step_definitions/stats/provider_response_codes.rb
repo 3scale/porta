@@ -1,11 +1,13 @@
-When(/^on the response codes chart page$/) do
+# frozen_string_literal: true
+
+When "on the response codes chart page" do
   visit admin_service_stats_response_codes_path(@provider.first_service!)
 end
 
 RESPONSE_CODES = %w[2XX 4XX 5XX].freeze
 RESPONSE_CODE_VALUE = 10
 
-Given(/^the provider has response codes stats data$/) do
+Given "the provider has response codes stats data" do
   storage = Stats::Client.storage
   now = Time.now.utc
   service = @provider.first_service!

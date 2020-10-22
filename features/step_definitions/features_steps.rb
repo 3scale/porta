@@ -1,52 +1,46 @@
-Given /^a feature "([^\"]*)" of (provider "[^\"]*")$/ do |feature_name, provider|
-  provider.default_service.features.create!(:name => feature_name)
+# frozen_string_literal: true
+
+Given "a feature {string} of {provider}" do |feature_name, provider|
+  provider.default_service.features.create!(name: feature_name)
 end
 
-Given /^feature "([^\"]*)" is (visible|hidden)$/ do |feature_name, visibility|
-  feature = Feature.find_by_name!(feature_name)
-  feature.visible = (visibility == 'visible')
+Given "feature {string} is {visible}" do |feature_name, visible|
+  feature = Feature.find_by!(name: feature_name)
+  feature.visible = visible
   feature.save!
 end
 
-Given /^feature "([^\"]*)" is (enabled|disabled) for (plan "[^"]*")$/ do |feature_name, state, plan|
-  #FIXME: if the feature does not exist this blows!
-  feature = plan.service.features.find_by_name!(feature_name)
+Given "feature {string} is {enabled} for plan {string}" do |feature_name, enabled, plan|
+  feature = plan.service.features.find_by!(name: feature_name)
 
-  if state == 'enabled'
+  if enabled
     plan.features << feature
   else
     plan.features.delete(feature)
   end
 end
 
-When /^I press the (enable|disable) button for feature "([^"]*)"$/ do |state, name|
+When "I press the enabled/disable button for feature {string}" do |name|
   button = find(%(table#features td:contains("#{name}") ~ td form input[type=image]))
   button.click
 end
 
-When /^I (follow|press) "([^"]*)" for (feature "[^"]*")$/ do |action, label, feature|
+When "I {word} {string} for {feature}" do |action, label, feature|
   step %(I #{action} "#{label}" within "##{dom_id(feature)}")
 end
 
-Then /^feature "([^"]*)" should be (enabled|disabled) for (plan "[^"]*")$/ do |name, state, plan|
-  assertion = state == 'enabled' ? :assert_not_nil : :assert_nil
-
-  send(assertion, plan.features.find_by_name(name))
+Then "feature {string} should be {enabled} for {plan}" do |name, enabled, plan|
+  assert_equal enabled, plan.features.find_by(name: name).nil?
 end
 
-Then /^I should see (enabled|disabled) feature "([^"]*)"$/ do |state, name|
+Then "I should see {word} feature {string}" do |state, name|
   assert has_css?(%(table#features tr.#{state} td:contains("#{name}")))
 end
 
-Then /^I should see feature "([^"]*)"$/ do |name|
-  assert has_css?(%(table#features td:contains("#{name}")))
+Then "I {should} see feature {string}" do |visible, name|
+  assert_equal visible, has_css?(%(table#features td:contains("#{name}")))
 end
 
-Then /^I should not see feature "([^"]*)"$/ do |name|
-  assert has_no_css?(%(table#features td:contains("#{name}")))
-end
-
-
-Then /^(provider "[^"]*") should not have feature "([^"]*)"$/ do |provider, name|
-  assert_nil provider.default_service.features.find_by_name(name)
+Then "{provider} should not have feature {string}" do |provider, name|
+  assert_nil provider.default_service.features.find_by(name: name)
 end

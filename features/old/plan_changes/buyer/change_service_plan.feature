@@ -52,7 +52,7 @@ Feature: Change service plan
       And I press "Request Plan Change"
      Then I should see "A request to change your service plan has been sent."
 
-    Given buyer "fan" has valid credit card with lots of money
+    Given buyer "fan" has a valid credit card with lots of money
      When I follow "Review/Change"
       And I follow "Metal"
       And I press "Change Plan"

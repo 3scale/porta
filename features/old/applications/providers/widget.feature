@@ -22,7 +22,7 @@ Feature: Applications widget
        | Service     | API         |
        | Plan        | Basic       |
        | State       | Live        |
-    And I should see link "bob's App" in the applications widget
+    And I should see the link "bob's App" in the applications widget
     And I should not see "Create new key"
 
   Scenario: Backend v2, one application allowed
@@ -48,7 +48,7 @@ Feature: Applications widget
        | Service     | API         |
        | Plan        | Basic       |
        | State       | Live        |
-    And I should see link "SuperWidget" in the applications widget
+    And I should see the link "SuperWidget" in the applications widget
 
     When I follow "SuperWidget"
     Then I should see "API Credentials"
@@ -91,7 +91,7 @@ Feature: Applications widget
        | Service     | API         |
        | Plan        | Basic       |
        | State       | Live        |
-    And I should see link "SuperWidget" in the applications widget
+    And I should see the link "SuperWidget" in the applications widget
 
     When I follow "SuperWidget"
     Then I should see "API Credentials"
@@ -120,5 +120,5 @@ Feature: Applications widget
     And I should not see link "AppTwo"
 
     When I follow "2 Applications"
-    Then I should see link "AppOne"
-    Then I should see link "AppTwo"
+    Then I should see the link "AppOne"
+    Then I should see the link "AppTwo"
