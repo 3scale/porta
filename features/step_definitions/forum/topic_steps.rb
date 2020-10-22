@@ -1,45 +1,41 @@
-Given /^(the forum of "[^\"]*") have topics$/ do |forum|
-  FactoryBot.create(:topic, :forum => forum, :user => forum.account.users.first)
+# frozen_string_literal: true
+
+Given "the forum of {forum} have topics" do |forum|
+  FactoryBot.create(:topic, forum: forum, user: forum.account.users.first)
 end
 
-Given /^(the forum of "[^"]*") has topics? #{QUOTED_LIST_PATTERN}$/ do |forum, titles|
+Given "the forum of {forum} has topics? #{QUOTED_LIST_PATTERN}" do |forum, titles|
   user = forum.account.admins.first
 
   titles.each do |item|
-    FactoryBot.create(:topic, :forum => forum, :title => item, :user => user)
+    FactoryBot.create(:topic, forum: forum, title: item, user: user)
   end
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" with "([^"]*)"$/ do |forum, title, body|
-  FactoryBot.create(:topic, :forum => forum,
-                  :title => title,
-                  :body  => body,
-                  :user  => forum.account.admins.first)
+Given "the forum of {forum} has topic {string} with {string}" do |forum, title, body|
+  FactoryBot.create(:topic, forum: forum, title: title, body: body, user: forum.account.admins.first)
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" from (user "[^"]*")$/ do |forum, title, user|
-  FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
+Given "the forum of {string} has topic {string} from user {user}" do |forum, title, user|
+  FactoryBot.create(:topic, forum: forum, title: title, user: user)
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" from (user "[^"]*") created (.*)$/ do |forum, title, user, time|
+Given "the forum of {string} has topic {string} from user {user} created {}" do |forum, title, user, time|
   Timecop.travel(Chronic.parse(time)) do
-    FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
+    FactoryBot.create(:topic, forum: forum, title: title, user: user)
   end
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" in category "([^"]*)"$/ do |forum, title, category_name|
-  FactoryBot.create(:topic, :forum    => forum,
-                  :category => forum.categories.find_by_name!(category_name),
-                  :title    => title,
-                  :user     => forum.account.admins.first)
+Given "the forum of {forum} has topic {string} in category {string}" do |forum, title, category_name|
+  FactoryBot.create(:topic, forum: forum, category: forum.categories.find_by!(name: category_name), title: title, user: forum.account.admins.first)
 end
 
-Given /^(the forum of "[^"]*") has the following topics:$/ do |forum, table|
+Given "the forum of {forum} has the following topics" do |forum, table|
   table.hashes.each do |hash|
-    category = TopicCategory.find_by_name(hash['Category'])
+    category = TopicCategory.find_by!(name: hash['Category'])
 
     user = if hash['Owner']
-             User.find_by_username!(hash['Owner'])
+             User.find_by!(username: hash['Owner'])
            else
              forum.account.users.first
            end
@@ -47,53 +43,53 @@ Given /^(the forum of "[^"]*") has the following topics:$/ do |forum, table|
     created_at = hash['Created at'] || 'now'
 
     Timecop.travel(Chronic.parse(created_at)) do
-      topic = FactoryBot.create(:topic, :forum    => forum,
-                              :title    => hash['Topic'],
-                              :tag_list => hash['Tags'],
-                              :user     => user,
-                              :category => category,
-                              :sticky   => hash['Sticky?'] == 'yes')
+      topic = FactoryBot.create(:topic, forum: forum,
+                                        title: hash['Topic'],
+                                        tag_list: hash['Tags'],
+                                        user: user,
+                                        category: category,
+                                        sticky: hash['Sticky?'] == 'yes')
 
       # We are creating topics with more that one post, since last post deletion
       # deletes also the topic.
-      FactoryBot.create(:post, :topic => topic, :user => user)
+      FactoryBot.create(:post, topic: topic, user: user)
     end
   end
 end
 
-When /^I create a new topic "([^\"]*)"$/ do |topic|
+When "I create a new topic {string}" do |topic|
   step %(I go to the new topic page)
   step %(I fill in "Title" with "#{topic}")
   step %(I fill in "Body" with "Bla bla bla")
   step %(I press "Create thread")
 end
 
-When /^the (user "[^"]*") post in the topic in (the forum of "[^"]*")$/ do |user, forum|
-  FactoryBot.create(:post, :topic => forum.topics.first, :forum => forum, :user => user)
+When "the user {user} post in the topic in the forum of {forum}" do |user, forum|
+  FactoryBot.create(:post, topic: forum.topics.first, forum: forum, user: user)
 end
 
-Then /^(the forum of "[^"]*") should have topic "([^"]*)"$/ do |forum, title|
-  assert_not_nil forum.topics.find_by_title(title)
+Then "the forum of {forum} should have topic {string}" do |forum, title|
+  assert_not_nil forum.topics.find_by!(title: title)
 end
 
-Then /^(the forum of "[^"]*") should not have topic "([^"]*)"$/ do |forum, title|
-  assert_nil forum.topics.find_by_title(title)
+Then "the forum of {forum} should not have topic {string}" do |forum, title|
+  assert_nil forum.topics.find_by!(title: title)
 end
 
-Then /^(the forum of "[^"]*") should have topic "([^"]*)" in category "([^"]*)"$/ do |forum, title, category|
-  topic = forum.topics.find_by_title(title)
+Then "the forum of {forum} should have topic {string} in category {string}" do |forum, title, category|
+  topic = forum.topics.find_by!(title: title)
   assert_not_nil topic
-  assert_equal category, topic.category.try!(:name)
+  assert_equal category, topic.category&.name
 end
 
-Then /^(the forum of "[^"]*") should have sticky topic "([^"]*)"$/ do |forum, title|
-  topic = forum.topics.find_by_title(title)
+Then "the forum of {forum} should have sticky topic {string}" do |forum, title|
+  topic = forum.topics.find_by!(title: title)
   assert_not_nil topic
   assert topic.sticky?
 end
 
-Then /^(the forum of "[^"]*") should have non\-sticky topic "([^"]*)"$/ do |forum, title|
-  topic = forum.topics.find_by_title(title)
+Then "the forum of {forum} should have non\-sticky topic {string}" do |forum, title|
+  topic = forum.topics.find_by!(title: title)
   assert_not_nil topic
   assert !topic.sticky?
 end
@@ -103,34 +99,32 @@ Then /^I should see the first topic is "([^"]*)"$/ do |topic|
   assert topics.first.has_xpath?("//a[text()[contains(.,'#{topic}')]]")
 end
 
-
 When /^I leave the obligatory topic fields blank$/ do
-  fill_in "topic_title", :with => ""
-  fill_in "Body", :with => ""
+  fill_in 'topic_title', with: ''
+  fill_in 'Body', with: ''
 end
 
-
-Then /^I should see all the topics on the (forum of "[^\"]*")$/ do |forum|
-  step %{I should see "#{forum.topics.length} topics"}
+Then "I should see all the topics on the forum of {forum}" do |forum|
+  step %(I should see "#{forum.topics.length} topics")
   forum.topics.each do |topic|
-    step %{I should see "#{topic.title}"}
+    step %(I should see "#{topic.title}")
   end
 end
 
 Then /^I should see only the (\w+) topic$/ do |title|
-  step %{I should see "1 topic"}
-  step %{I should see "#{title}"}
+  step %(I should see "1 topic")
+  step %(I should see "#{title}")
 end
 
 Then /^I should see topics? #{QUOTED_LIST_PATTERN}$/ do |titles|
   titles.each do |title|
-    assert has_css?('tr.topic', :text => title)
+    assert has_css?('tr.topic', text: title)
   end
 end
 
 Then /^I should not see topics? #{QUOTED_LIST_PATTERN}$/ do |titles|
   titles.each do |title|
-    assert has_no_css?('tr.topic', :text => title)
+    assert has_no_css?('tr.topic', text: title)
   end
 end
 

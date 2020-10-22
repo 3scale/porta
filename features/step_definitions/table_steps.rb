@@ -1,4 +1,6 @@
-Then /^I should see following table:$/ do |expected|
+# frozen_string_literal: true
+
+Then "I should see following table:" do |expected|
   table = extract_table('table.data', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
@@ -26,4 +28,3 @@ Then /^I should see following table:$/ do |expected|
     raise
   end
 end
-

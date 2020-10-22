@@ -23,7 +23,7 @@ Feature: Forum toggle
     And I log out
 
     When I log in as "alice" on foo.3scale.localhost
-    Then I should see link "Forum"
+    Then I should see the link "Forum"
 
   @javascript @wip
   Scenario: Disable the forum

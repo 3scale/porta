@@ -1,4 +1,6 @@
-Then(/^there should be a c3 chart with the following data:$/) do |table|
+# frozen_string_literal: true
+
+Then "there should be a c3 chart with the following data:" do |table|
   chart_selector = '.c3'
 
   page.should have_css(chart_selector)
@@ -32,7 +34,7 @@ Then(/^there should be a c3 chart with the following data:$/) do |table|
   end
 end
 
-When(/^I select today from the stats menu$/) do
+When "I select today from the stats menu" do
   page.should_not have_css('.StatsChart-container.is-loading')
   page.should have_css('.StatsMenu')
   find('.StatsMenu-customLink--since').click

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given(/^an invoice of (buyer "[^"]*") for (\w+, *\d+)$/) do |buyer, month|
   create_invoice buyer, month
 end
@@ -19,24 +21,21 @@ Given(/^an invoice of (buyer "[^"]*") for (\w+, *\d+) with items:?$/) do |buyer,
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end
 
-# TODO: add more actions if needed
-Given(/^I issue the invoice number "(.*?)"$/) do |number|
+Given "I issue the invoice number {string}" do |number|
   invoice = Invoice.by_number(number).first
-  if invoice
-    invoice.issue_and_pay_if_free!
-  else
-    raise "No invoice with number '#{number}' found"
-  end
+  raise "No invoice with number '#{number}' found" unless invoice
+
+  invoice.issue_and_pay_if_free!
 end
 
-Given(/^the buyer pays the invoice$/) do
+Given "the buyer pays the invoice" do
   invoice = Invoice.last
   invoice.finalize
   invoice.issue
   invoice.pay
 end
 
-Given(/^the buyer pays the invoice but failed$/) do
+Given "the buyer pays the invoice but failed" do
   invoice = Invoice.last
   invoice.finalize
   invoice.issue
@@ -44,15 +43,15 @@ Given(/^the buyer pays the invoice but failed$/) do
   invoice.fail
 end
 
-Then(/^I should (?:see|still see) (\d+) invoices?$/) do |count|
-  if count.to_i == 0
+Then "I should (still )see {int} invoice(s)" do |count|
+  if count.zero?
     page.should have_no_css('tr.invoice')
   else
-    page.should have_css('tr.invoice', count: count.to_i)
+    page.should have_css('tr.invoice', count: count)
   end
 end
 
-Then /^the buyer should have (\d+) invoices?$/ do |number|
+Then "the buyer should have {int} invoice(s)" do |number|
   step 'the buyer logs in to the provider'
   step 'I navigate to invoices issued for me'
 
@@ -66,17 +65,16 @@ Then /^the buyer should have following line items for "([^"]*)"(?: in the( \d(?:
   step 'I should see line items', items
 end
 
-Then(/^I should see the first invoice belonging to "([^"]*)"$/) do |buyer|
+Then "I should see the first invoice belonging to {string}" do |buyer|
   assert find(:xpath, '//table/tbody/tr[1]').text.include?(buyer)
 end
 
-Then(/^I should have (\d+) invoices?$/) do |count|
+Then "I should have {int} invoice(s)" do |count|
   step %(I navigate to invoices issued for me)
   step %(I should see #{count} invoices)
 end
 
-# TODO: change to accept REGEXPs! (use page.body and assert)
-Then(/^I should see line items$/) do |items|
+Then "I should see line items" do |items|
   items.hashes.each_with_index do |line, i|
     name = line['name']
     cost = line['cost']
@@ -96,30 +94,29 @@ Then(/^I should see line items$/) do |items|
     when /Total VAT Amount/
     else
       prefix      = "//table[@id='line_items']/tbody/tr[#{i + 1}]"
-      line_name = find(:xpath, "#{prefix}/th[1]").text.strip
+      line_name   = find(:xpath, "#{prefix}/th[1]").text.strip
       description = find(:xpath, "#{prefix}/td[1]").text.strip
       quantity    = find(:xpath, "#{prefix}/td[2]").text.strip
       real_cost   = find(:xpath, "#{prefix}/td[3]").text.strip
 
-      # TODO: strip double whitespace as done in https://github.com/3scale/system/commit/ce72abe4d673b1592f96ed9532c62317306c7ea6
-      assert_equal line['name'], line_name unless line_name.blank?
-      assert_equal line['description'], description unless line['description'].blank?
-      assert_equal line['quantity'],    quantity    unless line['quantity'].blank?
-      assert_match cost_regex,          real_cost
+      assert_equal line['name'].squish,        line_name   unless line_name.blank?
+      assert_equal line['description'].squish, description unless line['description'].blank?
+      assert_equal line['quantity'].squish,    quantity    unless line['quantity'].blank?
+      assert_match cost_regex,                 real_cost
     end
   end
 end
 
-Then(/^I should see invoice in state "([^"]*)"$/) do |state|
+Then "I should see invoice in state {string}" do |state|
   page.should have_css('dl', text: state.capitalize)
 end
 
-When(/^I see my invoice from "([^"]*)" is "([^"]*)"$/) do |month, state|
+When "I see my invoice from {string} is {string}" do |month, state|
   step %(I navigate to invoice issued FOR me in "#{month}")
   step %(I should see invoice in state "#{state}")
 end
 
-Then(/^I should see secure PDF link for invoice (.*)$/) do |invoice_number|
+Then "I should see secure PDF link for invoice {}" do |invoice_number|
   row = page.find(%(tr:has(td:contains("#{invoice_number}"))))
   link = row.find(%(td a:contains("PDF")))
 
@@ -130,33 +127,40 @@ Then(/^I should see secure PDF link for invoice (.*)$/) do |invoice_number|
   assert_secure_invoice_pdf_url(link[:href], Invoice.find_by_friendly_id!(invoice_number))
 end
 
-Then(/^I should see secure PDF link for the shown (buyer )?invoice$/) do |buyer_side|
-  link = buyer_side ? page.find_link('PDF') : page.find_link('Download PDF')
+Then "I should see secure PDF link for the shown buyer invoice" do
+  link = page.find_link('PDF')
 
   id = link[:href].scan(%r{/invoices/(\d+)/}).join
   assert_secure_invoice_pdf_url(link[:href], Invoice.find(id))
 end
 
-Then(/^I should have an invoice of "(\d+\.?\d*) (.+)"$/) do |amount, currency|
-  invoices = Invoice.where(provider_account_id: current_account.id)
-  assert invoices.select { |x| x.cost.to_s == amount && x.currency == currency }.any?
+Then "I should see secure PDF link for the shown invoice" do
+  link = page.find_link('Download PDF')
+
+  id = link[:href].scan(%r{/invoices/(\d+)/}).join
+  assert_secure_invoice_pdf_url(link[:href], Invoice.find(id))
 end
 
-Given(/^an invoice of the buyer with a total cost of (\d+)/) do |cost|
+Then "I should have an invoice of \"{float} {}\"" do |amount, currency|
+  invoices = Invoice.where(provider_account_id: current_account.id)
+  assert invoices.select { |x| x.cost == amount && x.currency == currency }.any?
+end
+
+Given "an invoice of the buyer with a total cost of {int}" do |cost|
   step 'an invoice of buyer "bob" for January, 2011 with items:', table(<<-TABLE)
   | name   | cost |
   | Custom | #{cost} |
   TABLE
 end
 
-Then(/^I should see in the invoice period for the column "(in process|overdue|paid|total)" a cost of (\d+\.\d+) (\w+)$/) do |column, cost, money|
+Then "I should see in the invoice period for the column {word} a cost of {float} {word}" do |column, cost, money|
   columns = ['month', 'total', 'in process', 'overdue', 'paid']
   position = columns.index(column) + 1
   node = find(:xpath, %(//table//td/a[text()="January, 2011"]/../..//td[#{position}]))
   assert_equal "#{money} #{cost}", node.text
 end
 
-Then(/there is only one invoice for "([^"]*)"/) do |date|
+Then "there is only one invoice for {string}" do |date|
   step 'the buyer logs in to the provider'
   step 'I navigate to invoices issued for me'
   nodes = page.find_all(:xpath, ".//tr[contains(@class,'invoice')]/td[contains(text(), '#{date}')]")

@@ -1,31 +1,31 @@
 # frozen_string_literal: true
 
-And(/^adds the echo Product$/) do
+And "adds the echo Product" do
   within product_form do
     fill_in 'Product Name', with: 'Echo Product'
   end
 end
 
-And(/^adds the echo Backend$/) do
+And "adds the echo Backend" do
   within backend_form do
     fill_in 'Backend Name', with: 'Echo API'
     fill_in 'Base URL', with: 'https://echo-api.3scale.net'
   end
 end
 
-And(/^adds a path$/) do
+And "adds a path" do
   within connect_form do
     fill_in 'Path', with: ''
   end
 end
 
-And(/^goes to Add a Backend page$/) do
+And "goes to Add a Backend page" do
   click_on 'Got it! Lets add my API'
 
   page.should have_content 'Add your API(s)'
 end
 
-And(/^goes to Add a Product page$/) do
+And "goes to Add a Product page" do
   within backend_form do
     click_on 'Add this Backend'
   end
@@ -33,7 +33,7 @@ And(/^goes to Add a Product page$/) do
   page.should have_content 'Design a Product'
 end
 
-And(/^goes to Connect page$/) do
+And "goes to Connect page" do
   within product_form do
     click_on 'Add this Product'
   end
@@ -41,7 +41,7 @@ And(/^goes to Connect page$/) do
   page.should have_content 'Use your Backend in your Product'
 end
 
-And(/^goes to the request page$/) do
+And "goes to the request page" do
   within connect_form do
     click_on 'Add the Backend to the Product'
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given "I don't care about backend alert limits" do
   Service.any_instance.stubs(:alert_limits).returns([])
   Service.any_instance.stubs(:create_alert_limits).returns([])
@@ -10,7 +12,7 @@ Given "I care about backend alert limits" do
   Service.any_instance.unstub(:delete_alert_limits)
 end
 
-When /^default service of (provider ".+?") has allowed following alerts:$/ do |provider, table|
+When "default service of {provider} has allowed following alerts:" do |provider, table|
   service = provider.first_service!
   settings = service.notification_settings || {}
 
@@ -19,5 +21,5 @@ When /^default service of (provider ".+?") has allowed following alerts:$/ do |p
     settings[key] = row['Levels'].from_sentence.map(&:to_i)
   end
 
-  service.update_attribute :notification_settings, settings
+  service.update!(notification_settings: settings)
 end

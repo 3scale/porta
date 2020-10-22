@@ -1,64 +1,49 @@
-Given /^(provider "[^\"]*") has "([^\"]*)" disabled$/ do |account, toggle|
-  account.settings.update_attribute("#{underscore_spaces(toggle)}_enabled", false)
+# frozen_string_literal: true
+
+Given "{provider} has {string} {enabled}" do |account, toggle, enabled|
+  account.settings.update!("#{underscore_spaces(toggle)}_enabled": enabled)
 end
 
-Given /^(provider "[^\"]*") has "([^\"]*)" enabled$/ do |account, toggle|
-  account.settings.update_attribute("#{underscore_spaces(toggle)}_enabled", true)
+Given "{provider} has {string} set to {string}" do |account, name, value|
+  account.settings.update!(underscore_spaces(name), value)
 end
 
-
-Given /^(provider "[^\"]*") has "([^\"]*)" set to "([^\"]*)"$/ do |account, name, value|
-  account.settings.update_attribute(underscore_spaces(name), value)
-end
-
-Given /^(provider "[^\"]*") has the following settings:$/ do |account, table|
+Given "{provider} has the following settings" do |account, table|
   attributes = table.rows_hash
   attributes.map_keys! { |key| underscore_spaces(key) }
 
-  account.settings.update_attributes!(attributes)
+  account.settings.update!(attributes)
 end
 
-Given /^(buyer "[^\"]*") has "([^\"]*)" enabled$/ do |account, setting|
-  account.settings.update_attribute("#{underscore_spaces(setting)}_enabled", true)
+Given "{buyer} has {string} {enabled}" do |account, setting, enabled|
+  account.settings.update!("#{underscore_spaces(setting)}_enabled": enabled)
 end
 
-When /^I (check|uncheck) "([^"]*)" for the "([^"]*)" module$/ do |action, widget, name|
-  send action, "settings_#{name.downcase}_#{widget.downcase}"
+When "I {check} {string} for the {string} module" do |check, widget, name|
+  send check ? 'check' : 'uncheck', "settings_#{name.downcase}_#{widget.downcase}"
 end
 
-Then /^I should see the settings updated$/ do
+Then "I should see the settings updated" do
   assert has_content?("Settings updated.")
 end
 
-Then /^(provider "[^"]*") should have strong passwords enabled$/ do |provider|
-  assert provider.settings.strong_passwords_enabled
+Then "{provider} should have strong passwords {enabled}" do |provider, enabled|
+  assert provider.settings.strong_passwords_enabled == enabled
 end
 
-Then /^(provider "[^"]*") should have strong passwords disabled$/ do |provider|
-  assert false == provider.settings.strong_passwords_enabled
-end
-
-When /^I select backend version "([^"]*)"$/ do |version|
+When "I select backend version {string}" do |version|
   find(:xpath, "//input[@id='service_backend_version_#{version}']").select_option
 end
 
-Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
+Then "I should see field {string} {enabled}" do |field, enabled|
   label = find('label', text: field)
   input = label.sibling('input')
 
-  if enabled == 'enabled'
-    assert_not input.readonly?
-  else
-    assert input.readonly?
-  end
+  assert_not_equal enabled, input.readonly?
 end
 
-Then(/^I should see button "([^"]*)" (enabled|disabled)$/) do |field, enabled|
+Then "I should see button {string} {enabled}" do |field, enabled|
   button = find('button', text: field)
 
-  if enabled == 'enabled'
-    assert_not button['disabled']
-  else
-    assert button['disabled']
-  end
+  assert_not_equal enabled, button['disabled']
 end

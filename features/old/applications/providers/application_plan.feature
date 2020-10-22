@@ -52,7 +52,7 @@ Feature: Applications plan
     Then I should see the app plan is "Basic"
 
   Scenario: Sorting Application Plans
-    When an published application plan "Other" of provider "foo.3scale.localhost"
+    When a published application plan "Other" of provider "foo.3scale.localhost"
      And a buyer "foo" signed up to application plan "Other"
      And a buyer "bar" signed up to application plan "Other"
      And I am on the application plans admin page

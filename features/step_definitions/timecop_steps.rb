@@ -1,35 +1,37 @@
+# frozen_string_literal: true
+
 def access_user_sessions
-  UserSession.where("revoked_at is null").each {|e| e.update_attribute(:accessed_at, Time.zone.now)}
+  UserSession.where("revoked_at is null").each { |e| e.update!(accessed_at: Time.zone.now) }
 end
 
-Given /^the year is (\d+)$/ do |year|
-  Timecop.travel(Time.zone.now.change(:year => year.to_i))
+Given "the year is {int}" do |year|
+  Timecop.travel(Time.zone.now.change(year: year))
 end
 
-Given /^the (?:date|time) is (.*)$/ do |time|
+Given "the date/time is {}" do |time|
   time = Time.zone.parse(time)
   Timecop.travel(time)
   access_user_sessions
 end
 
-Given(/^this happened (\d+) (hours|days?) ago$/) do |num, time_range|
-  time = num.to_i.public_send(time_range).ago
+Given "this happened {int} {word} ago" do |num, time_range|
+  time = num.public_send(time_range).ago
   Timecop.travel(time)
   access_user_sessions
 end
 
-Given /^the current date is not conflicting in new year\'s boundaries$/ do
-  step "the date is 15 March 2011"
+Given "the current date is not conflicting in new year's boundaries" do
+  step %(the date is 15 March 2011)
 end
 
-When /^(\d+) (second|minute|hour|day|week|month|year)s? pass(?:es)?$/ do |amount, period|
-  duration = amount.to_i.send(period.to_sym)
+When "{int} {time_period} pass(es)" do |amount, period|
+  duration = amount.send(period)
   time_machine(duration.from_now)
   access_user_sessions
 end
 
-When /^(?:the )?time flies to (.*)$/ do |date|
-  date = date.gsub(Regexp.union(%w(of st nd rd)), '')
+When "(the )time flies to {}" do |date|
+  date = date.gsub(Regexp.union(%w[of st nd rd]), '')
   time_machine(Time.zone.parse(date))
   step %(the date should be #{date})
   access_user_sessions
@@ -54,7 +56,7 @@ Then /^(.+) at (\d{2}:\d{2}:\d{2})$/ do |original, time|
   end
 end
 
-Then /^the (?:date|time) should be (.*)$/ do |time|
+Then "the date/time should be {}" do |time|
   # making the comparison at the beginning of hour instead of just using the timestamps as time is no longer frozen, we simply travel
   # if you really need full precision you should write another step
   assert_equal Time.zone.parse(time).beginning_of_hour, Time.zone.now.beginning_of_hour

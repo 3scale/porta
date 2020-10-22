@@ -15,7 +15,7 @@ Feature: Billing and Credit card details
 
   @javascript
   Scenario: Update credit card details
-    Given the buyer has valid credit card with lots of money
+    Given the buyer has a valid credit card with lots of money
 
     When the buyer logs in to the provider
     And go to the braintree edit credit card details page
@@ -30,7 +30,7 @@ Feature: Billing and Credit card details
 #  @javascript
 #  Scenario: Update credit card details with CVV equals to "000"
 #    # TODO: DRY
-#    Given the buyer has valid credit card with lots of money
+#    Given the buyer has a valid credit card with lots of money
 #
 #    When the buyer logs in to the provider
 #    And go to the braintree edit credit card details page
@@ -44,7 +44,7 @@ Feature: Billing and Credit card details
   @javascript
   Scenario: Update billing address with Postal Code equals to "00000"
     # TODO: DRY
-    Given the buyer has valid credit card with lots of money
+    Given the buyer has a valid credit card with lots of money
 
     When the buyer logs in to the provider
     And go to the braintree edit credit card details page

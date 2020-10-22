@@ -1,6 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-Then(/^I should see the personal details form$/) do
+Then "I should see the personal details form"  do
   should have_css('form#edit_personal_details.formtastic.personal_details')
   within('form#edit_personal_details') do
 
@@ -16,5 +16,4 @@ Then(/^I should see the personal details form$/) do
       should have_xpath("//input[@name='_method' and @type='hidden' and @value='put']", visible: :hidden)
     end
   end
-
 end

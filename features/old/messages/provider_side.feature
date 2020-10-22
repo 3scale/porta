@@ -15,7 +15,7 @@ Feature: Provider side messages
   Scenario: Compose link on the messages dashboard
     When I go to the provider dashboard
     And I follow "0 Messages"
-    Then I should see link "Compose Message"
+    Then I should see the link "Compose Message"
 
   Scenario: Sending a message
     Given account "bob" has no messages

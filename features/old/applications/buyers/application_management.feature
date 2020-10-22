@@ -6,6 +6,7 @@ Feature: Buyer's application management
 
   Background:
     Given a provider "foo.3scale.localhost"
+    Given a provider "foo.example.com"
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "service_plans" visible
     And provider "foo.3scale.localhost" has "multiple_services" visible
@@ -46,7 +47,7 @@ Feature: Buyer's application management
      And I fill in "Description" with "Awesome ultimate super widget"
      And I press "Create"
      And I should be on the "UltimateWidget" application page
-     And I should see "Name UltimateWidget"
+    And I should see "Name UltimateWidget"
      And I should see "Awesome ultimate super widget"
      And I should see "Plan Train"
      And buyer "bob" should have 1 cinstance
@@ -71,7 +72,7 @@ Feature: Buyer's application management
   Scenario: Can request plan change on an already existing application
     Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
     And an published application plan "Bronze" of provider "foo.3scale.localhost"
-   When I log in as "bob" on foo.3scale.localhost
+   When I log in as "bob" on "foo.3scale.localhost"
     And I go to the applications page
     And I follow "UltraWidget"
     And I follow "Edit UltraWidget"
@@ -212,8 +213,8 @@ Feature: Buyer's application management
     Given a service "Fancy" of provider "foo.3scale.localhost"
     Given a service "Awesome" of provider "foo.3scale.localhost"
     And a default service of provider "foo.3scale.localhost" has name "Boring"
-    And an published application plan "AppPlan" of service "Awesome"
-    And an published application plan "Fancy Plan" of service "Fancy"
+    And a published application plan "AppPlan" of service "Awesome"
+    And a published application plan "Fancy Plan" of service "Fancy"
     And a service plan "Good" of service "Fancy"
     And service plan "Good" requires approval
     And buyer "bob" subscribed service "Fancy" with plan "Good"
