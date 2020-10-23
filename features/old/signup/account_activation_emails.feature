@@ -11,7 +11,7 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch denied
 
   Scenario: Default account activation email
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
 
       When someone signs up with the email "user@3scale.localhost"
       Then "user@3scale.localhost" should receive the default account activation email with viral footer applyed
@@ -29,9 +29,9 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       And I fill in the draft with "provider custom account notification email"
       And I press "Create Email Template"
 
-    Given the current domain is foo.3scale.localhost
-    When someone signs up with the email "user@3scale.localhost"
-      And "user@3scale.localhost" opens the account activation email
+    Given the current domain is "foo.3scale.localhost"
+    When someone signs up with the email "user@example.com"
+      And "user@example.com" opens the account activation email
     Then they should see "provider custom account notification email" in the email body
 
   @javascript
@@ -48,7 +48,7 @@ Feature: Account Activation Emails on Sign Up of enterprise buyers
       And I fill in the draft with "another version of account notification email"
       And I press "Save"
 
-    Given the current domain is foo.3scale.localhost
-    When someone signs up with the email "user@3scale.localhost"
-      And "user@3scale.localhost" opens the account activation email
+    Given the current domain is "foo.3scale.localhost"
+    When someone signs up with the email "user@example.com"
+      And "user@example.com" opens the account activation email
     Then they should see "another version of account notification email" in the email body

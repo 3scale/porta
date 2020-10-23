@@ -7,7 +7,7 @@ Feature: Forum privacy
   Background:
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "forum" enabled
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
 
   Scenario: Private forum requires logged in user
     Given the forum of provider "foo.3scale.localhost" is private

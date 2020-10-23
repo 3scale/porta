@@ -19,7 +19,7 @@ Feature: Signup with defined fields
       | user_extra_read_only  |          | true      |        |
       | user_extra_hidden     |          |           | true   |
 
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
 
 
   Scenario: Required fields on signup

@@ -10,7 +10,7 @@ Feature: Provider billing mode off
      And admin of account "kyle" has email "kyle@3scale.localhost"
 
   Scenario: I don't want to be bugged by invoice information
-    Given I log in as "kyle" on xyz.3scale.localhost
+    Given I log in as "kyle" on "xyz.3scale.localhost"
       And I go to the account page
      Then I should not see link "Invoices"
 #	   And visiting the URL <whatever it is> should fail.

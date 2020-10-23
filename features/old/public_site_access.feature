@@ -8,14 +8,14 @@ Feature: Public site access
 
   @wip @3D
   Scenario: Provider dashboard link takes to the admin side
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And I log in as provider "foo.3scale.localhost"
       And I follow "Admin" in the user widget
     Then the current domain should be the master domain
 
   @wip @3D
   Scenario: Provider admin link takes to the admin side
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And I log in as provider "foo.3scale.localhost"
     When I follow "Admin" in the user widget
     Then the current domain should be the master domain

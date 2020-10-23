@@ -20,7 +20,7 @@ Feature: Forum viewing
   Scenario: Viewing forum not logged in
     Given the forum of "foo.3scale.localhost" has topic "Hello world"
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
       And I am on the forum page
       And I follow "Hello world"
       Then I should see "Hello world"
@@ -31,7 +31,7 @@ Feature: Forum viewing
     Given the forum of "foo.3scale.localhost" has topic "Hello world"
       And the forum of provider "foo.3scale.localhost" is private
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
      And I am not logged in
      And I go to the forum page
     Then I should be on the login page
@@ -41,7 +41,7 @@ Feature: Forum viewing
 
   @wip
   Scenario: Topics are ordered by date of last post by default
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
     When I log in as "bob"
     And I go to the forum page
     Then I should see topics listed for "foo.exmpale.com" with "topic c" showing first and "topic a" showing last

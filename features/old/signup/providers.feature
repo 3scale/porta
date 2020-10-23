@@ -62,7 +62,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I should not be logged in as "impersonationadmin"
 
   # --- Buyer signs up ---
-  Given the current domain is foo.3scale.localhost
+  Given the current domain is "foo.3scale.localhost"
     And provider "foo" has site access code "foobar"
    When I go to the sign up page
     And I enter "foobar" as access code

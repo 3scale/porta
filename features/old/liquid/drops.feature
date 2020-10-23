@@ -5,7 +5,7 @@ Feature: Liquid drops
   Background:
     Given a provider "foo.3scale.localhost"
     Given provider "foo.3scale.localhost" has Browser CMS activated
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   Scenario: MenuDrop
     Given a buyer "bob" of provider "foo.3scale.localhost"

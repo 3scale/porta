@@ -15,7 +15,7 @@ Feature: Users can subscribe to forum topics
     Given provider "foo.3scale.localhost" has the following users:
      | User          | State  |
      | member_on_foo | active |
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
 
     @javascript
   Scenario: Active user can subscribe to topics

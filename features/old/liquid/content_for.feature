@@ -3,8 +3,8 @@ Feature: Content for and content of
 
   Scenario: Store something by tag and print it by drop
     Given a provider "foo.3scale.localhost"
-    And the current provider is foo.3scale.localhost
-    And the current domain is foo.3scale.localhost
+    And the current provider is "foo.3scale.localhost"
+    And the current domain is "foo.3scale.localhost"
     And the provider has cms page "/some-page" with:
     """
       {% content_for something %}

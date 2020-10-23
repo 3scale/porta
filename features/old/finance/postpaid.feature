@@ -30,7 +30,7 @@ Background:
       When 1 month passes
       Then the date should be 15th February 2009
 
-      When I log in as "broke" on xyz.3scale.localhost
+      When I log in as "broke" on "xyz.3scale.localhost"
       And I navigate to invoices issued for me
       Then I should see 0 invoices
 
@@ -46,7 +46,7 @@ Background:
       | Metric   | Value |
       | hits     |    20 |
 
-    And I log in as "varnish" on xyz.3scale.localhost on 20th January 2009
+    And I log in as "varnish" on "xyz.3scale.localhost" on 20th January 2009
     And I change application plan to "Variable"
 
     When time flies to 3rd February 2009
@@ -77,7 +77,7 @@ Background:
       | Metric   | Value |
       | hits     |    20 |
 
-    And I log in as "varnish" on xyz.3scale.localhost on 20th January 2009
+    And I log in as "varnish" on "xyz.3scale.localhost" on 20th January 2009
     And I change application plan to "Variable"
 
     When time flies to 3rd February 2009
@@ -106,7 +106,7 @@ Background:
         | transfer |     5 |
 
      When time flies to 3rd February 2009
-     And I log in as "tycoon" on xyz.3scale.localhost
+     And I log in as "tycoon" on "xyz.3scale.localhost"
       And I navigate to invoice issued for me in "January, 2009"
      Then I should see line items
       | name                   | quantity | cost |
@@ -127,6 +127,6 @@ Background:
         | transfer |     5 |
 
      And time flies to 10th February 2009
-     And I log in as "tycoon" on xyz.3scale.localhost
+     And I log in as "tycoon" on "xyz.3scale.localhost"
      And I navigate to invoices issued for me
     Then I should see 0 invoices

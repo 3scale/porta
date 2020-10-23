@@ -5,7 +5,7 @@ Feature: Liquid tags
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
     And I am logged in as "foo.3scale.localhost"
 
 

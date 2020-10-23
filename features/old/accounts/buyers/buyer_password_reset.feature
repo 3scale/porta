@@ -6,8 +6,8 @@ Feature: Buyer password reset
   Background:
     Given a provider "foo.3scale.localhost"
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
-    And an active user "zed" of account "bob" with email "zed@3scale.localhost"
-   When the current domain is foo.3scale.localhost
+    And an active user "zed" of account "bob" with email "zed@example.com"
+   When the current domain is "foo.3scale.localhost"
     And I go to the login page
 
   Scenario: Reset password

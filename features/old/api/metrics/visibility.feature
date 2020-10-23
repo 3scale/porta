@@ -77,7 +77,7 @@ Feature: Metric visibility
     When I go to the provider side "app" application page
     Then I should see the metric "visible" limits as icons and text in the plan widget
 
-    # When the current domain is foo.3scale.localhost
+    # When the current domain is "foo.3scale.localhost"
     # When I log in as "buyer" on "foo.3scale.localhost"
     #   And I go to the "app" application page
     # Then I should see the metric "visible" limits as icons and text in the plan widget
@@ -95,7 +95,7 @@ Feature: Metric visibility
     When I go to the provider side "app" application page
     Then I should see the metric "zeroed" limits as icons only in the plan widget
 
-    # When the current domain is foo.3scale.localhost
+    # When the current domain is "foo.3scale.localhost"
     # When I log in as "buyer" on "foo.3scale.localhost"
     #   And I go to the "app" application page
     # Then I should see the metric "zeroed" limits as icons only in the plan widget

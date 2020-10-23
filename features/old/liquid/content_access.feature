@@ -33,7 +33,7 @@ Feature: Content access in liquid
         </div>
       {% endif %}
     """
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
 
 
   Scenario: Not logged in user has access denied to protected content in page

@@ -8,7 +8,7 @@ Feature: Forum visibility
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has multiple applications enabled
       And a buyer "buyer" signed up to provider "foo.3scale.localhost"
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
 
   Scenario: Buyer cannot access the forum if is disabled
     Given provider "foo.3scale.localhost" has "forum" disabled

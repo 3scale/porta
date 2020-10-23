@@ -4,8 +4,8 @@ Feature: CMS Applications
   Background:
     Given a provider "foo.3scale.localhost" with default plans
       And provider "foo.3scale.localhost" has all the templates setup
-      And the current provider is foo.3scale.localhost
-      And the current domain is foo.3scale.localhost
+      And the current provider is "foo.3scale.localhost"
+      And the current domain is "foo.3scale.localhost"
     Given a buyer "supetramp" signed up to application plan "Default"
       And I am logged in as "supetramp"
 
@@ -17,7 +17,7 @@ Feature: CMS Applications
 
   Scenario: Pagination
     Given buyer "supetramp" has 40 applications
-    
+
     And I follow "Applications"
       Then I should not see "App 9"
       Then I should see "App 35"

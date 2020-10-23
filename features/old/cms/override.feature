@@ -64,7 +64,7 @@ Feature: Render liquid templates from database
       | users_menu  | users   | ul.nav.nav-tabs                    |
 
   Scenario Outline: As logged out user
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     When I go to the <path> page
     Then I should see "<original>"
     And builtin page "<system_name>" of provider "foo.3scale.localhost" has content "EDITED <system_name>"
@@ -101,7 +101,7 @@ Feature: Render liquid templates from database
 
   # Extra because the user is not logged in
   Scenario: Login page
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
      And I go to the login page
     Then I should see "Username or Email"
 

@@ -12,7 +12,7 @@ Feature: Sign Up of enterprise buyers
       And a service plan "Gold" for service "api" exists
       And an application plan "iPhone" of service "api"
 
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   # regression test for https://github.com/3scale/system/pull/2902
   Scenario: Wrong activation code

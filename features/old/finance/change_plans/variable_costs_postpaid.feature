@@ -13,7 +13,7 @@ Feature: Change plan
     Given an application plan "CheapPlan" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "ExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "VeryExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And pricing rules on plan "CheapPlan":
       | Metric | Cost per unit | Min | Max      |
       | hits   |             1 |   1 | infinity |

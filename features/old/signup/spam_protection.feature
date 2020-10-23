@@ -13,7 +13,7 @@ Feature: Spam protection for buyer signup
       And a service plan "Gold" for service "api" exists
       And an application plan "iPhone" of service "api"
 
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   Scenario: Captcha is disabled
     Given provider "foo.3scale.localhost" has "spam protection level" set to "none"
