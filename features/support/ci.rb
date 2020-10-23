@@ -7,7 +7,7 @@ module Cucumber
     class List
       include Formatter::Io
 
-      def initialize(runtime, path_or_io, options)
+      def initialize(_, path_or_io, options)
         @io = ensure_io(path_or_io)
         @test_locations = []
         @options = options

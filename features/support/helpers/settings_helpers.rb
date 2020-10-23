@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SettingsHelpers
   def underscore_spaces(name)
     name.gsub(/\s+/, '_').underscore

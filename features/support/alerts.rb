@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 module Alerts
 
   def symbolize_headers(table)
@@ -6,12 +7,11 @@ module Alerts
   end
 
   def create_alert!(cinstance, hash)
-    attributes = hash.slice(:timestamp, :message, :utilization, :level, :alert_id).merge(
-      :cinstance => cinstance
-    )
+    attributes = hash.slice(:timestamp, :message, :utilization, :level, :alert_id)
+                     .merge(cinstance: cinstance)
 
-    Alert.create! [ attributes.merge(:account => cinstance.user_account),
-                    attributes.merge(:account => cinstance.service.account) ]
+    Alert.create! [attributes.merge(account: cinstance.user_account),
+                   attributes.merge(account: cinstance.service.account)]
   end
 
   def limit_alerts_table(state = nil)

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # TODO: cleanup require statements
-require File.expand_path(File.dirname(__FILE__) + '/sphinx')
+require File.expand_path("#{File.dirname(__FILE__)}/sphinx")
 
 require 'action_mailer'
 ActionMailer::Base.delivery_method = :test
@@ -14,11 +16,11 @@ World(TimecopHelpers)
 World(PlanHelpers)
 World(DummyAttachments)
 
-require File.expand_path(File.dirname(__FILE__) + '/helpers/js_helpers')
-require File.expand_path(File.dirname(__FILE__) + '/helpers/messages_helpers')
-require File.expand_path(File.dirname(__FILE__) + '/helpers/backend_helpers')
-require File.expand_path(File.dirname(__FILE__) + '/helpers/apps_keys_helpers')
-require File.expand_path(File.dirname(__FILE__) + '/helpers/site_account_support')
+require File.expand_path("#{File.dirname(__FILE__)}/helpers/js_helpers")
+require File.expand_path("#{File.dirname(__FILE__)}/helpers/messages_helpers")
+require File.expand_path("#{File.dirname(__FILE__)}/helpers/backend_helpers")
+require File.expand_path("#{File.dirname(__FILE__)}/helpers/apps_keys_helpers")
+require File.expand_path("#{File.dirname(__FILE__)}/helpers/site_account_support")
 
 
 World(JsHelpers)

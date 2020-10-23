@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_regexp do |expected|
   match do |actual|
     stripped = actual.delete("\n")

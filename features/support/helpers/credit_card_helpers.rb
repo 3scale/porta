@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CreditCardHelpers
   def customer_hash
     {

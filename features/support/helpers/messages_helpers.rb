@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MessagesHelpers
   def find_delete_button_in_row(label, *cells)
     forms = find(:xpath, selector_for_table_row_with_cells(*cells)).all('td form')

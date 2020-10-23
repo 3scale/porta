@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AppsKeysHelpers
 
   def fake_application_keys_count(application, number)

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module EmailSupport
   def find_latest_email(options)
     deliveries = ActionMailer::Base.deliveries
 
-    if options[:to]
+    if (options_to = options[:to])
       deliveries = deliveries.select do |email|
-        email.to && email.to.include?(options[:to])
+        email.to&.include?(options_to)
       end
     end
 

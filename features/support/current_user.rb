@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 helper = Module.new do
   def current_account
     current_user.account
@@ -15,11 +17,17 @@ helper = Module.new do
 
     assert username, "could not find username in the ui"
 
-    current_domain = URI.parse(current_url).host
-    site_account   = Account.find_by_domain(current_domain)
-    site_account ||= (p = Account.find_by_self_domain!(current_domain)) && p.provider_account
+    site_account!.buyer_users.find_by!(username: username)
+  end
 
-    site_account.buyer_users.find_by_username!(username)
+  def site_account!
+    current_domain = URI.parse(current_url).host
+    if (site_account = Account.find_by(domain: current_domain))
+      site_account
+    else
+      provider = Account.find_by!(self_domain: current_domain)
+      provider.provider_account
+    end
   end
 end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PlanHelpers
 
   def create_plan(type, options)
