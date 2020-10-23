@@ -19,7 +19,7 @@ class ModelsTest < ActiveSupport::TestCase
       'Profile' => %w[logo_file_name logo_content_type state], 'UserSession' => %w[key user_agent], 'CMS::Partial' => %w[content_type],
       'CMS::EmailTemplate' => %w[content_type], 'CMS::Builtin' => %w[title], 'CMS::Builtin::StaticPage' => %w[title], 'CMS::Builtin::Page' => %w[title content_type],
       'CMS::Builtin::Partial' => %w[title content_type], 'CMS::Portlet' => %w[content_type], 'CMS::Builtin::LegalTerm' => %w[title content_type],
-      'CMS::Portlet::Base' => %w[content_type], 'ExternalRssFeedPortlet' => %w[content_type],
+      'CMS::Portlet::Base' => %w[content_type], 'ExternalRssFeedPortlet' => %w[content_type], 'DeletionLock' => %w[lock_key],
       'LatestForumPostsPortlet' => %w[content_type], 'TableOfContentsPortlet' => %w[content_type], 'AuthenticationProvider::GitHub' => %w[branding_state account_type],
       'AuthenticationProvider::Keycloak' => %w[account_type], 'AuthenticationProvider::Auth0' => %w[account_type], 'AuthenticationProvider::Custom' => %w[account_type],
       'AuthenticationProvider::ServiceDiscoveryProvider' => %w[account_type], 'AuthenticationProvider::RedhatCustomerPortal' => %w[account_type],
