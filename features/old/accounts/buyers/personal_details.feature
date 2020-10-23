@@ -4,43 +4,43 @@ Feature: Personal Details
   I want to see and change my personal details
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has "useraccountarea" enabled
-    And a buyer "randomdude" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "useraccountarea" enabled
+    And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
 
 
   Scenario: Navigate to personals details page
-    When I log in as "randomdude" on foo.example.com
+    When I log in as "randomdude" on foo.3scale.localhost
     And I go to the personal details page
     Then I should be on the personal details page
 
 
   Scenario: Personal details form
-   When I log in as "randomdude" on foo.example.com
+   When I log in as "randomdude" on foo.3scale.localhost
    And I go to the personal details page
    Then I should be on the personal details page
    And I should see the personal details form
 
 
   Scenario: Edit personal details as buyer
-    When I log in as "randomdude" on foo.example.com
+    When I log in as "randomdude" on foo.3scale.localhost
       And I go to the personal details page
 
-    When I fill in "Email" with "john.doe@random.example.com"
+    When I fill in "Email" with "john.doe@random.3scale.localhost"
       And I press "Update Personal Details"
     Then I should see "User was successfully updated"
       And I should be on the personal details page
 
 
   Scenario: Editing of personal details can be blocked
-    Given provider "foo.example.com" has "useraccountarea" disabled
-    When I log in as "randomdude" on foo.example.com
+    Given provider "foo.3scale.localhost" has "useraccountarea" disabled
+    When I log in as "randomdude" on foo.3scale.localhost
     And I follow "Settings"
     Then I should not see "Personal Details"
 
   Scenario: User Fields
-    Given provider "foo.example.com" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for "User":
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -49,7 +49,7 @@ Feature: Personal Details
       | user_extra_read_only |          | true      |        |
       | user_extra_hidden    |          |           | true   |
 
-    When I log in as "randomdude" on foo.example.com
+    When I log in as "randomdude" on foo.3scale.localhost
       And I go to the personal details page
 
     Then fields should be required:

@@ -7,13 +7,13 @@ Feature: Mass email bulk operations
   Background:
     Given all the rolling updates features are off
 
-    Given a provider "foo.example.com"
-      And a default service of provider "foo.example.com" has name "Fancy API"
-      And a service "New Service" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And a default service of provider "foo.3scale.localhost" has name "Fancy API"
+      And a service "New Service" of provider "foo.3scale.localhost"
     Given a default service plan "Basic" of service "Fancy API"
       And a service plan "Unpublished" of service "New Service"
 
-    Given the following buyers with service subscriptions signed up to provider "foo.example.com":
+    Given the following buyers with service subscriptions signed up to provider "foo.3scale.localhost":
       | name | plans              |
       | bob  | Basic, Unpublished |
       | jane | Basic              |
@@ -22,11 +22,11 @@ Feature: Mass email bulk operations
     Given admin of account "jane" has email "jane@me.us"
       And admin of account "bob" has email "bob@me.us"
 
-    Given current domain is the admin domain of provider "foo.example.com"
-    Given I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    Given I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Send mass email to application owners
-      And provider "foo.example.com" has "service_plans" visible
+      And provider "foo.3scale.localhost" has "service_plans" visible
       And I am on the service contracts admin page
       And a clear email queue
 

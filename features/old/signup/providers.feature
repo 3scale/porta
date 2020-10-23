@@ -25,15 +25,15 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
      | Password                | godzilla           |
    And I press "Sign up"
    Then I should see "Hi quentin, thank you for signing up"
-   And the domain of provider "foo" should be "foo.example.com"
-   And the admin domain of provider "foo" should be "foo-admin.example.com"
+   And the domain of provider "foo" should be "foo.3scale.localhost"
+   And the admin domain of provider "foo" should be "foo-admin.3scale.localhost"
 
     And provider "foo" has all the templates setup
    # --- Otherwise sample data will fail --- because it runs in different process and we cannot stub backend calls
    And the service of provider "foo" has "mandatory_app_key" set to "false"
 
   # --- Provider logs in ---
-  When the current domain is foo-admin.example.com
+  When the current domain is foo-admin.3scale.localhost
   When I follow the activation link in an email sent to "tom@monsterapi.com"
    And I fill in the following:
     | Email or Username | tom@monsterapi.com |
@@ -62,7 +62,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I should not be logged in as "impersonationadmin"
 
   # --- Buyer signs up ---
-  Given the current domain is foo.example.com
+  Given the current domain is foo.3scale.localhost
     And provider "foo" has site access code "foobar"
    When I go to the sign up page
     And I enter "foobar" as access code

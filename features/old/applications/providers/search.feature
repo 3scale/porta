@@ -4,25 +4,25 @@ Feature: Providers's applications searching, sorting and filtering
   I want to search, filter and sort applications
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has "finance" switch visible
-    And a default application plan of provider "foo.example.com"
-    And a buyer "bob" signed up to provider "foo.example.com"
-    And a buyer "jane" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "finance" switch visible
+    And a default application plan of provider "foo.3scale.localhost"
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And a buyer "jane" signed up to provider "foo.3scale.localhost"
 
-    And the provider "foo.example.com" has following application plans:
+    And the provider "foo.3scale.localhost" has following application plans:
       | Name      | Cost per month | Setup fee |
       | Cheap     | 0              | 0         |
       | Expensive | 100            | 10        |
 
-    And the provider "foo.example.com" has the following applications:
+    And the provider "foo.3scale.localhost" has the following applications:
       | Buyer | Name    | Plan      |
       | bob   | BobApp  | Cheap     |
       | jane  | JaneApp | Expensive |
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I am logged in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Search
     When I am on the applications admin page
@@ -54,7 +54,7 @@ Feature: Providers's applications searching, sorting and filtering
 
 
   Scenario: Listing
-    Given the provider "foo.example.com" has the following applications:
+    Given the provider "foo.3scale.localhost" has the following applications:
     | Buyer | Name     | Plan  |
     | jane  | CheapApp | Cheap |
 

@@ -6,12 +6,12 @@ Feature: Provider account management
   I want to be able to manage the accounts
 
   Background:
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
     When I log in as "superadmin" on the master domain
 
   Scenario: Show and edit account details
     When I follow "Accounts"
-     And I follow "foo.example.com"
+     And I follow "foo.3scale.localhost"
     Then I should see "Account Summary" in a header
      And I should see "Provider Key" in the applications widget
 
@@ -25,8 +25,8 @@ Feature: Provider account management
      And I should see "6.78"
 
   Scenario: Test application does not show in the applications widget
-    Given provider "foo.example.com" has test application
+    Given provider "foo.3scale.localhost" has test application
     When I follow "Accounts"
-      And I follow "foo.example.com"
+      And I follow "foo.3scale.localhost"
     Then I should not see "Application on plan test" in the applications widget
 

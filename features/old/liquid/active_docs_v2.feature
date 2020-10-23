@@ -4,11 +4,11 @@ Feature: ActiveDocs
   As a provider
 
   Background:
-    Given a provider "foo.example.com"
-    And the current provider is foo.example.com
+    Given a provider "foo.3scale.localhost"
+    And the current provider is foo.3scale.localhost
 
   Scenario: Loading Swagger UI v2
-    Given provider "foo.example.com" has the swagger example of signup
+    Given provider "foo.3scale.localhost" has the swagger example of signup
     And the provider has cms page "/version-20" with:
     """
     {% active_docs version: "2.0" %}
@@ -21,12 +21,12 @@ Feature: ActiveDocs
     """
     And the cms page "/version-20" has main layout
 
-    And the current domain is "foo.example.com"
+    And the current domain is "foo.3scale.localhost"
     When I visit "/version-20"
     Then I should see "A sample echo API"
 
   Scenario: Loading new Swagger v2 template with new cdn_asset tag
-    Given provider "foo.example.com" has the swagger example of signup
+    Given provider "foo.3scale.localhost" has the swagger example of signup
     And the provider has cms page "/version-22" with:
     """
     {% cdn_asset /swagger-ui/2.2.10/swagger-ui.js %}
@@ -44,6 +44,6 @@ Feature: ActiveDocs
     """
     And the cms page "/version-22" has main layout
 
-    And the current domain is "foo.example.com"
+    And the current domain is "foo.3scale.localhost"
     When I visit "/version-22"
     Then I should see "A sample echo API"

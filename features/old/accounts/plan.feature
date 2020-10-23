@@ -3,22 +3,22 @@ Feature: Signed up plan
   I want to be able to manage plan
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "account_plans" visible
-    Given a buyer "buyer" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "account_plans" visible
+    Given a buyer "buyer" signed up to provider "foo.3scale.localhost"
 
   Scenario: Buyers does not see plans link if only one account plan
-    Given I am logged in as "buyer" on "foo.example.com"
+    Given I am logged in as "buyer" on "foo.3scale.localhost"
     When I follow "Settings"
     Then I should not see the link "Plans"
 
   Scenario: Buyers sees plans link if there is more than 1 published account plan
-    Given an account plan "published" of provider "foo.example.com"
-      And an account plan "second" of provider "foo.example.com"
+    Given an account plan "published" of provider "foo.3scale.localhost"
+      And an account plan "second" of provider "foo.3scale.localhost"
       And plan "published" is published
       And plan "second" is published
-    Given I am logged in as "buyer" on "foo.example.com"
+    Given I am logged in as "buyer" on "foo.3scale.localhost"
     When I follow "Settings"
     Then I should see the link "Plans"
 

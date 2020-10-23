@@ -22,7 +22,7 @@ end
 
 def stub_user_data(org_name)
   attributes = {
-    email: 'foo@example.com', email_verified: true, username: 'foo',
+    email: 'foo@3scale.localhost', email_verified: true, username: 'foo',
     org_name: org_name, kind:  @authentication_provider.kind,
     uid: 'alaska', id_token: 'idTokenForTests'
   }

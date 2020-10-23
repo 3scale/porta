@@ -4,38 +4,38 @@ Feature: Personal Details
   I want to see and change my personal details
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
 
   Scenario: Edit personal details as provider
-   Given current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+   Given current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
    When I follow "Account Settings"
     And I follow "Personal"
     And I follow "Personal Details"
-    And I fill in "Email" with "john.doe@foo.example.com"
+    And I fill in "Email" with "john.doe@foo.3scale.localhost"
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     Then I should see "User was successfully updated"
     And I should be on the provider personal details page
 
   Scenario: Personal details redirects back to users list if originated there
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
     When I go to the provider users page
       And I follow "Listing"
-      And I follow "foo.example.com" within "#users"
+      And I follow "foo.3scale.localhost" within "#users"
     Then I should be on the provider personal details page
-    When I fill in "Email" with "john.doe@foo.example.com"
+    When I fill in "Email" with "john.doe@foo.3scale.localhost"
       And I fill in "Current password" with "supersecret"
       And I press "Update Details"
     Then I should be on the provider users page
-    When I follow "foo.example.com" within "#users"
+    When I follow "foo.3scale.localhost" within "#users"
       And I fill in "Email" with ""
       And I fill in "Current password" with "supersecret"
       And I press "Update Details"
-      And I fill in "Email" with "john.doe@foo.example.com"
+      And I fill in "Email" with "john.doe@foo.3scale.localhost"
       And I fill in "Current password" with "supersecret"
 
       And I press "Update Details"
@@ -44,8 +44,8 @@ Feature: Personal Details
 
   @wip
   Scenario: Edit personal details with invalid data
-   Given current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+   Given current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
     And I go to the personal details page
 
     And I fill in "Email" with ""
@@ -62,8 +62,8 @@ Feature: Personal Details
       | user_extra_read_only |          | true      |        |
       | user_extra_hidden    |          |           | true   |
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
     When I go to the provider personal details page
     Then fields should be required:

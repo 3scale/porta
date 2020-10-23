@@ -4,15 +4,15 @@ Feature: Applications widget
   I want to see it in a widget on the buyer account detail page
 
   Background:
-    Given a provider "foo.example.com"
-    And a default application plan "Basic" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And a default application plan "Basic" of provider "foo.3scale.localhost"
 
   Scenario: Backend v1
-    Given provider "foo.example.com" uses backend v1 in his default service
+    Given provider "foo.3scale.localhost" uses backend v1 in his default service
     And a buyer "bob" signed up to application plan "Basic"
     And buyer "bob" has user key "userkey1234"
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
 
     And I navigate to the accounts page
     And I follow "bob"
@@ -26,17 +26,17 @@ Feature: Applications widget
     And I should not see "Create new key"
 
   Scenario: Backend v2, one application allowed
-    Given provider "foo.example.com" uses backend v2 in his default service
-    And provider "foo.example.com" has multiple applications disabled
-    And a buyer "bob" signed up to provider "foo.example.com"
+    Given provider "foo.3scale.localhost" uses backend v2 in his default service
+    And provider "foo.3scale.localhost" has multiple applications disabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has application "SuperWidget" with ID "id1234"
     And the application of buyer "bob" has the following keys:
       | key2345 |
       | key2346 |
       | key2347 |
 
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
 
     And I navigate to the accounts page
     And I follow "bob"
@@ -57,29 +57,29 @@ Feature: Applications widget
     And I should see "key2347"
 
   Scenario: Backend v2, multiple applications allowed but none created
-    Given provider "foo.example.com" uses backend v2 in his default service
-    And provider "foo.example.com" has multiple applications enabled
-    And a buyer "bob" signed up to provider "foo.example.com"
+    Given provider "foo.3scale.localhost" uses backend v2 in his default service
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has no applications
 
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
     And I navigate to the accounts page
     And I follow "bob"
     Then I should see "0 Applications"
 
   Scenario: Backend v2, multiple applications allowed, one created
-    Given provider "foo.example.com" uses backend v2 in his default service
-    And provider "foo.example.com" has multiple applications enabled
-    And a buyer "bob" signed up to provider "foo.example.com"
+    Given provider "foo.3scale.localhost" uses backend v2 in his default service
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has application "SuperWidget" with ID "id1234"
     And application "SuperWidget" has the following keys:
       | key1234 |
       | key1235 |
       | key1236 |
 
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
 
     And I navigate to the accounts page
     And I follow "bob"
@@ -100,15 +100,15 @@ Feature: Applications widget
     And I should see "key1236"
 
   Scenario: Backend v2, multiple applications allowed and multiple created
-    Given provider "foo.example.com" uses backend v2 in his default service
-    And provider "foo.example.com" has multiple applications enabled
-    And a buyer "bob" signed up to provider "foo.example.com"
+    Given provider "foo.3scale.localhost" uses backend v2 in his default service
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has application "AppOne"
     And buyer "bob" has application "AppTwo"
     And I don't care about application keys
 
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
 
     And I navigate to the accounts page
     And I follow "bob"

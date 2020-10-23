@@ -8,16 +8,16 @@ Feature: Notifications
       And all the rolling updates features are off
 
   Scenario: Navigate to notifications page
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the provider account page
     And I follow "Notifications"
     Then I should see "Email Notifications" in a header
 
 
   Scenario: Notifications default values
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
 
       And I go to the notifications page
     Then the "New user signup" checkbox should be checked
@@ -32,8 +32,8 @@ Feature: Notifications
   # This scenario was unDRYed from an Outline due to performance reasons, it went from ~2 minutes to 20 seconds
   @javascript
   Scenario: Enable notification
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
       And I go to the notifications page
 
     When I check "New user signup"

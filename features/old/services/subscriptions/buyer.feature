@@ -5,22 +5,22 @@ Feature: Buyer's service subscription
 
   Background:
     Given all the rolling updates features are off
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
 
-    And provider "foo.example.com" has "multiple_services" visible
-    And a service "Second" of provider "foo.example.com"
-    And a buyer "bob" of provider "foo.example.com"
-    And a published service plan "SoundsLike" of service "API" of provider "foo.example.com"
-    And I log in as "bob" on foo.example.com
+    And provider "foo.3scale.localhost" has "multiple_services" visible
+    And a service "Second" of provider "foo.3scale.localhost"
+    And a buyer "bob" of provider "foo.3scale.localhost"
+    And a published service plan "SoundsLike" of service "API" of provider "foo.3scale.localhost"
+    And I log in as "bob" on foo.3scale.localhost
 
   Scenario: Simple subscription
-   Given a published service plan "AnotherOne" of service "API" of provider "foo.example.com"
+   Given a published service plan "AnotherOne" of service "API" of provider "foo.3scale.localhost"
      And I go to the service subscription page
      And I press "Subscribe"
     Then I should see "You have successfully subscribed to a service."
 
   Scenario: Subscription with approval
-   Given a published service plan "Platinum" of service "Second" of provider "foo.example.com"
+   Given a published service plan "Platinum" of service "Second" of provider "foo.3scale.localhost"
      And service plan "Platinum" requires approval
 
     When I go to the service subscription page
@@ -30,7 +30,7 @@ Feature: Buyer's service subscription
      And I should see "Platinum (pending)"
 
   Scenario: Subscribe with legal terms
-    Given provider "foo.example.com" has service subscription legal terms:
+    Given provider "foo.3scale.localhost" has service subscription legal terms:
      """
      <h1>Magna Charta Libertatum</h1>
      <p>All your base are belong to us.</p>
@@ -43,6 +43,6 @@ Feature: Buyer's service subscription
     Then I should see "You have successfully subscribed to a service."
 
   Scenario: Fast lane - automatically subscribed when there is no plan to choose from
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
      And I go to the service subscription page
     Then I should see "You have successfully subscribed to a service."

@@ -1,5 +1,5 @@
 When /^"([^\"]*)" opens the account activation email$/ do |address|
-  step %{"#{address}" opens the email with subject "foo.example.com API account confirmation"}
+  step %{"#{address}" opens the email with subject "foo.3scale.localhost API account confirmation"}
 end
 
 Then /^"([^\"]*)" should receive the default account activation email$/ do |address|

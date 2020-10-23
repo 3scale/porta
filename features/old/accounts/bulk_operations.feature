@@ -5,17 +5,17 @@ Feature: Bulk operations
   I want to make bulk operations
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "account_plans" switch visible
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "account_plans" switch visible
 
 
-    Given these buyers signed up to provider "foo.example.com"
+    Given these buyers signed up to provider "foo.3scale.localhost"
       | bob  |
       | jane |
 
-    Given current domain is the admin domain of provider "foo.example.com"
-    Given I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    Given I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Show and hide bulk operations controls
     When I navigate to the accounts page

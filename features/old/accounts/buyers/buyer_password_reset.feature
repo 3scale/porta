@@ -4,41 +4,41 @@ Feature: Buyer password reset
   I should be able to reset it
 
   Background:
-    Given a provider "foo.example.com"
-    And a buyer "bob" signed up to provider "foo.example.com"
-    And an active user "zed" of account "bob" with email "zed@example.com"
-   When the current domain is foo.example.com
+    Given a provider "foo.3scale.localhost"
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And an active user "zed" of account "bob" with email "zed@3scale.localhost"
+   When the current domain is foo.3scale.localhost
     And I go to the login page
 
   Scenario: Reset password
     Given I follow "Forgot password?"
-    And I fill in "Email" with "zed@example.com"
+    And I fill in "Email" with "zed@3scale.localhost"
     And I press "Send instructions"
     Then I should see "A password reset link has been emailed to you."
-    When I follow the link found in the password reset email send to "zed@example.com"
+    When I follow the link found in the password reset email send to "zed@3scale.localhost"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "monkey"
     And I press "Change Password"
     Then I should see "The password has been changed"
 
     When I go to the login page
-    And I fill in "Username" with "zed@example.com"
+    And I fill in "Username" with "zed@3scale.localhost"
     And I fill in "Password" with "monkey"
     And I press "Sign in"
     Then I should be logged in as "zed"
 
   Scenario: Invalid email
-    Given no user exists with an email of "bob@example.com"
+    Given no user exists with an email of "bob@3scale.localhost"
     And I follow "Forgot password?"
-    And I fill in "Email" with "bob@example.com"
+    And I fill in "Email" with "bob@3scale.localhost"
     And I press "Send instructions"
     Then I should see "Email not found."
 
   Scenario: Wrong confirmation
     Given I follow "Forgot password?"
-    And I fill in "Email" with "zed@example.com"
+    And I fill in "Email" with "zed@3scale.localhost"
     And I press "Send instructions"
-    And I follow the link found in the password reset email send to "zed@example.com"
+    And I follow the link found in the password reset email send to "zed@3scale.localhost"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "donkey"
     And I press "Change Password"
@@ -47,9 +47,9 @@ Feature: Buyer password reset
 
   Scenario: Blank passwords
     When I follow "Forgot password?"
-    And I fill in "Email" with "zed@example.com"
+    And I fill in "Email" with "zed@3scale.localhost"
     And I press "Send instructions"
-    And I follow the link found in the password reset email send to "zed@example.com"
+    And I follow the link found in the password reset email send to "zed@3scale.localhost"
     And I press "Change Password"
     Then I should see "The password is invalid"
 
@@ -58,11 +58,11 @@ Feature: Buyer password reset
     Then I should see "The password reset token is invalid"
 
   Scenario: Attempt to login with invalid credentials, then reset password
-    Given I fill in "Username" with "zed@example.com"
+    Given I fill in "Username" with "zed@3scale.localhost"
     And I fill in "Password" with "ihavenoclue"
     And I press "Sign in"
     Then I should see "Incorrect email or password. Please try again."
     When I follow "Forgot password?"
-    And I fill in "Email" with "zed@example.com"
+    And I fill in "Email" with "zed@3scale.localhost"
     And I press "Send instructions"
     Then I should see "A password reset link has been emailed to you."

@@ -5,17 +5,17 @@ Feature: Master finance settings
 
   @javascript @wip @evil
   Scenario: Enable finance module
-    Given a provider "foo.example.com" with billing disabled
-      And current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost" with billing disabled
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
 
       # TODO: DRY?
       When I follow "Accounts"
-       And I follow "foo.example.com"
+       And I follow "foo.3scale.localhost"
        And I follow "Configuration"
        And I check config value "Billing mode"
     When I log out
-     And current domain is the admin domain of provider "foo.example.com"
-     And I log in as provider "foo.example.com"
+     And current domain is the admin domain of provider "foo.3scale.localhost"
+     And I log in as provider "foo.3scale.localhost"
     Then I should see "Billing"
 

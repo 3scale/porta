@@ -4,19 +4,19 @@ Feature: Copy plan
   I want to make an exact copy of the plan
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" uses backend v2 in his default service
-      And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" uses backend v2 in his default service
+      And provider "foo.3scale.localhost" has multiple applications enabled
 
-      And a buyer "bob" signed up to provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+      And a buyer "bob" signed up to provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
 
 
   @javascript
   Scenario: Copy account plan
-    Given provider "foo.example.com" has "account_plans" switch allowed
-    And an account plan "Basic" of provider "foo.example.com"
+    Given provider "foo.3scale.localhost" has "account_plans" switch allowed
+    And an account plan "Basic" of provider "foo.3scale.localhost"
     When I go to the account plans admin page
     And I follow "Copy plan 'Basic'"
     Then I should see "Plan copied."
@@ -25,7 +25,7 @@ Feature: Copy plan
 
   @javascript
   Scenario: Copy application plan
-    And an application plan "Basic" of provider "foo.example.com"
+    And an application plan "Basic" of provider "foo.3scale.localhost"
     When I go to the application plans admin page
     And I follow "Copy plan 'Basic'"
     Then I should see "Plan copied."
@@ -34,8 +34,8 @@ Feature: Copy plan
    
   @javascript
   Scenario: Copy service plan
-    Given a service plan "Basic" of provider "foo.example.com"
-    And provider "foo.example.com" has "service_plans" visible
+    Given a service plan "Basic" of provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "service_plans" visible
     When I go to the service plans admin page
     And I follow "Copy plan 'Basic'"
     Then I should see "Plan copied."

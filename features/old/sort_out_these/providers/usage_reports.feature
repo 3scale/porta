@@ -5,9 +5,9 @@ Feature: Usage reports
 
   Background:
     Given all the rolling updates features are off
-    Given a provider "foo.example.com"
-      And admin of account "foo.example.com" has email "fake@email.com"
-      And mail dispatch rule "foo.example.com/weekly_reports" is set to "true"
+    Given a provider "foo.3scale.localhost"
+      And admin of account "foo.3scale.localhost" has email "fake@email.com"
+      And mail dispatch rule "foo.3scale.localhost/weekly_reports" is set to "true"
 
   Scenario: usage report sent weekly
     When weekly reports are dispatched

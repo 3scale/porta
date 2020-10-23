@@ -5,10 +5,10 @@ Feature: Buyer signups to service
   I want to signup up to specific service
 
   Background:
-    Given a provider "foo.example.com" with default plans
-      And a default service of provider "foo.example.com" has name "API"
+    Given a provider "foo.3scale.localhost" with default plans
+      And a default service of provider "foo.3scale.localhost" has name "API"
       And a service plan "Gold" for service "API" exists
-      And the current domain is foo.example.com
+      And the current domain is foo.3scale.localhost
 
   Scenario: Signup with approval required
     Given service plan "Gold" is default

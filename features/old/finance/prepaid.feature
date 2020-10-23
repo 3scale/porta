@@ -4,10 +4,10 @@ Feature: Prepaid billing of a buyer
   I want to be charged as soon as possible
 
  Background:
-  Given a provider "foo.example.com" with prepaid billing enabled
-    And provider "foo.example.com" has "finance" switch visible
-    And an application plan "Fixed" of provider "foo.example.com" for 200 monthly
-    And an application plan "Variable" of provider "foo.example.com" for 200 monthly
+  Given a provider "foo.3scale.localhost" with prepaid billing enabled
+    And provider "foo.3scale.localhost" has "finance" switch visible
+    And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
+    And an application plan "Variable" of provider "foo.3scale.localhost" for 200 monthly
     And pricing rules on plan "Variable":
       | Metric   | Cost per unit | Min | Max      |
       | hits     |           0.1 |   1 | infinity |
@@ -17,7 +17,7 @@ Feature: Prepaid billing of a buyer
  Scenario: Bill one month beforehand
   Given the date is 1st January 2009
    When a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
-    And I log in as "zoidberg" on foo.example.com
+    And I log in as "zoidberg" on foo.3scale.localhost
 
   Given the time flies to 3rd February 2009
    Then I should have 2 invoices
@@ -42,7 +42,7 @@ Feature: Prepaid billing of a buyer
         | hits     |    40 |
 
    Given the time flies to 5th March 2009
-     And I log in as "zoidberg" on foo.example.com
+     And I log in as "zoidberg" on foo.3scale.localhost
 
       When I navigate to 1st invoice issued for me in "February, 2009"
       Then I should see invoice in state "Pending"
@@ -62,11 +62,11 @@ Feature: Prepaid billing of a buyer
  Scenario: Bill and issue when the trial ends, charge when due
   Given the date is 1st January 2009
     And plan "Fixed" has trial period of 15 days
-    And provider "foo.example.com" is fake charging
-    And provider "foo.example.com" has valid payment gateway
+    And provider "foo.3scale.localhost" is fake charging
+    And provider "foo.3scale.localhost" has valid payment gateway
 
    When a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
-    And I log in as "zoidberg" on foo.example.com
+    And I log in as "zoidberg" on foo.3scale.localhost
 
    Then I should have 1 invoice on 20th January 2009
     And I see my invoice from "January, 2009" is "Pending"
@@ -85,7 +85,7 @@ Feature: Prepaid billing of a buyer
     And plan "Fixed" has trial period of 0 days
     And plan "Fixed" has setup fee of 210
     And a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
-    And I log in as "zoidberg" on foo.example.com
+    And I log in as "zoidberg" on foo.3scale.localhost
 
    When the time flies to 4th January 2009
     And I navigate to invoices issued for me

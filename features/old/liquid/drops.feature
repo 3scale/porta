@@ -3,15 +3,15 @@ Feature: Liquid drops
   We need Liquid Drops to provide data needed for customization
 
   Background:
-    Given a provider "foo.example.com"
-    Given provider "foo.example.com" has Browser CMS activated
-      And the current domain is foo.example.com
+    Given a provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" has Browser CMS activated
+      And the current domain is foo.3scale.localhost
 
   Scenario: MenuDrop
-    Given a buyer "bob" of provider "foo.example.com"
+    Given a buyer "bob" of provider "foo.3scale.localhost"
       And I am logged in as "bob"
 
-    When provider "foo.example.com" has following template
+    When provider "foo.3scale.localhost" has following template
       """
       <title>{{ _menu.active_menu | capitalize }}{% if _menu.active_submenu %} | {{ _menu.active_submenu | capitalize }}{% endif %}</title>
       {% content %}

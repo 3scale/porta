@@ -10,7 +10,7 @@ end
 
 # Example:
 #
-#   When I hit "/potato" on domain "foo.example.com"
+#   When I hit "/potato" on domain "foo.3scale.localhost"
 #
 When /^I hit "([^"]*)" on ([^\s]+)$/ do |path,domain|
   step "the current domain is #{domain}"

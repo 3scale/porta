@@ -5,15 +5,15 @@ Feature: Paid plan
 
   Background:
     Given a published plan "Basic" of provider "Master account"
-    And a provider "foo.example.com" signed up to plan "Basic"
-    And an application plan "Foo" of provider "foo.example.com"
+    And a provider "foo.3scale.localhost" signed up to plan "Basic"
+    And an application plan "Foo" of provider "foo.3scale.localhost"
 
   Scenario: Billing allowed, all postpaid details valid
-    Given provider "foo.example.com" has billing enabled
-    And provider "foo.example.com" has valid payment gateway
+    Given provider "foo.3scale.localhost" has billing enabled
+    And provider "foo.3scale.localhost" has valid payment gateway
 
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
 
     And I go to the edit page for plan "Foo"
     Then I should see "Setup fee"

@@ -5,10 +5,10 @@ Feature: Email templates management
   I want to modify content of email templates
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has Browser CMS activated
-      And provider "foo.example.com" has "skip_email_engagement_footer" switch visible
-    Given I log in as "foo.example.com" on the admin domain of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has Browser CMS activated
+      And provider "foo.3scale.localhost" has "skip_email_engagement_footer" switch visible
+    Given I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Creating template
     When I go to the email templates page
@@ -18,14 +18,14 @@ Feature: Email templates management
     When I fill in the draft with "new content for account approved"
     And I fill the form with following:
       | Subject | Bcc | Cc | From |
-      | subj3ct | dcc | c! | strange@example.com |
+      | subj3ct | dcc | c! | strange@3scale.localhost |
     And I press "Create Email Template"
     Then I should see "Bcc is an invalid email address"
     Then I should see "Cc is an invalid email address"
     Then I should see "From does not match the domain of your outbound email"
     And I fill the form with following:
       | Subject | Bcc            | Cc                            | From       |
-      | subj3ct | some@email.com | "Example" <other@example.com> | My Company |
+      | subj3ct | some@email.com | "Example" <other@3scale.localhost> | My Company |
     And I press "Create Email Template"
     Then I should see "Email Template overrided"
     And the content of the email template "account_approved" should be
@@ -34,27 +34,27 @@ Feature: Email templates management
       """
     And the headers of email template "account_approved" should be following:
       | subject | bcc | cc |
-      | subj3ct | some@email.com | "Example" <other@example.com> |
+      | subj3ct | some@email.com | "Example" <other@3scale.localhost> |
 
   Scenario: Updating template
-    When I have following email template of provider "foo.example.com":
+    When I have following email template of provider "foo.3scale.localhost":
       | System Name      |
       | account_approved |
-    When I log in as "foo.example.com" on the admin domain of provider "foo.example.com"
+    When I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
 
     When I go to the email templates page
     And I follow "Buyer Account approved"
     And I fill the form with following:
       | Subject | Bcc | Cc |
-      | subj3ct | bcc@example.com | cc@example.com |
+      | subj3ct | bcc@3scale.localhost | cc@3scale.localhost |
     And I press "Save"
     Then I should see "Template updated"
     And the headers of email template "account_approved" should be following:
       | subject | bcc | cc |
-      | subj3ct | bcc@example.com | cc@example.com |
+      | subj3ct | bcc@3scale.localhost | cc@3scale.localhost |
 
   Scenario: New signup email template
-    Given admin of account "foo.example.com" has email "foo@example.com"
+    Given admin of account "foo.3scale.localhost" has email "foo@3scale.localhost"
       And all the rolling updates features are off
 
     When I go to the email templates page
@@ -69,7 +69,7 @@ Feature: Email templates management
       """
     When I press "Create Email Template"
 
-    When buyer "bob" with email "bob@mail.com" signs up to provider "foo.example.com"
+    When buyer "bob" with email "bob@mail.com" signs up to provider "foo.3scale.localhost"
      And "test@bcc.com" opens the email with subject "API System: New Account Signup"
 
     Then I should see following email body
@@ -90,7 +90,7 @@ Feature: Email templates management
       """
     When I press "Save"
 
-    When buyer "steve" with email "steve@mail.com" signs up to provider "foo.example.com"
+    When buyer "steve" with email "steve@mail.com" signs up to provider "foo.3scale.localhost"
     And "bcc@mail.com" opens the email with subject "Overriden"
 
     Then I should see following email body

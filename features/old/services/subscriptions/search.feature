@@ -5,21 +5,21 @@ Feature: Providers's subscription searching, sorting and filtering
   I want to search, filter and sort subscriptions
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has "service_plans" visible
-      And a default service of provider "foo.example.com" has name "Fancy API"
-      And a service "New Service" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "service_plans" visible
+      And a default service of provider "foo.3scale.localhost" has name "Fancy API"
+      And a service "New Service" of provider "foo.3scale.localhost"
       And a default service plan "Basic" of service "Fancy API"
       And a service plan "Unpublished" of service "New Service"
 
-    Given the following buyers with service subscriptions signed up to provider "foo.example.com":
+    Given the following buyers with service subscriptions signed up to provider "foo.3scale.localhost":
       | name | plans              |
       | bob  | Basic, Unpublished |
       | jane | Basic              |
       | mike | Unpublished        |
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I am logged in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Search
     When I am on the subscriptions admin page

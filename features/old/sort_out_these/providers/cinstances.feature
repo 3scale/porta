@@ -5,15 +5,15 @@ Feature: Provider's partners
   I want to see and edit details about them
 
   Background:
-    Given a provider "foo.example.com"
-    And an application plan "Basic" of provider "foo.example.com"
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And an application plan "Basic" of provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
   #TODO credit card does not show nowhere anyways => looks like
   @wip
   Scenario: Credit card details on informational billing
-    Given provider "foo.example.com" uses informational billing
+    Given provider "foo.3scale.localhost" uses informational billing
       And a buyer "alice" signed up to application plan "Basic"
       And the buyer "alice" has activated its account
     When I follow "USERS"
@@ -33,7 +33,7 @@ Feature: Provider's partners
   #TODO this navigation knowledge should be moved to some place where it's more expected
   @wip
   Scenario: Credit card details on prepaid billing
-    Given provider "foo.example.com" has prepaid billing enabled
+    Given provider "foo.3scale.localhost" has prepaid billing enabled
       And a buyer "bob" signed up to application plan "Basic"
       And the buyer "bob" has activated its account
     When I navigate to buyer "bob" details
@@ -42,7 +42,7 @@ Feature: Provider's partners
 
   @wip
   Scenario: Credit card details on postpaid billing
-    Given provider "foo.example.com" has postpaid billing enabled
+    Given provider "foo.3scale.localhost" has postpaid billing enabled
       And a buyer "cecilia" signed up to application plan "Basic"
       And the buyer "cecilia" has activated its account
     When I navigate to buyer "cecilia" details

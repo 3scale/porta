@@ -4,10 +4,10 @@ Feature: ActiveDocs
   As a provider I wanna provide swagger
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has the swagger example of signup
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has the swagger example of signup
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
   Scenario: Upload Swagger 2.0
     When I go to the new active docs page

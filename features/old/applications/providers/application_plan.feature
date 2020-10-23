@@ -5,15 +5,15 @@ Feature: Applications plan
   I want to do stuff with the application's plans
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" uses backend v2 in his default service
-      And provider "foo.example.com" has multiple applications enabled
-      And a default application plan "Basic" of provider "foo.example.com"
-      And a buyer "bob" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" uses backend v2 in his default service
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And a default application plan "Basic" of provider "foo.3scale.localhost"
+      And a buyer "bob" signed up to provider "foo.3scale.localhost"
       And buyer "bob" has application "OKWidget"
 
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
       And I don't care about application keys
 
   Scenario: Plan change does not show with only one plan
@@ -24,7 +24,7 @@ Feature: Applications plan
 
 
   Scenario: Changing plan to app
-    Given an application plan "Another" of provider "foo.example.com"
+    Given an application plan "Another" of provider "foo.3scale.localhost"
     When I navigate to the application "OKWidget" of the partner "bob"
     Then I should see the app plan is "Basic"
 
@@ -43,7 +43,7 @@ Feature: Applications plan
 
   @javascript
   Scenario: Customizing/Decustomizing plan of app
-    Given an application plan "Another" of provider "foo.example.com"
+    Given an application plan "Another" of provider "foo.3scale.localhost"
     When I navigate to the application "OKWidget" of the partner "bob"
       And I customize the app plan
     Then I should see the app plan is customized
@@ -52,7 +52,7 @@ Feature: Applications plan
     Then I should see the app plan is "Basic"
 
   Scenario: Sorting Application Plans
-    When an published application plan "Other" of provider "foo.example.com"
+    When an published application plan "Other" of provider "foo.3scale.localhost"
      And a buyer "foo" signed up to application plan "Other"
      And a buyer "bar" signed up to application plan "Other"
      And I am on the application plans admin page

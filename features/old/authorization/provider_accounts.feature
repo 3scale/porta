@@ -4,16 +4,16 @@ Feature: Provider accounts authorization
   I want to control who can access the accounts area
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has Browser CMS activated
-    Given provider "foo.example.com" has multiple applications enabled
-      And a buyer "buyer" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has Browser CMS activated
+    Given provider "foo.3scale.localhost" has multiple applications enabled
+      And a buyer "buyer" signed up to provider "foo.3scale.localhost"
 
   Scenario Outline: Provider admin can access accounts
-    Given current domain is the admin domain of provider "foo.example.com"
-    Given provider "foo.example.com" has "groups" switch allowed
-    Given provider "foo.example.com" has "multiple_users" switch allowed
-    When I log in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" has "groups" switch allowed
+    Given provider "foo.3scale.localhost" has "multiple_users" switch allowed
+    When I log in as provider "foo.3scale.localhost"
 
     When I go to the provider dashboard
     #Then show me the page
@@ -42,12 +42,12 @@ Feature: Provider accounts authorization
 
 
   Scenario Outline: Members per default cannot access accounts
-   Given an active user "member" of account "foo.example.com"
-     And user "member" does not belong to the admin group "partners" of provider "foo.example.com"
+   Given an active user "member" of account "foo.3scale.localhost"
+     And user "member" does not belong to the admin group "partners" of provider "foo.3scale.localhost"
 
-     And current domain is the admin domain of provider "foo.example.com"
-    Given provider "foo.example.com" has "groups" switch allowed
-    Given provider "foo.example.com" has "multiple_users" switch allowed
+     And current domain is the admin domain of provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" has "groups" switch allowed
+    Given provider "foo.3scale.localhost" has "multiple_users" switch allowed
     When I log in as provider "member"
 
      And I go to the provider dashboard
@@ -73,10 +73,10 @@ Feature: Provider accounts authorization
 
 
   Scenario Outline: Members of partners group can access accounts
-    Given an active user "member" of account "foo.example.com"
+    Given an active user "member" of account "foo.3scale.localhost"
       And user "member" has access to the admin section "partners"
-      And current domain is the admin domain of provider "foo.example.com"
-      And provider "foo.example.com" has "multiple_users" switch allowed
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "multiple_users" switch allowed
      When I log in as provider "member"
       And I go to the provider dashboard
     Then I should see the link "1 Account" in the audience dashboard widget
@@ -101,11 +101,11 @@ Feature: Provider accounts authorization
 
 
   Scenario: Members of partners group can activate and approve accounts
-    Given an active user "member" of account "foo.example.com"
+    Given an active user "member" of account "foo.3scale.localhost"
     And user "member" has access to the admin section "partners"
-    And current domain is the admin domain of provider "foo.example.com"
-    And provider "foo.example.com" has "multiple_users" switch allowed
-    Given a pending buyer "pending account" signed up to provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "multiple_users" switch allowed
+    Given a pending buyer "pending account" signed up to provider "foo.3scale.localhost"
 
     When I log in as provider "member"
     And I follow "2 Accounts"

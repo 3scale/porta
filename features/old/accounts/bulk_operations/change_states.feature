@@ -5,16 +5,16 @@ Feature: Bulk operations
   I want to change account states in bulk
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
 
-    Given a buyer "approved" signed up to provider "foo.example.com"
-    Given a pending buyer "pending" signed up to provider "foo.example.com"
-    Given a rejected buyer "rejected" signed up to provider "foo.example.com"
+    Given a buyer "approved" signed up to provider "foo.3scale.localhost"
+    Given a pending buyer "pending" signed up to provider "foo.3scale.localhost"
+    Given a rejected buyer "rejected" signed up to provider "foo.3scale.localhost"
       And I don't care about application keys
 
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Approve accounts
       And I am on the accounts admin page
