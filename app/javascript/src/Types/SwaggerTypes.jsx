@@ -67,3 +67,17 @@ export type SwaggerResponse = {
  text: string,
  url: string
 }
+
+export type Headers = {
+  [string]: string
+}
+
+export type SwaggerRequest = {
+  loadSpec?: boolean,
+  method?: string,
+  url: string,
+  credentials: string,
+  headers: Headers,
+  requestInterceptor: () => void,
+  responseInterceptor: () => void
+}
