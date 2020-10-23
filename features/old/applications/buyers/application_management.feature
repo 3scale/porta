@@ -6,7 +6,7 @@ Feature: Buyer's application management
 
   Background:
     Given a provider "foo.3scale.localhost"
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "service_plans" visible
     And provider "foo.3scale.localhost" has "multiple_services" visible
@@ -33,7 +33,7 @@ Feature: Buyer's application management
       And buyer "bob" is subscribed to service plan "Holidays"
       And buyer "bob" is subscribed to service plan "Default"
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
       And I log in as "bob" on foo.3scale.localhost
       And I go to the dashboard
       And I follow "Applications"

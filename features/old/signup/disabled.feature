@@ -8,7 +8,7 @@ Feature: Disabled signup for the provider
       And provider "foo.3scale.localhost" has signup disabled
       And a account plan "Tier-1" of provider "foo.3scale.localhost"
       And account plan "Tier-1" is default
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   Scenario: I try to enter the URL manually
      When I go to the sign up page

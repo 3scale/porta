@@ -10,7 +10,7 @@ Feature: Change plan prepaid
     Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
 
   @commit-transactions
   Scenario: Paying a fee without change plan PREPAID

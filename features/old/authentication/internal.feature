@@ -63,7 +63,7 @@ Feature: Internal authentication
   Scenario: Successful sign in as a buyer
     Given a buyer "alice" signed up to provider "foo.3scale.localhost"
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the login page
     And I fill in "Username" with "alice"
     And I fill in "Password" with "supersecret"
@@ -96,20 +96,20 @@ Feature: Internal authentication
   Scenario: Failed attempt to sign in without being activated
     Given a buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
     And a pending user "bob" of account "wickedwidgets"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I try to log in as "bob"
     Then I should not be logged in
 
   @security
   Scenario: Failed attempt to sign in as user with pending account
     Given a pending buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I try to log in as "wickedwidgets"
     Then I should not be logged in
 
   @security
   Scenario: Failed attempt to sign in as user with rejected account
     Given a rejected buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I try to log in as "wickedwidgets"
     Then I should not be logged in

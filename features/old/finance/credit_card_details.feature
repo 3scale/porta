@@ -57,7 +57,7 @@ Feature: Credit card details
      Then I should see "Billing Address"
 
   Scenario: Entering credit card details on a provider domain
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And provider "foo.3scale.localhost" manages payments with "stripe"
       And buyer "kenny" has last digits of credit card number "1234" and expiration date March, 2018
    When I log in as "kenny" on foo.3scale.localhost

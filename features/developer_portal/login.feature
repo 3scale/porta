@@ -9,7 +9,7 @@ Feature: Login feature
 
   @security
   Scenario: Buyer can log in with csrf protection enabled
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
     When I go to the login page
      And I fill in the "bob" login data
     Then I should be logged in the Development Portal

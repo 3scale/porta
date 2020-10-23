@@ -8,7 +8,7 @@ Feature: Signup using Cas
       And an application plan "iRage" of service "default"
       And application plan "iRage" is default
 
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
 
   Scenario: Signup with Internal
     When I go to the sign up page

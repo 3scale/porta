@@ -39,7 +39,7 @@ Feature: Sign Up of enterprise buyers
 
      @wip
   Scenario: try to signup with existent username in same provider
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
       And I go to the sign up page
       And I fill in the following:
       | Email                   | foobar@example.net |
@@ -53,7 +53,7 @@ Feature: Sign Up of enterprise buyers
 
       @wip
   Scenario: try to signup with existent mail in same provider
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
       And I go to the sign up page
       And I fill in the following:
       | Email                   | bar@3scale.localhost |

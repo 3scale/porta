@@ -12,13 +12,13 @@ Feature: Notice about payment details on buyer dashboard
     Given an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has monthly fee of 0
     And there is no user with username "bob"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page for the "Basic" plan
     And I fill in all required signup fields as "bob"
     And I press "Sign up"
     When user "bob" activates himself
     And buyer "bob" is approved
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see "Payment details required"
 
@@ -26,7 +26,7 @@ Feature: Notice about payment details on buyer dashboard
     Given provider "foo.3scale.localhost" is charging
     And an application plan "Pro" of provider "foo.3scale.localhost"
     And plan "Pro" has monthly fee of 200
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
 
     And I go to the sign up page for the "Pro" plan
     And I fill in all required signup fields as "bob"
@@ -34,7 +34,7 @@ Feature: Notice about payment details on buyer dashboard
 
     When user "bob" activates himself
     And buyer "bob" is approved
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should see "Payment details required"
 
@@ -43,14 +43,14 @@ Feature: Notice about payment details on buyer dashboard
     And an application plan "Pro" of provider "foo.3scale.localhost"
     And plan "Pro" has monthly fee of 200
     And plan "Pro" has trial period of 30 days
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
 
     When I go to the sign up page for the "Pro" plan
     And I fill in all required signup fields as "bob"
     And I press "Sign up"
     When user "bob" activates himself
     And buyer "bob" is approved
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see "Payment details required"
 
@@ -67,12 +67,12 @@ Feature: Notice about payment details on buyer dashboard
 
     Given an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has monthly fee of 0
- 
+
     And an application plan "Pro" of provider "foo.3scale.localhost"
     And plan "Pro" has monthly fee of 200
     And plan "Pro" has trial period of 30 days
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
 
     # Isolate to one step - signup
     And I go to the sign up page for the "Basic" plan
@@ -82,7 +82,7 @@ Feature: Notice about payment details on buyer dashboard
     And user "bob" activates himself
     And buyer "bob" is approved
 
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see "Payment details required"
     And I should not see "Trial period"
@@ -106,7 +106,7 @@ Feature: Notice about payment details on buyer dashboard
     And plan "Pro" has monthly fee of 200
     And plan "Pro" has trial period of 30 days
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     When I go to the sign up page for the "Basic" plan
     And I fill in all required signup fields as "bob"
     And I press "Sign up"
@@ -114,7 +114,7 @@ Feature: Notice about payment details on buyer dashboard
     And user "bob" activates himself
     And buyer "bob" is approved
 
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should see "30 days remaining"
 
@@ -128,7 +128,7 @@ Feature: Notice about payment details on buyer dashboard
     And provider "foo.3scale.localhost" has payment gateway in test mode
     And an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has monthly fee of 100
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page for the "Basic" plan
     And I fill in all required signup fields as "bob"
     And I press "Sign up"
@@ -136,6 +136,6 @@ Feature: Notice about payment details on buyer dashboard
     When user "bob" activates himself
     And buyer "bob" is approved
 
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see "Payment details required"

@@ -32,8 +32,8 @@ Feature: Login feature
     Then I should be on the provider dashboard
 
   Scenario: Buyer lands in dashboard when he requests login page
-   Given the current domain is foo.3scale.localhost
-     And I log in as "bob" on foo.3scale.localhost
+   Given the current domain is "foo.3scale.localhost"
+     And I log in as "bob" on "foo.3scale.localhost"
      And I go to the login page
     Then I should be on the dashboard
 
@@ -46,7 +46,7 @@ Feature: Login feature
 
   @security
   Scenario: Provider cannot login in buyer domain
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
     When I try to log in as "foo.3scale.localhost" with password "supersecret"
     Then I should not be logged in
      And I should see "Incorrect email or password. Please try again."

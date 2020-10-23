@@ -8,7 +8,7 @@ Feature: Buyer signups to service
     Given a provider "foo.3scale.localhost" with default plans
       And a default service of provider "foo.3scale.localhost" has name "API"
       And a service plan "Gold" for service "API" exists
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   Scenario: Signup with approval required
     Given service plan "Gold" is default

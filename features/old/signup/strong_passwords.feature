@@ -7,7 +7,7 @@ Feature: Signup with strong passwords
     Given a provider "foo.3scale.localhost" with default plans
       And an application plan "iPhone" of service "default"
       And application plan "iPhone" is default
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
 
 
   Scenario: Strong password is required

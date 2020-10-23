@@ -50,7 +50,7 @@ Feature: Forum toggle
     And I press "Update Settings"
 
     And I log out
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
     And I go to the forum page
     Then I should be on the forum page
 
@@ -64,6 +64,6 @@ Feature: Forum toggle
     And I press "Update Settings"
 
     And I log out
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
     And I go to the forum page
     Then I should be on the login page

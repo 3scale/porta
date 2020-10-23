@@ -16,16 +16,16 @@ Feature: Credit card details
     And a buyer "stan" signed up to application plan "Pro"
 
   Scenario: Entering cc details disabled if billing address not provided
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And provider "foo.3scale.localhost" manages payments with "stripe"
-    When I log in as "kenny" on foo.3scale.localhost
+    When I log in as "kenny" on "foo.3scale.localhost"
      And I go to the stripe credit card details page
     Then I should not see button "Edit Credit Card Details"
 
   Scenario: Billing Address fields are shown if they exist
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And provider "foo.3scale.localhost" manages payments with "stripe"
-    When I log in as "stan" on foo.3scale.localhost
+    When I log in as "stan" on "foo.3scale.localhost"
      And I go to the stripe credit card details page
 
     Then I should see "Timbuktu"
@@ -34,7 +34,7 @@ Feature: Credit card details
       And I should see "+123 456 789"
 
   Scenario: Credit card fields are shown if they exist
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And buyer "stan" has last digits of credit card number "1234" and expiration date March, 2018
       And provider "foo.3scale.localhost" manages payments with "stripe"
     When I log in as "stan" on foo.3scale.localhost
@@ -46,9 +46,9 @@ Feature: Credit card details
       And I should see "XXXX-XXXX-XXXX-1234"
 
   Scenario: Billing address errors (for all pg)
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
       And provider "foo.3scale.localhost" manages payments with "stripe"
-     When I log in as "kenny" on foo.3scale.localhost
+     When I log in as "kenny" on "foo.3scale.localhost"
       And I go to the stripe credit card details page
       And I follow "First add a billing address"
 

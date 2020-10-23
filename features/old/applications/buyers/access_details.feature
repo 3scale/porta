@@ -89,7 +89,7 @@ Feature: Buyer's API Access Details
     And provider "foo.3scale.localhost" has billing enabled
     And plan "Pro" has monthly fee of 200
     And a buyer "alice" signed up to application plan "Pro"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     When I log in as "alice"
     And I follow "API Access Details"
     Then I should see "Payment details required"
@@ -116,7 +116,7 @@ Feature: Buyer's API Access Details
     And provider "foo.3scale.localhost" has prepaid billing enabled
     And plan "Pro" has monthly fee of 200
     And a buyer "alice" signed up to application plan "Pro"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     When I log in as "alice"
     And I follow "API Access Details"
     Then I should see "Not enough credit"

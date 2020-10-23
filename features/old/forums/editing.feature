@@ -23,7 +23,7 @@ Feature: Editing forum topics and posts
      | from buyer yesterday   | buyer      | yesterday  |
      | from bob               | bob        | 5 days ago |
 
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
 
   Scenario: User can edit his topics the first day
     When I log in as "buyer"

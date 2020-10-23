@@ -20,7 +20,7 @@ Feature: Change service plan
   Scenario: Direct plan change
     Given provider "foo.3scale.localhost" allows to change service plan directly
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
      And I log in as "fan" on "foo.3scale.localhost"
      And I go to the services list for buyers
      When I follow "Review/Change"
@@ -31,7 +31,7 @@ Feature: Change service plan
   Scenario: Plan change by request
     Given provider "foo.3scale.localhost" allows to change service plan by request
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
      And I log in as "fan" on "foo.3scale.localhost"
      And I go to the services list for buyers
 
@@ -43,7 +43,7 @@ Feature: Change service plan
   Scenario: Plan change direct if credit card present
     Given provider "foo.3scale.localhost" allows to change service plan only with credit card
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
      And I log in as "fan" on "foo.3scale.localhost"
      And I go to the services list for buyers
 

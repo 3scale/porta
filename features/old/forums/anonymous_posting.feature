@@ -9,7 +9,7 @@ Feature: Anonymous posting
       And provider "foo.3scale.localhost" has multiple applications enabled
       And provider "foo.3scale.localhost" has "forum" enabled
       And a buyer "bob" signed up to provider "foo.3scale.localhost"
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   Scenario: Anonymous posting when logged in
     Given provider "foo.3scale.localhost" has "anonymous posts" enabled

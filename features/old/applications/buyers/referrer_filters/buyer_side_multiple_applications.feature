@@ -13,7 +13,7 @@ Feature: Buyer's application referrer filters (multiple applications mode)
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     And buyer "bob" has application "MegaWidget"
     And I don't care about application keys
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
 
   Scenario: List referrer filters
     Given application "MegaWidget" has the following referrer filters:
@@ -29,7 +29,7 @@ Feature: Buyer's application referrer filters (multiple applications mode)
 
   @javascript
   Scenario: Create valid referrer filter
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
     When I log in as "bob"
     And I go to the "MegaWidget" application page
     And I submit the new referrer filter form with "foo.example.org"
@@ -37,7 +37,7 @@ Feature: Buyer's application referrer filters (multiple applications mode)
 
   @allow-rescue
   Scenario: Create invalid referrer filter
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
     Given application "MegaWidget" has no referrer filters
     And the backend will respond with error on attempt to create blank referrer filter for application "MegaWidget"
     When I log in as "bob"
@@ -54,7 +54,7 @@ Feature: Buyer's application referrer filters (multiple applications mode)
 
   @javascript
   Scenario: Delete referrer filter
-    Given the current domain is foo.3scale.localhost
+    Given the current domain is "foo.3scale.localhost"
     Given application "MegaWidget" has the following referrer filters:
       | foo.example.org |
     #And the backend will delete referrer filter "foo.example.org" for application "MegaWidget"

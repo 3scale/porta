@@ -13,7 +13,7 @@ Feature: Access code
   Scenario: Invalid access code
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has site access code "foobar"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the homepage
     And I fill in "Access code" with "random"
     And I press "Enter"
@@ -22,7 +22,7 @@ Feature: Access code
   Scenario: Valid access code
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has site access code "foobar"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the homepage
     And I fill in "Access code" with "foobar"
     And I press "Enter"
@@ -31,7 +31,7 @@ Feature: Access code
   Scenario: Valid access code in any page not being homepage
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has site access code "foobar"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
       And I go to the dashboard page
       And I enter "foobar" as access code
     Then I should not be in the access code page
@@ -41,7 +41,7 @@ Feature: Access code
   Scenario: Several invalid access code should not loose url
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has site access code "foobar"
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
       And I go to the dashboard page
       And I enter "a wrongcode" as access code
       And I enter "a wrongcode" as access code
@@ -53,7 +53,7 @@ Feature: Access code
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has site access code "foobar"
     And domain "foo.3scale.localhost" supports SSL
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the homepage
     Then I should feel secure
     When I fill in "Access code" with "foobar"

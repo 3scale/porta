@@ -12,7 +12,7 @@ Feature: Buyer signup to service allowing multiple applications per buyer
       # TODO: add scenario without default app plan
       And an application plan "iPhone" of service "default"
       And application plan "iPhone" is default
-      And the current domain is foo.3scale.localhost
+      And the current domain is "foo.3scale.localhost"
 
   Scenario: Signup, activate, approve and login
     When I go to the sign up page

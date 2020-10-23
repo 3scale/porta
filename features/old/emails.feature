@@ -35,7 +35,7 @@ Scenario: Disable 'Waiting list confirmation' notification
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
@@ -58,7 +58,7 @@ Scenario: Disable 'Waiting list confirmation' notification with truthy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
@@ -81,7 +81,7 @@ Scenario: Disable 'Waiting list confirmation' notification with falsy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
@@ -112,7 +112,7 @@ Scenario: Custom email subject with truthy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
@@ -145,7 +145,7 @@ Scenario: Custom email subject with falsy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
@@ -178,7 +178,7 @@ Scenario: Do not disable 'Waiting list confirmation' notification due to falsy c
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
