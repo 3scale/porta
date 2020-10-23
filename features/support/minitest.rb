@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # https://github.com/cucumber/cucumber/wiki/Using-MiniTest#minitest-5
 
 require 'minitest/unit'

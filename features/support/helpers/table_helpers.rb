@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TableHelpers
 
   # Does the same thing as #tableish from cucumber-rails.

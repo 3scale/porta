@@ -1,5 +1,6 @@
-module XPathOriginalTitle
+# frozen_string_literal: true
 
+module XPathOriginalTitle
   def link(locator)
     locator = locator.to_s
     link = descendant(:a)[attr_reader(:href)]

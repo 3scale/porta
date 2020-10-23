@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module HtmlSelectorsHelper
   def selector_for(scope)
     case scope
