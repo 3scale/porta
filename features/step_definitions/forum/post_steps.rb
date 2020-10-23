@@ -71,7 +71,7 @@ Given "a post {string} under {topic}" do |body, topic|
   FactoryBot.create(:post, user: topic.user, topic: topic, body: body)
 end
 
-Given "user {user} posted {string} {word} under {topic}" do |user, body, time, topic|
+Given "{user} posted {string} {word} under {topic}" do |user, body, time, topic|
   Timecop.travel(Chronic.parse(time)) do
     FactoryBot.create(:post, user: user, topic: topic, body: body)
   end

@@ -16,11 +16,11 @@ Given "the forum of {forum} has topic {string} with {string}" do |forum, title, 
   FactoryBot.create(:topic, forum: forum, title: title, body: body, user: forum.account.admins.first)
 end
 
-Given "the forum of {string} has topic {string} from user {user}" do |forum, title, user|
+Given "the forum of {string} has topic {string} from {user}" do |forum, title, user|
   FactoryBot.create(:topic, forum: forum, title: title, user: user)
 end
 
-Given "the forum of {string} has topic {string} from user {user} created {}" do |forum, title, user, time|
+Given "the forum of {string} has topic {string} from {user} created {}" do |forum, title, user, time|
   Timecop.travel(Chronic.parse(time)) do
     FactoryBot.create(:topic, forum: forum, title: title, user: user)
   end
@@ -64,7 +64,7 @@ When "I create a new topic {string}" do |topic|
   step %(I press "Create thread")
 end
 
-When "the user {user} post in the topic in the forum of {forum}" do |user, forum|
+When "the {user} post in the topic in the forum of {forum}" do |user, forum|
   FactoryBot.create(:post, topic: forum.topics.first, forum: forum, user: user)
 end
 
