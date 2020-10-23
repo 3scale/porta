@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 After do
   Timecop.return
 end
