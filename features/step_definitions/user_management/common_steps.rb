@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-When "I follow {string} for user {user}" do |link_text, user|
+When "I follow {string} for {user}" do |link_text, user|
   step %(I follow "#{link_text}" within "#user_#{user.id}")
 end
 
-When "I press {string} for user {user}" do |button_text, user|
+When "I press {string} for {user}" do |button_text, user|
   within "#user_#{user.id}" do
     click_button(button_text)
   end
@@ -22,11 +22,11 @@ Then "I should not see the user role field" do
   refute has_xpath?("//fieldset[text()[contains(.,'Role')]]")
 end
 
-Then "I should see {string} for user {user}" do |text, user|
+Then "I should see {string} for {user}" do |text, user|
   step %(I should see "#{text}" within "#user_#{user.id}")
 end
 
-Then "I should not see {string} for user {user}" do |text, user|
+Then "I should not see {string} for {user}" do |text, user|
   step %(I should not see "#{text}" within "#user_#{user.id}")
 end
 

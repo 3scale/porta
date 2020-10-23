@@ -10,15 +10,15 @@ Given "{provider} has no groups for buyers" do |provider|
   assert provider.provided_groups_for_buyers.empty?
 end
 
-Given "user {user} has access to the admin section {string}" do |user, group|
+Given "{user} has access to the admin section {string}" do |user, group|
   user.member_permissions.create! admin_section: group
 end
 
-Given "user {user} belongs to the (buyer group {string} of provider {string})" do |user, group|
+Given "{user} belongs to the {buyer_group_of_provider}" do |user, group|
   user.user_group_memberships.create! group_id: group.id
 end
 
-Given "user {user} does not belong to the admin group {string} of provider {string}" do |user, admin_section|
+Given "{user} does not belong to the admin group {string} of provider {string}" do |user, admin_section|
   if user.has_permission?(admin_section)
     user.admin_sections = user.admin_sections - [admin_section]
     user.save

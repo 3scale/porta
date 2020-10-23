@@ -24,15 +24,15 @@ Given "there is no user with username {string}" do |username|
   assert_nil User.find_by(username: username)
 end
 
-Given "user {user} is suspended" do |user|
+Given "{user} is suspended" do |user|
   user.suspend! unless user.suspended?
 end
 
-Given "user {user} is active" do |user|
+Given "{user} is active" do |user|
   user.activate! unless user.active?
 end
 
-Given "user {user} is email unverified" do |user|
+Given "{user} is email unverified" do |user|
   user.email_unverify! unless user.email_unverified?
 end
 
@@ -42,11 +42,11 @@ Given "provider {string} has the following users:" do |provider_name, table|
   end
 end
 
-Given "user {user} has first name {string} and last name {string}" do |user, first_name, last_name|
+Given "{user} has first name {string} and last name {string}" do |user, first_name, last_name|
   user.update!(first_name: first_name, last_name: last_name)
 end
 
-Given "user {user} has email {string}" do |user, email|
+Given "{user} has email {string}" do |user, email|
   user.update!(email: email)
 end
 
@@ -62,11 +62,11 @@ Given "the admin of {account} has email {string}" do |account, email|
   user.save!
 end
 
-Given "the user {user} is activated" do |user|
+Given "the {user} is activated" do |user|
   user.activate!
 end
 
-Given "user {user} has role {string}" do |user, role|
+Given "{user} has role {string}" do |user, role|
   user.update!(role: role.to_sym)
 end
 
@@ -147,7 +147,7 @@ Then "I should see the notice that the email is verified" do
   response.body.should have_regexp /Email correctly verified/
 end
 
-Then "user {user} should receive an email to verify email address" do |user|
+Then "{user} should receive an email to verify email address" do |user|
   step %("#{user.email}" should receive an email to verify email address)
 end
 

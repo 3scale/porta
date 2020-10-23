@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-Given "user {user} is subscribed to the topic in the forum of {forum}" do |user, forum|
+Given "{user} is subscribed to the topic in the forum of {forum}" do |user, forum|
   user.user_topics.create! topic: forum.topics.first
 end
 
-Given "the user {user} is subscribed to the topics" do |user, table|
+Given "the {user} is subscribed to the topics" do |user, table|
   table.hashes.each do |hash|
     user.user_topics.create! topic: Topic.find_by!(title: hash['topic'])
   end
@@ -12,7 +12,7 @@ end
 
 #FIXME: forum complexity because of reusing everything!
 # These ugly steps are needed due to the crazy forum using the same views and routes for both public and admin sides
-When "user {user} subscribe to the topic in the forum of {forum}" do |user, forum|
+When "{user} subscribe to the topic in the forum of {forum}" do |user, forum|
   user.user_topics.create! topic: forum.topics.first
   step %(I navigate to a topic in the forum of "#{user.provider_account.org_name}")
 end

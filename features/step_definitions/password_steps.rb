@@ -10,7 +10,7 @@ Given "no user exists with an email of {string}" do |email|
   assert_nil User.find_by(email: email)
 end
 
-Then "the password of user {user} should not be {string}"  do |user, password|
+Then "the password of {user} should not be {string}"  do |user, password|
   assert !user.authenticated?(password)
 end
 
