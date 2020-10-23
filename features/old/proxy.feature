@@ -8,11 +8,11 @@ Feature: Proxy integration
     And I have apicast_v1 feature enabled
     And I have apicast_v2 feature enabled
     And I have oauth_api feature enabled
-    Given a provider "foo.example.com"
-    And a default service of provider "foo.example.com" has name "one"
-    And the service "one" of provider "foo.example.com" has deployment option "self_managed"
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And a default service of provider "foo.3scale.localhost" has name "one"
+    And the service "one" of provider "foo.3scale.localhost" has deployment option "self_managed"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
     And apicast registry is stubbed
     And the default proxy does not use apicast configuration driven
 
@@ -23,7 +23,7 @@ Feature: Proxy integration
 
   Scenario: Download Nginx Config
     When I go to the integration page for service "one"
-    And I fill in "proxy_endpoint" with "http://public.example.com"
+    And I fill in "proxy_endpoint" with "http://public.3scale.localhost"
     And I press "Update Production Configuration"
     And I follow "Download the NGINX Config files"
     Then I should be offered to download an "application/zip" file
@@ -33,14 +33,14 @@ Feature: Proxy integration
     Then I should see button to "Test"
 
   Scenario: Sandbox disabled for oauth
-    When provider "foo.example.com" uses backend oauth in his default service
+    When provider "foo.3scale.localhost" uses backend oauth in his default service
     And I go to the integration page for service "one"
     Then I should see button to "Update Staging Configuration"
 
   Scenario: Download Nginx Config for oauth
-    When provider "foo.example.com" uses backend oauth in his default service
+    When provider "foo.3scale.localhost" uses backend oauth in his default service
     When I go to the integration page for service "one"
-    And I fill in "proxy_endpoint" with "http://public.example.com"
+    And I fill in "proxy_endpoint" with "http://public.3scale.localhost"
     And I press "Update Production Configuration"
     And I follow "Download the NGINX Config files"
     Then I should be offered to download an "application/zip" file

@@ -51,7 +51,7 @@ end
 
 When(/^I send an invitation$/) do
   step 'I visit the page to invite users'
-  @invitee_email = 'mary@foo.example.com'
+  @invitee_email = 'mary@foo.3scale.localhost'
   step %(I fill in "Send invitation to" with "#{@invitee_email}")
   click_button 'Send'
 end

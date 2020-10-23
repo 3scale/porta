@@ -4,10 +4,10 @@ Feature: Metric creation
   I want to create them
 
   Background:
-    Given a provider "foo.example.com"
-    And an application plan "Basic" of provider "foo.example.com"
-    When current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And an application plan "Basic" of provider "foo.3scale.localhost"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
   Scenario: Create a metric from the service definition page
     When I go to the service definition page
@@ -18,14 +18,14 @@ Feature: Metric creation
     And I fill in "Description" with "How many zombies the user killed"
     And I press "Create Metric"
 
-    Then provider "foo.example.com" should have metric "zombie_kills"
+    Then provider "foo.3scale.localhost" should have metric "zombie_kills"
       And metric "zombie_kills" should have the following:
         | Friendly name | Number of zombies killed         |
         | Unit          | corpses                          |
         | Description   | How many zombies the user killed |
 
-    And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
       And I go to the edit page for plan "Basic"
     Then I should see metric "Number of zombies killed"
 

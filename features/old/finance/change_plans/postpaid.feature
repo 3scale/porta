@@ -4,20 +4,20 @@ Feature: Change plan
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" is charging
-      And provider "foo.example.com" has "finance" switch visible
-    Given an application plan "FreeAsInBeer" of provider "foo.example.com" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.example.com" for 31000000 monthly
-      And an application plan "PaidAsInDiplomat" of provider "foo.example.com" for 3100000000 monthly
-    Given the current domain is foo.example.com
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" is charging
+      And provider "foo.3scale.localhost" has "finance" switch visible
+    Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
+      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31000000 monthly
+      And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100000000 monthly
+    Given the current domain is foo.3scale.localhost
 
   @commit-transactions
   Scenario: Paying a fee without change plan POSTPAID
     Given the time is 28th April 2009
-      And provider "foo.example.com" is charging
+      And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
-    When I log in as "stallman" on foo.example.com on 15th June 2009
+    When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
          | name                         | description                                 | quantity |  cost         |
@@ -30,7 +30,7 @@ Feature: Change plan
     Given the time is 1st May 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
       When time flies to 1st June 2009
-      When I log in as "stallman" on foo.example.com on 15th June 2009
+      When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
 
        And I navigate to 1st invoice issued for me in "May, 2009"
     Then I should see line items
@@ -42,7 +42,7 @@ Feature: Change plan
   Scenario: Plan upgrade from paid to paid at 10th May 12:00 AM UTC
     Given the time is 30th April 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
-      And I log in as "stallman" on foo.example.com
+      And I log in as "stallman" on foo.3scale.localhost
       And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
       When time flies to 3rd June
 
@@ -59,7 +59,7 @@ Feature: Change plan
   Scenario: Plan upgrade from free to paid at 10th May 12:00 AM UTC
     Given the time is 30th April 2009
       And a buyer "stallman" signed up to application plan "FreeAsInBeer" on 30th April 2009
-      And I log in as "stallman" on foo.example.com
+      And I log in as "stallman" on foo.3scale.localhost
       And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
 
      When time flies to 3rd June
@@ -71,11 +71,11 @@ Feature: Change plan
          | Total cost                     |                                             |          | 2,150,000,000.00 |
 
   Scenario: Plan upgrade from free to free at 10th May 12:00 AM UTC
-    Given an application plan "FreeAsInCzechBeer" of provider "foo.example.com" for 0 monthly
+    Given an application plan "FreeAsInCzechBeer" of provider "foo.3scale.localhost" for 0 monthly
       And the time is 30th April 2009
 
     When a buyer "stallman" signed up to application plan "FreeAsInBeer" on 30th April 2009
-     And I log in as "stallman" on foo.example.com
+     And I log in as "stallman" on foo.3scale.localhost
      And I change application plan to "FreeAsInCzechBeer" on 10th May 2009 12:00 UTC
      And time flies to 8th June
     Then I should have 0 invoice

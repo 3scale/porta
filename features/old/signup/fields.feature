@@ -5,21 +5,21 @@ Feature: Signup with defined fields
   I want to sign up with defined fields
 
   Background:
-    Given a provider "foo.example.com" with default plans
+    Given a provider "foo.3scale.localhost" with default plans
     Given a default application plan "iPhone" of service "default"
-    Given provider "foo.example.com" has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Account":
       | name                      | required | read_only | hidden |
       | account_extra_required    | true     |           |        |
       | account_extra_read_only   |          | true      |        |
       | account_extra_hidden      |          |           | true   |
 
-    Given provider "foo.example.com" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for "User":
       | name                  | required | read_only | hidden |
       | user_extra_required   | true     |           |        |
       | user_extra_read_only  |          | true      |        |
       | user_extra_hidden     |          |           | true   |
 
-    Given the current domain is foo.example.com
+    Given the current domain is foo.3scale.localhost
 
 
   Scenario: Required fields on signup

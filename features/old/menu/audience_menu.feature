@@ -4,9 +4,9 @@ Feature: Audience menu
   I want to see a menu that lets me do that
 
   Background:
-    Given a provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
       And I go to the provider dashboard
       And I follow "0 Accounts"
 
@@ -58,21 +58,21 @@ Feature: Audience menu
     | Preferences               |
 
   Scenario: Accounts sub menu structure with account plans enabled
-    When provider "foo.example.com" has "account_plans" visible
+    When provider "foo.3scale.localhost" has "account_plans" visible
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
     Then I should see menu items
       | Account Plans            |
 
   Scenario: Accounts sub menu structure with account plans disabled
-    When provider "foo.example.com" has "account_plans" denied
+    When provider "foo.3scale.localhost" has "account_plans" denied
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
     Then I should not see menu items
       | Account Plans            |
 
   Scenario: Accounts sub menu structure with service plans enabled
-    When provider "foo.example.com" has "service_plans" visible
+    When provider "foo.3scale.localhost" has "service_plans" visible
     And I go to the accounts admin page
     When I follow "Accounts" within the main menu
     Then I should see menu items
@@ -82,7 +82,7 @@ Feature: Audience menu
     | Fields Definitions        |
 
   Scenario: Portal sub menu structure with groups enabled
-    When provider "foo.example.com" has "groups" switch allowed
+    When provider "foo.3scale.localhost" has "groups" switch allowed
     And I go to the provider dashboard
     And I follow "0 Accounts"
     When I follow "Developer Portal" within the main menu

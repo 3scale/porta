@@ -4,13 +4,13 @@ Feature: Provider settings authorization
   I want to control who can access the settings area
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has Browser CMS activated
-      And provider "foo.example.com" has billing enabled
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has Browser CMS activated
+      And provider "foo.3scale.localhost" has billing enabled
 
   Scenario Outline: Provider admin can access settings
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
      When I go to the provider dashboard
       And I follow "<link>" within the audience dashboard widget
       And I go to the <page> page
@@ -34,9 +34,9 @@ Feature: Provider settings authorization
 
 
   Scenario Outline: Members per default cannot access settings
-    Given an active user "member" of account "foo.example.com"
-      And user "member" does not belong to the admin group "settings" of provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
+    Given an active user "member" of account "foo.3scale.localhost"
+      And user "member" does not belong to the admin group "settings" of provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
      When I log in as provider "member"
      And I go to the provider dashboard
 
@@ -59,9 +59,9 @@ Feature: Provider settings authorization
       | Developer Portal     | authentication providers |
 
   Scenario Outline: Members of settings group can access settings
-    Given an active user "member" of account "foo.example.com"
+    Given an active user "member" of account "foo.3scale.localhost"
       And user "member" has access to the admin section "settings"
-      And current domain is the admin domain of provider "foo.example.com"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
      When I log in as provider "member"
       And I go to the provider dashboard
       And I follow "0 Messages"

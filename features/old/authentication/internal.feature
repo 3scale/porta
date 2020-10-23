@@ -8,21 +8,21 @@ Feature: Internal authentication
   # to go to whatever page the user was trying to go before.
 
   Background:
-    Given a provider "foo.example.com"
-    And a default service of provider "foo.example.com" has name "api"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" requires cinstances to be approved before use
-    And provider "foo.example.com" requires accounts to be approved
+    Given a provider "foo.3scale.localhost"
+    And a default service of provider "foo.3scale.localhost" has name "api"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" requires cinstances to be approved before use
+    And provider "foo.3scale.localhost" requires accounts to be approved
 
   @wip @3D
   Scenario: Successful sign in as a provider on the master domain
-    When current domain is the admin domain of provider "foo.example.com"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     Then I should feel secure
-    When I fill in "Username" with "foo.example.com"
+    When I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "supersecret"
     And I press "Sign in"
-    Then I should be logged in as "foo.example.com"
+    Then I should be logged in as "foo.3scale.localhost"
     And I should be on the provider dashboard
 
     # TODO: This should be separate scenario
@@ -31,10 +31,10 @@ Feature: Internal authentication
 
   Scenario: Redirects and keeps full url
     # legal terms's  url url has query_string
-    Given the admin of account "foo.example.com" has password "foobar"
-    When current domain is the admin domain of provider "foo.example.com"
+    Given the admin of account "foo.3scale.localhost" has password "foobar"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
       And I go to the legal terms settings page
-    And I fill in "Username" with "foo.example.com"
+    And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "foobar"
     And I press "Sign in"
     Then I should have the following query string:
@@ -43,27 +43,27 @@ Feature: Internal authentication
 
   @javascript
   Scenario: Failed attempt to sign in as provider with invalid password
-    Given the admin of account "foo.example.com" has password "foobar"
-    When current domain is the admin domain of provider "foo.example.com"
+    Given the admin of account "foo.3scale.localhost" has password "foobar"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
-    And I fill in "Username" with "foo.example.com"
+    And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "whatever"
     And I press "Sign in"
     Then I should see "Incorrect email or password. Please try again."
 
   @wip
   Scenario: Successful sign in as a provider on their domain
-    When I go to the login page on foo.example.com
-    And I fill in "Username" with "foo.example.com"
+    When I go to the login page on foo.3scale.localhost
+    And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "supersecret"
     And I press "Sign in"
-    Then I should be logged in as "foo.example.com"
+    Then I should be logged in as "foo.3scale.localhost"
     And I should be on the homepage
 
   Scenario: Successful sign in as a buyer
-    Given a buyer "alice" signed up to provider "foo.example.com"
+    Given a buyer "alice" signed up to provider "foo.3scale.localhost"
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the login page
     And I fill in "Username" with "alice"
     And I fill in "Password" with "supersecret"
@@ -73,7 +73,7 @@ Feature: Internal authentication
   @wip @3D
   Scenario: Successful sign in as master account admin
    Given the master account admin has username "admin" and password "supermonkey"
-    When current domain is the admin domain of provider "foo.example.com"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
     And I fill in "Username" with "admin"
     And I fill in "Password" with "supermonkey"
@@ -85,31 +85,31 @@ Feature: Internal authentication
   Scenario: Successful sign in stores login time and IP
     Given the time is 8th October 2010, 11:10
     And my remote address is "100.101.102.103"
-    When current domain is the admin domain of provider "foo.example.com"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
-    And I fill in "Username" with "foo.example.com"
+    And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "supersecret"
     And I press "Sign in"
-    Then user "foo.example.com" should have last login on 8th October 2010 at 11:10 from 100.101.102.103
+    Then user "foo.3scale.localhost" should have last login on 8th October 2010 at 11:10 from 100.101.102.103
 
   @security
   Scenario: Failed attempt to sign in without being activated
-    Given a buyer "wickedwidgets" signed up to provider "foo.example.com"
+    Given a buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
     And a pending user "bob" of account "wickedwidgets"
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I try to log in as "bob"
     Then I should not be logged in
 
   @security
   Scenario: Failed attempt to sign in as user with pending account
-    Given a pending buyer "wickedwidgets" signed up to provider "foo.example.com"
-    When the current domain is foo.example.com
+    Given a pending buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    When the current domain is foo.3scale.localhost
     And I try to log in as "wickedwidgets"
     Then I should not be logged in
 
   @security
   Scenario: Failed attempt to sign in as user with rejected account
-    Given a rejected buyer "wickedwidgets" signed up to provider "foo.example.com"
-    When the current domain is foo.example.com
+    Given a rejected buyer "wickedwidgets" signed up to provider "foo.3scale.localhost"
+    When the current domain is foo.3scale.localhost
     And I try to log in as "wickedwidgets"
     Then I should not be logged in

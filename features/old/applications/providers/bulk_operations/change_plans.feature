@@ -5,23 +5,23 @@ Feature: Bulk operations
   I want to change applications' plans in bulk
 
   Background:
-    Given a provider "foo.example.com"
-    Given a default application plan "Basic" of provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "service_plans" switch allowed
+    Given a provider "foo.3scale.localhost"
+    Given a default application plan "Basic" of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "service_plans" switch allowed
 
     Given a following buyers with applications exists:
       | name | provider        | applications |
-      | bob  | foo.example.com | BobApp       |
-      | jane | foo.example.com | JaneApp      |
-      | mike | foo.example.com | MikeApp      |
+      | bob  | foo.3scale.localhost | BobApp       |
+      | jane | foo.3scale.localhost | JaneApp      |
+      | mike | foo.3scale.localhost | MikeApp      |
 
-    Given current domain is the admin domain of provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
   Scenario: Mass change of application plans
-    Given an application plan "Advanced" of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
 
     When I check select for "BobApp", "JaneApp"

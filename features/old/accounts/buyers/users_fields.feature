@@ -5,10 +5,10 @@ Feature: Buyer side, user extra fields
 
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-    And a buyer "bob" signed up to provider "foo.example.com"
-    Given provider "foo.example.com" has the following fields defined for "User":
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" has the following fields defined for "User":
       | name            | choices | required | read_only | hidden |
       | false_field     |         |          |           |        |
       | required_field  |         | true     |           |        |
@@ -18,7 +18,7 @@ Feature: Buyer side, user extra fields
 
 
   Scenario: Hidden and not editable extra fields should not be editable
-    Given I log in as "bob" on foo.example.com
+    Given I log in as "bob" on foo.3scale.localhost
     When I go to the user edit page for "bob"
     Then I should see the fields:
       | name           |
@@ -34,7 +34,7 @@ Feature: Buyer side, user extra fields
 
 
   Scenario: Update a user with extra fields
-    Given I log in as "bob" on foo.example.com
+    Given I log in as "bob" on foo.3scale.localhost
     When I go to the user edit page for "bob"
       And I leave "Required field" blank
       And I leave "False field" blank

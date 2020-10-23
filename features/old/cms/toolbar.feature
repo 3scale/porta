@@ -11,10 +11,10 @@ Feature: CMS Toolbar
   #
 
   # Background:
-  #   Given a provider "foo.example.com" with default plans
-  #   And provider "foo.example.com" has all the templates setup
-  #   And the current provider is foo.example.com
-  #   And the current domain is foo.example.com
+  #   Given a provider "foo.3scale.localhost" with default plans
+  #   And provider "foo.3scale.localhost" has all the templates setup
+  #   And the current provider is foo.3scale.localhost
+  #   And the current domain is foo.3scale.localhost
   #   And I am in CMS Admin mode
 
   # Scenario: Edit Application page

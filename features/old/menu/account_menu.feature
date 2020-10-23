@@ -4,13 +4,13 @@ Feature: Menu of the Account screen
   I want to see the menu
 
   Background:
-    Given a provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
 
   Scenario: Account menu structure
     When I go to the provider account page
-    Then I should see "foo.example.com"
+    Then I should see "foo.3scale.localhost"
     And I should see menu items
     | Overview                  |
     | Export                    |
@@ -31,7 +31,7 @@ Feature: Menu of the Account screen
     | SSO Integrations          |
 
   Scenario: finance disabled should not disable 3scale invoices
-    Given provider "foo.example.com" has "finance" switch denied
+    Given provider "foo.3scale.localhost" has "finance" switch denied
     When I go to the provider account page
      And I follow "Billing"
      And I follow "3scale Invoices"
@@ -50,13 +50,13 @@ Feature: Menu of the Account screen
 
   Scenario: Account menu structure with sso enforced
     Given the provider has "multiple_users" switch allowed
-    Given provider "foo.example.com" has "enforce_sso" set to "true"
+    Given provider "foo.3scale.localhost" has "enforce_sso" set to "true"
     When I go to the provider account page
     Then I should not see "Invitations"
 
   Scenario: Personal menu structure
     When I go to the provider personal page
-    Then I should see "foo.example.com"
+    Then I should see "foo.3scale.localhost"
     And I should see menu items
     | Personal Details          |
     | Tokens                    |

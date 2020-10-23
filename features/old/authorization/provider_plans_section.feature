@@ -5,21 +5,21 @@ Feature: Provider plans section authorization
   I want to control who can access the plans area
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has Browser CMS activated
-      And provider "foo.example.com" has "account_plans" switch allowed
-      And provider "foo.example.com" has "service_plans" visible
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has Browser CMS activated
+      And provider "foo.3scale.localhost" has "account_plans" switch allowed
+      And provider "foo.3scale.localhost" has "service_plans" visible
 
-      And an account plan "account plan" of provider "foo.example.com"
-      And an application plan "app plan" of provider "foo.example.com"
-      And a service plan "serv plan" of provider "foo.example.com"
+      And an account plan "account plan" of provider "foo.3scale.localhost"
+      And an application plan "app plan" of provider "foo.3scale.localhost"
+      And a service plan "serv plan" of provider "foo.3scale.localhost"
 
-    Given provider "foo.example.com" has "account_plans" switch allowed
+    Given provider "foo.3scale.localhost" has "account_plans" switch allowed
 
 
   Scenario Outline: Provider admin can access plans
-    Given current domain is the admin domain of provider "foo.example.com"
-     When I log in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+     When I log in as provider "foo.3scale.localhost"
      When I go to the provider dashboard
      Then I should see "APIs" in the apis dashboard widget
      Then I should see "Products" in the apis dashboard widget
@@ -39,9 +39,9 @@ Feature: Provider plans section authorization
 
 
   Scenario Outline: Members per default cannot access plans
-    Given an active user "member" of account "foo.example.com"
-      And user "member" does not belong to the admin group "plans" of provider "foo.example.com"
-     And current domain is the admin domain of provider "foo.example.com"
+    Given an active user "member" of account "foo.3scale.localhost"
+      And user "member" does not belong to the admin group "plans" of provider "foo.3scale.localhost"
+     And current domain is the admin domain of provider "foo.3scale.localhost"
      When I log in as provider "member"
       And I go to the provider dashboard
     Then I should see "APIs" in the apis dashboard widget
@@ -64,9 +64,9 @@ Feature: Provider plans section authorization
     # | transaction errors  |
 
   Scenario Outline: Members of plans group can access plans
-    Given an active user "member" of account "foo.example.com"
+    Given an active user "member" of account "foo.3scale.localhost"
       And user "member" has access to the admin section "plans"
-      And current domain is the admin domain of provider "foo.example.com"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
      When I log in as provider "member"
       And I go to the provider dashboard
      Then I should see "APIs" in the apis dashboard widget

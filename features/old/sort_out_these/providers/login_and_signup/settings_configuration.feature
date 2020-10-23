@@ -5,16 +5,16 @@ Feature: Settings Configuration
 
   @wip
   Scenario: Provider Keys disabled
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has billing enabled
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has billing enabled
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
     And I go to the provider support page
     Then I should see "Edit Support Details"
 
-    When I fill in "Technical support email address" with "tech@foo.example.com"
-    And I fill in "Administrative support email address" with "admin@foo.example.com"
-    And I fill in "Who should be emailed, to change credit card details" with "credit@foo.example.com"
+    When I fill in "Technical support email address" with "tech@foo.3scale.localhost"
+    And I fill in "Administrative support email address" with "admin@foo.3scale.localhost"
+    And I fill in "Who should be emailed, to change credit card details" with "credit@foo.3scale.localhost"
     And I fill in "Contact and Support Information" with "We love to help"
     And I press "Save"
     Then I should see "Service information was updated"
@@ -22,8 +22,8 @@ Feature: Settings Configuration
     When I am on the master domain
     When the current domain is foo.example
     And I am on the support page
-    Then I should see "admin@foo.example.com"
-    And I should see "tech@foo.example.com"
+    Then I should see "admin@foo.3scale.localhost"
+    And I should see "tech@foo.3scale.localhost"
     And I should see "We love to help"
 
 

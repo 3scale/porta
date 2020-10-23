@@ -4,8 +4,8 @@ Feature: CMS Partials
   I want to manage CMS data objects
 
   Background:
-    Given a provider "foo.example.com"
-    And I am logged in as provider "foo.example.com" on its admin domain
+    Given a provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost" on its admin domain
     And I go to the CMS page
 
   Scenario: Partial
@@ -28,7 +28,7 @@ Feature: CMS Partials
       | System name    | brand-new-potato   |
 
   Scenario: Builtin partial
-    Given provider "foo.example.com" has all the templates setup
+    Given provider "foo.3scale.localhost" has all the templates setup
 
     When I go to the CMS page
     And I choose builtin page "submenu" in the CMS sidebar

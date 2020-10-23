@@ -5,10 +5,10 @@ Feature: Buyer's application referrer filters (single application mode)
   I want to define referrer filters
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications disabled
-    And referrer filters are required for the service of provider "foo.example.com"
-    And an application plan "Default" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications disabled
+    And referrer filters are required for the service of provider "foo.3scale.localhost"
+    And an application plan "Default" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Default"
     And I don't care about application keys
 
@@ -17,7 +17,7 @@ Feature: Buyer's application referrer filters (single application mode)
       | foo.example.org |
       | bar.example.org |
 
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the buyer access details page
 
     Then I should see "Referrer Filters"
@@ -28,7 +28,7 @@ Feature: Buyer's application referrer filters (single application mode)
   Scenario: Create valid referrer filter
     Given the application of buyer "bob" has no referrer filters
     And the backend will create referrer filter "foo.example.org" for the application of buyer "bob"
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the buyer access details page
     And I submit the new referrer filter form with "foo.example.org"
     Then I should see referrer filter "foo.example.org"
@@ -37,7 +37,7 @@ Feature: Buyer's application referrer filters (single application mode)
   Scenario: Create invalid referrer filter
     Given the application of buyer "bob" has no referrer filters
     And the backend will respond with error on attempt to create blank referrer filter for the application of buyer "bob"
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the buyer access details page
     And I submit the new referrer filter form with ""
     Then I should see referrer filter validation error "referrer filter can't be blank"
@@ -47,13 +47,13 @@ Feature: Buyer's application referrer filters (single application mode)
     Given the application of buyer "bob" has the following referrer filters:
       | foo.example.org |
     And the backend will delete referrer filter "foo.example.org" for the application of buyer "bob"
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the buyer access details page
     And I press "Delete" for referrer filter "foo.example.org"
     Then I should not see referrer filter "foo.example.org"
 
   Scenario: Referrer filters are not available if they are not required
-    Given referrer filters are not required for the service of provider "foo.example.com"
-    When I log in as "bob" on foo.example.com
+    Given referrer filters are not required for the service of provider "foo.3scale.localhost"
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the buyer access details page
     Then I should not see "Referrer Filters"

@@ -5,10 +5,10 @@ Feature: Plans management
 
   @javascript
   Scenario: Navigating to plans admin page in enterprise mode
-    Given a provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
-      And provider "foo.example.com" has "service_plans" visible
-      And I am logged in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "service_plans" visible
+      And I am logged in as provider "foo.3scale.localhost"
 
     When I follow "Dashboard"
      And I follow "API"

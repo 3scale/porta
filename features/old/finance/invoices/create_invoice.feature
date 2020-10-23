@@ -4,14 +4,14 @@ Feature: Create invoice
   I want to be able to create an invoice on demand
 
  Background:
-  Given a provider "foo.example.com" with prepaid billing enabled
-    And an application plan "Fixed" of provider "foo.example.com" for 0 monthly
+  Given a provider "foo.3scale.localhost" with prepaid billing enabled
+    And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
     And a buyer "zoidberg" signed up to application plan "Fixed"
 
  @javascript
  Scenario: Create and view the invoice
-   When current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+   When current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
     And go to the invoices of account "zoidberg" page
    Then I should not see "open"
 

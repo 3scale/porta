@@ -4,14 +4,14 @@ Feature: Signup with strong passwords
   I have to enter a strong password
 
   Background:
-    Given a provider "foo.example.com" with default plans
+    Given a provider "foo.3scale.localhost" with default plans
       And an application plan "iPhone" of service "default"
       And application plan "iPhone" is default
-    Given the current domain is foo.example.com
+    Given the current domain is foo.3scale.localhost
 
 
   Scenario: Strong password is required
-    Given provider "foo.example.com" is requiring strong passwords
+    Given provider "foo.3scale.localhost" is requiring strong passwords
     When I go to the sign up page
       And I fill in the following:
        | Email                   | bender@planet.ex |

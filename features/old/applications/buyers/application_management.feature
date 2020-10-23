@@ -5,26 +5,26 @@ Feature: Buyer's application management
   Has access to applications management area
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has "service_plans" visible
-    And provider "foo.example.com" has "multiple_services" visible
-    And an published application plan "Default" of provider "foo.example.com"
-    And a service plan "Gold" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "service_plans" visible
+    And provider "foo.3scale.localhost" has "multiple_services" visible
+    And an published application plan "Default" of provider "foo.3scale.localhost"
+    And a service plan "Gold" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to service plan "Gold"
     And I don't care about application keys
 
 
   Scenario: Provider can deny access to applications Keys
-    Given the provider "foo.example.com" does not allow its partners to manage application keys
+    Given the provider "foo.3scale.localhost" does not allow its partners to manage application keys
       And buyer "bob" has application "SomeApp"
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
       And I go to the "SomeApp" application page
     Then I should not see the application keys
 
   @javascript
   Scenario: Can select a plan when creating a new application
-    Given a service "Travelling" of provider "foo.example.com"
+    Given a service "Travelling" of provider "foo.3scale.localhost"
       And service "Travelling" allows to choose plan on app creation
       And a service plan "Holidays" of service "Travelling"
       And a published application plan "Plane" of service "Travelling"
@@ -32,8 +32,8 @@ Feature: Buyer's application management
       And buyer "bob" is subscribed to service plan "Holidays"
       And buyer "bob" is subscribed to service plan "Default"
 
-    When the current domain is foo.example.com
-      And I log in as "bob" on foo.example.com
+    When the current domain is foo.3scale.localhost
+      And I log in as "bob" on foo.3scale.localhost
       And I go to the dashboard
       And I follow "Applications"
       And I follow "Create new application"
@@ -52,10 +52,10 @@ Feature: Buyer's application management
      And buyer "bob" should have 1 cinstance
 
     Scenario: Cannot select a plan when creating a new application
-      Given an application plan "Bronze" of provider "foo.example.com"
-      And an application plan "Gold" of provider "foo.example.com"
+      Given an application plan "Bronze" of provider "foo.3scale.localhost"
+      And an application plan "Gold" of provider "foo.3scale.localhost"
 
-      When I log in as "bob" on foo.example.com
+      When I log in as "bob" on foo.3scale.localhost
       And I go to the dashboard
       And I follow "Applications"
       And I follow "Create new application"
@@ -70,8 +70,8 @@ Feature: Buyer's application management
   @javascript
   Scenario: Can request plan change on an already existing application
     Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
-    And an published application plan "Bronze" of provider "foo.example.com"
-   When I log in as "bob" on foo.example.com
+    And an published application plan "Bronze" of provider "foo.3scale.localhost"
+   When I log in as "bob" on foo.3scale.localhost
     And I go to the applications page
     And I follow "UltraWidget"
     And I follow "Edit UltraWidget"
@@ -87,15 +87,15 @@ Feature: Buyer's application management
     Then I should see "A request to change your application plan has been sent"
 
   Scenario: Create a new application without published or default plan
-    Given provider "foo.example.com" has no published application plans
-      And provider "foo.example.com" has no default application plan
-    When I log in as "bob" on foo.example.com
+    Given provider "foo.3scale.localhost" has no published application plans
+      And provider "foo.3scale.localhost" has no default application plan
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the applications page
     Then I should not see "Create new application"
 
   Scenario: Create an application that requires approval
-    Given provider "foo.example.com" requires cinstances to be approved before use
-    When I log in as "bob" on foo.example.com
+    Given provider "foo.3scale.localhost" requires cinstances to be approved before use
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the applications page
     And I follow "Create new application"
     And I fill in "Name" with "MegaWidget"
@@ -105,7 +105,7 @@ Feature: Buyer's application management
 
   Scenario: Edit an application
     Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the applications page
     And I follow "UltraWidget" for application "UltraWidget"
     And I follow "Edit UltraWidget"
@@ -118,7 +118,7 @@ Feature: Buyer's application management
 
   Scenario: Delete an application
     Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the applications page
     And I follow "UltraWidget" for application "UltraWidget"
     And I follow "Edit UltraWidget"
@@ -128,13 +128,13 @@ Feature: Buyer's application management
     And I should not see "UltraWidget"
 
   Scenario: Application creation with fields
-    Given provider "foo.example.com" has the following fields defined for "Cinstance":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":
       | name                 | required | read_only | hidden |
       | app_extra_required  | true     |           |        |
       | app_extra_read_only |          | true      |        |
       | app_extra_hidden    |          |           | true   |
 
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
       And I go to the new application page
 
     Then fields should be required:
@@ -163,7 +163,7 @@ Feature: Buyer's application management
       And I should see "MustBe" in the "App extra required" field
 
   Scenario: Application fields visibility for buyers
-    Given provider "foo.example.com" has the following fields defined for "Cinstance":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":
       | name                | required | read_only | hidden |
       | app_extra_required  | true     |           |        |
       | app_extra_read_only |          | true      |        |
@@ -171,14 +171,14 @@ Feature: Buyer's application management
 
       And buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
       And application "UltraWidget" has extra field "app_extra_required" blank
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
       And I go to the "UltraWidget" application page
     Then I should not see "App extra required"
       And I should not see "App extra read only"
       And I should not see "App extra hidden"
 
   Scenario: Application update with fields
-    Given provider "foo.example.com" has the following fields defined for "Cinstance":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":
       | name                | required | read_only | hidden |
       | app_extra_required  | true     |           |        |
       | app_extra_read_only |          | true      |        |
@@ -186,7 +186,7 @@ Feature: Buyer's application management
 
       And buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
 
-    When I log in as "bob" on foo.example.com
+    When I log in as "bob" on foo.3scale.localhost
       And I go to the "UltraWidget" application edit page
     Then I should not see the fields:
       | not present         |
@@ -209,16 +209,16 @@ Feature: Buyer's application management
     And I should not see "App extra hidden"
 
   Scenario: Choose service when subscribed to many
-    Given a service "Fancy" of provider "foo.example.com"
-    Given a service "Awesome" of provider "foo.example.com"
-    And a default service of provider "foo.example.com" has name "Boring"
+    Given a service "Fancy" of provider "foo.3scale.localhost"
+    Given a service "Awesome" of provider "foo.3scale.localhost"
+    And a default service of provider "foo.3scale.localhost" has name "Boring"
     And an published application plan "AppPlan" of service "Awesome"
     And an published application plan "Fancy Plan" of service "Fancy"
     And a service plan "Good" of service "Fancy"
     And service plan "Good" requires approval
     And buyer "bob" subscribed service "Fancy" with plan "Good"
     And buyer "bob" subscribed service "Awesome"
-    And I am logged in as "bob" on foo.example.com
+    And I am logged in as "bob" on foo.3scale.localhost
 
     When I go to the applications page
      And I follow "Create new application"

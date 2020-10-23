@@ -5,7 +5,7 @@ Feature: Member permissions
 
   Background:
       Given a provider with one active member is logged in
-      And provider "foo.example.com" has "groups" switch allowed
+      And provider "foo.3scale.localhost" has "groups" switch allowed
 
   Scenario: Enable and disable billing section
     When I have opened edit page for the active member

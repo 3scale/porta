@@ -5,14 +5,14 @@ Feature: Applications details
   I want to see all the extra fields for my buyer's application
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" uses backend v2 in his default service
-      And provider "foo.example.com" has multiple applications enabled
-      And a default application plan "Basic" of provider "foo.example.com"
-      And a buyer "bob" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" uses backend v2 in his default service
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And a default application plan "Basic" of provider "foo.3scale.localhost"
+      And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
-      And current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
       And I don't care about application keys
 
   Scenario: No special settings
@@ -22,7 +22,7 @@ Feature: Applications details
     And I should see "Add Random key"
 
   Scenario: Editing hidden fields
-    Given provider "foo.example.com" has the following fields defined for "Cinstance":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":
       | name            | choices     | required | read_only | hidden |
       | le_hidden_field |             |          |           | true   |
       | avec_choices    | true, false |          |           |        |
@@ -40,7 +40,7 @@ Feature: Applications details
 
   @random-fail
   Scenario: I should see all defined fields for an application
-    Given provider "foo.example.com" has the following fields defined for "Cinstance":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":
       | name                 | required | read_only | hidden |
       | user_extra_required  | true     |           |        |
       | user_extra_read_only |          | true      |        |

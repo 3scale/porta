@@ -4,13 +4,13 @@ Feature: Service subscriptions - providers
   I want to be able to liservice subscriptions
 
   Background:
-      And a provider "foo.example.com"
-      And provider "foo.example.com" has "service_plans" visible
-      And current domain is the admin domain of provider "foo.example.com"
-      And a service "Elephant Taming" of provider "foo.example.com"
-      And a service "Zeebra Stripe Drawing" of provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+      And a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "service_plans" visible
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And a service "Elephant Taming" of provider "foo.3scale.localhost"
+      And a service "Zeebra Stripe Drawing" of provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
 
   Scenario: Listing contracts by service
     When I go to the service subscriptions list for provider
@@ -19,7 +19,7 @@ Feature: Service subscriptions - providers
     Then I should see "No results."
 
   Scenario: Listing contracts by service
-   Given a buyer "mouse" of provider "foo.example.com"
+   Given a buyer "mouse" of provider "foo.3scale.localhost"
       And buyer "mouse" subscribed service "Elephant Taming"
 
     When I go to the service subscriptions list for provider

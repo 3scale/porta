@@ -4,11 +4,11 @@ Feature: ActiveDocs
   As a provider
 
   Background:
-    Given a provider "foo.example.com"
-    And the current provider is foo.example.com
+    Given a provider "foo.3scale.localhost"
+    And the current provider is foo.3scale.localhost
 
   Scenario: Loading ActiveDocs 1.0
-    Given provider "foo.example.com" has a swagger 1.0
+    Given provider "foo.3scale.localhost" has a swagger 1.0
     Given the provider has cms page "/version-10" with:
     """
     {% active_docs version: "1.0" %}
@@ -22,6 +22,6 @@ Feature: ActiveDocs
     """
     And the cms page "/version-10" has main layout
 
-    And the current domain is "foo.example.com"
+    And the current domain is "foo.3scale.localhost"
     When I visit "/version-10"
     Then I should see "Echo"
