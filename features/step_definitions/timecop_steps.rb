@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 def access_user_sessions
-  UserSession.where("revoked_at is null").each { |e| e.update!(accessed_at: Time.zone.now) }
+  UserSession.where("revoked_at is null").each { |user| user.update!(accessed_at: Time.zone.now) }
 end
 
 Given "the year is {int}" do |year|
   Timecop.travel(Time.zone.now.change(year: year))
 end
 
-Given "the date/time is {}" do |time|
+# Should be "the date/time is {}" but anonymous capture group doesn't work
+Given /^the (?:date|time) is (.*)$/ do |time|
   time = Time.zone.parse(time)
   Timecop.travel(time)
   access_user_sessions
@@ -30,7 +31,8 @@ When "{int} {time_period} pass(es)" do |amount, period|
   access_user_sessions
 end
 
-When "(the )time flies to {}" do |date|
+# Should be "(the )time flies to {}" but anonymous capture group doesn't work
+When /^(?:the )?time flies to (.*)$/ do |date|
   date = date.gsub(Regexp.union(%w[of st nd rd]), '')
   time_machine(Time.zone.parse(date))
   step %(the date should be #{date})
@@ -56,7 +58,8 @@ Then /^(.+) at (\d{2}:\d{2}:\d{2})$/ do |original, time|
   end
 end
 
-Then "the date/time should be {}" do |time|
+# Should be "the date/time should be {}" but anonymous capture group doesn't work
+Then /^the (?:date|time) should be (.*)$/ do |time|
   # making the comparison at the beginning of hour instead of just using the timestamps as time is no longer frozen, we simply travel
   # if you really need full precision you should write another step
   assert_equal Time.zone.parse(time).beginning_of_hour, Time.zone.now.beginning_of_hour

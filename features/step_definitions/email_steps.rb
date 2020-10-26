@@ -32,8 +32,9 @@ module EmailHelpers
     # last_email_address will return the last email address used by email spec to find an email.
     # Note that last_email_address will be reset after each Scenario.
     # last_email_address || "example@3scale.localhost"
+    last_email_address if @current_user_for_email.nil?
 
-    @current_user_for_email&.email || last_email_address
+    @current_user_for_email.email
   end
 
   def act_as_user(username)

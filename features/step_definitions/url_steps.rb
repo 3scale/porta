@@ -22,14 +22,14 @@ Given "current domain is the {word} domain of {provider}" do |level, provider|
   @provider = provider
 end
 
-Then "the current domain should be {word}" do |domain|
+Then "the current domain should be {string}" do |domain|
   uri = URI.parse(current_url)
   assert_equal domain, uri.host
 end
 
 Then "the current domain in a new window should be {word}" do |domain|
   page.driver.browser.switch_to.window(page.driver.browser.window_handles.last)
-  step "the current domain should be #{domain}"
+  step %(the current domain should be "#{domain}")
 end
 
 Then "the current domain should be the master domain" do
@@ -41,7 +41,7 @@ Then "the current domain is the master domain" do
 end
 
 Then "the current domain should be the admin domain of {provider}" do |provider|
-  step %(the current domain should be #{provider.admin_domain})
+  step %(the current domain should be "#{provider.admin_domain}")
 end
 
 Then "the current port should be {int}" do |port|

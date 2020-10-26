@@ -15,7 +15,7 @@ Then "fields {} should be required" do |fields|
   end
 end
 
-Then "I {should} see link to {link_to_page}" do |visible, path|
+Then "I {should} see {link_to_page}" do |visible, path|
   assert_equal visible, (page.all('a').any? { |node| matches_path?(node[:href], path) })
 end
 
@@ -23,11 +23,6 @@ end
 # Then "I should not see {link_to_page}" do |path|
 #   assert(page.all('a').none? { |node| matches_path?(node[:href], path) })
 # end
-
-#TODO: move this outta here!
-def matches_path?(url, path)
-  url =~ /^(?:https?:\/\/[^\/]+)?#{Regexp.quote(path)}/
-end
 
 Then "I should be redirected" do
   follow_redirect!

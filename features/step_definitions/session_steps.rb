@@ -13,21 +13,21 @@ Given "I am logged in as provider {string} on its admin domain" do |username|
   step %(I am logged in as provider "#{username}")
 end
 
-Given "I am logged in as {string} on {}" do |username, domain|
+Given "I am logged in as {string} on {string}" do |username, domain|
   # for some reason sometimes the domain is an array
   # In 1.9 Array#to_s is different so we need to handle it
   domain = domain.first if domain.is_a? Array
 
-  step %(the current domain is #{domain})
+  step %(the current domain is "#{domain}")
   step %(I log in as "#{username}")
 end
 
-Given "I am logged in as provider {string} on {}" do |username, domain|
+Given "I am logged in as provider {string} on {string}" do |username, domain|
   # for some reason sometimes the domain is an array
   # In 1.9 Array#to_s is different so we need to handle it
   domain = domain.first if domain.is_a? Array
 
-  step %(the current domain is #{domain})
+  step %(the current domain is "#{domain}")
   step %(I log in as provider "#{username}")
 end
 
@@ -39,7 +39,7 @@ Given "the master account admin has username {string} and password {string}" do 
 end
 
 When "I am logged in as master admin on master domain" do
-  step %(the current domain is #{Account.master.domain})
+  step %(the current domain is "#{Account.master.domain}")
   step %(I log in as provider "#{Account.master.admins.first.username}")
 end
 
@@ -67,22 +67,22 @@ When "I log in as provider {string}" do |username|
   step %(I log in as provider "#{username}" with password "supersecret")
 end
 
-When "I log in as {string} on {}" do |username, domain|
+When "I log in as {string} on {string}" do |username, domain|
   # sometimes the domain is an array. In 1.9 Array#to_s is different
   # so we need to handle it
   domain = domain.first if domain.is_a? Array
-  step %(I am logged in as "#{username}" on #{domain})
+  step %(I am logged in as "#{username}" on "#{domain}")
 end
 
-When "I log in as provider {string} on {}" do |username, domain|
+When "I log in as provider {string} on {string}" do |username, domain|
   # sometimes the domain is an array. In 1.9 Array#to_s is different
   # so we need to handle it
   domain = domain.first if domain.is_a? Array
-  step %(I am logged in as provider "#{username}" on #{domain})
+  step %(I am logged in as provider "#{username}" on "#{domain}")
 end
 
 When "I log in as {string} on the admin domain of {provider}" do |username, provider|
-  step %(I log in as provider "#{username}" on #{provider.admin_domain})
+  step %(I log in as provider "#{username}" on "#{provider.admin_domain}")
 end
 
 When "I try to log in as {string}" do |username|
@@ -100,7 +100,6 @@ When "I try to log in as {string} with password {string}" do |username, password
 end
 
 When "I try to log in as provider {string} with password {string}" do |username, password|
-  # binding.pry
   visit provider_login_path
   fill_in_login_data(username, password)
 end
@@ -151,5 +150,5 @@ end
 
 Then "I should not be logged in" do
   # HAX: Check the logout link is not present. Don't know how to check this in a more explicit way.
-  step 'I should not see link to logout'
+  step %(I should not see link to logout)
 end

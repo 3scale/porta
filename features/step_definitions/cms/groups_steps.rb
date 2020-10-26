@@ -37,15 +37,11 @@ When "I update a group" do
 end
 
 Then "the group {string} should be created" do |name|
-  Group.find_by!(name: name).should_not be_nil
+  assert_not_nil Group.find_by(name: name)
 end
 
-Then "I should see the {buyer} belongs to the buyer group {group_of}" do |account, group|
-  assert account.groups.include?(group)
-end
-
-Then "I should see the {buyer} does not belong to the buyer group {group_of}" do |account, group|
-  assert account.groups.include?(group) # TODO: is this assertion right?
+Then "I should see the {buyer} {does}( )belong(s) to the {buyer_group_of_provider}" do |account, belongs, group|
+  assert_equal belongs, account.groups.include?(group)
 end
 
 Then "I should see no groups" do

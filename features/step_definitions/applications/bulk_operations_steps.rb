@@ -11,7 +11,8 @@ end
 
 def check_or_uncheck_selected_row(set, text = nil)
   selector = if text
-               [:xpath, "//tbody/tr/td[*[text() = #{text.inspect}] | text() = #{text.inspect}]/preceding-sibling::td//input[@type='checkbox' and contains(@name,'select')]"]
+               content = text.inspect
+               [:xpath, "//tbody/tr/td[*[text() = #{content}] | text() = #{content}]/preceding-sibling::td//input[@type='checkbox' and contains(@name,'select')]"]
              else
                "input[type='checkbox'][name*='select']"
              end

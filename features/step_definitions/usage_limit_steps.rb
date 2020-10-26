@@ -9,13 +9,13 @@ end
 
 Then "I should see hourly usage limit of {int} for {metric}" do |value, metric|
   within "##{dom_id(metric)}_slot #usage_limits_table" do
-    assert has_table_row_with_cells?('1 hour', value)
+    assert table_row_with_cells?('1 hour', value)
   end
 end
 
 Then "I should see a usage limit of {int} for {metric_on_application_plan} per {string}" do |value, metric, period|
   within "##{dom_id(metric)}_slot #usage_limits_table" do
-    assert has_table_row_with_cells?(period, value)
+    assert table_row_with_cells?(period, value)
   end
 end
 
@@ -115,13 +115,14 @@ Then "the plan {should} have visible usage limits" do |should_have|
 end
 
 def visit_edit_plan(plan)
-  plan.should be
+  assert plan
 
   step %(I go to the application plans admin page)
 
+  plan_name = plan.name
   within plans do
-    click_on "Edit Application plan '#{plan.name}'"
+    click_on "Edit Application plan '#{plan_name}'"
   end
 
-  page.should have_css 'h1', text: "Application Plan #{plan.name}"
+  page.should have_css('h1', text: "Application Plan #{plan_name}")
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2010, Nathaniel Ritmeyer. All rights reserved.
 #
 # http://www.natontesting.com
@@ -17,13 +19,11 @@ class Unused < Cucumber::Formatter::Stepdefs
     cutting = false
     result = []
 
-    File.new(name).each_line.with_index do |l,i|
-      cutting = true if (i == line_number)
+    File.new(name).each_line.with_index do |l, i|
+      cutting = true if i == line_number
 
-      if cutting
-        if (l =~ /^end$/)
-          cutting = false
-        end
+      if cutting && l.match?(/^end$/)
+        cutting = false
       else
         result << l
       end
@@ -32,18 +32,17 @@ class Unused < Cucumber::Formatter::Stepdefs
     File.new(name, 'w').write(result.join(""))
   end
 
-
   def print_summary(features)
     add_unused_stepdefs
-    keys = @stepdef_to_match.keys.sort {|a,b| a.regexp_source <=> b.regexp_source}
+    keys = @stepdef_to_match.keys.sort_by(&:regexp_source)
     puts "The following steps are unused...\n---------"
 
     keys.each do |key|
-      if @stepdef_to_match[key].none?
-        puts "#{key.file_colon_line} (#{key.regexp_source})"
-        file, start = key.file_colon_line.split(':')
-        Unused.replace_step_file(file,start.to_i - 1)
-      end
+      next unless @stepdef_to_match[key].none?
+
+      puts "#{key.file_colon_line} (#{key.regexp_source})"
+      file, start = key.file_colon_line.split(':')
+      Unused.replace_step_file(file,start.to_i - 1)
     end
   end
 end
