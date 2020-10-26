@@ -8,10 +8,9 @@ import { useClickOutside } from 'utilities/useClickOutside'
 
 import 'Navigation/styles/ContextSelector.scss'
 
-import type { Api, Menu } from 'Types'
+import type { Menu } from 'Types'
 
 type Props = {
-  currentApi: Api,
   activeMenu: Menu,
   audienceLink: string,
   productsLink: string,
@@ -20,7 +19,7 @@ type Props = {
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, backendsLink }: Props) => {
+const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
@@ -39,7 +38,7 @@ const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, b
   return (
     <div className="PopNavigation PopNavigation--context" ref={ref}>
       <a className="PopNavigation-trigger" href="#context-menu" title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
-        <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} apiap={true}/>
+        <ActiveMenuTitle activeMenu={activeMenu} />
       </a>
       {isOpen && (
         <ul id="context-menu" className="PopNavigation-list">

@@ -19,16 +19,13 @@ exports[`should have Dashboard, Audience, Products and Backends 1`] = `
     >
       <ActiveMenuTitle
         activeMenu=""
-        apiap={true}
-        currentApi={null}
       >
         <span
           className="ActiveMenuTitle"
         >
           <i
-            className="fa fa-puzzle-piece"
+            className="fa "
           />
-          Choose an API
           <i
             className="fa fa-chevron-down"
           />
@@ -114,16 +111,13 @@ exports[`should not have Audience if not provided 1`] = `
     >
       <ActiveMenuTitle
         activeMenu=""
-        apiap={true}
-        currentApi={null}
       >
         <span
           className="ActiveMenuTitle"
         >
           <i
-            className="fa fa-puzzle-piece"
+            className="fa "
           />
-          Choose an API
           <i
             className="fa fa-chevron-down"
           />

@@ -10,7 +10,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   layout 'provider'
 
   def index
-    activate_menu :dashboard
+    activate_menu :backend_apis
     search = ThreeScale::Search.new(params[:search] || params)
     @raw_backend_apis = current_account.backend_apis
     @backend_apis = @raw_backend_apis.order(updated_at: :desc)
@@ -21,7 +21,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def new
-    activate_menu :dashboard
+    activate_menu :backend_apis
   end
 
   def create
@@ -29,7 +29,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
       redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend created'
     else
       flash.now[:error] = 'Backend could not be created'
-      activate_menu :dashboard
+      activate_menu :backend_apis
       render :new
     end
   end

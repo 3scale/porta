@@ -11,6 +11,7 @@ it('should return the proper title depending on the current menu', () => {
 
   expect(getWrapper('personal').text()).toEqual('Account Settings')
   expect(getWrapper('account').text()).toEqual('Account Settings')
+  expect(getWrapper('active_docs').text()).toEqual('Account Settings')
 
   expect(getWrapper('buyers').text()).toEqual('Audience')
   expect(getWrapper('finance').text()).toEqual('Audience')
@@ -18,22 +19,20 @@ it('should return the proper title depending on the current menu', () => {
   expect(getWrapper('site').text()).toEqual('Audience')
   expect(getWrapper('settings').text()).toEqual('Audience')
   expect(getWrapper('audience').text()).toEqual('Audience')
-
-  expect(getWrapper('applications').text()).toEqual('All APIs')
-  expect(getWrapper('active_docs').text()).toEqual('All APIs')
+  expect(getWrapper('applications').text()).toEqual('Audience')
 
   expect(getWrapper('serviceadmin', { name: 'Test' }).text())
-    .toEqual('Product: Test')
+    .toEqual('Products')
   expect(getWrapper('backend_api', { name: 'Test' }).text())
-    .toEqual('Backend: Test')
+    .toEqual('Backends')
 })
 
 it('should return the right title and icon when APIAP is disabled', () => {
   const wrapper = getWrapper('serviceadmin', { name: 'Test' }, false)
-  expect(wrapper.text()).toEqual('Api: Test')
-  expect(wrapper.find('i').first().prop('class')).toEqual('fa fa-puzzle-piece')
+  expect(wrapper.text()).toEqual('Products')
+  expect(wrapper.find('i').first().prop('class')).toEqual('fa fa-cubes')
 })
 
-it('should return a default title', () => {
-  expect(getWrapper().text()).toEqual('Choose an API')
+it('should not return a default title', () => {
+  expect(getWrapper().text()).toEqual('')
 })
