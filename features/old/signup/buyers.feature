@@ -5,14 +5,14 @@ Feature: Sign Up of enterprise buyers
   I want to sign up, activate and login
 
   Background:
-    Given a provider "foo.example.com"
-      And a account plan "Tier-1" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And a account plan "Tier-1" of provider "foo.3scale.localhost"
 
-      And a default service of provider "foo.example.com" has name "api"
+      And a default service of provider "foo.3scale.localhost" has name "api"
       And a service plan "Gold" for service "api" exists
       And an application plan "iPhone" of service "api"
 
-      And the current domain is foo.example.com
+      And the current domain is foo.3scale.localhost
 
   # regression test for https://github.com/3scale/system/pull/2902
   Scenario: Wrong activation code
@@ -23,14 +23,14 @@ Feature: Sign Up of enterprise buyers
     Given service plan "Gold" is default
       And account plan "Tier-1" is default
       And application plan "iPhone" is default
-      And provider "foo.example.com" has multiple applications disabled
+      And provider "foo.3scale.localhost" has multiple applications disabled
 
      When I go to the sign up page
       And I fill in the signup fields as "hugo"
      Then I should see the registration succeeded
       But user "hugo" should be pending
 
-    When I follow the activation link in an email sent to "hugo@example.com"
+    When I follow the activation link in an email sent to "hugo@3scale.localhost"
     Then I should see "Signup complete. You can now sign in."
      And user "hugo" should be active
 
@@ -40,7 +40,7 @@ Feature: Sign Up of enterprise buyers
     And account "hugo's stuff" should be buyer
 
   Scenario: Choose application plan, the rest is default
-    Given provider "foo.example.com" has multiple applications disabled
+    Given provider "foo.3scale.localhost" has multiple applications disabled
       And service plan "Gold" is default
       And account plan "Tier-1" is default
       And plan "iPhone" is published

@@ -5,10 +5,10 @@ Feature: Buyer side, account fields
 
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-    And a buyer "bob" signed up to provider "foo.example.com"
-    Given provider "foo.example.com" has the following fields defined for "Account":
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" has the following fields defined for "Account":
       | name            | choices | required | read_only | hidden |
       | false_field     |         |          |           |        |
       | required_field  |         | true     |           |        |
@@ -18,7 +18,7 @@ Feature: Buyer side, account fields
 
 
   Scenario: Hidden and not editable extra fields should not be editable
-    Given I log in as "bob" on foo.example.com
+    Given I log in as "bob" on foo.3scale.localhost
     When I go to the account edit page
     Then I should see the fields:
       | name                    |
@@ -34,7 +34,7 @@ Feature: Buyer side, account fields
 
 
   Scenario: Update an account with extra fields
-    Given I log in as "bob" on foo.example.com
+    Given I log in as "bob" on foo.3scale.localhost
     When I go to the account edit page
       And I leave "Required field" blank
       And I leave "False field" blank
@@ -53,7 +53,7 @@ Feature: Buyer side, account fields
     Given buyer "bob" has extra fields:
       | false_field | required_field | choices_field | non_editable | hidden_field |
       | falses      | required       | 1             | non_edit     | hidden       |
-      And I log in as "bob" on foo.example.com
+      And I log in as "bob" on foo.3scale.localhost
     When I go to the account page
     Then I should see "False field"
       And I should see "Required field"
@@ -62,8 +62,8 @@ Feature: Buyer side, account fields
     But I should not see "Hidden field"
 
   Scenario: Extra fields are sorted by position
-    Given I log in as "bob" on foo.example.com
-      And provider "foo.example.com" has the field "required_field" for "Account" in the position 20
+    Given I log in as "bob" on foo.3scale.localhost
+      And provider "foo.3scale.localhost" has the field "required_field" for "Account" in the position 20
     When I go to the account edit page
     Then I should see the fields in order:
       | name                    |
@@ -74,10 +74,10 @@ Feature: Buyer side, account fields
 
 
   Scenario: Country field works correctly
-    Given provider "foo.example.com" only has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" only has the following fields defined for "Account":
       | name    |
       | country |
-      And I log in as "bob" on foo.example.com
+      And I log in as "bob" on foo.3scale.localhost
     When I go to the account edit page
       And I select "Spain" from "Country"
       And I press "Update"

@@ -3,32 +3,32 @@ Feature: Users enter email unverified state
   The system must provide a way of handle them
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-    Given a buyer "alice" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+    Given a buyer "alice" signed up to provider "foo.3scale.localhost"
 
 
   Scenario: User in unverified_email state can login
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
     Then I should be logged in as "alice"
 
   @wip
   Scenario: User in unverified_email state sees notice in personal details page
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
       And I navigate to my personal details page
     Then I should see the notice to validate my email
 
   @wip
   Scenario: When user edits his email he should verify its email
     Given user "alice" is active
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
       And I navigate to my personal details page
 
-    When I fill in my email with "newmail@example.com"
+    When I fill in my email with "newmail@3scale.localhost"
       And I commit the changes to my personal details
-    Then "newmail@example.com" should receive an email to verify email address
+    Then "newmail@3scale.localhost" should receive an email to verify email address
 
     When I navigate to my personal details page
     Then I should see the notice to validate my email
@@ -36,7 +36,7 @@ Feature: Users enter email unverified state
   @wip
   Scenario: Email_unverified user receives verify email everytime he edits his details
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
       And I navigate to my personal details page
 
     When I change my name without changing the email
@@ -46,9 +46,9 @@ Feature: Users enter email unverified state
   @wip
   Scenario: User verify his email when logged in
     Given user "alice" is active
-    When I log in as "alice" on foo.example.com
-      And I change my email to "newmail@example.com"
-    Then "newmail@example.com" should receive an email to verify email address
+    When I log in as "alice" on foo.3scale.localhost
+      And I change my email to "newmail@3scale.localhost"
+    Then "newmail@3scale.localhost" should receive an email to verify email address
 
     When I follow the link to verify email in the email to verify email address
     Then I should see the notice that the email is verified
@@ -57,9 +57,9 @@ Feature: Users enter email unverified state
   @wip
   Scenario: User verify his email when not logged in
     Given user "alice" is active
-    When I log in as "alice" on foo.example.com
-      And I change my email to "newmail@example.com"
-    Then "newmail@example.com" should receive an email to verify email address
+    When I log in as "alice" on foo.3scale.localhost
+      And I change my email to "newmail@3scale.localhost"
+    Then "newmail@3scale.localhost" should receive an email to verify email address
 
     When I log out
       And I follow the link to verify email in the email to verify email address
@@ -69,7 +69,7 @@ Feature: Users enter email unverified state
   @wip
   Scenario: User restart email verification process
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
       And I navigate to my personal details page
       And I resend the email verification
     Then user "alice" should receive an email to verify email address

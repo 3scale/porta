@@ -5,27 +5,27 @@ Feature: Credit card details
 
   Background:
     Given the time is 1st June 2009
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" is charging
-      And provider "foo.example.com" has "finance" switch visible
-    Given the current domain is "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" is charging
+      And provider "foo.3scale.localhost" has "finance" switch visible
+    Given the current domain is "foo.3scale.localhost"
 
-    And an application plan "Pro" of provider "foo.example.com"
+    And an application plan "Pro" of provider "foo.3scale.localhost"
     And a buyer without billing address "kenny" signed up to application plan "Pro"
     And a buyer "stan" signed up to application plan "Pro"
 
   Scenario: Entering cc details disabled if billing address not provided
-    Given the current domain is foo.example.com
-      And provider "foo.example.com" manages payments with "stripe"
-    When I log in as "kenny" on foo.example.com
+    Given the current domain is foo.3scale.localhost
+      And provider "foo.3scale.localhost" manages payments with "stripe"
+    When I log in as "kenny" on foo.3scale.localhost
      And I go to the stripe credit card details page
     Then I should not see button "Edit Credit Card Details"
 
   Scenario: Entering cc details allowed after billing address provided
-    Given the current domain is foo.example.com
+    Given the current domain is foo.3scale.localhost
       And I have stripe_elements feature disabled
-      And provider "foo.example.com" manages payments with "stripe"
-    When I log in as "kenny" on foo.example.com
+      And provider "foo.3scale.localhost" manages payments with "stripe"
+    When I log in as "kenny" on foo.3scale.localhost
      And I go to the stripe credit card details page
     Then I should not see button "Edit Credit Card Details"
 
@@ -47,9 +47,9 @@ Feature: Credit card details
     And I should see button "Save details"
 
   Scenario: Billing Address fields are shown if they exist
-    Given the current domain is foo.example.com
-      And provider "foo.example.com" manages payments with "stripe"
-    When I log in as "stan" on foo.example.com
+    Given the current domain is foo.3scale.localhost
+      And provider "foo.3scale.localhost" manages payments with "stripe"
+    When I log in as "stan" on foo.3scale.localhost
      And I go to the stripe credit card details page
 
     Then I should see "Timbuktu"
@@ -58,10 +58,10 @@ Feature: Credit card details
       And I should see "+123 456 789"
 
   Scenario: Credit card fields are shown if they exist
-    Given the current domain is foo.example.com
+    Given the current domain is foo.3scale.localhost
       And buyer "stan" has last digits of credit card number "1234" and expiration date March, 2018
-      And provider "foo.example.com" manages payments with "stripe"
-    When I log in as "stan" on foo.example.com
+      And provider "foo.3scale.localhost" manages payments with "stripe"
+    When I log in as "stan" on foo.3scale.localhost
     And I go to the stripe credit card details page
 
     Then I should see "Expiration date"
@@ -70,9 +70,9 @@ Feature: Credit card details
       And I should see "XXXX-XXXX-XXXX-1234"
 
   Scenario: Billing address errors (for all pg)
-    Given the current domain is foo.example.com
-      And provider "foo.example.com" manages payments with "stripe"
-     When I log in as "kenny" on foo.example.com
+    Given the current domain is foo.3scale.localhost
+      And provider "foo.3scale.localhost" manages payments with "stripe"
+     When I log in as "kenny" on foo.3scale.localhost
       And I go to the stripe credit card details page
       And I follow "First add a billing address"
 

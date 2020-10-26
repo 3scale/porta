@@ -6,9 +6,9 @@ Feature: Default metrics
   @wip @3D
   Scenario: Default metrics available after signup
     Given provider "master" has default service and account plan
-    When new provider "bar.example.com" signs up and activates
-      And current domain is the admin domain of provider "bar.example.com"
-      And I log in as provider "bar.example.com"
+    When new provider "bar.3scale.localhost" signs up and activates
+      And current domain is the admin domain of provider "bar.3scale.localhost"
+      And I log in as provider "bar.3scale.localhost"
     And I go to the application plans admin page
       And I follow "Create new plan"
       And I fill in "Name" with "Amazing"

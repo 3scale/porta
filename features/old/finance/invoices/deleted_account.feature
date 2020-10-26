@@ -5,11 +5,11 @@ Feature: Invoices of deleted account
 
  Background:
   Given the date is 25th January 2012
-  Given a provider "xyz.example.com" with prepaid billing enabled
-  Given provider "xyz.example.com" has "finance" switch allowed
-    And an application plan "Plan" of provider "xyz.example.com"
+  Given a provider "xyz.3scale.localhost" with prepaid billing enabled
+  Given provider "xyz.3scale.localhost" has "finance" switch allowed
+    And an application plan "Plan" of provider "xyz.3scale.localhost"
     And a buyer "bob" signed up to application plan "Plan"
-  Given current domain is the admin domain of provider "xyz.example.com"
+  Given current domain is the admin domain of provider "xyz.3scale.localhost"
 
  @commit-transactions
  Scenario: I cannot but view the invoices of a deleted buyer
@@ -19,7 +19,7 @@ Feature: Invoices of deleted account
      And I issue the invoice number "2011-01-00000001"
      And account "bob" is deleted
 
-    When I log in as provider "xyz.example.com"
+    When I log in as provider "xyz.3scale.localhost"
      And I go to the invoices issued by me
     Then I should see 1 invoice
 

@@ -3,12 +3,12 @@ Feature: Signup using Cas
   I should not rage
 
   Background:
-    Given a provider "foo.example.com" with default plans
-      And provider "foo.example.com" uses Cas authentication
+    Given a provider "foo.3scale.localhost" with default plans
+      And provider "foo.3scale.localhost" uses Cas authentication
       And an application plan "iRage" of service "default"
       And application plan "iRage" is default
 
-    Given the current domain is foo.example.com
+    Given the current domain is foo.3scale.localhost
 
   Scenario: Signup with Internal
     When I go to the sign up page

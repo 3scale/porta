@@ -4,14 +4,14 @@ Feature: Liquid tags
   There should be tags available for me to use
 
   Background:
-    Given a provider "foo.example.com"
-      And the current domain is foo.example.com
-    And I am logged in as "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And the current domain is foo.3scale.localhost
+    And I am logged in as "foo.3scale.localhost"
 
 
   Scenario: Tag page_section works for simple cms
-    Given provider "foo.example.com" has Browser CMS deactivated
-    And a liquid template "main_layout" of provider "foo.example.com" with content
+    Given provider "foo.3scale.localhost" has Browser CMS deactivated
+    And a liquid template "main_layout" of provider "foo.3scale.localhost" with content
       """
         simple cms page_section {{ page_section }}
       """
@@ -20,8 +20,8 @@ Feature: Liquid tags
 
 
   Scenario: Tag page_section works for browser cms
-    Given provider "foo.example.com" has Browser CMS activated
-    And a liquid template "main_layout" of provider "foo.example.com" with content
+    Given provider "foo.3scale.localhost" has Browser CMS activated
+    And a liquid template "main_layout" of provider "foo.3scale.localhost" with content
       """
         bcms page_section {{ page_section }}
       """

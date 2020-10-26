@@ -54,7 +54,7 @@ Then /^the html head should contain "(.*?)"$/ do |html|
 end
 
 Then /^the html should contain the SSO data$/ do
-  authorization = User.find_by(email: 'foo@example.com').sso_authorizations.last!
+  authorization = User.find_by(email: 'foo@3scale.localhost').sso_authorizations.last!
   step "the html body should contain \"#{authorization.authentication_provider.system_name}\""
   step "the html body should contain \"#{authorization.id_token}\""
 end

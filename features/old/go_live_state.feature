@@ -1,9 +1,9 @@
 Feature: Dashboards
   Background:
-    Given a provider "foo.example.com"
-    And current domain is the admin domain of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
     And all the rolling updates features are off
-    And I log in as provider "foo.example.com"
+    And I log in as provider "foo.3scale.localhost"
 
   Scenario: "Steps completed with APIcast"
     When I complete the "apicast_gateway_deployed" step

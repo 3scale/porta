@@ -6,21 +6,21 @@ Feature: Users can subscribe to forum topics
   Background:
     Given a published plan "Basic" of provider "Master account"
       And plan "Basic" has "Forum" enabled
-    Given a provider "foo.example.com" signed up to plan "Basic"
+    Given a provider "foo.3scale.localhost" signed up to plan "Basic"
     And all the rolling updates features are off
-      And provider "foo.example.com" has "forum" enabled
-      And the forum of "foo.example.com" have topics
-      And a buyer "buyer" signed up to provider "foo.example.com"
+      And provider "foo.3scale.localhost" has "forum" enabled
+      And the forum of "foo.3scale.localhost" have topics
+      And a buyer "buyer" signed up to provider "foo.3scale.localhost"
       And an active user "luser" of account "buyer"
-    Given provider "foo.example.com" has the following users:
+    Given provider "foo.3scale.localhost" has the following users:
      | User          | State  |
      | member_on_foo | active |
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
 
     @javascript
   Scenario: Active user can subscribe to topics
     Given I am logged in as "buyer"
-    When I navigate to a topic in the forum of "foo.example.com"
+    When I navigate to a topic in the forum of "foo.3scale.localhost"
     Then I should see the link to subscribe to topic
     When I follow "Subscribe to thread"
     Then I should see that I am subscribed to the topic
@@ -30,15 +30,15 @@ Feature: Users can subscribe to forum topics
   Scenario: Email unverified user can not subscribe to topics
     Given I am logged in as "buyer"
       And user "buyer" is email unverified
-    When I navigate to a topic in the forum of "foo.example.com"
+    When I navigate to a topic in the forum of "foo.3scale.localhost"
     Then I should see the notice to validate my email
 
   Scenario: User subscribe to topics
     Given I am logged in as "buyer"
-    When I navigate to a topic in the forum of "foo.example.com"
-    When user "buyer" subscribe to the topic in the forum of "foo.example.com"
+    When I navigate to a topic in the forum of "foo.3scale.localhost"
+    When user "buyer" subscribe to the topic in the forum of "foo.3scale.localhost"
 
-    When I navigate to a topic in the forum of "foo.example.com"
+    When I navigate to a topic in the forum of "foo.3scale.localhost"
     Then I should see that I am subscribed to the topic
       And I should see the link to unsubscribe to topic
       And I unsubscribe the topic
@@ -46,26 +46,26 @@ Feature: Users can subscribe to forum topics
 
   @emails
   Scenario: Active user subscribed to topic receives email on new posts in topic
-    Given user "buyer" is subscribed to the topic in the forum of "foo.example.com"
-    When the user "member_on_foo" post in the topic in the forum of "foo.example.com"
+    Given user "buyer" is subscribed to the topic in the forum of "foo.3scale.localhost"
+    When the user "member_on_foo" post in the topic in the forum of "foo.3scale.localhost"
     Then the user "buyer" should receive an email notifying of the new post
 
 
   Scenario: Active user subscribed to topic does not receive email when he creates a new post in topic
-    Given user "foo.example.com" is subscribed to the topic in the forum of "foo.example.com"
-    When the user "foo.example.com" post in the topic in the forum of "foo.example.com"
-    Then the user "foo.example.com" should not receive an email notifying of the new post
+    Given user "foo.3scale.localhost" is subscribed to the topic in the forum of "foo.3scale.localhost"
+    When the user "foo.3scale.localhost" post in the topic in the forum of "foo.3scale.localhost"
+    Then the user "foo.3scale.localhost" should not receive an email notifying of the new post
 
 
   Scenario: Email unverified user subscribed to topic does not receives email on new posts in topic
-    Given user "foo.example.com" is subscribed to the topic in the forum of "foo.example.com"
-      And user "foo.example.com" is email unverified
-    When the user "member_on_foo" post in the topic in the forum of "foo.example.com"
-    Then the user "foo.example.com" should not receive an email notifying of the new post
+    Given user "foo.3scale.localhost" is subscribed to the topic in the forum of "foo.3scale.localhost"
+      And user "foo.3scale.localhost" is email unverified
+    When the user "member_on_foo" post in the topic in the forum of "foo.3scale.localhost"
+    Then the user "foo.3scale.localhost" should not receive an email notifying of the new post
 
 
   Scenario: User manages its subscriptions to topics
-    Given the forum of "foo.example.com" has the following topics:
+    Given the forum of "foo.3scale.localhost" has the following topics:
       | Topic                    |
       | subscribed topic         |
       | another subscribed topic |

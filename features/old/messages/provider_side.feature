@@ -5,12 +5,12 @@ Feature: Provider side messages
   I want to have an internal messaging system at my disposal
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And a buyer "bob" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
   Scenario: Compose link on the messages dashboard
     When I go to the provider dashboard
@@ -30,7 +30,7 @@ Feature: Provider side messages
     And I press "Send"
     Then I should see "Message was sent"
     And account "bob" should have 0 messages
-    Then a message should be sent from provider "foo.example.com" to buyer "bob" with subject "Party tonite!" and body "You are invited to my party."
+    Then a message should be sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Party tonite!" and body "You are invited to my party."
     When I follow "Dashboard"
     And I follow "0 Messages"
     And I follow "Sent messages"
@@ -40,7 +40,7 @@ Feature: Provider side messages
     And I should see "You are invited to my party."
 
   Scenario: Receiving a message
-    Given a message sent from buyer "bob" to provider "foo.example.com" with subject "I want out!" and body "I hate this system, delete my account ASAP!"
+    Given a message sent from buyer "bob" to provider "foo.3scale.localhost" with subject "I want out!" and body "I hate this system, delete my account ASAP!"
 
     And I go to the provider dashboard
     And I follow "0 Messages"
@@ -52,8 +52,8 @@ Feature: Provider side messages
     Then I should see read message from "bob" with subject "I want out!"
 
   Scenario: Bulk operations
-    Given account "foo.example.com" has no messages
-    And 40 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
+    Given account "foo.3scale.localhost" has no messages
+    And 40 messages sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Wildness" and body "On the road."
 
     And I go to the provider dashboard
     And I follow "0 Messages"
@@ -84,9 +84,9 @@ Feature: Provider side messages
       Then "(select all 40 messages)" should not be visible
 
   Scenario: Availability of select all messages action
-    Given account "foo.example.com" has no messages
+    Given account "foo.3scale.localhost" has no messages
 
-    And 20 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
+    And 20 messages sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Wildness" and body "On the road."
 
     And I go to the provider dashboard
     And I follow "0 Messages"
@@ -94,7 +94,7 @@ Feature: Provider side messages
     When I check select in table header
       Then I should not see "(select all 20 messages)"
 
-    And 20 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
+    And 20 messages sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Wildness" and body "On the road."
 
     And I go to the provider dashboard
     And I follow "0 Messages"
@@ -103,8 +103,8 @@ Feature: Provider side messages
       Then I should see "(select all 40 messages)"
 
   Scenario: Deleting a message with bulk operations
-    Given a message sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "Into the wild!"
-    Given a message sent from buyer "bob" to provider "foo.example.com" with subject "Alaska" and body "Into the wild!"
+    Given a message sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Wildness" and body "Into the wild!"
+    Given a message sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Alaska" and body "Into the wild!"
 
     And I go to the provider dashboard
     And I follow "0 Messages"
@@ -121,9 +121,9 @@ Feature: Provider side messages
       And I should see "Alaska"
 
   Scenario: Deleting all messages with bulk operations
-    Given account "foo.example.com" has no messages
+    Given account "foo.3scale.localhost" has no messages
 
-    And 40 messages sent from buyer "bob" to provider "foo.example.com" with subject "Wildness" and body "On the road."
+    And 40 messages sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Wildness" and body "On the road."
 
     When I go to the provider dashboard
     And I follow "0 Messages"

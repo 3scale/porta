@@ -5,13 +5,13 @@ Feature: Provider lists all invoices
 
   Background:
     # TODO: Create invoices directly from background
-    Given a provider "xyz.example.com" with billing enabled
-      And provider "xyz.example.com" has "finance" switch allowed
-    Given a provider "other.example.com" with billing enabled
-      And provider "other.example.com" has "finance" switch allowed
+    Given a provider "xyz.3scale.localhost" with billing enabled
+      And provider "xyz.3scale.localhost" has "finance" switch allowed
+    Given a provider "other.3scale.localhost" with billing enabled
+      And provider "other.3scale.localhost" has "finance" switch allowed
 
-    Given an application plan "Fixed" of provider "xyz.example.com" for 200 monthly
-      And an application plan "Fixed_for_other" of provider "other.example.com" for 200 monthly
+    Given an application plan "Fixed" of provider "xyz.3scale.localhost" for 200 monthly
+      And an application plan "Fixed_for_other" of provider "other.3scale.localhost" for 200 monthly
       And the date is 5th October 2010
       And a buyer "foobar" signed up to application plan "Fixed"
       And a buyer "other_buyer" signed up to application plan "Fixed_for_other"
@@ -20,13 +20,13 @@ Feature: Provider lists all invoices
       And time flies to 20th April 2011
 
   Scenario: Filter invoices on other
-      Given I log in as "other.example.com" on the admin domain of provider "other.example.com"
+      Given I log in as "other.3scale.localhost" on the admin domain of provider "other.3scale.localhost"
       And I navigate to invoices issued by me
       Then I should see 7 invoices
 
   @commit-transactions
   Scenario: Filter invoices
-      Given I log in as "xyz.example.com" on the admin domain of provider "xyz.example.com"
+      Given I log in as "xyz.3scale.localhost" on the admin domain of provider "xyz.3scale.localhost"
         And I navigate to invoices issued by me
 
       Then I should see 10 invoices
@@ -79,7 +79,7 @@ Feature: Provider lists all invoices
   Scenario: Filter deleted accounts
     Given account "mastermind" is deleted
 
-    Given I log in as "xyz.example.com" on the admin domain of provider "xyz.example.com"
+    Given I log in as "xyz.3scale.localhost" on the admin domain of provider "xyz.3scale.localhost"
       And I navigate to invoices issued by me
 
      Then I should see 10 invoices

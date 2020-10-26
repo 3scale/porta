@@ -11,10 +11,10 @@ Feature: Provider invoices for 3scale
       And an application plan "Pro" of provider "master" for 3100 monthly
 
   Scenario: List my invoices - full for Mega
-    And a provider "foo.example.com" signed up to plan "Mega"
+    And a provider "foo.3scale.localhost" signed up to plan "Mega"
       And 1 day passes
 
-     When I am logged in as provider "foo.example.com" on its admin domain
+     When I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to my invoices from 3scale page
      Then I should see 1 invoices
 
@@ -24,8 +24,8 @@ Feature: Provider invoices for 3scale
 
 
   Scenario: List my invoices - empty for Base
-    Given a provider "foo.example.com" signed up to plan "Base"
-      And I am logged in as provider "foo.example.com" on its admin domain
+    Given a provider "foo.3scale.localhost" signed up to plan "Base"
+      And I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to my invoices from 3scale page
      Then I should see "You have no invoices"
 
@@ -33,9 +33,9 @@ Feature: Provider invoices for 3scale
   @stats
   Scenario: Invoice price is ok when starting from power
     Given the time is 5th May 2009
-      And a provider "foo.example.com" signed up to plan "Mega"
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+      And a provider "foo.3scale.localhost" signed up to plan "Mega"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
 
       And time flies to 25th May 2009
       And I change application plan to "Pro"
@@ -52,10 +52,10 @@ Feature: Provider invoices for 3scale
   @stats
   Scenario: Invoice price is ok when starting from base
     Given the time is 1st May 2009
-      And a provider "foo.example.com" signed up to plan "Base"
-    Given current domain is the admin domain of provider "foo.example.com"
+      And a provider "foo.3scale.localhost" signed up to plan "Base"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given the time is 5th May 2009
-      And I log in as provider "foo.example.com"
+      And I log in as provider "foo.3scale.localhost"
       And I change application plan to "Mega"
 
       And time flies to 25th May 2009

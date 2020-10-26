@@ -4,10 +4,10 @@ Feature: Buyer users fields management
   I want to be able to manage the fields of my users
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And a buyer "SpaceWidgets" signed up to provider "foo.example.com"
-    Given provider "foo.example.com" has the following fields defined for "User":
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" has the following fields defined for "User":
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -18,8 +18,8 @@ Feature: Buyer users fields management
 
 
   Scenario: Fields are not required/hidden/read_only for providers
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
     When I go to the buyer user edit page for "SpaceWidgets"
 
     Then fields should be required:
@@ -41,8 +41,8 @@ Feature: Buyer users fields management
 
 
   Scenario: Fields edition
-    Given current domain is the admin domain of provider "foo.example.com"
-     And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+     And I am logged in as provider "foo.3scale.localhost"
     When I go to the buyer user edit page for "SpaceWidgets"
       And I fill in "First name" with "bob"
       And I fill in "User extra read only" with "notEditable"

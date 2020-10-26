@@ -6,10 +6,10 @@ Feature: Mass email bulk operations
 
   Background:
     Given all the rolling updates features are off
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
 
-    Given these buyers signed up to provider "foo.example.com"
+    Given these buyers signed up to provider "foo.3scale.localhost"
       | bob  |
       | jane |
 
@@ -17,8 +17,8 @@ Feature: Mass email bulk operations
       And admin of account "bob" has email "bob@bob.com"
       And I don't care about application keys
 
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Send mass email to application owners
       And I am on the accounts admin page

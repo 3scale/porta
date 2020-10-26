@@ -4,14 +4,14 @@ Feature: Wizard Billing information
   I want a wizard to enter the required account information and credit card information
 
   Background:
-  Given a provider "foo.example.com"
-    And provider "foo.example.com" doesn't have billing address
-    And current domain is the admin domain of provider "foo.example.com"
+  Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" doesn't have billing address
+    And current domain is the admin domain of provider "foo.3scale.localhost"
     And provider "master" has billing enabled
     And provider "master" has testing credentials for braintree
     And Braintree is stubbed to accept credit card
     And Braintree is stubbed for wizard
-    And I log in as provider "foo.example.com"
+    And I log in as provider "foo.3scale.localhost"
   Given master provider has the following fields defined for "Account":
       | name              | choices | label          | required | read_only | hidden |
       | org_legaladdress  |         | Address        | false    | false     | false  |
@@ -44,5 +44,5 @@ Feature: Wizard Billing information
     And I fill in the braintree credit card iframe
     And I select "Spain" from "Country"
     And I press "Save credit card"
-   Then the current domain should be admin.foo.example.com
+   Then the current domain should be admin.foo.3scale.localhost
    And I should be on the provider account page

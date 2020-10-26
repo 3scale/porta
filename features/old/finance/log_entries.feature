@@ -4,23 +4,23 @@ Feature: Log Entries
   I want to see traces of what happened to billing strategy
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" is charging
-      And provider "foo.example.com" has "finance" switch visible
-    Given an application plan "FreeAsInBeer" of provider "foo.example.com" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.example.com" for 31 monthly
-      And an application plan "PaidAsInDiplomat" of provider "foo.example.com" for 3100 monthly
-    Given the current domain is foo.example.com
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" is charging
+      And provider "foo.3scale.localhost" has "finance" switch visible
+    Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
+      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
+      And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
+    Given the current domain is foo.3scale.localhost
 
 @wip
   Scenario: Log Entry is created when invoice is issued
     Given the time is 25th April 2009
-      And provider "foo.example.com" is charging
+      And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch"
 
     When time flies to 15th May 2009
-      And current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost"
     When I go to the log entries page
      And I wait for 3 seconds
     Then I should see the following log entries:
@@ -36,12 +36,12 @@ Feature: Log Entries
 @wip
     Scenario: Log entry warning is created on provider's billing strategy change
       Given the time is 2nd May 2009
-      And provider "foo.example.com" is charging
+      And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch"
       When time flies to 15th May 2009
-      And provider "foo.example.com" changes billing to prepaid
+      And provider "foo.3scale.localhost" changes billing to prepaid
       When time flies to 17th May 2009
-      And current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
       And I go to the log entries page
       Then I should see log entry "Changed Billing Strategy to prepaid" with level "WARNING" on "2009-05-15"

@@ -7,18 +7,18 @@ Feature: Application Plan customization
     Given a published plan "Pro" of provider "Master account"
     And plan "Pro" has "custom plans" enabled
 
-    And a provider "foo.example.com" signed up to plan "Pro"
-    And provider "foo.example.com" has billing enabled
+    And a provider "foo.3scale.localhost" signed up to plan "Pro"
+    And provider "foo.3scale.localhost" has billing enabled
 
-    And an application plan "Basic" of provider "foo.example.com"
+    And an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has monthly fee of 1000
 
     And a buyer "bob" signed up to application plan "Basic"
 
   @ignore-backend @javascript
   Scenario: Customize the same plan twice (to check duplicate handling)
-    Given current domain is the admin domain of provider "foo.example.com"
-    When I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    When I am logged in as provider "foo.3scale.localhost"
 
     And I go to the provider side application page for "bob"
     Then I should see "Application Plan: Basic"
@@ -38,7 +38,7 @@ Feature: Application Plan customization
   @ignore-backend
   Scenario: Decustomize
     Given buyer "bob" has customized plan
-    When I am logged in as provider "foo.example.com" on its admin domain
+    When I am logged in as provider "foo.3scale.localhost" on its admin domain
     And I go to the provider side application page for "bob"
     Then I should see "Custom Application Plan"
     When I press "Remove customization"
@@ -48,9 +48,9 @@ Feature: Application Plan customization
   Scenario: Can edit custom plans
     # this switch is not needed for the core functionality but apps
     # list wouldn't be available if not set
-    Given provider "foo.example.com" has "multiple_applications" switch allowed
+    Given provider "foo.3scale.localhost" has "multiple_applications" switch allowed
       When buyer "bob" has customized plan
-       And I am logged in as provider "foo.example.com" on its admin domain
+       And I am logged in as provider "foo.3scale.localhost" on its admin domain
        And I go to the applications admin page
        And I follow "Basic (custom)"
      Then I should see "Application Plan Basic (custom)"

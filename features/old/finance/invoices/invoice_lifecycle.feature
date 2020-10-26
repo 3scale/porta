@@ -4,15 +4,15 @@ Feature: Invoice lifecycle
   I want to see the whole invoice lifecycle
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" is fake charging
-      And provider "foo.example.com" has "finance" switch visible
-      And provider "foo.example.com" has valid payment gateway
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" is fake charging
+      And provider "foo.3scale.localhost" has "finance" switch visible
+      And provider "foo.3scale.localhost" has valid payment gateway
 
-      And an application plan "PaidAsInLunch" of provider "foo.example.com" for 31 monthly
+      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And the time is 29th May 2009
       And a buyer "alice" signed up to application plan "PaidAsInLunch"
-      And I log in as "alice" on foo.example.com
+      And I log in as "alice" on foo.3scale.localhost
 
   @commit-transactions
   Scenario: Normal postpaid life-cycle

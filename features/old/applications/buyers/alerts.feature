@@ -4,17 +4,17 @@ Feature: API Usage alerts
   I want to see usage alerts and violations
 
   Background:
-    Given a provider "foo.example.com"
-      And a application plan "Default" of provider "foo.example.com"
-    Given a buyer "alice" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And a application plan "Default" of provider "foo.3scale.localhost"
+    Given a buyer "alice" signed up to provider "foo.3scale.localhost"
       And buyer "alice" has application "Aliget"
-      And a metric "foos" with friendly name "Number of Foos" of provider "foo.example.com"
-      And a metric "bars" with friendly name "Number of Bars" of provider "foo.example.com"
+      And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
+      And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
       And I have following API alerts:
       | Application | Timestamp           | Utilization | Level | Message         | Alert id |
       | Aliget      | 2010-10-14 11:11:00 | 0.9         | 90    | foos: 18 of 20  | 6        |
       | Aliget      | 2010-10-15 14:14:00 | 1.5         | 150   | foos: 30 of 20  | 7        |
-    Given the current domain is "foo.example.com"
+    Given the current domain is "foo.3scale.localhost"
 
   @ignore-backend @ignore-backend-alerts
   Scenario: Navigation
@@ -22,7 +22,7 @@ Feature: API Usage alerts
     When I am on the "Aliget" application page
     Then I should not see "API Alerts"
 
-    When default service of provider "foo.example.com" has allowed following alerts:
+    When default service of provider "foo.3scale.localhost" has allowed following alerts:
       | Who   | How | Levels |
       | buyer | web | 50, 90 |
     And I am on the "Aliget" application page
@@ -31,7 +31,7 @@ Feature: API Usage alerts
 
   Scenario: Listing alerts and violations
     Given I log in as "alice"
-      And default service of provider "foo.example.com" has allowed following alerts:
+      And default service of provider "foo.3scale.localhost" has allowed following alerts:
         | Who   | How | Levels |
         | buyer | web | 50, 90 |
     When I go to the alerts page of application "Aliget"
@@ -43,7 +43,7 @@ Feature: API Usage alerts
 
   Scenario: Deleting alerts
     Given I log in as "alice"
-      And default service of provider "foo.example.com" has allowed following alerts:
+      And default service of provider "foo.3scale.localhost" has allowed following alerts:
         | Who   | How | Levels |
         | buyer | web | 50, 90 |
      When I go to the alerts page of application "Aliget"
@@ -56,7 +56,7 @@ Feature: API Usage alerts
 
   Scenario: Deleting all alerts
     Given I log in as "alice"
-      And default service of provider "foo.example.com" has allowed following alerts:
+      And default service of provider "foo.3scale.localhost" has allowed following alerts:
         | Who   | How | Levels |
         | buyer | web | 50, 90 |
      When I go to the alerts page of application "Aliget"

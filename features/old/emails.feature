@@ -4,15 +4,15 @@ Feature: Emails
   I want to control email notifications like a boss
 
 Scenario: Disable 'Suspend Application' notification
-  Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "cinstance_messenger_suspended"
+  Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "cinstance_messenger_suspended"
     """
     {% email %}{% do_not_send %}{% endemail %}
     """
 
-   When a buyer "bob" signed up to provider "foo.example.com"
-    And I am logged in as provider "foo.example.com" on its admin domain
+   When a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost" on its admin domain
 
     And buyer "bob" has application "other"
     And I go to the provider side "other" application page
@@ -24,10 +24,10 @@ Scenario: Disable 'Suspend Application' notification
     Then I should receive no email with subject "Application has been suspended"
 
 Scenario: Disable 'Waiting list confirmation' notification
-    Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" requires accounts to be approved
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "account_confirmed"
+    Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "account_confirmed"
     """
     {% email %}{% do_not_send %}{% endemail %}
     Dear More Things,
@@ -35,22 +35,22 @@ Scenario: Disable 'Waiting list confirmation' notification
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
 
-    When I follow the activation link in an email sent to "Kirill@example.com"
+    When I follow the activation link in an email sent to "Kirill@3scale.localhost"
     Then I should see "once your account is approved"
 
     When I act as "Kirill"
     Then I should receive no email with subject "Waiting list confirmation"
 
 Scenario: Disable 'Waiting list confirmation' notification with truthy condition
-    Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" requires accounts to be approved
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "account_confirmed"
+    Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "account_confirmed"
     """
     {% if true %}{% email %}{% do_not_send %}{% endemail %}{% endif %}
     Dear More Things,
@@ -58,22 +58,22 @@ Scenario: Disable 'Waiting list confirmation' notification with truthy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
 
-    When I follow the activation link in an email sent to "Kirill@example.com"
+    When I follow the activation link in an email sent to "Kirill@3scale.localhost"
     Then I should see "once your account is approved"
 
     When I act as "Kirill"
     Then I should receive no email with subject "Waiting list confirmation"
 
 Scenario: Disable 'Waiting list confirmation' notification with falsy condition
-    Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" requires accounts to be approved
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "account_confirmed"
+    Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "account_confirmed"
     """
     {% if false %}{% email %}{% do_not_send %}{% endemail %}{% endif %}
     Dear More Things,
@@ -81,22 +81,22 @@ Scenario: Disable 'Waiting list confirmation' notification with falsy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
 
-    When I follow the activation link in an email sent to "Kirill@example.com"
+    When I follow the activation link in an email sent to "Kirill@3scale.localhost"
     Then I should see "once your account is approved"
 
     When I act as "Kirill"
     Then I should receive 1 email with subject "Waiting list confirmation"
 
 Scenario: Custom email subject with truthy condition
-    Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" requires accounts to be approved
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "account_confirmed"
+    Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "account_confirmed"
     """
     {% if true %}
       {% email %}
@@ -112,12 +112,12 @@ Scenario: Custom email subject with truthy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
 
-    When I follow the activation link in an email sent to "Kirill@example.com"
+    When I follow the activation link in an email sent to "Kirill@3scale.localhost"
     Then I should see "once your account is approved"
 
     When I act as "Kirill"
@@ -126,10 +126,10 @@ Scenario: Custom email subject with truthy condition
     Then I should receive 1 email with subject "Your account has been confirmed"
 
 Scenario: Custom email subject with falsy condition
-    Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" requires accounts to be approved
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "account_confirmed"
+    Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "account_confirmed"
     """
     {% if false %}
       {% email %}
@@ -145,12 +145,12 @@ Scenario: Custom email subject with falsy condition
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
 
-    When I follow the activation link in an email sent to "Kirill@example.com"
+    When I follow the activation link in an email sent to "Kirill@3scale.localhost"
     Then I should see "once your account is approved"
 
     When I act as "Kirill"
@@ -159,10 +159,10 @@ Scenario: Custom email subject with falsy condition
     Then I should receive 1 email with subject "Other custom subject"
 
 Scenario: Do not disable 'Waiting list confirmation' notification due to falsy condition but still change the subject
-    Given a provider "foo.example.com" with default plans
-    And provider "foo.example.com" requires accounts to be approved
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has email template "account_confirmed"
+    Given a provider "foo.3scale.localhost" with default plans
+    And provider "foo.3scale.localhost" requires accounts to be approved
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has email template "account_confirmed"
     """
     {% if false %}
       {% email %}
@@ -178,12 +178,12 @@ Scenario: Do not disable 'Waiting list confirmation' notification due to falsy c
     This email is to let you know that you own even more things.
     """
 
-    When the current domain is foo.example.com
+    When the current domain is foo.3scale.localhost
     And I go to the sign up page
     And I fill in the signup fields as "Kirill"
     Then I should see the registration succeeded
 
-    When I follow the activation link in an email sent to "Kirill@example.com"
+    When I follow the activation link in an email sent to "Kirill@3scale.localhost"
     Then I should see "once your account is approved"
 
     When I act as "Kirill"

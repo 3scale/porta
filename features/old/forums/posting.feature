@@ -5,16 +5,16 @@ Feature: Posting in the forum
   I want to post in the forum
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has "forum" enabled
-    And a buyer "alice" signed up to provider "foo.example.com"
-    And a buyer "bob" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "forum" enabled
+    And a buyer "alice" signed up to provider "foo.3scale.localhost"
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
   @recaptcha
   Scenario: New topic
-    Given provider "foo.example.com" has "spam protection level" set to "auto"
-    When I log in as "alice" on foo.example.com
+    Given provider "foo.3scale.localhost" has "spam protection level" set to "auto"
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
 
     And I follow "Start new thread"
@@ -27,9 +27,9 @@ Feature: Posting in the forum
 
   @recaptcha
   Scenario: Reply to a topic
-    Given the forum of "foo.example.com" has topic "How to get rich using this API?" from user "alice"
-      And provider "foo.example.com" has "spam protection level" set to "captcha"
-    When I log in as "bob" on foo.example.com
+    Given the forum of "foo.3scale.localhost" has topic "How to get rich using this API?" from user "alice"
+      And provider "foo.3scale.localhost" has "spam protection level" set to "captcha"
+    When I log in as "bob" on foo.3scale.localhost
     And I go to the forum page
     And I follow "How to get rich using this API?"
     And I fill in "Body" with "Just pass get-rich=true param in"
@@ -39,8 +39,8 @@ Feature: Posting in the forum
 
   @wip
   Scenario: New topic fails validation
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
     And I visit the page to create new topic
     Then I should see the page to create new topic

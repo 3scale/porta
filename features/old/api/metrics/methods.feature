@@ -6,11 +6,11 @@ Feature: Methods
   Background:
     Given a published plan "Pro" of provider "Master account"
     And plan "Pro" has "method tracking" enabled
-    Given a provider "foo.example.com" signed up to plan "Pro"
-    And current domain is the admin domain of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost" signed up to plan "Pro"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Create a method from the service definition page
-    When I log in as provider "foo.example.com"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the service definition page
     And I follow "New method"
     And I fill in "Friendly name" with "Search"

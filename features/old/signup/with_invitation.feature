@@ -5,20 +5,20 @@ Feature: Signup with invitation
   I want to use it to sign up
 
   Background:
-      And a provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
+      And a provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
 
   @javascript
   Scenario: Receiving an invitation, signing up with extra fields and signing in
-     Given the admin domain of provider "foo.example.com" is "admin.foo.example.com"
+     Given the admin domain of provider "foo.3scale.localhost" is "admin.foo.3scale.localhost"
      And master provider has the following fields defined for "User":
       | name       |
       | first_name |
       | last_name  |
-     When an invitation from account "foo.example.com" sent to "bob@foo.example.com"
-      And I follow the link to signup in the invitation sent to "bob@foo.example.com"
+     When an invitation from account "foo.3scale.localhost" sent to "bob@foo.3scale.localhost"
+      And I follow the link to signup in the invitation sent to "bob@foo.3scale.localhost"
       Then I should see the signup page
-      And the "Email" field should contain "bob@foo.example.com"
+      And the "Email" field should contain "bob@foo.3scale.localhost"
     When I fill in "Username" with "bob"
       And I fill in "First name" with "bob"
       And I fill in "Last name" with "dole"
@@ -26,8 +26,8 @@ Feature: Signup with invitation
       And I fill in "Password confirmation" with "monkey"
       And I press "Sign up"
     Then I should see "Thanks for signing up! You can now sign in."
-      And the current domain should be the admin domain of provider "foo.example.com"
-      But "bob@foo.example.com" should receive no email with subject "Account Activation"
+      And the current domain should be the admin domain of provider "foo.3scale.localhost"
+      But "bob@foo.3scale.localhost" should receive no email with subject "Account Activation"
     When I fill in "Username" with "bob"
       And I fill in "Password" with "monkey"
       And I press "Sign in"

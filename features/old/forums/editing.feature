@@ -5,25 +5,25 @@ Feature: Editing forum topics and posts
   I want to edit or delete my topics and posts
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has "forum" enabled
-    And a buyer "buyer" signed up to provider "foo.example.com"
-    And a buyer "luser" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "forum" enabled
+    And a buyer "buyer" signed up to provider "foo.3scale.localhost"
+    And a buyer "luser" signed up to provider "foo.3scale.localhost"
 
-    Given provider "foo.example.com" has the following users:
+    Given provider "foo.3scale.localhost" has the following users:
      | User              | State            |
      | alice             | active           |
      | bob               | active           |
 
     And the time is 14:00
 
-    And the forum of "foo.example.com" has the following topics:
+    And the forum of "foo.3scale.localhost" has the following topics:
      | Topic                  | Owner      | Created at |
      | from buyer today       | buyer      | today      |
      | from buyer yesterday   | buyer      | yesterday  |
      | from bob               | bob        | 5 days ago |
 
-    And the current domain is foo.example.com
+    And the current domain is foo.3scale.localhost
 
   Scenario: User can edit his topics the first day
     When I log in as "buyer"

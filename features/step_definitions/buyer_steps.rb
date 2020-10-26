@@ -238,13 +238,13 @@ And(/^has a buyer with (application|service) plan/) do |plan|
     step 'a service plan "Gold" for service "API" exists'
     step 'a buyer "Alexander" signed up to service plan "Gold"'
   else
-    step 'a application plan "Metal" of provider "foo.example.com"'
+    step 'a application plan "Metal" of provider "foo.3scale.localhost"'
     step 'a buyer "Alexander" signed up to application plan "Metal"'
   end
 end
 
 When(/^a buyer signs up/) do
-  step 'the current domain is foo.example.com'
+  step 'the current domain is foo.3scale.localhost'
   step %(I go to the sign up page)
   step %(I fill in the signup fields as "supertramp")
 end
@@ -255,7 +255,7 @@ end
 
 When(/^the buyer logs in$/) do
   steps %(
-    And the current domain is foo.example.com
+    And the current domain is foo.3scale.localhost
     And I go to the login page
     And I fill in "Username" with "Alexander"
     And I fill in "Password" with "supersecret"
@@ -280,5 +280,5 @@ When(/^I should be warned to complete my signup$/) do
 end
 
 When(/^as a developer$/) do
-  step 'the current domain is foo.example.com'
+  step 'the current domain is foo.3scale.localhost'
 end

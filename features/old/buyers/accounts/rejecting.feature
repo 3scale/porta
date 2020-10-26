@@ -4,27 +4,27 @@ Feature: Rejecting buyer account
   I want to reject them
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" requires cinstances to be approved before use
-    And provider "foo.example.com" requires accounts to be approved
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" requires cinstances to be approved before use
+    And provider "foo.3scale.localhost" requires accounts to be approved
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I am logged in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Rejecting a single buyer account
-    Given a pending buyer "bob" signed up to provider "foo.example.com"
+    Given a pending buyer "bob" signed up to provider "foo.3scale.localhost"
     When I go to the buyer account page for "bob"
     And I press "Reject"
     Then buyer "bob" should be rejected
 
   Scenario: Reject button is not shown for already rejected accounts
-    Given a rejected buyer "bob" signed up to provider "foo.example.com"
+    Given a rejected buyer "bob" signed up to provider "foo.3scale.localhost"
     When I go to the buyer account page for "bob"
     Then I should not see button to reject buyer "bob"
 
   Scenario: Reject button is not shown for approved accounts
-    Given an approved buyer "bob" signed up to provider "foo.example.com"
+    Given an approved buyer "bob" signed up to provider "foo.3scale.localhost"
     When I go to the buyer account page for "bob"
     Then I should not see button to reject buyer "bob"
 
