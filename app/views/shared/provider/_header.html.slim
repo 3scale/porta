@@ -11,12 +11,6 @@ header.pf-c-page__header id="user_widget" class='Header' class=('Header--master'
     = render 'shared/api_selector'
 
   .pf-c-page__header-tools
-    .PopNavigation.PopNavigation--account
-      - link = can?(:manage, current_account) ? provider_admin_account_path : edit_provider_admin_user_personal_details_path
-
-      a.PopNavigation-trigger class=('is-current' if active_menu?(:topmenu, :account)) href="#{link}"  title="Account Settings"
-        => icon('cog')
-
     // HACK of the month. See features/support/current_user.rb if you are hungry for reasons
     div class="username" style="display:none;"
       = current_user.username

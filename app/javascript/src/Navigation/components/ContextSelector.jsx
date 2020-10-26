@@ -13,13 +13,14 @@ import type { Menu } from 'Types'
 type Props = {
   activeMenu: Menu,
   audienceLink: string,
+  settingsLink: string,
   productsLink: string,
   backendsLink: string
 }
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink }: Props) => {
+const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
@@ -29,8 +30,9 @@ const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink 
     const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)
     const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].indexOf(activeMenu) !== -1)
     const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].indexOf(activeMenu) !== -1)
+    const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].indexOf(activeMenu) !== -1)
 
-    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected) {
+    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
       return 'PopNavigation-link current-context'
     }
 
@@ -64,6 +66,11 @@ const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink 
           <li className="PopNavigation-listItem">
             <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
               <i className='fa fa-cube' />Backends
+            </a>
+          </li>
+          <li className="PopNavigation-listItem">
+            <a className={getClassNamesForMenu('account')} href={settingsLink}>
+              <i className='fa fa-cog' />Account Settings
             </a>
           </li>
         </ul>
