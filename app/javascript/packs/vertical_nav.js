@@ -12,9 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const apiSelector = document.getElementById(containerId)
   const { currentApi } = apiSelector.dataset
 
-  console.log('what is the sections' + sections + JSON.stringify(sections))
-  console.log('what is the activeSection' + sections + JSON.stringify(activeSection))
-
   // TODO: where does this go?
   // - if can?(:manage, :plans)
   //   { title: 'Integration Errors', path: admin_service_errors_path(@service) },
