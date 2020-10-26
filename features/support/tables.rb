@@ -1,10 +1,8 @@
-World(Module.new do
-  def has_table_row_with_cells?(*cells)
-    assert_selector :xpath, selector_for_table_row_with_cells(*cells)
-  end
+# frozen_string_literal: true
 
-  def has_no_table_row_with_cells?(*cells)
-    assert_no_selector :xpath,selector_for_table_row_with_cells(*cells)
+World(Module.new do
+  def table_row_with_cells?(*cells)
+    assert_selector :xpath, selector_for_table_row_with_cells(*cells)
   end
 
   def selector_for_table_row_with_cells(*cells)

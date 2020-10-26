@@ -8,20 +8,11 @@ Given "the {provider} has following {plan_type} plan(s)" do |provider, plan_type
   end
 end
 
-Given "a published service plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :service, name: plan_name, issuer: service, published: true
-end
-
-Given "a default published service plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :service, name: plan_name, issuer: service, published: true, default: true
-end
-
-Given "a published application plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :application, name: plan_name, issuer: service, published: true
-end
-
-Given "a default published application plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :application, name: plan_name, issuer: service, published: true, default: true
+Given "a(n) {default}( ){published}( ){plan_type} plan {string} of {service_of_provider}" do |default, published, type, name, issuer|
+  create_plan type, name: name,
+                    issuer: issuer,
+                    published: published,
+                    default: default
 end
 
 Given "the provider has a {default} free application plan" do |default|
@@ -33,7 +24,7 @@ Given "the provider has a {default} free application plan {string}" do |default,
 end
 
 # TODO: convert this to cucumber expression
-Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (application|service|account) plan(?: "([^\"]*)")?(?: of (\d+) per month)?$/) do |other, default, plan_type, plan_name, cost|
+Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (application|service|account) plan(?: "([^"]*)")?(?: of (\d+) per month)?$/) do |other, default, plan_type, plan_name, cost|
   plan_type_name = (other ? "#{other.strip}_" : '') + plan_type
   return instance_variable_get("@paid_#{plan_type_name}_plan") if instance_variable_defined?("@paid_#{plan_type_name}_plan")
 
@@ -52,37 +43,20 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
 
-# TODO: convert this to cucumber expression
-PLANS = /account|service|application/
-Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^\"]*)" (?:of|for) ((?:provider|service) "[^\"]*")(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, issuer, cost|
-  type ||= :application
-  create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
+Given "a(n) {default}( ){published}( ){plan_type} plan {string} of/for {provider_or_service}" do |default, published, type, name, issuer|
+  create_plan type, name: name,
+                    issuer: issuer,
+                    default: default,
+                    published: published
 end
 
-# Given "a published {plan_type} plan {string} of/for {service}( exists)" do |plan_type, plan_name, service|
-#   plan_type ||= :application
-#   create_plan(plan_type, name: plan_name, issuer: service, cost: 0, published: true)
-# end
-
-# Given "a/an {plan_type} plan {string} of/for {service}( exists)" do |plan_type, plan_name, service|
-#   plan_type ||= :application
-#   create_plan(plan_type, name: plan_name, issuer: service, cost: 0)
-# end
-
-# Given "a published {plan_type} plan {string} of {provider}" do |plan_type, plan_name, provider|
-#   plan_type ||= :application
-#   create_plan(plan_type, name: plan_name, issuer: provider, cost: 0, published: true)
-# end
-
-# Given "a/an {plan_type} plan {string} of {provider}" do |plan_type, plan_name, provider|
-#   plan_type ||= :application
-#   create_plan(plan_type, name: plan_name, issuer: provider, cost: 0)
-# end
-
-# Given "a default {plan_type} plan {string} of {provider}" do |plan_type, plan_name, provider|
-#   plan_type ||= :application
-#   create_plan(plan_type, name: plan_name, issuer: provider, cost: 0, default: true)
-# end
+Given "a(n)( ){default}( ){published}( ){plan_type} plan {string} of/for {provider_or_service} for {int} monthly( exists)" do |default, published, type, name, issuer, cost|
+  create_plan type, name: name,
+                    issuer: issuer,
+                    cost: cost,
+                    default: default,
+                    published: published
+end
 
 Given "{buyer} signed up for plans {}" do |buyer, list|
   list.each do |name|

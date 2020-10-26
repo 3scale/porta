@@ -100,7 +100,7 @@ Then "the 'To' field should be fixed to {string}" do |receiver|
 end
 
 Then "I should see message to {string} with subject {string}" do |to, subject|
-  assert has_table_row_with_cells?(to, subject)
+  assert table_row_with_cells?(to, subject)
 end
 
 Then "I should see {word} message from {string} with subject {string}" do |state, from, subject|
@@ -108,5 +108,5 @@ Then "I should see {word} message from {string} with subject {string}" do |state
 end
 
 Then "I {should} see a message from {string} with subject {string}" do |visible, from, subject|
-  assert_equal visible, has_table_row_with_cells?(from, subject)
+  assert_equal visible, table_row_with_cells?(from, subject)
 end

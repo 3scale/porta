@@ -8,7 +8,7 @@ end
 
 Then "I should see a {published} plan {string}" do |published, name|
   within plans do
-    assert has_table_row_with_cells?(name, published ? 'published' : 'hidden')
+    assert table_row_with_cells?(name, published ? 'published' : 'hidden')
   end
 end
 

@@ -5,14 +5,16 @@ Given "the provider has {int} active docs?" do |number_active_docs|
 end
 
 When "I try to {word} the active docs with {valid} data" do |action, valid|
-  action_page = action == 'update' ? 'edit' : 'new'
-  step %(I go to the #{action_page} active docs page)
-  step %(I #{action} the action docs with #{valid ? 'valid' : 'invalid'})
+  action_active_docs(action, valid)
 end
 
 When "I try to {word} the active docs of the service with {valid} data" do |action, valid|
+  action_active_docs(action, valid, for_service: true)
+end
+
+def action_active_docs(action, valid, for_service: false)
   action_page = action == 'update' ? 'edit' : 'new'
-  step %(I go to the #{action_page} active docs page for a service)
+  step %(I go to the #{action_page} active docs page#{' for a service' if for_service})
   step %(I #{action} the action docs with #{valid ? 'valid' : 'invalid'})
 end
 

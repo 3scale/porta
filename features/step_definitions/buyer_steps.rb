@@ -184,7 +184,7 @@ Then "I should not see the timezone field" do
 end
 
 Given "the provider has a buyer" do
-  step %(the current domain is #{@provider.domain})
+  step %(the current domain is "#{@provider.domain}")
 
   visit signup_path
 
@@ -244,9 +244,11 @@ And "has a buyer with {plan_type} plan" do |plan_type|
 end
 
 When "a buyer signs up" do
-  step 'the current domain is foo.3scale.localhost'
-  step %(I go to the sign up page)
-  step %(I fill in the signup fields as "supertramp")
+  steps %(
+    the current domain is "foo.3scale.localhost"
+    I go to the sign up page
+    I fill in the signup fields as "supertramp"
+  )
 end
 
 And "application plan is paid" do
@@ -255,7 +257,7 @@ end
 
 When "the buyer logs in" do
   steps %(
-    And the current domain is foo.3scale.localhost
+    And the current domain is "foo.3scale.localhost"
     And I go to the login page
     And I fill in "Username" with "Alexander"
     And I fill in "Password" with "supersecret"
@@ -266,7 +268,7 @@ end
 
 When "the buyer logs in to the provider" do
   steps %(
-    When the current domain is #{@provider.domain}
+    When the current domain is "#{@provider.domain}"
     And I go to the login page
     And I fill in "Username" with "#{@buyer.admins.first.username}"
     And I fill in "Password" with "supersecret"
@@ -280,5 +282,5 @@ When "I should be warned to complete my signup" do
 end
 
 When "as a developer" do
-  step 'the current domain is foo.3scale.localhost'
+  step 'the current domain is "foo.3scale.localhost"'
 end
