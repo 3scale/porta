@@ -62,6 +62,7 @@ Feature: Multiservice feature
      And I follow "Settings"
      And I uncheck "Developers can manage applications"
      And I press "Update Service"
+     And I follow "Overview"
     Then I should see "Less fancy API"
 
   Scenario: Delete Service
