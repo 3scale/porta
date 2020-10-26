@@ -2,10 +2,10 @@ Feature: CMS Applications
   As a user I should be able to list my applications
 
   Background:
-    Given a provider "foo.example.com" with default plans
-      And provider "foo.example.com" has all the templates setup
-      And the current provider is foo.example.com
-      And the current domain is foo.example.com
+    Given a provider "foo.3scale.localhost" with default plans
+      And provider "foo.3scale.localhost" has all the templates setup
+      And the current provider is foo.3scale.localhost
+      And the current domain is foo.3scale.localhost
     Given a buyer "supetramp" signed up to application plan "Default"
       And I am logged in as "supetramp"
 
@@ -35,9 +35,9 @@ Feature: CMS Applications
       Then I should not see "default" within "table#applications"
 
   Scenario: Service name visible
-    And a service "Verduras" of provider "foo.example.com"
+    And a service "Verduras" of provider "foo.3scale.localhost"
     And a published service plan "Tomato" of service "Verduras"
-    And provider "foo.example.com" has "multiple_services" visible
+    And provider "foo.3scale.localhost" has "multiple_services" visible
 
     And I follow "Applications"
       Then I should see "default" within "table#applications"

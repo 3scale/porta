@@ -2,7 +2,7 @@ Feature: Provider Payment Details
   In order to pay to our master
 
   Background:
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
     And provider "master" manages payments with "braintree_blue"
     And provider "master" has testing credentials for braintree
     And Braintree is stubbed to accept credit card for buyer
@@ -17,8 +17,8 @@ Feature: Provider Payment Details
       | zip               |         | ZIP Code       | false    | false     | false  |
       | vat               |         | VAT Code       | false    | false     | false  |
 
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
     When I go to the provider account page
       And I follow "Billing"
       And I follow "Payment Details"

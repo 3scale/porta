@@ -5,22 +5,22 @@ Feature: Bulk operations
   I want to change account states in bulk
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
 
-    Given a default application plan "Bronze" of provider "foo.example.com"
-      And a buyer "Bob" signed up to provider "foo.example.com"
+    Given a default application plan "Bronze" of provider "foo.3scale.localhost"
+      And a buyer "Bob" signed up to provider "foo.3scale.localhost"
       And buyer "Bob" has the following applications:
       | name       | state   |
       | PendingApp | pending |
       | LiveApp    | live    |
       | SuspendedApp | suspended |
 
-    Given current domain is the admin domain of provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
   Scenario: Accept applications
-    Given I am logged in as provider "foo.example.com"
+    Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
 
     When I follow "Name"
@@ -45,7 +45,7 @@ Feature: Bulk operations
      | SuspendedApp | suspended |
 
   Scenario: Suspend applications
-    Given I am logged in as provider "foo.example.com"
+    Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
 
     When I follow "Name"
@@ -70,7 +70,7 @@ Feature: Bulk operations
      | SuspendedApp | suspended |
 
   Scenario: Resume applications
-    Given I am logged in as provider "foo.example.com"
+    Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
 
     When I follow "Name"

@@ -5,19 +5,19 @@ Feature: Forum categories
   I want to view the topics by category
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And provider "foo.example.com" has "forum" enabled
-    And a buyer "alice" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And provider "foo.3scale.localhost" has "forum" enabled
+    And a buyer "alice" signed up to provider "foo.3scale.localhost"
 
   Scenario: View topics by category
-    Given the forum of "foo.example.com" has categories "On topic" and "Off topic"
-    And the forum of "foo.example.com" has the following topics:
+    Given the forum of "foo.3scale.localhost" has categories "On topic" and "Off topic"
+    And the forum of "foo.3scale.localhost" has the following topics:
       | Topic                                      | Category  |
       | Authentication does not work - please help | On topic  |
       | OMG LOL check out this funny video!        | Off topic |
 
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
     And I follow "View by category"
     And I follow "On topic"
@@ -29,16 +29,16 @@ Feature: Forum categories
     But I should not see topic "Authentication does not work - please help"
 
   Scenario: Post a topic in a category
-    Given the forum of "foo.example.com" has categories "Security" and "Howtos"
+    Given the forum of "foo.3scale.localhost" has categories "Security" and "Howtos"
 
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
     And I follow "Start new thread"
     And I fill in "Title" with "How secure is this thing?"
     And I fill in "Body" with "Really, how secure is it?"
     And I select "Security" from "Category"
     And I press "Create thread"
-    Then the forum of "foo.example.com" should have topic "How secure is this thing?" in category "Security"
+    Then the forum of "foo.3scale.localhost" should have topic "How secure is this thing?" in category "Security"
 
     When I go to the forum page
     When I follow "View by category"
@@ -46,16 +46,16 @@ Feature: Forum categories
     Then I should see topic "How secure is this thing?"
 
   Scenario: Post a topic when there are no categories
-    Given the forum of "foo.example.com" has no categories
-    When I log in as "alice" on foo.example.com
+    Given the forum of "foo.3scale.localhost" has no categories
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the new topic page
     Then I should not see field "Category"
 
   Scenario: Post topic from a category page presets the category
-    Given the forum of "foo.example.com" has categories "Security" and "Insecurity"
-    And the forum of "foo.example.com" has topic "Hacks" in category "Security"
+    Given the forum of "foo.3scale.localhost" has categories "Security" and "Insecurity"
+    And the forum of "foo.3scale.localhost" has topic "Hacks" in category "Security"
 
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
     And I follow "View by category"
     And I follow "Security"
@@ -64,8 +64,8 @@ Feature: Forum categories
 
 
   Scenario: "User can't see manage buttons of categories"
-    When I log in as "alice" on foo.example.com
-    And the forum of "foo.example.com" has category "category 1"
+    When I log in as "alice" on foo.3scale.localhost
+    And the forum of "foo.3scale.localhost" has category "category 1"
     And I go to the forum page
     When I follow "View by category"
     Then I should not see link "New category"
@@ -76,21 +76,21 @@ Feature: Forum categories
 
   @security @allow-rescue
   Scenario: User can't create new category
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
     Then I should not see button "New category"
 
   @security @allow-rescue
   Scenario: User can't edit a category
-    Given the forum of "foo.example.com" has category "Security"
+    Given the forum of "foo.3scale.localhost" has category "Security"
 
-    When I log in as "alice" on foo.example.com
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
     Then I should not see link "Edit" for category "Security"
 
   @security @allow-rescue
   Scenario: User can't delete a category
-    Given the forum of "foo.example.com" has category "Security"
-    When I log in as "alice" on foo.example.com
+    Given the forum of "foo.3scale.localhost" has category "Security"
+    When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
     Then I should not see button "Delete" for category "Security"

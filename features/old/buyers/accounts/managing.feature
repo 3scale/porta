@@ -5,18 +5,18 @@ Feature: Buyer accounts management
 
   Background:
     Given a published plan "Basic" of provider "Master account"
-    And a provider "foo.example.com" signed up to plan "Basic"
-    And provider "foo.example.com" has multiple applications enabled
-    And a buyer "Bob's Apps" signed up to provider "foo.example.com"
+    And a provider "foo.3scale.localhost" signed up to plan "Basic"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a buyer "Bob's Apps" signed up to provider "foo.3scale.localhost"
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I am logged in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
 
 #TODO scenario to check that to create a buyer account the buyer needs a published
 # account plan
 
   Scenario: Creation of buyer accounts (even without legal terms)
-    Given provider "foo.example.com" has no legal terms
+    Given provider "foo.3scale.localhost" has no legal terms
     When I go to the buyer accounts page
      And I follow the link to create a new buyer account
 
@@ -33,7 +33,7 @@ Feature: Buyer accounts management
 
 
   Scenario: Can't create buyer account if multiple applications are disabled
-    Given provider "foo.example.com" has multiple applications disabled
+    Given provider "foo.3scale.localhost" has multiple applications disabled
     When I go to the buyer accounts page
     Then I should not see link "Create new buyer account"
 
@@ -53,8 +53,8 @@ Feature: Buyer accounts management
     But I should not see "Bob's Stuff"
 
   Scenario: In multiple application mode, shows number of applications per buyer account
-    Given a default application plan of provider "foo.example.com"
-    And a buyer "Alice's Widgets" signed up to provider "foo.example.com"
+    Given a default application plan of provider "foo.3scale.localhost"
+    And a buyer "Alice's Widgets" signed up to provider "foo.3scale.localhost"
     And buyer "Bob's Apps" has 4 applications
     And buyer "Alice's Widgets" has 2 applications
 
@@ -63,8 +63,8 @@ Feature: Buyer accounts management
     And I should see "2" in the "Apps" column and "Alice's Widgets" row
 
   Scenario: In single applications mode, does not show the applications column
-    Given a default application plan of provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications disabled
+    Given a default application plan of provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications disabled
     And buyer "Bob's Apps" has 1 application
 
     When I go to the buyer accounts page

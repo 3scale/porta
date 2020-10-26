@@ -6,11 +6,11 @@ Feature: Postpaid billing
   I want use the postpaid mode
 
 Background:
-  Given a provider "xyz.example.com" with billing enabled
-    And provider "xyz.example.com" has "finance" switch visible
-  Given a default service of provider "xyz.example.com" has name "api"
-    And a metric "transfer" of provider "xyz.example.com"
-    And an application plan "Variable" of provider "xyz.example.com" for 200 monthly
+  Given a provider "xyz.3scale.localhost" with billing enabled
+    And provider "xyz.3scale.localhost" has "finance" switch visible
+  Given a default service of provider "xyz.3scale.localhost" has name "api"
+    And a metric "transfer" of provider "xyz.3scale.localhost"
+    And an application plan "Variable" of provider "xyz.3scale.localhost" for 200 monthly
     And pricing rules on plan "Variable":
       | Metric   | Cost per unit | Min | Max      |
       | hits     |           0.1 |   1 | infinity |
@@ -18,7 +18,7 @@ Background:
 
 
   Scenario: With free plan, no invoice is created
-      Given an application plan "FreeAsInBeer" of provider "xyz.example.com" for 0 monthly
+      Given an application plan "FreeAsInBeer" of provider "xyz.3scale.localhost" for 0 monthly
       And a buyer "broke" signed up to application plan "FreeAsInBeer"
 
       Given the time is 15th January 2009
@@ -30,13 +30,13 @@ Background:
       When 1 month passes
       Then the date should be 15th February 2009
 
-      When I log in as "broke" on xyz.example.com
+      When I log in as "broke" on xyz.3scale.localhost
       And I navigate to invoices issued for me
       Then I should see 0 invoices
 
   Scenario: Variable only
    Given all the rolling updates features are off
-   Given an application plan "PureVariable" of provider "xyz.example.com" for 0 monthly
+   Given an application plan "PureVariable" of provider "xyz.3scale.localhost" for 0 monthly
      And pricing rules on plan "PureVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   |             1 |   1 | infinity |
@@ -46,7 +46,7 @@ Background:
       | Metric   | Value |
       | hits     |    20 |
 
-    And I log in as "varnish" on xyz.example.com on 20th January 2009
+    And I log in as "varnish" on xyz.3scale.localhost on 20th January 2009
     And I change application plan to "Variable"
 
     When time flies to 3rd February 2009
@@ -67,7 +67,7 @@ Background:
 
   Scenario: Variable only instant bill enabled
    Given all the rolling updates features are on
-   Given an application plan "PureVariable" of provider "xyz.example.com" for 0 monthly
+   Given an application plan "PureVariable" of provider "xyz.3scale.localhost" for 0 monthly
      And pricing rules on plan "PureVariable":
       | Metric | Cost per unit | Min | Max      |
       | hits   |             1 |   1 | infinity |
@@ -77,7 +77,7 @@ Background:
       | Metric   | Value |
       | hits     |    20 |
 
-    And I log in as "varnish" on xyz.example.com on 20th January 2009
+    And I log in as "varnish" on xyz.3scale.localhost on 20th January 2009
     And I change application plan to "Variable"
 
     When time flies to 3rd February 2009
@@ -106,7 +106,7 @@ Background:
         | transfer |     5 |
 
      When time flies to 3rd February 2009
-     And I log in as "tycoon" on xyz.example.com
+     And I log in as "tycoon" on xyz.3scale.localhost
       And I navigate to invoice issued for me in "January, 2009"
      Then I should see line items
       | name                   | quantity | cost |
@@ -127,6 +127,6 @@ Background:
         | transfer |     5 |
 
      And time flies to 10th February 2009
-     And I log in as "tycoon" on xyz.example.com
+     And I log in as "tycoon" on xyz.3scale.localhost
      And I navigate to invoices issued for me
     Then I should see 0 invoices

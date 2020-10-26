@@ -4,12 +4,12 @@ Feature: Account service plans management
   I want to have listing of service contracts and possibilit to create one or change plan
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "service_plans" visible
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "service_plans" visible
 
-    Given a default service of provider "foo.example.com" has name "Regular API"
-      And a service "Fancy API" of provider "foo.example.com"
+    Given a default service of provider "foo.3scale.localhost" has name "Regular API"
+      And a service "Fancy API" of provider "foo.3scale.localhost"
 
     Given a service plan "Only one" for service "Regular API" exists
       And service plan "Only one" is default
@@ -18,19 +18,19 @@ Feature: Account service plans management
       And a service plan "Cheap one" for service "Fancy API" exists
       And service plan "Cheap one" is default
 
-    Given a buyer "bob" signed up to provider "foo.example.com"
-    Given current domain is the admin domain of provider "foo.example.com"
+    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Link to service contracts on account page in enterprise
-    Given I am logged in as provider "foo.example.com"
+    Given I am logged in as provider "foo.3scale.localhost"
     When I am on the buyer account page for "bob"
      And I follow "Developer Portal" in the main menu
     Then I should see "Service Subscription"
 
   @javascript
   Scenario: Subscribe to service with selected service plan
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
 
     When I am on the buyer account service contracts page for "bob"
 

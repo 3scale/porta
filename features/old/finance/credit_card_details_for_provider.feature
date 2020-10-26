@@ -5,13 +5,13 @@ Feature: Credit card details
 
   Background:
     Given the time is 1st June 2009
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" doesn't have billing address
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" doesn't have billing address
 
-    Given current domain is the admin domain of provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
       And provider "master" has billing enabled
       And provider "master" has testing credentials for braintree
-    And I log in as provider "foo.example.com"
+    And I log in as provider "foo.3scale.localhost"
 
   Scenario: Legal Links on Credit Card Details edit page
       Given provider "master" has the following settings:
@@ -26,8 +26,8 @@ Feature: Credit card details
 
   @braintree
   Scenario: Entering credit card details on a provider domain
-    Given provider "foo.example.com" has last digits of credit card number "1234" and expiration date March, 2018
-    And provider "foo.example.com" has valid personal details
+    Given provider "foo.3scale.localhost" has last digits of credit card number "1234" and expiration date March, 2018
+    And provider "foo.3scale.localhost" has valid personal details
       And Braintree is stubbed to accept credit card
     When I go to the provider braintree edit credit card details page
 
@@ -42,7 +42,7 @@ Feature: Credit card details
      And I fill in "Phone" with "+34123123212"
      And I press "Save"
 
-   Then the current domain should be admin.foo.example.com
+   Then the current domain should be admin.foo.3scale.localhost
     And I should see "Credit card number"
     And I should see "XXXX-XXXX-XXXX-1111"
     And I should see "Expiration date"
@@ -50,7 +50,7 @@ Feature: Credit card details
 
   Scenario: Credit card storage fails
 
-    Given provider "foo.example.com" has valid personal details
+    Given provider "foo.3scale.localhost" has valid personal details
     And Braintree is stubbed to not accept credit card
     When I go to the provider braintree edit credit card details page
 
@@ -64,6 +64,6 @@ Feature: Credit card details
      And I fill in "ZIP / Postal Code" with "08080"
      And I fill in "Phone" with "+34123123212"
      And I press "Save"
-   Then the current domain should be admin.foo.example.com
+   Then the current domain should be admin.foo.3scale.localhost
     And I should see "Credit card number is invalid"
     And I should be on the provider braintree edit credit card details page

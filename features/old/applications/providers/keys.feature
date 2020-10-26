@@ -5,16 +5,16 @@ Feature: Applications details
   I want to be able to add and remove keys
 
   Background:
-  Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And a default application plan of provider "foo.example.com"
-    And a buyer "bob" signed up to provider "foo.example.com"
-  Given current domain is the admin domain of provider "foo.example.com"
+  Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a default application plan of provider "foo.3scale.localhost"
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+  Given current domain is the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Set custom user key
-    Given provider "foo.example.com" uses backend v1 in his default service
+    Given provider "foo.3scale.localhost" uses backend v1 in his default service
       And buyer "bob" has application "AjaxApp"
-      And I am logged in as provider "foo.example.com"
+      And I am logged in as provider "foo.3scale.localhost"
 
     When I navigate to the application "AjaxApp" of the partner "bob"
      And I follow "Set Custom Key"
@@ -24,9 +24,9 @@ Feature: Applications details
      And application "AjaxApp" should have user key "my-custom-key"
 
   Scenario: Set custom user key fails
-    Given provider "foo.example.com" uses backend v1 in his default service
+    Given provider "foo.3scale.localhost" uses backend v1 in his default service
       And buyer "bob" has application "AjaxApp"
-      And I am logged in as provider "foo.example.com"
+      And I am logged in as provider "foo.3scale.localhost"
 
     When I navigate to the application "AjaxApp" of the partner "bob"
      And I follow "Set Custom Key"
@@ -35,8 +35,8 @@ Feature: Applications details
     Then I should see "Invalid key"
 
   Scenario: Remove and add keys
-    Given provider "foo.example.com" uses backend v2 in his default service
-      And I am logged in as provider "foo.example.com"
+    Given provider "foo.3scale.localhost" uses backend v2 in his default service
+      And I am logged in as provider "foo.3scale.localhost"
       And buyer "bob" has application "AjaxApp"
       And the key limit for application "AjaxApp" is reached
 

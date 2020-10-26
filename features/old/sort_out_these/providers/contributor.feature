@@ -39,7 +39,7 @@ Feature: Contributor role
       But I should not see "Streams"
 
   Scenario: Contributor can create content
-      And current domain is the admin domain of provider "foo.example.com"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
       And I log in as "bob"
       And I follow "Add New Content"
     Then I should be on the new html block page

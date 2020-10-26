@@ -4,16 +4,16 @@ Feature: API Usage alerts
   I want to see usage alerts and violations
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And a application plan "Default" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And a application plan "Default" of provider "foo.3scale.localhost"
 
-    Given a buyer "bob" signed up to provider "foo.example.com"
-      And a buyer "alice" signed up to provider "foo.example.com"
+    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
+      And a buyer "alice" signed up to provider "foo.3scale.localhost"
       And buyer "bob" has application "Bobget"
       And buyer "alice" has application "Aliget"
-      And a metric "foos" with friendly name "Number of Foos" of provider "foo.example.com"
-      And a metric "bars" with friendly name "Number of Bars" of provider "foo.example.com"
+      And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
+      And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
       And I have following API alerts:
       | Application | Timestamp           | Utilization | Level | Message         | Alert id |
       | Bobget      | 2010-09-13 12:20:00 | 0.5         | 50    | foos: 2 of 4    | 1        |
@@ -21,15 +21,15 @@ Feature: API Usage alerts
       | Aliget      | 2010-10-14 11:11:00 | 0.9         | 90    | foos: 18 of 20  | 6        |
       | Aliget      | 2010-10-15 14:14:00 | 1.5         | 150   | foos: 30 of 20  | 7        |
 
-    Given current domain is the admin domain of provider "foo.example.com"
-    Given I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    Given I am logged in as provider "foo.3scale.localhost"
 
   @javascript
   Scenario: Navigation
     When I go to the provider dashboard
      And I follow "API"
      And I follow "Show all limit alerts for this service"
-    Then I should be on the API alerts page of service "API" of provider "foo.example.com"
+    Then I should be on the API alerts page of service "API" of provider "foo.3scale.localhost"
 
   Scenario: Listing alerts and violations
     When I go to the API alerts page
@@ -41,10 +41,10 @@ Feature: API Usage alerts
       | bob     | Bobget      | foos: 2 of 4   | ≥ 50 %  | 13 Sep 2010 12:20:00 UTC | unread |
 
   Scenario: Reading alerts
-    When I go to the API alerts page of service "API" of provider "foo.example.com"
+    When I go to the API alerts page of service "API" of provider "foo.3scale.localhost"
      And I follow "Read" for the 1st API alert
 
-    Then I should be on the API alerts page of service "API" of provider "foo.example.com"
+    Then I should be on the API alerts page of service "API" of provider "foo.3scale.localhost"
     Then I should see the following API alerts:
       | Account | Application | Message        | Level   | Time (UTC)               | State  |
       | alice   | Aliget      | foos: 30 of 20 | ≥ 150 % | 15 Oct 2010 14:14:00 UTC | read   |
@@ -75,10 +75,10 @@ Feature: API Usage alerts
       | bob     | Bobget      | foos: 2 of 4   | ≥ 50 % | 13 Sep 2010 12:20:00 UTC | unread |
 
   Scenario: Marking all alerts as read
-    When I go to the API alerts page of service "API" of provider "foo.example.com"
+    When I go to the API alerts page of service "API" of provider "foo.3scale.localhost"
       And I follow "Mark All As Read"
 
-    Then I should be on the API alerts page of service "API" of provider "foo.example.com"
+    Then I should be on the API alerts page of service "API" of provider "foo.3scale.localhost"
     Then I should not see any unread API alerts
 
   Scenario: Deleting all alerts

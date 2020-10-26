@@ -7,13 +7,13 @@ Feature: Billing Reporting
   # - IF the bill in a given month is Zero (for whatever reason) no email is sent.
 
   Background:
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
       And all the rolling updates features are off
-      And provider "foo.example.com" is fake charging
-      And provider "foo.example.com" has valid payment gateway
-      And admin of account "foo.example.com" has email "admin@foo.example.com"
-      And an application plan "FreeAsInBeer" of provider "foo.example.com" for 0 monthly
-      And an application plan "PaidAsInLunch" of provider "foo.example.com" for 31 monthly
+      And provider "foo.3scale.localhost" is fake charging
+      And provider "foo.3scale.localhost" has valid payment gateway
+      And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
+      And an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
+      And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
 
   Scenario: I don't want to get email if I am on free plan
       Given the time is 29th May 2009
@@ -57,9 +57,9 @@ Feature: Billing Reporting
         Then I should receive an email with subject "Monthly statement"
 
       # TODO: dry following steps by table or something because this is not good
-      Then on 5th June 2009, me and "admin@foo.example.com" should get email about 1.payment problem
-       And on 8th June 2009, me and "admin@foo.example.com" should get email about 2.payment problem
-       And on 11th June 2009, me and "admin@foo.example.com" should get email about 3.payment problem
+      Then on 5th June 2009, me and "admin@foo.3scale.localhost" should get email about 1.payment problem
+       And on 8th June 2009, me and "admin@foo.3scale.localhost" should get email about 2.payment problem
+       And on 11th June 2009, me and "admin@foo.3scale.localhost" should get email about 3.payment problem
 
   Scenario: I should be warned 10 days before my credit card expires and never ever after
       Given the time is 16th May 2009
@@ -70,7 +70,7 @@ Feature: Billing Reporting
        When the time flies to 17th May 2009
         And I act as "broke"
        Then I should receive an email with subject "Credit card expiry"
-        And "admin@foo.example.com" should receive an email with subject "User Credit card expiry"
+        And "admin@foo.3scale.localhost" should receive an email with subject "User Credit card expiry"
 
        Given a clear email queue
        And the time flies to 27th May 2009

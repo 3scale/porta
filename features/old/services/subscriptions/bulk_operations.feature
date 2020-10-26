@@ -5,24 +5,24 @@ Feature: Bulk operations
   I want to make bulk operations
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has "service_plans" visible
-      And a default service of provider "foo.example.com" has name "Fancy API"
-      And a service "New Service" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "service_plans" visible
+      And a default service of provider "foo.3scale.localhost" has name "Fancy API"
+      And a service "New Service" of provider "foo.3scale.localhost"
     Given a default service plan "Basic" of service "Fancy API"
       And a service plan "Unpublished" of service "New Service"
 
-    Given the following buyers with service subscriptions signed up to provider "foo.example.com":
+    Given the following buyers with service subscriptions signed up to provider "foo.3scale.localhost":
       | name | plans              |
       | bob  | Basic, Unpublished |
       | jane | Basic              |
       | mike | Unpublished        |
 
-    Given current domain is the admin domain of provider "foo.example.com"
-    Given I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    Given I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Show and hide bulk operations controls
-     And provider "foo.example.com" has "service_plans" visible
+     And provider "foo.3scale.localhost" has "service_plans" visible
      When I go to the subscriptions admin page
     When I check select for "bob"
     Then "Bulk operations" should be visible

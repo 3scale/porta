@@ -10,7 +10,7 @@ Before do |scenario|
     FactoryBot.create(:country, :name => name, :code => code) unless Country.exists?(:code => code)
   end
 
-  ThreeScale.config.stubs(superdomain: 'example.com')
+  ThreeScale.config.stubs(superdomain: '3scale.localhost')
 
   SphinxIndexationWorker.stubs(:perform_later)
   IndexProxyRuleWorker.stubs(:perform_later)

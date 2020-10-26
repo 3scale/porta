@@ -5,14 +5,14 @@ Feature: Buyer signup to service allowing multiple applications per buyer
   I want to sign up
 
   Background:
-    Given a provider "foo.example.com" with default plans
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" requires cinstances to be approved before use
-      And provider "foo.example.com" requires accounts to be approved
+    Given a provider "foo.3scale.localhost" with default plans
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" requires cinstances to be approved before use
+      And provider "foo.3scale.localhost" requires accounts to be approved
       # TODO: add scenario without default app plan
       And an application plan "iPhone" of service "default"
       And application plan "iPhone" is default
-      And the current domain is foo.example.com
+      And the current domain is foo.3scale.localhost
 
   Scenario: Signup, activate, approve and login
     When I go to the sign up page

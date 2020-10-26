@@ -115,12 +115,12 @@ Given('the provider has sample data') do
 end
 
 Given('a provider exists') do
-  step 'a provider "foo.example.com"'
+  step 'a provider "foo.3scale.localhost"'
   @service ||= @provider.default_service
 end
 
 Given('Provider has setup RH SSO') do
-  step 'a provider "foo.example.com"'
+  step 'a provider "foo.3scale.localhost"'
   steps <<-GHERKIN
   And the provider account allows signups
   And the provider has the authentication provider "Keycloak" published
@@ -143,12 +143,12 @@ Given('stub integration errors dashboard') do
 end
 
 Given(/^a provider( is logged in)?$/) do |login|
-  step 'a provider "foo.example.com"'
-  step 'current domain is the admin domain of provider "foo.example.com"'
+  step 'a provider "foo.3scale.localhost"'
+  step 'current domain is the admin domain of provider "foo.3scale.localhost"'
   step 'stub integration errors dashboard'
-  step 'I log in as provider "foo.example.com"' if login
+  step 'I log in as provider "foo.3scale.localhost"' if login
 
-  @provider = Account.find_by_domain!('foo.example.com')
+  @provider = Account.find_by_domain!('foo.3scale.localhost')
 end
 
 Given(/^master admin( is logged in)?/) do |login|

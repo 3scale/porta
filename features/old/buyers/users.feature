@@ -4,15 +4,15 @@ Feature: Buyer users management
   I want to be able to manage the users
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
 
-    And a buyer "SpaceWidgets" signed up to provider "foo.example.com"
+    And a buyer "SpaceWidgets" signed up to provider "foo.3scale.localhost"
     And an active user "alice" of account "SpaceWidgets"
     And an active user "bob" of account "SpaceWidgets"
 
-    And current domain is the admin domain of provider "foo.example.com"
-    And I am logged in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
 
  Scenario: Navigating to page of users of a buyer
    When I navigate to the accounts page
@@ -99,13 +99,13 @@ Feature: Buyer users management
 
   Scenario: Editing role of the only buyer admin
     Given buyer "SpaceWidgets" has only one admin "alice"
-    When current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    When current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
     And I navigate to the edit page of user "alice" of buyer "SpaceWidgets"
     Then I should not see the user role field
 
   Scenario: Fields are not required/hidden/read_only for Provider when editing users
-    Given provider "foo.example.com" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for "User":
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |
@@ -134,7 +134,7 @@ Feature: Buyer users management
     Then I should see "User was successfully updated."
 
   Scenario: Fields edition by provider
-    Given provider "foo.example.com" has the following fields defined for "User":
+    Given provider "foo.3scale.localhost" has the following fields defined for "User":
       | name                 | required | read_only | hidden |
       | first_name           | true     |           |        |
       | last_name            |          | true      |        |

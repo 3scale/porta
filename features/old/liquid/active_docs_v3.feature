@@ -4,11 +4,11 @@ Feature: ActiveDocs
   As a provider
 
   Background:
-    Given a provider "foo.example.com"
-    And the current provider is foo.example.com
+    Given a provider "foo.3scale.localhost"
+    And the current provider is foo.3scale.localhost
 
   Scenario: Loading new Swagger template with javascript packs
-    Given provider "foo.example.com" has the swagger example of signup
+    Given provider "foo.3scale.localhost" has the swagger example of signup
     And the provider has cms page "/swagger-ui-3" with:
     """
     {% content_for javascripts %}
@@ -36,6 +36,6 @@ Feature: ActiveDocs
     """
     And the cms page "/swagger-ui-3" has main layout
 
-    And the current domain is "foo.example.com"
+    And the current domain is "foo.3scale.localhost"
     When I visit "/swagger-ui-3"
     Then I should see "A sample echo API"

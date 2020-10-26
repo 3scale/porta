@@ -4,10 +4,10 @@ Feature: Password change
   I want to change my password from time to time
 
   Scenario: Provider password change
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
 
-    Given current domain is the admin domain of provider "foo.example.com"
-    When I log in as provider "foo.example.com" with password "supersecret"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+    When I log in as provider "foo.3scale.localhost" with password "supersecret"
     When I follow "Account Settings"
     And I follow "Personal"
     And I follow "Personal Details"
@@ -15,9 +15,9 @@ Feature: Password change
     And I fill in "Current password" with "supersecret"
     And I press "Update Details"
     And I log out
-    And current domain is the admin domain of provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
     And I go to the provider login page
-    And I fill in "Email or Username" with "foo.example.com"
+    And I fill in "Email or Username" with "foo.3scale.localhost"
     And I fill in "Password" with "monkey"
     And I press "Sign in"
-    Then I should be logged in as "foo.example.com"
+    Then I should be logged in as "foo.3scale.localhost"

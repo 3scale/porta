@@ -4,15 +4,15 @@ Feature: Default plan
   I want to define a default plan
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has multiple applications enabled
-    And a published application plan "Basic" of provider "foo.example.com"
-    And a published application plan "Pro" of provider "foo.example.com"
-    And current domain is the admin domain of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has multiple applications enabled
+    And a published application plan "Basic" of provider "foo.3scale.localhost"
+    And a published application plan "Pro" of provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
 
   @javascript
   Scenario: Marking plan as default
-    When I log in as provider "foo.example.com"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the application plans admin page
     And I select "Basic" as default plan
     Then I should see "Default plan was updated"
@@ -21,7 +21,7 @@ Feature: Default plan
   @javascript
   Scenario: Changing default plan
     Given plan "Basic" is default
-    When I log in as provider "foo.example.com"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the application plans admin page
     And I select "Pro" as default plan
     Then I should see "Default plan was updated"
@@ -31,7 +31,7 @@ Feature: Default plan
   Scenario: Hidden plan can be made default
     Given plan "Basic" is default
     And plan "Pro" is hidden
-    When I log in as provider "foo.example.com"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the application plans admin page
     Then I should see "Pro" in the default plans list
     And I select "Pro" as default plan

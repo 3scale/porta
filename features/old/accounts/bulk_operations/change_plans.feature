@@ -5,26 +5,26 @@ Feature: Bulk operations
   I want to change applications' plans in bulk
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "account_plans" switch allowed
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "account_plans" switch allowed
 
-    Given a default account plan "Bronze" of provider "foo.example.com"
-      And an account plan "Gold" of provider "foo.example.com"
+    Given a default account plan "Bronze" of provider "foo.3scale.localhost"
+      And an account plan "Gold" of provider "foo.3scale.localhost"
 
-    Given these buyers signed up to provider "foo.example.com"
+    Given these buyers signed up to provider "foo.3scale.localhost"
       | bob  |
       | jane |
       | mike |
 
       And I don't care about application keys
 
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Unable to change plans unless account_plans switch allowed
-    Given an application plan "Advanced" of provider "foo.example.com"
-      And provider "foo.example.com" has "account_plans" switch denied
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "account_plans" switch denied
       And I am on the accounts admin page
 
     When I follow "Group/Org."
@@ -32,7 +32,7 @@ Feature: Bulk operations
     Then I should not see "Change account plan"
 
   Scenario: Cant change plan to the same
-    Given an application plan "Advanced" of provider "foo.example.com"
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
       And I am on the accounts admin page
 
     When I check select for "bob"
@@ -44,7 +44,7 @@ Feature: Bulk operations
      Then I should see "There were some errors"
 
   Scenario: Mass change of account plans
-    Given an application plan "Advanced" of provider "foo.example.com"
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
       And I am on the accounts admin page
 
     When I follow "Group/Org."

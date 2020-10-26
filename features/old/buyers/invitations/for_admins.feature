@@ -3,19 +3,19 @@ Feature: Invitations on partner accounts for admins
   As an admin I want to manage the invitations of users to the partner accounts
 
   Background:
-    Given a provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
       And an application plan "power1M" of provider "master"
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "multiple_users" switch allowed
-      And provider "foo.example.com" has the following buyers:
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "multiple_users" switch allowed
+      And provider "foo.3scale.localhost" has the following buyers:
         | Name     |
         | lol cats |
 
-   And current domain is the admin domain of provider "foo.example.com"
-   When I log in as provider "foo.example.com"
+   And current domain is the admin domain of provider "foo.3scale.localhost"
+   When I log in as provider "foo.3scale.localhost"
 
   Scenario: Upgrade notice when provider does not have switch
-    Given provider "foo.example.com" has "multiple_users" switch denied
+    Given provider "foo.3scale.localhost" has "multiple_users" switch denied
     When I navigate to the page of the partner "lol cats"
       And I follow "0 Invitations"
     Then I should see upgrade notice for "multiple_users"

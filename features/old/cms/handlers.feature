@@ -4,8 +4,8 @@ Feature: Markdown/Textile Handlers
   I want to write markdown/textile format
 
   Scenario:
-    Given a provider "foo.example.com"
-      And I have cms page "/page" of provider "foo.example.com" with markdown content
-      And the current domain is "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And I have cms page "/page" of provider "foo.3scale.localhost" with markdown content
+      And the current domain is "foo.3scale.localhost"
     When I visit "/page"
     Then I should see rendered markdown content

@@ -5,18 +5,18 @@ Feature: Spam protection for buyer signup
   I want to protect buyer signup with spam protection and captcha
 
   Background:
-    Given a provider "foo.example.com"
-      And a account plan "Tier-1" of provider "foo.example.com"
-      And provider "foo.example.com" has "spam protection level" set to "auto"
+    Given a provider "foo.3scale.localhost"
+      And a account plan "Tier-1" of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has "spam protection level" set to "auto"
 
-      And a default service of provider "foo.example.com" has name "api"
+      And a default service of provider "foo.3scale.localhost" has name "api"
       And a service plan "Gold" for service "api" exists
       And an application plan "iPhone" of service "api"
 
-      And the current domain is foo.example.com
+      And the current domain is foo.3scale.localhost
 
   Scenario: Captcha is disabled
-    Given provider "foo.example.com" has "spam protection level" set to "none"
+    Given provider "foo.3scale.localhost" has "spam protection level" set to "none"
     When I go to the sign up page
     Then I should not see the captcha
      And I fill in the invalid signup fields
@@ -25,7 +25,7 @@ Feature: Spam protection for buyer signup
      And I should not see the captcha
 
   Scenario: Captcha is forced
-    Given provider "foo.example.com" has "spam protection level" set to "captcha"
+    Given provider "foo.3scale.localhost" has "spam protection level" set to "captcha"
     When I go to the sign up page
     Then I should see the captcha
 

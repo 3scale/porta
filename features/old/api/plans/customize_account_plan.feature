@@ -4,16 +4,16 @@ Feature: Accounts plan
   I want to do stuff with the account's plans
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" uses backend v2 in his default service
-      And provider "foo.example.com" has multiple applications enabled
-      And provider "foo.example.com" has "account_plans" visible
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" uses backend v2 in his default service
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And provider "foo.3scale.localhost" has "account_plans" visible
 
-    Given a default application plan "Basic" of provider "foo.example.com"
-    Given a buyer "bob" signed up to provider "foo.example.com"
+    Given a default application plan "Basic" of provider "foo.3scale.localhost"
+    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
 
-    Given current domain is the admin domain of provider "foo.example.com"
-      And I am logged in as provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
+      And I am logged in as provider "foo.3scale.localhost"
 
 
   @ignore-backend @javascript
@@ -23,7 +23,7 @@ Feature: Accounts plan
       And I go to the buyer account page for "bob"
     Then I should see the account plan is customized
 
-    Given a buyer "tom" signed up to provider "foo.example.com"
+    Given a buyer "tom" signed up to provider "foo.3scale.localhost"
      When I go to the buyer account page for "tom"
       And I customize the account plan
       #And I fill in "Name" with "unique customized name"

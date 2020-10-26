@@ -3,8 +3,8 @@ Feature: XSS Protection
   We need automatic XSS protection in liquid
 
   Background:
-    Given a provider "foo.example.com"
-    And the current provider is foo.example.com
+    Given a provider "foo.3scale.localhost"
+    And the current provider is foo.3scale.localhost
     And the provider has cms page "/some-page" with:
     """
       Hello {{ current_account.name }}

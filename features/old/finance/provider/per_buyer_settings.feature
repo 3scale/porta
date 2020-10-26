@@ -6,17 +6,17 @@ Feature: Enabling billing and charging per buyer
 
   Background:
     Given a published plan "Pro" of provider "Master account"
-      And a provider "foo.example.com" signed up to plan "Pro"
-      And provider "foo.example.com" has "finance" switch allowed
-      And provider "foo.example.com" is charging
+      And a provider "foo.3scale.localhost" signed up to plan "Pro"
+      And provider "foo.3scale.localhost" has "finance" switch allowed
+      And provider "foo.3scale.localhost" is charging
 
-      And an application plan "Basic" of provider "foo.example.com"
+      And an application plan "Basic" of provider "foo.3scale.localhost"
       And a buyer "bob's" signed up to application plan "Basic"
 
-      And I am logged in as provider "foo.example.com" on its admin domain
+      And I am logged in as provider "foo.3scale.localhost" on its admin domain
 
   Scenario: Finance off disables monthly charging toggle
-      And provider "foo.example.com" has "finance" switch denied
+      And provider "foo.3scale.localhost" has "finance" switch denied
       And I go to the buyer account page for "bob's"
      Then I should not see "Monthly charging is enabled"
 

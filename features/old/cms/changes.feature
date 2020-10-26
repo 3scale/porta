@@ -3,8 +3,8 @@ Feature: CMS Changes
   I want to manage all not published CMS changes on one place
 
   Background:
-    Given a provider "foo.example.com"
-    And I am logged in as provider "foo.example.com" on its admin domain
+    Given a provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost" on its admin domain
 
   Scenario: Changes
     Given I have changed CMS page "page"

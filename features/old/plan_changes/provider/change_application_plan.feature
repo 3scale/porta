@@ -5,20 +5,20 @@ Feature: Change Application Plan
 
   Background:
     Given a published plan "Pro" of provider "Master account"
-    And a provider "foo.example.com" signed up to plan "Pro"
+    And a provider "foo.3scale.localhost" signed up to plan "Pro"
 
-    And a default application plan "Basic" of provider "foo.example.com"
-    And a application plan "Advanced" of provider "foo.example.com"
+    And a default application plan "Basic" of provider "foo.3scale.localhost"
+    And a application plan "Advanced" of provider "foo.3scale.localhost"
 
-    And a buyer "bob" of provider "foo.example.com"
+    And a buyer "bob" of provider "foo.3scale.localhost"
     And buyer "bob" has application "app"
 
     And all the rolling updates features are off
 
   @ignore-backend
   Scenario: Change application plan
-   Given current domain is the admin domain of provider "foo.example.com"
-     And I log in as provider "foo.example.com"
+   Given current domain is the admin domain of provider "foo.3scale.localhost"
+     And I log in as provider "foo.3scale.localhost"
      And I go to the provider side "app" application page
 
     Then I should see "Change Plan"

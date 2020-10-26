@@ -6,24 +6,24 @@ Feature: Mass email bulk operations
 
   Background:
     Given all the rolling updates features are off
-    Given a provider "foo.example.com"
-    Given a default application plan "Basic" of provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
+    Given a provider "foo.3scale.localhost"
+    Given a default application plan "Basic" of provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
 
     Given a following buyers with applications exists:
       | name | provider        | applications        |
-      | bob  | foo.example.com | BobApp              |
-      | jane | foo.example.com | JaneApp, JaneAppTwo |
-      | mike | foo.example.com | MikeApp             |
+      | bob  | foo.3scale.localhost | BobApp              |
+      | jane | foo.3scale.localhost | JaneApp, JaneAppTwo |
+      | mike | foo.3scale.localhost | MikeApp             |
 
     Given admin of account "jane" has email "jane@me.us"
       And admin of account "bob" has email "bob@me.us"
 
-    Given current domain is the admin domain of provider "foo.example.com"
+    Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
   Scenario: Send mass email to application owners
-    Given I am logged in as provider "foo.example.com"
+    Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
       And a clear email queue
 

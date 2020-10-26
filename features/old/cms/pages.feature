@@ -5,13 +5,13 @@ Feature: CMS Pages
   I want to CRUD pages
 
   Background:
-    Given a provider "foo.example.com"
-    And I am logged in as provider "foo.example.com" on its admin domain
+    Given a provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost" on its admin domain
     And I go to the CMS page
 
   @essential @allow-rescue
   Scenario: Page
-      Given a CMS Layout "new-layout" of provider "foo.example.com"
+      Given a CMS Layout "new-layout" of provider "foo.3scale.localhost"
       When I follow "New Page"
        And I toggle "Advanced options"
       And I fill in the following:
@@ -44,19 +44,19 @@ Feature: CMS Pages
        And I press "Publish"
       Then I should see "Page saved and published"
 
-      And I hit "/potato" on foo.example.com
+      And I hit "/potato" on foo.3scale.localhost
      Then I should see "<h1>Potato is public!</h1>"
 
-     When I am logged in as provider "foo.example.com" on its admin domain
+     When I am logged in as provider "foo.3scale.localhost" on its admin domain
       And I go to the CMS Page "/potato" page
       And I press "Hide" inside the dropdown
      Then I should see "Page has been hidden"
 
-     When I hit "/potato" on foo.example.com
+     When I hit "/potato" on foo.3scale.localhost
      Then I should see "Not found"
 
   Scenario: Builtin page
-    Given provider "foo.example.com" has all the templates setup
+    Given provider "foo.3scale.localhost" has all the templates setup
 
     When I go to the CMS page
      And I choose builtin page "dashboards/show" in the CMS sidebar

@@ -4,11 +4,11 @@ Feature: Disabled signup for the provider
   I want to disable signups
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has signup disabled
-      And a account plan "Tier-1" of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has signup disabled
+      And a account plan "Tier-1" of provider "foo.3scale.localhost"
       And account plan "Tier-1" is default
-      And the current domain is foo.example.com
+      And the current domain is foo.3scale.localhost
 
   Scenario: I try to enter the URL manually
      When I go to the sign up page

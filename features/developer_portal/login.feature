@@ -3,13 +3,13 @@ Feature: Login feature
   I want to have a cool login behaviour
 
   Background:
-    Given a provider "foo.example.com"
-      And provider "foo.example.com" has multiple applications enabled
-      And a buyer "bob" signed up to provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And provider "foo.3scale.localhost" has multiple applications enabled
+      And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
   @security
   Scenario: Buyer can log in with csrf protection enabled
-    Given the current domain is foo.example.com
+    Given the current domain is foo.3scale.localhost
     When I go to the login page
      And I fill in the "bob" login data
     Then I should be logged in the Development Portal

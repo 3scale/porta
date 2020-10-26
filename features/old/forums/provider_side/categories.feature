@@ -5,12 +5,12 @@ Feature: Forum categories administration
   I want to assign a topic to a category
 
   Background:
-    Given a provider "foo.example.com"
-    And provider "foo.example.com" has "forum" enabled
-    And current domain is the admin domain of provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" has "forum" enabled
+    And current domain is the admin domain of provider "foo.3scale.localhost"
 
   Scenario: Create a category
-    When I log in as provider "foo.example.com"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the provider side forum page
     And I follow "Categories"
     And I follow "New category"
@@ -19,11 +19,11 @@ Feature: Forum categories administration
     And I should see "Category was successfully created."
     Then I should be on the provider side forum categories page
     And I should see category "Random stuff" in the list
-    And the forum of "foo.example.com" should have category "Random stuff"
+    And the forum of "foo.3scale.localhost" should have category "Random stuff"
 
   Scenario: Edit a category
-    Given the forum of "foo.example.com" has category "Random stuff"
-    When I log in as provider "foo.example.com"
+    Given the forum of "foo.3scale.localhost" has category "Random stuff"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the provider side forum page
     And I follow "Categories"
     And I follow "Edit" for category "Random stuff"
@@ -35,8 +35,8 @@ Feature: Forum categories administration
     But I should not see category "Random stuff" in the list
 
   Scenario: Delete a category
-    Given the forum of "foo.example.com" has category "Random stuff"
-    When I log in as provider "foo.example.com"
+    Given the forum of "foo.3scale.localhost" has category "Random stuff"
+    When I log in as provider "foo.3scale.localhost"
     And I go to the provider side forum page
     And I follow "Categories"
     And I press "Delete" for category "Random stuff"

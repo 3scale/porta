@@ -4,9 +4,9 @@ Feature: Fields Definitions
   I need to define and use extra fields
 
   Background:
-  Given a provider "foo.example.com"
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+  Given a provider "foo.3scale.localhost"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
 
   Scenario: Required fields can't be deleted
     When I go to the fields definitions index page
@@ -25,7 +25,7 @@ Feature: Fields Definitions
     Then I should see "Editing field"
 
   Scenario: Show all buyer fields being a provider
-    Given provider "foo.example.com" has the following fields defined for "Account":
+    Given provider "foo.3scale.localhost" has the following fields defined for "Account":
       | name             | required | read_only | hidden |
       | vat_code         | true     |           |        |
       | telephone_number |          | true      |        |
@@ -34,7 +34,7 @@ Feature: Fields Definitions
       | head_size        |          | true      |        |
       | hidden           |          |           | true   |
 
-      And a buyer "randomdude" signed up to provider "foo.example.com"
+      And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
       And buyer "randomdude" has extra fields:
       | car_type       | head_size      | hidden |
       | extra_required | user_read_only | hidden |

@@ -4,13 +4,13 @@ Feature: Menu of the Account screen
   I want to see the help dropdown
 
   Background:
-    Given a provider "foo.example.com"
-      And current domain is the admin domain of provider "foo.example.com"
-      And I log in as provider "foo.example.com"
+    Given a provider "foo.3scale.localhost"
+      And current domain is the admin domain of provider "foo.3scale.localhost"
+      And I log in as provider "foo.3scale.localhost"
 
   Scenario: Help menu dropdown
     When I go to the provider account page
-    Then I should see "foo.example.com"
+    Then I should see "foo.3scale.localhost"
     And I should see the help menu items
     | Support Website        |
     | 3scale API Docs        |

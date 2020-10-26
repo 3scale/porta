@@ -4,11 +4,11 @@ Feature: Buyer subscribes to service and can create applications for that servic
   I have to subscribe a service and have contract approved
 
   Background:
-    Given a provider "foo.example.com"
-      And a default service of provider "foo.example.com" has name "API"
+    Given a provider "foo.3scale.localhost"
+      And a default service of provider "foo.3scale.localhost" has name "API"
       And a service plan "Gold" for service "API" exists
       And a published application plan "Default" for service "API" exists
-    Given the current domain is "foo.example.com"
+    Given the current domain is "foo.3scale.localhost"
 
   Scenario: Buyer subscribes service with approval required
     Given service plan "Gold" requires approval of contracts

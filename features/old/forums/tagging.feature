@@ -6,12 +6,12 @@ Feature: Tags on Forum
   Background:
     Given a published plan "Basic" of provider "Master account"
     And plan "Basic" has "Forum" enabled
-    And a provider "foo.example.com" signed up to plan "Basic"
-    And provider "foo.example.com" has "forum" enabled
+    And a provider "foo.3scale.localhost" signed up to plan "Basic"
+    And provider "foo.3scale.localhost" has "forum" enabled
 
   Scenario: Tagging topic
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
     And I visit the page to create new topic
     Then I should see the page to create new topic
 
@@ -23,37 +23,37 @@ Feature: Tags on Forum
     And I should see the tags
 
   Scenario: Forum filtering by tags
-    Given the forum of "foo.example.com" have the topics:
+    Given the forum of "foo.3scale.localhost" have the topics:
          | topic    | tagged with     |
          | debian   | skypekit, linux |
          | hal 9000 | skypekit        |
 
-    When I log in as "foo.example.com" on foo.example.com
-    And I go to foo.example.com
+    When I log in as "foo.3scale.localhost" on foo.3scale.localhost
+    And I go to foo.3scale.localhost
     And I visit the forum page with no tag
-    Then I should see all the topics on the forum of "foo.example.com"
+    Then I should see all the topics on the forum of "foo.3scale.localhost"
 
-    When I go to foo.example.com
+    When I go to foo.3scale.localhost
     And I visit the forum page with tag "linux"
     Then I should see only the debian topic
 
   @admin_side
   Scenario: Topics have tags listed without links on admin side
-    Given the forum of "foo.example.com" have the topics:
+    Given the forum of "foo.3scale.localhost" have the topics:
        | topic    | tagged with     |
        | linuxian | linux, debian   |
        | skypian  | skypekit, phone |
-    And current domain is the admin domain of provider "foo.example.com"
-    And I log in as provider "foo.example.com"
-    And I visit on the admin side the page of the topic "linuxian" on the forum of "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
+    And I visit on the admin side the page of the topic "linuxian" on the forum of "foo.3scale.localhost"
     Then I should see the tags of the topic
 
   @public_side
   Scenario: Topics have tags listed with links on public side
-    Given the forum of "foo.example.com" have the topics:
+    Given the forum of "foo.3scale.localhost" have the topics:
        | topic    | tagged with     |
        | linuxian | linux, debian   |
        | skypian  | skypekit, phone |
-    When I log in as "foo.example.com" on foo.example.com
-    And I visit on the public side the topic "skypian" on the forum of "foo.example.com"
+    When I log in as "foo.3scale.localhost" on foo.3scale.localhost
+    And I visit on the public side the topic "skypian" on the forum of "foo.3scale.localhost"
     Then I should see the links to search by its tags

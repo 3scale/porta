@@ -5,16 +5,16 @@ Feature: Provider manages line items
 
 # TODO: create the invoice artificially and not by billing mechanism
 Background:
-  Given a provider "foo.example.com" with billing enabled
-    Given provider "foo.example.com" has "finance" switch allowed
-    And an application plan "Fixed" of provider "foo.example.com" for 200 monthly
+  Given a provider "foo.3scale.localhost" with billing enabled
+    Given provider "foo.3scale.localhost" has "finance" switch allowed
+    And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
     And a buyer "zoidberg" signed up to application plan "Fixed"
     And an invoice of buyer "zoidberg" for February, 2009 with items
       | name | cost |
       | Old  |   42 |
 
-    And current domain is the admin domain of provider "foo.example.com"
-   When I log in as provider "foo.example.com"
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+   When I log in as provider "foo.3scale.localhost"
 
     And I navigate to my earnings
     And I follow "February, 2009"
