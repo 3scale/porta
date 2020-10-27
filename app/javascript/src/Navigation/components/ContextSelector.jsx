@@ -27,8 +27,10 @@ const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink 
   function getClassNamesForMenu (menu: Menu): string {
     const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
     const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)
+    const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].indexOf(activeMenu) !== -1)
+    const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].indexOf(activeMenu) !== -1)
 
-    if (isDashboardSelected || isAudienceSelected) {
+    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected) {
       return 'PopNavigation-link current-context'
     }
 
@@ -55,12 +57,12 @@ const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink 
             </li>
           )}
           <li className="PopNavigation-listItem">
-            <a className="PopNavigation-link" href={productsLink}>
+            <a className={getClassNamesForMenu('products')} href={productsLink}>
               <i className='fa fa-cubes' />Products
             </a>
           </li>
           <li className="PopNavigation-listItem">
-            <a className="PopNavigation-link" href={backendsLink}>
+            <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
               <i className='fa fa-cube' />Backends
             </a>
           </li>
