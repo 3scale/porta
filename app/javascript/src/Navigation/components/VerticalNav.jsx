@@ -4,6 +4,7 @@ import React from 'react'
 import { Nav, NavExpandable, NavItem, NavGroup } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import 'Navigation/styles/VerticalNav.scss'
+import type { Api } from 'Types'
 
 type Item = {
   id: string,
@@ -22,13 +23,13 @@ type Props = {
   sections: Section[],
   activeSection: ?string,
   activeItem: ?string,
-  currentApi: ?string
+  currentApi: ?Api
 }
 
 const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props) => (
   <div className="pf-c-page__sidebar-body">
     <Nav id='mainmenu' theme='dark'>
-      <NavGroup title={currentApi.name}>
+      <NavGroup title={currentApi.name ? currentApi.name : ''}>
         {sections.map(({ id, title, path, items, outOfDateConfig }) => {
           return items
             ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>

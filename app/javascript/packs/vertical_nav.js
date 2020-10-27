@@ -1,7 +1,7 @@
 import { VerticalNavWrapper as VerticalNav } from 'Navigation/components/VerticalNav'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-const containerId = 'api_selector'
+const apiSelectorId = 'api_selector'
 
 document.addEventListener('DOMContentLoaded', () => {
   const dataset = document.getElementById('vertical-nav-wrapper').dataset
@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const activeSection = dataset.active_section
   const activeItem = dataset.active_item
 
-  const apiSelector = document.getElementById(containerId)
+  const apiSelector = document.getElementById(apiSelectorId)
   const { currentApi } = apiSelector.dataset
 
   // TODO: where does this go?
   // - if can?(:manage, :plans)
   //   { title: 'Integration Errors', path: admin_service_errors_path(@service) },
-  VerticalNav({ sections, activeSection, activeItem, currentApi: JSON.parse(currentApi) }, 'vertical-nav-wrapper')
+  VerticalNav({ sections, activeSection, activeItem, currentApi: safeFromJsonString(currentApi) }, 'vertical-nav-wrapper')
 })
