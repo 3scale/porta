@@ -37,7 +37,7 @@ const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, b
   }
 
   return (
-    <div className="PopNavigation PopNavigation--context" ref={ref}>
+    <div className={`PopNavigation PopNavigation--context${isOpen ? ' pf-m-expanded' : ''}`} ref={ref}>
       <a className="PopNavigation-trigger" href="#context-menu" title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
         <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} apiap={true}/>
       </a>
