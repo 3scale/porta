@@ -794,38 +794,6 @@ jobs:
             }" $SLACK_WEBHOOK_SYSTEM
           when: on_success
 
-  portafly_tests:
-    resource_class: small
-    docker:
-      - image: circleci/node:12
-    parameters:
-    steps:
-      - checkout-with-submodules
-      - run:
-          name: Run PortaFly tests
-          root: .
-          command: |
-            cd portafly
-            yarn --version
-            yarn install --frozen-lockfile
-            yarn test --maxWorkers=3
-
-  portafly_build:
-    resource_class: small
-    docker:
-      - image: circleci/node:12
-    parameters:
-    steps:
-      - checkout-with-submodules
-      - run:
-          name: Run PortaFly Build
-          root: .
-          command: |
-            cd portafly
-            yarn --version
-            yarn install --frozen-lockfile
-            yarn build
-
   check_production_gemfile:
     parameters:
       executor:
@@ -1082,20 +1050,6 @@ workflows:
             - karma
             - jest
           <<: *only-master-filter
-
-  portafly:
-    jobs:
-      - manual_approval:
-          type: approval
-      - notify_start:
-          requires:
-            - manual_approval
-      - portafly_tests:
-          requires:
-            - manual_approval
-      - portafly_build:
-          requires:
-            - portafly_tests
 
   production_gemfile-master:
     jobs:
