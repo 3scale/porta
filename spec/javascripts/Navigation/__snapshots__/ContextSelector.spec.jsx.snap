@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should have Dashboard, Audience, Products and Backends 1`] = `
+exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = `
 <ContextSelector
   activeMenu=""
   audienceLink="/audience"
