@@ -42,7 +42,6 @@ openshift/system/*file
 openshift/system/Dockerfile*
 openshift/system/*.yml
 openshift/system/*.md
-portafly
 log/*
 **/.idea
 **/*.sql
