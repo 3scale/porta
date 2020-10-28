@@ -9,7 +9,7 @@ exports[`should have Dashboard, Audience, Products and Backends 1`] = `
   productsLink="/products"
 >
   <div
-    className="PopNavigation PopNavigation--context"
+    className="PopNavigation PopNavigation--context pf-m-expanded"
   >
     <a
       className="PopNavigation-trigger"
@@ -101,7 +101,7 @@ exports[`should not have Audience if not provided 1`] = `
   productsLink="/products"
 >
   <div
-    className="PopNavigation PopNavigation--context"
+    className="PopNavigation PopNavigation--context pf-m-expanded"
   >
     <a
       className="PopNavigation-trigger"
