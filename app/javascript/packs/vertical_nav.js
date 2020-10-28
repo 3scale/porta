@@ -11,5 +11,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // TODO: where does this go?
   // - if can?(:manage, :plans)
   //   { title: 'Integration Errors', path: admin_service_errors_path(@service) },
-  VerticalNav({ sections, activeSection, activeItem, currentApi: JSON.parse(currentApi) }, 'vertical-nav-wrapper')
+  VerticalNav({ sections, activeSection, activeItem, currentApi: safeFromJsonString(currentApi) }, 'vertical-nav-wrapper')
 })
