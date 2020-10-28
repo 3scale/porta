@@ -96,6 +96,12 @@ module MenuHelper
     end
   end
 
+  def settings_link
+    can?(:manage, current_account)
+      ? provider_admin_account_path
+      : edit_provider_admin_user_personal_details_path
+  end
+
   def current_api
     (@backend_api || @service || Service.none).decorate
   end
