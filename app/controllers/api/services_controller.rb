@@ -17,7 +17,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def index
-    activate_menu :dashboard
+    activate_menu :products
     search = ThreeScale::Search.new(params[:search] || params)
     @raw_services = current_user.accessible_services
     @services = @raw_services.order(updated_at: :desc)
@@ -32,7 +32,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def new
-    activate_menu :dashboard
+    activate_menu :products
     @service = ServicePresenter.new(collection.build(params[:service]))
   end
 
