@@ -8,10 +8,9 @@ import { useClickOutside } from 'utilities/useClickOutside'
 
 import 'Navigation/styles/ContextSelector.scss'
 
-import type { Api, Menu } from 'Types'
+import type { Menu } from 'Types'
 
 type Props = {
-  currentApi: Api,
   activeMenu: Menu,
   audienceLink: string,
   productsLink: string,
@@ -20,7 +19,7 @@ type Props = {
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, backendsLink }: Props) => {
+const ContextSelector = ({ activeMenu, audienceLink, productsLink, backendsLink }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
@@ -28,8 +27,10 @@ const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, b
   function getClassNamesForMenu (menu: Menu): string {
     const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
     const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)
+    const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].indexOf(activeMenu) !== -1)
+    const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].indexOf(activeMenu) !== -1)
 
-    if (isDashboardSelected || isAudienceSelected) {
+    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected) {
       return 'PopNavigation-link current-context'
     }
 
@@ -39,7 +40,7 @@ const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, b
   return (
     <div className="PopNavigation PopNavigation--context" ref={ref}>
       <a className="PopNavigation-trigger" href="#context-menu" title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
-        <ActiveMenuTitle currentApi={currentApi} activeMenu={activeMenu} apiap={true}/>
+        <ActiveMenuTitle activeMenu={activeMenu} />
       </a>
       {isOpen && (
         <ul id="context-menu" className="PopNavigation-list">
@@ -56,12 +57,12 @@ const ContextSelector = ({ currentApi, activeMenu, audienceLink, productsLink, b
             </li>
           )}
           <li className="PopNavigation-listItem">
-            <a className="PopNavigation-link" href={productsLink}>
+            <a className={getClassNamesForMenu('products')} href={productsLink}>
               <i className='fa fa-cubes' />Products
             </a>
           </li>
           <li className="PopNavigation-listItem">
-            <a className="PopNavigation-link" href={backendsLink}>
+            <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
               <i className='fa fa-cube' />Backends
             </a>
           </li>

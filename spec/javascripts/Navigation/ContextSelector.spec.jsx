@@ -66,13 +66,13 @@ it('should display the current api', () => {
   const wrapper = getWrapper({ activeMenu: 'serviceadmin', currentApi })
 
   expect(wrapper.find('.fa-cubes').exists()).toBe(true)
-  expect(wrapper.find('.PopNavigation-trigger').text()).toContain(currentApi.name)
+  expect(wrapper.find('.PopNavigation-trigger').text()).toContain('Products')
 
   wrapper.setProps({ activeMenu: 'monitoring' })
   expect(wrapper.find('.fa-cubes').exists()).toBe(true)
-  expect(wrapper.find('.PopNavigation-trigger').text()).toContain(currentApi.name)
+  expect(wrapper.find('.PopNavigation-trigger').text()).toContain('Products')
 
   wrapper.setProps({ activeMenu: 'backend_api' })
   expect(wrapper.find('.fa-cube').exists()).toBe(true)
-  expect(wrapper.find('.PopNavigation-trigger').text()).toContain(currentApi.name)
+  expect(wrapper.find('.PopNavigation-trigger').text()).toContain('Backends')
 })
