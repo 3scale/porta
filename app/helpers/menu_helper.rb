@@ -97,9 +97,7 @@ module MenuHelper
   end
 
   def settings_link
-    can?(:manage, current_account)
-      ? provider_admin_account_path
-      : edit_provider_admin_user_personal_details_path
+    can?(:manage, current_account) ? provider_admin_account_path : edit_provider_admin_user_personal_details_path
   end
 
   def current_api
