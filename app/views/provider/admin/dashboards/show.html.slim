@@ -39,8 +39,3 @@
   div.Dashboard-events
     section.DashboardStream
       = raw(@messages_presenter.render)
-
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    toggleWidget()
-  })
