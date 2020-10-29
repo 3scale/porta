@@ -24,7 +24,7 @@ it('should render itself', () => {
   expect(getWrapper().find(ContextSelector).exists()).toEqual(true)
 })
 
-it('should have Dashboard, Audience, Products and Backends', () => {
+it('should have Dashboard, Audience, Products, Backends and Settings', () => {
   const wrapper = getWrapper()
   wrapper.find('.PopNavigation-trigger').simulate('click')
   expect(wrapper).toMatchSnapshot()
@@ -60,6 +60,26 @@ it('should highlight the selected context', () => {
   wrapper.setProps({ activeMenu: 'dashboard', currentApi })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Dashboard')
+
+  wrapper.setProps({ activeMenu: 'personal', currentApi })
+  expect(wrapper.find('.current-context')).toHaveLength(1)
+  expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
+
+  wrapper.setProps({ activeMenu: 'account', currentApi })
+  expect(wrapper.find('.current-context')).toHaveLength(1)
+  expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
+
+  wrapper.setProps({ activeMenu: 'active_docs', currentApi })
+  expect(wrapper.find('.current-context')).toHaveLength(1)
+  expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
+
+  wrapper.setProps({ activeMenu: 'serviceadmin', currentApi })
+  expect(wrapper.find('.current-context')).toHaveLength(1)
+  expect(wrapper.find('.current-context').text()).toEqual('Products')
+
+  wrapper.setProps({ activeMenu: 'backend_api', currentApi })
+  expect(wrapper.find('.current-context')).toHaveLength(1)
+  expect(wrapper.find('.current-context').text()).toEqual('Backends')
 })
 
 it('should display the current api', () => {

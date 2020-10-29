@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should have Dashboard, Audience, Products and Backends 1`] = `
+exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = `
 <ContextSelector
   activeMenu=""
   audienceLink="/audience"
@@ -88,6 +88,18 @@ exports[`should have Dashboard, Audience, Products and Backends 1`] = `
           Backends
         </a>
       </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+        >
+          <i
+            className="fa fa-cog"
+          />
+          Account Settings
+        </a>
+      </li>
     </ul>
   </div>
 </ContextSelector>
@@ -165,6 +177,18 @@ exports[`should not have Audience if not provided 1`] = `
             className="fa fa-cube"
           />
           Backends
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+        >
+          <i
+            className="fa fa-cog"
+          />
+          Account Settings
         </a>
       </li>
     </ul>

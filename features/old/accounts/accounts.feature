@@ -88,10 +88,11 @@ Feature: Account management
       And I go to the provider account page
     Then I should not be able to edit the value of the customers type field
 
+  @javascript
   Scenario: Edit personal details with invalid data
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
-    And I follow "Account Settings"
+    And I navigate to the Account Settings
     And I follow "Personal"
     And I follow "Personal Details"
     When I fill in "Email" with ""
