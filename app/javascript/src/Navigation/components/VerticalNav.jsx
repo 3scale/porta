@@ -26,29 +26,29 @@ type Props = {
   currentApi: ?Api
 }
 
-const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props) => (
-  <div className="pf-c-page__sidebar-body">
-    <Nav id='mainmenu' theme='dark'>
-      { currentApi ? (
-        <NavGroup title={currentApi.name}>
-          {sections.map(({ id, title, path, items, outOfDateConfig }) => {
-            return items
-              ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
-              : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
-          })}
-        </NavGroup>
-      ) : (
-        <NavList>
-          {sections.map(({ id, title, path, items, outOfDateConfig }) => {
-            return items
-              ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
-              : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
-          })}
-        </NavList>
-      )}
-    </Nav>
-  </div>
-)
+const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props) => {
+  var navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => {
+    return items
+      ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
+      : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
+  })
+
+  return (
+    <div className="pf-c-page__sidebar-body">
+      <Nav id='mainmenu' theme='dark'>
+        { currentApi ? (
+          <NavGroup title={currentApi.name}>
+            {navSections}
+          </NavGroup>
+        ) : (
+          <NavList>
+            {navSections}
+          </NavList>
+        )}
+      </Nav>
+    </div>
+  )
+}
 
 const NavSection = ({title, isSectionActive, activeItem, items, outOfDateConfig}) => {
   return (
