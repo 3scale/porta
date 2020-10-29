@@ -27,7 +27,7 @@ type Props = {
 }
 
 const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props) => {
-  var navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => {
+  const navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => {
     return items
       ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
       : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
