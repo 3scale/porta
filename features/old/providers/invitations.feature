@@ -9,6 +9,7 @@ Feature: Invitations
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "multiple_users" switch allowed
 
+  @javascript
   Scenario: Sending an invitation as provider
     Given the admin domain of provider "foo.3scale.localhost" is "admin.foo.3scale.localhost"
       And current domain is the admin domain of provider "foo.3scale.localhost"

@@ -81,3 +81,8 @@ When /^I navigate to the buyers service contracts page$/ do
   step 'I navigate to the accounts page'
   click_link 'Subscriptions'
 end
+
+When "I navigate to the Account Settings" do
+  find('#api_selector').click
+  step %(I follow "Account Settings")
+end

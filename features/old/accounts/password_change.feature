@@ -3,12 +3,13 @@ Feature: Password change
   As an user
   I want to change my password from time to time
 
+  @javascript
   Scenario: Provider password change
     Given a provider "foo.3scale.localhost"
 
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost" with password "supersecret"
-    When I follow "Account Settings"
+    When I navigate to the Account Settings
     And I follow "Personal"
     And I follow "Personal Details"
     And I fill in "Password" with "monkey"

@@ -7,11 +7,12 @@ Feature: Personal Details
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
 
+  @javascript
   Scenario: Edit personal details as provider
    Given current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
 
-   When I follow "Account Settings"
+   When I navigate to the Account Settings
     And I follow "Personal"
     And I follow "Personal Details"
     And I fill in "Email" with "john.doe@foo.3scale.localhost"
