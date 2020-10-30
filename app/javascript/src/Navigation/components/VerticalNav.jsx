@@ -3,6 +3,8 @@
 import React from 'react'
 import { Nav, NavExpandable, NavItem, NavList, NavGroup } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities/createReactWrapper'
+import 'Navigation/styles/VerticalNav.scss'
+import type { Api } from 'Types'
 
 type Item = {
   id: string,
@@ -20,22 +22,33 @@ type Section = Item & {
 type Props = {
   sections: Section[],
   activeSection: ?string,
-  activeItem: ?string
+  activeItem: ?string,
+  currentApi: ?Api
 }
 
-const VerticalNav = ({ sections, activeSection, activeItem }: Props) => (
-  <div className="pf-c-page__sidebar-body">
-    <Nav id='mainmenu' theme='dark'>
-      <NavList>
-        {sections.map(({ id, title, path, items, outOfDateConfig }) => {
-          return items
-            ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
-            : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
-        })}
-      </NavList>
-    </Nav>
-  </div>
-)
+const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props) => {
+  const navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => {
+    return items
+      ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
+      : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
+  })
+
+  return (
+    <div className="pf-c-page__sidebar-body">
+      <Nav id="mainmenu" theme="dark">
+        { currentApi ? (
+          <NavGroup title={currentApi.name}>
+            {navSections}
+          </NavGroup>
+        ) : (
+          <NavList>
+            {navSections}
+          </NavList>
+        )}
+      </Nav>
+    </div>
+  )
+}
 
 const NavSection = ({title, isSectionActive, activeItem, items, outOfDateConfig}) => {
   return (
