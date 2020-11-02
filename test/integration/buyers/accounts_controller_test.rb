@@ -163,6 +163,51 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       end
       assert_response :forbidden
     end
+
+    test 'member users with access to all services should see all buyers accounts' do
+      buyer_without_applications = FactoryBot.create(:simple_buyer, provider_account: provider)
+
+      accessible_service = FactoryBot.create(:service, account: @provider)
+      accessible_buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      accessible_app_plan = FactoryBot.create(:application_plan, issuer: accessible_service)
+      accessible_app = FactoryBot.create(:cinstance, user_account: accessible_buyer, plan: accessible_app_plan, name: 'accessible app')
+
+      another_service = FactoryBot.create(:service, account: @provider)
+      another_buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      another_app_plan = FactoryBot.create(:application_plan, issuer: another_service)
+      another_app = FactoryBot.create(:cinstance, user_account: another_buyer, plan: another_app_plan, name: 'another app')
+
+      user.member_permission_ids = [:partners]
+      user.save!
+      get admin_buyers_accounts_path
+      assert_equal 3, assigns(:accounts).size
+      assert_includes assigns(:accounts), accessible_buyer
+      assert_includes assigns(:accounts), buyer_without_applications
+      assert_includes assigns(:accounts), another_buyer
+    end
+
+    test 'member users with restricted access to services should see accounts subscribed to the service and accounts with no applications at all' do
+      buyer_without_applications = FactoryBot.create(:simple_buyer, provider_account: provider)
+
+      accessible_service = FactoryBot.create(:service, account: @provider)
+      accessible_buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      accessible_app_plan = FactoryBot.create(:application_plan, issuer: accessible_service)
+      accessible_app = FactoryBot.create(:cinstance, user_account: accessible_buyer, plan: accessible_app_plan, name: 'accessible app')
+
+      forbidden_service = FactoryBot.create(:service, account: @provider)
+      forbidden_buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      forbidden_app_plan = FactoryBot.create(:application_plan, issuer: forbidden_service)
+      forbidden_app = FactoryBot.create(:cinstance, user_account: forbidden_buyer, plan: forbidden_app_plan, name: 'forbidden app')
+
+      user.member_permission_ids = [:partners]
+      user.member_permission_service_ids = [accessible_service.id]
+      user.save!
+      get admin_buyers_accounts_path
+      assert_equal 2, assigns(:accounts).size
+      assert_includes assigns(:accounts), accessible_buyer
+      assert_includes assigns(:accounts), buyer_without_applications
+      assert_not_includes assigns(:accounts), forbidden_buyer
+    end
   end
 
   class ProviderLoggedInTest < Buyers::AccountsControllerTest
@@ -293,6 +338,22 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       get admin_buyers_accounts_path(id: @buyer.id)
       assert_xpath('//tbody/tr/td[2]/a', @buyer.decorate.admin_user_display_name)
+    end
+
+    test 'admin user should see all buyer accounts' do
+      accessible_service = FactoryBot.create(:service, account: @provider)
+      accessible_buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      accessible_app_plan = FactoryBot.create(:application_plan, issuer: accessible_service)
+      accessible_app = FactoryBot.create(:cinstance, user_account: accessible_buyer, plan: accessible_app_plan, name: 'accessible app')
+
+      accessible_service2 = FactoryBot.create(:service, account: @provider)
+      accessible_buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      accessible_app_plan2 = FactoryBot.create(:application_plan, issuer: accessible_service2)
+      accessible_app2 = FactoryBot.create(:cinstance, user_account: accessible_buyer2, plan: accessible_app_plan2, name: 'accessible2 app')
+
+      get admin_buyers_accounts_path
+      assert_equal 3, assigns(:accounts).size
+      assert_same_elements @provider.buyers.ids, assigns(:accounts).map(&:id)
     end
   end
 
