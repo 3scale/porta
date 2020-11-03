@@ -1,9 +1,6 @@
 import $ from 'jquery'
 
 import 'Dashboard/chart'
-import toggle from 'Dashboard/toggle'
-
-export { toggle }
 
 export function widget (url) {
   $.ajax({
