@@ -48,7 +48,7 @@ const ProductsWidget = ({ newProductPath, productsPath, products }: Props) => (
         </CardActions>
       </div>
       <div className="dashboard-list-subtitle">
-        Recently updated
+        Last updated
       </div>
     </CardHeader>
     <CardBody>
