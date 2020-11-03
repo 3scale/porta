@@ -48,7 +48,7 @@ const BackendsWidget = ({ newBackendPath, backendsPath, backends }: Props) => (
         </CardActions>
       </div>
       <div className="dashboard-list-subtitle">
-        Recently updated
+        Last updated
       </div>
     </CardHeader>
     <CardBody>
