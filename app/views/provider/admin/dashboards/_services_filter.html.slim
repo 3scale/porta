@@ -1,7 +1,0 @@
-- if current_user.multiple_accessible_services?
-  - apis = @services.as_json(root: false, only: [:id, :name]).to_json
-  #api_filter data-apis=apis data-dom-class='service'
-    = javascript_pack_tag 'services_search_bar'
-
-- else
-  h1.DashboardSection-title APIs
