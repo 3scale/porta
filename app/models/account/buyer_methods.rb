@@ -27,6 +27,18 @@ module Account::BuyerMethods
 
     has_many :contracts, foreign_key: :user_account_id, dependent: :destroy
 
+    def self.permitted_for(user)
+      return all unless user.forbidden_some_services?
+
+      where.has do
+        exists(
+          Cinstance
+            .by_account(BabySqueel[:accounts].id)
+            .by_service_id(*(user.member_permission_service_ids))
+        )
+      end
+    end
+
     module UniqueAssociation
       # Oracle can't do DISTINCT when there are TEXT columns
       # so it can't do unique has many through association on plans

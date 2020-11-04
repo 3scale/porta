@@ -219,9 +219,7 @@ class User < ApplicationRecord
   end
 
   def accessible_buyer_accounts
-    buyer_accounts = account.buyer_accounts
-    buyer_accounts_without_applications = buyer_accounts.where.has { not_exists Cinstance.by_account(BabySqueel[:accounts].id) }
-    buyer_accounts.where(id: accessible_cinstances.select(:user_account_id)).or(buyer_accounts_without_applications)
+    account.buyer_accounts.permitted_for(self)
   end
 
   def can_login?
