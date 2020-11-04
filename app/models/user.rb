@@ -211,19 +211,11 @@ class User < ApplicationRecord
   end
 
   def accessible_cinstances
-    cinstances = account.provided_cinstances
+    account.provided_cinstances.permitted_for(self)
 
     # TODO: this has no clear migration path
     # once we would enable the :service_permissions feature for everyone
     # members that have no access to service would stop seeing applications
-    case
-    when has_access_to_all_services?
-        cinstances
-    when account.provider_can_use?(:service_permissions)
-        cinstances.where(service_id: member_permission_service_ids)
-    else
-        cinstances
-    end
   end
 
   def accessible_service_contracts
