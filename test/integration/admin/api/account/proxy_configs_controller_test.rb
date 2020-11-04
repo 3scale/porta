@@ -93,6 +93,30 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_equal service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id), proxy_config_ids
   end
 
+  test '#index can be filtered by host' do
+    services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api, account: provider)
+    services.each do |service|
+      [
+        %w[3scale.localhost example.org],
+        %w[3scale.net example.org 3sca.net],
+        %w[3scale.localhost example.com]
+      ].each do |hosts|
+        FactoryBot.create(:proxy_config, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: ( { proxy: { hosts: hosts } }.to_json ) )
+      end
+    end
+
+    get admin_api_account_proxy_configs_path(
+      environment: ProxyConfig::ENVIRONMENTS.first,
+      access_token: access_token_value(user: provider.admin_user)
+    ), params: {host: 'example.org'}
+
+    assert_response :success
+
+    response_proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
+    expected_proxy_config_ids = services.map { |service| service.proxy.proxy_configs.by_host('example.org').select(:id).map(&:id) }.flatten
+    assert_same_elements expected_proxy_config_ids, response_proxy_config_ids
+  end
+
   private
 
   def access_token_value(user:)

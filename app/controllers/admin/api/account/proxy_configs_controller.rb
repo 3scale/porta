@@ -25,6 +25,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_environment
+  ##~ op.parameters.add :name => "host", :description => "Find by host", :dataType => "string", :required => false, :paramType => "query"
   #
   def index
     respond_with proxy_configs.order(:id).paginate(pagination_params)
@@ -33,8 +34,10 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   private
 
   def proxy_configs
-    accessible_services_ids = System::Database.oracle? ? accessible_services.pluck(:id) : accessible_services.select(:id)
-    ProxyConfig.joins(:proxy).where(proxies: { service_id: accessible_services_ids }).by_environment(environment)
+    @proxy_configs ||= ProxyConfig.joins(:proxy)
+      .where(proxies: { service_id: (System::Database.oracle? ? accessible_services.pluck(:id) : accessible_services.select(:id)) })
+      .by_environment(environment)
+      .by_host(host)
   end
 
   def accessible_services
@@ -43,5 +46,9 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
 
   def environment
     params.require(:environment)
+  end
+
+  def host
+    params.permit(:host)[:host]
   end
 end
