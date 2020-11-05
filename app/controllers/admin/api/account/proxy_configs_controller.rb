@@ -35,7 +35,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
 
   def proxy_configs
     @proxy_configs ||= ProxyConfig.joins(:proxy)
-      .where(proxies: { service_id: (System::Database.oracle? ? accessible_services.pluck(:id) : accessible_services.select(:id)) })
+      .where(proxies: { service_id: accessible_services.pluck(:id) })
       .by_environment(environment)
       .by_host(host)
   end
