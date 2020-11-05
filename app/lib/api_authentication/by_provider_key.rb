@@ -17,7 +17,7 @@ module ApiAuthentication::ByProviderKey
                          elsif provider_key.present?
                            Account
                                .providers_with_master
-                               .by_self_domain(request.host)
+                               .by_self_domain(request.internal_host)
                                .first_by_provider_key(provider_key)
                          end
   end
