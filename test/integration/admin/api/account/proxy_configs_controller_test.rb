@@ -117,6 +117,37 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_same_elements expected_proxy_config_ids, response_proxy_config_ids
   end
 
+  test '#index can be filtered by version' do
+    services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api, account: provider)
+    proxy_configs = services.map { |service| FactoryBot.create_list(:proxy_config, 3, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first) }.flatten
+
+
+
+    get admin_api_account_proxy_configs_path(
+      environment: ProxyConfig::ENVIRONMENTS.first,
+      access_token: access_token_value(user: provider.admin_user),
+      version: proxy_configs.first.version
+    )
+
+    assert_response :success
+    response_proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
+    expected_proxy_config_ids_specific_version = services.map { |service| service.proxy.proxy_configs.where(version: proxy_configs.first.version).select(:id).map(&:id) }.flatten
+    assert_same_elements expected_proxy_config_ids_specific_version, response_proxy_config_ids
+
+
+
+    get admin_api_account_proxy_configs_path(
+      environment: ProxyConfig::ENVIRONMENTS.first,
+      access_token: access_token_value(user: provider.admin_user),
+      version: 'latest'
+    )
+
+    assert_response :success
+    response_proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
+    expected_proxy_config_ids_latest_version = services.map { |service| service.proxy.proxy_configs.where(version: proxy_configs.last.version).select(:id).map(&:id) }.flatten
+    assert_same_elements expected_proxy_config_ids_latest_version, response_proxy_config_ids
+  end
+
   private
 
   def access_token_value(user:)

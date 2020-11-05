@@ -278,6 +278,13 @@
               "dataType": "string",
               "required": false,
               "paramType": "query"
+            },
+            {
+              "name": "version",
+              "description": "Find by version",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
             }
           ]
         }

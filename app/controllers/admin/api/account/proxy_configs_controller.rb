@@ -25,7 +25,8 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_environment
-  ##~ op.parameters.add :name => "host", :description => "Find by host", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "host",    :description => "Find by host",    :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "version", :description => "Find by version", :dataType => "string", :required => false, :paramType => "query"
   #
   def index
     respond_with proxy_configs.order(:id).paginate(pagination_params)
@@ -38,6 +39,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
       .where(proxies: { service_id: accessible_services.pluck(:id) })
       .by_environment(environment)
       .by_host(host)
+      .by_version(version)
   end
 
   def accessible_services
@@ -50,5 +52,9 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
 
   def host
     params.permit(:host)[:host]
+  end
+
+  def version
+    params.permit(:version)[:version]
   end
 end
