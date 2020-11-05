@@ -26,14 +26,13 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
       assert_response :success
 
-      proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
       expected_ids = ProxyConfig
                       .joins(:proxy)
                       .where(proxies: { service_id: [accessible_service_1, accessible_service_2].map(&:id) })
                       .by_environment(environment)
                       .order(:id)
                       .pluck(:id)
-      assert_equal expected_ids, proxy_config_ids # The order matters for this endpoint bcz it is paginated and we cannot afford random/different/unexpected results for each request
+      assert_equal expected_ids, response_proxy_config_ids # The order matters for this endpoint bcz it is paginated and we cannot afford random/different/unexpected results for each request
     end
   end
 
@@ -55,8 +54,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
     get admin_api_account_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, access_token: access_token_value(user: member))
     assert_response :forbidden
-    proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
-    assert_empty proxy_config_ids
+    assert_empty response_proxy_config_ids
 
     member.admin_sections = [:services, :partners]
     member.member_permission_service_ids = '[]'
@@ -64,8 +62,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
     get admin_api_account_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, access_token: access_token_value(user: member))
     assert_response :success
-    proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
-    assert_empty proxy_config_ids
+    assert_empty response_proxy_config_ids
 
     member.admin_sections = [:services, :partners]
     member.member_permission_service_ids = [services[0].id]
@@ -73,8 +70,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
     get admin_api_account_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, access_token: access_token_value(user: member))
     assert_response :success
-    proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
-    assert_equal services[0].proxy.proxy_configs.order(:id).pluck(:id), proxy_config_ids
+    assert_equal services[0].proxy.proxy_configs.order(:id).pluck(:id), response_proxy_config_ids
   end
 
   test '#index accepts pagination params' do
@@ -89,8 +85,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
     assert_response :success
 
-    proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
-    assert_equal service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id), proxy_config_ids
+    assert_equal service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id), response_proxy_config_ids
   end
 
   test '#index can be filtered by host' do
@@ -112,7 +107,6 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
     assert_response :success
 
-    response_proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
     expected_proxy_config_ids = services.map { |service| service.proxy.proxy_configs.by_host('example.org').select(:id).map(&:id) }.flatten
     assert_same_elements expected_proxy_config_ids, response_proxy_config_ids
   end
@@ -130,7 +124,6 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     )
 
     assert_response :success
-    response_proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
     expected_proxy_config_ids_specific_version = services.map { |service| service.proxy.proxy_configs.where(version: proxy_configs.first.version).select(:id).map(&:id) }.flatten
     assert_same_elements expected_proxy_config_ids_specific_version, response_proxy_config_ids
 
@@ -143,7 +136,6 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     )
 
     assert_response :success
-    response_proxy_config_ids = (JSON.parse(response.body)['proxy_configs'] || []).map { |api_doc| api_doc.dig('proxy_config', 'id') }
     expected_proxy_config_ids_latest_version = services.map { |service| service.proxy.proxy_configs.where(version: proxy_configs.last.version).select(:id).map(&:id) }.flatten
     assert_same_elements expected_proxy_config_ids_latest_version, response_proxy_config_ids
   end
@@ -152,5 +144,9 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
 
   def access_token_value(user:)
     FactoryBot.create(:access_token, owner: user, scopes: %w[account_management]).value
+  end
+
+  def response_proxy_config_ids
+    (JSON.parse(response.body)['proxy_configs'] || []).map { |proxy_config| proxy_config.dig('proxy_config', 'id') }
   end
 end
