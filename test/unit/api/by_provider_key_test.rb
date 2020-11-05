@@ -20,13 +20,16 @@ class ApiAuthentication::ByProviderKeyTest < ActiveSupport::TestCase
     p1 = FactoryBot.create(:provider_account)
     p2 = FactoryBot.create(:provider_account)
 
+    request = ActionDispatch::TestRequest.create
+    request.host = p2.self_domain
+
     object = Params.new(:provider_key => p2.api_key)
-    object.request = mock(:host => p2.self_domain)
+    object.request = request
 
     assert object.current_account
 
     object = Params.new(:provider_key => p1.api_key)
-    object.request = mock(:host => p2.self_domain)
+    object.request = request
     assert ! object.current_account
   end
 end
