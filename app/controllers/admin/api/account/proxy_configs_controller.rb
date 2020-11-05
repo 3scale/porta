@@ -43,7 +43,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   end
 
   def accessible_services
-    (current_user || current_account).accessible_services.order(:id)
+    (current_user || current_account).accessible_services
   end
 
   def environment
