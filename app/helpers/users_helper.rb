@@ -1,5 +1,6 @@
-module UsersHelper
+# frozen_string_literal: true
 
+module UsersHelper
   #
   # Use this to wrap view elements that the user can't access.
   # !! Note: this is an *interface*, not *security* feature !!
@@ -202,5 +203,11 @@ module UsersHelper
 
   def show_provider_sso_status_for_user?
     current_account.provider_can_use?(:provider_sso) && current_account.self_authentication_providers.published.any?
+  end
+
+  def permission_groups_summary(user = current_user)
+    member_permission_ids = user.member_permission_ids
+    return '-' if member_permission_ids.blank?
+    I18n.t('admin_sections.permission_groups_summary').values_at(*member_permission_ids).join(', ')
   end
 end
