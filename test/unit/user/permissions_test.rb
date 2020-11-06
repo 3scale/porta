@@ -153,25 +153,25 @@ class User::PermissionsTest < ActiveSupport::TestCase
   SERVICE_ADMIN_SECTIONS = %i[partners plans monitoring]
   NO_SERVICE_ADMIN_SECTIONS = %i[services portal finance settings]
 
-  test '#has_access_to_service_admin_sections? when no accessible services' do
+  test '#access_to_service_admin_sections? when no accessible services' do
     user = FactoryBot.build(:simple_user, admin_sections: NO_SERVICE_ADMIN_SECTIONS)
     user.stubs(:accessible_services?).returns(false)
-    refute user.has_access_to_service_admin_sections?
+    refute user.access_to_service_admin_sections?
 
     SERVICE_ADMIN_SECTIONS.each do |section|
       user.member_permission_ids = [section]
-      refute user.has_access_to_service_admin_sections?
+      refute user.access_to_service_admin_sections?
     end
   end
 
-  test '#has_access_to_service_admin_sections? when any accessible services' do
+  test '#access_to_service_admin_sections? when any accessible services' do
     user = FactoryBot.build(:simple_user, admin_sections: NO_SERVICE_ADMIN_SECTIONS)
     user.stubs(:accessible_services?).returns(true)
-    refute user.has_access_to_service_admin_sections?
+    refute user.access_to_service_admin_sections?
 
     SERVICE_ADMIN_SECTIONS.each do |section|
       user.member_permission_ids = [section]
-      assert user.has_access_to_service_admin_sections?
+      assert user.access_to_service_admin_sections?
     end
   end
 end

@@ -99,7 +99,7 @@ module User::Permissions
     !has_access_to_all_services? && account.provider_can_use?(:service_permissions)
   end
 
-  def has_access_to_service_admin_sections?
+  def access_to_service_admin_sections?
     (member_permission_ids & %i[partners plans monitoring]).any? && accessible_services?
   end
 
