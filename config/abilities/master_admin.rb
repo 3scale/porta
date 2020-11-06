@@ -64,6 +64,8 @@ Ability.define do |user|
     can :manage, Invitation
     can :manage, Invoice, provider_account_id: user.account_id unless user.account.master_on_premises?
 
+    can :manage, :permissions
+
     user.account.settings.switches.each do |name, _switch|
       can :admin, name
     end
