@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminSection
 
   PERMISSIONS = %I[ portal finance settings partners monitoring plans policy_registry ].freeze
@@ -10,6 +12,8 @@ class AdminSection
     plans: 'API backends, API products',
     policy_registry: 'policies'
   }
+  SERVICE_PERMISSIONS = %i[partners plans monitoring]
+  NO_SERVICE_PERMISSIONS = PERMISSIONS - SERVICE_PERMISSIONS
 
   def self.permissions
     if ThreeScale.master_on_premises?

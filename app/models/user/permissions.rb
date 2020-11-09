@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require 'admin_section'
+
 module User::Permissions
   extend ActiveSupport::Concern
 
@@ -100,7 +104,7 @@ module User::Permissions
   end
 
   def access_to_service_admin_sections?
-    (member_permission_ids & %i[partners plans monitoring]).any? && accessible_services?
+    (member_permission_ids & AdminSection::SERVICE_PERMISSIONS).any? && accessible_services?
   end
 
   def reload(*)
