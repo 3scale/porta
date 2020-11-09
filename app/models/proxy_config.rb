@@ -47,6 +47,13 @@ class ProxyConfig < ApplicationRecord
     System::Database.mysql? ? scope : where(id: scope.group(:version).select(:id))
   end
 
+  scope :by_version, ->(version) do
+    next unless version
+    next current_versions if version == 'latest'
+
+    where(version: version)
+  end
+
   def differs_from?(comparable)
     return true if comparable.blank?
 
