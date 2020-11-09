@@ -203,9 +203,8 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       user.member_permission_service_ids = [accessible_service.id]
       user.save!
       get admin_buyers_accounts_path
-      assert_equal 2, assigns(:accounts).size
       assert_includes assigns(:accounts), accessible_buyer
-      assert_includes assigns(:accounts), buyer_without_applications
+      assert_not_includes assigns(:accounts), buyer_without_applications
       assert_not_includes assigns(:accounts), forbidden_buyer
     end
   end

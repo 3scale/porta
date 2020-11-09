@@ -211,25 +211,15 @@ class User < ApplicationRecord
   end
 
   def accessible_cinstances
-    cinstances = account.provided_cinstances
+    account.provided_cinstances.permitted_for(self)
 
     # TODO: this has no clear migration path
     # once we would enable the :service_permissions feature for everyone
     # members that have no access to service would stop seeing applications
-    case
-    when has_access_to_all_services?
-        cinstances
-    when account.provider_can_use?(:service_permissions)
-        cinstances.where(service_id: member_permission_service_ids)
-    else
-        cinstances
-    end
   end
 
   def accessible_buyer_accounts
-    buyer_accounts = account.buyer_accounts
-    buyer_accounts_without_applications = buyer_accounts.where.has { not_exists Cinstance.by_account(BabySqueel[:accounts].id) }
-    buyer_accounts.where(id: accessible_cinstances.select(:user_account_id)).or(buyer_accounts_without_applications)
+    account.buyer_accounts.permitted_for(self)
   end
 
   def can_login?

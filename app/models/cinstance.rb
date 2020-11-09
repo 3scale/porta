@@ -172,8 +172,8 @@ class Cinstance < Contract
     end
   end
 
-  scope :by_service_id, ->(service_id) {
-    where(service_id: service_id)
+  scope :by_service_id, ->(*service_ids) {
+    where.has { service_id.in(service_ids) }
   }
 
   scope :by_active_since, ->(date) { where('first_daily_traffic_at >= ?', date) }
