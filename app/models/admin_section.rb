@@ -12,7 +12,7 @@ class AdminSection
     plans: 'API backends, API products',
     policy_registry: 'policies'
   }
-  SERVICE_PERMISSIONS = %i[partners plans monitoring]
+  SERVICE_PERMISSIONS = %i[partners plans monitoring].freeze
   NO_SERVICE_PERMISSIONS = PERMISSIONS - SERVICE_PERMISSIONS
 
   def self.permissions
