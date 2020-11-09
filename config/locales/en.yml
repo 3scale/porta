@@ -143,6 +143,14 @@ en:
       - <strong>attributes, application plans, active docs, and integration</strong> of <em>selected API products</em>'
     policy_registry: 'Create, read, update and delete:<br/>
       - the APIcast <strong>policy chain and its policies</strong>'
+    permission_groups_summary:
+      portal: 'Developer Portal'
+      finance: 'Customer Billing'
+      settings: 'Settings pages'
+      partners: 'Developer accounts, Applications'
+      monitoring: 'Analytics'
+      plans: 'API backends, API products'
+      policy_registry: 'Policies'
 
   go_live_states:
     api_sandbox_traffic: "Done: Add your API endpoint and hit save & test"
