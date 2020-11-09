@@ -271,6 +271,20 @@
               "required": true,
               "paramType": "path",
               "threescale_name": "environment"
+            },
+            {
+              "name": "host",
+              "description": "Find by host",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "version",
+              "description": "Find by version",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
             }
           ]
         }
