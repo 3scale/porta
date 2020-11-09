@@ -44,9 +44,9 @@ Feature: Provider plans section authorization
      And current domain is the admin domain of provider "foo.3scale.localhost"
      When I log in as provider "member"
       And I go to the provider dashboard
-    Then I should see "APIs" in the apis dashboard widget
-    Then I should see "Products" in the apis dashboard widget
-    Then I should see "Backends" in the apis dashboard widget
+    Then I should not see "APIs" in the apis dashboard widget
+    Then I should not see "Products" in the apis dashboard widget
+    Then I should not see "Backends" in the apis dashboard widget
 
     When I request the url of the '<page>' page then I should see an exception
 
