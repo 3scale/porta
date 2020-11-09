@@ -63,6 +63,12 @@ class Contract < ApplicationRecord
     where.has { plan_id.in( scope ) }
   end
 
+  scope :permitted_for, ->(user) {
+    next all unless user.forbidden_some_services?
+
+    where(service_id: user.member_permission_service_ids)
+  }
+
   # Return contracts bought by given account.
   scope :bought_by, ->(account) {
     where({:user_account_id => account.id})
