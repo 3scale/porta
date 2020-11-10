@@ -19,6 +19,7 @@ Ability.define do |user|
   if user.has_permission?('partners')
     can :manage, :partners
     can :manage, :applications
+    can :manage, :service_contracts
     can :admin, :multiple_users
     can :admin, :multiple_applications
 
@@ -35,7 +36,6 @@ Ability.define do |user|
     can :manage, :plans
     can :admin, :account_plans
     can :admin, :service_plans
-    can :admin, :service_contracts
     can %i[index show edit update], BackendApi
     can :manage, BackendApiConfig
   end

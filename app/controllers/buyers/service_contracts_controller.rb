@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class Buyers::ServiceContractsController < Buyers::BaseController
   before_action :authorize_service_contracts
 
   before_action :deny_on_premises_for_master
-  before_action :find_account, :except => [:index]
-  before_action :find_service, :only => [:new, :create]
-  before_action :find_service_contract, :only => [:edit, :change_plan, :destroy]
+  before_action :find_account, except: [:index]
+  before_action :find_service, only: %i[new create]
+  before_action :find_service_contract, only: %i[edit update approve change_plan destroy]
 
   include ThreeScale::Search::Helpers
 
@@ -12,7 +14,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   def index
     @states = ServiceContract.allowed_states.collect(&:to_s).sort
-    @services = current_account.accessible_services.includes(:service_plans)
+    @services = accessible_services.includes(:service_plans)
     @search = ThreeScale::Search.new(params[:search] || params)
     @plans = current_account.service_plans
 
@@ -33,7 +35,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
       activate_menu :audience, :accounts, :listing
     end
 
-    @service_contracts = current_account.provided_service_contracts
+    @service_contracts = current_user.accessible_service_contracts
               .scope_search(@search).order_by(*sorting_params)
               .paginate(pagination_params)
               .decorate
@@ -65,12 +67,10 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   def update
-    @service_contract = resource
     service = @service_contract.issuer
+    new_plan = service.service_plans.find(params[:service_contract][:plan_id])
 
-    plan = service.service_plans.find(params[:service_contract][:plan_id])
-
-    if @service_contract.change_plan! plan
+    if @service_contract.change_plan!(new_plan)
       flash[:success] = "Plan of the contract was changed."
     end
 
@@ -87,8 +87,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
       flash[:error] = t('service_contracts.unsubscribe_failure')
     end
 
-    redirect_to(:back)
-    #rails 5: redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
+    redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
   end
 
   def approve
@@ -98,10 +97,10 @@ class Buyers::ServiceContractsController < Buyers::BaseController
       flash[:error] = 'Cannot approve service contract.'
     end
 
-    redirect_to(:back)
-    #rails 5: redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
+    redirect_back(fallback_location: admin_buyers_account_service_contracts_path(@account))
   end
-private
+
+  private
 
   def sorting_params
     column = params[:sort] || 'cinstances.created_at'
@@ -110,7 +109,7 @@ private
   end
 
   def collection
-    @account.bought_service_contracts
+    @account.bought_service_contracts.permitted_for(current_user)
   end
 
   def service_contract_params
@@ -134,10 +133,14 @@ private
   end
 
   def service
-    @service ||= current_account.accessible_services.find(params[:service_id])
+    @service ||= accessible_services.find(params[:service_id])
   end
 
   def service_plan(plan_id = params[:service_contract][:plan_id])
     @service_plan ||= service.service_plans.find_by(id: plan_id)
+  end
+
+  def accessible_services
+    (current_user || current_account).accessible_services
   end
 end
