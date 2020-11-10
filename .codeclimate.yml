@@ -12,6 +12,7 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
+    channel: "rubocop-0-92"
   reek:
     enabled: true
   eslint:
@@ -32,14 +33,6 @@ plugins:
     enabled: true
   scss-lint:
     enabled: true
-  duplication:
-    enabled: true
-    exclude_paths:
-      - db/
-    config:
-      languages:
-        - ruby
-        - javascript
 exclude_patterns:
   - "app/assets/javascripts/plans_widget.js"
   - "app/assets/javascripts/provider/plans_widget.js"
@@ -52,6 +45,8 @@ exclude_patterns:
   - "public/themes/**/*"
   - "public/javascripts/vendor/*"
   - "public/fancybox/*"
+  - "public/assets"
+  - "public/packs"
   - 'lib/action_dispatch/rails5_ssl.rb'
   - "lib/developer_portal/app/views/developer_portal/javascripts/*"
   - "lib/developer_portal/app/views/developer_portal/css/*"
@@ -63,3 +58,5 @@ exclude_patterns:
   - "cdn/*"
   - "app/javascript/src/*/*/*.spec.*"
   - "bin/webpack*"
+  - "**/node_modules/"
+  - "**/flow-typed"
