@@ -1,11 +1,9 @@
+# frozen_string_literal: true
+
 class Api::ServicePlansController < Api::PlansBaseController
-
   before_action :authorize_service_plans!
-  before_action :activate_sidebar_menu
 
-  with_options :only => [:index, :new, :create, :update, :destroy, :masterize] do |options|
-    options.before_action :find_service
-  end
+  before_action :activate_sidebar_menu
 
   activate_menu :serviceadmin, :subscriptions, :service_plans
   sublayout 'api/service'
@@ -20,7 +18,6 @@ class Api::ServicePlansController < Api::PlansBaseController
 
   def edit
     @plan || raise(ActiveRecord::RecordNotFound)
-    @service = @plan.service
   end
 
   # class super metod which is Api::PlansBaseController#create
@@ -62,5 +59,4 @@ class Api::ServicePlansController < Api::PlansBaseController
   def authorize_service_plans!
     authorize! :manage, :service_plans
   end
-
 end
