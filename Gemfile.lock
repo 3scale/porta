@@ -482,7 +482,7 @@ GEM
       activerecord (>= 3.0)
     prawn-format (0.2.1)
       prawn-core
-    prawn-layout (0.2.1)
+    prawn-layout (0.8.4)
     prometheus-client-mmap (0.11.0)
     protected_attributes_continued (1.3.0)
       activemodel (~> 5.0)
@@ -915,7 +915,7 @@ DEPENDENCIES
   pisoni (~> 1.29)
   prawn-core!
   prawn-format (= 0.2.1)
-  prawn-layout (= 0.2.1)
+  prawn-layout (= 0.8.4)
   protected_attributes_continued (~> 1.3.0)
   pry-byebug (>= 3.7.0)
   pry-doc (>= 0.8)
