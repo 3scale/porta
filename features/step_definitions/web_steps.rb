@@ -38,11 +38,11 @@ When "(I )press invisible {string}" do |button|
   click_button(button, visible: false)
 end
 
-When "(I )follow invisible {string}" do |invisible, link|
+When "(I )follow invisible {string}" do |link|
   click_link(link, exact: true, visible: false)
 end
 
-When "(I )follow {string}" do |invisible, link|
+When "(I )follow {string}" do |link|
   click_link(link, exact: true, visible: true)
 end
 
