@@ -70,6 +70,7 @@ Metrics/ClassLength:
   Max: 200
 
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.5
   UseCache: true
   Exclude:
