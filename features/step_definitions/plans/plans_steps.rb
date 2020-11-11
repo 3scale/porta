@@ -43,7 +43,7 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
 
-Given "a(n) {default}( ){published}( ){plan_type} plan {string} of/for {provider_or_service}" do |default, published, type, name, issuer|
+Given "a(n) {default}( ){published}( ){plan_type} plan {string} of/for {provider_or_service}( exists)" do |default, published, type, name, issuer|
   create_plan type, name: name,
                     issuer: issuer,
                     default: default,
