@@ -10,7 +10,7 @@ Feature: Signed up plan
 
   Scenario: Buyers does not see plans link if only one account plan
     Given I am logged in as "buyer" on "foo.3scale.localhost"
-    When I follow "Settings"
+    When I go to the settings page
     Then I should not see the link "Plans"
 
   Scenario: Buyers sees plans link if there is more than 1 published account plan

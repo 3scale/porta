@@ -94,7 +94,7 @@ When "I try to log in as provider {string}" do |username|
 end
 
 When "I try to log in as {string} with password {string}" do |username, password|
-  visit login_path
+  visit System::UrlHelpers.cms_url_helpers.login_path
   fill_in_login_data(username, password)
   click_button('Sign in')
 end
@@ -102,16 +102,17 @@ end
 When "I try to log in as provider {string} with password {string}" do |username, password|
   visit provider_login_path
   fill_in_login_data(username, password)
+  click_button('Sign in')
 end
 
 When "I fill in the {string} login data" do |username|
   fill_in_login_data(username)
+  click_button('Sign in')
 end
 
 def fill_in_login_data(username, password = 'supersecret')
   fill_in('Username or Email', with: username)
   fill_in('Password', with: password)
-  click_button('Sign in')
 end
 
 Then "I {should} be logged in as {string}" do |logged_in, username|
