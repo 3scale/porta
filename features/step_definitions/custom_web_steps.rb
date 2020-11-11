@@ -15,15 +15,6 @@ Then "fields {} should be required" do |fields|
   end
 end
 
-Then "I {should} see {link_to_page}" do |visible, path|
-  assert_equal visible, (page.all('a').any? { |node| matches_path?(node[:href], path) })
-end
-
-# TODO: remove if the one above is good
-# Then "I should not see {link_to_page}" do |path|
-#   assert(page.all('a').none? { |node| matches_path?(node[:href], path) })
-# end
-
 Then "I should be redirected" do
   follow_redirect!
 end
@@ -64,13 +55,6 @@ end
 Then "I {should} see the link {string}" do |visible, label|
   assert_equal visible, page.has_css?('a', text: label)
 end
-
-# Should not be neccesar
-# Then "I {should} see the link {string} within {string}" do |visible, label, selector|
-#   within selector do
-#     assert_equal visible, page.has_css?('a', text: label)
-#   end
-# end
 
 Then "I {should} see button {string}" do |visible, label|
   assert_equal visible, has_button?(label)
