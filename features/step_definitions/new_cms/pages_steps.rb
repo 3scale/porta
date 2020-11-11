@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-Given "have (a )cms page {string} of {provider}" do |path, provider|
+Given "I have (a )cms page {string} of {provider}" do |path, provider|
   FactoryBot.create(:cms_page, path: path, provider: provider)
 end
 
-Given "have (a )cms page {string} of {provider} with markdown content" do |path, provider|
+Given "I have (a )cms page {string} of {provider} with markdown content" do |path, provider|
   FactoryBot.create(:cms_page, path: path, provider: provider, handler: :markdown, published: '# Markdown content')
 end
 
-Then "should see rendered markdown content" do
+Then "I should see rendered markdown content" do
   page.should have_css('h1', text: 'Markdown content')
 end
 
@@ -33,7 +33,7 @@ Then "{cms_page} should have:" do |page, table|
 end
 
 
-When "visit to add a new page within section {string}" do | section_path |
+When "I visit to add a new page within section {string}" do | section_path |
   section = Section.find_by_path section_path
   visit new_cms_section_page_path(:section_id => section.id)
 end
