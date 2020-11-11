@@ -582,7 +582,7 @@ Style/RescueModifier:
     - 'app/models/finance/billing_strategy.rb'
     - 'app/models/web_hook_failures.rb'
     - 'config/initializers/ruby1.9.rb'
-    - 'features/support/transforms.rb'
+    - 'features/support/parameter_types.rb'
     - 'app/lib/authentication/strategy/sso.rb'
     - 'app/lib/events/event.rb'
     - 'lib/payment_gateways/ogone_crypt.rb'
