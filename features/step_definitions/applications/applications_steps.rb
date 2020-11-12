@@ -36,7 +36,7 @@ Given "{buyer} has no applications" do |buyer|
   buyer.bought_cinstances.destroy_all
 end
 
-Given "{buyer} has the following applications" do |buyer, table|
+Given "{buyer} has the following applications:" do |buyer, table|
   plan = buyer.provider_account.first_service!.plans.default
 
   table.map_headers! { |header| header.downcase.gsub(/\s+/, '_') }
@@ -65,7 +65,7 @@ Given "{buyer} has {int} applications" do |buyer, number|
   end
 end
 
-Given "the {provider} has the following applications" do |provider, table|
+Given "the {provider} has the following applications:" do |provider, table|
   table.hashes.each do |row|
     assert provider.application_plans.include?(row[:plan]) if row[:plan]
     FactoryBot.create :cinstance, user_account: row[:buyer],

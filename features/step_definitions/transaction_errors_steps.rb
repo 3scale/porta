@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "provider {string} has the following transaction errors" do |provider, table|
+Given "provider {string} has the following transaction errors:" do |provider, table|
   table.map_headers! { |header| header.downcase.to_sym }
   fake_transaction_errors(provider, table.hashes)
 end

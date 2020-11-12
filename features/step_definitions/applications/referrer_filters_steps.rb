@@ -39,7 +39,7 @@ end
 
 # single-app
 
-Given "the application of {buyer} has the following referrer filters" do |buyer, table|
+Given "the application of {buyer} has the following referrer filters:" do |buyer, table|
   fake_application_referrer_filters(buyer.bought_cinstance, table.raw.map(&:first))
 end
 

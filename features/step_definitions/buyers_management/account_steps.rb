@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Given /^(provider "(.+?)") has the following buyers:$/ do |provider, provider_name, table|
-Given "{provider} has the following buyers" do |provider, table|
+Given "{provider} has the following buyers:" do |provider, table|
   #TODO: dry this with buyer_steps Given /^these buyers signed up to (plan "[^"]*"):
   table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
 

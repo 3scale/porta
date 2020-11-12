@@ -8,7 +8,7 @@ Given "{provider} has {string} set to {string}" do |account, name, value|
   account.settings.update!(underscore_spaces(name), value)
 end
 
-Given "{provider} has the following settings" do |account, table|
+Given "{provider} has the following settings:" do |account, table|
   attributes = table.rows_hash
   attributes.map_keys! { |key| underscore_spaces(key) }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "the following buyers with service subscriptions signed up to {provider}" do |provider, table|
+Given "the following buyers with service subscriptions signed up to {provider}:" do |provider, table|
   # table is a Cucumber::MultilineArgument::DataTable
   table.map_column!(:plans) { |plans| plans.from_sentence.map{ |plan| Plan.find_by!(name: plan) } }
   table.map_column!(:name) { |name| FactoryBot.create :buyer_account, provider_account: provider, org_name: name }

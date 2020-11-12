@@ -597,3 +597,14 @@ ParameterType(
 def find_provider_by!(opts)
   Account.providers.find_by!(opts)
 end
+
+# Utility
+
+ParameterType(
+  name: 'strings',
+  regexp: /.*"([^"]*)".*/,
+  transformer: ->(strings) {
+    binding.pry
+    strings
+  }
+)
