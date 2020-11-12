@@ -59,7 +59,7 @@ module PathsHelper
         provider_admin_onboarding_wizard_intro_path
 
       when 'the login page'
-        visit System::UrlHelpers.cms_url_helpers.login_path
+        System::UrlHelpers.cms_url_helpers.login_path
 
       when 'the signup page'
         signup_path
