@@ -111,7 +111,7 @@ When "I fill in the {string} login data" do |username|
 end
 
 def fill_in_login_data(username, password = 'supersecret')
-  fill_in('Username or Email', with: username)
+  fill_in('Email or Username', with: username)
   fill_in('Password', with: password)
 end
 
