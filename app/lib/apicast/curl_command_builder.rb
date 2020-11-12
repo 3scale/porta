@@ -47,7 +47,7 @@ module Apicast
       end
 
       def path_and_query
-        path = test_path ? test_path : first_proxy_rule_pattern
+        path = test_path || first_proxy_rule_pattern
         uri = Addressable::URI.parse(path)
         [uri.path, uri.query]
       end
@@ -98,8 +98,6 @@ module Apicast
         params.values_at(:user_key).compact.presence || params.values_at(:app_id, :app_key)
       end
 
-      delegate :provider_can_use?, to: 'service.account'
-
       protected
 
       def proxy
@@ -111,13 +109,10 @@ module Apicast
       end
     end
 
-    def initialize(proxy, environment: :staging, build_from_config: -> { apiap? }, use_api_test_path: -> { !apiap? })
+    def initialize(proxy, environment: :staging)
       @proxy = proxy
       @environment = environment
-      call_or_self = ->(param) { param.respond_to?(:call) ? param.call : param }
-      source = call_or_self.call(build_from_config) ? proxy_from_config : proxy
-      options = call_or_self.call(use_api_test_path) ? { test_path: proxy.api_test_path } : {}
-      @builder = builder_class.new(source, options)
+      @builder = builder_class.new(proxy_from_config)
     end
 
     attr_reader :proxy, :environment, :builder
@@ -136,10 +131,6 @@ module Apicast
       else
         raise
       end
-    end
-
-    def apiap?
-      proxy.provider_can_use?(:api_as_product)
     end
 
     def proxy_from_config
