@@ -17,7 +17,7 @@ Feature: Change plan
       Given the time is 5th May 2009
         And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 5th May 2009
 
-       When I log in as "stallman" on foo.3scale.localhost
+       When I log in as "stallman" on "foo.3scale.localhost"
         And I change application plan to "PaidAsInDiplomat" on 15th May 2009 UTC
         And time flies to 3rd June 2009
         And I navigate to invoice issued for me in "May, 2009"
@@ -33,7 +33,7 @@ Feature: Change plan
         And provider "foo.3scale.localhost" has prepaid billing enabled
         And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 25th April 2009
 
-       When I log in as "stallman" on foo.3scale.localhost
+       When I log in as "stallman" on "foo.3scale.localhost"
         And I change application plan to "PaidAsInDiplomat" on 15th May 2009 UTC
         And time flies to 3rd June 2009
         And I navigate to 2nd invoice issued for me in "May, 2009"
@@ -47,7 +47,7 @@ Feature: Change plan
     Given the time is 28th April 2009
       And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
-    When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
+    When I log in as "stallman" on "foo.3scale.localhost" on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
          | name                         | description                                 | quantity |  cost |
@@ -61,7 +61,7 @@ Feature: Change plan
     Given the time is 30 April 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
       When time flies to 3rd June 2009
-       And I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
+       And I log in as "stallman" on "foo.3scale.localhost" on 3rd June 2009
        And I navigate to invoice issued for me in "May, 2009"
     Then I should see line items
          | name                         | description                                 | quantity |  cost |
@@ -86,7 +86,7 @@ Feature: Change plan
         | hits   |     3 |
 
       # This should be ignored (different plan but still in trial period)
-      And I log in as "stallman" on foo.3scale.localhost on 10th May 2009
+      And I log in as "stallman" on "foo.3scale.localhost" on 10th May 2009
       And I change application plan to "PaidAsInDiplomat"
       And buyer "stallman" makes 1 service transaction with:
         | Metric | Value |

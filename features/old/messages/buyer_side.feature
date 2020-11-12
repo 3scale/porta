@@ -7,14 +7,14 @@ Feature: Buyer side messages
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
 
   Scenario: Sending a message
     Given account "bob" has no messages
     When I go to the dashboard
     And I follow "Messages"
     And I follow "Compose"
-    Then I should see "To foo.3scale.localhost"
+    Then I should see "To "foo.3scale.localhost""
     When I fill in "Subject" with "Hello there"
     And I fill in "Body" with "Just wanted to say hi"
     And I press "Send"

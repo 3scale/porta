@@ -8,7 +8,7 @@ Feature: Login feature
       And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
   Scenario: Buyer lands on the homepage when in enterprise mode
-     When I log in as "bob" on foo.3scale.localhost
+     When I log in as "bob" on "foo.3scale.localhost"
      Then I should be on the homepage
 
   @javascript

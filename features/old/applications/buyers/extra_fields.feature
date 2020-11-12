@@ -19,7 +19,7 @@ Feature: Buyer side, application extra fields
       | stealth      |         |          |           | true   |
 
   Scenario: Hidden and not editable extra fields should not be editable
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
     And I go to the new application page
     Then I should see the fields:
       | name        |
@@ -32,7 +32,7 @@ Feature: Buyer side, application extra fields
       | Stealth      |
 
   Scenario: Create an application with extra fields
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
     When I go to the new application page
       And I fill in the following:
         | Name        | Skoda    |
@@ -51,7 +51,7 @@ Feature: Buyer side, application extra fields
     Given buyer "bob" has application "Skoda" with extra fields:
       | engine | wheels | stealth | non-editable |
       | foo    | bar    | bat     | edit me      |
-      And I log in as "bob" on foo.3scale.localhost
+      And I log in as "bob" on "foo.3scale.localhost"
     When I go to the "Skoda" application page
     Then I should see "Non-editable"
       And I should see "Engine"
@@ -62,7 +62,7 @@ Feature: Buyer side, application extra fields
     Given buyer "bob" has application "Skoda" with extra fields:
       | engine | wheels | stealth | Non-editable |
       | foo    | bar    | bat     | edit me      |
-      And I log in as "bob" on foo.3scale.localhost
+      And I log in as "bob" on "foo.3scale.localhost"
     When I go to the "Skoda" application edit page
       And I fill in "Engine" with "turbo"
       And I select "2" from "Wheels"
@@ -70,7 +70,7 @@ Feature: Buyer side, application extra fields
     Then I should see "Application was successfully updated."
 
   Scenario: Extra fields are sorted by position
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has the field "wheels" for "Cinstance" in the position 20
     When I go to the new application page
     Then I should see the fields in order:

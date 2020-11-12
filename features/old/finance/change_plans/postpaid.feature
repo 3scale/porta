@@ -17,7 +17,7 @@ Feature: Change plan
     Given the time is 28th April 2009
       And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
-    When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
+    When I log in as "stallman" on "foo.3scale.localhost" on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
          | name                         | description                                 | quantity |  cost         |
@@ -30,7 +30,7 @@ Feature: Change plan
     Given the time is 1st May 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
       When time flies to 1st June 2009
-      When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 15th June 2009
 
        And I navigate to 1st invoice issued for me in "May, 2009"
     Then I should see line items
@@ -42,7 +42,7 @@ Feature: Change plan
   Scenario: Plan upgrade from paid to paid at 10th May 12:00 AM UTC
     Given the time is 30th April 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
-      And I log in as "stallman" on foo.3scale.localhost
+      And I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
       When time flies to 3rd June
 
@@ -59,7 +59,7 @@ Feature: Change plan
   Scenario: Plan upgrade from free to paid at 10th May 12:00 AM UTC
     Given the time is 30th April 2009
       And a buyer "stallman" signed up to application plan "FreeAsInBeer" on 30th April 2009
-      And I log in as "stallman" on foo.3scale.localhost
+      And I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
 
      When time flies to 3rd June
@@ -75,7 +75,7 @@ Feature: Change plan
       And the time is 30th April 2009
 
     When a buyer "stallman" signed up to application plan "FreeAsInBeer" on 30th April 2009
-     And I log in as "stallman" on foo.3scale.localhost
+     And I log in as "stallman" on "foo.3scale.localhost"
      And I change application plan to "FreeAsInCzechBeer" on 10th May 2009 12:00 UTC
      And time flies to 8th June
     Then I should have 0 invoice

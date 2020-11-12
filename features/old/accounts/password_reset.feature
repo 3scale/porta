@@ -6,24 +6,24 @@ Feature: Provider password reset
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And an active user "zed" of account "foo.3scale.localhost" with email "zed@3scale.localhost"
+    And an active user "zed" of account "foo.3scale.localhost" with email "zed@example.com"
 
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     When I go to the provider login page
 
   Scenario: Reset password
     And I follow "Forgot password?"
-    And I fill in "Email" with "zed@3scale.localhost" in the request password reset form
+    And I fill in "Email" with "zed@example.com" in the request password reset form
     And I press "Reset password"
     Then I should see "A password reset link has been emailed to you."
-    When I follow the link found in the provider password reset email send to "zed@3scale.localhost"
+    When I follow the link found in the provider password reset email send to "zed@example.com"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "monkey"
     And I press "Change Password"
     Then I should see "The password has been changed"
 
     When I go to the provider login page
-    And I fill in "Username" with "zed@3scale.localhost"
+    And I fill in "Username" with "zed@example.com"
     And I fill in "Password" with "monkey"
     And I press "Sign in"
     Then I should be logged in as "zed"
@@ -37,17 +37,17 @@ Feature: Provider password reset
     Then I should not see "Forgot Password?"
 
   Scenario: Invalid email
-    Given no user exists with an email of "bob@3scale.localhost"
+    Given no user exists with an email of "bob@example.com"
     And I follow "Forgot password?"
-    And I fill in "Email" with "bob@3scale.localhost" in the request password reset form
+    And I fill in "Email" with "bob@example.com" in the request password reset form
     And I press "Reset password"
     Then I should see "Email not found."
 
   Scenario: Wrong confirmation
     When I follow "Forgot password?"
-    And I fill in "Email" with "zed@3scale.localhost" in the request password reset form
+    And I fill in "Email" with "zed@example.com" in the request password reset form
     And I press "Reset password"
-    And I follow the link found in the provider password reset email send to "zed@3scale.localhost"
+    And I follow the link found in the provider password reset email send to "zed@example.com"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "donkey"
     Then I should see button "Change Password" disabled
@@ -59,30 +59,30 @@ Feature: Provider password reset
   Scenario: Expired token after 1 day
     And time flies to 12th June 2009
     When I follow "Forgot password?"
-    And I fill in "Email" with "zed@3scale.localhost" in the request password reset form
+    And I fill in "Email" with "zed@example.com" in the request password reset form
     And I press "Reset password"
     And time flies to 14th June 2009
-    When I follow the link found in the provider password reset email send to "zed@3scale.localhost"
+    When I follow the link found in the provider password reset email send to "zed@example.com"
     Then I should see "The password reset token is invalid"
 
   Scenario: Try to reuse a token
     When I follow "Forgot password?"
-    And I fill in "Email" with "zed@3scale.localhost" in the request password reset form
+    And I fill in "Email" with "zed@example.com" in the request password reset form
     And I press "Reset password"
-    When I follow the link found in the provider password reset email send to "zed@3scale.localhost"
+    When I follow the link found in the provider password reset email send to "zed@example.com"
     And I fill in "Password" with "monkey"
     And I fill in "Password confirmation" with "monkey"
     And I press "Change Password"
     Then I should see "The password has been changed"
-    And I follow the link found in the provider password reset email send to "zed@3scale.localhost"
+    And I follow the link found in the provider password reset email send to "zed@example.com"
     Then I should see "The password reset token is invalid"
 
   Scenario: Attempt to login with invalid credentials, then reset password
-    And I fill in "Username" with "zed@3scale.localhost"
+    And I fill in "Username" with "zed@example.com"
     And I fill in "Password" with "ihavenoclue"
     And I press "Sign in"
     Then I should see "Incorrect email or password. Please try again."
     When I follow "Forgot password?"
-    And I fill in "Email" with "zed@3scale.localhost" in the request password reset form
+    And I fill in "Email" with "zed@example.com" in the request password reset form
     And I press "Reset password"
     Then I should see "A password reset link has been emailed to you."

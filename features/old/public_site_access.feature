@@ -26,7 +26,7 @@ Feature: Public site access
       And I log in as provider "foo.3scale.localhost"
     Then the current port should not be 80
     When I follow "Site" in the user widget
-    Then the current domain should be foo.3scale.localhost
+    Then the current domain should be "foo.3scale.localhost"
       And the current port should not be 80
 
   @javascript
@@ -36,7 +36,7 @@ Feature: Public site access
      When I log in as provider "foo.3scale.localhost"
       And I follow "Developer Portal"
       And I follow "Visit Portal"
-     Then the current domain in a new window should be foo.3scale.localhost
+     Then the current domain in a new window should be "foo.3scale.localhost"
       And I should not see field "Access code"
 
   # Scenario: Master account has neither "view site" nor "admin" links

@@ -21,12 +21,12 @@ Feature: Sign Up of enterprise buyers
     Given an approved buyer "bar" signed up to provider "foo.3scale.localhost"
 
   Scenario: try to signup with existent email in other provider
-    When the current domain is foo2.3scale.localhost
+    When the current domain is "foo2.3scale.localhost"
       And I signup with the email "bar@example.org"
    Then I should see the registration succeeded
 
   Scenario: try to signup with existent email in other provider
-   When the current domain is foo2.3scale.localhost
+   When the current domain is "foo2.3scale.localhost"
      And I go to the sign up page
      And I fill in the following:
       | Email                   | foobar@example.net |

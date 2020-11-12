@@ -6,7 +6,7 @@ Feature: Access code
   Scenario: No access code
     Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has no site access code
-    When the current domain is foo.3scale.localhost
+    When the current domain is "foo.3scale.localhost"
     And I go to the homepage
     Then I should not see "Access code"
 

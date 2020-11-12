@@ -20,7 +20,7 @@ Feature: My posts
       | bob   | Security        | Bob is posting about security        |
       | bob   | Troubleshooting | Bob is posting about troubleshooting |
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     And I follow "My threads"
     Then I should see topic "Security"

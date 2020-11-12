@@ -11,7 +11,7 @@ Feature: Buyer's API Access Details
     Given provider "foo.3scale.localhost" uses backend v1 in his default service
     And provider "foo.3scale.localhost" has multiple applications disabled
     And a buyer "alice" signed up to application plan "Pro"
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the dashboard
     And I follow "API Credentials"
     Then I should see the user key of buyer "alice"
@@ -23,7 +23,7 @@ Feature: Buyer's API Access Details
     And a service plan "Gold Star L" of provider "foo.3scale.localhost"
     And a buyer "alice" signed up to service plan "Gold Star L"
     And buyer "alice" has application "CuteWidget"
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see link "API Credentials"
     When I follow "Applications"
@@ -36,7 +36,7 @@ Feature: Buyer's API Access Details
     And a buyer "alice" signed up to application plan "Pro"
     And the application of buyer "alice" has 3 keys
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the dashboard
     And I follow "API Credentials"
     Then I should see the ID of the application of buyer "alice"
@@ -52,7 +52,7 @@ Feature: Buyer's API Access Details
     And buyer "alice" has application "CuteWidget"
     And application "CuteWidget" has 2 keys
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see link "API Access Details"
     When I follow "Applications"
@@ -68,7 +68,7 @@ Feature: Buyer's API Access Details
     And a service plan "Gold" of provider "foo.3scale.localhost"
     And a buyer "alice" signed up to service plan "Gold"
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the dashboard
     And the backend will create key "key-one" for an application
     Then I should not see link "API Access Details"
@@ -128,6 +128,6 @@ Feature: Buyer's API Access Details
     Given provider "foo.3scale.localhost" uses backend v1 in his default service
     And a buyer "alice" signed up to application plan "Pro"
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I follow "API Access Details"
     Then I should not see "Provider Verification Key"

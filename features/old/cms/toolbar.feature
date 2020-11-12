@@ -13,7 +13,7 @@ Feature: CMS Toolbar
   # Background:
   #   Given a provider "foo.3scale.localhost" with default plans
   #   And provider "foo.3scale.localhost" has all the templates setup
-  #   And the current provider is foo.3scale.localhost
+  #   And the current provider is "foo.3scale.localhost"
   #   And the current domain is "foo.3scale.localhost"
   #   And I am in CMS Admin mode
 

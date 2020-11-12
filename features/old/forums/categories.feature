@@ -17,7 +17,7 @@ Feature: Forum categories
       | Authentication does not work - please help | On topic  |
       | OMG LOL check out this funny video!        | Off topic |
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     And I follow "View by category"
     And I follow "On topic"
@@ -31,7 +31,7 @@ Feature: Forum categories
   Scenario: Post a topic in a category
     Given the forum of "foo.3scale.localhost" has categories "Security" and "Howtos"
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     And I follow "Start new thread"
     And I fill in "Title" with "How secure is this thing?"
@@ -47,7 +47,7 @@ Feature: Forum categories
 
   Scenario: Post a topic when there are no categories
     Given the forum of "foo.3scale.localhost" has no categories
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the new topic page
     Then I should not see field "Category"
 
@@ -55,7 +55,7 @@ Feature: Forum categories
     Given the forum of "foo.3scale.localhost" has categories "Security" and "Insecurity"
     And the forum of "foo.3scale.localhost" has topic "Hacks" in category "Security"
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     And I follow "View by category"
     And I follow "Security"
@@ -64,7 +64,7 @@ Feature: Forum categories
 
 
   Scenario: "User can't see manage buttons of categories"
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And the forum of "foo.3scale.localhost" has category "category 1"
     And I go to the forum page
     When I follow "View by category"
@@ -76,7 +76,7 @@ Feature: Forum categories
 
   @security @allow-rescue
   Scenario: User can't create new category
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should not see button "New category"
 
@@ -84,13 +84,13 @@ Feature: Forum categories
   Scenario: User can't edit a category
     Given the forum of "foo.3scale.localhost" has category "Security"
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should not see link "Edit" for category "Security"
 
   @security @allow-rescue
   Scenario: User can't delete a category
     Given the forum of "foo.3scale.localhost" has category "Security"
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should not see button "Delete" for category "Security"

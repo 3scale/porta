@@ -18,7 +18,7 @@ Feature: Buyer side, account fields
 
 
   Scenario: Hidden and not editable extra fields should not be editable
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
     When I go to the account edit page
     Then I should see the fields:
       | name                    |
@@ -34,7 +34,7 @@ Feature: Buyer side, account fields
 
 
   Scenario: Update an account with extra fields
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
     When I go to the account edit page
       And I leave "Required field" blank
       And I leave "False field" blank
@@ -53,7 +53,7 @@ Feature: Buyer side, account fields
     Given buyer "bob" has extra fields:
       | false_field | required_field | choices_field | non_editable | hidden_field |
       | falses      | required       | 1             | non_edit     | hidden       |
-      And I log in as "bob" on foo.3scale.localhost
+      And I log in as "bob" on "foo.3scale.localhost"
     When I go to the account page
     Then I should see "False field"
       And I should see "Required field"
@@ -62,7 +62,7 @@ Feature: Buyer side, account fields
     But I should not see "Hidden field"
 
   Scenario: Extra fields are sorted by position
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has the field "required_field" for "Account" in the position 20
     When I go to the account edit page
     Then I should see the fields in order:
@@ -77,7 +77,7 @@ Feature: Buyer side, account fields
     Given provider "foo.3scale.localhost" only has the following fields defined for "Account":
       | name    |
       | country |
-      And I log in as "bob" on foo.3scale.localhost
+      And I log in as "bob" on "foo.3scale.localhost"
     When I go to the account edit page
       And I select "Spain" from "Country"
       And I press "Update"

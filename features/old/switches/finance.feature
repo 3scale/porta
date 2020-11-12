@@ -31,7 +31,7 @@ Feature: Finance switch
     Given an application plan "plan" of provider "foo.3scale.localhost"
       And a buyer "buyer" signed up to application plan "plan"
     Given provider "foo.3scale.localhost" has "finance" switch allowed
-    When I log in as "buyer" on foo.3scale.localhost
+    When I log in as "buyer" on "foo.3scale.localhost"
       And I go to the account page
     Then I should not see link to the invoices page
       And I should not see "Credit Card Details"

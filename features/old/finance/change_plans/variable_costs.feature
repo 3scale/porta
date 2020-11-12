@@ -35,7 +35,7 @@ Feature: Change plan
       | Metric   | Value |
       | hits     |    1 |
       And time flies to 3rd June 2009
-      When I log in as "stallman" on foo.3scale.localhost
+      When I log in as "stallman" on "foo.3scale.localhost"
       And I navigate to Invoices issued for me
       Then I should see "EUR 2.00"
       # should be 3
@@ -48,7 +48,7 @@ Feature: Change plan
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
-      When I log in as "stallman" on foo.3scale.localhost
+      When I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
       When time flies to 16th May 2009
       Then I should have 0 invoices
@@ -70,7 +70,7 @@ Feature: Change plan
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
-      When I log in as "stallman" on foo.3scale.localhost
+      When I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
       When time flies to 16th May 2009
        And current domain is the admin domain of provider "foo.3scale.localhost"
@@ -92,7 +92,7 @@ Feature: Change plan
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
-      When I log in as "stallman" on foo.3scale.localhost
+      When I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
@@ -111,7 +111,7 @@ Feature: Change plan
       | Metric   | Value |
       | hits     |    1 |
       When time flies to 15th May 2009
-      When I log in as "stallman" on foo.3scale.localhost
+      When I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "ExpensivePlan" on 15th May 2009 UTC
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |

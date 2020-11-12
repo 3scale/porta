@@ -18,7 +18,7 @@ Feature: Buyer side, user extra fields
 
 
   Scenario: Hidden and not editable extra fields should not be editable
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
     When I go to the user edit page for "bob"
     Then I should see the fields:
       | name           |
@@ -34,7 +34,7 @@ Feature: Buyer side, user extra fields
 
 
   Scenario: Update a user with extra fields
-    Given I log in as "bob" on foo.3scale.localhost
+    Given I log in as "bob" on "foo.3scale.localhost"
     When I go to the user edit page for "bob"
       And I leave "Required field" blank
       And I leave "False field" blank

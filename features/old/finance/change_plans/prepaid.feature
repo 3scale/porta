@@ -17,7 +17,7 @@ Feature: Change plan prepaid
     Given the time is 1st May 2009
       And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
-    When I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
+    When I log in as "stallman" on "foo.3scale.localhost" on 3rd June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
      Then I should see line items
          | name                         | description                                 | quantity |  cost |
@@ -30,7 +30,7 @@ Feature: Change plan prepaid
     Given the time is 1st May 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
       When time flies to 3rd June 2009
-      When I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 3rd June 2009
 
        And I navigate to 1st invoice issued for me in "May, 2009"
     Then I should see line items
@@ -43,7 +43,7 @@ Feature: Change plan prepaid
   Scenario: Plan changes at 10th May 12:00 AM UTC PREPAID
     Given the time is 1st May 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
-      And I log in as "stallman" on foo.3scale.localhost
+      And I log in as "stallman" on "foo.3scale.localhost"
       And I change application plan to "PaidAsInDiplomat" on 10th May 2009 12:00 UTC
       When time flies to 3rd June
      And I navigate to 1st invoice issued for me in "May, 2009"

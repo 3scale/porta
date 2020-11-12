@@ -9,7 +9,7 @@ Feature: Buyer stats
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has multiple applications enabled
       And a buyer "alice" signed up to provider "foo.3scale.localhost"
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I go to the dashboard
     Then I should not see the link "Statistics"
 
@@ -22,7 +22,7 @@ Feature: Buyer stats
         | Metric   | Value |
         | hits     |    20 |
 
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I go to the dashboard
     Then I should see "Statistics"
     When I follow "Statistics"

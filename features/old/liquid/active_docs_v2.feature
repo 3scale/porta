@@ -5,7 +5,7 @@ Feature: ActiveDocs
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And the current provider is foo.3scale.localhost
+    And the current provider is "foo.3scale.localhost"
 
   Scenario: Loading Swagger UI v2
     Given provider "foo.3scale.localhost" has the swagger example of signup

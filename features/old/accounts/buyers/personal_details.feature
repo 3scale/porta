@@ -11,20 +11,20 @@ Feature: Personal Details
 
 
   Scenario: Navigate to personals details page
-    When I log in as "randomdude" on foo.3scale.localhost
+    When I log in as "randomdude" on "foo.3scale.localhost"
     And I go to the personal details page
     Then I should be on the personal details page
 
 
   Scenario: Personal details form
-   When I log in as "randomdude" on foo.3scale.localhost
+   When I log in as "randomdude" on "foo.3scale.localhost"
    And I go to the personal details page
    Then I should be on the personal details page
    And I should see the personal details form
 
 
   Scenario: Edit personal details as buyer
-    When I log in as "randomdude" on foo.3scale.localhost
+    When I log in as "randomdude" on "foo.3scale.localhost"
       And I go to the personal details page
 
     When I fill in "Email" with "john.doe@random.3scale.localhost"
@@ -35,7 +35,7 @@ Feature: Personal Details
 
   Scenario: Editing of personal details can be blocked
     Given provider "foo.3scale.localhost" has "useraccountarea" disabled
-    When I log in as "randomdude" on foo.3scale.localhost
+    When I log in as "randomdude" on "foo.3scale.localhost"
     And I follow "Settings"
     Then I should not see "Personal Details"
 
@@ -49,7 +49,7 @@ Feature: Personal Details
       | user_extra_read_only |          | true      |        |
       | user_extra_hidden    |          |           | true   |
 
-    When I log in as "randomdude" on foo.3scale.localhost
+    When I log in as "randomdude" on "foo.3scale.localhost"
       And I go to the personal details page
 
     Then fields should be required:

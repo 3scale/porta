@@ -53,7 +53,7 @@ Feature: Internal authentication
 
   @wip
   Scenario: Successful sign in as a provider on their domain
-    When I go to the login page on foo.3scale.localhost
+    When I go to the login page on "foo.3scale.localhost"
     And I fill in "Username" with "foo.3scale.localhost"
     And I fill in "Password" with "supersecret"
     And I press "Sign in"
