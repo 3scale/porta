@@ -14,7 +14,7 @@ Feature: Buyer's payment details
       And provider "foo.3scale.localhost" manages payments with "braintree_blue"
       And a buyer "eric" signed up to application plan "Basic"
       And buyer "eric" has last digits of credit card number "1234" and expiration date March, 2018
-    When I log in as "eric" on foo.3scale.localhost
+    When I log in as "eric" on "foo.3scale.localhost"
      When I follow "Settings"
      When I follow "Credit Card Details"
     Then I should see "Credit card number"

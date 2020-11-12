@@ -5,7 +5,7 @@ Feature: ActiveDocs
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And the current provider is foo.3scale.localhost
+    And the current provider is "foo.3scale.localhost"
 
   Scenario: Loading ActiveDocs 1.0
     Given provider "foo.3scale.localhost" has a swagger 1.0

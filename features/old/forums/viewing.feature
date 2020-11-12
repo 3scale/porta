@@ -12,7 +12,7 @@ Feature: Forum viewing
 
   Scenario: Forum posts are rendered with textile
     Given the forum of "foo.3scale.localhost" has topic "Textile rulez" with "Check out this *awesome bold text*"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the "Textile rulez" topic page
     Then I should see "awesome bold text" in bold
 
@@ -48,7 +48,7 @@ Feature: Forum viewing
 
   @wip
   Scenario: Topic details
-    When I log in as "foo.3scale.localhost" on foo.3scale.localhost
+    When I log in as "foo.3scale.localhost" on "foo.3scale.localhost"
     And I visit the page of the first topic on the forum of "foo.3scale.localhost"
     Then I should see the topic title is the page title
     And I should see post dates in the right date format

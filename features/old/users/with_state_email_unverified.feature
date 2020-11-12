@@ -10,20 +10,20 @@ Feature: Users enter email unverified state
 
   Scenario: User in unverified_email state can login
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
     Then I should be logged in as "alice"
 
   @wip
   Scenario: User in unverified_email state sees notice in personal details page
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I navigate to my personal details page
     Then I should see the notice to validate my email
 
   @wip
   Scenario: When user edits his email he should verify its email
     Given user "alice" is active
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I navigate to my personal details page
 
     When I fill in my email with "newmail@3scale.localhost"
@@ -36,7 +36,7 @@ Feature: Users enter email unverified state
   @wip
   Scenario: Email_unverified user receives verify email everytime he edits his details
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I navigate to my personal details page
 
     When I change my name without changing the email
@@ -46,7 +46,7 @@ Feature: Users enter email unverified state
   @wip
   Scenario: User verify his email when logged in
     Given user "alice" is active
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I change my email to "newmail@3scale.localhost"
     Then "newmail@3scale.localhost" should receive an email to verify email address
 
@@ -57,7 +57,7 @@ Feature: Users enter email unverified state
   @wip
   Scenario: User verify his email when not logged in
     Given user "alice" is active
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I change my email to "newmail@3scale.localhost"
     Then "newmail@3scale.localhost" should receive an email to verify email address
 
@@ -69,7 +69,7 @@ Feature: Users enter email unverified state
   @wip
   Scenario: User restart email verification process
     Given user "alice" is email unverified
-    When I log in as "alice" on foo.3scale.localhost
+    When I log in as "alice" on "foo.3scale.localhost"
       And I navigate to my personal details page
       And I resend the email verification
     Then user "alice" should receive an email to verify email address

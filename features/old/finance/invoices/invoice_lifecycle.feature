@@ -12,7 +12,7 @@ Feature: Invoice lifecycle
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And the time is 29th May 2009
       And a buyer "alice" signed up to application plan "PaidAsInLunch"
-      And I log in as "alice" on foo.3scale.localhost
+      And I log in as "alice" on "foo.3scale.localhost"
 
   @commit-transactions
   Scenario: Normal postpaid life-cycle

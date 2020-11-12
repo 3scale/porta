@@ -13,7 +13,7 @@ Feature: Menu of the buyers
 
   Scenario: Without live applications menu item Stats is not visible
     Given buyer "bob" has no live applications
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the dashboard
     Then I should not see "Statiscis"
 

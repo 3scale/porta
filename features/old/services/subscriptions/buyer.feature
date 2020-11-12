@@ -11,7 +11,7 @@ Feature: Buyer's service subscription
     And a service "Second" of provider "foo.3scale.localhost"
     And a buyer "bob" of provider "foo.3scale.localhost"
     And a published service plan "SoundsLike" of service "API" of provider "foo.3scale.localhost"
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
 
   Scenario: Simple subscription
    Given a published service plan "AnotherOne" of service "API" of provider "foo.3scale.localhost"
@@ -43,6 +43,6 @@ Feature: Buyer's service subscription
     Then I should see "You have successfully subscribed to a service."
 
   Scenario: Fast lane - automatically subscribed when there is no plan to choose from
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
      And I go to the service subscription page
     Then I should see "You have successfully subscribed to a service."

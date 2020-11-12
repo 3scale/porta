@@ -4,7 +4,7 @@ Feature: XSS Protection
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And the current provider is foo.3scale.localhost
+    And the current provider is "foo.3scale.localhost"
     And the provider has cms page "/some-page" with:
     """
       Hello {{ current_account.name }}

@@ -17,14 +17,14 @@ Feature: Buyer's service subscription
 
    Scenario: Services that do not allow contracts are not visible to buyers
      Given a service "NoContractsService" of provider "foo.3scale.localhost"
-     When I log in as "bob" on foo.3scale.localhost
+     When I log in as "bob" on "foo.3scale.localhost"
       And I go to the services list for buyers
       Then I should see "Frutas"
        And I should see "Verduras"
       But I should not see "NoContractsService"
 
    Scenario: List services and subscribe to one of them
-     When I log in as "bob" on foo.3scale.localhost
+     When I log in as "bob" on "foo.3scale.localhost"
       And I go to the services list for buyers
 
       Then I should see "Frutas"

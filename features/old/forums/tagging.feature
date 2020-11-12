@@ -28,12 +28,12 @@ Feature: Tags on Forum
          | debian   | skypekit, linux |
          | hal 9000 | skypekit        |
 
-    When I log in as "foo.3scale.localhost" on foo.3scale.localhost
-    And I go to foo.3scale.localhost
+    When I log in as "foo.3scale.localhost" on "foo.3scale.localhost"
+    And I go to "foo.3scale.localhost"
     And I visit the forum page with no tag
     Then I should see all the topics on the forum of "foo.3scale.localhost"
 
-    When I go to foo.3scale.localhost
+    When I go to "foo.3scale.localhost"
     And I visit the forum page with tag "linux"
     Then I should see only the debian topic
 
@@ -54,6 +54,6 @@ Feature: Tags on Forum
        | topic    | tagged with     |
        | linuxian | linux, debian   |
        | skypian  | skypekit, phone |
-    When I log in as "foo.3scale.localhost" on foo.3scale.localhost
+    When I log in as "foo.3scale.localhost" on "foo.3scale.localhost"
     And I visit on the public side the topic "skypian" on the forum of "foo.3scale.localhost"
     Then I should see the links to search by its tags

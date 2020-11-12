@@ -17,7 +17,7 @@ Feature: Buyer's application referrer filters (single application mode)
       | foo.example.org |
       | bar.example.org |
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the buyer access details page
 
     Then I should see "Referrer Filters"
@@ -28,7 +28,7 @@ Feature: Buyer's application referrer filters (single application mode)
   Scenario: Create valid referrer filter
     Given the application of buyer "bob" has no referrer filters
     And the backend will create referrer filter "foo.example.org" for the application of buyer "bob"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the buyer access details page
     And I submit the new referrer filter form with "foo.example.org"
     Then I should see referrer filter "foo.example.org"
@@ -37,23 +37,23 @@ Feature: Buyer's application referrer filters (single application mode)
   Scenario: Create invalid referrer filter
     Given the application of buyer "bob" has no referrer filters
     And the backend will respond with error on attempt to create blank referrer filter for the application of buyer "bob"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the buyer access details page
     And I submit the new referrer filter form with ""
     Then I should see referrer filter validation error "referrer filter can't be blank"
-  
+
   @javascript
   Scenario: Delete referrer filter
     Given the application of buyer "bob" has the following referrer filters:
       | foo.example.org |
     And the backend will delete referrer filter "foo.example.org" for the application of buyer "bob"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the buyer access details page
     And I press "Delete" for referrer filter "foo.example.org"
     Then I should not see referrer filter "foo.example.org"
 
   Scenario: Referrer filters are not available if they are not required
     Given referrer filters are not required for the service of provider "foo.3scale.localhost"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the buyer access details page
     Then I should not see "Referrer Filters"

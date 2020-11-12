@@ -5,7 +5,7 @@ Feature: ActiveDocs
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And the current provider is foo.3scale.localhost
+    And the current provider is "foo.3scale.localhost"
 
   Scenario: Loading new Swagger template with javascript packs
     Given provider "foo.3scale.localhost" has the swagger example of signup

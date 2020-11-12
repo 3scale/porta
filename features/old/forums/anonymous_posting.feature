@@ -15,7 +15,7 @@ Feature: Anonymous posting
     Given provider "foo.3scale.localhost" has "anonymous posts" enabled
     And the forum of "foo.3scale.localhost" has topic "Check out this new feature"
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the "Check out this new feature" topic page
     And I fill in "Body" with "I do not like it"
     And I check "Post anonymously"

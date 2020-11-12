@@ -55,7 +55,7 @@ Feature: Account management
     Given an application plan "Default" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Default"
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I follow "Settings"
     Then I should not see "API Key"
 
@@ -71,7 +71,7 @@ Feature: Account management
     Given provider "foo.3scale.localhost" has the following buyers with states:
         | buyer | state    |
         | buyer | approved |
-    When I log in as "buyer" on foo.3scale.localhost
+    When I log in as "buyer" on "foo.3scale.localhost"
       And I follow "Settings"
     Then I should be able to edit the value of the customers type field
 

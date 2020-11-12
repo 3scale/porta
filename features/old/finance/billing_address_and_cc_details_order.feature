@@ -37,7 +37,7 @@ Feature: Credit card details
     Given the current domain is "foo.3scale.localhost"
       And buyer "stan" has last digits of credit card number "1234" and expiration date March, 2018
       And provider "foo.3scale.localhost" manages payments with "stripe"
-    When I log in as "stan" on foo.3scale.localhost
+    When I log in as "stan" on "foo.3scale.localhost"
     And I go to the stripe credit card details page
 
     Then I should see "Expiration date"

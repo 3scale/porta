@@ -22,7 +22,7 @@ Feature: Sticky Topics
     Then the forum of "foo.3scale.localhost" should have sticky topic "Read this first"
 
     When I log out
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I create a new topic "Please help!"
     And I create a new topic "Please help again!"
     And I go to the forum page
@@ -35,7 +35,7 @@ Feature: Sticky Topics
       | Second topic | 2 days ago |
       | Third topic  | 1 day ago  |
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should see the first topic is "Third topic"
 
@@ -49,7 +49,7 @@ Feature: Sticky Topics
     Then the forum of "foo.3scale.localhost" should have sticky topic "Second topic"
 
     When I log out
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should see the first topic is "Second topic"
 
@@ -59,7 +59,7 @@ Feature: Sticky Topics
       | First topic  | no      | 1 day ago  |
       | Second topic | yes     | 2 days ago |
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should see the first topic is "Second topic"
     When I log out
@@ -73,12 +73,12 @@ Feature: Sticky Topics
     Then the forum of "foo.3scale.localhost" should have non-sticky topic "Second topic"
 
     When I log out
-    And I log in as "bob" on foo.3scale.localhost
+    And I log in as "bob" on "foo.3scale.localhost"
     And I go to the forum page
     Then I should see the first topic is "First topic"
 
   @security
   Scenario: Non-admins can't create sticky topics
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the new topic page
     Then I should not see field "Sticky"

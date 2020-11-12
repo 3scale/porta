@@ -13,7 +13,7 @@ Background:
     And a buyer "tycoon" signed up to application plan "best"
     And time flies to 3rd February 2009
 
-    When I log in as "tycoon" on foo.3scale.localhost
+    When I log in as "tycoon" on "foo.3scale.localhost"
     And I navigate to invoice issued for me in "January, 2009"
     Then I should see line items
     | name                         | quantity | cost |
@@ -26,7 +26,7 @@ Background:
      And a buyer "tycoon" signed up to application plan "best"
      And VAT rate of buyer "tycoon" is 5%
      And time flies to 3rd February 2009
-    When I log in as "tycoon" on foo.3scale.localhost
+    When I log in as "tycoon" on "foo.3scale.localhost"
      And I navigate to invoice issued for me in "January, 2009"
     Then I should see line items
         | name                         | quantity | cost |
@@ -42,7 +42,7 @@ Background:
     And VAT rate of buyer "tycoon" is 0%
     And time flies to 3rd February 2009
 
-    When I log in as "tycoon" on foo.3scale.localhost
+    When I log in as "tycoon" on "foo.3scale.localhost"
     And I navigate to invoice issued for me in "January, 2009"
     Then I should see line items
     | name                         | quantity | cost |

@@ -19,7 +19,7 @@ Feature: Render liquid templates from database
     And provider "foo.3scale.localhost" has "multiple_services" visible
     And provider "foo.3scale.localhost" has "service_plans" visible
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the <path> page
     Then I should see "<original_content>"
     When builtin page "<system_name>" of provider "foo.3scale.localhost" has content "EDITED <system_name>"
@@ -50,7 +50,7 @@ Feature: Render liquid templates from database
 
   Scenario Outline: Override public pages
    Given a buyer "bob" signed up to provider "foo.3scale.localhost"
-   And I log in as "bob" on foo.3scale.localhost
+   And I log in as "bob" on "foo.3scale.localhost"
    When I go to the <page> page
    Then I should see markup matching '<original>'
    When builtin partial "<system_name>" of provider "foo.3scale.localhost" has content "PARTIAL <system_name> EDITED"
@@ -91,7 +91,7 @@ Feature: Render liquid templates from database
     And a service plan "Gold" of provider "foo.3scale.localhost"
     And a buyer "john" signed up to service plan "Gold"
 
-    When I log in as "john" on foo.3scale.localhost
+    When I log in as "john" on "foo.3scale.localhost"
      And I go to the new application page
     Then I should see "New Application"
 

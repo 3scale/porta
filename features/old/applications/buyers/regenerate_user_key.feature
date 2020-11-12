@@ -12,7 +12,7 @@ Feature: Refresh User Key
 
   Scenario: Regenerate user key
     Given the service of provider "foo.3scale.localhost" has "buyer key regenerate" enabled
-    When I log in as "fred" on foo.3scale.localhost
+    When I log in as "fred" on "foo.3scale.localhost"
     And I go to the API access details page
     And I remember the user key I see
     And I press "Regenerate"
@@ -21,12 +21,12 @@ Feature: Refresh User Key
 
   Scenario: Buyer Key Refresh disabled
     Given the service of provider "foo.3scale.localhost" has "buyer key regenerate" disabled
-    When I log in as "fred" on foo.3scale.localhost
+    When I log in as "fred" on "foo.3scale.localhost"
     And I go to the API access details page
     Then I should not see button "Regenerate"
 
   Scenario: Buyer Key Refresh enabled
     Given the service of provider "foo.3scale.localhost" has "buyer key regenerate" enabled
-    When I log in as "fred" on foo.3scale.localhost
+    When I log in as "fred" on "foo.3scale.localhost"
     And I go to the API access details page
     Then I should see button "Regenerate"

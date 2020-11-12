@@ -44,7 +44,7 @@ Feature: CMS Pages
        And I press "Publish"
       Then I should see "Page saved and published"
 
-      And I hit "/potato" on foo.3scale.localhost
+      And I hit "/potato" on "foo.3scale.localhost"
      Then I should see "<h1>Potato is public!</h1>"
 
      When I am logged in as provider "foo.3scale.localhost" on its admin domain
@@ -52,7 +52,7 @@ Feature: CMS Pages
       And I press "Hide" inside the dropdown
      Then I should see "Page has been hidden"
 
-     When I hit "/potato" on foo.3scale.localhost
+     When I hit "/potato" on "foo.3scale.localhost"
      Then I should see "Not found"
 
   Scenario: Builtin page

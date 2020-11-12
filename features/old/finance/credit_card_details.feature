@@ -33,7 +33,7 @@ Feature: Credit card details
         | cc_terms_path   | lorem-terms   |
         | cc_privacy_path | ipsum-privacy |
         | cc_refunds_path | dolor-refunds |
-    When I log in as "kenny" on foo.3scale.localhost
+    When I log in as "kenny" on "foo.3scale.localhost"
       And I follow "Settings"
       And I follow "Credit Card Details"
     Then I should see the legal terms link linking to path "lorem-terms"
@@ -43,14 +43,14 @@ Feature: Credit card details
   Scenario: Credit Card Details link does not show with charging disabled
       And provider "foo.3scale.localhost" is not charging
       And the current domain is "foo.3scale.localhost"
-    When I log in as "kenny" on foo.3scale.localhost
+    When I log in as "kenny" on "foo.3scale.localhost"
       And I go to the account page
     Then I should not see the link credit card details
 
   Scenario: Entering billing address
     Given a buyer without billing address "stan" signed up to application plan "Pro"
       And provider "foo.3scale.localhost" manages payments with "stripe"
-     When I log in as "kenny" on foo.3scale.localhost
+     When I log in as "kenny" on "foo.3scale.localhost"
       And I follow "Settings"
       And I follow "Credit Card Details"
       And I follow "Edit billing address"
@@ -60,7 +60,7 @@ Feature: Credit card details
     Given the current domain is "foo.3scale.localhost"
       And provider "foo.3scale.localhost" manages payments with "stripe"
       And buyer "kenny" has last digits of credit card number "1234" and expiration date March, 2018
-   When I log in as "kenny" on foo.3scale.localhost
+   When I log in as "kenny" on "foo.3scale.localhost"
     And I follow "Settings"
     And I follow "Credit Card Details"
     And I follow "Edit billing address"
@@ -75,7 +75,7 @@ Feature: Credit card details
     And I fill in "Phone" with "+34123123212"
     And I press "Save"
 
-    Then the current domain should be foo.3scale.localhost
+    Then the current domain should be "foo.3scale.localhost"
     And I should see "Credit card number"
     And I should see "XXXX-XXXX-XXXX-1234"
     And I should see "Expiration date"

@@ -19,7 +19,7 @@ Feature: Buyer's application management
   Scenario: Provider can deny access to applications Keys
     Given the provider "foo.3scale.localhost" does not allow its partners to manage application keys
       And buyer "bob" has application "SomeApp"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
       And I go to the "SomeApp" application page
     Then I should not see the application keys
 
@@ -34,7 +34,7 @@ Feature: Buyer's application management
       And buyer "bob" is subscribed to service plan "Default"
 
     When the current domain is "foo.3scale.localhost"
-      And I log in as "bob" on foo.3scale.localhost
+      And I log in as "bob" on "foo.3scale.localhost"
       And I go to the dashboard
       And I follow "Applications"
       And I follow "Create new application"
@@ -56,7 +56,7 @@ Feature: Buyer's application management
       Given an application plan "Bronze" of provider "foo.3scale.localhost"
       And an application plan "Gold" of provider "foo.3scale.localhost"
 
-      When I log in as "bob" on foo.3scale.localhost
+      When I log in as "bob" on "foo.3scale.localhost"
       And I go to the dashboard
       And I follow "Applications"
       And I follow "Create new application"
@@ -90,13 +90,13 @@ Feature: Buyer's application management
   Scenario: Create a new application without published or default plan
     Given provider "foo.3scale.localhost" has no published application plans
       And provider "foo.3scale.localhost" has no default application plan
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the applications page
     Then I should not see "Create new application"
 
   Scenario: Create an application that requires approval
     Given provider "foo.3scale.localhost" requires cinstances to be approved before use
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the applications page
     And I follow "Create new application"
     And I fill in "Name" with "MegaWidget"
@@ -106,7 +106,7 @@ Feature: Buyer's application management
 
   Scenario: Edit an application
     Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the applications page
     And I follow "UltraWidget" for application "UltraWidget"
     And I follow "Edit UltraWidget"
@@ -119,7 +119,7 @@ Feature: Buyer's application management
 
   Scenario: Delete an application
     Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
     And I go to the applications page
     And I follow "UltraWidget" for application "UltraWidget"
     And I follow "Edit UltraWidget"
@@ -135,7 +135,7 @@ Feature: Buyer's application management
       | app_extra_read_only |          | true      |        |
       | app_extra_hidden    |          |           | true   |
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
       And I go to the new application page
 
     Then fields should be required:
@@ -172,7 +172,7 @@ Feature: Buyer's application management
 
       And buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
       And application "UltraWidget" has extra field "app_extra_required" blank
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
       And I go to the "UltraWidget" application page
     Then I should not see "App extra required"
       And I should not see "App extra read only"
@@ -187,7 +187,7 @@ Feature: Buyer's application management
 
       And buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
 
-    When I log in as "bob" on foo.3scale.localhost
+    When I log in as "bob" on "foo.3scale.localhost"
       And I go to the "UltraWidget" application edit page
     Then I should not see the fields:
       | not present         |
@@ -219,7 +219,7 @@ Feature: Buyer's application management
     And service plan "Good" requires approval
     And buyer "bob" subscribed service "Fancy" with plan "Good"
     And buyer "bob" subscribed service "Awesome"
-    And I am logged in as "bob" on foo.3scale.localhost
+    And I am logged in as "bob" on "foo.3scale.localhost"
 
     When I go to the applications page
      And I follow "Create new application"

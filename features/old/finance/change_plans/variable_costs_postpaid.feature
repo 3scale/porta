@@ -29,7 +29,7 @@ Feature: Change plan
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
-      When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 15th May 2009
       And I change application plan to "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
@@ -42,7 +42,7 @@ Feature: Change plan
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 2nd May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 2nd May 2009
        And I change application plan to "ExpensivePlan"
        And current domain is the admin domain of provider "foo.3scale.localhost" on 16th May 2009
        And I log in as provider "foo.3scale.localhost"
@@ -59,7 +59,7 @@ Feature: Change plan
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost
+      When I log in as "stallman" on "foo.3scale.localhost"
        And I change application plan to "ExpensivePlan"
       Then buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
@@ -73,7 +73,7 @@ Feature: Change plan
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 15th May 2009
        And I change application plan to "ExpensivePlan"
        And current domain is the admin domain of provider "foo.3scale.localhost" on 16th May 2009
        And I log in as provider "foo.3scale.localhost"
@@ -88,7 +88,7 @@ Feature: Change plan
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
       | hits     |    1 |
-      When I log in as "stallman" on foo.3scale.localhost on 16th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 16th May 2009
       And I change application plan to "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
@@ -104,12 +104,12 @@ Feature: Change plan
         And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 15th May 2009
       And I change application plan to "ExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
       | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 17th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 17th May 2009
       And I change application plan to "CheapPlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
@@ -119,7 +119,7 @@ Feature: Change plan
 
   # Scenario: change plan in 2 different months
   #   Given a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
-  #   When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
+  #   When I log in as "stallman" on "foo.3scale.localhost" on 15th May 2009
   #     And buyer "stallman" makes 1 service transactions with:
   #     | Metric | Value |
   #     | hits   |     1 |
@@ -127,7 +127,7 @@ Feature: Change plan
   #   And buyer "stallman" makes 1 service transactions with:
   #   | Metric | Value |
   #   | hits   |     1 |
-  #   When I log in as "stallman" on foo.3scale.localhost on 17th May 2009
+  #   When I log in as "stallman" on "foo.3scale.localhost" on 17th May 2009
   #   And I change application plan to "CheapPlan"
   #   And buyer "stallman" makes 1 service transactions with:
   #   | Metric | Value |
@@ -142,7 +142,7 @@ Feature: Change plan
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 15th May 2009
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
@@ -163,12 +163,12 @@ Feature: Change plan
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 15th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 15th May 2009
        And I change application plan to "ExpensivePlan"
        And buyer "stallman" makes 1 service transactions with:
         | Metric | Value |
         | hits   |     1 |
-      When I log in as "stallman" on foo.3scale.localhost on 16th May 2009
+      When I log in as "stallman" on "foo.3scale.localhost" on 16th May 2009
       And I change application plan to "VeryExpensivePlan"
       And buyer "stallman" makes 1 service transactions with:
       | Metric | Value |
