@@ -160,7 +160,9 @@ end
 
 # this is being used only because of params[:type] in api/plans controller urls
 # remove if that is not more used?
-Then "(I )should be at url for {link_to_page}" do |path|
+Then "(I )should be at url for {link_to_page}" do |page_name|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   current_path = URI.parse(current_url).request_uri
   if current_path.respond_to? :should
     current_path.should be path
