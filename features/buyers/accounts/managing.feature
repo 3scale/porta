@@ -13,6 +13,6 @@ Feature: Accounts management
       Then there should be 1 valid account deleted event
       # TODO
       # service contract cancelled event should not be send
-      # And there should be 0 valid service contract cancelled event
+      # And there should be 0 valid service contract cancelled events
       And all the events should be valid
       And the users should receive the account deleted notification email
