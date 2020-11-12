@@ -83,7 +83,7 @@ When "I select the {string} application plan" do |plan|
   pending
 end
 
-When "I/someone signup/(signs up) with the email {string}" do |email|
+When "I/someone signup/signs( up) with the email {string}" do |email|
   step %(I go to the sign up page)
   fill_in 'Username', with: email.gsub(/[^\w]/, '-')
   fill_in 'Email', with: email
