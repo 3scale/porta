@@ -606,9 +606,6 @@ end
 
 ParameterType(
   name: 'strings',
-  regexp: /.*"([^"]*)".*/,
-  transformer: ->(strings) {
-    binding.pry
-    strings
-  }
+  regexp: /"(.+?)"/,
+  transformer: ->(name) { name.from_sentence.map { |n| n.delete('"') } }
 )

@@ -29,16 +29,14 @@ When "I {check} the first select in table body" do |check|
 end
 
 When "I {check} select for {strings}" do |check, names|
-  binding.pry
-  names = name.from_sentence.map{|n| n.delete('"') }
   names.each do |n|
-    check_or_uncheck_selected_row un, n
+    check_or_uncheck_selected_row check, n
   end
 end
 
 When "I {check} select in table header" do |check|
   within 'table.data thead' do
-    check_or_uncheck_selected_row un
+    check_or_uncheck_selected_row check
   end
 end
 
