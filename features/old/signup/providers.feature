@@ -79,7 +79,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   # --- Buyer logs in ---
   When I follow the activation link in an email sent to "bob@customer.net"
   And I fill in the following:
-    | Username or Email | bob     |
+    | Email or Username | bob     |
     | Password          | ie4ever |
   And I press "Sign in"
   Then I should see "Signed in successfully"
@@ -89,7 +89,7 @@ Scenario: Signup, activate, login, create sample data and let a buyer login
   Then I should see "You have been logged out"
   And I follow "Login"
   And I fill in the following:
-  | Username or Email |   john |
+  | Email or Username |   john |
   | Password          | 123456 |
   And I press "Sign in"
   Then I should see "Signed in successfully"
