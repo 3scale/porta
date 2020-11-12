@@ -103,9 +103,9 @@ Feature: Render liquid templates from database
   Scenario: Login page
     When the current domain is "foo.3scale.localhost"
      And I go to the login page
-    Then I should see "Username or Email"
+    Then I should see "Email or Username"
 
     When builtin page "login/new" of provider "foo.3scale.localhost" has content "EDITED PAGE"
     And I go to the login page
     Then I should see "EDITED PAGE"
-    And I should not see "Username or Email"
+    And I should not see "Email or Username"

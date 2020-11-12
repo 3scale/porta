@@ -111,8 +111,8 @@ When "I fill in the {string} login data" do |username|
 end
 
 def fill_in_login_data(username, password = 'supersecret')
-  fill_in('Email or Username', with: username)
-  fill_in('Password', with: password)
+  find('input', id: 'session_username').fill_in with: username
+  find('input', id: 'session_password').fill_in with: password
 end
 
 Then "I {should} be logged in as {string}" do |logged_in, username|

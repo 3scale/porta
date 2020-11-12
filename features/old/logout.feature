@@ -11,7 +11,7 @@ Feature: Logout feature
     When I log in as "foo.3scale.localhost" on the admin domain of provider "foo.3scale.localhost"
     And I follow "Site"
     And I follow "Sign in"
-    And I fill in "Username or Email" with "bob"
+    And I fill in "Email or Username" with "bob"
     And I fill in "password" with "supersecret"
     And I press "Sign in" within ".commit"
     And I follow "Logout"
