@@ -90,7 +90,6 @@ Then "I should see my section" do
 end
 
 Then "I should see my section changed" do
-  binding.pry
   # TODO: check that it effectively changed
   section = current_account.provided_sections.last
   assert has_xpath?(".//td[@id='section_#{section.id}']")
