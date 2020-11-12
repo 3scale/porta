@@ -16,11 +16,15 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
-Given "(I )am on {link_to_page}" do |path|
+Given "(I )am on {link_to_page}" do |page_name|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   visit path
 end
 
-When "(I )go to {link_to_page}" do |path|
+When "(I )go to {link_to_page}" do |page_name|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   visit path
 end
 

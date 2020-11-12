@@ -14,7 +14,9 @@ Then "I should get access denied" do
 end
 
 #OPTIMIZE: parameterize like the other one?
-When "I request the url of the {link_to_page} page then I should see an exception" do |path|
+When "I request the url of the {link_to_page} page then I should see an exception" do |page_name|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   requests = inspect_requests do
     visit path
   end
@@ -22,7 +24,9 @@ When "I request the url of the {link_to_page} page then I should see an exceptio
 end
 
 #OPTIMIZE: remove exception from step signature and make it less code aware
-When "I request the url of the {link_to_page} page then I should see a {string} exception" do |path, e|
+When "I request the url of the {link_to_page} page then I should see a {string} exception" do |page_name, e|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   -> { visit path }
     .should raise_error(e.constantize)
 end
@@ -33,7 +37,9 @@ Then "I request the url of the {page} an exception should be raised" do |page|
     .should raise_error(ActiveRecord::RecordNotFound)
 end
 
-When "I request the url of the {link_to_page} page then I should see {int}" do |path, status|
+When "I request the url of the {link_to_page} page then I should see {int}" do |page_name, status|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   requests = inspect_requests do
     visit path
   end
