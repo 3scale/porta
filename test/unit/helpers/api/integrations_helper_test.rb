@@ -32,15 +32,6 @@ class Api::IntegrationsHelperTest < ActionView::TestCase
       assert_match %r(<code.+>curl &quot;.+user_key=USER_KEY&quot; </code>), res
     end
 
-    test 'curl command when api as product is disabled' do
-      account = proxy.service.account
-      account.stubs(:provider_can_use?).returns(true)
-      account.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
-      proxy.update_attributes(api_test_path: '/api?test=true')
-      res = api_test_curl(proxy)
-      assert_match %r(<code.+>curl &quot;.+/api\?test=true&amp;user_key=USER_KEY&quot; </code>), res
-    end
-
     test 'data-credentials' do
       @proxy = FactoryBot.create(:proxy, auth_user_key: 'my_cool_name_for_user_key')
       create_proxy_config
