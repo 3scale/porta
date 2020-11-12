@@ -52,7 +52,7 @@ Given "{buyer} has the following applications:" do |buyer, table|
 
 end
 
-Given "{buyer} has {int} applications" do |buyer, number|
+Given "{buyer} has {int} application(s)" do |buyer, number|
   plan = buyer.provider_account.first_service!.plans.default
 
   buyer.bought_cinstances.destroy_all
