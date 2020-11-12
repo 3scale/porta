@@ -52,7 +52,7 @@ Then "I should see the link {string} containing {string} in the URL" do |label, 
   assert page.has_css?('a', text: label, &href_contain_params)
 end
 
-Then "I {should} see the link {string}" do |visible, label|
+Then "I {should} see (the )link {string}" do |visible, label|
   assert_equal visible, page.has_css?('a', text: label)
 end
 
