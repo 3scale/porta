@@ -12,8 +12,8 @@ Given "a(n) {user_type} {string} of {account} with email {string}" do |user_type
   FactoryBot.create(user_type, account: account, username: username, email: email)
 end
 
-Given "a(n) {user_type} {string} of {account} with {string} permission" do |user_type, username, account, permission|
-  user = FactoryBot.create(user_type, account: account, username: username)
+Given /^an active user "([^"]*)" of (account "([^"]*)") with ([^"]*) permission$/ do |username, account, permission|
+  user = FactoryBot.create(:active_user, account: account, username: username)
 
   user.admin_sections = permission == 'no' ? [] : [permission]
 
