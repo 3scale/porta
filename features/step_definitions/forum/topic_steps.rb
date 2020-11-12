@@ -30,7 +30,7 @@ Given "the forum of {forum} has topic {string} in category {string}" do |forum, 
   FactoryBot.create(:topic, forum: forum, category: forum.categories.find_by!(name: category_name), title: title, user: forum.account.admins.first)
 end
 
-Given "the forum of {forum} has the following topics" do |forum, table|
+Given "the forum of {forum} has the following topics:" do |forum, table|
   table.hashes.each do |hash|
     category = TopicCategory.find_by!(name: hash['Category'])
 

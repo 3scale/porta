@@ -28,7 +28,8 @@ When "I {check} the first select in table body" do |check|
   end
 end
 
-When "I {check} select for {string}" do |check, name|
+When "I {check} select for {strings}" do |check, names|
+  binding.pry
   names = name.from_sentence.map{|n| n.delete('"') }
   names.each do |n|
     check_or_uncheck_selected_row un, n
