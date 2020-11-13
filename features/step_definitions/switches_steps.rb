@@ -18,6 +18,10 @@ Given "{provider} has {string}( switch) visible" do |provider, switch|
   settings.send("show_#{switch}!")  unless settings.send(switch).visible?
 end
 
+Given "the provider has {string}( switch) visible" do |switch|
+  step %(provider "#{@provider.domain}" has "#{switch}" switch visible)
+end
+
 Then "I should see the invitation to upgrade my plan" do
   assert find('a#change-plan.important-button', text: 'Upgrade to')
 end
