@@ -177,12 +177,14 @@ Then "the {string} checkbox should be {checked}" do |label, checked|
   expect(field_checked).to checked ? be_truthy : be_falsy
 end
 
-Then "(I )should be on {}" do |page_name|
+Then "(I )should be on {link_to_page}" do |page_name|
+  # TODO: move this into transformer
+  path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
-    current_path.should be path_to(page_name)
+    current_path.should be path
   else
-    assert_equal path_to(page_name), current_path
+    assert_equal path, current_path
   end
 end
 
