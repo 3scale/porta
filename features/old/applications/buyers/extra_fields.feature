@@ -40,7 +40,7 @@ Feature: Buyer side, application extra fields
       And I select "3" from "Wheels"
       And I press "Create"
     Then I should see error "can't be blank" for extra field "engine"
-      But I should not see errors for extra field "colors"
+      But I should not see errors for extra field "color"
 
      When I fill in "Engine" with "1 Horse Power"
        And I press "Create"

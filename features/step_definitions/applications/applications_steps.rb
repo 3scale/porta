@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #TODO: does this step belong to extra_field steps
-Given "{buyer} has application {string} with extra fields" do |buyer, app_name, table|
+Given "{buyer} has application {string} with extra fields:" do |buyer, app_name, table|
   plan = buyer.provider_account.first_service!.plans.default or raise 'Provider has no default application plan'
   cinstance = FactoryBot.build(:cinstance, user_account: buyer,
                                            plan: plan,
