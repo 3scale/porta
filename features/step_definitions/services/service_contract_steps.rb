@@ -16,7 +16,7 @@ end
 
 Given "{buyer} subscribed {service}" do |buyer, service|
   plans = service.service_plans
-  plan = plans.default_or_first or plans.first
+  plan = plans.default_or_first || plans.first
   buyer.buy! plan
 end
 
