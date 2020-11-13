@@ -7,26 +7,28 @@ Given /^((?:buyer|provider) "[^\"]*") has last digits of credit card number "([^
   account.save!
 end
 
-Given "buyer {string} has( a) valid credit card" do |buyer_name|
-  step %(buyer "#{buyer_name}" has a valid credit card with lots of money)
+Given "{buyer} has( a) valid credit card" do |buyer|
+  config_credit_card(buyer)
 end
 
-Given "buyer {string} has( a) valid credit card with {balance}" do |buyer_name, balance|
-  buyer = Account.find_by!(org_name: buyer_name)
-
-  buyer.credit_card_expires_on_year = 2.years.from_now.year
-  buyer.credit_card_expires_on_month = 2.years.from_now.month
-  buyer.credit_card_auth_code = "valid_if_ends_with_one_#{balance}"
-
-  buyer.save!
+Given "{buyer} has( a) valid credit card with {balance}" do |buyer, balance|
+  config_credit_card(buyer, balance)
 end
 
 Given "the buyer has a valid credit card" do |buyer_name|
-  step %(the buyer has a valid credit card with lots of money)
+  config_credit_card(@buyer)
 end
 
 Given "the buyer has a valid credit card with {balance}" do |balance|
-  step %(buyer "#{@buyer.org_name}" has a valid credit card with #{balance})
+  config_credit_card(@buyer, balance)
+end
+
+def config_credit_card(buyer, auth_code = 1)
+  buyer.credit_card_expires_on_year = 2.years.from_now.year
+  buyer.credit_card_expires_on_month = 2.years.from_now.month
+  buyer.credit_card_auth_code = "valid_if_ends_with_one_#{auth_code}"
+
+  buyer.save!
 end
 
 Given "the payment gateway will fail on {word}" do |operation|
