@@ -35,10 +35,6 @@ Given "{provider} {is} charging" do |provider, charging_enabled|
   provider.save!
 end
 
-Given "the provider {is} charging" do |is|
-  step %(provider "#{@provider.domain}" #{is ? 'is' : 'is not'} charging)
-end
-
 Given "{provider} is fake charging" do |provider|
   provider.settings.allow_finance! unless provider.settings.finance.allowed?
 
