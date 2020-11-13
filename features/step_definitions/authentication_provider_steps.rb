@@ -14,7 +14,7 @@ Given "the Oauth2 user does not have all the required fields" do
 end
 
 When "I visit the {string} authentication provider page" do |name|
-  visit path_to('the authentication providers page')
+  visit PathsHelper::PathFinder.new(@provider).path_to('the authentication providers page')
   click_on name
 end
 
