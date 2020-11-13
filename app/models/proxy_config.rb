@@ -125,14 +125,14 @@ class ProxyConfig < ApplicationRecord
     errors.add :api_backend, :missing
   end
 
+  def parsed_content
+    JSON.parse(content).deep_symbolize_keys
+  end
+
   private
 
   def extract_host(endpoint)
     URI(endpoint).host if endpoint
-  end
-
-  def parsed_content
-    JSON.parse(content).deep_symbolize_keys
   end
 
   def denormalize_hosts
