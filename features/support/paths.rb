@@ -207,9 +207,6 @@ module PathsHelper
         provider_admin_account_users_path
       when 'the users page'
         admin_account_users_path
-      when /^the provider user edit page for "([^"]*)"$/
-        user = User.username!($1)
-        edit_provider_admin_account_user_path(user)
       when /^the user edit page for "([^"]*)"$/
         user = User.find_by!(username: $1)
         edit_admin_account_user_path(user)
