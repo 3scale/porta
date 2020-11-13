@@ -274,14 +274,14 @@
             },
             {
               "name": "host",
-              "description": "Find by host",
+              "description": "Filter by host",
               "dataType": "string",
               "required": false,
               "paramType": "query"
             },
             {
               "name": "version",
-              "description": "Find by version",
+              "description": "Filter by version",
               "dataType": "string",
               "required": false,
               "paramType": "query"
