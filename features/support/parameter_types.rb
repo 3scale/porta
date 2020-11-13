@@ -141,7 +141,7 @@ ParameterType(
 ParameterType(
   name: 'provider',
   type: Account,
-  regexp: /provider "([^"]*)"|(master) provider|provider (master)|(the provider)/,
+  regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
   transformer: ->(name) do
     # TODO: fix this hacky way of getting master
     if name == 'master'
@@ -151,7 +151,6 @@ ParameterType(
         FactoryBot.create(:master_account)
       end
     else
-      name = @provider.domain if name == 'the provider'
       Account.providers.readonly(false).find_by!(org_name: name)
     end
   end
