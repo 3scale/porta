@@ -5,7 +5,11 @@ Given "{buyer} has extra fields:" do |buyer, table|
   buyer.save!
 end
 
-Then "I {should} see error {string} for extra field {string}" do |visible, error, field|
-  #TODO: the text selector is nasty
-  assert_equal visible, has_xpath?("//*[contains(@class,'has-error')]/label[contains(text(),'#{field.first}')]")
+Then "I should see error {string} for extra field {string}" do |error, field|
+  assert has_css? ".has-error input[name*='[#{field}]']"
+  assert has_css?('.has-error .inline-errors', text: error)
+end
+
+Then "I should not see errors for extra field {string}" do |field|
+  assert has_no_css? ".has-error input[name*='[#{field}]']"
 end
