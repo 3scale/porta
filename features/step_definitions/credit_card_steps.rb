@@ -74,18 +74,27 @@ end
 Given "the provider has testing credentials for braintree" do
   step %(provider "#{@provider.domain}" has testing credentials for braintree)
 end
+
 Given "Braintree is stubbed for wizard" do
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:form_url).returns(hosted_success_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan'))
 end
 
-Given "Braintree is stubbed to (not )accept credit card" do
+Given "Braintree is stubbed to accept credit card" do
+  stub_braintree
+end
+
+Given "Braintree is stubbed to not accept credit card" do
+  stub_braintree(accept_credit_card: false)
+end
+
+def stub_braintree(accept_credit_card: false)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(customer_id_mismatch?: false)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:create_customer_data).returns(nil)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:authorization).returns(nil)
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
 
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:confirm).returns(failed ? failed_braintree_result : successful_braintree_result)
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:confirm).returns(accept_credit_card ? failed_braintree_result : successful_braintree_result)
 end
 
 Given "Braintree is stubbed to accept credit card for buyer" do
