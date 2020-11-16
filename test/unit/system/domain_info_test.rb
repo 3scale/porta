@@ -140,7 +140,7 @@ class System::DomainInfoTest < ActiveSupport::TestCase
       end
 
       apicast_info = System::DomainInfo.apicast_info('api.3scale.net')
-      assert apicast_info.staging
+      assert apicast_info.staging, "Oracle mystery must be revealed!: #{ProxyConfig.current_versions.by_host('api.3scale.net').take(2).index_by(&:environment)}"
       refute apicast_info.production
 
       apicast_info = System::DomainInfo.apicast_info('api.3sca.net')
