@@ -30,9 +30,13 @@ it('should have Dashboard, Audience, Products, Backends and Settings', () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-it('should not have Audience if not provided', () => {
+it('should not have Audience, Products or Backends if not provided', () => {
   const wrapper = getWrapper()
-  wrapper.setProps({ audienceLink: undefined })
+  wrapper.setProps({
+    audienceLink: undefined,
+    productsLink: undefined,
+    backendsLink: undefined
+  })
   wrapper.find('.PopNavigation-trigger').simulate('click')
   expect(wrapper).toMatchSnapshot()
 })
@@ -82,7 +86,7 @@ it('should highlight the selected context', () => {
   expect(wrapper.find('.current-context').text()).toEqual('Backends')
 })
 
-it('should display the current api', () => {
+it('should not display the current api', () => {
   const wrapper = getWrapper({ activeMenu: 'serviceadmin', currentApi })
 
   expect(wrapper.find('.fa-cubes').exists()).toBe(true)
