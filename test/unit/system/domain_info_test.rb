@@ -26,6 +26,8 @@ class System::DomainInfoTest < ActiveSupport::TestCase
   end
 
   class ApicastInfoTest < ActiveSupport::TestCase
+    disable_transactional_fixtures! if System::Database.oracle?
+
     test 'staging false, production false. Search an old version' do
       service = FactoryBot.create(:simple_service, :with_default_backend_api)
 
