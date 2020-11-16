@@ -14,7 +14,7 @@ Feature: Plan creation
       And I fill in "Name" with "Basic"
       And I press "Create Application Plan"
 
-    Then I should be at url for the application plans admin page
+    Then I should be on the application plans admin page
 
   Scenario: Create simple service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
@@ -23,7 +23,7 @@ Feature: Plan creation
       And I fill in "Name" with "Basic"
       And I press "Create Service plan"
 
-    Then I should be at url for the service plans admin page
+    Then I should be on the service plans admin page
 
   Scenario: Edit application plan name
     Given an application plan "Pro" of provider "foo.3scale.localhost"
@@ -32,7 +32,7 @@ Feature: Plan creation
       And I fill in "Name" with "Enterprise"
       And I press "Update Application plan"
 
-    Then I should be at url for the application plans admin page
+    Then I should be on the application plans admin page
       And I should see plan "Enterprise"
       But I should not see plan "Pro"
 
@@ -44,7 +44,7 @@ Feature: Plan creation
       And I fill in "Name" with "Enterprise"
       And I press "Update Service plan"
 
-    Then I should be at url for the service plans admin page
+    Then I should be on the service plans admin page
       And I should see plan "Enterprise"
       But I should not see plan "Pro"
 

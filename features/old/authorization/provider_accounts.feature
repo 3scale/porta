@@ -22,7 +22,7 @@ Feature: Provider accounts authorization
     Then I should see the link "Accounts" in the main menu
 
     When I go to the <page> page
-    Then I should be at url for the <page> page
+    Then I should be on the <page> page
 
     Examples:
       | page                                 |
@@ -82,7 +82,7 @@ Feature: Provider accounts authorization
     Then I should see the link "1 Account" in the audience dashboard widget
 
     When I go to the <page> page
-    Then I should be at url for the <page> page
+    Then I should be on the <page> page
 
     Examples:
       | page                                 |

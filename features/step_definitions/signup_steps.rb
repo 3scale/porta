@@ -120,7 +120,7 @@ end
 
 When "I fill and send the missing data for the signup page" do
   steps %(
-    Then I should be at url for the signup page
+    Then I should be on the signup page
     When I fill in the following:
       | Organization/Group Name | Planet eXpress |
     And I press "Sign up"

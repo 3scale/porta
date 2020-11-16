@@ -77,6 +77,8 @@ module PlanHelpers
 
 end
 
+World(PlanHelpers)
+
 # module PlanHelpers
 
 #   def create_plan(type, options)

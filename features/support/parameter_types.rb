@@ -344,7 +344,10 @@ ParameterType(
 ParameterType(
   name: 'plan_permission',
   regexp: /directly|only with credit card|by request|with credit card required/,
-  transformer: ->(p) { change_plan_permission_to_sym(p) }
+  transformer: ->(p) {
+    # FIXME: can access PlanHelpers mehtod
+    PlanHelpers.change_plan_permission_to_sym(p)
+  }
 )
 
 ParameterType(

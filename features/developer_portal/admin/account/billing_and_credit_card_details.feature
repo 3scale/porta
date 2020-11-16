@@ -19,7 +19,7 @@ Feature: Billing and Credit card details
 
     When the buyer logs in to the provider
     And go to the braintree edit credit card details page
-    Then I should be at url for the braintree edit credit card details page
+    Then I should be on the braintree edit credit card details page
 
     When I fill in the braintree credit card form
     And I press "Save details"
@@ -34,7 +34,7 @@ Feature: Billing and Credit card details
 #
 #    When the buyer logs in to the provider
 #    And go to the braintree edit credit card details page
-#    Then I should be at url for the braintree edit credit card details page
+#    Then I should be on the braintree edit credit card details page
 #
 #    When I fill in the braintree credit card form
 #    And I fill in "CVV" with "000"
@@ -48,7 +48,7 @@ Feature: Billing and Credit card details
 
     When the buyer logs in to the provider
     And go to the braintree edit credit card details page
-    Then I should be at url for the braintree edit credit card details page
+    Then I should be on the braintree edit credit card details page
 
     When I fill in the braintree credit card form
     And I fill in "ZIP / Postal Code" with "00000"

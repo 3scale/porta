@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-Given "the {provider} has following {plan_type} plan(s)" do |provider, plan_type, table|
-  plan_type = plan_type.parameterize.underscore
-
+Given "the {provider} has following {plan_type} plan(s):" do |provider, plan_type, table|
+  plan = "#{plan_type}_plan"
   table.hashes.each do |row|
-    FactoryBot.create plan_type, row.reverse_merge!(issuer: provider.first_service!)
+    FactoryBot.create plan, name: row['Name'],
+                            cost_per_month: row['Cost per month'],
+                            setup_fee: row['Setup fee'],
+                            issuer: provider.first_service!
   end
 end
 
