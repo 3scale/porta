@@ -47,7 +47,7 @@ Feature: Application Plan Change
     And I want to change the plan of my application to paid
 
     And I follow "enter your Credit Card details"
-    Then I should be at url for the braintree credit card details page
+    Then I should be on the braintree credit card details page
 
   # This is the default behaviour for new provider as of 05-07-2016
   Scenario: Change plan workflow with credit card required with wizard
@@ -61,7 +61,7 @@ Feature: Application Plan Change
 
     And I want to change the plan of my application to paid
     And I follow "enter your Credit Card details"
-    Then I should be at url for the braintree credit card details page
+    Then I should be on the braintree credit card details page
     And I follow "Add Credit Card Details and Billing Address"
 
     When I fill in the braintree credit card form
@@ -85,13 +85,13 @@ Feature: Application Plan Change
 
     And I want to change the plan of my application to paid
     And I follow "enter your Credit Card details"
-    Then I should be at url for the braintree credit card details page
+    Then I should be on the braintree credit card details page
     And I follow "Add Credit Card Details and Billing Address"
 
     When I fill in the braintree credit card form
 
     And I press "Save details"
-    Then I should be at url for the braintree credit card details page
+    Then I should be on the braintree credit card details page
     And I should see "Credit card details were successfully stored."
 
 

@@ -127,7 +127,7 @@ end
 Then "I should be logged in the Development Portal" do
   steps %(
     Then I should be logged in as "foo"
-    And I should be at url for the home page
+    And I should be on the home page
   )
 end
 

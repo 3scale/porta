@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 Given "the following messages were sent to {provider}" do |provider, table|
-  if provider.buyer_accounts.empty?
-    step %(a buyer "messenger" signed up to application plan "#{provider.application_plans.first.name}")
-  end
+  step %(a buyer "messenger" signed up to application plan "#{provider.application_plans.first.name}") if provider.buyer_accounts.empty?
 
   table.hashes.each do |hash|
     msg = provider.buyer_accounts.reload.first.messages.create!(to: provider, subject: hash['Message'], body: hash['Message'])
@@ -14,7 +12,7 @@ Given "the following messages were sent to {provider}" do |provider, table|
   end
 end
 
-Given "I the following messages were sent to provider:" do |table|
+Given "the following messages were sent to provider:" do |table|
   assert @provider, "@provider missing"
   step %(the following messages were sent to provider "#{@provider.org_name}":), table
 end

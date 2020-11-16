@@ -16,8 +16,8 @@ Given "{service} allows to change application plan {plan_permission}" do |servic
   service.set_change_application_plan_permission! plan_permission
 end
 
-Given "the provider service allows to change application plan {}" do |mode|
-  step %(service "#{@service.name}" allows to change application plan #{mode})
+Given "the provider service allows to change application plan {plan_permission}" do |plan_permission|
+  @service.set_change_application_plan_permission! plan_permission
 end
 
 Given "{service} does not allow to change application plan" do |service|

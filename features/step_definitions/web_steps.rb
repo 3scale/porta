@@ -180,12 +180,7 @@ end
 Then "(I )should be on {link_to_page}" do |page_name|
   # TODO: move this into transformer
   path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
-  current_path = URI.parse(current_url).path
-  if current_path.respond_to? :should
-    current_path.should be path
-  else
-    assert_equal path, current_path
-  end
+  assert_current_path path
 end
 
 Then "(I )should have the following query string:" do |expected_pairs|
