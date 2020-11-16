@@ -114,31 +114,40 @@ class System::DomainInfoTest < ActiveSupport::TestCase
       services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api)
 
       hosts_list = [
-        %w[example.org 3scale.net],
-        %w[3sca.net example.org],
-        %w[3scale.net 3sca.net]
+        %w[api.example.org api.3scale.net],
+        %w[api.3sca.net api.example.org],
+        %w[api.3scale.net api.3sca.net]
       ]
 
-      services.each do |service|
-        hosts_list.each do |hosts|
-          ProxyConfig::ENVIRONMENTS.each do |env|
+      proxy_configs_by_service = services.map do |service|
+        hosts_list.map do |hosts|
+          ProxyConfig::ENVIRONMENTS.map do |env|
             FactoryBot.create(:proxy_config,
             proxy: service.proxy,
             environment: env,
             content: content(*hosts))
           end
+        end.flatten
+      end
+
+      # Ensure that the versions are saved in the right order
+      environments_amount = ProxyConfig::ENVIRONMENTS.size
+      proxy_configs_by_service.each do |proxy_configs_of_service|
+        proxy_configs_of_service.each_with_index do |config, index|
+          next if index < environments_amount
+          assert config.version > proxy_configs_of_service[index - environments_amount].version
         end
       end
 
-      apicast_info = System::DomainInfo.apicast_info('3scale.net')
+      apicast_info = System::DomainInfo.apicast_info('api.3scale.net')
       assert apicast_info.staging
       refute apicast_info.production
 
-      apicast_info = System::DomainInfo.apicast_info('3sca.net')
+      apicast_info = System::DomainInfo.apicast_info('api.3sca.net')
       refute apicast_info.staging
       assert apicast_info.production
 
-      apicast_info = System::DomainInfo.apicast_info('example.org')
+      apicast_info = System::DomainInfo.apicast_info('api.example.org')
       refute apicast_info.staging
       refute apicast_info.production
     end
