@@ -67,14 +67,7 @@ module Abilities
     end
 
     def test_plans
-      ThreeScale.config.stubs(onpremises: false)
-      assert_can ability, :manage, :plans
-      assert_can ability, :create, :plans
-      assert_can ability, :create, Service
-      assert_can ability, :destroy, Service
-
-      ThreeScale.config.stubs(onpremises: true)
-      assert_can ability, :manage, :plans
+      assert_cannot ability, :manage, :plans
       assert_cannot ability, :create, :plans
       assert_cannot ability, :create, Service
       assert_cannot ability, :destroy, Service
@@ -102,12 +95,12 @@ module Abilities
 
     test 'backend apis and backend api components' do
       %i[show edit update create destroy].each do |action|
-        assert_can ability, action, BackendApi, "Expected user to be able to #{action} BackendApi, but it's not"
+        assert_cannot ability, action, BackendApi, "Expected user to be able to #{action} BackendApi, but it's not"
       end
     end
 
     test 'backend api configs' do
-      assert_can ability, :manage, BackendApiConfig
+      assert_cannot ability, :manage, BackendApiConfig
     end
 
     private

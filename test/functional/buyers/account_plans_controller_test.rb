@@ -31,8 +31,8 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
 
       should 'render index' do
         get :index
-        assert_equal 200, response.status
-        assert_template 'api/plans/_default_plan'
+        assert_equal 403, response.status
+        assert_template 'errors/forbidden'
       end
     end
   end
@@ -63,10 +63,10 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
         assert_template 'errors/provider/forbidden'
       end
 
-      should 'render index' do
+      should 'forbid index' do
         get :index
-        assert_equal 200, response.status
-        assert_template 'api/plans/_default_plan'
+        assert_equal 403, response.status
+        assert_template 'errors/provider/forbidden'
       end
     end
 
