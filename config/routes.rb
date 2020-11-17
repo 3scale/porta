@@ -103,10 +103,6 @@ without fake Core server your after commit callbacks will crash and you might ge
           resources :services, only: [:destroy]
         end
 
-        constraints(id: /[\w.-]+/) do
-          resources :domain, only: %i[show]
-        end
-
         namespace :proxy do
           resources :configs, path: 'configs/:environment', only: [:index]
         end
