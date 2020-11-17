@@ -193,7 +193,7 @@ module VerticalNavHelper
     return sections unless @service
     sections << {id: :overview,      title: 'Overview',      path: admin_service_path(@service)} if can? :manage, :plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
-    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if can? :manage, :applications
+    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
 
     if can? :manage, :plans
@@ -218,7 +218,7 @@ module VerticalNavHelper
 
   def service_applications
     items = []
-    items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}
+    items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
     if current_account.provider_can_use?(:api_as_product) && !master_on_premises?
       items << {title: 'Settings'}
