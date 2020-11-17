@@ -32,6 +32,8 @@ module HtmlSelectorsHelper
       'table.notification-settings tbody'
     when 'service widget'
       '.service-widget'
+    when 'the Context Selector'
+      '#api_selector'
 
     #
     # Invoicing helpers
