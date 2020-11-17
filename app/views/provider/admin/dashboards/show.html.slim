@@ -26,15 +26,16 @@
       = dashboard_widget :new_accounts if can?(:manage, :partners)
       = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
-    section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
-      - unless current_user.access_to_service_admin_sections?
-        = render 'shared/service_access'
-      - else
-        h1 APIs
-        div.apiContainer
-          = render 'products_widget'
-          = render 'backends_widget'
-          = javascript_pack_tag 'PF4Styles/dashboard'
+    - unless current_account.master?
+      section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
+        - unless current_user.access_to_service_admin_sections?
+          = render 'shared/service_access'
+        - else
+          h1 APIs
+          div.apiContainer
+            = render 'products_widget'
+            = render 'backends_widget'
+            = javascript_pack_tag 'PF4Styles/dashboard'
 
   div.Dashboard-events
     section.DashboardStream
