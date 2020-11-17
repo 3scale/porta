@@ -6,14 +6,12 @@ Feature: Master finance settings
     Given the master account admin has username "master" and password "supersecret"
     And a provider "foo.3scale.localhost"
 
-  @javascript
   Scenario: No APIs widgets
     When I am logged in as master admin on master domain
     And I go to the provider dashboard
     Then I should not see "Products"
     And I should not see "Backends"
 
-  @javascript
   Scenario: No Products or Backends in Context Selector
     When I am logged in as master admin on master domain
     And I go to the provider dashboard
