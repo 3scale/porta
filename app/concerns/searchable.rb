@@ -12,8 +12,9 @@ module Searchable
     self.allowed_search_scopes = %i[query]
 
     scope :by_query, ->(query) do
-      options = {ids_only: true, per_page: 1_000_000, star: true, ignore_scopes: true, with: { }}
-      where(id: search(ThinkingSphinx::Query.escape(query), options))
+      options = { ids_only: true, per_page: 1_000_000, star: false, ignore_scopes: true, with: {} }
+      term = "@!sphinx_internal_class_name #{ThinkingSphinx::Query.wildcard(ThinkingSphinx::Query.escape(query))}"
+      where(id: search(term, options))
     end
 
     private
