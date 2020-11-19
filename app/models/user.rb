@@ -226,6 +226,10 @@ class User < ApplicationRecord
     end
   end
 
+  def accessible_service_contracts
+    account.provided_service_contracts.permitted_for(self)
+  end
+
   def can_login?
     # Only buyers need to be approved for now.
     (active? || email_unverified?) && account && (account.provider? || account.approved?)
