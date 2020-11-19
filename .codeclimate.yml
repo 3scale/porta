@@ -13,6 +13,8 @@ plugins:
   rubocop:
     enabled: true
     channel: "rubocop-0-92"
+    config:
+      file: .rubocop.yml
   reek:
     enabled: true
   eslint:

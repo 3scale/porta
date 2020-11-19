@@ -12,15 +12,14 @@ module System
 
     class Info
       include BasicInfo
-      attr_reader :revision, :deployed_at
-      attr_reader :release
+      attr_reader :revision, :deployed_at, :release
 
       delegate :minor_version, :major_version, to: :version
 
       def initialize(info)
         @revision = info.fetch('revision') { `git rev-parse HEAD 2> /dev/null`.strip }
-        @release = info.fetch('release') { '2.x' }
-        @deployed_at = info.fetch('deployed_at') { Time.now }
+        @release = info.fetch('release', '2.x')
+        @deployed_at = info.fetch('deployed_at') { Time.zone.now }
         @error = info.fetch(:error) if info.key?(:error)
       end
 

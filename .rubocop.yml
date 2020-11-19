@@ -250,3 +250,6 @@ Lint/Debugger:
   Exclude:
     - 'features/step_definitions/debugger_steps.rb'
     - 'features/step_definitions/web_steps.rb'
+
+# Naming/RescuedExceptionsVariableName:
+#   PreferredName: error
