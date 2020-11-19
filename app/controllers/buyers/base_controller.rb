@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 #TODO: make all buyers controllers inherit from this one, e.g. accounts, users
 class Buyers::BaseController < FrontendController
   before_action :ensure_provider_domain
-  before_action :authorize_partners
+  before_action :authorize_section
 
   inherit_resources
   defaults :route_prefix => 'admin_buyers'
@@ -10,7 +12,7 @@ class Buyers::BaseController < FrontendController
 
   protected
 
-  def authorize_partners
+  def authorize_section
     authorize! :manage, :partners
   end
 
