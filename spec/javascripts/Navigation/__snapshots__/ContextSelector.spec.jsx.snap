@@ -105,10 +105,12 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
 </ContextSelector>
 `;
 
-exports[`should not have Audience, Products or Backends if not provided 1`] = `
+exports[`should not have Audience if not provided 1`] = `
 <ContextSelector
   activeMenu=""
+  backendsLink="/backends"
   currentApi={null}
+  productsLink="/products"
 >
   <div
     className="PopNavigation PopNavigation--context pf-m-expanded"
@@ -149,6 +151,32 @@ exports[`should not have Audience, Products or Backends if not provided 1`] = `
             className="fa fa-home"
           />
           Dashboard
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/products"
+        >
+          <i
+            className="fa fa-cubes"
+          />
+          Products
+        </a>
+      </li>
+      <li
+        className="PopNavigation-listItem"
+      >
+        <a
+          className="PopNavigation-link"
+          href="/backends"
+        >
+          <i
+            className="fa fa-cube"
+          />
+          Backends
         </a>
       </li>
       <li
