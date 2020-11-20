@@ -14,8 +14,8 @@ type Props = {
   activeMenu: Menu,
   audienceLink: string,
   settingsLink: string,
-  productsLink: ?string,
-  backendsLink: ?string
+  productsLink: string,
+  backendsLink: string
 }
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
@@ -58,20 +58,16 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
               </a>
             </li>
           )}
-          {productsLink && (
-            <li className="PopNavigation-listItem">
-              <a className={getClassNamesForMenu('products')} href={productsLink}>
-                <i className='fa fa-cubes' />Products
-              </a>
-            </li>
-          )}
-          {backendsLink && (
-            <li className="PopNavigation-listItem">
-              <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
-                <i className='fa fa-cube' />Backends
-              </a>
-            </li>
-          )}
+          <li className="PopNavigation-listItem">
+            <a className={getClassNamesForMenu('products')} href={productsLink}>
+              <i className='fa fa-cubes' />Products
+            </a>
+          </li>
+          <li className="PopNavigation-listItem">
+            <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
+              <i className='fa fa-cube' />Backends
+            </a>
+          </li>
           <li className="PopNavigation-listItem">
             <a className={getClassNamesForMenu('account')} href={settingsLink}>
               <i className='fa fa-cog' />Account Settings
