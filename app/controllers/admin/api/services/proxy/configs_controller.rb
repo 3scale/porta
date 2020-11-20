@@ -106,12 +106,16 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
   end
 
   def service_proxy_configs
-    service.proxy.proxy_configs.by_environment(environment)
+    ProxyConfig
+      .by_environment(environment)
+      .where(proxy_id: ProxiesForServiceOwnerAndWatcherService.call(owner: service, watcher: current_account).select(:id))
   end
 
   def host_proxy_configs
-    current_account.accessible_proxy_configs
-      .by_environment(environment).by_host(host).current_versions
+    ProxyConfig
+      .latest_versions(environment: environment)
+      .by_host(host)
+      .where(proxy_id: ProxiesForProviderOwnerAndWatcherService.call(owner: current_account, watcher: current_account).select(:id))
   end
 
   def host
@@ -120,5 +124,9 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
 
   def environment
     params.require(:environment)
+  end
+
+  def version
+    params.permit(:version)[:version]
   end
 end

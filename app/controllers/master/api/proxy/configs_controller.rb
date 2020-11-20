@@ -19,7 +19,7 @@ class Master::Api::Proxy::ConfigsController < Master::Api::BaseController
   protected
 
   def service_proxy_configs
-    ProxyConfig.current_versions.by_environment(environment).by_host(host)
+    ProxyConfig.latest_versions(environment: environment).by_host(host)
   end
 
   def environment

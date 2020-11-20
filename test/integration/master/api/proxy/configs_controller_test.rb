@@ -20,7 +20,7 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
     get master_api_proxy_configs_path(environment: 'production'), params: {access_token: @token.value}
     assert_response :success
 
-    assert_same_elements ProxyConfig.current_versions.by_environment('production').select(:id, :version).map(&:id),
+    assert_same_elements ProxyConfig.latest_versions(environment: 'production').pluck(:id),
                          proxy_config_ids(response.body)
   end
 

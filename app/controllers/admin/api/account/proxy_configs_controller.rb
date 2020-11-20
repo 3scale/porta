@@ -35,15 +35,20 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   private
 
   def proxy_configs
-    @proxy_configs ||= ProxyConfig.joins(:proxy)
-      .where(proxies: { service_id: accessible_services.pluck(:id) })
-      .by_environment(environment)
-      .by_host(host)
-      .by_version(version)
+    @proxy_configs ||= fetch_proxy_configs
   end
 
-  def accessible_services
-    (current_user || current_account).accessible_services
+  def fetch_proxy_configs
+    proxy_configs = ProxyConfig.by_host(host).where(proxy_id: ProxiesForProviderOwnerAndWatcherService.call(owner: current_account, watcher: watcher).select(:id))
+    if version == 'latest'
+      proxy_configs.latest_versions(environment: environment)
+    else
+      proxy_configs.by_version(version).by_environment(environment)
+    end
+  end
+
+  def watcher
+    (current_user || current_account)
   end
 
   def environment
