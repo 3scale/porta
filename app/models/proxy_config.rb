@@ -35,9 +35,7 @@ class ProxyConfig < ApplicationRecord
   scope :newest_first,   -> { order(version: :desc) }
   scope :by_environment, ->(env) { where(environment: VALID_ENVIRONMENTS[env]) }
   scope :by_host,        ->(host) { where.has { hosts =~ "%|#{host}|%" } if host }
-  scope :for_services,   ->(services) do
-    joins(:proxy).merge(::Proxy.where(service_id: services))
-  end
+
   scope :current_versions, -> do
     table = BabySqueel[:proxy_configs].alias(:versions)
     scope = joining { table.on((table.proxy_id == proxy_id) & (table.environment == environment)) }
@@ -107,10 +105,6 @@ class ProxyConfig < ApplicationRecord
     raw_write_attribute :version, version
   end
 
-  def max_version
-    ProxyConfig.select(:version).from(relation_scope.selecting { coalesce(max(version), 0).as('version') })
-  end
-
   def clone_to(environment:)
     EnvironmentClone.new(self, environment).call
   end
@@ -130,6 +124,10 @@ class ProxyConfig < ApplicationRecord
   end
 
   private
+
+  def max_version
+    ProxyConfig.select(:version).from(relation_scope.selecting { coalesce(max(version), 0).as('version') })
+  end
 
   def extract_host(endpoint)
     URI(endpoint).host if endpoint
