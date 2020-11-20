@@ -27,14 +27,6 @@ Feature: Dashboard
     And I should see the link "Create Backend" in the apis dashboard backends widget
 
   @javascript
-  Scenario: Products or Backends in Context Selector
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the provider dashboard
-    And I open the Context Selector
-    Then I should see link "Products" within the Context Selector
-    And I should see link "Backends" within the Context Selector
-
-  @javascript
   Scenario: first API widget
     When I log in as provider "foo.3scale.localhost"
     And I should see "API" in the first api dashboard widget
