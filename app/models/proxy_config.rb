@@ -38,13 +38,15 @@ class ProxyConfig < ApplicationRecord
   scope :by_environment, ->(env) { where(environment: VALID_ENVIRONMENTS[env]) }
   scope :by_host,        ->(host) { where.has { hosts =~ "%|#{host}|%" } if host }
   scope :by_version,     ->(version) { where(version: version) if version }
+  scope :by_proxy_ids,   ->(proxy_ids) { where.has { proxy_id.in(proxy_ids) } if proxy_ids }
 
-  def self.latest_versions(environment:)
+  def self.latest_versions(environment:, proxy_ids: nil)
     where.has do
       id.in(
         ProxyConfig
           .selecting { MAX(id).as('id') } # There is only 1 proxy_config with the maximum version for the same proxy_id and environment
           .by_environment(environment)
+          .by_proxy_ids(proxy_ids)
           .grouping { proxy_id }
           .when_having { MAX(version) > 0 }
       )
