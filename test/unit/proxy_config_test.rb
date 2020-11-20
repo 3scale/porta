@@ -1,6 +1,31 @@
 require 'test_helper'
 
 class ProxyConfigTest < ActiveSupport::TestCase
+  test '.by_version' do
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
+
+    proxy_configs = FactoryBot.create_list(:proxy_config, 2, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
+
+    assert_equal [proxy_configs.first.id],   ProxyConfig.by_version(1).pluck(:id)
+    assert_equal [proxy_configs.second.id],  ProxyConfig.by_version(2).pluck(:id)
+    assert_same_elements proxy_configs.map(&:id), ProxyConfig.by_version(nil).pluck(:id)
+  end
+
+  test '.latest_versions' do
+    services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api)
+
+    proxy_configs = ProxyConfig::ENVIRONMENTS.map do |env|
+      services.map do |service|
+        FactoryBot.create(:proxy_config, proxy: service.proxy, environment: env)
+      end.flatten
+    end
+
+    ProxyConfig::ENVIRONMENTS.each_with_index do |environment, index|
+      expected_proxy_configs = proxy_configs[index].max_by(2) { |pc| pc.version }.map(&:id)
+      found_proxy_configs = ProxyConfig.latest_versions(environment: environment).pluck(:id)
+      assert_same_elements expected_proxy_configs, found_proxy_configs
+    end
+  end
 
   def test_clone_to
     ProxyConfig::ENVIRONMENTS.each do |environment|
@@ -56,17 +81,6 @@ class ProxyConfigTest < ActiveSupport::TestCase
 
     config.hosts = nil
     assert_equal [], config.hosts
-  end
-
-  def test_current_versions
-    proxy = FactoryBot.create(:proxy)
-    FactoryBot.create(:proxy_config, version: 1, proxy: proxy)
-    assert_equal [1], ProxyConfig.current_versions.pluck(:version)
-
-    FactoryBot.create(:proxy_config, version: 2, proxy: proxy)
-    assert_equal [2], ProxyConfig.current_versions.pluck(:version)
-
-    assert ProxyConfig.current_versions.to_a
   end
 
   def test_filename
