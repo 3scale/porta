@@ -50,6 +50,19 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
     assert_equal [new_proxy_config.id], proxy_config_ids(response.body)
   end
 
+  test 'index accepts pagination params' do
+    FactoryBot.create_list(:proxy_config, 5, environment: 'production')
+
+    get master_api_proxy_configs_path(
+      environment: 'production',
+      access_token: @token.value,
+      per_page: 3, page: 2
+    )
+
+    assert_equal ProxyConfig.latest_versions(environment: 'production').order(:id).offset(3).limit(3).select(:id).map(&:id),
+                 proxy_config_ids(response.body)
+  end
+
   protected
 
   def content_hosts(*hosts)

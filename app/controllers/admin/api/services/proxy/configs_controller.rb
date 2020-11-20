@@ -30,11 +30,11 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
   ##~ op.parameters.add @parameter_environment
   #
   def index
-    respond_with(service_proxy_configs)
+    respond_with service_proxy_configs.order(:id).paginate(pagination_params)
   end
 
   def index_by_host
-    respond_with(host_proxy_configs)
+    respond_with host_proxy_configs.order(:id).paginate(pagination_params)
   end
 
   ##~ e = sapi.apis.add

@@ -102,6 +102,35 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_equal [proxy_config_new.id], proxy_config_ids
   end
 
+  test 'index accepts pagination params' do
+    FactoryBot.create_list(:proxy_config, 5, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
+
+    get admin_api_service_proxy_configs_path(
+      service_id: @service.id,
+      environment: ProxyConfig::ENVIRONMENTS.first,
+      access_token: @token.value,
+      per_page: 3, page: 2,
+      format: :json
+    )
+
+    assert_equal @service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id),
+                 JSON.parse(response.body)['proxy_configs'].map { |pc| pc.dig('proxy_config', 'id') }
+  end
+
+  test 'index_by_host accepts pagination params' do
+    ([%w[3scale.net], %w[example.com]] * 3).each do |hosts|
+      service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @account)
+      content = { proxy: { hosts: hosts } }.to_json
+      FactoryBot.create(:proxy_config, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content)
+    end
+
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json),
+          params: { per_page: 3, page: 2, host: '3scale.net', access_token: @token.value }
+
+    assert_equal @account.accessible_proxy_configs.by_host('3scale.net').order(:id).offset(3).limit(3).select(:id).map(&:id),
+                 JSON.parse(response.body)['proxy_configs'].map { |pc| pc.dig('proxy_config', 'id') }
+  end
+
   def test_promote
     params = valid_params.merge(version: @config.version, to: 'production')
 

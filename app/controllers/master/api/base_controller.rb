@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Master::Api::BaseController < Master::BaseController
+  include ::Admin::Api::Filters::Pagination
   include ApiAuthentication::ByProviderKey
   include ApiSupport::PrepareResponseRepresenter
   include ApiSupport::Params

@@ -13,7 +13,7 @@ class Master::Api::Proxy::ConfigsController < Master::Api::BaseController
   end
 
   def index
-    respond_with(service_proxy_configs)
+    respond_with service_proxy_configs.order(:id).paginate(pagination_params)
   end
 
   protected
