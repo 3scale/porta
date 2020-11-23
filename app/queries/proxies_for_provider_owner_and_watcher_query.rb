@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ProxiesForProviderOwnerAndWatcherService < ProxiesForOwnerAndWatcherService
+class ProxiesForProviderOwnerAndWatcherQuery < ProxiesForOwnerAndWatcherQuery
   private
 
   def accessible_services_ids

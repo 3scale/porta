@@ -108,11 +108,11 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
   def service_proxy_configs
     ProxyConfig
       .by_environment(environment)
-      .where(proxy_id: ProxiesForServiceOwnerAndWatcherService.call(owner: service, watcher: current_account).select(:id))
+      .where(proxy_id: ProxiesForServiceOwnerAndWatcherQuery.call(owner: service, watcher: current_account).select(:id))
   end
 
   def host_proxy_configs
-    proxy_ids = ProxiesForProviderOwnerAndWatcherService.call(owner: current_account, watcher: current_account).select(:id)
+    proxy_ids = ProxiesForProviderOwnerAndWatcherQuery.call(owner: current_account, watcher: current_account).select(:id)
     ProxyConfig.latest_versions(environment: environment, proxy_ids: proxy_ids).by_host(host)
   end
 

@@ -43,7 +43,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   end
 
   def proxy_ids
-    ProxiesForProviderOwnerAndWatcherService.call(owner: current_account, watcher: current_user || current_account).select(:id)
+    ProxiesForProviderOwnerAndWatcherQuery.call(owner: current_account, watcher: current_user || current_account).select(:id)
   end
 
   def environment

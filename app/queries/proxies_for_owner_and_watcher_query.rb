@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ProxiesForOwnerAndWatcherService
+class ProxiesForOwnerAndWatcherQuery
   def initialize(owner:, watcher: nil)
     @watcher = watcher
     @owner = owner

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProxiesForOwnerAndWatcherServiceTest < ActiveSupport::TestCase
+class ProxiesForOwnerAndWatcherQueryTest < ActiveSupport::TestCase
   def setup
     @provider = FactoryBot.create(:simple_provider)
     @service = FactoryBot.create(:simple_service, account: provider)
@@ -8,25 +8,25 @@ class ProxiesForOwnerAndWatcherServiceTest < ActiveSupport::TestCase
 
   attr_reader :provider, :service
 
-  class ProxiesForServiceOwnerAndWatcherServiceTest < ProxiesForOwnerAndWatcherServiceTest
+  class ProxiesForServiceOwnerAndWatcherQueryTest < ProxiesForOwnerAndWatcherQueryTest
     test 'it searches by service owner & filters by accessible only' do
       another_service, deleted_service = FactoryBot.create_list(:simple_service, 2, account: provider)
       deleted_service.mark_as_deleted!
 
-      assert_equal [service.proxy.id], ProxiesForServiceOwnerAndWatcherService.call(owner: service).select(:id).map(&:id)
-      assert_equal [another_service.proxy.id], ProxiesForServiceOwnerAndWatcherService.call(owner: another_service).select(:id).map(&:id)
-      assert_empty ProxiesForServiceOwnerAndWatcherService.call(owner: deleted_service).select(:id).map(&:id)
+      assert_equal [service.proxy.id], ProxiesForServiceOwnerAndWatcherQuery.call(owner: service).select(:id).map(&:id)
+      assert_equal [another_service.proxy.id], ProxiesForServiceOwnerAndWatcherQuery.call(owner: another_service).select(:id).map(&:id)
+      assert_empty ProxiesForServiceOwnerAndWatcherQuery.call(owner: deleted_service).select(:id).map(&:id)
     end
   end
 
-  class ProxiesForProviderOwnerAndWatcherServiceTest < ProxiesForOwnerAndWatcherServiceTest
+  class ProxiesForProviderOwnerAndWatcherQueryTest < ProxiesForOwnerAndWatcherQueryTest
     test 'it searches by provider owner & filters by accessible only' do
       services = [service] | FactoryBot.create_list(:simple_service, 2, account: provider)
       services.last.mark_as_deleted!
       _service_of_another_provider = FactoryBot.create(:simple_service)
 
       assert_same_elements provider.accessible_services.map { |s| s.proxy.id },
-                           ProxiesForProviderOwnerAndWatcherService.call(owner: provider).select(:id).map(&:id)
+                           ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider).select(:id).map(&:id)
     end
 
     test 'it filters by watcher permissions' do
@@ -42,17 +42,17 @@ class ProxiesForOwnerAndWatcherServiceTest < ActiveSupport::TestCase
 
       rolling_update(:service_permissions, enabled: true)
       [admin, member_access_all_services].each do |user|
-        assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherService.call(owner: provider, watcher: user).select(:id).map(&:id)
+        assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider, watcher: user).select(:id).map(&:id)
       end
       assert_same_elements(services[0..1].map { |s| s.proxy.id },
-                           ProxiesForProviderOwnerAndWatcherService.call(owner: provider, watcher: member_access_some_services).select(:id).map(&:id))
-      assert_empty ProxiesForProviderOwnerAndWatcherService.call(owner: provider, watcher: member_with_sections_permissions_but_empty_services).select(:id).map(&:id)
-      assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherService.call(owner: provider, watcher: provider).select(:id).map(&:id)
-      assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherService.call(owner: provider, watcher: nil).select(:id).map(&:id)
+                           ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider, watcher: member_access_some_services).select(:id).map(&:id))
+      assert_empty ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider, watcher: member_with_sections_permissions_but_empty_services).select(:id).map(&:id)
+      assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider, watcher: provider).select(:id).map(&:id)
+      assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider, watcher: nil).select(:id).map(&:id)
 
       rolling_update(:service_permissions, enabled: false)
       [admin, member_access_all_services, member_access_some_services, member_with_sections_permissions_but_empty_services, provider, nil].each do |watcher|
-        assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherService.call(owner: provider, watcher: watcher).select(:id).map(&:id)
+        assert_same_elements services.map { |s| s.proxy.id }, ProxiesForProviderOwnerAndWatcherQuery.call(owner: provider, watcher: watcher).select(:id).map(&:id)
       end
     end
   end
