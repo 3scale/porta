@@ -2,6 +2,20 @@ require 'test_helper'
 
 class ServiceTest < ActiveSupport::TestCase
 
+  test '#accessible?' do
+    service = Service.new
+
+    Service.state_machine.states.each do |state|
+      service.state = state.name.to_s
+
+      if service.state == Service::DELETE_STATE
+        refute service.accessible?
+      else
+        assert service.accessible?
+      end
+    end
+  end
+
   def test_create_default_proxy
     Service.any_instance.expects(:create_proxy!).at_least_once
     FactoryBot.create(:simple_service, proxy: nil)
