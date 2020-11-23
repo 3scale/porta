@@ -29,7 +29,7 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "version", :description => "Filter by version", :dataType => "string", :required => false, :paramType => "query"
   #
   def index
-    respond_with proxy_configs.order(:id).paginate(pagination_params)
+    respond_with proxy_configs.order(id: :asc).paginate(pagination_params)
   end
 
   private

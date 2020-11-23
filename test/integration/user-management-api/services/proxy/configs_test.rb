@@ -113,7 +113,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
       format: :json
     )
 
-    assert_equal @service.proxy.proxy_configs.order(:id).offset(3).limit(3).select(:id).map(&:id),
+    assert_equal @service.proxy.proxy_configs.order(id: :asc).offset(3).limit(3).select(:id).map(&:id),
                  JSON.parse(response.body)['proxy_configs'].map { |pc| pc.dig('proxy_config', 'id') }
   end
 
@@ -127,7 +127,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json),
           params: { per_page: 3, page: 2, host: '3scale.net', access_token: @token.value }
 
-    assert_equal @account.accessible_proxy_configs.by_host('3scale.net').order(:id).offset(3).limit(3).select(:id).map(&:id),
+    assert_equal @account.accessible_proxy_configs.by_host('3scale.net').order(id: :asc).offset(3).limit(3).select(:id).map(&:id),
                  JSON.parse(response.body)['proxy_configs'].map { |pc| pc.dig('proxy_config', 'id') }
   end
 

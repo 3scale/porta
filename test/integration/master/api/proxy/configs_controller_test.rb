@@ -59,7 +59,7 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
       per_page: 3, page: 2
     )
 
-    assert_equal ProxyConfig.latest_versions(environment: 'production').order(:id).offset(3).limit(3).select(:id).map(&:id),
+    assert_equal ProxyConfig.latest_versions(environment: 'production').order(id: :asc).offset(3).limit(3).select(:id).map(&:id),
                  proxy_config_ids(response.body)
   end
 
