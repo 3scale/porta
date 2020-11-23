@@ -199,6 +199,10 @@ class Service < ApplicationRecord
     after_transition to: [:deleted], do: :notify_deletion
   end
 
+  def accessible?
+    state != DELETE_STATE
+  end
+
   def using_proxy_pro?
     provider_can_use?(:proxy_pro) && proxy.self_managed?
   end
