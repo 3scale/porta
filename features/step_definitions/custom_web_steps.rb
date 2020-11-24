@@ -56,10 +56,8 @@ Then "I {should} see (the )link {string}" do |visible, label|
   assert_equal visible, page.has_css?('a', text: label)
 end
 
-# TODO: use prop type {link} instead
-Then "I should see link to {}" do |page_name|
-  path = path_to(page_name)
-  assert(page.all('a').any? { |node| matches_path?(node[:href], path) })
+Then "I {should} see {link_to_page}" do |visible, path|
+  assert_equal visible, (page.all('a').any? { |node| matches_path?(node[:href], path) })
 end
 
 Then "I {should} see button {string}" do |visible, label|
