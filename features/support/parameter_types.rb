@@ -178,7 +178,7 @@ ParameterType(
 
 ParameterType(
   name: 'state',
-  regexp: /active|pending|approved|rejected|accepted/,
+  regexp: /active|pending|approved|rejected|accepted|suspended/,
   transformer: ->(state) { state }
 )
 
@@ -496,6 +496,11 @@ ParameterType(
   end
 )
 
+ParameterType(
+  name: 'date',
+  regexp: /(.*)/,
+  transformer: ->(date) { Date.parse(date) }
+)
 # Boolean-like
 
 ParameterType(

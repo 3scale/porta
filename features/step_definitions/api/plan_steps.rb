@@ -27,7 +27,7 @@ When "I select {string} as default plan" do |plan|
   select plan
 end
 
-Then "I {should} see {string} in the default plans list" do |plan_name|
+Then "I {should} see {string} in the default plans list" do |visible, plan_name|
   within default_plan do
     method = visible ? :have_content : :have_no_content
     page.should send(method, plan_name)
