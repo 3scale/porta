@@ -113,6 +113,17 @@ class ProxyConfigTest < ActiveSupport::TestCase
     assert proxy_config.valid?
   end
 
+  test 'missing api backend when service_mesh' do
+    service = FactoryBot.create(:simple_service)
+    proxy = service.proxy
+    proxy.stubs(:service_mesh_integration?).returns(true)
+    proxy_config = FactoryBot.build(:proxy_config, proxy: proxy)
+
+    proxy.backend_api_configs.delete_all
+    proxy.reload
+    assert proxy_config.valid?
+  end
+
   def test_maximum_length
     proxy_config = FactoryBot.build(:proxy_config)
     content = proxy_config.content
