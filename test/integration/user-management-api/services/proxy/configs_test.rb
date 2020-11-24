@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
@@ -11,7 +13,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     host! @account.admin_domain
   end
 
-  def test_latest
+  test 'latest' do
     params = valid_params
 
     get latest_admin_api_service_proxy_configs_path(params)
@@ -70,7 +72,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_equal 1, parsed_response['proxy_configs'].count
   end
 
-  def test_index_by_host
+  test 'index by host' do
     get "/admin/api/services/proxy/configs/#{ProxyConfig::ENVIRONMENTS.first}.json?#{host_valid_params.to_query}"
     assert_response :success
     assert_equal 1, parsed_response['proxy_configs'].count
@@ -84,8 +86,8 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
   end
 
   test 'index_by_host only finds the host in the latest version' do
-    proxy_config_old = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v1.example.com'))
-    proxy_config_new = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v2.example.com'))
+    _proxy_config_old = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v1.example.com'))
+    proxy_config_new  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v2.example.com'))
 
     get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v1.example.com', access_token: @token.value }
     assert_empty proxy_config_ids
