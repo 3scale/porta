@@ -24,7 +24,7 @@ class ProxyConfig < ApplicationRecord
   validates :content, :version, :environment, presence: true
   validates :environment, inclusion: { in: ENVIRONMENTS }
   validate :service_token_exists
-  validate :api_backend_exists, on: :create
+  validate :api_backend_exists, on: :create, if: -> { !service_mesh_integration? }
   validates :content, length: { maximum: MAX_CONTENT_LENGTH }
 
   after_create :update_version
@@ -114,16 +114,20 @@ class ProxyConfig < ApplicationRecord
     errors.add :service_token, :missing
   end
 
-  def api_backend_exists
-    return if proxy&.api_backend_present?
-    errors.add :api_backend, :missing
-  end
-
   def parsed_content
     JSON.parse(content).deep_symbolize_keys
   end
 
   private
+
+  delegate :service_mesh_integration?, to: :proxy, allow_nil: true
+
+  def api_backend_exists
+    # FIXME: we should remove the nil check
+    return if proxy&.api_backend_present?
+
+    errors.add :api_backend, :missing
+  end
 
   def max_version
     ProxyConfig.select(:version).from(relation_scope.selecting { coalesce(max(version), 0).as('version') })
