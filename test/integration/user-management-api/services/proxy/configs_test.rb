@@ -92,6 +92,12 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
 
     get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v2.example.com', access_token: @token.value }
     assert_equal [proxy_config_new.id], proxy_config_ids
+
+
+    _proxy_config_old, proxy_config_new = FactoryBot.create_list(:proxy_config, 2, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('foo.example.com'))
+
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'foo.example.com', access_token: @token.value }
+    assert_equal [proxy_config_new.id], proxy_config_ids
   end
 
   def test_promote

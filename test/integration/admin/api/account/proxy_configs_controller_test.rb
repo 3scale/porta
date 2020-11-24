@@ -117,7 +117,7 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_same_elements expected_proxy_config_ids_latest_version, response_proxy_config_ids
   end
 
-  test '#index with host param: it searches first for latest version of each proxy/service and then filters that result by host (the order of this matters)' do
+  test '#index for latest with host param: it searches first for latest version of each proxy/service and then filters that result by host (the order of this matters)' do
     service1 = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
     service2 = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
 
@@ -147,6 +147,18 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     ), params: {host: 'v2.example.com', version: 'latest'}
 
     assert_equal [proxy_config_service2_version2.id], response_proxy_config_ids
+  end
+
+  test '#index for latest with host param: if the same host is twice, it only returns the latest' do
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
+    _proxy_config_version_old, proxy_config_version_new = FactoryBot.create_list(:proxy_config, 2, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('foo.example.com'))
+
+    get admin_api_account_proxy_configs_path(
+      environment: ProxyConfig::ENVIRONMENTS.first,
+      access_token: access_token_value(user: provider.admin_user)
+    ), params: {host: 'foo.example.com', version: 'latest'}
+
+    assert_equal [proxy_config_version_new.id], response_proxy_config_ids
   end
 
   private
