@@ -26,7 +26,7 @@ class ProxyConfig < ApplicationRecord
   validates :content, :version, :environment, presence: true
   validates :environment, inclusion: { in: ENVIRONMENTS }
   validate :service_token_exists
-  validate :api_backend_exists, on: :create, if: -> { !service_mesh_integration? }
+  validate :api_backend_exists, on: :create, unless: :service_mesh_integration?
   validates :content, length: { maximum: MAX_CONTENT_LENGTH }
 
   before_create :denormalize_hosts
