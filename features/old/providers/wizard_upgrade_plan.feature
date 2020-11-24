@@ -44,5 +44,5 @@ Feature: Wizard Billing information
     And I fill in the braintree credit card iframe
     And I select "Spain" from "Country"
     And I press "Save credit card"
-   Then the current domain should be admin.foo.3scale.localhost
+   Then the current domain should be "admin.foo.3scale.localhost"
    And I should be on the provider account page

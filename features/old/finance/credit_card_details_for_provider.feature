@@ -42,7 +42,7 @@ Feature: Credit card details
      And I fill in "Phone" with "+34123123212"
      And I press "Save"
 
-   Then the current domain should be admin.foo.3scale.localhost
+   Then the current domain should be "admin.foo.3scale.localhost"
     And I should see "Credit card number"
     And I should see "XXXX-XXXX-XXXX-1111"
     And I should see "Expiration date"
@@ -64,6 +64,6 @@ Feature: Credit card details
      And I fill in "ZIP / Postal Code" with "08080"
      And I fill in "Phone" with "+34123123212"
      And I press "Save"
-   Then the current domain should be admin.foo.3scale.localhost
+   Then the current domain should be "admin.foo.3scale.localhost"
     And I should see "Credit card number is invalid"
     And I should be on the provider braintree edit credit card details page
