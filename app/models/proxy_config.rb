@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ProxyConfig < ApplicationRecord
   class InvalidEnvironmentError < StandardError; end
-  ENVIRONMENTS = %w(sandbox production).freeze
+  ENVIRONMENTS = %w[sandbox production].freeze
 
   ENVIRONMENT_CHECK = ->(env) do
     ENVIRONMENTS.include?(env) ? env : raise(InvalidEnvironmentError, env)
@@ -12,8 +14,8 @@ class ProxyConfig < ApplicationRecord
   # Do not set it too high though the column accept until 16.megabytes
   MAX_CONTENT_LENGTH = 2.megabytes
 
-  belongs_to :proxy, required: true
-  belongs_to :user, required: false
+  belongs_to :proxy, optional: false
+  belongs_to :user, optional: true
 
   attr_readonly :proxy_id, :user_id, :version, :environment, :content
   delegate :service_token, :api_backend, to: :proxy, allow_nil: true
@@ -27,11 +29,11 @@ class ProxyConfig < ApplicationRecord
   validate :api_backend_exists, on: :create, if: -> { !service_mesh_integration? }
   validates :content, length: { maximum: MAX_CONTENT_LENGTH }
 
-  after_create :update_version
   before_create :denormalize_hosts
+  after_create :update_version
 
-  scope :sandbox,        -> { where(environment: 'sandbox'.freeze) }
-  scope :production,     -> { where(environment: 'production'.freeze) }
+  scope :sandbox,        -> { where(environment: 'sandbox') }
+  scope :production,     -> { where(environment: 'production') }
   scope :newest_first,   -> { order(version: :desc) }
   scope :by_environment, ->(env) { where(environment: VALID_ENVIRONMENTS[env]) }
   scope :by_host,        ->(host) { where.has { hosts =~ "%|#{host}|%" } if host }
@@ -67,7 +69,7 @@ class ProxyConfig < ApplicationRecord
   end
 
   def filename
-    "apicast-config-#{proxy.service.parameterized_name}-#{environment}-#{version}.json".freeze
+    "apicast-config-#{proxy.service.parameterized_name}-#{environment}-#{version}.json"
   end
 
   def sandbox_endpoint
@@ -87,7 +89,7 @@ class ProxyConfig < ApplicationRecord
   end
 
   def hosts
-    super.to_s.split('|'.freeze).reject(&:empty?)
+    super.to_s.split('|').reject(&:empty?)
   end
 
   def update_version
@@ -111,6 +113,7 @@ class ProxyConfig < ApplicationRecord
 
   def service_token_exists
     return if service_token
+
     errors.add :service_token, :missing
   end
 
