@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTest
@@ -15,27 +17,44 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
       FactoryBot.create_list(:proxy_config, 3, proxy: proxy, environment: 'production')
     end
 
-    get master_api_proxy_configs_path(environment: 'production'), access_token: @token.value
+    get master_api_proxy_configs_path(environment: 'production'), params: {access_token: @token.value}
     assert_response :success
 
-    assert_same_elements ProxyConfig.current_versions.by_environment('production').map(&:id),
+    assert_same_elements ProxyConfig.current_versions.by_environment('production').select(:id, :version).map(&:id),
                          proxy_config_ids(response.body)
   end
 
-  test '#index filter by host' do
+  test '#index filter by host (among the latest versions)' do
     proxy = FactoryBot.create(:proxy)
-    FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', hosts: %w[example.com])
-    proxy_config = FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', hosts: %w[lvh.me])
+    FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', content: content_hosts('v1.example.com'))
+    latest_proxy_config = FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', content: content_hosts('v2.example.com'))
 
-    get master_api_proxy_configs_path(environment: 'sandbox', host: 'lvh.me'), access_token: @token.value
+    get master_api_proxy_configs_path(environment: 'sandbox'), params: {access_token: @token.value, host: 'v2.example.com'}
+
     assert_response :success
+    assert_equal [latest_proxy_config.id], proxy_config_ids(response.body)
 
-    assert_same_elements [ proxy_config.id ],
-                         proxy_config_ids(response.body)
 
+    FactoryBot.create(:proxy_config, proxy: proxy, environment: 'sandbox', hosts: %w[example.com])
+
+    get master_api_proxy_configs_path(environment: 'sandbox'), params: {access_token: @token.value, host: 'v1.example.com'}
+
+    assert_response :success
+    assert_empty proxy_config_ids(response.body)
+
+
+    _old_proxy_config, new_proxy_config = FactoryBot.create_list(:proxy_config, 2, proxy: proxy, environment: 'sandbox', content: content_hosts('foo.example.com'))
+
+    get master_api_proxy_configs_path(environment: 'sandbox'), params: {access_token: @token.value, host: 'foo.example.com'}
+
+    assert_equal [new_proxy_config.id], proxy_config_ids(response.body)
   end
 
   protected
+
+  def content_hosts(*hosts)
+    { proxy: { hosts: hosts } }.to_json
+  end
 
   def proxy_config_ids(json)
     JSON.parse(json).fetch('proxy_configs').map { |h| h.dig('proxy_config', 'id') }
