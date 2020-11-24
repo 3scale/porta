@@ -103,15 +103,14 @@ Then "the provider time zone is {string}" do |time_zone|
   @provider.update!(timezone: time_zone)
 end
 
-Then "{account} should be {word}" do |account, type|
+Then /^(account "([^"]*)") should be (provider|buyer|master)$/ do |account, type|
   assert account.send("#{type}?"), "Account '#{account.org_name}' is not a #{type}"
 end
 
-# TODO: maybe prop type isnt correct here
-Given "account/buyer/provider {account} has only one admin {string}" do |account, username|
-  to_be_admin = account.users.find_by!(username: username)
+Given "{buyer} has only one admin {string}" do |buyer, username|
+  to_be_admin = buyer.users.find_by!(username: username)
 
-  account.users.each do |user|
+  buyer.users.each do |user|
     user.update(role: :member) unless user == to_be_admin
   end
 

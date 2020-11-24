@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-Given /^((?:buyer|provider) "[^\"]*") has last digits of credit card number "([^\"]*)" and expiration date (.*)$/ do |account, partial_number, expiration_date|
+Given "{provider_or_buyer} has last digits of credit card number {string} and expiration date {date}" do |account, partial_number, date|
   account.credit_card_partial_number = partial_number
   account.credit_card_auth_code = 'valid_code'
-  account.credit_card_expires_on = Date.parse(expiration_date)
+  account.credit_card_expires_on = date
   account.save!
 end
 
