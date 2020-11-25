@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Stats::Data::BaseController < ApplicationController
   include SiteAccountSupport
   include ApiAuthentication::SuspendedAccount
@@ -88,8 +90,8 @@ class Stats::Data::BaseController < ApplicationController
 
   def usage_params(required_parameter)
     params.require(required_parameter)
-    permitted_params = params.permit(*%i[metric_name granularity period since until skip_change timezone application_id backend_api_id service_id response_code])
-    permitted_params.require([:granularity, :since]) if permitted_params[:period].blank?
+    permitted_params = params.permit(:metric_name, :granularity, :period, :since, :until, :skip_change, :timezone, :application_id, :backend_api_id, :service_id, :response_code)
+    permitted_params.require(%i[granularity since]) if permitted_params[:period].blank?
     permitted_params
   end
 
@@ -99,11 +101,8 @@ class Stats::Data::BaseController < ApplicationController
   def slice_and_use_defaults(params, *allowed)
     options = params.slice(*allowed)
 
-    options[:skip_change] = (options[:skip_change] == 'false') ? false : true
-
-    unless options[:timezone]
-      options[:timezone] = current_account ? current_account.timezone : 'UTC'
-    end
+    options[:skip_change] = (options[:skip_change] != 'false')
+    options[:timezone] ||= current_account ? current_account.timezone : 'UTC'
 
     options
   end
