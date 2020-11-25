@@ -10,5 +10,5 @@ Then "I should see user key is different from what it was" do
 end
 
 Then "{application} should have user key {string}" do |app, user_key|
-  app.user_key.should be user_key
+  assert_equal user_key, app.user_key
 end

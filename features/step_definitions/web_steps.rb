@@ -103,7 +103,7 @@ Then "(I )should see JSON:" do |expected_json|
   require 'json'
   expected = JSON.pretty_generate(JSON.parse(expected_json))
   actual   = JSON.pretty_generate(JSON.parse(response.body))
-  expected.should be actual
+  assert_equal expected, actual
 end
 
 Then "(I )should see {string}" do |text|

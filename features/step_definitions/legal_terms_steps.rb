@@ -9,7 +9,7 @@ Given "{provider} has service subscription legal terms" do |provider, text|
 end
 
 Then "{provider} should have {string} creation binded to {legal_terms}" do |provider, scope, legal_terms|
-  provider.legal_term_for(scope).should be legal_terms
+  provider.legal_term_for(scope).should == legal_terms
 end
 
 Then "I should see my legal term" do
