@@ -61,19 +61,19 @@ end
 # Check how many emails have been sent/received
 #
 Then "{email_address} should receive {amount} email(s)" do |address, amount|
-  unread_emails_for(address).size.should be amount
+  unread_emails_for(address).size.should == amount
 end
 
 Then "{email_address} should have {amount} email(s)" do |address, amount|
-  mailbox_for(address).size.should be amount
+  mailbox_for(address).size.should == amount
 end
 
 Then "{email_address} should receive {amount} email(s) with subject {string}" do |address, amount, subject|
-  unread_emails_for(address).select { |m| m.subject =~ Regexp.new(Regexp.escape(subject)) }.size.should be amount
+  unread_emails_for(address).select { |m| m.subject =~ Regexp.new(Regexp.escape(subject)) }.size == amount
 end
 
 Then "{email_address} should receive {amount} email(s) with subject {}" do |address, amount, subject|
-  unread_emails_for(address).select { |m| m.subject =~ Regexp.new(subject) }.size.should be amount
+  unread_emails_for(address).select { |m| m.subject =~ Regexp.new(subject) }.size.should == amount
 end
 
 Then "{email_address} should receive an email with the following body:" do |address, expected_body|
@@ -122,7 +122,7 @@ Then "I/they should see {string} in the email body" do |text|
 end
 
 Then "I/they should see following email body" do |text|
-  current_email.default_part_body.to_s.strip.should be text.strip
+  current_email.default_part_body.to_s.strip.should == text.strip
 end
 
 Then "I/they should see {} in the email body" do |text|
@@ -158,19 +158,19 @@ end
 #
 
 Then "I/they should see {amount} attachment(s) with the email" do |amount|
-  current_email_attachments.size.should be amount
+  current_email_attachments.size.should == amount
 end
 
 Then "there should be {amount} attachment(s) named {string}" do |amount, filename|
-  current_email_attachments.select { |a| a.filename == filename }.size.should be amount
+  current_email_attachments.select { |a| a.filename == filename }.size.should == amount
 end
 
 Then "attachment {int} should be named {string}" do |index, filename|
-  current_email_attachments[(index.to_i - 1)].filename.should be filename
+  current_email_attachments[(index.to_i - 1)].filename.should == filename
 end
 
 Then "there should be {amount} attachment(s) of type {string}" do |amount, content_type|
-  current_email_attachments.select { |a| a.content_type.include?(content_type) }.size.should be amount
+  current_email_attachments.select { |a| a.content_type.include?(content_type) }.size.should == amount
 end
 
 Then "attachment {int} should be of type {string}" do |index, content_type|

@@ -96,7 +96,7 @@ Then "I should see the account details:" do |table|
 end
 
 Then "{provider} time zone should be {string}" do |provider, time_zone|
-  provider.timezone.should be time_zone
+  provider.timezone.should == time_zone
 end
 
 Then "the provider time zone is {string}" do |time_zone|

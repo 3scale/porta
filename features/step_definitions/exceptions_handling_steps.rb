@@ -10,7 +10,7 @@ Then "I should get access denied" do
   requests = inspect_requests do
     visit @want_path
   end
-  requests.first.status_code.should be 403
+  assert_equal 403, requests.first.status_code
 end
 
 #OPTIMIZE: parameterize like the other one?
@@ -20,7 +20,7 @@ When "I request the url of the {link_to_page} page then I should see an exceptio
   requests = inspect_requests do
     visit path
   end
-  requests.first.status_code.should be 403
+  assert_equal 403, requests.first.status_code
 end
 
 #OPTIMIZE: remove exception from step signature and make it less code aware
@@ -43,5 +43,5 @@ When "I request the url of the {link_to_page} page then I should see {int}" do |
   requests = inspect_requests do
     visit path
   end
-  requests.first.status_code.should be status
+  assert_equal status, requests.first.status_code
 end
