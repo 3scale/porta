@@ -14,32 +14,12 @@ module Stats
 
         data = usage_values_in_range(range, granularity, metric) # metric can be a response_code
 
-        total = data.sum
-
         result = {
-                metric.class.name.underscore.to_sym => detail(metric),
-                :period => period_detail(options),
-                :total       => total,
-                :values      => data
-              }
-
-        if @cinstance
-          plan = @cinstance.plan
-          account = @cinstance.user_account
-
-          result_application = {
-            :id    => @cinstance.id,
-            :name  => @cinstance.name,
-            :state => @cinstance.state,
-            :description => @cinstance.description,
-            service: { id: @cinstance.service_id }
-          }
-
-          result_application[:plan]    = {id: plan.id,    name: plan.name}    if plan
-          result_application[:account] = {id: account.id, name: account.name} if account
-
-          result[:application] = result_application
-        end
+          metric.class.name.underscore.to_sym => detail(metric),
+          period: period_detail(options),
+          total: data.sum,
+          values: data
+        }.merge(application_result)
 
         return result if options.fetch(:skip_change, true)
 
@@ -155,6 +135,26 @@ module Stats
       end
 
       protected
+
+      def application_result
+        return {} unless @cinstance
+
+        plan = @cinstance.plan
+        account = @cinstance.user_account
+
+        result_application = {
+          id:          @cinstance.id,
+          name:        @cinstance.name,
+          state:       @cinstance.state,
+          description: @cinstance.description,
+          service: { id: @cinstance.service_id }
+        }
+
+        result_application[:plan]    = {id: plan.id,    name: plan.name}    if plan
+        result_application[:account] = {id: account.id, name: account.name} if account
+
+        {application: result_application}
+      end
 
       def sanitize_period(period)
         if GRANULARITIES.has_key?(period)
