@@ -18,7 +18,8 @@ module.exports = {
   ],
   moduleDirectories: [
     'node_modules',
-    'app/javascript/src'
+    'app/javascript/src',
+    'app/javascript/packs'
   ],
   transform: {
     '^.+\\.jsx?$': './node_modules/babel-jest',
