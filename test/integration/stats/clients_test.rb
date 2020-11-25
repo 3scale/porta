@@ -120,4 +120,30 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
        "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 29 + [1, 0]
   end
+
+  test 'response without plan when it is nil' do
+    login! @provider_account
+
+    @cinstance.plan.delete
+
+    get usage_response_code_stats_data_applications_path(application_id: @cinstance.id), params: {period: 'month', response_code: 200}
+
+    assert_response :success
+    assert_equal cinstance.id, JSON.parse(response.body).dig('application', 'id')
+    assert_empty JSON.parse(response.body).dig('application', 'plan')
+    assert_not_empty JSON.parse(response.body).dig('application', 'account')
+  end
+
+  test 'response without account when it is nil' do
+    login! @provider_account
+
+    @cinstance.user_account.delete
+
+    get usage_response_code_stats_data_applications_path(application_id: @cinstance.id), params: {period: 'month', response_code: 200}
+
+    assert_response :success
+    assert_equal cinstance.id, JSON.parse(response.body).dig('application', 'id')
+    assert_empty JSON.parse(response.body).dig('application', 'account')
+    assert_not_empty JSON.parse(response.body).dig('application', 'plan')
+  end
 end

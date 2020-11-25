@@ -23,24 +23,22 @@ module Stats
                 :values      => data
               }
 
-        unless @cinstance.nil?
-          result[:application] = {
+        if @cinstance
+          plan = @cinstance.plan
+          account = @cinstance.user_account
+
+          result_application = {
             :id    => @cinstance.id,
             :name  => @cinstance.name,
             :state => @cinstance.state,
             :description => @cinstance.description,
-            :plan => {
-              :id   => @cinstance.plan.id,
-              :name => @cinstance.plan.name
-            },
-            :account => {
-              :id    => @cinstance.user_account.id,
-              :name  => @cinstance.user_account.org_name
-            },
-            service: {
-              id: @cinstance.service_id
-            }
+            service: { id: @cinstance.service_id }
           }
+
+          result_application[:plan]    = {id: plan.id,    name: plan.name}    if plan
+          result_application[:account] = {id: account.id, name: account.name} if account
+
+          result[:application] = result_application
         end
 
         return result if options.fetch(:skip_change, true)
