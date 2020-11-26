@@ -22,6 +22,8 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.group = "service"
   #
   ##~ op.parameters.add @parameter_access_token
+  ##~ op.parameters.add @parameter_page
+  ##~ op.parameters.add @parameter_per_page
   #
   def index
     services = accessible_services.includes(:proxy, :account).order(:id).paginate(pagination_params)
