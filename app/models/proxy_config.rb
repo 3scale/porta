@@ -110,6 +110,10 @@ class ProxyConfig < ApplicationRecord
     errors.add :service_token, :missing
   end
 
+  def parsed_content
+    JSON.parse(content).deep_symbolize_keys
+  end
+
   private
 
   delegate :service_mesh_integration?, to: :proxy, allow_nil: true
@@ -127,10 +131,6 @@ class ProxyConfig < ApplicationRecord
 
   def extract_host(endpoint)
     URI(endpoint).host if endpoint
-  end
-
-  def parsed_content
-    JSON.parse(content).deep_symbolize_keys
   end
 
   def denormalize_hosts
