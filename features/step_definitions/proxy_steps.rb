@@ -64,22 +64,14 @@ Given(%r{^the service uses app_id/app_key as authentication method$}) do
 end
 
 Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" delta "([^"]*)" and metric "([^"]*)"$/) do |method, pattern, delta, metric|
-  click_on 'add-proxy-rule'
-  within(page.find('#sortable tr:last-child')) do
-    find("td.http_method select option[value='#{method}']").select_option
-    find('td.pattern input').set pattern
-    find('td.delta input').set delta
-    find('td.metric select').find(:xpath, "//*[.='#{metric}']").select_option
+  click_on 'Add Mapping Rule'
+  within(page.find('form.proxy_rule')) do
+    find("select#proxy_rule_http_method option[value='#{method}']").select_option
+    find('input#proxy_rule_pattern').set pattern
+    find('input#proxy_rule_delta').set delta
+    find('select#proxy_rule_metric_id option', text: metric).select_option
   end
-end
-
-Given(/^I drag the last mapping rule to the position (\d+)$/) do |position|
-  within(page.find('#sortable')) do
-    last_index = all('tr').count
-    element = page.find("tr:nth-child(#{last_index}) .ui-sortable-handler")
-    target = page.find("tr:nth-child(#{position})")
-    element.drag_to(target)
-  end
+  click_on 'Create Mapping Rule'
 end
 
 Given(/^I save the proxy config$/) do
@@ -87,7 +79,7 @@ Given(/^I save the proxy config$/) do
 end
 
 Then(/^the mapping rules should be in the following order:$/) do |table|
-  data = @provider.default_service.proxy.proxy_rules.includes(:metric).ordered
+  data = @provider.default_service.proxy.proxy_rules.includes(:metric).order_by(:delta)
   MAPPING_RULE_ATTR = %w[http_method pattern delta metric].freeze
   data.each_with_index do |mapping_rule, index|
     MAPPING_RULE_ATTR.each do |attr|
