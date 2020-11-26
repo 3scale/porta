@@ -104,7 +104,7 @@ class ProxyTestService
 
   def backend_api_config_path
     return unless proxy.provider_can_use?(:api_as_product)
-    proxy.backend_api_configs.first&.path
+    proxy.backend_api_configs.order(:id).first&.path
   end
 
   def api_test_host
