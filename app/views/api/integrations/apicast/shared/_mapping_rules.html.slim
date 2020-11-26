@@ -1,39 +1,4 @@
-- if current_account.independent_mapping_rules_enabled?
-  fieldset.inputs.independent_mapping_rules
-    legend
-      span
-        = link_to 'Mapping Rules', admin_service_proxy_rules_path(@service), target: '_blank'
-- else
-  = f.toggled_inputs 'mapping_rules', cookie_name: 'mapping-rules' , legend: 'Mapping Rules', id: "mapping-rules" do
-
-    table#proxy-rules
-      thead
-        tr
-          th Verb
-          th Pattern
-          - if @service.using_proxy_pro?
-            th Redirect
-          th title="increment" +
-          th
-            ' Metric or Method
-            | (
-            = link_to 'Define', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service'
-            | )
-          th colspan="2"
-            ' Last?
-
-      tbody#sortable.ui-sortable
-        - metrics = options_from_collection_for_select(@service.metrics, 'id', 'name')
-
-        - @proxy.proxy_rules.ordered.each_with_index do |rule, i|
-          tr.ui-sortable-item
-            = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: rule, metrics: metrics, index: (i + 1)
-        tr#new-proxy-rule-template.ui-sortable-item style="display:none;"
-          = render 'api/integrations/apicast/shared/mapping_rule', form: f, rule: @proxy.proxy_rules.new(delta: 1), disabled: true, metrics: metrics
-      tfoot
-        tr
-          th colspan=(@service.using_proxy_pro? ? '7' : '6')
-            = link_to "Add Mapping Rule", '#add-proxy-rule', class: 'action add', id: 'add-proxy-rule'
-
-- content_for :javascripts do
-  = javascript_include_tag 'mapping_rules'
+fieldset.inputs.mapping_rules
+  legend
+    span
+      = link_to 'Mapping Rules', admin_service_proxy_rules_path(@service), target: '_blank'
