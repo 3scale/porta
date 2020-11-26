@@ -72,36 +72,6 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_equal 1, parsed_response['proxy_configs'].count
   end
 
-  test 'index by host' do
-    get "/admin/api/services/proxy/configs/#{ProxyConfig::ENVIRONMENTS.first}.json?#{host_valid_params.to_query}"
-    assert_response :success
-    assert_equal 1, parsed_response['proxy_configs'].count
-    assert_equal @config.version, parsed_response['proxy_configs'].first['proxy_config']['version']
-
-    new_config = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
-    get "/admin/api/services/proxy/configs/#{ProxyConfig::ENVIRONMENTS.first}.json?#{host_valid_params.to_query}"
-    assert_response :success
-    assert_equal 1, parsed_response['proxy_configs'].count
-    assert_equal new_config.version, parsed_response['proxy_configs'].first['proxy_config']['version']
-  end
-
-  test 'index_by_host only finds the host in the latest version' do
-    _proxy_config_old = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v1.example.com'))
-    proxy_config_new  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v2.example.com'))
-
-    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v1.example.com', access_token: @token.value }
-    assert_empty proxy_config_ids
-
-    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v2.example.com', access_token: @token.value }
-    assert_equal [proxy_config_new.id], proxy_config_ids
-
-
-    _proxy_config_old, proxy_config_new = FactoryBot.create_list(:proxy_config, 2, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('foo.example.com'))
-
-    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'foo.example.com', access_token: @token.value }
-    assert_equal [proxy_config_new.id], proxy_config_ids
-  end
-
   def test_promote
     params = valid_params.merge(version: @config.version, to: 'production')
 

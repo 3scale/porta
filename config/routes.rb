@@ -689,14 +689,6 @@ without fake Core server your after commit callbacks will crash and you might ge
 
             resource :oidc_configuration, only: %i[show update]
           end
-
-          collection do
-            namespace :proxy do
-              resources :configs, param: :version, path: 'configs/:environment', only: [] do
-                get :index, on: :collection, action: :index_by_host
-              end
-            end
-          end
         end
 
       end
