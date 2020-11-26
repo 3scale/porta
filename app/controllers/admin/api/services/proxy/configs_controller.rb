@@ -28,6 +28,8 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_service_id_by_id_name
   ##~ op.parameters.add @parameter_environment
+  ##~ op.parameters.add @parameter_page
+  ##~ op.parameters.add @parameter_per_page
   #
   def index
     respond_with service_proxy_configs.order(id: :asc).paginate(pagination_params)

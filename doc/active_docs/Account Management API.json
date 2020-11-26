@@ -285,6 +285,20 @@
               "dataType": "string",
               "required": false,
               "paramType": "query"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
             }
           ]
         }
@@ -7107,6 +7121,20 @@
               "required": true,
               "paramType": "path",
               "threescale_name": "environment"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
             }
           ]
         }

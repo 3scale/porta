@@ -27,6 +27,8 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_environment
   ##~ op.parameters.add :name => "host",    :description => "Filter by host",    :dataType => "string", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "version", :description => "Filter by version", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add @parameter_page
+  ##~ op.parameters.add @parameter_per_page
   #
   def index
     respond_with proxy_configs.order(id: :asc).paginate(pagination_params)
