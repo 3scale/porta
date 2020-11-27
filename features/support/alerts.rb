@@ -15,9 +15,8 @@ module Alerts
   end
 
   def limit_alerts_table(state = nil)
-    scope = 'tr'
-    scope << "[data-state='#{state}']" if state.present?
-    scope << "[id*='alert']"
+    data_state = "[data-state='#{state}']" if state.present?
+    scope = "tr#{data_state}[id*='alert']"
 
     states = all("#limit_alerts tbody #{scope}")
     table = extract_table("#limit_alerts", "thead tr:not(.search), tbody #{scope}", "th, td")

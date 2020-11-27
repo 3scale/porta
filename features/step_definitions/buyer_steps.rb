@@ -46,14 +46,7 @@ Given "a buyer without billing address {string} signed up to {plan_with_type}" d
   account.buy!(plan)
 end
 
-# TODO: distinguish AccountPlan here
-Given "a buyer {string} signed up to account {plan}" do |org_name, plan|
-  account = FactoryBot.create(:buyer_account, provider_account: plan.provider_account,
-                                              org_name: org_name)
-  account.buy! plan
-end
-
-Given "a buyer {string} with applicatoin ID {string} signed up to {plan}" do |org_name, app_id, plan|
+Given "a buyer {string} with application ID {string} signed up to {plan}" do |org_name, app_id, plan|
   account = FactoryBot.create(:buyer_account, provider_account: plan.provider_account,
                                               org_name: org_name)
   account.buy! plan.provider_account.account_plans.default

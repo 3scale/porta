@@ -12,6 +12,10 @@ Given "the forum of {forum} has topics? #{QUOTED_LIST_PATTERN}" do |forum, title
   end
 end
 
+Given "the forum of {forum} has topic {string}" do |forum, title|
+  FactoryBot.create(:topic, forum: forum, title: title, user: forum.account.admins.first)
+end
+
 Given "the forum of {forum} has topic {string} with {string}" do |forum, title, body|
   FactoryBot.create(:topic, forum: forum, title: title, body: body, user: forum.account.admins.first)
 end
