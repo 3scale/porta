@@ -15,16 +15,24 @@ end
 #   FactoryBot.create :cms_section, name: name, :public => false, account: provider
 # end
 
-Given "{provider} has a {public} section {string}( with path {string})" do |provider, public, name, path|
-  root = provider.sections.root || FactoryBot.create(:root_cms_section, account: provider)
+Given "{provider} has a {public} section {string}" do |provider, public, name|
+  create_section_for_provider!({ title: name,
+                                 system_name: name,
+                                 account: provider,
+                                 public: public })
+end
 
-  options = { title: name,
-              system_name: name,
-              account: provider,
-              parent: root,
-              public: public }
+Given "{provider} has a {public} section {string} with path {string}" do |provider, public, name, path|
+  create_section_for_provider!({ title: name,
+                                 system_name: name,
+                                 account: provider,
+                                 public: public,
+                                 path: path })
+end
 
-  options.merge(path ? {path: path} : {})
+def create_section_for_provider!(options)
+  provider = options[:account]
+  options = options.merge({ parent: provider.sections.root || FactoryBot.create(:root_cms_section, account: provider) })
 
   provider.sections.create!(options)
 end
