@@ -89,7 +89,7 @@ ParameterType(
 ParameterType(
   name: 'link_to_page',
   # regexp: /(.+)|link to (.+)/,
-  regexp: /(the.+page(?: for ".+")*)/,
+  regexp: /(the.+page(?: for ".+")*(?: of service ".+")*(?: of provider ".+")*)|(the provider dashboard)/,
   transformer: ->(page_name) {
     # FIXME: it should transform the page_name into a path, but @provider is nil
     # PathsHelper::PathFinder.new(@provider).path_to(page_name)
@@ -271,7 +271,7 @@ ParameterType(
 
 ParameterType(
   name: 'forum',
-  regexp: /"([^"]*)"|the forum of "[^"]*"/,
+  regexp: /"([^"]*)"|the forum of "([^"]*)"/,
   transformer: ->(name) { find_provider_by!(org_name: name).forum }
 )
 
@@ -346,7 +346,7 @@ ParameterType(
   name: 'plan_permission',
   regexp: /directly|only with credit card|by request|with credit card required/,
   transformer: ->(p) {
-    # FIXME: can access PlanHelpers mehtod
+    include PlanHelpers # FIXME: cannot access PlanHelpers mehtod without this
     PlanHelpers.change_plan_permission_to_sym(p)
   }
 )

@@ -140,7 +140,7 @@ Then "the {string} field within {string} should contain {string}" do |field, sel
   step %(the "#{field}" field should contain "#{value}" within "#{selector}")
 end
 
-Then "the {string} field should contain {string}" do |field, selector, value|
+Then "the {string} field should contain {string}" do |field, value|
   field = find_field(field)
   field_value = field['value'] || field.native.attribute('value').to_s
   if field_value.respond_to? :should
@@ -152,16 +152,6 @@ end
 
 Then "the {string} field within {string} should not contain {string}" do |field, selector, value|
   step %(the "#{field}" field should not contain "#{value}" within "#{selector}")
-end
-
-Then "the {string} field should contain {string}" do |field, selector, value|
-  field = find_field(field)
-  field_value = field.tag_name == 'textarea' ? field.text : field.value
-  if field_value.respond_to? :should_not
-    field_value.should_not =~ /#{value}/
-  else
-    refute_match(/#{value}/, field_value)
-  end
 end
 
 Then "the {string} checkbox within {string} should be checked" do |label, selector|
@@ -180,7 +170,8 @@ end
 Then "(I )should be on {link_to_page}" do |page_name|
   # TODO: move this into transformer
   path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
-  assert_current_path path
+  # assert_current_path gives a different one
+  assert_equal path, current_path
 end
 
 Then "(I )should have the following query string:" do |expected_pairs|
