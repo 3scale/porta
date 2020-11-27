@@ -444,7 +444,7 @@ ParameterType(
 
 ParameterType(
   name: 'email_template',
-  regexp: /email template "(.+?)"$/,
+  regexp: /email template "(.+?)"/,
   transformer: ->(name) { CMS::EmailTemplate.find_by!(system_name: name) }
 )
 
