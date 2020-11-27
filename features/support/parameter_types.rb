@@ -88,8 +88,8 @@ ParameterType(
 
 ParameterType(
   name: 'link_to_page',
-  # regexp: /(.+)|link to (.+)/,
-  regexp: /(the.+page(?: for ".+")*(?: of service ".+")*(?: of provider ".+")*)|(the provider dashboard)/,
+  regexp: /(the.+page(?:.+)*)|(the provider dashboard)/,
+  # regexp: /(the.+page(?: for ".+")*(?: (?:of|for) service ".+")*(?: of provider ".+")*)|(the provider dashboard)/,
   transformer: ->(page_name) {
     # FIXME: it should transform the page_name into a path, but @provider is nil
     # PathsHelper::PathFinder.new(@provider).path_to(page_name)
