@@ -22,11 +22,11 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     member.activate!
     login! provider, user: member
 
-    get edit_admin_service_integration_path(service_id: service.id)
+    get admin_service_integration_path(service_id: service.id)
     assert_response 403
 
     member.member_permissions.create!(admin_section: 'plans')
-    get edit_admin_service_integration_path(service_id: service.id)
+    get admin_service_integration_path(service_id: service.id)
     assert_response 200
   end
 
@@ -173,12 +173,13 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
   end
 
-  def test_edit
+  # Regression test for pre-APIAP
+  def test_edit_not_found
     get edit_admin_service_integration_path(service_id: 'no-such-service')
     assert_response :not_found
 
     get edit_admin_service_integration_path(service_id: service.id)
-    assert_response :success
+    assert_response :not_found
   end
 
   test 'updating proxy' do
@@ -252,7 +253,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_change of: -> { proxy.reload.oidc_configuration.id } do
       put admin_service_integration_path(service_id: service.id, proxy: oidc_params)
     end
-    assert_response :redirect
+    assert_response :success
 
     service.reload
     refute proxy.oidc_configuration.standard_flow_enabled
@@ -268,14 +269,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_change of: -> { proxy.reload.oidc_configuration.id } do
       put admin_service_integration_path(service_id: service.id, proxy: oidc_params)
     end
-    assert_response :not_found
-  end
-
-  test 'edit not found for apiap' do
-    rolling_updates_on
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true)
-
-    get edit_admin_service_integration_path(service_id: service.id)
     assert_response :not_found
   end
 

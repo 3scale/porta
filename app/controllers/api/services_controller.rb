@@ -128,6 +128,7 @@ class Api::ServicesController < Api::BaseController
 
   # This will be the default 'settings' when apiap is live
   def settings_page
+    # TODO: remove all :settings associated pages
     apiap? ? :settings_apiap : :settings
   end
 
