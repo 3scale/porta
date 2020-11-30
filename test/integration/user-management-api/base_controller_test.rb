@@ -42,10 +42,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       with_api_routes do
         get '/api/klas', params: { format: :json, words: %w[hello world example] }
         response_hash = JSON.parse(response.body)
-        assert_nil response_hash.dig('metadata', 'per_page')
-        assert_nil response_hash.dig('metadata', 'total_entries')
-        assert_nil response_hash.dig('metadata', 'total_pages')
-        assert_nil response_hash.dig('metadata', 'current_page')
+        assert_nil response_hash['metadata']
 
         get '/api/klas', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2 }
         response_hash = JSON.parse(response.body)
@@ -74,10 +71,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       with_api_routes do
         get '/api/mods', params: { format: :json, words: %w[hello world example] }
         response_hash = JSON.parse(response.body)
-        assert_nil response_hash.dig('metadata', 'per_page')
-        assert_nil response_hash.dig('metadata', 'total_entries')
-        assert_nil response_hash.dig('metadata', 'total_pages')
-        assert_nil response_hash.dig('metadata', 'current_page')
+        assert_nil response_hash['metadata']
 
         get '/api/mods', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2 }
         response_hash = JSON.parse(response.body)
