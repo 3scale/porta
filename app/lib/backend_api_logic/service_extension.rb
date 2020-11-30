@@ -8,8 +8,8 @@ module BackendApiLogic
       has_many :backend_api_configs, inverse_of: :service, dependent: :destroy
       has_many :backend_apis, through: :backend_api_configs
 
-      delegate :backend_api, to: :backend_api_proxy
-      delegate :api_backend, :api_backend=, to: :backend_api
+      delegate :backend_api, to: :backend_api_proxy # remove all "backend_api" single mentions
+      delegate :api_backend, :api_backend=, to: :backend_api # remove this as well
 
       has_many :backend_api_metrics, through: :backend_api_configs
 
@@ -18,7 +18,7 @@ module BackendApiLogic
       end, class_name: 'Metric'
     end
 
-    class BackendApiProxy
+    class BackendApiProxy # remove this shit
       attr_reader :service
       delegate :account, :backend_apis, :backend_api_configs, to: :service
       delegate :name, :system_name, to: :service, prefix: true
@@ -54,7 +54,7 @@ module BackendApiLogic
       end
     end
 
-    def backend_api_proxy
+    def backend_api_proxy # this too
       @backend_api_proxy ||= BackendApiProxy.new(self)
     end
   end

@@ -5,8 +5,8 @@ module BackendApiLogic
     extend ActiveSupport::Concern
 
     included do
-      delegate :api_backend, :api_backend=, :backend_api, :backend_api_proxy, to: :service
-      delegate :private_endpoint, :private_endpoint=, to: :backend_api, prefix: true
+      delegate :api_backend, :api_backend=, :backend_api, :backend_api_proxy, to: :service # remove this
+      delegate :private_endpoint, :private_endpoint=, to: :backend_api, prefix: true # remove after checking usages
       delegate :default_api_backend, to: 'BackendApi'
 
       before_save :save_backend_api
