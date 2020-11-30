@@ -562,8 +562,9 @@ class Account < ApplicationRecord
     end
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def independent_mapping_rules_enabled?
-    provider_can_use?(:api_as_product) || provider_can_use?(:independent_mapping_rules)
+    true
   end
 
   private

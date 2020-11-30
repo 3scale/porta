@@ -39,8 +39,9 @@ class FrontendController < ApplicationController
 
   private
 
+  # TODO: THREESCALE-3759 remove this method
   def apiap?
-    current_account.provider_can_use?(:api_as_product)
+    true
   end
 
   helper_method :apiap?

@@ -220,7 +220,7 @@ module VerticalNavHelper
     items = []
     items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
-    if current_account.provider_can_use?(:api_as_product) && !master_on_premises?
+    if !master_on_premises?
       items << {title: 'Settings'}
       items << {id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service)}
     end
@@ -238,10 +238,8 @@ module VerticalNavHelper
     items << {id: :configuration,       title: 'Configuration',     path: path_to_service(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
     items << {id: :methods_metrics,     title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
     items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if current_account.independent_mapping_rules_enabled?
-    if current_account.provider_can_use?(:api_as_product)
-      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
-      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
-    end
+    items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
+    items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
     items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
   end
 

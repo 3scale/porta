@@ -11,18 +11,13 @@
     <thead>
       <tr>
         <th colspan="<%= @plan.pricing_enabled? ? 4 : 3 %>">
-          <% if provider_can_use?(:api_as_product) -%>
-            Product Level
-          <% else -%>
-            Metric or method
-            (<%= link_to 'Define method or metric', admin_service_metrics_path(@service), title: 'Define Methods & Metrics for this service' %>)
-          <% end -%>
+          Product Level
         </th>
         <th class="operations">
-          Enabled       
+          Enabled
         </th>
         <th class="operations">
-          Visible          
+          Visible
         </th>
         <th class="operations" colspan="<%= @plan.pricing_enabled? ? 2 : 1 %>">
           Text only
@@ -43,7 +38,6 @@
     </tbody>
   </table>
 
-  <% if provider_can_use?(:api_as_product) -%>
   <table id="backend_api_metrics" class="contract_table">
     <thead>
       <tr>
@@ -51,7 +45,7 @@
           Backend Level
         </th>
         <th class="operations">
-          Enabled      
+          Enabled
         </th>
         <th class="operations">
           Visible
@@ -75,5 +69,4 @@
     </tbody>
   </table>
   <%= javascript_pack_tag 'plans-metrics' %>
-  <% end -%>
 </div>
