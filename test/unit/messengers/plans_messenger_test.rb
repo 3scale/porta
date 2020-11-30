@@ -8,6 +8,9 @@ class PlansMessengerTest < ActiveSupport::TestCase
   end
 
   test '#plan_change_request' do
+    rolling_updates_off
+    rolling_update(:api_as_product, enabled: true)
+
     cinstance = FactoryBot.create(:cinstance)
     plan = FactoryBot.create(:account_plan)
     perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do

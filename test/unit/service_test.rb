@@ -312,11 +312,10 @@ class ServiceTest < ActiveSupport::TestCase
     service = FactoryBot.build(:simple_service)
     service.account.settings.service_plans_ui_visible = false
 
-    Logic::RollingUpdates.feature(:published_service_plan_signup).any_instance.expects(:missing_config).returns(true)
     service.save!
 
     service_plan = service.service_plans.first!
-    assert_equal 'published', service_plan.state
+    assert service_plan.published?
   end
 
   class DestroyingServiceTest < ActiveSupport::TestCase
