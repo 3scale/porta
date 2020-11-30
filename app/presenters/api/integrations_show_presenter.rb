@@ -67,7 +67,7 @@ class Api::IntegrationsShowPresenter
 
   # TODO: THREESCALE-3759 remove this method
   def test_state_modifier
-    return 'is-untested'
+    'is-untested'
   end
 
   delegate :pending_affecting_changes?, :service, to: :proxy
