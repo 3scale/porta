@@ -1,7 +1,6 @@
+# frozen_string_literal: true
+
 class ThreeScale::Api::Collection
-
-  include PaginationHelper::ClassMethods
-
   def initialize(collection, options = {})
     @collection = collection
     @options = options
@@ -14,7 +13,7 @@ class ThreeScale::Api::Collection
     # merge options passed when creating collection with the ones passed now together with builder
     options = options.merge(@options).merge(builder: builder, skip_instruct: true)
 
-    builder.tag!(root, pagination) do |xml|
+    builder.tag!(root, pagination_attrs) do |xml|
       each do |item|
         item.to_xml(options)
       end
@@ -23,9 +22,12 @@ class ThreeScale::Api::Collection
     builder.to_xml
   end
 
+  def to_json(options = {})
+    MultiJson.dump collection.to_hash(options).merge(pagination_attrs(wrapper: :metadata))
+  end
+
   def method_missing(method_name, *arguments, &block)
-    collection = @collection.try(:represented) || @collection
-    collection.send(method_name, *arguments, &block)
+    represented.send(method_name, *arguments, &block)
   end
 
   # http://robots.thoughtbot.com/post/28335346416/always-define-respond-to-missing-when-overriding
@@ -36,7 +38,21 @@ class ThreeScale::Api::Collection
 
   private
 
-  def pagination
-    pagination_attrs(@collection)
+  attr_reader :collection
+
+  def represented
+    @represented ||= collection.try(:represented) || collection
+  end
+
+  def pagination_attrs(wrapper: nil)
+    return {} if represented.per_page >= represented.total_entries
+
+    pagination = %i[per_page total_entries total_pages current_page].each_with_object({}) do |meta_field, pagination_hash|
+      pagination_hash[meta_field] = represented.public_send(meta_field)
+    end
+    pagination = {wrapper => pagination} if wrapper
+    pagination
+  rescue NoMethodError
+    {}
   end
 end

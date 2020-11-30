@@ -36,7 +36,7 @@ module ThreeScale::JSONRepresenter
       wraps_resource name
 
       self.instance_eval do
-        include Representable::JSON::Collection
+        include ThreeScale::CollectionRepresenter::JSONCollection
         include ThreeScale::CollectionRepresenter::XMLCollection
       end
     end
