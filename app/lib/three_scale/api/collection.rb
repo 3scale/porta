@@ -6,24 +6,19 @@ class ThreeScale::Api::Collection
     @options = options
   end
 
-  def to_xml(options = {})
-    builder = options[:builder] || ThreeScale::XML::Builder.new
+  def to_xml(xml_options = {})
+    builder = xml_options[:builder] || ThreeScale::XML::Builder.new
+    options.merge!(xml_options).merge!(builder: builder, skip_instruct: true)
 
-    root = options.delete(:root) || @options.delete(:root)
-    # merge options passed when creating collection with the ones passed now together with builder
-    options = options.merge(@options).merge(builder: builder, skip_instruct: true)
-
-    builder.tag!(root, pagination_attrs) do |xml|
-      each do |item|
-        item.to_xml(options)
-      end
+    builder.tag!(options.delete(:root), pagination_metadata) do |xml|
+      each { |item| item.to_xml(options) }
     end
 
     builder.to_xml
   end
 
-  def to_json(options = {})
-    MultiJson.dump collection.to_hash(options).merge(pagination_attrs(wrapper: :metadata))
+  def to_json(json_options = {})
+    MultiJson.dump collection.to_hash(json_options).merge(pagination_metadata(wrapper: :metadata))
   end
 
   def method_missing(method_name, *arguments, &block)
@@ -33,26 +28,35 @@ class ThreeScale::Api::Collection
   # http://robots.thoughtbot.com/post/28335346416/always-define-respond-to-missing-when-overriding
 
   def respond_to_missing?(method_name, include_private = false)
-    @collection.respond_to?(method_name, include_private)
+    collection.respond_to?(method_name, include_private)
   end
 
   private
 
-  attr_reader :collection
+  PAGINATION_METADATA = %i[per_page total_entries total_pages current_page].freeze
+  private_constant :PAGINATION_METADATA
+
+  attr_reader :collection, :options
 
   def represented
     @represented ||= collection.try(:represented) || collection
   end
 
-  def pagination_attrs(wrapper: nil)
-    return {} if represented.per_page >= represented.total_entries
+  def pagination_metadata(wrapper: nil)
+    return {} unless paginated?
 
-    pagination = %i[per_page total_entries total_pages current_page].each_with_object({}) do |meta_field, pagination_hash|
+    wrapper ? {wrapper => pagination_attrs} : pagination_attrs
+  end
+
+  def pagination_attrs
+    PAGINATION_METADATA.each_with_object({}) do |meta_field, pagination_hash|
       pagination_hash[meta_field] = represented.public_send(meta_field)
     end
-    pagination = {wrapper => pagination} if wrapper
-    pagination
+  end
+
+  def paginated?
+    represented.per_page < represented.total_entries
   rescue NoMethodError
-    {}
+    false
   end
 end
