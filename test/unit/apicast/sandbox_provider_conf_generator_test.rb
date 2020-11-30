@@ -63,12 +63,4 @@ class Apicast::SandboxProviderConfGeneratorTest < ActiveSupport::TestCase
     generator = Apicast::SandboxProviderConfGenerator.new(@provider.id)
     assert_equal 0, generator.services.size
   end
-
-  class WithoutRollingUpdate < self
-    def setup
-      Logic::RollingUpdates.stubs(skipped?: true)
-      super
-      assert_equal :provider_key, @service.backend_authentication_type
-    end
-  end
 end

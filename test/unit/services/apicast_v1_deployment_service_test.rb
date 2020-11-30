@@ -1,18 +1,10 @@
 require 'test_helper'
 
 class ApicastV1DeploymentServiceTest < ActiveSupport::TestCase
-
-  class_attribute :rolling_updates
-  self.rolling_updates = false
-
   def setup
-    Logic::RollingUpdates.stubs(skipped?: !rolling_updates)
-
     @provider = FactoryBot.create(:provider_account)
     @provider.proxies.update_all(apicast_configuration_driven: false)
     @service = ApicastV1DeploymentService.new(@provider)
-
-    Logic::RollingUpdates.stubs(skipped?: true)
   end
 
   def test_deploy_success
@@ -79,9 +71,5 @@ class ApicastV1DeploymentServiceTest < ActiveSupport::TestCase
     assert_raise ConfContentFailure do
       @service.deploy(Proxy.new)
     end
-  end
-
-  class WithRollingUpdate < ApicastV1DeploymentServiceTest
-    self.rolling_updates = true
   end
 end

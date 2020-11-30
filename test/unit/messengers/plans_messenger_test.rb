@@ -1,12 +1,10 @@
 require 'test_helper'
 
 class PlansMessengerTest < ActiveSupport::TestCase
-
-  setup do
-    Logic::RollingUpdates.expects(skipped?: true).at_least_once
-  end
-
   test '#plan_change_request' do
+    rolling_updates_off
+    rolling_update(:api_as_product, enabled: true)
+
     cinstance = FactoryBot.create(:cinstance)
     plan = FactoryBot.create(:account_plan)
     PlansMessenger.plan_change_request(cinstance, plan).deliver

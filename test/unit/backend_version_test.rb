@@ -10,6 +10,7 @@ class BackendVersionTest < ActiveSupport::TestCase
 
   def test_visible_versions_oidc
     rolling_updates_off
+    rolling_update(:api_as_product, enabled: true)
     rolling_update(:apicast_oidc, enabled: false)
     service = FactoryBot.create(:simple_service)
     versions = BackendVersion.visible_versions(service: service)
