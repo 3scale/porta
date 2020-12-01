@@ -29,7 +29,7 @@ default: all
 
 ## This image is private and cannot be accessed by another third party than redhat.com employees
 ## You will need to build your own image as instructed in https://github.com/oracle/docker-images/tree/master/OracleDatabase/SingleInstance
-ORACLE_DB_IMAGE := quay.io/3scale/oracle:19.3.0-ee
+ORACLE_DB_IMAGE := quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
 
 include wget.mk
 include openshift.mk
