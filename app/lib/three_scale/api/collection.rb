@@ -26,7 +26,8 @@ class ThreeScale::Api::Collection
   end
 
   # http://robots.thoughtbot.com/post/28335346416/always-define-respond-to-missing-when-overriding
-
+  # :reek:BooleanParameter ThreeScale::Api::Collection#respond_to_missing? has boolean parameter 'include_private'
+  # :reek:ManualDispatch ThreeScale::Api::Collection#respond_to_missing? manually dispatches method call
   def respond_to_missing?(method_name, include_private = false)
     collection.respond_to?(method_name, include_private)
   end
