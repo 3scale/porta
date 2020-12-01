@@ -294,7 +294,6 @@ class ProxyTest < ActiveSupport::TestCase
     @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
     @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
     @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(false)
-    @account.expects(:provider_can_use?).with(:api_as_product).at_least_once.returns(false)
     backend_api = @proxy.backend_api
     backend_api.stubs(account: @account)
     @proxy.api_backend = 'https://example.org:3/path'

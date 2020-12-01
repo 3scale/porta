@@ -49,19 +49,7 @@ class Api::IntegrationsShowPresenterTest < ActiveSupport::TestCase
     assert Presenter.new(@proxy).environments_have_same_config?
   end
 
-  def test_state_modifier
-    @proxy.account.stubs(:provider_can_use?).with(:api_as_product).returns(false)
-
-    assert_equal 'is-untested', Presenter.new(@proxy).test_state_modifier
-
-    @proxy.api_test_success = true
-    assert_equal 'is-successful', Presenter.new(@proxy).test_state_modifier
-
-    @proxy.api_test_success = false
-    assert_equal 'is-erroneous', Presenter.new(@proxy).test_state_modifier
-  end
-
-  test 'state_modifier for apiap' do
+  test 'state_modifier' do
     @proxy.account.stubs(:provider_can_use?).with(:api_as_product).returns(true)
 
     assert_equal 'is-untested', Presenter.new(@proxy).test_state_modifier

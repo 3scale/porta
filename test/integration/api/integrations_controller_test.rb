@@ -294,7 +294,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     config = FactoryBot.create(:proxy_config, proxy: proxy, version: 3, environment: 'sandbox')
 
     Account.any_instance.stubs(:provider_can_use?).returns(true)
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
 
     get admin_service_integration_path(service_id: service.id)
 
