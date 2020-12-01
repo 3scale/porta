@@ -53,8 +53,9 @@ class Api::IntegrationsShowPresenter
     end
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def apiap?
-    provider_can_use? :api_as_product
+    true
   end
 
   def apicast_config_ready?
