@@ -210,7 +210,6 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
 end
 
 When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  binding.pry
   with_scope(selector) do
     choose(field)
   end
