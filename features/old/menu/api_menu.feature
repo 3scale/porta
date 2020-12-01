@@ -38,7 +38,6 @@ Feature: API menu
     | Application Plans         |
 
   Scenario: Integration sub menu structure
-    Given I have api_as_product feature enabled
     When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items
