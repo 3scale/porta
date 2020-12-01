@@ -11,7 +11,7 @@ class ThreeScale::Api::Collection
     options.merge!(xml_options).merge!(builder: builder, skip_instruct: true)
 
     builder.tag!(options.delete(:root), pagination_metadata) do |xml|
-      each { |item| item.to_xml(options) }
+      represented.each { |item| item.to_xml(options) }
     end
 
     builder.to_xml
