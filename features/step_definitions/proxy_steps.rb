@@ -2,16 +2,6 @@ Then /^I should be offered to download an? "(.+?)" file$/ do |mime_type|
   assert_equal mime_type, page.response_headers['Content-Type']
 end
 
-Given(/^I'm using a custom API Backend$/) do
-  steps %{
-    When I go to the integration page for service "one"
-    And I fill in "Private Base URL" with "http://www.google.com"
-  }
-  stub_deploy_calls!
-
-  click_on 'proxy-button-save-and-deploy'
-end
-
 Then(/^I should be able to switch back to using the default API Backend$/) do
   link = XPath::HTML.link "Use Echo API"
 

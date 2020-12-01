@@ -16,6 +16,9 @@ When(/^I have (\w+) feature (enabled|disabled)$/) do |feature, enabled|
 end
 
 Given(/^I have rolling updates "([^"]*)" (enabled|disabled)$/) do |features, enabled|
+  # TODO: THREESCALE-3759 only as a fail safe, remove it
+  raise if features.includes? 'api_as_product'
+
   Account.any_instance.stubs(:provider_can_use?).returns(true)
   features.split(',').each do |feature|
     Account.any_instance.stubs(:provider_can_use?).with(feature).returns(enabled == 'enabled')

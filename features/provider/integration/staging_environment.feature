@@ -1,3 +1,5 @@
+# TODO: THREESCALE-3759 tests are outdated, removed in https://github.com/3scale/porta/pull/2274
+@wip
 Feature: Staging Environment
   In order to integrate with 3scale
   As a provider
