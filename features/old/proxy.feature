@@ -81,17 +81,29 @@ Feature: Proxy integration
     And I go to the integration page for service "one"
     Then I should see "A valid APIcast Policies endpoint must be provided"
 
-  # TODO: THREESCALE-3759 fix this test, refer to https://github.com/3scale/porta/pull/2274
-  @wip
   Scenario: Sorting mapping rules
     And I go to the integration show page for service "one"
     And I follow "Mapping Rules"
-    And I add a new mapping rule with method "POST" pattern "/beers" delta "2" and metric "Hits"
-    And I add a new mapping rule with method "PUT" pattern "/mixers" delta "2" and metric "Hits"
-    And I add a new mapping rule with method "GET" pattern "/gins" delta "1" and metric "Hits"
+    And I add a new mapping rule with method "POST" pattern "/beers" position "2" and metric "Hits"
+
+  Scenario: Sorting mapping rules
+    When I go to the integration show page for service "one"
+    And I follow "Mapping Rules"
+    And I add a new mapping rule with method "POST" pattern "/beers" position "2" and metric "Hits"
     Then the mapping rules should be in the following order:
-      | http_method | pattern | delta | metric |
-      | POST        | /gins   | 1     | hits   |
-      | GET         | /       | 2     | hits   |
-      | PUT         | /mixers | 3     | hits   |
-      | POST        | /beers  | 4     | hits   |
+      | http_method | pattern | position | metric |
+      | GET         | /       | 1        | hits   |
+      | POST        | /beers  | 2        | hits   |
+    And I add a new mapping rule with method "PUT" pattern "/mixers" position "2" and metric "Hits"
+    Then the mapping rules should be in the following order:
+      | http_method | pattern | position | metric |
+      | GET         | /       | 1        | hits   |
+      | PUT         | /mixers | 2        | hits   |
+      | POST        | /beers  | 3        | hits   |
+    And I add a new mapping rule with method "GET" pattern "/gins" position "1" and metric "Hits"
+    Then the mapping rules should be in the following order:
+      | http_method | pattern | position | metric |
+      | GET         | /gins   | 1        | hits   |
+      | GET         | /       | 2        | hits   |
+      | PUT         | /mixers | 3        | hits   |
+      | POST        | /beers  | 4        | hits   |
