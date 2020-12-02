@@ -73,12 +73,12 @@ Given(%r{^the service uses app_id/app_key as authentication method$}) do
   @service.update_attributes!(backend_version: '2')
 end
 
-Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" delta "([^"]*)" and metric "([^"]*)"$/) do |method, pattern, delta, metric|
+Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" position "([^"]*)" and metric "([^"]*)"$/) do |method, pattern, position, metric|
   click_on 'Add Mapping Rule'
   within(page.find('form.proxy_rule')) do
     find("select#proxy_rule_http_method option[value='#{method}']").select_option
     find('input#proxy_rule_pattern').set pattern
-    find('input#proxy_rule_delta').set delta
+    find('input#proxy_rule_position').set position
     find('select#proxy_rule_metric_id option', text: metric).select_option
   end
   click_on 'Create Mapping Rule'
@@ -88,7 +88,7 @@ Given(/^I save the proxy config$/) do
   click_on 'proxy-button-save-and-deploy'
 end
 
-MAPPING_RULE_ATTR = %w[http_method pattern delta metric].freeze
+MAPPING_RULE_ATTR = %w[http_method pattern position metric].freeze
 
 Then(/^the mapping rules should be in the following order:$/) do |table|
   data = @provider.default_service.proxy.proxy_rules.includes(:metric).ordered
