@@ -24,7 +24,7 @@ Feature: Proxy integration
   Scenario: Got error message when APIcast registry is not setup properly
     And apicast registry is undefined
     And I go to the integration show page for service "one"
-    And I press "Update Service"
+    # And I press "Update Service"
     And I follow "Policies"
     Then I should see "A valid APIcast Policies endpoint must be provided"
 
