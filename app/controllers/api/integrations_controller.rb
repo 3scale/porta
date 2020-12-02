@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
+
 class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :hide_for_apiap, only: :edit
+  before_action :hide_for_apiap, only: :edit # TODO: THREESCALE-3759 remove this route
   before_action :find_registry_policies, only: %i[edit update]
 
   activate_menu :serviceadmin, :integration, :configuration
@@ -32,8 +34,9 @@ class Api::IntegrationsController < Api::BaseController
       flash[:notice] = flash_message(:update_success, environment: environment)
       update_mapping_rules_position
 
-      return redirect_to admin_service_integration_path(@service) if apiap?
+      return redirect_to admin_service_integration_path(@service)
 
+      # TODO: THREESCALE-3759 remove this branch
       if @proxy.send_api_test_request!
         api_backend = @proxy.api_backend
         done_step(:api_sandbox_traffic) if api_backend.present? && ApiClassificationService.test(api_backend).real_api?
@@ -205,7 +208,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def hide_for_apiap
-    raise ActiveRecord::RecordNotFound if apiap?
+    raise ActiveRecord::RecordNotFound
   end
 
   def authorize
@@ -279,11 +282,13 @@ class Api::IntegrationsController < Api::BaseController
     @proxy.apicast_configuration_driven ? admin_service_integration_path(@service) : edit_admin_service_integration_path(@service)
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def render_edit_or_show(opts = {})
-    render (apiap? ? :show : :edit), opts
+    render :show, opts
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def redirect_to_edit_or_show
-    redirect_to (apiap? ? :show : edit_path)
+    redirect_to :show
   end
 end

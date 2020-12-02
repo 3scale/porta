@@ -39,13 +39,6 @@ class FrontendController < ApplicationController
 
   private
 
-  # TODO: THREESCALE-3759 remove this method
-  def apiap?
-    true
-  end
-
-  helper_method :apiap?
-
   def disable_x_content_type
     use_secure_headers_override(:disable_x_content_type)
   end

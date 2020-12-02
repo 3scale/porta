@@ -46,7 +46,6 @@ class Api::ServicesController < Api::BaseController
   end
 
   def usage_rules
-    raise ActiveRecord::RecordNotFound unless apiap?
     activate_menu :serviceadmin, :applications, :usage_rules
   end
 
@@ -117,7 +116,6 @@ class Api::ServicesController < Api::BaseController
       error_status_no_match error_headers_no_match error_no_match
       error_status_limits_exceeded error_headers_limits_exceeded error_limits_exceeded
     ]
-    permitted_params << :api_backend unless apiap?
     permitted_params += %i[endpoint sandbox_endpoint] if can_edit_endpoints?
     params.require(:service).fetch(:proxy_attributes, {}).permit(permitted_params)
   end
@@ -126,14 +124,14 @@ class Api::ServicesController < Api::BaseController
     Rails.application.config.three_scale.apicast_custom_url || service.proxy.saas_configuration_driven_apicast_self_managed?
   end
 
-  # This will be the default 'settings' when apiap is live
+  # TODO: THREESCALE-3759 remove this method and all :settings associated pages
   def settings_page
-    # TODO: remove all :settings associated pages
-    apiap? ? :settings_apiap : :settings
+    :settings_apiap
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def product_or_service_type
-    apiap? ? 'Product' : 'Service'
+    'Product'
   end
 
   def collection

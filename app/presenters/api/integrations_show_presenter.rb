@@ -54,16 +54,8 @@ class Api::IntegrationsShowPresenter
   end
 
   # TODO: THREESCALE-3759 remove this method
-  def apiap?
-    true
-  end
-
   def apicast_config_ready?
-    if apiap?
-      proxy.service.backend_apis.any?
-    else
-      any_sandbox_configs?
-    end
+    proxy.service.backend_apis.any?
   end
 
   # TODO: THREESCALE-3759 remove this method
