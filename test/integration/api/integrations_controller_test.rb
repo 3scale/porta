@@ -172,15 +172,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
   end
 
-  # Regression test for pre-APIAP
-  def test_edit_not_found
-    get edit_admin_service_integration_path(service_id: 'no-such-service')
-    assert_response :not_found
-
-    get edit_admin_service_integration_path(service_id: service.id)
-    assert_response :not_found
-  end
-
   test 'updating proxy' do
     FactoryBot.create(:service_token, service: service)
     rolling_updates_off

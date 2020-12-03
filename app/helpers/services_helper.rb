@@ -27,7 +27,7 @@ module ServicesHelper
   end
 
   def path_to_service(service)
-    service.proxy.apicast_configuration_driven ? admin_service_integration_path(service) : edit_admin_service_integration_path(service)
+    admin_service_integration_path(service)
   end
 
   def plugin_language_name

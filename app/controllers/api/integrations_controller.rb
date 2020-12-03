@@ -65,7 +65,7 @@ class Api::IntegrationsController < Api::BaseController
 
     done_step(:apicast_gateway_deployed, final_step=true) if ApiClassificationService.test(@proxy.api_backend).real_api?
 
-    redirect_to action: :edit, anchor: 'proxy'
+    redirect_to action: :show, anchor: 'proxy'
   end
 
   def update_onpremises_production
