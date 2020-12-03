@@ -50,8 +50,6 @@ class Api::IntegrationsShowPresenterTest < ActiveSupport::TestCase
   end
 
   test 'state_modifier' do
-    @proxy.account.stubs(:provider_can_use?).with(:api_as_product).returns(true)
-
     assert_equal 'is-untested', Presenter.new(@proxy).test_state_modifier
 
     @proxy.api_test_success = true

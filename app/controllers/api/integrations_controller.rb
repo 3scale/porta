@@ -71,9 +71,9 @@ class Api::IntegrationsController < Api::BaseController
   def update_onpremises_production
     if @proxy.update_attributes(proxy_params)
       flash[:notice] = flash_message(:update_onpremises_production_success)
-      redirect_to action: :edit, anchor: 'production'
+      redirect_to action: :show, anchor: 'production'
     else
-      render :edit
+      render :show
     end
   end
 

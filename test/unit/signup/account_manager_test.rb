@@ -127,7 +127,6 @@ module Signup
 
       test 'first service has a private endpoint in order to be functional for non-APIAP accounts' do
         Account.any_instance.stubs(:provider_can_use?).returns(false)
-        Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false)
 
         account = signup_account_manager.create(signup_params).account
         assert_equal 1, account.first_service!.backend_apis.count
@@ -136,7 +135,6 @@ module Signup
 
       test 'first service has a complete backend api for APIAP accounts' do
         Account.any_instance.stubs(:provider_can_use?).returns(false)
-        Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true)
 
         account = signup_account_manager.create(signup_params).account
         assert_equal 1, account.backend_apis.count
