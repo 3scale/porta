@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'routing_constraints'
 require 'prometheus_exporter_port'
 
@@ -12,6 +14,7 @@ class CdnAssets
   end
 end
 
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
 
   constraints PortConstraint.new(PrometheusExporterPort.call) do
@@ -815,7 +818,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
           resources :backend_usages, except: :show
 
-          resource :integration, :except => [ :create, :destroy ] do
+          resource :integration, :except => [ :create, :destroy, :edit ] do
             member do
               patch 'update_production'
               patch 'update_onpremises_production'
@@ -1071,3 +1074,4 @@ without fake Core server your after commit callbacks will crash and you might ge
     mount MailPreview => 'mail_preview'
   end
 end
+# rubocop:enable Metrics/BlockLength

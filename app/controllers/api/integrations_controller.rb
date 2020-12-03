@@ -6,7 +6,6 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :hide_for_apiap, only: :edit # TODO: THREESCALE-3759 remove this route
   before_action :find_registry_policies, only: %i[edit update]
 
   activate_menu :serviceadmin, :integration, :configuration
@@ -183,6 +182,7 @@ class Api::IntegrationsController < Api::BaseController
     render_edit_or_show
   end
 
+  # TODO: THREESCALE-3759 remove this method and related code
   def edit_path
     last_message_id = @last_message_bus_id
 
@@ -205,10 +205,6 @@ class Api::IntegrationsController < Api::BaseController
 
   def message_bus?(proxy)
     proxy.oidc? && ZyncWorker.config.message_bus
-  end
-
-  def hide_for_apiap
-    raise ActiveRecord::RecordNotFound
   end
 
   def authorize
