@@ -54,10 +54,12 @@ section class="service-widget"
                 = alert.message
 
       - if can? :manage, :plans
-        h2
-          '  Published
-          => link_to 'Application Plans', admin_service_application_plans_path(service)
-        = action_link_to :new, new_admin_service_application_plan_path(service), label: 'Create Application Plan'
+        .flex-row
+          h2.flex-item
+            '  Published
+            => link_to 'Application Plans', admin_service_application_plans_path(service)
+          = action_link_to :new, new_admin_service_application_plan_path(service),
+            label: 'Create Application Plan', class: 'flex-item'
 
         ul.application-plans[data-hint="published"]
           = list_items_or_empty service.published_application_plans, 'There are no published application plans. Create one!' do |plan|
@@ -73,11 +75,12 @@ section class="service-widget"
           | .
 
         - if (can? :manage, :service_plans) && (current_account.settings.service_plans_ui_visible?)
-          h2
-            '  Published
-            => link_to 'Service plans', admin_service_service_plans_path(service)
-          = action_link_to :new,  new_admin_service_service_plan_path(service),
-          :label => 'Create Service Plan'
+          .flex-row
+            h2.flex-item
+              '  Published
+              => link_to 'Service plans', admin_service_service_plans_path(service)
+            = action_link_to :new,  new_admin_service_service_plan_path(service),
+              label: 'Create Service Plan', class: 'flex-item'
 
           ul.service-plans[data-hint="published"]
             = list_items_or_empty service.service_plans.published, 'There are no published service plans. Create one!' do |plan|
