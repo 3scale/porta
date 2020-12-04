@@ -16,6 +16,7 @@ resource "ProxyConfig" do
     get '/admin/api/services/:service_id/proxy/configs/:environment/latest.json',  action: :latest
     get '/admin/api/services/:service_id/proxy/configs/:environment/:version.json', action: :show
     get '/admin/api/services/:service_id/proxy/configs/:environment.json',         action: :index
+    get '/admin/api/services/proxy/configs/:environment.json',                     action: :index_by_host
     post '/admin/api/services/:service_id/proxy/configs/:environment/:version/promote', action: :promote
   end
 
@@ -38,3 +39,4 @@ latest_admin_api_service_proxy_configs GET      /admin/api/services/:service_id/
 promote_admin_api_service_proxy_config POST     /admin/api/services/:service_id/proxy/configs/:environment/:version/promote(.:format) admin/api/services/proxy/configs#promote {:format=>"xml"}
 admin_api_service_proxy_configs GET      /admin/api/services/:service_id/proxy/configs/:environment(.:format) admin/api/services/proxy/configs#index {:format=>"xml"}
 admin_api_service_proxy_config GET      /admin/api/services/:service_id/proxy/configs/:environment/:version(.:format) admin/api/services/proxy/configs#show {:format=>"xml"}
+admin_api_proxy_configs GET      /admin/api/services/proxy/configs/:environment(.:format) admin/api/services/proxy/configs#index_by_host {:format=>"xml"}
