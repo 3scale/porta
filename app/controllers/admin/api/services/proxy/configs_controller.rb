@@ -33,6 +33,10 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
     respond_with(service_proxy_configs)
   end
 
+  def index_by_host
+    respond_with(host_proxy_configs)
+  end
+
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/services/{service_id}/proxy/configs/{environment}/latest.json"
   ##~ e.responseClass = "proxy_config"
