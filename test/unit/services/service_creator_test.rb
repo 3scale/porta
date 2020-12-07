@@ -7,7 +7,6 @@ class ServiceCreatorTest < ActiveSupport::TestCase
     creator.call
     assert service.persisted?
     assert service.backend_api_proxy.backend_api.new_record?
-    ::Account.any_instance.stubs(:provider_can_use).with(:api_as_product).returns(true)
   end
 
   test 'service creation with path and private_endpoint' do
