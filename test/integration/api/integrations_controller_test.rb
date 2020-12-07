@@ -307,64 +307,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   end
 
-  test 'cannot update custom public endpoint when using APIcast' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    # call update_production as that is what APIcast production form calls
-    patch update_production_admin_service_integration_path(proxy: {endpoint: "http://example.com:80"}, service_id:service.id)
-    assert_equal 'https://endpoint.com:8443', proxy.reload.endpoint
-  end
-
-  test 'update custom public endpoint when deployment method is on premise' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    # Case where endpoint is allowed to be updated because on premise
-    Proxy.any_instance.stubs(self_managed?: true)
-
-    # call update_onpremises_production to update endpoint
-    patch update_onpremises_production_admin_service_integration_path(proxy: {endpoint: 'http://example.com:80'}, service_id: service.id)
-    assert_equal 'http://example.com:80', proxy.reload.endpoint
-  end
-
-  test 'cannot update custom public endpoint when configuration-driven APIcast does not support custom URL through ENV' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    Rails.configuration.three_scale.stubs(apicast_configuration_driven: true)
-    Rails.configuration.three_scale.stubs(apicast_custom_url: false)
-
-    # call update_onpremises_production to update production, apicast config driven uses that action
-    patch update_onpremises_production_admin_service_integration_path(proxy: {endpoint: 'http://example.com:80'}, service_id: service.id)
-    assert_equal 'https://endpoint.com:8443', proxy.reload.endpoint
-  end
-
-  test 'update custom public endpoint when configuration-driven APIcast supports custom URL through ENV' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(:disabled?).returns(true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    Rails.configuration.three_scale.stubs(apicast_configuration_driven: true)
-    Rails.configuration.three_scale.stubs(apicast_custom_url: true)
-    Rails.configuration.three_scale.expects(:apicast_custom_url).returns(true).at_least_once
-
-    # call update_onpremises_production to update production, apicast config driven uses that action
-    patch update_onpremises_production_admin_service_integration_path(proxy: {endpoint: 'http://example.com:80'}, service_id: service.id)
-    assert_equal 'http://example.com:80', proxy.reload.endpoint
-  end
-
   test 'promote to production' do
     FactoryBot.create(:service_token, service: service)
     proxy.update_columns(apicast_configuration_driven: true)

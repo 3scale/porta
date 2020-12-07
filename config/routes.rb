@@ -818,10 +818,8 @@ without fake Core server your after commit callbacks will crash and you might ge
 
           resources :backend_usages, except: :show
 
-          resource :integration, :except => [ :create, :destroy, :edit ] do
+          resource :integration, except: %i[create destroy edit] do
             member do
-              patch 'update_production'
-              patch 'update_onpremises_production'
               patch 'promote_to_production'
               patch 'toggle_apicast_version'
             end

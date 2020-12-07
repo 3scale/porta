@@ -6,7 +6,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :find_registry_policies, only: %i[edit update]
+  before_action :find_registry_policies, only: :update
 
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
@@ -14,12 +14,6 @@ class Api::IntegrationsController < Api::BaseController
   PLUGIN_LANGUAGES = %w[ruby java python nodejs php rest csharp].freeze
 
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
-
-  def edit
-    @latest_lua = current_account.proxy_logs.first
-    @deploying =  ThreeScale::TimedValue.get(deploying_hosted_proxy_key)
-    @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
-  end
 
   def settings; end
 
@@ -54,26 +48,6 @@ class Api::IntegrationsController < Api::BaseController
       @api_test_form_error = true
 
       render_edit_or_show
-    end
-  end
-
-  def update_production
-    ProxyDeploymentService.call(@proxy, environment: :production)
-    ThreeScale::TimedValue.set(deploying_hosted_proxy_key, true, 5*60 )
-    ThreeScale::Analytics.track(current_user, 'Hosted Proxy deployed')
-    flash[:notice] = flash_message(:update_production_success)
-
-    done_step(:apicast_gateway_deployed, final_step=true) if ApiClassificationService.test(@proxy.api_backend).real_api?
-
-    redirect_to action: :show, anchor: 'proxy'
-  end
-
-  def update_onpremises_production
-    if @proxy.update_attributes(proxy_params)
-      flash[:notice] = flash_message(:update_onpremises_production_success)
-      redirect_to action: :show, anchor: 'production'
-    else
-      render :show
     end
   end
 
