@@ -8,10 +8,10 @@ class ThreeScale::Api::Collection
 
   def to_xml(xml_options = {})
     builder = xml_options[:builder] || ThreeScale::XML::Builder.new
-    options.merge!(xml_options).merge!(builder: builder, skip_instruct: true)
+    opts = options.merge(xml_options).merge(builder: builder, skip_instruct: true)
 
-    builder.tag!(options.delete(:root), pagination_metadata) do |xml|
-      represented.each { |item| item.to_xml(options) }
+    builder.tag!(opts.delete(:root), pagination_metadata) do |xml|
+      represented.each { |item| item.to_xml(opts) }
     end
 
     builder.to_xml
