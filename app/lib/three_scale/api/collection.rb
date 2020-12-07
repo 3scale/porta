@@ -44,7 +44,7 @@ class ThreeScale::Api::Collection
   attr_reader :collection, :options
 
   def represented
-    @represented ||= collection.try(:represented) || collection
+    collection.try(:represented) || collection
   end
 
   def pagination_metadata(wrapper: nil)
