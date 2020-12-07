@@ -14,7 +14,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
   def test_wrapped_parameters_on_multipart_form
     body = multipart
     with_api_routes do
-      post '/api', body, {'Content-Type' => 'multipart/form-data; boundary=--0123456789', 'Content-Length' => body.size}
+      post '/api', params: body, headers: {'Content-Type' => 'multipart/form-data; boundary=--0123456789', 'Content-Length' => body.size}
       assert_response :success
       json = JSON.parse(response.body)
       assert_equal 'Multipart request', json['name']
@@ -24,7 +24,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
   def test_unknown_format
     with_api_routes do
-      get '/api/version/2.php', access_token: @token.value
+      get '/api/version/2.php', params: {access_token: @token.value}
       assert_response :not_acceptable
     end
   end
@@ -136,7 +136,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     def test_provider_admin_domain
       host! @provider.admin_domain
       with_api_routes do
-        get '/api', access_token: 'access_token'
+        get '/api', params: {access_token: 'access_token'}
         assert_response :success
       end
     end
@@ -145,7 +145,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       host! @provider.domain
       with_api_routes do
         assert_raise(ActionController::RoutingError) do
-          get '/api', access_token: 'access_token'
+          get '/api', params: {access_token: 'access_token'}
         end
       end
     end
@@ -160,7 +160,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       end
 
       with_api_routes do
-        get '/api', access_token: 'master_access_token'
+        get '/api', params: {access_token: 'master_access_token'}
         assert_response :success
       end
     end
@@ -171,7 +171,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
       with_api_routes do
         host! master_account.admin_domain
-        get '/api', access_token: 'access_token'
+        get '/api', params: {access_token: 'access_token'}
         assert_response :success
       end
     end
@@ -181,7 +181,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
       assert_raise(ActionController::RoutingError) do
         ThreeScale.config.stubs(tenant_mode: 'multitenant')
-        get '/api', access_token: 'access_token'
+        get '/api', params: {access_token: 'access_token'}
       end
     end
   end
