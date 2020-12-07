@@ -37,12 +37,8 @@ class ServiceCreator
   end
 
   def save_default_backend_api(params)
-    if provider_can_use?(:api_as_product)
-      return true if %i[path private_endpoint].none? { |key| params.key?(key) }
-      backend_api_proxy.update!(params)
-    else
-      backend_api_proxy.update!(private_endpoint: BackendApi.default_api_backend)
-    end
+    return true if %i[path private_endpoint].none? { |key| params.key?(key) }
+    backend_api_proxy.update!(params)
   end
 
   def save_assigned_backend_api(attrs)
