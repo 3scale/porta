@@ -1,6 +1,6 @@
 = render vertical_nav_item,
       title: 'Configuration',
-      path: path_to_service(@service)
+      path: admin_service_integration_path(@service)
 
 - unless current_account.provider_can_use?(:api_as_product)
   = render vertical_nav_item,
