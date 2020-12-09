@@ -45,14 +45,6 @@ Feature: Proxy integration
     And I follow "Download the NGINX Config files"
     Then I should be offered to download an "application/zip" file
 
-  Scenario: Redirect url with rolling updates
-    And I go to the integration page for service "one"
-    Then I should not see "Redirect"
-
-    When I have proxy_pro feature enabled
-    And I go to the integration page for service "one"
-    Then I should see "Redirect"
-
   Scenario: Edit endpoint with proxy_pro
     Given all the rolling updates features are off
     When I have proxy_pro feature enabled
