@@ -4,8 +4,6 @@ class Api::ProxyRulesController < Api::BaseController
   include ThreeScale::Search::Helpers
   include ProxyRuleSharedController
 
-  before_action :authorize!
-
   delegate :proxy_rules, to: :proxy
 
   activate_menu :serviceadmin, :integration, :mapping_rules
@@ -42,10 +40,6 @@ class Api::ProxyRulesController < Api::BaseController
   end
 
   private
-
-  def authorize!
-    current_account.independent_mapping_rules_enabled? || raise(CanCan::AccessDenied)
-  end
 
   def proxy
     @proxy ||= service.proxy
