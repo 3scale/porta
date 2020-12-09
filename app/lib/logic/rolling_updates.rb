@@ -301,11 +301,7 @@ module Logic
 
       class ApiAsProduct < Base
         def enabled?
-          super && !master?
-        end
-
-        def missing_config
-          false
+          !master?
         end
       end
 
