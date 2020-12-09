@@ -7,7 +7,11 @@ class BackendApi < ApplicationRecord
 
   define_proxy_config_affecting_attributes :private_endpoint
 
-  self.background_deletion = %i[proxy_rules metrics backend_api_configs]
+  self.background_deletion = [
+    [:proxy_rules, { lock: true }],
+    [:metrics, { lock: true }],
+    [:backend_api_configs, { lock: true }]
+  ].freeze
 
   DELETED_STATE = :deleted
   ECHO_API_HOST = 'echo-api.3scale.net'

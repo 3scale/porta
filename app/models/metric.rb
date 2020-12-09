@@ -4,7 +4,12 @@ class Metric < ApplicationRecord
   include SystemName
   include BackendApiLogic::MetricExtension
 
-  self.background_deletion = %i[pricing_rules usage_limits plan_metrics proxy_rules]
+  self.background_deletion = [
+    [:pricing_rules, { lock: true }],
+    [:usage_limits, { lock: true }],
+    [:plan_metrics, { lock: true }],
+    [:proxy_rules, { lock: true }]
+  ].freeze
 
   before_destroy :destroyable?
   before_validation :associate_to_service_of_parent, :fill_owner

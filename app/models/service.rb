@@ -20,9 +20,9 @@ class Service < ApplicationRecord
   self.background_deletion = [
     :service_plans,
     :application_plans,
-    [:api_docs_services, class_name: 'ApiDocs::Service'],
-    :backend_api_configs,
-    :metrics,
+    [:api_docs_services, { class_name: 'ApiDocs::Service', lock: true }],
+    [:backend_api_configs, { lock: true }],
+    [:metrics, { lock: true }],
     [:proxy, { action: :destroy, has_many: false }]
   ].freeze
 

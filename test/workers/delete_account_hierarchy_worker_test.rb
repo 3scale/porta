@@ -31,17 +31,17 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
     api_docs_service = FactoryBot.create(:api_docs_service, account: provider)
 
     DeleteObjectHierarchyWorker.stubs(:perform_later)
-    users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy') }
-    services.each { |service| DeleteObjectHierarchyWorker.expects(:perform_later).with(service, anything, 'destroy') }
+    users.each { |user| DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, anything) }
+    services.each { |service| DeleteObjectHierarchyWorker.expects(:perform_later).with(service, anything, anything) }
     contracts.each do |contract|
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, 'destroy')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(Contract.new({ id: contract.id }, without_protection: true), anything, anything)
     end
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything, 'destroy')
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(account_plan, anything, anything)
     cms_sections.each do |cms_section|
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(CMS::Section.new({ id: cms_section.id }, without_protection: true), anything, 'delete')
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(CMS::Section.new({ id: cms_section.id }, without_protection: true), anything, anything)
     end
-    DeletePaymentSettingHierarchyWorker.expects(:perform_later).with(provider.payment_gateway_setting, anything, 'destroy')
-    DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, 'destroy')
+    DeletePaymentSettingHierarchyWorker.expects(:perform_later).with(provider.payment_gateway_setting, anything, anything)
+    DeleteObjectHierarchyWorker.expects(:perform_later).with(api_docs_service, anything, anything)
 
     perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteAccountHierarchyWorker.perform_now(provider) }
   end
@@ -88,7 +88,7 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
     end
 
     test 'buyers are destroyed through regular hierarchy if it is not called from the tenant' do
-      buyers.each { |buyer| buyer.payment_detail.save! && DeleteObjectHierarchyWorker.expects(:perform_later).with(buyer.payment_detail, anything, 'destroy') }
+      buyers.each { |buyer| buyer.payment_detail.save! && DeleteObjectHierarchyWorker.expects(:perform_later).with(buyer.payment_detail, anything, anything) }
 
       buyers.each { |buyer| perform_enqueued_jobs { DeleteAccountHierarchyWorker.perform_now(buyer) } }
 
@@ -101,7 +101,9 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
       @tenant_hierarchy_worker ||= begin
         worker = DeleteAccountHierarchyWorker.new
         worker.instance_variable_set(:@caller_worker_hierarchy, ["Hierarchy-Account-#{provider.id}"])
+        worker.instance_variable_set(:@id, "Hierarchy-Account-#{provider.id}")
         worker.instance_variable_set(:@object, provider)
+        worker.instance_variable_set(:@options, {})
         worker
       end
     end
@@ -109,7 +111,7 @@ class DeleteAccountHierarchyWorkerTest < ActiveSupport::TestCase
     def expect_buyers_perform_later(requested_times:)
       buyers.each do |buyer|
         DeleteAccountHierarchyWorker.expects(:perform_later)
-          .with(buyer, ["Hierarchy-Account-#{provider.id}"], 'destroy')
+          .with(buyer, ["Hierarchy-Account-#{provider.id}"], anything)
           .public_send(requested_times)
       end
     end

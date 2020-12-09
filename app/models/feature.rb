@@ -1,6 +1,6 @@
 class Feature < ApplicationRecord
 
-  self.background_deletion = [:features_plans]
+  self.background_deletion = %i[features_plans].freeze
 
   audited :allow_mass_assignment => true
 

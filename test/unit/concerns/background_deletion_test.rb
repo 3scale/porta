@@ -20,8 +20,8 @@ module Concerns
     def test_destroy_integration
       user = FactoryBot.create(:simple_user)
       double_object = DoubleActiveRecordObject.create!(owner: user, value: 'abc123', name: 'super-token', permission: 'rw')
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy').once
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'delete').never
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, {background_destroy_method: 'destroy', lock: false}).once
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, {background_destroy_method: 'delete', lock: false}).never
       DeleteObjectHierarchyWorker.perform_now(double_object)
     end
 
@@ -32,8 +32,8 @@ module Concerns
     def test_delete_integration
       user = FactoryBot.create(:simple_user)
       double_object = SecondDoubleActiveRecordObject.create!(owner: user, value: 'abc123', name: 'super-token', permission: 'rw')
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'delete').once
-      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, 'destroy').never
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, {background_destroy_method: 'delete', lock: false}).once
+      DeleteObjectHierarchyWorker.expects(:perform_later).with(user, anything, {background_destroy_method: 'destroy', lock: false}).never
       DeleteObjectHierarchyWorker.perform_now(double_object)
     end
 

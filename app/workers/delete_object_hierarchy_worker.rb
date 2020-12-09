@@ -1,28 +1,39 @@
 # frozen_string_literal: true
 
 class DeleteObjectHierarchyWorker < ApplicationJob
+  include Sidekiq::Throttled::Worker
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
   # No need of ActiveRecord::RecordNotFound because that can only happen in the callbacks and those callbacks don't use this rescue_from but its own rescue
-  rescue_from(ActiveJob::DeserializationError) do |exception|
+  rescue_from(ActiveJob::DeserializationError, DeletionLock::LockDeletionError) do |exception|
     Rails.logger.info "DeleteObjectHierarchyWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
   queue_as :deletion
 
+  sidekiq_throttle({
+                     concurrency: { limit: 15 },
+                     threshold:   { limit: 1_000, period: 1.second }
+                   })
+
   before_perform do |job|
-    @object, workers_hierarchy, @background_destroy_method = job.arguments
-    id = "Hierarchy-#{object.class.name}-#{object.id}"
+    @object, workers_hierarchy, options = job.arguments
+    @id = "Hierarchy-#{object.class.name}-#{object.id}"
     @caller_worker_hierarchy = Array(workers_hierarchy) + [id]
-    info "Starting #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
+    @options = options || {}
+    info "Starting #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}. With options: #{options}"
   end
 
   after_perform do |job|
     info "Finished #{job.class}#perform with the hierarchy of workers: #{caller_worker_hierarchy}"
   end
 
-  def perform(_object, _caller_worker_hierarchy = [], _background_destroy_method = 'destroy')
-    build_batch
+  def perform(_object, _caller_worker_hierarchy = [], _options = {})
+    if lock?
+      DeletionLock.call_with_lock(lock_key: id, debug_info: caller_worker_hierarchy) { build_batch }
+    else
+      build_batch
+    end
   end
 
   def on_success(_, options)
@@ -37,8 +48,7 @@ class DeleteObjectHierarchyWorker < ApplicationJob
     workers_hierarchy = options['caller_worker_hierarchy']
     info "Starting DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
     object = GlobalID::Locator.locate(options['object_global_id'])
-    background_destroy_method = @background_destroy_method.presence || 'destroy'
-    DeletePlainObjectWorker.perform_later(object, workers_hierarchy, background_destroy_method)
+    DeletePlainObjectWorker.perform_later(object, workers_hierarchy, options.slice('background_destroy_method', 'lock').symbolize_keys)
     info "Finished DeleteObjectHierarchyWorker##{method_name} with the hierarchy of workers: #{workers_hierarchy}"
   rescue ActiveRecord::RecordNotFound => exception
     info "DeleteObjectHierarchyWorker##{method_name} raised #{exception.class} with message #{exception.message}"
@@ -46,9 +56,13 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   protected
 
+  def lock?
+    options.fetch(:lock) { ::BackgroundDeletion::Reflection::DEFAULT_LOCK_OPTION }
+  end
+
   delegate :info, to: 'Rails.logger'
 
-  attr_reader :object, :caller_worker_hierarchy
+  attr_reader :object, :caller_worker_hierarchy, :id, :options
 
   def build_batch
     batch = Sidekiq::Batch.new
@@ -91,10 +105,11 @@ class DeleteObjectHierarchyWorker < ApplicationJob
 
   def called_from_provider_hierarchy?
     return unless (tenant_id = object.tenant_id)
+
     caller_worker_hierarchy.include?("Hierarchy-Account-#{tenant_id}")
   end
 
   def callback_options
-    { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy }
+    { 'object_global_id' => object.to_global_id, 'caller_worker_hierarchy' => caller_worker_hierarchy, 'background_destroy_method' => options[:background_destroy_method] }
   end
 end

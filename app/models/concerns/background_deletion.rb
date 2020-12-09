@@ -11,6 +11,7 @@ module BackgroundDeletion
 
     DEFAULT_DESTROY_METHOD = 'destroy'
     DEFAULT_HAS_MANY_OPTION = true
+    DEFAULT_LOCK_OPTION = false
 
     attr_reader :name, :options
 
@@ -31,6 +32,10 @@ module BackgroundDeletion
 
     def background_destroy_method
       options[:action].to_s.presence || DEFAULT_DESTROY_METHOD
+    end
+
+    def lock?
+      options.fetch(:lock) { DEFAULT_LOCK_OPTION }
     end
   end
 end

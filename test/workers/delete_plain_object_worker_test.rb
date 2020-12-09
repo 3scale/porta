@@ -34,27 +34,57 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
         DeletePlainObjectWorker.perform_now(object, %w[HTestClass123])
       end
     end
+  end
 
-    def test_destroy_method_destroy
-      object_1 = objects.first
-      object_2 = objects.second
+  class RemovalMethodOptionTest < DeletePlainObjectWorkerTest
+    test '#destroy' do
+      object_1, object_2 = FactoryBot.create_list(:line_item, 2)
 
       object_1.expects(:destroy).once
-      DeletePlainObjectWorker.perform_now(object_1, %w[HTestClass123 HTestClass1123], 'destroy')
+      DeletePlainObjectWorker.perform_now(object_1, %w[HTestClass123 HTestClass1123], {background_destroy_method: 'destroy'})
 
-      object_1.expects(:destroy!).once
-      DeletePlainObjectWorker.perform_now(object_1, [], 'destroy')
+      object_2.expects(:destroy).once
+      DeletePlainObjectWorker.perform_now(object_2, %w[HTestClass123 HTestClass1123], {})
     end
 
-    def test_destroy_method_delete
-      object_1 = objects.first
-      object_2 = objects.second
+    test '#destroy!' do
+      object_1, object_2 = FactoryBot.create_list(:line_item, 2)
+
+      object_1.expects(:destroy!).once
+      DeletePlainObjectWorker.perform_now(object_1, [], {background_destroy_method: 'destroy'})
+
+      object_2.expects(:destroy!).once
+      DeletePlainObjectWorker.perform_now(object_2, [], {})
+    end
+
+    test '#delete' do
+      object_1, object_2 = FactoryBot.create_list(:line_item, 2)
 
       object_1.expects(:delete).once
-      DeletePlainObjectWorker.perform_now(object_1, %w[HTestClass123 HTestClass1123], 'delete')
+      DeletePlainObjectWorker.perform_now(object_1, %w[HTestClass123 HTestClass1123], {background_destroy_method: 'delete'})
 
-      object_1.expects(:delete).once
-      DeletePlainObjectWorker.perform_now(object_1, [], 'delete')
+      object_2.expects(:delete).once
+      DeletePlainObjectWorker.perform_now(object_2, [], {background_destroy_method: 'delete'})
+    end
+  end
+
+  class LockOptionTest < DeletePlainObjectWorkerTest
+    test '#lock true' do
+      object = FactoryBot.create(:line_item)
+      DeletionLock.expects(:call_with_lock).once
+      DeletePlainObjectWorker.perform_now(object, [], {lock: true})
+    end
+
+    test '#lock false' do
+      object = FactoryBot.create(:line_item)
+      DeletionLock.expects(:call_with_lock).never
+      DeletePlainObjectWorker.perform_now(object, [], {lock: false})
+    end
+
+    test '#lock empty' do
+      object = FactoryBot.create(:line_item)
+      DeletionLock.expects(:call_with_lock).never
+      DeletePlainObjectWorker.perform_now(object, [], {})
     end
   end
 

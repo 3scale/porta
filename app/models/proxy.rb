@@ -12,7 +12,11 @@ class Proxy < ApplicationRecord
 
   define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
-  self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
+  self.background_deletion = [
+    [:proxy_rules, { lock: true }],
+    [:proxy_configs, { action: :delete }],
+    [:oidc_configuration, { action: :delete, has_many: false }]
+  ].freeze
 
   DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
                      'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze

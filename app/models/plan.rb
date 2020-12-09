@@ -13,8 +13,14 @@ class Plan < ApplicationRecord
   include SystemName
   include Logic::MetricVisibility::Plan
 
-  self.background_deletion = [:cinstances, :contracts, :plan_metrics, :pricing_rules,
-                              :usage_limits, [:customizations, { action: :destroy, class_name: 'Plan' }]]
+  self.background_deletion = [
+    [:cinstances, { lock: true }],
+    [:contracts, { lock: true }],
+    [:plan_metrics, { lock: true }],
+    [:pricing_rules, { lock: true }],
+    [:usage_limits, { lock: true }],
+    [:customizations, { action: :destroy, class_name: 'Plan' }]
+  ].freeze
 
   has_system_name :uniqueness_scope => [ :type, :issuer_id, :issuer_type ]
 

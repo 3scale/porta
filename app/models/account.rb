@@ -56,9 +56,9 @@ class Account < ApplicationRecord
   self.background_deletion = [
     :users,
     :mail_dispatch_rules,
-    [:api_docs_services, { class_name: 'ApiDocs::Service' }],
+    [:api_docs_services, { class_name: 'ApiDocs::Service', lock: true }],
     :services,
-    :contracts,
+    [:contracts, { lock: true }],
     :account_plans,
     [:settings, { action: :destroy, class_name: 'Settings', has_many: false }],
     [:payment_detail, { action: :destroy, has_many: false }],

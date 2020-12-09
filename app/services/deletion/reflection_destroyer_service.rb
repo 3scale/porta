@@ -37,7 +37,10 @@ module Deletion
     end
 
     def delete_associated_object_later(associated_object)
-      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy, reflection.background_destroy_method) if associated_object.try(:id)
+      return unless associated_object.try(:id)
+
+      options = { background_destroy_method: reflection.background_destroy_method, lock: reflection.lock? }
+      association_delete_worker.perform_later(associated_object, caller_worker_hierarchy, options)
     end
 
     def association_delete_worker
