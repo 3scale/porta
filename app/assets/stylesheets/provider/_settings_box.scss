@@ -88,15 +88,6 @@
     top: 100%;
     z-index: 0;
   }
-
-  &--is-successful::after {
-    border-left-color: $success-color;
-  }
-
-  &--is-erroneous::after {
-    border-left-color: $error-color;
-  }
-
   &-summary {
     border: $border-width-lg solid $border-color;
     min-height: line-height-times(2);
@@ -122,14 +113,5 @@
 
   &-title {
     margin: 0 !important;
-  }
-
-  &--is-successful {
-    border-color: $success-color;
-  }
-
-  &--is-erroneous {
-    @include white-box-shadow;
-    border-color: $error-color;
   }
 }
