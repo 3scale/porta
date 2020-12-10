@@ -109,7 +109,7 @@ section class="service-widget"
 
       - if can? :manage, :partners
         h2
-          = link_to 'Configuration', path_to_service(service), :title => 'Change integration settings for this service'
+          = link_to 'Configuration', admin_service_integration_path(service), title: 'Change integration settings for this service'
           ' ,
           => link_to 'Methods', admin_service_metrics_path(service)
           '  and
@@ -132,17 +132,17 @@ section class="service-widget"
                   = important_icon_link "Configure #{deployment_option_phrased}",
                     'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
               - when 'plugin_rest'
-                p Follow the instructions on the #{link_to('Integration page', path_to_service(service))} to integrate your API using #{deployment_option_phrased} the against 3scale Service Management API endpoints.
+                p Follow the instructions on the #{link_to('Integration page', admin_service_integration_path(service))} to integrate your API using #{deployment_option_phrased} the against 3scale Service Management API endpoints.
                 = important_icon_link "Get started with #{deployment_option_phrased}",
-                  'hdd-o', path_to_service(service), :class => "outline-button next"
+                  'hdd-o', admin_service_integration_path(service), class: "outline-button next"
               - when nil
                 p = t("deployment_options.missing")
                 = important_icon_link 'Pick a deployment option now',
-                  'hdd-o', path_to_service(service), :class => "outline-button next"
+                  'hdd-o', admin_service_integration_path(service), class: "outline-button next"
               - else
-                p Follow the instructions on the #{link_to( 'Integration page', path_to_service(service) )} to download and install the #{deployment_option_phrased} into your codebase.
+                p Follow the instructions on the #{link_to( 'Integration page', admin_service_integration_path(service) )} to download and install the #{deployment_option_phrased} into your codebase.
                 = important_icon_link "Get started with the #{deployment_option_phrased}",
-                  'hdd-o',path_to_service(service), :class => "outline-button next"
+                  'hdd-o',admin_service_integration_path(service), class: "outline-button next"
 
           - if service.deployment_option.present? && service.has_traffic?
             li.item

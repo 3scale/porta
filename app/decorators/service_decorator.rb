@@ -60,7 +60,7 @@ class ServiceDecorator < ApplicationDecorator
       { name: 'Analytics', path: h.admin_service_stats_usage_path(object) },
       { name: 'Applications', path: h.admin_service_applications_path(object) },
       { name: 'ActiveDocs', path: h.admin_service_api_docs_path(object) },
-      { name: 'Integration', path: h.path_to_service(object) },
+      { name: 'Integration', path: h.admin_service_integration_path(object) },
     ]
   end
 
