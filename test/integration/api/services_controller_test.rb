@@ -26,10 +26,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'settings with finance allowed' do
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false | true)
-      rolling_update(:api_as_product, enabled: false)
-
       provider.settings.finance.allow
 
       get settings_admin_service_path(service)
@@ -83,7 +79,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params(oidc_id: previous_oidc_config_id)
 
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:notice]
 
       update_service_params = update_params[:service]
       update_proxy_params = update_service_params.delete(:proxy_attributes)
@@ -135,7 +131,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
@@ -160,7 +156,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       service.update!(deployment_option: 'self_managed')
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
@@ -194,7 +190,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       rolling_update(:api_as_product, enabled: false)
 
       put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
       assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
 

@@ -16,55 +16,6 @@ Feature: Proxy integration
     And apicast registry is stubbed
     And the default proxy does not use apicast configuration driven
 
-  Scenario: Download Nginx Config without public base URL
-    When I go to the integration page for service "one"
-    And I follow "Download the NGINX Config files"
-    Then I should be offered to download an "application/zip" file
-
-  Scenario: Download Nginx Config
-    When I go to the integration page for service "one"
-    And I fill in "proxy_endpoint" with "http://public.3scale.localhost"
-    And I press "Update Production Configuration"
-    And I follow "Download the NGINX Config files"
-    Then I should be offered to download an "application/zip" file
-
-  Scenario: Sandbox testing enabled by default
-    When I go to the integration page for service "one"
-    Then I should see button to "Test"
-
-  Scenario: Sandbox disabled for oauth
-    When provider "foo.3scale.localhost" uses backend oauth in his default service
-    And I go to the integration page for service "one"
-    Then I should see button to "Update Staging Configuration"
-
-  Scenario: Download Nginx Config for oauth
-    When provider "foo.3scale.localhost" uses backend oauth in his default service
-    When I go to the integration page for service "one"
-    And I fill in "proxy_endpoint" with "http://public.3scale.localhost"
-    And I press "Update Production Configuration"
-    And I follow "Download the NGINX Config files"
-    Then I should be offered to download an "application/zip" file
-
-  Scenario: Edit endpoint with proxy_pro
-    Given all the rolling updates features are off
-    When I have proxy_pro feature enabled
-     And I have async_apicast_deploy feature enabled
-    Then I can edit the proxy public endpoint
-
-  @javascript
-  Scenario: Restore to default API Backend
-    Given I'm using a custom API Backend
-    Then I should be able to switch back to using the default API Backend
-
-  @javascript
-  Scenario: Got some fancy policy chain
-    And I go to the integration show page for service "one"
-    And I press "Start using the latest APIcast"
-    When I have policies feature enabled
-    And I go to the integration page for service "one"
-    And I toggle "Policies"
-    Then I should see the Policy Chain
-
   Scenario: Got error message when APIcast registry is not setup properly
     And apicast registry is undefined
     And I go to the integration show page for service "one"

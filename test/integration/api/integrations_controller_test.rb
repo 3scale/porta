@@ -22,11 +22,11 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     member.activate!
     login! provider, user: member
 
-    get edit_admin_service_integration_path(service_id: service.id)
+    get admin_service_integration_path(service_id: service.id)
     assert_response 403
 
     member.member_permissions.create!(admin_section: 'plans')
-    get edit_admin_service_integration_path(service_id: service.id)
+    get admin_service_integration_path(service_id: service.id)
     assert_response 200
   end
 
@@ -178,7 +178,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
 
     get edit_admin_service_integration_path(service_id: service.id)
-    assert_response :success
+    assert_response :not_found
   end
 
   test 'updating proxy' do
@@ -272,9 +272,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'edit not found for apiap' do
-    rolling_updates_on
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true)
-
     get edit_admin_service_integration_path(service_id: service.id)
     assert_response :not_found
   end
