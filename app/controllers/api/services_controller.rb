@@ -46,7 +46,6 @@ class Api::ServicesController < Api::BaseController
   end
 
   def usage_rules
-    raise ActiveRecord::RecordNotFound unless apiap?
     activate_menu :serviceadmin, :applications, :usage_rules
   end
 
@@ -108,31 +107,49 @@ class Api::ServicesController < Api::BaseController
     params.require(:service).permit(permitted_params)
   end
 
+  # rubocop:disable Metrics/MethodLength
   def proxy_params
-    oidc_params = %i[oidc_issuer_type oidc_issuer_endpoint jwt_claim_with_client_id jwt_claim_with_client_id_type] + [{oidc_configuration_attributes: OIDCConfiguration::Config::FLOWS + [:id]}]
-    permitted_params = oidc_params + %i[
-      auth_user_key auth_app_id auth_app_key credentials_location hostname_rewrite secret_token
-      error_status_auth_failed error_headers_auth_failed error_auth_failed
-      error_status_auth_missing error_headers_auth_missing error_auth_missing
-      error_status_no_match error_headers_no_match error_no_match
-      error_status_limits_exceeded error_headers_limits_exceeded error_limits_exceeded
+    permitted_params = [{oidc_configuration_attributes: OIDCConfiguration::Config::FLOWS + [:id]}] + %i[
+      oidc_issuer_type
+      oidc_issuer_endpoint
+      jwt_claim_with_client_id
+      jwt_claim_with_client_id_type
+      auth_user_key
+      auth_app_id
+      auth_app_key
+      credentials_location
+      hostname_rewrite
+      secret_token
+      error_status_auth_failed
+      error_headers_auth_failed
+      error_auth_failed
+      error_status_auth_missing
+      error_headers_auth_missing
+      error_auth_missing
+      error_status_no_match
+      error_headers_no_match
+      error_no_match
+      error_status_limits_exceeded
+      error_headers_limits_exceeded
+      error_limits_exceeded
     ]
-    permitted_params << :api_backend unless apiap?
     permitted_params += %i[endpoint sandbox_endpoint] if can_edit_endpoints?
     params.require(:service).fetch(:proxy_attributes, {}).permit(permitted_params)
   end
+  # rubocop:enable Metrics/MethodLength
 
   def can_edit_endpoints?
     Rails.application.config.three_scale.apicast_custom_url || service.proxy.saas_configuration_driven_apicast_self_managed?
   end
 
-  # This will be the default 'settings' when apiap is live
+  # TODO: THREESCALE-3759 remove this method and all :settings associated pages
   def settings_page
-    apiap? ? :settings_apiap : :settings
+    :settings_apiap
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def product_or_service_type
-    apiap? ? 'Product' : 'Service'
+    'Product'
   end
 
   def collection
