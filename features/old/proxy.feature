@@ -5,7 +5,6 @@ Feature: Proxy integration
 
   Background:
     Given all the rolling updates features are off
-    And I have apicast_v1 feature enabled
     And I have apicast_v2 feature enabled
     And I have oauth_api feature enabled
     Given a provider "foo.3scale.localhost"
@@ -15,14 +14,6 @@ Feature: Proxy integration
     And I log in as provider "foo.3scale.localhost"
     And apicast registry is stubbed
     And the default proxy does not use apicast configuration driven
-
-  Scenario: Got error message when APIcast registry is not setup properly
-    And apicast registry is undefined
-    And I go to the integration show page for service "one"
-    And I press "Start using the latest APIcast"
-    When I have policies feature enabled
-    And I go to the integration page for service "one"
-    Then I should see "A valid APIcast Policies endpoint must be provided"
 
   Scenario: Sorting mapping rules
     And I go to the integration show page for service "one"
