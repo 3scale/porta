@@ -68,6 +68,8 @@ Metrics/MethodLength:
 
 Metrics/ClassLength:
   Max: 200
+  Exclude:
+    - 'test/**/*.rb'
 
 AllCops:
   NewCops: enable
