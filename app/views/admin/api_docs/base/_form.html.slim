@@ -1,7 +1,7 @@
 - content_for :javascripts do
   = javascript_include_tag 'provider/codemirror'
 
-- commit_button_label = action_name == 'edit' ? 'Update Spec' : 'Create Spec'
+- commit_button_label = @api_docs_service.new_record? ? 'Create Spec' : 'Update Spec'
 
 = form.inputs do
   = form.input :name
