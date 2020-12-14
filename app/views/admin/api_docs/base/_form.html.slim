@@ -1,6 +1,8 @@
 - content_for :javascripts do
   = javascript_include_tag 'provider/codemirror'
 
+- commit_button_label = action_name == 'edit' ? 'Update Spec' : 'Create Spec'
+
 = form.inputs do
   = form.input :name
   - if @api_docs_service.new_record?
@@ -15,7 +17,7 @@
   = form.semantic_errors :base_path
   = form.input :skip_swagger_validations, as: :boolean
 = form.buttons do
-  = form.commit_button
+  = form.commit_button commit_button_label
 
 css:
   #api_docs_service_body_input .CodeMirror {
