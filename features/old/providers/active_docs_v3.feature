@@ -44,7 +44,7 @@ Feature: ActiveDocs
       }
     }
     """
-    And I press "Create Service"
+    And I press "Create Spec"
     Then I should see "ActiveDocs Spec was successfully saved."
     And I should see "Simple API overview"
 
@@ -57,7 +57,7 @@ Feature: ActiveDocs
     """
     {"name":"godzilla"}
     """
-    And I press "Create Service"
+    And I press "Create Spec"
     Then I should see "JSON Spec is invalid"
     When I fill in the API JSON Spec with:
     """
@@ -89,7 +89,7 @@ Feature: ActiveDocs
       }
     }
     """
-    And I press "Create Service"
+    And I press "Create Spec"
     Then I should see "ActiveDocs Spec was successfully saved."
     When I follow "Publish"
     Then I should see "Spec UberAPI published"
@@ -140,7 +140,7 @@ Feature: ActiveDocs
       }
     }
     """
-    And I press "Create Service"
+    And I press "Create Spec"
     Then should see "ActiveDocs Spec was successfully saved."
     And the swagger v3 autocomplete should work for "user_key" with "user_keys"
 
@@ -186,6 +186,6 @@ Feature: ActiveDocs
       }
     }
     """
-    And I press "Create Service"
+    And I press "Create Spec"
     Then should see "ActiveDocs Spec was successfully saved."
     And swagger v3 should escape properly the curl string
