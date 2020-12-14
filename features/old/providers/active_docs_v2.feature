@@ -45,7 +45,6 @@ Feature: ActiveDocs
     When I go to the provider active docs page
     Then I should see "ActiveDocs"
     When I follow "Edit" within the row for echo active docs
-    Then I should see "Edit Service Spec"
     And I press "Update Spec"
     Then I should see "ActiveDocs Spec was successfully updated."
 
