@@ -267,7 +267,7 @@ class Service < ApplicationRecord
 
   def stop_destroy_if_last_or_default
     return if destroyable?
-    errors.add :base, 'This service cannot be removed'
+    errors.add :base, 'This product cannot be removed'
     false
   end
 

@@ -57,7 +57,7 @@ Feature: Multiservice feature
       And all the rolling updates features are off
       And I am on the edit page for service "Fancy API" of provider "foo.3scale.localhost"
     When I fill in "Name" with "Less fancy API"
-     And I press "Update Service"
+     And I press "Update Product"
      And I follow "Integration" within the main menu
      And I follow "Settings"
      And I uncheck "Developers can manage applications"
@@ -69,13 +69,5 @@ Feature: Multiservice feature
     Given I am logged in as provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has "multiple_services" switch allowed
     And I am on the edit page for service "Second service" of provider "foo.3scale.localhost"
-    When I follow "I understand the consequences, proceed to delete 'Second service' service" and I confirm dialog box
+    When I follow "I understand the consequences, proceed to delete 'Second service' product" and I confirm dialog box
     Then I should see "Product 'Second service' will be deleted shortly."
-
-  Scenario: Delete Service without apiap
-    Given I am logged in as provider "foo.3scale.localhost"
-    And provider "foo.3scale.localhost" has "multiple_services" switch allowed
-    And I have rolling updates "api_as_product" disabled
-    And I am on the edit page for service "Second service" of provider "foo.3scale.localhost"
-    When I follow "I understand the consequences, proceed to delete 'Second service' service" and I confirm dialog box
-    Then I should see "Service 'Second service' will be deleted shortly."
