@@ -150,7 +150,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Product information updated.', flash[:notice]
     end
 
-    test 'update api_backend with apiap' do
+    test 'update api_backend' do
       proxy = service.proxy
       proxy.api_backend = 'http://old.backend'
       proxy.save!
@@ -160,19 +160,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
       assert_equal 'http://old.backend:80', proxy.reload.api_backend
-    end
-
-    test 'update api_backend without' do
-      proxy = service.proxy
-      proxy.api_backend = 'http://old.backend'
-      proxy.save!
-
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
-
-      put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
-      assert_equal 'Product information updated.', flash[:notice]
-      assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
 
     private
