@@ -248,14 +248,23 @@ class Api::IntegrationsController < Api::BaseController
   ].freeze
 
   def proxy_params
-    permitted_fields = PROXY_BASIC_PARAMS.dup
+    basic_fields = PROXY_BASIC_PARAMS.dup
 
-    permitted_fields << :sandbox_endpoint if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
-    permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.self_managed?
+    if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
+      basic_fields << :endpoint
+      basic_fields << :sandbox_endpoint
+    end
 
-    permitted_fields.merge!(%i[oidc_issuer_endpoint oidc_issuer_type jwt_claim_with_client_id jwt_claim_with_client_id_type]) if provider_can_use?(:apicast_oidc)
+    basic_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
 
-    params.require(:proxy).permit(*permitted_fields)
+    if provider_can_use?(:apicast_oidc)
+      basic_fields << :oidc_issuer_endpoint
+      basic_fields << :oidc_issuer_type
+      basic_fields << :jwt_claim_with_client_id
+      basic_fields << :jwt_claim_with_client_id_type
+    end
+
+    params.require(:proxy).permit(*basic_fields)
   end
 
   def deploying_hosted_proxy_key
