@@ -7,7 +7,7 @@ Feature: Onboarding Wizard
     Given the master account allows signups
 
   @emails
-  Scenario: Provider goes through the APIAP wizard
+  Scenario: Provider goes through the wizard
     Given a provider signs up and activates his account
      And I have rolling updates "api_as_product" enabled
     When user starts the onboarding wizard
