@@ -252,12 +252,8 @@ class Api::IntegrationsController < Api::BaseController
   def proxy_params
     permitted_fields = PROXY_BASIC_PARAMS
 
-    if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
-      permitted_fields << :endpoint
-      permitted_fields << :sandbox_endpoint
-    end
-
-    permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
+    permitted_fields << :sandbox_endpoint if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
+    permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.self_managed?
 
     if provider_can_use?(:apicast_oidc)
       permitted_fields << :oidc_issuer_endpoint
