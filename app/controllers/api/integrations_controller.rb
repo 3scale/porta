@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
-
 class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
@@ -63,10 +61,10 @@ class Api::IntegrationsController < Api::BaseController
   def update_onpremises_production
     if @proxy.update_attributes(proxy_params)
       flash[:notice] = flash_message(:update_onpremises_production_success)
-      # TODO: THREESCALE-3759 it'll be changed to :show in https://github.com/3scale/porta/pull/2288
+      # TODO: THREESCALE-3759 it'll be changed in https://github.com/3scale/porta/pull/2288
       redirect_to action: :edit, anchor: 'production'
     else
-      # TODO: THREESCALE-3759 it'll be changed to :show in https://github.com/3scale/porta/pull/2288
+      # TODO: THREESCALE-3759 it'll be changed in https://github.com/3scale/porta/pull/2288
       render :edit
     end
   end
@@ -250,17 +248,12 @@ class Api::IntegrationsController < Api::BaseController
   ].freeze
 
   def proxy_params
-    permitted_fields = PROXY_BASIC_PARAMS
+    permitted_fields = PROXY_BASIC_PARAMS.dup
 
     permitted_fields << :sandbox_endpoint if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
     permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.self_managed?
 
-    if provider_can_use?(:apicast_oidc)
-      permitted_fields << :oidc_issuer_endpoint
-      permitted_fields << :oidc_issuer_type
-      permitted_fields << :jwt_claim_with_client_id
-      permitted_fields << :jwt_claim_with_client_id_type
-    end
+    permitted_fields.merge!(%i[oidc_issuer_endpoint oidc_issuer_type jwt_claim_with_client_id jwt_claim_with_client_id_type]) if provider_can_use?(:apicast_oidc)
 
     params.require(:proxy).permit(*permitted_fields)
   end
@@ -283,5 +276,3 @@ class Api::IntegrationsController < Api::BaseController
     redirect_to :show
   end
 end
-
-# rubocop:enable Metrics/ClassLength
