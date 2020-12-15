@@ -15,24 +15,9 @@ class PaymentBuyerReferencesTest < ActiveSupport::TestCase
     assert_equal "3scale-12345-67890", PaymentGateways::BuyerReferences.buyer_reference(account, provider)
   end
 
-  test '::charge_reference' do
-    assert_equal "3scale-charge-invoice-09876-67890", Foo.charge_reference(account, invoice)
-    assert_equal "3scale-charge-invoice-09876-67890", PaymentGateways::BuyerReferences.charge_reference(account, invoice)
-  end
-
-  test '::recurring_authorization_reference' do
-    assert_equal "3scale-recurring-authorization-12345-67890", Foo.recurring_authorization_reference(account, provider)
-    assert_equal "3scale-recurring-authorization-12345-67890", PaymentGateways::BuyerReferences.recurring_authorization_reference(account, provider)
-  end
-
   test '#buyer_reference' do
     foo = Foo.new(provider, account)
     assert_equal "3scale-67890-12345", foo.buyer_reference
-  end
-
-  test '#recurring_authorization_reference' do
-    foo = Foo.new(provider, account)
-    assert_equal "3scale-recurring-authorization-67890-12345", foo.recurring_authorization_reference
   end
 
   protected

@@ -37,11 +37,8 @@ class PaymentTransaction < ApplicationRecord
                    when ActiveMerchant::Billing::StripeGateway
           logger.info("Purchasing with stripe")
           purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
-                   when ActiveMerchant::Billing::Adyen12Gateway
-          logger.info("Purchasing with adyen v12")
-          purchase_with_adyen12(credit_card_auth_code, gateway, gateway_options)
                    else
-          logger.info("Purchasing with something other than authorize.net or stripe or adyen")
+          logger.info('Purchasing with something other than authorize.net or stripe')
           gateway.purchase(amount.cents, credit_card_auth_code, gateway_options)
         end
 
@@ -158,25 +155,6 @@ class PaymentTransaction < ApplicationRecord
   def purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
     options = gateway_options.merge(customer: credit_card_auth_code)
     gateway.purchase(amount.cents, nil, options)
-  end
-
-  # Adyen uses another way to do recurring payments
-  # They do not use the authorize/capture/purchase convention.
-  # Recurring and basic payments are done on different endpoints than authorize/capture/purchase
-  # * It needs to create a contract for recurring payment first
-  # * After this contract is created then submitting a charge can be done
-  def purchase_with_adyen12(credit_card_auth_code, gateway, gateway_options)
-    options = {
-      # Actually +credit_card_auth_code+ is the shopperReference
-      # shopperReference: PaymentGateways::BuyerReferences.buyer_reference(account, account.provider_account),
-      shopperReference: credit_card_auth_code,
-      reference: PaymentGateways::BuyerReferences.charge_reference(account, invoice),
-      recurring: 'RECURRING',
-      shopperInteraction: 'ContAuth',
-      selectedRecurringDetailReference: account.payment_detail.payment_service_reference.presence || 'LATEST',
-      currency: gateway_options.fetch(:currency)
-    }
-    gateway.submit_recurring(amount.cents, options)
   end
 
 end

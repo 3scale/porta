@@ -14,7 +14,7 @@ class PaymentGatewayTest < ActiveSupport::TestCase
     setup { PaymentGateway.stubs(:bogus_enabled?).returns(false) }
 
     should 'contain only supported gateways' do
-      assert_equal [:adyen12, :authorize_net, :braintree_blue, :ogone, :stripe], PaymentGateway.all.map(&:type).sort
+      assert_equal %i[authorize_net braintree_blue ogone stripe], PaymentGateway.all.map(&:type).sort
     end
 
     should 'include bogus when enabled' do
