@@ -83,14 +83,9 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
         collection_paths << path if path.match(name_or_path_regex)
       end
 
-      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(enabled?: true)
       get '/api_docs/services/account_management_api.json'
       actual_backed_api_routes = Rails.application.routes.named_routes.select { |name, route| name.to_s.match(name_or_path_regex) }
       assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['apis'].each_with_object(Set.new, &select_endpoints).length
-
-      Logic::RollingUpdates::Features::ApiAsProduct.any_instance.stubs(enabled?: false)
-      get '/api_docs/services/account_management_api.json'
-      assert_empty JSON.parse(response.body)['apis'].each_with_object(Set.new, &select_endpoints)
     end
   end
 

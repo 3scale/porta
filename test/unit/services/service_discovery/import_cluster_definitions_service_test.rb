@@ -93,7 +93,6 @@ module ServiceDiscovery
       @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
       @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
       @account.stubs(:provider_can_use?).with(:proxy_private_base_path).returns(false)
-      @account.expects(:provider_can_use?).with(:api_as_product).at_least_once.returns(false)
       @service.backend_api.stubs(account: @account)
 
       System::ErrorReporting.expects(:report_error).with(responds_with(:message, 'Could not save API backend URL'), any_parameters)
