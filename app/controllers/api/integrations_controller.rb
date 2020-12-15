@@ -61,8 +61,10 @@ class Api::IntegrationsController < Api::BaseController
   def update_onpremises_production
     if @proxy.update_attributes(proxy_params)
       flash[:notice] = flash_message(:update_onpremises_production_success)
+      # TODO: THREESCALE-3759 it'll be changed in https://github.com/3scale/porta/pull/2288
       redirect_to action: :edit, anchor: 'production'
     else
+      # TODO: THREESCALE-3759 it'll be changed in https://github.com/3scale/porta/pull/2288
       render :edit
     end
   end
@@ -216,18 +218,37 @@ class Api::IntegrationsController < Api::BaseController
     params.fetch(:proxy, {}).fetch(:proxy_rules_attributes, {})
   end
 
-  def proxy_params
-    basic_fields = [
-      :lock_version,
+  PROXY_BASIC_PARAMS = [
+    :lock_version,
+    :auth_app_id,
+    :auth_app_key,
+    :api_backend,
+    :hostname_rewrite,
+    :oauth_login_url,
+    :secret_token,
+    :credentials_location,
+    :auth_user_key,
+    :error_status_auth_failed,
+    :error_headers_auth_failed,
+    :error_auth_failed,
+    :error_status_auth_missing,
+    :error_headers_auth_missing,
+    :error_auth_missing,
+    :error_status_no_match,
+    :error_headers_no_match,
+    :error_no_match,
+    :error_status_limits_exceeded,
+    :error_headers_limits_exceeded,
+    :error_limits_exceeded,
+    :api_test_path,
+    :policies_config,
+    { proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id redirect_url position last] },
+    { oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id] },
+    { backend_api_configs_attributes: %i[_destroy id path] }
+  ].freeze
 
-      :auth_app_id, :auth_app_key, :api_backend, :hostname_rewrite, :oauth_login_url,
-      :secret_token, :credentials_location, :auth_user_key, :error_status_auth_failed,
-      :error_headers_auth_failed, :error_auth_failed, :error_status_auth_missing,
-      :error_headers_auth_missing, :error_auth_missing, :error_status_no_match,
-      :error_headers_no_match, :error_no_match, :error_status_limits_exceeded, :error_headers_limits_exceeded, :error_limits_exceeded,
-      :api_test_path, :policies_config, proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id
-                                                                   redirect_url position last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id]
-    ]
+  def proxy_params
+    basic_fields = PROXY_BASIC_PARAMS.dup
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
       basic_fields << :endpoint
@@ -242,8 +263,6 @@ class Api::IntegrationsController < Api::BaseController
       basic_fields << :jwt_claim_with_client_id
       basic_fields << :jwt_claim_with_client_id_type
     end
-
-    basic_fields << { backend_api_configs_attributes: %i[_destroy id path] } if provider_can_use?(:api_as_product)
 
     params.require(:proxy).permit(*basic_fields)
   end

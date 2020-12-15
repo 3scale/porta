@@ -22,9 +22,6 @@
 
     div class=("feedback api #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-puzzle-piece
-      - unless current_account.provider_can_use?(:api_as_product)
-        = f.inputs "API" do
-          = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend }, autofocus: (@proxy.api_backend == @proxy.default_api_backend) }, hint: api_backend_hint(@proxy.api_backend)
 
     div class=("feedback proxy #{'success' if @proxy.api_test_success} #{'no-test' if @proxy.api_test_path.blank? or @proxy.api_test_success.nil?}")
       i.fa.fa-hdd-o
@@ -40,15 +37,10 @@
                                 readonly: apicast_urls_readonly?,
                                 placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
                   hint: apicast_endpoint_input_hint(@service, environment: 'production')
-        - unless current_account.provider_can_use?(:api_as_product)
-          div.help-button-constrainer
-            = render 'api/integrations/apicast/shared/mapping_rules', f: f
         div.help-button-constrainer
           = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
         - if current_account.provider_can_use?(:policies)
           div.help-button-constrainer
-            - unless current_account.provider_can_use?(:api_as_product)
-              = render 'api/integrations/apicast/shared/policies', f: f
 
     = render 'api/integrations/apicast/shared/client', f: f unless @proxy.service.oauth?
 
