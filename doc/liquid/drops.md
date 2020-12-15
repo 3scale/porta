@@ -174,8 +174,6 @@ Give access to permission methods.
 
 ### edit_stripe_billing_address_url
 
-### edit_adyen12_billing_address_url
-
 -----------
 
 # AccountPlan drop
@@ -704,19 +702,6 @@ OAuth callback url.
 
 
 ## Methods
-### login_url
-
-### user_identified?
-
------------
-
-# Base drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -739,6 +724,19 @@ Returns the resource URL of the result.
 
 ### description
 Returns a descriptive string for the result.
+
+-----------
+
+# Base drop
+
+
+
+
+
+## Methods
+### login_url
+
+### user_identified?
 
 -----------
 
@@ -1615,27 +1613,6 @@ this returns the errors that occurred.
 
 
 ## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1675,6 +1652,27 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -2125,13 +2123,20 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### title
+### body
+Text of the post.
 
-### kind
+### topic
+Every post belongs to a [topic](#topic-drop).
+
+### created_at
+Date when this post created.
+```liquid
+{{ post.created_at | date: i18n.short_date }}
+```
 
 ### url
-
-### description
+The URL of this post within its topic.
 
 -----------
 
@@ -2153,20 +2158,13 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### body
-Text of the post.
+### title
 
-### topic
-Every post belongs to a [topic](#topic-drop).
-
-### created_at
-Date when this post created.
-```liquid
-{{ post.created_at | date: i18n.short_date }}
-```
+### kind
 
 ### url
-The URL of this post within its topic.
+
+### description
 
 -----------
 
@@ -2884,9 +2882,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 
@@ -2909,12 +2910,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 
