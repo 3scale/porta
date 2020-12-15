@@ -490,31 +490,6 @@ class ProxyTest < ActiveSupport::TestCase
     refute proxy.sandbox_deployed?
   end
 
-  test 'send_api_test_request!' do
-    proxy = FactoryBot.create(:proxy, api_test_path: '/v1/word/stuff.json',
-                                      secret_token: '123')
-    proxy.update!(api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
-                                      sandbox_endpoint: 'http://proxy:80')
-    stub_request(:get, 'http://proxy/v1/word/stuff.json?user_key=USER_KEY')
-        .to_return(status: 201, body: '', headers: {})
-
-    analytics.expects(:track).with('Sandbox Proxy Test Request', has_entries(success: true, uri: 'http://proxy/v1/word/stuff.json', status: 201))
-    assert proxy.send_api_test_request!
-  end
-
-  test 'send_api_test_request! with oauth' do
-    proxy = FactoryBot.create(:proxy,
-                                      api_backend: "http://api_backend.#{ThreeScale.config.superdomain}:80",
-                                      sandbox_endpoint: 'http://proxy:80',
-                                      api_test_path: '/v1/word/stuff.json',
-                                      secret_token: '123')
-    proxy.service.backend_version = 'oauth'
-    proxy.api_test_success = true
-    proxy.send_api_test_request!
-
-    assert_nil proxy.api_test_success
-  end
-
   test 'save_and_deploy' do
     proxy = FactoryBot.build(:proxy,
                               api_backend: 'http://example.com',
