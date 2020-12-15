@@ -7,7 +7,7 @@ Feature: Billing and Credit card details
     Given a provider exists
     And the provider has a default paid application plan
     And the provider is charging
-    # TODO: Test other payment gateways (adyen, authorize.net, etc)
+    # TODO: Test other payment gateways (authorize.net, etc)
     And the provider has testing credentials for braintree
     And the provider has "finance" switch visible
     And Braintree is stubbed to accept credit card for buyer
