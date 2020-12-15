@@ -66,10 +66,6 @@ Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" positio
   click_on 'Create Mapping Rule'
 end
 
-Given(/^I save the proxy config$/) do
-  click_on 'proxy-button-save-and-deploy'
-end
-
 MAPPING_RULE_ATTR = %w[http_method pattern position metric].freeze
 
 Then(/^the mapping rules should be in the following order:$/) do |table|

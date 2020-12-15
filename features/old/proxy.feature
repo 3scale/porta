@@ -16,11 +16,6 @@ Feature: Proxy integration
     And the default proxy does not use apicast configuration driven
 
   Scenario: Sorting mapping rules
-    And I go to the integration show page for service "one"
-    And I follow "Mapping Rules"
-    And I add a new mapping rule with method "POST" pattern "/beers" position "2" and metric "Hits"
-
-  Scenario: Sorting mapping rules
     When I go to the integration show page for service "one"
     And I follow "Mapping Rules"
     And I add a new mapping rule with method "POST" pattern "/beers" position "2" and metric "Hits"
