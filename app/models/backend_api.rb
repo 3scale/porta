@@ -107,10 +107,8 @@ class BackendApi < ApplicationRecord
     DeleteObjectHierarchyWorker.perform_later(self)
   end
 
-  def set_private_endpoint
-    return if account.provider_can_use?(:api_as_product)
-    self.private_endpoint ||= default_api_backend
-  end
+  # TODO: THREESCALE-3759 remove this method
+  def set_private_endpoint; end
 
   def set_port_private_endpoint
     Proxy::PortGenerator.new(self).call(:private_endpoint)

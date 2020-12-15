@@ -9,7 +9,6 @@ Feature: Onboarding Wizard
   @emails
   Scenario: Provider goes through the wizard
     Given a provider signs up and activates his account
-     And I have rolling updates "api_as_product" enabled
     When user starts the onboarding wizard
      And goes to Add a Backend page
      And adds the echo Backend

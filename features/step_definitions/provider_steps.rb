@@ -291,7 +291,3 @@ Then(/^new tenant should be not created$/) do
     assert_selector('.inline-errors', :text => error_message[:message])
   end
 end
-
-Given /^the account has api_as_product rolling update enabled$/ do
-  @provider.stubs(:provider_can_use?).with(:api_as_product).returns(true)
-end
