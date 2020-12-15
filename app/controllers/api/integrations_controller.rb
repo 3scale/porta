@@ -32,16 +32,7 @@ class Api::IntegrationsController < Api::BaseController
       flash[:notice] = flash_message(:update_success, environment: environment)
       update_mapping_rules_position
 
-      return redirect_to admin_service_integration_path(@service)
-
-      # TODO: THREESCALE-3759 remove this branch
-      if @proxy.send_api_test_request!
-        api_backend = @proxy.api_backend
-        done_step(:api_sandbox_traffic) if api_backend.present? && ApiClassificationService.test(api_backend).real_api?
-        return redirect_to edit_path
-      end
-
-      render :edit
+      redirect_to admin_service_integration_path(@service)
     else
       attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
