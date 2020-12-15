@@ -12,14 +12,6 @@ Given(/^I'm using a custom API Backend$/) do
   click_on 'proxy-button-save-and-deploy'
 end
 
-Then(/^I should be able to switch back to using the default API Backend$/) do
-  link = XPath::HTML.link "Use Echo API"
-
-  page.should have_xpath(link, visible: true)
-  find(:xpath, link).click
-  page.should_not have_xpath(link, visible: true)
-end
-
 Then(/^I can edit the proxy public endpoint$/) do
 
   step %(I go to the integration page for service "#{@provider.first_service!.name}")
