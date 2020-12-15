@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
+
 class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
@@ -218,51 +220,53 @@ class Api::IntegrationsController < Api::BaseController
     params.fetch(:proxy, {}).fetch(:proxy_rules_attributes, {})
   end
 
+  PROXY_BASIC_PARAMS = [
+    :lock_version,
+    :auth_app_id,
+    :auth_app_key,
+    :api_backend,
+    :hostname_rewrite,
+    :oauth_login_url,
+    :secret_token,
+    :credentials_location,
+    :auth_user_key,
+    :error_status_auth_failed,
+    :error_headers_auth_failed,
+    :error_auth_failed,
+    :error_status_auth_missing,
+    :error_headers_auth_missing,
+    :error_auth_missing,
+    :error_status_no_match,
+    :error_headers_no_match,
+    :error_no_match,
+    :error_status_limits_exceeded,
+    :error_headers_limits_exceeded,
+    :error_limits_exceeded,
+    :api_test_path,
+    :policies_config,
+    { proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id redirect_url position last] },
+    { oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id] },
+    { backend_api_configs_attributes: %i[_destroy id path] }
+  ].freeze
+
   def proxy_params
-    basic_fields = [
-      :lock_version,
-      :auth_app_id,
-      :auth_app_key,
-      :api_backend,
-      :hostname_rewrite,
-      :oauth_login_url,
-      :secret_token,
-      :credentials_location,
-      :auth_user_key,
-      :error_status_auth_failed,
-      :error_headers_auth_failed,
-      :error_auth_failed,
-      :error_status_auth_missing,
-      :error_headers_auth_missing,
-      :error_auth_missing,
-      :error_status_no_match,
-      :error_headers_no_match,
-      :error_no_match,
-      :error_status_limits_exceeded,
-      :error_headers_limits_exceeded,
-      :error_limits_exceeded,
-      :api_test_path,
-      :policies_config,
-      proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id redirect_url position last],
-      oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id],
-      backend_api_configs_attributes: %i[_destroy id path]
-    ]
+    permitted_fields = PROXY_BASIC_PARAMS
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
-      basic_fields << :endpoint
-      basic_fields << :sandbox_endpoint
+      permitted_fields << :endpoint
+      permitted_fields << :sandbox_endpoint
     end
 
-    basic_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
+    permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
 
     if provider_can_use?(:apicast_oidc)
-      basic_fields << :oidc_issuer_endpoint
-      basic_fields << :oidc_issuer_type
-      basic_fields << :jwt_claim_with_client_id
-      basic_fields << :jwt_claim_with_client_id_type
+      permitted_fields << :oidc_issuer_endpoint
+      permitted_fields << :oidc_issuer_type
+      permitted_fields << :jwt_claim_with_client_id
+      permitted_fields << :jwt_claim_with_client_id_type
     end
 
-    params.require(:proxy).permit(*basic_fields)
+    params.require(:proxy).permit(*permitted_fields)
   end
 
   def deploying_hosted_proxy_key
@@ -283,3 +287,5 @@ class Api::IntegrationsController < Api::BaseController
     redirect_to :show
   end
 end
+
+# rubocop:enable Metrics/ClassLength
