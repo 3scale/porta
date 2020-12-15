@@ -107,30 +107,31 @@ class Api::ServicesController < Api::BaseController
     params.require(:service).permit(permitted_params)
   end
 
-  DEFAULT_PARAMS = [{oidc_configuration_attributes: OIDCConfiguration::Config::FLOWS + [:id]}] + %i[
-    oidc_issuer_type
-    oidc_issuer_endpoint
-    jwt_claim_with_client_id
-    jwt_claim_with_client_id_type
-    auth_user_key
-    auth_app_id
-    auth_app_key
-    credentials_location
-    hostname_rewrite
-    secret_token
-    error_status_auth_failed
-    error_headers_auth_failed
-    error_auth_failed
-    error_status_auth_missing
-    error_headers_auth_missing
-    error_auth_missing
-    error_status_no_match
-    error_headers_no_match
-    error_no_match
-    error_status_limits_exceeded
-    error_headers_limits_exceeded
-    error_limits_exceeded
-  ]
+  DEFAULT_PARAMS = [
+    { oidc_configuration_attributes: OIDCConfiguration::Config::FLOWS + [:id] },
+    :oidc_issuer_type,
+    :oidc_issuer_endpoint,
+    :jwt_claim_with_client_id,
+    :jwt_claim_with_client_id_type,
+    :auth_user_key,
+    :auth_app_id,
+    :auth_app_key,
+    :credentials_location,
+    :hostname_rewrite,
+    :secret_token,
+    :error_status_auth_failed,
+    :error_headers_auth_failed,
+    :error_auth_failed,
+    :error_status_auth_missing,
+    :error_headers_auth_missing,
+    :error_auth_missing,
+    :error_status_no_match,
+    :error_headers_no_match,
+    :error_no_match,
+    :error_status_limits_exceeded,
+    :error_headers_limits_exceeded,
+    :error_limits_exceeded
+  ].freeze
 
   def proxy_params
     permitted_params = DEFAULT_PARAMS
