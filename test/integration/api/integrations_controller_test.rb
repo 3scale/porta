@@ -156,7 +156,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'deploy is never called when saving proxy info for proxy pro users' do
     rolling_updates_on
-    Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false)
     Account.any_instance.stubs(:provider_can_use?).with(:proxy_pro).returns(true)
 
     Proxy.any_instance.expects(:save_and_deploy).never
@@ -169,15 +168,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     proxy.update_column(:apicast_configuration_driven, false)
 
     put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
-  end
-
-  # Regression test for pre-APIAP
-  def test_edit_not_found
-    get edit_admin_service_integration_path(service_id: 'no-such-service')
-    assert_response :not_found
-
-    get edit_admin_service_integration_path(service_id: service.id)
-    assert_response :not_found
   end
 
   test 'updating proxy' do
@@ -313,64 +303,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
       assert zip.get_next_entry
     end
 
-  end
-
-  test 'cannot update custom public endpoint when using APIcast' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    # call update_production as that is what APIcast production form calls
-    patch update_production_admin_service_integration_path(proxy: {endpoint: "http://example.com:80"}, service_id:service.id)
-    assert_equal 'https://endpoint.com:8443', proxy.reload.endpoint
-  end
-
-  test 'update custom public endpoint when deployment method is on premise' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    # Case where endpoint is allowed to be updated because on premise
-    Proxy.any_instance.stubs(self_managed?: true)
-
-    # call update_onpremises_production to update endpoint
-    patch update_onpremises_production_admin_service_integration_path(proxy: {endpoint: 'http://example.com:80'}, service_id: service.id)
-    assert_equal 'http://example.com:80', proxy.reload.endpoint
-  end
-
-  test 'cannot update custom public endpoint when configuration-driven APIcast does not support custom URL through ENV' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(disabled?: true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    Rails.configuration.three_scale.stubs(apicast_configuration_driven: true)
-    Rails.configuration.three_scale.stubs(apicast_custom_url: false)
-
-    # call update_onpremises_production to update production, apicast config driven uses that action
-    patch update_onpremises_production_admin_service_integration_path(proxy: {endpoint: 'http://example.com:80'}, service_id: service.id)
-    assert_equal 'https://endpoint.com:8443', proxy.reload.endpoint
-  end
-
-  test 'update custom public endpoint when configuration-driven APIcast supports custom URL through ENV' do
-    Logic::RollingUpdates.stubs(enabled?: true)
-    Proxy.any_instance.stubs(deploy: true)
-    ProxyTestService.any_instance.stubs(:disabled?).returns(true)
-
-    proxy.update_column(:endpoint, 'https://endpoint.com:8443')
-
-    Rails.configuration.three_scale.stubs(apicast_configuration_driven: true)
-    Rails.configuration.three_scale.stubs(apicast_custom_url: true)
-    Rails.configuration.three_scale.expects(:apicast_custom_url).returns(true).at_least_once
-
-    # call update_onpremises_production to update production, apicast config driven uses that action
-    patch update_onpremises_production_admin_service_integration_path(proxy: {endpoint: 'http://example.com:80'}, service_id: service.id)
-    assert_equal 'http://example.com:80', proxy.reload.endpoint
   end
 
   test 'promote to production' do

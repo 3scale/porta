@@ -4,8 +4,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :hide_for_apiap, only: :edit # TODO: THREESCALE-3759 remove this route
-  before_action :find_registry_policies, only: %i[edit update]
+  before_action :find_registry_policies, only: :update
 
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
@@ -13,12 +12,6 @@ class Api::IntegrationsController < Api::BaseController
   PLUGIN_LANGUAGES = %w[ruby java python nodejs php rest csharp].freeze
 
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
-
-  def edit
-    @latest_lua = current_account.proxy_logs.first
-    @deploying =  ThreeScale::TimedValue.get(deploying_hosted_proxy_key)
-    @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
-  end
 
   def settings; end
 
@@ -44,28 +37,6 @@ class Api::IntegrationsController < Api::BaseController
       @api_test_form_error = true
 
       render_edit_or_show
-    end
-  end
-
-  def update_production
-    ProxyDeploymentService.call(@proxy, environment: :production)
-    ThreeScale::TimedValue.set(deploying_hosted_proxy_key, true, 5*60 )
-    ThreeScale::Analytics.track(current_user, 'Hosted Proxy deployed')
-    flash[:notice] = flash_message(:update_production_success)
-
-    done_step(:apicast_gateway_deployed, final_step=true) if ApiClassificationService.test(@proxy.api_backend).real_api?
-
-    redirect_to action: :edit, anchor: 'proxy'
-  end
-
-  def update_onpremises_production
-    if @proxy.update_attributes(proxy_params)
-      flash[:notice] = flash_message(:update_onpremises_production_success)
-      # TODO: THREESCALE-3759 it'll be changed in https://github.com/3scale/porta/pull/2288
-      redirect_to action: :edit, anchor: 'production'
-    else
-      # TODO: THREESCALE-3759 it'll be changed in https://github.com/3scale/porta/pull/2288
-      render :edit
     end
   end
 
@@ -174,6 +145,7 @@ class Api::IntegrationsController < Api::BaseController
     render_edit_or_show
   end
 
+  # TODO: THREESCALE-3759 remove this method and related code
   def edit_path
     last_message_id = @last_message_bus_id
 
@@ -196,10 +168,6 @@ class Api::IntegrationsController < Api::BaseController
 
   def message_bus?(proxy)
     proxy.oidc? && ZyncWorker.config.message_bus
-  end
-
-  def hide_for_apiap
-    raise ActiveRecord::RecordNotFound
   end
 
   def authorize
@@ -248,23 +216,23 @@ class Api::IntegrationsController < Api::BaseController
   ].freeze
 
   def proxy_params
-    basic_fields = PROXY_BASIC_PARAMS.dup
+    permitted_fields = PROXY_BASIC_PARAMS.dup
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
-      basic_fields << :endpoint
-      basic_fields << :sandbox_endpoint
+      permitted_fields << :endpoint
+      permitted_fields << :sandbox_endpoint
     end
 
-    basic_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
+    permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
 
     if provider_can_use?(:apicast_oidc)
-      basic_fields << :oidc_issuer_endpoint
-      basic_fields << :oidc_issuer_type
-      basic_fields << :jwt_claim_with_client_id
-      basic_fields << :jwt_claim_with_client_id_type
+      permitted_fields << :oidc_issuer_endpoint
+      permitted_fields << :oidc_issuer_type
+      permitted_fields << :jwt_claim_with_client_id
+      permitted_fields << :jwt_claim_with_client_id_type
     end
 
-    params.require(:proxy).permit(*basic_fields)
+    params.require(:proxy).permit(*permitted_fields)
   end
 
   def deploying_hosted_proxy_key
