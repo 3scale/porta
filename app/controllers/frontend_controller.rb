@@ -39,12 +39,6 @@ class FrontendController < ApplicationController
 
   private
 
-  def apiap?
-    current_account.provider_can_use?(:api_as_product)
-  end
-
-  helper_method :apiap?
-
   def disable_x_content_type
     use_secure_headers_override(:disable_x_content_type)
   end

@@ -25,28 +25,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
     end
 
-    test 'settings with finance allowed' do
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false | true)
-      rolling_update(:api_as_product, enabled: false)
-
-      provider.settings.finance.allow
-
-      get settings_admin_service_path(service)
-
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]"
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]"
-    end
-
-    test 'settings with finance denied' do
-      provider.settings.finance.deny
-
-      get settings_admin_service_path(service)
-
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]", false
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]", false
-    end
-
     test 'settings with finance globally denied' do
       provider = master_account
       provider.settings.stubs(globally_denied_switches: [:finance])
@@ -61,13 +39,12 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
 
       get settings_admin_service_path(service)
       assert_response :success
       page = Nokogiri::HTML::Document.parse(response.body)
 
-      assert_template 'api/services/settings'
+      assert_template 'api/services/settings_apiap'
       section_titles = page.xpath("//fieldset[@class='inputs']/legend").text
       ['Signup & Use', 'Application Plans', 'Application Plan Changing','Alerts'].each do |expected_title|
         section_titles.include? expected_title
@@ -83,7 +60,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params(oidc_id: previous_oidc_config_id)
 
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
 
       update_service_params = update_params[:service]
       update_proxy_params = update_service_params.delete(:proxy_attributes)
@@ -135,7 +112,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
@@ -160,7 +137,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       service.update!(deployment_option: 'self_managed')
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
@@ -173,7 +150,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Product information updated.', flash[:notice]
     end
 
-    test 'update api_backend with apiap' do
+    test 'update api_backend' do
       proxy = service.proxy
       proxy.api_backend = 'http://old.backend'
       proxy.save!
@@ -183,19 +160,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
       assert_equal 'http://old.backend:80', proxy.reload.api_backend
-    end
-
-    test 'update api_backend without' do
-      proxy = service.proxy
-      proxy.api_backend = 'http://old.backend'
-      proxy.save!
-
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
-
-      put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
-      assert_equal 'Service information updated.', flash[:notice]
-      assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
 
     private
