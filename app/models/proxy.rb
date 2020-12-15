@@ -394,38 +394,6 @@ class Proxy < ApplicationRecord
     service.oauth? || saas_configuration_driven_apicast_self_managed?
   end
 
-  def send_api_test_request!
-    proxy_test_service = ProxyTestService.new(self)
-
-    return true if proxy_test_service.disabled?
-
-    if skip_test_request?
-      update_column(:api_test_success, nil)
-      return true
-    end
-
-    result = proxy_test_service.perform
-
-    success = result.success?
-
-    update_column(:api_test_success, success)
-
-    error, description = result.error
-
-    if error && description
-      errors.add(:api_test_path, "<b>#{error}</b>: #{CGI.escapeHTML(description)}")
-    end
-
-    analytics.track 'Sandbox Proxy Test Request',
-                    analytics_attributes.merge(
-                        success: success,
-                        uri: result.uri.to_s,
-                        status: result.code
-                    )
-
-    success
-  end
-
   def enabled
     !!self.deployed_at
   end

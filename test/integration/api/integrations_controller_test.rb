@@ -54,7 +54,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   def test_update
     ProxyDeploymentService.any_instance.stubs(:deploy).returns(true)
-    Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
     proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: proxy, last: false)
 
     refute proxy_rule_1.last
@@ -95,7 +94,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   def test_update_proxy_rule_position
     ProxyDeploymentService.any_instance.expects(:deploy_v2).returns(true).times(3)
-    Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
 
     proxy.proxy_rules.destroy_all
     proxy_rule_1, proxy_rule_2 = FactoryBot.create_list(:proxy_rule, 2, proxy: proxy)
