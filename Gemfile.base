@@ -61,7 +61,7 @@ gem 'yabeda-prometheus-mmap'
 gem 'yabeda-rails'
 gem 'yabeda-sidekiq'
 
-gem 'activemerchant', '~> 1.77.0'
+gem 'activemerchant', '~> 1.113.0'
 gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 gem 'audited'
 

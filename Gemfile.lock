@@ -127,8 +127,8 @@ GEM
     activejob (5.0.7.2)
       activesupport (= 5.0.7.2)
       globalid (>= 0.3.6)
-    activemerchant (1.77.0)
-      activesupport (>= 3.2.14, < 6.x)
+    activemerchant (1.113.0)
+      activesupport (>= 4.2)
       builder (>= 2.1.2, < 4.0.0)
       i18n (>= 0.6.9)
       nokogiri (~> 1.4)
@@ -822,7 +822,7 @@ DEPENDENCIES
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
-  activemerchant (~> 1.77.0)
+  activemerchant (~> 1.113.0)
   activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 1.7.0)
   acts-as-taggable-on (~> 4.0)
