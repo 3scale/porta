@@ -49,7 +49,7 @@ Returns the id of the account.
 Returns the organization name of the developer's account.
 
 ### display_name
-Returns account's display name
+Returns the organization name of the developer's account.
 
 ### vat_zero_text
 Returns a text about a VAT zero.
@@ -1615,6 +1615,27 @@ this returns the errors that occurred.
 
 
 ## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -1654,27 +1675,6 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
 
 -----------
 
@@ -1773,12 +1773,18 @@ this returns the errors that occurred.
 ```
 
 ### title
+Returns the title of the page.
+```liquid
+<title>{{ page.title }}</title>
+```
 
-### kind
-
-### url
-
-### description
+### system_name
+Returns system name of the page.
+```liquid
+{% if page.system_name == 'my_page' %}
+  {% include 'custom_header' %}
+{% endif %}
+```
 
 -----------
 
@@ -1801,18 +1807,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Returns the title of the page.
-```liquid
-<title>{{ page.title }}</title>
-```
 
-### system_name
-Returns system name of the page.
-```liquid
-{% if page.system_name == 'my_page' %}
-  {% include 'custom_header' %}
-{% endif %}
-```
+### kind
+
+### url
+
+### description
 
 -----------
 
@@ -2125,20 +2125,13 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### body
-Text of the post.
+### title
 
-### topic
-Every post belongs to a [topic](#topic-drop).
-
-### created_at
-Date when this post created.
-```liquid
-{{ post.created_at | date: i18n.short_date }}
-```
+### kind
 
 ### url
-The URL of this post within its topic.
+
+### description
 
 -----------
 
@@ -2160,13 +2153,20 @@ this returns the errors that occurred.
 {{ post.errors.name | inline_errors }}
 ```
 
-### title
+### body
+Text of the post.
 
-### kind
+### topic
+Every post belongs to a [topic](#topic-drop).
+
+### created_at
+Date when this post created.
+```liquid
+{{ post.created_at | date: i18n.short_date }}
+```
 
 ### url
-
-### description
+The URL of this post within its topic.
 
 -----------
 
