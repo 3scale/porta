@@ -56,11 +56,11 @@ Feature: Multiservice feature
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the edit page for service "Fancy API" of provider "foo.3scale.localhost"
     When I fill in "Name" with "Less fancy API"
-     And I press "Update Service"
+     And I press "Update Product"
      And I follow "Applications" within the main menu
      And I follow "Usage Rules"
      And I uncheck "Developers can manage applications"
-     And I press "Update Service"
+     And I press "Update Product"
      And I follow "Overview"
     Then I should see "Less fancy API"
 
