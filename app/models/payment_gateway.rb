@@ -57,7 +57,8 @@ class PaymentGateway
   #
   #
   def self.implementation(type)
-    ActiveMerchant::Billing::Base.gateway(type)
+    filtered_type = (type == :stripe) ? :stripe_payment_intents : type
+    ActiveMerchant::Billing::Base.gateway(filtered_type)
   end
 
   def implementation

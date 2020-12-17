@@ -34,8 +34,12 @@ class PaymentTransaction < ApplicationRecord
                    when ActiveMerchant::Billing::AuthorizeNetGateway
           logger.info("Purchasing with authorize.net")
           purchase_with_authorize_net(credit_card_auth_code, gateway)
+                   when ActiveMerchant::Billing::StripePaymentIntentsGateway
+          logger.info("Purchasing with stripe (StripePaymentIntentsGateway)")
+          purchase_with_stripe(credit_card_auth_code, gateway, gateway_options.merge(execute_threed: true))
                    when ActiveMerchant::Billing::StripeGateway
           logger.info("Purchasing with stripe")
+          raise 'Temporarily raise error in this case :) Gotta fix this ;)'
           purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
                    else
           logger.info('Purchasing with something other than authorize.net or stripe')
@@ -154,7 +158,7 @@ class PaymentTransaction < ApplicationRecord
 
   def purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
     options = gateway_options.merge(customer: credit_card_auth_code)
-    gateway.purchase(amount.cents, nil, options)
+    gateway.purchase(amount.cents, account.payment_method_id.presence, options)
   end
 
 end
