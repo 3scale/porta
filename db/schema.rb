@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20201216223243) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                 null: false
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "hosted_proxy_deployed_at"
     t.string   "po_number"
     t.datetime "state_changed_at"
+    t.string   "payment_method_id"
     t.index ["default_service_id"], name: "index_accounts_on_default_service_id", using: :btree
     t.index ["domain", "state_changed_at"], name: "index_accounts_on_domain_and_state_changed_at", using: :btree
     t.index ["domain"], name: "index_accounts_on_domain", unique: true, using: :btree

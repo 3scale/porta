@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20201216223243) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "hosted_proxy_deployed_at",                                  precision: 6
     t.string   "po_number"
     t.datetime "state_changed_at",                                          precision: 6
+    t.string   "payment_method_id"
   end
 
   add_index "accounts", ["default_service_id"], name: "index_accounts_on_default_service_id"
