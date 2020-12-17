@@ -22,11 +22,11 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     member.activate!
     login! provider, user: member
 
-    get edit_admin_service_integration_path(service_id: service.id)
+    get admin_service_integration_path(service_id: service.id)
     assert_response 403
 
     member.member_permissions.create!(admin_section: 'plans')
-    get edit_admin_service_integration_path(service_id: service.id)
+    get admin_service_integration_path(service_id: service.id)
     assert_response 200
   end
 
@@ -54,7 +54,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   def test_update
     ProxyDeploymentService.any_instance.stubs(:deploy).returns(true)
-    Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
     proxy_rule_1 = FactoryBot.create(:proxy_rule, proxy: proxy, last: false)
 
     refute proxy_rule_1.last
@@ -95,7 +94,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
   def test_update_proxy_rule_position
     ProxyDeploymentService.any_instance.expects(:deploy_v2).returns(true).times(3)
-    Proxy.any_instance.stubs(:send_api_test_request!).returns(true)
 
     proxy.proxy_rules.destroy_all
     proxy_rule_1, proxy_rule_2 = FactoryBot.create_list(:proxy_rule, 2, proxy: proxy)
@@ -173,12 +171,13 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
   end
 
-  def test_edit
+  # Regression test for pre-APIAP
+  def test_edit_not_found
     get edit_admin_service_integration_path(service_id: 'no-such-service')
     assert_response :not_found
 
     get edit_admin_service_integration_path(service_id: service.id)
-    assert_response :success
+    assert_response :not_found
   end
 
   test 'updating proxy' do
@@ -252,7 +251,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_change of: -> { proxy.reload.oidc_configuration.id } do
       put admin_service_integration_path(service_id: service.id, proxy: oidc_params)
     end
-    assert_response :redirect
+    assert_response :success
 
     service.reload
     refute proxy.oidc_configuration.standard_flow_enabled
@@ -268,14 +267,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_change of: -> { proxy.reload.oidc_configuration.id } do
       put admin_service_integration_path(service_id: service.id, proxy: oidc_params)
     end
-    assert_response :not_found
-  end
-
-  test 'edit not found for apiap' do
-    rolling_updates_on
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(true)
-
-    get edit_admin_service_integration_path(service_id: service.id)
     assert_response :not_found
   end
 
@@ -301,7 +292,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     config = FactoryBot.create(:proxy_config, proxy: proxy, version: 3, environment: 'sandbox')
 
     Account.any_instance.stubs(:provider_can_use?).returns(true)
-    Account.any_instance.expects(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
 
     get admin_service_integration_path(service_id: service.id)
 

@@ -11,7 +11,7 @@ When /^I try to (create|update) the active docs( of the service)? with (in)?vali
   fill_in('Name', with: 'ActiveDocsName')
   api_spec = invalid ? 'invalid' : FactoryBot.build(:api_docs_service).body
   fill_in('API JSON Spec', with: api_spec)
-  click_on "#{action.capitalize!} Service"
+  click_on "#{action.capitalize!} Spec"
 end
 
 When /^I select a service from the service selector$/ do

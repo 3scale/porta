@@ -24,7 +24,7 @@ module BackendApiLogic
     protected
 
     def validate_backend_api?
-      !account.provider_can_use?(:api_as_product) || backend_api.private_endpoint_changed?
+      backend_api.private_endpoint_changed?
     end
 
     def save_backend_api

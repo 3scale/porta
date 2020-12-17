@@ -53,16 +53,9 @@ class Api::IntegrationsShowPresenter
     end
   end
 
-  def apiap?
-    provider_can_use? :api_as_product
-  end
-
+  # TODO: THREESCALE-3759 remove this method
   def apicast_config_ready?
-    if apiap?
-      proxy.service.backend_apis.any?
-    else
-      any_sandbox_configs?
-    end
+    proxy.service.backend_apis.any?
   end
 
   delegate :pending_affecting_changes?, :service, to: :proxy

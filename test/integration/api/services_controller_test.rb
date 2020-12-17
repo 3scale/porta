@@ -25,28 +25,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
     end
 
-    test 'settings with finance allowed' do
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false | true)
-      rolling_update(:api_as_product, enabled: false)
-
-      provider.settings.finance.allow
-
-      get settings_admin_service_path(service)
-
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]"
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]"
-    end
-
-    test 'settings with finance denied' do
-      provider.settings.finance.deny
-
-      get settings_admin_service_path(service)
-
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=credit_card]", false
-      assert_select "input[name='service[buyer_plan_change_permission]'][value=request_credit_card]", false
-    end
-
     test 'settings with finance globally denied' do
       provider = master_account
       provider.settings.stubs(globally_denied_switches: [:finance])
@@ -61,29 +39,39 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'settings renders the right template and contains the right sections' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
 
       get settings_admin_service_path(service)
       assert_response :success
       page = Nokogiri::HTML::Document.parse(response.body)
 
-      assert_template 'api/services/settings'
+      assert_template 'api/services/settings_apiap'
       section_titles = page.xpath("//fieldset[@class='inputs']/legend").text
-      ['Signup & Use', 'Application Plans', 'Application Plan Changing','Alerts'].each do |expected_title|
+
+      ['Deployment',
+       'API Gateway',
+       'Authentication',
+       'Authentication Settings',
+       'API Key (user_key) Basics',
+       'Credentials Location',
+       'Security',
+       'Gateway Response',
+       'Authentication Failed Error',
+       'Authentication Missing Error',
+       'No Match Error',
+       'Usage Limit Exceeded Error'].each do |expected_title|
         section_titles.include? expected_title
       end
     end
 
     test 'update the settings' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
       service.update!(deployment_option: 'self_managed')
       service.proxy.oidc_configuration.save!
       previous_oidc_config_id = service.proxy.reload.oidc_configuration.id
 
       put admin_service_path(service), params: update_params(oidc_id: previous_oidc_config_id)
 
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
 
       update_service_params = update_params[:service]
       update_proxy_params = update_service_params.delete(:proxy_attributes)
@@ -125,7 +113,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'update endpoint and sandbox endpoint with apicast custom url enabled' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
 
       ThreeScale.config.stubs(:apicast_custom_url).returns(true)
 
@@ -135,14 +122,13 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
 
     test 'update endpoint and sandbox endpoint with apicast custom url disabled' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
 
       ThreeScale.config.stubs(:apicast_custom_url).returns(false)
 
@@ -160,42 +146,25 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       service.update!(deployment_option: 'self_managed')
       put admin_service_path(service), params: update_params
       proxy.reload
-      assert_equal 'Service information updated.', flash[:notice]
+      assert_equal 'Product information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
     end
 
-    test 'update settings with apiap' do
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: true)
-
+    test 'update settings' do
       put admin_service_path(service), params: update_params
       assert_equal 'Product information updated.', flash[:notice]
     end
 
-    test 'update api_backend with apiap' do
+    test 'update api_backend' do
       proxy = service.proxy
       proxy.api_backend = 'http://old.backend'
       proxy.save!
 
       Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: true)
 
       put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
       assert_equal 'http://old.backend:80', proxy.reload.api_backend
-    end
-
-    test 'update api_backend without' do
-      proxy = service.proxy
-      proxy.api_backend = 'http://old.backend'
-      proxy.save!
-
-      Account.any_instance.stubs(:provider_can_use?).returns(true)
-      rolling_update(:api_as_product, enabled: false)
-
-      put admin_service_path(service), params: update_params.deep_merge(service: { proxy_attributes: { api_backend: 'https://new.backend' } })
-      assert_equal 'Service information updated.', flash[:notice]
-      assert_equal 'https://new.backend:443', proxy.reload.api_backend
     end
 
     private
@@ -240,9 +209,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       @provider.settings.allow_multiple_services!
     end
 
-    test 'should not create the default Backend if API as Product is enabled' do
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(true).at_least_once
-
+    test 'should not create the default Backend' do
       assert_no_change of: -> { BackendApi.count } do
         params = {
           service: {
@@ -255,23 +222,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_equal 0, Service.last.backend_api_configs.count
-    end
-
-    test 'should create the default Backend if API as Product is disabled' do
-      Account.any_instance.stubs(:provider_can_use?).with(:api_as_product).returns(false).at_least_once
-
-      assert_change of: -> { BackendApi.count }, by: 1 do
-        params = {
-          service: {
-            system_name: 'my_new_product',
-            name: 'My new Product',
-            description: 'This will act as product'
-          }
-        }
-        post admin_services_path, params: params
-      end
-
-      assert_equal 1, Service.last.backend_api_configs.count
     end
   end
 

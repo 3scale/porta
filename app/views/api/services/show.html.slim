@@ -119,15 +119,16 @@ section class="service-widget"
           - if service.deployment_option.present?
             - deployment_option_phrased = t(service.proxy.deployment_option, scope: "deployment_options.phrased")
           - unless service.has_traffic?
-            li class=("item integration #{'is-hidden' if apiap?}")
+            / TODO: THREESCALE-3759 verify if this is always hidden, and remove if required
+            li class=("item integration is-hidden")
               - case service.proxy.deployment_option.presence
               - when 'hosted'
-                - unless apiap?
+                / TODO: THREESCALE-3759 remove associated code
                   p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, hit <strong>Deploy</strong> in the production box and you have completed a basic integration.
                   = important_icon_link "Configure #{deployment_option_phrased}",
                     'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
               - when 'self_managed'
-                - unless apiap?
+                / TODO: THREESCALE-3759 remove associated code
                   p On the #{link_to( 'Integration page', edit_admin_service_integration_path(service, :anchor => 'staging') )}, add your <em>API base URL</em> to the <em>Private Base URL</em> field in the staging box and hit <strong>Update & Test</strong>. Once the staging box is green, proceed to download the NGINX config files for your On-premises NGINX reverse proxy server. Once you've added these config files to your Nginx server you have completed a basic integration.
                   = important_icon_link "Configure #{deployment_option_phrased}",
                     'hdd-o', edit_admin_service_integration_path(service, :anchor => 'staging'), :class => "outline-button next"
@@ -164,13 +165,12 @@ section class="service-widget"
           - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
             li.item
               = setting
-          - if provider_can_use?(:api_as_product)
-            li.item
-              strong> Backends
-              ' used in this product:
-              ul
-                - service.backend_apis.each do |backend_api|
-                  li = link_to backend_api.name, provider_admin_backend_api_path(backend_api)
+          li.item
+            strong> Backends
+            ' used in this product:
+            ul
+              - service.backend_apis.each do |backend_api|
+                li = link_to backend_api.name, provider_admin_backend_api_path(backend_api)
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
