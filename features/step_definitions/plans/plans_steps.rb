@@ -86,7 +86,7 @@ Given "the buyer changed to plan {string}" do |plan_name|
   @buyer.bought_cinstance.change_plan!(plan)
 end
 
-Given "the buyer's {plan_type} plan contract is {}" do |plan_type, state|
+Given "the buyer's {plan_type} plan contract is {word}" do |plan_type, state|
   plan = instance_variable_get("@paid_#{plan_type}_plan")
   contract = @buyer.contracts.where(plan_id: plan.id).first!
   contract.update!(state: state)

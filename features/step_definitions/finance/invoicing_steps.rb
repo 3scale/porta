@@ -54,7 +54,6 @@ end
 Then "the buyer should have {int} invoice(s)" do |number|
   step 'the buyer logs in to the provider'
   step 'I navigate to invoices issued for me'
-
   step "I should see #{number} invoice"
 end
 

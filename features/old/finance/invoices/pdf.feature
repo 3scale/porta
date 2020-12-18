@@ -29,7 +29,7 @@ Feature: Invoice PDFs
     And I log in as "bob"
     And provider "foo.3scale.localhost" has "finance" switch visible
 
-   When I go to my invoices
+   When I go to my invoices page
    Then I should see secure PDF link for invoice 2011-08-00000001
    When I follow "Show 2011-08-00000001"
    Then I should see secure PDF link for the shown buyer invoice

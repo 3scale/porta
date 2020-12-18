@@ -17,7 +17,7 @@ When /^I navigate to [Ii]?nvoices issued (?:FOR|for) me$/ do
   if current_account.provider?
     step %(I go to my invoices from 3scale page)
   else
-    step %(I go to my invoices)
+    step %(I go to my invoices page)
   end
 end
 

@@ -56,6 +56,14 @@ end
 
 # Given /^(provider "[^\"]*") has ?(prepaid|postpaid)? billing (enabled|disabled)$/ do |provider,mode,status|
 Given "{provider} has {billing} {enabled}" do |provider, mode, enabled|
+  set_provider_billing(provider, mode, enabled)
+end
+
+Given "the provider has {billing} {enabled}" do |mode, enabled|
+  set_provider_billing(@provider, mode, enabled)
+end
+
+def set_provider_billing(provider, mode, enabled)
   if enabled
     provider.settings.allow_finance! unless provider.settings.finance.allowed?
     provider.billing_strategy.update!(currency: 'EUR')
