@@ -3,7 +3,7 @@ Feature: Buyer signup
   I want to signup as a buyer
   Background:
     Given a provider exists
-    And master has a application plan "enterprise"
+    And master has an application plan "enterprise"
     And the provider account allows signups
 
   Scenario: Signup creates account created event
