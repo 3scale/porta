@@ -42,7 +42,7 @@ const ServiceDiscoveryForm = ({formActionPath, apiap, setLoadingProjects}: Props
     id: 'service_source',
     formActionPath,
     hasHiddenServiceDiscoveryInput: true,
-    submitText: apiap ? 'Create Product' : 'Create Service'
+    submitText: 'Create Product'
   }
 
   return (
