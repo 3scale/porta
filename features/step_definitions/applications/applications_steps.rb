@@ -23,7 +23,7 @@ Given "buyer {string} has application {string}" do |buyer_name, application_name
   step %(buyer "#{buyer_name}" has application "#{application_name}" with description "Blah blah")
 end
 
-Given "{buyer} has applicatoin {string} with ID {string}" do |buyer, name, id|
+Given "{buyer} has application {string} with ID {string}" do |buyer, name, id|
   plan = buyer.provider_account.first_service!.application_plans.default
   FactoryBot.create(:cinstance, application_id: id,
                                 user_account: buyer,
