@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/3scale/active_merchant-adyen12.git
-  revision: 22bb52dc286213825bf87dacc34808b06ab9fdd4
-  specs:
-    active_merchant-adyen12 (0.1.0)
-      activemerchant (~> 1.77.0)
-
-GIT
   remote: https://github.com/3scale/ci_reporter_shell.git
   revision: 30b30d655512891f56463e5f1fa125ea1f2df886
   specs:
@@ -829,7 +822,6 @@ DEPENDENCIES
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
-  active_merchant-adyen12!
   activemerchant (~> 1.77.0)
   activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 1.7.0)

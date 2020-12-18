@@ -17,7 +17,6 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.uncountable << 'stripe'
   inflect.uncountable << 'sudo'
   inflect.uncountable << 'github'
-  inflect.uncountable << 'adyen12'
   # ThinkingSphinx fails to preload CMS models because it thinks they are Cms
   # see ThinkingSphinx::Context#load_models for mode details, it uses 'cms/model'.camelize
   inflect.acronym 'CMS' # , enable this and rename every Cms to CMS

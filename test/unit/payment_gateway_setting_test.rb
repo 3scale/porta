@@ -47,16 +47,6 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     assert @gateway_setting.configured?
   end
 
-  test '#configured? failed if any gateway_settings missing for adyen12' do
-    @gateway_setting.gateway_type = :adyen12
-    @gateway_setting.gateway_settings = {login: 'Login', password: '', public_key: "Client Encryption Public Key",
-        merchantAccount: 'Merchant ID', encryption_js_url: "Library location"}
-    refute @gateway_setting.configured?
-
-    @gateway_setting.gateway_settings[:password] = 'password'
-    assert @gateway_setting.configured?
-  end
-
   test 'cannot create with a deprecated payment gateway' do
     deprecated_gateway = PaymentGateway.new(:bogus, deprecated: true, field_a: 'A', field_b: 'B')
     PaymentGateway.stubs(all: [deprecated_gateway])
