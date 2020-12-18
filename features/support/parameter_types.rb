@@ -475,8 +475,11 @@ OAUTH_PROVIDER_OPTIONS = {
 
 ParameterType(
   name: 'authentication_provider',
-  regexp: /^authentication provider "([^"]+)"$/,
+  regexp: /authentication provider "([^"]+)"/,
   transformer: ->(name) do
+    # FIXME: why @provider is nil? Closure?
+    @provider = Provider.all.last
+
     authentication_provider = @provider.authentication_providers.find_by(name: name)
     return authentication_provider if authentication_provider
 
