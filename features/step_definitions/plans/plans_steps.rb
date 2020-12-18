@@ -41,7 +41,12 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
     account: 1
   }
   plan_name = (plan_name || default_plan_names[plan_type.to_sym])
-  plan = create_plan plan_type.to_sym, name: plan_name, issuer: @service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
+  cost = default_plan_costs[plan_type.to_sym] if cost <= 0
+  plan = create_plan plan_type.to_sym, name: plan_name,
+                                       issuer: @service,
+                                       cost: cost,
+                                       published: true,
+                                       default: default.present?
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
 
@@ -112,7 +117,7 @@ end
 Given "I want to change the plan of my application to paid" do
   steps %(
     Given the buyer logs in to the provider
-    And I go to my application page
+    And I go to my application
     And I follow "Edit #{@application.name}"
     And I follow "Review/Change"
     And I follow "#{@paid_application_plan.name}"
