@@ -9,15 +9,14 @@ module Tasks
 
       File.delete(file_path) if File.exist?(file_path)
 
-      providers = FactoryBot.create_list(:simple_provider, 10)
+      providers = FactoryBot.create_list(:simple_provider, 8)
 
       # Testing with stripe but it could be any other payment gateway setting
 
       _providers_without_payment,
       providers_with_stripe_configured,
       providers_with_braintree_configured,
-      providers_with_stripe_unconfigured,
-      deleted_provider_with_stripe_configured = providers.shuffle.each_slice(2).to_a
+      providers_with_stripe_unconfigured = providers.shuffle.each_slice(2).to_a
 
       providers_with_stripe_configured.each do |provider|
         provider.payment_gateway_type = :stripe
@@ -34,13 +33,6 @@ module Tasks
       providers_with_stripe_unconfigured.each do |provider|
         provider.payment_gateway_type = :stripe
         provider.save!
-      end
-
-      deleted_provider_with_stripe_configured.each do |provider|
-        provider.payment_gateway_type = :stripe
-        provider.payment_gateway_options = {login: "sk_test_example#{provider.id}", publishable_key: "pk_test_example#{provider.id}"}
-        provider.save!
-        provider.schedule_for_deletion!
       end
 
       execute_rake_task 'payments.rake', 'payments:provider_data_payment_gateway_configured', 'stripe', file_path
