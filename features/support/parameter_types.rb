@@ -88,7 +88,7 @@ ParameterType(
 
 ParameterType(
   name: 'link_to_page',
-  regexp: /(the.+page(?:.+)*)|(the provider dashboard)/,
+  regexp: /((?:the|my).+page(?:.+)*)|(the provider dashboard)/,
   # regexp: /(the.+page(?: for ".+")*(?: (?:of|for) service ".+")*(?: of provider ".+")*)|(the provider dashboard)/,
   transformer: ->(page_name) {
     # FIXME: it should transform the page_name into a path, but @provider is nil
@@ -476,23 +476,23 @@ OAUTH_PROVIDER_OPTIONS = {
 ParameterType(
   name: 'authentication_provider',
   regexp: /^authentication provider "([^"]+)"$/,
-  transformer: ->(authentication_provider_name) do
-    authentication_provider = @provider.authentication_providers.find_by(name: authentication_provider_name)
+  transformer: ->(name) do
+    authentication_provider = @provider.authentication_providers.find_by(name: name)
     return authentication_provider if authentication_provider
 
-    ap_underscored_name = authentication_provider_name.underscore
+    ap_underscored_name = name.underscore
     options = OAUTH_PROVIDER_OPTIONS[ap_underscored_name.to_sym]
                 .merge({ system_name: "#{ap_underscored_name}_hex",
                          client_id: 'CLIENT_ID',
                          client_secret: 'CLIENT_SECRET',
                          kind: ap_underscored_name,
-                         name: authentication_provider_name,
+                         name: name,
                          account_id: @provider.id,
                          identifier_key: 'id',
                          username_key: 'login',
                          trust_email: false })
 
-    authentication_provider_class = "AuthenticationProvider::#{authentication_provider_name}".constantize
+    authentication_provider_class = "AuthenticationProvider::#{name}".constantize
     authentication_provider_class.create(options)
   end
 )

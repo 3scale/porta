@@ -178,3 +178,7 @@ Given "I'm on that application page" do
   assert @application, '@application is missing'
   click_on @application.name
 end
+
+When "I go to my application" do
+  step %(I go to the "#{@application.name}" application page)
+end
