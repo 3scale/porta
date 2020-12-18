@@ -20,4 +20,19 @@ namespace :payments do
       end
     end
   end
+
+  desc 'remove all traces of "adyen" from the DB'
+  task(:remove_adyen_from_db => [:environment]) do
+    PaymentGatewaySetting.where(gateway_type: :adyen12).joins(:account).find_each do |payment_setting|
+      payment_setting.account.buyer_accounts.joins(:payment_detail).find_each do |buyer|
+        buyer.payment_detail.destroy!
+      end
+      payment_setting.destroy!
+    end
+
+    adyen_form_regex = /{%\s?adyen12_form[^(%})]*%}/
+    CMS::Template.where.not(provider_id: Account.scheduled_for_deletion.select(:id)).where('published LIKE \'%adyen12_form%\'').find_each do |cms_template|
+      cms_template.update_column(:published, cms_template.published.gsub(adyen_form_regex, ''))
+    end
+  end
 end
