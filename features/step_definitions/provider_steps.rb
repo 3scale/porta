@@ -140,11 +140,11 @@ Given "stub integration errors dashboard" do
   end
 end
 
-Given "a provider is logged in" do
+Given %r{/^a provider( is logged in)?$/} do |login|
   step %(a provider "foo.3scale.localhost")
   step %(current domain is the admin domain of provider "foo.3scale.localhost")
   step %(stub integration errors dashboard)
-  step %(I log in as provider "foo.3scale.localhost")
+  step %(I log in as provider "foo.3scale.localhost") if login
 
   @provider = Account.find_by!(domain: 'foo.3scale.localhost')
 end

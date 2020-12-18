@@ -572,7 +572,7 @@ module PathsHelper
       when /(the )?finance settings( page)?/
         admin_finance_settings_path
 
-      when 'my invoices'
+      when 'my invoices page'
         admin_account_invoices_path
 
       when /^the invoices of (account ".+?") page$/
