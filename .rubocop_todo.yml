@@ -426,7 +426,6 @@ Style/NumericLiteralPrefix:
     - 'app/lib/logic/rolling_updates.rb'
     - 'lib/payment_gateways/ogone_crypt.rb'
     - 'lib/time_hacks.rb'
-    - 'test/functional/developer_portal/admin/account/adyen12_controller_test.rb'
     - 'test/integration/payment_gateways/ogone_test.rb'
     - 'test/integration/stats/services_test.rb'
     - 'test/unit/finance/variable_cost_calculation_test.rb'

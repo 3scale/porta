@@ -27,7 +27,6 @@ Rails.application.config.to_prepare do
     Liquid::Tags::OgoneForm,
     Liquid::Tags::BraintreeCustomerForm,
     Liquid::Tags::StripeForm,
-    Liquid::Tags::Adyen12Form,
     Liquid::Tags::Content,
     Liquid::Tags::Container,
     Liquid::Tags::CreditCardMissing,
