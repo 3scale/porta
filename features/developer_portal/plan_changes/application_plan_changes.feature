@@ -32,7 +32,7 @@ Feature: Application Plan Change
     Then I should see "A request to change your application plan has been sent."
 
     Given the buyer has a valid credit card with lots of money
-    And I go to my application page
+    And I go to my application
     And I want to change the plan of my application to paid
 
     And I press "Change Plan"
