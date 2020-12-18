@@ -11,7 +11,6 @@ namespace :payments do
         next unless payment_setting.configured?
 
         provider = payment_setting.account
-        next if provider.scheduled_for_deletion?
 
         provider_values_line = provider_data_attributes.each_with_object(String.new) do |attr_name, values_line|
           values_line << ";#{provider.public_send(attr_name)}"
