@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: refactor this module
 module PlanHelpers
 
   def create_plan(type, options)
