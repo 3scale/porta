@@ -7,17 +7,15 @@ end
 
 When "the file is deleted" do
   find('a[href]', text: 'Download')[:href]
-  step 'I follow "Delete" and I confirm dialog box'
   steps %(
+    And I follow "Delete" and I confirm dialog box
     Then I should see "deleted"
     Then there is not an image preview of that file
   )
 end
 
 Then "the file should be the same as uploaded" do
-  steps %(
-    And the page should be the file "test/fixtures/hypnotoad.jpg"
-  )
+  step %(the page should be the file "test/fixtures/hypnotoad.jpg")
 end
 
 When "I access the file on developer portal" do
@@ -35,14 +33,12 @@ When "I update the file with different image" do
   steps %(
     When I attach the file "test/fixtures/tinnytim.jpg" to "cms_file_attachment"
     And I press "Save"
-   )
+  )
 end
 
 Then "the file should be updated" do
   visit image_source
-  steps %(
-    And the page should be the file "test/fixtures/tinnytim.jpg"
-  )
+  step %(the page should be the file "test/fixtures/tinnytim.jpg")
 end
 
 And "the original file should be gone" do
@@ -67,7 +63,7 @@ Then "there {is} an image preview of that file" do |there_is|
     page.should have_selector(image_preview)
 
     visit image_source
-    steps %(Then the file should be the same as uploaded)
+    step 'the file should be the same as uploaded'
   end
 end
 

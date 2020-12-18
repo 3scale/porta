@@ -238,9 +238,9 @@ end
 
 When "a buyer signs up" do
   steps %(
-    the current domain is "foo.3scale.localhost"
-    I go to the sign up page
-    I fill in the signup fields as "supertramp"
+    And the current domain is "foo.3scale.localhost"
+    And I go to the sign up page
+    And I fill in the signup fields as "supertramp"
   )
 end
 
