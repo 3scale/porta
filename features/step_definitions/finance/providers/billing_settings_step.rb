@@ -36,12 +36,7 @@ Given "{provider} {is} charging" do |provider, charging_enabled|
 end
 
 Given "the provider {is} charging" do |is|
-  pepe
   step %(provider "#{@provider.domain}" #{is ? 'is' : 'is not'} charging)
-end
-
-def pepe
-  binding.pry
 end
 
 Given "{provider} is fake charging" do |provider|
