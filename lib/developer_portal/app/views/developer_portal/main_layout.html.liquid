@@ -13,18 +13,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% csrf %}
-    {{ '/css/bootstrap.css' | stylesheet_link_tag }}
+    {% cdn_asset /bootstrap/3.0.0/bootstrap.css %}
     {% cdn_asset /font-awesome/4.3.0/css/font-awesome.css %}
 
     {% cdn_asset /jquery/3.5.0/jquery.min.js %}
-
-    {{ '/javascripts/bootstrap.min.js' | javascript_include_tag }}
-    {{ '/javascripts/vendor/colorbox/jquery.colorbox-patched.js' | javascript_include_tag }}
-    {{ '/javascripts/3scale_v2.js' | javascript_include_tag }}
-    {{ '/javascripts/excanvas.compiled.js' | javascript_include_tag }}
+    {% cdn_asset /bootstrap/3.0.0/bootstrap.min.js %}
+    {% cdn_asset /jquery/jquery.colorbox-patched.js %}
+    {% cdn_asset /3scale_v2.js %}
+    {% cdn_asset /excanvas.compiled.js %}
 
     {{ content_of.stylesheets | html_safe }}
-    {{ '/css/default.css' | stylesheet_link_tag }}
+    {% cdn_asset /default.css %}
 
     {{ content_of.javascripts | html_safe }}
   </head>
