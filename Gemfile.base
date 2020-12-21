@@ -120,7 +120,7 @@ gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
 gem 'thinking-sphinx', '~> 3.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'diff-lcs', '~> 1.2'
-gem 'acts-as-taggable-on', '~> 4.0'
+gem 'acts-as-taggable-on', '~> 6.5'
 gem 'whenever', '~> 0.9.7', require: false
 gem 'will_paginate', '~> 3.1.6'
 gem 'browser'
