@@ -19,6 +19,12 @@ class Liquid::Tags::CdnAssetTest < ActiveSupport::TestCase
     {
       '/swagger-ui/2.2.10/swagger-ui.js' => '/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.js',
       '/swagger-ui/2.2.10/swagger-ui.min.js' => '/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.min.js',
+      '/bootstrap/3.0.0/bootstrap.css' => '/_cdn_assets_/bootstrap/3.0.0/bootstrap.css',
+      '/bootstrap/3.0.0/bootstrap.min.js' => '/_cdn_assets_/bootstrap/3.0.0/bootstrap.min.js',
+      '/jquery/jquery.colorbox-patched.js' => '/_cdn_assets_/jquery/jquery.colorbox-patched.js',
+      '/3scale_v2.js' => '/_cdn_assets_/3scale_v2.js',
+      '/excanvas.compiled.js' => '/_cdn_assets_/excanvas.compiled.js',
+      '/default.css' => '/_cdn_assets_/default.css'
     }.each do |params, expected|
       assert_equal expected, Liquid::Tags::CdnAsset.parse('cdn_asset', params, [], {}).file
     end
