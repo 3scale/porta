@@ -19,12 +19,11 @@ module PaymentGateways
       payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
       card = payment_method.card
 
-      account.credit_card_expires_on_month = card.exp_month
-      account.credit_card_expires_on_year = card.exp_year
-      account.credit_card_partial_number = card.last4
-      account.credit_card_auth_code = payment_method.customer
-      account.payment_method_id = payment_method_id
-      account.save
+      payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
+      payment_detail.credit_card_partial_number = card.last4
+      payment_detail.credit_card_auth_code      = payment_method.customer
+      payment_detail.payment_method_id          = payment_method_id
+      payment_detail.save
     end
 
     def create_stripe_customer
@@ -44,6 +43,8 @@ module PaymentGateways
     end
 
     private
+
+    delegate :payment_detail, to: :account
 
     def api_key
       payment_gateway_options.fetch(:login)
