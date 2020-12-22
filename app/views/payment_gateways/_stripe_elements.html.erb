@@ -22,12 +22,6 @@
         <!-- a Stripe Element will be inserted here. -->
       </div>
 
-      <!-- Display mandate acceptance text. -->
-      <div id="mandate-acceptance">
-        By completing the checkout process to store your card details you consent to our initiation of payments on your behalf.
-        The frequency of these payments will be in accordance with the subscribed plan(s) and the amounts billed will directly reflect any fixed and/or variable costs defined in said plan(s) and subsequently invoiced.
-      </div>
-
       <!-- Used to display form errors -->
       <div id="card-errors" role="alert"></div>
 
@@ -130,18 +124,6 @@
           country: "<%= j billing_address.country %>"
         }
 
-        var mandateData = {
-          customer_acceptance: {
-            type: 'online',
-            online: {
-              // hardcoded to simplify testing :P
-              ip_address: "90.167.87.82",
-              user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-              // infer_from_client: true
-            }
-          }
-        }
-
         stripe.confirmCardSetup(intentSecret,
           {
             payment_method: {
@@ -149,9 +131,8 @@
               billing_details: {
                 address: billingAddressDetails
               }
-            },
-            mandate_data: mandateData,
-          }, {handleActions: true}
+            }
+          }
         ).then(handleIntentResult);
     });
 
