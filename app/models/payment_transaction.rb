@@ -158,7 +158,7 @@ class PaymentTransaction < ApplicationRecord
 
   def purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
     options = gateway_options.merge(customer: credit_card_auth_code)
-    gateway.purchase(amount.cents, account.payment_method_id.presence, options)
+    gateway.purchase(amount.cents, account.payment_method_id.presence, options.merge(off_session: true))
   end
 
 end
