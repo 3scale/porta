@@ -22,10 +22,19 @@
         <!-- a Stripe Element will be inserted here. -->
       </div>
 
+      <!-- Display mandate acceptance text. -->
+      <div id="mandate-acceptance">
+        By completing the checkout process to store your card details you consent to our initiation of payments on your behalf.
+        The frequency of these payments will be in accordance with the subscribed plan(s) and the amounts billed will directly reflect any fixed and/or variable costs defined in said plan(s) and subsequently invoiced.
+      </div>
+
       <!-- Used to display form errors -->
       <div id="card-errors" role="alert"></div>
 
       <%= render partial: 'payment_gateways/stripe_billing_address', object: current_account.billing_address %>
+
+      <%= form.hidden_field :setup_intent_id %>
+      <%= form.hidden_field :payment_method_id %>
     </fieldset>
 
     <fieldset>
@@ -90,29 +99,20 @@
 
     var form = document.getElementById('stripe-form');
 
+    // Just to easily copy&paste : 4000 0000 0000 3220
+    console.log("4000000000003220");
+
     function handleIntentResult(result) {
       if (result.setupIntent && result.setupIntent.status === "succeeded") {
-        console.log(result.setupIntent)
+        console.log("succeeded ...");
+        console.log(JSON.stringify(result.setupIntent));
 
+        document.getElementById('stripe_setup_intent_id').value = result.setupIntent.id;
+        document.getElementById('stripe_payment_method_id').value = result.setupIntent.payment_method;
 
-
-
-        var setupIntentId = document.createElement('input');
-        setupIntentId.setAttribute('type', 'hidden');
-        setupIntentId.setAttribute('name', 'stripe[setup_intent_id]');
-        setupIntentId.setAttribute('value', result.setupIntent.id);
-        form.appendChild(setupIntentId);
-
-        var paymentMethodId = document.createElement('input');
-        setupIntentId.setAttribute('type', 'hidden');
-        setupIntentId.setAttribute('name', 'stripe[payment_method_id]');
-        setupIntentId.setAttribute('value', result.setupIntent.payment_method);
-        form.appendChild(paymentMethodId);
-
-        // Submit the form
         form.submit();
       } else {
-        console.log(result);
+        console.log(JSON.stringify(result));
         // YOLO
       }
     }
@@ -130,15 +130,29 @@
           country: "<%= j billing_address.country %>"
         }
 
-        stripe.confirmCardSetup(intentSecret,
-        {
-          payment_method: {
-            card: card,
-            billing_details: {
-              address: billingAddressDetails
+        var mandateData = {
+          customer_acceptance: {
+            type: 'online',
+            online: {
+              // hardcoded to simplify testing :P
+              ip_address: "90.167.87.82",
+              user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+              // infer_from_client: true
             }
           }
-        }).then(handleIntentResult);
+        }
+
+        stripe.confirmCardSetup(intentSecret,
+          {
+            payment_method: {
+              card: card,
+              billing_details: {
+                address: billingAddressDetails
+              }
+            },
+            mandate_data: mandateData,
+          }, {handleActions: true}
+        ).then(handleIntentResult);
     });
 
 </script>
