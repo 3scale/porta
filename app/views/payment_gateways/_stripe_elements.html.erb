@@ -93,10 +93,9 @@
 
     var form = document.getElementById('stripe-form');
 
-    // Just to easily copy&paste : 4000 0000 0000 3220
-    console.log("4000000000003220");
-
     function handleIntentResult(result) {
+      var errorElement = document.getElementById('card-errors');
+
       if (result.setupIntent && result.setupIntent.status === "succeeded") {
         console.log("succeeded ...");
         console.log(JSON.stringify(result.setupIntent));
@@ -105,9 +104,9 @@
         document.getElementById('stripe_payment_method_id').value = result.setupIntent.payment_method;
 
         form.submit();
-      } else {
-        console.log(JSON.stringify(result));
-        // YOLO
+      } else if (result.error) {
+        errorElement.textContent = result.error.message;
+        errorElement.classList.add('visible');
       }
     }
 
