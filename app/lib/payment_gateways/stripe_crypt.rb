@@ -15,9 +15,13 @@ module PaymentGateways
     end
 
     def update!(params)
+      pp params
+
+      setup_intent_id = params.require(:stripe).require(:setup_intent_id)
+      pp Stripe::SetupIntent.retrieve(setup_intent_id, api_key)
+
       payment_method_id = params.require(:stripe).require(:payment_method_id)
-      payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
-      card = payment_method.card
+      pp payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
 
       payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
       payment_detail.credit_card_partial_number = card.last4
