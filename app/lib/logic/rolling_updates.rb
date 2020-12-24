@@ -300,8 +300,8 @@ module Logic
       end
 
       class StripeElements < Base
-        def missing_config
-          false
+        def enabled?
+          true
         end
       end
 
