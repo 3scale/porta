@@ -7,8 +7,8 @@ class StripeFormTest < ActiveSupport::TestCase
     @stripe = Liquid::Tags::StripeForm.parse 'stripe_form', '', [], {}
   end
 
-  def test_renders_with_stripe_elements
-    @stripe.expects(:render_erb).with(@context, 'payment_gateways/stripe_elements', text: 'Edit Credit Card Details')
+  def test_renders_with_stripe
+    @stripe.expects(:render_erb).with(@context, 'payment_gateways/stripe', text: 'Edit Credit Card Details')
     @stripe.render(@context)
   end
 end
