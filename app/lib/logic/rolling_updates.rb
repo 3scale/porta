@@ -299,12 +299,6 @@ module Logic
         end
       end
 
-      class StripeElements < Base
-        def enabled?
-          true
-        end
-      end
-
       class Unknown < Base
         def missing_config
           false
