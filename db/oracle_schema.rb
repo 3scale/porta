@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20201222214415) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -902,6 +902,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "created_at",                 precision: 6,  null: false
     t.datetime "updated_at",                 precision: 6,  null: false
     t.integer  "tenant_id",                  precision: 38
+    t.string   "payment_method_id"
   end
 
   add_index "payment_details", ["account_id", "buyer_reference"], name: "index_payment_details_on_account_id_and_buyer_reference"
