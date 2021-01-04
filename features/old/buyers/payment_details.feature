@@ -11,12 +11,14 @@ Feature: Payment Details
       And provider "foo.3scale.localhost" has "useraccountarea" enabled
       And a buyer "randomdude" signed up to provider "foo.3scale.localhost"
 
+  @stripe
   Scenario: Navigate to payment details page
     Given provider "foo.3scale.localhost" manages payments with "stripe"
     When I log in as "randomdude" on foo.3scale.localhost
      And I go to the stripe credit card details page
     Then I should be on the stripe credit card details page
 
+  @stripe
   Scenario: Redirect to correct payment_gateway url
     Given provider "foo.3scale.localhost" manages payments with "stripe"
     When I log in as "randomdude" on foo.3scale.localhost

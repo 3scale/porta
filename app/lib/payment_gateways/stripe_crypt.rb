@@ -14,35 +14,43 @@ module PaymentGateways
       @errors = ActiveModel::Errors.new(self)
     end
 
-    def update!(params)
-      stripe_params = params.require(:stripe)
-      customer = create_stripe_customer(stripe_params)
-      update_account(customer, stripe_params)
-    rescue Stripe::CardError => error
-      report_error(error.message)
+    # TODO: get rid of the attrs in Account and pass them to PaymentDetails
+    # TODO: Figure out if we still need the Stripe gem or if it can/should be done by ActiveMerchant
+    def update!(payment_method_id)
+      payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
+      card = payment_method.card
+
+      payment_detail.credit_card_expires_on     = Date.new(card.exp_year, card.exp_month)
+      payment_detail.credit_card_partial_number = card.last4
+      payment_detail.credit_card_auth_code      = payment_method.customer
+      payment_detail.payment_method_id          = payment_method_id
+      payment_detail.save
     end
 
-    def create_stripe_customer(stripe_params)
-      token   = stripe_params.require(:token)
-      api_key = payment_gateway_options.fetch(:login)
-      Stripe::Customer.create({ card: token,
-                                description: account.org_name,
-                                email: user.email,
-                                metadata: {
-                                  '3scale_account_reference' => buyer_reference
-                                }
-                              }, api_key)
-    end
-
-    def update_account(customer, stripe_params)
-      account.credit_card_expires_on_month = stripe_params.require(:expires_on_month)
-      account.credit_card_expires_on_year = stripe_params.require(:expires_on_year)
-      account.credit_card_partial_number = stripe_params.require(:partial_number)[-4..-1]
-      account.credit_card_auth_code = customer.id
-      account.save
+    # TODO: for now, it always recreates the customer
+    def create_stripe_setup_intent
+      Stripe::SetupIntent.create({
+        payment_method_types: ['card'],
+        usage: 'off_session',
+        customer: customer.id
+      }, api_key)
     end
 
     private
+
+    delegate :payment_detail, to: :account
+
+    def customer
+      Stripe::Customer.create({
+        description: account.org_name,
+        email: user.email,
+        metadata: {  '3scale_account_reference' => buyer_reference }
+      }, api_key)
+    end
+
+    def api_key
+      payment_gateway_options.fetch(:login)
+    end
 
     def report_error(message)
       @errors.add(:base, message)
