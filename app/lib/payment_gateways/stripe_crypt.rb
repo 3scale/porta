@@ -14,8 +14,6 @@ module PaymentGateways
       @errors = ActiveModel::Errors.new(self)
     end
 
-    # TODO: get rid of the attrs in Account and pass them to PaymentDetails
-    # TODO: Figure out if we still need the Stripe gem or if it can/should be done by ActiveMerchant
     def update!(payment_method_id)
       payment_method = Stripe::PaymentMethod.retrieve(payment_method_id, api_key)
       card = payment_method.card
@@ -27,7 +25,6 @@ module PaymentGateways
       payment_detail.save
     end
 
-    # TODO: for now, it always recreates the customer
     def create_stripe_setup_intent
       Stripe::SetupIntent.create({
         payment_method_types: ['card'],

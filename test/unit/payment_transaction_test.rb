@@ -55,6 +55,54 @@ class PaymentTransactionTest < ActiveSupport::TestCase
     payment_transaction.send(:purchase_with_authorize_net, '1234', gateway)
   end
 
+  class PurchaseThroughStripeGatewayTest < ActiveSupport::TestCase
+    def setup
+      @order_id = 3
+      @payment_transaction = PaymentTransaction.new(amount: 100, action: :purchase, currency: 'EUR')
+      @payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
+      @credit_card_auth_code = 'cus_IhGaGqpp6zGwyd'
+    end
+
+    attr_reader :order_id, :payment_transaction, :payment_gateway_options, :credit_card_auth_code
+
+    test 'purchase through Stripe with SCA (without extra authorization step required by the bank)' do
+      payment_method_id = 'pm_1I5s3n2eZvKYlo2CiO193T69'
+
+      stripe_payment_intents_gateway = ActiveMerchant::Billing::StripePaymentIntentsGateway.new(payment_gateway_options)
+
+      expected_options = {off_session: true, execute_threed: true, order_id: order_id, currency: payment_transaction.currency, customer: credit_card_auth_code}
+      response_params = {'id' => 'pi_1I1EAnIxGJbGz9puiiI6e10D', 'paid' => true, 'payment_method' => payment_method_id}
+      active_merchant_response = ActiveMerchant::Billing::Response.new(true, 'Transaction approved', response_params, test: false, authorization: response_params['id'], error_code: nil)
+      stripe_payment_intents_gateway.expects(:purchase).with(payment_transaction.amount.cents, payment_method_id, expected_options).returns(active_merchant_response)
+
+      assert payment_transaction.process!(credit_card_auth_code, stripe_payment_intents_gateway, {order_id: order_id, payment_method_id: payment_method_id})
+
+      assert_payment_transaction_attributes(payment_transaction, active_merchant_response)
+    end
+
+    test 'purchase through Stripe without SCA' do
+      stripe_gateway = ActiveMerchant::Billing::StripeGateway.new(payment_gateway_options)
+
+      expected_options = {order_id: order_id, currency: payment_transaction.currency, customer: credit_card_auth_code}
+      response_params = {'id' => 'ch_1HxxDgIxGJbGz9puarvnHz6X', 'paid' => true, 'payment_method' => 'card_1HxtiHIxGJbGz9pusM7rTEYS'}
+      active_merchant_response = ActiveMerchant::Billing::Response.new(true, 'Transaction approved', response_params, test: false, authorization: response_params['id'], error_code: nil)
+      stripe_gateway.expects(:purchase).with(payment_transaction.amount.cents, nil, expected_options).returns(active_merchant_response)
+
+      assert payment_transaction.process!(credit_card_auth_code, stripe_gateway, {order_id: order_id})
+
+      assert_payment_transaction_attributes(payment_transaction, active_merchant_response)
+    end
+
+    private
+
+    def assert_payment_transaction_attributes(payment_transaction, active_merchant_response)
+      assert_equal active_merchant_response.success?, payment_transaction.success
+      assert_equal active_merchant_response.authorization, payment_transaction.reference
+      assert_equal active_merchant_response.message, payment_transaction.message
+      assert_equal active_merchant_response.params, payment_transaction.params
+      assert_equal active_merchant_response.test, payment_transaction.test
+    end
+  end
 
   context "PaymentTransaction" do
     setup do
