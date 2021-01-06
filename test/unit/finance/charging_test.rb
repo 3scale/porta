@@ -62,7 +62,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
         @invoice.paid_at = 1.week.ago
         @invoice.save!
 
-        @provider_account.payment_gateway.expects(:purchase).never
+        @provider_account.payment_gateway.class.any_instance.expects(:purchase).never
         @invoice.charge!
       end
 
@@ -77,7 +77,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
 
         @buyer_account.save!
 
-        @provider_account.payment_gateway.expects(:purchase).never
+        @provider_account.payment_gateway.class.any_instance.expects(:purchase).never
         @invoice.charge!
 
         refute @invoice.paid?
@@ -92,7 +92,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
 
 
         Timecop.travel(3.years.from_now) do
-          @provider_account.payment_gateway.expects(:purchase)
+          @provider_account.payment_gateway.class.any_instance.expects(:purchase)
           .with(10000, @buyer_account.credit_card_auth_code, has_key(:order_id))
           .returns(stub('response', :success? => false, :authorization => '1234',
                        :message => 'whatever', :params => {'foo' => 'bar'}, :test => false))
@@ -111,7 +111,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
 
           @buyer_account.save!
 
-          @provider_account.payment_gateway.expects(:purchase)
+          @provider_account.payment_gateway.class.any_instance.expects(:purchase)
             .with(10000, @buyer_account.credit_card_auth_code, has_key(:order_id))
             .returns(stub('response', :success? => false, :authorization => '1234',
                          :message => 'whatever', :params => {'foo' => 'bar'}, :test => false))
@@ -160,7 +160,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
 
           @buyer_account.save!
 
-          @provider_account.payment_gateway.expects(:purchase)
+          @provider_account.payment_gateway.class.any_instance.expects(:purchase)
             .raises(ActiveMerchant::ActiveMerchantError, 'boo')
         end
 
@@ -194,7 +194,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
 
           @buyer_account.save!
 
-          @provider_account.payment_gateway.expects(:purchase)
+          @provider_account.payment_gateway.class.any_instance.expects(:purchase)
             .with(10000, @buyer_account.credit_card_auth_code, has_key(:order_id))
             .returns(stub('response', :success? => true, :authorization => '1234',
                          :message => 'whatever', :params => {'foo' => 'bar'}, :test => false))
