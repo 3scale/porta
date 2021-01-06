@@ -41,4 +41,9 @@ class PaymentGatewayTest < ActiveSupport::TestCase
       assert_not_nil PaymentGateway.find(type)
     end
   end
+
+  test '.implementation for stripe with and without SCA' do
+    assert_equal ActiveMerchant::Billing::StripeGateway,               PaymentGateway.implementation(:stripe)
+    assert_equal ActiveMerchant::Billing::StripePaymentIntentsGateway, PaymentGateway.implementation(:stripe, sca: true)
+  end
 end

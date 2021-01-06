@@ -34,6 +34,9 @@ class PaymentTransaction < ApplicationRecord
                    when ActiveMerchant::Billing::AuthorizeNetGateway
           logger.info("Purchasing with authorize.net")
           purchase_with_authorize_net(credit_card_auth_code, gateway)
+                   when ActiveMerchant::Billing::StripePaymentIntentsGateway
+          logger.info('Purchasing with stripe (StripePaymentIntentsGateway)')
+          purchase_with_stripe(credit_card_auth_code, gateway, gateway_options.reverse_merge(off_session: true, execute_threed: true))
                    when ActiveMerchant::Billing::StripeGateway
           logger.info("Purchasing with stripe")
           purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
@@ -154,7 +157,8 @@ class PaymentTransaction < ApplicationRecord
 
   def purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
     options = gateway_options.merge(customer: credit_card_auth_code)
-    gateway.purchase(amount.cents, nil, options)
+    payment_method_id = options.delete(:payment_method_id)
+    gateway.purchase(amount.cents, payment_method_id, options)
   end
 
 end

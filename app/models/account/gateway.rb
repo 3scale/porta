@@ -14,12 +14,10 @@ module Account::Gateway
   end
 
   # Payment gateway this account accepts payments through.
-  def payment_gateway
-    @payment_gateway ||=
-      if payment_gateway_type.present?
-        gateway_class = PaymentGateway.implementation(payment_gateway_type)
-        gateway_class.new(payment_gateway_options || {})
-      end
+  def payment_gateway(**options)
+    return if payment_gateway_type.blank?
+
+    PaymentGateway.implementation(payment_gateway_type, options).new(payment_gateway_options || {})
   end
 
   def payment_gateway_configured?
@@ -64,7 +62,7 @@ module Account::Gateway
 
   # Payment gateway this account sends payments through.
   def provider_payment_gateway
-    provider_account && provider_account.payment_gateway
+    provider_account&.payment_gateway(sca: payment_detail.payment_method_id.present?)
   end
 
   def update_payment_gateway
