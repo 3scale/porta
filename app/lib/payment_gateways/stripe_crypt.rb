@@ -26,11 +26,12 @@ module PaymentGateways
     end
 
     def create_stripe_setup_intent
-      Stripe::SetupIntent.create({
+      setup_intent_params = {
         payment_method_types: ['card'],
         usage: 'off_session',
         customer: customer.id
-      }, api_key)
+      }
+      Stripe::SetupIntent.create(setup_intent_params, api_key)
     end
 
     private
@@ -38,11 +39,12 @@ module PaymentGateways
     delegate :payment_detail, to: :account
 
     def customer
-      Stripe::Customer.create({
+      customer_params = {
         description: account.org_name,
         email: user.email,
         metadata: {  '3scale_account_reference' => buyer_reference }
-      }, api_key)
+      }
+      Stripe::Customer.create(customer_params, api_key)
     end
 
     def api_key
