@@ -191,30 +191,30 @@ end
 
 Before '@stripe' do
   customer_response_body = <<~JSON.strip
-  {
-    "id": "cus_IiIMv3fS4LCHwE",
-    "object": "customer"
-  }
+    {
+      "id": "cus_IiIMv3fS4LCHwE",
+      "object": "customer"
+    }
   JSON
   stub_request(:post, 'https://api.stripe.com/v1/customers').to_return(status: 201, body: customer_response_body, headers: {})
 
   setup_intent_response_body = <<~JSON.strip
-  {
-    "id": "seti_1I6ggZIxGJbGz9puMkwMqBIP",
-    "object": "setup_intent",
-    "client_secret": "seti_1I6ggZIxGJbGz9puMkwMqBIP_secret_Ii6uDTQkCnWeOOONQVHxoaSkblEG8wk",
-    "customer": "cus_IiIMv3fS4LCHwE",
-    "payment_method_options": {
-      "card": {
-        "request_three_d_secure": "automatic"
-      }
-    },
-    "payment_method_types": [
-      "card"
-    ],
-    "status": "requires_payment_method",
-    "usage": "off_session"
-  }
+    {
+      "id": "seti_1I6ggZIxGJbGz9puMkwMqBIP",
+      "object": "setup_intent",
+      "client_secret": "seti_1I6ggZIxGJbGz9puMkwMqBIP_secret_Ii6uDTQkCnWeOOONQVHxoaSkblEG8wk",
+      "customer": "cus_IiIMv3fS4LCHwE",
+      "payment_method_options": {
+        "card": {
+          "request_three_d_secure": "automatic"
+        }
+      },
+      "payment_method_types": [
+        "card"
+      ],
+      "status": "requires_payment_method",
+      "usage": "off_session"
+    }
   JSON
   stub_request(:post, 'https://api.stripe.com/v1/setup_intents').to_return(status: 201, body: setup_intent_response_body, headers: {})
 end
