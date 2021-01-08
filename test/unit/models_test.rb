@@ -30,8 +30,9 @@ class ModelsTest < ActiveSupport::TestCase
     models = ActiveRecord::Base.descendants - [BackendApi, Service, Proxy, Topic, Forum]
 
     validate_columns_for = ->(model, options = {}) do
-      next if model.name.match(/^.+Test::.+$/)
-      exception_attributes = exceptions.fetch(model.name, [])
+      model_name = model.name
+      next if model_name.blank? || model_name.match(/^.+Test::.+$/)
+      exception_attributes = exceptions.fetch(model_name, [])
       next if exception_attributes == :all
       exception_attributes.concat INHERITANCE_COLUMNS
       model.columns.each do |column|
