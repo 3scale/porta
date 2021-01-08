@@ -35,7 +35,9 @@
     <fieldset>
       <div class="form-group">
         <div class="col-md-10 operations">
-          <%= form.submit 'Save details', class: "btn btn-primary pull-right"%>
+          <%= form.submit 'Save details', id: 'stripe-submit',
+                                          class: 'btn btn-primary pull-right',
+                                          disabled: true %>
         </div>
       </div>
     </fieldset>
@@ -80,6 +82,12 @@
       empty: 'is-empty',
     }
   });
+
+  var submit = $('#stripe-submit');
+  card.on('change', function (e) {
+    submit.prop('disabled', !e.complete)
+  });
+
   card.mount('#card-element');
 
   function handleIntentResult(result) {
