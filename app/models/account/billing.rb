@@ -87,7 +87,7 @@ module Account::Billing
       gateway_options[:order_id]= options[:invoice].id
     end
 
-    gateway_options.reverse_merge!(payment_method_id: payment_detail.payment_method_id)
+    gateway_options.reverse_merge!(payment_method_id: payment_detail.payment_method_id) if provider_payment_gateway.is_a?(ActiveMerchant::Billing::StripeGateway)
 
     logger.info("Processing transaction for buyer #{self.id} with code #{credit_card_auth_code}, gateway #{provider_payment_gateway} & options #{gateway_options}")
 
