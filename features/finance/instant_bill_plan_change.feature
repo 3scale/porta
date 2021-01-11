@@ -19,23 +19,23 @@ Feature: Instant biling plan change feature
 
     And the date is 1st January 2017
     And the buyer signed up for plan "NoVariable"
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     When time flies to 3rd January 2017
     And the buyer changed to plan "WithVariable"
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |   1000 |
     When time flies to 4th January 2017
     And the buyer changed to plan "NoVariable"
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |   5000 |
 
     When time flies to 6th January 2017
     And the buyer changed to plan "WithVariable"
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |   2000 |
     When time flies to 3rd February 2017
@@ -80,7 +80,7 @@ Feature: Instant biling plan change feature
 
     # In March, 2018
     Given the buyer signed up for plan "PureVariable101" on 20th Mar 2018
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |    50 |
     When time flies to 3rd Apr 2018
@@ -88,7 +88,7 @@ Feature: Instant biling plan change feature
     Then the buyer should have 0 invoices
 
     # In April, 2018
-    Given the buyer makes a service transactions with:
+    Given the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |    65 |
     When time flies to 3rd May 2018
@@ -96,7 +96,7 @@ Feature: Instant biling plan change feature
     Then the buyer should have 0 invoices
 
     # In May, 2018
-    Given the buyer makes a service transactions with:
+    Given the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |   500 |
     When time flies to 4th May 2018
@@ -107,7 +107,7 @@ Feature: Instant biling plan change feature
       | name            | quantity |  cost     |
       | Hits            |      500 |     40.00 |
       | Total cost      |          |     40.00 |
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric | Value  |
       | hits   |    100 |
     When time flies to 3rd Jun 2018
@@ -130,7 +130,7 @@ Feature: Instant biling plan change feature
       | hits     |           0.1 |   101 | infinity |
 
     Given the buyer signed up for plan "PureVariable" on 1st May 2018
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |    50 |
     When time flies to 4th May 2018
@@ -141,7 +141,7 @@ Feature: Instant biling plan change feature
       | name            | quantity |  cost     |
       | Hits            |       50 |      5.00 |
       | Total cost      |          |      5.00 |
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |    80 |
     When time flies to 8th May 2018
@@ -149,7 +149,7 @@ Feature: Instant biling plan change feature
     When time flies to 11th May 2018
     # Plan changed occurred, threshold of PureVariable101 wasn't reached
     Then the buyer should have 1 invoices
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |   500 |
     When time flies to 15th May 2018
@@ -157,7 +157,7 @@ Feature: Instant biling plan change feature
     When time flies to 18th May 2018
     # Plan changed occurred, nothing to bill since it was on free plan
     Then the buyer should have 1 invoices
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric | Value |
       | hits   |   300 |
     When time flies to 19th May 2018
