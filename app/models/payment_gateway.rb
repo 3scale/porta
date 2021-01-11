@@ -24,9 +24,7 @@ class PaymentGateway
   def self.all
     gateways = GATEWAYS.dup
 
-    if bogus_enabled?
-      gateways << self.new(:bogus)
-    end
+    gateways << new(:bogus) if bogus_enabled?
 
     gateways
   end
@@ -56,8 +54,9 @@ class PaymentGateway
   #     BraintreeOrangeGateway if :login is given or BraintreeeBlueGateway otherwise
   #
   #
-  def self.implementation(type)
-    ActiveMerchant::Billing::Base.gateway(type)
+  def self.implementation(type, **options)
+    specific_type = options[:sca] && type == :stripe ? :stripe_payment_intents : type
+    ActiveMerchant::Billing::Base.gateway(specific_type)
   end
 
   def implementation

@@ -52,7 +52,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
       assert_equal(['', 'braintree_blue', 'stripe', 'bogus'], values)
     end
 
-    should 'contain deprectaed gateway if in use' do
+    should 'contain deprecated gateway if in use' do
       @provider.gateway_setting.gateway_type = :ogone
       @provider.gateway_setting.save(validate: false)
 
