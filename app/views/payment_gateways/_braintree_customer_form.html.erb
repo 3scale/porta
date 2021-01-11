@@ -129,13 +129,14 @@
 
 <script src="https://js.braintreegateway.com/web/3.69.0/js/client.min.js"></script>
 <script src="https://js.braintreegateway.com/web/3.69.0/js/hosted-fields.min.js"></script>
+<script src="https://js.braintreegateway.com/web/3.69.0/js/three-d-secure.js"></script>
 <script type="text/javascript" charset="utf-8">
     var $form = $('#customer_form');
     var submit = document.querySelector('input[type="submit"]');
-
+    var client_token = @gateway_client.client_token
     if(typeof braintree !== 'undefined') {
         braintree.client.create({
-            authorization: '<%= j @braintree_authorization %>'
+            authorization: client_token
         }, function (clientErr, clientInstance) {
             if (clientErr) {
                 console.error(clientErr);
@@ -188,8 +189,18 @@
                             console.error(tokenizeErr);
                             return;
                         }
-                        $('#braintree_nonce').val(payload['nonce']);
-                        $form.get(0).submit();
+                        var threeDSecure;
+                        braintree.threeDSecure.create({
+                            version: 2
+                            client: clientInstance
+                        }, function (threeDSecureErr, threeDSecure) {
+                            if (threeDSecureErr) {
+                                console.log("Error creating 3DSecure" + threeDSecureErr);
+                                return;
+                            }
+                            $('#braintree_nonce').val(payload['nonce']);
+                            $form.get(0).submit();
+                        });
                     });
                 });
             });
