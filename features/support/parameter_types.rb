@@ -11,7 +11,7 @@ ParameterType(
   regexp: /(provider|buyer) "([^"]*)"/,
   transformer: ->(type, name) {
     case type
-    when 'provider' then Account.providers.readonly(false).find_by!(name: name)
+    when 'provider' then provider_by_name(name)
     when 'buyer' then Account.buyers.find_by!(name: name)
     end
   }
@@ -22,11 +22,24 @@ ParameterType(
   regexp: /(provider|service) "([^"]*)"/,
   transformer: ->(type, name) {
     case type
-    when 'provider' then Account.providers.readonly(false).find_by!(name: name)
+    when 'provider' then provider_by_name(name)
     when 'service' then Service.find_by!(name: name)
     end
   }
 )
+
+def provider_by_name(name)
+  # TODO: fix this hacky way of getting master
+  if name == 'master'
+    begin
+      Account.master
+    rescue
+      FactoryBot.create(:master_account)
+    end
+  else
+    Account.providers.readonly(false).find_by!(org_name: name)
+  end
+end
 
 ParameterType(
   name: 'amount',
@@ -143,18 +156,7 @@ ParameterType(
   name: 'provider',
   type: Account,
   regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
-  transformer: ->(name) do
-    # TODO: fix this hacky way of getting master
-    if name == 'master'
-      begin
-        Account.master
-      rescue
-        FactoryBot.create(:master_account)
-      end
-    else
-      Account.providers.readonly(false).find_by!(org_name: name)
-    end
-  end
+  transformer: ->(name) { provider_by_name(name) }
 )
 
 ParameterType(
@@ -226,7 +228,7 @@ ParameterType(
   name: 'page of provider',
   regexp: /^page "([^"]*)" of provider "([^"]*)"$/,
   transformer: ->(title, provider_name) do
-    provider = find_provider_by!(org_name: provider_name)
+    provider = providerl(org_name)
     Page.find_by!(title: title, account_id: provider.id)
   end
 )
@@ -235,7 +237,7 @@ ParameterType(
   name: 'page at of provider',
   regexp: /^page at (.*) of provider "([^"]*)"$/,
   transformer: ->(path, provider_name) do
-    provider = find_provider_by!(org_name: provider_name)
+    provider = providerl(org_name)
     Page.find_by!(path: path, account_id: provider.id)
   end
 )
@@ -244,8 +246,7 @@ ParameterType(
   name: 'section_of_provider',
   regexp: /section "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(name, provider_name) do
-    provider = Account.providers.readonly(false).find_by!(org_name: provider_name)
-    provider.provided_sections.find_by!(title: name)
+    provider_by_name(provider_name).provided_sections.find_by!(title: name)
   end
 )
 
@@ -272,7 +273,7 @@ ParameterType(
 ParameterType(
   name: 'forum',
   regexp: /"([^"]*)"|the forum of "([^"]*)"/,
-  transformer: ->(name) { find_provider_by!(org_name: name).forum }
+  transformer: ->(name) { provider_by_name(name).forum }
 )
 
 ParameterType(
@@ -429,7 +430,7 @@ ParameterType(
   name: 'service_of_provider',
   regexp: /service "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(service_name, provider_name) do
-    provider = find_provider_by!(org_name: provider_name)
+    provider = providerl(org_name)
     provider.services.find_by!(name: service_name)
   end
 )
@@ -608,10 +609,6 @@ ParameterType(
   regexp: /|does|does not|doesn't/,
   transformer: ->(value) { value == 'does' || value.blank? }
 )
-
-def find_provider_by!(opts)
-  Account.providers.find_by!(opts)
-end
 
 # Utility
 

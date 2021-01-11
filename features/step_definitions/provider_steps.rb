@@ -151,14 +151,13 @@ end
 
 Given "master admin" do
   @master = @provider = Account.master
-  @provider.admins.first!
   step 'the current domain is the master domain'
   step 'stub integration errors dashboard'
 end
 
 Given "master admin is logged in" do
   step %(master admin)
-  step %(I log in as provider "#{admin.username}")
+  step %(I log in as provider "#{@provider.admins.first!.username}")
 end
 
 Given "a master admin with extra fields is logged in" do
