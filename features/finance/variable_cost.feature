@@ -14,7 +14,7 @@ Feature: Variable cost on automatic billing
   Scenario: Variable cost in the middle of the first month of a contract subscribed days before
     Given the buyer signed up for plan "VariableOnly" on 10th January 2019
     And time flies to 15th January 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     When time flies to 3rd February 2019
@@ -25,7 +25,7 @@ Feature: Variable cost on automatic billing
 
   Scenario: Variable cost in the middle of the first month of a contract subscribed on the same day
     Given the buyer signed up for plan "VariableOnly" on 10th January 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     When time flies to 3rd February 2019
@@ -36,7 +36,7 @@ Feature: Variable cost on automatic billing
 
   Scenario: Variable cost on the first day of the month of a new contract
     Given the buyer signed up for plan "VariableOnly" on 1st January 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     When time flies to 3rd February 2019
@@ -48,7 +48,7 @@ Feature: Variable cost on automatic billing
   Scenario: Variable cost on the last day of the first month of a contract subscribed days before that
     Given the buyer signed up for plan "VariableOnly" on 10th January 2019
     And time flies to 31st January 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     When time flies to 3rd February 2019
@@ -59,7 +59,7 @@ Feature: Variable cost on automatic billing
 
   Scenario: Variable cost on the last day of the first month of a contract subscribed on the same day
     Given the buyer signed up for plan "VariableOnly" on 31st January 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     When time flies to 3rd February 2019
@@ -70,11 +70,11 @@ Feature: Variable cost on automatic billing
 
   Scenario: Variable cost on the last day of the first month of a contract subscribed on the same day and other months
     Given the buyer signed up for plan "VariableOnly" on 31st January 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     And time flies to 1st February 2019
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    500 |
     When time flies to 3rd March 2019
@@ -90,11 +90,11 @@ Feature: Variable cost on automatic billing
   Scenario: Variable cost in automated billing is always UTC
     Given the provider time zone is "Pacific Time (US & Canada)"
     And the buyer signed up for plan "VariableOnly" on 31st January 2019 22:00 PST
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    400 |
     And time flies to 1st February 2019 12:00 PST
-    And the buyer makes a service transactions with:
+    And the buyer makes a service transaction with:
       | Metric   | Value  |
       | hits     |    500 |
     When time flies to 3rd March 2019
