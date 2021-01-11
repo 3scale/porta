@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20201222214415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -860,6 +860,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.bigint   "tenant_id"
+    t.string   "payment_method_id"
     t.index ["account_id", "buyer_reference"], name: "index_payment_details_on_account_id_and_buyer_reference", using: :btree
     t.index ["account_id", "payment_service_reference"], name: "index_payment_details_on_account_id_and_payment_ref", using: :btree
     t.index ["account_id"], name: "index_payment_details_on_account_id", using: :btree
