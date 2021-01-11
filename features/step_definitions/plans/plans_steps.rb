@@ -21,7 +21,7 @@ Given "the provider has a {default} free application plan" do |default|
   step %(the provider has a #{default ? 'default' : ''} free application plan "Copper").squish
 end
 
-Given "the provider has a {default} free application plan {string}" do |default, plan_name|
+Given "the provider has a {default}( )free application plan {string}" do |default, plan_name|
   @free_application_plan ||= create_plan :application, name: plan_name, issuer: @service, published: true, default: default
 end
 
