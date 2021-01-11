@@ -22,7 +22,7 @@ Given "{provider} has multiple applications {enabled}" do |provider, enabled|
 end
 
 Given "the provider has multiple applications {enabled}" do |enabled|
-  step %(provider "#{provider_or_master_name}" has multiple applications #{enabled})
+  step %(provider "#{provider_or_master_name}" has multiple applications #{enabled ? 'enabled' : 'disabled'})
 end
 
 Given "{provider} has Browser CMS {activated}" do |provider, activated|
