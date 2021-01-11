@@ -16,7 +16,7 @@ When "the contract of {buyer} with {plan} is approved" do |buyer, plan|
   contract.accept!
 end
 
-When "the provider {word} the buyer's {plan_type} plan contract" do |verb, plan_type|
+When /^the provider (accept|suspend|resume)s the buyer's (account|service|application) plan contract$/ do |verb, plan_type|
   plan = instance_variable_get("@paid_#{plan_type}_plan")
   contract = @buyer.contracts.by_plan_id(plan.id).first
   contract.public_send("#{verb}!")
