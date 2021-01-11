@@ -133,7 +133,8 @@
 <script type="text/javascript" charset="utf-8">
     var $form = $('#customer_form');
     var submit = document.querySelector('input[type="submit"]');
-    var client_token = @gateway_client.client_token
+
+    var client_token = '<%= j @gateway_client.client_token %>'
     if(typeof braintree !== 'undefined') {
         braintree.client.create({
             authorization: client_token
@@ -191,7 +192,7 @@
                         }
                         var threeDSecure;
                         braintree.threeDSecure.create({
-                            version: 2
+                            version: 2,
                             client: clientInstance
                         }, function (threeDSecureErr, threeDSecure) {
                             if (threeDSecureErr) {
