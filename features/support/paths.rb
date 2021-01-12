@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ClassLength
 
 module PathsHelper
   def path_to(*args)
@@ -17,12 +17,13 @@ module PathsHelper
     include System::UrlHelpers.cms_url_helpers
     include System::UrlHelpers.system_url_helpers
 
+    attr_reader :provider
+
+    delegate :first_service!, to: :provider, prefix: true, allow_nil: true
+
     def initialize(provider)
       @provider = provider
     end
-
-    attr_reader :provider
-    delegate :first_service!, to: :provider, prefix: true, allow_nil: true
 
     def default_url_options
       {}
@@ -668,3 +669,5 @@ module PathsHelper
 end
 
 World(PathsHelper) if defined?(DeveloperPortal)
+
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ClassLength
