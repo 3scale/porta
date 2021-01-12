@@ -16,7 +16,7 @@ When "I search for:" do |table|
     table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
 
     search = table.hashes.first
-    binding.pry
+
     fill_in('search_query', with: search[:group_org]) if search[:group_org]
     fill_in('search_name', with: search[:name]) if search[:name]
     fill_in('search_account_query', with: search[:account]) if search[:account]
