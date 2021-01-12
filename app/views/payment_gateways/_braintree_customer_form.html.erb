@@ -134,10 +134,9 @@
     var $form = $('#customer_form');
     var submit = document.querySelector('input[type="submit"]');
 
-    var client_token = '<%= j @gateway_client.client_token %>'
     if(typeof braintree !== 'undefined') {
         braintree.client.create({
-            authorization: client_token
+            authorization: '<%= j @braintree_authorization %>'
         }, function (clientErr, clientInstance) {
             if (clientErr) {
                 console.error(clientErr);
