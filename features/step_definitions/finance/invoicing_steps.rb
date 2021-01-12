@@ -145,18 +145,18 @@ Then "I should have an invoice of \"{float} {}\"" do |amount, currency|
   assert invoices.select { |x| x.cost == amount && x.currency == currency }.any?
 end
 
-Given "an invoice of the buyer with a total cost of {int}" do |cost|
+Given "an invoice of the buyer with a total cost of {float} EUR" do |cost|
   step 'an invoice of buyer "bob" for January, 2011 with items:', table(<<-TABLE)
   | name   | cost |
   | Custom | #{cost} |
   TABLE
 end
 
-Then "I should see in the invoice period for the column {word} a cost of {float} {word}" do |column, cost, money|
+Then "I should see in the invoice period for the column {string} a cost of {float} EUR" do |column, cost|
   columns = ['month', 'total', 'in process', 'overdue', 'paid']
   position = columns.index(column) + 1
   node = find(:xpath, %(//table//td/a[text()="January, 2011"]/../..//td[#{position}]))
-  assert_equal "#{money} #{cost}", node.text
+  assert_equal "EUR #{format('%.2f', cost)}", node.text
 end
 
 Then "there is only one invoice for {string}" do |date|
