@@ -146,17 +146,12 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'the_provider',
-  type: Account,
-  regexp: /^the provider$/,
-  transformer: ->(_) { @provider or raise ActiveRecord::RecordNotFound, "@provider does not exist" }
-)
-
-ParameterType(
   name: 'provider',
   type: Account,
   regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
-  transformer: ->(name) { provider_by_name(name) }
+  # FIXME: This alternative regexp would be useful but "@provider" is not accessible from the transformer
+  # regexp: /provider "([^"]*)"|(master) provider|provider (master)|the provider/,
+  transformer: ->(name) { name.present? ? provider_by_name(name) : @provider }
 )
 
 ParameterType(

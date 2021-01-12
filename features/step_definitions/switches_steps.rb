@@ -18,8 +18,9 @@ Given "{provider} has {string}( switch) visible" do |provider, switch|
   settings.send("show_#{switch}!")  unless settings.send(switch).visible?
 end
 
-Given "the provider has {string}( switch) visible" do |switch|
-  step %(provider "#{@provider.domain}" has "#{switch}" switch visible)
+# FIXME: "the provider" steps should be added inside the ParameterType, but @provider is not accessible from there
+Given "the provider has {string}( switch) {word}" do |switch, state|
+  step %(provider "#{@provider.domain}" has "#{switch}" switch #{state})
 end
 
 Then "I should see the invitation to upgrade my plan" do
