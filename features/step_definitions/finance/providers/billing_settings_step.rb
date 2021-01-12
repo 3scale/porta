@@ -21,12 +21,14 @@ Given "{provider} {is} charging" do |provider, charging_enabled|
 
   if charging_enabled
     provider.payment_gateway_type = :bogus
-    provider.payment_gateway_options = { login: 'foo',
-                                         password: 'bar',
-                                         user: 'user',
-                                         merchant_id: '123',
-                                         public_key: 'key',
-                                         private_key: 'priv key' }
+    provider.payment_gateway_options = {
+      login: 'foo',
+      password: 'bar',
+      user: 'user',
+      merchant_id: '123',
+      public_key: 'key',
+      private_key: 'priv key'
+    }
   end
 
   provider.billing_strategy.charging_enabled = charging_enabled
