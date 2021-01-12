@@ -79,7 +79,7 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
 
   plan = create_plan plan_type.to_sym, name: plan_name,
                                        issuer: @service,
-                                       cost: (cost || default_plan_costs[plan_type]),
+                                       cost: (cost.positive? ? cost : default_plan_costs[plan_type.to_sym]),
                                        published: true,
                                        default: default.present?
 
