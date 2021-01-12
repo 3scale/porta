@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "the provider has {int} active docs?" do |number_active_docs|
+Given "the provider has {int} active doc(s)" do |number_active_docs|
   @active_docs = FactoryBot.create_list(:api_docs_service, number_active_docs, account: @provider, service: @provider.default_service)
 end
 
@@ -15,7 +15,7 @@ end
 def action_active_docs(action, valid, for_service: false)
   action_page = action == 'update' ? 'edit' : 'new'
   step %(I go to the #{action_page} active docs page#{' for a service' if for_service})
-  step %(I #{action} the action docs with #{valid ? 'valid' : 'invalid'})
+  step %(I #{action} the active docs with #{valid ? 'valid' : 'invalid'} data)
 end
 
 When "I {word} the active docs with {valid} data" do |action, valid|

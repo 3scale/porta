@@ -19,8 +19,8 @@ When "I visit the {string} authentication provider page" do |name|
 end
 
 When "I visit the {string} authentication provider edit page" do |name|
-  step %(I visit the #{name} authentication provider page)
-  click_on 'Edit' if edit
+  step %(I visit the "#{name}" authentication provider page)
+  click_on 'Edit'
 end
 
 def stub_user_data(org_name)

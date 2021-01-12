@@ -58,12 +58,12 @@ end
 Then "there {is} an image preview of that file" do |there_is|
   image_preview = 'img.preview'
   if there_is
-    page.should have_no_selector(image_preview)
-  else
     page.should have_selector(image_preview)
 
     visit image_source
     step 'the file should be the same as uploaded'
+  else
+    page.should have_no_selector(image_preview)
   end
 end
 
@@ -82,11 +82,14 @@ When "I upload a file that is not an image to the cms" do
   create_cms_file('file_not_image', 'countries.yml')
 end
 
+# Given(/^there is a (downloadable )?cms file$/) do |downloadable|
 Given "there is a cms file" do
+  #  create_cms_file('file_not_image', 'countries.yml')
   create_cms_file('image', 'hypnotoad.jpg')
 end
 
-Given "there is a downloadable cms file" do |downloadable|
+Given "there is a downloadable cms file" do
+  # create_cms_file('image', 'hypnotoad.jpg')
   steps %(
     Given there is a cms file
     Then I check "Downloadable"
