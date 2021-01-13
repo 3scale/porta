@@ -154,17 +154,13 @@ Then "the {string} field within {string} should not contain {string}" do |field,
   step %(the "#{field}" field should not contain "#{value}" within "#{selector}")
 end
 
-Then "the {string} checkbox within {string} should be checked" do |label, selector|
-  step %(the "#{field}" checkbox should be checked within "#{selector}")
+Then "the {string} checkbox within {string} {should} be checked" do |label, should, selector|
+  step %(the "#{field}" checkbox should be #{should ? 'checked' : 'unchecked'} within "#{selector}")
 end
 
-Then "the {string} checkbox within {string} should not be checked" do |label, selector|
-  step %(the "#{field}" checkbox should unchecked within "#{selector}")
-end
-
-Then "the {string} checkbox should be {checked}" do |label, checked|
+Then "the {string} checkbox {should} be {checked}" do |label, should, checked|
   field_checked = find_field(label)['checked']
-  expect(field_checked).to checked ? be_truthy : be_falsy
+  expect(field_checked).to(should == checked ? be_truthy : be_falsy)
 end
 
 Then "(I )should be on {link_to_page}" do |page_name|

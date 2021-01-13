@@ -140,11 +140,19 @@ Given "stub integration errors dashboard" do
   end
 end
 
+Given "a provider" do
+  create_default_provider
+end
+
 Given "a provider is logged in" do
+  create_default_provider
+  step %(I log in as provider "foo.3scale.localhost")
+end
+
+def create_default_provider
   step %(a provider "foo.3scale.localhost")
   step %(current domain is the admin domain of provider "foo.3scale.localhost")
   step %(stub integration errors dashboard)
-  step %(I log in as provider "foo.3scale.localhost")
 
   @provider = Account.find_by!(domain: 'foo.3scale.localhost')
 end
