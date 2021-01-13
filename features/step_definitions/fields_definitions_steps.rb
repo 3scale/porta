@@ -4,10 +4,10 @@ Given "{provider} only has the following fields defined for {string}:" do |provi
   # first we remove all other optional fields defined (this is what *only* means)
   provider.fields_definitions.by_target("Account").each(&:destroy)
   table.hashes.each do |hash|
-    hash.delete_if { |k ,v| v.blank? }
+    hash.delete_if { |k, v| v.blank? }
     hash['choices'] = hash['choices'].split( /\s*,*\s/ ) if hash['choices'].is_a? String
     provider.fields_definitions.create! hash.merge!({ target: target,
-                                                      label: hash['Name'].humanize })
+                                                      label: hash['name'].humanize })
   end
 end
 
