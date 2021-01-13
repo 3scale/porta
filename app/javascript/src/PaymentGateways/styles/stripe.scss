@@ -1,0 +1,14 @@
+.StripeElementsForm {
+  display: block;
+  height: 100%;
+  position: relative;
+  width: 100%;
+
+  .card-on-file {
+    display: inline-block;
+    float: none;
+    text-align: right;
+    vertical-align: middle;
+    width: 100%;
+  }
+}
