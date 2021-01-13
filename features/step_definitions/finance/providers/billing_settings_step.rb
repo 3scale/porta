@@ -2,10 +2,11 @@
 
 # TODO: - DRY all these steps
 # TODO: convert this to cucumber expression
-Given /^a provider "([^\"]*)" with (postpaid|prepaid)?\s*billing (enabled|disabled)?$/ do |provider_name, mode, status|
+Given /^a provider "([^"]*)" with (postpaid|prepaid)?\s*billing (enabled|disabled)?$/ do |provider_name, mode, status|
   step %(a provider "#{provider_name}")
   mode = nil if mode == 'postpaid'
-  step %(provider "#{provider_name}" has #{mode} billing #{status ? 'enabled' : 'disabled'}).squish
+  enabled = status == 'enabled'
+  step %(provider "#{provider_name}" has #{mode} billing #{enabled ? 'enabled' : 'disabled'}).squish
 end
 
 Given "a provider {string} with charging enabled" do |provider_name|
@@ -61,6 +62,7 @@ Given "{provider} has {billing} {enabled}" do |provider, mode, enabled|
   set_provider_billing(provider, mode, enabled)
 end
 
+# FIXME: "the provider" should be inside ParameterType 'provider' but @provider is not accesible from there
 Given "the provider has {billing} {enabled}" do |mode, enabled|
   set_provider_billing(@provider, mode, enabled)
 end

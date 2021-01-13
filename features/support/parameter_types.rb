@@ -59,7 +59,7 @@ ParameterType(
 
 ParameterType(
   name: 'billing',
-  regexp: /(prepaid|postpaid)? billing/,
+  regexp: /(prepaid |postpaid )?billing/,
   transformer: ->(mode) do
     if mode == 'prepaid'
       'Finance::PrepaidBillingStrategy'
