@@ -59,7 +59,7 @@ end
 Then "I {should} see link to {link_to_page}" do |visible, page_name|
   # TODO: move this into transformer
   path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
-  assert_equal visible, (page.all('a').any? { |node| matches_path?(node[:href], path) })
+  assert_equal visible, has_css?("a[href='#{path}']")
 end
 
 Then "I {should} see button {string}" do |visible, label|
