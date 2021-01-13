@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 When "I want to go to {link_to_page}" do |path|
-  @want_path = path
+  # TODO: move this into transformer
+  @want_path = PathsHelper::PathFinder.new(@provider).path_to(path)
 end
 
 Then "I should get access denied" do
