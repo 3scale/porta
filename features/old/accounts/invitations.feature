@@ -51,7 +51,7 @@ Feature: Invitations
 
   Scenario: Invitation to an email of already existing pending invitation
     Given an invitation from account "foo.3scale.localhost" sent to "alice@foo.3scale.localhost"
-    And a clear email queue
+    And an empty email queue
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider new invitation page

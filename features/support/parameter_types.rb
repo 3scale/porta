@@ -434,7 +434,7 @@ ParameterType(
 
 ParameterType(
   name: 'email_address',
-  regexp: /(I|they|"([^"]*?)")/,
+  regexp: /I|they|"([^"]*?)"/,
   transformer: ->(address) { address }
 )
 

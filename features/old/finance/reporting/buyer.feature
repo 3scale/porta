@@ -72,6 +72,6 @@ Feature: Billing Reporting
        Then I should receive an email with subject "Credit card expiry"
         And "admin@foo.3scale.localhost" should receive an email with subject "User Credit card expiry"
 
-       Given a clear email queue
+       Given an empty email queue
        And the time flies to 27th May 2009
        Then I should receive no email with subject "Credit card expiry"

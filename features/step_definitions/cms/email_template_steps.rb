@@ -11,9 +11,9 @@ Then "the headers of {email_template} should be following:" do |template, table|
   table.diff! headers
 end
 
-Given "{provider} has email template {string}" do |provider, content|
-  # Given /^(provider ".*?") has email template "(.*?)"$/ do |provider, system_name, content|
-  provider.email_templates.create(published: content, system_name: provider.system_name)
+# FIXME: last argument required otherwise throws error
+Given "{provider} has email template {string}" do |provider, content, _|
+  provider.email_templates.create(published: content, system_name: provider.name)
 end
 
 Given "I have following email (templates) of {provider}:" do |provider, table|

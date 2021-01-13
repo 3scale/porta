@@ -25,7 +25,7 @@ Feature: Mass email bulk operations
   Scenario: Send mass email to application owners
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
-      And a clear email queue
+      And an empty email queue
 
     When I check select for "BobApp", "JaneApp" and "JaneAppTwo"
       And I press "Send email"

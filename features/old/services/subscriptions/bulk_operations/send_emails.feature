@@ -28,7 +28,7 @@ Feature: Mass email bulk operations
   Scenario: Send mass email to application owners
       And provider "foo.3scale.localhost" has "service_plans" visible
       And I am on the service contracts admin page
-      And a clear email queue
+      And an empty email queue
 
     When I check select for "bob" and "jane"
       And I press "Send email"

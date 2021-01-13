@@ -49,7 +49,7 @@ World(EmailHelpers)
 # This is done automatically before each scenario.
 #
 
-Given "a clean email queue" do
+Given "an empty email queue" do
   reset_mailer
 end
 
