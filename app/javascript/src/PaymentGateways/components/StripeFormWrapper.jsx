@@ -23,23 +23,19 @@ type Props = {
 }
 
 const EditCreditCardDetails = ({isCreditCardStored}: {isCreditCardStored: boolean}) => {
-  const [state, setState] = useState<{isStripeFormVisible: boolean}>({ isStripeFormVisible: !isCreditCardStored })
-
-  const setStripeFormVisible = (isStripeFormVisible: boolean) => {
-    setState(prevState => ({ ...prevState, isStripeFormVisible }))
-  }
+  const [isStripeFormVisible, setIsStripeFormVisible] = useState({ isStripeFormVisible: !isCreditCardStored })
 
   const toggleStripeForm = () => {
-    const newStateStripeFormVisible = !state.isStripeFormVisible
+    const newStateStripeFormVisible = !isStripeFormVisible
     const stripeForm = document.getElementById('stripe-form')
     newStateStripeFormVisible ? stripeForm.classList.remove('hidden') : stripeForm.classList.add('hidden')
-    setStripeFormVisible(newStateStripeFormVisible)
+    setIsStripeFormVisible(newStateStripeFormVisible)
   }
 
   return (
     <a className='card-on-file' onClick={toggleStripeForm}>
       <i className='fa fa-pencil'></i>
-      <span>{state.isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
+      <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
     </a>
   )
 }
