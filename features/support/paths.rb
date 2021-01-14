@@ -46,7 +46,7 @@ module PathsHelper
         provider_admin_authentication_providers_path
 
       when /^the sign up page for the "([^"]*)" plan$/
-        plan = Plan.find_by! name:($1)
+        plan = Plan.find_by!(name: $1)
         signup_path('plan_ids[]': plan.id)
 
       when /the sign ?up page/, 'the old multiapps sign up page'
@@ -80,6 +80,7 @@ module PathsHelper
         '/support'
 
       when 'the password page with invalid password reset token'
+        # FIXME: should be "/admin/account/password?password_reset_token=bogus"
         admin_account_password_path(password_reset_token: 'bogus')
 
       when 'the provider password page with invalid password reset token'
@@ -285,7 +286,7 @@ module PathsHelper
         admin_service_service_plans_path provider_first_service!
 
       when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
-        plan = Plan.find_by! name:($1)
+        plan = Plan.find_by!(name: $1)
         edit_polymorphic_path([:admin, plan])
 
       #
@@ -302,18 +303,19 @@ module PathsHelper
       when 'the new application page'
         new_admin_application_path
       when /^the new application page for service "([^"]*)"$/
-        service = Service.find_by! name:($1)
-        new_admin_application_path(service_id service.id)
+        service = Service.find_by!(name: $1)
+        binding.pry
+        new_admin_application_path(service_id: service.id)
       when /^the "([^"]*)" application page$/
-        cinstance = Cinstance.find_by! name:($1)
+        cinstance = Cinstance.find_by!(name: $1)
         admin_application_path(cinstance)
       when /^the "([^"]*)" application edit page$/
-        cinstance = Cinstance.find_by! name:($1)
+        cinstance = Cinstance.find_by!(name: $1)
         edit_admin_application_path(cinstance)
       when 'the API access details page'
         admin_applications_access_details_path
       when /^the alerts page of application "(.+?)"$/
-        cinstance = Cinstance.find_by! name:($1)
+        cinstance = Cinstance.find_by!(name: $1)
         admin_application_alerts_path(cinstance)
 
       #
@@ -322,7 +324,7 @@ module PathsHelper
       when 'the service subscription page'
         new_admin_service_contract_path
 
-      when /the services list for buyers( page)?$/
+      when 'the services list page for buyers'
         admin_buyer_services_path
 
       when 'the service subscriptions list for provider',
@@ -338,15 +340,15 @@ module PathsHelper
         new_admin_buyers_account_application_path(buyer)
 
       when /^the provider side "([^"]*)" application page$/
-        application = Cinstance.find_by! name:($1)
+        application = Cinstance.find_by!(name: $1)
         admin_service_application_path(application.service, application)
 
       when /^the provider side "([^"]*)" edit application page$/
-        application = Cinstance.find_by! name:($1)
+        application = Cinstance.find_by!(name: $1)
         edit_admin_service_application_path(application.service, application)
 
       when /^the provider side application page for "([^"]*)"$/
-        application = Account.find_by! org_name:($1).bought_cinstance
+        application = Account.find_by!(org_name: $1).bought_cinstance
         admin_service_application_path(application.service, application)
 
       when 'the applications admin page',
@@ -376,19 +378,19 @@ module PathsHelper
         new_admin_buyers_account_path
 
       when /^the buyer account page for "([^"]*)"$/
-        admin_buyers_account_path(Account.find_by! org_name:($1))
+        admin_buyers_account_path(Account.find_by!(org_name: $1))
       when /^the buyer account "([^"]*)" page$/
-        admin_buyers_account_path(Account.find_by! org_name:($1))
+        admin_buyers_account_path(Account.find_by!(org_name: $1))
 
       when /^the buyer account edit page for "([^"]*)"$/
-        edit_admin_buyers_account_path(Account.find_by! org_name:($1))
+        edit_admin_buyers_account_path(Account.find_by!(org_name: $1))
       when /^the buyer account "([^"]*)" edit page$/
-        edit_admin_buyers_account_path(Account.find_by! org_name:($1))
+        edit_admin_buyers_account_path(Account.find_by!(org_name: $1))
 
       when /^the buyer users page for "([^"]*)"$/
-        admin_buyers_account_users_path(Account.find_by! org_name:($1))
+        admin_buyers_account_users_path(Account.find_by!(org_name: $1))
       when /^the buyer account "([^"]*)" users page$/
-        admin_buyers_account_users_path(Account.find_by! org_name:($1))
+        admin_buyers_account_users_path(Account.find_by!(org_name: $1))
 
       when /^the buyer user page for "([^"]*)"$/
         user = User.find_by!(username: $1)
@@ -405,21 +407,21 @@ module PathsHelper
         edit_admin_buyers_account_user_path(user.account, user)
 
       when /^the buyer account "([^"]*)" invitations page$/
-        admin_buyers_account_invitations_path(Account.find_by! org_name:($1))
+        admin_buyers_account_invitations_path(Account.find_by!(org_name: $1))
       when /^the buyer account "([^"]*)" new invitation page$/
-        new_admin_buyers_account_invitation_path(Account.find_by! org_name:($1))
+        new_admin_buyers_account_invitation_path(Account.find_by!(org_name: $1))
 
       when /^the buyer account "([^"]*)" groups page$/
-        admin_buyers_account_groups_path(Account.find_by! org_name:($1))
+        admin_buyers_account_groups_path(Account.find_by!(org_name: $1))
 
       when /^the data exports page$/
         new_admin_data_exports_path
 
       when /^the buyer account config page for "([^"]*)"$/
-        admin_buyers_account_configs_path(Account.find_by! org_name:($1))
+        admin_buyers_account_configs_path(Account.find_by!(org_name: $1))
 
       when /^the buyer account service contracts page for "([^"]*)"$/
-        admin_buyers_account_service_contracts_path Account.find_by! org_name:($1)
+        admin_buyers_account_service_contracts_path Account.find_by!(org_name: $1)
 
 
       #
