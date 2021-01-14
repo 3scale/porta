@@ -153,7 +153,6 @@ When "I click on Select this plan for the {string} plan" do |plan|
 end
 
 When "I request to change to {plan}" do |plan|
-  plan = Plan.find_by!(name: plan)
   step %(I press "Request Plan Change" within "div.plan-preview[data-plan-id='#{plan.id}']")
 end
 

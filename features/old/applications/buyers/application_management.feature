@@ -6,7 +6,6 @@ Feature: Buyer's application management
 
   Background:
     Given a provider "foo.3scale.localhost"
-    Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "service_plans" visible
     And provider "foo.3scale.localhost" has "multiple_services" visible
@@ -228,4 +227,4 @@ Feature: Buyer's application management
      And I should see "Awesome"
 
     When I go to the new application page for service "Fancy"
-    Then I should be on the services list for buyers
+    Then I should be on the services list page for buyers

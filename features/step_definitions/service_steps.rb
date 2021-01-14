@@ -56,7 +56,7 @@ Given "the service of {provider} has {string} {enabled}" do |account, toggle, en
 end
 
 Given "the service of {provider} has {string} set to {string}" do |account, name, value|
-  account.first_service!.update!(underscore_spaces(name), value)
+  account.first_service!.update!(Hash[underscore_spaces(name) => value])
 end
 
 Given "the service of {provider} has traffic" do |account|
