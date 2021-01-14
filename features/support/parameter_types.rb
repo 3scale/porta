@@ -425,8 +425,8 @@ ParameterType(
   name: 'service_of_provider',
   regexp: /service "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(service_name, provider_name) do
-    provider = providerl(org_name)
-    provider.services.find_by!(name: service_name)
+    provider_by_name(provider_name).services
+                                   .find_by!(name: service_name)
   end
 )
 
