@@ -114,7 +114,7 @@ Then "I should not see the application keys" do
   assert page.has_no_content?("Application Keys")
 end
 
-Then "the key {string} shouldn't/should not be deleteable" do |key|
+Then "the key {string} {should} be deleteable" do |key, should|
   within "#application_key_#{key}" do
     assert find("td.delete_key").has_no_content?("Delete")
   end
