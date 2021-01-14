@@ -55,11 +55,7 @@ const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAd
     const stripe = useStripe()
     const elements = useElements()
 
-    const [state, setState] = useState<{cardErrorMessage: ?string}>({ cardErrorMessage: null })
-
-    const setCardErrorMessage = (cardErrorMessage: ?string) => {
-      setState(prevState => ({ ...prevState, cardErrorMessage }))
-    }
+    const [cardErrorMessage, setCardErrorMessage] = useState({ cardErrorMessage: null })
 
     const handleSubmit = async event => {
       event.preventDefault()
@@ -114,7 +110,7 @@ const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAd
           <fieldset>
             <legend>Credit card details</legend>
             <CardElement options={CARD_OPTIONS} className='col-md-10'/>
-            { state.cardErrorMessage && <CreditCardErrors cardErrorMessage={state.cardErrorMessage} /> }
+            { cardErrorMessage && <CreditCardErrors cardErrorMessage={cardErrorMessage} /> }
           </fieldset>
           <fieldset>
             <div className='form-group'>
