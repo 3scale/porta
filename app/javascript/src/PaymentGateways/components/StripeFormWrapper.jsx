@@ -1,10 +1,10 @@
 // @flow
 
 import React, { useState } from 'react'
-import {loadStripe} from '@stripe/stripe-js'
-import {Elements, CardElement, useStripe, useElements} from '@stripe/react-stripe-js'
-import {createReactWrapper} from 'utilities/createReactWrapper'
-import {CSRFToken} from 'utilities/utils'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { CSRFToken } from 'utilities/utils'
 import 'PaymentGateways/styles/stripe.scss'
 
 type Props = {
