@@ -44,7 +44,7 @@ const EditCreditCardDetails = ({isCreditCardStored}: {isCreditCardStored: boolea
   )
 }
 
-const CrediCardErrors = ({cardErrorMessage}: {cardErrorMessage: null | string}) => {
+const CreditCardErrors = ({cardErrorMessage}: {cardErrorMessage: null | string}) => {
   if (cardErrorMessage) {
     return (
       <span id='card-errors' role='alert'>
@@ -122,7 +122,7 @@ const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAd
           <fieldset>
             <legend>Credit card details</legend>
             <CardElement options={CARD_OPTIONS} className='col-md-10'/>
-            <CrediCardErrors cardErrorMessage={state.cardErrorMessage} />
+            <CreditCardErrors cardErrorMessage={state.cardErrorMessage} />
             <span id='card-errors' role='alert'></span>
           </fieldset>
           <fieldset>
