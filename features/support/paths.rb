@@ -304,7 +304,6 @@ module PathsHelper
         new_admin_application_path
       when /^the new application page for service "([^"]*)"$/
         service = Service.find_by!(name: $1)
-        binding.pry
         new_admin_application_path(service_id: service.id)
       when /^the "([^"]*)" application page$/
         cinstance = Cinstance.find_by!(name: $1)
