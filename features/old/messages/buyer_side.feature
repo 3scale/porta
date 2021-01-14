@@ -11,7 +11,7 @@ Feature: Buyer side messages
 
   Scenario: Sending a message
     Given account "bob" has no messages
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages"
     And I follow "Compose"
     Then I should see "To "foo.3scale.localhost""
@@ -27,7 +27,7 @@ Feature: Buyer side messages
 
   Scenario: Receiving a message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "How are you doing?" and body "Just checking if everything is allright"
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     Then I should see unread message from "foo.3scale.localhost" with subject "How are you doing?"
     When I follow "How are you doing?"
@@ -38,7 +38,7 @@ Feature: Buyer side messages
 
   Scenario: Receiving a message without subject
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "" and body "Just checking if everything is allright"
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     Then I should see unread message from "foo.3scale.localhost" with subject "Just checkin..."
     When I follow "Just checkin..."
@@ -48,7 +48,7 @@ Feature: Buyer side messages
 
   Scenario: Receiving a message without subject nor body
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "" and body ""
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     Then I should see unread message from "foo.3scale.localhost" with subject "(no subject)"
     When I follow "(no subject)"
@@ -58,7 +58,7 @@ Feature: Buyer side messages
   Scenario: Repling to a message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
 
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     When I follow "Wassup?"
     Then I should see "Wassup?"
@@ -68,7 +68,7 @@ Feature: Buyer side messages
 
   Scenario: Deleting a message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     And follow "Delete message"
     Then I should not see a message from "foo.3scale.localhost" with subject "Wassup?"
@@ -81,7 +81,7 @@ Feature: Buyer side messages
 
   Scenario: Restoring a deleted message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     And I follow "Delete message"
     And I follow "Trash"
@@ -91,7 +91,7 @@ Feature: Buyer side messages
 
   Scenario: Empting the trash
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Hello" and body "Some stuff"
-    When I go to the dashboard
+    When I go to the dashboard page
     And I follow "Messages 1"
     And I follow "Delete message"
     And I follow "Trash"

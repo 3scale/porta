@@ -41,13 +41,13 @@ Given "{buyer} has the following applications:" do |buyer, table|
 
   table.map_headers! { |header| header.downcase.gsub(/\s+/, '_') }
   table.hashes.each do |hash|
-    attributes = hash.slice!(:state)
+    attributes = hash.symbolize_keys!.slice!(:state)
 
     cinstance = FactoryBot.build(:cinstance, attributes.merge(user_account: buyer, plan: plan))
     cinstance.description = 'Blah blah' if cinstance.description.blank?
     cinstance.save!
 
-    cinstance.update!(state: hash[:state]) if hash[:state]
+    cinstance.update_attribute(:state, hash[:state]) if hash[:state]
   end
 
 end
@@ -91,10 +91,6 @@ When "I follow {string} for {application}" do |label, application|
   step %(I follow "#{label}" within "#application_#{application.id}")
 end
 
-When "I follow {string} in the applications widget" do |label|
-  step %(I follow "#{label}" within "#applications_widget")
-end
-
 Then "{application} should be live" do |application|
   assert application.live?
 end
@@ -123,12 +119,8 @@ Then "I should see application named {string} in the applications table" do |nam
   end
 end
 
-Then "I should see button to {string}" do |text|
-  assert has_xpath(find(:button, text: text) || "//input[@value = '#{text}']")
-end
-
-Then "I should not see button to {string}" do |text|
-  assert has_no_xpath(find(:button, text: text) || "//input[@value = '#{text}']")
+Then "I {should} see button to {string}" do |visible, text|
+  assert_equal visible, has_xpath?("//input[contains(text(),'#{text}')]") || has_xpath?("//input[@value = '#{text}']")
 end
 
 Then "I should see the app menu" do

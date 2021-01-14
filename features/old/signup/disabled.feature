@@ -15,6 +15,6 @@ Feature: Disabled signup for the provider
      Then I should see "Signup disabled"
 
   Scenario: I want to click the signup link
-     When I go to the dashboard
+     When I go to the dashboard page
      Then I should not see "Sign up"
      And I should not see link to the sign up page

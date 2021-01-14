@@ -11,9 +11,9 @@ Feature: Bulk operations
     Given a default application plan "Bronze" of provider "foo.3scale.localhost"
       And a buyer "Bob" signed up to provider "foo.3scale.localhost"
       And buyer "Bob" has the following applications:
-      | name       | state   |
-      | PendingApp | pending |
-      | LiveApp    | live    |
+      | name         | state   |
+      | PendingApp   | pending |
+      | LiveApp      | live    |
       | SuspendedApp | suspended |
 
     Given current domain is the admin domain of provider "foo.3scale.localhost"

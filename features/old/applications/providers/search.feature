@@ -52,7 +52,6 @@ Feature: Providers's applications searching, sorting and filtering
       | Name ▲  | Account |
       | BobApp  | bob     |
 
-
   Scenario: Listing
     Given the provider "foo.3scale.localhost" has the following applications:
     | Buyer | Name     | Plan  |

@@ -12,7 +12,7 @@ Feature: Buyer's API Access Details
     And provider "foo.3scale.localhost" has multiple applications disabled
     And a buyer "alice" signed up to application plan "Pro"
     When I log in as "alice" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     And I follow "API Credentials"
     Then I should see the user key of buyer "alice"
     And I should not see button to "Create new key"
@@ -24,7 +24,7 @@ Feature: Buyer's API Access Details
     And a buyer "alice" signed up to service plan "Gold Star L"
     And buyer "alice" has application "CuteWidget"
     When I log in as "alice" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should not see link "API Credentials"
     When I follow "Applications"
     And I follow "CuteWidget" for application "CuteWidget"
@@ -37,7 +37,7 @@ Feature: Buyer's API Access Details
     And the application of buyer "alice" has 3 keys
 
     When I log in as "alice" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     And I follow "API Credentials"
     Then I should see the ID of the application of buyer "alice"
     And I should see all keys of the application of buyer "alice"
@@ -53,7 +53,7 @@ Feature: Buyer's API Access Details
     And application "CuteWidget" has 2 keys
 
     When I log in as "alice" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should not see link "API Access Details"
     When I follow "Applications"
     And I follow "CuteWidget" for application "CuteWidget"
@@ -69,7 +69,7 @@ Feature: Buyer's API Access Details
     And a buyer "alice" signed up to service plan "Gold"
 
     When I log in as "alice" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     And the backend will create key "key-one" for an application
     Then I should not see link "API Access Details"
     When I follow "Applications"

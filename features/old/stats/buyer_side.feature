@@ -10,7 +10,7 @@ Feature: Buyer stats
       And provider "foo.3scale.localhost" has multiple applications enabled
       And a buyer "alice" signed up to provider "foo.3scale.localhost"
     When I log in as "alice" on "foo.3scale.localhost"
-      And I go to the dashboard
+      And I go to the dashboard page
     Then I should not see the link "Statistics"
 
   @javascript
@@ -23,7 +23,7 @@ Feature: Buyer stats
         | hits     |    20 |
 
     When I log in as "alice" on "foo.3scale.localhost"
-      And I go to the dashboard
+      And I go to the dashboard page
     Then I should see "Statistics"
     When I follow "Statistics"
     Then there should be a c3 chart with the following data:

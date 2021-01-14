@@ -21,7 +21,7 @@ Feature: Dashboards
     Given provider "foo.3scale.localhost" has multiple applications enabled
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
     When I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should be on the dashboard
     # TODO: And I should see stuff
 

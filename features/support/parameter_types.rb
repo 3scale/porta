@@ -184,7 +184,7 @@ ParameterType(
 
 ParameterType(
   name: 'user_key_of_buyer',
-  regexp: /^user key of buyer "([^"]*)"$/,
+  regexp: /user key of buyer "([^"]*)"/,
   transformer: ->(name) { Account.buyers.find_by!(org_name: name).bought_cinstance.user_key }
 )
 

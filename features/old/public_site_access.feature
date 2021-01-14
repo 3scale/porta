@@ -42,6 +42,6 @@ Feature: Public site access
   # Scenario: Master account has neither "view site" nor "admin" links
   #    Given current domain is the admin domain of provider "foo.3scale.localhost"
   #     When I log in as "superadmin"
-  #      And I go to the dashboard
+  #      And I go to the dashboard page
   #     Then I should not see link "Site" in the user widget
   #     And I should not see link "Admin" in the user widget

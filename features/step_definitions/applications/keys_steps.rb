@@ -28,7 +28,7 @@ Given "the application of {buyer} the following keys:" do |buyer, table|
   fake_application_keys(buyer.bought_cinstance, table.raw.map(&:first))
 end
 
-Given "the application of {buyer} {int} keys" do |buyer, number|
+Given "the application of {buyer} has {int} keys" do |buyer, number|
   fake_application_keys_count(buyer.bought_cinstance, number)
 end
 

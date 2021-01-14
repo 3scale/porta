@@ -19,7 +19,7 @@ Feature: Notice about payment details on buyer dashboard
     When user "bob" activates himself
     And buyer "bob" is approved
     And I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should not see "Payment details required"
 
   Scenario: On paid plan
@@ -35,7 +35,7 @@ Feature: Notice about payment details on buyer dashboard
     When user "bob" activates himself
     And buyer "bob" is approved
     And I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should see "Payment details required"
 
   Scenario: On paid plan with trial period
@@ -51,14 +51,14 @@ Feature: Notice about payment details on buyer dashboard
     When user "bob" activates himself
     And buyer "bob" is approved
     And I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should not see "Payment details required"
 
     And I should see "Trial period"
     And I should see "30 days remaining"
 
     When 12 days pass
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should see "18 days remaining"
 
   @wip @buyer_change_plan
@@ -83,13 +83,13 @@ Feature: Notice about payment details on buyer dashboard
     And buyer "bob" is approved
 
     And I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should not see "Payment details required"
     And I should not see "Trial period"
 
     When 31 days pass
     And buyer "bob" upgrades to plan "Pro"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should see "Payment details required"
     And I should not see "Trial period"
 
@@ -115,12 +115,12 @@ Feature: Notice about payment details on buyer dashboard
     And buyer "bob" is approved
 
     And I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should see "30 days remaining"
 
     When 10 days pass
     And buyer "bob" upgrades to plan "Pro"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should see "20 days remaining"
 
   Scenario: On paid plan when payment gateway is in test mode
@@ -137,5 +137,5 @@ Feature: Notice about payment details on buyer dashboard
     And buyer "bob" is approved
 
     And I log in as "bob" on "foo.3scale.localhost"
-    And I go to the dashboard
+    And I go to the dashboard page
     Then I should not see "Payment details required"

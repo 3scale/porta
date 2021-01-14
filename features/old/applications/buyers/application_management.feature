@@ -34,7 +34,7 @@ Feature: Buyer's application management
 
     When the current domain is "foo.3scale.localhost"
       And I log in as "bob" on "foo.3scale.localhost"
-      And I go to the dashboard
+      And I go to the dashboard page
       And I follow "Applications"
       And I follow "Create new application"
       And I follow "Travelling"
@@ -56,7 +56,7 @@ Feature: Buyer's application management
       And an application plan "Gold" of provider "foo.3scale.localhost"
 
       When I log in as "bob" on "foo.3scale.localhost"
-      And I go to the dashboard
+      And I go to the dashboard page
       And I follow "Applications"
       And I follow "Create new application"
       Then I should not be able to pick a plan
