@@ -45,15 +45,11 @@ const EditCreditCardDetails = ({isCreditCardStored}: {isCreditCardStored: boolea
 }
 
 const CreditCardErrors = ({cardErrorMessage}: {cardErrorMessage: ?string}) => {
-  if (cardErrorMessage) {
-    return (
-      <span id='card-errors' role='alert'>
-        {cardErrorMessage}
-      </span>
-    )
-  } else {
-    return (<div></div>)
-  }
+  return (
+    <span id='card-errors' role='alert'>
+      {cardErrorMessage}
+    </span>
+  )
 }
 
 const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: Props) => {
@@ -122,8 +118,7 @@ const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAd
           <fieldset>
             <legend>Credit card details</legend>
             <CardElement options={CARD_OPTIONS} className='col-md-10'/>
-            <CreditCardErrors cardErrorMessage={state.cardErrorMessage} />
-            <span id='card-errors' role='alert'></span>
+            { state.cardErrorMessage && <CreditCardErrors cardErrorMessage={state.cardErrorMessage} /> }
           </fieldset>
           <fieldset>
             <div className='form-group'>
