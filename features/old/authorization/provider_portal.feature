@@ -41,7 +41,7 @@ Feature: Provider portal section authorization
      And I go to the provider dashboard
     Then I should not see "Portal" in the audience dashboard widget
 
-    When I request the url of the '<page>' page then I should see an exception
+    When I request the url of the <page> page then I should see an exception
 
     Examples:
       | page          |
@@ -55,7 +55,7 @@ Feature: Provider portal section authorization
     Given an active user "member" of account "foo.3scale.localhost"
      And user "member" has access to the admin section "portal"
      When I log in as provider "member"
-     When I request the url of the 'groups' page then I should see an exception
+     When I request the url of the groups page then I should see an exception
 
   Scenario Outline: Members of portal group can access portal
     Given an active user "member" of account "foo.3scale.localhost"

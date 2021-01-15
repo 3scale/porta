@@ -31,7 +31,7 @@ Feature: Provider finance authorization
       And I go to the provider dashboard
     Then I should not see "Billing" in the audience dashboard widget
 
-    When I request the url of the '<page>' page then I should see an exception
+    When I request the url of the <page> page then I should see an exception
   Examples:
     | page                |
     | finance             |

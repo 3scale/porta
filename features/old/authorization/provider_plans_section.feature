@@ -48,7 +48,7 @@ Feature: Provider plans section authorization
     Then I should not see "Products" in the apis dashboard widget
     Then I should not see "Backends" in the apis dashboard widget
 
-    When I request the url of the '<page>' page then I should see an exception
+    When I request the url of the <page> page then I should see an exception
 
   Examples:
       | page                            |
