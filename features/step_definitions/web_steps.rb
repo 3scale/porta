@@ -166,8 +166,7 @@ end
 Then "(I )should be on {link_to_page}" do |page_name|
   # TODO: move this into transformer
   path = PathsHelper::PathFinder.new(@provider).path_to(page_name)
-  # assert_current_path gives a different one
-  assert_equal path, current_path
+  assert_current_path path
 end
 
 Then "(I )should have the following query string:" do |expected_pairs|
