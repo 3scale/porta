@@ -30,18 +30,15 @@ class PaymentTransaction < ApplicationRecord
       logger.info("Processing PaymentTransaction with code #{credit_card_auth_code}, gateway #{gateway} & options #{gateway_options}")
 
       begin
+        logger.info("Purchasing with #{gateway.class}")
         response = case gateway
                    when ActiveMerchant::Billing::AuthorizeNetGateway
-          logger.info("Purchasing with authorize.net")
           purchase_with_authorize_net(credit_card_auth_code, gateway)
                    when ActiveMerchant::Billing::StripePaymentIntentsGateway
-          logger.info('Purchasing with stripe (StripePaymentIntentsGateway)')
           purchase_with_stripe(credit_card_auth_code, gateway, gateway_options.reverse_merge(off_session: true, execute_threed: true))
                    when ActiveMerchant::Billing::StripeGateway
-          logger.info("Purchasing with stripe")
           purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
                    else
-          logger.info('Purchasing with something other than authorize.net or stripe')
           gateway.purchase(amount.cents, credit_card_auth_code, gateway_options)
         end
 
