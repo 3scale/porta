@@ -41,10 +41,11 @@ Given "{buyer} is subscribed to the default service of {provider}" do |buyer, pr
   buyer.bought_service_contracts.create! plan: provider.first_service!.service_plans.first
 end
 
-Given "{buyer} is subscribed with state {state} to the default service of {provider}" do |buyer, state, provider|
+Given "{buyer} is subscribed with state {string} to the default service of {provider}" do |buyer, state, provider|
   buyer.bought_service_contracts.map(&:destroy)
-  contract = buyer.bought_service_contracts.create! plan: provider.first_service!.service_plans.first
-  contract.update!(state: state)
+  contract = buyer.bought_service_contracts.create!(plan: provider.first_service!.service_plans.first)
+  # TODO: contract.update!(state: state)
+  contract.update_column(:state, state)
 end
 
 Given "{buyer} is not subscribed to the default service of {provider}" do |buyer, provider|

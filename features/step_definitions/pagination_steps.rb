@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 Then "I should see {amount} page(s)" do |count|
-  binding.pry
   links = within ".pagination" do
     all("a:not(.next_page), em.current")
   end

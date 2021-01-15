@@ -24,7 +24,7 @@ Given "application {string} has no keys" do |name|
   step %(application "#{name}" has 0 keys)
 end
 
-Given "the application of {buyer} the following keys:" do |buyer, table|
+Given "the application of {buyer} has the following keys:" do |buyer, table|
   fake_application_keys(buyer.bought_cinstance, table.raw.map(&:first))
 end
 

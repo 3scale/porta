@@ -17,7 +17,6 @@ class Buyers::ApplicationsController < FrontendController
   layout 'provider'
 
   def index
-    binding.pry
     # TODO: Editing this action may require editing Api::ApplicationsController
 
     activate_menu :audience, :applications, :listing

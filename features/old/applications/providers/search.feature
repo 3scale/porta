@@ -62,6 +62,7 @@ Feature: Providers's applications searching, sorting and filtering
     When I search for:
       | Plan  |
       | Cheap |
+    # FIXME: per_page query param disappears when searching (reloading the page)
     Then I should see 2 pages
     And I follow "Account" within table header
     And I should see following table:
@@ -72,7 +73,6 @@ Feature: Providers's applications searching, sorting and filtering
       | Account ▲ |
       | jane      |
     And I should see 2 pages
-
 
   Scenario Outline: Ordering
     Given I am on the applications admin page

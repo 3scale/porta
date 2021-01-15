@@ -68,7 +68,7 @@ end
 Given "the {provider} has the following applications:" do |provider, table|
   table.hashes.each do |row|
     assert provider.application_plans.find_by(name: row['Plan']) if row['Plan']
-    FactoryBot.create :cinstance, user_account: Account.find_by(name: row['Name']),
+    FactoryBot.create :cinstance, user_account: Account.buyers.find_by(name: row['Buyer']),
                                   plan: ApplicationPlan.find_by(name: row['Plan']),
                                   name: row['Name'],
                                   description: row['Description'] || 'Description'
