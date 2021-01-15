@@ -151,5 +151,6 @@ end
 
 Then "I should not be logged in" do
   # HAX: Check the logout link is not present. Don't know how to check this in a more explicit way.
-  step %(I should not see link to logout)
+  # step %(I should not see link to logout)
+  step %(I should see button "Sign in")
 end
