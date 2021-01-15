@@ -1,14 +1,25 @@
+// scss-lint:disable SelectorFormat
 .StripeElementsForm {
-  display: block;
-  height: 100%;
-  position: relative;
-  width: 100%;
 
-  .card-on-file {
+  .editCardButton {
     display: inline-block;
-    float: none;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: normal;
     text-align: right;
-    vertical-align: middle;
+    text-decoration: none;
     width: 100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    .fa {
+      margin-right: 5px;
+    }
+  }
+
+  .cardErrors {
+    margin: 1rem;
   }
 }

@@ -1,12 +1,11 @@
 // @flow
 
-import React, { useState } from 'react'
+import React from 'react'
 import { loadStripe } from '@stripe/stripe-js'
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { CSRFToken } from 'utilities/utils'
+import { CardForm } from 'PaymentGateways'
 import 'PaymentGateways/styles/stripe.scss'
-
 type Props = {
   stripePublishableKey: string,
   setupIntentSecret: string,
@@ -22,121 +21,23 @@ type Props = {
   isCreditCardStored: boolean
 }
 
-const EditCreditCardDetails = ({isCreditCardStored}: {isCreditCardStored: boolean}) => {
-  const [isStripeFormVisible, setIsStripeFormVisible] = useState({ isStripeFormVisible: !isCreditCardStored })
-
-  const toggleStripeForm = () => {
-    const newStateStripeFormVisible = !isStripeFormVisible
-    const stripeForm = document.getElementById('stripe-form')
-    newStateStripeFormVisible ? stripeForm.classList.remove('hidden') : stripeForm.classList.add('hidden')
-    setIsStripeFormVisible(newStateStripeFormVisible)
-  }
-
-  return (
-    <a className='card-on-file' onClick={toggleStripeForm}>
-      <i className='fa fa-pencil'></i>
-      <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
-    </a>
-  )
-}
-
-const CreditCardErrors = ({cardErrorMessage}: {cardErrorMessage: ?string}) => {
-  return (
-    <span id='card-errors' role='alert'>
-      {cardErrorMessage}
-    </span>
-  )
-}
-
 const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: Props) => {
   const stripePromise = loadStripe(stripePublishableKey)
 
-  const CheckoutForm = () => {
-    const stripe = useStripe()
-    const elements = useElements()
-
-    const [cardErrorMessage, setCardErrorMessage] = useState({ cardErrorMessage: null })
-
-    const handleSubmit = async event => {
-      event.preventDefault()
-
-      setCardErrorMessage(null)
-
-      const {error, setupIntent} = await stripe.confirmCardSetup(setupIntentSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          billing_details: {
-            address: billingAddressDetails
-          }
-        }
-      })
-
-      if (setupIntent && setupIntent.status === 'succeeded') {
-        document.getElementById('stripe_payment_method_id').value = setupIntent.payment_method
-        document.getElementById('stripe-form').submit()
-      } else {
-        setCardErrorMessage(error.message)
-      }
-    }
-
-    const CARD_OPTIONS = {
-      iconStyle: 'solid',
-      style: {
-        base: {
-          iconColor: '#8898AA',
-          color: 'black',
-          fontWeight: 300,
-          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-          fontSize: '19px',
-          '::placeholder': {
-            color: '#3f454c'
-          }
-        },
-        invalid: {
-          iconColor: '#e85746',
-          color: '#e85746'
-        }
-      },
-      classes: {
-        focus: 'is-focused',
-        empty: 'is-empty'
-      }
-    }
-
-    return (
-      <div className='well StripeElementsForm'>
-        <EditCreditCardDetails isCreditCardStored={isCreditCardStored} />
-        <form onSubmit={handleSubmit} action={successUrl} id='stripe-form' acceptCharset='UTF-8' method='post' className={isCreditCardStored ? 'hidden' : 'card-missing'}>
-          <fieldset>
-            <legend>Credit card details</legend>
-            <CardElement options={CARD_OPTIONS} className='col-md-10'/>
-            { cardErrorMessage && <CreditCardErrors cardErrorMessage={cardErrorMessage} /> }
-          </fieldset>
-          <fieldset>
-            <div className='form-group'>
-              <div className='col-md-10 operations'>
-                <button type='submit' disabled={!stripe} className='btn btn-primary pull-right' id='stripe-submit'>
-                  Save details
-                </button>
-              </div>
-            </div>
-          </fieldset>
-          <input id='stripe_payment_method_id' name='stripe[payment_method_id]' type='hidden' value=''/>
-          <CSRFToken/>
-        </form>
-      </div>
-    )
-  }
-
   return (
     <Elements stripe={stripePromise}>
-      <CheckoutForm />
+      <CardForm
+        setupIntentSecret={setupIntentSecret}
+        billingAddressDetails={billingAddressDetails}
+        successUrl={successUrl}
+        isCreditCardStored={isCreditCardStored}
+      />
     </Elements>
   )
 }
 
-const StripeFormWrapper = (props: Props, containerId: string) => createReactWrapper(<StripeElementsForm {...props}/>, containerId)
+const StripeFormWrapper = (props: Props, containerId: string) => (
+  createReactWrapper(<StripeElementsForm {...props} />, containerId)
+)
 
-export {
-  StripeFormWrapper
-}
+export { StripeFormWrapper }

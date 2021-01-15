@@ -10,7 +10,13 @@
   }.to_json
 %>
 
-<div id="stripe-form-wrapper" data-stripe_publishable_key="<%= @stripe_publishable_key %>" data-setup_intent_secret="<%= @intent.client_secret %>" data-billing_address="<%= billing_address_json %>" data-success_url="<%= hosted_success_admin_account_stripe_path %>" data-credit_card_stored="<%= current_account.credit_card_stored? %>"></div>
+<div id="stripe-form-wrapper"
+  data-stripe-publishable-key="<%= @stripe_publishable_key %>"
+  data-setup-intent-secret="<%= @intent.client_secret %>"
+  data-billing-address="<%= billing_address_json %>"
+  data-success-url="<%= hosted_success_admin_account_stripe_path %>"
+  data-credit-card-stored="<%= current_account.credit_card_stored? %>">
+</div>
 
 <script src="https://js.stripe.com/v3/"></script>
 <%= javascript_pack_tag 'StripeForm' %>
