@@ -16,13 +16,12 @@ When "I search for:" do |table|
     table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
 
     search = table.hashes.first
-    binding.pry
     fill_in('search_query', with: search[:group_org]) if search[:group_org]
     fill_in('search_name', with: search[:name]) if search[:name]
     fill_in('search_account_query', with: search[:account]) if search[:account]
-    select(search[:plan], form: 'search_plan_id') if search[:plan]
-    select(search[:paid], form: 'search_plan_type') if search[:paid]
-    select(search[:state], form: 'search_state') if search[:state]
+    select(search[:plan], from: 'search_plan_id') if search[:plan]
+    select(search[:paid], from: 'search_plan_type') if search[:paid]
+    select(search[:state], from: 'search_state') if search[:state]
 
     click_button("Search")
   end
