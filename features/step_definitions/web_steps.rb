@@ -136,6 +136,13 @@ Then "(I )should not see {regexp}" do |regexp|
   end
 end
 
+Then "(I )should see {string} and {string}" do |text1, text2|
+  steps %(
+    And I should see "#{text1}"
+    And I should see "#{text2}"
+  )
+end
+
 Then "the {string} field within {string} should contain {string}" do |field, selector, value|
   step %(the "#{field}" field should contain "#{value}" within "#{selector}")
 end

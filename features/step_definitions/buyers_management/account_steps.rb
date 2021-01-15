@@ -10,10 +10,12 @@ Given "{provider} has the following buyers:" do |provider, table|
 
     buyer = Account.buyers.find_by!(org_name: hash[:name])
 
-    buyerupdate! :state, hash[:state] if hash[:state]
-    buyerupdate! :created_at, Chronic.parse(hash[:created_at]) if hash[:created_at]
-    buyerupdate! :country, Country.find_by!(name: hash[:country]) if hash[:country].present?
+    buyer.state = hash[:state] if hash[:state]
+    buyer.created_at = Chronic.parse(hash[:created_at]) if hash[:created_at]
+    buyer.country = Country.find_by!(name: hash[:country]) if hash[:country].present?
     buyer.bought_account_contract.change_plan!(provider.account_plans.find_by!(name: hash[:plan])) if hash[:plan]
+
+    buyer.save!
   end
 end
 
@@ -27,12 +29,14 @@ Given "{provider} has the following buyers with users:" do |provider, buyers|
       buyer = FactoryBot.create(:account, provider_account: provider_account)
     end
 
-    buyerupdate! :state, hash['Account State']
-    if buyer.users.find_by!(email: hash['User Email'], username: hash['User Name'])
-    else
-      FactoryBot.create(:user, account: buyer, email: hash['User Email'], username: hash['User Name'])
-    end
-    userupdate! :state, hash['User State']
+    buyer.state = hash['Account State']
+    buyer.save!
+
+    user = buyer.users.find_by!(email: hash['User Email'], username: hash['User Name'])
+    FactoryBot.create(:user, account: buyer, email: hash['User Email'], username: hash['User Name']) unless user
+
+    user.state = hash['User State']
+    user.save!
   end
 end
 
