@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-helper = Module.new do
+module CurrentUserHelper
   def current_account
     current_user.account
   end
@@ -31,4 +31,4 @@ helper = Module.new do
   end
 end
 
-World(helper)
+World(CurrentUserHelper)

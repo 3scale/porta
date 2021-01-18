@@ -16,6 +16,7 @@ module PathsHelper
   class PathFinder
     include System::UrlHelpers.cms_url_helpers
     include System::UrlHelpers.system_url_helpers
+    include CurrentUserHelper
 
     attr_reader :provider
 
@@ -28,6 +29,10 @@ module PathsHelper
     def default_url_options
       {}
     end
+
+    # def current_account
+    #   CurrentUserHelper.current_account
+    # end
 
     # Maps a name to a path. Used by the
     #
@@ -62,6 +67,7 @@ module PathsHelper
         provider_admin_onboarding_wizard_intro_path
 
       when 'the login page'
+        # TODO: check if it works with include
         System::UrlHelpers.cms_url_helpers.login_path
 
       when 'the signup page'
