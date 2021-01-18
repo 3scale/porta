@@ -6,6 +6,7 @@ import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CardForm } from 'PaymentGateways'
 import 'PaymentGateways/styles/stripe.scss'
+
 type Props = {
   stripePublishableKey: string,
   setupIntentSecret: string,
@@ -40,4 +41,4 @@ const StripeFormWrapper = (props: Props, containerId: string) => (
   createReactWrapper(<StripeElementsForm {...props} />, containerId)
 )
 
-export { StripeFormWrapper }
+export { StripeElementsForm, StripeFormWrapper }
