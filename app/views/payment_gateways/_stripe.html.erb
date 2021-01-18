@@ -96,7 +96,7 @@
 
       document.getElementById('stripe_payment_method_id').value = setupIntent.payment_method;
 
-      stripeForm.submit();
+      stripeForm[0].submit();
     } else {
       alert(result.error.message);
     }
