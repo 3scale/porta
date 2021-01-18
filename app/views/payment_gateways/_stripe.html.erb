@@ -103,26 +103,31 @@
   }
 
   stripeForm.submit(function(e) {
-    e.preventDefault();
-    var intentSecret = stripeForm.data('secret');
+    if (e.originalEvent === undefined) {
+      return true;
+    } else {
+      e.preventDefault();
+      var intentSecret = stripeForm.data('secret');
 
-    var billingAddressDetails = {
-      line1: "<%= j billing_address.address1 %>",
-      line2: "<%= j billing_address.address2 %>",
-      city: "<%= j billing_address.city %>",
-      state: "<%= j billing_address.state %>",
-      postal_code: "<%= j billing_address.zip %>",
-      country: "<%= j billing_address.country %>"
-    }
-
-    stripe.confirmCardSetup(intentSecret, {
-      payment_method: {
-        card: card,
-        billing_details: {
-          address: billingAddressDetails
-        }
+      var billingAddressDetails = {
+        line1: "<%= j billing_address.address1 %>",
+        line2: "<%= j billing_address.address2 %>",
+        city: "<%= j billing_address.city %>",
+        state: "<%= j billing_address.state %>",
+        postal_code: "<%= j billing_address.zip %>",
+        country: "<%= j billing_address.country %>"
       }
-    }).then(handleIntentResult);
+
+      stripe.confirmCardSetup(intentSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            address: billingAddressDetails
+          }
+        }
+      }).then(handleIntentResult);
+      return false;
+    }
   });
 
 </script>
