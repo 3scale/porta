@@ -28,16 +28,29 @@ const CARD_OPTIONS = {
   }
 }
 
+type CardElementEvent = {
+    complete: boolean,
+    brand: string,
+    elementType: string,
+    empty: boolean,
+    error: ?{
+      code: string,
+      message: string,
+      type: string
+    },
+    value: { postalCode: string }
+}
+
 const EditCreditCardDetails = ({ onToogleVisibility, isStripeFormVisible }: { onToogleVisibility: () => void, isStripeFormVisible: boolean }
 ) => (
   <a className='editCardButton' onClick={ onToogleVisibility }>
-    <i className={ `fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}` }></i>
+    <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`}></i>
     <span>{ isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details' }</span>
   </a>
 )
 
 const CreditCardErrors = ({ cardErrorMessage }: { cardErrorMessage: string }) => (
-  <div class='cardErrors' role='alert'>
+  <div className='cardErrors' role='alert'>
     { cardErrorMessage }
   </div>
 )
@@ -48,6 +61,7 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
   const [cardErrorMessage, setCardErrorMessage] = useState(null)
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
   const [stripePaymentMethodId, setStripePaymentMethodId] = useState('')
+  const [formComplete, setFormComplete] = useState(false)
 
   const stripe = useStripe()
   const elements = useElements()
@@ -56,6 +70,8 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
 
   const handleSubmit = async event => {
     event.preventDefault()
+    setFormComplete(false)
+
     if (!stripe || !elements) {
       return
     }
@@ -77,6 +93,11 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
     }
   }
 
+  const validateCardElement = (event: CardElementEvent) => {
+    setFormComplete(event.complete)
+    setCardErrorMessage(event.error ? event.error.message : null)
+  }
+
   return (
     <div className='well StripeElementsForm'>
       <EditCreditCardDetails
@@ -94,7 +115,11 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
       >
         <fieldset>
           <legend>Credit card details</legend>
-          <CardElement options={CARD_OPTIONS} className='col-md-12' />
+          <CardElement
+            options={CARD_OPTIONS}
+            className='col-md-12'
+            onChange={validateCardElement}
+          />
           { cardErrorMessage && <CreditCardErrors cardErrorMessage={ cardErrorMessage } /> }
         </fieldset>
         <fieldset>
@@ -102,7 +127,7 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
             <div className='col-md-10 operations'>
               <button
                 type='submit'
-                disabled={!stripe}
+                disabled={!formComplete}
                 className='btn btn-primary pull-right'
                 id='stripe-submit'
               >
