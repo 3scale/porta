@@ -35,12 +35,12 @@ Then "liquid template {string} of {provider} should have body {string}" do |name
 end
 
 When "builtin page {string} of {provider} has content {string}" do |system_name, provider, content|
-  provider.builtin_pages.where(system_name: system_name).first
+  template = provider.builtin_pages.where(system_name: system_name).first
   template.update_column(:published, content)
 end
 
 When "builtin partial {string} of {provider} has content {string}" do |system_name, provider, content|
-  provider.builtin_partials.where(system_name: system_name).first
+  template = provider.builtin_partials.where(system_name: system_name).first
   template.update_column(:published, content)
 end
 

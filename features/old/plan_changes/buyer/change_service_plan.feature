@@ -22,7 +22,7 @@ Feature: Change service plan
 
     When the current domain is "foo.3scale.localhost"
      And I log in as "fan" on "foo.3scale.localhost"
-     And I go to the services list page for buyers
+     And I go to the services list for buyers page
      When I follow "Review/Change"
       And I follow "Metal"
       And I press "Change Plan"
@@ -33,7 +33,7 @@ Feature: Change service plan
 
     When the current domain is "foo.3scale.localhost"
      And I log in as "fan" on "foo.3scale.localhost"
-     And I go to the services list page for buyers
+     And I go to the services list for buyers page
 
      When I follow "Review/Change"
       And I follow "Metal"
@@ -45,7 +45,7 @@ Feature: Change service plan
 
     When the current domain is "foo.3scale.localhost"
      And I log in as "fan" on "foo.3scale.localhost"
-     And I go to the services list page for buyers
+     And I go to the services list for buyers page
 
      When I follow "Review/Change"
       And I follow "Metal"

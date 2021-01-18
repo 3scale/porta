@@ -323,7 +323,7 @@ module PathsHelper
       when 'the service subscription page'
         new_admin_service_contract_path
 
-      when 'the services list page for buyers'
+      when 'the services list for buyers page'
         admin_buyer_services_path
 
       when 'the service subscriptions list for provider',
