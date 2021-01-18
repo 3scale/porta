@@ -53,8 +53,10 @@ Then /^(.*) in the buyer accounts table$/ do |action|
   within('#buyer_accounts') { step action }
 end
 
-Then /^(.*) for ((?:buyer|provider|account) "[^"]*")$/ do |action, account|
-  within('#' + dom_id(account)) { step action }
+Then /^(.*) for ((?:buyer|provider|account) "([^"]*)")$/ do |action, name|
+  # FIXME: use a ParameterType instead
+  account = Account.find_by!(org_name: name)
+  within("##{dom_id(account)}") { step action }
 end
 
 Then "I should see (only ){int} buyers" do |number|

@@ -134,13 +134,8 @@ Then "I should see buttons to resend the invitations" do
   end
 end
 
-Then "I should see the button to resend the invitation to {string}" do |email|
-  unaccepted_invitation = Invitation.find_by!(email: email)
-  response.should have_tag("a#resend-invitation-#{unaccepted_invitation.id}")
-end
-
 Then "I {should} be able to resend the invitation to {string}" do |can_resend, email|
-  assert_equal can_resend, have_css?("button#resend-invitation-#{Invitation.find_by!(email: email).id}")
+  assert_equal can_resend, has_css?("a#resend-invitation-#{Invitation.find_by!(email: email).id}")
 end
 
 Then "I should see the invitation for {string} on top of the list" do |address|

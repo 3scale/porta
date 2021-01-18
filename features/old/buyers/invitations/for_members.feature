@@ -23,5 +23,5 @@ Feature: Invitations to provider users
     Given invitation from "foo.3scale.localhost" sent to "alice@foo.3scale.localhost" was accepted
     When I visit the sent invitations page
 
-    Then I should see the button to resend the invitation to "bob@foo.3scale.localhost"
-      But I should not see the button to resend the invitation to "alice@foo.3scale.localhost"
+    Then I should be able to resend the invitation to "bob@foo.3scale.localhost"
+      But I should not be able to resend the invitation to "alice@foo.3scale.localhost"
