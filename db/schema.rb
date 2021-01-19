@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201222214415) do
+ActiveRecord::Schema.define(version: 20210119101158) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                 null: false
@@ -872,6 +872,18 @@ ActiveRecord::Schema.define(version: 20201222214415) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint   "tenant_id"
+  end
+
+  create_table "payment_intents", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer  "invoice_id",        null: false
+    t.string   "payment_intent_id"
+    t.string   "state"
+    t.bigint   "tenant_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id", using: :btree
+    t.index ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id", using: :btree
+    t.index ["state"], name: "index_payment_intents_on_state", using: :btree
   end
 
   create_table "payment_transactions", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|

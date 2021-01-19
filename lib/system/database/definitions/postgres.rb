@@ -525,6 +525,12 @@ System::Database::Postgres.define do
     SQL
   end
 
+  trigger 'payment_intents' do
+    <<~SQL
+      SELECT tenant_id INTO NEW.tenant_id FROM invoices WHERE id = NEW.invoice_id AND tenant_id <> master_id;
+    SQL
+  end
+
   trigger 'payment_gateway_settings' do
     <<~SQL
       IF NEW.account_id <> master_id THEN
