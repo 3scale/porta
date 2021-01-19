@@ -50,6 +50,8 @@ module Account::CreditCard
     case provider_account.try(:payment_gateway_type)
     when :authorize_net
       :credit_card_authorize_net_payment_profile_token
+    when :stripe
+      :credit_card_partial_number
     else
       :credit_card_auth_code
     end

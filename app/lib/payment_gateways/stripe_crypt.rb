@@ -29,7 +29,7 @@ module PaymentGateways
       setup_intent_params = {
         payment_method_types: ['card'],
         usage: 'off_session',
-        customer: customer.id
+        customer: find_or_create_customer.id
       }
       Stripe::SetupIntent.create(setup_intent_params, api_key)
     end
@@ -38,13 +38,26 @@ module PaymentGateways
 
     delegate :payment_detail, to: :account
 
-    def customer
+    def customer_id
+      payment_detail.credit_card_auth_code
+    end
+
+    def find_or_create_customer
+      customer = Stripe::Customer.retrieve(customer_id, api_key) if customer_id
+      customer.try(:id) ? customer : create_customer
+    end
+
+    def create_customer
       customer_params = {
         description: account.org_name,
         email: user.email,
         metadata: {  '3scale_account_reference' => buyer_reference }
       }
-      Stripe::Customer.create(customer_params, api_key)
+
+      Stripe::Customer.create(customer_params, api_key).tap do |customer|
+        payment_detail.credit_card_auth_code = customer.id
+        payment_detail.save
+      end
     end
 
     def api_key
