@@ -29,35 +29,46 @@ const CARD_OPTIONS = {
 }
 
 type CardElementEvent = {
-    complete: boolean,
-    brand: string,
-    elementType: string,
-    empty: boolean,
-    error: ?{
-      code: string,
-      message: string,
-      type: string
-    },
-    value: { postalCode: string }
+  complete: boolean,
+  brand: string,
+  elementType: string,
+  empty: boolean,
+  error: ?{
+    code: string,
+    message: string,
+    type: string
+  },
+  value: { postalCode: string }
 }
 
-const EditCreditCardDetails = ({ onToogleVisibility, isStripeFormVisible }: { onToogleVisibility: () => void, isStripeFormVisible: boolean }
-) => (
-  <a className='editCardButton' onClick={ onToogleVisibility }>
+type EditCardDetailsProps = {
+  onToogleVisibility: () => void,
+  isStripeFormVisible: boolean
+}
+
+const EditCreditCardDetails = ({ onToogleVisibility, isStripeFormVisible }: EditCreditCardDetailsProps) => (
+  <a className="editCardButton" onClick={onToogleVisibility}>
     <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`}></i>
-    <span>{ isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details' }</span>
+    <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
   </a>
 )
 
-const CreditCardErrors = ({ cardErrorMessage }: { cardErrorMessage: string }) => (
-  <div className='cardErrors' role='alert'>
-    { cardErrorMessage }
+const CreditCardErrors = (props) => (
+  <div className="cardErrors" role="alert">
+    {props.children}
   </div>
 )
 
-const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: { setupIntentSecret: string, billingAddressDetails: string, successUrl: string, isCreditCardStored: boolean }) => {
+type CardFormProps = {
+  setupIntentSecret: string,
+  billingAddressDetails: string,
+  successUrl: string,
+  isCreditCardStored: boolean
+}
+
+const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: CardFormProps) => {
   // eslint-disable-next-line flowtype/no-weak-types
-  const formRef: { current: any | HTMLFormElement } = useRef(null)
+  const formRef = useRef<{ current: any | HTMLFormElement }>(null)
   const [cardErrorMessage, setCardErrorMessage] = useState(null)
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
   const [stripePaymentMethodId, setStripePaymentMethodId] = useState('')
@@ -107,9 +118,9 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
       <form
         onSubmit={handleSubmit}
         action={successUrl}
-        id='stripe-form'
-        acceptCharset='UTF-8'
-        method='post'
+        id="stripe-form"
+        acceptCharset="UTF-8"
+        method="post"
         className={isStripeFormVisible ? '' : 'hidden'}
         ref={formRef}
       >
@@ -117,19 +128,19 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
           <legend>Credit card details</legend>
           <CardElement
             options={CARD_OPTIONS}
-            className='col-md-12'
+            className="col-md-12"
             onChange={validateCardElement}
           />
-          { cardErrorMessage && <CreditCardErrors cardErrorMessage={ cardErrorMessage } /> }
+          {cardErrorMessage && <CreditCardErrors>{cardErrorMessage}</CreditCardErrors>}
         </fieldset>
         <fieldset>
-          <div className='form-group'>
-            <div className='col-md-10 operations'>
+          <div className="form-group">
+            <div className="col-md-10 operations">
               <button
-                type='submit'
+                type="submit"
                 disabled={!formComplete}
-                className='btn btn-primary pull-right'
-                id='stripe-submit'
+                className="btn btn-primary pull-right"
+                id="stripe-submit"
               >
                 Save details
               </button>
@@ -137,9 +148,9 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
           </div>
         </fieldset>
         <input
-          id='stripe_payment_method_id'
-          name='stripe[payment_method_id]'
-          type='hidden'
+          id="stripe_payment_method_id"
+          name="stripe[payment_method_id]"
+          type="hidden"
           value={stripePaymentMethodId}
         />
         <CSRFToken />
