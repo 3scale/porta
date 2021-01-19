@@ -525,6 +525,12 @@ System::Database::Oracle.define do
     SQL
   end
 
+  trigger 'payment_intents' do
+    <<~SQL
+      SELECT tenant_id INTO :new.tenant_id FROM invoices WHERE id = :new.invoice_id AND tenant_id <> master_id;
+    SQL
+  end
+
   trigger 'payment_gateway_settings' do
     <<~SQL
       IF :new.account_id <> master_id THEN
