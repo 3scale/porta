@@ -100,8 +100,16 @@ module Account::BillingAddress
                                      })
   end
 
-  def billing_address_json
-    billing_address.to_json
+  def stripe_billing_address_json
+    stripe_billing_address = {
+      line1: @billing_address.address1,
+      line2: @billing_address.address2,
+      city: @billing_address.city,
+      state: @billing_address.state,
+      postal_code: @billing_address.zip,
+      country: @billing_address.country
+    }.to_json
+    stripe_billing_address
   end
 
   def billing_address=(address)
