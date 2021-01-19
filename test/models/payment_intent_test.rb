@@ -38,6 +38,40 @@ class PaymentIntentTest < ActiveSupport::TestCase
     assert_same_elements records[1..-1], relation.latest_pending(2)
   end
 
+  test 'by_invoice' do
+    records = create_payment_intents
+    other_invoice = FactoryBot.create(:invoice)
+    other_record = FactoryBot.create(:payment_intent, invoice: other_invoice)
+
+    assert_same_elements records.map(&:id), PaymentIntent.by_invoice(invoice).pluck(:id)
+    assert_same_elements [other_record.id], PaymentIntent.by_invoice(other_invoice).pluck(:id)
+  end
+
+  test '#update_from_stripe_event' do
+    FactoryBot.create(:line_item, invoice: invoice, cost: 250)
+    invoice.send(:issue!)
+    invoice_cost = invoice.charge_cost
+    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, state: 'submitted')
+    payment_intent_data = { id: payment_intent.payment_intent_id, amount: invoice_cost.cents }
+    payment_transactions = invoice.payment_transactions
+
+    invalid_event = stripe_event(type: 'payment_intent.required_action', payment_intent_data: payment_intent_data)
+    assert_no_difference(payment_transactions.method(:count)) do
+      refute payment_intent.update_from_stripe_event(invalid_event)
+      assert_equal 'submitted', payment_intent.reload.state
+      refute invoice.reload.paid?
+    end
+
+    valid_event = stripe_event(type: 'payment_intent.succeeded', payment_intent_data: payment_intent_data)
+    assert_difference(payment_transactions.method(:count)) do
+      assert payment_intent.update_from_stripe_event(valid_event)
+      assert_equal 'succeeded', payment_intent.reload.state
+      assert invoice.reload.paid?
+    end
+    expected_payment_transaction = { action: 'purchase', amount: invoice_cost, success: true, message: 'Payment confirmed', reference: payment_intent_data[:id], params: valid_event.to_hash }.deep_stringify_keys
+    assert_equal expected_payment_transaction, payment_transactions.last.attributes.slice(*%w[action amount success message reference params]).deep_stringify_keys
+  end
+
   private
 
   def create_payment_intents
@@ -46,5 +80,17 @@ class PaymentIntentTest < ActiveSupport::TestCase
 
   def relation
     PaymentIntent.where(invoice: invoice)
+  end
+
+  def stripe_payment_intent_data
+    { id: 'payment-intent-id', object: 'payment_intent', status: 'succeeded', amount: 85000, currency: 'eur' }
+  end
+
+  def stripe_event_data
+    { id: 'event-id', object: 'event', type: 'payment_intent.succeeded', data: { object: stripe_payment_intent_data } }
+  end
+
+  def stripe_event(type:, payment_intent_data: {})
+    Stripe::Event.construct_from(stripe_event_data.deep_merge(type: type, data: { object: payment_intent_data }))
   end
 end
