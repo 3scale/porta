@@ -19,7 +19,6 @@ const props = {
 
 it('should render properly', () => {
   const wrapper = mount(<StripeElementsForm { ...props } />)
-  expect(wrapper).toMatchSnapshot()
   expect(wrapper.find('.StripeElementsForm').exists()).toEqual(true)
   expect(wrapper.find('#stripe-form').exists()).toEqual(true)
 })
