@@ -100,6 +100,10 @@ module Account::BillingAddress
                                      })
   end
 
+  def billing_address_json
+    billing_address.to_json
+  end
+
   def billing_address=(address)
     raise Account::BillingAddress::AddressFormatError, self unless address.respond_to?(:each)
     @billing_address_set = true

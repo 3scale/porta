@@ -41,7 +41,7 @@ type CardElementEvent = {
   value: { postalCode: string }
 }
 
-type EditCardDetailsProps = {
+type EditCreditCardDetailsProps = {
   onToogleVisibility: () => void,
   isStripeFormVisible: boolean
 }
@@ -68,7 +68,7 @@ type CardFormProps = {
 
 const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: CardFormProps) => {
   // eslint-disable-next-line flowtype/no-weak-types
-  const formRef = useRef<{ current: any | HTMLFormElement }>(null)
+  const formRef = useRef<any | HTMLFormElement>(null)
   const [cardErrorMessage, setCardErrorMessage] = useState(null)
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
   const [stripePaymentMethodId, setStripePaymentMethodId] = useState('')

@@ -1,19 +1,7 @@
-<%
-  billing_address = current_account.billing_address
-  billing_address_json = {
-    line1: billing_address.address1,
-    line2: billing_address.address2,
-    city: billing_address.city,
-    state: billing_address.state,
-    postal_code: billing_address.zip,
-    country: billing_address.country
-  }.to_json
-%>
-
 <div id="stripe-form-wrapper"
   data-stripe-publishable-key="<%= @stripe_publishable_key %>"
   data-setup-intent-secret="<%= @intent.client_secret %>"
-  data-billing-address="<%= billing_address_json %>"
+  data-billing-address="<%= current_account.billing_address_json %>"
   data-success-url="<%= hosted_success_admin_account_stripe_path %>"
   data-credit-card-stored="<%= current_account.credit_card_stored? %>">
 </div>
