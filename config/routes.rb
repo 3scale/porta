@@ -1041,6 +1041,10 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
         end
 
+        namespace 'payment_callbacks', module: 'payment_callbacks' do
+          resources :stripe_callbacks, only: :create
+        end
+
         resources :accounts, :only => [], module: 'accounts' do
           resources :invoices, :only => [:index, :show]
         end
