@@ -4,7 +4,7 @@ import React from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { CardForm } from 'PaymentGateways'
+import { StripeCardForm } from 'PaymentGateways'
 import 'PaymentGateways/styles/stripe.scss'
 
 type Props = {
@@ -27,7 +27,7 @@ const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAd
 
   return (
     <Elements stripe={stripePromise}>
-      <CardForm
+      <StripeCardForm
         setupIntentSecret={setupIntentSecret}
         billingAddressDetails={billingAddressDetails}
         successUrl={successUrl}

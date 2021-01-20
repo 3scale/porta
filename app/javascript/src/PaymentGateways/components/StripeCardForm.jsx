@@ -59,14 +59,14 @@ const CreditCardErrors = (props) => (
   </div>
 )
 
-type CardFormProps = {
+type StripeCardFormProps = {
   setupIntentSecret: string,
   billingAddressDetails: string,
   successUrl: string,
   isCreditCardStored: boolean
 }
 
-const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: CardFormProps) => {
+const StripeCardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: StripeCardFormProps) => {
   // eslint-disable-next-line flowtype/no-weak-types
   const formRef = useRef<any | HTMLFormElement>(null)
   const [cardErrorMessage, setCardErrorMessage] = useState(null)
@@ -159,4 +159,4 @@ const CardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCred
   )
 }
 
-export { CardForm }
+export { StripeCardForm }

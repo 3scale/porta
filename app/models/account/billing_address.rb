@@ -100,18 +100,6 @@ module Account::BillingAddress
                                      })
   end
 
-  def stripe_billing_address_json
-    stripe_billing_address = {
-      line1: @billing_address.address1,
-      line2: @billing_address.address2,
-      city: @billing_address.city,
-      state: @billing_address.state,
-      postal_code: @billing_address.zip,
-      country: @billing_address.country
-    }.to_json
-    stripe_billing_address
-  end
-
   def billing_address=(address)
     raise Account::BillingAddress::AddressFormatError, self unless address.respond_to?(:each)
     @billing_address_set = true
