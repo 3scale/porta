@@ -23,7 +23,7 @@
     {{ '/javascripts/3scale_v2.js' | javascript_include_tag }}
     {{ '/javascripts/excanvas.compiled.js' | javascript_include_tag }}
      {% if provider.payment_gateway_type == :stripe %}
-      <script src="https://js.stripe.com/v3" async></script>      
+      {{ 'loadStripe.js' | javascript_include_tag }}
     {% endif %}
 
     {{ content_of.stylesheets | html_safe }}
