@@ -17,6 +17,12 @@ const defaultProps = {
   successUrl: '/Broflovski/Residence'
 }
 
+/**
+* IMPORTANT NOTE:
+* stripe-react is not easy to test, see discussion in https://github.com/stripe/react-stripe-js/issues/59
+* we should update this tests when the issue is updated
+*/
+
 it('should render properly', () => {
   const wrapper = mount(<StripeElementsForm {...defaultProps} />)
   expect(wrapper.find('.StripeElementsForm').exists()).toEqual(true)
