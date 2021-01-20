@@ -53,13 +53,14 @@ module PaymentDetailsHelper
   end
 
   def stripe_billing_address_json
+    billing_address = current_account.billing_address
     {
-      line1: current_account.billing_address.address1,
-      line2: current_account.billing_address.address2,
-      city: current_account.billing_address.city,
-      state: current_account.billing_address.state,
-      postal_code: current_account.billing_address.zip,
-      country: current_account.billing_address.country
+      line1: billing_address.address1,
+      line2: billing_address.address2,
+      city: billing_address.city,
+      state: billing_address.state,
+      postal_code: billing_address.zip,
+      country: billing_address.country
     }.to_json
   end
 
