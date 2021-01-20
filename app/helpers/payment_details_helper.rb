@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PaymentDetailsHelper
-  delegate :billing_address, to: :current_account
 
   def credit_card_terms_url
     url_for(site_account.settings.cc_terms_path)
@@ -55,7 +54,8 @@ module PaymentDetailsHelper
     definition_list_item
   end
 
-  def stripe_billing_address_json 
+  def stripe_billing_address_json
+    billing_address = current_account.billing_address
     {
       line1: billing_address.address1,
       line2: billing_address.address2,
