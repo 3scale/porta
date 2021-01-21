@@ -482,51 +482,11 @@ en:
           the OAuth authentication mode. You can change the authentication mode
           in the %{link_to_settings_tab}.
       proxy:
-        production:
-          title: "Production:"
-          self_managed:
-            title: "Self-managed Gateway"
-            description_html: |
-              To deploy an on-premises API gateway, add the Public Base URL
-              of your API, download the Nginx Config files and install them on your servers.
-          hosted:
-            title: "APIcast Cloud Gateway"
-            description: |
-              The APIcast production environment has the same configuration as the staging environment.
-              The public endpoint is different and it runs in a production environment
-          apicast:
-            title: "APIcast"
-            description_html: |
-              The APIcast production environment has the same configuration as the staging environment.
-              The public endpoint is different.
-        feedback:
-          api_test_path_blank: "The API test GET request has been left blank. You should set it before checking the connections between client, gateway & API."
-          api_test_success_nil: "Hit the test button to check the connections between client, gateway & API."
-          api_test_success_true_html: 'Connection between client, gateway & API is working correctly as <a href="%{url}">reflected in the analytics section</a>.'
-          api_test_success_false: "Something is not quite ok. Is your private API host reachable from the API gateway?"
-          api_test_form_error: "There seems to be an error in your Staging Configuration. Please review, fix and re-submit."
-
-        howto_hosted_html: |
-          Configure your API gateway in the staging environment. Once
-          your staging environment is green you can deploy the gateway
-          to the 3scale production environment.
-
-        howto_self_managed_html: |
-          Configure your API gateway in the staging environment. At any moment,
-          you can download the nginx config files to deploy your on-premises
-          API gateway to a suitable production environment.
-
-        howto_oauth_html: |
-          Configure your API gateway and run it on-premises. Please note that this is currently only possible for the Authorization Code flow.
-          For other flows, checkout our repository of nginx config file templates in <a href='https://github.com/3scale/nginx-oauth-templates'>github</a>. <b>Our staging environment currently doesn't support oauth.</b>
-
         enabled_html: "Deployed at %{at}. <a href='%{list}'>See the history.</a>"
         disabled_html: "Not deployed. <a href='%{list}'>See the history.</a>"
 
-        visit_documentation: 'documentation'
         # start documentation links
         documentation_hosted_url: '%{docs_base_url}/deployment-options/apicast-hosted'
-        documentation_apicast_url: '%{docs_base_url}/deployment-options/apicast-overview'
         documentation_self_managed_url: '%{docs_base_url}/deployment-options/apicast-self-managed-nginx-config-files'
         documentation_oauth_url: '%{docs_base_url}/deployment-options/apicast-oauth-before-may-2017'
         documentation_response_codes_tracking_url: '%{docs_base_url}/admin_portal_guide/response-codes-tracking'
@@ -1235,8 +1195,6 @@ en:
            API gateway and OAuth setup</a> on our support page.
         oidc_issuer_endpoint: |
           Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be "https://&lt;CLIENT_ID&gt;:&lt;CLIENT_SECRET&gt;@&lt;HOST&gt;:&lt;PORT&gt;/auth/realms/&lt;REALM_NAME&gt;".
-        api_test_path: "Optional GET request to a API gateway endpoint. We will use this call to validate your API gateway setup using credentials of the first live application. You can try it yourself by copying the following command into your shell:"
-        api_test_path_blank: "Optional GET request to a API gateway endpoint. This call has been left blank and therefore it will not be possible to test if the connection between client, API gateway & API is working correctly."
         hostname_rewrite: |
           Lets you define a custom <code>Host</code> request header. This is needed if your API backend only accepts traffic from a specific host.
         secret_token: |

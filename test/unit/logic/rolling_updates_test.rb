@@ -106,7 +106,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     provider.expects(:provider_can_use?).returns(false).once
     buyer.send(:provider_can_use?, :whatever)
   end
-  
+
   test "Controller: provider_can_use? delegate to current_account" do
     controller_instance = mocked_controller
 
@@ -154,6 +154,7 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   test 'async apicast deploy' do
     provider = Account.new
 
+    # TODO: THREESCALE-3759 remove this rolling update, no longer used?
     refute provider.rolling_update(:async_apicast_deploy).missing_config
   end
 
