@@ -55,6 +55,8 @@ module PaymentDetailsHelper
   end
 
   def stripe_billing_address_json
+    return unless logged_in?
+
     billing_address = current_account.billing_address
     {
       line1: billing_address.address1,

@@ -22,7 +22,7 @@
     {{ '/javascripts/vendor/colorbox/jquery.colorbox-patched.js' | javascript_include_tag }}
     {{ '/javascripts/3scale_v2.js' | javascript_include_tag }}
     {{ '/javascripts/excanvas.compiled.js' | javascript_include_tag }}
-     {% if provider.payment_gateway_type == :stripe %}
+    {% if provider.payment_gateway_type == :stripe %}
       {{ 'load_stripe.js' | javascript_include_tag }}
     {% endif %}
 
