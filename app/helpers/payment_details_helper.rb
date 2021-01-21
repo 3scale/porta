@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentDetailsHelper
 
   def credit_card_terms_url
@@ -51,4 +53,17 @@ module PaymentDetailsHelper
     definition_list_item += content_tag :dd, value.presence, class: 'u-dl-definition'
     definition_list_item
   end
+
+  def stripe_billing_address_json
+    billing_address = current_account.billing_address
+    {
+      line1: billing_address.address1,
+      line2: billing_address.address2,
+      city: billing_address.city,
+      state: billing_address.state,
+      postal_code: billing_address.zip,
+      country: billing_address.country
+    }.to_json
+  end
+
 end
