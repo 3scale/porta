@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #FIXME: why is this controller not inheriting from Buyers::Base ?????
 class Buyers::ApplicationsController < FrontendController
 
@@ -6,8 +8,8 @@ class Buyers::ApplicationsController < FrontendController
   helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
-  before_action :find_buyer, :only => [:new, :create]
-  before_action :authorize_multiple_applications, :only => [ :new, :create ]
+  before_action :find_buyer, :only => [:create]
+  before_action :authorize_multiple_applications, :only => [:create]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
   before_action :find_provider,  only: %i[new create update]
@@ -52,13 +54,17 @@ class Buyers::ApplicationsController < FrontendController
   end
 
   def new
-    @cinstance = @buyer.bought_cinstances.build
-    extend_cinstance_for_new_plan
-    @plans = accessible_plans.stock
-
+    # binding.pry
     if params[:account_id]
+      # We're in buyers/accounts/:id/applications/new
+      find_buyer
+      @plans = accessible_plans.stock
+      @cinstance = @buyer.bought_cinstances.build
+      extend_cinstance_for_new_plan
       @account = current_account.buyers.find params[:account_id]
       activate_menu :buyers, :accounts
+    else
+      # We're in buyers/applications/new
     end
   end
 

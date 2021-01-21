@@ -577,7 +577,7 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
         end
 
-        resources :applications, :controller => 'buyers_applications', :only => [:index, :show, :create, :update, :destroy] do
+        resources :applications, :controller => 'buyers_applications', :except => :edit do
           collection do
             get :find
           end

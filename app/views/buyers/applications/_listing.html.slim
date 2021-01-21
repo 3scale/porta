@@ -46,6 +46,8 @@ table class="data"
           - else
             = switch_link 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add',
           :upgrade_notice => true, :switch => :multiple_applications
+        - else
+          = link_to 'Create Application', new_admin_buyers_application_path, :class => 'action add'
 
     - if @cinstances.present? || @account.nil?
       tr class="search"
