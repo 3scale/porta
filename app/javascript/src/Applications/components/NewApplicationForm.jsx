@@ -49,6 +49,7 @@ type Product = {
 type Props = {
   createApplicationPath: string,
   createServicePlanPath: string,
+  createApplicationPlanPath: string,
   products: Array<Product>,
   applicationPlans: Array<ApplicationPlan>,
   servicePlansAllowed: boolean,
@@ -70,7 +71,7 @@ function toFormSelectOption (p: { disabled?: boolean, name: string, id: number }
 const NewApplicationForm = (props: Props) => {
   console.log(props)
   console.time('render NewApplicationForm')
-  const { buyerId, createApplicationPath, servicePlansAllowed, products, applicationPlans } = props
+  const { buyerId, createApplicationPath, servicePlansAllowed, products, applicationPlans, createApplicationPlanPath } = props
 
   const [buyer, setBuyer] = useState(buyers[0])
   const [product, setProduct] = useState(DEFAULT_PRODUCT)
@@ -138,7 +139,7 @@ const NewApplicationForm = (props: Props) => {
           fieldId="cinstance_plan_id"
         >
           <FormSelect
-            isDisabled={product === DEFAULT_PRODUCT}
+            isDisabled={product === DEFAULT_PRODUCT || !availablePlans.length}
             value={plan.id}
             onChange={(id) => setPlan(applicationPlans.find(p => p.id === Number(id)))}
             id="cinstance_plan_id"
@@ -146,6 +147,11 @@ const NewApplicationForm = (props: Props) => {
           >
             {[DEFAULT_APP_PLAN, ...availablePlans].map(toFormSelectOption)}
           </FormSelect>
+          {product !== DEFAULT_PRODUCT && !availablePlans.length && (
+            <Button component="a" href={createApplicationPlanPath.replace(':id', product.id)} variant="link">
+              Create your first application plan.
+            </Button>
+          )}
         </FormGroup>
 
         {/* Service Plan */}

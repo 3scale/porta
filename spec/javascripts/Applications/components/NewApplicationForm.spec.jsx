@@ -5,18 +5,22 @@ import React from 'react'
 import { render, mount } from 'enzyme'
 import { NewApplicationForm } from 'Applications/components/NewApplicationForm'
 
-const products = [{ id: 0, name: 'API Product' }]
+const products = [
+  { id: 0, name: 'API Product' },
+  { id: 1, name: 'API w/o plans' }
+]
 const applicationPlans = [{ id: 0, name: 'Basic Plan', issuer_id: products[0].id }]
 
 const defaultProps = {
   createApplicationPath: '/applications/new',
-  createServicePlanPath: '/accounts/:id/applications/new',
+  createServicePlanPath: '/service/:id/plans/new',
+  createApplicationPlanPath: '/accounts/applications/new',
   products,
   applicationPlans,
   servicePlansAllowed: false,
   // servicesContracted: [],
   // servicePlanContractedForService: [],
-  buyerId: 12345
+  buyerId: '12345'
 }
 
 it('should render properly', () => {
@@ -28,10 +32,34 @@ it('should be able to submit only when form is complete', () => {
   const wrapper = mount(<NewApplicationForm {...defaultProps} />)
   expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(true)
 
+  // FIXME:
   // wrapper.find('input[name="cinstance[name]"]').simulate('change', { currentTarget: { value: 'My Application' } })
   // wrapper.find('select#product').simulate('change', { target: { value: products[0].id } })
   // wrapper.find('select[name="cinstance[plan_id]"]').simulate('change', applicationPlans[0].id)
   // expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(false)
+})
+
+it('should render a link to create an application plan if selected product has none', () => {
+  const wrapper = mount(<NewApplicationForm {...defaultProps} />)
+  const getLink = () => wrapper.find(`a[href="${defaultProps.createApplicationPlanPath}"]`)
+  expect(getLink().exists()).toBe(false)
+
+  // FIXME:
+  // wrapper.find('select#product').simulate('change', products[1].id)
+  // expect(wrapper.find(`a[href="${defaultProps.createApplicationPlanPath}"]`).exists()).toBe(true)
+})
+
+it('should enable the plans select only after selecting a product', () => {
+  const wrapper = mount(<NewApplicationForm {...defaultProps} />)
+  const planSelect = wrapper.find('select[name="cinstance[plan_id]"]')
+  expect(planSelect.prop('disabled')).toBe(true)
+
+  // FIXME:
+  // const productSelect = wrapper.find('select#product')
+  // productSelect.simulate('change', products[0].id)
+
+  // expect(planSelect.prop('disabled')).toBe(false)
+  // console.log(planSelect.prop('disabled'))
 })
 
 describe('when in Account context', () => {
@@ -59,26 +87,3 @@ describe('when Service plans not allowed', () => {
 describe('when Service plans allowed', () => {
   const props = { ...defaultProps, servicePlansAllowed: true }
 })
-
-// it('should display the current API on top', () => {
-//   const wrapper = render(<NewApplicationForm {...defaultProps} />)
-//   const sectionTitle = wrapper.find('.pf-c-nav__section-title').first()
-
-//   expect(sectionTitle.text()).toBe(currentApi.name)
-// })
-
-// it('should display sections', () => {
-//   const wrapper = render(<NewApplicationForm sections={sections} />)
-//   const navItems = wrapper.find('.pf-c-nav__item')
-
-//   expect(navItems.length).toBe(sections.length)
-// })
-
-// it('should display all sections closed by default', () => {
-//   const wrapper = mount(<NewApplicationForm sections={sections} />)
-//   expect(wrapper.find('.pf-m-expanded').exists()).toBe(false)
-
-//   wrapper.setProps({ sections, activeSection: '0', activeItem: '0' })
-//   wrapper.update()
-//   expect(wrapper.find('.pf-m-expanded').exists()).toBe(true)
-// })

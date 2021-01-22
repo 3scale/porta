@@ -8,6 +8,7 @@ module Buyers::ApplicationsHelper
       'relation-service-and-service-plans': relation_service_and_service_plans(provider), # DELETEME: APPDUX-762
       'relation-plans-services': relation_plans_services(provider), # DELETEME: APPDUX-762
       'create-application-path': admin_buyers_applications_path,
+      'create-application-plan-path': new_admin_service_application_plan_path(':id'),
       'service-plans-allowed': provider.settings.service_plans.allowed?,
       services: provider.accessible_services.to_json(only: %i[id name], root: false),
       'application-plans': provider.application_plans.where(issuer: accessible_services)
