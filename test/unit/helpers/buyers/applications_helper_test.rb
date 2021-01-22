@@ -32,6 +32,7 @@ class Buyers::ApplicationsHelperTest < ActionView::TestCase
     assert_equal service_plan_contracted_for_service(Account.providers.new), {}.to_json
   end
 
+  # DELETEME: APPDUX-762
   test "relation_service_and_service_plans" do
     provider = FactoryBot.create(:provider_account)
 

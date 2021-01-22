@@ -1,20 +1,36 @@
+# frozen_string_literal: true
+
 module Buyers::ApplicationsHelper
 
-  def metadata_new_app(buyer, provider)
+  def new_application_form_metadata(provider, buyer = nil)
+    dataset = {
+      'create-service-plan-path': create_service_plan_path,
+      'relation-service-and-service-plans': relation_service_and_service_plans(provider), # DELETEME: APPDUX-762
+      'relation-plans-services': relation_plans_services(provider), # DELETEME: APPDUX-762
+      'create-application-path': admin_buyers_applications_path,
+      'service-plans-allowed': provider.settings.service_plans.allowed?,
+      services: provider.accessible_services.to_json(only: %i[id name], root: false),
+      'application-plans': provider.application_plans.where(issuer: accessible_services)
+                                                     .to_json(only: %i[id name issuer_id], root: false)
+    }
 
-    "<div id='metadata-form'
-      data-services_contracted='#{ services_contracted(buyer) }'
-      data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
-      data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
-      data-create_service_plan_path='#{ create_service_plan_path }'
-      data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
+    if buyer.present?
+      dataset.merge!({
+        'services-contracted': services_contracted(buyer),
+        'service-plan-contracted-for-service': service_plan_contracted_for_service(buyer), # DELETEME: APPDUX-762
+        'create-application-path': admin_buyers_account_applications_path(buyer),
+        'buyer-id': buyer.id
+      })
+    end
 
+    dataset
   end
 
   def services_contracted(buyer)
     buyer.bought_service_contracts.services.pluck(:id).to_json
   end
 
+  # DELETEME: APPDUX-762
   def service_plan_contracted_for_service(buyer)
     buyer.bought_service_contracts.inject({}) do |hash, service_contract|
 
@@ -27,6 +43,7 @@ module Buyers::ApplicationsHelper
     end.to_json
   end
 
+  # DELETEME: APPDUX-762
   def relation_service_and_service_plans(provider)
     provider.accessible_services.inject({}) do |hash, service|
       hash[service.id] = service.service_plans.inject([]) do |array, service_plan|
@@ -36,6 +53,7 @@ module Buyers::ApplicationsHelper
     end.to_json
   end
 
+  # DELETEME: APPDUX-762
   def relation_plans_services(provider)
     provider.application_plans.includes(:service).each_with_object({}) do |application_plan, hash|
       hash[application_plan.id] = application_plan.service.id

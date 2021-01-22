@@ -1,0 +1,7 @@
+- if @account
+  = render '/buyers/accounts/menu'
+
+h2 New Application
+
+div id="new-application-form" data=(new_application_form_metadata(@provider, @buyer))
+  = javascript_pack_tag 'new_application'
