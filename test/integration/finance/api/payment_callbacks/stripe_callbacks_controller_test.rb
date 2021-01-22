@@ -5,7 +5,7 @@ require 'test_helper'
 class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDispatch::IntegrationTest
   class CreateTest < self
     setup do
-      @provider_account = FactoryBot.create(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc' })
+      @provider_account = FactoryBot.create(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', endpoint_secret: 'some-secret' })
       provider_account.settings.allow_finance!
       provider_admin = FactoryBot.create(:admin, account: provider_account)
       @access_token = FactoryBot.create(:access_token, owner: provider_admin, scopes: %w[finance])
@@ -25,6 +25,16 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
 
       post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
       assert_response :ok
+    end
+
+    test 'missing stripe webhook signing secret' do
+      gateway_options = @provider_account.payment_gateway_setting
+      gateway_options.gateway_settings[:endpoint_secret] = ''
+      gateway_options.save(validate: false)
+
+      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
+      assert_response :unprocessable_entity
+      assert_equal 'Configuration is missing', response.body
     end
 
     test 'invalid stripe signature' do

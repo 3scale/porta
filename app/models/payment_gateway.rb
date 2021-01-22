@@ -14,7 +14,7 @@ class PaymentGateway
     PaymentGateway.new(:authorize_net, deprecated: true, login: 'LoginID', password: 'Transaction Key'),
     PaymentGateway.new(:braintree_blue, public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key'),
     PaymentGateway.new(:ogone, deprecated: true, login: 'PSPID', password: 'Password', user: 'User Id', signature: "SHA-IN Pass phrase", signature_out: "SHA-OUT Pass phrase"),
-    PaymentGateway.new(:stripe, login: "Secret Key", publishable_key: "Publishable Key")
+    PaymentGateway.new(:stripe, login: 'Secret Key', publishable_key: 'Publishable Key', endpoint_secret: 'Webhook Signing Secret')
   ].freeze
 
   def self.bogus_enabled?

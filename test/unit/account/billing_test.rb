@@ -48,7 +48,7 @@ class Account::BillingTest < ActiveSupport::TestCase
   end
 
   test 'unstore credit card when destroyed' do
-    provider = Account.new(payment_gateway_type: :stripe, payment_gateway_options: {login: 'private_key', publishable_key: 'public_key'})
+    provider = Account.new(payment_gateway_type: :stripe, payment_gateway_options: { login: 'private_key', publishable_key: 'public_key', endpoint_secret: 'some-secret' })
     buyer = Account.new(provider_account: provider)
     buyer.payment_detail.credit_card_auth_code = 'SOMESTRING'
 
@@ -169,7 +169,7 @@ class Account::BillingTest < ActiveSupport::TestCase
   end
 
   test 'charge! sends the payment_method_id' do
-    provider = FactoryBot.build(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'})
+    provider = FactoryBot.build(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' })
     buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
     buyer.payment_detail.assign_attributes(credit_card_auth_code: 'cus_IhGaGqpp6zGwyd', payment_method_id: 'pm_1I5s3n2eZvKYlo2CiO193T69', credit_card_partial_number: '4242')
 

@@ -59,7 +59,7 @@ class PaymentTransactionTest < ActiveSupport::TestCase
     def setup
       @order_id = 3
       @payment_transaction = PaymentTransaction.new(amount: 100, action: :purchase, currency: 'EUR')
-      @payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
+      @payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
       @credit_card_auth_code = 'cus_IhGaGqpp6zGwyd'
     end
 
