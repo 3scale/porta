@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { StripeCardForm } from 'PaymentGateways'
-import 'PaymentGateways/styles/stripe.scss'
+import 'PaymentGateways/stripe/styles/stripe.scss'
 
 type Props = {
   stripePublishableKey: string,
