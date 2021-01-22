@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { StripeElementsForm } from 'PaymentGateways/components/StripeFormWrapper'
+import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 import { mount } from 'enzyme'
 
 const defaultProps = {
