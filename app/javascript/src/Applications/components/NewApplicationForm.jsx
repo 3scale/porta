@@ -141,6 +141,11 @@ const NewApplicationForm = ({
             {/* $FlowFixMe */}
             {[PRODUCT_PLACEHOLDER, ...products].map(toFormSelectOption)}
           </FormSelect>
+          {product !== DEFAULT_PRODUCT && !availablePlans.length && (
+            <Button component="a" href={createApplicationPlanPath.replace(':id', product.id)} variant="link">
+              Create your first application plan.
+            </Button>
+          )}
         </FormGroup>
 
         {servicePlansAllowed && (
