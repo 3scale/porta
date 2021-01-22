@@ -27,9 +27,13 @@ module PaymentGateways
       setup_intent_params = {
         payment_method_types: ['card'],
         usage: 'off_session',
-        customer: find_or_create_customer.id
+        customer: customer.id
       }
       Stripe::SetupIntent.create(setup_intent_params, api_key)
+    end
+
+    def customer
+      @customer ||= find_or_create_customer
     end
 
     private
@@ -38,20 +42,20 @@ module PaymentGateways
 
     def find_or_create_customer
       customer_id = payment_detail.credit_card_auth_code
-      customer_id.present? ? Stripe::Customer.retrieve(customer_id, api_key) : create_customer
+      return create_customer if customer_id.blank?
+
+      customer = Stripe::Customer.retrieve(customer_id, api_key)
+      customer.deleted? ? create_customer : customer
     end
 
     def create_customer
       customer_params = {
         description: account.org_name,
         email: user.email,
-        metadata: {  '3scale_account_reference' => buyer_reference }
+        metadata: { '3scale_account_reference' => buyer_reference }
       }
 
-      Stripe::Customer.create(customer_params, api_key).tap do |customer|
-        payment_detail.credit_card_auth_code = customer.id
-        payment_detail.save
-      end
+      Stripe::Customer.create(customer_params, api_key).tap { |stripe_customer| payment_detail.update(credit_card_auth_code: stripe_customer.id) }
     end
 
     def api_key
