@@ -44,11 +44,6 @@ module PaymentGateways
       customer_id = payment_detail.credit_card_auth_code
       Stripe::Customer.expects(:retrieve).with(customer_id, api_key).returns(mock_customer(id: customer_id))
       assert_equal customer_id, stripe_crypt.send(:find_or_create_customer).id
-
-      # cannot match existing payment detail to a stripe customer
-      Stripe::Customer.expects(:retrieve).with(customer_id, api_key).returns(mock_customer(id: nil))
-      Stripe::Customer.expects(:create).with(create_customer_params, api_key).returns(mock_customer)
-      assert_equal 'new-customer-id', stripe_crypt.send(:find_or_create_customer).id
     end
 
     test 'create_stripe_setup_intent finds existing customer' do
@@ -84,7 +79,7 @@ module PaymentGateways
     end
 
     def create_customer_params
-      { description: buyer_account.org_name, email: buyer_user.email, metadata: {  '3scale_account_reference' => buyer_reference } }
+      { description: buyer_account.org_name, email: buyer_user.email, metadata: { '3scale_account_reference' => buyer_reference } }
     end
 
     def mock_customer(id: 'new-customer-id')

@@ -2,8 +2,6 @@
 
 module PaymentGateways
   class StripeCrypt < PaymentGatewayCrypt
-    attr_accessor :customer_id
-
     attr_reader :errors
 
     # TODO: move Errors to payment gateway base and make others use it
@@ -38,13 +36,9 @@ module PaymentGateways
 
     delegate :payment_detail, to: :account
 
-    def customer_id
-      payment_detail.credit_card_auth_code
-    end
-
     def find_or_create_customer
-      customer = Stripe::Customer.retrieve(customer_id, api_key) if customer_id
-      customer.try(:id) ? customer : create_customer
+      customer_id = payment_detail.credit_card_auth_code
+      customer_id.present? ? Stripe::Customer.retrieve(customer_id, api_key) : create_customer
     end
 
     def create_customer
