@@ -193,10 +193,12 @@ Before '@stripe' do
   customer_response_body = <<~JSON.strip
     {
       "id": "cus_IiIMv3fS4LCHwE",
-      "object": "customer"
+      "object": "customer",
+      "deleted": false
     }
   JSON
   stub_request(:post, 'https://api.stripe.com/v1/customers').to_return(status: 201, body: customer_response_body, headers: {})
+  stub_request(:get, 'https://api.stripe.com/v1/customers/valid_code').to_return(status: 200, body: customer_response_body, headers: {})
 
   setup_intent_response_body = <<~JSON.strip
     {
