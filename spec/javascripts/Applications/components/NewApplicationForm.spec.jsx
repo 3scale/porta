@@ -5,22 +5,26 @@ import React from 'react'
 import { render, mount } from 'enzyme'
 import { NewApplicationForm } from 'Applications/components/NewApplicationForm'
 
+const appPlans = [{ id: 0, name: 'Basic Plan', issuer_id: 0, default: false }]
+const servicePlans = [{ id: 0, name: 'Basic Plan', issuer_id: 0, default: false }]
 const products = [
-  { id: 0, name: 'API Product' },
-  { id: 1, name: 'API w/o plans' }
+  { id: 0, name: 'API Product', appPlans, servicePlans, defaultServicePlan: servicePlans[0] },
+  { id: 1, name: 'API w/o plans', appPlans, servicePlans, defaultServicePlan: null }
 ]
-const applicationPlans = [{ id: 0, name: 'Basic Plan', issuer_id: products[0].id }]
+const buyer = {
+  id: '12345',
+  name: 'developer',
+  contractedProducts: [],
+  servicePlans: [],
+  createApplicationPath: '/account/12345/applications/new',
+}
 
 const defaultProps = {
   createApplicationPath: '/applications/new',
   createServicePlanPath: '/service/:id/plans/new',
   createApplicationPlanPath: '/accounts/applications/new',
   products,
-  applicationPlans,
-  servicePlansAllowed: false,
-  // servicesContracted: [],
-  // servicePlanContractedForService: [],
-  buyerId: '12345'
+  servicePlansAllowed: false
 }
 
 it('should render properly', () => {
@@ -63,7 +67,7 @@ it('should enable the plans select only after selecting a product', () => {
 })
 
 describe('when in Account context', () => {
-  const props = { ...defaultProps, buyerId: 12345 }
+  const props = { ...defaultProps, buyer }
 
   it('should not render a select for Buyers', () => {
     const wrapper = render(<NewApplicationForm {...props} />)
@@ -72,7 +76,7 @@ describe('when in Account context', () => {
 })
 
 describe('when in Applications context', () => {
-  const props = { ...defaultProps, buyerId: undefined }
+  const props = { ...defaultProps, buyer: undefined }
 
   it('should render a select for Buyers', () => {
     const wrapper = render(<NewApplicationForm {...props} />)
