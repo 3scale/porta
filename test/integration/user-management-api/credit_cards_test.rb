@@ -65,6 +65,8 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   # Provider key
 
   test 'credit_card_stored is false if buyer has no cc' do
+    @provider.update!(payment_gateway_type: :bogus)
+
     get(admin_api_account_path(@buyer, :format => :xml),
              :provider_key => @provider.api_key)
 
@@ -75,6 +77,8 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   end
 
   test 'credit_card_stored is true if buyer has cc' do
+    @provider.update!(payment_gateway_type: :bogus)
+
     @buyer.credit_card_auth_code = 'foo'
     @buyer.save!
     get(admin_api_account_path(@buyer, :format => :xml),
@@ -216,16 +220,9 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
 
 
   test 'delete_credit_card_info' do
-    @provider.payment_gateway_type = :authorize_net
-    @buyer.credit_card_auth_code = 'foo'
-    @buyer.credit_card_authorize_net_payment_profile_token = 'bar'
-    @buyer.billing_address_name = 'foo'
-    @buyer.billing_address_address1 = 'elm street'
-    @buyer.billing_address_city = 'sin city'
-    @buyer.billing_address_country = 'spain'
-    @buyer.save!
-    @buyer.reload
-    assert @buyer.credit_card_stored?
+    @buyer.payment_detail.delete
+    FactoryBot.create(:payment_detail, account: @buyer)
+    assert @buyer.reload.credit_card_stored?
 
     delete(admin_api_account_credit_card_path(@buyer, :format => :xml), :provider_key => @provider.api_key)
     @buyer.reload

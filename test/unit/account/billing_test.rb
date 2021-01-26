@@ -171,7 +171,7 @@ class Account::BillingTest < ActiveSupport::TestCase
   test 'charge! sends the payment_method_id' do
     provider = FactoryBot.build(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'})
     buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
-    buyer.payment_detail.assign_attributes(credit_card_auth_code: 'cus_IhGaGqpp6zGwyd', payment_method_id: 'pm_1I5s3n2eZvKYlo2CiO193T69')
+    buyer.payment_detail.assign_attributes(credit_card_auth_code: 'cus_IhGaGqpp6zGwyd', payment_method_id: 'pm_1I5s3n2eZvKYlo2CiO193T69', credit_card_partial_number: '4242')
 
     PaymentTransaction.any_instance.expects(:process!).with do |_customer, _payment_gateway, opts|
       opts[:payment_method_id] == buyer.payment_detail.payment_method_id
