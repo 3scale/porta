@@ -1,9 +1,2 @@
-= form_tag polymorphic_path([:masterize, :admin, @service, @new_plan]), method: :post, class: 'default_plan autosubmit formtastic', remote: true do
-  fieldset.inputs
-    ol
-      li.string.optional
-        label for="default_plan"  Default Plan
-        = select_tag :id, options_from_collection_for_select(@plans.not_custom, "id", "name", lambda { |p| p.master? }),
-          include_blank: true, id: "default_plan"
-        p.inline-hints= @plans.first.class.human_attribute_name 'default_plan_hint'
-
+div id='default_plan'
+= javascript_pack_tag 'default_plan_selector'
