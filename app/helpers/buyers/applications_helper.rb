@@ -36,7 +36,7 @@ module Buyers::ApplicationsHelper
       id: buyer.id.to_s,
       name: buyer.name,
       contractedProducts: buyer.bought_service_contracts.services.select(:id, :name).as_json(root: false),
-      servicePlans: buyer.bought_service_contracts.map(&:plan).as_json(only: %i[id name], root: false),
+      servicePlans: buyer.bought_service_plans.as_json(only: %i[id name], root: false),
       createApplicationPath: admin_buyers_account_applications_path(buyer)
     }.to_json
   end
