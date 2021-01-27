@@ -58,6 +58,7 @@ const NewApplicationForm = (props: Props) => {
   useEffect(() => {
     if (product !== DEFAULT_PRODUCT) {
       setAppPlan(DEFAULT_APP_PLAN)
+
       if (product.defaultServicePlan) {
         setServicePlan(product.defaultServicePlan)
       } else {
@@ -65,6 +66,8 @@ const NewApplicationForm = (props: Props) => {
       }
     }
   }, [product])
+
+  const servicePlanDisabled = buyer && buyer.contractedProducts.some(p => p.id === product.id)
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
@@ -82,7 +85,7 @@ const NewApplicationForm = (props: Props) => {
         <input name="utf8" type="hidden" value="✓"/>
 
         {/* Buyer */}
-        {buyer === undefined && (
+        {!buyer && (
           <FormGroup
             label="Account"
             isRequired
@@ -115,6 +118,7 @@ const NewApplicationForm = (props: Props) => {
           fieldId="product"
         >
           <FormSelect
+            isDisabled={!buyer || buyer === DEFAULT_BUYER}
             value={product.id}
             onChange={(id: string) => setProduct(products.find(p => p.id === Number(id)) || DEFAULT_PRODUCT)}
             id="product"
@@ -123,6 +127,27 @@ const NewApplicationForm = (props: Props) => {
             {[DEFAULT_PRODUCT, ...products].map(toFormSelectOption)}
           </FormSelect>
         </FormGroup>
+
+        {/* Service Plan */}
+        {servicePlansAllowed && (
+          <FormGroup
+            label="Service plan"
+            isRequired
+            validated="default"
+            fieldId="cinstance_service_plan_id"
+          >
+            <FormSelect
+              isDisabled={product === DEFAULT_PRODUCT || servicePlanDisabled}
+              value={servicePlan.id}
+              onChange={(id) => setServicePlan(product.servicePlans.find(p => p.id === Number(id)) || DEFAULT_SERVICE_PLAN)}
+              id="cinstance_service_plan_id"
+              name="cinstance[service_plan_id]"
+            >
+              {/* $FlowFixMe */}
+              {[DEFAULT_SERVICE_PLAN, ...product.servicePlans].map(toFormSelectOption)}
+            </FormSelect>
+          </FormGroup>
+        )}
 
         {/* Application Plan */}
         <FormGroup
@@ -139,33 +164,6 @@ const NewApplicationForm = (props: Props) => {
             createApplicationPlanPath={createApplicationPlanPath.replace(':id', product.id.toString())}
           />
         </FormGroup>
-
-        {/* Service Plan */}
-        {servicePlansAllowed && (
-          <FormGroup
-            label="Service plan"
-            isRequired
-            validated="default"
-            fieldId="cinstance_service_plan_id"
-          >
-            <FormSelect
-              // Disable if no product is selected OR buyer has that products contracted already
-              isDisabled={product === DEFAULT_PRODUCT || product.defaultServicePlan}
-              value={servicePlan.id}
-              onChange={(id) => setServicePlan(product.servicePlans.find(p => p.id === Number(id)) || DEFAULT_SERVICE_PLAN)}
-              id="cinstance_service_plan_id"
-              name="cinstance[service_plan_id]"
-            >
-              {/* $FlowFixMe */}
-              {[DEFAULT_SERVICE_PLAN, ...product.servicePlans].map(toFormSelectOption)}
-            </FormSelect>
-            {product !== DEFAULT_PRODUCT && !product.servicePlans.length && (
-              <p className="hint">
-                In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan.
-              </p>
-            )}
-          </FormGroup>
-        )}
 
         {/* Name */}
         <FormGroup

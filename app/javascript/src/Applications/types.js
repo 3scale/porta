@@ -25,6 +25,6 @@ export type Buyer = {
   id: string,
   name: string,
   contractedProducts: Product[],
-  servicePlans: ServicePlan[],
+  // servicePlans: ServicePlan[], Not needed?
   createApplicationPath: string,
 }
