@@ -7,6 +7,17 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
   class InvalidStripeEvent < StripeCallbackError; end
   class MissingStripeEndpointSecret < StripeCallbackError; end
 
+  rescue_from Stripe::SignatureVerificationError, JSON::ParserError do
+    render_error('Signature verification failed', status: :bad_request)
+  end
+
+  rescue_from InvalidStripeEvent, with: :handle_not_found
+
+  rescue_from MissingStripeEndpointSecret do |e|
+    report_error(e)
+    render_error('Configuration is missing', status: :unprocessable_entity)
+  end
+
   # Undocumented endpoint used for update callbacks of async-authorized payment transactions (mostly due to SCA regulations)
   def create
     sig_header = request.headers['Stripe-Signature']
@@ -30,13 +41,6 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
     end
 
     head :ok
-  rescue JSON::ParserError, Stripe::SignatureVerificationError
-    render_error('Signature verification failed', status: :bad_request)
-  rescue InvalidStripeEvent
-    render_error(:not_found, status: :not_found)
-  rescue MissingStripeEndpointSecret => exception
-    report_error(exception)
-    render_error('Configuration is missing', status: :unprocessable_entity)
   end
 
   protected
