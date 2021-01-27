@@ -28,7 +28,8 @@ class PaymentIntent < ApplicationRecord
 
     transaction do
       self.state = payment_intent_data['status']
-      amount = payment_intent_data['amount'].to_has_money(payment_intent_data['currency']&.upcase || invoice.currency) / 100.0
+      currency = payment_intent_data['currency']&.upcase || invoice.currency
+      amount = ThreeScale::Money.cents(payment_intent_data['amount'], currency)
       payment_transaction = build_payment_transaction(amount: amount, reference: payment_intent_data['id'], params: event.to_hash)
       save && payment_transaction.save && invoice.pay
     end
