@@ -12,7 +12,8 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { ApplicationPlanSelect, DEFAULT_APP_PLAN } from 'Applications/components/ApplicationPlanSelect'
+// $FlowFixMe: import throwing an error but it should not
+import { ProductFormSelector, ApplicationPlanSelect, DEFAULT_APP_PLAN } from 'Applications'
 import { CSRFToken } from 'utilities/utils'
 import { toFormSelectOption } from 'utilities/patternfly-utils'
 
@@ -99,6 +100,12 @@ const NewApplicationForm = (props: Props) => {
             </FormSelect>
           </FormGroup>
         )}
+
+        {/* Product (fancy selector) */}
+        <ProductFormSelector
+          products={products}
+          onSelect={console.log}
+        />
 
         {/* Product */}
         <FormGroup
