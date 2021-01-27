@@ -40,7 +40,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
 
   test '#configured? failed if any gateway_settings missing for stripe' do
     @gateway_setting.gateway_type = :stripe
-    @gateway_setting.gateway_settings = {login: "Secret Key", publishable_key: ""}
+    @gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '', endpoint_secret: 'some-secret' }
     refute @gateway_setting.configured?
 
     @gateway_setting.gateway_settings[:publishable_key] = 'PUBKEY'
@@ -79,7 +79,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     gateway_setting.save(validate: false)
 
     gateway_setting.gateway_type = :stripe
-    gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '' }
+    gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '', endpoint_secret: 'some-secret' }
 
     assert gateway_setting.valid?
     refute gateway_setting.errors.added?(:gateway_type, :invalid)

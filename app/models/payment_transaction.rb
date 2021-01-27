@@ -155,7 +155,7 @@ class PaymentTransaction < ApplicationRecord
   def purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
     options = gateway_options.merge(customer: credit_card_auth_code)
     payment_method_id = options.delete(:payment_method_id)
-    gateway.purchase(amount.cents, payment_method_id, options)
+    stripe_service = Finance::StripeChargeService.new(gateway, payment_method_id: payment_method_id, invoice: invoice, gateway_options: options)
+    stripe_service.charge(amount)
   end
-
 end

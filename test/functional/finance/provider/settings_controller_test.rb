@@ -36,6 +36,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
 
       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][login]'
       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][publishable_key]'
+      assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][endpoint_secret]'
     end
   end
 
