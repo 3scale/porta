@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class PaymentIntent < ApplicationRecord
-  SUCCEEDED_STATES = %w[succeeded].freeze
+  STRIPE_STATUS_SUCCEEDED = 'succeeded'
+  SUCCEEDED_STATES = [STRIPE_STATUS_SUCCEEDED].freeze
+
+  STRIPE_PAYMENT_INTENT_SUCCEEDED = [Stripe::PaymentIntent::OBJECT_NAME, STRIPE_STATUS_SUCCEEDED].join('.').freeze
 
   belongs_to :invoice, inverse_of: :payment_intents
 
@@ -18,7 +21,7 @@ class PaymentIntent < ApplicationRecord
   end
 
   def update_from_stripe_event(event)
-    return unless event.type == 'payment_intent.succeeded'
+    return unless event.type == STRIPE_PAYMENT_INTENT_SUCCEEDED
     return if succeeded? || invoice.paid?
 
     payment_intent_data = event.data.object
