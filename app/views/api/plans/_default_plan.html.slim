@@ -1,2 +1,2 @@
-div id='default_plan'
-= javascript_pack_tag 'default_plan_selector'
+div id='default_plan' data-application-plans=(application_plans_data()) data-current-plan-id=(current_plan_id_data())
+  = javascript_pack_tag 'default_plan_selector'
