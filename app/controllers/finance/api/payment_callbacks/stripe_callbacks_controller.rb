@@ -47,11 +47,9 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
     end
   end
 
-  PAYMENT_INTENT_SUCCEEDED_STATUS = [Stripe::PaymentIntent::OBJECT_NAME, 'succeeded'].join('.').freeze
-
   def extract_payment_intent_data
     case stripe_event.type # Also checked by PaymentIntent#update_from_stripe_event, but here it can save us some processing and ensure an immediate response at the level of the controller in case of unsupported event types
-    when PAYMENT_INTENT_SUCCEEDED_STATUS
+    when PaymentIntent::STRIPE_PAYMENT_INTENT_SUCCEEDED
       stripe_event.data.object
     else
       raise InvalidStripeEvent
