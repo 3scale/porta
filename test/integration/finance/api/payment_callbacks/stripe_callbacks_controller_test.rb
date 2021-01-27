@@ -74,7 +74,9 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       invoices = provider_account.buyer_invoices
       PaymentIntent.expects(:by_invoice).returns(invoices)
       invoices.expects(:find_by!).with(payment_intent_id: 'some-payment-intent-id').returns(payment_intent)
-      payment_intent.expects(:update_from_stripe_event).returns(false)
+      payment_intent_update_service = Finance::StripePaymentIntentUpdateService.new(provider_account, stripe_event)
+      Finance::StripePaymentIntentUpdateService.expects(:new).with(provider_account, stripe_event).returns(payment_intent_update_service)
+      payment_intent_update_service.expects(:call).returns(false)
       System::ErrorReporting.expects(:report_error).at_least_once # because the setup doesn't really build all required objects
       System::ErrorReporting.expects(:report_error).with(instance_of(Finance::Api::PaymentCallbacks::StripeCallbacksController::StripeCallbackError), event: stripe_event, payment_intent: payment_intent)
 
