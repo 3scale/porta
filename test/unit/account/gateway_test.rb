@@ -106,7 +106,7 @@ class Account::GatewayTest  < ActiveSupport::TestCase
     assert_equal provider.payment_gateway_options,                    provider.payment_gateway.options
 
     provider.payment_gateway_type    = :stripe
-    provider.payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
+    provider.payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
     assert_instance_of ActiveMerchant::Billing::StripeGateway, provider.payment_gateway
     refute_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, provider.payment_gateway # this test is necessary because StripePaymentIntentsGateway is a subclass of StripeGateway
     assert_equal provider.payment_gateway_options, provider.payment_gateway.options
@@ -128,7 +128,7 @@ class Account::GatewayTest  < ActiveSupport::TestCase
     assert_instance_of ActiveMerchant::Billing::BraintreeBlueGateway, buyer.provider_payment_gateway
 
     buyer.provider_account.payment_gateway_type = :stripe
-    buyer.provider_account.payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
+    buyer.provider_account.payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
     assert_instance_of ActiveMerchant::Billing::StripeGateway, buyer.provider_payment_gateway
     refute_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, buyer.provider_payment_gateway # this test is necessary because StripePaymentIntentsGateway is a subclass of StripeGateway
     buyer.payment_detail.payment_method_id = 'pm_1I5s3n2eZvKYlo2CiO193T69'

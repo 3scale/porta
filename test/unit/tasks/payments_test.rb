@@ -20,7 +20,7 @@ module Tasks
 
       providers_with_stripe_configured.each do |provider|
         provider.payment_gateway_type = :stripe
-        provider.payment_gateway_options = {login: "sk_test_example#{provider.id}", publishable_key: "pk_test_example#{provider.id}"}
+        provider.payment_gateway_options = { login: "sk_test_example#{provider.id}", publishable_key: "pk_test_example#{provider.id}", endpoint_secret: 'some-secret' }
         provider.save!
       end
 

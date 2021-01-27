@@ -37,6 +37,7 @@ class Invoice < ApplicationRecord
   has_many :line_items, -> { oldest_first }, dependent: :destroy, inverse_of: :invoice
 
   has_many :payment_transactions, -> { oldest_first }, dependent: :nullify, inverse_of: :invoice
+  has_many :payment_intents, dependent: :destroy, inverse_of: :invoice
 
   has_attached_file :pdf, url: ':url_root/:class/:id/:attachment/:style/:basename.:extension'
   do_not_validate_attachment_file_type :pdf
@@ -518,6 +519,10 @@ class Invoice < ApplicationRecord
 
   def chargeable?
     !reason_cannot_charge
+  end
+
+  def latest_pending_payment_intent
+    payment_intents.latest_pending.first
   end
 
   def self.opened_by_buyer(buyer)
