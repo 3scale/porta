@@ -2,6 +2,7 @@
 
 class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::BaseController
   before_action :ensure_stripe_payment_gateway
+  before_action :validate_stripe_event_type
 
   class StripeCallbackError < StandardError; end
   class InvalidStripeEvent < StripeCallbackError; end
@@ -20,23 +21,27 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
 
   # Undocumented endpoint used for update callbacks of async-authorized payment transactions (mostly due to SCA regulations)
   def create
-    return head(:no_content) if payment_intent.update_from_stripe_event(stripe_event)
+    service = Finance::StripePaymentIntentUpdateService.new(current_account, stripe_event)
+
+    return head(:no_content) if service.call
 
     exception = StripeCallbackError.new('Cannot update Stripe payment intent')
-    report_error(exception, event: stripe_event, payment_intent: payment_intent)
+    report_error(exception, event: stripe_event, payment_intent: service.payment_intent)
   end
 
   protected
+
+  PAYMENT_INTENT_SUCCEEDED = [Stripe::PaymentIntent::OBJECT_NAME, Finance::StripeChargeService::PAYMENT_INTENT_SUCCEEDED].join('.').freeze
+  ALLOWED_STRIPE_EVENT_TYPES = [PAYMENT_INTENT_SUCCEEDED].freeze
+
+  delegate :report_error, to: System::ErrorReporting
+  delegate :payment_gateway_type, :payment_gateway_options, to: :current_account
 
   def ensure_stripe_payment_gateway
     return if payment_gateway_type == :stripe
 
     render_error(:not_found, status: :not_found)
   end
-
-  delegate :payment_gateway_type, :payment_gateway_options, to: :current_account
-
-  delegate :report_error, to: System::ErrorReporting
 
   def stripe_event
     @stripe_event ||= begin
@@ -47,16 +52,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
     end
   end
 
-  def extract_payment_intent_data
-    case stripe_event.type # Also checked by PaymentIntent#update_from_stripe_event, but here it can save us some processing and ensure an immediate response at the level of the controller in case of unsupported event types
-    when PaymentIntent::STRIPE_PAYMENT_INTENT_SUCCEEDED
-      stripe_event.data.object
-    else
-      raise InvalidStripeEvent
-    end
-  end
-
-  def payment_intent
-    @payment_intent ||= PaymentIntent.by_invoice(current_account.buyer_invoices).find_by!(payment_intent_id: extract_payment_intent_data['id'])
+  def validate_stripe_event_type
+    raise InvalidStripeEvent unless ALLOWED_STRIPE_EVENT_TYPES.include?(stripe_event.type)
   end
 end
