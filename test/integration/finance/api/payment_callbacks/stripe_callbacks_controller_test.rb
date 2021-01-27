@@ -24,7 +24,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
 
       post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
-      assert_response :ok
+      assert_response :no_content
     end
 
     test 'missing stripe webhook signing secret' do
@@ -79,7 +79,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       System::ErrorReporting.expects(:report_error).with(instance_of(Finance::Api::PaymentCallbacks::StripeCallbacksController::StripeCallbackError), event: stripe_event, payment_intent: payment_intent)
 
       post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
-      assert_response :ok
+      assert_response :no_content
     end
 
     test 'not stripe gateway' do
