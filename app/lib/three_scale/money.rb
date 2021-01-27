@@ -18,7 +18,7 @@ module ThreeScale
     attr_reader :date
 
     def self.cents(amount, currency, date = nil)
-      new(amount.to_i / 100.to_d, currency, date)
+      new(amount.to_d / 100, currency, date)
     end
 
     def initialize(amount, currency, date = nil)
