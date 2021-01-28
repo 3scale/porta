@@ -14,17 +14,18 @@ const products = [
 const buyer = {
   id: '12345',
   name: 'developer',
-  contractedProducts: [],
-  servicePlans: [],
-  createApplicationPath: '/account/12345/applications/new',
+  contractedProducts: [
+    { id: 0, name: 'API Product', withPlan: appPlans[0] }
+  ],
+  createApplicationPath: '/account/12345/applications/new'
 }
 
 const defaultProps = {
   createApplicationPath: '/applications/new',
-  createServicePlanPath: '/service/:id/plans/new',
   createApplicationPlanPath: '/accounts/applications/new',
   products,
-  servicePlansAllowed: false
+  servicePlansAllowed: false,
+  buyer
 }
 
 it('should render properly', () => {

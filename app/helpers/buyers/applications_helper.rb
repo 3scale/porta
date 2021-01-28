@@ -3,20 +3,13 @@
 module Buyers::ApplicationsHelper
 
   def new_application_form_metadata(provider, buyer = nil)
-    dataset = {
-      'create-application-path': admin_buyers_applications_path,
-      'create-service-plan-path': admin_service_service_plans_path(':id'),
+    {
+      'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
       'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
-      products: data_products(provider)
+      products: data_products(provider),
+      buyer: buyer && buyer_data(buyer)
     }
-    if buyer.present?
-      dataset.merge!({
-        'create-application-path': admin_buyers_account_applications_path(buyer),
-        buyer: buyer_data(buyer)
-      })
-    end
-    dataset
   end
 
   def data_products(provider)
@@ -35,9 +28,17 @@ module Buyers::ApplicationsHelper
     {
       id: buyer.id.to_s,
       name: buyer.name,
-      contractedProducts: buyer.bought_service_contracts.services.select(:id, :name).as_json(root: false),
-      createApplicationPath: admin_buyers_account_applications_path(buyer)
+      contractedProducts: contracts(buyer),
+      createApplicationPath: admin_buyers_account_applications_path(buyer),
+      # canSelectPlan: true # TODO needed?
     }.to_json
+  end
+
+  def contracts(buyer)
+    buyer.bought_service_contracts.map do |contract|
+      hash = contract.service.as_json(only: %i[id name], root: false)
+      hash.merge!({ withPlan: contract.plan.as_json(only: %i[id name], root: false) })
+    end
   end
 
   def last_traffic(cinstance)

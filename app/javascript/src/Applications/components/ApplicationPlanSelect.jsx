@@ -1,6 +1,9 @@
+// @flow
+
 import React from 'react'
 
 import {
+  FormGroup,
   FormSelect,
   Button
 } from '@patternfly/react-core'
@@ -16,20 +19,26 @@ type Props = {
   createApplicationPlanPath: string
 }
 
-const DEFAULT_APP_PLAN: ApplicationPlan = { disabled: true, id: -1, name: 'Select an Application Plan', issuer_id: -1 }
+const APP_PLAN_PLACEHOLDER: ApplicationPlan = { disabled: true, id: -1, name: 'Select an Application Plan', issuer_id: -1 }
 
 const ApplicationPlanSelect = ({ appPlans, isDisabled, appPlan, setAppPlan, createApplicationPlanPath }: Props) => {
   const showHint = !isDisabled && appPlans.length === 0
   return (
-    <>
+    <FormGroup
+      label="Application plan"
+      isRequired
+      validated="default"
+      fieldId="cinstance_plan_id"
+    >
       <FormSelect
         isDisabled={isDisabled || appPlans.length === 0}
         value={appPlan.id}
-        onChange={(id) => setAppPlan(appPlans.find(p => p.id === Number(id)) || DEFAULT_APP_PLAN)}
+        onChange={(id) => setAppPlan(appPlans.find(p => p.id === Number(id)) || APP_PLAN_PLACEHOLDER)}
         id="cinstance_plan_id"
         name="cinstance[plan_id]"
       >
-        {[DEFAULT_APP_PLAN, ...appPlans].map(toFormSelectOption)}
+        {/* $FlowFixMe */}
+        {[APP_PLAN_PLACEHOLDER, ...appPlans].map(toFormSelectOption)}
       </FormSelect>
       {showHint && (
         <p className="hint">
@@ -39,8 +48,8 @@ const ApplicationPlanSelect = ({ appPlans, isDisabled, appPlan, setAppPlan, crea
           </Button>
         </p>
       )}
-    </>
+    </FormGroup>
   )
 }
 
-export { ApplicationPlanSelect, DEFAULT_APP_PLAN }
+export { ApplicationPlanSelect, APP_PLAN_PLACEHOLDER }

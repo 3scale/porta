@@ -42,6 +42,7 @@ const ProductFormSelector = ({ isDisabled = false, onSelect, products }: Props) 
         onSelect={onSelectProduct}
         isExpanded={expanded}
       >
+        {/* $FlowFixMe */}
         {[DEFAULT_PRODUCT, ...products].map(toSelectOption)}
       </Select>
     </FormGroup>

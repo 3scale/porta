@@ -2,15 +2,12 @@
 
 export type ServicePlan = {
   id: number,
-  name: string,
-  issuer_id: number, // TODO: change to productId in app/helpers/buyers/applications_helper.rb:14
-  default: boolean
+  name: string
 }
 
 export type ApplicationPlan = {
   id: number,
   name: string,
-  issuer_id: number // TODO: change to productId in app/helpers/buyers/applications_helper.rb:14
 }
 
 export type Product = {
@@ -21,10 +18,15 @@ export type Product = {
   defaultServicePlan: ServicePlan | null
 }
 
+export type ContractedProduct = {
+  id: number,
+  name: string,
+  withPlan: ServicePlan
+}
+
 export type Buyer = {
   id: string,
   name: string,
-  contractedProducts: Product[],
-  // servicePlans: ServicePlan[], Not needed?
+  contractedProducts: ContractedProduct[],
   createApplicationPath: string,
 }
