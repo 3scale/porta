@@ -22,6 +22,9 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
     assign_drops invoice: Liquid::Drops::Invoice.wrap(invoice)
   end
 
+  def payment
+  end
+
   protected
 
   def authorize_finance
