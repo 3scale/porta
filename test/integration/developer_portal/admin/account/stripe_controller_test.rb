@@ -5,6 +5,7 @@ require 'test_helper'
 module DeveloperPortal
   class Admin::Account::StripeControllerTest < ActionDispatch::IntegrationTest
     include System::UrlHelpers.cms_url_helpers
+    include PaymentDetailsHelper
 
     def setup
       @provider = FactoryBot.create(:provider_account, payment_gateway_type: :stripe, payment_gateway_options: {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'})
@@ -16,6 +17,7 @@ module DeveloperPortal
     end
 
     attr_reader :provider, :buyer
+    alias current_account buyer
 
     test '#show' do
       setup_intent = Stripe::SetupIntent.new(id: 'seti_1I5s0l2eZvKYlo2CjumP89gc').tap { |si| si.update_attributes(client_secret: 'seti_1I6Fs82eZvKYlo2COrbF4OYY_secret_IhfCWxVPnPaXIYPlr9ORrd5noJDnDW7') }
@@ -23,9 +25,16 @@ module DeveloperPortal
 
       get admin_account_stripe_path
 
-      assert_equal provider.payment_gateway_options.fetch(:publishable_key), assigns(:stripe_publishable_key)
-      assert_equal setup_intent.id, assigns(:intent).id
-      assert_equal setup_intent.client_secret, assigns(:intent).client_secret
+      expected_attributes = {
+        'id' => 'stripe-form-wrapper',
+        'data-stripe-publishable-key' => provider.payment_gateway_options[:publishable_key],
+        'data-setup-intent-secret' => setup_intent.client_secret,
+        'data-billing-address' => stripe_billing_address_json,
+        'data-success-url' => hosted_success_admin_account_stripe_path,
+        'data-credit-card-stored' => buyer.credit_card_stored?
+      }.map { |k, v| "@#{k}='#{v}'" }.join(' and ')
+
+      assert_xpath(".//div[#{expected_attributes}]")
     end
 
     test '#hosted_success' do
@@ -36,6 +45,12 @@ module DeveloperPortal
       post hosted_success_admin_account_stripe_path, params: {stripe: {payment_method_id: payment_method_id}}
 
       assert_equal 'Credit card details were saved correctly', flash[:success]
+    end
+
+    private
+
+    def logged_in?
+      !!current_account
     end
   end
 end

@@ -4,8 +4,6 @@ module DeveloperPortal::Admin::Account
   class StripeController < PaymentDetailsBaseController
 
     def show
-      @stripe_publishable_key = site_account.payment_gateway_options[:publishable_key]
-      @intent = stripe_crypt.create_stripe_setup_intent
       render template: 'accounts/payment_gateways/show'
     end
 
