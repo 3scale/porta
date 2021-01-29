@@ -20,7 +20,7 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
   end
 
   test 'charge with existing payment intent' do
-    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'some-payment-intent-id', state: 'pending')
+    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: 'some-payment-intent-id', state: 'pending')
     service.expects(:confirm_payment_intent).with(payment_intent).returns(true)
     assert service.charge(amount)
   end
@@ -32,7 +32,7 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     assert_difference(invoice.payment_intents.method(:count)) do
       assert_equal response, service.send(:create_payment_intent, amount)
       assert (payment_intent = invoice.payment_intents.latest.first)
-      assert_equal 'new-payment-intent-id', payment_intent.payment_intent_id
+      assert_equal 'new-payment-intent-id', payment_intent.reference
       assert_equal 'succeeded', payment_intent.state
       refute invoice.latest_pending_payment_intent
     end
@@ -45,7 +45,7 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     assert_difference(invoice.payment_intents.method(:count)) do
       assert_equal response, service.send(:create_payment_intent, amount)
       assert (payment_intent = invoice.latest_pending_payment_intent)
-      assert_equal 'new-payment-intent-id', payment_intent.payment_intent_id
+      assert_equal 'new-payment-intent-id', payment_intent.reference
       assert_equal 'requires_payment_method', payment_intent.state
     end
   end
@@ -54,7 +54,7 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     response = build_response(false, 'Authentication required', status: 'authentication_required', error: { payment_intent: { object: 'payment_intent', id: 'new-payment-intent-id', status: 'requires_confirmation' } })
     gateway.expects(:purchase).returns(response)
 
-    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'new-payment-intent-id', state: 'requires_confirmation')
+    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: 'new-payment-intent-id', state: 'requires_confirmation')
     invoice.payment_intents.expects(:create!).returns(payment_intent)
 
     service.expects(:confirm_payment_intent).with(payment_intent).returns(true)
@@ -80,11 +80,11 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
   end
 
   test 'successful confirm payment intent' do
-    payment_intent_id = 'some-payment-intent-id'
-    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: payment_intent_id, state: 'pending')
+    payment_intent_reference = 'some-payment-intent-id'
+    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: payment_intent_reference, state: 'pending')
 
-    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: payment_intent_id, status: 'succeeded')
-    gateway.expects(:confirm_intent).with(payment_intent_id, service.payment_method_id, service.gateway_options).returns(response)
+    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: payment_intent_reference, status: 'succeeded')
+    gateway.expects(:confirm_intent).with(payment_intent_reference, service.payment_method_id, service.gateway_options).returns(response)
 
     assert_equal 'pending', payment_intent.state
     assert_equal response, service.send(:confirm_payment_intent, payment_intent)
@@ -92,11 +92,11 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
   end
 
   test 'failed confirm payment intent' do
-    payment_intent_id = 'some-payment-intent-id'
-    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: payment_intent_id, state: 'pending')
+    payment_intent_reference = 'some-payment-intent-id'
+    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: payment_intent_reference, state: 'pending')
 
     response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'some-payment-intent-id', status: 'requires_payment_method')
-    gateway.expects(:confirm_intent).with(payment_intent_id, service.payment_method_id, service.gateway_options).returns(response)
+    gateway.expects(:confirm_intent).with(payment_intent_reference, service.payment_method_id, service.gateway_options).returns(response)
 
     assert_equal 'pending', payment_intent.state
     assert service.send(:confirm_payment_intent, payment_intent)
