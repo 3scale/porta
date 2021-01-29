@@ -28,7 +28,7 @@ class Finance::StripeChargeService
     with_payment_intent_data_from(response) do |payment_intent_data|
       next unless invoice
 
-      payment_intent = invoice.payment_intents.create!(payment_intent_id: payment_intent_data['id'], state: payment_intent_data['status'])
+      payment_intent = invoice.payment_intents.create!(reference: payment_intent_data['id'], state: payment_intent_data['status'])
 
       # For PaymentIntent statuses and corresponding recommended actions see https://stripe.com/docs/payments/accept-a-payment-synchronously
       # - succeeded                => no additional action > the payment has succeeded
@@ -49,7 +49,7 @@ class Finance::StripeChargeService
     # Passing the gateway option `off_session: false` will cause a `requires_action` status on the payment intent in cases where otherwise it would be `requires_payment_method`.
     # This happens even when the payment intent has been originally created with `off_session: true` – i.e. Stripe allows us to turn an "off_session" payment intent into an "on_session" one.
     # Along with the `requires_action` status, the param `next_action.use_stripe_sdk.stripe_js` holds the next-step link to get the transaction authenticated
-    response = gateway.confirm_intent(payment_intent.payment_intent_id, payment_method_id, gateway_options)
+    response = gateway.confirm_intent(payment_intent.reference, payment_method_id, gateway_options)
 
     with_payment_intent_data_from(response) do |payment_intent_data|
       payment_intent_status = payment_intent_data['status']

@@ -12,7 +12,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
 
       buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
       invoice = FactoryBot.create(:invoice, buyer_account: buyer_account, provider_account: provider_account)
-      @payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'some-payment-intent-id')
+      @payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: 'some-payment-intent-id')
 
       login! provider_account
     end
@@ -73,7 +73,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
       invoices = provider_account.buyer_invoices
       PaymentIntent.expects(:by_invoice).returns(invoices)
-      invoices.expects(:find_by!).with(payment_intent_id: 'some-payment-intent-id').returns(payment_intent)
+      invoices.expects(:find_by!).with(reference: 'some-payment-intent-id').returns(payment_intent)
       payment_intent_update_service = Finance::StripePaymentIntentUpdateService.new(provider_account, stripe_event)
       Finance::StripePaymentIntentUpdateService.expects(:new).with(provider_account, stripe_event).returns(payment_intent_update_service)
       payment_intent_update_service.expects(:call).returns(false)

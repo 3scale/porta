@@ -17,11 +17,11 @@ class PaymentIntentTest < ActiveSupport::TestCase
     assert record.valid?
   end
 
-  test 'requires a payment_intent_id' do
-    record = FactoryBot.build(:payment_intent, payment_intent_id: nil)
+  test 'requires a reference' do
+    record = FactoryBot.build(:payment_intent, reference: nil)
     refute record.valid?
-    assert record.errors[:payment_intent_id].include?("can't be blank")
-    record.payment_intent_id = 'foo'
+    assert record.errors[:reference].include?("can't be blank")
+    record.reference = 'foo'
     assert record.valid?
   end
 
