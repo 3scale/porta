@@ -71,9 +71,6 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
     test 'fails to update payment intent' do
       stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'some-payment-intent-id' })
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
-      invoices = provider_account.buyer_invoices
-      PaymentIntent.expects(:by_invoice).returns(invoices)
-      invoices.expects(:find_by!).with(reference: 'some-payment-intent-id').returns(payment_intent)
       payment_intent_update_service = Finance::StripePaymentIntentUpdateService.new(provider_account, stripe_event)
       Finance::StripePaymentIntentUpdateService.expects(:new).with(provider_account, stripe_event).returns(payment_intent_update_service)
       payment_intent_update_service.expects(:call).returns(false)
