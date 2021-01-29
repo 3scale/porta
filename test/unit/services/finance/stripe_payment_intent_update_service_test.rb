@@ -49,7 +49,7 @@ class Finance::StripePaymentIntentUpdateServiceTest < ActiveSupport::TestCase
   end
 
   def payment_intent_data
-    { id: payment_intent.payment_intent_id, amount: charge_cost.cents }
+    { id: payment_intent.reference, amount: charge_cost.cents }
   end
 
   def build_stripe_event(type:, payment_intent_data: {})

@@ -4,7 +4,7 @@ class Finance::StripePaymentIntentUpdateService
   def initialize(provider_account, stripe_event)
     @stripe_event = stripe_event
     @payment_intent_data = stripe_event.data.object
-    @payment_intent = PaymentIntent.by_invoice(provider_account.buyer_invoices).find_by!(payment_intent_id: payment_intent_data['id'])
+    @payment_intent = PaymentIntent.by_invoice(provider_account.buyer_invoices).find_by!(reference: payment_intent_data['id'])
   end
 
   attr_reader :stripe_event, :payment_intent_data, :payment_intent
