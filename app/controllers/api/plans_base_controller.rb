@@ -112,6 +112,16 @@ class Api::PlansBaseController < Api::BaseController
 
   protected
 
+  def new_masterize_plan(issuer, assoc)
+    if @plan.nil? || issuer.send(assoc) == @plan
+      issuer.send("#{assoc}=", nil)
+    else
+      issuer.send("#{assoc}=", @plan)
+    end
+
+    issuer.save!
+  end
+
   def generic_masterize_plan(issuer, assoc)
     masterize_plan do
       if @plan.nil? || issuer.send(assoc) == @plan
