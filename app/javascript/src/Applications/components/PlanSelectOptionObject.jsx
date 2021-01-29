@@ -1,11 +1,16 @@
+// @flow
+
 import { SelectOptionObject } from '@patternfly/react-core'
 
 type Plan = {
-  id: string,
+  id: number,
   name: string
 }
 
 class PlanSelectOptionObject implements SelectOptionObject {
+  id: number
+  name: string
+
   constructor (plan: Plan) {
     this.id = plan.id
     this.name = plan.name

@@ -20,7 +20,7 @@ div.dashboard_card.round#provider-change-plan
   br
   = form_tag edit_master_provider_plan_path(provider), :method => :get, :remote => true, :class => 'formtastic colorbox' do
     fieldset.inputs
-      legend Change Plan
+      legend Change Plan PEPE
       ol
         li
           = select_tag :plan_id, options_from_collection_for_select(plans, :id, :name), required: true, include_blank: true
