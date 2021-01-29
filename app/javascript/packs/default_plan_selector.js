@@ -1,13 +1,15 @@
-import { DefaultPlanSelectorWrapper } from 'Applications'
+import { DefaultPlanSelectWrapper } from 'Applications'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
   const { dataset } = document.getElementById('default_plan')
+  const currentService = safeFromJsonString(dataset.currentService)
   const plans = safeFromJsonString(dataset.applicationPlans)
-  const currentPlanId = Number(dataset.currentPlanId)
+  const currentPlan = safeFromJsonString(dataset.currentPlan) ?? undefined
 
-  DefaultPlanSelectorWrapper({
+  DefaultPlanSelectWrapper({
+    currentService,
     plans,
-    currentPlanId
+    currentPlan
   }, 'default_plan')
 })
