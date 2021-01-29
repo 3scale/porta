@@ -12,7 +12,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
 
       buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
       invoice = FactoryBot.create(:invoice, buyer_account: buyer_account, provider_account: provider_account)
-      @payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'some-payment-intent-id')
+      @payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, reference: 'some-payment-intent-id')
 
       login! provider_account
     end
@@ -24,7 +24,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
 
       post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
-      assert_response :ok
+      assert_response :no_content
     end
 
     test 'missing stripe webhook signing secret' do
@@ -71,15 +71,14 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
     test 'fails to update payment intent' do
       stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'some-payment-intent-id' })
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
-      invoices = provider_account.buyer_invoices
-      PaymentIntent.expects(:by_invoice).returns(invoices)
-      invoices.expects(:find_by!).with(payment_intent_id: 'some-payment-intent-id').returns(payment_intent)
-      payment_intent.expects(:update_from_stripe_event).returns(false)
+      payment_intent_update_service = Finance::StripePaymentIntentUpdateService.new(provider_account, stripe_event)
+      Finance::StripePaymentIntentUpdateService.expects(:new).with(provider_account, stripe_event).returns(payment_intent_update_service)
+      payment_intent_update_service.expects(:call).returns(false)
       System::ErrorReporting.expects(:report_error).at_least_once # because the setup doesn't really build all required objects
       System::ErrorReporting.expects(:report_error).with(instance_of(Finance::Api::PaymentCallbacks::StripeCallbacksController::StripeCallbackError), event: stripe_event, payment_intent: payment_intent)
 
       post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
-      assert_response :ok
+      assert_response :no_content
     end
 
     test 'not stripe gateway' do
