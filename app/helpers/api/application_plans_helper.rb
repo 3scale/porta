@@ -4,9 +4,10 @@ module Api::ApplicationPlansHelper
 
   def default_plan_data(service, plans)
     {
-      'current-service': service.to_json(root: false, only: %i[id name]),
+      'service': service.to_json(root: false, only: %i[id name]),
       'application-plans': application_plans_data(plans),
-      'current-plan': default_application_plan_data(service)
+      'current-plan': default_application_plan_data(service),
+      'path': masterize_admin_service_application_plans_path(':id')
     }
   end
 
