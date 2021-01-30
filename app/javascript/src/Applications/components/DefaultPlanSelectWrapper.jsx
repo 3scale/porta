@@ -1,8 +1,12 @@
+// @flow
+
 import React from 'react'
 
-import { DefaultPlanSelect } from 'Applications'
+import { DefaultPlanSelectSection } from 'Applications'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-const DefaultPlanSelectWrapper = (props, containerId) => createReactWrapper(<DefaultPlanSelect {...props} />, containerId)
+import type { Props } from 'Applications/components/DefaultPlanSelectSection'
+
+const DefaultPlanSelectWrapper = (props: Props, containerId: string) => createReactWrapper(<DefaultPlanSelectSection {...props} />, containerId)
 
 export { DefaultPlanSelectWrapper }
