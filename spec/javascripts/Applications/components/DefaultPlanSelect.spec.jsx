@@ -6,9 +6,10 @@ import { DefaultPlanSelect } from 'Applications'
 import { mount } from 'enzyme'
 
 const props = {
-  currentService: { id: 0, name: 'Le Service' },
-  currentPlan: undefined,
-  plans: []
+  plan: undefined,
+  plans: [],
+  onSelectPlan: jest.fn(),
+  isDisabled: false
 }
 
 it('should render', () => {
