@@ -1,0 +1,14 @@
+@import "~@patternfly/patternfly/components/Card/card.css";
+
+#default-plan-select-card {
+  margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
+
+  .pf-c-select__toggle.pf-m-disabled input {
+    background-color: var(--pf-global--disabled-color--300);
+  }
+
+  .pf-c-select__menu {
+    max-height: 150px;
+    overflow-y: scroll;
+  }
+}
