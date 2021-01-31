@@ -11,8 +11,6 @@ import { PlanSelectOptionObject } from 'Applications/utils'
 
 import type { ApplicationPlan } from 'Applications/types'
 
-import './DefaultPlanSelect.scss'
-
 type Props = {
   plan: ApplicationPlan,
   plans: ApplicationPlan[],
