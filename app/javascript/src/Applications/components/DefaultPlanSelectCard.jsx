@@ -13,7 +13,7 @@ import { DefaultPlanSelect } from 'Applications'
 
 import type { Product, ApplicationPlan } from 'Applications/types'
 
-import './DefaultPlanSelectSection.scss'
+import './DefaultPlanSelectCard.scss'
 
 export type Props = {
   product: Product,
@@ -23,7 +23,7 @@ export type Props = {
 
 const NO_DEFAULT_PLAN: ApplicationPlan = { id: -1, name: '(No default plan)' }
 
-const DefaultPlanSelectSection = ({ product, initialDefaultPlan, path }: Props) => {
+const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => {
   const [defaultPlan, setDefaultPlan] = useState<ApplicationPlan>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
   const [isLoading, setIsLoading] = useState(false)
@@ -40,8 +40,13 @@ const DefaultPlanSelectSection = ({ product, initialDefaultPlan, path }: Props) 
           $.flash('Default plan was updated')
           setDefaultPlan(plan)
         } else {
-          // $FlowFixMe
-          $.flash.error('Plan could not be updated')
+          if (data.status === 404) {
+            // $FlowFixMe
+            $.flash.error("The selected plan doesn't exist.")
+          } else {
+            // $FlowFixMe
+            $.flash.error('Plan could not be updated')
+          }
         }
       })
       .catch(err => {
@@ -76,4 +81,4 @@ const DefaultPlanSelectSection = ({ product, initialDefaultPlan, path }: Props) 
   )
 }
 
-export { DefaultPlanSelectSection }
+export { DefaultPlanSelectCard }
