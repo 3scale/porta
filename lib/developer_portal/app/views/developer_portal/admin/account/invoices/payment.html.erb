@@ -7,7 +7,7 @@
             <i class="fa fa-chevron-left"></i>
             Cancel
           </a>
-          <%= @invoice.period.begin %> Invoice
+          <%= @invoice.period.begin.strftime("%B, %Y") %> Invoice
         </div>
         <div class="panel-body">
           <div class="row">
@@ -76,7 +76,10 @@
               </dl>
             </div>
           </div>
-          <div class="row stripe-from" data-publishable-key="<%= @stripe_publishable_key %>"
+          <div
+            class="row stripe-form"
+            data-publishable-key="<%= @stripe_publishable_key %>"
+            data-client-secret="<%= @client_secret %>"
             data-line-item="<%= @invoice.line_items.to_json %>">
             <form id="payment-form">
               <div id="card-element"></div>

@@ -1,13 +1,14 @@
 import { loadStripe } from '@stripe/stripe-js'
+import 'PaymentGateways/stripe/styles/stripe.scss'
+
 document.addEventListener('DOMContentLoaded', async () => {
-  const stripePublishableKey = document.querySelector('.stripe-from').dataset.publishableKey
-  // const lineItems = JSON.parse(document.querySelector('.stripe-from').dataset.lineItem)
+  const stripePublishableKey = document.querySelector('.stripe-form').dataset.publishableKey
+  const clientSecret = document.querySelector('.stripe-form').dataset.clientSecret
+  if (!stripePublishableKey || !clientSecret) {
+    return
+  }
+
   const payButton = document.querySelector('#submit-payment')
-  // const purchase = {
-  //   items: lineItems.map(item => ({
-  //     id: item.line_item.id
-  //   }))
-  // }
 
   const style = {
     base: {
@@ -25,7 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       iconColor: '#fa755a'
     }
   }
-  const getClientSecret = () => ''
 
   const payWithCard = function (stripe, card, clientSecret) {
     loading(true)
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   payButton.disabled = true
-  const clientSecret = getClientSecret()
   const stripe = await loadStripe(stripePublishableKey)
   const elements = stripe.elements()
   const card = elements.create('card', { style: style })
@@ -90,7 +89,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const form = document.getElementById('payment-form')
   form.addEventListener('submit', function (event) {
     event.preventDefault()
-    // Complete payment when the submit button is clicked
     payWithCard(stripe, card, clientSecret)
   })
 })
