@@ -1,5 +1,6 @@
 // The Spinner is still not available in the version of @patternfly/react-core we use, therefor we need all the following styles
 
+// scss-lint:disable all
 .pf-c-spinner {
   --pf-c-spinner--AnimationDuration: 1.5s;
   --pf-c-spinner--AnimationTimingFunction: cubic-bezier(.77, .005, .315, 1);
@@ -207,3 +208,4 @@
     transform: rotate(-360deg);
   }
 }
+// scss-lint:enable all
