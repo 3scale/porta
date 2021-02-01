@@ -35,7 +35,6 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
 
     post(url, body)
       .then(data => {
-        console.log(data)
         if (data.ok) {
           // $FlowFixMe
           $.flash('Default plan was updated')

@@ -113,10 +113,10 @@ class Api::PlansBaseController < Api::BaseController
   protected
 
   def new_masterize_plan(issuer, assoc)
-    raise ActiveRecord::RecordNotFound, "Plan doesn't exist" if @plan.nil?
-
     if params[:id].blank? || issuer.send(assoc) == @plan
       issuer.send("#{assoc}=", nil)
+    elsif @plan.nil?
+      raise ActiveRecord::RecordNotFound, "Plan doesn't exist"
     else
       issuer.send("#{assoc}=", @plan)
     end
