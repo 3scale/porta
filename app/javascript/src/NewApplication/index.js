@@ -1,5 +1,6 @@
 // @flow
 
+export * from './components/BuyerSelect'
 export * from './components/ServicePlanSelect'
 export * from './components/ProductFancySelector'
 export * from './components/ApplicationPlanSelect'

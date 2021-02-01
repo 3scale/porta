@@ -12,6 +12,8 @@ import {
   PageSectionVariants
 } from '@patternfly/react-core'
 import {
+  BuyerSelect,
+  BUYER_PLACEHOLDER,
   ProductFormSelector,
   ApplicationPlanSelect,
   APP_PLAN_PLACEHOLDER,
@@ -27,7 +29,6 @@ import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplicatio
 
 import './NewApplicationForm.scss'
 
-const BUYER_PLACEHOLDER: Buyer = { disabled: true, id: '-1', name: 'Select an Account', contractedProducts: [], servicePlans: [], createApplicationPath: '' }
 const PRODUCT_PLACEHOLDER: Product = { disabled: true, id: -1, name: 'Select a Product', appPlans: [], servicePlans: [], defaultServicePlan: null }
 
 type Props = {
@@ -100,24 +101,7 @@ const NewApplicationForm = ({
         <input name="utf8" type="hidden" value="✓"/>
 
         {!buyer && (
-          <FormGroup
-            label="Account"
-            isRequired
-            fieldId="account_id"
-          >
-            <FormSelect
-              value={undefined}
-              onChange={(id) => console.log('setBuyer(buyers.find(a => a.id === id))')}
-              id="account_id"
-              name="account_id"
-            >
-              {/* {buyers.map((b) => (
-                <FormSelectOption isDisabled={b.disabled} key={b.id} value={b.id} label={b.name} />
-              ))} */}
-              {/* $FlowFixMe */}
-              {[BUYER_PLACEHOLDER].map(toFormSelectOption)}
-            </FormSelect>
-          </FormGroup>
+          <BuyerSelect />
         )}
 
         {/* Product (fancy selector) */}
