@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 
 import { Select, SelectVariant } from '@patternfly/react-core'
-import { SelectOptionObject, toSelectOption } from 'utilities/patternfly-utils'
+import { SelectOptionObject, toSelectOption, Record } from 'utilities/patternfly-utils'
 
 import './DefaultPlanSelect.scss'
 
@@ -12,7 +12,7 @@ import type { ApplicationPlan } from 'Applications/types'
 type Props = {
   plan: ApplicationPlan,
   plans: ApplicationPlan[],
-  onSelectPlan: (ApplicationPlan) => void,
+  onSelectPlan: (Record) => void,
   isDisabled?: boolean
 }
 
