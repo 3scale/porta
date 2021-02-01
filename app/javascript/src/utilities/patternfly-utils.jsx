@@ -7,8 +7,8 @@ import {
   SelectOptionObject as ISelectOptionObject
 } from '@patternfly/react-core'
 
-interface Record {
-  id: string | number,
+export interface Record {
+  id: number | string,
   name: string
 }
 
