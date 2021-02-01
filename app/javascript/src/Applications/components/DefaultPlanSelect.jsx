@@ -10,7 +10,6 @@ import {
 import { PlanSelectOptionObject } from 'Applications/utils'
 
 import type { ApplicationPlan } from 'Applications/types'
-
 type Props = {
   plan: ApplicationPlan,
   plans: ApplicationPlan[],
