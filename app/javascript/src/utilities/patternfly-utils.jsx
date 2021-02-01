@@ -17,21 +17,21 @@ type Props = Record & {
 }
 
 export class SelectOptionObject implements ISelectOptionObject {
-   id: string;
-   name: string;
+  id: string;
+  name: string;
 
-   constructor (item: Record) {
-     this.id = String(item.id)
-     this.name = item.name
-   }
+  constructor (item: Record) {
+    this.id = String(item.id)
+    this.name = item.name
+  }
 
-   toString (): string {
-     return this.name
-   }
+  toString (): string {
+    return this.name
+  }
 
-   compareTo (other: Record): boolean {
-     return this.id === other.id
-   }
+  compareTo (other: Record): boolean {
+    return this.id === other.id
+  }
 }
 
 export const toSelectOption = ({ id, name, disabled = false }: Props) => (
