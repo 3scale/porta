@@ -6,40 +6,35 @@ import {
   FormGroup,
   FormSelectOption,
   Select,
-  SelectGroup,
-  SelectOption,
   SelectVariant
 } from '@patternfly/react-core'
-// import { toSelectOption } from 'utilities/patternfly-utils'
+import { toSelectOption } from 'utilities/patternfly-utils'
 
 import type { Product } from 'NewApplication/types'
 
-// Tried to remove Select a Product but I keep getting a blank option
-// const DEFAULT_PRODUCT: Product = { disabled: true, id: -1, name: 'Select a Product', label: 'Vendor Names', key: 'group2', appPlans: [], servicePlans: [], defaultServicePlan: null }
+const HEADER = { id: 'header', name: 'Most recently created products', disabled: true, className: 'pf-c-select__menu-item--group-name' }
+const SHOW_ALL_PRODUCTS = { id: 'foo', name: 'View all Products' }
 
 const options = [
-  <SelectGroup label="Most recently created Products" key="group1">
-    <SelectOption key={0} value="Product-01" description="please"/>
-    <SelectOption key={1} value="Product-02" />
-    <SelectOption key={2} value="Product-03" />
-    <SelectOption key={3} value="Product-04" />
-    <SelectOption key={4} value="Product-05" />
-    <SelectOption key={5} value="Product-06" />
-    <SelectOption key={6} value="Product-07" isDisabled />
-    <SelectOption key={7} value="Product-08" />
-    <SelectOption key={8} value="Product-09" />
-    <SelectOption key={9} value="Product-10" />
-    <SelectOption key={10} value="Product-11" />
-    <SelectOption key={11} value="Product-12" />
-    <SelectOption key={12} value="Product-13" />
-    <SelectOption key={13} value="Product-14" />
-    <SelectOption key={14} value="Product-15" />
-    <SelectOption key={15} value="Product-16" />
-    <SelectOption key={16} value="Product-17" />
-    <SelectOption key={17} value="Product-18" />
-    <SelectOption key={18} value="Product-19" />
-    <SelectOption key={19} value="See all products" className="select-option--fixed-link" />
-  </SelectGroup>
+  { name: 'Product-01', id: '01', systemName: 'product_01' },
+  { name: 'Product-02', id: '02', systemName: 'product_02' },
+  { name: 'Product-03', id: '03', systemName: 'product_03' },
+  { name: 'Product-04', id: '04', systemName: 'product_04' },
+  { name: 'Product-05', id: '05', systemName: 'product_05' },
+  { name: 'Product-06', id: '06', systemName: 'product_06' },
+  { name: 'Product-07', id: '07', systemName: 'product_07' },
+  { name: 'Product-08', id: '08', systemName: 'product_08' },
+  { name: 'Product-09', id: '09', systemName: 'product_09' },
+  { name: 'Product-10', id: '10', systemName: 'product_10' },
+  { name: 'Product-11', id: '11', systemName: 'product_11' },
+  { name: 'Product-12', id: '12', systemName: 'product_12' },
+  { name: 'Product-13', id: '13', systemName: 'product_13' },
+  { name: 'Product-14', id: '14', systemName: 'product_14' },
+  { name: 'Product-15', id: '15', systemName: 'product_15' },
+  { name: 'Product-16', id: '16', systemName: 'product_16' },
+  { name: 'Product-17', id: '17', systemName: 'product_17' },
+  { name: 'Product-18', id: '18', systemName: 'product_18' },
+  { name: 'Product-19', id: '19', systemName: 'product_19' }
 ]
 
 type Props = {
@@ -55,7 +50,12 @@ const ProductFormSelector = ({ isDisabled = false, onSelect, products }: Props) 
 
   const onSelectProduct = (_e, product) => {
     setExpanded(false)
-    onSelect(product)
+
+    if (product.id === SHOW_ALL_PRODUCTS.id) {
+      console.log('open modal')
+    } else {
+      onSelect(product)
+    }
   }
 
   return (
@@ -75,15 +75,11 @@ const ProductFormSelector = ({ isDisabled = false, onSelect, products }: Props) 
         isExpanded={expanded}
         isGrouped={true}
         aria-labelledby="product"
+        className="pf-c-select__menu--with-fixed-link"
       >
-        {/* <SelectGroup label="Most recently created Products" key="group1">
-          {[DEFAULT_PRODUCT, ...products].map(toSelectOption)}
-        </SelectGroup> */}
-
-        {options}
+        {[HEADER, ...options, SHOW_ALL_PRODUCTS].map(toSelectOption)}
       </Select>
     </FormGroup>
   )
 }
-
 export { ProductFormSelector }

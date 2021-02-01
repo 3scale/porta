@@ -12,11 +12,4 @@
     max-height: 20em;
     overflow: auto;
   }
-
-  // .select-option--fixed-link,
-  .pf-c-select__menu-group li:last-of-type {
-    position:sticky;
-    bottom: -8px;
-    background-color: red;
-  }
 }

@@ -104,3 +104,36 @@ $dropdown-bg-color: lighten(black, 85%);
   text-align: left;
   min-width: line-height-times(10);
 }
+
+// For a select box with fixed link at the bottom, select the last li to be that sticky link
+.pf-c-select__menu--with-fixed-link li:last-of-type {
+  position:sticky;
+  bottom: calc(-1 * var(--pf-global--spacer--sm));
+  padding-top: var(--pf-global--spacer--xs);
+  padding-bottom: var(--pf-global--spacer--sm);
+  background-color: var(--pf-global--BackgroundColor--100);
+}
+// Make the sticky link look like a link
+.pf-c-select__menu--with-fixed-link li:last-of-type .pf-c-select__menu-item {
+  color: var(--pf-global--link--Color);
+}
+.pf-c-select__menu--with-fixed-link li:last-of-type .pf-c-select__menu-item:hover {
+  background-color: var(--pf-global--BackgroundColor--100);
+  color: var(--pf-global--link--Color--hover);
+}
+
+// For a typeahead select with an option marked as a group name, make the option look like the SelectGroup name should
+.pf-c-select__menu-item.pf-c-select__menu-item--group-name  {
+  padding-top: var(--pf-c-select__menu-item--PaddingTop);
+  padding-right: var(--pf-c-select__menu-item--PaddingRight);
+  padding-bottom: var(--pf-c-select__menu-item--PaddingBottom);
+  padding-left: var(--pf-c-select__menu-item--PaddingLeft);
+  font-size: var(--pf-global--FontSize--sm);
+  font-weight: var(--pf-global--FontWeight--semi-bold);
+  color: var(--pf-global--Color--dark-200);
+}
+
+// fix the bottom border of the typeahead select that is being overwritten by a reset
+.pf-c-select__toggle-wrapper > .pf-c-form-control {
+  border-bottom-color: var(--pf-c-select__toggle--BorderBottomColor);
+}
