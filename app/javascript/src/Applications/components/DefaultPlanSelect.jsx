@@ -2,12 +2,8 @@
 
 import React, { useState } from 'react'
 
-import {
-  Select,
-  SelectOption,
-  SelectVariant
-} from '@patternfly/react-core'
-import { PlanSelectOptionObject } from 'Applications/utils'
+import { Select, SelectVariant } from '@patternfly/react-core'
+import { SelectOptionObject, toSelectOption } from 'utilities/patternfly-utils'
 
 import './DefaultPlanSelect.scss'
 
@@ -21,10 +17,10 @@ type Props = {
 }
 
 const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Props) => {
-  const [selection, setSelection] = useState<PlanSelectOptionObject | null>(new PlanSelectOptionObject(plan))
+  const [selection, setSelection] = useState<SelectOptionObject | null>(new SelectOptionObject(plan))
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const onSelect = (_e, newPlan: PlanSelectOptionObject) => {
+  const onSelect = (_e, newPlan: SelectOptionObject) => {
     setSelection(newPlan)
     setIsExpanded(false)
 
@@ -49,8 +45,7 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
       selections={selection}
       isCreatable={false}
     >
-      {plans.map(p => new PlanSelectOptionObject(p))
-        .map(p => <SelectOption key={p.id} value={p} />)}
+      {plans.map(toSelectOption)}
     </Select>
   )
 }
