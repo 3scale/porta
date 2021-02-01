@@ -23,6 +23,8 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
   end
 
   def payment
+    @invoice = current_account.invoices.visible_for_buyer.find(params[:id])
+    @stripe_publishable_key = site_account.payment_gateway_options[:publishable_key]
   end
 
   protected
