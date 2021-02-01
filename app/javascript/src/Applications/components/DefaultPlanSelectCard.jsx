@@ -9,12 +9,13 @@ import {
   Card,
   CardBody
 } from '@patternfly/react-core'
-import { DefaultPlanSelect, MySpinner } from 'Applications'
+import { DefaultPlanSelect } from 'Applications'
+import { Spinner } from 'Common'
 
 import type { Product, ApplicationPlan } from 'Applications/types'
 
 import './DefaultPlanSelectCard.scss'
-import 'patternflyStyles/spinner.scss'
+
 export type Props = {
   product: Product,
   initialDefaultPlan: ApplicationPlan | null,
@@ -60,7 +61,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
   }
 
   return (
-    <Card className="pf-c-card" id="default-plan-select-card">
+    <Card id="default_plan_card">
       <CardBody>
         <Form onSubmit={e => e.preventDefault()}>
           <FormGroup
@@ -68,7 +69,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
             fieldId="application_plan_id"
             helperText="Default application plan (if any) is selected automatically upon service subscription."
           >
-            {isLoading && <MySpinner size='sm' className='pf-u-ml-md' />}
+            {isLoading && <Spinner size='sm' className='pf-u-ml-md' />}
             <DefaultPlanSelect
               plan={defaultPlan}
               plans={[NO_DEFAULT_PLAN, ...product.appPlans].filter(p => p.id !== defaultPlan.id)} // Don't show the current default plan
