@@ -9,7 +9,10 @@ import {
 } from '@patternfly/react-core'
 import { PlanSelectOptionObject } from 'Applications/utils'
 
+import './DefaultPlanSelect.scss'
+
 import type { ApplicationPlan } from 'Applications/types'
+
 type Props = {
   plan: ApplicationPlan,
   plans: ApplicationPlan[],
