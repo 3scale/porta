@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { ApplicationPlanSelect } from 'Applications'
+import { ApplicationPlanSelect } from 'NewApplication'
 import { mount } from 'enzyme'
 
 const props = {

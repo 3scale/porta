@@ -1,4 +1,4 @@
-import { NewApplicationFormWrapper } from 'Applications'
+import { NewApplicationFormWrapper } from 'NewApplication'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {

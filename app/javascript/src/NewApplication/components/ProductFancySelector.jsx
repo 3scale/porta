@@ -9,7 +9,7 @@ import {
 } from '@patternfly/react-core'
 import { toSelectOption } from 'utilities/patternfly-utils'
 
-import type { Product } from 'Applications/types'
+import type { Product } from 'NewApplication/types'
 
 const DEFAULT_PRODUCT: Product = { disabled: true, id: -1, name: 'Select a Product', appPlans: [], servicePlans: [], defaultServicePlan: null }
 

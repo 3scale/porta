@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { DescriptionInput } from 'Applications'
+import { DescriptionInput } from 'NewApplication'
 import { render } from 'enzyme'
 
 const props = {

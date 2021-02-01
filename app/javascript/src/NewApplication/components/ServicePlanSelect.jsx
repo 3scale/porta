@@ -8,7 +8,7 @@ import {
 } from '@patternfly/react-core'
 import { toFormSelectOption } from 'utilities/patternfly-utils'
 
-import type { ServicePlan } from 'Applications/types'
+import type { ServicePlan } from 'NewApplication/types'
 
 type Props = {
   isDisabled?: boolean,

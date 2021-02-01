@@ -3,7 +3,7 @@
 import React from 'react'
 
 import { render, mount } from 'enzyme'
-import { NewApplicationForm } from 'Applications/components/NewApplicationForm'
+import { NewApplicationForm } from 'NewApplication/components/NewApplicationForm'
 
 const appPlans = [{ id: 0, name: 'Basic Plan', issuer_id: 0, default: false }]
 const servicePlans = [{ id: 0, name: 'Basic Plan', issuer_id: 0, default: false }]

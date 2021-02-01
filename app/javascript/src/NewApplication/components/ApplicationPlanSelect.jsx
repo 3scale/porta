@@ -9,7 +9,7 @@ import {
 } from '@patternfly/react-core'
 import { toFormSelectOption } from 'utilities/patternfly-utils'
 
-import type { ApplicationPlan } from 'Applications/types'
+import type { ApplicationPlan } from 'NewApplication/types'
 
 type Props = {
   appPlans: ApplicationPlan[],

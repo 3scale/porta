@@ -19,11 +19,11 @@ import {
   SERVICE_PLAN_PLACEHOLDER,
   NameInput,
   DescriptionInput
-} from 'Applications'
+} from 'NewApplication'
 import { CSRFToken } from 'utilities/utils'
 import { toFormSelectOption } from 'utilities/patternfly-utils'
 
-import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'Applications/types'
+import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'
 
 import './NewApplicationForm.scss'
 
