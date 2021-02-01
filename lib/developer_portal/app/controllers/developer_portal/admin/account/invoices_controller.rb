@@ -24,7 +24,8 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
   def payment
     @invoice = current_account.invoices.visible_for_buyer.find(params[:id])
-    @stripe_publishable_key = site_account.payment_gateway_options[:publishable_key]
+    @client_secret = fetch_stripe_client_secret
+    @stripe_publishable_key = payment_gateway_options[:publishable_key]
   end
 
   protected
@@ -35,5 +36,20 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
   def find_provider
     @provider = site_account
+  end
+
+  delegate :payment_gateway_options, to: :site_account
+
+  def payment_intent
+    @payment_intent ||= @invoice.payment_intents.latest_pending.first
+  end
+
+  def api_key
+    payment_gateway_options[:login]
+  end
+
+  def fetch_stripe_client_secret
+    return unless payment_intent
+    Stripe::PaymentIntent.retrieve(payment_intent.reference, api_key).client_secret
   end
 end
