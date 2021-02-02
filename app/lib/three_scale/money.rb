@@ -107,8 +107,8 @@ module ThreeScale
 
     def inspect
       output = "#{self.class}(#{currency} #{amount.to_f}"
-      output << ", on #{date}" if date
-      output << ')'
+      output += ", on #{date}" if date
+      output += ')'
       output
     end
 
