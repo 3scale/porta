@@ -12,7 +12,7 @@ import {
 import {
   BuyerSelect,
   BUYER_PLACEHOLDER,
-  ProductFormSelector,
+  ProductSelect,
   ApplicationPlanSelect,
   APP_PLAN_PLACEHOLDER,
   ServicePlanSelect,
@@ -25,8 +25,6 @@ import { CSRFToken } from 'utilities/utils'
 import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'
 
 import './NewApplicationForm.scss'
-
-const PRODUCT_PLACEHOLDER: Product = { disabled: true, id: -1, name: 'Select a Product', appPlans: [], servicePlans: [], defaultServicePlan: null }
 
 type Props = {
   createApplicationPath: string,
@@ -43,13 +41,8 @@ const NewApplicationForm = ({
   products,
   createApplicationPlanPath
 }: Props) => {
-  console.log({buyer,
-    createApplicationPath,
-    servicePlansAllowed,
-    products,
-    createApplicationPlanPath})
   // const [buyer, setBuyer] = useState(buyers[0])
-  const [product, setProduct] = useState<Product>(PRODUCT_PLACEHOLDER)
+  const [product, setProduct] = useState<Product | null>(null)
   const [appPlan, setAppPlan] = useState<ApplicationPlan>(APP_PLAN_PLACEHOLDER)
   const [servicePlan, setServicePlan] = useState<ServicePlan>(SERVICE_PLAN_PLACEHOLDER)
   const [name, setName] = useState<string>('')
@@ -62,7 +55,7 @@ const NewApplicationForm = ({
   const servicePlanValid = !servicePlansAllowed || servicePlan.id !== SERVICE_PLAN_PLACEHOLDER.id
   const isFormComplete = name &&
     buyerValid &&
-    product !== PRODUCT_PLACEHOLDER &&
+    product !== null &&
     appPlan !== APP_PLAN_PLACEHOLDER &&
     servicePlanValid
 
@@ -74,7 +67,7 @@ const NewApplicationForm = ({
   // }, [buyer])
 
   useEffect(() => {
-    if (product !== PRODUCT_PLACEHOLDER) {
+    if (product !== null) {
       setAppPlan(APP_PLAN_PLACEHOLDER)
 
       const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
@@ -85,8 +78,8 @@ const NewApplicationForm = ({
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
-  const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
-  const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
+  const contract = buyer && product && buyer.contractedProducts.find(p => p.id === product.id)
+  const contractedServicePlan = (contract && contract.withPlan) || (product && product.defaultServicePlan)
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -103,7 +96,7 @@ const NewApplicationForm = ({
           <BuyerSelect />
         )}
 
-        <ProductFormSelector
+        <ProductSelect
           product={product}
           products={products}
           onSelect={setProduct}
@@ -114,19 +107,19 @@ const NewApplicationForm = ({
         {servicePlansAllowed && (
           <ServicePlanSelect
             isRequired={contractedServicePlan === null}
-            isDisabled={product === PRODUCT_PLACEHOLDER || contractedServicePlan !== null}
-            servicePlans={product.servicePlans}
+            isDisabled={product === null || contractedServicePlan !== null}
+            servicePlans={product ? product.servicePlans : []}
             servicePlan={servicePlan}
             setServicePlan={setServicePlan}
           />
         )}
 
         <ApplicationPlanSelect
-          isDisabled={product === PRODUCT_PLACEHOLDER}
-          appPlans={product.appPlans}
+          isDisabled={product === null}
+          appPlans={product ? product.appPlans : []}
           appPlan={appPlan}
           setAppPlan={setAppPlan}
-          createApplicationPlanPath={createApplicationPlanPath.replace(':id', product.id.toString())}
+          createApplicationPlanPath={createApplicationPlanPath.replace(':id', product ? product.id.toString() : '')}
         />
 
         <NameInput name={name} setName={setName} />

@@ -13,6 +13,7 @@ export type ApplicationPlan = {
 export type Product = {
   id: number,
   name: string,
+  systemName: string,
   appPlans: ApplicationPlan[],
   servicePlans: ServicePlan[],
   defaultServicePlan: ServicePlan | null

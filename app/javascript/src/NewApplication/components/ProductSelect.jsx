@@ -7,7 +7,7 @@ import {
   Select,
   SelectVariant
 } from '@patternfly/react-core'
-import { toSelectOption } from 'utilities/patternfly-utils'
+import { toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import type { Product } from 'NewApplication/types'
 
@@ -15,23 +15,27 @@ const HEADER = { id: 'header', name: 'Most recently created products', disabled:
 const SHOW_ALL_PRODUCTS = { id: 'foo', name: 'View all Products' }
 
 type Props = {
-  product: Product,
+  product: Product | null,
   products: Product[],
-  onSelect: Product => void,
+  onSelect: (Product | null) => void,
   onShowAll: () => void,
   isDisabled?: boolean
 }
 
-const ProductFormSelector = ({ isDisabled = false, onSelect, onShowAll, products, product }: Props) => {
+const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
-  const onSelectProduct = (_e, product) => {
+  const handleOnSelect = (_e, option: SelectOptionObject) => {
     setExpanded(false)
 
-    if (product.id === SHOW_ALL_PRODUCTS.id) {
+    if (option.id === SHOW_ALL_PRODUCTS.id) {
       onShowAll()
     } else {
-      onSelect(product)
+      const selectedProduct = products.find(p => p.id.toString() === option.id)
+
+      if (selectedProduct) {
+        onSelect(selectedProduct)
+      }
     }
   }
 
@@ -45,11 +49,11 @@ const ProductFormSelector = ({ isDisabled = false, onSelect, onShowAll, products
         // Not to be submitted, do not add "name"
         variant={SelectVariant.typeahead}
         placeholderText="Select a product"
-        selections={product}
+        selections={product && new SelectOptionObject(product)} // Flow is wrong here
         onToggle={() => setExpanded(!expanded)}
-        onSelect={onSelectProduct}
+        onSelect={handleOnSelect}
         isExpanded={expanded}
-        isGrouped={true}
+        onClear={() => onSelect(null)}
         aria-labelledby="product"
         className="pf-c-select__menu--with-fixed-link"
       >
@@ -59,4 +63,4 @@ const ProductFormSelector = ({ isDisabled = false, onSelect, onShowAll, products
     </FormGroup>
   )
 }
-export { ProductFormSelector }
+export { ProductSelect }
