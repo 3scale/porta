@@ -1,43 +1,59 @@
 // @flow
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   FormGroup,
-  FormSelect
+  Select,
+  SelectVariant
 } from '@patternfly/react-core'
-import { toFormSelectOption } from 'utilities/patternfly-utils'
+import { toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import type { ServicePlan } from 'NewApplication/types'
 
 type Props = {
-  isDisabled?: boolean,
-  isRequired?: boolean,
+  servicePlan: ServicePlan | null,
   servicePlans: ServicePlan[],
-  servicePlan: ServicePlan,
-  setServicePlan: ServicePlan => void
+  onSelect: (ServicePlan | null) => void,
+  isDisabled?: boolean,
+  isRequired?: boolean
 }
 
-const SERVICE_PLAN_PLACEHOLDER: ServicePlan = { disabled: true, id: -1, name: 'Select a Service Plan', issuer_id: -1, default: false }
+const ServicePlanSelect = ({ isDisabled, isRequired, servicePlans, servicePlan, onSelect }: Props) => {
+  const [expanded, setExpanded] = useState(false)
 
-const ServicePlanSelect = ({ isDisabled, isRequired, servicePlans, servicePlan, setServicePlan }: Props) => (
-  <FormGroup
-    label="Service plan"
-    isRequired={isRequired}
-    validated="default"
-    fieldId="cinstance_service_plan_id"
-  >
-    <FormSelect
-      isDisabled={isDisabled}
-      value={servicePlan.id}
-      onChange={(id) => setServicePlan(servicePlans.find(p => p.id === Number(id)) || SERVICE_PLAN_PLACEHOLDER)}
-      id="cinstance_service_plan_id"
-      name="cinstance[service_plan_id]"
+  const handleSelect = (_e, option: SelectOptionObject) => {
+    setExpanded(false)
+
+    const selectedPlan = servicePlans.find(p => p.id.toString() === option.id)
+    onSelect(selectedPlan || null)
+  }
+
+  return (
+    <FormGroup
+      isRequired={isRequired}
+      label="Service plan"
+      fieldId="cinstance_service_plan_id"
     >
-      {/* $FlowFixMe */}
-      {[SERVICE_PLAN_PLACEHOLDER, ...servicePlans].map(toFormSelectOption)}
-    </FormSelect>
-  </FormGroup>
-)
+      {servicePlan && <input type="hidden" name="cinstance[service_plan_id]" value={servicePlan.id} />}
+      <Select
+        id="cinstance_service_plan_id"
+        variant={SelectVariant.typeahead}
+        placeholderText="Select a service plan"
+        // $FlowFixMe Flow wrong here
+        selections={servicePlan && new SelectOptionObject(servicePlan)}
+        onToggle={() => setExpanded(!expanded)}
+        onSelect={handleSelect}
+        isExpanded={expanded}
+        onClear={() => onSelect(null)}
+        aria-labelledby="service plan"
+        isDisabled={isDisabled}
+      >
+        {/* $FlowFixMe Flow wrong here */}
+        {servicePlans.map(toSelectOption)}
+      </Select>
+    </FormGroup>
+  )
+}
 
-export { ServicePlanSelect, SERVICE_PLAN_PLACEHOLDER }
+export { ServicePlanSelect }

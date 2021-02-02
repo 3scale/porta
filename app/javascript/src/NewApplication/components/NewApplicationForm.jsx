@@ -11,12 +11,9 @@ import {
 } from '@patternfly/react-core'
 import {
   BuyerSelect,
-  BUYER_PLACEHOLDER,
   ProductSelect,
   ApplicationPlanSelect,
-  APP_PLAN_PLACEHOLDER,
   ServicePlanSelect,
-  SERVICE_PLAN_PLACEHOLDER,
   NameInput,
   DescriptionInput
 } from 'NewApplication'
@@ -43,20 +40,21 @@ const NewApplicationForm = ({
 }: Props) => {
   // const [buyer, setBuyer] = useState(buyers[0])
   const [product, setProduct] = useState<Product | null>(null)
-  const [appPlan, setAppPlan] = useState<ApplicationPlan>(APP_PLAN_PLACEHOLDER)
-  const [servicePlan, setServicePlan] = useState<ServicePlan>(SERVICE_PLAN_PLACEHOLDER)
+  const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
+  const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(null)
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
+
   const [loading, setLoading] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   console.log(`Modal is ${modalOpen ? 'open' : 'close'}`)
 
-  const buyerValid = buyer && (buyer.id !== undefined || buyer.id !== BUYER_PLACEHOLDER.id)
-  const servicePlanValid = !servicePlansAllowed || servicePlan.id !== SERVICE_PLAN_PLACEHOLDER.id
+  const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
+  const servicePlanValid = !servicePlansAllowed || servicePlan !== null
   const isFormComplete = name &&
     buyerValid &&
     product !== null &&
-    appPlan !== APP_PLAN_PLACEHOLDER &&
+    appPlan !== null &&
     servicePlanValid
 
   // useEffect(() => {
@@ -68,11 +66,11 @@ const NewApplicationForm = ({
 
   useEffect(() => {
     if (product !== null) {
-      setAppPlan(APP_PLAN_PLACEHOLDER)
+      setAppPlan(null)
 
       const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
       const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
-      setServicePlan(contractedServicePlan || SERVICE_PLAN_PLACEHOLDER)
+      setServicePlan(contractedServicePlan || null)
     }
   }, [product])
 
@@ -101,25 +99,25 @@ const NewApplicationForm = ({
           products={products}
           onSelect={setProduct}
           onShowAll={() => setModalOpen(true)}
-          isDisabled={!buyer || buyer === BUYER_PLACEHOLDER}
+          isDisabled={!buyer}
         />
 
         {servicePlansAllowed && (
           <ServicePlanSelect
+            servicePlan={servicePlan}
+            servicePlans={product ? product.servicePlans : []}
+            onSelect={setServicePlan}
             isRequired={contractedServicePlan === null}
             isDisabled={product === null || contractedServicePlan !== null}
-            servicePlans={product ? product.servicePlans : []}
-            servicePlan={servicePlan}
-            setServicePlan={setServicePlan}
           />
         )}
 
         <ApplicationPlanSelect
-          isDisabled={product === null}
-          appPlans={product ? product.appPlans : []}
           appPlan={appPlan}
-          setAppPlan={setAppPlan}
+          appPlans={product ? product.appPlans : []}
+          onSelect={setAppPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(':id', product ? product.id.toString() : '')}
+          isDisabled={product === null}
         />
 
         <NameInput name={name} setName={setName} />

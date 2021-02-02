@@ -46,10 +46,10 @@ const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, prod
       fieldId="product"
     >
       <Select
-        // Not to be submitted, do not add "name"
         variant={SelectVariant.typeahead}
         placeholderText="Select a product"
-        selections={product && new SelectOptionObject(product)} // Flow is wrong here
+        // $FlowFixMe Flow wrong here
+        selections={product && new SelectOptionObject(product)}
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleOnSelect}
         isExpanded={expanded}
@@ -57,7 +57,7 @@ const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, prod
         aria-labelledby="product"
         className="pf-c-select__menu--with-fixed-link"
       >
-        {/* $FlowFixMe */}
+        {/* $FlowFixMe Flow wrong here */}
         {[HEADER, ...products, SHOW_ALL_PRODUCTS].map(toSelectOption)}
       </Select>
     </FormGroup>
