@@ -18,7 +18,9 @@ table#line-items {
         {{ invoice.period_begin | date: '%B, %Y' }} Invoice
       </div>
       <div class="panel-body panel-footer">
-
+        {% if invoice.payment_transactions.size > 0 %}
+         <a href="{{invoice.url}}/payment" class="pull-right btn btn-default">Pay Invoice</a>
+        {% endif %}
         <dl class="dl-horizontal">
           <dt>ID</dt>
           <dd>{{ invoice.friendly_id }}</dd>
