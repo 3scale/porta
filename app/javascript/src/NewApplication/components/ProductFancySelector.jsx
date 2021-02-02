@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 
 import {
   FormGroup,
-  FormSelectOption,
   Select,
   SelectVariant
 } from '@patternfly/react-core'
@@ -16,21 +15,21 @@ const HEADER = { id: 'header', name: 'Most recently created products', disabled:
 const SHOW_ALL_PRODUCTS = { id: 'foo', name: 'View all Products' }
 
 type Props = {
+  product: Product,
   products: Product[],
   onSelect: Product => void,
+  onShowAll: () => void,
   isDisabled?: boolean
 }
 
-const ProductFormSelector = ({ isDisabled = false, onSelect, products }: Props) => {
+const ProductFormSelector = ({ isDisabled = false, onSelect, onShowAll, products, product }: Props) => {
   const [expanded, setExpanded] = useState(false)
-
-  const selectedProduct: FormSelectOption = null
 
   const onSelectProduct = (_e, product) => {
     setExpanded(false)
 
     if (product.id === SHOW_ALL_PRODUCTS.id) {
-      console.log('open modal')
+      onShowAll()
     } else {
       onSelect(product)
     }
@@ -39,17 +38,16 @@ const ProductFormSelector = ({ isDisabled = false, onSelect, products }: Props) 
   return (
     <FormGroup
       isRequired
-      label="Fancy Product"
+      label="Product"
       fieldId="product"
     >
       <Select
         // Not to be submitted, do not add "name"
         variant={SelectVariant.typeahead}
         placeholderText="Select a product"
-        selections={selectedProduct}
+        selections={product}
         onToggle={() => setExpanded(!expanded)}
         onSelect={onSelectProduct}
-        onClear={() => {}}
         isExpanded={expanded}
         isGrouped={true}
         aria-labelledby="product"

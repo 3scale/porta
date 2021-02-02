@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react'
 
 import {
   Form,
-  FormGroup,
-  FormSelect,
   ActionGroup,
   Button,
   PageSection,
@@ -23,7 +21,6 @@ import {
   DescriptionInput
 } from 'NewApplication'
 import { CSRFToken } from 'utilities/utils'
-import { toFormSelectOption } from 'utilities/patternfly-utils'
 
 import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'
 
@@ -58,6 +55,8 @@ const NewApplicationForm = ({
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  console.log(`Modal is ${modalOpen ? 'open' : 'close'}`)
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer.id !== BUYER_PLACEHOLDER.id)
   const servicePlanValid = !servicePlansAllowed || servicePlan.id !== SERVICE_PLAN_PLACEHOLDER.id
@@ -104,33 +103,13 @@ const NewApplicationForm = ({
           <BuyerSelect />
         )}
 
-        {/* Product (fancy selector) */}
         <ProductFormSelector
+          product={product}
           products={products}
-          onSelect={console.log}
+          onSelect={setProduct}
+          onShowAll={() => setModalOpen(true)}
+          isDisabled={!buyer || buyer === BUYER_PLACEHOLDER}
         />
-
-        <FormGroup
-          // Not to be submitted
-          isRequired
-          label="Product"
-          fieldId="product"
-        >
-          <FormSelect
-            isDisabled={!buyer || buyer === BUYER_PLACEHOLDER}
-            value={product.id}
-            onChange={(id: string) => setProduct(products.find(p => p.id === Number(id)) || PRODUCT_PLACEHOLDER)}
-            id="product"
-          >
-            {/* $FlowFixMe */}
-            {[PRODUCT_PLACEHOLDER, ...products].map(toFormSelectOption)}
-          </FormSelect>
-          {product !== DEFAULT_PRODUCT && !availablePlans.length && (
-            <Button component="a" href={createApplicationPlanPath.replace(':id', product.id)} variant="link">
-              Create your first application plan.
-            </Button>
-          )}
-        </FormGroup>
 
         {servicePlansAllowed && (
           <ServicePlanSelect
