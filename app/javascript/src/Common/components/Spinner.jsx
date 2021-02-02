@@ -10,7 +10,7 @@ type Props = {
 }
 
 const Spinner = ({ size = 'md', className }: Props) => {
-  const classParameters = `pf-c-spinner pf-m-${size.toString()} ${className}`
+  const classParameters = `pf-c-spinner pf-m-${size.toString()} ${className || ''}`
 
   return (
     <span className={classParameters} role="progressbar" aria-valuetext="Loading projects">
