@@ -19,13 +19,13 @@ const style = {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const stripePublishableKey = document.querySelector('.stripe-form').dataset.publishableKey
-  const clientSecret = document.querySelector('.stripe-form').dataset.clientSecret
+  const dataset = document.querySelector('.stripe-form').dataset
+  const stripePublishableKey = dataset.publishableKey
+  const clientSecret = dataset.clientSecret
   const form = document.querySelector('#payment-form')
+  const callbackForm = document.querySelector('#payment-callback-form')
   const payButton = document.querySelector('#submit-payment')
   const cardError = document.querySelector('#card-error')
-  const resultMessage = document.querySelector('.result-message')
-  const resultMessageLink = document.querySelector('.result-message a')
   const errorMsg = document.querySelector('#card-error')
   const spinner = document.querySelector('#spinner')
   const buttonText = document.querySelector('#button-text')
@@ -44,19 +44,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (result.error) {
         showError(result.error.message)
       } else {
-        orderComplete(result.paymentIntent.id)
+        orderComplete(result.paymentIntent)
       }
     })
   }
 
-  const orderComplete = (paymentIntentId) => {
+  const orderComplete = (paymentIntent) => {
     setLoading(false)
-    resultMessageLink.setAttribute(
-      'href',
-      'https://dashboard.stripe.com/test/payments/' + paymentIntentId
-    )
-    resultMessage.classList.remove('hidden')
-    payButton.disabled = true
+    Object.keys(paymentIntent).forEach(key => {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = `payment_intent[${key}]`;
+      hiddenField.value = paymentIntent[key];
+      callbackForm.appendChild(hiddenField);
+    });
+    callbackForm.submit();
   }
 
   const showError = (errorMsgText) => {
