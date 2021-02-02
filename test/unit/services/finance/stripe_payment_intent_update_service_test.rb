@@ -42,6 +42,17 @@ class Finance::StripePaymentIntentUpdateServiceTest < ActiveSupport::TestCase
     assert_equal expected_payment_transaction, payment_transactions.last.attributes.slice(*%w[action amount success message reference params]).deep_stringify_keys
   end
 
+  test 'skips when there is no change to the payment intent state' do
+    payment_intent.update!(state: Finance::StripeChargeService::PAYMENT_INTENT_SUCCEEDED)
+
+    stripe_event = build_stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { status: 'succeeded' })
+    service = Finance::StripePaymentIntentUpdateService.new(provider_account, stripe_event)
+
+    assert_no_difference(payment_transactions.method(:count)) do
+      assert service.call
+    end
+  end
+
   protected
 
   def stripe_event_data
