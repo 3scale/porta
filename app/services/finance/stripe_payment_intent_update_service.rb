@@ -14,12 +14,17 @@ class Finance::StripePaymentIntentUpdateService
 
   def call
     payment_intent.with_lock do
-      payment_intent.state = payment_intent_data['status']
+      payment_intent.state = payment_intent_status
+      next true unless payment_intent.changed?
       payment_intent.save && create_payment_transaction && (!succeeded? || invoice.pay)
     end
   end
 
   protected
+
+  def payment_intent_status
+    payment_intent_data['status']
+  end
 
   def create_payment_transaction
     attributes = {
@@ -27,7 +32,7 @@ class Finance::StripePaymentIntentUpdateService
       amount: ThreeScale::Money.cents(payment_intent_data['amount'].presence || 0, payment_intent_data['currency']&.upcase || invoice.currency),
       reference: payment_intent_data['id'],
       success: succeeded?,
-      message: succeeded? ? 'Payment confirmed' : payment_intent_data['status'].humanize,
+      message: succeeded? ? 'Payment confirmed' : payment_intent_status.humanize,
       params: stripe_event.to_hash
     }
 
