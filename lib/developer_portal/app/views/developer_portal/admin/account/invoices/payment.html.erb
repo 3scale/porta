@@ -1,4 +1,4 @@
-<div class="row" data-invoice="<%= @invoice.to_json %>">
+<div class="row">
   <div class="col-md-9">
     <%= sanitize render "/users_menu" %>
       <div class="panel panel-default">
@@ -46,7 +46,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% @invoice.line_items.each do |line_item|%>
+                      <% @invoice.line_items.each do |line_item| %>
                         <tr>
                           <th>
                             <%= line_item.name %>
@@ -58,8 +58,7 @@
                             <%= line_item.quantity %>
                           </td>
                           <td>
-                            <%= line_item.currency %>
-                              <%= line_item.cost%>
+                            <%= line_item.currency %> <%= line_item.cost%>
                           </td>
                         </tr>
                         <% end %>
@@ -69,18 +68,14 @@
                 <dt>Total cost</dt>
                 <dd>
                   <strong>
-                    <%= @invoice.currency %>
-                      <%= @invoice.cost %>
+                    <%= @invoice.currency %> <%= @invoice.cost %>
                   </strong>
                 </dd>
               </dl>
             </div>
           </div>
-          <div
-            class="row stripe-form"
-            data-publishable-key="<%= @stripe_publishable_key %>"
-            data-client-secret="<%= @client_secret %>"
-            data-line-item="<%= @invoice.line_items.to_json %>">
+          <div class="row stripe-form" data-publishable-key="<%= @stripe_publishable_key %>"
+            data-client-secret="<%= @client_secret %>" data-line-item="<%= @invoice.line_items.to_json %>">
             <form id="payment-form">
               <div id="card-element"></div>
               <button id="submit-payment">
@@ -89,8 +84,7 @@
               </button>
               <p id="card-error" role="alert"></p>
               <p class="result-message hidden">
-                Payment succeeded, see the result in your
-                <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+                Payment succeeded
               </p>
             </form>
           </div>
