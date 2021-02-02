@@ -1,0 +1,5 @@
+@import '~@patternfly/patternfly/components/ModalBox/modal-box.css';
+
+.pf-c-modal-box .pf-c-title {
+    text-align: initial;
+}
