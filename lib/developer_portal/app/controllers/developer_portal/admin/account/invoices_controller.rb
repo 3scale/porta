@@ -50,6 +50,7 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
   def fetch_stripe_client_secret
     return unless payment_intent
+
     Stripe::PaymentIntent.retrieve(payment_intent.reference, api_key).client_secret
   end
 end
