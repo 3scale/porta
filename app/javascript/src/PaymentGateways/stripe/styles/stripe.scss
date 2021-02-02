@@ -52,17 +52,6 @@ $stripe-form-spinner-color: #5469d4;
     width: 100%;
   }
 
-  .result-message {
-    font-size: 16px;
-    line-height: 22px;
-
-    a {
-      color: $stripe-form-result-color;
-      font-weight: 600;
-      text-decoration: none;
-    }
-  }
-
   .hidden {
     display: none;
   }

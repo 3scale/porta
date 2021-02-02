@@ -83,10 +83,8 @@
                 <span id="button-text">Pay</span>
               </button>
               <p id="card-error" role="alert"></p>
-              <p class="result-message hidden">
-                Payment succeeded
-              </p>
             </form>
+            <%= form_tag payment_succeeded_admin_account_invoice_path(@invoice), method: :post, id: 'payment-callback-form' %>
           </div>
         </div>
       </div>

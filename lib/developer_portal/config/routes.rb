@@ -68,6 +68,7 @@ DeveloperPortal::Engine.routes.draw do
       resources :invoices, :only => [:index, :show] do
         member do
           get :payment
+          post :payment_succeeded
         end
       end
       resources :plan_changes, only: [:index, :new, :destroy]
