@@ -9,21 +9,21 @@ import type { Api } from 'Types'
 type Item = {
   id: string,
   title: string,
-  path: ?string,
-  target: ?string,
-  itemOutOfDateConfig: ?boolean
+  path?: string,
+  target?: string,
+  itemOutOfDateConfig?: boolean
 }
 
 type Section = Item & {
-  items: ?Item[],
-  outOfDateConfig: ?boolean
+  items?: Item[],
+  outOfDateConfig?: boolean
 }
 
 type Props = {
   sections: Section[],
-  activeSection: ?string,
-  activeItem: ?string,
-  currentApi: ?Api
+  activeSection?: string,
+  activeItem?: string,
+  currentApi?: Api
 }
 
 const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props) => {
