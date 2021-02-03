@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Api::ApplicationPlansHelper
+module Api::PlansHelper
 
-  def default_plan_data(service, plans)
+  def default_application_plan_data(service, plans)
     {
       'service': service.to_json(root: false, only: %i[id name]),
       'application-plans': application_plans_data(plans),
