@@ -1,13 +1,18 @@
 // @flow
 
-import { DefaultPlanSelectWrapper } from 'Applications'
+import { DefaultPlanSelectWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Product, ApplicationPlan } from 'Applications/types'
+import type { Product, ApplicationPlan } from 'Plans/types'
 
 document.addEventListener('DOMContentLoaded', () => {
-  // $FlowFixMe
-  const { dataset } = document.getElementById('default_plan')
+  const container = document.getElementById('default_plan')
+
+  if (!container) {
+    return
+  }
+
+  const { dataset } = container
   const service = safeFromJsonString<Product>(dataset.service)
   const appPlans = safeFromJsonString<ApplicationPlan[]>(dataset.applicationPlans)
   const initialDefaultPlan = safeFromJsonString<ApplicationPlan>(dataset.currentPlan) || null

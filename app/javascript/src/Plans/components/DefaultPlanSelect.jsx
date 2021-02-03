@@ -7,7 +7,7 @@ import { SelectOptionObject, toSelectOption } from 'utilities/patternfly-utils'
 
 import './DefaultPlanSelect.scss'
 
-import type { ApplicationPlan } from 'Applications/types'
+import type { ApplicationPlan } from 'Types'
 
 type Props = {
   plan: ApplicationPlan,

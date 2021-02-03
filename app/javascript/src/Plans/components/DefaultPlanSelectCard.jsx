@@ -9,10 +9,10 @@ import {
   Card,
   CardBody
 } from '@patternfly/react-core'
-import { DefaultPlanSelect } from 'Applications'
+import { DefaultPlanSelect } from 'Plans'
 import { Spinner } from 'Common'
 
-import type { Product, ApplicationPlan } from 'Applications/types'
+import type { Product, ApplicationPlan } from 'Types'
 
 import './DefaultPlanSelectCard.scss'
 
