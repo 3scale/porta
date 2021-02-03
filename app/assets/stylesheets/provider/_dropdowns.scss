@@ -137,3 +137,8 @@ $dropdown-bg-color: lighten(black, 85%);
 .pf-c-select__toggle-wrapper > .pf-c-form-control {
   border-bottom-color: var(--pf-c-select__toggle--BorderBottomColor);
 }
+
+// fix a reset that is breaking the disabled typeahead select
+.pf-c-select__toggle.pf-m-disabled input {
+  background-color:  var(--pf-global--disabled-color--300);
+}
