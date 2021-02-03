@@ -1567,7 +1567,7 @@ Returns the resource URL of the invoice PDF.
 ```
 
 ### pay_now?
-Returns true if the invoice is pending to be paid.
+Returns true if the online payment page is available for the invoice.
 ```liquid
 {% if invoice.pay_now? %}
 ```
