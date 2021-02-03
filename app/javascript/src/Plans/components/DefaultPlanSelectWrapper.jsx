@@ -2,10 +2,10 @@
 
 import React from 'react'
 
-import { DefaultPlanSelectCard } from 'Applications'
+import { DefaultPlanSelectCard } from 'Plans'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-import type { Props } from 'Applications/components/DefaultPlanSelectCard'
+import type { Props } from 'Plans/DefaultPlanSelectCard'
 
 const DefaultPlanSelectWrapper = (props: Props, containerId: string) => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
 
