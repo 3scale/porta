@@ -3,7 +3,7 @@
 import { DefaultPlanSelectWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Product, ApplicationPlan } from 'Plans/types'
+import type { Product, ApplicationPlan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('default_plan')
