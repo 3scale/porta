@@ -2,4 +2,5 @@
 
 .pf-c-modal-box .pf-c-title {
     text-align: initial;
+    font-size: var(--pf-global--FontSize--2xl);
 }

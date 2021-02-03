@@ -9,14 +9,14 @@ import {
   Modal,
   PageSection,
   PageSectionVariants,
-  // Table,
   InputGroup,
   TextInput,
-  // SearchIcon,
   Pagination,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
+import { Table, TableHeader, TableBody } from '@patternfly/react-table'
+import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 import {
   BuyerSelect,
   ProductSelect,
@@ -87,14 +87,18 @@ const NewApplicationForm = ({
   const contract = buyer && product && buyer.contractedProducts.find(p => p.id === product.id)
   const contractedServicePlan = (contract && contract.withPlan) || (product && product.defaultServicePlan)
 
-  // const modalColumns = [
-  //   {title: 'Name'},
-  //   {title: 'System Name'},
-  //   {title: 'Last updated'}
-  // ]
-  // const modalRows = [
-  //   ['Product-01', 'product-01-sys-name', '04 Oct 2020, 08:05am']
-  // ]
+  const modalColumns = [
+    {title: 'Name'},
+    {title: 'System Name'},
+    {title: 'Last updated'}
+  ]
+  const modalRows = [
+    ['Product-01', 'product-01-sys-name', '04 Oct 2020, 08:05am'],
+    ['Product-02', 'product-02-sys-name', '04 Oct 2020, 08:07am'],
+    ['Product-03', 'product-03-sys-name', '04 Oct 2020, 08:09am'],
+    ['Product-04', 'product-04-sys-name', '04 Oct 2020, 08:11am'],
+    ['Product-05', 'product-05-sys-name', '04 Oct 2020, 08:13am']
+  ]
 
   return (
     <>
@@ -164,7 +168,7 @@ const NewApplicationForm = ({
         isOpen={modalOpen}
         isFooterLeftAligned={true}
         actions={[
-          <Button key='add' variant='primary'>
+          <Button key='add' variant='primary' isDisabled={true}>
             Add
           </Button>,
           <Button key='cancel' variant='secondary'>
@@ -179,7 +183,7 @@ const NewApplicationForm = ({
             <InputGroup>
               <TextInput name="searchInput" id="searchInput" type="search" aria-label="search for a product" />
               <Button variant="control" aria-label="search button for search input">
-                search icon{/* <SearchIcon /> */}
+                <SearchIcon />
               </Button>
             </InputGroup>
           </ToolbarItem>
@@ -195,14 +199,28 @@ const NewApplicationForm = ({
             />
           </ToolbarItem>
         </Toolbar>
-        {/* <Table
-          caption='Products'
-          // sortBy={sortBy}
-          // onSort={this.onSort}
+        <Table
+          sortBy={() => {}}
+          onSort={() => {}}
+          onSelect={() => {}}
           cells={modalColumns}
           rows={modalRows}
+          selectVariant='radio'
         >
-        </Table> */}
+          <TableHeader />
+          <TableBody />
+        </Table>
+        <Pagination
+          itemCount={8}
+          isCompact={true}
+          className="pf-u-mt-sm"
+          // perPage={this.state.perPage}
+          // page={this.state.page}
+          // onSetPage={this.onSetPage}
+          // widgetId="pagination-options-menu-top"
+          // onPerPageSelect={this.onPerPageSelect}
+        />
+
       </Modal>
     </>
   )
