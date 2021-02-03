@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::BaseController
+  class PaymentGatewayNotSupported < StandardError; end
+
+  rescue_from PaymentGatewayNotSupported, with: :handle_not_found
+
   helper Finance::InvoicesHelper
   helper Accounts::InvoicesHelper
 
   before_action :authorize_finance
   before_action :find_provider
+  before_action :authorize_payment_gateway, only: %i[payment payment_succeeded]
   before_action :find_invoice, only: %i[show payment payment_succeeded]
+
   activate_menu :account, :invoices
 
   liquify prefix: 'invoices'
@@ -33,9 +39,9 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
     service = Finance::StripePaymentIntentUpdateService.new(site_account, stripe_payment_intent)
     if service.call
-      flash[:notice] = 'Payment succeeded'
+      flash[:notice] = 'Payment transaction updated'
     else
-      flash[:error] = 'Payment failed'
+      flash[:error] = 'Failed to update payment transaction'
     end
 
     redirect_to admin_account_invoice_path(@invoice)
@@ -45,6 +51,11 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
   def authorize_finance
     authorize! :read, Invoice
+  end
+
+  def authorize_payment_gateway
+    return if payment_gateway_type.to_s =~ /stripe.*/
+    raise PaymentGatewayNotSupported
   end
 
   def find_provider
@@ -61,7 +72,7 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
   attr_reader :invoice, :payment_intent
 
-  delegate :payment_gateway_options, to: :site_account
+  delegate :payment_gateway_type, :payment_gateway_options, to: :site_account
 
   def api_key
     payment_gateway_options[:login]
