@@ -52,13 +52,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const orderComplete = (paymentIntent) => {
     setLoading(false)
     Object.keys(paymentIntent).forEach(key => {
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = `payment_intent[${key}]`;
-      hiddenField.value = paymentIntent[key];
-      callbackForm.appendChild(hiddenField);
-    });
-    callbackForm.submit();
+      const hiddenField = document.createElement('input')
+      hiddenField.type = 'hidden'
+      hiddenField.name = `payment_intent[${key}]`
+      hiddenField.value = paymentIntent[key]
+      callbackForm.appendChild(hiddenField)
+    })
+    callbackForm.submit()
   }
 
   const showError = (errorMsgText) => {
