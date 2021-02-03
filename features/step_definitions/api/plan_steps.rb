@@ -22,7 +22,13 @@ When /^I follow "([^"]*)" for (plan "[^"]*")$/ do |label, plan|
 end
 
 When /^I select "(.*?)" as default plan$/ do | plan |
-  select plan
+  # if React default plan select
+  if (select = find(:css, '#default_plan_card .pf-c-select'))
+    select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
+    select.find('.pf-c-select__menu-item', text: plan).click
+  else
+    select plan
+  end
 end
 
 Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
@@ -32,8 +38,14 @@ Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
 end
 
 Then /^I should see "(.*?)" in the default plans list$/ do | plan_name |
-  within(default_plan) do
-    page.should have_content(plan_name)
+  # if React default plan select
+  if (select = find(:css, '#default_plan_card .pf-c-select'))
+    select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
+    select.should have_content(plan_name)
+  else
+    within(default_plan) do
+      page.should have_content(plan_name)
+    end
   end
 end
 
