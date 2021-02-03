@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const orderComplete = (paymentIntent) => {
-    setLoading(false)
     Object.keys(paymentIntent).forEach(key => {
       const hiddenField = document.createElement('input')
       hiddenField.type = 'hidden'
