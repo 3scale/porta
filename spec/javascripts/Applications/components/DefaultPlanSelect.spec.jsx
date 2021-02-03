@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { DefaultPlanSelect } from 'Applications'
+import { DefaultPlanSelect } from 'Plans'
 import { mount } from 'enzyme'
 
 const props = {
