@@ -25,32 +25,38 @@ type Props = {
   onClose: () => void
 }
 
+const PER_PAGE = 5
+
 const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Props) => {
   const [selectedRowId, setSelectedRowId] = useState<number>(-1)
-  const modalColumns = [
+  const [page, setPage] = useState<number>(1)
+
+  const columns = [
     { title: 'Name' },
     { title: 'System Name' },
     { title: 'Last updated' }
   ]
-  const modalRows = products.map((p, i) => ({
+
+  const pagination = (
+    <Pagination
+      perPage={PER_PAGE}
+      itemCount={products.length}
+      page={page}
+      onSetPage={(_e, page) => setPage(page)}
+      widgetId="pagination-options-menu-top"
+    />
+  )
+
+  const pageProducts = products.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+
+  const rows = pageProducts.map((p, i) => ({
     selected: i === selectedRowId,
     cells: [p.name, p.systemName, p.updatedAt]
   }))
 
   const onAccept = () => {
-    onSelectProduct(products[selectedRowId])
+    onSelectProduct(pageProducts[selectedRowId])
   }
-
-  const pagination = (
-    <Pagination
-      itemCount={products.length}
-      // perPage={this.state.perPage}
-      // page={this.state.page}
-      // onSetPage={this.onSetPage}
-      // widgetId="pagination-options-menu-top"
-      // onPerPageSelect={this.onPerPageSelect}
-    />
-  )
 
   return (
     <Modal
@@ -79,11 +85,12 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
         </ToolbarItem>
       </Toolbar>
       <Table
+        aria-label="Products"
         sortBy={() => {}}
         onSort={() => {}}
         onSelect={(_e, _i, rowId) => setSelectedRowId(rowId)}
-        cells={modalColumns}
-        rows={modalRows}
+        cells={columns}
+        rows={rows}
         selectVariant='radio'
       >
         <TableHeader />
