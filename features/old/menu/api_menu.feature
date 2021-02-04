@@ -12,6 +12,9 @@ Feature: API menu
       And I go to the provider dashboard
       And I follow "API"
 
+  Scenario: Current API title
+    Then I should see the current API is "API"
+
   Scenario: API menu structure
     Then I should see menu items
     | Overview                  |

@@ -12,6 +12,10 @@ Feature: Backend menu
       # TODO: Replace this step with actual navigation from the Dashboard once Backend APIs are listed there
       And I go to the backend api overview
 
+  @javascript
+  Scenario: Current API title
+    Then I should see the current API is "API"
+
   Scenario: API menu structure
     Then I should see menu items
     | Overview                  |

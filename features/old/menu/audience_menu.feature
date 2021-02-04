@@ -10,6 +10,9 @@ Feature: Audience menu
       And I go to the provider dashboard
       And I follow "0 Accounts"
 
+  Scenario: Current API title
+    Then I should see there is no current API
+
   Scenario: Audience menu structure
     Then I should see menu items
     | Accounts                  |
