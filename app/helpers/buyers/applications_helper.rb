@@ -13,10 +13,15 @@ module Buyers::ApplicationsHelper
   end
 
   def data_products(provider)
-    provider.accessible_services.map do |service|
+    provider.accessible_services
+            .order(updated_at: :desc)
+            .decorate
+            .map do |service|
       {
         id: service.id,
         name: service.name,
+        systemName: service.system_name,
+        updatedAt: service.updated_at,
         appPlans: service.plans.select(:id, :name).as_json(root: false),
         servicePlans: service.service_plans.select(:id, :name).as_json(root: false),
         defaultServicePlan: service.default_service_plan.as_json(root: false, only: %i[id name])
