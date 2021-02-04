@@ -34,7 +34,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   end
 
   def masterize
-    new_masterize_plan(@service, :default_application_plan)
+    assign_plan!(@service, :default_application_plan)
   end
 
   protected
