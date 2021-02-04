@@ -28,8 +28,9 @@ class Api::PlansBaseController < Api::BaseController
     authorize! :create, :plans
   end
 
-  def resource(id = params[:id])
-    collection.readonly(false).find_by_id(id)
+  def resource(id = params[:id].presence)
+    return unless id
+    collection.readonly(false).find(id)
   end
 
   def collection
@@ -112,28 +113,14 @@ class Api::PlansBaseController < Api::BaseController
 
   protected
 
-  def new_masterize_plan(issuer, assoc)
-    if params[:id].blank? || issuer.send(assoc) == @plan
-      issuer.send("#{assoc}=", nil)
-    elsif @plan.nil?
-      raise ActiveRecord::RecordNotFound, "Plan doesn't exist"
-    else
-      issuer.send("#{assoc}=", @plan)
-    end
-
+  def assign_plan!(issuer, assoc)
+    plan = (!@plan || issuer.send(assoc) == @plan) ? nil : @plan
+    issuer.send("#{assoc}=", plan)
     issuer.save!
   end
 
   def generic_masterize_plan(issuer, assoc)
-    masterize_plan do
-      if @plan.nil? || issuer.send(assoc) == @plan
-        issuer.send("#{assoc}=", nil)
-      else
-        issuer.send("#{assoc}=", @plan)
-      end
-
-      issuer.save!
-    end
+    masterize_plan { assign_plan(issuer, assoc) }
   end
 
   # this is supposed to be called via ajax and we need only to flash stuff

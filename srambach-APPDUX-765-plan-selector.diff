@@ -1,0 +1,1759 @@
+diff --git a/.flowconfig b/.flowconfig
+index 663316cf..abfaab9d 100644
+--- a/.flowconfig
++++ b/.flowconfig
+@@ -15,4 +15,4 @@
+ module.system.node.resolve_dirname=node_modules
+ module.name_mapper='.*\(.s?css\)' -> 'empty/object'
+ module.system=haste
+-module.name_mapper='\(ActiveDocs\|Applications\|ChangePassword\|Form\|Settings\|Dashboard\|LoginPage\|Navigation\|Onboarding\|PaymentGateways\|Policies\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'
++module.name_mapper='\(ActiveDocs\|Applications\|ChangePassword\|Common\|Form\|Settings\|Dashboard\|LoginPage\|Navigation\|Onboarding\|PaymentGateways\|Plans\|Policies\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'
+diff --git a/app/controllers/api/application_plans_controller.rb b/app/controllers/api/application_plans_controller.rb
+index 2cf75152..9c3e212f 100644
+--- a/app/controllers/api/application_plans_controller.rb
++++ b/app/controllers/api/application_plans_controller.rb
+@@ -34,7 +34,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
+   end
+ 
+   def masterize
+-    generic_masterize_plan(@service, :default_application_plan)
++    assign_plan!(@service, :default_application_plan)
+   end
+ 
+   protected
+diff --git a/app/controllers/api/plans_base_controller.rb b/app/controllers/api/plans_base_controller.rb
+index 3ca23ad9..63f7c1fd 100644
+--- a/app/controllers/api/plans_base_controller.rb
++++ b/app/controllers/api/plans_base_controller.rb
+@@ -29,7 +29,8 @@ class Api::PlansBaseController < Api::BaseController
+   end
+ 
+   def resource(id = params[:id])
+-    collection.readonly(false).find_by_id(id)
++    return unless id
++    collection.readonly(false).find(id)
+   end
+ 
+   def collection
+@@ -112,16 +113,14 @@ class Api::PlansBaseController < Api::BaseController
+ 
+   protected
+ 
+-  def generic_masterize_plan(issuer, assoc)
+-    masterize_plan do
+-      if @plan.nil? || issuer.send(assoc) == @plan
+-        issuer.send("#{assoc}=", nil)
+-      else
+-        issuer.send("#{assoc}=", @plan)
+-      end
++  def assign_plan!(issuer, assoc)
++    plan = (!@plan || issuer.send(assoc) == @plan) ? nil : @plan
++    issuer.send("#{assoc}=", nil)
++    issuer.save!
++  end
+ 
+-      issuer.save!
+-    end
++  def generic_masterize_plan(issuer, assoc)
++    masterize_plan { assign_plan(issuer, assoc) }
+   end
+ 
+   # this is supposed to be called via ajax and we need only to flash stuff
+diff --git a/app/controllers/finance/api/payment_callbacks/stripe_callbacks_controller.rb b/app/controllers/finance/api/payment_callbacks/stripe_callbacks_controller.rb
+new file mode 100644
+index 00000000..40e10dec
+--- /dev/null
++++ b/app/controllers/finance/api/payment_callbacks/stripe_callbacks_controller.rb
+@@ -0,0 +1,53 @@
++# frozen_string_literal: true
++
++class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::BaseController
++  before_action :ensure_stripe_payment_gateway
++
++  class StripeCallbackError < StandardError; end
++  class InvalidStripeEvent < StripeCallbackError; end
++  class MissingStripeEndpointSecret < StripeCallbackError; end
++
++  # Undocumented endpoint used for update callbacks of async-authorized payment transactions (mostly due to SCA regulations)
++  def create
++    sig_header = request.headers['Stripe-Signature']
++    endpoint_secret = payment_gateway_options[:endpoint_secret].presence
++
++    raise MissingStripeEndpointSecret unless endpoint_secret
++
++    stripe_event = Stripe::Webhook.construct_event(request.raw_post, sig_header, endpoint_secret)
++    payment_intent_data = case stripe_event.type # Also checked by PaymentIntent#update_from_stripe_event, but here it can save us some processing and ensure an immediate response at the level of the controller in case of unsupported event types
++                          when 'payment_intent.succeeded'
++                            stripe_event.data.object
++                          else
++                            raise InvalidStripeEvent
++                          end
++
++    payment_intent = PaymentIntent.by_invoice(current_account.buyer_invoices).find_by!(payment_intent_id: payment_intent_data['id'])
++
++    unless payment_intent.update_from_stripe_event(stripe_event)
++      exception = StripeCallbackError.new('Cannot update Stripe payment intent')
++      report_error(exception, event: stripe_event, payment_intent: payment_intent)
++    end
++
++    head :ok
++  rescue JSON::ParserError, Stripe::SignatureVerificationError
++    render_error('Signature verification failed', status: :bad_request)
++  rescue InvalidStripeEvent
++    render_error(:not_found, status: :not_found)
++  rescue MissingStripeEndpointSecret => exception
++    report_error(exception)
++    render_error('Configuration is missing', status: :unprocessable_entity)
++  end
++
++  protected
++
++  def ensure_stripe_payment_gateway
++    return if payment_gateway_type == :stripe
++    render_error(:not_found, status: :not_found)
++    false
++  end
++
++  delegate :payment_gateway_type, :payment_gateway_options, to: :current_account
++
++  delegate :report_error, to: System::ErrorReporting
++end
+diff --git a/app/helpers/api/plans_helper.rb b/app/helpers/api/plans_helper.rb
+new file mode 100644
+index 00000000..46a0d265
+--- /dev/null
++++ b/app/helpers/api/plans_helper.rb
+@@ -0,0 +1,24 @@
++# frozen_string_literal: true
++
++module Api::PlansHelper
++
++  def default_application_plan_data(service, plans)
++    {
++      'service': service.to_json(root: false, only: %i[id name]),
++      'application-plans': application_plans_data(plans),
++      'current-plan': current_application_plan_data(service),
++      'path': masterize_admin_service_application_plans_path(':id')
++    }
++  end
++
++  def application_plans_data(plans)
++    plans.not_custom
++         .alphabetically
++         .to_json(root: false, only: %i[id name])
++  end
++
++  def current_application_plan_data(service)
++    service.default_application_plan&.to_json(root: false, only: %i[id name]) || nil.to_json
++  end
++
++end
+diff --git a/app/javascript/packs/default_plan_selector.js b/app/javascript/packs/default_plan_selector.js
+new file mode 100644
+index 00000000..274e1a18
+--- /dev/null
++++ b/app/javascript/packs/default_plan_selector.js
+@@ -0,0 +1,26 @@
++// @flow
++
++import { DefaultPlanSelectWrapper } from 'Plans'
++import { safeFromJsonString } from 'utilities/json-utils'
++
++import type { Product, ApplicationPlan } from 'Types'
++
++document.addEventListener('DOMContentLoaded', () => {
++  const container = document.getElementById('default_plan')
++
++  if (!container) {
++    return
++  }
++
++  const { dataset } = container
++  const service = safeFromJsonString<Product>(dataset.service)
++  const appPlans = safeFromJsonString<ApplicationPlan[]>(dataset.applicationPlans)
++  const initialDefaultPlan = safeFromJsonString<ApplicationPlan>(dataset.currentPlan) || null
++  const path: string = dataset.path
++
++  DefaultPlanSelectWrapper({
++    initialDefaultPlan,
++    product: { ...service, appPlans },
++    path
++  }, 'default_plan')
++})
+diff --git a/app/javascript/src/Common/components/Spinner.jsx b/app/javascript/src/Common/components/Spinner.jsx
+new file mode 100644
+index 00000000..9463c5de
+--- /dev/null
++++ b/app/javascript/src/Common/components/Spinner.jsx
+@@ -0,0 +1,24 @@
++// @flow
++
++import React from 'react'
++
++import './Spinner.scss'
++
++type Props = {
++  size?: 'sm' | 'md' | 'lg' | 'xl',
++  className?: string
++}
++
++const Spinner = ({ size = 'md', className }: Props) => {
++  const classParameters = `pf-c-spinner pf-m-${size.toString()} ${className || ''}`
++
++  return (
++    <span className={classParameters} role="progressbar" aria-valuetext="Loading projects">
++      <span className="pf-c-spinner__clipper"></span>
++      <span className="pf-c-spinner__lead-ball"></span>
++      <span className="pf-c-spinner__tail-ball"></span>
++    </span>
++  )
++}
++
++export { Spinner }
+diff --git a/app/javascript/src/Common/components/Spinner.scss b/app/javascript/src/Common/components/Spinner.scss
+new file mode 100644
+index 00000000..0780bcd4
+--- /dev/null
++++ b/app/javascript/src/Common/components/Spinner.scss
+@@ -0,0 +1,211 @@
++// The Spinner is still not available in the version of @patternfly/react-core we use, therefor we need all the following styles
++
++// scss-lint:disable all
++.pf-c-spinner {
++  --pf-c-spinner--AnimationDuration: 1.5s;
++  --pf-c-spinner--AnimationTimingFunction: cubic-bezier(.77, .005, .315, 1);
++
++  // This conceptual variable is used to set other values all based on the diameter of the spinner.
++  // The default is the -xl modifier size.
++  --pf-c-spinner--diameter: var(--pf-global--icon--FontSize--xl);
++
++  // These conceptual variables are used to size the stroke width, which is accomplished using various properties in the clipper:after and the ball animations
++  --pf-c-spinner--stroke-width-multiplier: .1;
++  --pf-c-spinner--stroke-width: calc(var(--pf-c-spinner--diameter) * var(--pf-c-spinner--stroke-width-multiplier));
++
++  // Set the overall width and height of the spinner to be consistent with the icon size
++  // Width and Height must be the same
++  --pf-c-spinner--Width: var(--pf-c-spinner--diameter);
++  --pf-c-spinner--Height: var(--pf-c-spinner--diameter);
++
++  // This variable is used to set the color for all the parts of the spinner
++  --pf-c-spinner--Color: var(--pf-global--primary-color--100);
++
++  // Modifier variables for main spinner
++  // Width and Height must be the same
++  --pf-c-spinner--m-sm--diameter: var(--pf-global--icon--FontSize--sm);
++  --pf-c-spinner--m-md--diameter: var(--pf-global--icon--FontSize--md);
++  --pf-c-spinner--m-lg--diameter: var(--pf-global--icon--FontSize--lg);
++  --pf-c-spinner--m-xl--diameter: var(--pf-global--icon--FontSize--xl);
++
++  // Clipper variables
++  --pf-c-spinner__clipper--Width: var(--pf-c-spinner--diameter);
++  --pf-c-spinner__clipper--Height: var(--pf-c-spinner--diameter);
++
++  // Clipper:after (circle) values
++  --pf-c-spinner__clipper--after--BoxShadowColor: var(--pf-c-spinner--Color);
++  --pf-c-spinner__clipper--after--Width: var(--pf-c-spinner--diameter);
++  --pf-c-spinner__clipper--after--Height: var(--pf-c-spinner--diameter);
++
++  // This creates the stroke and needs to match the spinner__ball:after Height and Width
++  --pf-c-spinner__clipper--after--BoxShadowSpreadRadius: var(--pf-c-spinner--stroke-width);
++
++  // Lead ball variables
++  --pf-c-spinner__lead-ball--after--BackgroundColor: var(--pf-c-spinner--Color);
++
++  // These sizes need to match the stroke width, i.e. clipper:after BoxShadowSpreadRadius
++  --pf-c-spinner__ball--after--Width: var(--pf-c-spinner--stroke-width);
++  --pf-c-spinner__ball--after--Height: var(--pf-c-spinner--stroke-width);
++
++  // Tail ball variables
++  --pf-c-spinner__tail-ball--after--BackgroundColor: var(--pf-c-spinner--Color);
++
++  position: relative;
++  display: inline-block;
++  width: var(--pf-c-spinner--Width);
++  height: var(--pf-c-spinner--Height);
++  text-align: left;
++  animation: pf-animation-spinner-parent calc(var(--pf-c-spinner--AnimationDuration) * 2) var(--pf-c-spinner--AnimationTimingFunction) infinite;
++
++  // Modifiers change the variables for size variations
++  &.pf-m-sm {
++    --pf-c-spinner--diameter: var(--pf-c-spinner--m-sm--diameter);
++  }
++
++  &.pf-m-md {
++    --pf-c-spinner--diameter: var(--pf-c-spinner--m-md--diameter);
++  }
++
++  &.pf-m-lg {
++    --pf-c-spinner--diameter: var(--pf-c-spinner--m-lg--diameter);
++  }
++
++  &.pf-m-xl {
++    --pf-c-spinner--diameter: var(--pf-c-spinner--m-xl--diameter);
++  }
++}
++
++// Rotate the parent 360deg as the basic line animation happens, repeat that twice, and another rotation overall. This adds up to 3 complete rotations.
++@keyframes pf-animation-spinner-parent {
++  0% {
++    transform: rotate(0deg);
++  }
++
++  50% {
++    transform: rotate(-540deg);
++  }
++
++  100% {
++    transform: rotate(-1080deg);
++  }
++}
++
++
++// Elements
++
++// Clipper is a rotating rectangle clipped to one quarter the size of the spinner, starting in the upper right
++.pf-c-spinner__clipper {
++  position: absolute;
++  width: var(--pf-c-spinner__clipper--Width);
++  height: var(--pf-c-spinner__clipper--Height);
++  clip-path: inset(0 0 50% 50%);
++  animation: pf-animation-spinner__clipper var(--pf-c-spinner--AnimationDuration) linear infinite;
++}
++
++@keyframes pf-animation-spinner__clipper {
++  0% {
++    transform: rotate(0deg);
++  }
++
++  100% {
++    transform: rotate(-270deg);
++  }
++}
++
++// The :after of the Clipper is a rotating semicircle that has the part that you see moving around (inset box shadow), growing and shrinking because it is moving into and out of the Clipper box
++.pf-c-spinner__clipper::after {
++  position: absolute;
++  width: var(--pf-c-spinner__clipper--after--Width);
++  height: var(--pf-c-spinner__clipper--after--Height);
++  clip-path: inset(0 0 0 50%);
++  content: "";
++  border-radius: 50%;
++  box-shadow: inset 0 0 0 var(--pf-c-spinner__clipper--after--BoxShadowSpreadRadius) var(--pf-c-spinner__clipper--after--BoxShadowColor);
++  animation: pf-animation-spinner__clipper-after var(--pf-c-spinner--AnimationDuration) linear infinite;
++}
++
++// The Clipper:after moves rotates 270deg in relation to its parent (so that it appears to grow and then shrink)
++@keyframes pf-animation-spinner__clipper-after {
++  0% {
++    transform: rotate(90deg);
++  }
++
++  100% {
++    transform: rotate(-180deg);
++  }
++}
++
++// The Lead ball is at the front of the stroke to round out the leading end
++.pf-c-spinner__lead-ball {
++  position: absolute;
++  top: 0;
++  left: 0;
++  width: 100%;
++  height: 100%;
++  animation: pf-animation-spinner__lead-ball var(--pf-c-spinner--AnimationDuration) linear infinite;
++
++  &::after {
++    position: absolute;
++    top: calc(50% - (var(--pf-c-spinner__ball--after--Height) / 2));
++    right: 0;
++    width: var(--pf-c-spinner__ball--after--Width);
++    height: var(--pf-c-spinner__ball--after--Height);
++    content: "";
++    background-color: var(--pf-c-spinner__lead-ball--after--BackgroundColor);
++    border-radius: 50%;
++    transform-origin: top right;
++  }
++}
++
++// The Lead ball rotates to match the line that grows and shrinks - first following the Clipper:after and then the Clipper itself.
++@keyframes pf-animation-spinner__lead-ball {
++  0% {
++    transform: rotate(0deg);
++  }
++
++  34% {
++    transform: rotate(-180deg);
++  }
++
++  100% {
++    transform: rotate(-360deg);
++  }
++}
++
++// The tail ball is at the end of the stroke to round out the tail end
++.pf-c-spinner__tail-ball {
++  position: absolute;
++  top: 0;
++  left: 0;
++  width: 100%;
++  height: 100%;
++  animation: pf-animation-spinner__tail-ball var(--pf-c-spinner--AnimationDuration) linear infinite;
++
++  &::after {
++    position: absolute;
++    top: calc(50% - (var(--pf-c-spinner__ball--after--Height) / 2));
++    right: 0;
++    width: var(--pf-c-spinner__ball--after--Width);
++    height: var(--pf-c-spinner__ball--after--Height);
++    content: "";
++    background-color: var(--pf-c-spinner__tail-ball--after--BackgroundColor);
++    border-radius: 50%;
++    transform-origin: top right;
++  }
++}
++
++// The Tail ball rotates to match the tail end of the line that grows and shrinks - first following the Clipper and then the Clipper:after
++@keyframes pf-animation-spinner__tail-ball {
++  0% {
++    transform: rotate(0deg);
++  }
++
++  67.5% {
++    transform: rotate(-180deg);
++  }
++
++  100% {
++    transform: rotate(-360deg);
++  }
++}
++// scss-lint:enable all
+diff --git a/app/javascript/src/Common/index.jsx b/app/javascript/src/Common/index.jsx
+new file mode 100644
+index 00000000..1bbfdc07
+--- /dev/null
++++ b/app/javascript/src/Common/index.jsx
+@@ -0,0 +1,3 @@
++// @flow
++
++export * from './components/Spinner'
+diff --git a/app/javascript/src/Plans/components/DefaultPlanSelect.jsx b/app/javascript/src/Plans/components/DefaultPlanSelect.jsx
+new file mode 100644
+index 00000000..5009dbd1
+--- /dev/null
++++ b/app/javascript/src/Plans/components/DefaultPlanSelect.jsx
+@@ -0,0 +1,58 @@
++// @flow
++
++import React, { useState } from 'react'
++
++import { Select, SelectVariant } from '@patternfly/react-core'
++import { SelectOptionObject, toSelectOption } from 'utilities/patternfly-utils'
++
++import './DefaultPlanSelect.scss'
++
++import type { ApplicationPlan } from 'Types'
++
++type Props = {
++  plan: ApplicationPlan,
++  plans: ApplicationPlan[],
++  onSelectPlan: (ApplicationPlan) => void,
++  isDisabled?: boolean
++}
++
++const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Props) => {
++  // $FlowFixMe Flow is wrong here
++  const [selection, setSelection] = useState<SelectOptionObject | null>(new SelectOptionObject(plan))
++  const [isExpanded, setIsExpanded] = useState(false)
++
++  const onSelect = (_e, option: SelectOptionObject) => {
++    setSelection(option)
++    setIsExpanded(false)
++
++    const newPlan = plans.find(p => p.id.toString() === option.id)
++    if (newPlan) {
++      onSelectPlan(newPlan)
++    }
++  }
++
++  const onClear = () => {
++    setSelection(null)
++  }
++
++  return (
++    <Select
++      id="default-plan-select"
++      variant={SelectVariant.typeahead}
++      aria-label="Select application plan"
++      placeholderText="Select application plan"
++      onToggle={() => setIsExpanded(!isExpanded)}
++      onSelect={onSelect}
++      onClear={onClear}
++      isExpanded={isExpanded}
++      isDisabled={isDisabled}
++      selections={selection}
++      isCreatable={false}
++    >
++      {/* $FlowFixMe Flow is wrong here */}
++      {plans.map(toSelectOption)}
++    </Select>
++  )
++}
++
++export { DefaultPlanSelect }
+diff --git a/app/javascript/src/Plans/components/DefaultPlanSelect.scss b/app/javascript/src/Plans/components/DefaultPlanSelect.scss
+new file mode 100644
+index 00000000..e22a34f7
+--- /dev/null
++++ b/app/javascript/src/Plans/components/DefaultPlanSelect.scss
+@@ -0,0 +1,8 @@
++.pf-c-select__toggle.pf-m-disabled input {
++  background-color: var(--pf-global--disabled-color--300);
++}
++
++.pf-c-select__menu {
++  max-height: 150px;
++  overflow-y: scroll;
++}
+diff --git a/app/javascript/src/Plans/components/DefaultPlanSelectCard.jsx b/app/javascript/src/Plans/components/DefaultPlanSelectCard.jsx
+new file mode 100644
+index 00000000..710eefe0
+--- /dev/null
++++ b/app/javascript/src/Plans/components/DefaultPlanSelectCard.jsx
+@@ -0,0 +1,85 @@
++// @flow
++
++import React, { useState } from 'react'
++import { post } from 'utilities/ajax'
++
++import {
++  Form,
++  FormGroup,
++  Card,
++  CardBody
++} from '@patternfly/react-core'
++import { DefaultPlanSelect } from 'Plans'
++import { Spinner } from 'Common'
++
++import type { Product, ApplicationPlan } from 'Types'
++
++import './DefaultPlanSelectCard.scss'
++
++export type Props = {
++  product: Product,
++  initialDefaultPlan: ApplicationPlan | null,
++  path: string
++}
++
++const NO_DEFAULT_PLAN: ApplicationPlan = { id: -1, name: '(No default plan)' }
++
++const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => {
++  const [defaultPlan, setDefaultPlan] = useState<ApplicationPlan>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
++
++  const [isLoading, setIsLoading] = useState(false)
++
++  const onSelectPlan = (plan: ApplicationPlan) => {
++    const body = plan.id >= 0 ? new URLSearchParams({ id: plan.id.toString() }) : undefined
++    const url = path.replace(':id', String(product.id))
++
++    post(url, body)
++      .then(data => {
++        if (data.ok) {
++          // $FlowFixMe
++          $.flash('Default plan was updated')
++          setDefaultPlan(plan)
++        } else {
++          if (data.status === 404) {
++            // $FlowFixMe
++            $.flash.error("The selected plan doesn't exist.")
++          } else {
++            // $FlowFixMe
++            $.flash.error('Plan could not be updated')
++          }
++        }
++      })
++      .catch(err => {
++        console.error(err)
++        // $FlowFixMe
++        $.flash.error('An error ocurred. Please try again later.')
++      })
++      .finally(() => setIsLoading(false))
++
++    setIsLoading(true)
++  }
++
++  return (
++    <Card id="default_plan_card">
++      <CardBody>
++        <Form onSubmit={e => e.preventDefault()}>
++          <FormGroup
++            label="Default plan"
++            fieldId="application_plan_id"
++            helperText="Default application plan (if any) is selected automatically upon service subscription."
++          >
++            {isLoading && <Spinner size='sm' className='pf-u-ml-md' />}
++            <DefaultPlanSelect
++              plan={defaultPlan}
++              plans={[NO_DEFAULT_PLAN, ...product.appPlans].filter(p => p.id !== defaultPlan.id)} // Don't show the current default plan
++              onSelectPlan={onSelectPlan}
++              isDisabled={isLoading}
++            />
++          </FormGroup>
++        </Form>
++      </CardBody>
++    </Card>
++  )
++}
++
++export { DefaultPlanSelectCard }
+diff --git a/app/javascript/src/Plans/components/DefaultPlanSelectCard.scss b/app/javascript/src/Plans/components/DefaultPlanSelectCard.scss
+new file mode 100644
+index 00000000..bf5eb00c
+--- /dev/null
++++ b/app/javascript/src/Plans/components/DefaultPlanSelectCard.scss
+@@ -0,0 +1,10 @@
++@import "~@patternfly/patternfly/components/Card/card.css";
++
++.pf-c-card#default_plan_card {
++  margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
++
++  form {
++    // isWidthLimited isn't available in current version. See: https://github.com/patternfly/patternfly-react/blob/master/packages/react-core/src/components/Form/Form.tsx#L12
++    max-width: 500px;
++  }
++}
+diff --git a/app/javascript/src/Plans/components/DefaultPlanSelectWrapper.jsx b/app/javascript/src/Plans/components/DefaultPlanSelectWrapper.jsx
+new file mode 100644
+index 00000000..a89dc5f4
+--- /dev/null
++++ b/app/javascript/src/Plans/components/DefaultPlanSelectWrapper.jsx
+@@ -0,0 +1,12 @@
++// @flow
++
++import React from 'react'
++
++import { DefaultPlanSelectCard } from 'Plans'
++import { createReactWrapper } from 'utilities/createReactWrapper'
++
++import type { Props } from 'Plans/components/DefaultPlanSelectCard'
++
++const DefaultPlanSelectWrapper = (props: Props, containerId: string) => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
++
++export { DefaultPlanSelectWrapper }
+diff --git a/app/javascript/src/Plans/index.js b/app/javascript/src/Plans/index.js
+new file mode 100644
+index 00000000..da61f743
+--- /dev/null
++++ b/app/javascript/src/Plans/index.js
+@@ -0,0 +1,5 @@
++// @flow
++
++export * from './components/DefaultPlanSelect'
++export * from './components/DefaultPlanSelectCard'
++export * from './components/DefaultPlanSelectWrapper'
+diff --git a/app/javascript/src/Types/index.js b/app/javascript/src/Types/index.js
+index 403a8d70..6c237117 100644
+--- a/app/javascript/src/Types/index.js
++++ b/app/javascript/src/Types/index.js
+@@ -4,3 +4,14 @@ export * from 'Types/Api'
+ export * from 'Types/NavigationTypes'
+ export * from 'Types/FlashMessages'
+ export * from 'Types/Signup'
++
++export type ApplicationPlan = {
++  id: number,
++  name: string,
++}
++
++export type Product = {
++  id: number,
++  name: string,
++  appPlans: ApplicationPlan[]
++}
+diff --git a/app/javascript/src/utilities/ajax.js b/app/javascript/src/utilities/ajax.js
+new file mode 100644
+index 00000000..07259081
+--- /dev/null
++++ b/app/javascript/src/utilities/ajax.js
+@@ -0,0 +1,17 @@
++// @flow
++
++const post = (url: string, body?: URLSearchParams) => {
++  const meta = document.querySelector('meta[name="csrf-token"]')
++  const token = (meta && meta.getAttribute('content')) || ''
++
++  return fetch(url, {
++    method: 'POST',
++    headers: {
++      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
++      'X-CSRF-Token': token
++    },
++    body
++  })
++}
++
++export { post }
+diff --git a/app/javascript/src/utilities/patternfly-utils.jsx b/app/javascript/src/utilities/patternfly-utils.jsx
+new file mode 100644
+index 00000000..9138c367
+--- /dev/null
++++ b/app/javascript/src/utilities/patternfly-utils.jsx
+@@ -0,0 +1,43 @@
++// @flow
++
++import React from 'react'
++
++import {
++  SelectOption,
++  SelectOptionObject as ISelectOptionObject
++} from '@patternfly/react-core'
++
++export interface Record {
++  id: number | string,
++  name: string
++}
++
++type Props = Record & {
++  disabled?: boolean | void
++}
++
++export class SelectOptionObject implements ISelectOptionObject {
++  id: string;
++  name: string;
++
++  constructor (item: Record) {
++    this.id = String(item.id)
++    this.name = item.name
++  }
++
++  toString (): string {
++    return this.name
++  }
++
++  compareTo (other: Record): boolean {
++    return this.id === other.id
++  }
++}
++
++export const toSelectOption = ({ id, name, disabled = false }: Props) => (
++  <SelectOption
++    key={id}
++    value={new SelectOptionObject({ id, name })}
++    isDisabled={disabled}
++  />
++)
+diff --git a/app/models/invoice.rb b/app/models/invoice.rb
+index 9ca8c164..92775ee6 100644
+--- a/app/models/invoice.rb
++++ b/app/models/invoice.rb
+@@ -37,6 +37,7 @@ class Invoice < ApplicationRecord
+   has_many :line_items, -> { oldest_first }, dependent: :destroy, inverse_of: :invoice
+ 
+   has_many :payment_transactions, -> { oldest_first }, dependent: :nullify, inverse_of: :invoice
++  has_many :payment_intents, dependent: :destroy, inverse_of: :invoice
+ 
+   has_attached_file :pdf, url: ':url_root/:class/:id/:attachment/:style/:basename.:extension'
+   do_not_validate_attachment_file_type :pdf
+@@ -520,6 +521,10 @@ class Invoice < ApplicationRecord
+     !reason_cannot_charge
+   end
+ 
++  def latest_pending_payment_intent
++    payment_intents.latest_pending.first
++  end
++
+   def self.opened_by_buyer(buyer)
+     opened.by_provider(buyer.provider_account)
+            .where(['invoices.buyer_account_id = ?', buyer.id ])
+diff --git a/app/models/payment_gateway.rb b/app/models/payment_gateway.rb
+index b66bf1cf..1fe14183 100644
+--- a/app/models/payment_gateway.rb
++++ b/app/models/payment_gateway.rb
+@@ -14,7 +14,7 @@ class PaymentGateway
+     PaymentGateway.new(:authorize_net, deprecated: true, login: 'LoginID', password: 'Transaction Key'),
+     PaymentGateway.new(:braintree_blue, public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key'),
+     PaymentGateway.new(:ogone, deprecated: true, login: 'PSPID', password: 'Password', user: 'User Id', signature: "SHA-IN Pass phrase", signature_out: "SHA-OUT Pass phrase"),
+-    PaymentGateway.new(:stripe, login: "Secret Key", publishable_key: "Publishable Key")
++    PaymentGateway.new(:stripe, login: 'Secret Key', publishable_key: 'Publishable Key', endpoint_secret: 'Webhook Signing Secret')
+   ].freeze
+ 
+   def self.bogus_enabled?
+diff --git a/app/models/payment_intent.rb b/app/models/payment_intent.rb
+new file mode 100644
+index 00000000..883f899f
+--- /dev/null
++++ b/app/models/payment_intent.rb
+@@ -0,0 +1,40 @@
++# frozen_string_literal: true
++
++class PaymentIntent < ApplicationRecord
++  SUCCEEDED_STATES = %w[succeeded].freeze
++
++  belongs_to :invoice, inverse_of: :payment_intents
++
++  validates :invoice, :payment_intent_id, :state, presence: true
++  validates :payment_intent_id, :state, length: { maximum: 255 }
++
++  scope :latest, -> (count = 1) { reorder(created_at: :desc, id: :desc).limit(count) }
++  scope :latest_pending, -> (count = 1) { where.not(state: SUCCEEDED_STATES).latest(count) }
++
++  scope :by_invoice, ->(invoice) { where(invoice: invoice) }
++
++  def succeeded?
++    SUCCEEDED_STATES.include?(state)
++  end
++
++  def update_from_stripe_event(event)
++    return unless event.type == 'payment_intent.succeeded'
++    return if succeeded? || invoice.paid?
++
++    payment_intent_data = event.data.object
++
++    transaction do
++      self.state = payment_intent_data['status']
++      amount = payment_intent_data['amount'].to_has_money(payment_intent_data['currency']&.upcase || invoice.currency) / 100.0
++      payment_transaction = build_payment_transaction(amount: amount, reference: payment_intent_data['id'], params: event.to_hash)
++      save && payment_transaction.save && invoice.pay
++    end
++  end
++
++  protected
++
++  def build_payment_transaction(attrs)
++    attributes = attrs.reverse_merge(action: :purchase, success: true, message: 'Payment confirmed')
++    invoice.payment_transactions.build(attributes, without_protection: true)
++  end
++end
+diff --git a/app/models/payment_transaction.rb b/app/models/payment_transaction.rb
+index b38b1709..d36d9e5a 100644
+--- a/app/models/payment_transaction.rb
++++ b/app/models/payment_transaction.rb
+@@ -155,7 +155,7 @@ class PaymentTransaction < ApplicationRecord
+   def purchase_with_stripe(credit_card_auth_code, gateway, gateway_options)
+     options = gateway_options.merge(customer: credit_card_auth_code)
+     payment_method_id = options.delete(:payment_method_id)
+-    gateway.purchase(amount.cents, payment_method_id, options)
++    stripe_service = Finance::StripeChargeService.new(gateway, payment_method_id: payment_method_id, invoice: invoice, gateway_options: options)
++    stripe_service.charge(amount)
+   end
+-
+ end
+diff --git a/app/services/finance/stripe_charge_service.rb b/app/services/finance/stripe_charge_service.rb
+new file mode 100644
+index 00000000..265508b2
+--- /dev/null
++++ b/app/services/finance/stripe_charge_service.rb
+@@ -0,0 +1,75 @@
++# frozen_string_literal: true
++
++class Finance::StripeChargeService
++  def initialize(gateway, payment_method_id:, invoice: nil, gateway_options: {})
++    @gateway = gateway
++    @payment_method_id = payment_method_id
++    @invoice = invoice
++    @gateway_options = gateway_options
++  end
++
++  attr_reader :gateway, :payment_method_id, :invoice, :gateway_options
++
++  def charge(amount)
++    payment_intent = latest_pending_payment_intent
++    payment_intent ? confirm_payment_intent(payment_intent) : create_payment_intent(amount)
++  end
++
++  protected
++
++  delegate :latest_pending_payment_intent, to: :invoice, allow_nil: true
++
++  def create_payment_intent(amount)
++    response = gateway.purchase(amount.cents, payment_method_id, gateway_options)
++
++    with_payment_intent_data_from(response) do |payment_intent_data|
++      next unless invoice
++
++      payment_intent = invoice.payment_intents.create!(payment_intent_id: payment_intent_data['id'], state: payment_intent_data['status'])
++
++      # For PaymentIntent statuses and corresponding recommended actions see https://stripe.com/docs/payments/accept-a-payment-synchronously
++      # - succeeded                => no additional action > the payment has succeeded
++      # - requires_confirmation    => confirm the payment intent
++      # - requires_action          => check `payment_intent_data['next_action']` for instructions
++      # - requires_payment_method  => do not retry > the payment attempt has failed > ask cardholder to replace card data
++
++      case payment_intent.state
++      when 'succeeded'
++        next
++      when 'requires_confirmation'
++        confirm_payment_intent(payment_intent)
++      end
++    end
++  end
++
++  def confirm_payment_intent(payment_intent)
++    # Passing the gateway option `off_session: false` will cause a `requires_action` status on the payment intent in cases where otherwise it would be `requires_payment_method`.
++    # This happens even when the payment intent has been originally created with `off_session: true` – i.e. Stripe allows us to turn an "off_session" payment intent into an "on_session" one.
++    # Along with the `requires_action` status, the param `next_action.use_stripe_sdk.stripe_js` holds the next-step link to get the transaction authenticated
++    response = gateway.confirm_intent(payment_intent.payment_intent_id, payment_method_id, gateway_options)
++
++    with_payment_intent_data_from(response) do |payment_intent_data|
++      payment_intent_status = payment_intent_data['status']
++      payment_intent.update!(state: payment_intent_status)
++
++      next if payment_intent_status == 'succeeded' || !response.success?
++
++      # Because in some cases Stripe won't wrap the response of `/payment_intents/:id/confirm` into an 'error' and ActiveMerchant may think it was a success when it wasn't.
++      # See https://github.com/activemerchant/active_merchant/blob/b2f5e89eb383429d47e446f248d7bfe4f95ac3d0/lib/active_merchant/billing/gateways/stripe_payment_intents.rb#L299-L307
++      response.instance_variable_set(:@success, false)
++      response.instance_variable_set(:@message, payment_intent_status.humanize)
++    end
++  end
++
++  def with_payment_intent_data_from(response)
++    payment_intent_data = extract_payment_intent_data_from(response)
++    yield(payment_intent_data) if payment_intent_data.present?
++    response
++  end
++
++  def extract_payment_intent_data_from(response)
++    response_params = response.params
++    payment_intent_data = (response.success? ? response_params : response_params.dig('error', Stripe::PaymentIntent::OBJECT_NAME)) || {}
++    payment_intent_data if payment_intent_data['object'] == Stripe::PaymentIntent::OBJECT_NAME
++  end
++end
+diff --git a/app/views/api/application_plans/_listing.html.slim b/app/views/api/application_plans/_listing.html.slim
+new file mode 100644
+index 00000000..d7747292
+--- /dev/null
++++ b/app/views/api/application_plans/_listing.html.slim
+@@ -0,0 +1,20 @@
++section class="pf-c-page__main-section pf-m-no-padding"
++  - if @plans.not_custom.size > 0
++    div id='default_plan' data=default_application_plan_data(@service, @plans)
++      = javascript_pack_tag 'default_plan_selector'
++
++  div.pf-c-card
++    / TODO: use card body and other pf styles instead of .data class
++    / div.pf-c-card__body
++    table#plans.data
++      thead
++        tr
++          th = sortable :name, @new_plan.human_attribute_name(:name)
++          th = sortable :contracts_count, @new_plan.human_attribute_name(:contracts)
++          th = sortable :state, @new_plan.human_attribute_name(:state)
++          th.right.operations colspan="3"
++            - if can_create_plan?(@new_plan)
++              = link_to "Create #{@new_plan.model_name.human.titleize}",
++                      new_polymorphic_path([:admin, @service, @new_plan]),
++                      title: 'Create new plan', class: 'action add'
++      = render partial: 'api/plans/table_body', locals: {plans: @plans.not_custom}
+diff --git a/app/views/api/application_plans/index.html.erb b/app/views/api/application_plans/index.html.erb
+index 36485155..6f5472e9 100644
+--- a/app/views/api/application_plans/index.html.erb
++++ b/app/views/api/application_plans/index.html.erb
+@@ -1,8 +1,11 @@
+-<% content_for :sublayout_title, 'Application Plans' %>
++<h1>Application Plans</h1>
+ 
+-<p class="description">Application Plans establish the rules (limits, pricing, features) for
++<p class="description">
++  Application Plans establish the rules (limits, pricing, features) for
+   using your API; every developer's application accessing your API will be accessing it within the
+   constraints of an Application Plan. From a business perspective, Application Plans allow you
+   to target different audiences by using multiple plans (i.e. 'basic', 'pro', 'premium') with
+-  different sets of rules.</p>
+-<%= render :partial => 'api/plans/listing' %>
+\ No newline at end of file
++  different sets of rules.
++</p>
++
++<%= render partial: 'listing' %>
+diff --git a/app/views/api/plans/_default_plan.html.slim b/app/views/api/plans/_default_plan.html.slim
+index e57a544d..2dd53fb9 100644
+--- a/app/views/api/plans/_default_plan.html.slim
++++ b/app/views/api/plans/_default_plan.html.slim
+@@ -1,3 +1,4 @@
++/ DEPRECATED: remove in favor of javascript_pack_tag 'default_plan_selector'. app/views/api/application_plans/_listing.html.slim
+ = form_tag polymorphic_path([:masterize, :admin, @service, @new_plan]), method: :post, class: 'default_plan autosubmit formtastic', remote: true do
+   fieldset.inputs
+     ol
+@@ -6,4 +7,3 @@
+         = select_tag :id, options_from_collection_for_select(@plans.not_custom, "id", "name", lambda { |p| p.master? }),
+           include_blank: true, id: "default_plan"
+         p.inline-hints= @plans.first.class.human_attribute_name 'default_plan_hint'
+-
+diff --git a/app/views/api/plans/_listing.html.slim b/app/views/api/plans/_listing.html.slim
+index b3c5b775..d2ff2a2d 100644
+--- a/app/views/api/plans/_listing.html.slim
++++ b/app/views/api/plans/_listing.html.slim
+@@ -1,3 +1,4 @@
++/ DEPRECATED: remove in favor of javascript_pack_tag 'default_plan_selector'. See app/views/api/application_plans/_listing.html.slim
+ - if @plans.not_custom.size > 0
+   = render partial: 'api/plans/default_plan'
+ table#plans.data
+@@ -8,7 +9,7 @@ table#plans.data
+       th = sortable :state, @new_plan.human_attribute_name(:state)
+       th.right.operations colspan="3"
+         - if can_create_plan?(@new_plan)
+-          = link_to "Create #{@new_plan.model_name.human.titleize}",
+-                  new_polymorphic_path([:admin, @service, @new_plan]),
+-                  title: 'Create new plan', class: 'action add'
++         = link_to "Create #{@new_plan.model_name.human.titleize}",
++                   new_polymorphic_path([:admin, @service, @new_plan]),
++                   title: 'Create new plan', class: 'action add'
+   = render partial: 'api/plans/table_body', locals: {plans: @plans.not_custom}
+diff --git a/app/views/master/providers/plans/_widget.html.slim b/app/views/master/providers/plans/_widget.html.slim
+index 93afef58..90bca330 100644
+--- a/app/views/master/providers/plans/_widget.html.slim
++++ b/app/views/master/providers/plans/_widget.html.slim
+@@ -20,7 +20,7 @@ div.dashboard_card.round#provider-change-plan
+   br
+   = form_tag edit_master_provider_plan_path(provider), :method => :get, :remote => true, :class => 'formtastic colorbox' do
+     fieldset.inputs
+-      legend Change Plan
++      legend Change Plan PEPE
+       ol
+         li
+           = select_tag :plan_id, options_from_collection_for_select(plans, :id, :name), required: true, include_blank: true
+diff --git a/config/routes.rb b/config/routes.rb
+index 2bbff1e9..ed711dab 100644
+--- a/config/routes.rb
++++ b/config/routes.rb
+@@ -1041,6 +1041,10 @@ without fake Core server your after commit callbacks will crash and you might ge
+           end
+         end
+ 
++        namespace 'payment_callbacks', module: 'payment_callbacks' do
++          resources :stripe_callbacks, only: :create
++        end
++
+         resources :accounts, :only => [], module: 'accounts' do
+           resources :invoices, :only => [:index, :show]
+         end
+diff --git a/db/migrate/20210119101158_create_payment_intents.rb b/db/migrate/20210119101158_create_payment_intents.rb
+new file mode 100644
+index 00000000..20ef5085
+--- /dev/null
++++ b/db/migrate/20210119101158_create_payment_intents.rb
+@@ -0,0 +1,17 @@
++class CreatePaymentIntents < ActiveRecord::Migration[5.0]
++  disable_ddl_transaction!
++
++  def change
++    create_table :payment_intents do |t|
++      t.references :invoice, null: false
++      t.string :payment_intent_id
++      t.string :state
++      t.integer :tenant_id, limit: 8
++      t.timestamps null: false
++    end
++
++    index_options = System::Database.postgres? ? { algorithm: :concurrently } : {}
++    add_index :payment_intents, :payment_intent_id, index_options
++    add_index :payment_intents, :state, index_options
++  end
++end
+diff --git a/db/oracle_schema.rb b/db/oracle_schema.rb
+index c5dd5692..10c27c68 100644
+--- a/db/oracle_schema.rb
++++ b/db/oracle_schema.rb
+@@ -10,7 +10,7 @@
+ #
+ # It's strongly recommended that you check this file into your version control system.
+ 
+-ActiveRecord::Schema.define(version: 20201222214415) do
++ActiveRecord::Schema.define(version: 20210119101158) do
+ 
+   create_table "access_tokens", force: :cascade do |t|
+     t.integer  "owner_id",   precision: 38, null: false
+@@ -918,6 +918,19 @@ ActiveRecord::Schema.define(version: 20201222214415) do
+     t.integer  "tenant_id",        precision: 38
+   end
+ 
++  create_table "payment_intents", force: :cascade do |t|
++    t.integer  "invoice_id",        precision: 38, null: false
++    t.string   "payment_intent_id"
++    t.string   "state"
++    t.integer  "tenant_id",         precision: 38
++    t.datetime "created_at",        precision: 6,  null: false
++    t.datetime "updated_at",        precision: 6,  null: false
++  end
++
++  add_index "payment_intents", ["invoice_id"], name: "index_payment_intents_on_invoice_id"
++  add_index "payment_intents", ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id"
++  add_index "payment_intents", ["state"], name: "index_payment_intents_on_state"
++
+   create_table "payment_transactions", force: :cascade do |t|
+     t.integer  "account_id",           precision: 38
+     t.integer  "invoice_id",           precision: 38
+diff --git a/db/postgres_schema.rb b/db/postgres_schema.rb
+index e2a776eb..55831ccb 100644
+--- a/db/postgres_schema.rb
++++ b/db/postgres_schema.rb
+@@ -10,7 +10,7 @@
+ #
+ # It's strongly recommended that you check this file into your version control system.
+ 
+-ActiveRecord::Schema.define(version: 20201222214415) do
++ActiveRecord::Schema.define(version: 20210119101158) do
+ 
+   # These are extensions that must be enabled in order to support this database
+   enable_extension "plpgsql"
+@@ -875,6 +875,18 @@ ActiveRecord::Schema.define(version: 20201222214415) do
+     t.bigint   "tenant_id"
+   end
+ 
++  create_table "payment_intents", force: :cascade do |t|
++    t.integer  "invoice_id",        null: false
++    t.string   "payment_intent_id"
++    t.string   "state"
++    t.bigint   "tenant_id"
++    t.datetime "created_at",        null: false
++    t.datetime "updated_at",        null: false
++    t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id", using: :btree
++    t.index ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id", using: :btree
++    t.index ["state"], name: "index_payment_intents_on_state", using: :btree
++  end
++
+   create_table "payment_transactions", force: :cascade do |t|
+     t.bigint   "account_id"
+     t.bigint   "invoice_id"
+diff --git a/db/schema.rb b/db/schema.rb
+index 2eb381c6..44bbee20 100644
+--- a/db/schema.rb
++++ b/db/schema.rb
+@@ -10,7 +10,7 @@
+ #
+ # It's strongly recommended that you check this file into your version control system.
+ 
+-ActiveRecord::Schema.define(version: 20201222214415) do
++ActiveRecord::Schema.define(version: 20210119101158) do
+ 
+   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+     t.bigint   "owner_id",                 null: false
+@@ -874,6 +874,18 @@ ActiveRecord::Schema.define(version: 20201222214415) do
+     t.bigint   "tenant_id"
+   end
+ 
++  create_table "payment_intents", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
++    t.integer  "invoice_id",        null: false
++    t.string   "payment_intent_id"
++    t.string   "state"
++    t.bigint   "tenant_id"
++    t.datetime "created_at",        null: false
++    t.datetime "updated_at",        null: false
++    t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id", using: :btree
++    t.index ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id", using: :btree
++    t.index ["state"], name: "index_payment_intents_on_state", using: :btree
++  end
++
+   create_table "payment_transactions", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+     t.bigint   "account_id"
+     t.bigint   "invoice_id"
+diff --git a/features/step_definitions/api/plan_steps.rb b/features/step_definitions/api/plan_steps.rb
+index 43df09bd..37804588 100644
+--- a/features/step_definitions/api/plan_steps.rb
++++ b/features/step_definitions/api/plan_steps.rb
+@@ -22,7 +22,13 @@ When /^I follow "([^"]*)" for (plan "[^"]*")$/ do |label, plan|
+ end
+ 
+ When /^I select "(.*?)" as default plan$/ do | plan |
+-  select plan
++  # if React default plan select
++  if (select = find(:css, '#default_plan_card .pf-c-select'))
++    select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
++    select.find('.pf-c-select__menu-item', text: plan).click
++  else
++    select plan
++  end
+ end
+ 
+ Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
+@@ -32,8 +38,14 @@ Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
+ end
+ 
+ Then /^I should see "(.*?)" in the default plans list$/ do | plan_name |
+-  within(default_plan) do
+-    page.should have_content(plan_name)
++  # if React default plan select
++  if (select = find(:css, '#default_plan_card .pf-c-select'))
++    select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
++    select.should have_content(plan_name)
++  else
++    within(default_plan) do
++      page.should have_content(plan_name)
++    end
+   end
+ end
+ 
+diff --git a/lib/system/database/definitions/mysql.rb b/lib/system/database/definitions/mysql.rb
+index 5e405f98..8a8758b9 100644
+--- a/lib/system/database/definitions/mysql.rb
++++ b/lib/system/database/definitions/mysql.rb
+@@ -509,6 +509,12 @@ System::Database::MySQL.define do
+     SQL
+   end
+ 
++  trigger 'payment_intents' do
++    <<~SQL
++      SET NEW.tenant_id = (SELECT tenant_id FROM invoices WHERE id = NEW.invoice_id AND tenant_id <> master_id);
++    SQL
++  end
++
+   trigger 'payment_gateway_settings' do
+     <<~SQL
+       IF NEW.account_id <> master_id THEN
+diff --git a/lib/system/database/definitions/oracle.rb b/lib/system/database/definitions/oracle.rb
+index 452c9827..c53493aa 100644
+--- a/lib/system/database/definitions/oracle.rb
++++ b/lib/system/database/definitions/oracle.rb
+@@ -525,6 +525,12 @@ System::Database::Oracle.define do
+     SQL
+   end
+ 
++  trigger 'payment_intents' do
++    <<~SQL
++      SELECT tenant_id INTO :new.tenant_id FROM invoices WHERE id = :new.invoice_id AND tenant_id <> master_id;
++    SQL
++  end
++
+   trigger 'payment_gateway_settings' do
+     <<~SQL
+       IF :new.account_id <> master_id THEN
+diff --git a/lib/system/database/definitions/postgres.rb b/lib/system/database/definitions/postgres.rb
+index e31dbc47..84423cb5 100644
+--- a/lib/system/database/definitions/postgres.rb
++++ b/lib/system/database/definitions/postgres.rb
+@@ -525,6 +525,12 @@ System::Database::Postgres.define do
+     SQL
+   end
+ 
++  trigger 'payment_intents' do
++    <<~SQL
++      SELECT tenant_id INTO NEW.tenant_id FROM invoices WHERE id = NEW.invoice_id AND tenant_id <> master_id;
++    SQL
++  end
++
+   trigger 'payment_gateway_settings' do
+     <<~SQL
+       IF NEW.account_id <> master_id THEN
+diff --git a/spec/javascripts/Applications/components/DefaultPlanSelect.spec.jsx b/spec/javascripts/Applications/components/DefaultPlanSelect.spec.jsx
+new file mode 100644
+index 00000000..f59159d3
+--- /dev/null
++++ b/spec/javascripts/Applications/components/DefaultPlanSelect.spec.jsx
+@@ -0,0 +1,18 @@
++// @flow
++
++import React from 'react'
++
++import { DefaultPlanSelect } from 'Plans'
++import { mount } from 'enzyme'
++
++const props = {
++  plan: { id: 0, name: 'Plan 0' },
++  plans: [{ id: 0, name: 'Plan 0' }],
++  onSelectPlan: jest.fn(),
++  isDisabled: false
++}
++
++it('should render', () => {
++  const wrapper = mount(<DefaultPlanSelect {...props} />)
++  expect(wrapper.exists()).toBe(true)
++})
+diff --git a/test/factories/payment_intent.rb b/test/factories/payment_intent.rb
+new file mode 100644
+index 00000000..8c389ba2
+--- /dev/null
++++ b/test/factories/payment_intent.rb
+@@ -0,0 +1,9 @@
++# frozen_string_literal: true
++
++FactoryBot.define do
++  factory(:payment_intent) do
++    association :invoice
++    sequence(:payment_intent_id) { |n| "payment-intent-id-#{n}" }
++    state 'requires_action'
++  end
++end
+diff --git a/test/functional/finance/provider/settings_controller_test.rb b/test/functional/finance/provider/settings_controller_test.rb
+index fc6c7b35..662c9366 100644
+--- a/test/functional/finance/provider/settings_controller_test.rb
++++ b/test/functional/finance/provider/settings_controller_test.rb
+@@ -36,6 +36,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
+ 
+       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][login]'
+       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][publishable_key]'
++      assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][endpoint_secret]'
+     end
+   end
+ 
+diff --git a/test/integration/admin/account/payment_gateways_controller_test.rb b/test/integration/admin/account/payment_gateways_controller_test.rb
+index c0eea778..1e5356ba 100644
+--- a/test/integration/admin/account/payment_gateways_controller_test.rb
++++ b/test/integration/admin/account/payment_gateways_controller_test.rb
+@@ -14,7 +14,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
+   test 'update' do
+     put admin_account_payment_gateway_path(@provider), account: {
+       payment_gateway_type: 'stripe',
+-      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey' }
++      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
+     }
+ 
+     @provider.reload
+@@ -23,7 +23,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
+     assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
+     assert_equal({
+       'gateway_type' => 'stripe',
+-      'gateway_settings' => {'login' => 'bob', 'publishable_key' => 'monkey'}
++      'gateway_settings' => { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
+     },
+     @provider.gateway_setting.attributes.slice('gateway_type', 'gateway_settings'))
+   end
+@@ -52,7 +52,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
+ 
+     put admin_account_payment_gateway_path(@provider), account: {
+       payment_gateway_type: 'stripe',
+-      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey' }
++      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
+     }
+ 
+     @provider.reload
+@@ -60,7 +60,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
+     assert_redirected_to admin_finance_settings_url
+     assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
+     assert_equal(
+-      { 'gateway_type' => 'stripe', 'gateway_settings' => {'login' => 'bob', 'publishable_key' => 'monkey'} },
++      { 'gateway_type' => 'stripe', 'gateway_settings' => { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' } },
+       @provider.gateway_setting.attributes.slice('gateway_type', 'gateway_settings')
+     )
+   end
+diff --git a/test/integration/finance/api/payment_callbacks/stripe_callbacks_controller_test.rb b/test/integration/finance/api/payment_callbacks/stripe_callbacks_controller_test.rb
+new file mode 100644
+index 00000000..7069eb4e
+--- /dev/null
++++ b/test/integration/finance/api/payment_callbacks/stripe_callbacks_controller_test.rb
+@@ -0,0 +1,107 @@
++# frozen_string_literal: true
++
++require 'test_helper'
++
++class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDispatch::IntegrationTest
++  class CreateTest < self
++    setup do
++      @provider_account = FactoryBot.create(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', endpoint_secret: 'some-secret' })
++      provider_account.settings.allow_finance!
++      provider_admin = FactoryBot.create(:admin, account: provider_account)
++      @access_token = FactoryBot.create(:access_token, owner: provider_admin, scopes: %w[finance])
++
++      buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
++      invoice = FactoryBot.create(:invoice, buyer_account: buyer_account, provider_account: provider_account)
++      @payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'some-payment-intent-id')
++
++      login! provider_account
++    end
++
++    attr_reader :provider_account, :access_token, :payment_intent
++
++    test 'updates existing payment intent' do
++      stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'some-payment-intent-id' })
++      Stripe::Webhook.expects(:construct_event).returns(stripe_event)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :ok
++    end
++
++    test 'missing stripe webhook signing secret' do
++      gateway_options = @provider_account.payment_gateway_setting
++      gateway_options.gateway_settings[:endpoint_secret] = ''
++      gateway_options.save(validate: false)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :unprocessable_entity
++      assert_equal 'Configuration is missing', response.body
++    end
++
++    test 'invalid stripe signature' do
++      exception = Stripe::SignatureVerificationError.new('invalid signature', 'invalid header content')
++      Stripe::Webhook.expects(:construct_event).raises(exception)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :bad_request
++    end
++
++    test 'invalid json payload' do
++      Stripe::Webhook.expects(:construct_event).raises(JSON::ParserError)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :bad_request
++    end
++
++    test 'invalid event' do
++      stripe_event = self.stripe_event(type: 'payment_intent.requires_action', payment_intent_data: { id: 'some-payment-intent-id' })
++      Stripe::Webhook.expects(:construct_event).returns(stripe_event)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :not_found
++    end
++
++    test 'cannot find payment intent' do
++      stripe_event = self.stripe_event(type: 'payment_intent.requires_action', payment_intent_data: { id: 'non-existent-payment-intent-id' })
++      Stripe::Webhook.expects(:construct_event).returns(stripe_event)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :not_found
++    end
++
++    test 'fails to update payment intent' do
++      stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'some-payment-intent-id' })
++      Stripe::Webhook.expects(:construct_event).returns(stripe_event)
++      invoices = provider_account.buyer_invoices
++      PaymentIntent.expects(:by_invoice).returns(invoices)
++      invoices.expects(:find_by!).with(payment_intent_id: 'some-payment-intent-id').returns(payment_intent)
++      payment_intent.expects(:update_from_stripe_event).returns(false)
++      System::ErrorReporting.expects(:report_error).at_least_once # because the setup doesn't really build all required objects
++      System::ErrorReporting.expects(:report_error).with(instance_of(Finance::Api::PaymentCallbacks::StripeCallbacksController::StripeCallbackError), event: stripe_event, payment_intent: payment_intent)
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :ok
++    end
++
++    test 'not stripe gateway' do
++      provider_account.payment_gateway_type = :bogus
++      provider_account.save!
++
++      post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
++      assert_response :not_found
++    end
++  end
++
++  protected
++
++  def stripe_payment_intent_data
++    { id: 'payment-intent-id', object: 'payment_intent', status: 'succeeded', amount: 85000, currency: 'eur' }
++  end
++
++  def stripe_event_data
++    { id: 'event-id', object: 'event', type: 'payment_intent.succeeded', data: { object: stripe_payment_intent_data } }
++  end
++
++  def stripe_event(type:, payment_intent_data: {})
++    Stripe::Event.construct_from(stripe_event_data.deep_merge(type: type, data: { object: payment_intent_data }))
++  end
++end
+diff --git a/test/models/payment_intent_test.rb b/test/models/payment_intent_test.rb
+new file mode 100644
+index 00000000..d08f8e6c
+--- /dev/null
++++ b/test/models/payment_intent_test.rb
+@@ -0,0 +1,96 @@
++# frozen_string_literal: true
++
++require 'test_helper'
++
++class PaymentIntentTest < ActiveSupport::TestCase
++  setup do
++    @invoice = FactoryBot.create(:invoice)
++  end
++
++  attr_reader :invoice
++
++  test 'requires an invoice' do
++    record = FactoryBot.build(:payment_intent, invoice: nil)
++    refute record.valid?
++    assert record.errors[:invoice].include?("can't be blank")
++    record.invoice = invoice
++    assert record.valid?
++  end
++
++  test 'requires a payment_intent_id' do
++    record = FactoryBot.build(:payment_intent, payment_intent_id: nil)
++    refute record.valid?
++    assert record.errors[:payment_intent_id].include?("can't be blank")
++    record.payment_intent_id = 'foo'
++    assert record.valid?
++  end
++
++  test 'latest' do
++    records = create_payment_intents
++    assert_same_elements [records.first], relation.latest
++    assert_same_elements records.first(2), relation.latest(2)
++  end
++
++  test 'latest_pending' do
++    records = create_payment_intents
++    records.first.update!(state: 'succeeded')
++    assert_same_elements [records.second], relation.latest_pending
++    assert_same_elements records[1..-1], relation.latest_pending(2)
++  end
++
++  test 'by_invoice' do
++    records = create_payment_intents
++    other_invoice = FactoryBot.create(:invoice)
++    other_record = FactoryBot.create(:payment_intent, invoice: other_invoice)
++
++    assert_same_elements records.map(&:id), PaymentIntent.by_invoice(invoice).pluck(:id)
++    assert_same_elements [other_record.id], PaymentIntent.by_invoice(other_invoice).pluck(:id)
++  end
++
++  test '#update_from_stripe_event' do
++    FactoryBot.create(:line_item, invoice: invoice, cost: 250)
++    invoice.send(:issue!)
++    invoice_cost = invoice.charge_cost
++    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, state: 'submitted')
++    payment_intent_data = { id: payment_intent.payment_intent_id, amount: invoice_cost.cents }
++    payment_transactions = invoice.payment_transactions
++
++    invalid_event = stripe_event(type: 'payment_intent.required_action', payment_intent_data: payment_intent_data)
++    assert_no_difference(payment_transactions.method(:count)) do
++      refute payment_intent.update_from_stripe_event(invalid_event)
++      assert_equal 'submitted', payment_intent.reload.state
++      refute invoice.reload.paid?
++    end
++
++    valid_event = stripe_event(type: 'payment_intent.succeeded', payment_intent_data: payment_intent_data)
++    assert_difference(payment_transactions.method(:count)) do
++      assert payment_intent.update_from_stripe_event(valid_event)
++      assert_equal 'succeeded', payment_intent.reload.state
++      assert invoice.reload.paid?
++    end
++    expected_payment_transaction = { action: 'purchase', amount: invoice_cost, success: true, message: 'Payment confirmed', reference: payment_intent_data[:id], params: valid_event.to_hash }.deep_stringify_keys
++    assert_equal expected_payment_transaction, payment_transactions.last.attributes.slice(*%w[action amount success message reference params]).deep_stringify_keys
++  end
++
++  private
++
++  def create_payment_intents
++    FactoryBot.create_list(:payment_intent, 3, invoice: invoice).sort_by(&:id).reverse
++  end
++
++  def relation
++    PaymentIntent.where(invoice: invoice)
++  end
++
++  def stripe_payment_intent_data
++    { id: 'payment-intent-id', object: 'payment_intent', status: 'succeeded', amount: 85000, currency: 'eur' }
++  end
++
++  def stripe_event_data
++    { id: 'event-id', object: 'event', type: 'payment_intent.succeeded', data: { object: stripe_payment_intent_data } }
++  end
++
++  def stripe_event(type:, payment_intent_data: {})
++    Stripe::Event.construct_from(stripe_event_data.deep_merge(type: type, data: { object: payment_intent_data }))
++  end
++end
+diff --git a/test/unit/account/billing_test.rb b/test/unit/account/billing_test.rb
+index 8fab4cc5..e9bc5f44 100644
+--- a/test/unit/account/billing_test.rb
++++ b/test/unit/account/billing_test.rb
+@@ -48,7 +48,7 @@ class Account::BillingTest < ActiveSupport::TestCase
+   end
+ 
+   test 'unstore credit card when destroyed' do
+-    provider = Account.new(payment_gateway_type: :stripe, payment_gateway_options: {login: 'private_key', publishable_key: 'public_key'})
++    provider = Account.new(payment_gateway_type: :stripe, payment_gateway_options: { login: 'private_key', publishable_key: 'public_key', endpoint_secret: 'some-secret' })
+     buyer = Account.new(provider_account: provider)
+     buyer.payment_detail.credit_card_auth_code = 'SOMESTRING'
+ 
+@@ -169,7 +169,7 @@ class Account::BillingTest < ActiveSupport::TestCase
+   end
+ 
+   test 'charge! sends the payment_method_id' do
+-    provider = FactoryBot.build(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'})
++    provider = FactoryBot.build(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' })
+     buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
+     buyer.payment_detail.assign_attributes(credit_card_auth_code: 'cus_IhGaGqpp6zGwyd', payment_method_id: 'pm_1I5s3n2eZvKYlo2CiO193T69', credit_card_partial_number: '4242')
+ 
+diff --git a/test/unit/account/gateway_test.rb b/test/unit/account/gateway_test.rb
+index 00bb4121..29e10183 100644
+--- a/test/unit/account/gateway_test.rb
++++ b/test/unit/account/gateway_test.rb
+@@ -106,7 +106,7 @@ class Account::GatewayTest  < ActiveSupport::TestCase
+     assert_equal provider.payment_gateway_options,                    provider.payment_gateway.options
+ 
+     provider.payment_gateway_type    = :stripe
+-    provider.payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
++    provider.payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
+     assert_instance_of ActiveMerchant::Billing::StripeGateway, provider.payment_gateway
+     refute_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, provider.payment_gateway # this test is necessary because StripePaymentIntentsGateway is a subclass of StripeGateway
+     assert_equal provider.payment_gateway_options, provider.payment_gateway.options
+@@ -128,7 +128,7 @@ class Account::GatewayTest  < ActiveSupport::TestCase
+     assert_instance_of ActiveMerchant::Billing::BraintreeBlueGateway, buyer.provider_payment_gateway
+ 
+     buyer.provider_account.payment_gateway_type = :stripe
+-    buyer.provider_account.payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
++    buyer.provider_account.payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
+     assert_instance_of ActiveMerchant::Billing::StripeGateway, buyer.provider_payment_gateway
+     refute_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, buyer.provider_payment_gateway # this test is necessary because StripePaymentIntentsGateway is a subclass of StripeGateway
+     buyer.payment_detail.payment_method_id = 'pm_1I5s3n2eZvKYlo2CiO193T69'
+diff --git a/test/unit/payment_gateway_setting_test.rb b/test/unit/payment_gateway_setting_test.rb
+index 9bf6f639..4f019837 100644
+--- a/test/unit/payment_gateway_setting_test.rb
++++ b/test/unit/payment_gateway_setting_test.rb
+@@ -40,7 +40,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
+ 
+   test '#configured? failed if any gateway_settings missing for stripe' do
+     @gateway_setting.gateway_type = :stripe
+-    @gateway_setting.gateway_settings = {login: "Secret Key", publishable_key: ""}
++    @gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '', endpoint_secret: 'some-secret' }
+     refute @gateway_setting.configured?
+ 
+     @gateway_setting.gateway_settings[:publishable_key] = 'PUBKEY'
+@@ -79,7 +79,7 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
+     gateway_setting.save(validate: false)
+ 
+     gateway_setting.gateway_type = :stripe
+-    gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '' }
++    gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '', endpoint_secret: 'some-secret' }
+ 
+     assert gateway_setting.valid?
+     refute gateway_setting.errors.added?(:gateway_type, :invalid)
+diff --git a/test/unit/payment_transaction_test.rb b/test/unit/payment_transaction_test.rb
+index cadfb630..b617694c 100644
+--- a/test/unit/payment_transaction_test.rb
++++ b/test/unit/payment_transaction_test.rb
+@@ -59,7 +59,7 @@ class PaymentTransactionTest < ActiveSupport::TestCase
+     def setup
+       @order_id = 3
+       @payment_transaction = PaymentTransaction.new(amount: 100, action: :purchase, currency: 'EUR')
+-      @payment_gateway_options = {login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx'}
++      @payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
+       @credit_card_auth_code = 'cus_IhGaGqpp6zGwyd'
+     end
+ 
+diff --git a/test/unit/services/finance/stripe_charge_service_test.rb b/test/unit/services/finance/stripe_charge_service_test.rb
+new file mode 100644
+index 00000000..371b76de
+--- /dev/null
++++ b/test/unit/services/finance/stripe_charge_service_test.rb
+@@ -0,0 +1,119 @@
++# frozen_string_literal: true
++
++require 'test_helper'
++
++class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
++  setup do
++    provider_account = FactoryBot.create(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc' })
++    buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
++    @gateway = provider_account.payment_gateway(sca: true)
++    @invoice = FactoryBot.create(:invoice, buyer_account: buyer_account, provider_account: provider_account)
++    @amount = ThreeScale::Money.new(150.0, 'EUR')
++    @service = build_charge_service(invoice: invoice)
++  end
++
++  attr_reader :gateway, :invoice, :amount, :service
++
++  test 'charge' do
++    service.expects(:create_payment_intent).with(amount).returns(true)
++    assert service.charge(amount)
++  end
++
++  test 'charge with existing payment intent' do
++    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'some-payment-intent-id', state: 'pending')
++    service.expects(:confirm_payment_intent).with(payment_intent).returns(true)
++    assert service.charge(amount)
++  end
++
++  test 'create payment intent' do
++    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'new-payment-intent-id', status: 'succeeded')
++    gateway.expects(:purchase).returns(response)
++
++    assert_difference(invoice.payment_intents.method(:count)) do
++      assert_equal response, service.send(:create_payment_intent, amount)
++      assert (payment_intent = invoice.payment_intents.latest.first)
++      assert_equal 'new-payment-intent-id', payment_intent.payment_intent_id
++      assert_equal 'succeeded', payment_intent.state
++      refute invoice.latest_pending_payment_intent
++    end
++  end
++
++  test 'new payment intent requires action' do
++    response = build_response(false, 'Authentication required', status: 'authentication_required', error: { payment_intent: { object: 'payment_intent', id: 'new-payment-intent-id', status: 'requires_payment_method' } })
++    gateway.expects(:purchase).returns(response)
++
++    assert_difference(invoice.payment_intents.method(:count)) do
++      assert_equal response, service.send(:create_payment_intent, amount)
++      assert (payment_intent = invoice.latest_pending_payment_intent)
++      assert_equal 'new-payment-intent-id', payment_intent.payment_intent_id
++      assert_equal 'requires_payment_method', payment_intent.state
++    end
++  end
++
++  test 'new payment intent requires confirmation' do
++    response = build_response(false, 'Authentication required', status: 'authentication_required', error: { payment_intent: { object: 'payment_intent', id: 'new-payment-intent-id', status: 'requires_confirmation' } })
++    gateway.expects(:purchase).returns(response)
++
++    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: 'new-payment-intent-id', state: 'requires_confirmation')
++    invoice.payment_intents.expects(:create!).returns(payment_intent)
++
++    service.expects(:confirm_payment_intent).with(payment_intent).returns(true)
++    assert_equal response, service.send(:create_payment_intent, amount)
++  end
++
++  test 'create with error' do
++    response = build_response(false, 'Failed', status: 'failed', error: { message: 'No error details' })
++    gateway.expects(:purchase).returns(response)
++
++    assert_no_difference(invoice.payment_intents.method(:count)) do
++      assert_equal response, service.send(:create_payment_intent, amount)
++    end
++  end
++
++  test 'create payment intent without invoice' do
++    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'new-payment-intent-id', status: 'succeeded')
++    gateway.expects(:purchase).returns(response)
++
++    assert_no_difference(invoice.payment_intents.method(:count)) do
++      assert_equal response, build_charge_service.send(:create_payment_intent, amount)
++    end
++  end
++
++  test 'successful confirm payment intent' do
++    payment_intent_id = 'some-payment-intent-id'
++    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: payment_intent_id, state: 'pending')
++
++    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: payment_intent_id, status: 'succeeded')
++    gateway.expects(:confirm_intent).with(payment_intent_id, service.payment_method_id, service.gateway_options).returns(response)
++
++    assert_equal 'pending', payment_intent.state
++    assert_equal response, service.send(:confirm_payment_intent, payment_intent)
++    assert_equal 'succeeded', payment_intent.reload.state
++  end
++
++  test 'failed confirm payment intent' do
++    payment_intent_id = 'some-payment-intent-id'
++    payment_intent = FactoryBot.create(:payment_intent, invoice: invoice, payment_intent_id: payment_intent_id, state: 'pending')
++
++    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'some-payment-intent-id', status: 'requires_payment_method')
++    gateway.expects(:confirm_intent).with(payment_intent_id, service.payment_method_id, service.gateway_options).returns(response)
++
++    assert_equal 'pending', payment_intent.state
++    assert service.send(:confirm_payment_intent, payment_intent)
++    refute response.success?
++    assert_equal 'Requires payment method', response.message
++    assert_equal 'requires_payment_method', payment_intent.reload.state
++  end
++
++  private
++
++  def build_charge_service(opts = {})
++    gateway_options = { customer: 'a-customer-id', off_session: true, execute_threed: true }
++    options = { payment_method_id: 'a-payment-method-id', gateway_options: gateway_options }
++    Finance::StripeChargeService.new(gateway, **options.deep_merge(opts))
++  end
++
++  def build_response(success, message, params)
++    ActiveMerchant::Billing::Response.new(success, message, params.deep_stringify_keys)
++  end
++end
+diff --git a/test/unit/tasks/payments_test.rb b/test/unit/tasks/payments_test.rb
+index 7a37fcde..a86e8212 100644
+--- a/test/unit/tasks/payments_test.rb
++++ b/test/unit/tasks/payments_test.rb
+@@ -20,7 +20,7 @@ module Tasks
+ 
+       providers_with_stripe_configured.each do |provider|
+         provider.payment_gateway_type = :stripe
+-        provider.payment_gateway_options = {login: "sk_test_example#{provider.id}", publishable_key: "pk_test_example#{provider.id}"}
++        provider.payment_gateway_options = { login: "sk_test_example#{provider.id}", publishable_key: "pk_test_example#{provider.id}", endpoint_secret: 'some-secret' }
+         provider.save!
+       end
+ 
