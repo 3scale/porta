@@ -6,24 +6,17 @@ import {
   Form,
   ActionGroup,
   Button,
-  Modal,
   PageSection,
-  PageSectionVariants,
-  InputGroup,
-  TextInput,
-  Pagination,
-  Toolbar,
-  ToolbarItem
+  PageSectionVariants
 } from '@patternfly/react-core'
-import { Table, TableHeader, TableBody } from '@patternfly/react-table'
-import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 import {
   BuyerSelect,
   ProductSelect,
   ApplicationPlanSelect,
   ServicePlanSelect,
   NameInput,
-  DescriptionInput
+  DescriptionInput,
+  SelectProductModal
 } from 'NewApplication'
 import { CSRFToken } from 'utilities/utils'
 
@@ -87,19 +80,6 @@ const NewApplicationForm = ({
   const contract = buyer && product && buyer.contractedProducts.find(p => p.id === product.id)
   const contractedServicePlan = (contract && contract.withPlan) || (product && product.defaultServicePlan)
 
-  const modalColumns = [
-    {title: 'Name'},
-    {title: 'System Name'},
-    {title: 'Last updated'}
-  ]
-  const modalRows = [
-    ['Product-01', 'product-01-sys-name', '04 Oct 2020, 08:05am'],
-    ['Product-02', 'product-02-sys-name', '04 Oct 2020, 08:07am'],
-    ['Product-03', 'product-03-sys-name', '04 Oct 2020, 08:09am'],
-    ['Product-04', 'product-04-sys-name', '04 Oct 2020, 08:11am'],
-    ['Product-05', 'product-05-sys-name', '04 Oct 2020, 08:13am']
-  ]
-
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
@@ -162,66 +142,15 @@ const NewApplicationForm = ({
         </Form>
       </PageSection>
 
-      <Modal
-        title='Select a Product'
-        isLarge={true}
+      <SelectProductModal
         isOpen={modalOpen}
-        isFooterLeftAligned={true}
-        actions={[
-          <Button key='add' variant='primary' isDisabled={true}>
-            Add
-          </Button>,
-          <Button key='cancel' variant='secondary'>
-            Cancel
-          </Button>
-        ]}
-      >
-
-        {/* Toolbar is a component in the css, but a layout in react, so the class names are mismatched (pf-c-toolbar vs pf-l-toolbar) Styling doesn't work, but if you change it to pf-c in the inspector, it works */}
-        <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-          <ToolbarItem>
-            <InputGroup>
-              <TextInput name="searchInput" id="searchInput" type="search" aria-label="search for a product" />
-              <Button variant="control" aria-label="search button for search input">
-                <SearchIcon />
-              </Button>
-            </InputGroup>
-          </ToolbarItem>
-          <ToolbarItem>
-            <Pagination
-              itemCount={8}
-              isCompact={true}
-              // perPage={this.state.perPage}
-              // page={this.state.page}
-              // onSetPage={this.onSetPage}
-              // widgetId="pagination-options-menu-top"
-              // onPerPageSelect={this.onPerPageSelect}
-            />
-          </ToolbarItem>
-        </Toolbar>
-        <Table
-          sortBy={() => {}}
-          onSort={() => {}}
-          onSelect={() => {}}
-          cells={modalColumns}
-          rows={modalRows}
-          selectVariant='radio'
-        >
-          <TableHeader />
-          <TableBody />
-        </Table>
-        <Pagination
-          itemCount={8}
-          isCompact={true}
-          className="pf-u-mt-sm"
-          // perPage={this.state.perPage}
-          // page={this.state.page}
-          // onSetPage={this.onSetPage}
-          // widgetId="pagination-options-menu-top"
-          // onPerPageSelect={this.onPerPageSelect}
-        />
-
-      </Modal>
+        products={products}
+        onSelectProduct={p => {
+          setProduct(p)
+          setModalOpen(false)
+        }}
+        onClose={() => setModalOpen(false)}
+      />
     </>
   )
 }
