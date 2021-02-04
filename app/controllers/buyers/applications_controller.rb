@@ -75,8 +75,6 @@ class Buyers::ApplicationsController < FrontendController
     application_plan = @plans.find plan_id
     service_plan = if service_plan_id = params[:cinstance].delete(:service_plan_id)
                      application_plan.service.service_plans.find(service_plan_id)
-                   else
-                     # return default OR contracted service_plan for buyer, it will not come from UI
                    end
 
     @cinstance = current_account.provider_builds_application_for(@buyer, application_plan, params[:cinstance], service_plan)

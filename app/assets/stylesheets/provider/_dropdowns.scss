@@ -28,13 +28,13 @@ $dropdown-bg-color: lighten(black, 85%);
 
     &:last-child {
       & > a,
-      & > input[type=submit],
+      & > input[type="submit"],
       & > button {
         border-bottom: 0;
       }
     }
     & > a,
-    & > input[type=submit],
+    & > input[type="submit"],
     & > button {
       display: block;
       color: $font-color;
@@ -67,9 +67,10 @@ $dropdown-bg-color: lighten(black, 85%);
   padding: 0 !important;
 }
 
-
 .button-group {
-  & > a, & > button, & > input[type='submit'] {
+  & > a,
+  & > button,
+  & > input[type="submit"] {
     position: relative;
     margin-right: 0;
     border-radius: 0;
@@ -94,7 +95,8 @@ $dropdown-bg-color: lighten(black, 85%);
     }
   }
 
-  & > input[type=submit], & > button {
+  & > input[type="submit"],
+  & > button {
     margin-right: line-height-times(1/4);
   }
 }
@@ -107,7 +109,7 @@ $dropdown-bg-color: lighten(black, 85%);
 
 // For a select box with fixed link at the bottom, select the last li to be that sticky link
 .pf-c-select__menu--with-fixed-link li:last-of-type {
-  position:sticky;
+  position: sticky;
   bottom: calc(-1 * var(--pf-global--spacer--sm));
   padding-top: var(--pf-global--spacer--xs);
   padding-bottom: var(--pf-global--spacer--sm);
@@ -123,7 +125,7 @@ $dropdown-bg-color: lighten(black, 85%);
 }
 
 // For a typeahead select with an option marked as a group name, make the option look like the SelectGroup name should
-.pf-c-select__menu-item.pf-c-select__menu-item--group-name  {
+.pf-c-select__menu-item.pf-c-select__menu-item--group-name {
   padding-top: var(--pf-c-select__menu-item--PaddingTop);
   padding-right: var(--pf-c-select__menu-item--PaddingRight);
   padding-bottom: var(--pf-c-select__menu-item--PaddingBottom);
