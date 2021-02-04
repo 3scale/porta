@@ -19,10 +19,11 @@ type Props = {
   products: Product[],
   onSelect: (Product | null) => void,
   onShowAll: () => void,
-  isDisabled?: boolean
+  isDisabled?: boolean,
+  productsMaxLength?: number
 }
 
-const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product }: Props) => {
+const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product, productsMaxLength = 5 }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleOnSelect = (_e, option: SelectOptionObject) => {
@@ -58,7 +59,7 @@ const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, prod
         className="pf-c-select__menu--with-fixed-link"
       >
         {/* $FlowFixMe Flow wrong here */}
-        {[HEADER, ...products, SHOW_ALL_PRODUCTS].map(toSelectOption)}
+        {[HEADER, ...products.slice(0, productsMaxLength), SHOW_ALL_PRODUCTS].map(toSelectOption)}
       </Select>
     </FormGroup>
   )
