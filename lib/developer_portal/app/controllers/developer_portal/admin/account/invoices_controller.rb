@@ -29,7 +29,7 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
 
   def payment
     @invoice = find_invoice
-    payment_intent = @invoice.payment_intents.latest_pending.first!
+    payment_intent = @invoice.payment_intents.pending.latest.first!
     @client_secret = retrieve_stripe_payment_intent(payment_intent).client_secret
     @stripe_publishable_key = payment_gateway_options[:publishable_key]
   end

@@ -522,7 +522,7 @@ class Invoice < ApplicationRecord
   end
 
   def latest_pending_payment_intent
-    payment_intents.latest_pending.first
+    payment_intents.pending.latest.first
   end
 
   def self.opened_by_buyer(buyer)
