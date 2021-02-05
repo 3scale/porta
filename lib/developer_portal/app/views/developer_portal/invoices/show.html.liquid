@@ -18,7 +18,7 @@ table#line-items {
           </a>
           {{ invoice.period_begin | date: '%B, %Y' }} Invoice
           {% if invoice.pay_now? %}
-            <a href="{{invoice.url}}/payment" class="pull-right btn btn-success pay-invoice-btn">Pay Invoice</a>
+            <a href="{{invoice.url}}/payment" class="pull-right btn btn-success pay-invoice-btn">Pay invoice</a>
           {% endif %}
         </div> 
       </div>
