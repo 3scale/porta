@@ -11,7 +11,6 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
   before_action :authorize_finance
   before_action :find_provider
   before_action :authorize_payment_gateway, only: %i[payment payment_succeeded]
-  before_action :find_invoice, only: %i[show payment payment_succeeded]
 
   activate_menu :account, :invoices
 
@@ -25,26 +24,28 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
   end
 
   def show
-    assign_drops invoice: Liquid::Drops::Invoice.wrap(invoice)
+    assign_drops invoice: Liquid::Drops::Invoice.wrap(find_invoice)
   end
 
   def payment
-    @payment_intent = @invoice.payment_intents.latest_pending.first!
-    @client_secret = stripe_payment_intent.client_secret
+    @invoice = find_invoice
+    payment_intent = @invoice.payment_intents.latest_pending.first!
+    @client_secret = retrieve_stripe_payment_intent(payment_intent).client_secret
     @stripe_publishable_key = payment_gateway_options[:publishable_key]
   end
 
   def payment_succeeded
-    @payment_intent = @invoice.payment_intents.find_by!(reference: stripe_payment_intent_params[:id])
+    invoice = find_invoice
+    payment_intent = invoice.payment_intents.find_by!(reference: stripe_payment_intent_params[:id])
+    service = Finance::StripePaymentIntentUpdateService.new(site_account, retrieve_stripe_payment_intent(payment_intent))
 
-    service = Finance::StripePaymentIntentUpdateService.new(site_account, stripe_payment_intent)
     if service.call
       flash[:notice] = 'Payment transaction updated'
     else
       flash[:error] = 'Failed to update payment transaction'
     end
 
-    redirect_to admin_account_invoice_path(@invoice)
+    redirect_to admin_account_invoice_path(invoice)
   end
 
   protected
@@ -67,7 +68,7 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
   end
 
   def find_invoice
-    @invoice = accessible_invoices.find(params[:id])
+    accessible_invoices.find(params[:id])
   end
 
   attr_reader :invoice, :payment_intent
@@ -82,7 +83,7 @@ class DeveloperPortal::Admin::Account::InvoicesController < ::DeveloperPortal::B
     params.require(:payment_intent).permit(:id)
   end
 
-  def stripe_payment_intent
+  def retrieve_stripe_payment_intent(payment_intent)
     Stripe::PaymentIntent.retrieve(payment_intent.reference, api_key)
   end
 end
