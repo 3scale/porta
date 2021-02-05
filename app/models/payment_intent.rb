@@ -13,7 +13,6 @@ class PaymentIntent < ApplicationRecord
 
   scope :latest, ->(count = 1) { reorder(created_at: :desc, id: :desc).limit(count) }
   scope :pending, ->() { where.not(state: SUCCEEDED_STATES) }
-  scope :latest_pending, ->(count = 1) { pending.latest(count) }
 
   scope :by_invoice, ->(invoice) { where(invoice: invoice) }
 

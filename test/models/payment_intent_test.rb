@@ -31,11 +31,10 @@ class PaymentIntentTest < ActiveSupport::TestCase
     assert_same_elements records.first(2), relation.latest(2)
   end
 
-  test 'latest_pending' do
+  test 'pending' do
     records = create_payment_intents
     records.first.update!(state: 'succeeded')
-    assert_same_elements [records.second], relation.latest_pending
-    assert_same_elements records[1..-1], relation.latest_pending(2)
+    assert_same_elements records[1..-1], relation.pending
   end
 
   test 'by_invoice' do
