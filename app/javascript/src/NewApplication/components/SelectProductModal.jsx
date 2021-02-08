@@ -28,8 +28,13 @@ type Props = {
 const PER_PAGE = 5
 
 const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Props) => {
-  const [selectedRowId, setSelectedRowId] = useState<number>(-1)
+  const [selectedProductId, setSelectedProductId] = useState<number>(-1)
   const [page, setPage] = useState<number>(1)
+
+  const handleOnSelect = (_e, _i, rowId) => {
+    const selectedProduct = pageProducts.find((p, i) => i === rowId)
+    setSelectedProductId(selectedProduct ? selectedProduct.id : -1)
+  }
 
   const columns = [
     { title: 'Name' },
@@ -49,13 +54,16 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
 
   const pageProducts = products.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
-  const rows = pageProducts.map((p, i) => ({
-    selected: i === selectedRowId,
+  const rows = pageProducts.map(p => ({
+    selected: p.id === selectedProductId,
     cells: [p.name, p.systemName, p.updatedAt]
   }))
 
   const onAccept = () => {
-    onSelectProduct(pageProducts[selectedRowId])
+    const product = products.find(p => p.id === selectedProductId)
+    if (product) {
+      onSelectProduct(product)
+    }
   }
 
   return (
@@ -66,7 +74,7 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
       onClose={onClose}
       isFooterLeftAligned={true}
       actions={[
-        <Button key='add' variant='primary' isDisabled={selectedRowId === -1} onClick={onAccept}>Add</Button>,
+        <Button key='add' variant='primary' isDisabled={selectedProductId === -1} onClick={onAccept}>Add</Button>,
         <Button key='cancel' variant='secondary' onClick={onClose}>Cancel</Button>
       ]}
     >
@@ -88,7 +96,7 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
         aria-label="Products"
         sortBy={() => {}}
         onSort={() => {}}
-        onSelect={(_e, _i, rowId) => setSelectedRowId(rowId)}
+        onSelect={handleOnSelect}
         cells={columns}
         rows={rows}
         selectVariant='radio'
