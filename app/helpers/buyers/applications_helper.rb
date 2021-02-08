@@ -35,7 +35,7 @@ module Buyers::ApplicationsHelper
       id: buyer.id.to_s,
       name: buyer.name,
       admin: buyer.admin_user_display_name,
-      createdAt: buyer.created_at,
+      createdAt: buyer.created_at.to_s(:long),
       contractedProducts: contracts(buyer),
       createApplicationPath: admin_buyers_account_applications_path(buyer),
       # canSelectPlan: true # TODO needed?
