@@ -47,8 +47,6 @@ const threeDSecureParameters = {
   amount: '00.00',
   billingAddress: billingAdressInfo,
   onLookupComplete: function (data, next) {
-    // use `data` here, then call `next()`
-    console.log('---->>>', data)
     next()
   }
 }
@@ -65,9 +63,6 @@ const veryfyCard = (threeDSecureInstance, payload) => {
       console.error(err)
       return
     }
-    // Send response.nonce to your server for use in your integration
-    // The 3D Secure Authentication ID can be found
-    //  at response.threeDSecureInfo.threeDSecureAuthenticationId
     braintreeNonce.value = response.nonce
     form.submit()
   })
