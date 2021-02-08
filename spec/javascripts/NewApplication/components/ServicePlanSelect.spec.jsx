@@ -8,7 +8,8 @@ import { mount } from 'enzyme'
 const props = {
   servicePlan: { id: 0, name: 'The Plan' },
   setServicePlan: jest.fn(),
-  servicePlans: [{ id: 0, name: 'The Plan' }]
+  servicePlans: [{ id: 0, name: 'The Plan' }],
+  onSelect: jest.fn()
 }
 
 it('should render', () => {

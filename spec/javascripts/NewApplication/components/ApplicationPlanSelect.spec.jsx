@@ -9,7 +9,8 @@ const props = {
   appPlan: { id: 0, name: 'The Plan' },
   setAppPlan: jest.fn(),
   appPlans: [{ id: 0, name: 'The Plan' }],
-  createApplicationPlanPath: '/plans'
+  createApplicationPlanPath: '/plans',
+  onSelect: jest.fn()
 }
 
 it('should render', () => {

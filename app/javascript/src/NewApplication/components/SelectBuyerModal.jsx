@@ -28,7 +28,6 @@ type Props = {
 const PER_PAGE = 5
 
 const SelectBuyerModal = ({ isOpen, buyers, onSelectBuyer, onClose }: Props) => {
-  console.log(buyers)
   const [selectedBuyerId, setSelectedBuyerId] = useState('')
   const [page, setPage] = useState(1)
 
