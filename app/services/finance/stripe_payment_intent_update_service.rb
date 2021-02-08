@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Finance::StripePaymentIntentUpdateService
-  def initialize(provider_account, stripe_event)
-    @stripe_event = stripe_event
-    @payment_intent_data = stripe_event.data.object
-    @payment_intent = PaymentIntent.by_invoice(provider_account.buyer_invoices).find_by!(reference: payment_intent_data['id'])
+  def initialize(provider_account, source_object)
+    @source_object = source_object.to_hash
+    @payment_intent_data = @source_object.dig(:data, :object) || @source_object
+    @payment_intent = PaymentIntent.by_invoice(provider_account.buyer_invoices).find_by!(reference: payment_intent_id)
   end
 
-  attr_reader :stripe_event, :payment_intent_data, :payment_intent
+  attr_reader :source_object, :payment_intent_data, :payment_intent
 
   delegate :invoice, :succeeded?, to: :payment_intent
   delegate :payment_transactions, to: :invoice
@@ -23,17 +23,21 @@ class Finance::StripePaymentIntentUpdateService
   protected
 
   def payment_intent_status
-    payment_intent_data['status']
+    payment_intent_data[:status]
+  end
+
+  def payment_intent_id
+    payment_intent_data[:id]
   end
 
   def create_payment_transaction
     attributes = {
       action: :purchase,
-      amount: ThreeScale::Money.cents(payment_intent_data['amount'].presence || 0, payment_intent_data['currency']&.upcase || invoice.currency),
-      reference: payment_intent_data['id'],
+      amount: ThreeScale::Money.cents(payment_intent_data[:amount].presence || 0, payment_intent_data[:currency]&.upcase || invoice.currency),
+      reference: payment_intent_id,
       success: succeeded?,
       message: succeeded? ? 'Payment confirmed' : payment_intent_status.humanize,
-      params: stripe_event.to_hash
+      params: source_object
     }
 
     payment_transactions.create(attributes, without_protection: true)

@@ -11,11 +11,16 @@ table#line-items {
     {% include 'users_menu' %}
     <div class="panel panel-default">
       <div class="panel-heading important">
-        <a href="{{ urls.invoices }}">
-          <i class="fa fa-chevron-left"></i>
-          Cancel
-        </a>
-        {{ invoice.period_begin | date: '%B, %Y' }} Invoice
+        <div class="clearfix">
+          <a href="{{ urls.invoices }}">
+            <i class="fa fa-chevron-left"></i>
+            Cancel
+          </a>
+          {{ invoice.period_begin | date: '%B, %Y' }} Invoice
+          {% if invoice.pay_now? %}
+            <a href="{{invoice.url}}/payment" class="pull-right btn btn-success pay-invoice-btn">Pay invoice</a>
+          {% endif %}
+        </div> 
       </div>
       <div class="panel-body panel-footer">
 

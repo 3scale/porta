@@ -1566,6 +1566,12 @@ Returns the resource URL of the invoice PDF.
 {{ "PDF" | link_to: invoice.pdf_url }}
 ```
 
+### pay_now?
+Returns true if the online payment page is available for the invoice.
+```liquid
+{% if invoice.pay_now? %}
+```
+
 -----------
 
 # LineItem drop
@@ -1603,6 +1609,27 @@ this returns the errors that occurred.
 ### quantity
 
 ### cost
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -1652,27 +1679,6 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
 
 -----------
 
@@ -2882,12 +2888,9 @@ this returns the errors that occurred.
 ```
 
 ### title
-
-### kind
+Name of the topic. Submitted when first post to the thread is posted.
 
 ### url
-
-### description
 
 -----------
 
@@ -2910,9 +2913,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Name of the topic. Submitted when first post to the thread is posted.
+
+### kind
 
 ### url
+
+### description
 
 -----------
 
