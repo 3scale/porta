@@ -65,7 +65,12 @@ DeveloperPortal::Engine.routes.draw do
 
       resource :personal_details, :only => [:show, :update]
       resource :password, :only => [:new, :show, :create, :update]
-      resources :invoices, :only => [:index, :show]
+      resources :invoices, :only => [:index, :show] do
+        member do
+          get :payment
+          post :payment_succeeded
+        end
+      end
       resources :plan_changes, only: [:index, :new, :destroy]
     end
 

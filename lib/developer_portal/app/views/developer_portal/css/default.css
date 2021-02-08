@@ -306,6 +306,10 @@ fieldset:first-of-type {
   font-weight: normal;
 }
 
+.panel-default > .panel-heading a.pay-invoice-btn {
+  margin-top: -6px;
+}
+
 .panel-heading a:hover {
   text-decoration: none;
 }
