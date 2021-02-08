@@ -14,67 +14,68 @@ import {
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
-import type { Product } from 'NewApplication/types'
+import type { Buyer } from 'NewApplication/types'
 
 import './SelectModal.scss'
 
 type Props = {
   isOpen?: boolean,
-  products: Product[],
-  onSelectProduct: (Product) => void,
+  buyers: Buyer[],
+  onSelectBuyer: (Buyer) => void,
   onClose: () => void
 }
 
 const PER_PAGE = 5
 
-const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Props) => {
-  const [selectedProductId, setSelectedProductId] = useState<number>(-1)
-  const [page, setPage] = useState<number>(1)
+const SelectBuyerModal = ({ isOpen, buyers, onSelectBuyer, onClose }: Props) => {
+  console.log(buyers)
+  const [selectedBuyerId, setSelectedBuyerId] = useState('')
+  const [page, setPage] = useState(1)
 
   const handleOnSelect = (_e, _i, rowId) => {
-    const selectedProduct = pageProducts.find((p, i) => i === rowId)
-    setSelectedProductId(selectedProduct ? selectedProduct.id : -1)
+    const selectedBuyer = pageBuyers.find((b, i) => i === rowId)
+    setSelectedBuyerId(selectedBuyer ? selectedBuyer.id : '')
   }
 
   const columns = [
     { title: 'Name' },
-    { title: 'System Name' },
-    { title: 'Last updated' }
+    { title: 'Admin' },
+    { title: 'Signup date' }
   ]
 
   const pagination = (
     <Pagination
       perPage={PER_PAGE}
-      itemCount={products.length}
+      itemCount={buyers.length}
       page={page}
       onSetPage={(_e, page) => setPage(page)}
       widgetId="pagination-options-menu-top"
     />
   )
 
-  const pageProducts = products.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+  const pageBuyers = buyers.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
-  const rows = pageProducts.map(p => ({
-    selected: p.id === selectedProductId,
-    cells: [p.name, p.systemName, p.updatedAt]
+  const rows = pageBuyers.map(b => ({
+    selected: b.id === selectedBuyerId,
+    cells: [b.name, b.admin, b.createdAt]
   }))
 
   const onAccept = () => {
-    const product = products.find(p => p.id === selectedProductId)
-    if (product) {
-      onSelectProduct(product)
+    const buyer = buyers.find(b => b.id === selectedBuyerId)
+    if (buyer) {
+      onSelectBuyer(buyer)
     }
   }
 
   return (
     <Modal
-      title='Select a Product'
+      title='Select a Buyer'
       isLarge={true}
       isOpen={isOpen}
       onClose={onClose}
       isFooterLeftAligned={true}
       actions={[
-        <Button key='add' variant='primary' isDisabled={selectedProductId === -1} onClick={onAccept}>Add</Button>,
+        <Button key='add' variant='primary' isDisabled={selectedBuyerId === -1} onClick={onAccept}>Add</Button>,
         <Button key='cancel' variant='secondary' onClick={onClose}>Cancel</Button>
       ]}
     >
@@ -82,7 +83,7 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
           <InputGroup>
-            <TextInput name="searchInput" id="searchInput" type="search" aria-label="search for a product" />
+            <TextInput name="searchInput" id="searchInput" type="search" aria-label="search for a buyer" />
             <Button variant="control" aria-label="search button for search input">
               <SearchIcon />
             </Button>
@@ -93,7 +94,7 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
         </ToolbarItem>
       </Toolbar>
       <Table
-        aria-label="Products"
+        aria-label="Buyers"
         sortBy={() => {}}
         onSort={() => {}}
         onSelect={handleOnSelect}
@@ -109,4 +110,4 @@ const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Prop
   )
 }
 
-export { SelectProductModal }
+export { SelectBuyerModal }

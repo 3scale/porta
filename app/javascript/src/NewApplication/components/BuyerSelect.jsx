@@ -11,20 +11,34 @@ import { toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import type { Buyer } from 'NewApplication/types'
 
+const HEADER = { id: 'header', name: 'Most recently created Accounts', disabled: true, className: 'pf-c-select__menu-item--group-name' }
+const SHOW_ALL_BUYERS = { id: 'foo', name: 'View all Accounts' }
+
 type Props = {
   buyer: Buyer | null,
   buyers: Buyer[],
-  onSelect: (Buyer | null) => void
+  onSelect: (Buyer | null) => void,
+  onShowAll: () => void,
+  isDisabled?: boolean
 }
 
-const BuyerSelect = ({ buyer, buyers, onSelect }: Props) => {
-  const [expanded, setExpanded] = useState<boolean>(false)
+const MAX_BUYERS = 20
+
+const BuyerSelect = ({ isDisabled = false, onSelect, onShowAll, buyers, buyer }: Props) => {
+  const [expanded, setExpanded] = useState(false)
 
   const handleOnSelect = (_e, option: SelectOptionObject) => {
     setExpanded(false)
-    const selectedBuyer = buyers.find(b => b.id.toString() === option.id)
 
-    onSelect(selectedBuyer || null)
+    if (option.id === SHOW_ALL_BUYERS.id) {
+      onShowAll()
+    } else {
+      const selectedBuyer = buyers.find(b => b.id === option.id)
+
+      if (selectedBuyer) {
+        onSelect(selectedBuyer)
+      }
+    }
   }
 
   return (
@@ -33,6 +47,7 @@ const BuyerSelect = ({ buyer, buyers, onSelect }: Props) => {
       label="Account"
       fieldId="account_id"
     >
+      {buyer && <input type="hidden" name="account_id" value={buyer.id} />}
       <Select
         id="account_id"
         name="account_id"
@@ -45,9 +60,12 @@ const BuyerSelect = ({ buyer, buyers, onSelect }: Props) => {
         isExpanded={expanded}
         onClear={() => onSelect(null)}
         aria-labelledby="account"
+        className="pf-c-select__menu--with-fixed-link"
       >
-        {/* $FlowFixMe Flow wrong here */}
-        {buyers.map(toSelectOption)}
+        {[HEADER, ...buyers.slice(0, MAX_BUYERS), SHOW_ALL_BUYERS].map(b => toSelectOption({
+          ...b,
+          description: b.admin || undefined
+        }))}
       </Select>
     </FormGroup>
   )

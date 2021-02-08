@@ -16,6 +16,7 @@ import {
   ServicePlanSelect,
   NameInput,
   DescriptionInput,
+  SelectBuyerModal,
   SelectProductModal
 } from 'NewApplication'
 import { CSRFToken } from 'utilities/utils'
@@ -29,17 +30,19 @@ type Props = {
   createApplicationPlanPath: string,
   products: Product[],
   servicePlansAllowed: boolean,
-  buyer?: Buyer
+  buyer?: Buyer,
+  buyers?: Buyer[]
 }
 
 const NewApplicationForm = ({
-  buyer,
+  buyer: defaultBuyer,
+  buyers,
   createApplicationPath,
   servicePlansAllowed,
   products,
   createApplicationPlanPath
 }: Props) => {
-  // const [buyer, setBuyer] = useState(buyers[0])
+  const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
   const [product, setProduct] = useState<Product | null>(null)
   const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
   const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(null)
@@ -48,21 +51,23 @@ const NewApplicationForm = ({
 
   const [loading, setLoading] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [buyersModalOpen, setBuyersModalOpen] = useState<boolean>(false)
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan !== null
-  const isFormComplete = name &&
-    buyerValid &&
+  const isFormComplete = buyer !== null &&
     product !== null &&
+    servicePlanValid &&
     appPlan !== null &&
-    servicePlanValid
+    name &&
+    buyerValid
 
-  // useEffect(() => {
-  //   if (buyer !== BUYER_PLACEHOLDER) {
-  //     setProduct(PRODUCT_PLACEHOLDER)
-  //     setAppPlan(APP_PLAN_PLACEHOLDER)
-  //   }
-  // }, [buyer])
+  useEffect(() => {
+    if (buyer !== null) {
+      setProduct(null)
+      setAppPlan(null)
+    }
+  }, [buyer])
 
   useEffect(() => {
     if (product !== null) {
@@ -91,14 +96,33 @@ const NewApplicationForm = ({
           <CSRFToken />
           <input name='utf8' type='hidden' value='✓' />
 
-          {!buyer && <BuyerSelect />}
+          {buyers && (
+            <>
+              <BuyerSelect
+                buyer={buyer}
+                buyers={buyers}
+                onSelect={setBuyer}
+                onShowAll={() => setBuyersModalOpen(true)}
+              />
+
+              <SelectBuyerModal
+                isOpen={buyersModalOpen}
+                buyers={buyers}
+                onSelectBuyer={b => {
+                  setBuyer(b)
+                  setBuyersModalOpen(false)
+                }}
+                onClose={() => setBuyersModalOpen(false)}
+              />
+            </>
+          )}
 
           <ProductSelect
             product={product}
             products={products}
             onSelect={setProduct}
             onShowAll={() => setModalOpen(true)}
-            isDisabled={!buyer}
+            isDisabled={buyer === null}
           />
 
           {servicePlansAllowed && (

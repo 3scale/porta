@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const products = safeFromJsonString(dataset.products)
   const servicePlansAllowed = safeFromJsonString(dataset.servicePlansAllowed)
   const buyer = safeFromJsonString(dataset.buyer)
+  const buyers = safeFromJsonString(dataset.buyers)
 
   NewApplicationFormWrapper({
     createApplicationPath,
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createApplicationPlanPath,
     servicePlansAllowed,
     products,
-    buyer
+    buyer,
+    buyers
   }, containerId)
 })

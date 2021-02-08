@@ -8,7 +8,8 @@ module Buyers::ApplicationsHelper
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
       'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
       products: data_products(provider),
-      buyer: buyer && buyer_data(buyer)
+      buyer: buyer && buyer_data(buyer).to_json,
+      buyers: !buyer && data_buyers.to_json
     }
   end
 
@@ -33,10 +34,22 @@ module Buyers::ApplicationsHelper
     {
       id: buyer.id.to_s,
       name: buyer.name,
+      admin: buyer.admin_user_display_name,
+      createdAt: buyer.created_at,
       contractedProducts: contracts(buyer),
       createApplicationPath: admin_buyers_account_applications_path(buyer),
       # canSelectPlan: true # TODO needed?
-    }.to_json
+    }
+  end
+
+  def data_buyers
+    current_account.buyer_accounts
+                   .not_master
+                   .order(created_at: :desc)
+                   .decorate
+                   .map do |buyer|
+                     buyer_data(buyer)
+                   end
   end
 
   def contracts(buyer)

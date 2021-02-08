@@ -29,6 +29,8 @@ export type ContractedProduct = {
 export type Buyer = {
   id: string,
   name: string,
+  admin: string,
+  createdAt: string,
   contractedProducts: ContractedProduct[],
   createApplicationPath: string,
 }

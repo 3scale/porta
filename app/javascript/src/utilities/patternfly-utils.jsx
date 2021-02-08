@@ -25,7 +25,7 @@ type Props = Record & {
   disabled?: boolean | void
 }
 
-export const toSelectOption = ({ id, name, systemName, disabled = false, className, description }: Props) => (
+export const toSelectOption = ({ id, name, description, disabled = false, className }: Props) => (
   <SelectOption
     key={id}
     value={toSelectOptionObject({ id, name })}

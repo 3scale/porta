@@ -19,11 +19,12 @@ type Props = {
   products: Product[],
   onSelect: (Product | null) => void,
   onShowAll: () => void,
-  isDisabled?: boolean,
-  productsMaxLength?: number
+  isDisabled?: boolean
 }
 
-const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product, productsMaxLength = 20 }: Props) => {
+const MAX_PRODUCTS = 20
+
+const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleOnSelect = (_e, option: SelectOptionObject) => {
@@ -54,12 +55,15 @@ const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, prod
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleOnSelect}
         isExpanded={expanded}
+        isDisabled={isDisabled}
         onClear={() => onSelect(null)}
         aria-labelledby="product"
         className="pf-c-select__menu--with-fixed-link"
       >
-        {/* $FlowFixMe Flow wrong here */}
-        {[HEADER, ...products.slice(0, productsMaxLength), SHOW_ALL_PRODUCTS].map(toSelectOption)}
+        {[HEADER, ...products.slice(0, MAX_PRODUCTS), SHOW_ALL_PRODUCTS].map(p => toSelectOption({
+          ...p,
+          description: p.systemName || undefined
+        }))}
       </Select>
     </FormGroup>
   )
