@@ -45,7 +45,6 @@ const hostedFieldOptions = {
 
 const threeDSecureParameters = {
   amount: '00.00',
-  email: 'test@example.com',
   billingAddress: billingAdressInfo,
   onLookupComplete: function (data, next) {
     // use `data` here, then call `next()`
@@ -58,6 +57,7 @@ const veryfyCard = (threeDSecureInstance, payload) => {
   const options = {
     nonce: payload.nonce,
     bin: payload.details.bin,
+    challengeRequested: true,
     ...threeDSecureParameters
   }
   threeDSecureInstance.verifyCard(options, function (err, response) {
