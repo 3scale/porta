@@ -48,7 +48,6 @@ const NewApplicationForm = ({
 
   const [loading, setLoading] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  console.log(`Modal is ${modalOpen ? 'open' : 'close'}`)
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan !== null
