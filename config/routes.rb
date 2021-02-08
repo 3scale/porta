@@ -804,7 +804,7 @@ without fake Core server your after commit callbacks will crash and you might ge
             end
           end
 
-          resources :applications, only: %i[index show edit]
+          resources :applications, only: %i[index show edit new]
           resources :api_docs, only: %i[index new edit update create], controller: '/admin/api_docs/service_api_docs' do
             member do
               get :preview

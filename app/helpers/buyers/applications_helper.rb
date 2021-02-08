@@ -2,14 +2,28 @@
 
 module Buyers::ApplicationsHelper
 
-  def new_application_form_metadata(provider, buyer = nil)
+  def new_application_form_metadata(provider:, buyer: nil, service: nil)
     {
       'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
       'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
-      products: data_products(provider),
+      product: service && product_data(service).to_json,
+      products: !service && data_products(provider).to_json,
       buyer: buyer && buyer_data(buyer).to_json,
       buyers: !buyer && data_buyers.to_json
+    }.compact
+  end
+
+  def product_data(service)
+    service = service.decorate
+    {
+      id: service.id,
+      name: service.name,
+      systemName: service.system_name,
+      updatedAt: service.updated_at,
+      appPlans: service.plans.select(:id, :name).as_json(root: false),
+      servicePlans: service.service_plans.select(:id, :name).as_json(root: false),
+      defaultServicePlan: service.default_service_plan.as_json(root: false, only: %i[id name])
     }
   end
 
@@ -18,19 +32,12 @@ module Buyers::ApplicationsHelper
             .order(updated_at: :desc)
             .decorate
             .map do |service|
-      {
-        id: service.id,
-        name: service.name,
-        systemName: service.system_name,
-        updatedAt: service.updated_at,
-        appPlans: service.plans.select(:id, :name).as_json(root: false),
-        servicePlans: service.service_plans.select(:id, :name).as_json(root: false),
-        defaultServicePlan: service.default_service_plan.as_json(root: false, only: %i[id name])
-      }
-    end.to_json
+              product_data(service)
+            end
   end
 
   def buyer_data(buyer)
+    buyer = buyer.decorate
     {
       id: buyer.id.to_s,
       name: buyer.name,
@@ -46,7 +53,6 @@ module Buyers::ApplicationsHelper
     current_account.buyer_accounts
                    .not_master
                    .order(created_at: :desc)
-                   .decorate
                    .map do |buyer|
                      buyer_data(buyer)
                    end

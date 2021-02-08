@@ -46,7 +46,9 @@ table class="data"
           - else
             = switch_link 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add',
           :upgrade_notice => true, :switch => :multiple_applications
-        - elsif !@service
+        - elsif @service
+          = link_to 'Create Application', new_admin_service_application_path(@service), :class => 'action add'
+        - else
           = link_to 'Create Application', new_admin_buyers_application_path, :class => 'action add'
 
     - if @cinstances.present? || @account.nil?

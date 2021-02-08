@@ -28,7 +28,8 @@ import './NewApplicationForm.scss'
 type Props = {
   createApplicationPath: string,
   createApplicationPlanPath: string,
-  products: Product[],
+  product?: Product,
+  products?: Product[],
   servicePlansAllowed: boolean,
   buyer?: Buyer,
   buyers?: Buyer[]
@@ -39,11 +40,12 @@ const NewApplicationForm = ({
   buyers,
   createApplicationPath,
   servicePlansAllowed,
+  product: defaultProduct,
   products,
   createApplicationPlanPath
 }: Props) => {
   const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
-  const [product, setProduct] = useState<Product | null>(null)
+  const [product, setProduct] = useState<Product | null>(defaultProduct || null)
   const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
   const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(null)
   const [name, setName] = useState<string>('')
@@ -63,20 +65,31 @@ const NewApplicationForm = ({
     buyerValid
 
   useEffect(() => {
-    if (buyer !== null) {
-      setProduct(null)
-      setAppPlan(null)
+    const product = defaultProduct || null
+    let servicePlan = null
+
+    if (buyer !== null && product !== null) {
+      const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
+      const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
+      servicePlan = contractedServicePlan
     }
+
+    setProduct(product)
+    setServicePlan(servicePlan)
+    setAppPlan(null)
   }, [buyer])
 
   useEffect(() => {
-    if (product !== null) {
-      setAppPlan(null)
+    let servicePlan = null
 
+    if (product !== null) {
       const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
       const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
-      setServicePlan(contractedServicePlan || null)
+      servicePlan = contractedServicePlan
     }
+
+    setServicePlan(servicePlan)
+    setAppPlan(null)
   }, [product])
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
@@ -85,96 +98,98 @@ const NewApplicationForm = ({
   const contractedServicePlan = (contract && contract.withPlan) || (product && product.defaultServicePlan)
 
   return (
-    <>
-      <PageSection variant={PageSectionVariants.light}>
-        <Form
-          acceptCharset='UTF-8'
-          method='post'
-          action={url}
-          onSubmit={e => setLoading(true)}
-        >
-          <CSRFToken />
-          <input name='utf8' type='hidden' value='✓' />
+    <PageSection variant={PageSectionVariants.light}>
+      <Form
+        acceptCharset='UTF-8'
+        method='post'
+        action={url}
+        onSubmit={e => setLoading(true)}
+      >
+        <CSRFToken />
+        <input name='utf8' type='hidden' value='✓' />
 
-          {buyers && (
-            <>
-              <BuyerSelect
-                buyer={buyer}
-                buyers={buyers}
-                onSelect={setBuyer}
-                onShowAll={() => setBuyersModalOpen(true)}
-              />
-
-              <SelectBuyerModal
-                isOpen={buyersModalOpen}
-                buyers={buyers}
-                onSelectBuyer={b => {
-                  setBuyer(b)
-                  setBuyersModalOpen(false)
-                }}
-                onClose={() => setBuyersModalOpen(false)}
-              />
-            </>
-          )}
-
-          <ProductSelect
-            product={product}
-            products={products}
-            onSelect={setProduct}
-            onShowAll={() => setModalOpen(true)}
-            isDisabled={buyer === null}
-          />
-
-          {servicePlansAllowed && (
-            <ServicePlanSelect
-              servicePlan={servicePlan}
-              servicePlans={product ? product.servicePlans : []}
-              onSelect={setServicePlan}
-              isRequired={contractedServicePlan === null}
-              isDisabled={product === null || contractedServicePlan !== null}
+        {buyers && (
+          <>
+            <BuyerSelect
+              buyer={buyer}
+              buyers={buyers}
+              onSelect={setBuyer}
+              onShowAll={() => setBuyersModalOpen(true)}
             />
+
+            <SelectBuyerModal
+              isOpen={buyersModalOpen}
+              buyers={buyers}
+              onSelectBuyer={b => {
+                setBuyer(b)
+                setBuyersModalOpen(false)
+              }}
+              onClose={() => setBuyersModalOpen(false)}
+            />
+          </>
+        )}
+
+        {products && (
+          <>
+            <ProductSelect
+              product={product}
+              products={products}
+              onSelect={setProduct}
+              onShowAll={() => setModalOpen(true)}
+              isDisabled={buyer === null}
+            />
+
+            <SelectProductModal
+              isOpen={modalOpen}
+              products={products}
+              onSelectProduct={p => {
+                setProduct(p)
+                setModalOpen(false)
+              }}
+              onClose={() => setModalOpen(false)}
+            />
+          </>
+        )}
+
+        {servicePlansAllowed && (
+          <ServicePlanSelect
+            servicePlan={servicePlan}
+            servicePlans={product ? product.servicePlans : []}
+            onSelect={setServicePlan}
+            isRequired={contractedServicePlan === null}
+            isDisabled={product === null || contractedServicePlan !== null || buyer === null}
+          />
+        )}
+
+        <ApplicationPlanSelect
+          appPlan={appPlan}
+          appPlans={product ? product.appPlans : []}
+          onSelect={setAppPlan}
+          createApplicationPlanPath={createApplicationPlanPath.replace(
+            ':id',
+            product ? product.id.toString() : ''
           )}
+          isDisabled={product === null}
+        />
 
-          <ApplicationPlanSelect
-            appPlan={appPlan}
-            appPlans={product ? product.appPlans : []}
-            onSelect={setAppPlan}
-            createApplicationPlanPath={createApplicationPlanPath.replace(
-              ':id',
-              product ? product.id.toString() : ''
-            )}
-            isDisabled={product === null}
-          />
+        <NameInput name={name} setName={setName} />
 
-          <NameInput name={name} setName={setName} />
+        <DescriptionInput
+          description={description}
+          setDescription={setDescription}
+        />
 
-          <DescriptionInput
-            description={description}
-            setDescription={setDescription}
-          />
-
-          <ActionGroup>
-            <Button
-              variant='primary'
-              type='submit'
-              isDisabled={!isFormComplete || loading}
-            >
+        <ActionGroup>
+          <Button
+            variant='primary'
+            type='submit'
+            isDisabled={!isFormComplete || loading}
+          >
               Create Application
-            </Button>
-          </ActionGroup>
-        </Form>
-      </PageSection>
-
-      <SelectProductModal
-        isOpen={modalOpen}
-        products={products}
-        onSelectProduct={p => {
-          setProduct(p)
-          setModalOpen(false)
-        }}
-        onClose={() => setModalOpen(false)}
-      />
-    </>
+          </Button>
+        </ActionGroup>
+      </Form>
+    </PageSection>
   )
 }
 
