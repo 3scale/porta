@@ -23,7 +23,7 @@ type Props = {
   productsMaxLength?: number
 }
 
-const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product, productsMaxLength = 5 }: Props) => {
+const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product, productsMaxLength = 20 }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleOnSelect = (_e, option: SelectOptionObject) => {
