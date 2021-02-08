@@ -120,7 +120,7 @@ class Api::PlansBaseController < Api::BaseController
   end
 
   def generic_masterize_plan(issuer, assoc)
-    masterize_plan { assign_plan(issuer, assoc) }
+    masterize_plan { assign_plan!(issuer, assoc) }
   end
 
   # this is supposed to be called via ajax and we need only to flash stuff
