@@ -4,6 +4,6 @@ FactoryBot.define do
   factory(:payment_intent) do
     association :invoice
     sequence(:reference) { |n| "payment-intent-#{n}" }
-    state 'requires_action'
+    state { 'requires_action' }
   end
 end
