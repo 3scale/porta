@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module VerticalNavHelper
+  def vertical_nav_data
+    {
+      'current-api': current_api.to_json(root: false, only: %i[name]),
+      sections: vertical_nav_sections.to_json,
+      'active-section': active_submenu,
+      'active-item': active_sidebar
+    }.compact
+  end
+
   def vertical_nav_sections
     case active_menu
     when :personal, :account
