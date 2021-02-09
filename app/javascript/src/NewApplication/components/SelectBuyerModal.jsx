@@ -15,13 +15,11 @@ type Props = {
 }
 
 const SelectBuyerModal = ({ isOpen, buyer, buyers, onSelectBuyer, onClose }: Props) => {
-  const columns = [
-    { title: 'Name' },
-    { title: 'Admin' },
-    { title: 'Signup date' }
+  const cells = [
+    { title: 'Name', propName: 'name' },
+    { title: 'Admin', propName: 'admin' },
+    { title: 'Signup date', propName: 'createdAt' }
   ]
-
-  const cells = ['name', 'admin', 'createdAt']
 
   return (
     <SelectModal
@@ -31,7 +29,6 @@ const SelectBuyerModal = ({ isOpen, buyer, buyers, onSelectBuyer, onClose }: Pro
       items={buyers}
       onSelect={onSelectBuyer}
       onClose={onClose}
-      columns={columns}
       cells={cells}
     />
   )

@@ -15,13 +15,11 @@ type Props = {
 }
 
 const SelectProductModal = ({ isOpen, product, products, onSelectProduct, onClose }: Props) => {
-  const columns = [
-    { title: 'Name' },
-    { title: 'System Name' },
-    { title: 'Last updated' }
+  const cells = [
+    { title: 'Name', propName: 'name' },
+    { title: 'System Name', propName: 'systemName' },
+    { title: 'Last updated', propName: 'updatedAt' }
   ]
-
-  const cells = ['name', 'systemName', 'updatedAt']
 
   return (
     <SelectModal
@@ -31,7 +29,6 @@ const SelectProductModal = ({ isOpen, product, products, onSelectProduct, onClos
       items={products}
       onSelect={onSelectProduct}
       onClose={onClose}
-      columns={columns}
       cells={cells}
     />
   )

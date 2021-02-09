@@ -26,13 +26,12 @@ type Props<T: Record> = {
   onSelect: (T) => void,
   onClose: () => void,
   perPage?: number,
-  columns: { title: string }[],
-  cells: string[],
+  cells: { title: string, propName: string }[]
 }
 
 const PER_PAGE_DEFAULT = 5
 
-const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, columns, cells }: Props<T>) => {
+const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>) => {
   const [selectedId, setSelectedId] = useState(item ? item.id : '')
   const [page, setPage] = useState(1)
 
@@ -54,7 +53,7 @@ const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose,
 
   const rows = pageItems.map((i) => ({
     selected: i.id === selectedId,
-    cells: cells.map(prop => (i: {[string]: string})[prop])
+    cells: cells.map(({ propName }) => (i: {[string]: string})[propName])
   }))
 
   const onAccept = () => {
@@ -72,8 +71,8 @@ const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose,
       onClose={onClose}
       isFooterLeftAligned={true}
       actions={[
-        <Button key='add' variant='primary' isDisabled={selectedId === -1} onClick={onAccept}>Add</Button>,
-        <Button key='cancel' variant='secondary' onClick={onClose}>Cancel</Button>
+        <Button key="Select" variant="primary" isDisabled={selectedId === -1} onClick={onAccept}>Add</Button>,
+        <Button key="Cancel" variant="secondary" onClick={onClose}>Cancel</Button>
       ]}
     >
       {/* Toolbar is a component in the css, but a layout in react, so the class names are mismatched (pf-c-toolbar vs pf-l-toolbar) Styling doesn't work, but if you change it to pf-c in the inspector, it works */}
