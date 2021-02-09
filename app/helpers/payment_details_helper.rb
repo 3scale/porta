@@ -30,7 +30,7 @@ module PaymentDetailsHelper
   end
 
   def merchant_countries
-    ActiveMerchant::Country::COUNTRIES.map{|c| c[:name] }
+    ActiveMerchant::Country::COUNTRIES.map{|c| [c[:name], c[:alpha2]] }
   end
 
   #TODO: move these two methods to another helper
