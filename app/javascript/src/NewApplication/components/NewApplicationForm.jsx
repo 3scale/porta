@@ -119,6 +119,7 @@ const NewApplicationForm = ({
 
             <SelectBuyerModal
               isOpen={buyersModalOpen}
+              buyer={buyer}
               buyers={buyers}
               onSelectBuyer={b => {
                 setBuyer(b)
@@ -141,6 +142,7 @@ const NewApplicationForm = ({
 
             <SelectProductModal
               isOpen={modalOpen}
+              product={product}
               products={products}
               onSelectProduct={p => {
                 setProduct(p)

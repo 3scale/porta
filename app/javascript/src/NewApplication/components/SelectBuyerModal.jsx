@@ -20,6 +20,7 @@ import './SelectModal.scss'
 
 type Props = {
   isOpen?: boolean,
+  buyer: Buyer | null,
   buyers: Buyer[],
   onSelectBuyer: (Buyer) => void,
   onClose: () => void
@@ -27,8 +28,9 @@ type Props = {
 
 const PER_PAGE = 5
 
-const SelectBuyerModal = ({ isOpen, buyers, onSelectBuyer, onClose }: Props) => {
-  const [selectedBuyerId, setSelectedBuyerId] = useState('')
+const SelectBuyerModal = ({ isOpen, buyer, buyers, onSelectBuyer, onClose }: Props) => {
+  // FIXME: selected product in the Modal should coincide with the one selected in the Select
+  const [selectedBuyerId, setSelectedBuyerId] = useState(buyer ? buyer.id : '')
   const [page, setPage] = useState(1)
 
   const handleOnSelect = (_e, _i, rowId) => {

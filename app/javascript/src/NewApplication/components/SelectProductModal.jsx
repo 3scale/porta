@@ -20,6 +20,7 @@ import './SelectModal.scss'
 
 type Props = {
   isOpen?: boolean,
+  product: Product | null,
   products: Product[],
   onSelectProduct: (Product) => void,
   onClose: () => void
@@ -27,12 +28,13 @@ type Props = {
 
 const PER_PAGE = 5
 
-const SelectProductModal = ({ isOpen, products, onSelectProduct, onClose }: Props) => {
-  const [selectedProductId, setSelectedProductId] = useState<number>(-1)
+const SelectProductModal = ({ isOpen, product, products, onSelectProduct, onClose }: Props) => {
+  // FIXME: selected product in the Modal should coincide with the one selected in the Select
+  const [selectedProductId, setSelectedProductId] = useState<number>(product ? product.id : -1)
   const [page, setPage] = useState<number>(1)
 
   const handleOnSelect = (_e, _i, rowId) => {
-    const selectedProduct = pageProducts.find((p, i) => i === rowId)
+    const selectedProduct = pageProducts.find((p, i) => i === selectedProductId)
     setSelectedProductId(selectedProduct ? selectedProduct.id : -1)
   }
 
