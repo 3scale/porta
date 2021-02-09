@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import {
   Button,
@@ -34,6 +34,26 @@ const PER_PAGE_DEFAULT = 5
 const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>) => {
   const [selectedId, setSelectedId] = useState(item ? item.id : '')
   const [page, setPage] = useState(1)
+  const [filteredItems, setFilteredItems] = useState(items)
+  const searchInputRef = useRef(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      setFilteredItems(items)
+      setPage(1)
+    }
+  }, [isOpen])
+
+  const handleOnSearch = () => {
+    if (searchInputRef.current) {
+      search(searchInputRef.current.value)
+    }
+  }
+
+  const search = (term: string = '') => {
+    setFilteredItems(items.filter(i => i.name.includes(term)))
+    setPage(1)
+  }
 
   const handleOnSelect = (_e, _i, rowId) => {
     setSelectedId(pageItems[rowId].id)
@@ -42,14 +62,14 @@ const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose,
   const pagination = (
     <Pagination
       perPage={perPage}
-      itemCount={items.length}
+      itemCount={filteredItems.length}
       page={page}
       onSetPage={(_e, page) => setPage(page)}
       widgetId="pagination-options-menu-top"
     />
   )
 
-  const pageItems = items.slice((page - 1) * perPage, page * perPage)
+  const pageItems = filteredItems.slice((page - 1) * perPage, page * perPage)
 
   const rows = pageItems.map((i) => ({
     selected: i.id === selectedId,
@@ -79,8 +99,12 @@ const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose,
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
           <InputGroup>
-            <TextInput name="searchInput" id="searchInput" type="search" aria-label="search for a item" />
-            <Button variant="control" aria-label="search button for search input">
+            <TextInput
+              type="search"
+              aria-label="search for an item"
+              ref={searchInputRef}
+            />
+            <Button variant="control" aria-label="search button for search input" onClick={handleOnSearch}>
               <SearchIcon />
             </Button>
           </InputGroup>
