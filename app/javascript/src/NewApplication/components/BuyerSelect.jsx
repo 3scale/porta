@@ -53,7 +53,6 @@ const BuyerSelect = ({ isDisabled = false, onSelect, onShowAll, buyers, buyer }:
         name="account_id"
         variant={SelectVariant.typeahead}
         placeholderText="Select an account"
-        // $FlowFixMe Flow wrong here
         selections={buyer && new SelectOptionObject(buyer)}
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleOnSelect}

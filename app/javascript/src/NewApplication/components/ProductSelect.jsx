@@ -50,7 +50,6 @@ const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, prod
       <Select
         variant={SelectVariant.typeahead}
         placeholderText="Select a product"
-        // $FlowFixMe Flow wrong here
         selections={product && new SelectOptionObject(product)}
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleOnSelect}
