@@ -38,18 +38,6 @@ table class="data"
 
       th = sortable('cinstances.created_at', 'Created At')
       th = sortable('cinstances.first_daily_traffic_at', 'Traffic On')
-      th.actions
-        - if @account
-          - cinstances = @account.bought_cinstances
-          - if cinstances.size.zero?
-            = link_to 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add'
-          - else
-            = switch_link 'Create Application', new_admin_buyers_account_application_path(@account), :class => 'action add',
-          :upgrade_notice => true, :switch => :multiple_applications
-        - elsif @service
-          = link_to 'Create Application', new_admin_service_application_path(@service), :class => 'action add'
-        - else
-          = link_to 'Create Application', new_admin_buyers_application_path, :class => 'action add'
 
     - if @cinstances.present? || @account.nil?
       tr class="search"

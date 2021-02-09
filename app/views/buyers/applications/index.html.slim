@@ -1,17 +1,30 @@
 - if @account
   = render '/buyers/accounts/menu'
-- else
-  h2
-    ' Applications
-    - if @plan
-      ' on plan
-      = @plan.name
-    - elsif @service
-      ' on service
-      = @service.name
+
+h1
+  ' Applications
+  - if @plan
+    ' on plan
+    = @plan.name
+  - elsif @service
+    ' on service
+    = @service.name
+  - elsif @account
+    ' for
+    = @account.name
+
+- if !@account
+  a.pf-c-button.pf-m-primary.pf-c-button__in-title href=new_admin_buyers_application_path Create Application
+- elsif @account.bought_cinstances.size.zero?
+  a.pf-c-button.pf-m-primary.pf-c-button__in-title href=new_admin_buyers_account_application_path(@account) Create Application
+- elsif can?(:admin, :multiple_applications)
+  - if can?(:see, :multiple_applications) && false
+    a.pf-c-button.pf-m-primary.pf-c-button__in-title href=new_admin_buyers_account_application_path(@account) Create Application
+  - else
+    a.pf-c-button.pf-m-primary.pf-c-button__in-title href=admin_upgrade_notice_path(:multiple_applications) Create Application
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'
 - else
-  = render 'listing'
+  = render 'shared/applications/listing'
 
