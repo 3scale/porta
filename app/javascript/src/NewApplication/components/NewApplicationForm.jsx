@@ -169,7 +169,7 @@ const NewApplicationForm = ({
           onSelect={setAppPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(
             ':id',
-            product ? product.id.toString() : ''
+            product ? product.id : ''
           )}
           isDisabled={product === null}
         />

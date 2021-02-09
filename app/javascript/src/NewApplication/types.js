@@ -11,7 +11,7 @@ export type ApplicationPlan = {
 }
 
 export type Product = {
-  id: number,
+  id: string,
   name: string,
   systemName: string,
   updatedAt: string,

@@ -33,7 +33,7 @@ const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, prod
     if (option.id === SHOW_ALL_PRODUCTS.id) {
       onShowAll()
     } else {
-      const selectedProduct = products.find(p => p.id.toString() === option.id)
+      const selectedProduct = products.find(p => p.id === option.id)
 
       if (selectedProduct) {
         onSelect(selectedProduct)

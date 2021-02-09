@@ -17,7 +17,7 @@ module Buyers::ApplicationsHelper
   def product_data(service)
     service = service.decorate
     {
-      id: service.id,
+      id: service.id.to_s,
       name: service.name,
       systemName: service.system_name,
       updatedAt: service.updated_at,
