@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Select, SelectVariant } from '@patternfly/react-core'
-import { SelectOptionObject, toSelectOption } from 'utilities/patternfly-utils'
+import { toSelectOptionObject, toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 import './DefaultPlanSelect.scss'
 import type { ApplicationPlan } from 'Types'
 
@@ -14,8 +14,8 @@ type Props = {
 }
 
 const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Props) => {
-  // $FlowFixMe Flow is wrong here
-  const [selection, setSelection] = useState<SelectOptionObject | null>(new SelectOptionObject(plan))
+  // $FlowFixMe should not complain about plan having id as number, since Record has union "number | string"
+  const [selection, setSelection] = useState<SelectOptionObject | null>(toSelectOptionObject(plan))
   const [isExpanded, setIsExpanded] = useState(false)
 
   const onSelect = (_e, option: SelectOptionObject) => {
