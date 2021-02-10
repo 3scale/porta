@@ -6,6 +6,7 @@ module Buyers::ApplicationsHelper
     {
       'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
+      'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
       'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
       product: service && product_data(service).to_json,
       products: !service && data_products(provider).to_json,

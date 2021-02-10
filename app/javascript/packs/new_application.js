@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = document.getElementById(containerId)
 
-  const { createServicePlanPath, createApplicationPath, createApplicationPlanPath } = dataset
+  const { createServicePlanPath, createApplicationPath, createApplicationPlanPath, serviceSubscriptionsPath } = dataset
   const product = safeFromJsonString(dataset.product)
   const products = safeFromJsonString(dataset.products)
   const servicePlansAllowed = safeFromJsonString(dataset.servicePlansAllowed)
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createApplicationPath,
     createServicePlanPath,
     createApplicationPlanPath,
+    serviceSubscriptionsPath,
     servicePlansAllowed,
     product,
     products,

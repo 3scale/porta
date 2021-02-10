@@ -5,7 +5,8 @@ import React, { useState } from 'react'
 import {
   FormGroup,
   Select,
-  SelectVariant
+  SelectVariant,
+  Button
 } from '@patternfly/react-core'
 import { toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 
@@ -15,12 +16,23 @@ type Props = {
   servicePlan: ServicePlan | null,
   servicePlans: ServicePlan[],
   onSelect: (ServicePlan | null) => void,
-  isDisabled?: boolean,
-  isRequired?: boolean
+  isPlanContracted: boolean,
+  showHint: boolean,
+  serviceSubscriptionsPath: string,
+  isDisabled?: boolean
 }
 
-const ServicePlanSelect = ({ isDisabled, isRequired, servicePlans, servicePlan, onSelect }: Props) => {
+const ServicePlanSelect = ({ showHint, isDisabled, isPlanContracted, servicePlans, servicePlan, onSelect, serviceSubscriptionsPath }: Props) => {
   const [expanded, setExpanded] = useState(false)
+
+  const hint = isPlanContracted ? (
+    <p className="hint">
+      {'This Account already subscribes to the selected Product’s Service plan. If you want this Account to subscribe to a different Service plan for this Product go to '}
+      <Button component="a" variant="link" href={serviceSubscriptionsPath} isInline>Service subscriptions</Button>.
+    </p>
+  ) : (
+    <p className="hint">In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan.</p>
+  )
 
   const handleSelect = (_e, option: SelectOptionObject) => {
     setExpanded(false)
@@ -31,7 +43,7 @@ const ServicePlanSelect = ({ isDisabled, isRequired, servicePlans, servicePlan, 
 
   return (
     <FormGroup
-      isRequired={isRequired}
+      isRequired={!isPlanContracted}
       label="Service plan"
       fieldId="cinstance_service_plan_id"
     >
@@ -52,6 +64,7 @@ const ServicePlanSelect = ({ isDisabled, isRequired, servicePlans, servicePlan, 
         {/* $FlowFixMe Flow wrong here */}
         {servicePlans.map(toSelectOption)}
       </Select>
+      {showHint && hint}
     </FormGroup>
   )
 }

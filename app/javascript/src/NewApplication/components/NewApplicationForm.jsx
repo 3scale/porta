@@ -28,6 +28,7 @@ import './NewApplicationForm.scss'
 type Props = {
   createApplicationPath: string,
   createApplicationPlanPath: string,
+  serviceSubscriptionsPath: string,
   product?: Product,
   products?: Product[],
   servicePlansAllowed: boolean,
@@ -39,6 +40,7 @@ const NewApplicationForm = ({
   buyer: defaultBuyer,
   buyers,
   createApplicationPath,
+  serviceSubscriptionsPath,
   servicePlansAllowed,
   product: defaultProduct,
   products,
@@ -94,8 +96,8 @@ const NewApplicationForm = ({
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
-  const contract = buyer && product && buyer.contractedProducts.find(p => p.id === product.id)
-  const contractedServicePlan = (contract && contract.withPlan) || (product && product.defaultServicePlan)
+  const contract = (buyer && product && buyer.contractedProducts.find(p => p.id === product.id)) || null
+  const contractedServicePlan: ServicePlan | null = (contract && contract.withPlan) || (product && product.defaultServicePlan)
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -158,8 +160,10 @@ const NewApplicationForm = ({
             servicePlan={servicePlan}
             servicePlans={product ? product.servicePlans : []}
             onSelect={setServicePlan}
-            isRequired={contractedServicePlan === null}
+            showHint={product !== null && buyer !== null}
+            isPlanContracted={contractedServicePlan !== null}
             isDisabled={product === null || contractedServicePlan !== null || buyer === null}
+            serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', buyer.id) : ''}
           />
         )}
 
