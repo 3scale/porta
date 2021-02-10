@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react'
-
 import './Spinner.scss'
 
 type Props = {
@@ -9,8 +8,8 @@ type Props = {
   className?: string
 }
 
-const Spinner = ({ size = 'md', className }: Props) => {
-  const classParameters = `pf-c-spinner pf-m-${size.toString()} ${className || ''}`
+const Spinner = ({ size = 'md', className = '' }: Props) => {
+  const classParameters = `pf-c-spinner pf-m-${size} ${className}`
 
   return (
     <span className={classParameters} role="progressbar" aria-valuetext="Loading projects">
