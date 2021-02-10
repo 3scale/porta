@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import { post } from 'utilities/ajax'
-
 import {
   Form,
   FormGroup,
@@ -11,9 +10,7 @@ import {
 } from '@patternfly/react-core'
 import { DefaultPlanSelect } from 'Plans'
 import { Spinner } from 'Common'
-
 import type { Product, ApplicationPlan } from 'Types'
-
 import './DefaultPlanSelectCard.scss'
 
 export type Props = {
@@ -59,6 +56,8 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
     setIsLoading(true)
   }
 
+  const availablePlans = [NO_DEFAULT_PLAN, ...product.appPlans].filter(p => p.id !== defaultPlan.id)
+
   return (
     <Card id="default_plan_card">
       <CardBody>
@@ -71,7 +70,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
             {isLoading && <Spinner size='sm' className='pf-u-ml-md' />}
             <DefaultPlanSelect
               plan={defaultPlan}
-              plans={[NO_DEFAULT_PLAN, ...product.appPlans].filter(p => p.id !== defaultPlan.id)} // Don't show the current default plan
+              plans={availablePlans}
               onSelectPlan={onSelectPlan}
               isDisabled={isLoading}
             />

@@ -1,18 +1,15 @@
 // @flow
 
 import React, { useState } from 'react'
-
 import { Select, SelectVariant } from '@patternfly/react-core'
 import { SelectOptionObject, toSelectOption } from 'utilities/patternfly-utils'
-
 import './DefaultPlanSelect.scss'
-
 import type { ApplicationPlan } from 'Types'
 
 type Props = {
   plan: ApplicationPlan,
   plans: ApplicationPlan[],
-  onSelectPlan: (ApplicationPlan) => void,
+  onSelectPlan: ApplicationPlan => void,
   isDisabled?: boolean
 }
 
@@ -31,10 +28,6 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
     }
   }
 
-  const onClear = () => {
-    setSelection(null)
-  }
-
   return (
     <Select
       id="default-plan-select"
@@ -43,7 +36,7 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
       placeholderText="Select application plan"
       onToggle={() => setIsExpanded(!isExpanded)}
       onSelect={onSelect}
-      onClear={onClear}
+      onClear={() => setSelection(null)}
       isExpanded={isExpanded}
       isDisabled={isDisabled}
       selections={selection}
