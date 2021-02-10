@@ -2,42 +2,33 @@
 
 import React from 'react'
 
-import {
-  SelectOption,
-  SelectOptionObject as ISelectOptionObject
-} from '@patternfly/react-core'
+import { SelectOption } from '@patternfly/react-core'
 
 export interface Record {
   id: number | string,
   name: string
 }
 
-type Props = Record & {
-  disabled?: boolean | void
+export interface SelectOptionObject {
+  id: string,
+  name: string,
+  toString: () => string
 }
 
-export class SelectOptionObject implements ISelectOptionObject {
-  id: string;
-  name: string;
+export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
+  id: String(item.id),
+  name: item.name,
+  toString: () => item.name
+})
 
-  constructor (item: Record) {
-    this.id = String(item.id)
-    this.name = item.name
-  }
-
-  toString (): string {
-    return this.name
-  }
-
-  compareTo (other: Record): boolean {
-    return this.id === other.id
-  }
+type Props = Record & {
+  disabled?: boolean | void
 }
 
 export const toSelectOption = ({ id, name, disabled = false }: Props) => (
   <SelectOption
     key={id}
-    value={new SelectOptionObject({ id, name })}
+    value={toSelectOptionObject({ id, name })}
     isDisabled={disabled}
   />
 )
