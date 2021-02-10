@@ -11,7 +11,7 @@ module Buyers::ApplicationsHelper
       product: service && product_data(service).to_json,
       products: !service && data_products(provider).to_json,
       buyer: buyer && buyer_data(buyer).to_json,
-      buyers: !buyer && data_buyers.to_json
+      buyers: !buyer && data_buyers(provider).to_json
     }.compact
   end
 
@@ -50,13 +50,13 @@ module Buyers::ApplicationsHelper
     }
   end
 
-  def data_buyers
-    current_account.buyer_accounts
-                   .not_master
-                   .order(created_at: :desc)
-                   .map do |buyer|
-                     buyer_data(buyer)
-                   end
+  def data_buyers(provider)
+    provider.buyer_accounts
+            .not_master
+            .order(created_at: :desc)
+            .map do |buyer|
+              buyer_data(buyer)
+            end
   end
 
   def contracts(buyer)
