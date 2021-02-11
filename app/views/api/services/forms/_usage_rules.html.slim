@@ -1,9 +1,5 @@
 = form.inputs current_account.multiple_applications_allowed? ? 'Application Requirements' : 'Signup & Use' do
 
-  - unless current_account.multiple_applications_allowed?
-    // TODO remove this and make it an extra_field? Or how about just remove it?
-    = form.input :intentions_required
-
   = form.input :buyers_manage_apps
 
   - if @service.backend_version.app_keys_allowed?
