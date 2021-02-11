@@ -102,6 +102,7 @@ module Pdf
       end
 
       def print_line_items
+        subtitle('<b>Line items</b>')
         opts = { width: TABLE_FULL_WIDTH, headers: InvoiceReportData::LINE_ITEMS_HEADING }
         @pdf.table(@data.line_items, @style.table_style.merge(opts))
         move_down
