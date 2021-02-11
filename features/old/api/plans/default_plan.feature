@@ -38,3 +38,33 @@ Feature: Default plan
     Then I should see "Default plan was updated"
     And plan "Pro" should be the default
 
+  @javascript
+  Scenario: Selected plan doesn't exist
+    Given a published application plan "Deleteme" of provider "foo.3scale.localhost"
+    And plan "Basic" is default
+    When I log in as provider "foo.3scale.localhost"
+    And I go to the application plans admin page
+    And plan "Deleteme" has been deleted
+    And I select "Deleteme" as default plan
+    Then I should see "The selected plan doesn't exist."
+
+  @javascript
+  Scenario: Server returns an error
+    Given a published application plan "Error" of provider "foo.3scale.localhost"
+    And server will return an error 403 when selecting default plan "Error"
+    And plan "Basic" is default
+    When I log in as provider "foo.3scale.localhost"
+    And I go to the application plans admin page
+    And I select "Error" as default plan
+    Then I should see "Plan could not be updated"
+
+  @javascript
+  Scenario: Selected plan doesn't exist
+    Given a published application plan "Error" of provider "foo.3scale.localhost"
+    And server will return an error 500 when selecting default plan "Error"
+    And plan "Basic" is default
+    When I log in as provider "foo.3scale.localhost"
+    And I go to the application plans admin page
+    And plan "Wrong" has been deleted
+    And I select "Wrong" as default plan
+    Then I should see "An error ocurred. Please try again later."

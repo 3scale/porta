@@ -78,3 +78,14 @@ When(/^the provider creates a plan$/) do
 
   @plan = Plan.find_by_name!(name)
 end
+
+When /^(plan "[^"]*") has been deleted$/ do |plan, provider|
+  plan.destroy
+end
+
+Given /^server will return an error (\d+) when selecting default (plan "[^"]*")/ do |code, plan|
+  service = @provider.first_service!
+  # required? http://admin.foo.3scale.localhost:55810
+  url = %r{"/#{masterize_admin_service_application_plans_path(service)}/"}
+  stub_request(:post, url).to_return(status: code)
+end
