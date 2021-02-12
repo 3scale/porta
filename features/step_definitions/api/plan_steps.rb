@@ -78,3 +78,7 @@ When(/^the provider creates a plan$/) do
 
   @plan = Plan.find_by_name!(name)
 end
+
+When /^(plan "[^"]*") has been deleted$/ do |plan|
+  plan.destroy
+end
