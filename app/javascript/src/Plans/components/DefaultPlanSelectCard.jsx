@@ -1,6 +1,7 @@
 // @flow
 
 import React, { useState } from 'react'
+import $ from 'jquery'
 import { post } from 'utilities/ajax'
 import {
   Form,
@@ -33,22 +34,18 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
     post(url, body)
       .then(data => {
         if (data.ok) {
-          // $FlowFixMe
-          $.flash('Default plan was updated')
+          $.flash.notice('Default plan was updated')
           setDefaultPlan(plan)
         } else {
           if (data.status === 404) {
-            // $FlowFixMe
             $.flash.error("The selected plan doesn't exist.")
           } else {
-            // $FlowFixMe
             $.flash.error('Plan could not be updated')
           }
         }
       })
       .catch(err => {
         console.error(err)
-        // $FlowFixMe
         $.flash.error('An error ocurred. Please try again later.')
       })
       .finally(() => setIsLoading(false))

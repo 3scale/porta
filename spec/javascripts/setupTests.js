@@ -9,3 +9,9 @@ import * as utils from 'utilities/utils'
 jest.mock('utilities/utils')
 jest.spyOn(utils, 'CSRFToken')
   .mockImplementation(() => '')
+
+import $ from 'jquery'
+$.flash = {
+  notice: jest.fn(),
+  error: jest.fn()
+}

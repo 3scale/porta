@@ -38,3 +38,12 @@ Feature: Default plan
     Then I should see "Default plan was updated"
     And plan "Pro" should be the default
 
+  @javascript
+  Scenario: Selected plan doesn't exist
+    Given a published application plan "Deleteme" of provider "foo.3scale.localhost"
+    And plan "Basic" is default
+    When I log in as provider "foo.3scale.localhost"
+    And I go to the application plans admin page
+    And plan "Deleteme" has been deleted
+    And I select "Deleteme" as default plan
+    Then I should see "The selected plan doesn't exist."
