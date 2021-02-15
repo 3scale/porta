@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import { isNotApicastPolicy } from 'Policies/util'
 import { PolicyTile } from 'Policies/components/PolicyTile'
@@ -16,7 +16,7 @@ type Props = {
   }
 }
 
-const PolicyRegistry = ({ items, actions: { addPolicy, closePolicyRegistry } }: Props) => (
+const PolicyRegistry = ({ items, actions: { addPolicy, closePolicyRegistry } }: Props): React.Node => (
   <section className="PolicyRegistry">
     <header>
       <h2>Select a Policy</h2>

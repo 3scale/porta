@@ -11,6 +11,7 @@ function updatePolicyConfig (state: ChainPolicy, action: UpdatePolicyConfigActio
 }
 
 // TODO: use combineReducers instead of createReducer
+// $FlowFixMe[signature-verification-failure] State types are very complex for Flow
 const PolicyConfigReducer = createReducer<ChainPolicy>(initialState.policyConfig, {
   'UPDATE_POLICY_CONFIG': updatePolicyConfig
 })

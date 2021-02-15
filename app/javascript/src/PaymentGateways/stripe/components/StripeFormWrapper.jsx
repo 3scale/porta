@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -22,7 +22,7 @@ type Props = {
   isCreditCardStored: boolean
 }
 
-const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: Props) => {
+const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: Props): React.Node => {
   const stripePromise = loadStripe(stripePublishableKey)
 
   return (
@@ -37,7 +37,7 @@ const StripeElementsForm = ({ stripePublishableKey, setupIntentSecret, billingAd
   )
 }
 
-const StripeFormWrapper = (props: Props, containerId: string) => (
+const StripeFormWrapper = (props: Props, containerId: string): void => (
   createReactWrapper(<StripeElementsForm {...props} />, containerId)
 )
 

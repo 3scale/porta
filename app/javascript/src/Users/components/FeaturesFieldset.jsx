@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import ReactHtmlParser from 'react-html-parser'
 
 import {
@@ -25,7 +25,7 @@ type Props = {
  * @param {boolean}         areServicesVisible      - Whether or not the fieldset with all services is visible.
  * @param {function}        onAdminSectionSelected  - A callback function triggered when a feature is checked or unchecked.
  */
-const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible = false, onAdminSectionSelected }: Props) => {
+const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible = false, onAdminSectionSelected }: Props): React.Node => {
   const featuresListClassName = `FeatureAccessList ${areServicesVisible ? '' : 'FeatureAccessList--noServicePermissionsGranted'}`
   const allServicesChecked = !selectedSections.includes('services')
 

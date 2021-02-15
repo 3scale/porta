@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import ReactHtmlParser from 'react-html-parser'
 
 import type { Role } from 'Users/types'
@@ -16,7 +16,7 @@ const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API prod
 const RoleRadioGroup = ({ selectedRole, onRoleChanged }: {
   selectedRole: Role,
   onRoleChanged: Role => void
-}) => (
+}): React.Node => (
   <li className='radio optional' id='user_role_input'>
     <fieldset>
       <legend className='label'>

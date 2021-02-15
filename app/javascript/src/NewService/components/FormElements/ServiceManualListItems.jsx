@@ -1,15 +1,15 @@
 // @flow
 
-import React, {useState} from 'react'
+import * as React from 'react'
 import {Label} from 'NewService/components/FormElements'
 import type {ServiceFormTemplate} from 'NewService/types'
 
 type Props = ServiceFormTemplate
 
-const ServiceManualListItems = ({service, errors}: Props) => {
-  const [name, setName] = useState(service.name)
-  const [systemName, setSystemName] = useState(service.system_name)
-  const [description, setDescription] = useState(service.description)
+const ServiceManualListItems = ({service, errors}: Props): React.Node => {
+  const [name, setName] = React.useState(service.name)
+  const [systemName, setSystemName] = React.useState(service.system_name)
+  const [description, setDescription] = React.useState(service.description)
   const onChange = (fn) => (e) => fn(e.currentTarget.value)
 
   return (

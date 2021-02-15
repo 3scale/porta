@@ -157,6 +157,6 @@ const BackendsIndexPage = ({ backendsCount, backends }: Props) => {
   )
 }
 
-const BackendsIndexPageWrapper = (props: Props, containerId: string) => createReactWrapper(<BackendsIndexPage {...props} />, containerId)
+const BackendsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsIndexPage {...props} />, containerId)
 
 export { BackendsIndexPageWrapper }

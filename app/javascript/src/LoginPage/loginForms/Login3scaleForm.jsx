@@ -45,7 +45,7 @@ const PASSWORD_ATTRS = {
 }
 
 class Login3scaleForm extends React.Component<Props, State> {
-  state = {
+  state: State = {
     username: this.props.session.username || '',
     password: '',
     validation: {
@@ -54,7 +54,7 @@ class Login3scaleForm extends React.Component<Props, State> {
     }
   }
 
-  handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
+  handleInputChange (value: string, event: SyntheticEvent<HTMLInputElement>) {
     const isValid = validateSingleField(event)
     const validation = {
       ...this.state.validation,

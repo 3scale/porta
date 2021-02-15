@@ -35,7 +35,7 @@ export function getFeatureName (feature: Feature): string {
   throw new Error(`${feature} is not a known feature`)
 }
 
-export function getFeatureNameDescription (feature: Feature) {
+export function getFeatureNameDescription (feature: Feature): Array<string> {
   return FEATURE_NAMES_DESCRIPTION_ITEMS[feature]
 }
 

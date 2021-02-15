@@ -58,7 +58,22 @@ const extractFirstErrorMessage = (errorMessageArray: string[]): string => errorM
 const isFieldValid = (errorMessageArray: string[]): boolean => !errorMessageArray.length
 const isPassConfirmLongEnough = ({[PASSWORD]: pass, [PASSWORD_CONFIRMATION]: conf}: FieldState): boolean => (conf.length >= pass.length)
 
-const useFormState = () => {
+type FormInput = {
+  value: string,
+  isValid: boolean,
+  errorMessage: string,
+  onChange: (value: string) => void,
+  onBlur: (e: SyntheticInputEvent<HTMLInputElement>) => void
+}
+
+type IUseFormState = {
+  isFormDisabled: boolean,
+  onFormChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
+  password: FormInput,
+  passwordConfirmation: FormInput
+}
+
+const useFormState = (): IUseFormState => {
   const [fieldValues, setFieldValues] = useState(fieldsTemplate)
   const [fieldErrors, setFieldErrors] = useState(fieldErrorsTemplate)
   const [isFormDisabled, setIsFormDisabled] = useState(true)
@@ -66,10 +81,11 @@ const useFormState = () => {
 
   const onFormChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
     const validationErrors: ?ValidationErrors = validate(event.currentTarget, validationConstraints)
-    const visibleErrors: ValidationErrors | false = !!validationErrors && Object.keys(validationErrors)
+    const visibleErrors = !!validationErrors && Object.keys(validationErrors)
       .filter(key => !areFieldsPristine[key])
       .filter(key => !key === PASSWORD_CONFIRMATION || isPassConfirmLongEnough(fieldValues))
       .reduce((errors, key) => ({...errors, [key]: validationErrors[key]}), {})
+    // $FlowExpectedError visibleErrors is supposed to be inexact
     setFieldErrors(visibleErrors ? {...fieldErrorsTemplate, ...visibleErrors} : fieldErrorsTemplate)
     setIsFormDisabled(!!validationErrors)
   }

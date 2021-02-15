@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useRef } from 'react'
+import * as React from 'react'
 
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -20,9 +20,9 @@ type Props = {
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink }: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef(null)
+const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink }: Props): React.Node => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const ref = React.useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
 
   function getClassNamesForMenu (menu: Menu): string {
@@ -81,6 +81,6 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
   )
 }
 
-const ContextSelectorWrapper = (props: Props, containerId: string) => createReactWrapper(<ContextSelector {...props} />, containerId)
+const ContextSelectorWrapper = (props: Props, containerId: string): void => createReactWrapper(<ContextSelector {...props} />, containerId)
 
 export { ContextSelector, ContextSelectorWrapper }

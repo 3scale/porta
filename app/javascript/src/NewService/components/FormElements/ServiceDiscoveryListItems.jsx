@@ -1,6 +1,7 @@
 // @flow
 
-import React, {useState, useEffect} from 'react'
+import * as React from 'react'
+import {useState, useEffect} from 'react'
 import {Label, Select} from 'NewService/components/FormElements'
 import {fetchData} from 'utilities/utils'
 import {BASE_PATH} from 'NewService'
@@ -10,7 +11,7 @@ type Props = {
   onError: (err: string) => void
 }
 
-const ServiceDiscoveryListItems = (props: Props) => {
+const ServiceDiscoveryListItems = (props: Props): React.Node => {
   const { projects, onError } = props
 
   const [services, setServices] = useState([])

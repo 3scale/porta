@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 type Props = {
   name: string,
@@ -16,7 +16,7 @@ const Options = ({options}) => {
   })
 }
 
-const Select = ({name, id, disabled, onChange, options}: Props) =>
+const Select = ({name, id, disabled, onChange, options}: Props): React.Node =>
   <select
     required="required"
     name={name}

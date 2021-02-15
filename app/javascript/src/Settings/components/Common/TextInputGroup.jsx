@@ -15,7 +15,7 @@ const TextInputGroup = ({
   isDefaultValue = false,
   readOnly = false,
   inputType = 'text'
-}: FieldGroupProps) => {
+}: FieldGroupProps): React.Node => {
   const [ inputValue, setInputValue ] = useState(value)
   const onChange = (value, _e) => setInputValue(value)
   return (

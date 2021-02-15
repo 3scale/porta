@@ -48,10 +48,11 @@ const injectAutocompleteToCommonParameters = (parameters: Array<Param>, accountD
   param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param
 )
 
-const injectParametersToPath = (path: PathItemObject, commonParameters: Array<Param>, accountData: AccountData): PathItemObject => (
+const injectParametersToPath = (path: PathItemObject, commonParameters?: Array<Param> = [], accountData: AccountData): PathItemObject => (
   Object.keys(path).reduce((updatedPath, item) => {
     updatedPath[item] = (item === 'parameters' && commonParameters)
       ? injectAutocompleteToCommonParameters(commonParameters, accountData)
+      // $FlowFixMe should be safe to assume correct type
       : injectParametersToPathOperation(path[item], accountData)
     return updatedPath
   }, {})
@@ -63,7 +64,8 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
     paths: Object.keys(responseBody.paths).reduce(
       (paths, path) => {
         const commonParameters = responseBody.paths[path].parameters
-        paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
+        // $FlowFixMe should safe to assume it is PathItemObject
+        paths[path] = injectParametersToPath((responseBody.paths[path]), commonParameters, accountData)
         return paths
       }, {})
   }
@@ -75,6 +77,7 @@ const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint:
 
   return {
     ...responseBody,
+    // $FlowFixMe should be safe to assume correct type
     servers
   }
 }
@@ -83,7 +86,7 @@ const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint:
 // is present when doing a request to one of the paths
 const isSpecFetched = (response: SwaggerResponse): boolean => !!response.body.method
 
-export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string, serviceEndpoint: string): SwaggerResponse => {
+export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string, serviceEndpoint: string): Promise<SwaggerResponse> => {
   if (isSpecFetched(response)) {
     return response
   }

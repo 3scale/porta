@@ -14,7 +14,7 @@ type Props = {
 const initSettings = ({
   settings = SETTINGS_DEFAULT,
   elementId
-}: Props) => createReactWrapper(<Form {...settings} />, elementId)
+}: Props): void => createReactWrapper(<Form {...settings} />, elementId)
 
 export {
   initSettings

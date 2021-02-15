@@ -52,6 +52,7 @@ function configureStoreDev (initialState: State): Store {
   return store
 }
 
+// $FlowIgnore we can pass over types safely
 const configureStore = process.env.NODE_ENV === 'production' ? configureStoreProd : configureStoreDev
 
 export default configureStore

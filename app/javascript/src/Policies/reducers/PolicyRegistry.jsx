@@ -11,6 +11,7 @@ function updateRegistry (state: Array<RegistryPolicy>, action: FetchRegistrySucc
 }
 
 // TODO: use combineReducers instead of createReducer
+// $FlowFixMe[signature-verification-failure] State types are very complex for Flow
 const RegistryReducer = createReducer<Array<RegistryPolicy>>(initialState.registry, {
   'LOAD_REGISTRY_SUCCESS': updateRegistry,
   'FETCH_REGISTRY_SUCCESS': updateRegistry

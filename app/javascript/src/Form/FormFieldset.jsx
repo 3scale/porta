@@ -20,7 +20,7 @@ const FormFieldset = ({
   className = '',
   isInline = false,
   ...props
-}: Props) => (
+}: Props): React.Node => (
   <FormContext.Consumer>
     {({ isHorizontal }: { isHorizontal: boolean }) => (
       <fieldset
