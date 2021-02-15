@@ -27,7 +27,7 @@ function generateGuid (): string {
   return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`
 }
 
-function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[]) {
+function isPolicyChainChanged (chain: ChainPolicy[], originalChain: ChainPolicy[]): boolean {
   const chainLength = chain.length
   if (originalChain.length !== chainLength) {
     return true

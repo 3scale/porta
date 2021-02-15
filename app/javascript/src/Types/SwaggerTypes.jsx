@@ -1,3 +1,5 @@
+// @flow
+
 export type Primitive = string | number | boolean
 
 export type AccountData = {
@@ -24,11 +26,12 @@ export type Param = {
  description?: string,
  required?: boolean,
  schema?: Primitive | ParamArraySchema | ParamEnumSchema,
- examples?: Examples
+ examples?: Examples,
+ 'x-data-threescale-name': string
 }
 
 export type PathOperationObject = {
-  [string]: ?string,
+  [string]: string,
   servers?: {},
   responses?: {},
   parameters?: Array<Param>,
@@ -36,10 +39,8 @@ export type PathOperationObject = {
 }
 
 export type PathItemObject = {
-  [string]: ?string,
-  [string]: ?PathOperationObject,
-  parameters?: Array<Param>,
-  ...
+  [string]: string | PathOperationObject,
+  parameters?: Array<Param>
 }
 
 export type ResponseBody = {

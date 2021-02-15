@@ -19,7 +19,7 @@ const Form = ({
   credentialsLocation,
   security,
   gatewayResponse
-}: Props) => {
+}: Props): React.Node => {
   const [ selectedIntegrationMethod, setSelectedIntegrationMethod ] = useState(integrationMethod.value)
   const [ selectedAuthenticationMethod, setSelectedAuthenticationMethod ] = useState(authenticationMethod.value)
   const onChange = (setState) => (_checked, e) => setState(e.currentTarget.value)
@@ -34,6 +34,7 @@ const Form = ({
       <RadioFieldset {...integrationMethod} onChange={onChange(setSelectedIntegrationMethod)} value={selectedIntegrationMethod} legend='Integration' />
       { !isServiceMesh && <FormCollection collection={customProxyEndpoints} ItemComponent={TextInputGroup} legend='API gateway' /> }
       <RadioFieldset {...authenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} value={selectedAuthenticationMethod} legend='Authentication' />
+      {/* $FlowIgnore[cannot-spread-inexact] */}
       <AuthenticationSettingsFieldset
         isServiceMesh={isServiceMesh}
         authenticationMethod={selectedAuthenticationMethod}

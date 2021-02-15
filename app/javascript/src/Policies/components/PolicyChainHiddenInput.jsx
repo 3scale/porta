@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import type { ChainPolicy } from 'Policies/types'
 
@@ -8,7 +8,7 @@ type Props = {
   policies: ChainPolicy[]
 }
 
-const PolicyChainHiddenInput = ({ policies }: Props) => {
+const PolicyChainHiddenInput = ({ policies }: Props): React.Node => {
   // TODO: Next iteration see if we can store the config as data field in Rails
   const parsedPolicies = policies.map(({ data, name, version, enabled }) => ({ configuration: data, name, version, enabled }))
   const data = JSON.stringify(parsedPolicies)

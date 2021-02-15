@@ -64,6 +64,6 @@ const BackendsWidget = ({ newBackendPath, backendsPath, backends }: Props) => (
   </Card>
 )
 
-const BackendsWidgetWrapper = (props: Props, containerId: string) => createReactWrapper(<BackendsWidget {...props} />, containerId)
+const BackendsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsWidget {...props} />, containerId)
 
 export { BackendsWidgetWrapper }

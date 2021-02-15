@@ -24,7 +24,7 @@ type PoliciesProps = {
   serviceId: string
 }
 
-const PoliciesWrapper = ({registry, chain, serviceId}: PoliciesProps, elementId: string) => {
+const PoliciesWrapper = ({registry, chain, serviceId}: PoliciesProps, elementId: string): void => {
   const store = configureStore(initialState)
   store.dispatch(populateChainFromConfigs(serviceId, chain, registry))
 

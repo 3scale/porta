@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react'
+import * as React from 'react'
 import {
   Form,
   ActionGroup,
@@ -17,6 +17,16 @@ import type {SignupProps} from 'Types'
 
 type Validation = {
   [string]: ?boolean
+}
+
+type InputProps = {
+  isRequired: boolean,
+  name: string,
+  fieldId: string,
+  label: string,
+  isValid: boolean,
+  value: string,
+  onChange: (value: string, e: SyntheticEvent<HTMLInputElement>) => void
 }
 
 type State = {
@@ -56,8 +66,8 @@ const INPUT_LABELS = {
   passwordConfirmation: 'Password confirmation'
 }
 
-class SignupForm extends Component<SignupProps, State> {
-  state = {
+class SignupForm extends React.Component<SignupProps, State> {
+  state: State = {
     [INPUT_NAMES.username]: this.props.user.username,
     [INPUT_NAMES.email]: this.props.user.email,
     [INPUT_NAMES.firstName]: this.props.user.firstname,
@@ -74,19 +84,19 @@ class SignupForm extends Component<SignupProps, State> {
     }
   }
 
-  getInputProps = (name: string, isRequired: boolean) => {
+  getInputProps (name: string, isRequired: boolean): InputProps {
     return {
       isRequired,
       name: INPUT_NAMES[name],
       fieldId: INPUT_IDS[name],
       label: INPUT_LABELS[name],
-      isValid: this.state.validation[INPUT_NAMES[name]],
+      isValid: Boolean(this.state.validation[INPUT_NAMES[name]]),
       value: this.state[INPUT_NAMES[name]],
       onChange: this.handleInputChange
     }
   }
 
-  handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
+  handleInputChange (value: string, event: SyntheticEvent<HTMLInputElement>) {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
     const validation = {
       ...this.state.validation,
@@ -99,7 +109,7 @@ class SignupForm extends Component<SignupProps, State> {
     })
   }
 
-  render () {
+  render (): React.Node {
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
 
     const usernameInputProps = this.getInputProps('username', true)

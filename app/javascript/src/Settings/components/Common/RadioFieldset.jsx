@@ -24,9 +24,10 @@ const RadioFieldset = ({
   catalog,
   onChange,
   ...props
-}: Props) => {
+}: Props): React.Node => {
   const [selectedOnChange, setSelectedOnChange] = useSelectedOnChange(value, onChange)
   return (
+    // $FlowIgnore[cannot-spread-inexact]
     <FormFieldset id={`fieldset-${name}`} {...props} >
       <FormLegend>{legend}</FormLegend>
       {Object.keys(catalog).map(key => (

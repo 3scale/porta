@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import {
   SortableContainer,
   SortableElement,
@@ -22,8 +22,10 @@ type Props = {
   }
 }
 
+// $FlowIgnore[signature-verification-failure] missing react-sortable-hoc types
 const DragHandle = SortableHandle(() => <div className="Policy-sortHandle"><i className="fa fa-sort" /></div>)
 
+// $FlowIgnore[signature-verification-failure] missing react-sortable-hoc types
 const SortableItem = SortableElement(({value, editPolicy, index}) => {
   const edit = () => editPolicy(value, index)
   return (
@@ -34,6 +36,7 @@ const SortableItem = SortableElement(({value, editPolicy, index}) => {
   )
 })
 
+// $FlowIgnore[signature-verification-failure] missing react-sortable-hoc types
 const SortableList = SortableContainer(({ items, editPolicy }) => (
   <ul className="list-group">
     {items.map((policy, index) => (
@@ -47,7 +50,7 @@ const SortableList = SortableContainer(({ items, editPolicy }) => (
   </ul>
 ))
 
-const PolicyChain = ({chain, actions}: Props) => {
+const PolicyChain = ({chain, actions}: Props): React.Node => {
   const onSortEnd = ({oldIndex, newIndex}) => {
     const sortedChain = arrayMove(chain, oldIndex, newIndex)
     actions.sortPolicyChain(sortedChain)

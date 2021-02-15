@@ -11,6 +11,7 @@ function setOriginalPolicyChain (state: Array<ChainPolicy>, action: SetOriginalP
 }
 
 // TODO: use combineReducers instead of createReducer
+// $FlowFixMe[signature-verification-failure] State types are very complex for Flow
 const OriginalChainReducer = createReducer<Array<ChainPolicy>>(initialState.originalChain, {
   'SET_ORIGINAL_POLICY_CHAIN': setOriginalPolicyChain
 })

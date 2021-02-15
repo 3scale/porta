@@ -1,6 +1,6 @@
 // @flow
 
-import React, {useState} from 'react'
+import * as React from 'react'
 import { FormFieldset, FormLegend } from 'Form'
 import { Checkbox } from '@patternfly/react-core'
 import { FormCollection, TypeItemCombo } from 'Settings/components/Common'
@@ -15,7 +15,7 @@ const JsonWebToken = (props: TypeItemProps) => (
 )
 
 const FlowItem = ({name, label, checked}: FieldGroupProps) => {
-  const [ isChecked, setIsChecked ] = useState(checked)
+  const [ isChecked, setIsChecked ] = React.useState(checked)
   const onChange = (check, _e) => setIsChecked(check)
   return (
     <Checkbox
@@ -39,7 +39,7 @@ type Props = {
   flowSettings: FieldGroupProps[]
 }
 
-const OidcFieldset = ({isServiceMesh, basicSettings, jwtSettings, flowSettings}: Props) => (
+const OidcFieldset = ({isServiceMesh, basicSettings, jwtSettings, flowSettings}: Props): React.Node => (
   <FormFieldset id='fieldset-Oidc'>
     <FormLegend>OPENID CONNECT (OIDC)</FormLegend>
     <Basics {...basicSettings} />

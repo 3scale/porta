@@ -2,9 +2,9 @@
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import 'core-js/es6/promise'
 
-import React from 'react'
+import * as React from 'react'
 
-function CSRFToken ({win = window}: {win?: Window}) {
+function CSRFToken ({win = window}: {win?: Window}): React.Node {
   const getMetaContent = (metaName: string) => {
     const meta = win.document.querySelector(`head > meta[name~=${metaName}][content]`)
     return meta ? meta.content : undefined
