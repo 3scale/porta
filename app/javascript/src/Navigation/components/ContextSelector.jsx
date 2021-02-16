@@ -33,47 +33,49 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
     const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].indexOf(activeMenu) !== -1)
 
     if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
-      return 'PopNavigation-link current-context'
+      return 'pf-c-context-selector__menu-list-item current-context'
     }
 
-    return 'PopNavigation-link'
+    return 'pf-c-context-selector__menu-list-item'
   }
 
   return (
-    <div className={`PopNavigation PopNavigation--context${isOpen ? ' pf-m-expanded' : ''}`} ref={ref}>
-      <a className="PopNavigation-trigger" href="#context-menu" title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
+    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} ref={ref}>
+      <a className="pf-c-context-selector__toggle " href="#context-menu" title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
         <ActiveMenuTitle activeMenu={activeMenu} />
       </a>
       {isOpen && (
-        <ul id="context-menu" className="PopNavigation-list">
-          <li className="PopNavigation-listItem">
-            <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
-              <i className='fa fa-home' />Dashboard
-            </a>
-          </li>
-          {audienceLink && (
-            <li className="PopNavigation-listItem">
-              <a className={getClassNamesForMenu('audience')} href={audienceLink}>
-                <i className='fa fa-bullseye' />Audience
+        <div className="pf-c-context-selector__menu">
+          <ul id="context-menu" className="pf-c-context-selector__menu-list">
+            <li>
+              <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
+                <i className='fa fa-home header-context-selector__item-icon' />Dashboard
               </a>
             </li>
-          )}
-          <li className="PopNavigation-listItem">
-            <a className={getClassNamesForMenu('products')} href={productsLink}>
-              <i className='fa fa-cubes' />Products
-            </a>
-          </li>
-          <li className="PopNavigation-listItem">
-            <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
-              <i className='fa fa-cube' />Backends
-            </a>
-          </li>
-          <li className="PopNavigation-listItem">
-            <a className={getClassNamesForMenu('account')} href={settingsLink}>
-              <i className='fa fa-cog' />Account Settings
-            </a>
-          </li>
-        </ul>
+            {audienceLink && (
+              <li>
+                <a className={getClassNamesForMenu('audience')} href={audienceLink}>
+                  <i className='fa fa-bullseye header-context-selector__item-icon' />Audience
+                </a>
+              </li>
+            )}
+            <li>
+              <a className={getClassNamesForMenu('products')} href={productsLink}>
+                <i className='fa fa-cubes header-context-selector__item-icon' />Products
+              </a>
+            </li>
+            <li>
+              <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
+                <i className='fa fa-cube header-context-selector__item-icon' />Backends
+              </a>
+            </li>
+            <li>
+              <a className={getClassNamesForMenu('account')} href={settingsLink}>
+                <i className='fa fa-cog header-context-selector__item-icon' />Account Settings
+              </a>
+            </li>
+          </ul>
+        </div>
       )}
     </div >
   )
