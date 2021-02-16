@@ -6,7 +6,6 @@ import { mount } from 'enzyme'
 import { SimpleLoginPage } from 'LoginPage'
 
 const props = {
-  flashMessages: [],
   authenticationProviders: [],
   providerAdminDashboardPath: 'provider-admin-path',
   providerLoginPath: 'provider-login-path',

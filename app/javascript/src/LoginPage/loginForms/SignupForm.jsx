@@ -16,7 +16,7 @@ import {
 import type {SignupProps, InputProps} from 'Types'
 
 type Validation = {
-  [string]: ?boolean
+  [string]: boolean | void
 }
 
 type State = {
@@ -80,7 +80,7 @@ class SignupForm extends React.Component<SignupProps, State> {
       name: INPUT_NAMES[name],
       fieldId: INPUT_IDS[name],
       label: INPUT_LABELS[name],
-      isValid: Boolean(this.state.validation[INPUT_NAMES[name]]),
+      isValid: this.state.validation[INPUT_NAMES[name]],
       value: this.state[INPUT_NAMES[name]],
       onChange: this.handleInputChange
     }

@@ -25,8 +25,8 @@ it('should render itself', () => {
   expect(wrapper.find('.login-provider-link').length).toEqual(2)
 
   expect(wrapper.find('.login-provider-link').first().props().href).toEqual('fake-provider-1')
-  expect(wrapper.find('.login-provider-link').first()).toContain('Fake human kind 1')
+  expect(wrapper.find('.login-provider-link').first().text()).toMatch('Fake human kind 1')
 
   expect(wrapper.find('.login-provider-link').last().props().href).toEqual('fake-provider-2')
-  expect(wrapper.find('.login-provider-link').last()).toContain('Fake human kind 2')
+  expect(wrapper.find('.login-provider-link').last().text()).toMatch('Fake human kind 2')
 })

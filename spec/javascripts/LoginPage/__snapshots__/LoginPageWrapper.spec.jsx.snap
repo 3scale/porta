@@ -2,7 +2,7 @@
 
 exports[`should not render reset password button when disablePasswordReset is true 1`] = `
 <SimpleLoginPage
-  authenticationProviders={null}
+  authenticationProviders={Array []}
   disablePasswordReset={true}
   providerAdminDashboardPath="provider-admin-path"
   providerLoginPath="provider-login-path"
@@ -382,6 +382,17 @@ exports[`should not render reset password button when disablePasswordReset is tr
                     </form>
                   </Form>
                 </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={Array []}
+                  >
+                    <div
+                      className="providers-list"
+                    />
+                  </AuthenticationProviders>
+                </div>
               </div>
             </LoginMainBody>
           </main>
@@ -1047,7 +1058,7 @@ exports[`should render Login form and Authentication providers when available 1`
 
 exports[`should render itself 1`] = `
 <SimpleLoginPage
-  authenticationProviders={null}
+  authenticationProviders={Array []}
   disablePasswordReset={false}
   providerAdminDashboardPath="provider-admin-path"
   providerLoginPath="provider-login-path"
@@ -1431,6 +1442,17 @@ exports[`should render itself 1`] = `
                     </form>
                   </Form>
                 </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={Array []}
+                  >
+                    <div
+                      className="providers-list"
+                    />
+                  </AuthenticationProviders>
+                </div>
               </div>
             </LoginMainBody>
             <LoginMainFooter
@@ -1476,7 +1498,7 @@ exports[`should render itself 1`] = `
 
 exports[`should render reset password button when disablePasswordReset is false 1`] = `
 <SimpleLoginPage
-  authenticationProviders={null}
+  authenticationProviders={Array []}
   disablePasswordReset={false}
   providerAdminDashboardPath="provider-admin-path"
   providerLoginPath="provider-login-path"
@@ -1860,6 +1882,17 @@ exports[`should render reset password button when disablePasswordReset is false 
                     </form>
                   </Form>
                 </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={Array []}
+                  >
+                    <div
+                      className="providers-list"
+                    />
+                  </AuthenticationProviders>
+                </div>
               </div>
             </LoginMainBody>
             <LoginMainFooter

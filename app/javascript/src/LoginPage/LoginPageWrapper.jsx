@@ -26,7 +26,7 @@ import type { ProvidersProps } from 'LoginPage'
 
 type Props = {
   authenticationProviders: Array<ProvidersProps>,
-  flashMessages: Array<FlashMessage>,
+  flashMessages?: Array<FlashMessage>,
   providerAdminDashboardPath: string,
   providerLoginPath: string,
   providerSessionsPath: string,
