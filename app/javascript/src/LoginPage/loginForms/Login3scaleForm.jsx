@@ -27,8 +27,8 @@ type State = {
   username: string,
   password: string,
   validation: {
-    username: ?boolean,
-    password: ?boolean
+    username?: boolean,
+    password?: boolean
   }
 }
 

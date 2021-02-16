@@ -23,7 +23,7 @@ type Props = {
 type State = {
   email: string,
   validation: {
-    email: ?boolean
+    email?: boolean
   }
 }
 

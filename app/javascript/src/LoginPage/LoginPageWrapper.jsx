@@ -22,9 +22,10 @@ import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
 import type { FlashMessage } from 'Types'
+import type { ProvidersProps } from 'LoginPage'
 
 type Props = {
-  authenticationProviders: Array<mixed>,
+  authenticationProviders: Array<ProvidersProps>,
   flashMessages: Array<FlashMessage>,
   providerAdminDashboardPath: string,
   providerLoginPath: string,

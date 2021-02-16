@@ -9,6 +9,20 @@ export type SignupProps = {
     firstname: string,
     lastname: string,
     username: string,
-    errors: ?FlashMessage[]
+    errors?: FlashMessage[]
   }
+}
+
+export type InputProps = {
+  isRequired: boolean,
+  label: string,
+  fieldId: string,
+  isValid?: boolean,
+  name: string,
+  value: string,
+  onChange?: (value: string, event: SyntheticEvent<HTMLInputElement>) => void,
+  onBlur?: (e: SyntheticInputEvent<HTMLInputElement>) => void,
+  autoFocus?: boolean | 'autoFocus',
+  ariaInvalid?: boolean,
+  errorMessage?: string
 }
