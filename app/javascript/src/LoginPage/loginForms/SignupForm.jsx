@@ -74,7 +74,7 @@ class SignupForm extends React.Component<SignupProps, State> {
     }
   }
 
-  getInputProps (name: string, isRequired: boolean): InputProps {
+  getInputProps: (string, boolean) => InputProps = (name, isRequired) => {
     return {
       isRequired,
       name: INPUT_NAMES[name],
@@ -86,7 +86,7 @@ class SignupForm extends React.Component<SignupProps, State> {
     }
   }
 
-  handleInputChange (value: string, event: SyntheticEvent<HTMLInputElement>) {
+  handleInputChange: (string, SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
     const validation = {
       ...this.state.validation,
