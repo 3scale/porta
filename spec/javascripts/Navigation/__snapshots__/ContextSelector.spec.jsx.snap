@@ -2,11 +2,12 @@
 
 exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = `
 <ContextSelector
-  activeMenu=""
+  activeMenu="dashboard"
   audienceLink="/audience"
   backendsLink="/backends"
   currentApi={null}
   productsLink="/products"
+  settingsLink="/settings"
 >
   <div
     className="pf-c-context-selector header-context-selector  pf-m-expanded"
@@ -18,7 +19,7 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
       title="Context Selector"
     >
       <ActiveMenuTitle
-        activeMenu=""
+        activeMenu="dashboard"
       >
         <span
           className="pf-c-context-selector__toggle-text"
@@ -101,10 +102,11 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
 
 exports[`should not have Audience if not provided 1`] = `
 <ContextSelector
-  activeMenu=""
+  activeMenu="dashboard"
   backendsLink="/backends"
   currentApi={null}
   productsLink="/products"
+  settingsLink="/settings"
 >
   <div
     className="pf-c-context-selector header-context-selector  pf-m-expanded"
@@ -116,7 +118,7 @@ exports[`should not have Audience if not provided 1`] = `
       title="Context Selector"
     >
       <ActiveMenuTitle
-        activeMenu=""
+        activeMenu="dashboard"
       >
         <span
           className="pf-c-context-selector__toggle-text"

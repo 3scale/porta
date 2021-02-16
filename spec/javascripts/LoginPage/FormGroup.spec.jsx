@@ -21,7 +21,7 @@ describe('TextField', () => {
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
-    expect(wrapper.find('label').first.contains('Text Field')).toEqual(true)
+    expect(wrapper.find('label').text()).toMatch('Text Field')
 
     expect(wrapper.find('input').length).toEqual(1)
     expect(wrapper.find('input').instance()?.type).toEqual('text')
@@ -52,7 +52,7 @@ describe('PasswordField', () => {
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
-    expect(wrapper.find('label').first.contains('Password')).toEqual(true)
+    expect(wrapper.find('label').text()).toMatch('Password')
 
     expect(wrapper.find('input').length).toEqual(1)
     expect(wrapper.find('input').instance()?.type).toEqual('password')
@@ -83,7 +83,7 @@ describe('EmailField', () => {
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
-    expect(wrapper.find('label').first.contains('Email')).toEqual(true)
+    expect(wrapper.find('label').text()).toMatch('Email')
 
     expect(wrapper.find('input').length).toEqual(1)
     expect(wrapper.find('input').instance()?.type).toEqual('email')

@@ -1,3 +1,6 @@
+// @flow
+
+// $FlowFixMe OAS3Autocomplete is not found by Flow, move to src
 import { autocompleteOAS3 } from 'OAS3Autocomplete'
 import * as utils from 'utilities/utils'
 
@@ -53,6 +56,7 @@ const fetch = jest.spyOn(utils, 'fetchData')
 fetch.mockImplementation(accountDataUrl => Promise.resolve(accountData))
 
 it('should inject servers to response body', () => {
+  console.log(autocompleteOAS3)
   return autocompleteOAS3(response, accountDataUrl, serviceEndpoint).then(res => {
     expect(res.body.servers).toEqual([{ 'url': 'foo/bar/serviceEndpoint' }])
   })
