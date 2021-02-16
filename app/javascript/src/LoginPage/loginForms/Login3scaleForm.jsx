@@ -54,7 +54,7 @@ class Login3scaleForm extends React.Component<Props, State> {
     }
   }
 
-  handleInputChange (value: string, event: SyntheticEvent<HTMLInputElement>) {
+  handleInputChange: (string, SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = validateSingleField(event)
     const validation = {
       ...this.state.validation,
