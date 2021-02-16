@@ -1,10 +1,13 @@
+// @flow
+
 import React from 'react'
 import { mount } from 'enzyme'
 
 import { SimpleLoginPage } from 'LoginPage'
 
 const props = {
-  authenticationProviders: null,
+  flashMessages: [],
+  authenticationProviders: [],
   providerAdminDashboardPath: 'provider-admin-path',
   providerLoginPath: 'provider-login-path',
   providerRequestPasswordResetPath: 'password-path',
