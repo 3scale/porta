@@ -294,6 +294,16 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_accounts_path(id: @buyer.id)
       assert_xpath('//tbody/tr/td[2]/a', @buyer.decorate.admin_user_display_name)
     end
+
+    test 'User with invalid data shows an flash error' do
+      post admin_buyers_accounts_path, account: {
+          org_name: 'My organization',
+          user: {
+            username: 'hello'
+          }
+      }
+      assert_equal 'Users invalid', flash[:error]
+    end
   end
 
   class MasterLoggedInTest < Buyers::AccountsControllerTest
