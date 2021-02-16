@@ -25,7 +25,7 @@ it('should render six Form Groups', () => {
   expect(wrapper.find('.pf-c-form__group > label').length).toEqual(6)
 })
 
-describe.only('Username', () => {
+describe('Username', () => {
   const event = {
     currentTarget: {
       required: true,

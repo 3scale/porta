@@ -1,8 +1,15 @@
+// @flow
+
 import React from 'react'
 import { render, mount } from 'enzyme'
 import { VerticalNav } from 'Navigation/components/VerticalNav'
 
-const currentApi = { name: 'My Product' }
+const currentApi = {
+  id: 1,
+  name: 'My Product',
+  link: '/foo',
+  type: 'product'
+}
 const sections = [{
   id: '0',
   title: 'Section 0',

@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {act} from 'react-dom/test-utils'
 import {mount, shallow, render} from 'enzyme'
@@ -81,7 +83,9 @@ describe('fetchServices', () => {
     })
 
     // Assert selects are not disabled after fetched
+    // $FlowIgnore
     wrapper.update()
+    // $FlowIgnore
     expect(wrapper.find('select').everyWhere(n => n.prop('disabled') === false)).toBe(true)
   })
 })
