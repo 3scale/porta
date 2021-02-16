@@ -65,7 +65,7 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
       (paths, path) => {
         const commonParameters = responseBody.paths[path].parameters
         // $FlowFixMe should safe to assume it is PathItemObject
-        paths[path] = injectParametersToPath((responseBody.paths[path]), commonParameters, accountData)
+        paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
         return paths
       }, {})
   }

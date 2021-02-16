@@ -30,9 +30,11 @@ const AuthenticationProviders = (props: Props): React.Node => {
   )
 
   return (
-    <div className='providers-list'>
-      {providersList}
-    </div>
+    <React.Fragment>
+      <div className='providers-list'>
+        {providersList}
+      </div>
+    </React.Fragment>
   )
 }
 
