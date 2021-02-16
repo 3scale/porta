@@ -50,11 +50,13 @@ const ActiveMenuTitle = ({ activeMenu }: Props) => {
   const [icon, text] = getIconAndText()
 
   return (
-    <span className="ActiveMenuTitle">
-      <i className={`fa ${icon}`} />
-      {text}
-      <i className='fa fa-chevron-down' />
-    </span>
+    <>
+      <span className="pf-c-context-selector__toggle-text">
+        <i className={`fa ${icon}` + ' header-context-selector__toggle-text-icon'} />
+        {text}
+      </span>
+      <i className='fa fa-chevron-down  pf-c-context-selector__toggle-icon' />
+    </>
   )
 }
 
