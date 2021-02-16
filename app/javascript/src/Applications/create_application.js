@@ -10,7 +10,7 @@ type ServicePlan = {
 
 export class CreateApplication {
   previewsService: ?number
-  metadata: JQuery
+  metadata: any // eslint-disable-line flowtype/no-weak-types
 
   constructor () {
     this.previewsService = undefined
