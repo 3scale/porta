@@ -5,20 +5,7 @@ import {
   FormGroup as PF4FormGroup,
   TextInput
 } from '@patternfly/react-core'
-
-type InputProps = {
-  isRequired: boolean,
-  label: string,
-  fieldId: 'string',
-  isValid: boolean,
-  name: string,
-  value: string,
-  onChange?: () => void,
-  onBlur?: () => void,
-  autoFocus?: string,
-  ariaInvalid?: boolean,
-  errorMessage?: string
-}
+import type { InputProps } from 'Types'
 
 type Props = {
   type: string,

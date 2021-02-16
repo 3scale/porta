@@ -14,7 +14,7 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 type Props = {
   lostPasswordToken: ?string,
   url: string,
-  errors: (?FlashMessage)[]
+  errors?: FlashMessage[]
 }
 
 const ChangePassword = ({ lostPasswordToken, url, errors }: Props): React.Node => {

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { KeyIcon, LessThanIcon, GreaterThanIcon } from '@patternfly/react-icons'
 
-type ProvidersProps = {
+export type ProvidersProps = {
   authorizeURL: string,
   humanKind: string
 }

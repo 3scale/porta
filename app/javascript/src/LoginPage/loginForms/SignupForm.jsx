@@ -13,20 +13,10 @@ import {
   EmailField,
   validateSingleField
 } from 'LoginPage'
-import type {SignupProps} from 'Types'
+import type {SignupProps, InputProps} from 'Types'
 
 type Validation = {
   [string]: ?boolean
-}
-
-type InputProps = {
-  isRequired: boolean,
-  name: string,
-  fieldId: string,
-  label: string,
-  isValid: boolean,
-  value: string,
-  onChange: (value: string, e: SyntheticEvent<HTMLInputElement>) => void
 }
 
 type State = {
