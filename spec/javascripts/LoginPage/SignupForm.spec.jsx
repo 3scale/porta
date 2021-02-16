@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { mount } from 'enzyme'
 
@@ -23,7 +25,7 @@ it('should render six Form Groups', () => {
   expect(wrapper.find('.pf-c-form__group > label').length).toEqual(6)
 })
 
-describe('Username', () => {
+describe.only('Username', () => {
   const event = {
     currentTarget: {
       required: true,
