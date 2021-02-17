@@ -10,6 +10,7 @@ import {
 } from '@patternfly/react-core'
 import { DefaultPlanSelect } from 'Plans'
 import { Spinner } from 'Common'
+import * as alert from 'utilities/alert'
 import type { Product, ApplicationPlan } from 'Types'
 import './DefaultPlanSelectCard.scss'
 
@@ -33,19 +34,19 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => 
     post(url, body)
       .then(data => {
         if (data.ok) {
-          $.flash.notice('Default plan was updated')
+          alert.notice('Default plan was updated')
           setDefaultPlan(plan)
         } else {
           if (data.status === 404) {
-            $.flash.error("The selected plan doesn't exist.")
+            alert.error("The selected plan doesn't exist.")
           } else {
-            $.flash.error('Plan could not be updated')
+            alert.error('Plan could not be updated')
           }
         }
       })
       .catch(err => {
         console.error(err)
-        $.flash.error('An error ocurred. Please try again later.')
+        alert.error('An error ocurred. Please try again later.')
       })
       .finally(() => setIsLoading(false))
 
