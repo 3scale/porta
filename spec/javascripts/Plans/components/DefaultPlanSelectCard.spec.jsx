@@ -5,8 +5,9 @@ import { act } from 'react-dom/test-utils'
 import { DefaultPlanSelectCard } from 'Plans'
 import { mount } from 'enzyme'
 
-const noticeSpy = jest.spyOn($.flash, 'notice')
-const errorSpy = jest.spyOn($.flash, 'error')
+import * as alert from 'utilities/alert'
+const noticeSpy = jest.spyOn(alert, 'notice')
+const errorSpy = jest.spyOn(alert, 'error')
 
 jest.mock('utilities/ajax')
 import { post } from 'utilities/ajax'
