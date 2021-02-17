@@ -29,7 +29,8 @@ class Api::PlansBaseController < Api::BaseController
   end
 
   def resource(id = params[:id])
-    collection.readonly(false).find_by_id(id)
+    return unless id.present?
+    collection.readonly(false).find(id)
   end
 
   def collection
@@ -112,16 +113,14 @@ class Api::PlansBaseController < Api::BaseController
 
   protected
 
-  def generic_masterize_plan(issuer, assoc)
-    masterize_plan do
-      if @plan.nil? || issuer.send(assoc) == @plan
-        issuer.send("#{assoc}=", nil)
-      else
-        issuer.send("#{assoc}=", @plan)
-      end
+  def assign_plan!(issuer, assoc)
+    plan = (!@plan || issuer.send(assoc) == @plan) ? nil : @plan
+    issuer.send("#{assoc}=", plan)
+    issuer.save!
+  end
 
-      issuer.save!
-    end
+  def generic_masterize_plan(issuer, assoc)
+    masterize_plan { assign_plan!(issuer, assoc) }
   end
 
   # this is supposed to be called via ajax and we need only to flash stuff
