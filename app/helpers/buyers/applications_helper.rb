@@ -1,49 +1,69 @@
+# frozen_string_literal: true
+
 module Buyers::ApplicationsHelper
 
-  def metadata_new_app(buyer, provider)
-
-    "<div id='metadata-form'
-      data-services_contracted='#{ services_contracted(buyer) }'
-      data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
-      data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
-      data-create_service_plan_path='#{ create_service_plan_path }'
-      data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
-
+  def new_application_form_metadata(provider:, buyer: nil, service: nil)
+    {
+      'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
+      'create-application-plan-path': new_admin_service_application_plan_path(':id'),
+      'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
+      'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
+      product: service && product_data(service).to_json,
+      products: !service && data_products(provider).to_json,
+      buyer: buyer && buyer_data(buyer).to_json,
+      buyers: !buyer && data_buyers(provider).to_json
+    }.compact
   end
 
-  def services_contracted(buyer)
-    buyer.bought_service_contracts.services.pluck(:id).to_json
+  def product_data(service)
+    service = service.decorate
+    {
+      id: service.id.to_s,
+      name: service.name,
+      systemName: service.system_name,
+      updatedAt: service.updated_at,
+      appPlans: service.plans.select(:id, :name).as_json(root: false),
+      servicePlans: service.service_plans.select(:id, :name).as_json(root: false),
+      defaultServicePlan: service.default_service_plan.as_json(root: false, only: %i[id name])
+    }
   end
 
-  def service_plan_contracted_for_service(buyer)
-    buyer.bought_service_contracts.inject({}) do |hash, service_contract|
-
-      service_plan = service_contract.plan
-      name = service_plan.name
-      name += " (#{service_contract.state})" unless service_contract.live?
-
-      hash[service_plan.service.id] = {id: service_plan.id, name: name}
-      hash
-    end.to_json
+  def data_products(provider)
+    provider.accessible_services
+            .order(updated_at: :desc)
+            .decorate
+            .map do |service|
+              product_data(service)
+            end
   end
 
-  def relation_service_and_service_plans(provider)
-    provider.accessible_services.inject({}) do |hash, service|
-      hash[service.id] = service.service_plans.inject([]) do |array, service_plan|
-        array << {id: service_plan.id, name: service_plan.name, default: service_plan.master?}
-      end
-      hash
-    end.to_json
+  def buyer_data(buyer)
+    buyer = buyer.decorate
+    {
+      id: buyer.id.to_s,
+      name: buyer.name,
+      admin: buyer.admin_user_display_name,
+      createdAt: buyer.created_at.to_s(:long),
+      contractedProducts: contracts(buyer),
+      createApplicationPath: admin_buyers_account_applications_path(buyer),
+      # canSelectPlan: true # TODO needed?
+    }
   end
 
-  def relation_plans_services(provider)
-    provider.application_plans.includes(:service).each_with_object({}) do |application_plan, hash|
-      hash[application_plan.id] = application_plan.service.id
-    end.to_json
+  def data_buyers(provider)
+    provider.buyer_accounts
+            .not_master
+            .order(created_at: :desc)
+            .map do |buyer|
+              buyer_data(buyer)
+            end
   end
 
-  def create_service_plan_path
-    admin_service_service_plans_path ':service_id'
+  def contracts(buyer)
+    buyer.bought_service_contracts.map do |contract|
+      hash = contract.service.as_json(only: %i[id name], root: false)
+      hash.merge!({ withPlan: contract.plan.as_json(only: %i[id name], root: false) })
+    end
   end
 
   def last_traffic(cinstance)
