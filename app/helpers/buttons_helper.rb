@@ -176,8 +176,13 @@ module ButtonsHelper
   end
 
   def pf_delete_button_for(url, options = {})
-    options[:class] = add_pf_classes_to_options("pf-c-button pf-c-link", options[:class])
+    options[:class] = add_pf_classes_to_options("pf-c-button pf-m-link", options[:class])
     delete_button_for(url, options)
+  end
+
+  def pf_delete_link_for(url, options = {})
+    options[:class] = add_pf_classes_to_options("pf-c-button pf-m-link preserve-icons", options[:class])
+    delete_link_for(url, options)
   end
 
   def add_pf_classes_to_options(pf_class, options_class)

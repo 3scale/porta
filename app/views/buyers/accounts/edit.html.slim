@@ -13,6 +13,6 @@ div
       = form.user_defined_form
 
     = form.buttons do
-      = form.commit_button 'Update Account'
+      = form.commit_button 'Update Account', button_html: { class: 'pf-c-button pf-m-primary' }
       li
         = delete_buyer_link(@account)
