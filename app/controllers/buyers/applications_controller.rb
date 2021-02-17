@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #FIXME: why is this controller not inheriting from Buyers::Base ?????
 class Buyers::ApplicationsController < FrontendController
 
@@ -6,8 +8,9 @@ class Buyers::ApplicationsController < FrontendController
   helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
-  before_action :find_buyer, :only => [:new, :create]
-  before_action :authorize_multiple_applications, :only => [ :new, :create ]
+  before_action :find_buyer, :only => [:create]
+  before_action :find_plans, :only => %i[new create]
+  before_action :authorize_multiple_applications, :only => [:create]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
   before_action :find_provider,  only: %i[new create update]
@@ -52,19 +55,23 @@ class Buyers::ApplicationsController < FrontendController
   end
 
   def new
-    @cinstance = @buyer.bought_cinstances.build
-    extend_cinstance_for_new_plan
-    @plans = accessible_plans.stock
+    @products = accessible_services
 
     if params[:account_id]
+      # We're under Account context
+      find_buyer
+      @cinstance = @buyer.bought_cinstances.build
+      extend_cinstance_for_new_plan
       @account = current_account.buyers.find params[:account_id]
-      activate_menu :buyers, :accounts
+      activate_menu :buyers, :accounts, :listing
+    else
+      # We're under Applications context
+      activate_menu :audience, :applications, :listing
     end
   end
 
   # TODO: this should be done by buy! method
   def create
-    @plans = accessible_plans.stock
     application_plan = @plans.find plan_id
     service_plan = if service_plan_id = params[:cinstance].delete(:service_plan_id)
                      application_plan.service.service_plans.find(service_plan_id)
@@ -178,6 +185,10 @@ class Buyers::ApplicationsController < FrontendController
 
   def find_buyer
     @buyer = current_account.buyers.find(params[:account_id])
+  end
+
+  def find_plans
+    @plans = accessible_plans.stock
   end
 
   def find_service(id = params[:service_id])
