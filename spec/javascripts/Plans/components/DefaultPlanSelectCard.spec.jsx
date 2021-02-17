@@ -5,7 +5,6 @@ import { act } from 'react-dom/test-utils'
 import { DefaultPlanSelectCard } from 'Plans'
 import { mount } from 'enzyme'
 
-import $ from 'jquery'
 const noticeSpy = jest.spyOn($.flash, 'notice')
 const errorSpy = jest.spyOn($.flash, 'error')
 

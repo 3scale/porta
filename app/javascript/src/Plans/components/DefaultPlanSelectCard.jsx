@@ -1,7 +1,6 @@
 // @flow
 
 import React, { useState } from 'react'
-import $ from 'jquery'
 import { post } from 'utilities/ajax'
 import {
   Form,
