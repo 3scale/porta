@@ -142,6 +142,48 @@ module ButtonsHelper
     end
   end
 
+  def pf_link_with_icon(text, url, options)
+    a_class = "pf-c-button pf-m-#{options[:type] || 'link'} #{options[:class]}"
+    span_class = "pf-c-button__icon pf-m-#{options[:position] || 'start'}"
+    icon_class = "fa fa-#{options[:icon]}"
+
+    span_icon_tag = content_tag :span, (content_tag :i, nil, :class => icon_class, "aria-hidden" => true), :class => span_class
+
+    content_tag :a, class: a_class, href: url do
+      options[:position] == 'start' ?  (
+        concat span_icon_tag
+        concat text
+      ) : (
+        concat text
+        concat span_icon_tag
+      )
+    end
+  end
+
+  def pf_action_link_to(action, url, options = {})
+    options[:class] = add_pf_classes_to_options("pf-c-button pf-m-link preserve-icons", options[:class])
+    action_link_to(action, url, options)
+  end
+
+  def pf_fancy_button_to(label, url, options = {})
+    options[:class] = add_pf_classes_to_options("pf-c-button pf-m-link preserve-icons", options[:class])
+    fancy_button_to(label, url, options)
+  end
+
+  def pf_fancy_link_to(label, url, options = {})
+    options[:class] = add_pf_classes_to_options("pf-c-button pf-m-link preserve-icons", options[:class])
+    fancy_link_to(label, url, options)
+  end
+
+  def pf_delete_button_for(url, options = {})
+    options[:class] = add_pf_classes_to_options("pf-c-button pf-c-link", options[:class])
+    delete_button_for(url, options)
+  end
+
+  def add_pf_classes_to_options(pf_class, options_class)
+    "#{pf_class} #{options_class}"
+  end
+
   protected
 
   def javascript_alert_url(text)
