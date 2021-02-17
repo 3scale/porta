@@ -23,32 +23,6 @@
   color: var(--pf-global--active-color--100);
 }
 
-
-// // Copied from colors.scss
-// $lochMaraBlue: #0088ce; //pf-blue-400
-// $font-color: #393f44; // pf-black-800
-
-// // scss-lint:disable SelectorFormat IdSelector
-// #api_selector {
-//   margin-bottom: 0.5rem; // var(--pf-c-page__header-tools--MarginTop)
-//   margin-top: 0.5rem;
-// }
-
-// .current-context {
-//   color: $lochMaraBlue;
-// }
-// .PopNavigation-list {
-//   animation: none;
-// }
-
-// .PopNavigation-link > i {
-//   padding-right: 0.5rem;
-// }
-
-// .unauthorized {
-//   cursor: not-allowed;
-
-//   &:hover {
-//     color: $font-color;
-//   }
-// }
+a.pf-c-context-selector__menu-list-item {
+  color: var(--pf-global--Color--100);
+}
