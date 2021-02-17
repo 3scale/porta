@@ -53,7 +53,7 @@ class Buyers::AccountsController < Buyers::BaseController
       redirect_to admin_buyers_account_path(@buyer)
     else
       @user = signup_result.user
-      flash.now[:error] = signup_result.errors.messages.without(:account, :user).values.join('. ')
+      flash.now[:error] = signup_result.errors.messages.without(:user).values.join('. ')
       render action: :new
     end
   end
