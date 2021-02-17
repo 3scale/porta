@@ -28,8 +28,8 @@ class Api::PlansBaseController < Api::BaseController
     authorize! :create, :plans
   end
 
-  def resource(id = params[:id].presence)
-    return unless id
+  def resource(id = params[:id])
+    return unless id.present?
     collection.readonly(false).find(id)
   end
 
