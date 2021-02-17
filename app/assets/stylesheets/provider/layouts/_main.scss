@@ -37,6 +37,14 @@ body {
   }
 }
 
+// HACK: links and buttons with icons are showing double icons
+// One because of PatternFly, one because our own styles
+// We can't remove icons from our codebase, as not all links are using PF
+a.action.pf-c-button:not(.preserve-icons)::before,
+button.action.pf-c-button:not(.preserve-icons)::before {
+  content: none;
+}
+
 @mixin white-box-shadow {
   background-color: $white;
   box-shadow: $whiteBoxShadow;
