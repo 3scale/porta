@@ -44,6 +44,9 @@ a.action.pf-c-button:not(.preserve-icons)::before,
 button.action.pf-c-button:not(.preserve-icons)::before {
   content: none;
 }
+a.action.pf-c-button {
+  color: $success-color;
+}
 
 @mixin white-box-shadow {
   background-color: $white;

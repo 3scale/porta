@@ -47,7 +47,7 @@ module Finance::InvoicesHelper
 
   def invoice_action_button(name, action)
     url = send("#{action}_admin_finance_invoice_path", @invoice.id, :format => :js)
-    fancy_button_to(name, url, :method => :put, :remote => true)
+    pf_fancy_button_to(name, url, :method => :put, :remote => true)
   end
 
   def invoice_pdf_link(invoice, label = 'Download PDF')
