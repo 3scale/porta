@@ -18,7 +18,6 @@ common: &sphinx
   charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
   indexed_models:
     - Account
-    - Topic
     - CMS::Page
 
 development:
