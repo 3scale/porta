@@ -46,8 +46,12 @@ module TopicIndex
   protected
 
   def sphinx_index
-    return if System::Database.oracle?
+    return if System::Database.oracle? || !allow_system_indexation?
 
     SphinxIndexationWorker.perform_later(self)
+  end
+
+  def allow_system_indexation?
+    ThinkingSphinx::Configuration.new.settings['indexed_models'].include?(self.class.name)
   end
 end
