@@ -142,6 +142,12 @@ module ButtonsHelper
     end
   end
 
+  def pf_link_to(name, path, options)
+    options[:class] = join_dom_classes(options[:class], ' pf-c-button pf-m-link preserve-icons')
+    link_to(name, path, options)
+  end
+  
+
   def pf_link_with_icon(text, url, options)
     a_class = "pf-c-button pf-m-#{options[:type] || 'link'} #{options[:class]}"
     span_class = "pf-c-button__icon pf-m-#{options[:position] || 'start'}"
