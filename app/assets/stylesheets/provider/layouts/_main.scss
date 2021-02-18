@@ -41,6 +41,44 @@ body {
 // As we are still using both PF and not-PF links, we need this
 a.action.pf-c-button {
   color: $success-color;
+
+  &.add,
+  &.new,
+  &.approve,
+  &.activate,
+  &.ok,
+  &.enable,
+  &.resume {
+    color: $create-color;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  &.bolt,
+  &.fire,
+  &.off,
+  &.eye,
+  &.revert {
+    color: $warning-color;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  &.delete,
+  &.reject,
+  &.eye-slash,
+  &.suspend,
+  &.disable {
+    color: $delete-color;
+
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
 }
 
 @mixin white-box-shadow {
