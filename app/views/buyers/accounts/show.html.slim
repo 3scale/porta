@@ -2,9 +2,9 @@
 h1 data-hook="account-show"
   ' Account: #{@account.org_name}
   - if can? :update, @account
-    = pf_link_with_icon 'Edit',
+     = pf_link_to 'Edit',
         edit_admin_buyers_account_path(@account),
-        { type: 'link', position: 'start', icon: 'pencil', class: 'action edit' }
+        class: 'action edit'
 #twoCol.equal-width
   .left
     .wide_dashboard_card.round
@@ -17,9 +17,9 @@ h1 data-hook="account-show"
               => link_to 'Impersonate',
                          admin_buyers_account_impersonation_path(@account),
                          class: 'action bolt', method: 'post', target: '_blank'
-            => pf_link_with_icon 'Send message',
+            => pf_link_to 'Send message',
                        new_provider_admin_messages_outbox_path(to: @account),
-                       { type: 'link', position: 'start', icon: 'envelope-o', class: 'action message fancybox' }
+                       class: 'action message fancybox'
         - if current_account.master? && @account.provider?
           tr
             th Public domain
