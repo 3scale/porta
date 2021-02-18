@@ -39,7 +39,7 @@ table#line-items {
           <dd>{{ invoice.paid_on | date: i18n.long_date }}</dd>
           {% if invoice.exists_pdf? %}
           <dt>PDF</dt>
-          <dd>{{ 'Download PDF' | link_to: invoice.pdf_url, title: 'Show pdf', class: 'link' }}</dd>
+          <dd>{{ 'Download PDF' | pf_link_to: invoice.pdf_url, title: 'Show pdf', class: 'link' }}</dd>
           {% endif %}
         </dl>
 
