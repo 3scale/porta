@@ -31,7 +31,7 @@ Here you can manage all the information you gather from your users. You can add 
 	<span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
 	<span class="action-set">
 	  <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
-	  <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+	  <%= pf_link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
       </li>
     <% end %>
   </ol>
