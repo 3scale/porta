@@ -13,7 +13,7 @@ class DataExportsWorker
     if provider.provider_can_use?(:new_notification_system)
       publish_event!(provider, recipient, type, period)
     else
-      email(provider, recipient, type, period).deliver_now
+      email(provider, recipient, type, period).deliver_later
     end
   end
 

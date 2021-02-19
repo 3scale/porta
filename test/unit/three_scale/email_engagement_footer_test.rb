@@ -17,11 +17,11 @@ end
 class ThreeScale::EmailEngagementFooterTest < ActiveSupport::TestCase
 
   test "interceptor for action mailer" do
-    email = LeMailer.bienvenu.deliver_now
+    email = LeMailer.bienvenu.deliver_later
 
     assert_match email.body, /3scale API/
 
-    email = LeMailer.aurevoir.deliver_now
+    email = LeMailer.aurevoir.deliver_later
     assert_equal email.body, "Le test."
   end
 end

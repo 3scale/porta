@@ -12,7 +12,7 @@ class TopicMailerTest < ActionMailer::TestCase
     subscriber =  FactoryBot.build_stubbed(:simple_user, account: @buyer)
 
     assert_difference ActionMailer::Base.deliveries.method(:count), +1 do
-      TopicMailer.new_post(subscriber, post).deliver_now
+      TopicMailer.new_post(subscriber, post).deliver_later
     end
   end
 

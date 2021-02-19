@@ -142,7 +142,7 @@ class NotificationsTest < ActiveSupport::TestCase
      should 'be sent to provider when dispatch rule is true' do
        @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider, :dispatch => true, :system_operation => @operation
 
-       PostOffice.message_notification(@message, @provider_recipient).deliver_now
+       PostOffice.message_notification(@message, @provider_recipient).deliver_later
        @email = ActionMailer::Base.deliveries.last
        expected = [@provider.admins.first.email]
        assert_same_elements @email.bcc, expected
@@ -152,7 +152,7 @@ class NotificationsTest < ActiveSupport::TestCase
       SystemOperation.delete_all
       @message.update_attribute(:system_operation, nil)
       @message.reload
-      PostOffice.message_notification(@message, @provider_recipient).deliver_now
+      PostOffice.message_notification(@message, @provider_recipient).deliver_later
       @email = ActionMailer::Base.deliveries.last
       expected = [@provider.admins.first.email]
       assert_same_elements @email.bcc, expected

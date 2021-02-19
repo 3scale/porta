@@ -12,15 +12,15 @@ class ValidateEmailInterceptorTest < ActionMailer::TestCase
 
   def test_validate_to_attribute
     assert_difference(ActionMailer::Base.deliveries.method(:count), +1) do
-      DoubleMailer.new_account(to: 'bar@example.com').deliver_now
+      DoubleMailer.new_account(to: 'bar@example.com').deliver_later
     end
 
     assert_difference(ActionMailer::Base.deliveries.method(:count), +1) do
-      DoubleMailer.new_account(bcc: ['bar@example.com']).deliver_now
+      DoubleMailer.new_account(bcc: ['bar@example.com']).deliver_later
     end
 
     assert_no_difference(ActionMailer::Base.deliveries.method(:count)) do
-      DoubleMailer.new_account(to: nil, bcc: nil).deliver_now
+      DoubleMailer.new_account(to: nil, bcc: nil).deliver_later
     end
   end
 end

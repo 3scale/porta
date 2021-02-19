@@ -11,7 +11,7 @@ class ActivationReminderWorker
     user = User.find(user_id)
 
     if user.pending?
-      ProviderUserMailer.activation_reminder(user).deliver_now
+      ProviderUserMailer.activation_reminder(user).deliver_later
     end
   rescue ActiveRecord::RecordNotFound
     # nothing, user was deleted

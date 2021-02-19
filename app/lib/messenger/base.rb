@@ -42,7 +42,7 @@ module Messenger
       @_message.deliver!
     end
 
-    alias deliver_now deliver
+    alias deliver_later deliver
 
     def message(options = {})
       m = @_message

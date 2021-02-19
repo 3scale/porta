@@ -7,7 +7,7 @@ class BillingMailerTest < ActionMailer::TestCase
   test "success" do
     results = Finance::BillingStrategy::Results.new(Time.now)
 
-    BillingMailer.billing_finished(results).deliver_now
+    BillingMailer.billing_finished(results).deliver_later
 
     email = ActionMailer::Base.deliveries.last
     assert_match "Billing and charging succeeded", email.subject
@@ -18,7 +18,7 @@ class BillingMailerTest < ActionMailer::TestCase
     results = Finance::BillingStrategy::Results.new(Time.now)
     results.stubs(:successful?).returns(false)
 
-    BillingMailer.billing_finished(results).deliver_now
+    BillingMailer.billing_finished(results).deliver_later
 
     email = ActionMailer::Base.deliveries.last
     assert_match "Billing and charging failed", email.subject

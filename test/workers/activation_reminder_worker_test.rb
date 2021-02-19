@@ -7,7 +7,7 @@ class ActivationReminderWorkerTest < ActiveSupport::TestCase
   end
 
   should "send reminder if user is pending" do
-    ProviderUserMailer.expects(:activation_reminder).returns(mock('mail', deliver_now: true)).once
+    ProviderUserMailer.expects(:activation_reminder).returns(mock('mail', deliver_later: true)).once
     ActivationReminderWorker.new.perform(@user.id)
   end
 

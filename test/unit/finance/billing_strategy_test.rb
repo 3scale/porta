@@ -263,7 +263,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'notifies billing failure' do
     buyer = FactoryBot.build_stubbed(:simple_buyer, provider_account: @provider)
     results = mock_billing_failure(Time.utc(2018, 3, 17, 18, 15), @provider, [buyer.id])
-    BillingMailer.expects(:billing_finished).with(results).returns(mock(deliver_now: true))
+    BillingMailer.expects(:billing_finished).with(results).returns(mock(deliver_later: true))
     @bs.notify_billing_results(results)
   end
 

@@ -24,14 +24,14 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create! sender: @provider, to: [@buyer], subject: subject, body: 'W0rmDr1nk'
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
     email = find_message_by_subject(subject)
 
     assert_match email.body, /3scale API/
 
     @provider.settings.update_attribute :skip_email_engagement_footer_switch, 'visible'
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     emails = ActionMailer::Base.deliveries.select { |message| message.subject == subject }
     assert email = emails.last
@@ -46,7 +46,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal @provider.admins.map(&:email), email.bcc
@@ -60,7 +60,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => Account.master, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal @provider.users.map(&:email), email.bcc
@@ -74,7 +74,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => @provider, :to => [Account.master], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal Account.master.admins.map(&:email), email.bcc
@@ -88,7 +88,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal @buyer.admins.map(&:email), email.bcc
@@ -102,7 +102,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal @buyer.users.map(&:email), email.bcc
@@ -116,7 +116,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => @buyer, :to => [@provider], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal @provider.admins.map(&:email), email.bcc
@@ -127,7 +127,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "message")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject(subject)
     assert_equal message.subject, email.subject
@@ -140,7 +140,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(:sender => @provider, :to => [@buyer], :subject => subject, :body => "buyer", :origin => "web")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject("[msg] #{subject}")
     assert_equal @buyer.admins.map(&:email), email.bcc
@@ -153,7 +153,7 @@ class PostOfficeTest < ActionMailer::TestCase
     message   = Message.create!(sender: @buyer, to: [@provider], subject: subject, body: "provider", origin: "web")
     recipient = message.recipients.first
 
-    PostOffice.message_notification(message, recipient).deliver_now
+    PostOffice.message_notification(message, recipient).deliver_later
 
     assert email = find_message_by_subject("[msg] #{subject}")
     assert_equal @provider.admins.map(&:email), email.bcc
@@ -168,7 +168,7 @@ class PostOfficeTest < ActionMailer::TestCase
     recipient.receiver.self_domain = nil
 
     begin
-      PostOffice.message_notification(message, recipient).deliver_now
+      PostOffice.message_notification(message, recipient).deliver_later
       flunk 'Missing host did not raise'
     rescue ArgumentError => e
       assert_match /^Message\([0-9]+\),Recipient\([0-9]+\)/, e.message
@@ -187,7 +187,7 @@ class PostOfficeTest < ActionMailer::TestCase
 
     `touch #{file}`
 
-    PostOffice.report(report, "December 2010").deliver_now
+    PostOffice.report(report, "December 2010").deliver_later
 
     assert email = find_message_by_subject("3scale: #{service.name} - December 2010")
     assert_equal [account.admins.first.email], email.bcc

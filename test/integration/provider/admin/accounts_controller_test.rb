@@ -16,7 +16,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test '#create without approval required' do
     # sends activation email
-    ProviderUserMailer.expects(:activation).returns(mock(deliver_now: true))
+    ProviderUserMailer.expects(:activation).returns(mock(deliver_later: true))
 
     account_plan.update_attribute(:approval_required, false)
     post provider_admin_accounts_path, valid_params

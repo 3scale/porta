@@ -76,10 +76,10 @@ class SupportEntitlementsService
   end
 
   def notify_entitlements_assigned
-    AccountMailer.support_entitlements_assigned(account, notification_options).deliver_now
+    AccountMailer.support_entitlements_assigned(account, notification_options).deliver_later
   end
 
   def notify_entitlements_revoked
-    AccountMailer.support_entitlements_revoked(account, notification_options).deliver_now
+    AccountMailer.support_entitlements_revoked(account, notification_options).deliver_later
   end
 end

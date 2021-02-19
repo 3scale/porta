@@ -20,7 +20,7 @@ class SendUserInvitationWorker < ApplicationJob
 
   def perform(invitation)
     mailer = invitation.account.provider? ? ProviderInvitationMailer : InvitationMailer
-    mailer.invitation(invitation).deliver_now!
+    mailer.invitation(invitation).deliver_later!
 
     invitation.update(sent_at: Time.zone.now)
   rescue *RETRY_ERRORS => e

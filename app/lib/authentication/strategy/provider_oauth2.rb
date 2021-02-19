@@ -34,7 +34,7 @@ module Authentication
           if strategy.instance_variable_set(:@new_user_created, user.save)
             # FIXME: this should be handled by some of the on_* callbacks
             unless user.activate_email(user_data.verified_email)
-              ProviderUserMailer.activation(user).deliver_now
+              ProviderUserMailer.activation(user).deliver_later
               ActivationReminderWorker.enqueue(user)
             end
           end

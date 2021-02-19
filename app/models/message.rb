@@ -203,7 +203,7 @@ class Message < ApplicationRecord
   end
 
   def attempt_to_send_message(recipient)
-    PostOffice.message_notification(self, recipient).deliver_now
+    PostOffice.message_notification(self, recipient).deliver_later
   rescue ArgumentError => error
     System::ErrorReporting.report_error error_class: error,
                     error_message: "Got #{error} for message_id: `#{recipient.message_id}' and recipient `#{recipient.id}' -- #{recipient.emails.inspect}"

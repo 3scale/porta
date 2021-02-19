@@ -10,7 +10,7 @@ class ProviderInvitationMailerTest < ActionMailer::TestCase
 
   test 'deliver' do
     assert_difference ActionMailer::Base.deliveries.method(:count) do
-      @provider_invitation_email.deliver_now
+      @provider_invitation_email.deliver_later
     end
   end
 

@@ -6,12 +6,12 @@ class UserMailerTest < ActionMailer::TestCase
   end
 
   def deliver_lost_password
-    UserMailer.lost_password(@user).deliver_now
+    UserMailer.lost_password(@user).deliver_later
     ActionMailer::Base.deliveries.last
   end
 
   def deliver_signup_notification
-    UserMailer.signup_notification(@user).deliver_now
+    UserMailer.signup_notification(@user).deliver_later
     ActionMailer::Base.deliveries.last
   end
 
@@ -135,7 +135,7 @@ Customized Template
       end
 
       should "have specific body and subject" do
-        UserMailer.signup_notification(@user).deliver_now
+        UserMailer.signup_notification(@user).deliver_later
         message = ActionMailer::Base.deliveries.last
 
         # Headers

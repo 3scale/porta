@@ -65,7 +65,7 @@ module Pdf
     def send_notification!
       account.admins.map do |admin|
         if deliver_notification?(admin)
-          NotificationMailer.public_send(notification_name, self, admin).deliver_now
+          NotificationMailer.public_send(notification_name, self, admin).deliver_later
         else
           Rails.logger.info "[PDF::Report] Skipping delivery of #{period} report to #{admin}"
         end
@@ -82,7 +82,7 @@ module Pdf
 
     # REFACTOR: this class should not be responsible for mailing
     def mail_report
-      PostOffice.report(self, print_period).deliver_now
+      PostOffice.report(self, print_period).deliver_later
     end
 
     def pdf_file_name

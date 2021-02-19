@@ -18,8 +18,8 @@ class ThreeScale::EmailDoNotSendInterceptorTest < ActiveSupport::TestCase
   test "action mailer" do
     ActionMailer::Base.deliveries.clear
 
-    DasMailer.willkommen.deliver_now
-    DasMailer.nachrichten.deliver_now
+    DasMailer.willkommen.deliver_later
+    DasMailer.nachrichten.deliver_later
 
     assert_equal 1, ActionMailer::Base.deliveries.size
   end

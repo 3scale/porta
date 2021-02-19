@@ -184,7 +184,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
       assert_equal "cc@mail.example.com", mail.header['cc'].to_s
       assert_equal @custom, mail.header['custom'].to_s
 
-      mail.deliver_now
+      mail.deliver_later
 
       assert_match /poweredby/, mail.body.to_s
     end

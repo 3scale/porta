@@ -109,7 +109,7 @@ class Finance::BillingStrategy < ApplicationRecord
   end
 
   def self.notify_billing_results(results)
-    BillingMailer.billing_finished(results).deliver_now unless results.successful?
+    BillingMailer.billing_finished(results).deliver_later unless results.successful?
   rescue => error
     System::ErrorReporting.report_error(error)
     env = Rails.env

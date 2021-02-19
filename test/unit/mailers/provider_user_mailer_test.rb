@@ -15,7 +15,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       # ThreeScale.config.onpremises should be false by default
 
       test 'activation' do
-        ProviderUserMailer.activation(user).deliver_now
+        ProviderUserMailer.activation(user).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -30,7 +30,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'activation reminder' do
-        ProviderUserMailer.activation_reminder(user).deliver_now
+        ProviderUserMailer.activation_reminder(user).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -45,7 +45,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'lost_domain' do
-        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.external_domain]).deliver_now
+        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.external_domain]).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -60,7 +60,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'lost_password' do
-        ProviderUserMailer.lost_password(user).deliver_now
+        ProviderUserMailer.lost_password(user).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -82,7 +82,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'activation' do
-        ProviderUserMailer.activation(user).deliver_now
+        ProviderUserMailer.activation(user).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -98,7 +98,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'activation reminder' do
-        ProviderUserMailer.activation_reminder(user).deliver_now
+        ProviderUserMailer.activation_reminder(user).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -114,7 +114,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'lost_domain' do
-        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.external_domain]).deliver_now
+        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.external_domain]).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -130,7 +130,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       end
 
       test 'lost_password' do
-        ProviderUserMailer.lost_password(user).deliver_now
+        ProviderUserMailer.lost_password(user).deliver_later
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -148,7 +148,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
       test 'lost password under https' do
         with_default_url_options protocol: 'https' do
           user.stubs lost_password_token: 'abc123'
-          ProviderUserMailer.lost_password(user).deliver_now
+          ProviderUserMailer.lost_password(user).deliver_later
           email = ActionMailer::Base.deliveries.last
           assert_match "https://#{account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
         end
@@ -179,13 +179,13 @@ class ProviderUserMailerTest < ActionMailer::TestCase
   class MasterTest < ProviderUserMailerTest
 
     test 'master user activation on saas' do
-      ProviderUserMailer.activation(user).deliver_now
+      ProviderUserMailer.activation(user).deliver_later
       assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
     end
 
     test 'master user activation on-prem' do
       ThreeScale.config.stubs(onpremises: true)
-      ProviderUserMailer.activation(user).deliver_now
+      ProviderUserMailer.activation(user).deliver_later
       assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
     end
 
