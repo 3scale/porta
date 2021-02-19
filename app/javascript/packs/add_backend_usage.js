@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { backends, url, newBackendPath } = container.dataset
-  console.log(container.dataset)
+
   AddBackendFormWrapper({
     backends: safeFromJsonString(backends) || [],
     url,
