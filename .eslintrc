@@ -16,12 +16,20 @@
     "fixture": true,
     "spyOnEvent": true
   },
-  "extends" : "standard",
+  "extends": "standard",
   "plugins": [
     "flowtype",
     "react"
   ],
   "rules": {
+    "no-console": [
+      "warn",
+      {
+        "allow": [
+          "error"
+        ]
+      }
+    ],
     "no-duplicate-imports": 0,
     "react/sort-comp": [
       2,
@@ -36,9 +44,9 @@
       }
     ],
     "react/no-unused-prop-types": 0,
-    "react/jsx-uses-react" : 2,
-    "react/jsx-uses-vars" : 2,
-    "react/react-in-jsx-scope" : 2,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2,
     "flowtype/boolean-style": [
       2,
       "boolean"
