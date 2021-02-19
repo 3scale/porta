@@ -5,11 +5,7 @@ import Adapter from 'enzyme-adapter-react-16'
 
 Enzyme.configure({adapter: new Adapter()})
 
-import * as utils from 'utilities/utils'
-jest.mock('utilities/utils')
-jest.spyOn(utils, 'CSRFToken')
-  .mockImplementation(() => '')
-
+// DELETE: this is false
 import $ from 'jquery'
 // $FlowIgnore[prop-missing] flash is our custom function
 $.flash = {
