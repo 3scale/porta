@@ -48,7 +48,7 @@
               include_blank: false
 
     = f.buttons do
-      = f.commit_button 'Save', button_html: { class: 'pf-c-button pf-m-primary' }
+      = f.button 'Save', button_html: { class: 'pf-c-button pf-m-primary' }
 
 - if can?(:manage, :finance)
   - if @account.billing_strategy.try(:needs_credit_card?)
@@ -86,7 +86,7 @@
                                           value: '', disabled: true
 
       = form.buttons do
-        = form.commit_button 'Save changes', button_html: { class: 'pf-c-button pf-m-primary' }
+        = form.button 'Save changes', button_html: { class: 'pf-c-button pf-m-primary' }
 
   javascript:
     $(function() {
