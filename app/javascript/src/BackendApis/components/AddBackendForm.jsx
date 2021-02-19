@@ -27,7 +27,7 @@ const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const isFormComplete = backend && path
+  const isFormComplete = backend !== null && path !== ''
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -67,6 +67,7 @@ const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
             variant='primary'
             type='submit'
             isDisabled={!isFormComplete || loading}
+            data-testid="submit"
           >
             Add to Product
           </Button>
