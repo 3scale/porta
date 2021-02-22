@@ -85,6 +85,7 @@ it.skip('should have a filterable table', () => {
   expect(wrapper.find('tbody tr').length).toEqual(crew.length)
 
   const textInput = wrapper.find('.pf-c-toolbar input[type="search"]')
+  // FIXME: input not receiving text for some reason
   textInput.simulate('change', { target: { value: 'Kamal' } })
   expect(wrapper.find('.pf-c-toolbar input[type="search"]').text()).toEqual('Kamal')
 
@@ -124,4 +125,12 @@ it('should be cancelable', () => {
   const wrapper = mountWrapper()
   wrapper.find('button[data-testid="cancel"]').simulate('click')
   expect(onCloseSpy).toHaveBeenCalledTimes(1)
+})
+
+it('should check the current item if previously selected', () => {
+  const item = { id: 0, name: 'N. Nagata', role: 'Engineer' }
+  const wrapper = mountWrapper({ items: [item], item })
+
+  const radio = wrapper.find('tbody tr').first().find('input')
+  expect(radio.prop('checked')).toBe(true)
 })
