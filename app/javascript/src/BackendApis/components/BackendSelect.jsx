@@ -13,8 +13,8 @@ import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilit
 
 import type { Backend } from 'Types'
 
-const HEADER = { id: 'header', name: 'Most recently created Backends', disabled: true, className: 'pf-c-select__menu-item--group-name' }
-const SHOW_ALL = { id: 'foo', name: 'View all Backends' }
+const HEADER = { id: 'group-0', name: 'Most recently created Backends', disabled: true, className: 'pf-c-select__menu-item--group-name' }
+const SHOW_ALL = { id: 'show-all', name: 'View all Backends' }
 
  type Props = {
    backend: Backend | null,
@@ -44,6 +44,23 @@ const BackendSelect = ({ isDisabled = false, newBackendPath, onSelect, onShowAll
     }
   }
 
+  const toBackendOption = b => toSelectOption({ ...b, description: b.privateEndpoint || undefined })
+  const getItems = backends => [HEADER, ...backends.slice(0, MAX_PRODUCTS), SHOW_ALL]
+
+  const options = getItems(backends).map(toBackendOption)
+
+  const handleOnFilter = (e) => {
+    const term = e.target.value
+
+    const filteredBackends = term !== '' ? backends.filter(b => b.name.includes(term)) : backends
+
+    if (filteredBackends.length === 0) {
+      filteredBackends.push({})
+    }
+
+    return getItems(filteredBackends).map(toBackendOption)
+  }
+
   return (
     <FormGroup
       isRequired
@@ -70,11 +87,10 @@ const BackendSelect = ({ isDisabled = false, newBackendPath, onSelect, onShowAll
         onClear={() => onSelect(null)}
         aria-labelledby="backend"
         className="pf-c-select__menu--with-fixed-link"
+        isGrouped
+        onFilter={handleOnFilter}
       >
-        {[HEADER, ...backends.slice(0, MAX_PRODUCTS), SHOW_ALL].map(b => toSelectOption({
-          ...b,
-          description: b.privateEndpoint || undefined
-        }))}
+        {options}
       </Select>
     </FormGroup>
   )

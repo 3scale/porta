@@ -53,7 +53,7 @@ it('should be able to select and submit an item', () => {
   const wrapper = mountWrapper()
 
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button').filterWhere(n => n.text() === targetItem.name).simulate('click')
+  wrapper.find('.pf-c-select__menu li button').filterWhere(n => n.text().includes(targetItem.name)).simulate('click')
 
   expect(onSelectSpy).toBeCalledWith(targetItem)
 })
