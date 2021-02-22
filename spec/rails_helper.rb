@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
@@ -23,7 +25,7 @@ require 'rspec-html-matchers'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -36,10 +38,17 @@ end
 
 if ENV['CI']
   require 'simplecov'
-  SimpleCov.start
-
+  require "simplecov_json_formatter"
   require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  formatters = [
+    SimpleCov::Formatter::SimpleFormatter,
+    SimpleCov::Formatter::JSONFormatter,
+    SimpleCov::Formatter::HTMLFormatter,
+    Codecov::SimpleCov::Formatter
+  ]
+  SimpleCov.start do
+    formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
+  end
 end
 
 # Require backend API stubbing
@@ -91,7 +100,7 @@ RSpec.configure do |config|
 
   config.around(:each, transactions: false) do |ex|
     require 'database_cleaner'
-    transactional = self.use_transactional_fixtures
+    transactional = use_transactional_fixtures
     self.use_transactional_fixtures = false
 
     begin
@@ -104,12 +113,12 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    begin
-      User.current = nil
-      ::Backend::Storage.instance.flushdb
-    rescue Errno::ECONNREFUSED
-      # not running
-    end
+
+    User.current = nil
+    ::Backend::Storage.instance.flushdb
+  rescue Errno::ECONNREFUSED
+    # not running
+
   end
 
   config.before(:suite) do
@@ -125,9 +134,9 @@ end
 
 
 RspecApiDocumentation.configure do |config|
-  config.docs_dir = Rails.root.join(*%w|doc api|)
+  config.docs_dir = Rails.root.join('doc', 'api')
   # html pages with the wURL console
-  config.format = [:json, :wurl, :combined_text]
+  config.format = %i[json wurl combined_text]
   # html pages without the wURL console
   #config.format = [:json, :html]
   #config.url_prefix = "/docs"
