@@ -3,7 +3,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { SelectModal } from 'Common'
+import { TableModal } from 'Common'
 
 const onSelectSpy = jest.fn()
 const onCloseSpy = jest.fn()
@@ -27,7 +27,7 @@ const defaultProps = {
 }
 
 // $FlowFixMe: $FlowIssue should not complain since id has union type 'string | number'
-const mountWrapper = (props) => mount(<SelectModal {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

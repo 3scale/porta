@@ -1,4 +1,5 @@
 // @flow
 
-export * from './components/SelectModal'
+export * from './components/TableModal'
 export * from './components/Spinner'
+export * from './components/SelectWithModal'
