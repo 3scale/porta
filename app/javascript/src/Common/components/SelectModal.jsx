@@ -38,6 +38,12 @@ const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose,
   const searchInputRef = useRef(null)
 
   useEffect(() => {
+    if (item !== null && item.id !== selectedId) {
+      setSelectedId(item.id)
+    }
+  }, [item])
+
+  useEffect(() => {
     if (isOpen) {
       setFilteredItems(items)
       setPage(1)
