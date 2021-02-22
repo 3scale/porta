@@ -29,6 +29,6 @@ it.skip('should work', () => {
 
   wrapper.find('input').simulate('change', { currentTarget: { value }, target: { value } })
 
-  // FIXME: what is wrong with this, onChange is passed the event with the value and it should work.
+  // FIXME: what is wrong with this? onChange is passed the event with the value and it should work.
   expect(setPath).toHaveBeenCalledWith(value)
 })

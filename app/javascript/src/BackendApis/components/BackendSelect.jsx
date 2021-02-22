@@ -1,70 +1,40 @@
 // @flow
 
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
-  Button,
-  FormGroup,
-  Select,
-  SelectVariant
+  Button
 } from '@patternfly/react-core'
 import { PlusCircleIcon } from '@patternfly/react-icons'
-import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilities/patternfly-utils'
+import { SelectWithModal } from 'Common'
 
 import type { Backend } from 'Types'
-
-const HEADER = { id: 'group-0', name: 'Most recently created Backends', disabled: true, className: 'pf-c-select__menu-item--group-name' }
-const SHOW_ALL = { id: 'show-all', name: 'View all Backends' }
 
  type Props = {
    backend: Backend | null,
    backends: Backend[],
    newBackendPath: string,
-   onSelect: (Backend | null) => void,
-   onShowAll: () => void,
-   isDisabled?: boolean
+   onSelect: (Backend | null) => void
  }
 
-const MAX_PRODUCTS = 20
-
-const BackendSelect = ({ isDisabled = false, newBackendPath, onSelect, onShowAll, backends, backend }: Props) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const handleOnSelect = (_e, option: SelectOptionObject) => {
-    setExpanded(false)
-
-    if (option.id === SHOW_ALL.id) {
-      onShowAll()
-    } else {
-      const selectedBackend = backends.find(b => String(b.id) === option.id)
-
-      if (selectedBackend) {
-        onSelect(selectedBackend)
-      }
-    }
-  }
-
-  const toBackendOption = b => toSelectOption({ ...b, description: b.privateEndpoint || undefined })
-  const getItems = backends => [HEADER, ...backends.slice(0, MAX_PRODUCTS), SHOW_ALL]
-
-  const options = getItems(backends).map(toBackendOption)
-
-  const handleOnFilter = (e) => {
-    const term = new RegExp(e.target.value, 'i')
-
-    const filteredBackends: Backend[] = term !== '' ? backends.filter(b => term.test(b.name)) : backends
-    let filteredItems = filteredBackends.length === 0
-      ? [{ id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }, SHOW_ALL]
-      : getItems(filteredBackends)
-
-    return filteredItems.map(toBackendOption)
-  }
+const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props) => {
+  const cells = [
+    { title: 'Name', propName: 'name' },
+    { title: 'Private Base URL', propName: 'privateEndpoint' },
+    { title: 'Last updated', propName: 'updatedAt' }
+  ]
 
   return (
-    <FormGroup
-      isRequired
+    <SelectWithModal
       label="Backend"
-      fieldId="backend"
+      fieldId="backend_api_config_backend_api_id"
+      id="backend_api_config_backend_api_id"
+      name="backend_api_config[backend_api_id]"
+      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      item={backend}
+      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      items={backends}
+      cells={cells}
       helperText={(
         <p className="hint">
           <Button variant="link" icon={<PlusCircleIcon />} component="a" href={newBackendPath} isInline>
@@ -72,26 +42,11 @@ const BackendSelect = ({ isDisabled = false, newBackendPath, onSelect, onShowAll
           </Button>
         </p>
       )}
-    >
-      {backend && <input type="hidden" name="backend_api_config[backend_api_id]" value={backend.id} />}
-      <Select
-        variant={SelectVariant.typeahead}
-        placeholderText="Select a backend"
-        // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
-        selections={backend && toSelectOptionObject(backend)}
-        onToggle={() => setExpanded(!expanded)}
-        onSelect={handleOnSelect}
-        isExpanded={expanded}
-        isDisabled={isDisabled}
-        onClear={() => onSelect(null)}
-        aria-labelledby="backend"
-        className="pf-c-select__menu--with-fixed-link"
-        isGrouped
-        onFilter={handleOnFilter}
-      >
-        {options}
-      </Select>
-    </FormGroup>
+      modalTitle="Select a Backend"
+      onSelect={onSelect}
+      header="Most recently created Backends"
+      footer="View all Backends"
+    />
   )
 }
 export { BackendSelect }

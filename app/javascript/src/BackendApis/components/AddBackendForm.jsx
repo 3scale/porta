@@ -9,7 +9,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { BackendSelect, BackendSelectModal, PathInput } from 'BackendApis'
+import { BackendSelect, PathInput } from 'BackendApis'
 import { CSRFToken } from 'utilities/utils'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
@@ -24,7 +24,6 @@ type Props = {
 const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
   const [backend, setBackend] = useState<Backend | null>(null)
   const [path, setPath] = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const isFormComplete = backend !== null && path !== ''
@@ -46,18 +45,6 @@ const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
           backends={backends}
           newBackendPath={newBackendPath}
           onSelect={setBackend}
-          onShowAll={() => setModalOpen(true)}
-        />
-
-        <BackendSelectModal
-          isOpen={modalOpen}
-          backend={backend}
-          backends={backends}
-          onSelectBackend={b => {
-            setBackend(b)
-            setModalOpen(false)
-          }}
-          onClose={() => setModalOpen(false)}
         />
 
         <PathInput path={path} setPath={setPath} />
