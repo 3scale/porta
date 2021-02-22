@@ -16,7 +16,7 @@ import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import type { Record } from 'utilities/patternfly-utils'
 
-import './SelectModal.scss'
+import './TableModal.scss'
 
 type Props<T: Record> = {
   title: string,
@@ -31,7 +31,7 @@ type Props<T: Record> = {
 
 const PER_PAGE_DEFAULT = 5
 
-const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>) => {
+const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>) => {
   const [selectedId, setSelectedId] = useState(item ? item.id : null)
   const [page, setPage] = useState(1)
   const [filteredItems, setFilteredItems] = useState(items)
@@ -143,4 +143,4 @@ const SelectModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose,
   )
 }
 
-export { SelectModal }
+export { TableModal }
