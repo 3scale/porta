@@ -177,6 +177,7 @@ commands: # reusable commands with parameters
           name: Install gems with bundler
           command: |
             echo "Running gems install for database: $DB"
+            echo "$(bundle version)"
             bundle check || bundle install --deployment
             bundle clean
             # remove capybara-webkit source, save more than 400 MB
