@@ -30,7 +30,7 @@ it('should enable submit button only when form is filled', () => {
   expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(true)
 
   act(() => {
-    wrapper.find('BackendSelectModal').prop('onSelectBackend')(backend)
+    wrapper.find('BackendSelect').prop('onSelect')(backend)
     wrapper.find('PathInput').prop('setPath')('/foo')
   })
 
