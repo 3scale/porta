@@ -52,13 +52,12 @@ const BackendSelect = ({ isDisabled = false, newBackendPath, onSelect, onShowAll
   const handleOnFilter = (e) => {
     const term = e.target.value
 
-    const filteredBackends = term !== '' ? backends.filter(b => b.name.includes(term)) : backends
+    const filteredBackends: Backend[] = term !== '' ? backends.filter(b => b.name.includes(term)) : backends
+    let filteredItems = filteredBackends.length === 0
+      ? [{ id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }, SHOW_ALL]
+      : getItems(filteredBackends)
 
-    if (filteredBackends.length === 0) {
-      filteredBackends.push({})
-    }
-
-    return getItems(filteredBackends).map(toBackendOption)
+    return filteredItems.map(toBackendOption)
   }
 
   return (
