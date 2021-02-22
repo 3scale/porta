@@ -50,9 +50,9 @@ const BackendSelect = ({ isDisabled = false, newBackendPath, onSelect, onShowAll
   const options = getItems(backends).map(toBackendOption)
 
   const handleOnFilter = (e) => {
-    const term = e.target.value
+    const term = new RegExp(e.target.value, 'i')
 
-    const filteredBackends: Backend[] = term !== '' ? backends.filter(b => b.name.includes(term)) : backends
+    const filteredBackends: Backend[] = term !== '' ? backends.filter(b => term.test(b.name)) : backends
     let filteredItems = filteredBackends.length === 0
       ? [{ id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }, SHOW_ALL]
       : getItems(filteredBackends)
