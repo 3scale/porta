@@ -26,20 +26,20 @@ it('should render itself', () => {
 
 it('should have Dashboard, Audience, Products, Backends and Settings', () => {
   const wrapper = getWrapper()
-  wrapper.find('.PopNavigation-trigger').simulate('click')
+  wrapper.find('.pf-c-context-selector__toggle').simulate('click')
   expect(wrapper).toMatchSnapshot()
 })
 
 it('should not have Audience if not provided', () => {
   const wrapper = getWrapper()
   wrapper.setProps({ audienceLink: undefined })
-  wrapper.find('.PopNavigation-trigger').simulate('click')
+  wrapper.find('.pf-c-context-selector__toggle').simulate('click')
   expect(wrapper).toMatchSnapshot()
 })
 
 it('should highlight the selected context', () => {
   const wrapper = getWrapper()
-  wrapper.find('.PopNavigation-trigger').simulate('click')
+  wrapper.find('.pf-c-context-selector__toggle').simulate('click')
 
   wrapper.setProps({ activeMenu: 'buyers', currentApi: null })
   expect(wrapper.find('.current-context')).toHaveLength(1)
@@ -86,13 +86,13 @@ it('should display the current api', () => {
   const wrapper = getWrapper({ activeMenu: 'serviceadmin', currentApi })
 
   expect(wrapper.find('.fa-cubes').exists()).toBe(true)
-  expect(wrapper.find('.PopNavigation-trigger').text()).toContain('Products')
+  expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')
 
   wrapper.setProps({ activeMenu: 'monitoring' })
   expect(wrapper.find('.fa-cubes').exists()).toBe(true)
-  expect(wrapper.find('.PopNavigation-trigger').text()).toContain('Products')
+  expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')
 
   wrapper.setProps({ activeMenu: 'backend_api' })
   expect(wrapper.find('.fa-cube').exists()).toBe(true)
-  expect(wrapper.find('.PopNavigation-trigger').text()).toContain('Backends')
+  expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Backends')
 })
