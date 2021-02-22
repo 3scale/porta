@@ -6,11 +6,14 @@ junit_reporter_path = 'tmp/junit/unit'
 
 if ENV['CI']
   require 'simplecov'
-  SimpleCov.start
-
   require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-
+  SimpleCov.start do
+    formatter SimpleCov::Formatter::MultiFormatter.new([
+                                                         SimpleCov::Formatter::SimpleFormatter,
+                                                         SimpleCov::Formatter::HTMLFormatter,
+                                                         Codecov::SimpleCov::Formatter
+                                                       ])
+  end
   junit_reporter_path = "#{junit_reporter_path}-#{ENV['CIRCLE_NODE_INDEX']}"
 end
 
@@ -22,7 +25,7 @@ require 'rails/test_help'
 require "paperclip/matchers"
 require 'shoulda'
 
-require File.expand_path('../../lib/developer_portal/test/test_helper.rb', __FILE__)
+require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
 
 require 'minitest/reporters'
 
@@ -44,7 +47,7 @@ class ActiveSupport::TestCase
   Aws.config[:s3] = { stub_responses: true }
 
   def assert_not_match(regexp, str)
-    assert !(str =~ Regexp.compile(regexp)), "Should not match '#{regexp}'"
+    assert_not (str =~ Regexp.compile(regexp)), "Should not match '#{regexp}'"
   end
 
   def assert_can(ability, *args)
