@@ -6,13 +6,16 @@ junit_reporter_path = 'tmp/junit/unit'
 
 if ENV['CI']
   require 'simplecov'
+  require "simplecov_json_formatter"
   require 'codecov'
+  formatters = [
+    SimpleCov::Formatter::SimpleFormatter,
+    SimpleCov::Formatter::JSONFormatter,
+    SimpleCov::Formatter::HTMLFormatter,
+    Codecov::SimpleCov::Formatter
+  ]
   SimpleCov.start do
-    formatter SimpleCov::Formatter::MultiFormatter.new([
-                                                         SimpleCov::Formatter::SimpleFormatter,
-                                                         SimpleCov::Formatter::HTMLFormatter,
-                                                         Codecov::SimpleCov::Formatter
-                                                       ])
+    formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
   end
   junit_reporter_path = "#{junit_reporter_path}-#{ENV['CIRCLE_NODE_INDEX']}"
 end
