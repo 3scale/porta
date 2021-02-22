@@ -7,10 +7,17 @@ require 'config/boot'
 
 if ENV['CI']
   require 'simplecov'
-  SimpleCov.start
-
+  require "simplecov_json_formatter"
   require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  formatters = [
+    SimpleCov::Formatter::SimpleFormatter,
+    SimpleCov::Formatter::JSONFormatter,
+    SimpleCov::Formatter::HTMLFormatter,
+    Codecov::SimpleCov::Formatter
+  ]
+  SimpleCov.start do
+    formatter SimpleCov::Formatter::MultiFormatter.new(formatters)
+  end
 end
 
 require 'minitest/autorun'
@@ -27,7 +34,8 @@ require 'active_support/core_ext'
 require 'test_helpers/simple_mini_test'
 
 unless defined?(Rails)
-  module Rails extend self
+  module Rails
+    extend self
     $mocha = Object.new.extend(Mocha::API)
 
     # this is for pry-rails
