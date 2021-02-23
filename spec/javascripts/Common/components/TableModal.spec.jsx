@@ -12,10 +12,12 @@ const cells = [
   { title: 'Name', propName: 'name' },
   { title: 'Role', propName: 'role' }
 ]
+
 const crew = [
   { id: 0, name: 'J. Holden', role: 'Captain' },
   { id: 1, name: 'A. Burton', role: 'Muscle' }
 ]
+
 const defaultProps = {
   title: 'The Rocinante',
   item: null,
