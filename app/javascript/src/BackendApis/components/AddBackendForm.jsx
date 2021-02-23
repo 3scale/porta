@@ -15,6 +15,8 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { Backend } from 'Types'
 
+import './AddBackendForm.scss'
+
 type Props = {
   backends: Backend[],
   url: string,
@@ -36,6 +38,7 @@ const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
         method='post'
         action={url}
         onSubmit={e => setLoading(true)}
+        // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />
         <input name='utf8' type='hidden' value='✓' />
