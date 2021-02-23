@@ -7,20 +7,17 @@ div.dashboard_card.round
                            html: { :method => :put, class: "formtastic" },
                            'data-confirm': confirm_message do |form|
       fieldset.inputs
-        ol
-          li
-            data = default_application_plan_data(@service, @plans)
-            = javascript_pack_tag 'default_plan_selector'
+        data = default_application_plan_data(@service, @cinstance.available_application_plans)
+        = javascript_pack_tag 'default_plan_selector'
 
-            = form.collection_select :plan_id, @cinstance.available_application_plans,
-                                      :id,
-                                      :name,
-                                      { include_blank: true },
-                                      { required: true }
+        = form.collection_select :plan_id, @cinstance.available_application_plans,
+                                  :id,
+                                  :name,
+                                  { include_blank: true },
+                                  { required: true }
       fieldset.buttons
-        ol
-          li.commit
-            = form.submit 'Change Plan', class: 'important-button'
+        .commit
+          = form.submit 'Change Plan', class: 'important-button'
 
   - if @cinstance.credit_card_missing?
     p Buyer does not have any payment details on record.
