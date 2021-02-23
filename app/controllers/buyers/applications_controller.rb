@@ -9,7 +9,7 @@ class Buyers::ApplicationsController < FrontendController
 
   before_action :authorize_partners
   before_action :find_buyer, :only => [:create]
-  before_action :find_plans, :only => %i[new create]
+  before_action :find_plans, :only => %i[show new create update]
   before_action :authorize_multiple_applications, :only => [:create]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
