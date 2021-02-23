@@ -29,7 +29,7 @@ const BuyerSelect = ({ buyer, buyers, onSelectBuyer, isDisabled }: Props) => {
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
       item={buyer}
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
-      items={buyers}
+      items={buyers.map(b => ({ ...b, description: b.admin }))}
       cells={cells}
       modalTitle="Select an Account"
       onSelect={onSelectBuyer}

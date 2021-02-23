@@ -31,7 +31,7 @@ const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
       item={product}
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
-      items={products}
+      items={products.map(p => ({ ...p, description: p.systemName }))}
       cells={cells}
       modalTitle="Select an Account"
       onSelect={onSelectProduct}
