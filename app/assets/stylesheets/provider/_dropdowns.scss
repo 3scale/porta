@@ -148,10 +148,10 @@ $dropdown-bg-color: lighten(black, 85%);
   .pf-c-select__menu-item-description {
     height: auto;
 
-    &:after {
+    &::after {
       color: var(--pf-global--Color--200); // var(--pf-c-select__menu-item-description--Color);
       content: "\A"attr(data-description);
-      font-size: 0.75rem; // var(--pf-c-select__menu-item-description--FontSize);
+      font-size: .75rem; // var(--pf-c-select__menu-item-description--FontSize);
       white-space: pre-wrap;
     }
   }
