@@ -8,10 +8,11 @@ import { mount } from 'enzyme'
 import { AddBackendForm } from 'BackendApis'
 
 const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org' }
+const newBackendPath = '/backend/new'
 const defaultProps = {
   backends: [backend],
   url: '',
-  newBackendPath: ''
+  newBackendPath
 }
 
 const mountWrapper = (props) => mount(<AddBackendForm {...{ ...defaultProps, ...props }} />)
@@ -36,4 +37,9 @@ it('should enable submit button only when form is filled', () => {
 
   wrapper.update()
   expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(false)
+})
+
+it('should have a button to create a new backend', () => {
+  const wrapper = mountWrapper()
+  expect(wrapper.find(`a[href="${newBackendPath}"]`))
 })
