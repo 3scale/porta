@@ -1,11 +1,17 @@
-Dear {{account.name}},
+Dear {{ account.name }},
 
 Thank you for using our service.
 
-We'd like to inform you that unfortunately your last payment failed to process correctly. We will try again in 3 to 4 days. In the meantime, please update the credit card details on the Account tab of your Dashboard ({{payment_url}}) if you believe the card details are out of date.
+We're sorry to inform you that your last payment was declined.
+This may have been caused by a few common reasons:
 
-If you need any help, please don't hesitate to contact us at {{ provider.finance_support_email }}.
+- A new authentication policy enforced by your bank
+- An expired credit card
+- Insufficient funds on the account
+
+To continue using your service, verify the status of your credit card and update or re-enter the credit card details at {{payment_url}}.
+
+If you need help, don't hesitate to contact us at {{ provider.finance_support_email }}.
 
 Best regards,
-
 The {{ provider.name }} API Team
