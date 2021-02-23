@@ -50,6 +50,14 @@ const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, 
     }
   }, [isOpen])
 
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.addEventListener('input', ({ inputType }) => {
+        if (!inputType) search()
+      })
+    }
+  }, [searchInputRef.current])
+
   const handleOnSearch = () => {
     if (searchInputRef.current) {
       search(searchInputRef.current.value)
