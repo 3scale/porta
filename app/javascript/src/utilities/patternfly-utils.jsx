@@ -6,7 +6,8 @@ import { SelectOption } from '@patternfly/react-core'
 
 export interface Record {
   id: number | string,
-  name: string
+  name: string,
+  description?: string | void
 }
 
 export interface SelectOptionObject {
@@ -22,13 +23,18 @@ export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
 })
 
 type Props = Record & {
-  disabled?: boolean | void
+  disabled?: boolean | void,
+  className?: string
 }
 
-export const toSelectOption = ({ id, name, disabled = false }: Props) => (
+export const toSelectOption = ({ id, name, description, disabled = false, className }: Props) => (
   <SelectOption
     key={id}
-    value={toSelectOptionObject({ id, name })}
+    value={toSelectOptionObject({ id, name, description })}
+    className={className}
+    // TODO: when we upgrade PF, use description prop directly
+    // description={record.description}
+    data-description={description}
     isDisabled={disabled}
   />
 )
