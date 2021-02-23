@@ -12,6 +12,6 @@ h2
     = form.user_defined_form
 
   = form.buttons do
-    = form.commit_button
+    = form.button 'Update Application', button_html: {class: 'pf-c-button pf-m-primary' }
     li
       = delete_application_link(@cinstance)

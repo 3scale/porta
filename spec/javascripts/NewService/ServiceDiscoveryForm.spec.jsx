@@ -71,6 +71,6 @@ describe('when Api as Product is enabled', () => {
   props.apiap = true
   it('should render itself', () => {
     const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
-    expect(wrapper.find('.important-button.create').props().value).toEqual('Create Product')
+    expect(wrapper.find('.pf-c-button.create').props().value).toEqual('Create Product')
   })
 })

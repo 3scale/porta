@@ -67,12 +67,8 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
     // classList.toggle second argument is not supported in IE11
     if (isPolicyChainChanged(chain, originalChain)) {
       submitButton.removeAttribute('disabled')
-      submitButton.classList.remove('disabled-button')
-      submitButton.classList.add('important-button')
     } else {
       submitButton.setAttribute('disabled', '')
-      submitButton.classList.add('disabled-button')
-      submitButton.classList.remove('important-button')
     }
   }
 

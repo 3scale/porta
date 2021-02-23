@@ -1,6 +1,8 @@
 // @flow
 
 import * as React from 'react'
+import { Button } from '@patternfly/react-core'
+import { PlusIcon, TimesIcon } from '@patternfly/react-icons'
 
 import type { ThunkAction } from 'Policies/types'
 
@@ -15,15 +17,20 @@ const classNames = {
   cancel: 'PolicyChain-addPolicy--cancel'
 }
 
-const icons = {
-  add: 'fa fa-plus-circle',
-  cancel: 'fa fa-times-circle'
-}
+const Icon = ({type}) => (
+  type === 'add' ? <PlusIcon/> : <TimesIcon/>
+)
 
 const HeaderButton = ({ type, onClick, children }: Props) => (
-  <div className={classNames[type]} onClick={onClick}>
-    <i className={icons[type]} />{children}
-  </div>
+  <Button
+    className={classNames[type]}
+    variant="link"
+    icon={<Icon type={type}/>}
+    iconPosition="left"
+    onClick={onClick}
+  >
+    {children}
+  </Button>
 )
 
 export { HeaderButton }

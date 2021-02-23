@@ -29,7 +29,7 @@ const FormWrapper = (props: FormProps) => {
           type="submit"
           name="commit"
           value={submitText}
-          className="important-button create"/>
+          className="pf-c-button pf-m-primary create" />
       </fieldset>
     </form>
   )
