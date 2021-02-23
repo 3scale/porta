@@ -33,7 +33,7 @@ const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props) =
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
       item={backend}
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
-      items={backends}
+      items={backends.map(b => ({ ...b, description: b.privateEndpoint }))}
       cells={cells}
       helperText={(
         <p className="hint">
