@@ -8,4 +8,4 @@
   = form.input :position
 
 = form.buttons do
-  = form.commit_button "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule"
+  = form.button "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule", button_html: { class: 'pf-c-button pf-m-primary' }

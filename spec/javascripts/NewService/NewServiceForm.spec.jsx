@@ -79,7 +79,7 @@ describe('when Api as Product is enabled', () => {
 
     wrapper.update()
     expect(wrapper.find('h1').text()).toEqual('New Product')
-    expect(wrapper.find('.important-button.create').props().value).toEqual('Create Product')
+    expect(wrapper.find('.pf-c-button.create').props().value).toEqual('Create Product')
   })
 })
 

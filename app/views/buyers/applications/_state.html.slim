@@ -7,10 +7,10 @@ dl#cinstance_state.u-dl.u-dl--skinny
     - if @cinstance.pending?
       = render :partial => 'buyers/applications/accept_reject'
     - elsif @cinstance.live?
-      = fancy_link_to 'Suspend', suspend_admin_buyers_application_path(@cinstance),
+      = pf_fancy_link_to 'Suspend', suspend_admin_buyers_application_path(@cinstance),
                       :method => :post, :remote => true, data: {:confirm => suspend_application_confirmation(@cinstance)}, class: 'action suspend'
     - elsif @cinstance.suspended?
-      = fancy_link_to 'Resume', resume_admin_buyers_application_path(@cinstance), :method => :post, :remote => true, class: 'action resume'
+      = pf_fancy_link_to 'Resume', resume_admin_buyers_application_path(@cinstance), :method => :post, :remote => true, class: 'action resume'
 
   - if @cinstance.trial?
     dt.u-dl-term
