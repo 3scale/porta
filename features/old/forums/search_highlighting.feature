@@ -1,4 +1,4 @@
-@search @saas-only
+@search @saas-only @wip
 Feature: Search
   In order to search on pages
   Buyer will need to have a search form

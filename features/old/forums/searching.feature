@@ -1,4 +1,4 @@
-@search @saas-only
+@search @saas-only @wip
 Feature: Forum searching
   In order to find stuff in the forum
   As an user
