@@ -15,9 +15,7 @@ import {
   ApplicationPlanSelect,
   ServicePlanSelect,
   NameInput,
-  DescriptionInput,
-  SelectBuyerModal,
-  SelectProductModal
+  DescriptionInput
 } from 'NewApplication'
 import { CSRFToken } from 'utilities/utils'
 
@@ -54,8 +52,6 @@ const NewApplicationForm = ({
   const [description, setDescription] = useState<string>('')
 
   const [loading, setLoading] = useState<boolean>(false)
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [buyersModalOpen, setBuyersModalOpen] = useState<boolean>(false)
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan !== null
@@ -111,48 +107,20 @@ const NewApplicationForm = ({
         <input name='utf8' type='hidden' value='✓' />
 
         {buyers && (
-          <>
-            <BuyerSelect
-              buyer={buyer}
-              buyers={buyers}
-              onSelect={setBuyer}
-              onShowAll={() => setBuyersModalOpen(true)}
-            />
-
-            <SelectBuyerModal
-              isOpen={buyersModalOpen}
-              buyer={buyer}
-              buyers={buyers}
-              onSelectBuyer={b => {
-                setBuyer(b)
-                setBuyersModalOpen(false)
-              }}
-              onClose={() => setBuyersModalOpen(false)}
-            />
-          </>
+          <BuyerSelect
+            buyer={buyer}
+            buyers={buyers}
+            onSelectBuyer={setBuyer}
+          />
         )}
 
         {products && (
-          <>
-            <ProductSelect
-              product={product}
-              products={products}
-              onSelect={setProduct}
-              onShowAll={() => setModalOpen(true)}
-              isDisabled={buyer === null}
-            />
-
-            <SelectProductModal
-              isOpen={modalOpen}
-              product={product}
-              products={products}
-              onSelectProduct={p => {
-                setProduct(p)
-                setModalOpen(false)
-              }}
-              onClose={() => setModalOpen(false)}
-            />
-          </>
+          <ProductSelect
+            product={product}
+            products={products}
+            onSelectProduct={setProduct}
+            isDisabled={buyer === null}
+          />
         )}
 
         {servicePlansAllowed && (

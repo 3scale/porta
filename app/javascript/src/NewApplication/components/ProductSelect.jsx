@@ -1,71 +1,44 @@
 // @flow
 
-import React, { useState } from 'react'
+import React from 'react'
 
-import {
-  FormGroup,
-  Select,
-  SelectVariant
-} from '@patternfly/react-core'
-import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilities/patternfly-utils'
+import { SelectWithModal } from 'Common'
 
 import type { Product } from 'NewApplication/types'
-
-const HEADER = { id: 'header', name: 'Most recently created products', disabled: true, className: 'pf-c-select__menu-item--group-name' }
-const SHOW_ALL_PRODUCTS = { id: 'foo', name: 'View all Products' }
 
 type Props = {
   product: Product | null,
   products: Product[],
-  onSelect: (Product | null) => void,
-  onShowAll: () => void,
+  onSelectProduct: (Product | null) => void,
   isDisabled?: boolean
 }
 
-const MAX_PRODUCTS = 20
-
-const ProductSelect = ({ isDisabled = false, onSelect, onShowAll, products, product }: Props) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const handleOnSelect = (_e, option: SelectOptionObject) => {
-    setExpanded(false)
-
-    if (option.id === SHOW_ALL_PRODUCTS.id) {
-      onShowAll()
-    } else {
-      const selectedProduct = products.find(p => p.id === option.id)
-
-      if (selectedProduct) {
-        onSelect(selectedProduct)
-      }
-    }
-  }
+const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props) => {
+  const cells = [
+    { title: 'Name', propName: 'name' },
+    { title: 'System Name', propName: 'systemName' },
+    { title: 'Last updated', propName: 'updatedAt' }
+  ]
 
   return (
-    <FormGroup
-      isRequired
+    <SelectWithModal
       label="Product"
-      fieldId="product"
-    >
-      <Select
-        variant={SelectVariant.typeahead}
-        placeholderText="Select a product"
-        // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
-        selections={product && toSelectOptionObject(product)}
-        onToggle={() => setExpanded(!expanded)}
-        onSelect={handleOnSelect}
-        isExpanded={expanded}
-        isDisabled={isDisabled}
-        onClear={() => onSelect(null)}
-        aria-labelledby="product"
-        className="pf-c-select__menu--with-fixed-link"
-      >
-        {[HEADER, ...products.slice(0, MAX_PRODUCTS), SHOW_ALL_PRODUCTS].map(p => toSelectOption({
-          ...p,
-          description: p.systemName || undefined
-        }))}
-      </Select>
-    </FormGroup>
+      // Do not submit
+      // fieldId="TODO"
+      id="product"
+      // name="TODO"
+
+      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      item={product}
+      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      items={products}
+      cells={cells}
+      modalTitle="Select an Account"
+      onSelect={onSelectProduct}
+      header="Most recently created Accounts"
+      footer="View all Accounts"
+      isDisabled={isDisabled}
+    />
   )
 }
 export { ProductSelect }
