@@ -73,7 +73,11 @@ const SelectWithModal = <T: Record>({
     }
   }
 
-  const getItems = items => [headerItem, ...items.slice(0, maxItems), footerItem]
+  const getItems = items => [
+    headerItem,
+    ...items.slice(0, maxItems).map(i => ({ ...i, className: 'pf-c-select__menu-item-description' })),
+    footerItem
+  ]
 
   // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
   const options = getItems(items).map(toSelectOption)
