@@ -62,31 +62,28 @@ const NewApplicationForm = ({
     name &&
     buyerValid
 
-  useEffect(() => {
-    const product = defaultProduct || null
-    let servicePlan = null
+  const resetServicePlan = () => {
+    let plan = null
 
     if (buyer !== null && product !== null) {
       const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
       const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
-      servicePlan = contractedServicePlan
+      plan = contractedServicePlan
     }
 
+    setServicePlan(plan)
+  }
+
+  useEffect(() => {
+    const product = defaultProduct || null
+
     setProduct(product)
-    setServicePlan(servicePlan)
+    resetServicePlan()
     setAppPlan(null)
   }, [buyer])
 
   useEffect(() => {
-    let servicePlan = null
-
-    if (product !== null) {
-      const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
-      const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
-      servicePlan = contractedServicePlan
-    }
-
-    setServicePlan(servicePlan)
+    resetServicePlan()
     setAppPlan(null)
   }, [product])
 
