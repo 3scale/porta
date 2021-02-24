@@ -96,7 +96,7 @@ export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl
         : bodyWithServer
     ))
     .catch(error => {
-      console.log(error)
+      console.error(error)
       return bodyWithServer
     })
 
