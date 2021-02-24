@@ -1,5 +1,6 @@
-require 'test_helper'
 # frozen_string_literal: true
+
+require 'test_helper'
 
 class ProxyRuleTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
@@ -47,9 +48,9 @@ class ProxyRuleTest < ActiveSupport::TestCase
   test '#search_for does not use sphinx if no query given' do
     ThinkingSphinx::Test.rt_run do
       ThinkingSphinx::Search.expects(:new).never
-      query = ProxyRuleQuery.new(owner_type: 'BackendApi', owner_id: 1)
+      query = ProxyRuleQuery.new(owner_type: 'BackendApi', owner_id: master_account.id)
 
-      assert_equal [], query.search_for('')
+      assert_equal master_account.proxy_rules, query.search_for('')
     end
   end
 end
