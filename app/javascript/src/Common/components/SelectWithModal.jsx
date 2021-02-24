@@ -86,7 +86,7 @@ const SelectWithModal = <T: Record>({
     const term = new RegExp(e.target.value, 'i')
 
     const filteredRecords: T[] = term !== '' ? items.filter(b => term.test(b.name)) : items
-    let filteredItems = filteredRecords.length === 0
+    const filteredItems = filteredRecords.length === 0
       ? [{ id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }, footerItem]
       : getItems(filteredRecords)
 
