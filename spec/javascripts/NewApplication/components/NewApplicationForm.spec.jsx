@@ -2,6 +2,7 @@
 
 import React from 'react'
 
+import { act } from 'react-dom/test-utils'
 import { render, mount } from 'enzyme'
 import { NewApplicationForm } from 'NewApplication/components/NewApplicationForm'
 
@@ -21,87 +22,173 @@ const buyer = {
   ],
   createApplicationPath: '/account/12345/applications/new'
 }
-
+const buyers = [buyer]
 const defaultProps = {
   createApplicationPath: '/applications/new',
   createApplicationPlanPath: '/accounts/applications/new',
   products,
-  servicePlansAllowed: false,
+  servicePlansAllowed: true,
   buyer,
   serviceSubscriptionsPath: '/foo'
 }
 
+const mountWrapper = (props) => mount(<NewApplicationForm {...{...defaultProps, ...props}}/>)
+const renderWrapper = (props) => render(<NewApplicationForm {...{...defaultProps, ...props}}/>)
+
 it('should render properly', () => {
-  const wrapper = mount(<NewApplicationForm {...defaultProps} />)
+  const wrapper = mountWrapper()
   expect(wrapper.exists()).toBe(true)
 })
 
-it('should be able to submit only when form is complete', () => {
-  const wrapper = mount(<NewApplicationForm {...defaultProps} />)
-  expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(true)
-
-  // FIXME:
-  // wrapper.find('input[name="cinstance[name]"]').simulate('change', { currentTarget: { value: 'My Application' } })
-  // wrapper.find('select#product').simulate('change', { target: { value: products[0].id } })
-  // wrapper.find('select[name="cinstance[plan_id]"]').simulate('change', applicationPlans[0].id)
-  // expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(false)
-})
-
 it('should render a link to create an application plan if selected product has none', () => {
-  const wrapper = mount(<NewApplicationForm {...defaultProps} />)
-  const getLink = () => wrapper.find(`a[href="${defaultProps.createApplicationPlanPath}"]`)
-  expect(getLink().exists()).toBe(false)
+  const wrapper = mountWrapper()
+  const linkSelector = `a[href="${defaultProps.createApplicationPlanPath}"]`
+  const productWithNoPlans = { ...products[0], appPlans: [] }
+  expect(wrapper.find(linkSelector).exists()).toBe(false)
 
-  // FIXME:
-  // wrapper.find('select#product').simulate('change', products[1].id)
-  // expect(wrapper.find(`a[href="${defaultProps.createApplicationPlanPath}"]`).exists()).toBe(true)
+  act(() => wrapper.find('ProductSelect').props().onSelectProduct(productWithNoPlans))
+
+  expect(wrapper.update().find(linkSelector).exists()).toBe(true)
 })
 
 it('should enable the plans select only after selecting a product', () => {
-  const wrapper = mount(<NewApplicationForm {...defaultProps} />)
-  const planSelect = wrapper.find('Select#cinstance_plan_id')
-  expect(planSelect.prop('isDisabled')).toBe(true)
+  const wrapper = mountWrapper()
+  const planSelectSelector = 'Select#cinstance_plan_id .pf-c-select'
+  expect(wrapper.find(planSelectSelector).find('.pf-m-disabled').exists()).toBe(true)
 
-  // FIXME:
-  // const productSelect = wrapper.find('select#product')
-  // productSelect.simulate('change', products[0].id)
+  act(() => wrapper.find('ProductSelect').props().onSelectProduct(products[0]))
 
-  // expect(planSelect.prop('disabled')).toBe(false)
-  // console.log(planSelect.prop('disabled'))
+  expect(wrapper.update().find(planSelectSelector).find('.pf-m-disabled').exists()).toBe(false)
+})
+
+describe('when in Service context', () => {
+  const props = { ...defaultProps, buyer: undefined, buyers, product: products[0], products: undefined }
+
+  it('should render all inputs but for product', () => {
+    const inputs = [
+      'account_id',
+      'cinstance_service_plan_id',
+      'cinstance_plan_id',
+      'cinstance_name',
+      'cinstance_description'
+    ]
+    const html = renderWrapper(props).find('.pf-c-form__group').toString()
+
+    inputs.forEach(name => expect(html).toMatch(name))
+    expect(html).not.toMatch('product')
+  })
+
+  it('should be able to submit only when form is complete', () => {
+    const wrapper = mountWrapper(props)
+    const isButtonDisabled = () => wrapper.update().find('button[type="submit"]').prop('disabled')
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('BuyerSelect').props().onSelectBuyer(buyer))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ServicePlanSelect').props().onSelect(servicePlans[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ApplicationPlanSelect').props().onSelect(appPlans[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('NameInput').props().setName('My App'))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(false)
+  })
 })
 
 describe('when in Account context', () => {
   const props = { ...defaultProps, buyer, buyers: undefined }
 
-  it('should not render a select for Buyers', () => {
-    const wrapper = render(<NewApplicationForm {...props} />)
-    expect(wrapper.toString()).not.toContain('account_id')
+  it('should render all inputs but for buyer', () => {
+    const inputs = [
+      'product',
+      'cinstance_service_plan_id',
+      'cinstance_plan_id',
+      'cinstance_name',
+      'cinstance_description'
+    ]
+    const html = renderWrapper(props).find('.pf-c-form__group').toString()
+
+    inputs.forEach(name => expect(html).toMatch(name))
+    expect(html).not.toMatch('account_id')
+  })
+
+  it('should be able to submit only when form is complete', () => {
+    const wrapper = mountWrapper(props)
+    const isButtonDisabled = () => wrapper.update().find('button[type="submit"]').prop('disabled')
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ProductSelect').props().onSelectProduct(products[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ServicePlanSelect').props().onSelect(servicePlans[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ApplicationPlanSelect').props().onSelect(appPlans[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('NameInput').props().setName('My App'))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(false)
   })
 })
 
-describe('when in Applications context', () => {
-  const props = { ...defaultProps, buyer: undefined, buyers: [buyer] }
+describe('when in Audience context', () => {
+  const props = { ...defaultProps, buyer: undefined, buyers }
 
-  it('should render a select for Buyers', () => {
-    const wrapper = render(<NewApplicationForm {...props} />)
-    expect(wrapper.toString()).toContain('account_id')
+  it('should render all inputs', () => {
+    const inputs = [
+      'account_id',
+      'product',
+      'cinstance_service_plan_id',
+      'cinstance_plan_id',
+      'cinstance_name',
+      'cinstance_description'
+    ]
+    const html = renderWrapper(props).find('.pf-c-form__group').toString()
+
+    inputs.forEach(name => expect(html).toMatch(name))
+  })
+
+  it('should be able to submit only when form is complete', () => {
+    const wrapper = mountWrapper(props)
+    const isButtonDisabled = () => wrapper.update().find('button[type="submit"]').prop('disabled')
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('BuyerSelect').props().onSelectBuyer(buyer))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ProductSelect').props().onSelectProduct(products[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ServicePlanSelect').props().onSelect(servicePlans[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('ApplicationPlanSelect').props().onSelect(appPlans[0]))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(true)
+
+    act(() => wrapper.find('NameInput').props().setName('My App'))
+    wrapper.update()
+    expect(isButtonDisabled()).toBe(false)
   })
 })
 
-describe('when Service plans not allowed', () => {
-  const props = { ...defaultProps, servicePlansAllowed: false }
+it('should render a select for services provided they are allowed', () => {
+  const wrapper = mountWrapper({ servicePlansAllowed: true })
+  expect(wrapper.find('ServicePlanSelect').exists()).toBe(true)
 
-  it('should not render a select for services', () => {
-    const wrapper = render(<NewApplicationForm {...props} />)
-    expect(wrapper.toString()).not.toContain('cinstance_service_plan_id')
-  })
-})
-
-describe('when Service plans allowed', () => {
-  const props = { ...defaultProps, servicePlansAllowed: true }
-
-  it('should render a select for services', () => {
-    const wrapper = render(<NewApplicationForm {...props} />)
-    expect(wrapper.toString()).toContain('cinstance_service_plan_id')
-  })
+  wrapper.setProps({ servicePlansAllowed: false })
+  expect(wrapper.find('ServicePlanSelect').exists()).toBe(false)
 })
