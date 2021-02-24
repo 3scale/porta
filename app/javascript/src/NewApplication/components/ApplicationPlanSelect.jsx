@@ -1,14 +1,9 @@
 // @flow
 
-import React, { useState } from 'react'
+import * as React from 'react'
 
-import {
-  FormGroup,
-  Select,
-  SelectVariant,
-  Button
-} from '@patternfly/react-core'
-import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilities/patternfly-utils'
+import { Button } from '@patternfly/react-core'
+import { Select } from 'Common'
 
 import type { ApplicationPlan } from 'NewApplication/types'
 
@@ -21,49 +16,32 @@ type Props = {
 }
 
 const ApplicationPlanSelect = ({ appPlan, appPlans, onSelect, createApplicationPlanPath, isDisabled }: Props) => {
-  const [expanded, setExpanded] = useState<boolean>(false)
-
   const showHint = !isDisabled && appPlans.length === 0
 
-  const handleSelect = (_e, option: SelectOptionObject) => {
-    setExpanded(false)
-
-    const selectedPlan = appPlans.find(p => p.id.toString() === option.id)
-    onSelect(selectedPlan || null)
-  }
+  const hint = (
+    <p className="hint">
+      {"An Application needs to subscribe to a Product's Application plan, and no Application plans exist for the selected Product. "}
+      <Button component="a" variant="link" href={createApplicationPlanPath} isInline>
+        Create a new Application plan
+      </Button>
+    </p>
+  )
 
   return (
-    <FormGroup
-      isRequired
-      label="Application plan"
+    <Select
+      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      item={appPlan}
+      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      items={appPlans}
+      onSelect={onSelect}
+      label="Application Plan"
       fieldId="cinstance_plan_id"
-    >
-      {appPlan && <input type="hidden" name="cinstance[plan_id]" value={appPlan.id} />}
-      <Select
-        id="cinstance_plan_id"
-        variant={SelectVariant.typeahead}
-        placeholderText="Select an application plan"
-        // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
-        selections={appPlan && toSelectOptionObject(appPlan)}
-        onToggle={() => setExpanded(!expanded)}
-        onSelect={handleSelect}
-        isExpanded={expanded}
-        onClear={() => onSelect(null)}
-        aria-labelledby="application plan"
-        isDisabled={isDisabled || appPlans.length === 0}
-      >
-        {/* $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string" */}
-        {appPlans.map(toSelectOption)}
-      </Select>
-      {showHint && (
-        <p className="hint">
-          {"An Application needs to subscribe to a Product's Application plan, and no Application plans exist for the selected Product. "}
-          <Button component="a" variant="link" href={createApplicationPlanPath} isInline>
-            Create a new Application plan
-          </Button>
-        </p>
-      )}
-    </FormGroup>
+      name="cinstance[plan_id]"
+      placeholderText="Select an application plan"
+      hint={showHint && hint}
+      isDisabled={isDisabled}
+      isRequired
+    />
   )
 }
 
