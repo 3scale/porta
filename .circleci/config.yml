@@ -131,6 +131,11 @@ only-master-filter: &only-master-filter
     branches:
       only: master
 
+ignore-master-filter: &ignore-master-filter
+  filters:
+    branches:
+      ignore: autorun-test-on-master
+
 nightly-trigger: &nightly-trigger
   triggers:
     - schedule:
@@ -862,6 +867,7 @@ workflows:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          <<: *ignore-master-filter
       - notify_start:
           <<: *only-master-filter
           requires:
@@ -1016,6 +1022,7 @@ workflows:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
           type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
+          <<: *ignore-master-filter
       - notify_start:
           <<: *only-master-filter
           requires:
