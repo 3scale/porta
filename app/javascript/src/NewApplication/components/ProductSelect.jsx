@@ -23,11 +23,7 @@ const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props
   return (
     <SelectWithModal
       label="Product"
-      // Do not submit
-      // fieldId="TODO"
       id="product"
-      // name="TODO"
-
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
       item={product}
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
