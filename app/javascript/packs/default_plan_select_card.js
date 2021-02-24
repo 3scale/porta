@@ -1,6 +1,6 @@
 // @flow
 
-import { DefaultPlanSelectWrapper } from 'Plans'
+import { DefaultPlanSelectCardWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { Product, ApplicationPlan } from 'Types'
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialDefaultPlan = safeFromJsonString<ApplicationPlan>(dataset.currentPlan) || null
   const path: string = dataset.path
 
-  DefaultPlanSelectWrapper({
+  DefaultPlanSelectCardWrapper({
     initialDefaultPlan,
     product: { ...service, appPlans },
     path

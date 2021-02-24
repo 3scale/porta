@@ -7,7 +7,6 @@ div.narrow_dashboard_card {
   border: 0;
   margin-bottom: line-height-times(1);
   padding: line-height-times(1);
-  overflow: hidden;
 
   &> table.list:first-child {
     margin-top: line-height-times(-1/2);
