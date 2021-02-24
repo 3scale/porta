@@ -32,7 +32,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
 
     assert_select_form admin_account_payment_gateway_path, :method => :patch do
       assert_select 'select[name=?]', 'account[payment_gateway_type]'
-      assert_select 'input[type=submit]'
+      assert_select 'button[type=submit]'
 
       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][login]'
       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][publishable_key]'
