@@ -74,8 +74,7 @@ const create3DSecure = (clientInstance, payload) => {
     client: clientInstance
   }, function (threeDSecureErr, threeDSecureInstance) {
     if (threeDSecureErr) {
-      console.log('Error creating 3DSecure' + threeDSecureErr)
-      return
+      throw new Error('Error creating 3DSecure' + threeDSecureErr)
     }
     veryfyCard(threeDSecureInstance, payload)
   })

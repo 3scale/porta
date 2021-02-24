@@ -9,7 +9,7 @@ const safeFromJsonString = <T>(json: string): (T | void) => {
   try {
     return fromJsonString(json)
   } catch (err) {
-    console.warn('That doesn\'t look like a valid json!', err)
+    console.error('That doesn\'t look like a valid json!', err)
     return undefined
   }
 }
