@@ -93,4 +93,45 @@ class Account::GatewayTest  < ActiveSupport::TestCase
 
     assert account.payment_gateway_configured?
   end
+
+  test 'payment_gateway' do
+    provider = Account.new
+
+    provider.payment_gateway_type = nil
+    assert_nil provider.payment_gateway
+
+    provider.payment_gateway_type    = :braintree_blue
+    provider.payment_gateway_options = {merchant_id: 'foo', public_key: 'bar', private_key: 'baz'}
+    assert_instance_of ActiveMerchant::Billing::BraintreeBlueGateway, provider.payment_gateway
+    assert_equal provider.payment_gateway_options,                    provider.payment_gateway.options
+
+    provider.payment_gateway_type    = :stripe
+    provider.payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
+    assert_instance_of ActiveMerchant::Billing::StripeGateway, provider.payment_gateway
+    refute_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, provider.payment_gateway # this test is necessary because StripePaymentIntentsGateway is a subclass of StripeGateway
+    assert_equal provider.payment_gateway_options, provider.payment_gateway.options
+    assert_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, provider.payment_gateway(sca: true)
+    assert_equal provider.payment_gateway_options, provider.payment_gateway(sca: true).options
+  end
+
+  test 'provider_payment_gateway' do
+    buyer = Account.new
+
+    assert_nil buyer.provider_payment_gateway
+
+    buyer.provider_account = Account.new
+
+    assert_nil buyer.provider_payment_gateway
+
+    buyer.provider_account.payment_gateway_type = :braintree_blue
+    buyer.provider_account.payment_gateway_options = {merchant_id: 'foo', public_key: 'bar', private_key: 'baz'}
+    assert_instance_of ActiveMerchant::Billing::BraintreeBlueGateway, buyer.provider_payment_gateway
+
+    buyer.provider_account.payment_gateway_type = :stripe
+    buyer.provider_account.payment_gateway_options = { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
+    assert_instance_of ActiveMerchant::Billing::StripeGateway, buyer.provider_payment_gateway
+    refute_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, buyer.provider_payment_gateway # this test is necessary because StripePaymentIntentsGateway is a subclass of StripeGateway
+    buyer.payment_detail.payment_method_id = 'pm_1I5s3n2eZvKYlo2CiO193T69'
+    assert_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, buyer.provider_payment_gateway
+  end
 end

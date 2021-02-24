@@ -1,18 +1,19 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
 
   def setup
-    account  = FactoryBot.create(:provider_account)
-    @service = FactoryBot.create(:simple_service, :with_default_backend_api, account: account)
+    @account = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @account)
     @config  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
-    admin    = FactoryBot.create(:admin, account: account)
-    @token   = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
+    @token   = FactoryBot.create(:access_token, owner: @account.admin_user, scopes: 'account_management')
 
-    host! account.admin_domain
+    host! @account.admin_domain
   end
 
-  def test_latest
+  test 'latest' do
     params = valid_params
 
     get latest_admin_api_service_proxy_configs_path(params)
@@ -71,7 +72,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_equal 1, parsed_response['proxy_configs'].count
   end
 
-  def test_index_by_host
+  test 'index by host' do
     get "/admin/api/services/proxy/configs/#{ProxyConfig::ENVIRONMENTS.first}.json?#{host_valid_params.to_query}"
     assert_response :success
     assert_equal 1, parsed_response['proxy_configs'].count
@@ -82,6 +83,23 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 1, parsed_response['proxy_configs'].count
     assert_equal new_config.version, parsed_response['proxy_configs'].first['proxy_config']['version']
+  end
+
+  test 'index_by_host only finds the host in the latest version' do
+    _proxy_config_old = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v1.example.com'))
+    proxy_config_new  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('v2.example.com'))
+
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v1.example.com', access_token: @token.value }
+    assert_empty proxy_config_ids
+
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'v2.example.com', access_token: @token.value }
+    assert_equal [proxy_config_new.id], proxy_config_ids
+
+
+    _proxy_config_old, proxy_config_new = FactoryBot.create_list(:proxy_config, 2, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('foo.example.com'))
+
+    get admin_api_proxy_configs_path(environment: ProxyConfig::ENVIRONMENTS.first, format: :json), params: { host: 'foo.example.com', access_token: @token.value }
+    assert_equal [proxy_config_new.id], proxy_config_ids
   end
 
   def test_promote
@@ -100,15 +118,22 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
 
   private
 
+  def proxy_config_ids
+    (parsed_response['proxy_configs'] || {}).map { |h| h.dig('proxy_config', 'id') }
+  end
+
   def parsed_response
     JSON.parse(response.body)
+  end
+
+  def content_hosts(*hosts)
+    { proxy: { hosts: hosts } }.to_json
   end
 
   def host_valid_params
     {
       host:         @config.hosts.first,
       access_token: @token.value,
-
     }
   end
 

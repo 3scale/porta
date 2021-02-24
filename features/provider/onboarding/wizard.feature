@@ -9,17 +9,6 @@ Feature: Onboarding Wizard
   @emails
   Scenario: Provider goes through the wizard
     Given a provider signs up and activates his account
-     And I have rolling updates "api_as_product" disabled
-    When user starts the onboarding wizard
-     And adds the echo api
-     And sends the test request
-     And goes to what's next
-    Then goes to API page
-
-  @emails
-  Scenario: Provider goes through the APIAP wizard
-    Given a provider signs up and activates his account
-     And I have rolling updates "api_as_product" enabled
     When user starts the onboarding wizard
      And goes to Add a Backend page
      And adds the echo Backend

@@ -2,6 +2,5 @@ p
   ' You don't have access to any API on the
   => current_account.org_name
   ' account. Please
-  - admin = current_account.admin_user
-  => mail_to admin.email, "contact #{current_account.admin_user_display_name}"
+  => mail_to current_account.admin_user_email, "contact #{current_account.admin_user_display_name}"
   | to request access.

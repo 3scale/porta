@@ -1,17 +1,13 @@
 = javascript_pack_tag 'vertical_nav'
 
-- api = current_api.to_json if current_api.present?
 - sections = vertical_nav_sections || []
-- active_section = active_submenu
-- active_item = active_sidebar
 
-#vertical-nav-wrapper class='pf-c-page__sidebar pf-m-dark' data={ current_api: api,
-                                                                  sections: sections.to_json,
-                                                                  active_section: active_section,
-                                                                  active_item: active_item }.compact
+#vertical-nav-wrapper class='pf-c-page__sidebar pf-m-dark' data=vertical_nav_data()
 
   div.pf-c-page__sidebar-body
     nav#mainmenu class='pf-c-nav'
       ul.pf-c-nav__list
         - sections.each do |section|
-          = render 'shared/provider/navigation/vertical_nav_item', :section => section, :active_section => active_section, :active_item => active_item
+          = render 'shared/provider/navigation/vertical_nav_item', section: section,
+                                                                   active_section: active_submenu,
+                                                                   active_item: active_sidebar

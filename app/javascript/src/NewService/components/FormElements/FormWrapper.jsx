@@ -19,7 +19,7 @@ const FormWrapper = (props: FormProps) => {
       <CSRFToken />
       {hasHiddenServiceDiscoveryInput && <HiddenServiceDiscoveryInput />}
       <fieldset className="inputs" name="Service">
-        <legend><span>Service</span></legend>
+        <legend><span>Product</span></legend>
         <ol>
           {props.children}
         </ol>

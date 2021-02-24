@@ -4,8 +4,7 @@ class Api::IntegrationsController < Api::BaseController
   before_action :find_service
   before_action :find_proxy
   before_action :authorize
-  before_action :hide_for_apiap, only: :edit
-  before_action :find_registry_policies, only: %i[edit update]
+  before_action :find_registry_policies, only: :update
 
   activate_menu :serviceadmin, :integration, :configuration
   sublayout 'api/service'
@@ -13,12 +12,6 @@ class Api::IntegrationsController < Api::BaseController
   PLUGIN_LANGUAGES = %w[ruby java python nodejs php rest csharp].freeze
 
   rescue_from ActiveRecord::StaleObjectError, with: :edit_stale
-
-  def edit
-    @latest_lua = current_account.proxy_logs.first
-    @deploying =  ThreeScale::TimedValue.get(deploying_hosted_proxy_key)
-    @ever_deployed_hosted = current_account.hosted_proxy_deployed_at.present?
-  end
 
   def settings; end
 
@@ -32,15 +25,7 @@ class Api::IntegrationsController < Api::BaseController
       flash[:notice] = flash_message(:update_success, environment: environment)
       update_mapping_rules_position
 
-      return redirect_to admin_service_integration_path(@service) if apiap?
-
-      if @proxy.send_api_test_request!
-        api_backend = @proxy.api_backend
-        done_step(:api_sandbox_traffic) if api_backend.present? && ApiClassificationService.test(api_backend).real_api?
-        return redirect_to edit_path
-      end
-
-      render :edit
+      redirect_to admin_service_integration_path(@service)
     else
       attrs = proxy_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
@@ -52,26 +37,6 @@ class Api::IntegrationsController < Api::BaseController
       @api_test_form_error = true
 
       render_edit_or_show
-    end
-  end
-
-  def update_production
-    ProxyDeploymentService.call(@proxy, environment: :production)
-    ThreeScale::TimedValue.set(deploying_hosted_proxy_key, true, 5*60 )
-    ThreeScale::Analytics.track(current_user, 'Hosted Proxy deployed')
-    flash[:notice] = flash_message(:update_production_success)
-
-    done_step(:apicast_gateway_deployed, final_step=true) if ApiClassificationService.test(@proxy.api_backend).real_api?
-
-    redirect_to action: :edit, anchor: 'proxy'
-  end
-
-  def update_onpremises_production
-    if @proxy.update_attributes(proxy_params)
-      flash[:notice] = flash_message(:update_onpremises_production_success)
-      redirect_to action: :edit, anchor: 'production'
-    else
-      render :edit
     end
   end
 
@@ -180,6 +145,7 @@ class Api::IntegrationsController < Api::BaseController
     render_edit_or_show
   end
 
+  # TODO: THREESCALE-3759 remove this method and related code
   def edit_path
     last_message_id = @last_message_bus_id
 
@@ -204,10 +170,6 @@ class Api::IntegrationsController < Api::BaseController
     proxy.oidc? && ZyncWorker.config.message_bus
   end
 
-  def hide_for_apiap
-    raise ActiveRecord::RecordNotFound if apiap?
-  end
-
   def authorize
     authorize! :manage, :plans
     authorize! :edit, @service
@@ -224,36 +186,53 @@ class Api::IntegrationsController < Api::BaseController
     params.fetch(:proxy, {}).fetch(:proxy_rules_attributes, {})
   end
 
-  def proxy_params
-    basic_fields = [
-      :lock_version,
+  PROXY_BASIC_PARAMS = [
+    :lock_version,
+    :auth_app_id,
+    :auth_app_key,
+    :api_backend,
+    :hostname_rewrite,
+    :oauth_login_url,
+    :secret_token,
+    :credentials_location,
+    :auth_user_key,
+    :error_status_auth_failed,
+    :error_headers_auth_failed,
+    :error_auth_failed,
+    :error_status_auth_missing,
+    :error_headers_auth_missing,
+    :error_auth_missing,
+    :error_status_no_match,
+    :error_headers_no_match,
+    :error_no_match,
+    :error_status_limits_exceeded,
+    :error_headers_limits_exceeded,
+    :error_limits_exceeded,
+    :api_test_path,
+    :policies_config,
+    { proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id redirect_url position last] },
+    { oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id] },
+    { backend_api_configs_attributes: %i[_destroy id path] }
+  ].freeze
 
-      :auth_app_id, :auth_app_key, :api_backend, :hostname_rewrite, :oauth_login_url,
-      :secret_token, :credentials_location, :auth_user_key, :error_status_auth_failed,
-      :error_headers_auth_failed, :error_auth_failed, :error_status_auth_missing,
-      :error_headers_auth_missing, :error_auth_missing, :error_status_no_match,
-      :error_headers_no_match, :error_no_match, :error_status_limits_exceeded, :error_headers_limits_exceeded, :error_limits_exceeded,
-      :api_test_path, :policies_config, proxy_rules_attributes: %i[_destroy id http_method pattern delta metric_id
-                                                                   redirect_url position last], oidc_configuration_attributes: OIDCConfiguration::Config::ATTRIBUTES + [:id]
-    ]
+  def proxy_params
+    permitted_fields = PROXY_BASIC_PARAMS.dup
 
     if Rails.application.config.three_scale.apicast_custom_url || @proxy.saas_configuration_driven_apicast_self_managed?
-      basic_fields << :endpoint
-      basic_fields << :sandbox_endpoint
+      permitted_fields << :endpoint
+      permitted_fields << :sandbox_endpoint
     end
 
-    basic_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
+    permitted_fields << :endpoint if @service.using_proxy_pro? || @proxy.saas_script_driven_apicast_self_managed?
 
     if provider_can_use?(:apicast_oidc)
-      basic_fields << :oidc_issuer_endpoint
-      basic_fields << :oidc_issuer_type
-      basic_fields << :jwt_claim_with_client_id
-      basic_fields << :jwt_claim_with_client_id_type
+      permitted_fields << :oidc_issuer_endpoint
+      permitted_fields << :oidc_issuer_type
+      permitted_fields << :jwt_claim_with_client_id
+      permitted_fields << :jwt_claim_with_client_id_type
     end
 
-    basic_fields << { backend_api_configs_attributes: %i[_destroy id path] } if provider_can_use?(:api_as_product)
-
-    params.require(:proxy).permit(*basic_fields)
+    params.require(:proxy).permit(*permitted_fields)
   end
 
   def deploying_hosted_proxy_key
@@ -264,11 +243,13 @@ class Api::IntegrationsController < Api::BaseController
     @proxy.apicast_configuration_driven ? admin_service_integration_path(@service) : edit_admin_service_integration_path(@service)
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def render_edit_or_show(opts = {})
-    render (apiap? ? :show : :edit), opts
+    render :show, opts
   end
 
+  # TODO: THREESCALE-3759 remove this method
   def redirect_to_edit_or_show
-    redirect_to (apiap? ? :show : edit_path)
+    redirect_to :show
   end
 end

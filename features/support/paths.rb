@@ -609,9 +609,8 @@ World(Module.new do
     when /^the integration show page for (service ".+?")/
       admin_service_integration_path(Transform $1)
     when /^the integration page for (service ".+?")/
+      # TODO: THREESCALE-3759 edit page no longer exist, remove or replace
       edit_admin_service_integration_path(Transform $1)
-    when 'the service integration page'
-      edit_admin_service_integration_path(provider_first_service!)
 
     when 'the 404 page'
       '/the-404-page'

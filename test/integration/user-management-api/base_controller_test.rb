@@ -14,7 +14,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
   def test_wrapped_parameters_on_multipart_form
     body = multipart
     with_api_routes do
-      post '/api', body, {'Content-Type' => 'multipart/form-data; boundary=--0123456789', 'Content-Length' => body.size}
+      post '/api', params: body, headers: {'Content-Type' => 'multipart/form-data; boundary=--0123456789', 'Content-Length' => body.size}
       assert_response :success
       json = JSON.parse(response.body)
       assert_equal 'Multipart request', json['name']
@@ -24,8 +24,98 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
   def test_unknown_format
     with_api_routes do
-      get '/api/version/2.php', access_token: @token.value
+      get '/api/version/2.php', params: {access_token: @token.value}
       assert_response :not_acceptable
+    end
+  end
+
+  class RepresentedPaginationMetadataTest < ActionDispatch::IntegrationTest
+    include RepresentedApiRouting
+    disable_transactional_fixtures!
+
+    def setup
+      provider = FactoryBot.create(:provider_account)
+      login! provider
+    end
+
+    test 'JSON for a representer class without pagination' do
+      with_api_routes do
+        get '/api/klas', params: { format: :json, words: %w[hello world example] }
+        assert_nil JSON.parse(response.body)['metadata']
+      end
+    end
+
+    test 'JSON pagination metadata for a representer class' do
+      with_api_routes do
+        get '/api/klas', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2 }
+        response_hash = JSON.parse(response.body)
+        assert_equal 1, response_hash.dig('metadata', 'per_page')
+        assert_equal 3, response_hash.dig('metadata', 'total_entries')
+        assert_equal 3, response_hash.dig('metadata', 'total_pages')
+        assert_equal 2, response_hash.dig('metadata', 'current_page')
+      end
+    end
+
+    test 'JSON for a representer module without pagination' do
+      with_api_routes do
+        get '/api/mods', params: { format: :json, words: %w[hello world example] }
+        assert_nil JSON.parse(response.body)['metadata']
+      end
+    end
+
+    test 'JSON pagination metadata for a representer module' do
+      with_api_routes do
+        get '/api/mods', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2 }
+        response_hash = JSON.parse(response.body)
+        assert_equal 1, response_hash.dig('metadata', 'per_page')
+        assert_equal 3, response_hash.dig('metadata', 'total_entries')
+        assert_equal 3, response_hash.dig('metadata', 'total_pages')
+        assert_equal 2, response_hash.dig('metadata', 'current_page')
+      end
+    end
+
+    test 'XML for a representer class without pagination' do
+      with_api_routes do
+        get '/api/klas', params: { format: :xml, words: %w[hello world example] }
+        response_hash = Hash.from_xml(response.body)
+        assert_nil response_hash.dig('klass', 'per_page')
+        assert_nil response_hash.dig('klass', 'total_entries')
+        assert_nil response_hash.dig('klass', 'total_pages')
+        assert_nil response_hash.dig('klass', 'current_page')
+      end
+    end
+
+    test 'XML pagination metadata (attributes) for a representer class' do
+      with_api_routes do
+        get '/api/klas', params: { format: :xml, words: %w[hello world example], per_page: 1, page: 2 }
+        response_hash = Hash.from_xml(response.body)
+        assert_equal '1', response_hash.dig('klass', 'per_page')
+        assert_equal '3', response_hash.dig('klass', 'total_entries')
+        assert_equal '3', response_hash.dig('klass', 'total_pages')
+        assert_equal '2', response_hash.dig('klass', 'current_page')
+      end
+    end
+
+    test 'XML for a representer module without pagination' do
+      with_api_routes do
+        get '/api/mods', params: { format: :xml, words: %w[hello world example] }
+        response_hash = Hash.from_xml(response.body)
+        assert_nil response_hash.dig('mods', 'per_page')
+        assert_nil response_hash.dig('mods', 'total_entries')
+        assert_nil response_hash.dig('mods', 'total_pages')
+        assert_nil response_hash.dig('mods', 'current_page')
+      end
+    end
+
+    test 'XML pagination metadata (attributes) for a representer module' do
+      with_api_routes do
+        get '/api/mods', params: { format: :xml, words: %w[hello world example], per_page: 1, page: 2 }
+        response_hash = Hash.from_xml(response.body)
+        assert_equal '1', response_hash.dig('mods', 'per_page')
+        assert_equal '3', response_hash.dig('mods', 'total_entries')
+        assert_equal '3', response_hash.dig('mods', 'total_pages')
+        assert_equal '2', response_hash.dig('mods', 'current_page')
+      end
     end
   end
 
@@ -46,7 +136,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     def test_provider_admin_domain
       host! @provider.admin_domain
       with_api_routes do
-        get '/api', access_token: 'access_token'
+        get '/api', params: {access_token: 'access_token'}
         assert_response :success
       end
     end
@@ -55,7 +145,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       host! @provider.domain
       with_api_routes do
         assert_raise(ActionController::RoutingError) do
-          get '/api', access_token: 'access_token'
+          get '/api', params: {access_token: 'access_token'}
         end
       end
     end
@@ -70,7 +160,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       end
 
       with_api_routes do
-        get '/api', access_token: 'master_access_token'
+        get '/api', params: {access_token: 'master_access_token'}
         assert_response :success
       end
     end
@@ -81,7 +171,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
       with_api_routes do
         host! master_account.admin_domain
-        get '/api', access_token: 'access_token'
+        get '/api', params: {access_token: 'access_token'}
         assert_response :success
       end
     end
@@ -91,7 +181,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
       assert_raise(ActionController::RoutingError) do
         ThreeScale.config.stubs(tenant_mode: 'multitenant')
-        get '/api', access_token: 'access_token'
+        get '/api', params: {access_token: 'access_token'}
       end
     end
   end

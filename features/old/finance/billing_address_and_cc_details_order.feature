@@ -1,3 +1,4 @@
+@stripe
 Feature: Credit card details
   In order to pay for the service
   As a buyer
@@ -20,31 +21,6 @@ Feature: Credit card details
     When I log in as "kenny" on foo.3scale.localhost
      And I go to the stripe credit card details page
     Then I should not see button "Edit Credit Card Details"
-
-  Scenario: Entering cc details allowed after billing address provided
-    Given the current domain is foo.3scale.localhost
-      And I have stripe_elements feature disabled
-      And provider "foo.3scale.localhost" manages payments with "stripe"
-    When I log in as "kenny" on foo.3scale.localhost
-     And I go to the stripe credit card details page
-    Then I should not see button "Edit Credit Card Details"
-
-    When I follow "First add a billing address"
-
-    Then I should see "Billing Address"
-
-    When I fill in "Contact / Company Name" with "comp"
-      And I fill in "Address" with "C/LLacuna 162"
-      And I fill in "City" with "Barcelona"
-      And I select "Spain" from "Country"
-      And I fill in "ZIP / Postal Code" with "08080"
-      And I fill in "Phone" with "+34123123212"
-      And I press "Save"
-
-    Then I should see the fields:
-      | Card number          |
-      | CVC                  |
-    And I should see button "Save details"
 
   Scenario: Billing Address fields are shown if they exist
     Given the current domain is foo.3scale.localhost

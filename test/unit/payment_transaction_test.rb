@@ -5,57 +5,6 @@ class PaymentTransactionTest < ActiveSupport::TestCase
   should belong_to :invoice
   should validate_presence_of :amount
 
-  test "purchase_with_authorize_net with arrays" do
-    payment_transaction = PaymentTransaction.new
-
-    gateway = stubs(:gateway)
-    profile_response = stubs(:profile_response)
-    profile_response.stubs(:success?).returns(true)
-    profile_response.stubs(:params).returns({'profile' => {'payment_profiles' => [{},{"customer_payment_profile_id" => '5678'}]}})
-    payment_transaction.stubs(get_profile_response: profile_response)
-
-    cim_gateway = stubs(:cim_gateway)
-
-    expected_hash = {:transaction => {
-        :customer_profile_id => '1234',
-        :customer_payment_profile_id => '5678',
-        :type => :auth_capture,
-        :amount => 10.0 }
-    }
-
-    payment_transaction.stubs(amount: 10)
-    cim_gateway.expects(:create_customer_profile_transaction).with(expected_hash)
-    gateway.stubs(cim_gateway: cim_gateway)
-
-    payment_transaction.send(:purchase_with_authorize_net, '1234', gateway)
-  end
-
-  test "purchase_with_authorize_net with hashes" do
-    payment_transaction = PaymentTransaction.new
-
-    gateway = stubs(:gateway)
-    profile_response = stubs(:profile_response)
-    profile_response.stubs(:success?).returns(true)
-    profile_response.stubs(:params).returns({'profile' => {'payment_profiles' => {"customer_payment_profile_id" => '5678'}}})
-    payment_transaction.stubs(get_profile_response: profile_response)
-
-    cim_gateway = stubs(:cim_gateway)
-
-    expected_hash = {:transaction => {
-        :customer_profile_id => '1234',
-        :customer_payment_profile_id => '5678',
-        :type => :auth_capture,
-        :amount => 10.0 }
-    }
-
-    payment_transaction.stubs(amount: 10)
-    cim_gateway.expects(:create_customer_profile_transaction).with(expected_hash)
-    gateway.stubs(cim_gateway: cim_gateway)
-
-    payment_transaction.send(:purchase_with_authorize_net, '1234', gateway)
-  end
-
-
   context "PaymentTransaction" do
     setup do
       @transaction = PaymentTransaction.new(:amount => 1000.to_has_money('JPY'))
@@ -69,7 +18,7 @@ class PaymentTransactionTest < ActiveSupport::TestCase
 
     context "with card stored in BogusGateway" do
       setup do
-        @gateway =  ActiveMerchant::Billing::BogusGateway.new
+        @gateway = ActiveMerchant::Billing::BogusGateway.new
       end
 
       should 'process without problems' do
@@ -82,7 +31,6 @@ class PaymentTransactionTest < ActiveSupport::TestCase
       end
     end
   end
-
 
   context "with many transactions" do
     setup do

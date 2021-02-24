@@ -129,12 +129,6 @@ module Logic
         end
       end
 
-      class IndependentMappingRules < Base
-        def missing_config
-          false
-        end
-      end
-
       class InstantBillPlanChange < Base
         def missing_config
           false
@@ -301,17 +295,7 @@ module Logic
 
       class ApiAsProduct < Base
         def enabled?
-          super && !master?
-        end
-
-        def missing_config
-          false
-        end
-      end
-
-      class StripeElements < Base
-        def missing_config
-          false
+          !master?
         end
       end
 

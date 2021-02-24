@@ -61,13 +61,12 @@ gem 'yabeda-prometheus-mmap'
 gem 'yabeda-rails'
 gem 'yabeda-sidekiq'
 
-gem 'activemerchant', '~> 1.77.0'
-gem 'active_merchant-adyen12', github: '3scale/active_merchant-adyen12'
-gem 'stripe', '~> 3.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
+gem 'activemerchant', '~> 1.107.4'
+gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 gem 'audited'
 
 gem 'acts_as_list', '~> 0.9.17'
-gem 'braintree', '~> 2.89'
+gem 'braintree', '~> 2.93'
 gem 'cancancan', '~> 2.3.0'
 gem 'formtastic', '~> 1.2.4'
 gem 'rmagick', '~> 2.15.3', require: false
@@ -175,8 +174,10 @@ group :development do
 
   gem 'yard', require: false
 
-  # Install rubocop only when using RubyMine (for the rubocop plugin)
-  gem 'rubocop', '0.59.1', install_if: ENV['TEAMCITY_RAKE_RUNNER_MODE'], require: false
+  gem 'rubocop', '~> 0.92', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-performance', require: false
+  gem 'solargraph'
 end
 
 gem 'message_bus', '~> 2.0.2'

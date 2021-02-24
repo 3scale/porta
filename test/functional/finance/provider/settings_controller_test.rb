@@ -36,6 +36,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
 
       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][login]'
       assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][publishable_key]'
+      assert_select 'input[type=text][name=?]', 'account[payment_gateway_options][endpoint_secret]'
     end
   end
 
@@ -52,7 +53,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
       assert_equal(['', 'braintree_blue', 'stripe', 'bogus'], values)
     end
 
-    should 'contain deprectaed gateway if in use' do
+    should 'contain deprecated gateway if in use' do
       @provider.gateway_setting.gateway_type = :ogone
       @provider.gateway_setting.save(validate: false)
 

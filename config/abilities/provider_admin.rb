@@ -18,6 +18,8 @@ Ability.define do |user|
   can :manage, Invitation
   can :manage, User, :id => user.id
 
+  can :manage, :permissions
+
   # Update Permissions of a provider user:
   # 1) nobody can change user permissions of a provider admin
   # (admin should have full access)

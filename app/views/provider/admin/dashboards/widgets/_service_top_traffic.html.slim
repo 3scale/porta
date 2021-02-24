@@ -25,7 +25,8 @@ article.DashboardWidget id = widget.id
         ' In order to show Top Applications you need to have at least one application sending traffic to the #{friendly_service_name(service)}.
       p
           ' Consider
-          => link_to 'making some test calls', (apiap? ? admin_service_integration_path(widget_service_id) : edit_admin_service_integration_path(widget_service_id, :anchor => 'staging'))
+          / TODO: THREESCALE-3759 remove edit_admin_service_integration_path and related stuff
+          => link_to 'making some test calls', admin_service_integration_path(widget_service_id)
           | to get a feel for what you’d see here.
 
   - else

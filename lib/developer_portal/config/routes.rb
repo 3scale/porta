@@ -45,7 +45,7 @@ DeveloperPortal::Engine.routes.draw do
         end
       end
 
-      resource :authorize_net, :braintree_blue, :ogone, :adyen12, :stripe, only: [:show, :edit] do
+      resource :authorize_net, :braintree_blue, :ogone, :stripe, only: [:show, :edit] do
         match 'hosted_success', via: [:get, :post], on: :member
       end
 
@@ -65,7 +65,12 @@ DeveloperPortal::Engine.routes.draw do
 
       resource :personal_details, :only => [:show, :update]
       resource :password, :only => [:new, :show, :create, :update]
-      resources :invoices, :only => [:index, :show]
+      resources :invoices, :only => [:index, :show] do
+        member do
+          get :payment
+          post :payment_succeeded
+        end
+      end
       resources :plan_changes, only: [:index, :new, :destroy]
     end
 

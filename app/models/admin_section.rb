@@ -1,19 +1,14 @@
-class AdminSection
+# frozen_string_literal: true
 
-  PERMISSIONS = %I[ portal finance settings partners monitoring plans policy_registry ].freeze
-  LABELS_RESUME = {
-    portal: 'developer portal',
-    finance: 'customer billing',
-    settings: 'settings pages',
-    partners: 'developer accounts, applications',
-    monitoring: 'analytics',
-    plans: 'API backends, API products',
-    policy_registry: 'policies'
-  }
+class AdminSection
+  PERMISSIONS = %i[portal finance settings partners monitoring plans policy_registry].freeze
+  SERVICE_PERMISSIONS = %i[partners plans monitoring].freeze
+  NO_SERVICE_PERMISSIONS = PERMISSIONS - SERVICE_PERMISSIONS
+  SECTIONS = PERMISSIONS + %i[services]
 
   def self.permissions
     if ThreeScale.master_on_premises?
-      PERMISSIONS - %i(finance)
+      PERMISSIONS - %i[finance]
     else
       PERMISSIONS
     end
@@ -23,23 +18,9 @@ class AdminSection
     account.provider_can_use?(:policy_registry) ? permissions : (permissions - %i[policy_registry])
   end
 
-  SECTIONS = PERMISSIONS + %I[ services ]
-
   def self.sections
     permissions + %i(services)
   end
 
-  LABELS = SECTIONS.map do |section|
-    [ section, I18n.t(section.to_s, scope: :admin_sections)]
-  end.to_h
-
-  private_constant :LABELS, :PERMISSIONS, :SECTIONS
-
-  def self.labels(roles)
-    LABELS.values_at(*Array(roles).map(&:to_sym)).join(', ')
-  end
-
-  def self.labels_resume(roles)
-    LABELS_RESUME.values_at(*Array(roles).map(&:to_sym)).join(', ')
-  end
+  private_constant :PERMISSIONS, :SECTIONS
 end

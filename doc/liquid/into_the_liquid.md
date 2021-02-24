@@ -6,7 +6,7 @@ language, please see the [Shopify documentation](http://wiki.shopify.com/Liquid)
 
 ## Global Variables
 
-Each page or email template have their own set of top level variables
+Each page or email template has its own set of top level variables
 available for use. This set defines the information which you can
 retrieve via liquids on each part of the developer portal. To check
 which variables are available on the current page, add <code>{%
@@ -49,9 +49,9 @@ to change it for 'current_account' one to provide a proper context
 
 Example:
 URLS&current_user
-One of the most common use cases include creationg of a custom user
+One of the most common use cases include creating a custom user
 widget. This can be easily done with the use of 'urls' object. An
-examplary code could look like this:
+exemplary code could look like this:
 
 W<pre><code>&ltdiv class='user-widget'&gt
 
@@ -72,7 +72,7 @@ W<pre><code>&ltdiv class='user-widget'&gt
 Here inside the '.user-widget' div different content is generated
 depending if the user is logged in or not. The conditional statement
 <code>{% if current_user %}</code> is responsible for checking for
-existence of the 'current_user' variable, which is available only if
+the existence of the 'current_user' variable, which is available only if
 the user is logged into the portal. Inside the conditional, the
 current user's username and links to his dashboard and session end are
 generated. To check more methods for the 'current_user' variable

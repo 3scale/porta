@@ -7,6 +7,18 @@ Then /^I should see the partners submenu$/ do
   })
 end
 
+Then /^I should see the current API is "(.*?)"/ do |name|
+  within '#mainmenu' do
+    assert has_css? '.pf-c-nav__section-title', text: name
+  end
+end
+
+Then /^I should see there is no current API/ do
+  within '#mainmenu' do
+    assert_not has_css? '.pf-c-nav__section-title'
+  end
+end
+
 Then /^I should see menu items$/ do |items|
   items.raw.each do |item|
     within '#mainmenu' do

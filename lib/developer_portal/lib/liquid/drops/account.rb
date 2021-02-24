@@ -324,10 +324,6 @@ A developer account. See `User` drop if you are looking for the email addresses 
         edit_admin_account_stripe_path
       end
 
-      def edit_adyen12_billing_address_url
-        edit_admin_account_adyen12_path
-      end
-
       private
 
       def admin_user

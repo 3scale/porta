@@ -9,7 +9,7 @@ table class="data" id="users"
         th
           ' Authenticated through SSO
       th Role
-      - if can?(:manage, :groups)
+      - if can?(:manage, :permissions)
         th Permission Groups
       th.operations colspan="2"
         - if can?(:create, Invitation) and can?(:see, :multiple_users)
@@ -38,12 +38,12 @@ table class="data" id="users"
             = user.sso_authorizations.exists? ? 'yes' : 'not yet'
         td = user.role
 
-        - if can?(:manage, :groups)
+        - if can?(:manage, :permissions)
           td
             - if user.admin?
               | Unlimited Access
             - else
-              = user.admin_sections.any? ? AdminSection.labels_resume(user.admin_sections) : '-'
+              = permission_groups_summary(user)
 
         td.operations
           - if can? :destroy, user

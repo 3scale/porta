@@ -271,6 +271,20 @@
               "required": true,
               "paramType": "path",
               "threescale_name": "environment"
+            },
+            {
+              "name": "host",
+              "description": "Filter by host",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "version",
+              "description": "Filter by version",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
             }
           ]
         }
@@ -4761,14 +4775,14 @@
               "required": true,
               "paramType": "query",
               "name": "credit_card_token",
-              "description": "Token used by the payment gateway to identify the buyer -- shopper reference (Adyen), customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Adyen and Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
+              "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
             },
             {
               "dataType": "string",
               "required": false,
               "paramType": "query",
               "name": "credit_card_authorize_net_payment_profile_token",
-              "description": "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'. For Adyen, use the `recurringDetailReference` (provided within the response for their `listRecurringDetails` API method), or leave it empty for always charging the LATEST card in their list. Not used for other payment gateways."
+              "description": "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'"
             },
             {
               "dataType": "string",
@@ -7407,6 +7421,20 @@
               "required": true,
               "paramType": "query",
               "threescale_name": "access_token"
+            },
+            {
+              "name": "page",
+              "description": "Page in the paginated list. Defaults to 1.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "1"
+            },
+            {
+              "name": "per_page",
+              "description": "Number of results per page. Default and max is 500.",
+              "dataType": "int",
+              "paramType": "query",
+              "defaultValue": "500"
             }
           ]
         }

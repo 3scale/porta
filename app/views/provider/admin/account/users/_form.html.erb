@@ -11,12 +11,12 @@
   <%= content_tag :div, id: 'user-permissions-form',
                         data: { state: @user.as_json(root: false, only: [:role], methods: [:admin_sections, :member_permission_service_ids]),
                                 services: @services.as_json(root: false, only: [:id, :name, :description]),
-                                features: AdminSection.permissions_for_account(current_account) 
+                                features: AdminSection.permissions_for_account(current_account)
                             } do %>
 <%= form.inputs :name => 'Administrative' do %>
   <%= form.input :role, :as => :radio, :collection => roles_collection_for_form_helpers(@user), :input_html => { :class => 'roles_ids' } %>
 
-  <% if can?(:manage, :groups) -%>
+  <% if can?(:manage, :permissions) -%>
     <li id="user_member_permissions_input"
         class="radio optional <%= 'u-servicePermissionsDisabled' unless current_account.provider_can_use?(:service_permissions) %>">
       <fieldset>
@@ -24,17 +24,18 @@
           <label>This member user can:</label>
         </legend>
         <ol class="FeatureAccessList">
-          <% AdminSection.permissions.each do |role| %>
+          <% AdminSection.permissions.each do |permission| %>
             <li class="FeatureAccessList-item">
-              <label for="user_member_permission_ids_<%= role %>">
+              <label for="user_member_permission_ids_<%= permission %>">
                 <input class="user_member_permission_ids"
-                       id="user_member_permission_ids_<%= role %>"
+                       id="user_member_permission_ids_<%= permission %>"
                        name="user[member_permission_ids][]"
                        type="checkbox"
-                       value="<%= role %>"
-                      <%= "checked" if @user.admin_sections.include?(role) %>  >
-                <%= sanitize AdminSection.labels(role).html_safe %>
+                       value="<%= permission %>"
+                      <%= "checked" if @user.admin_sections.include?(permission) %>  >
+                <%= sanitize t("admin_sections.#{permission}").html_safe %>
               </label>
+            </li>
           <% end -%>
         </ol>
         <input name="user[member_permission_ids][]" type="hidden" value="" />
