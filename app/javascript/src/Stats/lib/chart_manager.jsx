@@ -85,7 +85,7 @@ export class StatsChartManager {
       if (sources.length > 0) {
         return this._buildSeries(sources).getData(this._options())
       } else {
-        console.warn('[Stats] There are no sources to get data from')
+        console.error('[Stats] There are no sources to get data from')
         return false
       }
     })
