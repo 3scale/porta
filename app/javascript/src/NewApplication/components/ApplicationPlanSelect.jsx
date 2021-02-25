@@ -34,7 +34,7 @@ const ApplicationPlanSelect = ({ appPlan, appPlans, onSelect, createApplicationP
       // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
       items={appPlans}
       onSelect={onSelect}
-      label="Application Plan"
+      label="Application plan"
       fieldId="cinstance_plan_id"
       name="cinstance[plan_id]"
       placeholderText="Select an application plan"
