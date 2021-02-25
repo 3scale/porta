@@ -108,7 +108,7 @@ gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', 
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'RedCloth', '~>4.3', require: false
-gem 'redcarpet', '~>3.4.0', require: false
+gem 'redcarpet', '~>3.5.1', require: false
 gem 'baby_squeel', '~> 1.3.1'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'hiredis', '~> 0.6.3'
