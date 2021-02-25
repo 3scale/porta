@@ -74,11 +74,19 @@ end
 
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
-    select = find(:xpath, XPath::HTML.select(field))
-    if select.native.is_a?(Nokogiri::XML::Element) || select.native.is_a?(String) # a String means capybara-webkit
-      select.find(:xpath, XPath::HTML.option(value)).select_option
-    else # this is selenium, needs slightly different treatment
-      select.find(:xpath, XPath::HTML.option(value)).click
+    if (select = find('.pf-c-form__label', text: /#{field}/i).sibling('.pf-c-select'))
+      within select do
+        select.find('.pf-c-select__toggle-button').click
+        click_on(value, exact: true)
+      end
+    else
+      # DEPRECATED: remove when all selects have been replaced for PF4
+      select = find(:xpath, XPath::HTML.select(field))
+      if select.native.is_a?(Nokogiri::XML::Element) || select.native.is_a?(String) # a String means capybara-webkit
+        select.find(:xpath, XPath::HTML.option(value)).select_option
+      else # this is selenium, needs slightly different treatment
+        select.find(:xpath, XPath::HTML.option(value)).click
+      end
     end
   end
 end

@@ -67,7 +67,7 @@ Feature: Create application
       And I fill in "Description" with "Awesome ultimate super widget"
       And I select "second_app_plan" from "Application plan"
       And I select "non_default" from "Service plan"
-      And I press "Create"
+      And I press "Create Application"
       Then I should see "Application was successfully created."
 
      Then buyer "bob" should have 1 cinstance
@@ -103,7 +103,7 @@ Feature: Create application
      And I fill in "Womm" with "12/10"
 
      And I select "Basic" from "Application plan"
-     And I press "Create"
+     And I press "Create Application"
 
     Then I should be on the provider side "UltimateWidget" application page
      And should see "Application was successfully created"
@@ -115,19 +115,21 @@ Feature: Create application
      And I fill in "Name" with ""
      And I fill in "Description" with ""
      And I select "Basic" from "Application plan"
-     And I press "Create"
+     And I press "Create Application"
    Then I should see "can´t be blank" in the "Name" field
      And I should see "can´t be blank" in the "Description" field
 
   @javascript
   Scenario: Create an application with a pending contract
     Given buyer "bob" is subscribed with state "pending" to the default service of provider "foo.3scale.localhost"
-    And  I go to the provider side create application page for "bob"
+    And I go to the provider side create application page for "bob"
     When I should see "New Application"
-    And I should see "Default (pending)"
+    And I select "API" from "Product"
+    And I select "Default" from "Service plan"
+    And I select "Basic" from "Application plan"
     And I fill in "Name" with "name"
     And I fill in "Description" with "description"
-    And I press "Create"
+    And I press "Create Application"
     Then I should see "must have an approved subscription to service"
 
   Scenario: Edit an application should validate the fields

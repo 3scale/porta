@@ -85,6 +85,7 @@ class Buyers::ApplicationsController < FrontendController
       redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
+      flash[:error] = @cinstance.errors.full_messages
       render :action => :new
     end
   end
