@@ -146,7 +146,7 @@ module ButtonsHelper
 
   PATTERNFLY_LINK_CLASS = 'pf-c-button pf-m-link'
 
-  %w[link_to action_link_to fancy_button_to fancy_link_to delete_button_for delete_link_for].each do |method_sym|
+  %i[link_to action_link_to fancy_button_to fancy_link_to delete_button_for delete_link_for].each do |method_sym|
     define_method("pf_#{method_sym}") do |*args, options|
       opts = options.respond_to?(:merge) ?
         [options.merge(class: join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class]))] :
