@@ -146,34 +146,13 @@ module ButtonsHelper
 
   PATTERNFLY_LINK_CLASS = 'pf-c-button pf-m-link'
 
-  def pf_link_to(name, path, options)
-    options[:class] = join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class])
-    link_to(name, path, options)
-  end
-
-  def pf_action_link_to(action, url, options = {})
-    options[:class] = join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class])
-    action_link_to(action, url, options)
-  end
-
-  def pf_fancy_button_to(label, url, options = {})
-    options[:class] = join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class])
-    fancy_button_to(label, url, options)
-  end
-
-  def pf_fancy_link_to(label, url, options = {})
-    options[:class] = join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class])
-    fancy_link_to(label, url, options)
-  end
-
-  def pf_delete_button_for(url, options = {})
-    options[:class] = join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class])
-    delete_button_for(url, options)
-  end
-
-  def pf_delete_link_for(url, options = {})
-    options[:class] = join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class])
-    delete_link_for(url, options)
+  %w[link_to action_link_to fancy_button_to fancy_link_to delete_button_for delete_link_for].each do |method_sym|
+    define_method("pf_#{method_sym}") do |*args, options|
+      opts = options.respond_to?(:merge) ?
+        [options.merge(class: join_dom_classes(PATTERNFLY_LINK_CLASS, options[:class]))] :
+        [options, { class: PATTERNFLY_LINK_CLASS }]
+      public_send(method_sym, *args, *opts)
+    end
   end
 
   protected
