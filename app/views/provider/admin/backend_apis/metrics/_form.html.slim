@@ -5,4 +5,4 @@
   = form.input :description, input_html: { rows: 3 }
 
 = form.buttons do
-  = form.commit_button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}"
+  = form.button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}", button_html: { class: 'pf-c-button pf-m-primary' }
