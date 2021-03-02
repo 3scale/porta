@@ -9,4 +9,4 @@ p.help
   = render 'form', form: f
 
   = f.buttons do
-    = f.commit_button label: 'Update webhooks settings'
+    = f.button 'Update webhooks settings',  button_html: { class: 'pf-c-button pf-m-primary' }
