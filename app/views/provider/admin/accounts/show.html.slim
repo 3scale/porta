@@ -26,7 +26,7 @@ div id="account-column-wrapper"
       ' Account Details
       - if @presenter.show_edit_account_link?
         span class="operations"
-          = link_to 'Edit', edit_provider_admin_account_path, class: 'action edit'
+          = pf_link_to 'Edit', edit_provider_admin_account_path, class: 'action edit'
 
     table class="list"
       tbody

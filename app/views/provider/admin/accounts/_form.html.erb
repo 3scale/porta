@@ -5,9 +5,9 @@
 
 <%= form.buttons do %>
   <% if params[:next_step] == 'credit_card' %>
-    <%= form.commit_button 'Save and continue with payment details' %>
+    <%= form.button 'Save and continue with payment details', button_html: { class: 'pf-c-button pf-m-primary' } %>
   <% else %>
-    <%= form.commit_button  %>
+    <%= form.button 'Update Account', button_html: { class: 'pf-c-button pf-m-primary' }  %>
   <% end %>
 <% end %>
 <%= javascript_include_tag 'custom_profiles_input_texts' %>
