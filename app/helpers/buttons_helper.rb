@@ -144,7 +144,8 @@ module ButtonsHelper
     end
   end
 
-  PATTERNFLY_LINK_CLASS = 'pf-c-button pf-m-link'
+  PATTERNFLY_BUTTON_CLASS = 'pf-c-button'
+  PATTERNFLY_LINK_CLASS = "#{PATTERNFLY_BUTTON_CLASS} pf-m-link"
 
   %i[link_to action_link_to fancy_button_to fancy_link_to delete_button_for delete_link_for].each do |method_sym|
     define_method("pf_#{method_sym}") do |*args, options|
@@ -153,6 +154,13 @@ module ButtonsHelper
         [options, { class: PATTERNFLY_LINK_CLASS }]
       public_send(method_sym, *args, *opts)
     end
+  end
+
+  def pf_link_as_button(label, url, options)
+    pf_class = "#{PATTERNFLY_BUTTON_CLASS} pf-m-#{options[:modifier]}"
+    options[:class] = join_dom_classes(pf_class, options[:class])
+    
+    link_to label, url, options
   end
 
   protected

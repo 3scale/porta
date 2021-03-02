@@ -13,7 +13,7 @@
     <%= invoice_field(:issued_on, invoice_date_format(@invoice.issued_on))  %>
     <%= invoice_field(:due_on, invoice_date_format(@invoice.due_on)) %>
     <%= invoice_field(:paid_on, invoice_date_format(@invoice.paid_at))  %>
-    <%= invoice_field('PDF', invoice_pdf_link(@invoice)) %>
+    <%= invoice_field('PDF', pf_invoice_pdf_link(@invoice)) %>
 
   </table>
 
