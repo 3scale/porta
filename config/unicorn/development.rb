@@ -26,7 +26,7 @@ listen prometheus_port
 
 pid app_dir.join('tmp/pids/unicorn.pid').to_s
 
-if ENV['RAILS_LOG_TO_STDOUT'].blank?
+if ENV.fetch('RAILS_LOG_TO_STDOUT', '1') != '1'
   stderr_path app_dir.join("log/unicorn.stderr.log").to_s
   stdout_path app_dir .join("log/unicorn.stdout.log").to_s
 end
