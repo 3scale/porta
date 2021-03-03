@@ -16,7 +16,9 @@ Here you can manage all the information you gather from your users. You can add 
   <h2>
     <%= class_name.constantize.model_name.human %>
   </h2>
-  <%= fancy_link_to "Create", new_admin_fields_definition_path(:fields_definition => {:target => class_name}), :title => "Create new field for #{class_name.constantize.model_name.human}", :class => 'new-field-definition new action add' %>
+  <%= pf_fancy_link_to "Create", new_admin_fields_definition_path(:fields_definition=> {:target => class_name}),
+    :title => "Create new field for #{class_name.constantize.model_name.human}", :class => 'new-field-definition new
+    action add' %>
 
   <% if @fields_definitions.by_target(class_name).blank? %>
     <i>No extra fields for this element.</i>
@@ -29,7 +31,7 @@ Here you can manage all the information you gather from your users. You can add 
 	<span>"<%= h truncate(fields_definition.label, :length => 50) %>"</span>
 	<span class="action-set">
 	  <span class="properties"><%=h retrieve_properties_of fields_definition %></span>
-	  <%= link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
+	  <%= pf_link_to 'Edit', edit_admin_fields_definition_path(fields_definition), :class => 'action edit' %>
       </li>
     <% end %>
   </ol>

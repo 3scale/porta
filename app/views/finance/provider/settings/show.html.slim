@@ -13,9 +13,9 @@
 
       li
         - new_mode = @billing_strategy.is_a?(Finance::PostpaidBillingStrategy) ? 'prepaid' : 'postpaid'
-        = submit_tag "Switch to #{new_mode.upcase}",
+        = button_tag "Switch to #{new_mode.upcase}",
                      onclick: "return confirm('Are you sure you want to switch to #{new_mode} mode?');",
-                     class: "dangerous-button button next"
+                     class: "pf-c-button pf-m-danger button next"
         = hidden_field_tag 'type', new_mode
 
 = semantic_form_for @billing_strategy.becomes(Finance::BillingStrategy),
@@ -48,7 +48,7 @@
               include_blank: false
 
     = f.buttons do
-      = f.commit_button 'Save'
+      = f.button 'Save', button_html: { class: 'pf-c-button pf-m-primary' }
 
 - if can?(:manage, :finance)
   - if @account.billing_strategy.try(:needs_credit_card?)
@@ -86,7 +86,7 @@
                                           value: '', disabled: true
 
       = form.buttons do
-        = form.commit_button 'Save changes'
+        = form.button 'Save changes', button_html: { class: 'pf-c-button pf-m-primary' }
 
   javascript:
     $(function() {

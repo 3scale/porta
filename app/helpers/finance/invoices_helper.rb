@@ -45,14 +45,24 @@ module Finance::InvoicesHelper
             :title => "Current invoice for #{h(buyer.org_name)}"
   end
 
-  def invoice_action_button(name, action)
+  def invoice_action_button(name, action, modifier)
     url = send("#{action}_admin_finance_invoice_path", @invoice.id, :format => :js)
-    fancy_button_to(name, url, :method => :put, :remote => true)
+    pf_class = "pf-c-button pf-m-#{modifier}"
+    fancy_button_to(name, url, :method => :put, :remote => true, :class => pf_class)
   end
+
 
   def invoice_pdf_link(invoice, label = 'Download PDF')
     if invoice.pdf.file?
       link_to(label, invoice.pdf.expiring_url)
+    else
+      content_tag(:em,'not yet generated')
+    end
+  end
+
+  def pf_invoice_pdf_link(invoice, label = 'Download PDF')
+    if invoice.pdf.file?
+      pf_link_as_button(label, invoice.pdf.expiring_url, modifier: 'secondary')
     else
       content_tag(:em,'not yet generated')
     end

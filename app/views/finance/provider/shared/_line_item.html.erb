@@ -8,7 +8,7 @@
     <% if line_item.invoice.editable? && editable %>
       <%= form_tag admin_finance_account_invoice_line_item_path(line_item.invoice.buyer_account, line_item.invoice, line_item),
         :method => 'delete', :class => 'remote' do %>
-        <button type="submit" class="action delete">Delete</button>
+        <button type="submit" class="pf-c-button pf-m-link action delete">Delete</button>
       <% end %>
     <% end %>
   </td>
