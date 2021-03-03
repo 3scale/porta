@@ -49,7 +49,7 @@
             = render 'shared/plan_change_settings', form: form, permission: :change_service_plan_permission, label: ''
 
     = form.buttons do
-      = form.commit_button
+      = form.button 'Update Settings', button_html: { class: 'pf-c-button pf-m-primary' }
 
 = javascript_include_tag 'sites/general_settings.js'
 javascript:
