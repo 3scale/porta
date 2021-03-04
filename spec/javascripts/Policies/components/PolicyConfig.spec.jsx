@@ -92,7 +92,7 @@ describe('PolicyConfig Component', () => {
 
   it('should have a remove button', () => {
     const {policyConfigWrapper, props} = setup()
-    const removePolicyButton = policyConfigWrapper.find('.pf-c-button.PolicyConfiguration-remove')
+    const removePolicyButton = policyConfigWrapper.find('.pf-c-button')
     expect(removePolicyButton.exists()).toBe(true)
 
     removePolicyButton.simulate('click')

@@ -74,7 +74,6 @@ const PolicyConfig = ({policy, actions}: Props) => {
       }
       { removable &&
         <Button
-          className="PolicyConfiguration-remove"
           variant="danger"
           onClick={remove}
         >
