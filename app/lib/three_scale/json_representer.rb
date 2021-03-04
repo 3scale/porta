@@ -21,9 +21,8 @@ module ThreeScale::JSONRepresenter
     builder = ThreeScale::XML::Builder.new(skip_instruct: true)
     doc = options.fetch(:doc)
     xml = to_xml(builder: builder)
-    nodeset = Nokogiri::XML.parse(xml).children
-    nodeset.document = doc
-    nodeset
+
+    Nokogiri::XML::Node.new('root', doc).replace(xml)
   end
 
   module Format
