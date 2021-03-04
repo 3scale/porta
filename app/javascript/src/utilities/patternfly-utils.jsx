@@ -5,9 +5,9 @@ import React from 'react'
 import { SelectOption } from '@patternfly/react-core'
 
 export interface Record {
+  description?: string | void,
   id: number | string,
-  name: string,
-  description?: string | void
+  name: string
 }
 
 export interface SelectOptionObject {
@@ -23,8 +23,8 @@ export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
 })
 
 type Props = Record & {
-  disabled?: boolean | void,
-  className?: string
+  className?: string,
+  disabled?: boolean | void
 }
 
 export const toSelectOption = ({ id, name, description, disabled = false, className }: Props) => (
