@@ -6,7 +6,6 @@
     margin-top: 2rem;
   }
 
-  // scss-lint:disable SelectorFormat
   .pf-c-nav__item {
     &.outdated-config:not(.pf-m-expanded) > a::before {
       content: '\f071';
