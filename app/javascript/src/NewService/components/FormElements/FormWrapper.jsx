@@ -4,6 +4,7 @@ import React from 'react'
 import type {FormProps} from 'NewService/types'
 import {CSRFToken} from 'utilities/utils'
 import {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements'
+import { Button } from '@patternfly/react-core'
 
 const FormWrapper = (props: FormProps) => {
   const {id, formActionPath, hasHiddenServiceDiscoveryInput, submitText} = props
@@ -25,11 +26,10 @@ const FormWrapper = (props: FormProps) => {
         </ol>
       </fieldset>
       <fieldset className="buttons">
-        <input
+        <Button
           type="submit"
           name="commit"
-          value={submitText}
-          className="pf-c-button pf-m-primary create" />
+          className="create">{ submitText }</Button>
       </fieldset>
     </form>
   )
