@@ -12,12 +12,12 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   def index
     activate_menu :backend_apis
     search = ThreeScale::Search.new(params[:search] || params)
-    @raw_backend_apis = current_account.backend_apis
-    @backend_apis = @raw_backend_apis.order(updated_at: :desc)
-                                     .paginate(pagination_params)
-                                     .scope_search(search)
-                                     .decorate
-                                     .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
+    @backend_apis = current_account.backend_apis
+                                            .order(updated_at: :desc)
+                                            .scope_search(search)
+    @page_backend_apis = @backend_apis.paginate(pagination_params)
+                                          .decorate
+                                          .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
   end
 
   def new
