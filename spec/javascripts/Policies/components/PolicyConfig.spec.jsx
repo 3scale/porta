@@ -92,7 +92,7 @@ describe('PolicyConfig Component', () => {
 
   it('should have a remove button', () => {
     const {policyConfigWrapper, props} = setup()
-    const removePolicyButton = policyConfigWrapper.find('.PolicyConfiguration-remove')
+    const removePolicyButton = policyConfigWrapper.find('.pf-c-button.pf-m-danger')
     expect(removePolicyButton.exists()).toBe(true)
 
     removePolicyButton.simulate('click')
@@ -101,7 +101,7 @@ describe('PolicyConfig Component', () => {
 
   it('should have a submit button', () => {
     const {policyConfigWrapper} = setup()
-    const submitPolicyButton = policyConfigWrapper.find('button').first()
+    const submitPolicyButton = policyConfigWrapper.find('.PolicyConfiguration-form .pf-c-button[type="submit"]')
     expect(submitPolicyButton.text()).toBe('Update Policy')
   })
 

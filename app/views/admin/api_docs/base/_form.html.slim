@@ -17,7 +17,7 @@
   = form.semantic_errors :base_path
   = form.input :skip_swagger_validations, as: :boolean
 = form.buttons do
-  = form.commit_button commit_button_label
+  = form.button commit_button_label, button_html: { class: 'pf-c-button pf-m-primary' } 
 
 css:
   #api_docs_service_body_input .CodeMirror {

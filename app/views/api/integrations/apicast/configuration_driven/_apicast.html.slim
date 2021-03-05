@@ -44,7 +44,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
   section style="margin-top: 48px;"
 
     .SettingsBox.Environment class=('Environment--is-promoted' if @show_presenter.environments_have_same_config?)
-      = link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'staging'), class: 'SettingsBox-toggle'
+      = pf_link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'staging'), class: 'SettingsBox-toggle'
       article.Environment-summary data-state="open"
         h3.Environment-title Staging APIcast
         - if @show_presenter.any_sandbox_configs?
@@ -76,7 +76,7 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
 
     .SettingsBox.Environment
       - if @show_presenter.any_production_configs?
-        = link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'production'), class: 'SettingsBox-toggle'
+        = pf_link_to 'Configuration history', admin_service_proxy_configs_path(@service, environment: 'production'), class: 'SettingsBox-toggle'
       article.Environment-summary data-state="open" style="margin-top: 24px;"
         h3.Environment-title Production APIcast
         - if @show_presenter.any_production_configs?
