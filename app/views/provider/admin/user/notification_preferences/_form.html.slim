@@ -13,4 +13,5 @@
               hint_method: ->(value) { t(value, scope: :notification_preference_hints) }
 
   = f.buttons do
-    = f.commit_button 'Update Notification Preferences'
+    = f.button I18n.t('provider.admin.user.notification_preferences.form.submit_button_label'), button_html: { class: 'pf-c-button pf-m-primary' }
+

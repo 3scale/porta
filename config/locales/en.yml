@@ -366,9 +366,19 @@ en:
         has_password: 'User already has a password. Use it to change the password.'
 
     admin:
+      account:
+        users:
+          form:
+            submit_button_label: 'Update User'
+      accounts:
+        form:
+          submit_button_label: 'Update Account'
+          submit_button_next_step_label: 'Save and continue with payment details'
+
       authentication_providers:
         form:
           automatically_approve_accounts_hint_html: "<br /> Even if the <a href=%{link}>account approval settings</a> say otherwise"
+          submit_button_label: 'Create Authentication provider'
       messages:
         no_metrics: "You have no metrics"
         no_methods: "You have no methods"
@@ -394,6 +404,12 @@ en:
             no_notification_preferences_html: |
               You don't have access to any notifications on the %{account_name} account.
               Please contact <a href="mailto:%{email}">%{username}</a> to request access.
+          form:
+            submit_button_label: 'Update Notification Preferences'
+        personal_details:
+          edit:
+            form:
+              submit_button_label: 'Update Details'
 
       dashboards:
         show:
@@ -405,6 +421,10 @@ en:
           no_messages_4: "Blue skies ahead…"
           no_messages_5: "Inbox Zero"
           no_messages_6: "The sound of silence"
+      webhooks:
+        edit:
+          form:
+            submit_button_label: 'Update webhooks settings'
 
   buyers:
     accounts:

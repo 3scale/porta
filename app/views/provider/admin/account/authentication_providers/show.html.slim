@@ -4,7 +4,7 @@ h1.title
 
 .SettingsBox
 
-  = link_to "edit", edit_provider_admin_account_authentication_provider_path(@presenter.authentication_provider), class: 'SettingsBox-toggle edit' unless @presenter.cannot_edit?
+  = pf_link_to "edit", edit_provider_admin_account_authentication_provider_path(@presenter.authentication_provider), class: 'SettingsBox-toggle edit' unless @presenter.cannot_edit?
 
   dl.SettingsBox-summary.u-dl
     dt.u-dl-term
@@ -52,11 +52,11 @@ h1.title
 
     - if @presenter.authentication_provider.published?
       - if @presenter.publishing_service.valid?
-        = f.submit 'Unpublish', class: 'important-button button next update'
+        = f.submit 'Unpublish', class: 'pf-c-button pf-m-primary button next update'
       - else
-        = f.submit 'Unpublish', class: 'important-button button next update disabled-button', disabled: true
+        = f.submit 'Unpublish', class: 'pf-c-button pf-m-primary button next update', disabled: true
     - else
       - if @presenter.publishing_service.valid?
-        = f.submit 'Publish', class: 'important-button button next update'
+        = f.submit 'Publish', class: 'pf-c-button pf-m-primary button next update'
       - else
-        = f.submit 'Publish', class: 'important-button button next update disabled-button', disabled: true
+        = f.submit 'Publish', class: 'pf-c-button pf-m-primary button next update', disabled: true
