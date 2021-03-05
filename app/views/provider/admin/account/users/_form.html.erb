@@ -67,7 +67,7 @@
 <% end %>
 
 <%= form.buttons do %>
-  <%= form.commit_button %>
+  <%= form.button I18n.t('provider.admin.account.users.form.submit_button_label'), button_html: { class: 'pf-c-button pf-m-primary' } %>
 <% end %>
 
 <%= javascript_include_tag 'custom_profiles_input_texts' %>

@@ -14,7 +14,7 @@ h1 Personal Details
     = form.inputs name: "Provide your current password and update your personal details" do
       = form.input :current_password, required: true
   = form.buttons do
-    = form.commit_button 'Update Details'
+    = form.button I18n.t('provider.admin.user.personal_details.edit.form.submit_button_label'), button_html: { class: 'pf-c-button pf-m-primary' }
 
 - if current_user.can_set_password? && !current_account.settings.enforce_sso?
   p You have no password set. If you'd like to set one use the
