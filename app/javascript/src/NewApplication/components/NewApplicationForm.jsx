@@ -13,13 +13,13 @@ import {
   BuyerSelect,
   ProductSelect,
   ApplicationPlanSelect,
-  ServicePlanSelect,
-  NameInput,
-  DescriptionInput
+  ServicePlanSelect
 } from 'NewApplication'
+import { UserDefinedField } from 'Common'
 import { CSRFToken } from 'utilities/utils'
 
 import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'
+import type { FieldDefinition } from 'Types'
 
 import './NewApplicationForm.scss'
 
@@ -32,7 +32,9 @@ type Props = {
   products?: Product[],
   servicePlansAllowed: boolean,
   buyer?: Buyer,
-  buyers?: Buyer[]
+  buyers?: Buyer[],
+  definedFields?: FieldDefinition[],
+  validationErrors: {[string]: string[] | void}
 }
 
 const NewApplicationForm = ({
@@ -44,25 +46,35 @@ const NewApplicationForm = ({
   serviceSubscriptionsPath,
   servicePlansAllowed,
   product: defaultProduct,
-  products
+  products,
+  definedFields,
+  validationErrors
 }: Props) => {
   const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
   const [product, setProduct] = useState<Product | null>(defaultProduct || null)
   const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
   const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(null)
-  const [name, setName] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
+
+  const definedFieldsInitialState = definedFields ? definedFields.reduce((state, field) => {
+    state[field.id] = ''
+    return state
+  }, {}) : {}
+  const [definedFieldsState, setDefinedFieldsState] = useState<{[string]: string}>(definedFieldsInitialState)
+  const handleOnDefinedFieldChange = (id) => (value) => {
+    setDefinedFieldsState(state => ({ ...state, [id]: value }))
+  }
 
   const [loading, setLoading] = useState<boolean>(false)
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan !== null
+  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
   const isFormComplete = buyer !== null &&
     product !== null &&
     servicePlanValid &&
     appPlan !== null &&
-    name &&
-    buyerValid
+    buyerValid &&
+    definedFieldsValid
 
   const resetServicePlan = () => {
     let plan = null
@@ -146,12 +158,14 @@ const NewApplicationForm = ({
           isDisabled={product === null}
         />
 
-        <NameInput name={name} setName={setName} />
-
-        <DescriptionInput
-          description={description}
-          setDescription={setDescription}
-        />
+        {definedFields && definedFields.map(f => (
+          <UserDefinedField
+            validationErrors={validationErrors[f.id]}
+            fieldDefinition={f}
+            value={definedFieldsState[f.id]}
+            onChange={handleOnDefinedFieldChange(f.id)}
+            key={f.id} />
+        ))}
 
         <ActionGroup>
           <Button

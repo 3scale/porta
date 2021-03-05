@@ -18,21 +18,24 @@ Feature: Create application
 
 
   #TODO move single_app mode examples to separate feature?
-  @javascript
+  @javascript @wip
   Scenario: Create a single application in single application mode
     Given plan "Basic" is customized
     Given provider "foo.3scale.localhost" has multiple applications disabled
       And buyer "bob" has no applications
       And I go to the provider side create application page for "bob"
     Then I should see "New Application"
+     And I select "API" from "Product"
+     # FIXME: why should not contain custom plans?
      But the application plans select should not contain custom plans of provider "foo.3scale.localhost"
+     And I select "Default" from "Service plan"
+     And I select "Basic" from "Application plan"
      And I fill in "Name" with "UltimateWidget"
      And I fill in "Description" with "Awesome ultimate super widget"
-     And I select "Basic" from "Application plan"
-     And I press "Create"
+     And I press "Create Application"
      And I should be on the provider side "UltimateWidget" application page
      And should see "Application was successfully created"
-     And  buyer "bob" should have 1 cinstance
+     And buyer "bob" should have 1 cinstance
     When I go to the buyer account page for "bob"
     And I follow "1 Application"
     Then I should see "Create Application"
@@ -43,11 +46,12 @@ Feature: Create application
     Given buyer "bob" has no applications
       And I go to the provider side create application page for "bob"
     Then I should see "New Application"
+    # FIXME!!!
      But the application plans select should not contain custom plans of provider "foo.3scale.localhost"
      And I fill in "Name" with "UltimateWidget"
      And I fill in "Description" with "Awesome ultimate super widget"
      And I select "Basic" from "Application plan"
-     And I press "Create"
+     And I press "Create Application"
 
      Then I should be on the provider side "UltimateWidget" application page
      And should see "Application was successfully created"
@@ -65,6 +69,7 @@ Feature: Create application
      Then I should see "New Application"
       And I fill in "Name" with "UltimateWidget"
       And I fill in "Description" with "Awesome ultimate super widget"
+      And I select "second" from "Product"
       And I select "second_app_plan" from "Application plan"
       And I select "non_default" from "Service plan"
       And I press "Create Application"
@@ -75,7 +80,7 @@ Feature: Create application
      And should see "Application was successfully created"
 
   @javascript
-   Scenario: The service of the selected application plans hasn´t service plan
+   Scenario: The service of the selected application plans does not have a service plan
      Given a service "second" of provider "foo.3scale.localhost"
        And a published application plan "second_app_plan" of service "second" of provider "foo.3scale.localhost"
        And the service "second" does not have service plan
@@ -84,8 +89,10 @@ Feature: Create application
       Then I should see "New Application"
        And I fill in "Name" with "UltimateWidget"
        And I fill in "Description" with "Awesome ultimate super widget"
+       And I select "second" from "Product"
        And I select "second_app_plan" from "Application plan"
-      Then I should see "Create a service plan"
+      Then I should see "In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan."
+      And I should see "Create a new Service plan"
 
   @javascript
   Scenario: Create an application with extra field
@@ -101,8 +108,9 @@ Feature: Create application
      And I fill in "Name" with "UltimateWidget"
      And I fill in "Description" with "Awesome ultimate super widget"
      And I fill in "Womm" with "12/10"
-
+     And I select "API" from "Product"
      And I select "Basic" from "Application plan"
+     And I select "Default" from "Service plan"
      And I press "Create Application"
 
     Then I should be on the provider side "UltimateWidget" application page
@@ -114,12 +122,13 @@ Feature: Create application
     Then I should see "New Application"
      And I fill in "Name" with ""
      And I fill in "Description" with ""
+     And I select "second" from "Product"
      And I select "Basic" from "Application plan"
      And I press "Create Application"
    Then I should see "can´t be blank" in the "Name" field
      And I should see "can´t be blank" in the "Description" field
 
-  @javascript
+  @javascript @wip
   Scenario: Create an application with a pending contract
     Given buyer "bob" is subscribed with state "pending" to the default service of provider "foo.3scale.localhost"
     And I go to the provider side create application page for "bob"

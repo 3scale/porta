@@ -16,6 +16,8 @@ type Props<T: Record> = {
   name: string,
   placeholderText: string,
   hint?: React.Node,
+  isValid?: boolean,
+  helperTextInvalid?: string,
   isDisabled?: boolean,
   isRequired?: boolean
 }
@@ -29,6 +31,8 @@ const Select = <T: Record>({
   name,
   placeholderText,
   hint,
+  isValid = true,
+  helperTextInvalid,
   isDisabled = false,
   isRequired = false
 }: Props<T>) => {
@@ -46,6 +50,8 @@ const Select = <T: Record>({
       isRequired={isRequired}
       label={label}
       fieldId={fieldId}
+      isValid={isValid}
+      helperTextInvalid={helperTextInvalid}
     >
       {item && <input type="hidden" name={name} value={item.id} />}
       <PF4Select

@@ -15,3 +15,15 @@ export type Product = {
   name: string,
   appPlans: ApplicationPlan[]
 }
+
+export type FieldDefinition = {
+  hidden: boolean,
+  required: boolean,
+  label: string,
+  name: string,
+  id: string,
+  choices?: string[],
+  hint?: string,
+  readOnly: boolean,
+  type: 'extra' | 'internal' | 'builtin'
+}

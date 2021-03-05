@@ -2,16 +2,19 @@
 
 module Buyers::ApplicationsHelper
 
-  def new_application_form_metadata(provider:, buyer: nil, service: nil)
+  def new_application_form_metadata(provider:, buyer: nil, service: nil, cinstance: nil)
     {
       'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
+      'create-service-plan-path': new_admin_service_service_plan_path(':id'),
       'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
       'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
       product: service && product_data(service).to_json,
       products: !service && data_products(provider).to_json,
       buyer: buyer && buyer_data(buyer).to_json,
-      buyers: !buyer && data_buyers(provider).to_json
+      buyers: !buyer && data_buyers(provider).to_json,
+      'defined-fields': cinstance && data_defined_fields(cinstance).to_json,
+      errors: cinstance&.errors.to_json
     }.compact
   end
 
@@ -64,6 +67,37 @@ module Buyers::ApplicationsHelper
       hash = contract.service.as_json(only: %i[id name], root: false)
       hash.merge!({ withPlan: contract.plan.as_json(only: %i[id name], root: false) })
     end
+  end
+
+  def data_defined_fields(cinstance)
+    # Is it already sorted? .order(pos: :asc)
+    cinstance.defined_fields
+             .map do |field|
+               defined_field_data(cinstance, field)
+             end
+  end
+
+  def defined_field_data(cinstance, field)
+    type = if cinstance.extra_field?(field.name)
+             'extra'
+           elsif cinstance.internal_field?(field.name)
+             'internal'
+           else
+             'builtin'
+           end
+    # Is this correct?
+    name = "#{field.target.downcase}#{type == 'extra' ? '[extra_fields]' : ''}[#{field.name}]"
+    {
+      hidden: field.hidden,
+      required: field.required,
+      label: field.label,
+      name: name,
+      id: field.name,
+      choices: field.choices.any? ? field.choices : nil,
+      hint: field.hint,
+      readOnly: field.read_only,
+      type: type
+    }.compact
   end
 
   def last_traffic(cinstance)

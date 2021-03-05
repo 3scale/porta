@@ -66,6 +66,7 @@ class Buyers::ApplicationsController < FrontendController
       activate_menu :buyers, :accounts, :listing
     else
       # We're under Applications context
+      # FIXME: since there is no buyer, there is no @cinstace so how to pass defined_fields to the form? Inside @buyers for each buyer?? x_x
       activate_menu :audience, :applications, :listing
     end
   end
@@ -85,7 +86,8 @@ class Buyers::ApplicationsController < FrontendController
       redirect_to(admin_service_application_path(@cinstance.service, @cinstance))
     else
       @cinstance.extend(AccountForNewPlan)
-      flash[:error] = @cinstance.errors.full_messages
+      # Return - @cinstance.errors.full_messages
+      # FIXME: It always redirects to /buyers/applications but it should redirect to the page it came from.
       render :action => :new
     end
   end

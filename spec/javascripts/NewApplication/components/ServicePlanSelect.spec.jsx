@@ -12,7 +12,8 @@ const props = {
   onSelect: jest.fn(),
   isPlanContracted: false,
   showHint: false,
-  serviceSubscriptionsPath: '/foo'
+  serviceSubscriptionsPath: '/foo',
+  createServicePlanPath: '/bar'
 }
 
 it('should render', () => {

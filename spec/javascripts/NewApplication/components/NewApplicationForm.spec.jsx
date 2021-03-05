@@ -29,7 +29,9 @@ const defaultProps = {
   products,
   servicePlansAllowed: true,
   buyer,
-  serviceSubscriptionsPath: '/foo'
+  serviceSubscriptionsPath: '/foo',
+  createServicePlanPath: '/bar',
+  validationErrors: {}
 }
 
 const mountWrapper = (props) => mount(<NewApplicationForm {...{...defaultProps, ...props}}/>)

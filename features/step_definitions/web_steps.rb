@@ -39,12 +39,21 @@ end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
-    fill_in(field, :with => value, visible: true)
+    if (input = find('.pf-c-form__label', text: field).sibling('input'))
+      input.set value
+    else
+      # DEPRECATED: remove when all forms implement PF4
+      fill_in(field, :with => value, visible: true)
+    end
   end
 end
 
 When /^I fill in "(.+?)" with:$/ do |field, text|
-  fill_in(field, :with => text, visible: true)
+  if (input = find('.pf-c-form__label', text: field).sibling('input'))
+    input.set value
+  else
+    fill_in(field, :with => text, visible: true)
+  end
 end
 
 When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|

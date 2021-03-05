@@ -1,10 +1,18 @@
+// @flow
+
+// $FlowFixMe $FlowError[cannot-resolve-module] failing because file name contains module's name NewApplication
 import { NewApplicationFormWrapper } from 'NewApplication'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'new-application-form'
+  const container = document.getElementById(containerId)
 
-  const { dataset } = document.getElementById(containerId)
+  if (!container) {
+    return
+  }
+
+  const { dataset } = container
 
   const { createServicePlanPath, createApplicationPath, createApplicationPlanPath, serviceSubscriptionsPath } = dataset
   const product = safeFromJsonString(dataset.product)
@@ -12,8 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const servicePlansAllowed = safeFromJsonString(dataset.servicePlansAllowed)
   const buyer = safeFromJsonString(dataset.buyer)
   const buyers = safeFromJsonString(dataset.buyers)
+  const definedFields = safeFromJsonString(dataset.definedFields)
+  const validationErrors = safeFromJsonString(dataset.errors) || {}
+  console.log(definedFields) // TODO need definedFields on all contexts
 
   NewApplicationFormWrapper({
+    // application, // TODO: get form data from response body
     createApplicationPath,
     createServicePlanPath,
     createApplicationPlanPath,
@@ -22,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     product,
     products,
     buyer,
-    buyers
+    buyers,
+    definedFields,
+    validationErrors
   }, containerId)
 })
