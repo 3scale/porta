@@ -1244,7 +1244,7 @@ en:
         update: "%{action} Staging Environment"
       policies:
         update: "Update Policy Chain"
-    l abels:
+    labels:
       service:
         intentions_required: "Signup requires a description of intended use"
         buyers_manage_apps: "Developers can manage applications"
