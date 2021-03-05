@@ -30,7 +30,7 @@ it('should return the proper title depending on the current menu', () => {
 it('should return the right title and icon when APIAP is disabled', () => {
   const wrapper = getWrapper('serviceadmin', { name: 'Test' }, false)
   expect(wrapper.text()).toEqual('Products')
-  expect(wrapper.find('i').first().prop('class')).toEqual('fa fa-cubes')
+  expect(wrapper.find('i').first().prop('class')).toContain('fa fa-cubes')
 })
 
 it('should not return a default title', () => {

@@ -9,10 +9,10 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
   productsLink="/products"
 >
   <div
-    className="PopNavigation PopNavigation--context pf-m-expanded"
+    className="pf-c-context-selector header-context-selector  pf-m-expanded"
   >
     <a
-      className="PopNavigation-trigger"
+      className="pf-c-context-selector__toggle "
       href="#context-menu"
       onClick={[Function]}
       title="Context Selector"
@@ -21,86 +21,80 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
         activeMenu=""
       >
         <span
-          className="ActiveMenuTitle"
+          className="pf-c-context-selector__toggle-text"
         >
           <i
-            className="fa "
-          />
-          <i
-            className="fa fa-chevron-down"
+            className="fa  header-context-selector__toggle-text-icon"
           />
         </span>
+        <i
+          className="fa fa-chevron-down  pf-c-context-selector__toggle-icon"
+        />
       </ActiveMenuTitle>
     </a>
-    <ul
-      className="PopNavigation-list"
-      id="context-menu"
+    <div
+      className="pf-c-context-selector__menu"
     >
-      <li
-        className="PopNavigation-listItem"
+      <ul
+        className="pf-c-context-selector__menu-list"
+        id="context-menu"
       >
-        <a
-          className="PopNavigation-link"
-          href="/p/admin/dashboard"
-        >
-          <i
-            className="fa fa-home"
-          />
-          Dashboard
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-          href="/audience"
-        >
-          <i
-            className="fa fa-bullseye"
-          />
-          Audience
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-          href="/products"
-        >
-          <i
-            className="fa fa-cubes"
-          />
-          Products
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-          href="/backends"
-        >
-          <i
-            className="fa fa-cube"
-          />
-          Backends
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-        >
-          <i
-            className="fa fa-cog"
-          />
-          Account Settings
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/p/admin/dashboard"
+          >
+            <i
+              className="fa fa-home header-context-selector__item-icon"
+            />
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/audience"
+          >
+            <i
+              className="fa fa-bullseye header-context-selector__item-icon"
+            />
+            Audience
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/products"
+          >
+            <i
+              className="fa fa-cubes header-context-selector__item-icon"
+            />
+            Products
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/backends"
+          >
+            <i
+              className="fa fa-cube header-context-selector__item-icon"
+            />
+            Backends
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+          >
+            <i
+              className="fa fa-cog header-context-selector__item-icon"
+            />
+            Account Settings
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </ContextSelector>
 `;
@@ -113,10 +107,10 @@ exports[`should not have Audience if not provided 1`] = `
   productsLink="/products"
 >
   <div
-    className="PopNavigation PopNavigation--context pf-m-expanded"
+    className="pf-c-context-selector header-context-selector  pf-m-expanded"
   >
     <a
-      className="PopNavigation-trigger"
+      className="pf-c-context-selector__toggle "
       href="#context-menu"
       onClick={[Function]}
       title="Context Selector"
@@ -125,73 +119,69 @@ exports[`should not have Audience if not provided 1`] = `
         activeMenu=""
       >
         <span
-          className="ActiveMenuTitle"
+          className="pf-c-context-selector__toggle-text"
         >
           <i
-            className="fa "
-          />
-          <i
-            className="fa fa-chevron-down"
+            className="fa  header-context-selector__toggle-text-icon"
           />
         </span>
+        <i
+          className="fa fa-chevron-down  pf-c-context-selector__toggle-icon"
+        />
       </ActiveMenuTitle>
     </a>
-    <ul
-      className="PopNavigation-list"
-      id="context-menu"
+    <div
+      className="pf-c-context-selector__menu"
     >
-      <li
-        className="PopNavigation-listItem"
+      <ul
+        className="pf-c-context-selector__menu-list"
+        id="context-menu"
       >
-        <a
-          className="PopNavigation-link"
-          href="/p/admin/dashboard"
-        >
-          <i
-            className="fa fa-home"
-          />
-          Dashboard
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-          href="/products"
-        >
-          <i
-            className="fa fa-cubes"
-          />
-          Products
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-          href="/backends"
-        >
-          <i
-            className="fa fa-cube"
-          />
-          Backends
-        </a>
-      </li>
-      <li
-        className="PopNavigation-listItem"
-      >
-        <a
-          className="PopNavigation-link"
-        >
-          <i
-            className="fa fa-cog"
-          />
-          Account Settings
-        </a>
-      </li>
-    </ul>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/p/admin/dashboard"
+          >
+            <i
+              className="fa fa-home header-context-selector__item-icon"
+            />
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/products"
+          >
+            <i
+              className="fa fa-cubes header-context-selector__item-icon"
+            />
+            Products
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/backends"
+          >
+            <i
+              className="fa fa-cube header-context-selector__item-icon"
+            />
+            Backends
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+          >
+            <i
+              className="fa fa-cog header-context-selector__item-icon"
+            />
+            Account Settings
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </ContextSelector>
 `;

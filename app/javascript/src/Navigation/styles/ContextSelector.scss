@@ -1,28 +1,30 @@
-// Copied from colors.scss
-$lochMaraBlue: #0088ce; //pf-blue-400
-$font-color: #393f44; // pf-black-800
-
-// scss-lint:disable SelectorFormat IdSelector
-#api_selector {
-  margin-bottom: 0.5rem; // var(--pf-c-page__header-tools--MarginTop)
-  margin-top: 0.5rem;
+// Adjust styles for a context selector that is within the (dark) header
+.header-context-selector {
+  --pf-c-context-selector__toggle--BorderTopColor: transparent;
+  --pf-c-context-selector__toggle--BorderRightColor: transparent;
+  --pf-c-context-selector__toggle--BorderBottomColor: transparent;
+  --pf-c-context-selector__toggle--BorderLeftColor: transparent;
+  --pf-c-context-selector__toggle--active--BorderBottomColor: transparent;
+  --pf-c-context-selector__toggle--expanded--BorderBottomColor: transparent;
+  --pf-c-context-selector__toggle--hover--BorderBottomColor: transparent;
+  --pf-c-context-selector--Width: initial;
 }
 
-.current-context {
-  color: $lochMaraBlue;
-}
-.PopNavigation-list {
-  animation: none;
-}
-
-.PopNavigation-link > i {
-  padding-right: 0.5rem;
+.header-context-selector__item-icon {
+  // color: var(--pf-global--active-color--100);
+  margin-right: var(--pf-global--spacer--sm);
+  min-width: var(--pf-global--spacer--lg);
 }
 
-.unauthorized {
-  cursor: not-allowed;
+.header-context-selector__toggle-text-icon {
+  margin-right: var(--pf-global--spacer--sm);
+  color: var(--pf-global--active-color--100);
+}
 
-  &:hover {
-    color: $font-color;
-  }
+.pf-c-context-selector__menu-list {
+  overflow-y: auto;
+}
+
+a.pf-c-context-selector__menu-list-item {
+  color: var(--pf-global--Color--100);
 }
