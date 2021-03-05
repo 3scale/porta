@@ -9,4 +9,4 @@ p.help
   = render 'form', form: f
 
   = f.buttons do
-    = f.button 'Update webhooks settings',  button_html: { class: 'pf-c-button pf-m-primary' }
+    = f.button I18n.t('provider.admin.webhooks.edit.form.submit_button_label'),  button_html: { class: 'pf-c-button pf-m-primary' }
