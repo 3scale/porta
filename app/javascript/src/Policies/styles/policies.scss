@@ -1,3 +1,5 @@
+// scss-lint:disable SelectorFormat
+
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 .PolicyConfiguration {
   @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
@@ -74,12 +76,6 @@ $error-color: #c00;
       width: 100%;
     }
 
-    &-remove {
-      background-color: white;
-      border-color: $dontColor;
-      color: $dontColor;
-    }
-
     &-description {
       margin: 1rem 0 2rem;
       white-space: pre-line;
@@ -88,10 +84,15 @@ $error-color: #c00;
     .btn-info {
       background-color: $doColor;
       border-color: $doColor;
-      width: 33.33%;
       float: right;
-      padding-left: 6px;
-      padding-right: 6px;
+
+      &.btn-add.col-xs-12 {
+        max-width: 1rem;
+      }
+
+      i.glyphicon {
+        top: -1px;
+      }
     }
 
     .btn-group > button.btn-danger:first-child {

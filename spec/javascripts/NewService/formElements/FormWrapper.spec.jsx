@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import {shallow} from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
 import {FormWrapper} from 'NewService/components/FormElements'
 import {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements'
@@ -26,10 +26,10 @@ it('should render an empty input', () => {
 })
 
 it('should render submit button with proper text', () => {
-  const wrapper = shallow(<FormWrapper {...props}/>)
-  const button = wrapper.find(`input[type='submit']`)
+  const wrapper = mount(<FormWrapper { ...props } />)
+  const button = wrapper.find(`button[type='submit']`)
   expect(button.exists()).toBe(true)
-  expect(button.prop('value')).toEqual(submitText)
+  expect(button.text()).toEqual(submitText)
 })
 
 it('should render a hidden input for service discovery when required', () => {

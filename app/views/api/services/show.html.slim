@@ -5,7 +5,7 @@ h1 Overview
 
 section.Section
   .SettingsBox
-    = link_to 'edit', edit_admin_service_path(@service), class: "SettingsBox-toggle"
+    = pf_link_to 'edit', edit_admin_service_path(@service), class: "SettingsBox-toggle"
     dl.SettingsBox-summary.u-dl data-state="open"
       dt.u-dl-term Name
       dd.u-dl-definition = @service.name
@@ -58,7 +58,7 @@ section class="service-widget"
           h2.flex-item
             '  Published
             => link_to 'Application Plans', admin_service_application_plans_path(service)
-          = action_link_to :new, new_admin_service_application_plan_path(service),
+          = pf_action_link_to :new, new_admin_service_application_plan_path(service),
             label: 'Create Application Plan', class: 'flex-item'
 
         ul.application-plans[data-hint="published"]
@@ -79,7 +79,7 @@ section class="service-widget"
             h2.flex-item
               '  Published
               => link_to 'Service plans', admin_service_service_plans_path(service)
-            = action_link_to :new,  new_admin_service_service_plan_path(service),
+            = pf_action_link_to :new,  new_admin_service_service_plan_path(service),
               label: 'Create Service Plan', class: 'flex-item'
 
           ul.service-plans[data-hint="published"]
