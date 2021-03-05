@@ -4,12 +4,6 @@ require 'test_helper'
 
 class Buyers::ApplicationsHelperTest < ActionView::TestCase
 
-  test 'new_application_form_metadata requires a provider' do
-    assert_raise ArgumentError do
-      new_application_form_metadata
-    end
-  end
-
   test 'new_application_form_metadata' do
     provider = FactoryBot.create(:provider_account)
     buyer = FactoryBot.create(:simple_buyer)
