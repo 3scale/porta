@@ -5,9 +5,9 @@
 
 <%= form.buttons do %>
   <% if params[:next_step] == 'credit_card' %>
-    <%= form.button 'Save and continue with payment details', button_html: { class: 'pf-c-button pf-m-primary' } %>
+    <%= form.button I18n.t('provider.admin.accounts.form.submit_button_next_step_label'), button_html: { class: 'pf-c-button pf-m-primary' } %>
   <% else %>
-    <%= form.button 'Update Account', button_html: { class: 'pf-c-button pf-m-primary' }  %>
+    <%= form.button I18n.t('provider.admin.accounts.form.submit_button_label'), button_html: { class: 'pf-c-button pf-m-primary' }  %>
   <% end %>
 <% end %>
 <%= javascript_include_tag 'custom_profiles_input_texts' %>
