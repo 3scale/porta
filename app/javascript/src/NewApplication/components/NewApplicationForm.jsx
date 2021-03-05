@@ -26,6 +26,7 @@ import './NewApplicationForm.scss'
 type Props = {
   createApplicationPath: string,
   createApplicationPlanPath: string,
+  createServicePlanPath: string,
   serviceSubscriptionsPath: string,
   product?: Product,
   products?: Product[],
@@ -38,11 +39,12 @@ const NewApplicationForm = ({
   buyer: defaultBuyer,
   buyers,
   createApplicationPath,
+  createApplicationPlanPath,
+  createServicePlanPath,
   serviceSubscriptionsPath,
   servicePlansAllowed,
   product: defaultProduct,
-  products,
-  createApplicationPlanPath
+  products
 }: Props) => {
   const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
   const [product, setProduct] = useState<Product | null>(defaultProduct || null)
@@ -129,6 +131,7 @@ const NewApplicationForm = ({
             isPlanContracted={contractedServicePlan !== null}
             isDisabled={product === null || contractedServicePlan !== null || buyer === null}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', buyer.id) : ''}
+            createServicePlanPath={product ? createServicePlanPath.replace(':id', product.id) : ''}
           />
         )}
 
