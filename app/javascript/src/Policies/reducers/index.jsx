@@ -8,7 +8,7 @@ import PolicyConfigReducer from 'Policies/reducers/PolicyConfig'
 import ChainReducer from 'Policies/reducers/PolicyChain'
 import OriginalChainReducer from 'Policies/reducers/OriginalPolicyChain'
 
-// $FlowFixMe: provide type for State, Action after removing createReducer
+// $FlowIgnore[signature-verification-failure] we can safely assume valid signature
 const rootReducer = combineReducers({
   chain: ChainReducer,
   originalChain: OriginalChainReducer,

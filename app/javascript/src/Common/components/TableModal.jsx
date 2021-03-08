@@ -1,7 +1,7 @@
 // @flow
 
-import React, { useState, useRef, useEffect } from 'react'
-
+import * as React from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Button,
   Modal,
@@ -31,7 +31,7 @@ type Props<T: Record> = {
 
 const PER_PAGE_DEFAULT = 5
 
-const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>) => {
+const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>): React.Node => {
   const [selectedId, setSelectedId] = useState(item ? item.id : null)
   const [page, setPage] = useState(1)
   const [filteredItems, setFilteredItems] = useState(items)
@@ -93,7 +93,7 @@ const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, 
 
   const rows = pageItems.map((i) => ({
     selected: i.id === selectedId,
-    cells: cells.map(({ propName }) => (i: {[string]: string})[propName])
+    cells: cells.map(({ propName }) => i[propName])
   }))
 
   const onAccept = () => {

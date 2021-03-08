@@ -3,7 +3,7 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer } from 'Policies/util'
 
-import type { UIState, FetchErrorAction } from 'Policies/types'
+import type { Reducer, UIState, FetchErrorAction } from 'Policies/types'
 import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 
 function updateComponentTransition (state: UIState, action: UIComponentTransitionAction): UIState {
@@ -22,8 +22,7 @@ function updateError (state: UIState, action: FetchErrorAction) {
 }
 
 // TODO: use combineReducers instead of createReducer
-// $FlowFixMe[signature-verification-failure] State types are very complex for Flow
-const UISettingsReducer = createReducer<UIState>(initialState.ui, {
+const UISettingsReducer: Reducer<UIState> = createReducer<UIState>(initialState.ui, {
   'UI_COMPONENT_TRANSITION': updateComponentTransition,
   'FETCH_CHAIN_ERROR': updateError,
   'FETCH_REGISTRY_ERROR': updateError,

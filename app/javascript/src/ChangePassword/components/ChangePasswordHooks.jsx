@@ -80,12 +80,13 @@ const useFormState = (): IUseFormState => {
   const [areFieldsPristine, setAreFieldsPristine] = useState(fieldsPristineTemplate)
 
   const onFormChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
-    const validationErrors: ?ValidationErrors = validate(event.currentTarget, validationConstraints)
+    // $FlowIgnore[incompatible-call] we can assume all arguments are correct
+    const validationErrors: ValidationErrors = validate(event.currentTarget, validationConstraints)
     const visibleErrors = !!validationErrors && Object.keys(validationErrors)
       .filter(key => !areFieldsPristine[key])
       .filter(key => !key === PASSWORD_CONFIRMATION || isPassConfirmLongEnough(fieldValues))
       .reduce((errors, key) => ({...errors, [key]: validationErrors[key]}), {})
-    // $FlowExpectedError visibleErrors is supposed to be inexact
+    // $FlowExpectedError[cannot-spread-inexact] visibleErrors is supposed to be inexact
     setFieldErrors(visibleErrors ? {...fieldErrorsTemplate, ...visibleErrors} : fieldErrorsTemplate)
     setIsFormDisabled(!!validationErrors)
   }
@@ -96,7 +97,8 @@ const useFormState = (): IUseFormState => {
   }
 
   const onFieldBlur = (fieldName: FieldName) => (event: SyntheticInputEvent<HTMLInputElement>) => {
-    const validationErrors: ?ValidationErrors = validate(
+    // $FlowIgnore[incompatible-type] we can assume types here
+    const validationErrors: ValidationErrors = validate(
       {...fieldValues, [fieldName]: event.currentTarget.value},
       {[fieldName]: validationConstraints[fieldName]}
     ) || {[fieldName]: []}

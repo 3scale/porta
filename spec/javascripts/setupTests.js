@@ -11,6 +11,7 @@ jest.spyOn(utils, 'CSRFToken')
   .mockImplementation(() => '')
 
 import $ from 'jquery'
+// $FlowIgnore[prop-missing] flash is our custom function
 $.flash = {
   notice: jest.fn(),
   error: jest.fn()

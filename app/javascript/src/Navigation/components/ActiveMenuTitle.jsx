@@ -12,7 +12,7 @@ type Props = {
   activeMenu: Menu
 }
 
-const ActiveMenuTitle = ({ activeMenu }: Props) => {
+const ActiveMenuTitle = ({ activeMenu }: Props): React.Node => {
   const getIconAndText: () => [string, string] = () => {
     switch (activeMenu) {
       case 'dashboard':

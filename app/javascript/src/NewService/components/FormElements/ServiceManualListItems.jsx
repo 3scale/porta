@@ -14,7 +14,6 @@ const ServiceManualListItems = ({service, errors}: Props): React.Node => {
 
   return (
     <React.Fragment>
-      { /* $FlowFixMe boolean coercion in string literals */ }
       <li id="service_name_input" className={`string required ${errors && errors.name ? 'error' : ''}`}>
         <Label
           htmlFor='service_name'
@@ -24,7 +23,6 @@ const ServiceManualListItems = ({service, errors}: Props): React.Node => {
         <input onChange={onChange(setName)} value={name} maxLength="255" id="service_name" type="text" name="service[name]" autoFocus="autoFocus"/>
         { !!errors.name && <p className="inline-errors">{errors.name}</p> }
       </li>
-      { /* $FlowFixMe boolean coercion in string literals */ }
       <li id="service_system_name_input" className={`string required ${errors && errors.system_name ? 'error' : ''}`}>
         <Label
           htmlFor='service_system_name'
@@ -36,7 +34,6 @@ const ServiceManualListItems = ({service, errors}: Props): React.Node => {
           Only ASCII letters, numbers, dashes and underscores are allowed.
         </p>
       </li>
-      { /* $FlowFixMe boolean coercion in string literals */ }
       <li id="service_description_input" className={`text optional ${errors && errors.description ? 'error' : ''}`}>
         <Label
           htmlFor='service_description'

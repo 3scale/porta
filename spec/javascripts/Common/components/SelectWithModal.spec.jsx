@@ -39,7 +39,6 @@ function openModal <T> (wrapper: ReactWrapper<T>) {
   wrapper.find('.pf-c-select__menu li button').last().simulate('click')
 }
 
-// $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
 const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
