@@ -25,8 +25,9 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
           className="pf-c-context-selector__toggle-text"
         >
           <i
-            className="fa  header-context-selector__toggle-text-icon"
+            className="fa fa-home header-context-selector__toggle-text-icon"
           />
+          Dashboard
         </span>
         <i
           className="fa fa-chevron-down  pf-c-context-selector__toggle-icon"
@@ -42,7 +43,7 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
       >
         <li>
           <a
-            className="pf-c-context-selector__menu-list-item"
+            className="pf-c-context-selector__menu-list-item current-context"
             href="/p/admin/dashboard"
           >
             <i
@@ -87,6 +88,7 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
         <li>
           <a
             className="pf-c-context-selector__menu-list-item"
+            href="/settings"
           >
             <i
               className="fa fa-cog header-context-selector__item-icon"
@@ -124,8 +126,9 @@ exports[`should not have Audience if not provided 1`] = `
           className="pf-c-context-selector__toggle-text"
         >
           <i
-            className="fa  header-context-selector__toggle-text-icon"
+            className="fa fa-home header-context-selector__toggle-text-icon"
           />
+          Dashboard
         </span>
         <i
           className="fa fa-chevron-down  pf-c-context-selector__toggle-icon"
@@ -141,7 +144,7 @@ exports[`should not have Audience if not provided 1`] = `
       >
         <li>
           <a
-            className="pf-c-context-selector__menu-list-item"
+            className="pf-c-context-selector__menu-list-item current-context"
             href="/p/admin/dashboard"
           >
             <i
@@ -175,6 +178,7 @@ exports[`should not have Audience if not provided 1`] = `
         <li>
           <a
             className="pf-c-context-selector__menu-list-item"
+            href="/settings"
           >
             <i
               className="fa fa-cog header-context-selector__item-icon"
