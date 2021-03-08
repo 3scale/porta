@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import './Spinner.scss'
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
   className?: string
 }
 
-const Spinner = ({ size = 'md', className = '' }: Props) => {
+const Spinner = ({ size = 'md', className = '' }: Props): React.Node => {
   const classParameters = `pf-c-spinner pf-m-${size} ${className}`
 
   return (

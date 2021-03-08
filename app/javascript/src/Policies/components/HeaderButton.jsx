@@ -21,7 +21,7 @@ const Icon = ({type}) => (
   type === 'add' ? <PlusIcon/> : <TimesIcon/>
 )
 
-const HeaderButton = ({ type, onClick, children }: Props) => (
+const HeaderButton = ({ type, onClick, children }: Props): React.Node => (
   <Button
     className={classNames[type]}
     variant="link"

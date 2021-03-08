@@ -1,6 +1,6 @@
 // @flow
 
-// $FlowFixMe OAS3Autocomplete is not found by Flow, move to src
+// $FlowIgnore[cannot-resolve-module] OAS3Autocomplete module not found by Flow since not included in name-mapper.
 import { autocompleteOAS3 } from 'OAS3Autocomplete'
 import * as utils from 'utilities/utils'
 

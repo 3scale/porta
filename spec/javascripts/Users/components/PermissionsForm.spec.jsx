@@ -80,14 +80,12 @@ describe('when role is "member"', () => {
       features: ['portal', 'finance', 'settings']
     })
 
-    // $FlowFixMe: waiting for https://github.com/facebook/flow/pull/7298 to be merged
     expect(wrapper.containsAllMatchingElements([
       <input id={'user_member_permission_ids_portal'} />,
       <input id={'user_member_permission_ids_finance'} />,
       <input id={'user_member_permission_ids_settings'} />
     ])).toBe(true)
 
-    // $FlowFixMe: waiting for https://github.com/facebook/flow/pull/7298 to be merged
     expect(wrapper.containsAllMatchingElements([
       <input id={'user_member_permission_ids_partners'} />,
       <input id={'user_member_permission_ids_monitoring'} />,
@@ -99,14 +97,12 @@ describe('when role is "member"', () => {
       features: ['partners', 'monitoring', 'plans']
     })
 
-    // $FlowFixMe: waiting for https://github.com/facebook/flow/pull/7298 to be merged
     expect(wrapper.containsAllMatchingElements([
       <input id={'user_member_permission_ids_partners'} />,
       <input id={'user_member_permission_ids_monitoring'} />,
       <input id={'user_member_permission_ids_plans'} />
     ])).toBe(true)
 
-    // $FlowFixMe: waiting for https://github.com/facebook/flow/pull/7298 to be merged
     expect(wrapper.containsAllMatchingElements([
       <input id={'user_member_permission_ids_portal'} />,
       <input id={'user_member_permission_ids_finance'} />,

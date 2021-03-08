@@ -3,8 +3,6 @@
 // Disabling all weak-type checks since this file is a workaround for missing types
 /* eslint-disable flowtype/no-weak-types */
 
-import type { JQueryStatic } from 'jquery'
-
 // TODO: remove these module declarations when not failing
 declare module 'whatwg-fetch' {
   declare type Options = {

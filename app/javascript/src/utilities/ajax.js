@@ -1,6 +1,6 @@
 // @flow
 
-const post = (url: string, body?: URLSearchParams) => {
+const post = (url: string, body?: URLSearchParams): Promise<Response> => {
   const meta = document.querySelector('meta[name="csrf-token"]')
   const token = (meta && meta.getAttribute('content')) || ''
 

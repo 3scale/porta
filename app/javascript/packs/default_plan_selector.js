@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const service = safeFromJsonString<Product>(dataset.service)
-  const appPlans = safeFromJsonString<ApplicationPlan[]>(dataset.applicationPlans)
+  // $FlowIgnore[incompatible-cast] we can safely assume service is not undefined
+  const service = (safeFromJsonString<Product>(dataset.service): Product)
+  const appPlans = safeFromJsonString<ApplicationPlan[]>(dataset.applicationPlans) || []
   const initialDefaultPlan = safeFromJsonString<ApplicationPlan>(dataset.currentPlan) || null
   const path: string = dataset.path
 

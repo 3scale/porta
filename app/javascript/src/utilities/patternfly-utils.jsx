@@ -1,13 +1,13 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import { SelectOption } from '@patternfly/react-core'
 
-export interface Record {
+export type Record = {
   id: number | string,
   name: string,
-  description?: string | void
+  description?: string
 }
 
 export interface SelectOptionObject {
@@ -23,11 +23,11 @@ export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
 })
 
 type Props = Record & {
-  disabled?: boolean | void,
+  disabled?: boolean,
   className?: string
 }
 
-export const toSelectOption = ({ id, name, description, disabled = false, className }: Props) => (
+export const toSelectOption = ({ id, name, description, disabled = false, className }: Props): React.Node => (
   <SelectOption
     key={id}
     value={toSelectOptionObject({ id, name, description })}
