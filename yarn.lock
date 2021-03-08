@@ -1464,6 +1464,11 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.7.8.tgz#b15e8f9c1077f828d0ab0d95856c1114027a8217"
   integrity sha512-d/OEE8vBz0+/7Bxa2WiRTvtQqf/GcFtfpNdORPYSvoifAggL9wt+/62g0GCAPOu1qOyZHuThB2Bjg77V87EkQg==
 
+"@patternfly/react-styles@^4.8.2":
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.8.2.tgz#4796a77b658541d75d616e2e2a00fc5d7ec42bc7"
+  integrity sha512-JLVZTUYa8LIyASLvfiAgByLgNcg+OPkuXSh8Za5KdjqrBaNVQ3Wlul+oWQGwlGjbq7KSiyDg1oWemxOuLJH1VQ==
+
 "@patternfly/react-table@^4.18.14":
   version "4.18.14"
   resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.18.14.tgz#317074a32f1ed13edfea82d665ec4392e40ed171"
