@@ -7,7 +7,7 @@
 
 [libs]
 ./app/javascript/src/Types/libs/libdefs.js
-
+flow-typed
 
 [lints]
 
