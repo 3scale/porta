@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react'
+import * as React from 'react'
 import { post } from 'utilities/ajax'
 import {
   Form,
@@ -22,10 +22,10 @@ export type Props = {
 
 const NO_DEFAULT_PLAN: ApplicationPlan = { id: -1, name: '(No default plan)' }
 
-const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props) => {
-  const [defaultPlan, setDefaultPlan] = useState<ApplicationPlan>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
+const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): React.Node => {
+  const [defaultPlan, setDefaultPlan] = React.useState<ApplicationPlan>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const onSelectPlan = (plan: ApplicationPlan) => {
     const body = plan.id >= 0 ? new URLSearchParams({ id: plan.id.toString() }) : undefined

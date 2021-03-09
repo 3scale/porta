@@ -52,7 +52,7 @@ const SelectWithModal = <T: Record>({
   footer = FOOTER,
   cells,
   modalTitle
-}: Props<T>) => {
+}: Props<T>): React.Node => {
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' }
   const footerItem = { id: 'foo', name: footer }
 
@@ -79,18 +79,17 @@ const SelectWithModal = <T: Record>({
     footerItem
   ]
 
-  // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
   const options = getItems(items).map(toSelectOption)
 
   const handleOnFilter = (e) => {
-    const term = new RegExp(e.target.value, 'i')
+    const { value } = e.target
+    const term = new RegExp(value, 'i')
 
-    const filteredRecords: T[] = term !== '' ? items.filter(b => term.test(b.name)) : items
+    const filteredRecords: T[] = value !== '' ? items.filter(b => term.test(b.name)) : items
     const filteredItems = filteredRecords.length === 0
       ? [{ id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }, footerItem]
       : getItems(filteredRecords)
 
-    // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
     return filteredItems.map(toSelectOption)
   }
 

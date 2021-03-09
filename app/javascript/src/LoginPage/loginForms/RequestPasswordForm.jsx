@@ -23,19 +23,19 @@ type Props = {
 type State = {
   email: string,
   validation: {
-    email: ?boolean
+    email?: boolean
   }
 }
 
 class RequestPasswordForm extends React.Component<Props, State> {
-  state = {
+  state: State = {
     email: '',
     validation: {
       email: undefined
     }
   }
 
-  handleTextInputEmail = (email: string, event: SyntheticEvent<HTMLInputElement>) => {
+  handleTextInputEmail: (string, SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
     const isValid = validateSingleField(event)
     this.setState({ email, validation: {email: isValid} })
   }

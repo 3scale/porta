@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
 import type {FormProps, ServiceFormTemplate} from 'NewService/types'
 import type {Api} from 'Types/Api'
@@ -12,7 +12,7 @@ type Props = {
   backendApis: Api[]
 }
 
-const ServiceManualForm = (props: Props) => {
+const ServiceManualForm = (props: Props): React.Node => {
   const {template, formActionPath, apiap} = props
 
   const formProps: FormProps = {

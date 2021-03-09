@@ -1,6 +1,6 @@
 // @flow
 
-import React, {useState} from 'react'
+import * as React from 'react'
 
 import {ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm} from 'NewService'
 import {createReactWrapper} from 'utilities/createReactWrapper'
@@ -18,12 +18,12 @@ type Props = {
   backendApis: Api[]
 }
 
-const NewServiceForm = (props: Props) => {
+const NewServiceForm = (props: Props): React.Node => {
   const {template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
     providerAdminServiceDiscoveryServicesPath, adminServicesPath, apiap, backendApis} = props
 
-  const [formMode, setFormMode] = useState('manual')
-  const [loadingProjects, setLoadingProjects] = useState(false)
+  const [formMode, setFormMode] = React.useState('manual')
+  const [loadingProjects, setLoadingProjects] = React.useState(false)
 
   const handleFormsVisibility = (event: SyntheticEvent<HTMLInputElement>) =>
     setFormMode(event.currentTarget.value)
@@ -53,7 +53,7 @@ const NewServiceForm = (props: Props) => {
   )
 }
 
-const NewServiceFormWrapper = (props: Props, containerId: string) =>
+const NewServiceFormWrapper = (props: Props, containerId: string): void =>
   createReactWrapper(<NewServiceForm {...props} />, containerId)
 
 export {NewServiceForm, NewServiceFormWrapper}

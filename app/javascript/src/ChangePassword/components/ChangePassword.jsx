@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage, Form, ActionGroup, Button } from '@patternfly/react-core'
 import { PasswordField, PasswordConfirmationField, HiddenInputs, FlashMessages } from 'LoginPage'
@@ -14,10 +14,10 @@ import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 type Props = {
   lostPasswordToken: ?string,
   url: string,
-  errors: (?FlashMessage)[]
+  errors?: FlashMessage[]
 }
 
-const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
+const ChangePassword = ({ lostPasswordToken, url, errors }: Props): React.Node => {
   const {
     isFormDisabled,
     onFormChange,
@@ -90,7 +90,7 @@ const ChangePassword = ({ lostPasswordToken, url, errors }: Props) => {
   )
 }
 
-const ChangePasswordWrapper = (props: Props, containerId: string) =>
+const ChangePasswordWrapper = (props: Props, containerId: string): void =>
   createReactWrapper(<ChangePassword {...props} />, containerId)
 
 export { ChangePassword, ChangePasswordWrapper }

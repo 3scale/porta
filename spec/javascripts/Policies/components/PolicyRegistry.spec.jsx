@@ -56,6 +56,7 @@ describe('PolicyRegistry Component', () => {
     const closeRegistryButton = registryWrapper.find('HeaderButton')
     expect(closeRegistryButton.find('.PolicyChain-addPolicy--cancel').exists()).toBe(true)
     closeRegistryButton.simulate('click')
+    // $FlowIgnore[prop-missing] closePolicyRegistry is mocked
     expect(props.actions.closePolicyRegistry.mock.calls.length).toBe(1)
   })
 

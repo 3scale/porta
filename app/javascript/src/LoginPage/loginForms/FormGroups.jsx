@@ -1,24 +1,11 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import {
   FormGroup as PF4FormGroup,
   TextInput
 } from '@patternfly/react-core'
-
-type InputProps = {
-  isRequired: boolean,
-  label: string,
-  fieldId: 'string',
-  isValid: boolean,
-  name: string,
-  value: string,
-  onChange?: () => void,
-  onBlur?: () => void,
-  autoFocus?: string,
-  ariaInvalid?: boolean,
-  errorMessage?: string
-}
+import type { InputProps } from 'Types'
 
 type Props = {
   type: string,
@@ -67,7 +54,7 @@ const FormGroup = ({type, helperTextInvalid, inputProps}: Props) => {
   )
 }
 
-const TextField = ({inputProps}: {inputProps: InputProps}) => {
+const TextField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   return (
     <FormGroup
       type='text'
@@ -77,7 +64,7 @@ const TextField = ({inputProps}: {inputProps: InputProps}) => {
   )
 }
 
-const EmailField = ({inputProps}: {inputProps: InputProps}) => {
+const EmailField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   return (
     <FormGroup
       type='email'
@@ -87,7 +74,7 @@ const EmailField = ({inputProps}: {inputProps: InputProps}) => {
   )
 }
 
-const PasswordField = ({inputProps}: {inputProps: InputProps}) => {
+const PasswordField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   let helperText = helperTexts.password
   return (
     <FormGroup
@@ -98,7 +85,7 @@ const PasswordField = ({inputProps}: {inputProps: InputProps}) => {
   )
 }
 
-const PasswordConfirmationField = ({inputProps}: {inputProps: InputProps}) => {
+const PasswordConfirmationField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
   const errorMessage = inputProps.errorMessage
   let helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage

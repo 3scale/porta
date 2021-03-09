@@ -28,7 +28,6 @@ const defaultProps = {
   isOpen: true
 }
 
-// $FlowFixMe: $FlowIssue should not complain since id has union type 'string | number'
 const mountWrapper = (props) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {

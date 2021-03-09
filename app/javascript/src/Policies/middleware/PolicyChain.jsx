@@ -46,6 +46,7 @@ const loadChain = ({registry, policiesConfig, dispatch}: {registry: Array<Regist
   dispatch(loadChainSuccess(updatedChain))
 }
 
+// $FlowIgnore[signature-verification-failure] no need to verify
 const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, getState: GetState }) => (next: Dispatch) => (action: PolicyChainMiddlewareAction) => {
   const state = getState()
   switch (action.type) {

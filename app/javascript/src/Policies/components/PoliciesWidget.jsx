@@ -30,7 +30,7 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  // $FlowFixMe flow complaining because importing all actions at once
+  // $FlowIgnore[incompatible-call] flow complaining because importing all actions at once
   boundActionCreators: bindActionCreators(actions, dispatch)
 })
 
@@ -82,7 +82,7 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
   )
 }
 
-// $FlowFixMe: Redux types should work out of the box
+// $FlowIgnore[signature-verification-failure] no need to verify signature
 const PoliciesWidget = connect(
   mapStateToProps,
   mapDispatchToProps

@@ -10,7 +10,8 @@ const noticeSpy = jest.spyOn(alert, 'notice')
 const errorSpy = jest.spyOn(alert, 'error')
 
 jest.mock('utilities/ajax')
-import { post } from 'utilities/ajax'
+import * as ajax from 'utilities/ajax'
+const post = (ajax.post: JestMockFn<empty, any>)
 
 const plan = { id: 1, name: 'My Plan' }
 const props = {
@@ -25,7 +26,6 @@ it('should render', () => {
 })
 
 it('should show a success message if request goes well', async () => {
-  // $FlowFixMe: $FlowIgnore[infer-error] this is a mocked object
   post.mockResolvedValue({ ok: true })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
@@ -37,7 +37,6 @@ it('should show a success message if request goes well', async () => {
 })
 
 it('should show an error message when selected plan does not exist', async () => {
-  // $FlowFixMe: $FlowIgnore[infer-error] this is a mocked object
   post.mockResolvedValueOnce({ status: 404 })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
@@ -49,7 +48,6 @@ it('should show an error message when selected plan does not exist', async () =>
 })
 
 it('should show an error message when server returns an error', async () => {
-  // $FlowFixMe: $FlowIgnore[infer-error] this is a mocked object
   post.mockResolvedValue({ status: 403 })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
@@ -61,9 +59,9 @@ it('should show an error message when server returns an error', async () => {
 })
 
 it('should show an error message when connection fails', async () => {
-  // $FlowFixMe: $FlowIgnore suppress error in test logs
+  // $FlowExpectedError[cannot-write] suppress error logs during test
   console.error = jest.fn()
-  // $FlowFixMe: $FlowIgnore[infer-error] this is a mocked object
+
   post.mockRejectedValue()
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 

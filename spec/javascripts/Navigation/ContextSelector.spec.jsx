@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { mount } from 'enzyme'
 import { ContextSelector } from 'Navigation/components/ContextSelector'
@@ -5,16 +7,18 @@ import { ContextSelector } from 'Navigation/components/ContextSelector'
 const audienceLink = '/audience'
 const productsLink = '/products'
 const backendsLink = '/backends'
+const settingsLink = '/settings'
 
 const currentApi = { name: 'api 0', id: 0, link: 'foo.bar' }
 
 function getWrapper (customProps) {
   const props = {
     currentApi: null,
-    activeMenu: '',
+    activeMenu: 'dashboard',
     audienceLink: audienceLink,
     productsLink: productsLink,
     backendsLink: backendsLink,
+    settingsLink: settingsLink,
     ...customProps
   }
   return mount(<ContextSelector {...props} />)

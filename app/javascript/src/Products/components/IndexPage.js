@@ -160,6 +160,6 @@ const ProductsIndexPage = ({ productsCount, products }: Props) => {
   )
 }
 
-const ProductsIndexPageWrapper = (props: Props, containerId: string) => createReactWrapper(<ProductsIndexPage {...props} />, containerId)
+const ProductsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsIndexPage {...props} />, containerId)
 
 export { ProductsIndexPageWrapper }

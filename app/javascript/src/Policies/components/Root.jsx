@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 
@@ -12,7 +12,7 @@ type Props = {
   store: Store
 }
 
-const Root = ({ store }: Props) => (
+const Root = ({ store }: Props): React.Node => (
   <Provider store={store}>
     <PoliciesWidget />
   </Provider>
