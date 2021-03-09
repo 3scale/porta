@@ -21,9 +21,10 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby25-rh-c
               ImageMagick \
               ImageMagick-devel \
               unixODBC-devel \
-              mysql \
               file \
               rh-nodejs10 \
+              rh-mysql80-mysql-devel \
+              rh-mysql80-mysql \
     && rpm -i /tmp/sphinxsearch.rpm \
     && rm /tmp/*.rpm \
     && yum install -y epel-release \
