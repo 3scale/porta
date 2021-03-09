@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {mount} from 'enzyme'
 
@@ -19,11 +21,11 @@ describe('TextField', () => {
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
-    expect(wrapper.find('label').contains('Text Field')).toEqual(true)
+    expect(wrapper.find('label').text()).toMatch('Text Field')
 
     expect(wrapper.find('input').length).toEqual(1)
-    expect(wrapper.find('input').instance().type).toEqual('text')
-    expect(wrapper.find('input').instance().value).toEqual('Bob Sponge')
+    expect(wrapper.find('input').instance()?.type).toEqual('text')
+    expect(wrapper.find('input').instance()?.value).toEqual('Bob Sponge')
 
     expect(wrapper.find('.pf-m-error').exists()).toEqual(false)
   })
@@ -50,11 +52,11 @@ describe('PasswordField', () => {
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
-    expect(wrapper.find('label').contains('Password')).toEqual(true)
+    expect(wrapper.find('label').text()).toMatch('Password')
 
     expect(wrapper.find('input').length).toEqual(1)
-    expect(wrapper.find('input').instance().type).toEqual('password')
-    expect(wrapper.find('input').instance().value).toEqual('12345678')
+    expect(wrapper.find('input').instance()?.type).toEqual('password')
+    expect(wrapper.find('input').instance()?.value).toEqual('12345678')
 
     expect(wrapper.find('.pf-m-error').exists()).toEqual(false)
   })
@@ -81,11 +83,11 @@ describe('EmailField', () => {
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
-    expect(wrapper.find('label').contains('Email')).toEqual(true)
+    expect(wrapper.find('label').text()).toMatch('Email')
 
     expect(wrapper.find('input').length).toEqual(1)
-    expect(wrapper.find('input').instance().type).toEqual('email')
-    expect(wrapper.find('input').instance().value).toEqual('bob@sponge.com')
+    expect(wrapper.find('input').instance()?.type).toEqual('email')
+    expect(wrapper.find('input').instance()?.value).toEqual('bob@sponge.com')
 
     expect(wrapper.find('.pf-m-error').exists()).toEqual(false)
   })

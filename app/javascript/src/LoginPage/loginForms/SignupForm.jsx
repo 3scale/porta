@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react'
+import * as React from 'react'
 import {
   Form,
   ActionGroup,
@@ -13,10 +13,10 @@ import {
   EmailField,
   validateSingleField
 } from 'LoginPage'
-import type {SignupProps} from 'Types'
+import type {SignupProps, InputProps} from 'Types'
 
 type Validation = {
-  [string]: ?boolean
+  [string]: boolean | void
 }
 
 type State = {
@@ -56,8 +56,8 @@ const INPUT_LABELS = {
   passwordConfirmation: 'Password confirmation'
 }
 
-class SignupForm extends Component<SignupProps, State> {
-  state = {
+class SignupForm extends React.Component<SignupProps, State> {
+  state: State = {
     [INPUT_NAMES.username]: this.props.user.username,
     [INPUT_NAMES.email]: this.props.user.email,
     [INPUT_NAMES.firstName]: this.props.user.firstname,
@@ -74,7 +74,7 @@ class SignupForm extends Component<SignupProps, State> {
     }
   }
 
-  getInputProps = (name: string, isRequired: boolean) => {
+  getInputProps: (string, boolean) => InputProps = (name, isRequired) => {
     return {
       isRequired,
       name: INPUT_NAMES[name],
@@ -86,7 +86,7 @@ class SignupForm extends Component<SignupProps, State> {
     }
   }
 
-  handleInputChange = (value: string, event: SyntheticEvent<HTMLInputElement>) => {
+  handleInputChange: (string, SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
     const validation = {
       ...this.state.validation,
@@ -99,7 +99,7 @@ class SignupForm extends Component<SignupProps, State> {
     })
   }
 
-  render () {
+  render (): React.Node {
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
 
     const usernameInputProps = this.getInputProps('username', true)

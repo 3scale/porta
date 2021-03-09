@@ -80,7 +80,7 @@ export function toggleState (ident: string, classList: DOMTokenList, className: 
 // @param {DOMTokenList} classList - element.classList
 // @param {Element} toggle - Element that toggles
 // @param {string} className - class to be toggled
-export function toggle (ident: string, classList: DOMTokenList, toggle: Element, className: string) {
+export function toggle (ident: string, classList: DOMTokenList, toggle: Element, className: string): () => void {
   let handler = () => {
     toggleState(ident, classList, className)
     let event

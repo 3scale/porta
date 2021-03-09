@@ -2,11 +2,10 @@
 // TODO: Replace this component when patternfly-react implements it.
 
 import * as React from 'react'
-// $FlowFixMe Flow has troubles with @patternfly modules
+// $FlowIgnore[cannot-resolve-module] name-mapper is messing with this path
 import { FormContext } from '@patternfly/react-core/dist/js/components/Form/FormContext'
-// $FlowFixMe Flow has troubles with @patternfly modules
+// $FlowIgnore[cannot-resolve-module] name-mapper is messing with this path
 import styles from '@patternfly/react-styles/css/components/Form/form'
-// $FlowFixMe Flow has troubles with @patternfly modules
 import { css } from '@patternfly/react-styles'
 
 type Props = {
@@ -20,7 +19,7 @@ const FormFieldset = ({
   className = '',
   isInline = false,
   ...props
-}: Props) => (
+}: Props): React.Node => (
   <FormContext.Consumer>
     {({ isHorizontal }: { isHorizontal: boolean }) => (
       <fieldset

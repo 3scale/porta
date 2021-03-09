@@ -28,7 +28,7 @@ const AuthenticationSettingsFieldset = ({
   apiKeySettings,
   appIdKeyPairSettings,
   oidcSettings
-}: Props) => {
+}: Props): React.Node => {
   const isOidc = authenticationMethod === OIDC_AUTH_METHOD
   const isApiKey = authenticationMethod === API_KEY_METHOD
   const isAppIdKey = authenticationMethod === APP_ID_KEY_METHOD

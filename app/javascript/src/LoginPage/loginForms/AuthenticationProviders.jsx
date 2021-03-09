@@ -1,9 +1,9 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import { KeyIcon, LessThanIcon, GreaterThanIcon } from '@patternfly/react-icons'
 
-type ProvidersProps = {
+export type ProvidersProps = {
   authorizeURL: string,
   humanKind: string
 }
@@ -23,7 +23,7 @@ const Provider = ({authorizeURL, humanKind}: {authorizeURL: string, humanKind: s
   )
 }
 
-const AuthenticationProviders = (props: Props) => {
+const AuthenticationProviders = (props: Props): React.Node => {
   const {authenticationProviders} = props
   const providersList = authenticationProviders.map(
     provider => <Provider authorizeURL={provider.authorizeURL} humanKind={provider.humanKind} key={provider.humanKind}/>

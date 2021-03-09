@@ -13,7 +13,7 @@ const SelectGroup = ({
   hint,
   value,
   catalog
-}: Props) => {
+}: Props): React.Node => {
   const [ selectedValue, setSelectedValue ] = useState(value)
   const [ isExpanded, setIsExpanded ] = useState(false)
   const onSelect = (_e, selection) => {

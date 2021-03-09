@@ -22,10 +22,11 @@ import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
 import type { FlashMessage } from 'Types'
+import type { ProvidersProps } from 'LoginPage'
 
 type Props = {
-  authenticationProviders: Array<mixed>,
-  flashMessages: Array<FlashMessage>,
+  authenticationProviders: Array<ProvidersProps>,
+  flashMessages?: Array<FlashMessage>,
   providerAdminDashboardPath: string,
   providerLoginPath: string,
   providerSessionsPath: string,
@@ -50,13 +51,13 @@ class SimpleLoginPage extends React.Component<Props, State> {
     }
   }
 
-  showForgotCredentials () {
+  showForgotCredentials (): Node {
     const { disablePasswordReset, providerRequestPasswordResetPath, show3scaleLoginForm } = this.props
     const showResetPasswordLink = show3scaleLoginForm && !disablePasswordReset
     return showResetPasswordLink && <ForgotCredentials requestPasswordResetPath={providerRequestPasswordResetPath} />
   }
 
-  loginForm () {
+  loginForm (): Node {
     const hasAuthenticationProviders = this.props.authenticationProviders
     const show3scaleLoginForm = this.props.show3scaleLoginForm
     return (
@@ -99,7 +100,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
   }
 }
 
-const LoginPageWrapper = (props: Props, containerId: string) =>
+const LoginPageWrapper = (props: Props, containerId: string): void =>
   createReactWrapper(<SimpleLoginPage {...props} />, containerId)
 
 export {SimpleLoginPage, LoginPageWrapper}

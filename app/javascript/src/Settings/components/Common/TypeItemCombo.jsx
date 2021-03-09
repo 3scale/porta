@@ -11,7 +11,7 @@ type Props = {
   legend: string
 }
 
-const TypeItemCombo = ({ type, item, legend }: Props) => {
+const TypeItemCombo = ({ type, item, legend }: Props): React.Node => {
   return (
     <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
       <FormLegend>{legend}</FormLegend>

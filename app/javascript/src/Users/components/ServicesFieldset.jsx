@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import type { Api } from 'Types'
 import type { AdminSection } from 'Users/types'
@@ -17,7 +17,7 @@ const ServicesFieldset = ({ services = [], selectedSections = [], selectedServic
   selectedSections?: AdminSection[],
   selectedServicesIds?: number[],
   onServiceSelected: number => void
-}) => {
+}): React.Node => {
   const servicesListClassName = `ServiceAccessList`
   const allServicesChecked = !selectedSections.includes('services')
 

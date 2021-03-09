@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import { LoginPage } from '@patternfly/react-core'
@@ -19,7 +19,7 @@ type Props = {
   providerPasswordPath: string
 }
 
-const RequestPassword = ({ flashMessages, providerLoginPath, providerPasswordPath }: Props) => (
+const RequestPassword = ({ flashMessages, providerLoginPath, providerPasswordPath }: Props): React.Node => (
   <LoginPage
     brandImgSrc={brandImg}
     brandImgAlt='Red Hat 3scale API Management'
@@ -35,7 +35,7 @@ const RequestPassword = ({ flashMessages, providerLoginPath, providerPasswordPat
   </LoginPage>
 )
 
-const RequestPasswordWrapper = (props: Props, containerId: string) =>
+const RequestPasswordWrapper = (props: Props, containerId: string): void =>
   createReactWrapper(<RequestPassword {...props} />, containerId)
 
 export { RequestPassword, RequestPasswordWrapper }

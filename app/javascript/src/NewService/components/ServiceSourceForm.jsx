@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 type Props = {
   isServiceDiscoveryUsable: boolean,
@@ -10,7 +10,7 @@ type Props = {
   apiap: boolean
 }
 
-const ServiceSourceForm = (props: Props) => {
+const ServiceSourceForm = (props: Props): React.Node => {
   const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
     handleFormsVisibility, loadingProjects, apiap} = props
   const classNameDisabled = isServiceDiscoveryUsable ? '' : 'disabled'

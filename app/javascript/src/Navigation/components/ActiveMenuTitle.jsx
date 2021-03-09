@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
 
@@ -12,7 +12,7 @@ type Props = {
   activeMenu: Menu
 }
 
-const ActiveMenuTitle = ({ activeMenu }: Props) => {
+const ActiveMenuTitle = ({ activeMenu }: Props): React.Node => {
   const getIconAndText: () => [string, string] = () => {
     switch (activeMenu) {
       case 'dashboard':

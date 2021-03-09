@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {mount} from 'enzyme'
 
@@ -23,8 +25,8 @@ it('should render itself', () => {
   expect(wrapper.find('.login-provider-link').length).toEqual(2)
 
   expect(wrapper.find('.login-provider-link').first().props().href).toEqual('fake-provider-1')
-  expect(wrapper.find('.login-provider-link').first().contains('Fake human kind 1')).toEqual(true)
+  expect(wrapper.find('.login-provider-link').first().text()).toMatch('Fake human kind 1')
 
   expect(wrapper.find('.login-provider-link').last().props().href).toEqual('fake-provider-2')
-  expect(wrapper.find('.login-provider-link').last().contains('Fake human kind 2')).toEqual(true)
+  expect(wrapper.find('.login-provider-link').last().text()).toMatch('Fake human kind 2')
 })

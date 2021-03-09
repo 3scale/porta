@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react'
+import * as React from 'react'
 import { Select, SelectVariant } from '@patternfly/react-core'
 import { toSelectOptionObject, toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 import './DefaultPlanSelect.scss'
@@ -13,10 +13,11 @@ type Props = {
   isDisabled?: boolean
 }
 
-const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Props) => {
-  // $FlowFixMe should not complain about plan having id as number, since Record has union "number | string"
-  const [selection, setSelection] = useState<SelectOptionObject | null>(toSelectOptionObject(plan))
-  const [isExpanded, setIsExpanded] = useState(false)
+const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Props): React.Node => {
+  // $FlowIssue[prop-missing] description is optional
+  // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
+  const [selection, setSelection] = React.useState<SelectOptionObject | null>(toSelectOptionObject(plan))
+  const [isExpanded, setIsExpanded] = React.useState(false)
 
   const onSelect = (_e, option: SelectOptionObject) => {
     setSelection(option)
@@ -42,7 +43,8 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
       selections={selection}
       isCreatable={false}
     >
-      {/* $FlowFixMe Flow is wrong here */}
+      {/* $FlowIssue[prop-missing] description is optional */}
+      {/* $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string" */}
       {plans.map(toSelectOption)}
     </Select>
   )

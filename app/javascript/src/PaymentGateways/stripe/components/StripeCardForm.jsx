@@ -1,6 +1,7 @@
 // @flow
 
-import React, { useState, useRef } from 'react'
+import * as React from 'react'
+import { useState, useRef } from 'react'
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 import { CSRFToken } from 'utilities/utils'
 
@@ -66,7 +67,7 @@ type StripeCardFormProps = {
   isCreditCardStored: boolean
 }
 
-const StripeCardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: StripeCardFormProps) => {
+const StripeCardForm = ({ setupIntentSecret, billingAddressDetails, successUrl, isCreditCardStored }: StripeCardFormProps): React.Node => {
   // eslint-disable-next-line flowtype/no-weak-types
   const formRef = useRef<any | HTMLFormElement>(null)
   const [cardErrorMessage, setCardErrorMessage] = useState(null)

@@ -12,7 +12,7 @@ const FormLegend = ({
   children,
   className = '',
   ...props
-}: Props) => (
+}: Props): React.Node => (
   <legend {...props} className={`pf-c-form__legend ${className}`}>
     {children}
   </legend>

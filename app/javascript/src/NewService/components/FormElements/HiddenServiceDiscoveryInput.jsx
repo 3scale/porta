@@ -1,8 +1,8 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
-const HiddenServiceDiscoveryInput = () =>
+const HiddenServiceDiscoveryInput = (): React.Node =>
   <input
     value='discover'
     type='hidden'

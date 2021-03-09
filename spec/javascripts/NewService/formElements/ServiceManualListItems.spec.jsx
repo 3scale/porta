@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { shallow } from 'enzyme'
 
@@ -25,8 +27,8 @@ it('should render required form fields with errors', () => {
       description: 'A brand new API'
     },
     errors: {
-      name: "Can't be blank",
-      system_name: 'Only ASCII letters, numbers, dashes and underscores are allowed.'
+      name: ["Can't be blank"],
+      system_name: ['Only ASCII letters, numbers, dashes and underscores are allowed.']
     }
   }
   const view = shallow(<ServiceManualListItems {...props}/>)

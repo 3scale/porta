@@ -6,11 +6,11 @@ import type { FieldGroupProps } from 'Settings/types'
 
 type Props = {
   collection: FieldGroupProps[],
-  ItemComponent: (FieldGroupProps) => React.Element<empty>,
+  ItemComponent: (FieldGroupProps) => React.Node,
   legend: string
 }
 
-const FormCollection = ({collection, ItemComponent, legend}: Props) => {
+const FormCollection = ({collection, ItemComponent, legend}: Props): React.Node => {
   return (
     <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
       <FormLegend>{legend}</FormLegend>
