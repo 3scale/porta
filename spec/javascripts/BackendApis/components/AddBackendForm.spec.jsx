@@ -4,7 +4,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-// $FlowFixMe: module name mapper is confused, export exists
+// $FlowIgnore: module name mapper is confused, export exists
 import { AddBackendForm } from 'BackendApis'
 
 const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org' }
