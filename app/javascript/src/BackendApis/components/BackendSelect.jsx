@@ -10,12 +10,12 @@ import type { Backend } from 'Types'
 
 import './BackendSelect.scss'
 
- type Props = {
-   backend: Backend | null,
-   backends: Backend[],
-   newBackendPath: string,
-   onSelect: (Backend | null) => void
- }
+type Props = {
+  backend: Backend | null,
+  backends: Backend[],
+  newBackendPath: string,
+  onSelect: (Backend | null) => void
+}
 
 const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props): React.Node => {
   const cells = [
