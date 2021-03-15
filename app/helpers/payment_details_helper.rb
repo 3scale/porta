@@ -51,4 +51,23 @@ module PaymentDetailsHelper
     definition_list_item += content_tag :dd, value.presence, class: 'u-dl-definition'
     definition_list_item
   end
+
+  def stripe_billing_address_json
+    return unless logged_in?
+
+    billing_address = current_account.billing_address
+    {
+      line1: billing_address.address1,
+      line2: billing_address.address2,
+      city: billing_address.city,
+      state: billing_address.state,
+      postal_code: billing_address.zip,
+      country: billing_address.country
+    }.to_json
+  end
+
+  def get_country_code(billing_address_data)
+    merchant_countries.select {|c| c.include? billing_address_data.country}.first[1]
+  end
+
 end
