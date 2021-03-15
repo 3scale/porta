@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import { Button } from '@patternfly/react-core'
 import { PlusCircleIcon } from '@patternfly/react-icons'
@@ -17,7 +17,7 @@ import './BackendSelect.scss'
    onSelect: (Backend | null) => void
  }
 
-const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props) => {
+const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props): React.Node => {
   const cells = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },
@@ -30,9 +30,8 @@ const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props) =
       fieldId="backend_api_config_backend_api_id"
       id="backend_api_config_backend_api_id"
       name="backend_api_config[backend_api_id]"
-      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
+      // $FlowIssue backend is compatible with null
       item={backend}
-      // $FlowFixMe $FlowIssue It should not complain since Record.id has union "number | string"
       items={backends.map(b => ({ ...b, description: b.privateEndpoint }))}
       cells={cells}
       helperText={(
@@ -43,6 +42,7 @@ const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props) =
         </p>
       )}
       modalTitle="Select a Backend"
+      // $FlowIssue It should not complain since Record.id has union "number | string"
       onSelect={onSelect}
       header="Most recently created Backends"
       footer="View all Backends"

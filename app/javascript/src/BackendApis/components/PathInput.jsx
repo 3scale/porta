@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import { FormGroup, TextInput } from '@patternfly/react-core'
 
@@ -9,7 +9,7 @@ type Props = {
   setPath: string => void
 }
 
-const PathInput = ({ path, setPath }: Props) => (
+const PathInput = ({ path, setPath }: Props): React.Node => (
   <FormGroup
     isRequired
     label="Path"
