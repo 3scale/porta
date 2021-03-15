@@ -68,4 +68,8 @@ module PaymentDetailsHelper
     }.to_json
   end
 
+  def get_country_code(billing_address_data)
+    merchant_countries.select {|c| c.include? billing_address_data.country}.first[1]
+  end 
+
 end
