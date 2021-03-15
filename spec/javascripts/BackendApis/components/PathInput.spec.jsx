@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
 import { PathInput } from 'BackendApis'
@@ -23,12 +24,12 @@ it('should render itself', () => {
   expect(wrapper.exists()).toBe(true)
 })
 
-it.skip('should work', () => {
+it('should work', () => {
   const value = 'foo'
   const wrapper = mountWrapper()
 
-  wrapper.find('input').simulate('change', { currentTarget: { value }, target: { value } })
+  act(() => wrapper.find(PathInput).props().setPath(value))
 
-  // FIXME: what is wrong with this? onChange is passed the event with the value and it should work.
+  wrapper.update()
   expect(setPath).toHaveBeenCalledWith(value)
 })
