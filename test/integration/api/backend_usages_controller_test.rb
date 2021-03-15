@@ -28,29 +28,6 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test '#new only for backend_apis not used by the product' do
-    backend_apis = [backend_api, *FactoryBot.create_list(:backend_api, 2, account: backend_api.account)]
-
-    backend_apis_not_in_use = backend_apis.take(2)
-    backend_api_in_use = backend_apis.last
-    service.backend_api_configs.create!(backend_api: backend_api_in_use, path: 'whatever')
-
-    get new_admin_service_backend_usage_path(service)
-    backend_apis_not_in_use.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id.to_s }
-    assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api_in_use.id.to_s, count: 0
-  end
-
-  test '#new only for accessible backend_apis' do
-    backend_apis = [backend_api, *FactoryBot.create_list(:backend_api, 2, account: backend_api.account)]
-    accessible_backend_apis = backend_apis.take(2)
-    non_accessible_backend_api = backend_apis.last
-    non_accessible_backend_api.update_column(:state, 'deleted')
-
-    get new_admin_service_backend_usage_path(service)
-    accessible_backend_apis.each { |backend_api| assert_select 'select#backend_api_config_backend_api_id option[value=?]', backend_api.id.to_s }
-    assert_select 'select#backend_api_config_backend_api_id option[value=?]', non_accessible_backend_api.id.to_s, count: 0
-  end
-
   test '#create' do
     assert_change of: -> { service.backend_api_configs.count }, by: 1 do
       backend_api_config_params = { backend_api_id: backend_api.id, path: 'foo' }
