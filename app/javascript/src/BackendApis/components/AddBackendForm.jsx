@@ -1,6 +1,7 @@
 // @flow
 
-import React, { useState } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 
 import {
   Form,
@@ -23,7 +24,7 @@ type Props = {
   newBackendPath: string
 }
 
-const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
+const AddBackendForm = ({ backends, url, newBackendPath }: Props): React.Node => {
   const [backend, setBackend] = useState<Backend | null>(null)
   const [path, setPath] = useState('')
   const [loading, setLoading] = useState(false)
@@ -67,6 +68,6 @@ const AddBackendForm = ({ backends, url, newBackendPath }: Props) => {
   )
 }
 
-const AddBackendFormWrapper = (props: Props, containerId: string) => createReactWrapper(<AddBackendForm {...props} />, containerId)
+const AddBackendFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<AddBackendForm {...props} />, containerId)
 
 export { AddBackendForm, AddBackendFormWrapper }
