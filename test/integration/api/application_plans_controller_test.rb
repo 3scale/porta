@@ -69,7 +69,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
     test 'GET index shows the management buttons (create, delete, copy, hide/publish) for Saas' do
       management_buttons = [
-        { element_text: 'Create Application Plan',
+        { element_text: 'Create Application plan',
           xpath_selector: "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]" },
         { element_text: /Hide/,
           xpath_selector: "//a[contains(@href, '#{hide_admin_plan_path(plan)}')]" },
@@ -188,7 +188,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
     test 'GET index shows always the management buttons (create, delete, copy, hide/publish) indepently of the onpremises value' do
       management_buttons = [
-          { element_text: 'Create Application Plan',
+          { element_text: 'Create Application plan',
             xpath_selector: "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]" },
           { element_text: /Publish/,
             xpath_selector: "//a[contains(@href, '#{publish_admin_plan_path(plan)}')]" },
