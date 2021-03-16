@@ -6,14 +6,16 @@ const form = document.querySelector('#customer_form')
 const clientToken = form.dataset.clientToken
 const braintreeNonce = document.querySelector('#braintree_nonce')
 
-const billingAdressInfo = {
-  company: document.querySelector('#customer_credit_card_billing_address_company').value,
-  streetAddress: document.querySelector('#customer_credit_card_billing_address_street_address').value,
-  postalCode: document.querySelector('#customer_credit_card_billing_address_postal_code').value,
-  locality: document.querySelector('#customer_credit_card_billing_address_locality').value,
-  region: document.querySelector('#customer_credit_card_billing_address_region').value,
-  countryCodeAlpha2: document.querySelector('#customer_credit_card_billing_address_country_name').value
-}
+const getBillingAdressInfo = () => (
+  {
+    givenName: document.querySelector('#customer_credit_card_billing_address_company').value,
+    streetAddress: document.querySelector('#customer_credit_card_billing_address_street_address').value,
+    postalCode: document.querySelector('#customer_credit_card_billing_address_postal_code').value,
+    locality: document.querySelector('#customer_credit_card_billing_address_locality').value,
+    region: document.querySelector('#customer_credit_card_billing_address_region').value || null,
+    countryCodeAlpha2: document.querySelector('#customer_credit_card_billing_address_country_name').value
+  }
+)
 
 const hostedFieldOptions = {
   styles: {
@@ -43,15 +45,14 @@ const hostedFieldOptions = {
   }
 }
 
-const threeDSecureParameters = {
-  amount: '00.00',
-  billingAddress: billingAdressInfo,
-  onLookupComplete: function (data, next) {
-    next()
-  }
-}
-
 const veryfyCard = (threeDSecureInstance, payload) => {
+  const threeDSecureParameters = {
+    amount: '00.00',
+    billingAddress: getBillingAdressInfo(),
+    onLookupComplete: function (data, next) {
+      next()
+    }
+  }
   const options = {
     nonce: payload.nonce,
     bin: payload.details.bin,
