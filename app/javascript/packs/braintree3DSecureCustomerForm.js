@@ -8,11 +8,11 @@ const braintreeNonce = document.querySelector('#braintree_nonce')
 
 const getBillingAdressInfo = () => (
   {
-    company: document.querySelector('#customer_credit_card_billing_address_company').value,
+    givenName: document.querySelector('#customer_credit_card_billing_address_company').value,
     streetAddress: document.querySelector('#customer_credit_card_billing_address_street_address').value,
     postalCode: document.querySelector('#customer_credit_card_billing_address_postal_code').value,
     locality: document.querySelector('#customer_credit_card_billing_address_locality').value,
-    region: document.querySelector('#customer_credit_card_billing_address_region').value,
+    region: document.querySelector('#customer_credit_card_billing_address_region').value || null,
     countryCodeAlpha2: document.querySelector('#customer_credit_card_billing_address_country_name').value
   }
 )

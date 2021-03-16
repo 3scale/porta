@@ -123,17 +123,17 @@
 
                   <%= billing_address.input :region,
                     input_html: {
-                      required: "required",
                       class: "form-control col-md-6",
                       style: "width:50%;",
-                      value: billing_address_data.state
+                      maxlength: 3
                     },
                     wrapper_html: {class: "form-group"},
                     label: "State/Region",
+                    hint: "<div class='col-md-6 col-md-offset-4'>The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. <strong>If unsure, left blank</strong></div>",
                     label_html: {class: "col-md-4 control-label" },
                     allow_blank: false
                   %>
-                  
+
                   <%= billing_address.input :country_name,
                     as: :select,
                     collection:  options_for_select(merchant_countries, get_country_code(billing_address_data)),
