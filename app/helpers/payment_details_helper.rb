@@ -69,7 +69,8 @@ module PaymentDetailsHelper
   end
 
   def get_country_code(billing_address_data)
-    merchant_countries.select {|c| c.include? billing_address_data.country}.first[1]
+    _label, code = merchant_countries.find {|label, code| label.downcase == billing_address_data.country.to_s.downcase }
+    code
   end 
 
 end
