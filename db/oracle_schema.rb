@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20210128155025) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -902,6 +902,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "created_at",                 precision: 6,  null: false
     t.datetime "updated_at",                 precision: 6,  null: false
     t.integer  "tenant_id",                  precision: 38
+    t.string   "payment_method_id"
   end
 
   add_index "payment_details", ["account_id", "buyer_reference"], name: "index_payment_details_on_account_id_and_buyer_reference"
@@ -916,6 +917,21 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "updated_at",       precision: 6
     t.integer  "tenant_id",        precision: 38
   end
+
+  create_table "payment_intents", force: :cascade do |t|
+    t.integer  "invoice_id",        precision: 38, null: false
+    t.string   "payment_intent_id"
+    t.string   "state"
+    t.integer  "tenant_id",         precision: 38
+    t.datetime "created_at",        precision: 6,  null: false
+    t.datetime "updated_at",        precision: 6,  null: false
+    t.string   "reference"
+  end
+
+  add_index "payment_intents", ["invoice_id"], name: "index_payment_intents_on_invoice_id"
+  add_index "payment_intents", ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id"
+  add_index "payment_intents", ["reference"], name: "index_payment_intents_on_reference", unique: true
+  add_index "payment_intents", ["state"], name: "index_payment_intents_on_state"
 
   create_table "payment_transactions", force: :cascade do |t|
     t.integer  "account_id",           precision: 38

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentDetailsHelper
 
   def credit_card_terms_url
@@ -28,7 +30,7 @@ module PaymentDetailsHelper
   end
 
   def merchant_countries
-    ActiveMerchant::Country::COUNTRIES.map{|c| c[:name] }
+    ActiveMerchant::Country::COUNTRIES.map{|c| [c[:name], c[:alpha2]] }
   end
 
   #TODO: move these two methods to another helper
@@ -69,6 +71,6 @@ module PaymentDetailsHelper
   def get_country_code(billing_address_data)
     _label, code = merchant_countries.find {|label, code| label.downcase == billing_address_data.country.to_s.downcase }
     code
-  end
+  end 
 
 end

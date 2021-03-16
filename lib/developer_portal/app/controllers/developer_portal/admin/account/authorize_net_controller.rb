@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DeveloperPortal::Admin::Account
   class AuthorizeNetController < PaymentDetailsBaseController
     def show
@@ -12,26 +14,23 @@ module DeveloperPortal::Admin::Account
 
     def hosted_success
       cim_gateway = site_account.payment_gateway.cim_gateway
-      auth_response = cim_gateway.get_customer_profile(
-        customer_profile_id: current_account.credit_card_auth_code
-      )
-      update_user_and_perform_action!(auth_response)
+      customer = current_account.credit_card_auth_code
+      auth_response = cim_gateway.get_customer_profile(customer_profile_id: customer)
+
+      if authorize_net.has_credit_card?(auth_response)
+        authorize_net.update_user(auth_response)
+        flash[:success] = 'Credit Card details were saved correctly'
+      else
+        delete_profile(cim_gateway, customer)
+      end
       redirect_to after_hosted_success_path
     end
 
     private
 
-    def update_user_and_perform_action!(auth_response)
-      @payment_result = authorize_net.has_credit_card?(auth_response)
-      if @payment_result
-        authorize_net.update_user(auth_response)
-        flash[:success] = 'Credit Card details were saved correctly'
-      else
-        site_account.payment_gateway.cim_gateway.delete_customer_profile(
-          customer_profile_id: current_account.credit_card_auth_code
-        )
-        authorize_net.delete_user_profile
-      end
+    def delete_profile(cim_gateway, customer)
+      cim_gateway.delete_customer_profile(customer_profile_id: customer)
+      authorize_net.delete_user_profile
     end
 
     def authorize_net

@@ -125,7 +125,7 @@ class ApiDocs::ServicesController < FrontendController
   def exclude_forbidden_endpoints(apis)
     apis.select do |api|
       path = api['path']
-      (!master_on_premises? || path.exclude?('plan')) && (provider_can_use?(:api_as_product) || !path.match(/backend_(api|usage)/))
+      !master_on_premises? || path.exclude?('plan')
     end
   end
 

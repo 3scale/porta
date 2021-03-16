@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AccountDecorator < ApplicationDecorator
-  delegate :display_name, to: :admin_user, prefix: true
+  delegate :display_name, :email, to: :admin_user, prefix: true
 
   private
 

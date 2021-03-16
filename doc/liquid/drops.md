@@ -49,7 +49,7 @@ Returns the id of the account.
 Returns the organization name of the developer's account.
 
 ### display_name
-Returns account's display name
+Returns the organization name of the developer's account.
 
 ### vat_zero_text
 Returns a text about a VAT zero.
@@ -173,8 +173,6 @@ Give access to permission methods.
 ### edit_braintree_blue_credit_card_details_url
 
 ### edit_stripe_billing_address_url
-
-### edit_adyen12_billing_address_url
 
 -----------
 
@@ -704,19 +702,6 @@ OAuth callback url.
 
 
 ## Methods
-### login_url
-
-### user_identified?
-
------------
-
-# Base drop
-
-
-
-
-
-## Methods
 ### errors
 
 If a form for this model is rendered after unsuccessful submission,
@@ -739,6 +724,19 @@ Returns the resource URL of the result.
 
 ### description
 Returns a descriptive string for the result.
+
+-----------
+
+# Base drop
+
+
+
+
+
+## Methods
+### login_url
+
+### user_identified?
 
 -----------
 
@@ -1568,6 +1566,12 @@ Returns the resource URL of the invoice PDF.
 {{ "PDF" | link_to: invoice.pdf_url }}
 ```
 
+### pay_now?
+Returns true if the online payment page is available for the invoice.
+```liquid
+{% if invoice.pay_now? %}
+```
+
 -----------
 
 # LineItem drop
@@ -1605,6 +1609,27 @@ this returns the errors that occurred.
 ### quantity
 
 ### cost
+
+-----------
+
+# Message drop
+
+
+
+
+
+## Methods
+### type
+
+Possible types of the messages are:
+
+ - success (not used by now)
+ - info
+ - warning
+ - danger
+        
+
+### text
 
 -----------
 
@@ -1654,27 +1679,6 @@ Returns the name of the sender.
 Returns the name of the receiver.
 
 ### recipients
-
------------
-
-# Message drop
-
-
-
-
-
-## Methods
-### type
-
-Possible types of the messages are:
-
- - success (not used by now)
- - info
- - warning
- - danger
-        
-
-### text
 
 -----------
 
@@ -1773,12 +1777,18 @@ this returns the errors that occurred.
 ```
 
 ### title
+Returns the title of the page.
+```liquid
+<title>{{ page.title }}</title>
+```
 
-### kind
-
-### url
-
-### description
+### system_name
+Returns system name of the page.
+```liquid
+{% if page.system_name == 'my_page' %}
+  {% include 'custom_header' %}
+{% endif %}
+```
 
 -----------
 
@@ -1801,18 +1811,12 @@ this returns the errors that occurred.
 ```
 
 ### title
-Returns the title of the page.
-```liquid
-<title>{{ page.title }}</title>
-```
 
-### system_name
-Returns system name of the page.
-```liquid
-{% if page.system_name == 'my_page' %}
-  {% include 'custom_header' %}
-{% endif %}
-```
+### kind
+
+### url
+
+### description
 
 -----------
 

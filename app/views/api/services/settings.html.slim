@@ -1,3 +1,4 @@
+/ TODO: THREESCALE-3759 file no longer used
 - content_for :sublayout_title, 'Settings'
 
 - if (can? :manage, :service_plans) && !current_account.settings.service_plans_ui_visible?
@@ -18,4 +19,4 @@
 = semantic_form_for @service, :url => admin_service_path(@service) do |form|
   = render :partial => 'api/services/forms/settings', :locals => { :form => form }
   = form.buttons do
-    = form.commit_button
+    = form.commit_button 'Update Product'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20210128155025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -860,6 +860,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.bigint   "tenant_id"
+    t.string   "payment_method_id"
     t.index ["account_id", "buyer_reference"], name: "index_payment_details_on_account_id_and_buyer_reference", using: :btree
     t.index ["account_id", "payment_service_reference"], name: "index_payment_details_on_account_id_and_payment_ref", using: :btree
     t.index ["account_id"], name: "index_payment_details_on_account_id", using: :btree
@@ -872,6 +873,20 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.bigint   "tenant_id"
+  end
+
+  create_table "payment_intents", force: :cascade do |t|
+    t.integer  "invoice_id",        null: false
+    t.string   "payment_intent_id"
+    t.string   "state"
+    t.bigint   "tenant_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "reference"
+    t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id", using: :btree
+    t.index ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id", using: :btree
+    t.index ["reference"], name: "index_payment_intents_on_reference", unique: true, using: :btree
+    t.index ["state"], name: "index_payment_intents_on_state", using: :btree
   end
 
   create_table "payment_transactions", force: :cascade do |t|

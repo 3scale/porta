@@ -12,6 +12,9 @@ Feature: API menu
       And I go to the provider dashboard
       And I follow "API"
 
+  Scenario: Current API title
+    Then I should see the current API is "API"
+
   Scenario: API menu structure
     Then I should see menu items
     | Overview                  |
@@ -37,28 +40,7 @@ Feature: API menu
     | Listing                   |
     | Application Plans         |
 
-  Scenario: Integration sub menu structure provider has api as product enabled
-    Given the account has api_as_product rolling update enabled
-    And I have api_as_product feature disabled
-    When I follow "Overview"
-    When I follow "Integration" within the main menu
-    Then I should see menu items
-    | Configuration             |
-    | Methods & Metrics         |
-    | Mapping Rules             |
-    | Settings                  |
-
-  Scenario: Integration sub menu structure when provider does not have api as product enabled
-    Given I have api_as_product feature disabled
-    When I follow "Overview"
-    And I follow "Integration" within the main menu
-    Then I should see menu items
-    | Configuration             |
-    | Methods & Metrics         |
-    | Settings                  |
-
-  Scenario: Integration sub menu structure for API as Product
-    Given I have api_as_product feature enabled
+  Scenario: Integration sub menu structure
     When I follow "Overview"
     And I follow "Integration" within the main menu
     Then I should see menu items

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
+require 'admin_section'
 
 class User::PermissionsTest < ActiveSupport::TestCase
-
   test 'has_permission' do
     user = FactoryBot.build_stubbed(:simple_user)
 
@@ -150,4 +152,25 @@ class User::PermissionsTest < ActiveSupport::TestCase
     assert user.forbidden_some_services?
   end
 
+  test '#access_to_service_admin_sections? when no accessible services' do
+    user = FactoryBot.build(:simple_user)
+    user.stubs(:accessible_services?).returns(false)
+    refute user.access_to_service_admin_sections?
+
+    AdminSection::SERVICE_PERMISSIONS.each do |section|
+      user.member_permission_ids = [section]
+      refute user.access_to_service_admin_sections?
+    end
+  end
+
+  test '#access_to_service_admin_sections? when any accessible services' do
+    user = FactoryBot.build(:simple_user)
+    user.stubs(:accessible_services?).returns(true)
+    refute user.access_to_service_admin_sections?
+
+    AdminSection::SERVICE_PERMISSIONS.each do |section|
+      user.member_permission_ids = [section]
+      assert user.access_to_service_admin_sections?
+    end
+  end
 end

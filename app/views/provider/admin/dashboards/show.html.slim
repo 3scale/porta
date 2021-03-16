@@ -27,7 +27,7 @@
       = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
     section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
-      - unless current_user.accessible_services?
+      - unless current_user.access_to_service_admin_sections?
         = render 'shared/service_access'
       - else
         h1 APIs

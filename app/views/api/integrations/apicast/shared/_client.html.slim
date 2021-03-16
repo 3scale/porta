@@ -1,9 +1,0 @@
-.feedback.client
-  i.fa.fa-mobile-phone
-  = f.inputs "Client" do
-    - if @service.using_proxy_pro?
-      p#client-request.curl style=("display: none")
-    - else
-      = render 'api/integrations/apicast/shared/curl', f: f
-    br/
-    br/

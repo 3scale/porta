@@ -101,6 +101,6 @@ module MenuHelper
   end
 
   def current_api
-    (@backend_api || @service || Service.none).decorate
+    @backend_api || @service
   end
 end

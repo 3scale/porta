@@ -43,25 +43,24 @@ class Account::BillingTest < ActiveSupport::TestCase
     assert_equal 'pkey', account.payment_gateway.options[:private_key]
   end
 
-
-  should 'return payment gateway of provider_account' do
-    provider_account = FactoryBot.create(:simple_provider)
-    buyer_account = FactoryBot.create(:simple_buyer, :provider_account => provider_account)
-
-    assert_same provider_account.payment_gateway, buyer_account.provider_payment_gateway
-  end
-
-
   should 'return false by default' do
     assert !Account.new.credit_card_stored?
   end
 
   test 'unstore credit card when destroyed' do
-    provider = FactoryBot.create(:simple_provider)
-    buyer = FactoryBot.create(:account, :provider_account => provider,
-                    :credit_card_auth_code => 'SOMESTRING')
+    provider = Account.new(payment_gateway_type: :stripe, payment_gateway_options: { login: 'private_key', publishable_key: 'public_key', endpoint_secret: 'some-secret' })
+    buyer = Account.new(provider_account: provider)
+    buyer.payment_detail.credit_card_auth_code = 'SOMESTRING'
 
-    provider.payment_gateway.expects(:threescale_unstore).with('SOMESTRING')
+    ActiveMerchant::Billing::StripeGateway.any_instance.expects(:threescale_unstore).with('SOMESTRING')
+    buyer.destroy
+
+
+    provider = Account.new(payment_gateway_type: :braintree_blue, payment_gateway_options: {merchant_id: 'foo', public_key: 'bar', private_key: 'baz'})
+    buyer = Account.new(provider_account: provider)
+    buyer.payment_detail.credit_card_auth_code = 'SOMESTRING'
+
+    ActiveMerchant::Billing::BraintreeBlueGateway.any_instance.expects(:threescale_unstore).with('SOMESTRING')
     buyer.destroy
   end
 
@@ -167,6 +166,18 @@ class Account::BillingTest < ActiveSupport::TestCase
 
     provider.destroy!
     assert provider.destroyed?
+  end
+
+  test 'charge! sends the payment_method_id' do
+    provider = FactoryBot.build(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' })
+    buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
+    buyer.payment_detail.assign_attributes(credit_card_auth_code: 'cus_IhGaGqpp6zGwyd', payment_method_id: 'pm_1I5s3n2eZvKYlo2CiO193T69', credit_card_partial_number: '4242')
+
+    PaymentTransaction.any_instance.expects(:process!).with do |_customer, _payment_gateway, opts|
+      opts[:payment_method_id] == buyer.payment_detail.payment_method_id
+    end
+
+    buyer.charge!(100)
   end
 
 end

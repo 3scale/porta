@@ -8,6 +8,11 @@ Feature: Menu of the Account screen
       And current domain is the admin domain of provider "foo.3scale.localhost"
       And I log in as provider "foo.3scale.localhost"
 
+  @javascript
+  Scenario: Current API title
+    When I go to the provider account page
+    Then I should see there is no current API
+
   Scenario: Account menu structure
     When I go to the provider account page
     Then I should see "foo.3scale.localhost"

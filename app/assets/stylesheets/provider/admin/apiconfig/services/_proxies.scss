@@ -8,7 +8,7 @@ $integration-tab-warning-color: darken($dirty-color, 60%);
   max-width: 100%;
 }
 
-#integration-tabs fieldset.independent_mapping_rules {
+#integration-tabs fieldset.mapping_rules {
   margin-left: 0;
 }
 
@@ -433,11 +433,6 @@ form.formtastic fieldset > ol > li.radio--iconic {
 
     .fa-hdd-o {
       margin-left: -65px;
-    }
-    .fa-mobile-phone {
-      font-size: 60px;
-      margin-left: -57px;
-      color: $success-color;
     }
 
     &.client {

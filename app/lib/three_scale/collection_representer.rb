@@ -18,4 +18,13 @@ class ThreeScale::CollectionRepresenter < ThreeScale::Representer
       xml_collection.new(self).to_xml(options.merge(root: representation_wrap))
     end
   end
+
+  module JSONCollection
+    extend ActiveSupport::Concern
+    include Representable::JSON::Collection
+
+    def to_json(options = {})
+      ThreeScale::Api::Collection.new(self).to_json(options)
+    end
+  end
 end

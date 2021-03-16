@@ -52,16 +52,6 @@
                       </licenses>
         </dependency>
             <dependency>
-          <packageName>active_merchant-adyen12</packageName>
-          <version>0.1.0</version>
-          <licenses>
-                          <license>
-                <name>MIT</name>
-                <url>http://opensource.org/licenses/mit-license</url>
-              </license>
-                      </licenses>
-        </dependency>
-            <dependency>
           <packageName>activejob</packageName>
           <version>4.2.9</version>
           <licenses>

@@ -199,6 +199,10 @@ class Service < ApplicationRecord
     after_transition to: [:deleted], do: :notify_deletion
   end
 
+  def accessible?
+    state != DELETE_STATE
+  end
+
   def using_proxy_pro?
     provider_can_use?(:proxy_pro) && proxy.self_managed?
   end
@@ -263,7 +267,7 @@ class Service < ApplicationRecord
 
   def stop_destroy_if_last_or_default
     return if destroyable?
-    errors.add :base, 'This service cannot be removed'
+    errors.add :base, 'This product cannot be removed'
     false
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ThreeScale
 
   # This class represents some amount of money with currency. It behaves more or
@@ -14,6 +16,10 @@ module ThreeScale
     attr_reader :amount
     attr_reader :currency
     attr_reader :date
+
+    def self.cents(amount, currency, date = nil)
+      new(amount.to_d / 100, currency, date)
+    end
 
     def initialize(amount, currency, date = nil)
       @amount = amount
@@ -101,8 +107,8 @@ module ThreeScale
 
     def inspect
       output = "#{self.class}(#{currency} #{amount.to_f}"
-      output << ", on #{date}" if date
-      output << ')'
+      output += ", on #{date}" if date
+      output += ')'
       output
     end
 

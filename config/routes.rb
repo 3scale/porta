@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'routing_constraints'
 require 'prometheus_exporter_port'
 
@@ -11,6 +13,8 @@ class CdnAssets
     @environment.call(env)
   end
 end
+
+# rubocop:disable Metrics/BlockLength
 
 Rails.application.routes.draw do
 
@@ -101,10 +105,6 @@ without fake Core server your after commit callbacks will crash and you might ge
             post :change_partner
           end
           resources :services, only: [:destroy]
-        end
-
-        constraints(id: /[\w.-]+/) do
-          resources :domain, only: %i[show]
         end
 
         namespace :proxy do
@@ -819,10 +819,8 @@ without fake Core server your after commit callbacks will crash and you might ge
 
           resources :backend_usages, except: :show
 
-          resource :integration, :except => [ :create, :destroy ] do
+          resource :integration, except: %i[create destroy edit] do
             member do
-              patch 'update_production'
-              patch 'update_onpremises_production'
               patch 'promote_to_production'
               patch 'toggle_apicast_version'
             end
@@ -1043,6 +1041,10 @@ without fake Core server your after commit callbacks will crash and you might ge
           end
         end
 
+        namespace 'payment_callbacks', module: 'payment_callbacks' do
+          resources :stripe_callbacks, only: :create
+        end
+
         resources :accounts, :only => [], module: 'accounts' do
           resources :invoices, :only => [:index, :show]
         end
@@ -1075,3 +1077,5 @@ without fake Core server your after commit callbacks will crash and you might ge
     mount MailPreview => 'mail_preview'
   end
 end
+
+# rubocop:enable Metrics/BlockLength

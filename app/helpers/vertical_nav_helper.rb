@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module VerticalNavHelper
+  def vertical_nav_data
+    {
+      'current-api': current_api.to_json(root: false, only: %i[name]),
+      sections: vertical_nav_sections.to_json,
+      'active-section': active_submenu,
+      'active-item': active_sidebar
+    }.compact
+  end
+
   def vertical_nav_sections
     case active_menu
     when :personal, :account
@@ -193,7 +202,7 @@ module VerticalNavHelper
     return sections unless @service
     sections << {id: :overview,      title: 'Overview',      path: admin_service_path(@service)} if can? :manage, :plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
-    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if can? :manage, :applications
+    sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
     sections << {id: :subscriptions, title: 'Subscriptions', items: service_subscriptions}       if can?(:manage, :service_plans) && current_account.settings.service_plans_ui_visible?
 
     if can? :manage, :plans
@@ -218,9 +227,9 @@ module VerticalNavHelper
 
   def service_applications
     items = []
-    items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}
+    items << {id: :listing,           title: 'Listing',           path: admin_service_applications_path(@service)}      if can? :manage, :applications
     items << {id: :application_plans, title: 'Application Plans', path: admin_service_application_plans_path(@service)} if can?(:manage, :plans)
-    if current_account.provider_can_use?(:api_as_product) && !master_on_premises?
+    unless master_on_premises?
       items << {title: 'Settings'}
       items << {id: :usage_rules, title: 'Usage Rules', path: usage_rules_admin_service_path(@service)}
     end
@@ -235,13 +244,11 @@ module VerticalNavHelper
 
   def service_integration_items
     items = []
-    items << {id: :configuration,       title: 'Configuration',     path: path_to_service(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
+    items << {id: :configuration,       title: 'Configuration',     path: admin_service_integration_path(@service), itemOutOfDateConfig: has_out_of_date_configuration?(@service)}
     items << {id: :methods_metrics,     title: 'Methods & Metrics', path: admin_service_metrics_path(@service)}
-    items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)} if current_account.independent_mapping_rules_enabled?
-    if current_account.provider_can_use?(:api_as_product)
-      items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
-      items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
-    end
+    items << {id: :mapping_rules,       title: 'Mapping Rules',     path: admin_service_proxy_rules_path(@service)}
+    items << {id: :policies,            title: 'Policies',          path: edit_admin_service_policies_path(@service)} if @service.can_use_policies?
+    items << {id: :backend_api_configs, title: 'Backends',        path: admin_service_backend_usages_path(@service)} if @service.can_use_backends?
     items << {id: :settings,            title: 'Settings',        path: settings_admin_service_path(@service)}
   end
 

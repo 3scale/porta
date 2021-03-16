@@ -14,7 +14,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
   test 'update' do
     put admin_account_payment_gateway_path(@provider), account: {
       payment_gateway_type: 'stripe',
-      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey' }
+      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
     }
 
     @provider.reload
@@ -23,7 +23,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
     assert_equal({
       'gateway_type' => 'stripe',
-      'gateway_settings' => {'login' => 'bob', 'publishable_key' => 'monkey'}
+      'gateway_settings' => { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
     },
     @provider.gateway_setting.attributes.slice('gateway_type', 'gateway_settings'))
   end
@@ -52,7 +52,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
 
     put admin_account_payment_gateway_path(@provider), account: {
       payment_gateway_type: 'stripe',
-      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey' }
+      payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
     }
 
     @provider.reload
@@ -60,7 +60,7 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     assert_redirected_to admin_finance_settings_url
     assert_equal 'Payment gateway details were successfully saved.', flash[:notice]
     assert_equal(
-      { 'gateway_type' => 'stripe', 'gateway_settings' => {'login' => 'bob', 'publishable_key' => 'monkey'} },
+      { 'gateway_type' => 'stripe', 'gateway_settings' => { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' } },
       @provider.gateway_setting.attributes.slice('gateway_type', 'gateway_settings')
     )
   end

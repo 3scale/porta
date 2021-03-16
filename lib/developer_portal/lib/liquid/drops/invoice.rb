@@ -172,6 +172,14 @@ module Liquid
         @invoice.pdf.expiring_url
       end
 
+      desc "Returns true if the online payment page is available for the invoice."
+      example %{
+        {% if invoice.pay_now? %}
+      }
+      def pay_now?
+        @invoice.pending? && @invoice.payment_intents.pending.any?
+      end
+
       private
 
       def money_to_s(value)

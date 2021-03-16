@@ -38,12 +38,6 @@
   // BUTTONS
   .button-to {
     font-weight: $font-weight-bold;
-
-    &.new {
-      position: relative;
-      float: right;
-      top: line-height-times(-1.25);
-    }
   }
 
   ul.listing {
@@ -116,6 +110,13 @@
 
   section {
     margin-top: line-height-times(1);
+
+    .flex-row {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin-top: line-height-times(2);
+    }
 
     h2 {
       margin-top: line-height-times(2);
