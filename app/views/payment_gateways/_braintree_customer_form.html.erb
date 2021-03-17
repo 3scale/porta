@@ -79,7 +79,7 @@
                       required: "required",
                       class: "form-control col-md-6",
                       style: "width:50%;",
-                      value: billing_address_data.name
+                      value: billing_address_data ? billing_address_data.name : ''
                     },
                     wrapper_html: {class: "form-group"},
                     label_html: {class: "col-md-4 control-label" }
@@ -90,7 +90,7 @@
                       required: "required",
                       class: "form-control col-md-6",
                       style: "width:50%;",
-                      value: billing_address_data.address1
+                      value: billing_address_data ? billing_address_data.address1 : ''
                     },
                     wrapper_html: {class: "form-group"},
                     label_html: {class: "col-md-4 control-label" }
@@ -101,7 +101,7 @@
                       required: "required",
                       class: "form-control col-md-6",
                       style: "width:50%;",
-                      value: billing_address_data.zip
+                      value: billing_address_data ? billing_address_data.zip : ''
                     },
                     wrapper_html: {class: "form-group"},
                     label: "ZIP / Postal Code",
@@ -114,7 +114,7 @@
                       required: "required",
                       class: "form-control col-md-6",
                       style: "width:50%;",
-                      value: billing_address_data.city
+                      value: billing_address_data ? billing_address_data.city : ''
                     },
                     wrapper_html: {class: "form-group"},
                     label: "City",
@@ -136,7 +136,7 @@
 
                   <%= billing_address.input :country_name,
                     as: :select,
-                    collection:  options_for_select(merchant_countries, get_country_code(billing_address_data)),
+                    collection:  options_for_select(merchant_countries, billing_address_data ? get_country_code(billing_address_data) : ''),
                     input_html: {required: "required", class: "form-control col-md-6", style: "width:50%;" },
                     wrapper_html: {class: "form-group"},
                     label:  "Country",
