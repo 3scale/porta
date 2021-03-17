@@ -65,18 +65,18 @@ When(/^the provider creates a plan$/) do
   name = SecureRandom.hex(10)
 
   step 'I go to the application plans admin page'
-  click_on 'Create Application Plan'
+  click_on 'Create Application plan'
 
   within new_application_plan_form do
     fill_in 'Name', with: name
     fill_in 'System name', with: name
 
-    click_on 'Create Application Plan' # TODO: should be Application Plan
+    click_on 'Create Application Plan'
   end
 
   page.should have_content("Created Application plan #{name}")
 
-  @plan = Plan.find_by_name!(name)
+  @plan = Plan.find_by!(name: name)
 end
 
 When /^(plan "[^"]*") has been deleted$/ do |plan|
