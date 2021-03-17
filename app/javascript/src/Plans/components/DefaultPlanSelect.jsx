@@ -4,12 +4,12 @@ import * as React from 'react'
 import { Select, SelectVariant } from '@patternfly/react-core'
 import { toSelectOptionObject, toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
 import './DefaultPlanSelect.scss'
-import type { ApplicationPlan } from 'Types'
+import type { Plan } from 'Types'
 
 type Props = {
-  plan: ApplicationPlan,
-  plans: ApplicationPlan[],
-  onSelectPlan: ApplicationPlan => void,
+  plan: Plan,
+  plans: Plan[],
+  onSelectPlan: Plan => void,
   isDisabled?: boolean
 }
 
