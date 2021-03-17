@@ -21,4 +21,11 @@ module Api::PlansHelper
     service.default_application_plan&.to_json(root: false, only: %i[id name]) || nil.to_json
   end
 
+  def application_plans_table_data(plans, new_plan)
+    {
+      plans: plans.not_custom.to_json(root: false, only: %i[name id]),
+      count: plans.count
+    }
+  end
+
 end
