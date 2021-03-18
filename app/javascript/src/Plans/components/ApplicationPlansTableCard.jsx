@@ -18,30 +18,57 @@ export type Props = {
 }
 
 const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: Props): React.Node => {
-  const [plans, setPlans] = React.useState(initialPlans)
+  const [plans, setPlans] = React.useState<ApplicationPlan[]>(initialPlans)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  const handleAction = ({ path, method }: Action) => {
+  const handleActionCopy = (path) => ajax(path, 'POST')
+    .then(data => data.json()
+      .then(res => {
+        if (data.status === 201) {
+          alert.notice(res.notice)
+          // $FlowIgnore[incompatible-type] we can assume safely this is a plan
+          const newPlan: ApplicationPlan = safeFromJsonString(res.plan)
+          setPlans([...plans, newPlan])
+        } else {
+          alert.error(res.error)
+        }
+      })
+    )
+    .catch(err => {
+      console.error(err)
+      alert.error('An error ocurred. Please try again later.')
+    })
+    .finally(() => setIsLoading(false))
+
+  const handleActionDelete = (path) => ajax(path, 'DELETE')
+    .then(data => data.json()
+      .then(res => {
+        if (data.status === 200) {
+          alert.notice(res.notice)
+          const purgedPlans = plans.filter(p => p.id !== res.id)
+          setPlans(purgedPlans)
+        }
+      })
+    )
+    .catch(err => {
+      console.error(err)
+      alert.error('An error ocurred. Please try again later.')
+    })
+    .finally(() => setIsLoading(false))
+
+  const handleAction = ({ title, path, method }: Action) => {
     if (isLoading) {
+      // Block table or something when is loading, show user feedback
       return
     }
 
-    ajax(path, method)
-      .then(data => data.json())
-      .then(res => {
-        res.notice ? alert.notice(res.notice) : alert.error(res.error)
-        const { plan } = res
-        if (plan) {
-          setPlans([...plans, safeFromJsonString<ApplicationPlan>(plan)])
-        }
-      })
-      .catch(err => {
-        console.error(err)
-        alert.error('An error ocurred. Please try again later.')
-      })
-      .finally(() => setIsLoading(false))
-
     setIsLoading(true)
+
+    if (title === 'Copy') {
+      handleActionCopy(path)
+    } else if (title === 'Delete') {
+      handleActionDelete(path)
+    }
   }
 
   return (
