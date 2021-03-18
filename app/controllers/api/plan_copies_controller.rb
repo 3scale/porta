@@ -19,11 +19,17 @@ class Api::PlanCopiesController < FrontendController
     end
 
     respond_to do |format|
-      format.js do
-        if @plan.persisted?
-          render :create
-        else
-          render :new
+      if @plan.type == 'ApplicationPlan'
+        json = @plan.persisted? ? { notice: 'Plan copied.' } : { error: 'Plan could not be copied' }
+        json[:plan] = @plan.decorate.index_table_data.to_json
+        format.json { render json: json, status: :created }
+      else
+        format.js do
+          if @plan.persisted?
+            render :create
+          else
+            render :new
+          end
         end
       end
     end

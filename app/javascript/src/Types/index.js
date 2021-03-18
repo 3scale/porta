@@ -1,5 +1,7 @@
 // @flow
 
+import type { Method } from 'utilities/ajax'
+
 export * from 'Types/Api'
 export * from 'Types/NavigationTypes'
 export * from 'Types/FlashMessages'
@@ -10,13 +12,16 @@ export type Plan = {
   name: string
 }
 
+export type Action = {
+  title: string,
+  path: string,
+  method: Method
+}
+
 export type ApplicationPlan = Plan & {
   applications: number,
   state: string,
-  actions: Array<{
-    title: string,
-    path: string
-  }>,
+  actions: Action[],
   applicationsPath: string
 }
 

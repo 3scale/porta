@@ -35,10 +35,10 @@ class ApplicationPlanDecorator < ApplicationDecorator
 
   def index_table_actions
     [
-      published? ? nil : { title: 'Publish', path: h.publish_admin_plan_path(object) },
-      published? ? { title: 'Hide', path: h.hide_admin_plan_path(object) } : nil,
-      { title: 'Copy', path: h.admin_plan_copies_path(plan_id: id) },
-      { title: 'Delete', path: h.polymorphic_path([:admin, object]) }
+      published? ? nil : { title: 'Publish', path: h.publish_admin_plan_path(object), method: :post },
+      published? ? { title: 'Hide', path: h.hide_admin_plan_path(object), method: :post } : nil,
+      { title: 'Copy', path: h.admin_plan_copies_path(plan_id: id), method: :post },
+      { title: 'Delete', path: h.polymorphic_path([:admin, object]), method: :delete }
     ].compact
   end
 end
