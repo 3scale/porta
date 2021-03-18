@@ -13,11 +13,10 @@ export type Plan = {
 export type ApplicationPlan = Plan & {
   applications: number,
   state: string,
-  actionPaths: {
-    publish: string,
-    copy: string,
-    delete: string
-  },
+  actions: Array<{
+    title: string,
+    path: string
+  }>,
   applicationsPath: string
 }
 

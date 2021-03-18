@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
-class PlanDecoratorTest < Draper::TestCase
-
+class ApplicationPlanDecoratorTest < Draper::TestCase
   def test_path
     service = Service.new
     service.id = 1

@@ -23,9 +23,17 @@ module Api::PlansHelper
 
   def application_plans_table_data(plans, new_plan)
     {
-      plans: plans.not_custom.to_json(root: false, only: %i[name id]),
-      count: plans.count
+      plans: application_plans_index_data(plans).to_json,
+      count: plans.size,
+      'search-href': 'TODO'
     }
+  end
+
+  def application_plans_index_data(plans)
+    plans.not_custom
+         .alphabetically
+         .decorate
+         .map(&:index_table_data)
   end
 
 end
