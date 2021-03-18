@@ -14,11 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
+  const { searchHref } = container.dataset
+  const count = safeFromJsonString<number>(container.dataset.count) || 0
   const plans = safeFromJsonString<ApplicationPlan[]>(container.dataset.plans) || []
 
   PlansTableWrapper({
     plans,
-    count: 0,
-    searchHref: 'apiconfig/services/4/application_plans'
+    count,
+    searchHref
   }, containerId)
 })

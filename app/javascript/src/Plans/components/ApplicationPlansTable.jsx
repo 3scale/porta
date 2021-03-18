@@ -47,17 +47,13 @@ const ApplicationPlansTable = ({ plans, count, searchHref }: Props): React.Node 
     ]
   }))
 
-  const tableActions = ['Publish', 'Copy', 'Delete'].map(action => ({
-    title: action,
-    onClick: (_event, rowId) => navigateToPath(rowId, action)
-  }))
+  const actionResolver = (_rowData, { rowIndex }: { rowIndex: number }) =>
+    plans[rowIndex].actions.map(a => ({
+      title: a.title,
+      onClick: () => { window.location.href = a.path }
+    }))
 
   const url = new URL(window.location.href)
-
-  const navigateToPath = (rowId, action) => {
-    const { path } = plans[rowId].actionPaths[action.toLowerCase()]
-    window.location.href = path
-  }
 
   const selectPerPage = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', selectedPerPage)
@@ -108,7 +104,7 @@ const ApplicationPlansTable = ({ plans, count, searchHref }: Props): React.Node 
         </ToolbarItem>
       </Toolbar>
       <Divider />
-      <Table aria-label="Plans Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
+      <Table aria-label="Plans Table" actionResolver={actionResolver} cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
