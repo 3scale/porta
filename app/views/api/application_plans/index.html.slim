@@ -14,5 +14,5 @@ section class="pf-c-page__main-section pf-m-no-padding"
     div id='default_plan' data=default_application_plan_data(@service, @plans)
       = javascript_pack_tag 'default_plan_selector'
 
-  div.pf-c-card id='plans_table' data=application_plans_table_data(@plans, @new_plan)
+  div id='plans_table' data=application_plans_table_data(@plans, @new_plan)
     = javascript_pack_tag 'plans_table'
