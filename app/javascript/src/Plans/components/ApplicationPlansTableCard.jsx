@@ -6,7 +6,7 @@ import { Card } from '@patternfly/react-core'
 // $FlowIgnore[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTable } from 'Plans'
 import * as alert from 'utilities/alert'
-import { ajax } from 'utilities/ajax'
+import { post, ajax } from 'utilities/ajax'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { ApplicationPlan, Action } from 'Types'
@@ -21,7 +21,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
   const [plans, setPlans] = React.useState<ApplicationPlan[]>(initialPlans)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  const handleActionCopy = (path) => ajax(path, 'POST')
+  const handleActionCopy = (path) => post(path)
     .then(data => data.json()
       .then(res => {
         if (data.status === 201) {
@@ -56,6 +56,29 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
     })
     .finally(() => setIsLoading(false))
 
+  const handleActionPublishHide = (path) => post(path)
+    .then(data => data.json()
+      .then(res => {
+        if (data.status === 200) {
+          alert.notice(res.notice)
+          // $FlowIgnore[incompatible-type] we can assume safely this is a plan
+          const newPlan: ApplicationPlan = safeFromJsonString(res.plan)
+          const i = plans.findIndex(p => p.id === newPlan.id)
+          plans[i] = newPlan
+          setPlans(plans)
+        }
+
+        if (data.status === 422) {
+          alert.error(res.error)
+        }
+      })
+    )
+    .catch(err => {
+      console.error(err)
+      alert.error('An error ocurred. Please try again later.')
+    })
+    .finally(() => setIsLoading(false))
+
   const handleAction = ({ title, path, method }: Action) => {
     if (isLoading) {
       // Block table or something when is loading, show user feedback
@@ -64,10 +87,19 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
 
     setIsLoading(true)
 
-    if (title === 'Copy') {
-      handleActionCopy(path)
-    } else if (title === 'Delete') {
-      handleActionDelete(path)
+    switch (title) {
+      case 'Copy':
+        handleActionCopy(path)
+        break
+      case 'Delete':
+        handleActionDelete(path)
+        break
+      case 'Publish':
+      case 'Hide':
+        handleActionPublishHide(path)
+        break
+      default:
+        console.error('Unknown action: ' + title)
     }
   }
 
