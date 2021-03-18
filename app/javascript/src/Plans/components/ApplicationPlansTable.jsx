@@ -19,7 +19,7 @@ import {
   TableBody
 } from '@patternfly/react-table'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
-import type { ApplicationPlan } from 'Types'
+import type { ApplicationPlan, Action } from 'Types'
 
 import './ApplicationPlansTable.scss'
 
@@ -27,9 +27,10 @@ export type Props = {
   plans: ApplicationPlan[],
   count: number,
   searchHref: string,
+  onAction: (action: Action) => void
 }
 
-const ApplicationPlansTable = ({ plans, count, searchHref }: Props): React.Node => {
+const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): React.Node => {
   console.log({ plans, count, searchHref })
   // TODO: make columns sortable
   const tableColumns = [
@@ -50,7 +51,7 @@ const ApplicationPlansTable = ({ plans, count, searchHref }: Props): React.Node 
   const actionResolver = (_rowData, { rowIndex }: { rowIndex: number }) =>
     plans[rowIndex].actions.map(a => ({
       title: a.title,
-      onClick: () => { window.location.href = a.path }
+      onClick: () => onAction(a)
     }))
 
   const url = new URL(window.location.href)
