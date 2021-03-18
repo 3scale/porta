@@ -8,13 +8,14 @@ class Api::PlansController < Api::PlansBaseController
     # Only Application plans are implemented in React right now
     old_publish unless @plan.type == 'ApplicationPlan'
 
+    name = @plan.name
     json = {}
     if @plan.publish
-      json[:notice] = "Plan #{@plan.name} was published."
+      json[:notice] = "Plan #{name} was published."
       json[:plan] = @plan.decorate.index_table_data.to_json
       status = :ok
     else
-      json[:error]  = "Plan #{@plan.name} cannot be published."
+      json[:error]  = "Plan #{name} cannot be published."
       status = :unprocessable_entity
     end
 
@@ -25,10 +26,11 @@ class Api::PlansController < Api::PlansBaseController
 
   def old_publish
     ThreeScale::Deprecation.warn "This method will be removed once Plans has migrated to React"
+    name = @plan.name
     if @plan.publish
-      flash[:notice] = "Plan #{@plan.name} was published."
+      flash[:notice] = "Plan #{name} was published."
     else
-      flash[:alert]  = "Plan #{@plan.name} cannot be published."
+      flash[:alert]  = "Plan #{name} cannot be published."
     end
 
     redirect_back_or_to determine_plans_path
@@ -38,13 +40,14 @@ class Api::PlansController < Api::PlansBaseController
     # Only Application plans are implemented in React right now
     old_hide unless @plan.type == 'ApplicationPlan'
 
+    name = @plan.name
     json = {}
     if @plan.hide
-      json[:notice] = "Plan #{@plan.name} was hidden."
+      json[:notice] = "Plan #{name} was hidden."
       json[:plan] = @plan.decorate.index_table_data.to_json
       status = :ok
     else
-      json[:alert]  = "Plan #{@plan.name} cannot be hidden."
+      json[:alert]  = "Plan #{name} cannot be hidden."
       status = :unprocessable_entity
     end
 
@@ -55,10 +58,11 @@ class Api::PlansController < Api::PlansBaseController
 
   def old_hide
     ThreeScale::Deprecation.warn "This method will be removed once Plans has migrated to React"
+    name = @plan.name
     if @plan.hide
-      flash[:notice] = "Plan #{@plan.name} was hidden."
+      flash[:notice] = "Plan #{name} was hidden."
     else
-      flash[:alert]  = "Plan #{@plan.name} cannot be hidden."
+      flash[:alert]  = "Plan #{name} cannot be hidden."
     end
 
     redirect_back_or_to determine_plans_path
