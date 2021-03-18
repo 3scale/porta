@@ -1,7 +1,7 @@
 // @flow
 
 // $FlowIgnore[missing-export] export is there, name_mapper is the problem
-import { PlansTableWrapper } from 'Plans'
+import { ApplicationPlansTableCardWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { ApplicationPlan } from 'Types'
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const count = safeFromJsonString<number>(container.dataset.count) || 0
   const plans = safeFromJsonString<ApplicationPlan[]>(container.dataset.plans) || []
 
-  PlansTableWrapper({
+  ApplicationPlansTableCardWrapper({
     plans,
     count,
     searchHref
