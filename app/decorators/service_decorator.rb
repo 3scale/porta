@@ -32,7 +32,7 @@ class ServiceDecorator < ApplicationDecorator
   end
 
   def published_application_plans
-    PlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
+    ApplicationPlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
   end
 
   def api_selector_api_link
