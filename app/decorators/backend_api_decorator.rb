@@ -8,6 +8,15 @@ class BackendApiDecorator < ApplicationDecorator
     h.provider_admin_backend_api_path(object)
   end
 
+  def add_backend_usage_backends_data
+    {
+      id: id,
+      name: name,
+      privateEndpoint: private_endpoint,
+      updatedAt: updated_at
+    }
+  end
+
   alias link api_selector_api_link
 
   private
