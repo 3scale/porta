@@ -10,6 +10,7 @@ export type Record = {
   description?: string
 }
 
+// TODO: this should come from @patternfly/react-core typings, but they're not compatible with Flow
 export interface SelectOptionObject {
   id: string,
   name: string,
@@ -19,7 +20,7 @@ export interface SelectOptionObject {
 export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
   id: String(item.id),
   name: item.name,
-  toString: () => item.name
+  toString: () => item.description ? `${item.name} (${item.description})` : item.name
 })
 
 type Props = Record & {

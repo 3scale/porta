@@ -15,3 +15,9 @@ export type Product = {
   name: string,
   appPlans: ApplicationPlan[]
 }
+
+export type Backend = {
+  id: number,
+  name: string,
+  privateEndpoint: string
+}

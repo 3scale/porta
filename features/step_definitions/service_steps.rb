@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 Given /^a service "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
   provider.services.create! :name => name, :mandatory_app_key => false
 end
 
-Given /^a backend api "([^"]*)"$/ do |name|
-  @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
+Given /^a backend api "([^"]*)"( that is unnaccessible)?$/ do |name, unnaccessible|
+  backend = @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
+  backend.update!(state: 'deleted') if unnaccessible.present?
 end
 
 Given /^a service "([^"]*)"$/ do |name|

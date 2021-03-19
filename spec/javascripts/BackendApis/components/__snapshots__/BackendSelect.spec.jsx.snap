@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should have a table with Name, Private Base URL and Last updated 1`] = `
+Array [
+  <th
+    className=""
+    data-key={0}
+    data-label=""
+    onMouseEnter={[Function]}
+  />,
+  <th
+    className=""
+    data-key={1}
+    data-label="Name"
+    onMouseEnter={[Function]}
+    scope="col"
+  >
+    Name
+  </th>,
+  <th
+    className=""
+    data-key={2}
+    data-label="Private Base URL"
+    onMouseEnter={[Function]}
+    scope="col"
+  >
+    Private Base URL
+  </th>,
+  <th
+    className=""
+    data-key={3}
+    data-label="Last updated"
+    onMouseEnter={[Function]}
+    scope="col"
+  >
+    Last updated
+  </th>,
+]
+`;
