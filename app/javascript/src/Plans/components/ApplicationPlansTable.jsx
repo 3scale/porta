@@ -31,8 +31,6 @@ export type Props = {
 }
 
 const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): React.Node => {
-  console.log({ plans, count, searchHref })
-  // TODO: make columns sortable
   const tableColumns = [
     { title: 'Name' },
     { title: 'Applications' },
@@ -42,7 +40,7 @@ const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): R
   const tableRows = plans.map(p => ({
     disableActions: false,
     cells: [
-      p.name,
+      { title: <Button href={p.editPath} component="a" variant="link" isInline>{p.name}</Button> },
       { title: <Button href={p.applicationsPath} component="a" variant="link" isInline>{p.applications}</Button> },
       p.state
     ]
