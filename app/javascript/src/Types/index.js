@@ -22,6 +22,7 @@ export type ApplicationPlan = Plan & {
   applications: number,
   state: string,
   actions: Action[],
+  editPath: string,
   applicationsPath: string
 }
 

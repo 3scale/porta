@@ -111,3 +111,17 @@ end
 Given /^master has an? application plan "([^\"]*)"$/ do |plan_name|
   create_plan :application, name: plan_name, issuer: Account.master
 end
+
+When /^I select option "([^"]*)" from the actions menu for plan "([^"]*)"$/ do |option, plan|
+  td = find('td', text: plan)
+  actions = td.sibling('.pf-c-table__action').find('.pf-c-dropdown')
+  actions.find('.pf-c-dropdown__toggle').click unless actions[:class].include? 'pf-m-expanded'
+  actions.find('.pf-c-dropdown__menu-item', text: option).click
+end
+
+When /^I should not see option "([^"]*)" from the actions menu for plan "([^"]*)"$/ do |option, plan|
+  td = find('td', text: plan)
+  actions = td.sibling('.pf-c-table__action').find('.pf-c-dropdown')
+  actions.find('.pf-c-dropdown__toggle').click unless actions[:class].include? 'pf-m-expanded'
+  assert_not actions.has_css?('.pf-c-dropdown__menu-item', text: option)
+end

@@ -87,7 +87,12 @@ def metrics
 end
 
 def plans
-  find(:css, '#plans')
+  if page.has_css?('#plans_table')
+    find('#plans_table .pf-c-table')
+  else
+    ThreeScale::Deprecation.warn "Detected outdated plans list, pending migration to PF4 React"
+    find(:css, '#plans')
+  end
 end
 
 And(/^limits hits of that plan to (\d+)$/) do |number|
