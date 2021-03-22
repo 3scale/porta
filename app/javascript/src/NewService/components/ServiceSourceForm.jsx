@@ -6,13 +6,12 @@ type Props = {
   isServiceDiscoveryUsable: boolean,
   serviceDiscoveryAuthenticateUrl: string,
   handleFormsVisibility: (event: SyntheticEvent<HTMLInputElement>) => void,
-  loadingProjects: boolean,
-  apiap: boolean
+  loadingProjects: boolean
 }
 
 const ServiceSourceForm = (props: Props): React.Node => {
   const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    handleFormsVisibility, loadingProjects, apiap} = props
+    handleFormsVisibility, loadingProjects} = props
   const classNameDisabled = isServiceDiscoveryUsable ? '' : 'disabled'
   return (
     <form className="formtastic" id="new_service_source">
@@ -50,7 +49,7 @@ const ServiceSourceForm = (props: Props): React.Node => {
                 </a>
               }
             </label>
-            { apiap && <p className="inline-hints">Choosing this option will also create a Backend</p> }
+            <p className="inline-hints">Choosing this option will also create a Backend</p>
           </li>
         </ol>
       </fieldset>

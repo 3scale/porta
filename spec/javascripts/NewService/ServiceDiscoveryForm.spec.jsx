@@ -9,7 +9,6 @@ import * as utils from 'utilities/utils'
 
 const props = {
   formActionPath: 'action-path',
-  apiap: false,
   setLoadingProjects: () => {}
 }
 
@@ -64,13 +63,5 @@ describe('fetchProjects', () => {
 
     expect(useState).toHaveBeenCalled()
     expect(fetch).toHaveBeenCalled()
-  })
-})
-
-describe('when Api as Product is enabled', () => {
-  props.apiap = true
-  it('should render itself', () => {
-    const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
-    expect(wrapper.find('.pf-c-button.create').text()).toEqual('Create Product')
   })
 })

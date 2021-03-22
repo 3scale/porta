@@ -11,8 +11,7 @@ const props = {
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl,
   handleFormsVisibility: () => {},
-  loadingProjects: false,
-  apiap: false
+  loadingProjects: false
 }
 
 it('should render itself', () => {
@@ -65,10 +64,4 @@ it('should render a link to authenticate when Service Discovery is not usable', 
     wrapper.setProps({ isServiceDiscoveryUsable: true })
   })
   expect(wrapper.find(`a[href="${serviceDiscoveryAuthenticateUrl}"]`).exists()).toBe(false)
-})
-
-it('should render a text hint when APIAP is on', () => {
-  props.apiap = true
-  const wrapper = mount(<ServiceSourceForm {...props} />)
-  expect(wrapper.find('.inline-hints').text()).toEqual('Choosing this option will also create a Backend')
 })
