@@ -14,13 +14,12 @@ type Props = {
   serviceDiscoveryAuthenticateUrl: string,
   providerAdminServiceDiscoveryServicesPath: string,
   adminServicesPath: string,
-  apiap: boolean,
   backendApis: Api[]
 }
 
 const NewServiceForm = (props: Props): React.Node => {
   const {template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    providerAdminServiceDiscoveryServicesPath, adminServicesPath, apiap, backendApis} = props
+    providerAdminServiceDiscoveryServicesPath, adminServicesPath, backendApis} = props
 
   const [formMode, setFormMode] = React.useState('manual')
   const [loadingProjects, setLoadingProjects] = React.useState(false)
@@ -29,14 +28,12 @@ const NewServiceForm = (props: Props): React.Node => {
     setFormMode(event.currentTarget.value)
 
   const formToRender = () => formMode === 'manual'
-    ? <ServiceManualForm template={template} formActionPath={adminServicesPath} apiap={apiap} backendApis={backendApis} />
-    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} apiap={apiap} setLoadingProjects={setLoadingProjects} />
-
-  const title = apiap ? 'New Product' : 'New API'
+    ? <ServiceManualForm template={template} formActionPath={adminServicesPath} backendApis={backendApis} />
+    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
 
   return (
     <React.Fragment>
-      <h1>{title}</h1>
+      <h1>New Product</h1>
       <div className="new-service-form">
         {isServiceDiscoveryAccessible &&
           <ServiceSourceForm
@@ -44,7 +41,6 @@ const NewServiceForm = (props: Props): React.Node => {
             serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
             handleFormsVisibility={handleFormsVisibility}
             loadingProjects={loadingProjects}
-            apiap={apiap}
           />
         }
         {formToRender()}

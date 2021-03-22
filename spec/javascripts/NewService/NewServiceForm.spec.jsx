@@ -27,7 +27,6 @@ const props = {
   serviceDiscoveryAuthenticateUrl: 'authenticate-url',
   providerAdminServiceDiscoveryServicesPath: 'my-path',
   adminServicesPath: 'my-other-path',
-  apiap: false,
   backendApis: []
 }
 
@@ -59,28 +58,6 @@ it('should render the correct form depending on which mode is selected', () => {
   wrapper.update()
   expect(wrapper.find('ServiceManualForm').exists()).toEqual(true)
   expect(wrapper.find('ServiceDiscoveryForm').exists()).toEqual(false)
-})
-
-describe('when Api as Product is enabled', () => {
-  beforeAll(() => {
-    props.apiap = true
-  })
-
-  it('should render itself', () => {
-    const wrapper = mount(<NewServiceForm {...props}/>)
-    expect(wrapper.find('#new_service_source').exists()).toEqual(true)
-    expect(wrapper.find(`input[name='source']`).length).toEqual(2)
-
-    const clickEvent = value => ({ currentTarget: { value } })
-
-    act(() => {
-      wrapper.find('input#source_manual').props().onChange(clickEvent('manual'))
-    })
-
-    wrapper.update()
-    expect(wrapper.find('h1').text()).toEqual('New Product')
-    expect(wrapper.find('.pf-c-button.create').text()).toEqual('Create Product')
-  })
 })
 
 describe('when Service Discovery is not accessible', () => {

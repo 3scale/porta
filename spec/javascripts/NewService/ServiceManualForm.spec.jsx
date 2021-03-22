@@ -7,7 +7,6 @@ import {ServiceManualForm} from 'NewService'
 import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
 
 const props = {
-  apiap: true,
   backendApis: [],
   template: {
     service: {
