@@ -99,7 +99,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
         handleActionPublishHide(path)
         break
       default:
-        console.error('Unknown action: ' + title)
+        console.error(`Unknown action: ${title}`)
     }
   }
 
