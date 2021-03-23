@@ -8,6 +8,7 @@ import { ApplicationPlansTable } from 'Plans'
 import * as alert from 'utilities/alert'
 import { post, ajax } from 'utilities/ajax'
 import { safeFromJsonString } from 'utilities/json-utils'
+import { confirm } from 'utilities/confirm-dialog'
 
 import type { ApplicationPlan, Action } from 'Types'
 
@@ -40,16 +41,19 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
     })
     .finally(() => setIsLoading(false))
 
-  const handleActionDelete = (path) => ajax(path, 'DELETE')
-    .then(data => data.json()
-      .then(res => {
-        if (data.status === 200) {
-          alert.notice(res.notice)
-          const purgedPlans = plans.filter(p => p.id !== res.id)
-          setPlans(purgedPlans)
-        }
-      })
-    )
+  const handleActionDelete = (path) => confirm('Are you sure?')
+    .then(confirmed => {
+      if (confirmed) {
+        return ajax(path, 'DELETE')
+          .then(data => data.json().then(res => {
+            if (data.status === 200) {
+              alert.notice(res.notice)
+              const purgedPlans = plans.filter(p => p.id !== res.id)
+              setPlans(purgedPlans)
+            }
+          }))
+      }
+    })
     .catch(err => {
       console.error(err)
       alert.error('An error ocurred. Please try again later.')
