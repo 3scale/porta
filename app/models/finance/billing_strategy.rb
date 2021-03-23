@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Finance::BillingStrategy < ApplicationRecord
+  class BillingError < StandardError
+  end
+
   module NonAuditedColumns
     def non_audited_columns
       super - [inheritance_column]
@@ -93,9 +96,8 @@ class Finance::BillingStrategy < ApplicationRecord
         message = "BillingStrategy #{id}(#{name}) failed utterly"
 
         Rails.logger.error(message)
-        report_error(:error_message => message,
-                     :error_class => 'BillingError',
-                     :exception => e)
+
+        System::ErrorReporting.report_error(e, :error_message => message, :error_class => 'BillingError')
 
         raise e
       end
@@ -174,8 +176,8 @@ class Finance::BillingStrategy < ApplicationRecord
     id_prefix = billing_monthly? ? month : month.begin.year
 
     last_of_period = Invoice.by_provider(account)
-                         .with_normalized_friendly_id(numbering_period, month)
-                         .first
+                            .with_normalized_friendly_id(numbering_period, month)
+                            .first
     order = if last_of_period
               last_of_period.friendly_id.split('-').last
             else
@@ -202,15 +204,15 @@ class Finance::BillingStrategy < ApplicationRecord
   end
 
   def warning(txt, buyer = nil)
-    LogEntry.log( :warning, txt, self.account_id, buyer)
+    LogEntry.log(:warning, txt, self.account_id, buyer)
   end
 
   def error(txt, buyer = nil)
-    LogEntry.log( :error, txt, self.account_id, buyer)
+    LogEntry.log(:error, txt, self.account_id, buyer)
   end
 
   def info(txt, buyer = nil)
-    LogEntry.log( :info, txt, self.account_id, buyer)
+    LogEntry.log(:info, txt, self.account_id, buyer)
   end
 
   protected
@@ -221,7 +223,6 @@ class Finance::BillingStrategy < ApplicationRecord
     now = days.shift
     yield if days.include?(now.day)
   end
-
 
   def bill_expired_trials(buyer, now)
     buyer.billable_contracts_with_trial_period_expired(now - 1.day).find_each(batch_size: 50) do |contract|
@@ -346,8 +347,10 @@ class Finance::BillingStrategy < ApplicationRecord
     @failed_buyers = []
 
     if provider.nil?
-      report_error(:error_message => "WARNING: tried to use billing strategy #{self.id} which has no account",
-                   :error_class => 'InvalidData')
+
+      message = "WARNING: tried to use billing strategy #{self.id} which has no account"
+      exception = BillingError.new message
+      System::ErrorReporting.report_error(exception, :error_message => message, :error_class => 'InvalidData')
       return
     end
 
@@ -363,10 +366,10 @@ class Finance::BillingStrategy < ApplicationRecord
 
         msg = "Failed to bill or charge #{name}(#{buyer_id}) of provider(#{provider_id}): #{exception.message}\n"
         error(msg, buyer)
-        report_error(:error_message => msg,
-                     :error_class => 'BillingError',
-                     :parameters => { :buyer_id => buyer_id, :provider_id => provider_id },
-                     :exception => exception)
+        System::ErrorReporting.report_error(exception, :error_message => msg,
+                                            :error_class => 'BillingError',
+                                            :parameters => { :buyer_id => buyer_id, :provider_id => provider_id }
+        )
 
         @failed_buyers << buyer_id
         raise if Rails.env.test?
@@ -408,7 +411,7 @@ class Finance::BillingStrategy < ApplicationRecord
     end
   end
 
-  extend  FindEachFix
+  extend FindEachFix
   include FindEachFix
 end
 
