@@ -241,7 +241,7 @@ hr, {
   background: $select-color;
 }
 
-.ui-sortable-handler { // scss-lint:disable SelectorFormat
+.ui-sortable-handler {
   color: $success-color;
   cursor: move;
 }
