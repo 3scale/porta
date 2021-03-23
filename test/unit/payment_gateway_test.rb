@@ -46,4 +46,10 @@ class PaymentGatewayTest < ActiveSupport::TestCase
     assert_equal ActiveMerchant::Billing::StripeGateway,               PaymentGateway.implementation(:stripe)
     assert_equal ActiveMerchant::Billing::StripePaymentIntentsGateway, PaymentGateway.implementation(:stripe, sca: true)
   end
+
+  test 'non_boolean_fields' do
+    payment_gateway = PaymentGateway.new(:feature, name: 'Name of the feature', opt_in: 'Opt in', boolean: %i[opt_in])
+    assert_equal %i[opt_in], payment_gateway.boolean_field_keys
+    assert_equal({name: 'Name of the feature'}, payment_gateway.non_boolean_fields)
+  end
 end
