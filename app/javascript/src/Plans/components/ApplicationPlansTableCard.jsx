@@ -83,29 +83,6 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
     })
     .finally(() => setIsLoading(false))
 
-  const handleActionPublishHide = (path) => post(path)
-    .then(data => data.json()
-      .then(res => {
-        if (data.status === 200) {
-          alert.notice(res.notice)
-          // $FlowIgnore[incompatible-type] we can assume safely this is a plan
-          const newPlan: ApplicationPlan = safeFromJsonString(res.plan)
-          const i = plans.findIndex(p => p.id === newPlan.id)
-          plans[i] = newPlan
-          setPlans(plans)
-        }
-
-        if (data.status === 422) {
-          alert.error(res.error)
-        }
-      })
-    )
-    .catch(err => {
-      console.error(err)
-      alert.error('An error ocurred. Please try again later.')
-    })
-    .finally(() => setIsLoading(false))
-
   const handleAction = ({ title, path, method }: Action) => {
     if (isLoading) {
       // Block table or something when is loading, show user feedback
