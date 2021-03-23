@@ -98,4 +98,15 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     assert gateway_setting.valid?
     refute gateway_setting.errors.added?(:gateway_type, :invalid)
   end
+
+  test 'with boolean fields' do
+    @gateway_setting.gateway_type = :braintree_blue
+    @gateway_setting.gateway_settings = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key'}
+    assert @gateway_setting.configured?
+
+    refute @gateway_setting.gateway_settings[:three_ds_enabled], 'three_ds_enabled should be falsey'
+
+    @gateway_setting.gateway_settings = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key', three_ds_enabled: true}
+    assert @gateway_setting.gateway_settings[:three_ds_enabled], 'three_ds_enabled should be truthy'
+  end
 end

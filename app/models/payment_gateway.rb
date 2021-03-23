@@ -4,16 +4,15 @@ class PaymentGateway
   def initialize(type, options = {})
     @type = type
     @deprecated = options.delete(:deprecated).presence
-    @boolean_fields = options.delete(:boolean) || []
+    @boolean_field_keys = options.delete(:boolean) || []
     @fields = options
   end
 
   def non_boolean_fields
-    fields - boolean_fields
+    fields.except(*boolean_field_keys)
   end
 
-  attr_reader :type, :deprecated, :fields, :boolean_fields
-
+  attr_reader :type, :deprecated, :fields, :boolean_field_keys
 
   # So far hardcoded list of gateways, later maybe this will be loaded from a config file or db.
   GATEWAYS = [
