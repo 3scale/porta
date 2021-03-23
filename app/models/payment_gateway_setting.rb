@@ -27,10 +27,19 @@ class PaymentGatewaySetting < ApplicationRecord
   # I prefer validating manually in places where it is needed. Do not break things.
   def configured?
     return false if gateway_type.blank?
-    fields = PaymentGateway.find(gateway_type).fields.keys
+
+    fields = PaymentGateway.find(gateway_type).non_boolean_fields.keys
     fields.all? do |field|
       symbolized_settings[field].present?
     end
+  end
+
+  def gateway_settings=(hash)
+    gateway = PaymentGateway.find(gateway_type)
+    gateway.boolean_fields.each do |field|
+      hash[field] = ActiveModel::Type::Boolean.new.cast(hash[field])
+    end
+    super(hash)
   end
 
   def active_gateway_type

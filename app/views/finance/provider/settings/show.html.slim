@@ -79,11 +79,15 @@
                   li class="string"
                     = fields.label name, label
                     - if enabled
-                      = fields.text_field name,
-                                          value: @account.payment_gateway_options[name]
+                      - if payment_gateway.boolean_fields.include?(name)
+                          = fields.check_box name, data: {val: @account.payment_gateway_options[name].presence }, checked: @account.payment_gateway_options[name].present?
+                      - else
+                          = fields.text_field name, value: @account.payment_gateway_options[name]
                     - else
-                      = fields.text_field name,
-                                          value: '', disabled: true
+                        - if payment_gateway.boolean_fields.include?(name)
+                          = fields.check_box name, checked: false, disabled: true
+                        - else
+                          = fields.text_field name, value: '', disabled: true
 
       = form.buttons do
         = form.button 'Save changes', button_html: { class: 'pf-c-button pf-m-primary' }
