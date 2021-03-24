@@ -72,7 +72,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
           setPlans(plans)
         }
 
-        if (data.status === 422) {
+        if (data.status === 406) {
           alert.error(res.error)
         }
       })
