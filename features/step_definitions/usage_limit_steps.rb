@@ -87,7 +87,7 @@ def metrics
 end
 
 def plans
-  if page.has_css?('#plans_table')
+  if page.has_css?('#plans_table .pf-c-table')
     find('#plans_table .pf-c-table')
   else
     ThreeScale::Deprecation.warn "Detected outdated plans list, pending migration to PF4 React"
@@ -123,7 +123,7 @@ def visit_edit_plan(plan)
   step 'I go to the application plans admin page'
 
   within plans do
-    click_on "Edit Application plan '#{plan.name}'"
+    click_on plan.name
   end
 
   page.should have_css 'h1', text: "Application Plan #{plan.name}"
