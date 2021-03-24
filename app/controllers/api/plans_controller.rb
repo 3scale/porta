@@ -15,7 +15,7 @@ class Api::PlansController < Api::PlansBaseController
       json[:plan] = @plan.decorate.index_table_data.to_json
       status = :ok
     else
-      json[:error]  = "Plan #{name} cannot be published."
+      json[:error] = "Plan #{name} cannot be published."
       status = :not_acceptable
     end
 
@@ -35,7 +35,7 @@ class Api::PlansController < Api::PlansBaseController
       json[:plan] = @plan.decorate.index_table_data.to_json
       status = :ok
     else
-      json[:alert]  = "Plan #{name} cannot be hidden."
+      json[:alert] = "Plan #{name} cannot be hidden."
       status = :not_acceptable
     end
 
@@ -69,7 +69,7 @@ class Api::PlansController < Api::PlansBaseController
     if @plan.publish
       flash[:notice] = "Plan #{name} was published."
     else
-      flash[:alert]  = "Plan #{name} cannot be published."
+      flash[:alert] = "Plan #{name} cannot be published."
     end
 
     redirect_back_or_to determine_plans_path
@@ -81,7 +81,7 @@ class Api::PlansController < Api::PlansBaseController
     if @plan.hide
       flash[:notice] = "Plan #{name} was hidden."
     else
-      flash[:alert]  = "Plan #{name} cannot be hidden."
+      flash[:alert] = "Plan #{name} cannot be hidden."
     end
 
     redirect_back_or_to determine_plans_path
