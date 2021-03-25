@@ -21,10 +21,10 @@ module Api::PlansHelper
     service.default_application_plan&.to_json(root: false, only: %i[id name]) || nil.to_json
   end
 
-  def application_plans_table_data(plans)
+  def application_plans_table_data(page_plans:, plans_size:)
     {
-      plans: application_plans_index_data(plans).to_json,
-      count: plans.size,
+      plans: application_plans_index_data(page_plans).to_json,
+      count: plans_size,
       'search-href': 'TODO'
     }
   end

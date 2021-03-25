@@ -43,6 +43,7 @@ class Api::PlansBaseController < Api::BaseController
 
   def find_plans
     @plans = collection.order_by(params[:sort], params[:direction])
+    @page_plans = @plans.paginate(pagination_params)
   end
 
   def find_issuer
