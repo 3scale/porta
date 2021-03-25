@@ -50,9 +50,9 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     test 'destroy' do
       plan = FactoryBot.create(:application_plan, service: @service)
       assert_difference( @service.application_plans.method(:count), -1 ) do
-        delete polymorphic_path([:admin, plan])
-        assert_response :redirect
-        assert_equal 'The plan was deleted', flash[:notice]
+        delete polymorphic_path([:admin, plan], format: :json)
+        assert_response :success
+        assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
       end
       assert_raise ActiveRecord::RecordNotFound do
         plan.reload
@@ -67,23 +67,10 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'GET index shows the management buttons (create, delete, copy, hide/publish) for Saas' do
-      management_buttons = [
-        { element_text: 'Create Application plan',
-          xpath_selector: "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]" },
-        { element_text: /Hide/,
-          xpath_selector: "//a[contains(@href, '#{hide_admin_plan_path(plan)}')]" },
-        { element_text: /Copy/,
-          xpath_selector: "//a[contains(@href, '#{admin_plan_copies_path(plan_id: plan.id)}')]" },
-        { element_text: /Delete/,
-          xpath_selector: "//a[contains(@href, '#{polymorphic_path([:admin, plan])}')]" }
-      ]
-
+    test 'GET index shows the create button for Saas' do
       # Saas is the default
       get admin_service_application_plans_path(service)
-      management_buttons.each do |button|
-        assert_xpath(button[:xpath_selector], button[:element_text])
-      end
+      assert_xpath "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create Application plan'
     end
 
     test 'actions are authorized for Saas' do
@@ -96,14 +83,14 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       post admin_service_application_plans_path(service), params: { application_plan:{ name: 'planName' } }
       assert_response :redirect
 
-      post hide_admin_plan_path(plan)
-      assert_response :redirect
-
-      post publish_admin_plan_path(plan)
-      assert_response :redirect
-
-      post admin_plan_copies_path(plan_id: plan.id, format: :js)
+      post hide_admin_plan_path(plan, format: :json)
       assert_response :ok
+
+      post publish_admin_plan_path(plan, format: :json)
+      assert_response :ok
+
+      post admin_plan_copies_path(plan_id: plan.id, format: :json)
+      assert_response :created
 
       delete admin_application_plan_path(plan)
       assert_response :redirect
@@ -122,16 +109,16 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       post admin_service_application_plans_path(service), params: { application_plan:{ name: 'planName' } }
       assert_response :forbidden
 
-      post hide_admin_plan_path(plan)
+      post hide_admin_plan_path(plan, format: :json)
       assert_response :forbidden
 
-      post publish_admin_plan_path(plan)
+      post publish_admin_plan_path(plan, format: :json)
       assert_response :forbidden
 
-      post admin_plan_copies_path(plan_id: plan.id, format: :js)
+      post admin_plan_copies_path(plan_id: plan.id, format: :json)
       assert_response :forbidden
 
-      delete admin_application_plan_path(plan)
+      delete admin_application_plan_path(plan, format: :json)
       assert_response :forbidden
     end
 
@@ -166,12 +153,12 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'destroy' do
-      delete polymorphic_path([:admin, plan])
-      assert_response :redirect
-      refute flash[:error]
+      delete polymorphic_path([:admin, plan], format: :json)
+      assert_response :success
+      assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
     end
 
-    test 'plan cannot be deleted' do
+    test 'plan cannot be deleted because of having contracts' do
       plan.create_contract_with(FactoryBot.create(:buyer_account))
       delete polymorphic_path([:admin, plan])
       assert_response :redirect
@@ -186,24 +173,11 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_equal error_message(:customizations_has_contracts), flash[:error]
     end
 
-    test 'GET index shows always the management buttons (create, delete, copy, hide/publish) indepently of the onpremises value' do
-      management_buttons = [
-          { element_text: 'Create Application plan',
-            xpath_selector: "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]" },
-          { element_text: /Publish/,
-            xpath_selector: "//a[contains(@href, '#{publish_admin_plan_path(plan)}')]" },
-          { element_text: /Copy/,
-            xpath_selector: "//a[contains(@href, '#{admin_plan_copies_path(plan_id: plan.id)}')]" },
-          { element_text: /Delete/,
-            xpath_selector: "//a[contains(@href, '#{polymorphic_path([:admin, plan])}')]" }
-      ]
-
+    test 'GET index shows the create button indepently of the onpremises value' do
       [true, false].each do |onpremises|
         ThreeScale.config.stubs(onpremises: onpremises)
         get admin_service_application_plans_path(service)
-        management_buttons.each do |button|
-          assert_xpath(button[:xpath_selector], button[:element_text])
-        end
+        assert_xpath("//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create Application plan')
       end
     end
 
@@ -221,17 +195,17 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
         post admin_service_application_plans_path(service), params: { application_plan:{ name: "planName #{onpremises ? 'onprem' : 'saas'}" } }
         assert_response :redirect
 
-        post publish_admin_plan_path(plan)
-        assert_response :redirect
-
-        post hide_admin_plan_path(plan)
-        assert_response :redirect
-
-        post admin_plan_copies_path(plan_id: plan.id, format: :js)
+        post publish_admin_plan_path(plan, format: :json)
         assert_response :ok
 
-        delete polymorphic_path([:admin, plan])
-        assert_response :redirect
+        post hide_admin_plan_path(plan, format: :json)
+        assert_response :ok
+
+        post admin_plan_copies_path(plan_id: plan.id, format: :json)
+        assert_response :created
+
+        delete polymorphic_path([:admin, plan], format: :json)
+        assert_response :ok
       end
     end
 
@@ -271,16 +245,16 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       post masterize_admin_service_application_plans_path(service, plan, format: :js)
       assert_response :forbidden
 
-      post hide_admin_plan_path(plan)
+      post publish_admin_plan_path(plan, format: :json)
       assert_response :forbidden
 
-      post publish_admin_plan_path(plan)
+      post hide_admin_plan_path(plan, format: :json)
       assert_response :forbidden
 
-      post admin_plan_copies_path(plan_id: plan.id, format: :js)
+      post admin_plan_copies_path(plan_id: plan.id, format: :json)
       assert_response :forbidden
 
-      delete admin_application_plan_path(plan)
+      delete admin_application_plan_path(plan, format: :json)
       assert_response :forbidden
     end
 
@@ -306,17 +280,17 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       post masterize_admin_service_application_plans_path(service, plan, format: :js)
       assert_response :success
 
-      post hide_admin_plan_path(plan)
-      assert_response :redirect
+      post publish_admin_plan_path(plan, format: :json)
+      assert_response :ok
 
-      post publish_admin_plan_path(plan)
-      assert_response :redirect
+      post hide_admin_plan_path(plan, format: :json)
+      assert_response :ok
 
-      post admin_plan_copies_path(plan_id: plan.id, format: :js)
-      assert_response :success
+      post admin_plan_copies_path(plan_id: plan.id, format: :json)
+      assert_response :created
 
-      delete admin_application_plan_path(plan)
-      assert_response :redirect
+      delete admin_application_plan_path(plan, format: :json)
+      assert_response :ok
     end
 
     test 'member with permission over restricted services' do
@@ -335,29 +309,29 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       get new_admin_service_application_plan_path(service)
       assert_response :success
 
-      post admin_service_application_plans_path(service), params: { application_plan:{ name: 'planName' } }
+      post admin_service_application_plans_path(service), params: { application_plan: { name: 'planName' } }
       assert_response :redirect
 
       get edit_admin_application_plan_path(plan)
       assert_response :success
 
-      put admin_application_plan_path(plan), params: { application_plan:{ name: 'New plan name' } }
+      put admin_application_plan_path(plan), params: { application_plan: { name: 'New plan name' } }
       assert_response :redirect
 
       post masterize_admin_service_application_plans_path(service, plan, format: :js)
       assert_response :success
 
-      post hide_admin_plan_path(plan)
-      assert_response :redirect
+      post publish_admin_plan_path(plan, format: :json)
+      assert_response :ok
 
-      post publish_admin_plan_path(plan)
-      assert_response :redirect
+      post hide_admin_plan_path(plan, format: :json)
+      assert_response :ok
 
-      post admin_plan_copies_path(plan_id: plan.id, format: :js)
+      post admin_plan_copies_path(plan_id: plan.id, format: :json)
+      assert_response :created
+
+      delete admin_application_plan_path(plan, format: :json)
       assert_response :success
-
-      delete admin_application_plan_path(plan)
-      assert_response :redirect
 
       get admin_service_application_plans_path(forbidden_service)
       assert_response :not_found
@@ -377,16 +351,16 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       post masterize_admin_service_application_plans_path(forbidden_service, forbidden_plan, format: :js)
       assert_response :not_found
 
-      post hide_admin_plan_path(forbidden_plan)
+      post hide_admin_plan_path(forbidden_plan, format: :json)
       assert_response :not_found
 
-      post publish_admin_plan_path(forbidden_plan)
+      post publish_admin_plan_path(forbidden_plan, format: :json)
       assert_response :not_found
 
-      post admin_plan_copies_path(plan_id: forbidden_plan.id, format: :js)
+      post admin_plan_copies_path(plan_id: forbidden_plan.id, format: :json)
       assert_response :not_found
 
-      delete admin_application_plan_path(forbidden_plan)
+      delete admin_application_plan_path(forbidden_plan, format: :json)
       assert_response :not_found
     end
 
