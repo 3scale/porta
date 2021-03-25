@@ -78,7 +78,7 @@ const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): R
         onPreviousClick={(_ev, page) => goToPage(page)}
         onFirstClick={(_ev, page) => goToPage(page)}
         onLastClick={(_ev, page) => goToPage(page)}
-        perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
+        perPageOptions={[10, 20].map(n => ({ title: n, value: n }))}
         variant={variant}
       />
     )
