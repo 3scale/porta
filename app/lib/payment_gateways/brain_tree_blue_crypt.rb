@@ -17,9 +17,19 @@ module PaymentGateways
     end
 
     def confirm(options, nonce)
-      customer_gateway.update(buyer_reference_for_update, options.deep_merge({payment_method_nonce: nonce, credit_card: { options: {make_default: true, update_existing_token: current_token } }}))
+      customer_gateway.update(buyer_reference_for_update, options.deep_merge(
+        {
+          payment_method_nonce: nonce,
+          credit_card: {
+            options: {
+              make_default: true, update_existing_token: current_token,
+              verify_card: verify_card?
+            }
+          }
+        }
+      ))
     rescue Braintree::BraintreeError => e
-      notify_exception(e, {buyer_reference: buyer_reference_for_update})
+      notify_exception(e, { buyer_reference: buyer_reference_for_update })
       false
     end
 
@@ -49,7 +59,7 @@ module PaymentGateways
     # This will update the last saved credit card if it exists
     # :reek:FeatureEnvy {enabled: false}
     def remote_update_credit_card(customer, options)
-      credit_card_options = current_token ? {credit_card: { options: { update_existing_token: current_token } } } : {}
+      credit_card_options = current_token ? { credit_card: { options: { update_existing_token: current_token } } } : {}
       customer_gateway.update(customer.id, options.deep_merge(credit_card_options))
     end
 
@@ -70,7 +80,7 @@ module PaymentGateways
 
     def update_user(result)
       if customer_id_mismatch?(result)
-        data =  {
+        data = {
           gateway: :braintree,
           actual: result.customer.id,
           expected: buyer_reference_for_update,
@@ -107,32 +117,36 @@ module PaymentGateways
     end
 
     def account_credit_card_details=(result)
-      credit_card                          = result.customer.credit_cards.first #first cc is the last inserted
+      credit_card = result.customer.credit_cards.first #first cc is the last inserted
       # FIXME: Strange it is stated above the first is the last inserted
-      account.credit_card_partial_number   = result.customer.credit_cards.last.last_4
-      account.credit_card_expires_on_year  = credit_card.expiration_year
+      account.credit_card_partial_number = result.customer.credit_cards.last.last_4
+      account.credit_card_expires_on_year = credit_card.expiration_year
       account.credit_card_expires_on_month = credit_card.expiration_month
-      account.credit_card_auth_code        = result.customer.id
+      account.credit_card_auth_code = result.customer.id
     end
 
     # rubocop:disable Metrics/AbcSize
     def account_billing_address=(result)
-      account.billing_address_first_name   = result.customer.first_name
-      account.billing_address_last_name    = result.customer.last_name
-      account.billing_address_phone        = result.customer.phone
-      address                              = result.customer.addresses.last  #last address is the last inserted
-      account.billing_address_name         = address.company
-      account.billing_address_address1     = address.street_address
-      account.billing_address_city         = address.locality
-      account.billing_address_country      = address.country_name
-      account.billing_address_state        = address.region
-      account.billing_address_zip          = address.postal_code
+      account.billing_address_first_name = result.customer.first_name
+      account.billing_address_last_name = result.customer.last_name
+      account.billing_address_phone = result.customer.phone
+      address = result.customer.addresses.last #last address is the last inserted
+      account.billing_address_name = address.company
+      account.billing_address_address1 = address.street_address
+      account.billing_address_city = address.locality
+      account.billing_address_country = address.country_name
+      account.billing_address_state = address.region
+      account.billing_address_zip = address.postal_code
     end
 
     def buyer_reference_for_update_counter(auth_code)
       _3scale, _provider_id, _buyer_id, index = auth_code.to_s.split('-')
       index = index.to_i
       index.zero? ? 1 : index
+    end
+
+    def verify_card?
+      payment_gateway_options[:three_ds_enabled].present?
     end
   end
 end
