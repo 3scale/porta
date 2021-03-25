@@ -126,4 +126,6 @@ def find_actions_for_plan(plan_name)
   td = find('td', text: plan_name)
   actions = td.sibling('.pf-c-table__action').find('.pf-c-dropdown')
   actions.find('.pf-c-dropdown__toggle').click unless actions[:class].include? 'pf-m-expanded'
+
+  actions
 end
