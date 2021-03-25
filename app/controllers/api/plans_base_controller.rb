@@ -99,17 +99,19 @@ class Api::PlansBaseController < Api::BaseController
   def destroy
     @plan.destroy
 
-    if block_given?
-      yield
-    elsif @plan.type == 'ApplicationPlan' # Only Application plans are implemented in React right now
-      json = { notice: 'The plan was deleted', id: @plan.id }
-      respond_to do |format|
-        format.json { render json: json, status: :ok }
-      end
-    else
+    return yield if block_given?
+
+    unless @plan.type == 'ApplicationPlan'
+      # Only Application plans are implemented in React right now
       ThreeScale::Deprecation.warn "Plans are being migrated to React and this will no longer be used"
+
       flash[:notice] = 'The plan was deleted'
-      redirect_to plans_index_path
+      return redirect_to plans_index_path
+    end
+
+    json = { notice: 'The plan was deleted', id: @plan.id }
+    respond_to do |format|
+      format.json { render json: json, status: :ok }
     end
   end
 
