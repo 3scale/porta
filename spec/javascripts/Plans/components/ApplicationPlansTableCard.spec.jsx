@@ -81,7 +81,10 @@ it('should be able to hide a plan', async () => {
   expect(fetch).toHaveBeenCalledWith('/hide', expect.objectContaining({ method: 'POST' }))
 })
 
-it('should be able to delete a plan', async () => {
+it('should be able to delete a plan after user confirmation', async () => {
+  const windownConfirmMock = jest.fn()
+  window.confirm = windownConfirmMock.mockResolvedValueOnce(true)
+
   const wrapper = mountWrapper()
 
   wrapper.find('.pf-c-dropdown__toggle').simulate('click')
