@@ -21,7 +21,7 @@ namespace :ci do
     task :report do
       STDOUT.puts 'Generating report...'
       licenses_xml_path = Rails.root.join('doc', 'licenses', 'licenses.xml')
-      exec("license_finder report --format=xml > #{licenses_xml_path}")
+      exec("license_finder report --format=xml --save #{licenses_xml_path}")
     end
   end
 end
