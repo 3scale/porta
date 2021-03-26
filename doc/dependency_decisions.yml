@@ -1,65 +1,65 @@
 ---
-- - :whitelist
+- - :permit
   - MIT
   - :who: 
     :why: 
     :versions: []
     :when: 2016-08-15 10:59:07.210221000 Z
-- - :whitelist
+- - :permit
   - Apache 2.0
   - :who: 
     :why: 
     :versions: []
     :when: 2016-08-15 10:59:32.297032000 Z
-- - :whitelist
+- - :permit
   - ruby
   - :who: 
     :why: 
     :versions: []
     :when: 2016-08-15 11:00:00.919892000 Z
-- - :whitelist
+- - :permit
   - Ruby 1.8
   - :who: 
     :why: 
     :versions: []
     :when: 2016-08-15 11:03:11.357434000 Z
-- - :whitelist
+- - :permit
   - BSD
   - :who: 
     :why: 
     :versions: []
     :when: 2016-08-15 11:03:40.069678000 Z
-- - :whitelist
+- - :permit
   - New BSD
   - :who: 
     :why: 
     :versions: []
     :when: 2016-08-15 11:03:46.628014000 Z
-- - :whitelist
+- - :permit
   - Simplified BSD
   - :who: 
     :why: 
     :versions: []
     :when: 2016-11-23 12:29:52.630868000 Z
-- - :whitelist
+- - :permit
   - 2-clause BSDL
   - :who: 
     :why: 
     :versions: []
     :when: 2016-11-23 12:30:06.838026000 Z
-- - :whitelist
+- - :permit
   - LGPL
   - :who: 
     :why: 
     :versions: []
     :when: 2016-11-23 12:30:22.623646000 Z
-- - :whitelist
+- - :permit
   - LGPL-2.1+
   - :who: 
     :why: 
     :versions: []
     :when: 2016-11-23 12:30:35.642108000 Z
-- - :whitelist
+- - :permit
   - Apache
   - :who: 
     :why: 
@@ -127,19 +127,19 @@
 - - :approve
   - MIT
   - *5
-- - :whitelist
+- - :permit
   - GPL-2
   - :who: 
     :why: 
     :versions: []
     :when: 2016-11-29 11:24:05.225924000 Z
-- - :whitelist
+- - :permit
   - ISC
   - :who: 
     :why: 
     :versions: []
     :when: 2016-11-29 11:24:15.693203000 Z
-- - :whitelist
+- - :permit
   - GPL-2.0+
   - :who: 
     :why: 
@@ -249,7 +249,7 @@
     :why: MIT license
     :versions: []
     :when: 2017-01-27 12:04:39.120613000 Z
-- - :whitelist
+- - :permit
   - Unlicense
   - :who: 
     :why: 
@@ -423,61 +423,61 @@
     :versions:
     - 1.5.1
     :when: 2018-01-17 12:06:07.468492000 Z
-- - :whitelist
+- - :permit
   - MIT/X11
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:41:10.872704000 Z
-- - :whitelist
+- - :permit
   - BSD-like
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:41:20.655159000 Z
-- - :whitelist
+- - :permit
   - CC-BY-4.0
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:41:28.474576000 Z
-- - :whitelist
+- - :permit
   - WTFPL
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:41:53.058253000 Z
-- - :whitelist
+- - :permit
   - CC0-1.0
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:42:01.551501000 Z
-- - :whitelist
+- - :permit
   - BSD-new
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:42:59.682695000 Z
-- - :whitelist
+- - :permit
   - CC-BY-3.0
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-08 14:43:09.580575000 Z
-- - :whitelist
+- - :permit
   - MIT*
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-15 13:27:14.491103000 Z
-- - :whitelist
+- - :permit
   - Apache*
   - :who: 
     :why: 
     :versions: []
     :when: 2018-10-15 13:27:45.971658000 Z
-- - :whitelist
+- - :permit
   - BSD*
   - :who: 
     :why: 
@@ -648,3 +648,4 @@
 - - :approve
   - WHY=0BSD
   - *16
+
