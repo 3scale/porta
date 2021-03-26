@@ -1,6 +1,6 @@
 
 class Plan < ApplicationRecord
-  include ThreeScale::Search::Scopes
+  include Searchable
   class PeriodRangeCalculationError < StandardError; end
   include Symbolize
 
