@@ -28,14 +28,6 @@ GIT
       excon (~> 0.45)
 
 GIT
-  remote: https://github.com/3scale/mimemagic
-  revision: 696db81993d60812b70c2bff2c226cba4670acd9
-  branch: 0.3-3scale
-  specs:
-    mimemagic (0.3.7)
-      nokogiri (~> 1.10.10)
-
-GIT
   remote: https://github.com/3scale/prawn.git
   revision: 88aead0d97e230d08e9f51a18711d01317965bfe
   branch: 0.5.1-3scale
@@ -425,6 +417,9 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0212)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.10.3)
@@ -901,14 +896,14 @@ DEPENDENCIES
   mechanize
   message_bus (~> 2.0.2)
   message_bus_client!
-  mimemagic!
+  mimemagic (~> 0.3.10)
   minitest (= 5.10.3)
   minitest-reporters
   minitest-stub-const
   mocha (~> 1.1.0)
   mysql2 (~> 0.5.3)
   newrelic_rpm (~> 5.6)
-  nokogiri (>= 1.6.8)
+  nokogiri (~> 1.10.10)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
   open_id_authentication
