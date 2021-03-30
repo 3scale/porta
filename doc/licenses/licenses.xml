@@ -7473,7 +7473,7 @@
       </dependency>
           <dependency>
         <packageName>mimemagic</packageName>
-        <version>0.3.7</version>
+        <version>0.3.10</version>
         <licenses>
                       <license>
               <name>MIT</name>
