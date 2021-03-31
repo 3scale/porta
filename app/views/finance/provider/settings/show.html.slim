@@ -85,6 +85,7 @@
                           = fields.check_box name, checked: false, disabled: true, id: ['account', 'payment', payment_gateway.type, name].join('_')
 
                         = label
+                      p.inline-hints Make sure your Braintree account has 3D Secure enabled before you enable it here as otherwise payments initiated from the developer portal will fail.
 
                     - else
                       = fields.label name, label
