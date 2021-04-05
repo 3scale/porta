@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableBody
 } from '@patternfly/react-table'
-import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
+import { SearchIcon } from '@patternfly/react-icons'
 import type { ApplicationPlan, Action } from 'Types'
 
 import './ApplicationPlansTable.scss'
