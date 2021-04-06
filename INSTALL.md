@@ -309,6 +309,16 @@ Run [Yarn](https://www.yarnpkg.com/) to install all the required dependencies:
 yarn install
 ```
 
+## Manual setup for Arch linux
+
+The setup is the same as for Fedora, but the naming of packages might differ.
+Since Porta needs ImageMagick6, you need to install [libmagick6](https://aur.archlinux.org/packages/libmagick6/) from AUR.
+
+When running `bundle install`, you need to specify `PKG_CONFIG_PATH`.
+```shell
+PKG_CONFIG_PATH=/usr/lib/imagemagick6/pkgconfig bundle install
+```
+
 ## Setup Database
 
 Finally, initialize the database with some seed data by running:
