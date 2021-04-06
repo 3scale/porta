@@ -247,7 +247,7 @@ sudo systemctl restart memcached
 Postgres, MySQL or Oracle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
 ```shell
-docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=3scale_system_development --name postgres10 circleci/postgres:10.5-alpine
+docker run -d -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=3scale_system_development --name postgres10 circleci/postgres:10.5-alpine
 ```
 
 Alternatively, you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
@@ -320,6 +320,13 @@ PKG_CONFIG_PATH=/usr/lib/imagemagick6/pkgconfig bundle install
 ```
 
 ## Setup Database
+
+If you are using a different database than MySQL you need to export the env variable `DATABASE_URL`.
+
+For Postgres it would be:
+```bash
+export DATABASE_URL=postgresql://postgres:@localhost/3scale_system_development
+```
 
 Finally, initialize the database with some seed data by running:
 
