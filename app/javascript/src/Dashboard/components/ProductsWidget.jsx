@@ -42,7 +42,12 @@ const ProductsWidget = ({ newProductPath, productsPath, products }: Props) => (
           Products
         </Title>
         <CardActions>
-          <Button component="a" variant="primary" href={newProductPath}>
+          <Button
+            data-testid="dashboardCreateProduct-buttonLink"
+            component="a"
+            variant="primary"
+            href={newProductPath}
+          >
             Create Product
           </Button>
         </CardActions>

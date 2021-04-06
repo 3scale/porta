@@ -27,6 +27,7 @@ const FormWrapper = (props: FormProps): React.Node => {
       </fieldset>
       <fieldset className="buttons">
         <Button
+          data-testid="newProductCreateProduct-buttonSubmit"
           type="submit"
           name="commit"
           className="create">{ submitText }</Button>
