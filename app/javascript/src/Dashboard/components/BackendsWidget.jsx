@@ -42,7 +42,12 @@ const BackendsWidget = ({ newBackendPath, backendsPath, backends }: Props) => (
           Backends
         </Title>
         <CardActions>
-          <Button component="a" variant="primary" href={newBackendPath}>
+          <Button
+            data-testid="dashboardCreateBackend-buttonLink"
+            component="a"
+            variant="primary"
+            href={newBackendPath}
+          >
             Create Backend
           </Button>
         </CardActions>
