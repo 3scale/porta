@@ -118,7 +118,12 @@ const ProductsIndexPage = ({ productsCount, products }: Props) => {
           <Title headingLevel="h1" size="2xl">Products</Title>
         </LevelItem>
         <LevelItem>
-          <Button variant="primary" component="a" href="/apiconfig/services/new">
+          <Button
+            data-testid="productsIndexCreateProduct-buttonLink"
+            variant="primary"
+            component="a"
+            href="/apiconfig/services/new"
+          >
             Create Product
           </Button>
         </LevelItem>
