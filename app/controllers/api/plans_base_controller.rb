@@ -42,7 +42,10 @@ class Api::PlansBaseController < Api::BaseController
   end
 
   def find_plans
+    search = ThreeScale::Search.new(params[:search] || params)
     @plans = collection.order_by(params[:sort], params[:direction])
+                       .scope_search(search)
+    @page_plans = @plans.paginate(pagination_params)
   end
 
   def find_issuer
@@ -99,11 +102,19 @@ class Api::PlansBaseController < Api::BaseController
   def destroy
     @plan.destroy
 
-    if block_given?
-      yield
-    else
+    return yield if block_given?
+
+    unless @plan.type == 'ApplicationPlan'
+      # Only Application plans are implemented in React right now
+      ThreeScale::Deprecation.warn "Plans are being migrated to React and this will no longer be used"
+
       flash[:notice] = 'The plan was deleted'
-      redirect_to plans_index_path
+      return redirect_to plans_index_path
+    end
+
+    json = { notice: 'The plan was deleted', id: @plan.id }
+    respond_to do |format|
+      format.json { render json: json, status: :ok }
     end
   end
 

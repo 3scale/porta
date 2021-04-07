@@ -1,3 +1,6 @@
-.pf-c-options-menu {
-  visibility: hidden !important;
+// Targets PF modal dialog
+div[role="dialog"] {
+  .pf-c-options-menu {
+    visibility: hidden !important;
+  }
 }

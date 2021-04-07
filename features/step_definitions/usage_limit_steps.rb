@@ -86,10 +86,6 @@ def metrics
   find(:css, '#metrics')
 end
 
-def plans
-  find(:css, '#plans')
-end
-
 And(/^limits hits of that plan to (\d+)$/) do |number|
   visit_edit_plan(@plan)
 
@@ -118,7 +114,7 @@ def visit_edit_plan(plan)
   step 'I go to the application plans admin page'
 
   within plans do
-    click_on "Edit Application plan '#{plan.name}'"
+    click_on plan.name
   end
 
   page.should have_css 'h1', text: "Application Plan #{plan.name}"

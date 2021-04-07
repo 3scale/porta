@@ -8,13 +8,6 @@ Feature: Plan creation
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
 
-  Scenario: Create simple application plan
-    And I go to the application plans admin page
-    And I follow "Create Application plan"
-    And I fill in "Name" with "Basic"
-    And I press "Create Application Plan"
-    Then I should be at url for the application plans admin page
-
   Scenario: Create simple service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
      When I go to the service plans admin page
@@ -23,17 +16,6 @@ Feature: Plan creation
       And I press "Create Service plan"
 
     Then I should be at url for the service plans admin page
-
-  Scenario: Edit application plan name
-    Given an application plan "Pro" of provider "foo.3scale.localhost"
-      And I go to the application plans admin page
-      And I follow "Pro"
-      And I fill in "Name" with "Enterprise"
-      And I press "Update Application plan"
-
-    Then I should be at url for the application plans admin page
-      And I should see plan "Enterprise"
-      But I should not see plan "Pro"
 
   Scenario: Edit service plan name
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
