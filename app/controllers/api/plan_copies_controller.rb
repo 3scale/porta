@@ -19,11 +19,16 @@ class Api::PlanCopiesController < FrontendController
     end
 
     respond_to do |format|
-      format.js do
-        if @plan.persisted?
-          render :create
-        else
-          render :new
+      case @plan.type
+      when 'ApplicationPlan'
+        # Only Application plans are implemented in React right now
+        json = @plan.persisted? ? { notice: 'Plan copied.' } : { error: 'Plan could not be copied' }
+        json[:plan] = @plan.decorate.index_table_data.to_json
+        format.json { render json: json, status: :created }
+      else
+        ThreeScale::Deprecation.warn "Plans are being migrated to React and this will no longer be used"
+        format.js do
+          render @plan.persisted? ? :create : :new
         end
       end
     end

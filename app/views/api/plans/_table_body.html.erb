@@ -7,10 +7,8 @@
           :title => "Edit #{plan.class.model_name.human} '#{plan.name}'" -%>
       </td>
       <td>
-        <% if plan.kind_of?(ApplicationPlan) %>
-          <%= link_to plan.contracts_count, admin_service_applications_path(plan.service, search: { plan_id: plan.id }) %>
-        <% elsif plan.kind_of?(ServicePlan) %>
-          <%= link_to plan.contracts_count, admin_buyers_service_contracts_path(search: { plan_id: plan.id }) %>        
+        <% if plan.kind_of?(ServicePlan) %>
+          <%= link_to plan.contracts_count, admin_buyers_service_contracts_path(search: { plan_id: plan.id }) %>
         <% else %>
           <%= link_to plan.contracts_count, admin_buyers_accounts_path(search: { plan_id: plan.id }) %>
         <% end %>

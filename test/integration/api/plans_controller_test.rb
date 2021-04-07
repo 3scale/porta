@@ -18,9 +18,7 @@ class Api::PlansControllerTest < ActionDispatch::IntegrationTest
     test 'publishing a published application plan' do
       app_plan = FactoryBot.create(:published_plan, issuer: current_account.default_service)
       post publish_admin_plan_path(app_plan)
-      assert_response :redirect
-      assert_redirected_to admin_service_application_plans_path(app_plan.service)
-      assert_not_nil flash[:alert]
+      assert_response :not_acceptable
     end
 
     test 'publishing a service plan and redirecting back to google' do

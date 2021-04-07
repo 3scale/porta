@@ -179,10 +179,6 @@ Then /^I should not see image "([^"]*)"$/ do |file|
   end)
 end
 
-Then /^I should see the following table:$/ do |table|
-  table.diff!(extract_table('table', 'tr', 'th,td'))
-end
-
 Then /^I should see "([^"]*)" in the "([^"]*)" column and "([^"]*)" row$/ do |text, column, row|
   row_element = find(:xpath, "//td/a[text()=\"#{row}\"]/ancestor::tr")
   column_element = find(:xpath, "//th[text()='#{column}']")

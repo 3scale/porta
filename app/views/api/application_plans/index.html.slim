@@ -10,4 +10,9 @@ p
   a.pf-c-button.pf-m-primary.pf-c-button__in-title href=new_polymorphic_path([:admin, @service, @new_plan]) Create Application plan
 
 section class="pf-c-page__main-section pf-m-no-padding"
-  = render 'listing'
+  - if @plans.not_custom.size > 0
+    div id='default_plan' data=default_application_plan_data(@service, @plans)
+      = javascript_pack_tag 'default_plan_selector'
+
+  div id='plans_table' data=application_plans_table_data(service_id: @service.id, page_plans: @page_plans, plans_size: @plans.size)
+    = javascript_pack_tag 'plans_table'

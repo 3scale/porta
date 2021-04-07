@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 Then /^I should see following table:$/ do |expected|
+  ThreeScale::Deprecation.warn "Detected old table. Move to PF4 and use step 'I should see the following table:'"
   table = extract_table('table.data', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
 
   # strip html entities and non letter, space or number characters
@@ -27,3 +30,19 @@ Then /^I should see following table:$/ do |expected|
   end
 end
 
+Then /^I should see the following table:$/ do |expected|
+  table = if has_css?('.pf-c-table')
+            extract_pf4_table
+          else
+            extract_table('table', 'tr', 'th,td')
+          end
+
+  expected.diff! table
+rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
+  if ENV['CI']
+    puts error.message
+    puts expected.to_s
+  end
+
+  raise
+end
