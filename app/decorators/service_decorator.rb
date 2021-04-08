@@ -47,6 +47,18 @@ class ServiceDecorator < ApplicationDecorator
 
   alias link api_selector_api_link
 
+  def new_application_data
+    {
+      id: id.to_s,
+      name: name,
+      systemName: system_name,
+      updatedAt: updated_at,
+      appPlans: plans.stock.select(:id, :name).as_json(root: false),
+      servicePlans: service_plans.select(:id, :name).as_json(root: false),
+      defaultServicePlan: default_service_plan.as_json(root: false, only: %i[id name])
+    }
+  end
+
   private
 
   def backend_api?
