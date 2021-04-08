@@ -324,9 +324,16 @@ World(Module.new do
     #
     # Applications (provider side)
     #
-    when /^the provider side create application page for "([^"]*)"$/
-      buyer = Account.buyers.find_by_org_name($1)
+    when /^the account context create application page for "([^"]*)"$/
+      buyer = Account.buyers.find_by!(org_name: $1)
       new_admin_buyers_account_application_path(buyer)
+
+    when /^the audience context create application page$/
+      new_admin_buyers_application_path
+
+    when /^the product context create application page for "([^"]*)"$/
+      product = Service.find_by!(name: $1)
+      new_admin_service_application_path(product)
 
     when /^the provider side "([^"]*)" application page$/
       application = Cinstance.find_by_name!($1)
@@ -343,6 +350,14 @@ World(Module.new do
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/
       admin_buyers_applications_path(:per_page => $1)
+
+    when /^the account context applications page for "([^"]*)"$/
+      buyer = Account.buyers.find_by!(org_name: $1)
+      admin_buyers_account_applications_path(buyer)
+
+    when /^the product context applications page for "([^"]*)"$/
+      product = Service.find_by!(name: $1)
+      admin_service_applications_path(product)
 
     when /^the provider side edit page for application "([^"]*)" of buyer "([^"]*)"$/
       application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
