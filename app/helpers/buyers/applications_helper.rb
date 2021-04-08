@@ -1,49 +1,22 @@
+# frozen_string_literal: true
+
 module Buyers::ApplicationsHelper
 
-  def metadata_new_app(buyer, provider)
-
-    "<div id='metadata-form'
-      data-services_contracted='#{ services_contracted(buyer) }'
-      data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
-      data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
-      data-create_service_plan_path='#{ create_service_plan_path }'
-      data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
-
-  end
-
-  def services_contracted(buyer)
-    buyer.bought_service_contracts.services.pluck(:id).to_json
-  end
-
-  def service_plan_contracted_for_service(buyer)
-    buyer.bought_service_contracts.inject({}) do |hash, service_contract|
-
-      service_plan = service_contract.plan
-      name = service_plan.name
-      name += " (#{service_contract.state})" unless service_contract.live?
-
-      hash[service_plan.service.id] = {id: service_plan.id, name: name}
-      hash
-    end.to_json
-  end
-
-  def relation_service_and_service_plans(provider)
-    provider.accessible_services.inject({}) do |hash, service|
-      hash[service.id] = service.service_plans.inject([]) do |array, service_plan|
-        array << {id: service_plan.id, name: service_plan.name, default: service_plan.master?}
-      end
-      hash
-    end.to_json
-  end
-
-  def relation_plans_services(provider)
-    provider.application_plans.includes(:service).each_with_object({}) do |application_plan, hash|
-      hash[application_plan.id] = application_plan.service.id
-    end.to_json
-  end
-
-  def create_service_plan_path
-    admin_service_service_plans_path ':service_id'
+  def new_application_form_metadata(provider:, buyer: nil, service: nil, cinstance: nil)
+    provider = ProviderDecorator.new(provider)
+    {
+      'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
+      'create-application-plan-path': new_admin_service_application_plan_path(':id'),
+      'create-service-plan-path': new_admin_service_service_plan_path(':id'),
+      'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
+      'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
+      product: service && ServiceDecorator.new(service).new_application_data.to_json,
+      products: !service && provider.application_products_data.to_json,
+      buyer: buyer && BuyerDecorator.new(buyer).new_application_data.to_json,
+      buyers: !buyer && provider.application_buyers_data.to_json,
+      'defined-fields': provider.application_defined_fields_data.to_json,
+      errors: cinstance&.errors.to_json
+    }.compact
   end
 
   def last_traffic(cinstance)
