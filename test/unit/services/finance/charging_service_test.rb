@@ -109,7 +109,7 @@ module Finance
       gateway = ActiveMerchant::Billing::BraintreeBlueGateway.new(gateway_options)
       amount = ThreeScale::Money.new(45, 'EUR')
       service = ChargingService.new(gateway, buyer_reference: '1234', amount: amount)
-      gateway.expects(:purchase).with(amount.cents, '1234', { transaction_source: 'recurring' }).returns(true)
+      gateway.expects(:purchase).with(amount.cents, '1234', { transaction_source: 'unscheduled' }).returns(true)
       assert service.call
     end
   end
