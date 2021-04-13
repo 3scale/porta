@@ -62,7 +62,7 @@ const CreditCardErrors = (props) => (
 
 type StripeCardFormProps = {
   setupIntentSecret: string,
-  billingAddressDetails: string,
+  billingAddressDetails: {},
   successUrl: string,
   isCreditCardStored: boolean
 }

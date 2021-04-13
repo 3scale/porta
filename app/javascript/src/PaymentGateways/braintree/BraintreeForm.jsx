@@ -8,6 +8,8 @@ import {
   BraintreeSubmitFields
 } from 'PaymentGateways'
 import { CSRFToken } from 'utilities/utils'
+
+import type { Node } from 'react'
 import type { Props } from 'PaymentGateways'
 
 const BraintreeForm = ({
@@ -16,7 +18,7 @@ const BraintreeForm = ({
   threeDSecureEnabled,
   formActionPath,
   countriesList
-}: Props): React.Node => {
+}: Props): Node => {
   return (
     <form
       id="customer_form"
