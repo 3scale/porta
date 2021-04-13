@@ -1,3 +1,5 @@
+// @flow
+
 export { StripeFormWrapper } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 export { StripeCardForm } from 'PaymentGateways/stripe/components/StripeCardForm'
 export { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
@@ -6,4 +8,4 @@ export { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFiel
 export { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/BraintreeBillingAddressFields'
 export { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
 export { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
-export * from 'PaymentGateways/types.js'
+export * from 'PaymentGateways/types'
