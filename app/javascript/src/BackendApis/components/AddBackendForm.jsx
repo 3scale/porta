@@ -21,10 +21,10 @@ import './AddBackendForm.scss'
 type Props = {
   backends: Backend[],
   url: string,
-  newBackendPath: string
+  backendsPath: string
 }
 
-const AddBackendForm = ({ backends, url, newBackendPath }: Props): React.Node => {
+const AddBackendForm = ({ backends, url, backendsPath }: Props): React.Node => {
   const [backend, setBackend] = useState<Backend | null>(null)
   const [path, setPath] = useState('')
   const [loading, setLoading] = useState(false)
