@@ -5,5 +5,6 @@ export type Props = {
   billingAddress?: string,
   threeDSecureEnabled: boolean,
   formActionPath: string,
-  countriesList: string
+  countriesList: string,
+  selectedCountryCode: string
 }

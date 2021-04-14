@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     billingAddress: safeFromJsonString(containerDataset.billingAddress),
     threeDSecureEnabled: containerDataset.threeDSecureEnabled === 'true',
     formActionPath: containerDataset.formActionPath,
-    countriesList: containerDataset.countriesList
+    countriesList: containerDataset.countriesList,
+    selectedCountryCode: containerDataset.selectedCountryCode
   }
 
   BraintreeFormWrapper(props, containerId)
