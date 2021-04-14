@@ -17,7 +17,8 @@ const BraintreeForm = ({
   billingAddress,
   threeDSecureEnabled,
   formActionPath,
-  countriesList
+  countriesList,
+  selectedCountryCode
 }: Props): Node => {
   return (
     <form
@@ -36,6 +37,7 @@ const BraintreeForm = ({
       <fieldset>
         <BraintreeBillingAddressFields
           billingAddress={billingAddress}
+          selectedCountryCode={selectedCountryCode}
           countriesList={JSON.parse(countriesList)}
         />
       </fieldset>

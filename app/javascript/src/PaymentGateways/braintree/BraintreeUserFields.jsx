@@ -46,6 +46,7 @@ const BraintreeUserFields = () => {
         <input
           className="form-control col-md-6"
           type="text"
+          name="Phone"
         />
       </li>
     </ul>

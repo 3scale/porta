@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 const inputStyle = { width: '50%' }
 
-const BraintreeBillingAddressFields = ({ countriesList, billingAddress }) => {
-  const selectInitialValue = countriesList.filter(country => country[0] === billingAddress.country)[0][1]
-  const [selectValue, setSelectValue] = useState(selectInitialValue)
+const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selectedCountryCode }) => {
+  const [selectValue, setSelectValue] = useState(selectedCountryCode)
   const [address, setAddress] = useState(billingAddress)
   const updateAddress = (e, field) => {
     address[field] = e.target.value
