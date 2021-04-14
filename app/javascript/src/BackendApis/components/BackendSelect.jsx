@@ -13,11 +13,11 @@ import './BackendSelect.scss'
 type Props = {
   backend: Backend | null,
   backends: Backend[],
-  newBackendPath: string,
+  onCreateNewBackend: () => void,
   onSelect: (Backend | null) => void
 }
 
-const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props): React.Node => {
+const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend }: Props): React.Node => {
   const cells = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },
@@ -36,7 +36,13 @@ const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props): 
       cells={cells}
       helperText={(
         <p className="hint">
-          <Button variant="link" icon={<PlusCircleIcon />} component="a" href={newBackendPath} isInline>
+          <Button
+            isInline
+            variant="link"
+            icon={<PlusCircleIcon />}
+            onClick={onCreateNewBackend}
+            data-testid="create-new-backend"
+          >
             Create new Backend
           </Button>
         </p>

@@ -1,7 +1,14 @@
 global.fetch = () => {}
-global.$ = {
-  flash: {
-    notice: () => {},
-    error: () => {}
-  }
+
+const jQueryMock = () => $
+
+// rails flash
+jQueryMock.flash = {
+  notice: () => {},
+  error: () => {}
 }
+
+// rails ujs
+jQueryMock.live = () => jQueryMock
+
+global.$ = jQueryMock
