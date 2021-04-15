@@ -9,7 +9,9 @@ import { AddBackendForm } from 'BackendApis'
 const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend' }
 const backendsPath = '/backends'
 const defaultProps = {
+  backend: null,
   backends: [backend],
+  inlineErrors: null,
   url: '',
   backendsPath
 }
@@ -60,4 +62,21 @@ it('should select the new backend when created', () => {
 
   wrapper.update()
   expect(wrapper.find('BackendSelect').prop('backend')).toBe(newBackend)
+})
+
+it('should be able to have a default backend selected', () => {
+  const wrapper = mountWrapper({ backend })
+
+  expect(wrapper.find('BackendSelect .pf-c-select__toggle-typeahead').instance().value).toEqual(backend.name)
+})
+
+it('should be able to show inline errors', () => {
+  const inlineErrors = {
+    backend_api_id: ['invalid backend'],
+    path: ['invalid path']
+  }
+  const wrapper = mountWrapper({ inlineErrors })
+
+  expect(wrapper.find('BackendSelect .pf-c-form__helper-text.pf-m-error').text()).toEqual(inlineErrors.backend_api_id[0])
+  expect(wrapper.find('PathInput .pf-c-form__helper-text.pf-m-error').text()).toEqual(inlineErrors.path[0])
 })
