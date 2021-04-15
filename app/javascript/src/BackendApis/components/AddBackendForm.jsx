@@ -20,13 +20,18 @@ import type { Backend } from 'Types'
 import './AddBackendForm.scss'
 
 type Props = {
+  backend: Backend | null,
   backends: Backend[],
   url: string,
+  inlineErrors: null | {
+    backend_api_id?: Array<string>,
+    path?: Array<string>
+  },
   backendsPath: string
 }
 
-const AddBackendForm = ({ backends, url, backendsPath }: Props): React.Node => {
-  const [backend, setBackend] = useState<Backend | null>(null)
+const AddBackendForm = ({ backend: initialBackend, backends, url, backendsPath, inlineErrors }: Props): React.Node => {
+  const [backend, setBackend] = useState<Backend | null>(initialBackend)
   const [updatedBackends, setUpdatedBackends] = useState(backends)
   const [path, setPath] = useState('')
   const [loading, setLoading] = useState(false)
@@ -60,9 +65,14 @@ const AddBackendForm = ({ backends, url, backendsPath }: Props): React.Node => {
             backends={updatedBackends}
             onSelect={setBackend}
             onCreateNewBackend={() => setIsModalOpen(true)}
+            error={inlineErrors ? inlineErrors.backend_api_id && inlineErrors.backend_api_id[0] : undefined}
           />
 
-          <PathInput path={path} setPath={setPath} />
+          <PathInput
+            path={path}
+            setPath={setPath}
+            error={inlineErrors ? inlineErrors.path && inlineErrors.path[0] : undefined}
+          />
 
           <ActionGroup>
             <Button
