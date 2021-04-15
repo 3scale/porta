@@ -33,10 +33,30 @@ it('should enable submit button only when form is filled', () => {
   expect(isSubmitButtonDisabled(wrapper)).toBe(true)
 
   act(() => {
-    wrapper.find('BackendSelect').prop('onSelect')(backend)
-    wrapper.find('PathInput').prop('setPath')('/foo')
+    wrapper.find('BackendSelect').props().onSelect(null)
+    wrapper.find('PathInput').props().setPath('')
   })
+  wrapper.update()
+  expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(true)
 
+  act(() => {
+    wrapper.find('BackendSelect').props().onSelect(backend)
+    wrapper.find('PathInput').props().setPath('')
+  })
+  wrapper.update()
+  expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(false)
+
+  act(() => {
+    wrapper.find('BackendSelect').props().onSelect(null)
+    wrapper.find('PathInput').props().setPath('/path')
+  })
+  wrapper.update()
+  expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(true)
+
+  act(() => {
+    wrapper.find('BackendSelect').props().onSelect(backend)
+    wrapper.find('PathInput').props().setPath('/path')
+  })
   wrapper.update()
   expect(isSubmitButtonDisabled(wrapper)).toBe(false)
 })

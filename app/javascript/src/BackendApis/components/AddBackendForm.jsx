@@ -37,7 +37,7 @@ const AddBackendForm = ({ backend: initialBackend, backends, url, backendsPath, 
   const [loading, setLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const isFormComplete = backend !== null && path !== ''
+  const isFormComplete = backend !== null
 
   const handleOnCreateBackend = (backend: Backend) => {
     notice('Backend created')
