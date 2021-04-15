@@ -247,7 +247,7 @@ sudo systemctl restart memcached
 Postgres, MySQL or Oracle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
 ```shell
-docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=3scale_system_development --name postgres10 circleci/postgres:10.5-alpine
+docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7 
 ```
 
 Alternatively, you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
