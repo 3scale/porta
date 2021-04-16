@@ -29,7 +29,7 @@ const defaultProps = {
 }
 
 const mountWrapper = (props) => mount(<NewBackendForm {...{ ...defaultProps, ...props }} />)
-const isSubmitButtonDisabled = wrapper => wrapper.find('button[data-testid="submit"]').prop('disabled')
+const isSubmitButtonDisabled = wrapper => wrapper.find('button[data-testid="newBackendCreateBackend-buttonSubmit"]').prop('disabled')
 
 afterEach(() => {
   jest.resetAllMocks()

@@ -41,7 +41,7 @@ const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend }: Prop
             variant="link"
             icon={<PlusCircleIcon />}
             onClick={onCreateNewBackend}
-            data-testid="create-new-backend"
+            data-testid="newBackendCreateBackend-buttonLink"
           >
             Create new Backend
           </Button>
