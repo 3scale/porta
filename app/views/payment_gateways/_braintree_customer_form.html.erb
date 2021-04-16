@@ -1,4 +1,6 @@
 <% billing_address_data = current_account.has_billing_address? ? current_account.billing_address : nil %>
+<% selected_country_code = billing_address_data ? get_country_code(billing_address_data) : '' %>
+
 <div
   id="braintree-form-wrapper"
   data-form-action-path="<%= developer_portal.hosted_success_admin_account_braintree_blue_path %>"
@@ -6,7 +8,7 @@
   data-client-token="<%= client_token = j @braintree_authorization %>"
   data-billing-address="<%= billing_address_data ? billing_address_data.to_json : nil %>"
   data-countries-list="<%= merchant_countries.to_json %>"
-  data_selected-country-code="<%=  billing_address_data ? get_country_code(billing_address_data) : '' %>"
+  data-selected-country-code="<%= selected_country_code %>"
 ></div>
 <%= javascript_pack_tag 'BraintreeForm'%>
 
