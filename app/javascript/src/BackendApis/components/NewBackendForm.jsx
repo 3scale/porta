@@ -57,7 +57,7 @@ const NewBackendForm = ({ action, onCancel, isLoading = false, errors = {} }: Pr
           variant="primary"
           type="submit"
           isDisabled={validationErrors !== undefined || isLoading}
-          data-testid="submit"
+          data-testid="newBackendCreateBackend-buttonSubmit"
         >
           Create Backend
         </Button>

@@ -69,7 +69,7 @@ const AddBackendForm = ({ backends, url, backendsPath }: Props): React.Node => {
               variant='primary'
               type='submit'
               isDisabled={!isFormComplete || loading}
-              data-testid="submit"
+              data-testid="addBackend-buttonSubmit"
             >
               Add to Product
             </Button>
