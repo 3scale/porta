@@ -3,7 +3,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-// $FlowIgnore[missing-export] export is there, name_mapper is the problem
+// $FlowFixMe[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTable } from 'Plans'
 
 const plans = []

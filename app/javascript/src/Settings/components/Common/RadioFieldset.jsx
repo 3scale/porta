@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useState } from 'react'
-import { FormFieldset, FormLegend } from 'Form'
+import { FormFieldset, FormLegend } from 'Settings/components/Common'
 import { Radio } from '@patternfly/react-core'
 import type { FieldGroupProps, FieldCatalogProps } from 'Settings/types'
 

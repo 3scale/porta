@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { mount } from 'enzyme'
-import { FormFieldset } from 'Form/FormFieldset'
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 
 describe('FormFieldset', () => {
   it('should render default form fieldset variant', () => {

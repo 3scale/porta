@@ -3,9 +3,9 @@
 export * from './components/DefaultPlanSelect'
 export * from './components/DefaultPlanSelectCard'
 export * from './components/DefaultPlanSelectWrapper'
-// $FlowIgnore[cannot-resolve-module] name-mapper is replacing 'Plans'
+// $FlowFixMe[cannot-resolve-module] name-mapper is replacing 'Plans', to fix this rename module or fix name_mapper expression in flowconfig
 export * from './components/ApplicationPlansTable'
-// $FlowIgnore[cannot-resolve-module] name-mapper is replacing 'Plans'
+// $FlowFixMe[cannot-resolve-module] name-mapper is replacing 'Plans', to fix this rename module or fix name_mapper expression in flowconfig
 export * from './components/ApplicationPlansTableCard'
-// $FlowIgnore[cannot-resolve-module] name-mapper is replacing 'Plans'
+// $FlowFixMe[cannot-resolve-module] name-mapper is replacing 'Plans', to fix this rename module or fix name_mapper expression in flowconfig
 export * from './components/ApplicationPlansTableCardWrapper'

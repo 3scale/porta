@@ -4,7 +4,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-// $FlowIgnore[missing-export] export is there, name_mapper is the problem
+// $FlowFixMe[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTableCard } from 'Plans'
 
 const fetch = jest.fn()
