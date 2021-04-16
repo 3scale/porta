@@ -8,4 +8,11 @@ export { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFiel
 export { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/BraintreeBillingAddressFields'
 export { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
 export { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
+export {
+  hostedFieldOptions,
+  createBraintreeClient,
+  createHostedFieldsInstance,
+  create3DSecureInstance,
+  veryfyCard
+} from 'PaymentGateways/braintree/braintreeCustomerForm'
 export * from 'PaymentGateways/types'
