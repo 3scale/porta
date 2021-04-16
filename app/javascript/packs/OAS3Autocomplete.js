@@ -52,7 +52,8 @@ const injectParametersToPath = (path: PathItemObject, commonParameters?: Array<P
   Object.keys(path).reduce((updatedPath, item) => {
     updatedPath[item] = (item === 'parameters' && commonParameters)
       ? injectAutocompleteToCommonParameters(commonParameters, accountData)
-      // $FlowFixMe should be safe to assume correct type
+      // $FlowIgnore[incompatible-call] should be safe to assume correct type
+      // $FlowIgnore[incompatible-return] should be safe to assume correct type
       : injectParametersToPathOperation(path[item], accountData)
     return updatedPath
   }, {})
@@ -64,7 +65,7 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
     paths: Object.keys(responseBody.paths).reduce(
       (paths, path) => {
         const commonParameters = responseBody.paths[path].parameters
-        // $FlowFixMe should safe to assume it is PathItemObject
+        // $FlowFixMe[incompatible-call] should safe to assume it is PathItemObject
         paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
         return paths
       }, {})
@@ -77,7 +78,7 @@ const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint:
 
   return {
     ...responseBody,
-    // $FlowFixMe should be safe to assume correct type
+    // $FlowFixMe[incompatible-return] should be safe to assume correct type
     servers
   }
 }

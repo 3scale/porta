@@ -1,9 +1,9 @@
 // @flow
 
 import * as React from 'react'
-import { FormFieldset, FormLegend } from 'Form'
+
 import { Checkbox } from '@patternfly/react-core'
-import { FormCollection, TypeItemCombo } from 'Settings/components/Common'
+import { FormCollection, FormFieldset, FormLegend, TypeItemCombo } from 'Settings/components/Common'
 import type { TypeItemProps, FieldGroupProps } from 'Settings/types'
 
 const Basics = (props: TypeItemProps) => (
