@@ -9,8 +9,7 @@ table#mapping_rules.data
       th = sortable('metrics.friendly_name', 'Metric or Method')
       th = sortable('proxy_rules.last', 'Last?')
       th = sortable('proxy_rules.position', 'Position')
-      th.actions
-        = link_to 'Add Mapping Rule', new_rule_path, class: 'action add'
+      th
     tr.search
       = search_form do |s|
         th
