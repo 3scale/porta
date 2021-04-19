@@ -192,7 +192,7 @@ commands: # reusable commands with parameters
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "17:be:79:a1:a0:c5:38:84:a7:3c:f2:af:87:d7:f3:cf"
+            - "aa:64:17:1e:6c:ab:2f:d2:ad:35:59:99:05:31:3e:87"
       - run:
           name: "Fetch oracle libraries"
           command: |
@@ -806,7 +806,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "17:be:79:a1:a0:c5:38:84:a7:3c:f2:af:87:d7:f3:cf"
+            - "aa:64:17:1e:6c:ab:2f:d2:ad:35:59:99:05:31:3e:87"
       - checkout-with-submodules
       - run:
           name: Keep production gemfile up to date
