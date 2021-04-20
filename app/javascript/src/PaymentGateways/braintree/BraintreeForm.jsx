@@ -58,14 +58,11 @@ const BraintreeForm = ({
 
   const onSubmit = async (event) => {
     event.preventDefault()
-    const payload = await hostedFieldsInstanceRef.current.tokenize()
-      .then(payload => payload)
-      .catch(error => console.error(error))
-
-    if (threeDSecureEnabled) {
+    if (hostedFieldsInstanceRef.currrent) {
+      const payload = await hostedFieldsInstanceRef.current.tokenize()
+        .then(payload => payload)
+        .catch(error => console.error(error))
       verifyCard3DSecure(payload)
-    } else {
-      console.log('Not 3D secure')
     }
   }
 
