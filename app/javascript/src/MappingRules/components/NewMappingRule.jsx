@@ -40,14 +40,13 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
   const [increment, setIncrement] = React.useState(1)
   const [isLast, setIsLast] = React.useState(false)
   const [position, setPosition] = React.useState(0)
+  const [loading, setLoading] = React.useState(false)
 
   const isFormComplete = httpMethod &&
     pattern &&
     metric !== null &&
     increment > 0 &&
     position >= 0
-
-  const loading = false
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -56,7 +55,7 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
         acceptCharset="UTF-8"
         method="post"
         action={url}
-        // onSubmit={e => setLoading(true)}
+        onSubmit={e => setLoading(true)}
         // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />
@@ -64,6 +63,7 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
 
         <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
         <PatternInput pattern={pattern} setPattern={setPattern} />
+        {/* $FlowIssue[incompatible-type] Yes it can be null, that's the whole point */}
         <MetricInput metric={metric} topLevelMetrics={topLevelMetrics} methods={methods} setMetric={setMetric} />
         {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
         <IncrementByInput increment={increment} setIncrement={setIncrement} />
