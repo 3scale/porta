@@ -1,7 +1,8 @@
 // @flow
 
 export type BraintreeFormProps = {
-  clientToken: string,
+  // eslint-disable-next-line flowtype/no-weak-types
+  braintreeClient: any,
   billingAddress?: string,
   threeDSecureEnabled: boolean,
   formActionPath: string,
