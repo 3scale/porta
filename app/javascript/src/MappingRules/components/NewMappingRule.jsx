@@ -41,7 +41,12 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
   const [isLast, setIsLast] = React.useState(false)
   const [position, setPosition] = React.useState(0)
 
-  const isFormComplete = true
+  const isFormComplete = httpMethod &&
+    pattern &&
+    metric !== null &&
+    increment > 0 &&
+    position >= 0
+
   const loading = false
 
   return (
