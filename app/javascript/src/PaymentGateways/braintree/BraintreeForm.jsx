@@ -32,13 +32,13 @@ const BraintreeForm = ({
   selectedCountryCode
 }: BraintreeFormProps): Node => {
   const formRef = useRef<HTMLFormElement | null>(null)
-  const hostedFieldsInstanceRef = useRef({})
+  const [hostedFieldsInstance, setHostedFieldsInstance] = useState(null)
   const [braintreeNonceValue, setBraintreeNonceValue] = useState('')
 
   useEffect(() => {
     const getHostedFieldsInstance = async () => {
-      const hostedFieldsInstance = await createHostedFieldsInstance(hostedFields, braintreeClient, hostedFieldOptions)
-      hostedFieldsInstanceRef.current = hostedFieldsInstance
+      const HFInstance = await createHostedFieldsInstance(hostedFields, braintreeClient, hostedFieldOptions)
+      setHostedFieldsInstance(HFInstance)
     }
     getHostedFieldsInstance()
   }, [])
@@ -58,8 +58,8 @@ const BraintreeForm = ({
 
   const onSubmit = async (event) => {
     event.preventDefault()
-    if (hostedFieldsInstanceRef.currrent) {
-      const payload = await hostedFieldsInstanceRef.current.tokenize()
+    if (hostedFieldsInstance) {
+      const payload = await hostedFieldsInstance.tokenize()
         .then(payload => payload)
         .catch(error => console.error(error))
       verifyCard3DSecure(payload)
