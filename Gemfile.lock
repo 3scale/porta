@@ -415,7 +415,9 @@ GEM
     method_source (1.0.0)
     middleware (0.1.0)
     mime-types (2.99.3)
-    mimemagic (0.3.2)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.10.3)
@@ -892,12 +894,13 @@ DEPENDENCIES
   mechanize
   message_bus (~> 2.0.2)
   message_bus_client!
+  mimemagic (~> 0.3.10)
   minitest (= 5.10.3)
   minitest-reporters
   minitest-stub-const
   mocha (~> 1.1.0)
   mysql2 (~> 0.5.3)
-  nokogiri (>= 1.6.8)
+  nokogiri (~> 1.10.10)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
   open_id_authentication

@@ -91,7 +91,8 @@ group :development, :test do
   end
 end
 
-gem 'nokogiri', '>= 1.6.8'
+gem 'mimemagic', '~> 0.3.10'
+gem 'nokogiri', '~> 1.10.10'
 gem 'dalli', '~> 2.7'
 gem 'secure_headers', '~> 6.3.0'
 gem 'faraday', '~> 0.15.3'
