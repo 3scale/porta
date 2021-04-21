@@ -56,7 +56,7 @@ Given(%r{^the service uses app_id/app_key as authentication method$}) do
 end
 
 Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" position "([^"]*)" and metric "([^"]*)"$/) do |method, pattern, position, metric|
-  click_on 'Add Mapping Rule'
+  visit "#{URI.parse(current_url).path}/new"
   within(page.find('form.proxy_rule')) do
     find("select#proxy_rule_http_method option[value='#{method}']").select_option
     find('input#proxy_rule_pattern').set pattern

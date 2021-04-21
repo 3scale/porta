@@ -1,23 +1,17 @@
-Feature: Proxy integration
-  In order to integrate with 3scale via a on-premise proxy
+@javascript
+Feature: Backend API mapping rules
+  In order to integrate my backend api
   As a provider
-  I want to download config files from the inteface
+  I want to be able to manage my mapping rules
 
   Background:
-    Given all the rolling updates features are off
-    And I have apicast_v2 feature enabled
-    And I have oauth_api feature enabled
     Given a provider "foo.3scale.localhost"
-    And a default service of provider "foo.3scale.localhost" has name "one"
-    And the service "one" of provider "foo.3scale.localhost" has deployment option "self_managed"
+    And a backend api "My Backend"
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
-    And apicast registry is stubbed
-    And the default proxy does not use apicast configuration driven
 
   Scenario: Sorting mapping rules
-    When I go to the integration show page for service "one"
-    And I follow "Mapping Rules"
+    When I go to the mapping rules index page for backend "My Backend"
     And I add a new mapping rule with method "POST" pattern "/beers" position "2" and metric "Hits"
     Then the mapping rules should be in the following order:
       | http_method | pattern | position | metric |
@@ -32,7 +26,7 @@ Feature: Proxy integration
     And I add a new mapping rule with method "GET" pattern "/gins" position "1" and metric "Hits"
     Then the mapping rules should be in the following order:
       | http_method | pattern | position | metric |
-      | GET         | /gins   | 1        | hits   |
-      | GET         | /       | 2        | hits   |
+      | GET         | /       | 1        | hits   |
+      | GET         | /gins   | 2        | hits   |
       | PUT         | /mixers | 3        | hits   |
       | POST        | /beers  | 4        | hits   |
