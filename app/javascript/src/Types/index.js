@@ -37,3 +37,10 @@ export type Backend = {
   name: string,
   privateEndpoint: string
 }
+
+export type Metric = {
+  id: number,
+  name: string,
+  systemName: string,
+  updatedAt: string
+}
