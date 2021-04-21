@@ -52,11 +52,11 @@ class AlertMessenger < Messenger::Base
   end
 
   def domain
-    @alert.account.provider_account.domain
+    @alert.account.provider_account.external_domain
   end
 
   def self_domain
-    @alert.account.self_domain
+    @alert.account.external_self_domain
   end
 
   def send_alert(alert, sender)

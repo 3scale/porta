@@ -23,11 +23,11 @@ h1 data-hook="account-show"
         - if current_account.master? && @account.provider?
           tr
             th Public domain
-            td = link_to @account.domain, public_domain(@account), target: "_blank"
+            td = link_to @account.external_domain, public_domain(@account), target: "_blank"
           tr
             th Admin domain
-            td = link_to @account.self_domain,
-                         provider_admin_dashboard_url(host: @account.self_domain),
+            td = link_to @account.external_self_domain,
+                         provider_admin_dashboard_url(host: @account.external_self_domain),
                          target: "_blank"
         - if @account.admins.present?
           tr

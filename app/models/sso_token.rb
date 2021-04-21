@@ -63,7 +63,7 @@ class SSOToken
     save if new_record?
 
     params= {
-      host: host || account.domain,
+      host: host || account.external_domain,
       protocol: protocol,
       token: encrypted_token,
       expires_at: expires_at.to_i,
