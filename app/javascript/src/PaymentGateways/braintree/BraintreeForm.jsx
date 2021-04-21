@@ -1,8 +1,6 @@
-/* eslint-disable no-console */
 // @flow
 
 // Todos:
-// get billingAdrres
 // handle not 3D secure scenario
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -34,6 +32,7 @@ const BraintreeForm = ({
   const formRef = useRef<HTMLFormElement | null>(null)
   const [hostedFieldsInstance, setHostedFieldsInstance] = useState(null)
   const [braintreeNonceValue, setBraintreeNonceValue] = useState('')
+  const [billingAddressData, setBillingAddressData] = useState(billingAddress)
 
   useEffect(() => {
     const getHostedFieldsInstance = async () => {
@@ -50,10 +49,9 @@ const BraintreeForm = ({
   }, [braintreeNonceValue])
 
   const verifyCard3DSecure = async (payload) => {
-    const threeDSecureInstance = await create3DSecureInstance(threeDSecure, braintreeClient, payload)
-    const response = await veryfyCard(threeDSecureInstance, payload)
+    const threeDSecureInstance = await create3DSecureInstance(threeDSecure, braintreeClient)
+    const response = await veryfyCard(threeDSecureInstance, payload, billingAddressData)
     setBraintreeNonceValue(response.nonce)
-    console.log(braintreeNonceValue)
   }
 
   const onSubmit = async (event) => {
@@ -84,7 +82,8 @@ const BraintreeForm = ({
       </fieldset>
       <fieldset>
         <BraintreeBillingAddressFields
-          billingAddress={billingAddress}
+          billingAddressData={billingAddressData}
+          setBillingAddressData={setBillingAddressData}
           selectedCountryCode={selectedCountryCode}
           countriesList={JSON.parse(countriesList)}
         />

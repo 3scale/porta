@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const hostedFieldOptions = {
   styles: {
     'input': {
@@ -42,7 +41,7 @@ const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOpt
     .catch(error => console.error(error))
 }
 
-const create3DSecureInstance = async (threeDSecure, clientInstance, payload) => {
+const create3DSecureInstance = async (threeDSecure, clientInstance) => {
   return await threeDSecure.create({
     version: 2,
     client: clientInstance
@@ -51,10 +50,10 @@ const create3DSecureInstance = async (threeDSecure, clientInstance, payload) => 
     .catch(error => console.error(error))
 }
 
-const veryfyCard = async (threeDSecureInstance, payload) => {
+const veryfyCard = async (threeDSecureInstance, payload, billingAddress) => {
   const threeDSecureParameters = {
     amount: '00.00',
-    billingAddress: {}, // Todo: get values from form
+    billingAddress,
     onLookupComplete: function (data, next) {
       next()
     }
