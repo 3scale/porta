@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react'
+import { useState } from 'react'
 
 import {
   BaseSizes,
@@ -24,8 +25,8 @@ type Props = {
 }
 
 const NewBackendModal = ({ backendsPath, isOpen = false, onClose, onCreateBackend }: Props): React.Node => {
-  const [isLoading, setIsLoading] = React.useState(false)
-  const [errors, setErrors] = React.useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState()
 
   const handleOnAjaxComplete = (_event, xhr: { responseText: string }, status: string) => {
     setIsLoading(false)
