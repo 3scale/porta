@@ -4,4 +4,4 @@ Dear <%= @receiver.informal_name %>,
 <% else %>
 Anonymous user has posted a new message in your forum
 <% end %>
-To view new forum post, follow this link <%= forum_topic_url(@post.topic, host: @provider_account.domain) %>
+To view new forum post, follow this link <%= forum_topic_url(@post.topic, host: @provider_account.external_domain) %>
