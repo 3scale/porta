@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 const inputStyle = { width: '50%' }
 
-const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selectedCountryCode }) => {
+const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setBillingAddressData, selectedCountryCode }) => {
   const [selectValue, setSelectValue] = useState(selectedCountryCode)
-  const [address, setAddress] = useState(billingAddress)
-  const updateAddress = (e, field) => {
-    address[field] = e.target.value
-    setAddress(address)
+
+  const onChangeBillingAddressData = (value, field) => {
+    setBillingAddressData({
+      ...billingAddressData,
+      [field]: value
+    })
   }
 
   return (
@@ -28,8 +30,8 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selected
             required
             style={ inputStyle }
             name="customer[credit_card][billing_address][company]"
-            value={address.company}
-            onChange={(e) => updateAddress(e, 'company')}
+            value={billingAddressData.company}
+            onChange={(e) => onChangeBillingAddressData(e.target.value, 'company')}
           />
         </li>
         <li
@@ -47,8 +49,8 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selected
             required
             style={ inputStyle }
             name="customer[credit_card][billing_address][street_address]"
-            value={address.address1}
-            onChange={(e) => updateAddress(e, 'address1')}
+            value={billingAddressData.address1}
+            onChange={(e) => onChangeBillingAddressData(e.target.value, 'address1')}
           />
         </li>
         <li
@@ -66,8 +68,8 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selected
             required
             style={ inputStyle }
             name="customer[credit_card][billing_address][postal_code]"
-            value={address.zip}
-            onChange={(e) => updateAddress(e, 'zip')}
+            value={billingAddressData.zip}
+            onChange={(e) => onChangeBillingAddressData(e.target.value, 'zip')}
           />
         </li>
         <li
@@ -85,8 +87,8 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selected
             required
             style={ inputStyle }
             name="customer[credit_card][billing_address][locality]"
-            value={address.city}
-            onChange={(e) => updateAddress(e, 'city')}
+            value={billingAddressData.city}
+            onChange={(e) => onChangeBillingAddressData(e.target.value, 'city')}
           />
         </li>
         <li
@@ -104,8 +106,8 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddress, selected
             maxLength="3"
             style={ inputStyle }
             name="customer[credit_card][billing_address][region]"
-            value={address.state}
-            onChange={(e) => updateAddress(e, 'state')}
+            value={billingAddressData.state}
+            onChange={(e) => onChangeBillingAddressData(e.target.value, 'state')}
           />
           <div className="col-md-6 col-md-offset-4">
             The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. <strong>If unsure, left blank</strong>
