@@ -33,18 +33,6 @@ module PaymentDetailsHelper
     ActiveMerchant::Country::COUNTRIES.map{|c| [c[:name], c[:alpha2]] }
   end
 
-  #TODO: move these two methods to another helper
-  def build_url(path)
-    full_path = "#{site_account.domain}#{local_postfix_and_port}/#{path}".gsub(/[\/]+/, '/')
-    "https://#{full_path}"
-  end
-
-  def local_postfix_and_port
-    if ["test", "development"].include?(Rails.env)
-      request.host_with_port.gsub(site_account.domain, '').gsub(/\/.*/, '/')
-    end
-  end
-
   def payment_details_definition_list_item(name, account)
     value = account.public_send("billing_address_#{name}")
     return unless value.present?

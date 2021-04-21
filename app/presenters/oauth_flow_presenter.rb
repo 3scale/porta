@@ -74,11 +74,11 @@ class OauthFlowPresenter
   end
 
   def callback_domain
-    authentication_provider.account.domain
+    authentication_provider.account.external_domain
   end
 
   def account_domain
-    callback_account.try(:domain)
+    callback_account.try(:external_domain)
   end
 
   class NullClient
