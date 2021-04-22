@@ -6,7 +6,7 @@ import { mount } from 'enzyme'
 
 import { AddBackendForm } from 'BackendApis'
 
-const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org' }
+const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend' }
 const backendsPath = '/backends'
 const defaultProps = {
   backends: [backend],
