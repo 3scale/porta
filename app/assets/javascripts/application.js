@@ -239,7 +239,7 @@
     // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed. Also jquery-ujs has been replaced with rails-ujs.
     // Added #colorbox selector to target only non-React forms
     // show errors from ajax in formtastic
-    $('#form:not(.pf-c-form)').live('ajax:error', function(event, xhr, status, error) {
+    $('form:not(.pf-c-form)').live('ajax:error', function(event, xhr, status, error) {
       switch(status){
         case 'error':
           $.colorbox({html: xhr.responseText});
