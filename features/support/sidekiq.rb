@@ -41,17 +41,9 @@ module Sidekiq
 
       private
 
-      def handle_callbacks(batch, batch_id, status)
-        if batch.respond_to?(:callbacks) # sidekiq-pro
-          batch.callbacks.fetch('complete', []).each do |complete_callback|
-            complete_callback.each do |type, options|
-              type.constantize.new.on_complete(status, options)
-            end
-          end
-        else # sidekiq-batch
-          Sidekiq::Batch.enqueue_callbacks(:complete, batch_id)
-          Sidekiq::Batch.enqueue_callbacks(:success, batch_id)
-        end
+      def handle_callbacks(_batch, batch_id, _status)
+        Sidekiq::Batch.enqueue_callbacks(:complete, batch_id)
+        Sidekiq::Batch.enqueue_callbacks(:success, batch_id)
       end
     end
 
