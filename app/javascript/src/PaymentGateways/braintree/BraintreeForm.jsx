@@ -60,7 +60,8 @@ const BraintreeForm = ({
       const payload = await hostedFieldsInstance.tokenize()
         .then(payload => payload)
         .catch(error => console.error(error))
-      verifyCard3DSecure(payload)
+      threeDSecureEnabled ? verifyCard3DSecure(payload)
+        : setBraintreeNonceValue(payload.nonce)
     }
   }
 
