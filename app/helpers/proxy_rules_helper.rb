@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
 module ProxyRulesHelper
-  def new_mapping_rule_metrics_data(owner)
-    {
-      isProxyProEnabled: owner.try(:using_proxy_pro?),
-      topLevelMetrics: owner.metrics.top_level.decorate.map(&:new_mapping_rule_data),
-      methods: owner.method_metrics.decorate.map(&:new_mapping_rule_data)
-    }.to_json
-  end
-
   def proxy_rule_path_for(proxy_rule, edit: false)
     owner = proxy_rule.owner
     member_name = case owner

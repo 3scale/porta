@@ -12,15 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { url, httpMethods, metrics, isProxyProEnabled } = container.dataset
-
-  const { topLevelMetrics = [], methods = [] } = safeFromJsonString(metrics) || {}
+  const { url, httpMethods, topLevelMetrics, methods, isProxyProEnabled } = container.dataset
 
   NewMappingRuleWrapper({
     url,
-    topLevelMetrics,
-    methods,
-    isProxyProEnabled: safeFromJsonString<boolean>(isProxyProEnabled),
+    topLevelMetrics: safeFromJsonString(topLevelMetrics) || [],
+    methods: safeFromJsonString(methods) || [],
+    isProxyProEnabled: isProxyProEnabled !== undefined,
     httpMethods: safeFromJsonString<Array<string>>(httpMethods) || []
   }, CONTAINER_ID)
 })

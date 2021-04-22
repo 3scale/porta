@@ -519,6 +519,10 @@ class Service < ApplicationRecord
     DeploymentOption.plugins.include?(deployment_option)
   end
 
+  def top_level_metrics
+    metrics.top_level
+  end
+
   private
 
   def archive_as_deleted

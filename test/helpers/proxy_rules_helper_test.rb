@@ -1,13 +1,6 @@
 require 'test_helper'
 
 class ProxyRulesHelperTest < ActionView::TestCase
-  test 'generates the right data for the New Mapping Rule page' do
-    data = new_mapping_rule_form_data
-
-    assert data.topLevelMetrics
-    assert data.methods
-  end
-
   test 'generates the right path when it is a Proxy Rule with a Proxy' do
     proxy      = FactoryBot.build_stubbed(:proxy)
     proxy_rule = FactoryBot.build_stubbed(:proxy_rule, owner: proxy)
