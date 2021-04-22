@@ -1,7 +1,5 @@
-
 module Stats
   class Service < Base
-    include ::ThreeScale::MethodTracing
 
     include Views::Usage
     include Views::Top
@@ -50,8 +48,6 @@ module Stats
       { }
     end
 
-    add_three_scale_method_tracer :top_clients
-
     def top_countries(options)
       # TODO: optimize country lookup
 
@@ -67,6 +63,5 @@ module Stats
     def find_cinstance(id)
       source.first.cinstances.find_by_application_id(id)
     end
-    add_three_scale_method_tracer :find_cinstance
   end
 end

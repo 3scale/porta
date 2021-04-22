@@ -5,7 +5,6 @@ class Contract < ApplicationRecord
   self.table_name = 'cinstances'
 
   audited allow_mass_assignment: true
-  include ::ThreeScale::MethodTracing
 
   # FIXME: This class should be an abstract class I think, but doing so makes plenty of tests fail
   # self.abstract_class = true
@@ -294,7 +293,6 @@ class Contract < ApplicationRecord
     end
   end
 
-  add_three_scale_method_tracer :change_plan_internal
 
   private
 
