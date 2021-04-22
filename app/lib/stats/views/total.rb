@@ -2,7 +2,6 @@
 module Stats
   module Views
     module Total
-      include ::ThreeScale::MethodTracing
 
       #
       # == Options
@@ -52,7 +51,6 @@ module Stats
         result
       end
 
-      add_three_scale_method_tracer :top
 
       def total_hits(options = {})
         total(options.reverse_merge(:metric => hits_metric))
@@ -84,7 +82,6 @@ module Stats
         source.first.metrics.hits
       end
 
-      add_three_scale_method_tracer :hits_metric
     end
   end
 end
