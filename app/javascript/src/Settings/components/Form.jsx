@@ -2,8 +2,14 @@
 
 import * as React from 'react'
 import { useState } from 'react'
-import { FormFieldset, FormLegend } from 'Form'
-import { FormCollection, TextInputGroup, RadioFieldset } from 'Settings/components/Common'
+
+import {
+  FormCollection,
+  FormFieldset,
+  FormLegend,
+  TextInputGroup,
+  RadioFieldset
+} from 'Settings/components/Common'
 import { AuthenticationSettingsFieldset } from 'Settings/components/AuthenticationSettingsFieldset'
 import type { SettingsProps as Props } from 'Settings/types'
 

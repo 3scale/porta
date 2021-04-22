@@ -83,9 +83,9 @@ describe('fetchServices', () => {
     })
 
     // Assert selects are not disabled after fetched
-    // $FlowIgnore
+    // $FlowIgnore[incompatible-use]
     wrapper.update()
-    // $FlowIgnore
+    // $FlowIgnore[incompatible-use]
     expect(wrapper.find('select').everyWhere(n => n.prop('disabled') === false)).toBe(true)
   })
 })
