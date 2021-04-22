@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react'
-import { FormFieldset, FormLegend } from 'Form'
-import { TextInputGroup, SelectGroup } from 'Settings/components/Common'
+
+import { FormFieldset, FormLegend, TextInputGroup, SelectGroup } from 'Settings/components/Common'
 import type { FieldGroupProps, FieldCatalogProps } from 'Settings/types'
 
 type Props = {
