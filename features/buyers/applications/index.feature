@@ -16,3 +16,7 @@ Feature: Applications index
   Scenario: Create a new application from Audience context
     And I go to the applications admin page
     Then I should see link "Create Application"
+
+  Scenario: Create a new application from Product context
+    And I go to the product context applications page for "API"
+    Then I should see link "Create Application"
