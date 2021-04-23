@@ -2,21 +2,8 @@
 
 module Buyers::ApplicationsHelper
 
-  def new_application_form_metadata(provider:, buyer: nil, service: nil, cinstance: nil)
-    provider = ProviderDecorator.new(provider)
-    {
-      'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
-      'create-application-plan-path': new_admin_service_application_plan_path(':id'),
-      'create-service-plan-path': new_admin_service_service_plan_path(':id'),
-      'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
-      'service-plans-allowed': provider.settings.service_plans.allowed?.to_json,
-      product: service && ServiceDecorator.new(service).new_application_data.to_json,
-      products: !service && provider.application_products_data.to_json,
-      buyer: buyer && BuyerDecorator.new(buyer).new_application_data.to_json,
-      buyers: !buyer && provider.application_buyers_data.to_json,
-      'defined-fields': provider.application_defined_fields_data.to_json,
-      errors: cinstance&.errors.to_json
-    }.compact
+  def new_application_form_metadata(provider, *args)
+    ProviderDecorator.new(provider).new_application_form_data(*args)
   end
 
   def create_application_link_href(account)
