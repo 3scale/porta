@@ -19,6 +19,20 @@ module Buyers::ApplicationsHelper
     }.compact
   end
 
+  def create_application_link_href(account)
+    if !account
+      new_admin_buyers_application_path
+    elsif account.bought_cinstances.size.zero?
+      new_admin_buyers_account_application_path(account)
+    elsif can?(:admin, :multiple_applications)
+      if can?(:see, :multiple_applications)
+        new_admin_buyers_account_application_path(account)
+      else
+        admin_upgrade_notice_path(:multiple_applications)
+      end
+    end
+  end
+
   def last_traffic(cinstance)
     if cinstance.first_daily_traffic_at?
       date = cinstance.first_daily_traffic_at

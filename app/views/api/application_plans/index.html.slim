@@ -7,7 +7,7 @@ p
   | different sets of rules.
 
 - if can_create_plan?(@new_plan)
-  a.pf-c-button.pf-m-primary.pf-c-button__in-title href=new_polymorphic_path([:admin, @service, @new_plan]) Create Application plan
+  = pf_button_in_title 'Create Application plan', new_polymorphic_path([:admin, @service, @new_plan])
 
 section class="pf-c-page__main-section pf-m-no-padding"
   - if @plans.not_custom.size > 0
