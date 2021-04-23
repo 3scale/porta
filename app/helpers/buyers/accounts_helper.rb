@@ -4,7 +4,7 @@ module Buyers::AccountsHelper
 
   def public_domain(account)
     access_code = "/access_code?access_code=#{account.site_access_code}" if account.site_access_code
-    "http://#{account.domain}#{access_code}".html_safe
+    "http://#{account.external_domain}#{access_code}".html_safe
   end
 
   def account_title(account)

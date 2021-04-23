@@ -143,7 +143,7 @@ module VerticalNavHelper
     end
 
     items << {title: ' '} # Blank space
-    items << {title: 'Visit Portal', path: access_code_url(host: current_account.domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
+    items << {title: 'Visit Portal', path: access_code_url(host: current_account.external_domain, cms_token: current_account.settings.cms_token!, access_code: current_account.site_access_code).html_safe, target: '_blank'}
 
     if can?(:manage, :portal)
       items << {                                   title: 'Legal Terms'}

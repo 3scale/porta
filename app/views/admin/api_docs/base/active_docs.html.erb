@@ -7,7 +7,7 @@
 <div class='api-docs-wrap'></div>
 <script>
 
-  <% domain = current_account.domain + (Rails.env.development? ? ':3000' : '') -%>
+  <% domain = current_account.external_domain + (Rails.env.development? ? ':3000' : '') -%>
   $(function(){
     ThreeScale.APIDocs.preview = true;
     ThreeScale.APIDocs.account_type = 'provider';

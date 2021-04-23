@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { FormFieldset, FormLegend } from 'Form'
+import { FormFieldset, FormLegend } from 'Settings/components/Common'
 import type { FieldGroupProps } from 'Settings/types'
 
 type Props = {

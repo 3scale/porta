@@ -2,9 +2,9 @@ class InvitationMessenger < Messenger::Base
 
   def invite(invitation)
     domain = if invitation.account.provider?
-               invitation.account.admin_domain
+               invitation.account.external_admin_domain
              else
-               invitation.account.provider_account.domain
+               invitation.account.provider_account.external_domain
              end
     @url = invitee_signup_url(:invitation_token => invitation.token,
                               :host => domain)
