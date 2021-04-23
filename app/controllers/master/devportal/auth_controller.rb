@@ -9,13 +9,13 @@ class Master::Devportal::AuthController < ApplicationController
   def show
     account = Account.find_by!(domain: params.require(:domain))
 
-    redirect_to callback_url(account, domain: account.domain)
+    redirect_to callback_url(account, domain: account.external_domain)
   end
 
   def show_self
     account = Account.find_by!(self_domain: params.require(:self_domain))
 
-    redirect_to callback_url(account, domain: account.self_domain)
+    redirect_to callback_url(account, domain: account.external_self_domain)
   end
 
   protected

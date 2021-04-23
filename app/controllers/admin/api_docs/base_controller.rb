@@ -46,7 +46,7 @@ class Admin::ApiDocs::BaseController < FrontendController
         format.json { render json: swagger_spec }
       end
     else
-      @host = current_account.domain
+      @host = current_account.external_domain
       @resource = api_docs_service.system_name
       @spec = ApiDocs::Service.spec_for api_docs_service
       render 'active_docs'

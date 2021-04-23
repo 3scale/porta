@@ -1,6 +1,5 @@
 // @flow
 
-// $FlowIgnore: module name mapper is confused, export exists
 import { AddBackendFormWrapper } from 'BackendApis'
 import { safeFromJsonString } from 'utilities/json-utils'
 

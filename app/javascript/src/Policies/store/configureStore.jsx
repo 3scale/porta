@@ -20,9 +20,9 @@ function configureStoreProd (initialState: State): Store {
     policyChainMiddleware
   ]
 
-  // $FlowFixMe returns Store
+  // $FlowIgnore[prop-missing] returns Store
   return createStore(rootReducer, initialState, compose(
-    // $FlowFixMe
+    // $FlowIgnore[incompatible-variance]
     applyMiddleware(...middlewares)
   ))
 }
@@ -44,15 +44,15 @@ function configureStoreDev (initialState: State): Store {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // add support for Redux dev tools
 
   const store = createStore(rootReducer, initialState, composeEnhancers(
-    // $FlowFixMe
+    // $FlowIgnore[incompatible-variance]
     applyMiddleware(...middlewares)
   ))
 
-  // $FlowFixMe this is of type State
+  // $FlowIgnore[prop-missing] this is of type State
   return store
 }
 
-// $FlowIgnore we can pass over types safely
+// $FlowIgnore[signature-verification-failure] we can pass over types safely
 const configureStore = process.env.NODE_ENV === 'production' ? configureStoreProd : configureStoreDev
 
 export default configureStore

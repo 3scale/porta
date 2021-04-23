@@ -1,8 +1,8 @@
 // @flow
 
 import * as React from 'react'
-import { FormFieldset, FormLegend } from 'Form'
-import { FormCollection, TextInputGroup } from 'Settings/components/Common'
+
+import { FormCollection, FormFieldset, FormLegend, TextInputGroup } from 'Settings/components/Common'
 import { OidcFieldset } from 'Settings/components/OidcFieldset'
 import type { FieldGroupProps, TypeItemProps } from 'Settings/types'
 

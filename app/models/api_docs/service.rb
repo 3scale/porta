@@ -50,7 +50,7 @@ class ApiDocs::Service < ApplicationRecord
   def self.for(account)
     services = account.api_docs_services.published
 
-    { :host => account.domain,
+    { :host => account.external_domain,
       :apis => services.map { |service| ApiDocs::Service.spec_for(service)} }
   end
 

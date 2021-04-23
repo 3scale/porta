@@ -30,7 +30,7 @@ const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props): 
       fieldId="backend_api_config_backend_api_id"
       id="backend_api_config_backend_api_id"
       name="backend_api_config[backend_api_id]"
-      // $FlowIssue backend is compatible with null
+      // $FlowIssue[incompatible-type] backend is compatible with null
       item={backend}
       items={backends.map(b => ({ ...b, description: b.privateEndpoint }))}
       cells={cells}
@@ -42,7 +42,7 @@ const BackendSelect = ({ backend, backends, newBackendPath, onSelect }: Props): 
         </p>
       )}
       modalTitle="Select a Backend"
-      // $FlowIssue It should not complain since Record.id has union "number | string"
+      // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
       onSelect={onSelect}
       header="Most recently created Backends"
       footer="View all Backends"

@@ -29,4 +29,13 @@ class ThreeScale::OAuth2::GithubClientTest < ActiveSupport::TestCase
   test '#org_name' do
     assert_equal 'org', @oauth2.org_name
   end
+  
+  test '#access_token in Authorization HTTP header' do
+    access_token = ::OAuth2::AccessToken.from_hash(@oauth2.client, access_token: 'some-access-token')
+    @oauth2.expects(:access_token).returns(access_token).at_least_once
+    stub_request(:get, "https://api.github.com/user/emails")
+      .with(:headers => {'Accept'=>'application/vnd.github.v3', 'Authorization'=>'Bearer some-access-token'})
+      .to_return(status: 200, body: '[]', headers: { 'Content-Type' => 'application/json' })
+    @oauth2.email
+   end
 end

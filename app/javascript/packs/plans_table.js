@@ -1,6 +1,6 @@
 // @flow
 
-// $FlowIgnore[missing-export] export is there, name_mapper is the problem
+// $FlowFixMe[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTableCardWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities/json-utils'
 
