@@ -612,6 +612,10 @@ World(Module.new do
       admin_service_metrics_path(provider_first_service!)
     when /^the integration show page for (service ".+?")/
       admin_service_integration_path(Transform $1)
+    when /^the mapping rules index page for (service ".+?")/
+      admin_service_proxy_rules_path(Transform $1)
+    when /^the mapping rules index page for backend "(.+?)"/
+      provider_admin_backend_api_mapping_rules_path(BackendApi.find_by!(name: $1))
     when /^the integration page for (service ".+?")/
       # TODO: THREESCALE-3759 edit page no longer exist, remove or replace
       edit_admin_service_integration_path(Transform $1)
