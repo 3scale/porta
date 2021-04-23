@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const backends = safeFromJsonString<Backend[]>(dataset.backends) || []
   const backend = backends.find(b => String(b.id) === backendApiId) || null
-  const inlineErrors = safeFromJsonString(dataset.inlineErrors)
+  const inlineErrors = safeFromJsonString(dataset.inlineErrors) || null
 
   AddBackendFormWrapper({
     backends,
