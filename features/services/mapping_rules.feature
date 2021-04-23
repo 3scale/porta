@@ -37,3 +37,12 @@ Feature: Product mapping rules
       | PUT         | /mixers | 3        | hits   |
       | POST        | /beers  | 4        | hits   |
 
+  Scenario: New mapping rule form with proxy pro
+    Given I have proxy_pro feature enabled
+    When I go to the create mapping rule page for service "one"
+    Then I should see field "Redirect URL"
+
+  Scenario: New mapping rule form without proxy pro
+    Given I have proxy_pro feature disabled
+    When I go to the create mapping rule page for service "one"
+    Then I should not see field "Redirect URL"

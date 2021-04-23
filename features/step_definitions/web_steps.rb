@@ -77,7 +77,7 @@ When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value,
     if page.has_css?('.pf-c-form__label', text: field)
       select = find('.pf-c-form__label', text: field).sibling('.pf-c-select')
       within select do
-        find('.pf-c-select__toggle-button').click unless select['class'].include?('pf-m-expanded')
+        find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
         click_on(value)
       end
     else

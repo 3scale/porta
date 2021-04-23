@@ -38,20 +38,6 @@ class Api::ProxyRulesControllerTest < ActionDispatch::IntegrationTest
     assert_match /Redirect/, response.body
   end
 
-  test '#new should not return the Redirect Url field when not using proxy pro' do
-    Service.any_instance.stubs(:using_proxy_pro?).returns(false)
-
-    get new_admin_service_proxy_rule_path(@service)
-    assert_select '#proxy_rule_redirect_url', false
-  end
-
-  test '#new should return the Redirect Url field when using proxy pro' do
-    Service.any_instance.stubs(:using_proxy_pro?).returns(true)
-
-    get new_admin_service_proxy_rule_path(@service)
-    assert_select '#proxy_rule_redirect_url'
-  end
-
 
   test '#create persists a new proxy rule' do
     proxy_rule_params = FactoryBot.attributes_for(:proxy_rule, proxy: @service.proxy, metric_id: @service.metrics.last.id)
