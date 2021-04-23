@@ -7,7 +7,7 @@ class MetricDecorator < ApplicationDecorator
   def new_mapping_rule_data
     {
       id: id,
-      name: name,
+      name: friendly_name,
       systemName: system_name,
       updatedAt: updated_at
     }
