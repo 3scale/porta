@@ -113,7 +113,7 @@ def visit_edit_plan(plan)
 
   step 'I go to the application plans admin page'
 
-  within plans do
+  within plans_table do
     click_on plan.name
   end
 
