@@ -45,6 +45,13 @@ Paperclip.interpolates :s3_prefix do |attachment, style|
   attachment.instance.provider.s3_prefix
 end
 
+Paperclip.interpolates(:s3_path_url) do |attachment, style|
+  if attachment.options.dig(:s3_options, :force_path_style) || attachment.bucket_name =~ /\./
+    "#{attachment.s3_protocol(style, true)}//#{attachment.s3_host_name}/#{attachment.bucket_name}/#{attachment.path(style).sub(%r{\A/}, ''.freeze)}"
+  else
+    "#{attachment.s3_protocol(style, true)}//#{attachment.bucket_name}.#{attachment.s3_host_name}/#{attachment.path(style).sub(%r{\A/}, ''.freeze)}"
+  end
+end
 
 begin
   CMS::S3.enable!
