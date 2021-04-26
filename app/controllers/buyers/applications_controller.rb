@@ -40,7 +40,7 @@ class Buyers::ApplicationsController < FrontendController
     end
 
     if params[:account_id]
-      @account = current_account.buyers.find params[:account_id]
+      find_buyer
       @search.account = @account.id
       activate_menu :buyers, :accounts, :listing
     end
@@ -60,9 +60,8 @@ class Buyers::ApplicationsController < FrontendController
     if params[:account_id]
       # We're under Account context
       find_buyer
-      @cinstance = @buyer.bought_cinstances.build
+      @cinstance = @account.bought_cinstances.build
       extend_cinstance_for_new_plan
-      @account = current_account.buyers.find params[:account_id]
       activate_menu :buyers, :accounts, :listing
     else
       # We're under Applications context
@@ -77,7 +76,7 @@ class Buyers::ApplicationsController < FrontendController
                      application_plan.service.service_plans.find(service_plan_id)
                    end
 
-    @cinstance = current_account.provider_builds_application_for(@buyer, application_plan, params[:cinstance], service_plan)
+    @cinstance = current_account.provider_builds_application_for(@account, application_plan, params[:cinstance], service_plan)
     @cinstance.validate_human_edition!
 
     if @cinstance.save
@@ -184,7 +183,7 @@ class Buyers::ApplicationsController < FrontendController
   end
 
   def find_buyer
-    @buyer = current_account.buyers.find(params[:account_id])
+    @account = current_account.buyers.find(params[:account_id])
   end
 
   def find_plans
@@ -218,7 +217,7 @@ class Buyers::ApplicationsController < FrontendController
   end
 
   def authorize_multiple_applications
-    authorize! :manage, :multiple_applications if @buyer.has_bought_cinstance?
+    authorize! :manage, :multiple_applications if @account.has_bought_cinstance?
   end
 
   module AccountForNewPlan
