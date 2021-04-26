@@ -6,19 +6,29 @@ class ProviderDecorator < ApplicationDecorator
   self.include_root_in_json = false
 
   def new_application_form_data(buyer: nil, service: nil, cinstance: nil)
-    {
-      'create-application-path': buyer ? admin_buyers_account_applications_path(buyer) : admin_buyers_applications_path,
+    data = {
+      'create-application-path': admin_buyers_applications_path,
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
       'create-service-plan-path': new_admin_service_service_plan_path(':id'),
       'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
       'service-plans-allowed': settings.service_plans.allowed?.to_json,
-      product: service && ServiceDecorator.new(service).new_application_data.to_json,
-      products: !service && application_products_data.to_json,
-      buyer: buyer && BuyerDecorator.new(buyer).new_application_data.to_json,
-      buyers: !buyer && application_buyers_data.to_json,
-      'defined-fields': application_defined_fields_data.to_json,
-      errors: cinstance&.errors.to_json
-    }.compact
+      'defined-fields': application_defined_fields_data.to_json
+    }
+
+    data.merge!(account_context_new_application_form_data(buyer)) if buyer
+    data[:buyers] = application_buyers_data.to_json unless buyer
+    data[:product] = ServiceDecorator.new(service).new_application_data.to_json if service
+    data[:products] = application_products_data.to_json unless service
+    data[:errors] = cinstance.errors.to_json if cinstance
+
+    data
+  end
+
+  def account_context_new_application_form_data(buyer)
+    {
+      'create-application-path': admin_buyers_account_applications_path(buyer),
+      buyer: BuyerDecorator.new(buyer).new_application_data.to_json
+    }
   end
 
   def application_products_data
