@@ -51,13 +51,14 @@ When /^new provider "([^"]*)" signs up and activates$/ do |name|
   step %(user "#{name}" activates himself)
 end
 
-When /^I fill in the signup fields as "([^\"]*)"$/ do |name|
-  step %(I fill in "Username" with "#{name}")
-  step %(I fill in "Email" with "#{name}@3scale.localhost")
-  step %(I fill in "Organization/Group Name" with "#{name}'s stuff")
-  step %(I fill in "Password" with "supersecret")
-  step %(I fill in "Password confirmation" with "supersecret")
-  step %(I press "Sign up")
+When /^I fill in the signup fields as "([^"]*)"$/ do |name|
+  fill_in('Username', with: name)
+  fill_in('Email', with: "#{name}@3scale.localhost")
+  fill_in('Organization/Group Name', with: "#{name}'s stuff")
+  fill_in('Password', with: 'supersecret')
+  fill_in('Password confirmation', with: 'supersecret')
+
+  click_on 'Sign up'
 end
 
 When /^I fill in the invalid signup fields$/ do
