@@ -6,6 +6,7 @@ module Buyers::ApplicationsHelper
     ProviderDecorator.new(provider).new_application_form_data(*args)
   end
 
+  # TODO: need to refactor this method, there is no default return value
   def create_application_link_href(account)
     if !account
       new_admin_buyers_application_path
