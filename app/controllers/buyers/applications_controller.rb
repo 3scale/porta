@@ -8,7 +8,7 @@ class Buyers::ApplicationsController < FrontendController
   helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
-  before_action :find_buyer, only: :create
+  before_action :find_buyer, only: %i[index create new]
   before_action :find_plans, only: %i[new create]
   before_action :authorize_multiple_applications, only: [:create]
 
@@ -40,7 +40,6 @@ class Buyers::ApplicationsController < FrontendController
     end
 
     if params[:account_id]
-      find_buyer
       @search.account = @account.id
       activate_menu :buyers, :accounts, :listing
     end
@@ -59,7 +58,6 @@ class Buyers::ApplicationsController < FrontendController
 
     return activate_menu :audience, :applications, :listing if applications_context?
 
-    find_buyer
     @cinstance = @account.bought_cinstances.build
     extend_cinstance_for_new_plan
 
@@ -186,7 +184,10 @@ class Buyers::ApplicationsController < FrontendController
   end
 
   def find_buyer
-    @account = current_account.buyers.find(params[:account_id])
+    account_id = params[:account_id]
+    return unless account_id
+
+    @account = current_account.buyers.find(account_id)
   end
 
   def find_plans
