@@ -102,3 +102,7 @@ When(/^I fill in the braintree credit card form$/) do
   step 'I select "Spain" from "Country"'
 end
 
+When(/^I submit the braintree form$/) do
+  page.evaluate_script("document.querySelector('#customer_form').submit()")
+end
+

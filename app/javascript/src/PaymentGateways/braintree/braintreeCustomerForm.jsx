@@ -76,7 +76,7 @@ const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOpt
     ...hostedFieldOptions
   })
     .then((hostedFieldsInstance) => {
-      hostedFieldsInstance.on('blur', () => {
+      hostedFieldsInstance.on('validityChange', () => {
         const state = hostedFieldsInstance.getState()
         const cardValid = Object.keys(state.fields).every((key) => state.fields[key].isValid)
         setIsCardValid(cardValid)
