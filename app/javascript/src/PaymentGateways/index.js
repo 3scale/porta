@@ -9,6 +9,7 @@ export { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/Braintr
 export { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
 export { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
 export {
+  validationConstraints,
   hostedFieldOptions,
   createBraintreeClient,
   createHostedFieldsInstance,
