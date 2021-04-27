@@ -66,7 +66,7 @@ Feature: Application Plan Change
 
     When I fill in the braintree credit card form
 
-    And I press "Save details"
+    And I submit the braintree form
     And I press "Confirm"
     Then I should see "Plan change was successful."
     And a message should be sent from buyer to provider with plan change details from free to paid
@@ -90,7 +90,7 @@ Feature: Application Plan Change
 
     When I fill in the braintree credit card form
 
-    And I press "Save details"
+    And I submit the braintree form
     Then I should be at url for the braintree credit card details page
     And I should see "Credit card details were successfully stored."
 
