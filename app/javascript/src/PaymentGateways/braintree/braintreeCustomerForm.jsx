@@ -1,3 +1,41 @@
+const validationConstraints = {
+  'customer[first_name]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[last_name]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[credit_card][billing_address][company]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[credit_card][billing_address][street_address]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[credit_card][billing_address][postal_code]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[credit_card][billing_address][locality]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[credit_card][billing_address][country_name]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  }
+}
+
 const hostedFieldOptions = {
   styles: {
     'input': {
@@ -32,15 +70,21 @@ const createBraintreeClient = (client, clientToken) => {
     .catch(error => console.error(error))
 }
 
-const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOptions) => {
+const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOptions, setIsCardValid) => {
   return hostedFields.create({
     client: clientInstance,
     ...hostedFieldOptions
   })
-    .then((hostedFieldsInstance) => hostedFieldsInstance)
+    .then((hostedFieldsInstance) => {
+      hostedFieldsInstance.on('blur', () => {
+        const state = hostedFieldsInstance.getState()
+        const cardValid = Object.keys(state.fields).every((key) => state.fields[key].isValid)
+        setIsCardValid(cardValid)
+      })
+      return hostedFieldsInstance
+    })
     .catch(error => console.error(error))
 }
-
 const create3DSecureInstance = async (threeDSecure, clientInstance) => {
   return await threeDSecure.create({
     version: 2,
@@ -64,14 +108,13 @@ const veryfyCard = async (threeDSecureInstance, payload, billingAddress) => {
     challengeRequested: true,
     ...threeDSecureParameters
   }
-  const response = await threeDSecureInstance.verifyCard(options)
+  return await threeDSecureInstance.verifyCard(options)
     .then(response => response)
-    .catch(error => console.error(error))
-
-  return response
+    .catch(error => error)
 }
 
 export {
+  validationConstraints,
   hostedFieldOptions,
   createBraintreeClient,
   createHostedFieldsInstance,
