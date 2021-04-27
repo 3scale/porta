@@ -8,9 +8,9 @@ class Buyers::ApplicationsController < FrontendController
   helper DisplayViewPortion::Helper
 
   before_action :authorize_partners
-  before_action :find_buyer, :only => :create
-  before_action :find_plans, :only => %i[new create]
-  before_action :authorize_multiple_applications, :only => [:create]
+  before_action :find_buyer, only: :create
+  before_action :find_plans, only: %i[new create]
+  before_action :authorize_multiple_applications, only: [:create]
 
   before_action :find_cinstance, :except => [:index, :create, :new]
   before_action :find_provider,  only: %i[new create update]
@@ -57,16 +57,13 @@ class Buyers::ApplicationsController < FrontendController
   def new
     @products = accessible_services
 
-    if params[:account_id]
-      # We're under Account context
-      find_buyer
-      @cinstance = @account.bought_cinstances.build
-      extend_cinstance_for_new_plan
-      activate_menu :buyers, :accounts, :listing
-    else
-      # We're under Applications context
-      activate_menu :audience, :applications, :listing
-    end
+    return activate_menu :audience, :applications, :listing if applications_context?
+
+    find_buyer
+    @cinstance = @account.bought_cinstances.build
+    extend_cinstance_for_new_plan
+
+    activate_menu :buyers, :accounts, :listing
   end
 
   # TODO: this should be done by buy! method
@@ -150,6 +147,12 @@ class Buyers::ApplicationsController < FrontendController
       flash[:notice] = 'Not possible to delete application'
       redirect_to :back
     end
+  end
+
+  protected
+
+  def applications_context?
+    !params[:account_id]
   end
 
   private
