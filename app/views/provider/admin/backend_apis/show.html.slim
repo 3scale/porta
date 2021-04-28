@@ -18,11 +18,7 @@ section class="overview-widget"
   div
 
     div.left
-      h2 Products Using this Backend
-      ul.listing#products_using_backend
-        - list_items_or_empty @backend_api.services.accessible, 'No Product currently using this Backend' do |service|
-          li.item
-            = link_to service.name, admin_service_path(service)
+      = render 'provider/admin/backend_apis/cards/products_table', products: @backend_api.services.accessible
 
     div.right
       h2 Methods & Mapping Rules
