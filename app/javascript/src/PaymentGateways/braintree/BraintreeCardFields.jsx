@@ -9,7 +9,7 @@ const BraintreeCardFields = () => {
           id="customer_credit_card_number_input"
           className="string optional form-group"
         >
-          <label htmlFor="customer_credit_card_number" className="col-md-4 control-label">Number</label>
+          <label htmlFor="customer_credit_card_number" className="col-md-4 control-label">Number *</label>
           <div
             id="customer_credit_card_number"
             className="form-control col-md-6"
@@ -21,7 +21,7 @@ const BraintreeCardFields = () => {
           <label
             htmlFor="customer_credit_card_cvv"
             className="col-md-4 control-label"
-          >CVV</label>
+          >CVV *</label>
           <div
             id="customer_credit_card_cvv"
             className="form-control col-md-6"
@@ -33,7 +33,7 @@ const BraintreeCardFields = () => {
           <label
             htmlFor="customer_credit_card_expiration_date"
             className="col-md-4 control-label"
-          >Expiration Date (MM/YY)</label>
+          >Expiration Date (MM/YY) *</label>
           <div
             id="customer_credit_card_expiration_date"
             className="form-control col-md-6"
