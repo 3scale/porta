@@ -27,10 +27,55 @@ class PaymentGatewaySetting < ApplicationRecord
   # I prefer validating manually in places where it is needed. Do not break things.
   def configured?
     return false if gateway_type.blank?
-    fields = PaymentGateway.find(gateway_type).fields.keys
-    fields.all? do |field|
+
+    gateway = PaymentGateway.find(gateway_type)
+
+    return false unless gateway
+
+    fields = gateway.non_boolean_fields
+
+    fields.all? do |field, _label|
       symbolized_settings[field].present?
     end
+  end
+
+  # Overrides the {#gateway_setting} attribute by ensuring boolean fields are cast correctly
+  # @note It would be nice to combine this with `attribute "#{boolean_field}"` and `gateway_setting` as an ActiveModel::Model
+  # Sadly the attributes are dynamic, and meta-programming in this case would be overkill, still can be considered...
+  # @param [Hash] hash with correct PaymentGateway fields
+  # @return [Hash]
+  #
+  #   @example:
+  #
+  #   class GatewaySetting
+  #     include ActiveModel::Model
+  #
+  #     attribute :name
+  #     attribute :three_ds_enabled, :boolean
+  #
+  #     def self.load(str)
+  #       new(JSON.load(str))
+  #     end
+  #
+  #     def self.dump(obj)
+  #       JSON.dump(obj.attributes)
+  #     end
+  #   end
+  #
+  #   class PaymentGatewaySetting < Gateway
+  #     serialize :gateway_settings, GatewaySetting
+  #   end
+  #
+  def gateway_settings=(hash)
+    gateway = PaymentGateway.find(gateway_type)
+
+    return super unless gateway
+
+    gateway.boolean_field_keys.each do |field|
+      hash[field] = ActiveModel::Type::Boolean.new.cast(hash[field])
+    end
+
+    super(hash)
   end
 
   def active_gateway_type

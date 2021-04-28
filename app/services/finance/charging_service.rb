@@ -63,7 +63,7 @@ module Finance
     end
 
     def charge_with_braintree_blue
-      gateway.purchase(amount.cents, buyer_reference, options.merge(transaction_source: 'recurring'))
+      gateway.purchase(amount.cents, buyer_reference, options.merge(transaction_source: 'unscheduled'))
     end
   end
 end
