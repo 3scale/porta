@@ -1,5 +1,3 @@
-h2 Products Using this Backend
-ul.listing#products_using_backend
-  - list_items_or_empty products, 'No Product currently using this Backend' do |product|
-    li.item
-      = link_to product.name, admin_service_path(product)
+h2 Products using this backend
+div id='products_using_backend' data-products=@backend_api.decorate.products_used_table_data
+  = javascript_pack_tag 'products_used_table'

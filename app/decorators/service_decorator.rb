@@ -45,6 +45,15 @@ class ServiceDecorator < ApplicationDecorator
     end
   end
 
+  def used_by_backend_table_data
+    {
+      id: id,
+      name: name,
+      systemName: system_name,
+      path: link # Verify that api_selector_api_link is the right call
+    }
+  end
+
   alias link api_selector_api_link
 
   def new_application_data

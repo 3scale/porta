@@ -1,0 +1,7 @@
+@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/components/Pagination/pagination.css';
+
+.pf-c-pagination__micro {
+  padding-top: var(--pf-c-page__main-section--PaddingTop);
+}
