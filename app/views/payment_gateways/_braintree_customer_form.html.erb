@@ -160,4 +160,10 @@
     </fieldset>
     <%= hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce' %>
 <% end %>
-<%= javascript_pack_tag 'braintree3DSecureCustomerForm'%>
+<% if site_account.payment_gateway_options[:three_ds_enabled] %>
+  <%= javascript_pack_tag 'braintree3DSecureCustomerForm'%>
+<% else %>
+  <script src="https://js.braintreegateway.com/web/3.70.0/js/client.min.js"></script>
+  <script src="https://js.braintreegateway.com/web/3.70.0/js/hosted-fields.min.js"></script>
+  <%= javascript_pack_tag 'braintree3DSecuredisabled'%>
+<% end %>
