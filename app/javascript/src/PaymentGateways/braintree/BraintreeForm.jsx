@@ -35,7 +35,8 @@ const BraintreeForm = ({
   const [billingAddressData, setBillingAddressData] = useState(billingAddress)
   const [isCardValid, setIsCardValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
-  const [formErrors, setFormErrors] = useState(null)
+  const [formErrors, setFormErrors] = useState('Form is empty')
+  const [cardError, setCardError] = useState(null)
   const [isAwaiting, setIsAwaiting] = useState(false)
 
   useEffect(() => {
@@ -60,16 +61,33 @@ const BraintreeForm = ({
   const get3DSecureNonce = async (payload) => {
     const threeDSecureInstance = await create3DSecureInstance(threeDSecure, braintreeClient)
     const response = await veryfyCard(threeDSecureInstance, payload, billingAddressData)
-    if (response.name === 'BraintreeError') {
-      throw new Error(response.details.originalError.details.originalError.error.message)
-    } else {
-      return response.nonce
+    const error = response.name === 'BraintreeError'
+      ? response.code === 'THREEDS_LOOKUP_VALIDATION_ERROR' ? response.details.originalError.details.originalError.error.message : response.message
+      : null
+    const nonce = response.nonce || null
+
+    return {
+      error,
+      nonce
     }
+  }
+
+  const clearHostedFields = () => {
+    hostedFieldsInstance.clear('number')
+    hostedFieldsInstance.clear('cvv')
+    hostedFieldsInstance.clear('expirationDate')
   }
 
   const onFormChange = (event) => {
     const validationErrors = validate(event.currentTarget, validationConstraints)
     setFormErrors(validationErrors)
+  }
+
+  const handleCardError = (error) => {
+    setCardError(`Credit card errors found: ${error}. Please correct your CC data.`)
+    clearHostedFields()
+    setIsAwaiting(false)
+    setTimeout(() => setCardError(null), 8000)
   }
 
   const onSubmit = async (event) => {
@@ -79,7 +97,12 @@ const BraintreeForm = ({
       const payload = await hostedFieldsInstance.tokenize()
         .then(payload => payload)
         .catch(error => console.error(error))
-      const nonce = threeDSecureEnabled ? await get3DSecureNonce(payload) : payload.nonce
+
+      const response3Dsecure = threeDSecureEnabled ? await get3DSecureNonce(payload) : null
+      if (response3Dsecure.error) {
+        return handleCardError(response3Dsecure.error)
+      }
+      const nonce = threeDSecureEnabled ? response3Dsecure.nonce : payload.nonce
       setBraintreeNonceValue(nonce)
       setIsAwaiting(false)
     }
@@ -100,6 +123,7 @@ const BraintreeForm = ({
       </fieldset>
       <fieldset>
         <BraintreeCardFields />
+        {cardError && <p className="alert alert-danger">{cardError}</p>}
       </fieldset>
       <fieldset>
         <BraintreeBillingAddressFields

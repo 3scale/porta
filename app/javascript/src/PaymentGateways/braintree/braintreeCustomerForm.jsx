@@ -98,9 +98,7 @@ const veryfyCard = async (threeDSecureInstance, payload, billingAddress) => {
   const threeDSecureParameters = {
     amount: '00.00',
     billingAddress,
-    onLookupComplete: function (data, next) {
-      next()
-    }
+    onLookupComplete: (data, next) => next()
   }
   const options = {
     nonce: payload.nonce,
