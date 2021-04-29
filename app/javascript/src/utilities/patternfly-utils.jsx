@@ -20,7 +20,7 @@ export interface SelectOptionObject {
 export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
   id: String(item.id),
   name: item.name,
-  toString: () => item.description ? `${item.name} (${item.description})` : item.name
+  toString: () => item.name
 })
 
 type Props = Record & {

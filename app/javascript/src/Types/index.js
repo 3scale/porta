@@ -35,5 +35,7 @@ export type Product = {
 export type Backend = {
   id: number,
   name: string,
+  systemName: string,
+  description?: string,
   privateEndpoint: string
 }
