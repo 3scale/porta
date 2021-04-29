@@ -4,13 +4,8 @@ Given /^a service "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
   provider.services.create! :name => name, :mandatory_app_key => false
 end
 
-Given /^a backend api "([^"]*)"( that is unnaccessible)?$/ do |name, unnaccessible|
-  backend = @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
-  backend.update!(state: 'deleted') if unnaccessible.present?
-end
-
-Given /^a service "([^"]*)"$/ do |name|
-  @provider.services.create!(name: name, mandatory_app_key: false)
+Given /^(service "[^"]*") becomes unnaccessible?$/ do |service|
+  service.update!(state: 'deleted')
 end
 
 Given /^(?:a )?default service of (provider "[^"]*") has name "([^"]*)"$/ do |provider, name|

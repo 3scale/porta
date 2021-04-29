@@ -29,20 +29,6 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     assert_response :success
   end
 
-  test '#show only accessible services' do
-    backend_api = @provider.backend_apis.last
-
-    services = FactoryBot.create_list(:simple_service, 3, account: @provider)
-    services.each { |service| service.backend_api_configs.create(backend_api: backend_api, path: '/') }
-    accessible_services = services.take(2)
-    non_accessible_service = services.last
-    non_accessible_service.update_column(:state, 'deleted')
-
-    get provider_admin_backend_api_path(backend_api)
-    accessible_services.each { |service| assert_select 'ul.listing#products_using_backend li a', text: service.name }
-    assert_select 'ul.listing#products_using_backend li a', text: non_accessible_service.name, count: 0
-  end
-
   test '#create' do
     assert_difference @provider.backend_apis.method(:count) do
       backend_api_attributes = { name: 'My Backend', system_name: 'my-new-backend-api', private_endpoint: 'https://host.com/p' }

@@ -641,6 +641,8 @@ World(Module.new do
     # Backend API
     when /^the backend api overview/
       provider_admin_backend_api_path(provider_first_service!.backend_api)
+    when /^the overview page of backend "(.+?)"/
+      provider_admin_backend_api_path(BackendApi.find_by!(name: $1))
 
     #
     # Help
