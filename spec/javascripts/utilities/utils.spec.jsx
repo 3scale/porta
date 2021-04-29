@@ -1,22 +1,24 @@
+// @flow
+
 import React from 'react'
 import { mount } from 'enzyme'
-import { JSDOM } from 'jsdom'
-
-const { CSRFToken } = jest.requireActual('utilities/utils')
+import { CSRFToken } from 'utilities/CSRFToken'
 
 describe('CSRFToken', () => {
   it('should render itself correctly', () => {
-    const { window } = new JSDOM(`
-      <!doctype html>
-      <html>
-        <head>
-          <meta name="csrf-param" content="authenticity_token">
-          <meta name="csrf-token" content="=42=">
-        </head>
-        <body></body>
-      </html>
-    `)
-    const wrapper = mount(<CSRFToken win={window} />)
+    const windowMock = {
+      document: {
+        querySelector: (query) => {
+          switch (query) {
+            case 'head > meta[name~=csrf-param][content]':
+              return { content: 'authenticity_token' }
+            case 'head > meta[name~=csrf-token][content]':
+              return { content: '=42=' }
+          }
+        }
+      }
+    }
+    const wrapper = mount(<CSRFToken win={windowMock} />)
 
     expect(wrapper.find(CSRFToken).exists()).toBe(true)
     expect(wrapper.find('input').prop('name')).toBe('authenticity_token')
@@ -24,14 +26,19 @@ describe('CSRFToken', () => {
   })
 
   it('should return undefined values when csrf-param meta tag is not present', () => {
-    const { window } = new JSDOM(`
-      <!doctype html>
-      <html>
-        <head></head>
-        <body></body>
-      </html>
-    `)
-    const wrapper = mount(<CSRFToken win={window} />)
+    const windowMock = {
+      document: {
+        querySelector: (query) => {
+          switch (query) {
+            case 'head > meta[name~=csrf-param][content]':
+              return undefined
+            case 'head > meta[name~=csrf-token][content]':
+              return undefined
+          }
+        }
+      }
+    }
+    const wrapper = mount(<CSRFToken win={windowMock} />)
 
     expect(wrapper.find(CSRFToken).exists()).toBe(true)
     expect(wrapper.find('input').prop('name')).toBeUndefined()
