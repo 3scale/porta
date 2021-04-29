@@ -5,7 +5,7 @@ module Api::BackendUsagesHelper
     {
       backends: backends(service.id).to_json,
       url: admin_service_backend_usages_path(service),
-      'new-backend-path': new_provider_admin_backend_api_path
+      'backends-path': provider_admin_backend_apis_path
     }
   end
 
