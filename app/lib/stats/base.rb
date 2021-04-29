@@ -93,7 +93,6 @@ module Stats
       metric
     end
 
-
     def extract_since(options)
       timezone = options[:timezone]
       since = options[:since]

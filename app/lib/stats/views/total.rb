@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Stats
   module Views
@@ -50,7 +51,6 @@ module Stats
 
         result
       end
-
 
       def total_hits(options = {})
         total(options.reverse_merge(:metric => hits_metric))

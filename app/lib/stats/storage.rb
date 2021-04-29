@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Stats
   class Storage < Backend::Storage
@@ -226,7 +227,6 @@ module Stats
         end
       end
     end
-
 
     def granularity_to_seconds(g)
       (g.is_a?(Symbol) || g.is_a?(String)) ? 1.public_send(g) : g
