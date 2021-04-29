@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 
 import {
   Button,
@@ -15,6 +15,7 @@ import { Table, TableBody } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
 import { MicroPagination } from 'Common'
 import { createReactWrapper } from 'utilities/createReactWrapper'
+import { useSearchInputEffect } from 'utilities/custom-hooks'
 
 import './ProductsUsedTable.scss'
 
@@ -31,13 +32,12 @@ const ProductsUsedTable = ({ products }: Props): React.Node => {
   const [filteredProducts, setFilteredProducts] = useState(products)
   const searchInputRef = useRef(null)
 
-  useEffect(() => {
-    if (searchInputRef.current) {
-      searchInputRef.current.addEventListener('input', ({ inputType }) => {
-        if (!inputType) search()
-      })
-    }
-  }, [searchInputRef.current])
+  const search = (term: string = '') => {
+    setFilteredProducts(products.filter(p => p.name.includes(term)))
+    setPage(1)
+  }
+
+  useSearchInputEffect(searchInputRef, search)
 
   const handleOnSearch = () => {
     if (searchInputRef.current) {
@@ -49,11 +49,6 @@ const ProductsUsedTable = ({ products }: Props): React.Node => {
     if (e.key === 'Enter') {
       handleOnSearch()
     }
-  }
-
-  const search = (term: string = '') => {
-    setFilteredProducts(products.filter(p => p.name.includes(term)))
-    setPage(1)
   }
 
   const lastPage = Math.ceil(filteredProducts.length / PER_PAGE)

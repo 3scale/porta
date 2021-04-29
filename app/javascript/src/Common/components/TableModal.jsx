@@ -12,6 +12,7 @@ import {
   ToolbarItem
 } from '@patternfly/react-core'
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
+import { useSearchInputEffect } from 'utilities/custom-hooks'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import type { Record } from 'utilities/patternfly-utils'
@@ -50,14 +51,6 @@ const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, 
     }
   }, [isOpen])
 
-  useEffect(() => {
-    if (searchInputRef.current) {
-      searchInputRef.current.addEventListener('input', ({ inputType }) => {
-        if (!inputType) search()
-      })
-    }
-  }, [searchInputRef.current])
-
   const handleOnSearch = () => {
     if (searchInputRef.current) {
       search(searchInputRef.current.value)
@@ -68,6 +61,8 @@ const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, 
     setFilteredItems(items.filter(i => i.name.includes(term)))
     setPage(1)
   }
+
+  useSearchInputEffect(searchInputRef, search)
 
   const handleOnSelect = (_e, _i, rowId: number) => {
     setSelectedId(pageItems[rowId].id)
