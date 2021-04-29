@@ -10,10 +10,17 @@ module BackendApiLogic
       other_routing_rules = other_routing_policies.flat_map { |policy| policy['configuration']['rules'] }
 
       routing_policy = Builder.new(service).to_h
-
+      
       return other_policies if routing_policy['configuration']['rules'].concat(other_routing_rules).empty?
 
-      [routing_policy, *other_policies].compact
+      index_apicast = other_policies.index { |policy| policy['name'] == 'apicast'}
+      result = []
+      if index_apicast > 0
+        result.push(*other_policies[0..index_apicast - 1])
+      end
+      result << routing_policy
+      result.push(*other_policies[index_apicast..-1])
+      return result
     end
 
     def with_subpaths?
