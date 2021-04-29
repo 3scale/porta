@@ -524,7 +524,6 @@ class Account < ApplicationRecord
     xml.to_xml
   end
 
-
   def generate_s3_prefix
     self.s3_prefix = if org_name
                        org_name.parameterize
