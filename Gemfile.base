@@ -207,7 +207,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'email_spec', require: false
   gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
-  gem 'webmock', '~> 2.3.2'
+  gem 'webmock', '~> 3.8.0'
   gem 'launchy'
   gem 'mechanize'
 
