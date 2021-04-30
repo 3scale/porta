@@ -4,7 +4,7 @@ Given /^a service "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
   provider.services.create! :name => name, :mandatory_app_key => false
 end
 
-Given /^(service "[^"]*") becomes unnaccessible?$/ do |service|
+Given /^(service "[^"]*") becomes inaccessible?$/ do |service|
   service.update!(state: 'deleted')
 end
 
