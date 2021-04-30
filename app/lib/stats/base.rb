@@ -4,7 +4,6 @@ require_dependency 'stats'
 module Stats
   class Base
     include ::Stats::KeyHelpers
-    include ::ThreeScale::MethodTracing
 
     # TODO: Replace the zone default parameter by Time.zone once the
     # application's default zone is set to UTC
@@ -93,8 +92,6 @@ module Stats
 
       metric
     end
-    add_three_scale_method_tracer :extract_metric
-
 
     def extract_since(options)
       timezone = options[:timezone]

@@ -8,7 +8,6 @@ class Plan < ApplicationRecord
   self.default_sort_column = :position
   self.default_sort_direction = :asc
 
-  include ::ThreeScale::MethodTracing
 
   include SystemName
   include Logic::MetricVisibility::Plan

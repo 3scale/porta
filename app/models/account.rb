@@ -9,7 +9,6 @@ class Account < ApplicationRecord
   # it has to be THE FIRST callback after create, so associations get the tenant id
   after_create :update_tenant_id, if: :provider?, prepend: true
 
-  include ::ThreeScale::MethodTracing
 
   include Fields::Fields
   required_fields_are :org_name
@@ -524,8 +523,6 @@ class Account < ApplicationRecord
 
     xml.to_xml
   end
-
-  add_three_scale_method_tracer :to_xml, 'ActiveRecord/Account/to_xml'
 
   def generate_s3_prefix
     self.s3_prefix = if org_name

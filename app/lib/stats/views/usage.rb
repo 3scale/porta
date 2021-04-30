@@ -2,7 +2,6 @@
 module Stats
   module Views
     module Usage
-      include ::ThreeScale::MethodTracing
 
       GRANULARITIES = {:year  => :month,
                        :month => :day,
@@ -57,8 +56,6 @@ module Stats
 
         result
       end
-
-      add_three_scale_method_tracer :usage
 
       def usage_progress(options)
         range, granularity, metric = extract_range_and_granularity_and_metric(options)

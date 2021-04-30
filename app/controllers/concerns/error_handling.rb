@@ -88,12 +88,6 @@ module ErrorHandling
                            })
     end
 
-    def notify_newrelic(exception)
-      return unless defined?(NewRelic)
-
-      NewRelic::Agent.notice_error(exception)
-    end
-
     def handle_provider_side(status, exception, title)
       render layout: "error",
              template: "errors/provider/#{status}",

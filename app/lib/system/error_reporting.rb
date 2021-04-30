@@ -10,7 +10,6 @@ module System
       ::Bugsnag.notify(exception) do |report|
         report.add_tab 'parameter', {parameters: parameters}
       end
-      ::NewRelic::Agent.notice_error(exception) if defined?(::NewRelic)
     end
 
     class LogFormatter < ActiveSupport::Logger::SimpleFormatter

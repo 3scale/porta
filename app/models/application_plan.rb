@@ -1,6 +1,5 @@
 
 class ApplicationPlan < Plan
-  include ::ThreeScale::MethodTracing
 
   #TODO: is the dependent :destroy working?
   has_many :cinstances, :foreign_key => :plan_id, :dependent => :destroy, :inverse_of => :plan
@@ -51,7 +50,6 @@ class ApplicationPlan < Plan
     xml_builder(options, attrs, extra_nodes).to_xml
   end
 
-  add_three_scale_method_tracer :to_xml, 'ActiveRecord/ApplicationPlan/to_xml'
 
   protected
 

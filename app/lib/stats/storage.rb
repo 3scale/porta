@@ -1,8 +1,8 @@
+# frozen_string_literal: true
 
 module Stats
   class Storage < Backend::Storage
     include ::Stats::KeyHelpers
-    include ::ThreeScale::MethodTracing
     include ActiveSupport::Benchmarkable
     delegate :logger, to: :Rails
 
@@ -72,7 +72,6 @@ module Stats
         ActiveSupport::OrderedHash.new
       end
     end
-    add_three_scale_method_tracer :ordered_hash
 
     protected
 
@@ -209,7 +208,6 @@ module Stats
         end
       end
     end
-    add_three_scale_method_tracer :compute_timeshift_deltas
 
     # Gets keys in given range for :granularity supplied in options
     #
@@ -229,8 +227,6 @@ module Stats
         end
       end
     end
-
-    add_three_scale_method_tracer :keys_for_range
 
     def granularity_to_seconds(g)
       (g.is_a?(Symbol) || g.is_a?(String)) ? 1.public_send(g) : g
