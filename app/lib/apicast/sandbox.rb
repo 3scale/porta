@@ -2,7 +2,6 @@ require 'httpclient/include_client'
 
 class Apicast::Sandbox
   extend ::HTTPClient::IncludeClient
-  include ::ThreeScale::MethodTracing
 
   def self.config
     ThreeScale.config.sandbox_proxy
@@ -47,7 +46,6 @@ class Apicast::Sandbox
     failures.none? && finished.map(&:status).all?(&successful)
   end
 
-  add_three_scale_method_tracer :deploy, 'External/Proxy::Sandbox#deploy'
 
   protected
 

@@ -4,7 +4,6 @@ module Stats
     module Top
       private
 
-      include ::ThreeScale::MethodTracing
 
       def top(name, options)
         options = options.symbolize_keys
@@ -32,7 +31,6 @@ module Stats
         end
       end
 
-      add_three_scale_method_tracer :top
     end
   end
 end
