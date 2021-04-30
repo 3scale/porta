@@ -10,7 +10,7 @@ const BraintreeUserFields = () => {
         <label
           htmlFor="customer_first_name"
           className="col-md-4 control-label"
-        >First name *
+        >First name
         </label>
         <input
           id="customer_first_name"
@@ -27,7 +27,7 @@ const BraintreeUserFields = () => {
         <label
           htmlFor="customer_last_name"
           className="col-md-4 control-label"
-        >Last name *
+        >Last name
         </label>
         <input
           id="customer_last_name"

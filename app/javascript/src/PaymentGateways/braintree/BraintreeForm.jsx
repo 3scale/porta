@@ -32,7 +32,7 @@ const BraintreeForm = ({
 }: BraintreeFormProps): Node => {
   const formRef = useRef<HTMLFormElement | null>(null)
   const [hostedFieldsInstance, setHostedFieldsInstance] = useState(null)
-  const [braintreeNonceValue, setBraintreeNonceValue] = useState('test-mode-placeholder')
+  const [braintreeNonceValue, setBraintreeNonceValue] = useState('')
   const [billingAddressData, setBillingAddressData] = useState(billingAddress)
   const [isCardValid, setIsCardValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
@@ -49,7 +49,7 @@ const BraintreeForm = ({
   }, [])
 
   useEffect(() => {
-    if (braintreeNonceValue !== 'test-mode-placeholder' && formRef.current) {
+    if (braintreeNonceValue && formRef.current) {
       formRef.current.submit()
     }
   }, [braintreeNonceValue])

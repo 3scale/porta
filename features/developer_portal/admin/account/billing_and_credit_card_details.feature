@@ -21,7 +21,7 @@ Feature: Billing and Credit card details
     Then I should be at url for the braintree edit credit card details page
 
     When I fill in the braintree credit card form
-    And I submit the braintree form
+    And I press "Save details"
     Then I should see "Credit card details were successfully stored."
 
   @javascript
@@ -33,7 +33,7 @@ Feature: Billing and Credit card details
     And go to the braintree edit credit card details page
     Then I should be at url for the braintree edit credit card details page
 
-    When I fill in the braintree credit card form
     And I fill in "ZIP / Postal Code" with "00000"
-    And I submit the braintree form
+    When I fill in the braintree credit card form
+    And press "Save details"
     Then I should see "Credit card details were successfully stored."
