@@ -68,8 +68,8 @@ module BackendApiLogic
 
 
     test 'routing policy before apicast policy' do
-      policy_1 = { name: 'abc', version: 'builtin', enabled: true, configuration: {} }
-      policy_2 = { name: 'lmn', version: 'builtin', enabled: true, configuration: {} }
+      mock_policy1 = { name: 'abc', version: 'builtin', enabled: true, configuration: {} }
+      mock_policy2 = { name: 'lmn', version: 'builtin', enabled: true, configuration: {} }
       apicast_policy = { name: 'apicast', version: 'builtin', enabled: true, configuration: {} }
       backend_api1 = backend_apis.first
       backend_api2 = backend_apis.last
@@ -77,7 +77,6 @@ module BackendApiLogic
         { url: backend_api2.private_endpoint, owner_id: backend_api2.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '^(/foo/.*|/foo/?)'] }, replace_path: "{{uri | remove_first: '/foo'}}" },
         { url: backend_api1.private_endpoint, owner_id: backend_api1.id, owner_type: 'BackendApi', condition: { operations: [match: :path, op: :matches, value: '^(/.*)'] } }
       ]
-      # apicast_policy = { name: 'apicast', version: 'builtin', configuration: {} }
       injected_policy = {
         name: "routing",
         version: "builtin",
@@ -85,14 +84,14 @@ module BackendApiLogic
         configuration: { rules: injected_rules }
       }
 
-      proxy.stubs(:policies_config).returns([apicast_policy, policy_1, policy_2].as_json)
-      assert_equal [injected_policy, apicast_policy.except(:enabled), policy_1.except(:enabled), policy_2.except(:enabled)].as_json, proxy.policy_chain
+      proxy.stubs(:policies_config).returns([apicast_policy, mock_policy1, mock_policy2].as_json)
+      assert_equal [injected_policy, apicast_policy.except(:enabled), mock_policy1.except(:enabled), mock_policy2.except(:enabled)].as_json, proxy.policy_chain
 
-      proxy.stubs(:policies_config).returns([policy_1, apicast_policy, policy_2].as_json)
-      assert_equal [policy_1.except(:enabled), injected_policy, apicast_policy.except(:enabled), policy_2.except(:enabled)].as_json, proxy.policy_chain
+      proxy.stubs(:policies_config).returns([mock_policy1, apicast_policy, mock_policy2].as_json)
+      assert_equal [mock_policy1.except(:enabled), injected_policy, apicast_policy.except(:enabled), mock_policy2.except(:enabled)].as_json, proxy.policy_chain
 
-      proxy.stubs(:policies_config).returns([policy_1, policy_2, apicast_policy].as_json)
-      assert_equal [policy_1.except(:enabled), policy_2.except(:enabled), injected_policy, apicast_policy.except(:enabled)].as_json, proxy.policy_chain
+      proxy.stubs(:policies_config).returns([mock_policy1, mock_policy2, apicast_policy].as_json)
+      assert_equal [mock_policy1.except(:enabled), mock_policy2.except(:enabled), injected_policy, apicast_policy.except(:enabled)].as_json, proxy.policy_chain
 
     end
 
