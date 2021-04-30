@@ -99,10 +99,10 @@ const BraintreeForm = ({
         .catch(error => console.error(error))
 
       const response3Dsecure = threeDSecureEnabled ? await get3DSecureNonce(payload) : null
-      if (response3Dsecure.error) {
+      if (response3Dsecure && response3Dsecure.error) {
         return handleCardError(response3Dsecure.error)
       }
-      const nonce = threeDSecureEnabled ? response3Dsecure.nonce : payload.nonce
+      const nonce = response3Dsecure ? response3Dsecure.nonce : payload.nonce
       setBraintreeNonceValue(nonce)
       setIsAwaiting(false)
     }
