@@ -15,6 +15,7 @@ const BraintreeCardFields = () => {
             className="form-control col-md-6"
             data-name="customer[credit_card][number]"
           ></div>
+          <div className="col-md-6 col-md-offset-4 inline-hints">Should be a valid credit card number</div>
         </li>
         <li id="customer_credit_card_cvv_input"
           className="string optional form-group">
@@ -27,6 +28,7 @@ const BraintreeCardFields = () => {
             className="form-control col-md-6"
             data-name="customer[credit_card][cvv]"
           ></div>
+          <div className="col-md-6 col-md-offset-4 inline-hints">3 digits security code</div>
         </li>
         <li id="customer_credit_card_expiration_date_input"
           className="string optional form-group">
@@ -39,6 +41,7 @@ const BraintreeCardFields = () => {
             className="form-control col-md-6"
             data-name="customer[credit_card][expiration_date]"
           ></div>
+          <div className="col-md-6 col-md-offset-4 inline-hints">Date in format MM/YY. Example: 12/29</div>
         </li>
       </ul>
     </>

@@ -1,0 +1,13 @@
+.braintree-hosted-fields-invalid {
+  border-color: #E53A40;
+}
+
+.inline-hints {
+  display: block;
+  color: #8b8d8f;
+  font-size: 12px;
+}
+
+.braintree-hosted-fields-valid + .inline-hints {
+  display: none;
+}
