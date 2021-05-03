@@ -51,11 +51,11 @@ const hostedFieldOptions = {
   fields: {
     number: {
       selector: '#customer_credit_card_number',
-      placeholder: '4111 1111 1111 1111'
+      placeholder: 'Enter Credit Card number'
     },
     cvv: {
       selector: '#customer_credit_card_cvv',
-      placeholder: '123'
+      placeholder: 'Enter a valid CVV number'
     },
     expirationDate: {
       selector: '#customer_credit_card_expiration_date',
@@ -70,7 +70,7 @@ const createBraintreeClient = (client, clientToken) => {
     .catch(error => console.error(error))
 }
 
-const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOptions, setIsCardValid) => {
+const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOptions, setIsCardValid, setCardError) => {
   return hostedFields.create({
     client: clientInstance,
     ...hostedFieldOptions
@@ -81,6 +81,7 @@ const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOpt
         const cardValid = Object.keys(state.fields).every((key) => state.fields[key].isValid)
         setIsCardValid(cardValid)
       })
+      hostedFieldsInstance.on('focus', () => setCardError(null))
       return hostedFieldsInstance
     })
     .catch(error => console.error(error))
