@@ -4,6 +4,10 @@ Given /^a service "([^"]*)" of (provider "[^"]*")$/ do |name, provider|
   provider.services.create! :name => name, :mandatory_app_key => false
 end
 
+Given /^a service "([^"]*)"$/ do |name|
+  @provider.services.create!(name: name, mandatory_app_key: false)
+end
+
 Given /^(service "[^"]*") becomes inaccessible?$/ do |service|
   service.update!(state: 'deleted')
 end
