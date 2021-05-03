@@ -35,7 +35,7 @@ class ServiceDecorator < ApplicationDecorator
     ApplicationPlanDecorator.decorate_collection(application_plans.stock.published, context: { service: self })
   end
 
-  def api_selector_api_link
+  def service_path
     if h.can?(:manage, :plans)
       h.admin_service_path(object)
     elsif h.can?(:manage, :monitoring)
@@ -50,11 +50,11 @@ class ServiceDecorator < ApplicationDecorator
       id: id,
       name: name,
       systemName: system_name,
-      path: link # Verify that api_selector_api_link is the right call
+      path: service_path
     }
   end
 
-  alias link api_selector_api_link
+  alias link service_path
 
   def new_application_data
     {
