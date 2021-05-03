@@ -1,23 +1,5 @@
 // @flow
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
-import 'core-js/es6/promise'
-
-import * as React from 'react'
-
-function CSRFToken ({win = window}: {win?: Window}): React.Node {
-  const getMetaContent = (metaName: string) => {
-    const meta = win.document.querySelector(`head > meta[name~=${metaName}][content]`)
-    return meta ? meta.content : undefined
-  }
-
-  return (
-    <input
-      name={getMetaContent('csrf-param')}
-      value={getMetaContent('csrf-token')}
-      type='hidden'
-    />
-  )
-}
 
 const fetchData = <T>(url: string): Promise<T> => {
   return fetchPolyfill(url)
@@ -30,7 +12,4 @@ const fetchData = <T>(url: string): Promise<T> => {
     })
 }
 
-export {
-  CSRFToken,
-  fetchData
-}
+export { fetchData }
