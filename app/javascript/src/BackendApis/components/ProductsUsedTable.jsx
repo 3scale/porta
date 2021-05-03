@@ -68,6 +68,7 @@ const ProductsUsedTable = ({ products }: Props): React.Node => {
         aria-label="search for an item"
         ref={searchInputRef}
         onKeyDown={handleOnTextInputKeyDown}
+        placeholder="Find a Product"
       />
       <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={handleOnSearch} data-testid="search">
         <SearchIcon />
