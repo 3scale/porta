@@ -3,6 +3,8 @@
 import { AddBackendFormWrapper } from 'BackendApis'
 import { safeFromJsonString } from 'utilities/json-utils'
 
+import type { Backend } from 'Types'
+
 const containerId = 'add-backend-form'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,10 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { backends, url, backendsPath } = container.dataset
+  const { dataset } = container
+  const { url, backendsPath, backendApiId } = dataset
+
+  const backends = safeFromJsonString<Backend[]>(dataset.backends) || []
+  const backend = backends.find(b => String(b.id) === backendApiId) || null
+  const inlineErrors = safeFromJsonString(dataset.inlineErrors) || null
 
   AddBackendFormWrapper({
-    backends: safeFromJsonString(backends) || [],
+    backends,
+    backend,
+    inlineErrors,
     url,
     backendsPath
   }, containerId)

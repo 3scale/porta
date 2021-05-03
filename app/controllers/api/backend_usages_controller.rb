@@ -30,6 +30,7 @@ class Api::BackendUsagesController < Api::BaseController
       redirect_to admin_service_backend_usages_path(@service)
     else
       flash[:error] = "Couldn't add Backend to Product"
+      @inline_errors = @backend_api_config.errors.as_json
       render 'new'
     end
   end
@@ -74,6 +75,10 @@ class Api::BackendUsagesController < Api::BaseController
   end
 
   def ensure_same_account_backend_api
-    current_account.backend_apis.find(backend_api_config_params[:backend_api_id])
+    return if current_account.backend_apis.find_by(id: backend_api_config_params[:backend_api_id])
+
+    flash[:error] = "Couldn't add Backend to Product"
+    @inline_errors = { backend_api_id: ['Not a valid backend'] }
+    render 'new'
   end
 end
