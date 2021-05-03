@@ -42,7 +42,7 @@ const BraintreeForm = ({
 
   useEffect(() => {
     const getHostedFieldsInstance = async () => {
-      const HFInstance = await createHostedFieldsInstance(hostedFields, braintreeClient, hostedFieldOptions, setIsCardValid)
+      const HFInstance = await createHostedFieldsInstance(hostedFields, braintreeClient, hostedFieldOptions, setIsCardValid, setCardError)
       setHostedFieldsInstance(HFInstance)
     }
     getHostedFieldsInstance()
@@ -88,7 +88,6 @@ const BraintreeForm = ({
     setCardError(`Credit card errors found: ${error}. Please correct your CC data.`)
     clearHostedFields()
     setIsAwaiting(false)
-    setTimeout(() => setCardError(null), 8000)
   }
 
   const onSubmit = async (event) => {
@@ -120,6 +119,7 @@ const BraintreeForm = ({
       <input name="utf8" type="hidden" value="✓"/>
       <CSRFToken/>
       <fieldset>
+        <p className="required-fields">All fields marked with * are required</p>
         <BraintreeUserFields/>
       </fieldset>
       <fieldset>

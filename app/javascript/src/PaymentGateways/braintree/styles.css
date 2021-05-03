@@ -3,11 +3,16 @@
 }
 
 .inline-hints {
-  display: block;
+  display: none;
   color: #8b8d8f;
   font-size: 12px;
 }
 
-.braintree-hosted-fields-valid + .inline-hints {
-  display: none;
+.braintree-hosted-fields-invalid + .inline-hints {
+  display: block;
+}
+
+.required-fields {
+  font-style: italic;
+  margin: 2rem 0;
 }

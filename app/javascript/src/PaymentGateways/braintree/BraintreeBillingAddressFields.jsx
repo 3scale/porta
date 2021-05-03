@@ -11,6 +11,11 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
     })
   }
 
+  const onSelectCountry = (e) => {
+    setSelectValue(e.target.value)
+    onChangeBillingAddressData(e.target.options[e.target.selectedIndex].text, 'country')
+  }
+
   return (
     <>
       <legend>Biling address</legend>
@@ -22,7 +27,7 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           <label
             htmlFor="customer_credit_card_billing_address_company"
             className="col-md-4 control-label"
-          >Company</label>
+          >Company *</label>
           <input
             type="text"
             className="form-control col-md-6"
@@ -41,7 +46,7 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           <label
             htmlFor="customer_credit_card_billing_address_street_address"
             className="col-md-4 control-label"
-          >Street address</label>
+          >Street address *</label>
           <input
             type="text"
             className="form-control col-md-6"
@@ -60,7 +65,7 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           <label
             htmlFor="customer_credit_card_billing_address_postal_code"
             className="col-md-4 control-label"
-          >ZIP / Postal Code</label>
+          >ZIP / Postal Code *</label>
           <input
             type="text"
             className="form-control col-md-6"
@@ -79,7 +84,7 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           <label
             htmlFor="customer_credit_card_billing_address_locality"
             className="col-md-4 control-label"
-          >City</label>
+          >City *</label>
           <input
             type="text"
             className="form-control col-md-6"
@@ -120,7 +125,7 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           <label
             htmlFor="customer_credit_card_billing_address_country_name"
             className="col-md-4 control-label"
-          >Country</label>
+          >Country *</label>
           <select
             id="customer_credit_card_billing_address_country_name"
             className="form-control col-md-6"
@@ -128,7 +133,7 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
             style={ inputStyle }
             name="customer[credit_card][billing_address][country_name]"
             value={selectValue}
-            onChange={(e) => setSelectValue(e.target.value)}
+            onChange={onSelectCountry}
           >
             <option value=""></option>
             { countriesList.map((country, i) => (
