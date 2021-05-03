@@ -5,16 +5,18 @@ import * as React from 'react'
 import { FormGroup, TextInput } from '@patternfly/react-core'
 
 type Props = {
+  error?: string,
   path: string,
   setPath: string => void
 }
 
-const PathInput = ({ path, setPath }: Props): React.Node => (
+const PathInput = ({ error, path, setPath }: Props): React.Node => (
   <FormGroup
-    isRequired
     label="Path"
     validated="default"
     fieldId="backend_api_config_path"
+    isValid={!error}
+    helperTextInvalid={error}
   >
     <TextInput
       type="text"
@@ -22,6 +24,8 @@ const PathInput = ({ path, setPath }: Props): React.Node => (
       name="backend_api_config[path]"
       value={path}
       onChange={setPath}
+      placeholder="/"
+      isValid={!error}
     />
   </FormGroup>
 )

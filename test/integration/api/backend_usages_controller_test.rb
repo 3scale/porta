@@ -57,7 +57,8 @@ class Api::BackendUsagesControllerTest < ActionDispatch::IntegrationTest
     assert_no_change of: -> { service.backend_api_configs.count } do
       backend_api_config_params = { backend_api_id: backend_api.id, path: 'foo' }
       post admin_service_backend_usages_path(service), params: { backend_api_config: backend_api_config_params }
-      assert_response :not_found
+      assert_equal "Couldn't add Backend to Product", flash[:error]
+      assert_response :ok
     end
   end
 

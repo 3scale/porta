@@ -21,10 +21,12 @@ type Props<T: Record> = {
   items: T[],
   onSelect: (T | null) => void,
   isDisabled?: boolean,
+  isValid?: boolean,
   label: string,
   id: string,
   name?: string,
   helperText?: React.Node,
+  helperTextInvalid?: string,
   placeholderText?: string,
   maxItems?: number,
   header?: string,
@@ -42,10 +44,12 @@ const SelectWithModal = <T: Record>({
   items,
   onSelect,
   isDisabled,
+  isValid,
   label,
   id,
   name,
   helperText,
+  helperTextInvalid,
   placeholderText,
   maxItems = MAX_ITEMS,
   header = HEADER,
@@ -100,6 +104,8 @@ const SelectWithModal = <T: Record>({
         label={label}
         fieldId={id}
         helperText={helperText}
+        helperTextInvalid={helperTextInvalid}
+        isValid={isValid}
       >
         {item && <input type="hidden" name={name} value={item.id} />}
         <Select
