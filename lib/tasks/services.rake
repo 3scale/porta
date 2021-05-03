@@ -24,4 +24,9 @@ namespace :services do
     end
     service.reload.mark_as_deleted!
   end
+
+  desc 'Create default proxy of a service'
+  task :create_default_proxy => :environment do
+    CreateDefaultProxyWorker::BatchEnqueueWorker.perform_later
+  end
 end
