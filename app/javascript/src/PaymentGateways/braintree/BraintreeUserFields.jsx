@@ -1,4 +1,5 @@
 import React from 'react'
+import { Label } from 'PaymentGateways'
 
 const BraintreeUserFields = () => {
   return (
@@ -7,11 +8,11 @@ const BraintreeUserFields = () => {
         id="customer_first_name_input"
         className="string optional form-group"
       >
-        <label
+        <Label
           htmlFor="customer_first_name"
-          className="col-md-4 control-label"
-        >First name *
-        </label>
+          label="First name"
+          required
+        />
         <input
           id="customer_first_name"
           className="form-control col-md-6"
@@ -24,11 +25,11 @@ const BraintreeUserFields = () => {
         id="customer_last_name_input"
         className="string optional form-group"
       >
-        <label
+        <Label
           htmlFor="customer_last_name"
-          className="col-md-4 control-label"
-        >Last name *
-        </label>
+          label="Last name"
+          required
+        />
         <input
           id="customer_last_name"
           className="form-control col-md-6"
@@ -41,9 +42,12 @@ const BraintreeUserFields = () => {
         id="customer_phone_input"
         className="string optional form-group"
       >
-        <label
-          className="col-md-4 control-label">Phone</label>
+        <Label
+          htmlFor="customer_phone"
+          label="Phone"
+        />
         <input
+          id="customer_phone"
           className="form-control col-md-6"
           type="text"
           name="Phone"

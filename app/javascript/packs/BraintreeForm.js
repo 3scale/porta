@@ -5,19 +5,31 @@ import {
 import client from 'braintree-web/client'
 import { safeFromJsonString } from 'utilities/json-utils'
 
+const CONTAINER_ID = 'braintree-form-wrapper'
+
 document.addEventListener('DOMContentLoaded', async () => {
-  const containerId = 'braintree-form-wrapper'
-  const containerDataset = document.getElementById(containerId).dataset
-  const clientToken = containerDataset.clientToken
-  const braintreeClient = await createBraintreeClient(client, clientToken)
-  const props = {
-    braintreeClient,
-    billingAddress: safeFromJsonString(containerDataset.billingAddress),
-    threeDSecureEnabled: containerDataset.threeDSecureEnabled === 'true',
-    formActionPath: containerDataset.formActionPath,
-    countriesList: containerDataset.countriesList,
-    selectedCountryCode: containerDataset.selectedCountryCode
+  const container = document.getElementById(CONTAINER_ID)
+  if (!container) {
+    return
   }
 
-  BraintreeFormWrapper(props, containerId)
+  const { clientToken, billingAddress, threeDSecureEnabled, formActionPath, countriesList, selectedCountryCode } = container.dataset
+  const billingAddressParsed = safeFromJsonString(billingAddress)
+  for (let key in billingAddressParsed) {
+    if (!billingAddressParsed[key]) {
+      billingAddressParsed[key] = ''
+    }
+  }
+  const braintreeClient = await createBraintreeClient(client, clientToken)
+
+  const props = {
+    braintreeClient,
+    formActionPath,
+    countriesList,
+    selectedCountryCode,
+    billingAddress: billingAddressParsed,
+    threeDSecureEnabled: threeDSecureEnabled === 'true'
+  }
+
+  BraintreeFormWrapper(props, CONTAINER_ID)
 })

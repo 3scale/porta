@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // @flow
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -15,12 +14,12 @@ import {
 } from 'PaymentGateways'
 import hostedFields from 'braintree-web/hosted-fields'
 import threeDSecure from 'braintree-web/three-d-secure'
-import { CSRFToken } from 'utilities/utils'
+import { CSRFToken } from 'utilities/CSRFToken'
 import validate from 'validate.js'
 import './styles.css'
 
 import type { Node } from 'react'
-import type { BraintreeFormProps } from 'PaymentGateways'
+import type { BraintreeFormProps, BillingAddressData } from 'PaymentGateways'
 
 const BraintreeForm = ({
   braintreeClient,
@@ -31,12 +30,13 @@ const BraintreeForm = ({
   selectedCountryCode
 }: BraintreeFormProps): Node => {
   const formRef = useRef<HTMLFormElement | null>(null)
-  const [hostedFieldsInstance, setHostedFieldsInstance] = useState(null)
+  // eslint-disable-next-line flowtype/no-weak-types
+  const [hostedFieldsInstance, setHostedFieldsInstance] = useState<any>(null)
   const [braintreeNonceValue, setBraintreeNonceValue] = useState('')
-  const [billingAddressData, setBillingAddressData] = useState(billingAddress)
+  const [billingAddressData, setBillingAddressData] = useState<BillingAddressData>(billingAddress)
   const [isCardValid, setIsCardValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
-  const [formErrors, setFormErrors] = useState('Form is empty')
+  const [formErrors, setFormErrors] = useState(null)
   const [cardError, setCardError] = useState(null)
   const [isAwaiting, setIsAwaiting] = useState(false)
 
@@ -79,18 +79,18 @@ const BraintreeForm = ({
     hostedFieldsInstance.clear('expirationDate')
   }
 
-  const onFormChange = (event) => {
+  const onFormChange = (event: SyntheticEvent<HTMLFormElement>) => {
     const validationErrors = validate(event.currentTarget, validationConstraints)
     setFormErrors(validationErrors)
   }
 
-  const handleCardError = (error) => {
+  const handleCardError = (error: string) => {
     setCardError(`Credit card errors found: ${error}. Please correct your CC data.`)
     clearHostedFields()
     setIsAwaiting(false)
   }
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: SyntheticEvent<HTMLInputElement>) => {
     event.preventDefault()
     if (hostedFieldsInstance) {
       setIsAwaiting(true)

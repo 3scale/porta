@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Label } from 'PaymentGateways'
 const inputStyle = { width: '50%' }
 
 const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setBillingAddressData, selectedCountryCode }) => {
@@ -24,10 +25,11 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           id="customer_credit_card_billing_address_company_input"
           className="string optional form-group"
         >
-          <label
+          <Label
             htmlFor="customer_credit_card_billing_address_company"
-            className="col-md-4 control-label"
-          >Company *</label>
+            label="Company"
+            required
+          />
           <input
             type="text"
             className="form-control col-md-6"
@@ -43,10 +45,11 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           id="customer_credit_card_billing_address_street_address_input"
           className="string optional form-group"
         >
-          <label
+          <Label
             htmlFor="customer_credit_card_billing_address_street_address"
-            className="col-md-4 control-label"
-          >Street address *</label>
+            label="Street address"
+            required
+          />
           <input
             type="text"
             className="form-control col-md-6"
@@ -62,10 +65,11 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           id="customer_credit_card_billing_address_postal_code_input"
           className="string optional form-group"
         >
-          <label
+          <Label
             htmlFor="customer_credit_card_billing_address_postal_code"
-            className="col-md-4 control-label"
-          >ZIP / Postal Code *</label>
+            label="ZIP / Postal Code"
+            required
+          />
           <input
             type="text"
             className="form-control col-md-6"
@@ -81,10 +85,11 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           id="customer_credit_card_billing_address_locality_input"
           className="string optional form-group"
         >
-          <label
+          <Label
             htmlFor="customer_credit_card_billing_address_locality"
-            className="col-md-4 control-label"
-          >City *</label>
+            label="City"
+            required
+          />
           <input
             type="text"
             className="form-control col-md-6"
@@ -100,10 +105,10 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           id="customer_credit_card_billing_address_region_input"
           className="string optional form-group"
         >
-          <label
+          <Label
             htmlFor="customer_credit_card_billing_address_region"
-            className="col-md-4 control-label"
-          >State/Region</label>
+            label="State/Region"
+          />
           <input
             type="text"
             className="form-control col-md-6"
@@ -122,10 +127,10 @@ const BraintreeBillingAddressFields = ({ countriesList, billingAddressData, setB
           id="customer_credit_card_billing_address_country_name_input"
           className="string optional form-group"
         >
-          <label
+          <Label
             htmlFor="customer_credit_card_billing_address_country_name"
-            className="col-md-4 control-label"
-          >Country *</label>
+            label="Country"
+          />
           <select
             id="customer_credit_card_billing_address_country_name"
             className="form-control col-md-6"

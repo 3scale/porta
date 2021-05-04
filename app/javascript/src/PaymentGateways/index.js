@@ -15,5 +15,6 @@ export {
   createHostedFieldsInstance,
   create3DSecureInstance,
   veryfyCard
-} from 'PaymentGateways/braintree/braintreeCustomerForm'
-export * from 'PaymentGateways/types'
+} from 'PaymentGateways/braintree/braintree'
+export { Label } from 'PaymentGateways/braintree/components/Label'
+export * from 'PaymentGateways/braintree/types'
