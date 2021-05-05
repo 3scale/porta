@@ -39,12 +39,26 @@ end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field, value, selector|
   with_scope(selector) do
-    fill_in(field, :with => value, visible: true)
+    if page.has_css?('.pf-c-form__label', text: field)
+      input = find('.pf-c-form__label', text: field).sibling('input')
+      input.set value
+    else
+      # DEPRECATED: remove when all forms implement PF4
+      ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
+      fill_in(field, :with => value, visible: true)
+    end
   end
 end
 
 When /^I fill in "(.+?)" with:$/ do |field, text|
-  fill_in(field, :with => text, visible: true)
+  if page.has_css?('.pf-c-form__label', text: field)
+    input = find('.pf-c-form__label', text: field).sibling('input')
+    input.set value
+  else
+    # DEPRECATED: remove when all forms implement PF4
+    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
+    fill_in(field, :with => text, visible: true)
+  end
 end
 
 When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
