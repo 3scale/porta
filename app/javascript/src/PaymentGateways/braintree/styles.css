@@ -3,8 +3,8 @@
 }
 
 .inline-hints {
-  display: none;
   color: #8b8d8f;
+  display: none;
   font-size: 12px;
 }
 
@@ -13,6 +13,6 @@
 }
 
 .required-fields {
-  font-style: italic;
   margin-bottom: 2rem;
+  font-style: italic;
 }

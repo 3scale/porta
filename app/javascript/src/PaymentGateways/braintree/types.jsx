@@ -1,4 +1,7 @@
+/* eslint-disable flowtype/no-weak-types */
 // @flow
+
+import type { Node } from 'react'
 
 export type BillingAddressData = {
   address: string,
@@ -13,11 +16,53 @@ export type BillingAddressData = {
 }
 
 export type BraintreeFormProps = {
-  // eslint-disable-next-line flowtype/no-weak-types
   braintreeClient: any,
   billingAddress: BillingAddressData,
   threeDSecureEnabled: boolean,
   formActionPath: string,
   countriesList: string,
   selectedCountryCode: string
+}
+
+export type BillingAddressProps = {
+  countriesList: Array<string[]>,
+  billingAddressData: BillingAddressData,
+  setBillingAddressData: (obj: BillingAddressData) => void,
+  selectedCountryCode: string
+}
+
+export type BraintreeSubmitFieldsProps = {
+  onSubmitForm: (event: SyntheticEvent<HTMLInputElement>) => Promise<mixed> | void,
+  isFormValid: boolean
+}
+
+export type InputProps = {
+  id: string,
+  required?: boolean,
+  name: string,
+  value: string,
+  onChange?: (event: SyntheticEvent<HTMLInputElement>) => void
+}
+
+export type LabelProps = {
+  htmlFor: string,
+  label: string,
+  required?: boolean
+}
+
+export type ListItemProps = {
+  id: string,
+  children?: Node,
+}
+
+export type HostedFieldsOptions = {
+  styles: {
+    [key: string]: string | {}
+  },
+  fields: {
+    [key: string]: {
+      selector: string,
+      placeholder: string
+    }
+  }
 }

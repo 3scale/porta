@@ -1,3 +1,8 @@
+/* eslint-disable flowtype/no-weak-types */
+// @flow
+
+import type { BillingAddressData, HostedFieldsOptions } from 'PaymentGateways'
+
 const validationConstraints = {
   'customer[first_name]': {
     presence: {
@@ -5,6 +10,11 @@ const validationConstraints = {
     }
   },
   'customer[last_name]': {
+    presence: {
+      message: '^isMandatory'
+    }
+  },
+  'customer[phone]': {
     presence: {
       message: '^isMandatory'
     }
@@ -64,16 +74,22 @@ const hostedFieldOptions = {
   }
 }
 
-const createBraintreeClient = (client, clientToken) => {
+const createBraintreeClient = (client: any, clientToken: string): any => {
   return client.create({ authorization: clientToken })
     .then((clientInstance) => clientInstance)
     .catch(error => console.error(error))
 }
 
-const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOptions, setIsCardValid, setCardError) => {
+const createHostedFieldsInstance = (
+  hostedFields: any,
+  clientInstance: any,
+  hostedFieldOptions: HostedFieldsOptions,
+  setIsCardValid: (cardValid: boolean) => void,
+  setCardError: (err: string | null) => void
+): any => {
   return hostedFields.create({
-    client: clientInstance,
-    ...hostedFieldOptions
+    ...hostedFieldOptions,
+    client: clientInstance
   })
     .then((hostedFieldsInstance) => {
       hostedFieldsInstance.on('validityChange', () => {
@@ -86,7 +102,7 @@ const createHostedFieldsInstance = (hostedFields, clientInstance, hostedFieldOpt
     })
     .catch(error => console.error(error))
 }
-const create3DSecureInstance = async (threeDSecure, clientInstance) => {
+const create3DSecureInstance = async (threeDSecure: any, clientInstance: any): Promise<any> => {
   return await threeDSecure.create({
     version: 2,
     client: clientInstance
@@ -95,7 +111,7 @@ const create3DSecureInstance = async (threeDSecure, clientInstance) => {
     .catch(error => console.error(error))
 }
 
-const veryfyCard = async (threeDSecureInstance, payload, billingAddress) => {
+const veryfyCard = async (threeDSecureInstance: any, payload: any, billingAddress: BillingAddressData): Promise<any> => {
   const threeDSecureParameters = {
     amount: '00.00',
     billingAddress,
