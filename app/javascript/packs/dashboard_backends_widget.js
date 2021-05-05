@@ -1,5 +1,5 @@
 import { BackendsWidgetWrapper } from 'Dashboard/components/BackendsWidget'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 const containerId = 'backends-widget'
 

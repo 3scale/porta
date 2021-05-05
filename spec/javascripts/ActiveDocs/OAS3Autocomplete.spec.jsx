@@ -2,7 +2,7 @@
 
 // $FlowIgnore[cannot-resolve-module] OAS3Autocomplete module not found by Flow since not included in name-mapper.
 import { autocompleteOAS3 } from 'OAS3Autocomplete'
-import * as utils from 'utilities/utils'
+import * as utils from 'utilities/fetchData'
 
 const accountDataUrl = 'foo/bar'
 const serviceEndpoint = 'foo/bar/serviceEndpoint'

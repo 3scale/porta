@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { Select, SelectVariant } from '@patternfly/react-core'
-import { toSelectOptionObject, toSelectOption, SelectOptionObject } from 'utilities/patternfly-utils'
+import { toSelectOptionObject, toSelectOption, SelectOptionObject } from 'utilities'
 import './DefaultPlanSelect.scss'
 import type { Plan } from 'Types'
 

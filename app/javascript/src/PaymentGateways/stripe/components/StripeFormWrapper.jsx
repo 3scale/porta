@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 import { StripeCardForm } from 'PaymentGateways'
 import 'PaymentGateways/stripe/styles/stripe.scss'
 

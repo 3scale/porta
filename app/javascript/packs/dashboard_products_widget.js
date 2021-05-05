@@ -1,5 +1,5 @@
 import { ProductsWidgetWrapper } from 'Dashboard/components/ProductsWidget'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 const containerId = 'products-widget'
 
