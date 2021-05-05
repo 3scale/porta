@@ -3,7 +3,6 @@
 import * as React from 'react'
 
 import { Card } from '@patternfly/react-core'
-// $FlowIgnore[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTable } from 'Plans'
 import * as alert from 'utilities/alert'
 import { post, ajax } from 'utilities/ajax'

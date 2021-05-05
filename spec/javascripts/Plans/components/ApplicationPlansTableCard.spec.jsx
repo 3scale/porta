@@ -4,7 +4,6 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-// $FlowFixMe[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTableCard } from 'Plans'
 
 const fetch = jest.fn()
@@ -16,12 +15,13 @@ const consoleSpy = jest.fn()
 console.error = consoleSpy
 
 const actions = [
-  { title: 'Copy', path: '/copy', method: 'post' },
-  { title: 'Publish', path: '/publish', method: 'post' },
-  { title: 'Hide', path: '/hide', method: 'post' },
-  { title: 'Delete', path: '/delete', method: 'delete' }
+  { title: 'Copy', path: '/copy', method: 'POST' },
+  { title: 'Publish', path: '/publish', method: 'POST' },
+  { title: 'Hide', path: '/hide', method: 'POST' },
+  { title: 'Delete', path: '/delete', method: 'POST' }
 ]
-const plans = [{ id: 0, name: 'Basic Plan', actions }]
+
+const plans = [{ id: 0, name: 'Basic Plan', actions, applications: 0, state: 'state', editPath: '/edit', applicationsPath: '/apps' }]
 const defaultProps = {
   plans,
   count: plans.length,
@@ -99,10 +99,9 @@ it('should be able to delete a plan after user confirmation', async () => {
 })
 
 it('should log an error if an action is unknown', () => {
-  const action = { title: 'Unknown Action', path: '/actions/A', method: 'post' }
-  const plans = [{ id: 0, name: 'Basic Plan', actions: [action] }]
+  const action = { title: 'Unknown Action', path: '/actions/A', method: 'POST' }
 
-  const wrapper = mountWrapper({ plans })
+  const wrapper = mountWrapper({ plans: [{ ...plans[0], id: 0, name: 'Basic Plan', actions: [action] }] })
 
   wrapper.find('.pf-c-dropdown__toggle').simulate('click')
   wrapper.find('button')
