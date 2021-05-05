@@ -1,49 +1,24 @@
+# frozen_string_literal: true
+
 module Buyers::ApplicationsHelper
 
-  def metadata_new_app(buyer, provider)
-
-    "<div id='metadata-form'
-      data-services_contracted='#{ services_contracted(buyer) }'
-      data-service_plan_contracted_for_service='#{ service_plan_contracted_for_service(buyer) }'
-      data-relation_service_and_service_plans='#{ relation_service_and_service_plans(provider) }'
-      data-create_service_plan_path='#{ create_service_plan_path }'
-      data-relation_plans_services= '#{ relation_plans_services(provider) }' >".html_safe
-
+  def new_application_form_metadata(provider, *args)
+    ProviderDecorator.new(provider).new_application_form_data(*args)
   end
 
-  def services_contracted(buyer)
-    buyer.bought_service_contracts.services.pluck(:id).to_json
-  end
-
-  def service_plan_contracted_for_service(buyer)
-    buyer.bought_service_contracts.inject({}) do |hash, service_contract|
-
-      service_plan = service_contract.plan
-      name = service_plan.name
-      name += " (#{service_contract.state})" unless service_contract.live?
-
-      hash[service_plan.service.id] = {id: service_plan.id, name: name}
-      hash
-    end.to_json
-  end
-
-  def relation_service_and_service_plans(provider)
-    provider.accessible_services.inject({}) do |hash, service|
-      hash[service.id] = service.service_plans.inject([]) do |array, service_plan|
-        array << {id: service_plan.id, name: service_plan.name, default: service_plan.master?}
+  # TODO: need to refactor this method, there is no default return value
+  def create_application_link_href(account)
+    if !account
+      new_admin_buyers_application_path
+    elsif account.bought_cinstances.size.zero?
+      new_admin_buyers_account_application_path(account)
+    elsif can?(:admin, :multiple_applications)
+      if can?(:see, :multiple_applications)
+        new_admin_buyers_account_application_path(account)
+      else
+        admin_upgrade_notice_path(:multiple_applications)
       end
-      hash
-    end.to_json
-  end
-
-  def relation_plans_services(provider)
-    provider.application_plans.includes(:service).each_with_object({}) do |application_plan, hash|
-      hash[application_plan.id] = application_plan.service.id
-    end.to_json
-  end
-
-  def create_service_plan_path
-    admin_service_service_plans_path ':service_id'
+    end
   end
 
   def last_traffic(cinstance)

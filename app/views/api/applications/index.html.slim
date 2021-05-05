@@ -1,2 +1,4 @@
-- content_for :sublayout_title, 'Applications'
-= render '/buyers/applications/listing'
+h1 Applications
+= pf_button_in_title 'Create Application', new_admin_service_application_path(@service)
+
+= render 'shared/applications/listing'
