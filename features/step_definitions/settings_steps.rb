@@ -52,13 +52,3 @@ Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
     assert input.readonly?
   end
 end
-
-Then(/^I should see button "([^"]*)" (enabled|disabled)$/) do |field, enabled|
-  button = find('button', text: field)
-
-  if enabled == 'enabled'
-    assert_not button['disabled']
-  else
-    assert button['disabled']
-  end
-end

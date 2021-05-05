@@ -88,9 +88,8 @@ Then /^I should not see link "([^"]*)" within "([^"]*)"$/ do |label, selector|
   end
 end
 
-Then /^I should see button "([^\"]*)"$/ do |label|
-  assert has_button?(label)
-  assert has_button?(label)
+Then(/^I should see button "([^"]*)"( disabled)?$/) do |label, disabled|
+  assert find_button(label, disabled: disabled.present?)
 end
 
 Then /^I should not see button "([^\"]*)"$/ do |label|
