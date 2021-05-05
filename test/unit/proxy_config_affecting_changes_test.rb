@@ -66,7 +66,7 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
       define_proxy_config_affecting_attributes :settings
       self.table_name = 'gateway_configurations'
 
-      store :settings, accessors: [:jwt_claim_with_client_id, :jwt_claim_with_client_id_type], coder: JSON
+      store :settings, accessors: %i[jwt_claim_with_client_id jwt_claim_with_client_id_type], coder: JSON
     end
 
     test 'tracks proxy config affecting changes on attribute write' do
