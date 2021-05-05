@@ -13,7 +13,7 @@ import {
 } from '@patternfly/react-core'
 import { CubeIcon } from '@patternfly/react-icons'
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 
 import 'Dashboard/styles/dashboard.scss'
 

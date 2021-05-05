@@ -24,7 +24,7 @@ const data = {
   values: [1, 2, 3]
 }
 
-import * as utils from 'utilities/utils'
+import * as utils from 'utilities/fetchData'
 const fetchMock = jest.spyOn(utils, 'fetchData')
   .mockImplementation(() => Promise.resolve(data))
 

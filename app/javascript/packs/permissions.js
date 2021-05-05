@@ -4,7 +4,7 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { PermissionsForm } from 'Users/components/PermissionsForm'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('user-permissions-form')

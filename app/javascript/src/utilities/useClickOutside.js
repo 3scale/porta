@@ -1,5 +1,8 @@
+// @flow
+
 import { useEffect } from 'react'
 
+// $FlowFixMe[signature-verification-failure]
 const useClickOutside = (ref, cb) => {
   useEffect(() => {
     /**
@@ -11,8 +14,10 @@ const useClickOutside = (ref, cb) => {
       }
     }
 
+    // $FlowFixMe[speculation-ambiguous]
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
+      // $FlowFixMe[speculation-ambiguous]
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [ref])

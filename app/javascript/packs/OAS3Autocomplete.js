@@ -1,6 +1,6 @@
 // @flow
 
-import { fetchData } from 'utilities/utils'
+import { fetchData } from 'utilities'
 import type {
   AccountData,
   Param,

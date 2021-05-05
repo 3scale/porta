@@ -1,5 +1,5 @@
 import {NewServiceFormWrapper} from 'NewService'
-import {safeFromJsonString} from 'utilities/json-utils'
+import {safeFromJsonString} from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   const newServiceWrapper = document.getElementById('new_service_wrapper')

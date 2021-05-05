@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { post } from 'utilities/ajax'
+import { post } from 'utilities'
 import {
   Form,
   FormGroup,

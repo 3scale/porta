@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 import { Form } from 'Settings/components/Form'
 import { SETTINGS_DEFAULT } from 'Settings/defaults'
 import type { SettingsProps } from 'Settings/types'

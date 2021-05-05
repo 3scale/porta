@@ -1,4 +1,4 @@
-import { fromJsonString, safeFromJsonString } from 'utilities/json-utils'
+import { fromJsonString, safeFromJsonString } from 'utilities'
 
 const goodOlJsonString = '{"answer": "42"}'
 const badOlJsonString = "{answer': '42'}"

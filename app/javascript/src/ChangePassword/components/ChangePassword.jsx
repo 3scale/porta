@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 import { LoginPage, Form, ActionGroup, Button } from '@patternfly/react-core'
 import { PasswordField, PasswordConfirmationField, HiddenInputs, FlashMessages } from 'LoginPage'
 import { useFormState } from 'ChangePassword'

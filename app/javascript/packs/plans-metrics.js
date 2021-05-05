@@ -1,4 +1,4 @@
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   function toggleMetricVisibility (id) {

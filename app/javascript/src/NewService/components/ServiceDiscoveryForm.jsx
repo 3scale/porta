@@ -5,7 +5,7 @@ import type {Node} from 'react'
 
 import {FormWrapper, ErrorMessage,
   ServiceDiscoveryListItems} from 'NewService/components/FormElements'
-import {fetchData} from 'utilities/utils'
+import {fetchData} from 'utilities'
 
 import {PROJECTS_PATH} from 'NewService'
 
