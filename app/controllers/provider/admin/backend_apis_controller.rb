@@ -13,11 +13,11 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
     activate_menu :backend_apis
     search = ThreeScale::Search.new(params[:search] || params)
     @backend_apis = current_account.backend_apis
-                                            .order(updated_at: :desc)
-                                            .scope_search(search)
+                                   .order(updated_at: :desc)
+                                   .scope_search(search)
     @page_backend_apis = @backend_apis.paginate(pagination_params)
-                                          .decorate
-                                          .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
+                                      .decorate
+                                      .to_json(only: %i[name updated_at id private_endpoint system_name], methods: %i[links products_count])
   end
 
   def new
@@ -25,12 +25,15 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def create
-    if @backend_api.save
-      redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend created'
-    else
-      flash.now[:error] = 'Backend could not be created'
-      activate_menu :backend_apis
-      render :new
+    respond_to do |format|
+      if @backend_api.save
+        format.json { render json: @backend_api.decorate.add_backend_usage_backends_data, status: :created }
+        format.html { redirect_to provider_admin_backend_api_path(@backend_api), notice: 'Backend created' }
+      else
+        flash.now[:error] = 'Backend could not be created'
+        format.json { render json: @backend_api.errors, status: :unprocessable_entity }
+        format.html { render :new }
+      end
     end
   end
 

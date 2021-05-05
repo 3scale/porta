@@ -3,7 +3,6 @@
 
 module EventStore
   class Repository < Delegator
-    include ::ThreeScale::MethodTracing
 
     attr_reader :client, :facade
 
@@ -169,8 +168,6 @@ module EventStore
     end
 
     delegate :publish_event, to: :facade
-
-    add_three_scale_method_tracer :publish_event, 'EventStore/publish_event'
 
     protected
 

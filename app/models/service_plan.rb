@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ServicePlan < Plan
-  include ::ThreeScale::MethodTracing
 
   #application_plan association has :dependent => :destroy why this one does not?
   has_many :service_contracts, :foreign_key => :plan_id
@@ -31,5 +30,4 @@ class ServicePlan < Plan
     xml_builder(options, attrs, extra_nodes).to_xml
   end
 
-  add_three_scale_method_tracer :to_xml, 'ActiveRecord/ServicePlan/to_xml'
 end

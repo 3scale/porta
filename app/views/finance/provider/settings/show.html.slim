@@ -77,13 +77,22 @@
               = form.inputs "#{link_to payment_gateway.display_name, payment_gateway.homepage_url} Options" do
                 - payment_gateway.fields.each do |name, label|
                   li class="string"
-                    = fields.label name, label
-                    - if enabled
-                      = fields.text_field name,
-                                          value: @account.payment_gateway_options[name]
+                    - if payment_gateway.boolean_field_keys.include?(name)
+                      = fields.label name, for: ['account', 'payment', payment_gateway.type, name].join('_') do
+                        - if enabled
+                          = fields.check_box name, checked: @account.payment_gateway_options[name].present?, id: ['account', 'payment', payment_gateway.type, name].join('_')
+                        - else
+                          = fields.check_box name, checked: false, disabled: true, id: ['account', 'payment', payment_gateway.type, name].join('_')
+
+                        = label
+                      p.inline-hints Make sure your Braintree account has 3D Secure enabled before you enable it here as otherwise payments initiated from the developer portal will fail.
+
                     - else
-                      = fields.text_field name,
-                                          value: '', disabled: true
+                      = fields.label name, label
+                      - if enabled
+                        = fields.text_field name, value: @account.payment_gateway_options[name]
+                      - else
+                        = fields.text_field name, value: '', disabled: true
 
       = form.buttons do
         = form.button 'Save changes', button_html: { class: 'pf-c-button pf-m-primary' }

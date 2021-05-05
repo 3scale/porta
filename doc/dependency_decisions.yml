@@ -66,12 +66,6 @@
     :versions: []
     :when: 2016-11-23 12:31:29.289170000 Z
 - - :approve
-  - sidekiq-pro
-  - :who: 
-    :why: 
-    :versions: []
-    :when: 2016-11-23 13:43:07.881188000 Z
-- - :approve
   - 3scale_core
   - :who: 
     :why: 
@@ -292,19 +286,7 @@
     :versions: []
     :when: 2017-02-20 18:32:50.064445000 Z
 - - :unapprove
-  - newrelic-redis
-  - :who: 
-    :why: 
-    :versions: []
-    :when: 2017-02-27 17:39:13.158889000 Z
-- - :unapprove
   - rpm_contrib
-  - :who: 
-    :why: 
-    :versions: []
-    :when: 2017-02-27 17:39:13.158889000 Z
-- - :unapprove
-  - newrelic_rpm
   - :who: 
     :why: 
     :versions: []

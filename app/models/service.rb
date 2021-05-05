@@ -523,6 +523,10 @@ class Service < ApplicationRecord
     DeploymentOption.plugins.include?(deployment_option)
   end
 
+  def create_default_proxy
+    create_proxy! unless proxy
+  end
+
   private
 
   def archive_as_deleted
@@ -541,10 +545,6 @@ class Service < ApplicationRecord
 
   def destroyable?
     destroyed_by_association || !default_or_last?
-  end
-
-  def create_default_proxy
-    create_proxy! unless proxy
   end
 
   def create_default_service_plan

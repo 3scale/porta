@@ -35,6 +35,8 @@ export type Product = {
 export type Backend = {
   id: number,
   name: string,
+  systemName: string,
+  description?: string,
   privateEndpoint: string
 }
 
@@ -43,4 +45,16 @@ export type Metric = {
   name: string,
   systemName: string,
   updatedAt: string
+}
+
+export type FieldDefinition = {
+  hidden: boolean,
+  required: boolean,
+  label: string,
+  name: string,
+  id: string,
+  choices?: string[],
+  hint?: string,
+  readOnly: boolean,
+  type: 'extra' | 'internal' | 'builtin'
 }

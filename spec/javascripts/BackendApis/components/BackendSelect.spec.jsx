@@ -5,18 +5,20 @@ import { mount } from 'enzyme'
 
 import { BackendSelect } from 'BackendApis'
 
+const onCreateBackendSpy = jest.fn()
 const onShowAllSpy = jest.fn()
 const onSelectSpy = jest.fn()
 
 const newBackendPath = '/backends/new'
 const backends = [
-  { id: 0, name: 'API A', privateEndpoint: 'a.com' },
-  { id: 1, name: 'API B', privateEndpoint: 'b.com' }
+  { id: 0, name: 'API A', privateEndpoint: 'a.com', systemName: 'API_A' },
+  { id: 1, name: 'API B', privateEndpoint: 'b.com', systemName: 'API_B' }
 ]
 const defaultProps = {
   newBackendPath,
   backend: null,
   backends,
+  onCreateNewBackend: onCreateBackendSpy,
   onShowAll: onShowAllSpy,
   onSelect: onSelectSpy
 }

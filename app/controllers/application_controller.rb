@@ -12,8 +12,6 @@ class ApplicationController < ActionController::Base
 
   _helpers.module_eval { prepend DecoratorAdditions }
 
-  before_action :set_newrelic_custom_params
-
   protect_from_forgery with: :reset_session # See ActionController::RequestForgeryProtection for details
 
   # Disable CSRF protection for non xml requests.
@@ -119,18 +117,6 @@ class ApplicationController < ActionController::Base
 
   def enable_analytics
     @_analytics_enabled = true
-  end
-
-  def set_newrelic_custom_params
-    if defined? ::NewRelic
-      ::NewRelic::Agent.add_custom_attributes(:host => request.host,
-                                              :user_agent => request.user_agent )
-
-      if (user = current_user) && (account = current_account)
-        ::NewRelic::Agent.add_custom_attributes(user_id: user.id, user: user.email,
-                                                account: account.org_name, account_id: account.id)
-      end
-    end
   end
 
   def set_timezone

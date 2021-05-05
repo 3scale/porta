@@ -1,17 +1,17 @@
 Then /^I should not see any plans$/ do
-  within plans do
+  within plans_table do
     page.should have_css('tbody tr', size: 0)
   end
 end
 
 Then /^I should see a (published|hidden) plan "([^"]*)"$/ do |state, name|
-  within plans do
+  within plans_table do
     assert has_table_row_with_cells?(name, state)
   end
 end
 
 Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
-  within plans do
+  within plans_table do
     method = negate ? :have_no_css : :have_css
     page.should send(method, 'td', text: name)
   end
@@ -23,7 +23,8 @@ end
 
 When /^I select "(.*?)" as default plan$/ do | plan |
   # if React default plan select
-  if (select = find(:css, '#default_plan_card .pf-c-select'))
+  if page.has_css?('#default_plan_card .pf-c-select')
+    select = find(:css, '#default_plan_card .pf-c-select')
     select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
     select.find('.pf-c-select__menu-item', text: plan).click
   else
@@ -32,14 +33,16 @@ When /^I select "(.*?)" as default plan$/ do | plan |
 end
 
 Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
-  within(default_plan) do
+  within default_plan_select do
     page.should_not have_content(plan_name)
   end
 end
 
 Then /^I should see "(.*?)" in the default plans list$/ do | plan_name |
   # if React default plan select
-  if (select = find(:css, '#default_plan_card .pf-c-select'))
+
+  if page.has_css?('#default_plan_card .pf-c-select')
+    select = find(:css, '#default_plan_card .pf-c-select')
     select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
     select.should have_content(plan_name)
   else
@@ -49,7 +52,7 @@ Then /^I should see "(.*?)" in the default plans list$/ do | plan_name |
   end
 end
 
-def plans
+def plans_table
   if page.has_css?('#plans_table .pf-c-table')
     find('#plans_table .pf-c-table')
   else
@@ -58,7 +61,7 @@ def plans
   end
 end
 
-def default_plan
+def default_plan_select
   find(:css, "select#default_plan")
 end
 

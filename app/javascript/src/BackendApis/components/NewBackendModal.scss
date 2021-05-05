@@ -1,0 +1,25 @@
+// HACK: this is to prevent app/assets/javascripts/ajax_events.js from adding a spinner.
+// ajax_events and jquery-ujs should be replaced with rails-ujs used directly inside React components
+#ajax-in-progress {
+  display: none;
+}
+
+.pf-c-modal-box {
+  .pf-c-title.with-spinner {
+    display: inline;
+    margin-right: 6px;
+  }
+
+  form#new_backend_api_config {
+    max-width: 80%;
+
+    .pf-c-form__group {
+      text-align: left;
+    }
+
+    .pf-c-form__actions {
+      // HACK: since the buttons belongs to the form and not the modal, the PF4 css breaks a bit.
+      margin-bottom: -6px;
+    }
+  }
+}

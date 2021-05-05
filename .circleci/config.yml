@@ -224,7 +224,9 @@ commands: # reusable commands with parameters
       - run:
           name: Rspec tests
           command: |
-            bundle exec rspec --format progress $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            TESTS="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+            echo "bundle exec rspec --format progress ${TESTS}"
+            bundle exec rspec --format progress ${TESTS}
       - upload-artifacts
 
   cucumber-tests:
@@ -242,8 +244,9 @@ commands: # reusable commands with parameters
       - run:
           name: Run cucumber tests
           command: |
-            TEST=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
-            bundle exec cucumber --profile ci ${TEST}
+            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            echo "bundle exec cucumber --profile ci ${TESTS}"
+            bundle exec cucumber --profile ci ${TESTS}
       - *enable-internet-access
       - upload-artifacts
       - store_artifacts:
@@ -266,8 +269,9 @@ commands: # reusable commands with parameters
           name: Run Rails tests
           command: |
             taskname=$(echo $CIRCLE_JOB | sed -e 's/-\(postgres\|oracle\|[0-9]\).*//')
-            TEST=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
-            bundle exec rake test:run TEST="$TEST" TESTOPTS=--verbose --verbose --trace
+            TESTS=$(bundle exec rake "test:files:${taskname}" | circleci tests split --split-by=timings)
+            echo "bundle exec rake test:run  TESTOPTS=--verbose --verbose --trace TEST='${TESTS}'"
+            bundle exec rake test:run TEST="${TESTS}" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
 
   save-gem-cache:
@@ -795,63 +799,6 @@ jobs:
             }" $SLACK_WEBHOOK_SYSTEM
           when: on_success
 
-  check_production_gemfile:
-    parameters:
-      executor:
-        type: string
-        default: builder-ruby25
-    executor:
-      name: << parameters.executor >>
-      database: mysql
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "aa:64:17:1e:6c:ab:2f:d2:ad:35:59:99:05:31:3e:87"
-      - checkout-with-submodules
-      - run:
-          name: Keep production gemfile up to date
-          command: |
-            echo "keeping production gemfiles up to date"
-            git config user.email "3scale@redhat.com"
-            git config user.name "3scale"
-            make bundle
-            FILES_CHANGED=$(git status --porcelain | awk '{print $2}')
-            [[ -z "$FILES_CHANGED" ]] && exit 0
-            if [[ $FILES_CHANGED = "Gemfile.prod.lock"  ]]; then
-              git add Gemfile.prod.lock
-              git commit -m "Update Gemfile.prod.lock"
-              git push origin $(git rev-parse --abbrev-ref HEAD)
-            else
-              echo "More than Gemfile.prod.lock file was changed"
-              curl -X POST -H 'Content-type: application/json' \
-              --data \
-              "{ \
-                \"attachments\": [ \
-                { \
-                  \"fallback\": \"Build failed on master, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-                  \"color\": \"#CD0000\", \
-                  \"pretext\": \"Failed when trying to commit Gemfile.lock.prod. More than one file changed!! $FILES_CHANGED \", \
-                  \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-                  \"title\": \"Job: $CIRCLE_JOB \", \
-                  \"title_link\": \"$CIRCLE_BUILD_URL\", \
-                  \"text\": \"$CIRCLE_BUILD_URL\", \
-                  \"fields\": [ \
-                  { \
-                    \"title\": \"Commit\", \
-                    \"value\": \"$CIRCLE_SHA1\", \
-                    \"short\": false \
-                  } \
-                  ] \
-                } \
-                ] \
-              }" $SLACK_WEBHOOK_SYSTEM
-              exit 1
-            fi
-          environment:
-            BUNDLE_RETRY: 3
-            BUNDLE_JOBS: 3
-            BUNDLE_FROZEN: false
-            BUNDLE_DEPLOYMENT: false
 
 ##################################### CIRCLECI WORKFLOWS ############################################
 
@@ -1052,10 +999,6 @@ workflows:
             - jest
           <<: *only-master-filter
 
-  production_gemfile-master:
-    jobs:
-      - check_production_gemfile:
-          <<: *only-master-filter
 
   ######## Nightly workflows
 

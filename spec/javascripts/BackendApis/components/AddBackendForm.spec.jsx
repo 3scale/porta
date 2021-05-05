@@ -6,12 +6,14 @@ import { mount } from 'enzyme'
 
 import { AddBackendForm } from 'BackendApis'
 
-const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org' }
-const newBackendPath = '/backend/new'
+const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend' }
+const backendsPath = '/backends'
 const defaultProps = {
+  backend: null,
   backends: [backend],
+  inlineErrors: null,
   url: '',
-  newBackendPath
+  backendsPath
 }
 
 const mountWrapper = (props) => mount(<AddBackendForm {...{ ...defaultProps, ...props }} />)
@@ -27,18 +29,76 @@ it('should render itself', () => {
 
 it('should enable submit button only when form is filled', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(true)
+  const isSubmitButtonDisabled = wrapper => wrapper.find('button[data-testid="addBackend-buttonSubmit"]').prop('disabled')
+  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
 
   act(() => {
-    wrapper.find('BackendSelect').prop('onSelect')(backend)
-    wrapper.find('PathInput').prop('setPath')('/foo')
+    wrapper.find('BackendSelect').props().onSelect(null)
+    wrapper.find('PathInput').props().setPath('')
   })
-
   wrapper.update()
-  expect(wrapper.find('button[data-testid="submit"]').prop('disabled')).toBe(false)
+  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+
+  act(() => {
+    wrapper.find('BackendSelect').props().onSelect(backend)
+    wrapper.find('PathInput').props().setPath('')
+  })
+  wrapper.update()
+  expect(isSubmitButtonDisabled(wrapper)).toBe(false)
+
+  act(() => {
+    wrapper.find('BackendSelect').props().onSelect(null)
+    wrapper.find('PathInput').props().setPath('/path')
+  })
+  wrapper.update()
+  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+
+  act(() => {
+    wrapper.find('BackendSelect').props().onSelect(backend)
+    wrapper.find('PathInput').props().setPath('/path')
+  })
+  wrapper.update()
+  expect(isSubmitButtonDisabled(wrapper)).toBe(false)
 })
 
-it('should have a button to create a new backend', () => {
+it('should open/close a modal with a form to create a new backend', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find(`a[href="${newBackendPath}"]`))
+  expect(wrapper.find('NewBackendModal').prop('isOpen')).toBe(false)
+
+  act(() => wrapper.find('button[data-testid="newBackendCreateBackend-buttonLink"]').props().onClick())
+  wrapper.update()
+  expect(wrapper.find('NewBackendModal').prop('isOpen')).toBe(true)
+
+  act(() => wrapper.find('button[data-testid="cancel"]').props().onClick())
+  wrapper.update()
+  expect(wrapper.find('NewBackendModal').prop('isOpen')).toBe(false)
+})
+
+it('should select the new backend when created', () => {
+  const wrapper = mountWrapper()
+  const newBackend = { id: 1, name: 'New backend', privateEndpoint: 'example.org' }
+
+  act(() => wrapper.find('NewBackendModal').props().onCreateBackend(newBackend))
+
+  wrapper.update()
+  expect(wrapper.find('BackendSelect').prop('backend')).toBe(newBackend)
+})
+
+it('should be able to have a default backend selected', () => {
+  const wrapper = mountWrapper({ backend })
+
+  expect(wrapper.find('BackendSelect .pf-c-select__toggle-typeahead').instance()?.value).toEqual(backend.name)
+})
+
+it('should be able to show inline errors', () => {
+  const inlineErrors = {
+    backend_api_id: ['invalid backend'],
+    path: ['invalid path']
+  }
+  const wrapper = mountWrapper({ inlineErrors })
+
+  // $FlowIgnore[incompatible-use]
+  expect(wrapper.find('BackendSelect .pf-c-form__helper-text.pf-m-error').text()).toEqual(inlineErrors.backend_api_id[0])
+  // $FlowIgnore[incompatible-use]
+  expect(wrapper.find('PathInput .pf-c-form__helper-text.pf-m-error').text()).toEqual(inlineErrors.path[0])
 })

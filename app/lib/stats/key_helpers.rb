@@ -1,7 +1,6 @@
 
 module Stats
   module KeyHelpers
-    include ::ThreeScale::MethodTracing
 
     # Convert any value into storage key.
     def key_for(*args)
@@ -25,7 +24,6 @@ module Stats
         end
       end
     end
-    add_three_scale_method_tracer :key_for
 
     def encode_pair(key, value)
       key = encode_key(key)

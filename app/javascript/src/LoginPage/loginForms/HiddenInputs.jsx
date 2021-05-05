@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import {CSRFToken} from 'utilities/utils'
+import {CSRFToken} from 'utilities/CSRFToken'
 
 const HiddenInputs = ({isPasswordReset = false}: {isPasswordReset?: boolean}): React.Node => {
   return (

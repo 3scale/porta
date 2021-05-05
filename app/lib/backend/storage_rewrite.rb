@@ -60,7 +60,7 @@ module Backend
 
       bought_cinstances = provider.bought_cinstances
 
-      metrics = provider.metrics.includes(:service, :parent)
+      metrics = Metric.by_provider(provider).includes(:parent)
       usage_limits = provider.usage_limits.includes(plan: :service)
 
       total_count = services.size + cinstances.size + metrics.size + usage_limits.size + bought_cinstances.size

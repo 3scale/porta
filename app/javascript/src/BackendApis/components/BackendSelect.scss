@@ -1,9 +1,8 @@
-.hint {
-  margin-bottom: 0;
-
-  .pf-c-button {
-    text-decoration: none;
-  }
+.pf-c-button.pf-c-button__as-hint {
+  margin-top: -1rem;
+  padding-left: unset;
+  text-align: left;
+  text-decoration: none;
 }
 
 .pf-c-select__menu {

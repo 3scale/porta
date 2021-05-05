@@ -50,6 +50,10 @@ class Api::ApplicationsController < Api::BaseController
 
   def edit; end
 
+  def new
+    @provider = current_account
+  end
+
   private
 
   def accessible_not_bought_cinstances
