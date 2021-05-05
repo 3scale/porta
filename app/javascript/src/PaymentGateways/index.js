@@ -17,4 +17,6 @@ export {
   veryfyCard
 } from 'PaymentGateways/braintree/braintree'
 export { Label } from 'PaymentGateways/braintree/components/Label'
+export { Input } from 'PaymentGateways/braintree/components/Input'
+export { ListItem } from 'PaymentGateways/braintree/components/ListItem'
 export * from 'PaymentGateways/braintree/types'

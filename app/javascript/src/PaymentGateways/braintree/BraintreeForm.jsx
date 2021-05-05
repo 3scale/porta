@@ -36,7 +36,7 @@ const BraintreeForm = ({
   const [billingAddressData, setBillingAddressData] = useState<BillingAddressData>(billingAddress)
   const [isCardValid, setIsCardValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
-  const [formErrors, setFormErrors] = useState(null)
+  const [formErrors, setFormErrors] = useState(validate(formRef, validationConstraints))
   const [cardError, setCardError] = useState(null)
   const [isAwaiting, setIsAwaiting] = useState(false)
 
@@ -79,7 +79,7 @@ const BraintreeForm = ({
     hostedFieldsInstance.clear('expirationDate')
   }
 
-  const onFormChange = (event: SyntheticEvent<HTMLFormElement>) => {
+  const validateForm = (event: SyntheticEvent<HTMLFormElement>) => {
     const validationErrors = validate(event.currentTarget, validationConstraints)
     setFormErrors(validationErrors)
   }
@@ -100,7 +100,8 @@ const BraintreeForm = ({
 
       const response3Dsecure = threeDSecureEnabled ? await get3DSecureNonce(payload) : null
       if (response3Dsecure && response3Dsecure.error) {
-        return handleCardError(response3Dsecure.error)
+        handleCardError(response3Dsecure.error)
+        return
       }
       const nonce = response3Dsecure ? response3Dsecure.nonce : payload.nonce
       setBraintreeNonceValue(nonce)
@@ -114,7 +115,7 @@ const BraintreeForm = ({
       className="form-horizontal customer"
       action={formActionPath}
       ref={formRef}
-      onChange={onFormChange}
+      onChange={validateForm}
     >
       <input name="utf8" type="hidden" value="✓"/>
       <CSRFToken/>

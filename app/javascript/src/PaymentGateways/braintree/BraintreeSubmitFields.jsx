@@ -1,6 +1,10 @@
-import React from 'react'
+// @flow
 
-const BraintreeSubmitFields = ({ onSubmitForm, isFormValid }) => {
+import React from 'react'
+import type { Node } from 'react'
+import type { BraintreeSubmitFieldsProps } from 'PaymentGateways'
+
+const BraintreeSubmitFields = ({ onSubmitForm, isFormValid }: BraintreeSubmitFieldsProps): Node => {
   return (
     <div className="form-group">
       <div className="col-md-10 operations">

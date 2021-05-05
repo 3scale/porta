@@ -1,58 +1,57 @@
-import React from 'react'
-import { Label } from 'PaymentGateways'
+// @flow
 
-const BraintreeUserFields = () => {
+import React, { useState } from 'react'
+import { Label, Input, ListItem } from 'PaymentGateways'
+import type { Node } from 'react'
+
+const BraintreeUserFields = (): Node => {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [phone, setPhone] = useState('')
+
   return (
     <ul className="list-unstyled">
-      <li
-        id="customer_first_name_input"
-        className="string optional form-group"
-      >
+      <ListItem id="customer_first_name_input">
         <Label
           htmlFor="customer_first_name"
           label="First name"
           required
         />
-        <input
+        <Input
           id="customer_first_name"
-          className="form-control col-md-6"
-          type="text"
-          required
           name="customer[first_name]"
+          value={firstName}
+          onChange={(e) => setFirstName(e.currentTarget.value)}
+          required
         />
-      </li>
-      <li
-        id="customer_last_name_input"
-        className="string optional form-group"
-      >
+      </ListItem>
+      <ListItem id="customer_last_name_input">
         <Label
           htmlFor="customer_last_name"
           label="Last name"
           required
         />
-        <input
+        <Input
           id="customer_last_name"
-          className="form-control col-md-6"
-          type="text"
-          required
           name="customer[last_name]"
+          value={lastName}
+          onChange={(e) => setLastName(e.currentTarget.value)}
+          required
         />
-      </li>
-      <li
-        id="customer_phone_input"
-        className="string optional form-group"
-      >
+      </ListItem>
+      <ListItem id="customer_phone_input">
         <Label
           htmlFor="customer_phone"
           label="Phone"
+          required
         />
-        <input
+        <Input
           id="customer_phone"
-          className="form-control col-md-6"
-          type="text"
-          name="Phone"
+          name="customer[phone]"
+          value={phone}
+          onChange={(e) => setPhone(e.currentTarget.value)}
         />
-      </li>
+      </ListItem>
     </ul>
   )
 }

@@ -1,6 +1,10 @@
-import React from 'react'
+// @flow
 
-const Label = ({ htmlFor, label, required }: { htmlFor: string, label: string, required: boolean }) => (
+import React from 'react'
+import type { Node } from 'react'
+import type { LabelProps } from 'PaymentGateways'
+
+const Label = ({ htmlFor, label, required }: LabelProps): Node => (
   <label
     htmlFor={htmlFor}
     className="col-md-4 control-label"
