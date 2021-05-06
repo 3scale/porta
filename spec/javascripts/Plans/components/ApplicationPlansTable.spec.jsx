@@ -3,11 +3,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-// $FlowFixMe[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTable } from 'Plans'
 
 const plans = []
 const defaultProps = {
+  onAction: () => {},
   plans,
   count: plans.length,
   searchHref: '/plans'

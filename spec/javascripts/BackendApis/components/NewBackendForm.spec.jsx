@@ -4,7 +4,6 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-// $FlowFixMe[missing-export] To fix this: rename src/Form si that name-mapper does not mess up
 import { NewBackendForm } from 'BackendApis'
 
 const validPaths = [

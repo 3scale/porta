@@ -87,7 +87,7 @@ class InlineChart extends Component<Props, State> {
 
   pluralizeUnit (unit: string, total: number): string {
     if (unit.slice(-1) !== 's' && total !== 1) {
-      unit = this.state.unitPluralized
+      return this.state.unitPluralized
     }
     return unit
   }
