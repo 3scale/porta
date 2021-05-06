@@ -61,7 +61,7 @@ const hostedFieldOptions = {
   fields: {
     number: {
       selector: '#customer_credit_card_number',
-      placeholder: 'Enter Credit Card number'
+      placeholder: 'Enter a valid credit card number'
     },
     cvv: {
       selector: '#customer_credit_card_cvv',
