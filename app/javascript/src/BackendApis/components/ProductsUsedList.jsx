@@ -33,7 +33,10 @@ const ProductsUsedList = ({ products }: Props): React.Node => {
   const searchInputRef = useRef(null)
 
   const search = (term: string = '') => {
-    setFilteredProducts(products.filter(p => p.name.includes(term)))
+    setFilteredProducts(products.filter(p => {
+      const regex = new RegExp(term, 'i')
+      return regex.test(p.name)
+    }))
     setPage(1)
   }
 
