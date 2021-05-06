@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render properly 1`] = `
+<ListItem
+  id="my-unique-id"
+>
+  <li
+    className="string optional form-group"
+    id="my-unique-id"
+  />
+</ListItem>
+`;

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render properly 1`] = `
+<Label
+  htmlFor="username"
+  label="Username"
+  required={false}
+>
+  <label
+    className="col-md-4 control-label"
+    htmlFor="username"
+  >
+    Username 
+  </label>
+</Label>
+`;
