@@ -17,7 +17,7 @@ import { MicroPagination } from 'Common'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { useSearchInputEffect } from 'utilities/custom-hooks'
 
-import './ProductsUsedTable.scss'
+import './ProductsUsedList.scss'
 
 import type { Product } from 'Types'
 
@@ -27,7 +27,7 @@ type Props = {
 
 const PER_PAGE = 5
 
-const ProductsUsedTable = ({ products }: Props): React.Node => {
+const ProductsUsedList = ({ products }: Props): React.Node => {
   const [page, setPage] = useState(1)
   const [filteredProducts, setFilteredProducts] = useState(products)
   const searchInputRef = useRef(null)
@@ -91,6 +91,6 @@ const ProductsUsedTable = ({ products }: Props): React.Node => {
   )
 }
 
-const ProductsUsedTableWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsUsedTable {...props} />, containerId)
+const ProductsUsedListWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsUsedList {...props} />, containerId)
 
-export { ProductsUsedTable, ProductsUsedTableWrapper }
+export { ProductsUsedList, ProductsUsedListWrapper }

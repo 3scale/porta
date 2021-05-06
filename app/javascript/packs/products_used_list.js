@@ -1,9 +1,9 @@
 // @flow
 
-import { ProductsUsedTableWrapper } from 'BackendApis'
+import { ProductsUsedListWrapper } from 'BackendApis'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-const containerId = 'products_using_backend'
+const containerId = 'products-used-list-container'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { products } = container.dataset
 
-  ProductsUsedTableWrapper({
+  ProductsUsedListWrapper({
     products: safeFromJsonString(products) || []
   }, containerId)
 })

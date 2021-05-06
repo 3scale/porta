@@ -3,13 +3,13 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ProductsUsedTable } from 'BackendApis'
+import { ProductsUsedList } from 'BackendApis'
 
 const defaultProps = {
   products: []
 }
 
-const mountWrapper = (props) => mount(<ProductsUsedTable {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props) => mount(<ProductsUsedList {...{ ...defaultProps, ...props }} />)
 const mockProducts = (count) => new Array(count).fill({}).map((i, j) => ({ id: j, name: `Product ${j}`, systemName: `product_${j}`, path: `/products/${j}`, appPlans: [] }))
 
 afterEach(() => {
