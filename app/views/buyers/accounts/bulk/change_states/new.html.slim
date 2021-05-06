@@ -8,5 +8,5 @@
     = render 'buyers/accounts/bulk/selected_accounts'
     = form.input :action, as: :select, collection: @actions
     p.notice Changing the state of a developer account doesn't change the state of its applications.
-    = form.buttons do
-      = form.commit_button 'Change state', button_html: {:'data-disable-with' => 'Running bulk action...' }
+    = form.actions do
+      = form.action :submit, :label => 'Change state', button_html: {:'data-disable-with' => 'Running bulk action...' }

@@ -7,7 +7,7 @@
     <%= render 'forums/admin/posts/anonymous', :form => form, :post => @post %>
   <% end %>
 
-  <%= form.buttons do %>
-    <%= form.commit_button 'Post reply' %>
+  <%= form.actions do %>
+    <%= form.action :submit, :label => 'Post reply' %>
   <% end %>
 <% end %>

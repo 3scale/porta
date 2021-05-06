@@ -36,7 +36,7 @@ module Liquid
       def form_builder
         @form_builder ||= begin
                             object_name = ActiveModel::Naming.param_key(model)
-                            Formtastic::SemanticFormBuilder.new(object_name, model, template, {})
+                            Formtastic::FormBuilder.new(object_name, model, template, {})
                           end
 
       end

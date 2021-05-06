@@ -4,5 +4,5 @@
 
 <%= semantic_form_for @plan, :url => admin_service_service_plans_path(@service) do |form| %>
   <%= render :partial => 'form', :object => form %>
-  <%= form.buttons :commit %>
+  <%= form.actions :commit %>
 <%- end %>

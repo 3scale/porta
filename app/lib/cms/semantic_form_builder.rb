@@ -79,7 +79,7 @@ module CMS
       template.content_tag(:li, button, :id => 'cms-template-delete-button')
     end
 
-    def commit_button(*args)
+    def actions(*args)
       options = args.extract_options!
       button_html = options[:button_html] ||= {}
 

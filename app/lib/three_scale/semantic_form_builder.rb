@@ -1,5 +1,5 @@
 module ThreeScale
-  class SemanticFormBuilder < ::Formtastic::SemanticFormBuilder
+  class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::SpamProtection::Integration::FormBuilder
 
     # Allow specify how to display errors for the input
@@ -149,7 +149,7 @@ module ThreeScale
     end
 
 
-    def commit_button(*args)
+    def actions(*args)
       opts = args.extract_options!
       button_html = (opts[:button_html] ||= {})
 
@@ -176,10 +176,10 @@ module ThreeScale
 
     # Adds cancel link to a form.
     #
-    # Use this inside a buttons block:
+    # Use this inside a actions block:
     #
-    #   <%= form.buttons do %>
-    #     <%= form.commit_button %>
+    #   <%= form.actions do %>
+    #     <%= form.action :submit %>
     #     <%= form.cancel_link(some_url) %>
     #   <% end %>
     #

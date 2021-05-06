@@ -9,8 +9,8 @@
       <%= render 'forums/admin/posts/fields', :form => form %>
     <% end %>
 
-    <%= form.buttons do %>
-      <%= form.commit_button %>
+    <%= form.actions do %>
+      <%= form.action :submit %>
     <% end %>
   <% end %>
 </div>

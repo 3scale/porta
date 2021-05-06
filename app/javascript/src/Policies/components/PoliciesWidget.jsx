@@ -51,7 +51,7 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
     closePolicyRegistry: boundActionCreators.closePolicyRegistry
   }
 
-  const buttonsFieldset = document.querySelector('[id^="edit_proxy_"] > fieldset.buttons')
+  const buttonsFieldset = document.querySelector('[id^="edit_proxy_"] > fieldset.actions')
   if (buttonsFieldset) {
     // classList.toggle second argument is not supported in IE11
     if (ui.chain) {

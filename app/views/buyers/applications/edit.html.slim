@@ -11,7 +11,7 @@ h2
   = form.inputs do
     = form.user_defined_form
 
-  = form.buttons do
-    = form.commit_button
+  = form.actions do
+    = form.action :submit
     li
       = delete_application_link(@cinstance)

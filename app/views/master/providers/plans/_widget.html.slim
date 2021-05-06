@@ -24,7 +24,7 @@ div.dashboard_card.round#provider-change-plan
       ol
         li
           = select_tag :plan_id, options_from_collection_for_select(plans, :id, :name), required: true, include_blank: true
-    fieldset.buttons
+    fieldset.actions
       ol
         li.commit
           = submit_tag 'Change Plan', type: "submit", class: "important-button"

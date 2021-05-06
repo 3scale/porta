@@ -72,7 +72,7 @@ gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 2.93'
 gem 'bugsnag', '~> 6.11'
 gem 'cancancan', '~> 2.3.0'
-gem 'formtastic', '~> 1.2.4'
+gem 'formtastic', '~> 3.1.5'
 gem 'gruff', '~>0.3', require: false
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 gem 'rmagick', '~> 2.15.3', require: false
