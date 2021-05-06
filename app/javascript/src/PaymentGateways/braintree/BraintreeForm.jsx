@@ -120,7 +120,7 @@ const BraintreeForm = ({
       <input name="utf8" type="hidden" value="✓"/>
       <CSRFToken/>
       <fieldset>
-        <p className="required-fields">All fields marked with * are required</p>
+        <p className="required-fields">All fields marked with an asterisk ( * ) are mandatory</p>
         <BraintreeUserFields/>
       </fieldset>
       <fieldset>
