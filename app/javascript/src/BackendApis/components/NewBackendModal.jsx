@@ -10,7 +10,6 @@ import {
   Title,
   TitleLevel
 } from '@patternfly/react-core'
-// $FlowFixMe[missing-export] To fix this: rename src/Form si that name-mapper does not mess up
 import { NewBackendForm } from 'BackendApis'
 
 import './NewBackendModal.scss'

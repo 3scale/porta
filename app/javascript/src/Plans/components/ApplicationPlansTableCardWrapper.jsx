@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-// $FlowFixMe[missing-export] export is there, name_mapper is the problem
 import { ApplicationPlansTableCard } from 'Plans'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import type { Props } from 'Plans/components/ApplicationPlansTableCard'
