@@ -97,9 +97,6 @@ section class="service-widget"
             = pluralize service.contracts.service.size, 'contract'
             | .
 
-    - if current_user.accessible_services.empty?
-      = render 'shared/service_access'
-
       - if can? :manage, :partners
         h2
           = link_to 'Configuration', admin_service_integration_path(service), title: 'Change integration settings for this service'
@@ -129,6 +126,9 @@ section class="service-widget"
           - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
             li.item
               = setting
+
+      - if current_user.accessible_services.empty?
+        = render 'shared/service_access'
 
     section[name="activity"]
 
