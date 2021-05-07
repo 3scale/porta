@@ -5,6 +5,8 @@ import * as React from 'react'
 import { Button } from '@patternfly/react-core'
 import { AngleLeftIcon, AngleRightIcon } from '@patternfly/react-icons'
 
+import './MicroPagination.scss'
+
 type Props = {
   page: number,
   lastPage: number,

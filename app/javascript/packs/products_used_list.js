@@ -1,7 +1,9 @@
 // @flow
 
-import { ProductsUsedListWrapper } from 'BackendApis'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { ProductsUsedListCardWrapper } from 'BackendApis'
+import { safeFromJsonString } from 'utilities'
+
+import type { CompactListItem } from 'Common'
 
 const containerId = 'products-used-list-container'
 
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { products } = container.dataset
 
-  ProductsUsedListWrapper({
-    products: safeFromJsonString(products) || []
+  ProductsUsedListCardWrapper({
+    products: safeFromJsonString<Array<CompactListItem>>(products) || []
   }, containerId)
 })

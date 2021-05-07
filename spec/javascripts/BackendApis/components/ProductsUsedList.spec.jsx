@@ -3,14 +3,14 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ProductsUsedList } from 'BackendApis'
+import { ProductsUsedListCard } from 'BackendApis'
 
 const defaultProps = {
   products: []
 }
 
-const mountWrapper = (props) => mount(<ProductsUsedList {...{ ...defaultProps, ...props }} />)
-const mockProducts = (count) => new Array(count).fill({}).map((i, j) => ({ id: j, name: `Product ${j}`, systemName: `product_${j}`, path: `/products/${j}`, appPlans: [] }))
+const mountWrapper = (props) => mount(<ProductsUsedListCard {...{ ...defaultProps, ...props }} />)
+const mockProducts = (count) => new Array(count).fill({}).map((i, j) => ({ name: `Product ${j}`, description: `product_${j}`, href: `/products/${j}` }))
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -39,7 +39,7 @@ it('should be paginated and have 5 items per page', () => {
 it('should be able to navigate to a product overview page', () => {
   const products = mockProducts(1)
   const wrapper = mountWrapper({ products })
-  expect(wrapper.find('tbody tr').first().find('Button').prop('href')).toEqual(products[0].path)
+  expect(wrapper.find('tbody tr').first().find('Button').prop('href')).toEqual(products[0].href)
 })
 
 // FIXME: input not receiving change event

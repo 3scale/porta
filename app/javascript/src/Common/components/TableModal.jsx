@@ -12,7 +12,7 @@ import {
   ToolbarItem
 } from '@patternfly/react-core'
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
-import { useSearchInputEffect } from 'utilities/custom-hooks'
+import { useSearchInputEffect } from 'utilities'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
 import type { Record } from 'utilities/patternfly-utils'

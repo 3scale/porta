@@ -47,10 +47,9 @@ class ServiceDecorator < ApplicationDecorator
 
   def used_by_backend_table_data
     {
-      id: id,
       name: name,
-      systemName: system_name,
-      path: service_path
+      description: system_name,
+      href: service_path
     }
   end
 
