@@ -40,10 +40,17 @@ it('should not render a table header', () => {
   expect(wrapper.find('th').exists()).toBe(false)
 })
 
-it('should render each row with a link to the item and a description', () => {
+it('should render each row with a link to the item overview page and a description', () => {
   const wrapper = mountWrapper()
   const rows = wrapper.find('table td')
   expect(rows.findWhere(n => n.text() === item.name).exists()).toBe(true)
   expect(rows.find(`a[href="${item.href}"]`).exists()).toBe(true)
   expect(rows.findWhere(n => n.text() === item.description).exists()).toBe(true)
+})
+
+it('should trigger search when clicking the search button', () => {
+  const wrapper = mountWrapper()
+
+  wrapper.find('button[data-testid="search"]').simulate('click')
+  expect(onSearch).toHaveBeenCalledTimes(1)
 })

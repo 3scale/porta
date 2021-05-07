@@ -53,3 +53,15 @@ it.skip('should be filterable by name', () => {
 
   expect(wrapper.find('tbody tr').length).toEqual(2)
 })
+
+// FIXME: input not receiving change event
+it.skip('should search when pressing Enter', () => {
+  const Items = mockProducts(10)
+  const wrapper = mountWrapper({ Items })
+
+  wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
+  wrapper.find('input[type="search"]').simulate('keydown', { key: 'Enter' })
+  wrapper.update()
+
+  expect(wrapper.find('tbody tr').length).toEqual(2)
+})
