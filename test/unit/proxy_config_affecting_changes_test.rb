@@ -13,6 +13,10 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     include ProxyConfigAffectingChanges::ModelExtension
   end
 
+  def self.build_tracker
+    Thread.current[ProxyConfigAffectingChanges::TRACKER_NAME] = ProxyConfigAffectingChanges::Tracker.new
+  end
+
   test 'tracks columns by default' do
     assert_equal %w[name system_name description], Model.proxy_config_affecting_attributes
   end
@@ -41,8 +45,7 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
 
   test 'tracks proxy config affecting changes on attribute write' do
     within_thread do
-      tracker = ProxyConfigAffectingChanges::Tracker.new
-      Thread.current[ProxyConfigAffectingChanges::TRACKER_NAME] = tracker
+      tracker = ProxyConfigAffectingChangesTest.build_tracker
       CheapTrick = Class.new(Model)
       tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
       CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
@@ -51,13 +54,42 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
 
   test 'tracks proxy config affecting changes on destroy' do
     within_thread do
-      tracker = ProxyConfigAffectingChanges::Tracker.new
-      Thread.current[ProxyConfigAffectingChanges::TRACKER_NAME] = tracker
+      tracker = ProxyConfigAffectingChangesTest.build_tracker
       CheapTrick = Class.new(Model)
       model = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
       tracker.expects(:track).with(instance_of(CheapTrick))
       model.destroy
     end
+  end
+
+  class StoredModelTest < ActiveSupport::TestCase
+    class StoredModel < ActiveRecord::Base
+      include ProxyConfigAffectingChanges::ModelExtension
+      define_proxy_config_affecting_attributes :settings
+      self.table_name = 'gateway_configurations'
+
+      store :settings, accessors: %i[jwt_claim_with_client_id jwt_claim_with_client_id_type], coder: JSON
+    end
+
+    test 'tracks proxy config affecting changes on attribute write' do
+      within_thread do
+        tracker = ProxyConfigAffectingChangesTest.build_tracker
+        CheapTrick = Class.new(StoredModel)
+        tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
+        CheapTrick.new(jwt_claim_with_client_id: 'azp', jwt_claim_with_client_id_type: 'plain')
+      end
+    end
+
+    test 'tracks proxy config affecting changes on destroy' do
+      within_thread do
+        tracker = ProxyConfigAffectingChangesTest.build_tracker
+        CheapTrick = Class.new(StoredModel)
+        model = CheapTrick.new(jwt_claim_with_client_id: 'azp', jwt_claim_with_client_id_type: 'plain')
+        tracker.expects(:track).with(instance_of(CheapTrick))
+        model.destroy
+      end
+    end
+
   end
 
   class TrackerTest < ActiveSupport::TestCase
