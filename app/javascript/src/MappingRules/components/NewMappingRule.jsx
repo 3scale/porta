@@ -9,7 +9,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { CSRFToken } from 'utilities'
+import { CSRFToken, createReactWrapper } from 'utilities'
 import {
   MetricInput,
   PatternInput,
@@ -24,7 +24,7 @@ import type { Metric } from 'Types'
 
 import './NewMappingRule.scss'
 
-export type Props = {
+type Props = {
   url: string,
   isProxyProEnabled?: boolean,
   topLevelMetrics: Array<Metric>,
@@ -85,4 +85,6 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
   )
 }
 
-export { NewMappingRule }
+const NewMappingRuleWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewMappingRule {...props} />, containerId)
+
+export { NewMappingRule, NewMappingRuleWrapper }
