@@ -1,7 +1,7 @@
 // @flow
 
 import { NewMappingRuleWrapper } from 'MappingRules'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 const CONTAINER_ID = 'new-mapping-rule-form'
 

@@ -9,7 +9,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { CSRFToken } from 'utilities/CSRFToken'
+import { CSRFToken } from 'utilities'
 import {
   MetricInput,
   PatternInput,

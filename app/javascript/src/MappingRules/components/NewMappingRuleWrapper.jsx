@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { NewMappingRule } from 'MappingRules'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 
 import type { Props } from 'MappingRules/components/NewMappingRule'
 
