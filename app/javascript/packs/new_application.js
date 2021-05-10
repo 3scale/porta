@@ -2,7 +2,7 @@
 
 // $FlowIgnore[missing-export] it is exported but name-mapper is failing
 import { NewApplicationFormWrapper } from 'NewApplication'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'new-application-form'

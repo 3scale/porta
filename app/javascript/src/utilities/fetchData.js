@@ -1,7 +1,8 @@
 // @flow
+
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 
-const fetchData = <T>(url: string): Promise<T> => {
+export function fetchData<T> (url: string): Promise<T> {
   return fetchPolyfill(url)
     .then(response => {
       if (!response.ok) {
@@ -11,5 +12,3 @@ const fetchData = <T>(url: string): Promise<T> => {
       return response.json()
     })
 }
-
-export { fetchData }

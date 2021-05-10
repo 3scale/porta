@@ -3,9 +3,9 @@
 import * as React from 'react'
 
 import { FormGroup, Select as PF4Select, SelectVariant } from '@patternfly/react-core'
-import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilities/patternfly-utils'
+import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilities'
 
-import type { Record } from 'utilities/patternfly-utils'
+import type { Record } from 'utilities'
 
 type Props<T: Record> = {
   item: T | null,

@@ -1,7 +1,7 @@
 // @flow
 
 import { DefaultPlanSelectWrapper } from 'Plans'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 import type { Product, Plan } from 'Types'
 

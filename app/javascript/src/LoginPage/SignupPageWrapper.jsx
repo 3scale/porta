@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import {createReactWrapper} from 'utilities/createReactWrapper'
+import {createReactWrapper} from 'utilities'
 
 import {LoginPage} from '@patternfly/react-core'
 import {SignupForm, FlashMessages} from 'LoginPage'

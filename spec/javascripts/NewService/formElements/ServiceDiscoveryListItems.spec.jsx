@@ -5,7 +5,7 @@ import {act} from 'react-dom/test-utils'
 import {mount, shallow, render} from 'enzyme'
 
 import {ServiceDiscoveryListItems} from 'NewService/components/FormElements'
-import * as utils from 'utilities/utils'
+import * as utils from 'utilities/fetchData'
 import { BASE_PATH } from 'NewService'
 
 const projects = ['project_00', 'project_01']

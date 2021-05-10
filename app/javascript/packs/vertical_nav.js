@@ -1,7 +1,7 @@
 // @flow
 
 import { VerticalNavWrapper as VerticalNav } from 'Navigation/components/VerticalNav'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('vertical-nav-wrapper')

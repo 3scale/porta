@@ -1,5 +1,5 @@
 import { StripeFormWrapper } from 'PaymentGateways'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'stripe-form-wrapper'
