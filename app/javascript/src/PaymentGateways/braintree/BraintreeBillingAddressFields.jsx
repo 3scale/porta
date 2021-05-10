@@ -98,7 +98,7 @@ const BraintreeBillingAddressFields = ({
             onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'state')}
           />
           <div className="col-md-6 col-md-offset-4">
-            The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. <strong>If unsure, left blank</strong>
+            The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. <strong>If unsure, leave blank</strong>
           </div>
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_country_name_input">

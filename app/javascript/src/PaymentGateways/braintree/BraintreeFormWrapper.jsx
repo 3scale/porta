@@ -9,4 +9,4 @@ const BraintreeFormWrapper = (props: BraintreeFormProps, containerId: string): v
   createReactWrapper(<BraintreeForm { ...props } />, containerId)
 )
 
-export { BraintreeForm, BraintreeFormWrapper }
+export { BraintreeFormWrapper }
