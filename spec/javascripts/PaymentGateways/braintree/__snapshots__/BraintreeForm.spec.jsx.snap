@@ -492,7 +492,7 @@ exports[`should render properly 1`] = `
               >
                 The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. 
                 <strong>
-                  If unsure, left blank
+                  If unsure, leave blank
                 </strong>
               </div>
             </li>

@@ -113,7 +113,7 @@ const create3DSecureInstance = async (threeDSecure: any, clientInstance: any): P
 
 const veryfyCard = async (threeDSecureInstance: any, payload: any, billingAddress: BillingAddressData): Promise<any> => {
   const threeDSecureParameters = {
-    amount: '00.00',
+    amount: '0.00',
     billingAddress,
     onLookupComplete: (data, next) => next()
   }
