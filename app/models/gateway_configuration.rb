@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GatewayConfiguration < ApplicationRecord
+  include ProxyConfigAffectingChanges::ModelExtension
+  define_proxy_config_affecting_attributes :settings
   JWT_CLAIM_ATTRIBUTES = %i[jwt_claim_with_client_id jwt_claim_with_client_id_type].freeze
   ATTRIBUTES = JWT_CLAIM_ATTRIBUTES
 

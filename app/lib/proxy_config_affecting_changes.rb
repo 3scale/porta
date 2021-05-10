@@ -111,8 +111,10 @@ module ProxyConfigAffectingChanges
         end
       end
 
+      delegate :proxy_config_affecting_attributes, to: 'self.class'
+
       def proxy_config_affecting_state
-        attributes.slice(*self.class.proxy_config_affecting_attributes).to_json
+        attributes.slice(*proxy_config_affecting_attributes).to_json
       end
 
       def destroy
@@ -123,7 +125,12 @@ module ProxyConfigAffectingChanges
       protected
 
       def write_attribute(attr_name, value)
-        track_proxy_affecting_changes if self.class.proxy_config_affecting_attributes.include?(attr_name)
+        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name)
+        super
+      end
+
+      def write_store_attribute(store_attribute, key, value)
+        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(store_attribute.to_s)
         super
       end
 

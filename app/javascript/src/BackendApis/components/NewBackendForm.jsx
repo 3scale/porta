@@ -11,7 +11,7 @@ import {
   DescriptionInput,
   PrivateEndpointInput
 } from 'BackendApis'
-import { CSRFToken } from 'utilities/CSRFToken'
+import { CSRFToken } from 'utilities'
 
 type Props = {
   action: string,

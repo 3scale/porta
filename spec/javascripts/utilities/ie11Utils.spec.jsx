@@ -1,4 +1,4 @@
-import { isBrowserIE11 } from 'utilities/ie11Utils'
+import { isBrowserIE11 } from 'utilities'
 
 describe('isBrowserIE11', () => {
   const windowNotIE = {

@@ -24,7 +24,7 @@ import {
   TableBody
 } from '@patternfly/react-table'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 
 import 'BackendApis/styles/backends.scss'
 

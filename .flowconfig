@@ -1,9 +1,9 @@
 [ignore]
-<PROJECT_ROOT>/vendor/.*
-<PROJECT_ROOT>/node_modules/.*
-<PROJECT_ROOT>/.git/.*
+.*/__snapshots__/.*
 
 [include]
+<PROJECT_ROOT>/app/javascript/
+<PROJECT_ROOT>/spec/javascripts/
 
 [libs]
 ./app/javascript/src/Types/libs/libdefs.js
@@ -12,7 +12,9 @@ flow-typed
 [lints]
 
 [options]
-module.system.node.resolve_dirname=node_modules
+emoji=true
+experimental.const_params=true
+max_header_tokens=1
 module.name_mapper='.*\(.s?css\)' -> 'empty/object'
 module.system=haste
-module.name_mapper='\(ActiveDocs\|Applications\|BackendApis\|ChangePassword\|Common\|Settings\|Dashboard\|LoginPage\|MappingRules\|Navigation\|NewApplication\|Onboarding\|PaymentGateways\|Plans\|Policies\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'
+module.name_mapper='^\(ActiveDocs\|Applications\|BackendApis\|ChangePassword\|Common\|Settings\|Dashboard\|LoginPage\|MappingRules\|Navigation\|NewApplication\|Onboarding\|PaymentGateways\|Plans\|Policies\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'

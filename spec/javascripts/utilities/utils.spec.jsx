@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { mount } from 'enzyme'
-import { CSRFToken } from 'utilities/CSRFToken'
+import { CSRFToken } from 'utilities'
 
 describe('CSRFToken', () => {
   it('should render itself correctly', () => {

@@ -2,8 +2,7 @@ import '@babel/polyfill'
 import 'core-js/es7/object'
 
 import {SignupPageWrapper} from 'LoginPage'
-import {safeFromJsonString} from 'utilities/json-utils'
-import {isBrowserIE11} from 'utilities/ie11Utils'
+import {safeFromJsonString, isBrowserIE11} from 'utilities'
 
 const isIE11 = isBrowserIE11(window)
 if (isIE11) {

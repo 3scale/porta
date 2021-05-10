@@ -3,7 +3,7 @@
 import React, {Component } from 'react'
 import type { Node } from 'react'
 import c3 from 'c3'
-import {fetchData} from 'utilities/utils'
+import {fetchData} from 'utilities'
 import 'core-js/es6/promise'
 import 'url-polyfill'
 import moment from 'moment'
@@ -87,7 +87,7 @@ class InlineChart extends Component<Props, State> {
 
   pluralizeUnit (unit: string, total: number): string {
     if (unit.slice(-1) !== 's' && total !== 1) {
-      unit = this.state.unitPluralized
+      return this.state.unitPluralized
     }
     return unit
   }

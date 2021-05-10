@@ -5,7 +5,7 @@ import {shallow, mount} from 'enzyme'
 
 import {ServiceDiscoveryForm} from 'NewService'
 import {FormWrapper, ErrorMessage, ServiceDiscoveryListItems} from 'NewService/components/FormElements'
-import * as utils from 'utilities/utils'
+import * as utils from 'utilities/fetchData'
 
 const props = {
   formActionPath: 'action-path',

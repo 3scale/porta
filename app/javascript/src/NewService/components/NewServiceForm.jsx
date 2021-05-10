@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import {ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm} from 'NewService'
-import {createReactWrapper} from 'utilities/createReactWrapper'
+import {createReactWrapper} from 'utilities'
 import type {Api} from 'Types/Api'
 import type {ServiceFormTemplate} from 'NewService/types'
 
