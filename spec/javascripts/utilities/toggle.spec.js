@@ -1,3 +1,5 @@
+// @flow
+
 import { toggle, toggleState, recoverState, moveState } from 'utilities/toggle'
 
 describe('Toggle', () => {
@@ -53,11 +55,13 @@ describe('Toggle', () => {
   })
 
   it('fires window resize event on click', () => {
+    // $FlowIgnore[cannot-resolve-name]
     let event = spyOnEvent(window, 'resize')
     toggle(article.id, article.classList, icon, 'toggle')
 
     icon.click()
 
+    // $FlowIgnore[incompatible-call]
     expect(event).toHaveBeenTriggered()
   })
 })

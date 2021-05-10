@@ -1,7 +1,7 @@
 // @flow
 
 import { AddBackendFormWrapper } from 'BackendApis'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 import type { Backend } from 'Types'
 

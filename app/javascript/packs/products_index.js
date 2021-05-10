@@ -1,5 +1,5 @@
 import { ProductsIndexPageWrapper } from 'Products/components/IndexPage'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 const containerId = 'products'
 

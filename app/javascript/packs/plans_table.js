@@ -1,7 +1,7 @@
 // @flow
 
 import { ApplicationPlansTableCardWrapper } from 'Plans'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 import type { ApplicationPlan } from 'Types'
 

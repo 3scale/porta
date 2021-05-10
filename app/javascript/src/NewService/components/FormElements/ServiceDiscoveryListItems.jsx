@@ -3,7 +3,7 @@
 import * as React from 'react'
 import {useState, useEffect} from 'react'
 import {Label, Select} from 'NewService/components/FormElements'
-import {fetchData} from 'utilities/utils'
+import {fetchData} from 'utilities'
 import {BASE_PATH} from 'NewService'
 
 type Props = {

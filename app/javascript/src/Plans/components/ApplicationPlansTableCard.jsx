@@ -5,9 +5,12 @@ import * as React from 'react'
 import { Card } from '@patternfly/react-core'
 import { ApplicationPlansTable } from 'Plans'
 import * as alert from 'utilities/alert'
-import { post, ajax } from 'utilities/ajax'
-import { safeFromJsonString } from 'utilities/json-utils'
-import { confirm } from 'utilities/confirm-dialog'
+import {
+  post,
+  ajax,
+  safeFromJsonString,
+  confirm
+} from 'utilities'
 
 import type { ApplicationPlan, Action } from 'Types'
 

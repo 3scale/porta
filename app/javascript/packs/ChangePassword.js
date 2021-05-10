@@ -1,5 +1,5 @@
 import { ChangePasswordWrapper as ChangePassword } from 'ChangePassword'
-import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities'
 
 document.addEventListener('DOMContentLoaded', () => {
   const changePasswordContainer = document.getElementById('pf-login-page-container')

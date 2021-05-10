@@ -2,7 +2,7 @@
 
 import React from 'react'
 import type { Node } from 'react'
-import {createReactWrapper} from 'utilities/createReactWrapper'
+import {createReactWrapper} from 'utilities'
 import 'url-polyfill'
 
 import {
