@@ -40,6 +40,13 @@ export type Backend = {
   privateEndpoint: string
 }
 
+export type Metric = {
+  id: number,
+  name: string,
+  systemName: string,
+  updatedAt: string
+}
+
 export type FieldDefinition = {
   hidden: boolean,
   required: boolean,

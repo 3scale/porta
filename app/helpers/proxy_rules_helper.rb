@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProxyRulesHelper
   def proxy_rule_path_for(proxy_rule, edit: false)
     owner = proxy_rule.owner

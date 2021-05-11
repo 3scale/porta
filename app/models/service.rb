@@ -320,6 +320,10 @@ class Service < ApplicationRecord
     metrics.find_by(system_name: 'hits')&.children || metrics.none
   end
 
+  def top_level_metrics
+    metrics.top_level
+  end
+
   # Does this service has metric "hits" with submetrics (methods) defined?
   def has_method_metrics?
     metrics.find_by(system_name: 'hits')&.parent?
