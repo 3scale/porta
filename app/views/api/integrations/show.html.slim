@@ -1,7 +1,7 @@
 - content_for :sublayout_title, 'Configuration'
 
 #integration-tabs
-  = render 'api/integrations/apicast/shared/deployment_options'
+  .SettingsBox
 
   .integration data-state="open"
     - case @service.deployment_option
