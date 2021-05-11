@@ -1,150 +1,29 @@
-javascript:
-  $(document).ready(function(){
-    // warning when changing auth mode
-    var auth_mode_changed = false;
-    var current_auth_mode = "#{@service.proxy.authentication_method}";
+= javascript_pack_tag 'settings'
 
-    $("input[name='service[backend_version]']").change( function(){
-      auth_mode_changed = true;
-    });
+- @service.deployment_option ||= 'hosted'
 
-    $("#edit_service_#{@service.id}").submit( function(){
-      var warning_message = 'It is not advisable to change the authentication mode when you are serving customers in production. If you do proceed, you will need to update your APIcast configuration to reflect this change. Do you really want to change the authentication mode?';
-      var deprecation_message = "The OAuth 2.0 authentication option has been deprecated. It can still be used but you won't be able to switch back to it once you confirmed the switch to another authentication mode.";
-
-      if(auth_mode_changed) {
-        if(current_auth_mode == 'oauth') {
-          return confirm(deprecation_message) && confirm(warning_message);
-        } else {
-          return confirm(warning_message);
-        }
-      };
-
-      return true;
-    });
-
-    // scrolling
-    var scrolledToSubmit = false;
-
-    var toggleState = function (elem, one, two) {
-      var elem = $(elem);
-      elem.attr('data-state', elem.attr('data-state') === one ? two : one);
-    };
-
-    var toggleText = function (elem, one, two) {
-      $(elem).text($(elem).text() == one ? two : one);
-    };
-
-    $('.IntegrationSettingsBox-toggle').on( "click", function(e) {
-      toggleState('.IntegrationSettingsBox-summary', 'open', 'closed');
-      toggleState('.IntegrationSettingsBox-form', 'closed', 'open');
-      toggleState('.integration', 'open', 'closed');
-      toggleText('.IntegrationSettingsBox-toggle', 'edit integration settings', 'cancel');
-      e.preventDefault();
-
-      // toggling the form visibility is like a new visit
-      scrolledToSubmit = false;
-    });
-
-    $("input[type=radio][name='service[deployment_option]']").change(function() {
-      var commitTopOffset = $(".commit").offset().top;
-
-      if(!scrolledToSubmit && document.body.scrollTop + $(window).height() < commitTopOffset ) {
-        $(document.body).animate({
-          scrollTop: commitTopOffset
-        }, 750);
-
-        scrolledToSubmit = true;
-      }
-    });
-
-
-    // oauth not for APIcast 1
-    function toggleOauthAvailability() {
-      var current_deployment_option = $("input[type=radio][name='service[deployment_option]']:checked").val();
-      var wrapper = $(".backend_version_oauth");
-      var authentication_option = $("input[type=radio][name='service[backend_version]'][value='oauth']");
-
-      if (current_deployment_option == 'hosted') {
-        authentication_option.attr("disabled", true);
-        wrapper.addClass("disabled").attr("title", "OAuth is not supported by APIcast Cloud Gateway at this moment in time. Pick another Gateway or Plugin option at the top of this page to enable OAuth activation.");;
-      } else {
-        authentication_option.attr("disabled", false);
-        wrapper.removeClass("disabled").attr("title", "OAuth");;
-      }
-    };
-
-    toggleOauthAvailability();
-
-    $("input[type=radio][name='service[deployment_option]']").change(function() {
-      toggleOauthAvailability();
-    });
-
-    function toggleApiCastAvailability() {
-      var current_authentication_option = $("input[type=radio][name='service[backend_version]']:checked").val();
-      var wrapper = $(".deployment_option_hosted");
-      var deployment_option = $("input[type=radio][name='service[deployment_option]'][value='hosted']");
-
-      if (current_authentication_option == 'oauth') {
-        deployment_option.attr("disabled", true);
-        wrapper.addClass("disabled").attr("title", "APIcast Cloud Gateway doesn't support OAuth at this moment in time. Pick another Authentication method at the bottom of this page to enable APIcast activation.");
-      } else {
-        deployment_option.attr("disabled", false);
-        wrapper.removeClass("disabled").attr("title", "APIcast");
-      }
-
-      var wrapper = $(".deployment_option_service_mesh_istio");
-      var deployment_option = $("input[type=radio][name='service[deployment_option]'][value='service_mesh_istio']");
-    };
-
-    toggleApiCastAvailability();
-
-    $("input[type=radio][name='service[backend_version]']").change(function() {
-      toggleApiCastAvailability();
-    });
-  });
-
-#integration-settings
-  = form.inputs "Production Deployment Option" do
-
-    - if @service.deployment_option == nil
-      - @service.deployment_option = 'hosted'
+#settings
+  = form.inputs 'Deployment', id: 'integration-wrapper' do
 
     = form.input :deployment_option,
-      as: :radio,
-      collection: Service.deployment_options(current_account)['Gateway'],
-      label: 'Gateway',
-      wrapper_html: { class: "radio--iconic gateway" },
-      value_as_class: true,
-      hint: t("formtastic.hints.deployment_option_gateway")
+            as: :radio,
+            collection: deployment_options,
+            value_as_class: true,
+            label: false,
+            input_html: {class: 'integration-method'}
 
-    - if current_account.provider_can_use?(:service_mesh_integration)
-      = form.input :deployment_option,
-              as: :radio,
-              collection: Service.deployment_options(current_account)['Service Mesh'],
-              label: 'Service Mesh',
-              wrapper_html: {class: 'radio--iconic service_mesh'},
-              value_as_class: true,
-              hint: t('formtastic.hints.deployment_option_service_mesh')
+    = form.semantic_fields_for :proxy do |f|
+      = render 'api/integrations/apicast/shared/proxy_endpoints', f: f, service: @service, proxy: @service.proxy
 
-    = form.input :deployment_option,
-      as: :radio,
-      collection: Service.deployment_options(current_account)['Plugin'],
-      label: 'Or Plugin',
-      wrapper_html: { class: "radio--iconic plugin" },
-      value_as_class: true,
-      hint: t("formtastic.hints.deployment_option_plugin")
-
-  = form.inputs "Authentication" do
+  = form.inputs 'Authentication', id: 'auth-wrapper' do
     = form.input :proxy_authentication_method,
-      name: 'service[backend_version]',
-      as: :radio,
-      required: false,
-      collection: BackendVersion.visible_versions(service: @service),
-      label: 'Authentication',
-      wrapper_html: { class: "radio--iconic" },
-      value_as_class: true,
-      hint: 'Authentication is essential to provide Access Control. The chosen authentication mode dictates how your customers will authenticate with your API.'
+            name: 'service[backend_version]',
+            as: :radio,
+            required: false,
+            collection: BackendVersion.visible_versions(service: @service),
+            value_as_class: true,
+            label: false,
+            input_html: {class: 'auth-method'}
 
-= form.buttons do
-  = form.commit_button
+    = form.semantic_fields_for :proxy do |f|
+      = render 'api/services/forms/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
