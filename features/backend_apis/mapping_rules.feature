@@ -30,3 +30,7 @@ Feature: Backend API mapping rules
       | GET         | /gins   | 2        | hits   |
       | PUT         | /mixers | 3        | hits   |
       | POST        | /beers  | 4        | hits   |
+
+  Scenario: New mapping rule form can't have redirect url
+    When I go to the create mapping rule page for backend "My Backend"
+    Then I should not see field "Redirect URL"
