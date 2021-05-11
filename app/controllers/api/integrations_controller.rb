@@ -36,7 +36,7 @@ class Api::IntegrationsController < Api::BaseController
       flash.now[:error] = flash_message(:update_error)
       @api_test_form_error = true
 
-      render_edit_or_show
+      render :show
     end
   end
 
@@ -109,7 +109,7 @@ class Api::IntegrationsController < Api::BaseController
     @proxy.reload
     @proxy.assign_attributes(proxy_params.except(:lock_version))
 
-    render_edit_or_show status: :conflict
+    render :show, status: :conflict
   end
 
   def flash_message(key, opts = {})
@@ -120,9 +120,9 @@ class Api::IntegrationsController < Api::BaseController
     if @proxy.update_attributes(proxy_params)
       update_mapping_rules_position
       flash[:notice] = flash_message(:proxy_pro_update_sucess)
-      redirect_to_edit_or_show
+      redirect_to :show
     else
-      render_edit_or_show
+      render :show
     end
   end
 
@@ -140,7 +140,7 @@ class Api::IntegrationsController < Api::BaseController
       @api_test_form_error = true
     end
 
-    render_edit_or_show
+    render :show
   end
 
   def find_proxy
@@ -226,15 +226,5 @@ class Api::IntegrationsController < Api::BaseController
 
   def toggle_land_path
     @proxy.apicast_configuration_driven ? admin_service_integration_path(@service) : edit_admin_service_integration_path(@service)
-  end
-
-  # TODO: THREESCALE-3759 remove this method
-  def render_edit_or_show(opts = {})
-    render :show, opts
-  end
-
-  # TODO: THREESCALE-3759 remove this method
-  def redirect_to_edit_or_show
-    redirect_to :show
   end
 end
