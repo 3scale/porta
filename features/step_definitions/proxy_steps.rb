@@ -58,7 +58,7 @@ end
 Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" position "([^"]*)" and metric "([^"]*)"$/) do |method, pattern, position, metric|
   visit "#{URI.parse(current_url).path}/new"
   within('#new-mapping-rule-form form') do
-    step %(I select "#{method}" from "Verb")
+    pf4_select(method, from: 'Verb')
     find('input#proxy_rule_pattern').set pattern
     find('input#proxy_rule_position').set position
     within('#wrapper_metric') do

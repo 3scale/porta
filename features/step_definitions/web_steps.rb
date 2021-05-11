@@ -89,11 +89,7 @@ end
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
     if page.has_css?('.pf-c-form__label', text: field)
-      select = find('.pf-c-form__label', text: field).sibling('.pf-c-select')
-      within select do
-        find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
-        click_on(value)
-      end
+      pf4_select(value, from: field)
     else
       # DEPRECATED: remove when all selects have been replaced for PF4
       ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
@@ -104,6 +100,15 @@ When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value,
         select.find(:xpath, XPath::HTML.option(value)).click
       end
     end
+  end
+end
+
+# TODO: Ideally we would extend Node::Actions#select to satisfy Liskov instead of using a custom method.
+def pf4_select(value, from:)
+  select = find('.pf-c-form__label', text: from).sibling('.pf-c-select')
+  within select do
+    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
+    click_on(value)
   end
 end
 
