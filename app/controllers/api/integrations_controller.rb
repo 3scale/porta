@@ -109,8 +109,6 @@ class Api::IntegrationsController < Api::BaseController
     @proxy.reload
     @proxy.assign_attributes(proxy_params.except(:lock_version))
 
-    @last_message_bus_id = nil # don't want MessageBus showing flash message
-
     render_edit_or_show status: :conflict
   end
 
@@ -145,21 +143,8 @@ class Api::IntegrationsController < Api::BaseController
     render_edit_or_show
   end
 
-  # TODO: THREESCALE-3759 remove this method and related code
-  def edit_path
-    last_message_id = @last_message_bus_id
-
-    {
-      action: :edit,
-      last_id: last_message_id,
-      anchor: last_message_id ? 'second_nav' : 'proxy'
-    }.compact
-  end
-
   def find_proxy
     @proxy = @service.proxy
-
-    @last_message_bus_id = params.fetch(:last_id) { last_message_bus_id(@proxy) } if message_bus?(@proxy)
   end
 
   def last_message_bus_id(proxy)
