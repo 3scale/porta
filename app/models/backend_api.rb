@@ -12,6 +12,8 @@ class BackendApi < ApplicationRecord
   DELETED_STATE = :deleted
   ECHO_API_HOST = 'echo-api.3scale.net'
 
+  before_validation :set_port_private_endpoint
+  after_create :create_default_metrics
   before_destroy :validate_destroyed_by_association_or_not_used_by_services
 
   has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
@@ -37,9 +39,6 @@ class BackendApi < ApplicationRecord
     non_localhost: { message: :protected_domain }
 
   alias_attribute :api_backend, :private_endpoint
-
-  before_validation :set_private_endpoint, :set_port_private_endpoint
-  after_create :create_default_metrics
 
   has_system_name(uniqueness_scope: [:account_id])
 
@@ -106,9 +105,6 @@ class BackendApi < ApplicationRecord
   def schedule_deletion
     DeleteObjectHierarchyWorker.perform_later(self)
   end
-
-  # TODO: THREESCALE-3759 remove this method
-  def set_private_endpoint; end
 
   def set_port_private_endpoint
     Proxy::PortGenerator.new(self).call(:private_endpoint)
