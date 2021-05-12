@@ -97,6 +97,7 @@ C:\\nppdf32Log\\debuglog.txt
 /public/system
 /public/test*.html
 /tmp/*
+!/tmp/metrics
 !.gitkeep
 !.eslint*
 !.babelrc
