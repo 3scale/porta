@@ -1,0 +1,18 @@
+.inline-hints {
+  color: #8b8d8f;
+  display: none;
+  font-size: 12px;
+}
+
+.braintree-hosted-fields-invalid {
+  border-color: #E53A40;
+
+  + .inline-hints {
+    display: block;
+  }
+}
+
+.required-fields {
+  font-style: italic;
+  margin-bottom: 2rem;
+}
