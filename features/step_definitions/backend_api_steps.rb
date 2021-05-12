@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-Given /^a backend api "([^"]*)"( that is unnaccessible)?$/ do |name, unnaccessible|
+Given /^a backend api "([^"]*)"( that is deleted)?$/ do |name, deleted|
   backend = @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
-  backend.update!(state: 'deleted') if unnaccessible.present?
+  backend.update!(state: 'deleted') if deleted.present?
 end
 
 Given(/^a backend api "([^"]*)" using the following products:$/) do |name, table|

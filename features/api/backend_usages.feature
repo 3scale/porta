@@ -31,6 +31,6 @@ Feature: Backend Usages
     Then I should see "Couldn't add Backend to Product"
 
   Scenario: Add a backend must be accessible
-    Given a backend api "NO backend" that is unnaccessible
+    Given a backend api "NO backend" that is deleted
     Then I follow "Add Backend"
     And the "Backend" select should not contain "NO backend" option
