@@ -98,9 +98,9 @@ When(/^I fill in the braintree credit card form$/) do
   | City                      | Sevilla                 |
   | State/Region              | Andalusia               |
   TABLE
-  step 'I fill in the braintree credit card iframe'
   step 'I fill in the following:', table(data)
   step 'I select "Spain" from "Country"'
+  step 'I fill in the braintree credit card iframe'
 end
 
 # This will mock filling in the braintree hidden parameters
@@ -108,6 +108,7 @@ When(/^I fill in the braintree credit card iframe$/) do
   # TODO: Would be better to not rely on this kind of variables
   if @javascript
     page.evaluate_script("document.querySelector('#braintree_nonce').value = 'some_braintree_nonce'")
+    page.evaluate_script("document.querySelector('.btn-primary').disabled = false")
   else
     find(:css, '#braintree_nonce', visible: :hidden).set('some_braintree_nonce')
   end
