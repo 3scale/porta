@@ -10,12 +10,12 @@ const props = {
 
 it('should render properly', () => {
   const wrapper = mount(<Label {...props} />)
-  expect(wrapper).toMatchSnapshot()
+  expect(wrapper.exists()).toBe(true)
 })
 
 it('should render label', () => {
   const wrapper = mount(<Label {...props} />)
-  expect(wrapper.text()).toEqual('Username ')
+  expect(wrapper.text()).toEqual('Username')
 })
 
 it('should add * to mandatory field', () => {

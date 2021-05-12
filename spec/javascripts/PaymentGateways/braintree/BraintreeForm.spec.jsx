@@ -1,4 +1,5 @@
-import React from 'react'
+import * as React from 'react'
+import { act } from 'react-dom/test-utils'
 
 import { BraintreeForm } from 'PaymentGateways'
 import { mount } from 'enzyme'
@@ -30,7 +31,7 @@ const props = {
 
 it('should render properly', () => {
   const wrapper = mount(<BraintreeForm {...props} />)
-  expect(wrapper).toMatchSnapshot()
+  expect(wrapper.exists()).toBe(true)
 })
 
 it('should render submit button disabled by default', () => {
@@ -45,4 +46,26 @@ it('should pre-fill billing address inputs when a value is provided', () => {
   expect(wrapper.find('input#customer_credit_card_billing_address_postal_code').props().value).toEqual('08013')
   expect(wrapper.find('input#customer_credit_card_billing_address_locality').props().value).toEqual('Barcelona')
   expect(wrapper.find('select#customer_credit_card_billing_address_country_name').props().value).toEqual('ES')
+})
+
+it('should enable submit button when form is valid', () => {
+  // We can't access braintree card fields, mocking state to pass form vaidation
+  const stateSetter = jest.fn()
+  jest.spyOn(React, 'useState')
+    .mockImplementationOnce(init => [null, stateSetter]) // hostedFieldsInstance
+    .mockImplementationOnce(init => ['', stateSetter]) // braintreeNonceValue
+    .mockImplementationOnce(init => [props.billingAddress, stateSetter]) // billingAddressData
+    .mockImplementationOnce(init => [true, stateSetter]) // isCardValid
+    .mockImplementationOnce(init => [null, stateSetter]) // formErrors
+    .mockImplementationOnce(init => [null, stateSetter]) // cardError
+    .mockImplementationOnce(init => [false, stateSetter]) // isLoading
+
+  const wrapper = mount(<BraintreeForm {...props} />)
+  act(() => {
+    wrapper.find('input#customer_first_name').props().onChange({currentTarget: { value: 'Jane' }})
+    wrapper.find('input#customer_last_name').props().onChange({currentTarget: { value: 'Doe' }})
+    wrapper.find('input#customer_phone').props().onChange({currentTarget: { value: '1234567890' }})
+  })
+
+  expect(wrapper.find('.btn-primary').prop('disabled')).toEqual(false)
 })

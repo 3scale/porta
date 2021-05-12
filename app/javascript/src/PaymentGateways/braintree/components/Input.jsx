@@ -4,9 +4,13 @@ import React from 'react'
 import type { Node } from 'react'
 import type { InputProps } from 'PaymentGateways'
 
-const Input = (props: InputProps): Node => (
+const Input = ({id, required = false, name, value, onChange}: InputProps): Node => (
   <input
-    {...props}
+    id={id}
+    required={required}
+    name={name}
+    value={value}
+    onChange={onChange}
     className="col-md-6 form-control"
     type="text"
   />

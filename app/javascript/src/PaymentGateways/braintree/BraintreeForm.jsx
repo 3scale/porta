@@ -16,7 +16,7 @@ import hostedFields from 'braintree-web/hosted-fields'
 import threeDSecure from 'braintree-web/three-d-secure'
 import { CSRFToken } from 'utilities/CSRFToken'
 import validate from 'validate.js'
-import './styles.css'
+import './BraintreeCustomerForm.scss'
 
 import type { Node } from 'react'
 import type { BraintreeFormProps, BillingAddressData } from 'PaymentGateways'

@@ -13,7 +13,7 @@ const props = {
 
 it('should render properly', () => {
   const wrapper = mount(<ListItem {...props} />)
-  expect(wrapper).toMatchSnapshot()
+  expect(wrapper.exists()).toBe(true)
 })
 
 it('should render without children', () => {
