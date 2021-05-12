@@ -16,7 +16,7 @@ import {
   ServicePlanSelect
 } from 'NewApplication'
 import { UserDefinedField } from 'Common'
-import { CSRFToken } from 'utilities/CSRFToken'
+import { CSRFToken } from 'utilities'
 import * as flash from 'utilities/alert'
 
 import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'

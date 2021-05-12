@@ -4,6 +4,7 @@
 import * as React from 'react'
 
 import { FormContext } from '@patternfly/react-core/dist/js/components/Form/FormContext'
+// $FlowFixMe[cannot-resolve-module] to fix this, try import via scss
 import styles from '@patternfly/react-styles/css/components/Form/form'
 import { css } from '@patternfly/react-styles'
 

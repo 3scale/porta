@@ -1,0 +1,10 @@
+#wrapper_method,
+#wrapper_metric {
+  & > .pf-c-radio {
+    padding-bottom: 6px;
+  }
+
+   & > .pf-c-form__group {
+    padding: 6px 0 12px 18px;
+  }
+}

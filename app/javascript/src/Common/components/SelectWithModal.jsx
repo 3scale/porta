@@ -11,10 +11,10 @@ import {
   toSelectOption,
   toSelectOptionObject,
   SelectOptionObject
-} from 'utilities/patternfly-utils'
+} from 'utilities'
 import { TableModal } from 'Common'
 
-import type { Record } from 'utilities/patternfly-utils'
+import type { Record } from 'utilities'
 
 type Props<T: Record> = {
   item: T | null,

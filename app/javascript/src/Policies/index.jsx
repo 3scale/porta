@@ -12,7 +12,7 @@ import Root from 'Policies/components/Root'
 import configureStore from 'Policies/store/configureStore'
 import { initialState } from 'Policies/reducers/initialState'
 import { populateChainFromConfigs } from 'Policies/actions'
-import { createReactWrapper } from 'utilities/createReactWrapper'
+import { createReactWrapper } from 'utilities'
 
 import type { RegistryPolicy, PolicyConfig } from 'Policies/types'
 

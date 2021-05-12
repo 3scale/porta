@@ -53,11 +53,6 @@ class Api::IntegrationsShowPresenter
     end
   end
 
-  # TODO: THREESCALE-3759 remove this method
-  def apicast_config_ready?
-    proxy.service.backend_apis.any?
-  end
-
   delegate :pending_affecting_changes?, :service, to: :proxy
 
   private :proxy

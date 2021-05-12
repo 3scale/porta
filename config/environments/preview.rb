@@ -16,7 +16,7 @@ System::Application.configure do
   # ip spoofing checks are pointless and might mess up proxies
   config.action_dispatch.ip_spoofing_check = false
 
-  config.assets.compile = true
+  config.assets.compile = false
   config.assets.compress = true
   config.assets.digest = true
 

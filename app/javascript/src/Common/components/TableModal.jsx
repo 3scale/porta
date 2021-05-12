@@ -15,7 +15,7 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table'
 import { useSearchInputEffect } from 'utilities'
 import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
 
-import type { Record } from 'utilities/patternfly-utils'
+import type { Record } from 'utilities'
 
 import './TableModal.scss'
 
