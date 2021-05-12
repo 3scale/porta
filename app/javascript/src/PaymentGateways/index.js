@@ -1,22 +1,15 @@
 // @flow
 
-export { StripeFormWrapper } from 'PaymentGateways/stripe/components/StripeFormWrapper'
-export { StripeCardForm } from 'PaymentGateways/stripe/components/StripeCardForm'
-export { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
-export { BraintreeFormWrapper } from 'PaymentGateways/braintree/BraintreeFormWrapper'
-export { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFields'
-export { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/BraintreeBillingAddressFields'
-export { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
-export { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
-export {
-  validationConstraints,
-  hostedFieldOptions,
-  createBraintreeClient,
-  createHostedFieldsInstance,
-  create3DSecureInstance,
-  veryfyCard
-} from 'PaymentGateways/braintree/braintree'
-export { Label } from 'PaymentGateways/braintree/components/Label'
-export { Input } from 'PaymentGateways/braintree/components/Input'
-export { ListItem } from 'PaymentGateways/braintree/components/ListItem'
-export * from 'PaymentGateways/braintree/types'
+export { StripeFormWrapper } from './stripe/components/StripeFormWrapper'
+export { StripeCardForm } from './stripe/components/StripeCardForm'
+export { BraintreeForm } from './braintree/BraintreeForm'
+export { BraintreeFormWrapper } from './braintree/BraintreeFormWrapper'
+export { BraintreeCardFields } from './braintree/BraintreeCardFields'
+export { BraintreeBillingAddressFields } from './braintree/BraintreeBillingAddressFields'
+export { BraintreeUserFields } from './braintree/BraintreeUserFields'
+export { BraintreeSubmitFields } from './braintree/BraintreeSubmitFields'
+export * from './braintree/braintree'
+export { Label } from './braintree/components/Label'
+export { Input } from './braintree/components/Input'
+export { ListItem } from './braintree/components/ListItem'
+export * from './braintree/types'

@@ -9,9 +9,9 @@ const BraintreeBillingAddressFields = ({
   countriesList,
   billingAddressData,
   setBillingAddressData,
-  selectedCountryCode
+  selectedCountryCode = ''
 }: BillingAddressProps): Node => {
-  const [selectValue, setSelectValue] = useState(selectedCountryCode || '')
+  const [selectValue, setSelectValue] = useState(selectedCountryCode)
 
   const onChangeBillingAddressData = (value: string, field: string) => {
     setBillingAddressData({
@@ -105,6 +105,7 @@ const BraintreeBillingAddressFields = ({
           <Label
             htmlFor="customer_credit_card_billing_address_country_name"
             label="Country"
+            required
           />
           <select
             id="customer_credit_card_billing_address_country_name"

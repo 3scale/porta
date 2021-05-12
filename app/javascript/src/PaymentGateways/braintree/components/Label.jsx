@@ -8,7 +8,8 @@ const Label = ({ htmlFor, label, required }: LabelProps): Node => (
   <label
     htmlFor={htmlFor}
     className="col-md-4 control-label"
-  >{`${label} ${required ? '*' : ''}`}
+  >
+    {`${label}${required ? ' *' : ''}`}
   </label>
 )
 

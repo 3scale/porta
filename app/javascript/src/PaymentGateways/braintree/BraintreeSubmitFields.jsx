@@ -12,7 +12,9 @@ const BraintreeSubmitFields = ({ onSubmitForm, isFormValid }: BraintreeSubmitFie
           className="btn btn-primary pull-right"
           onClick={onSubmitForm}
           disabled={!isFormValid}
-        >Save details</button>
+        >
+          Save details
+        </button>
       </div>
     </div>
   )
