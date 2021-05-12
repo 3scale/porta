@@ -10,11 +10,8 @@
     - when /^service_mesh/
       = render 'api/integrations/apicast/configuration_driven/apicast'
     - else
-      - if @show_presenter.apicast_config_ready?
+      - if @service.backend_apis.any?
         = render 'api/integrations/apicast/configuration_driven/apicast'
       - else
         ' To get started with this product on APIcast,
         = link_to "add a Backend and promote the configuration.", new_admin_service_backend_usage_path(@service), class: "important-button"
-        / TODO: THREESCALE-3759 remove edit_admin_service_integration_path ?
-          ' To get started with this service on APIcast,
-          = link_to "add the base URL of your API and save the configuration.", edit_admin_service_integration_path(@service), class: "important-button"
