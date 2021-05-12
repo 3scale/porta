@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
 
-  include Formtastic::SemanticFormHelper
+  include Formtastic::Helpers::FormHelper
 
   class Dummy
     extend ActiveModel::Naming

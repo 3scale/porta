@@ -1,5 +1,5 @@
 module ThreeScale
-  class SemanticFormBuilder < ::Formtastic::SemanticFormBuilder
+  class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::SpamProtection::Integration::FormBuilder
 
     # Allow specify how to display errors for the input
