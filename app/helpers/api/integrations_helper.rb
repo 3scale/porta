@@ -41,10 +41,6 @@ module Api::IntegrationsHelper
     @service.proxy.apicast_configuration_driven
   end
 
-  def can_toggle_apicast_version?
-    current_account.provider_can_use?(:apicast_v2) && current_account.provider_can_use?(:apicast_v1)
-  end
-
   def apicast_custom_urls?
     # the idea would be to keep this rolling update disabled for saas
     Rails.application.config.three_scale.apicast_custom_url
@@ -68,11 +64,6 @@ module Api::IntegrationsHelper
 
   def deployment_option_is_service_mesh?(service)
     service.deployment_option =~ /^service_mesh/
-  end
-
-  def edit_deployment_option_title(service)
-    title = deployment_option_is_service_mesh?(service) ? 'Service Mesh' : 'APIcast'
-    t(:edit_deployment_configuration, scope: :api_integrations_controller, deployment: title )
   end
 
   def promote_to_staging_button_options(proxy)
