@@ -1,6 +1,6 @@
 default: &default
   enabled: false
-  request_pattern: "\\.3scale.localhost"
+  request_pattern: "\\.3scale\\.localhost"
   request_replacement: ".example.com"
   response_pattern: "\\.example\\.com"
   response_replacement: ".3scale.localhost"
