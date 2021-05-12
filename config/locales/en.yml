@@ -24,7 +24,6 @@ en:
     apicast_version_not_reverted: 'The APIcast version for this service could not be reverted'
     apicast_version_not_upgraded: 'The APIcast version for this service could not be upgraded'
     oidc_not_available_on_old_apicast: 'OpenID Connect is not supported for the old APIcast. Pick a different authentication option before reverting back.'
-    edit_deployment_configuration: 'edit %{deployment} configuration'
   logos_controller:
     update_success: 'The logo was successfully uploaded.'
     destroy_success: 'The logo was successfully deleted.'
@@ -1122,17 +1121,6 @@ en:
         current_password: |
           Any other active session(s) for this user account will be terminated when you update your personal details
           to be sure it's you and not somebody else trying to lock you out of your account.
-      deployment_option_gateway: |
-        A gateway is the most maintainable and scalable way to integrate your API with 3scale as you won't have to touch your API at all;
-        a gateway sits in front of your API as a completely separate entity. Developers will make requests on the gateway,
-        the gateway will communicate (asynchronously) with 3scale for Access Control & Traffic Reporting and forward the original requests to your API.
-      deployment_option_plugin: |
-        Plugins provide a wrapper for the 3scale API that enables API Access Control and API Traffic Reporting without having to run another server.
-        A plugin lives inside the code that powers your API. The plugin calls the 3scale API for Access Control & Traffic Reporting.
-      deployment_option_service_mesh: |
-        The term service mesh is used to describe the network of microservices that make up the applications and the interactions between them.
-        As a service mesh grows in size and complexity, it can become harder to understand and manage. Its requirements can include discovery, load balancing, failure recovery, metrics, and monitoring.
-        A service mesh also often has more complex operational requirements, like A/B testing, canary releases, rate limiting, access control, and end-to-end authentication.
       subdomain: "The domain name is the initial temporary domain name for your developer portal - you can change this to your own domain name later."
       handler: "Do you use any markup language?"
       liquid_enabled: "Process Liquid tags and drops?"
