@@ -30,5 +30,5 @@ Then(/^I should not see product "([^"]*)" being used$/) do |name|
 end
 
 def products_used_table
-  find('#products_using_backend')
+  find('#products-used-list-container')
 end
