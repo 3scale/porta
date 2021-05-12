@@ -149,7 +149,7 @@ form.formtastic fieldset.inputs > ol > li.select select {
   border-radius: $border-radius;
 }
 
-form.formtastic fieldset.buttons {
+form.formtastic fieldset.actions {
   border-top: $border-width solid $border-color;
   text-align: right;
 
@@ -163,7 +163,7 @@ form.formtastic fieldset.buttons {
   }
 }
 
-.button-bar fieldset.buttons {
+.button-bar fieldset.actions {
   border-top: 0 !important;
 
   .delete {
@@ -172,7 +172,7 @@ form.formtastic fieldset.buttons {
   }
 }
 
-form.formtastic fieldset.buttons ol {
+form.formtastic fieldset.actions ol {
 
   li {
     padding: 0 0 0 0;
@@ -474,7 +474,7 @@ form.formtastic fieldset > ol > li p.inline-errors {
  margin: 0;
 }
 
-#fancybox-inner form.formtastic fieldset.buttons {
+#fancybox-inner form.formtastic fieldset.actions {
   padding: 0;
 }
 

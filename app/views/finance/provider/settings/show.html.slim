@@ -47,7 +47,7 @@
               collection: ['monthly', 'yearly'],
               include_blank: false
 
-    = f.buttons do
+    = f.actions do
       = f.button 'Save', button_html: { class: 'pf-c-button pf-m-primary' }
 
 - if can?(:manage, :finance)
@@ -94,7 +94,7 @@
                       - else
                         = fields.text_field name, value: '', disabled: true
 
-      = form.buttons do
+      = form.actions do
         = form.button 'Save changes', button_html: { class: 'pf-c-button pf-m-primary' }
 
   javascript:

@@ -5,8 +5,8 @@
     <%= form.input :app_gallery_enabled %>
   <% end %>
 
-  <%= form.buttons do %>
-    <%= form.commit_button %>
+  <%= form.actions do %>
+    <%= form.action :submit %>
     <%= form.cancel_link admin_site_settings_url %>
   <% end %>
 <% end %>

@@ -178,8 +178,8 @@ module ThreeScale
     #
     # Use this inside a buttons block:
     #
-    #   <%= form.buttons do %>
-    #     <%= form.commit_button %>
+    #   <%= form.actions do %>
+    #     <%= form.action :submit %>
     #     <%= form.cancel_link(some_url) %>
     #   <% end %>
     #

@@ -8,7 +8,7 @@
     <%= f.input :email, :label => 'Send invitation to', :hint => 'Email address to invite to this account' %>
   <% end %>
 
-  <%= f.buttons do %>
-    <%= f.commit_button 'Send' %>
+  <%= f.actions do %>
+    <%= f.action :submit, :label => 'Send' %>
   <% end %>
 <% end %>
