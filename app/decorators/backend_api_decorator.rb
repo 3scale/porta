@@ -17,9 +17,9 @@ class BackendApiDecorator < ApplicationDecorator
     }
   end
 
-  def products_used_table_data
+  def products_table_data
     ServiceDecorator.decorate_collection(services.accessible.sort_by(&:name))
-                    .map(&:used_by_backend_table_data)
+                    .map(&:table_data)
                     .to_json
   end
 

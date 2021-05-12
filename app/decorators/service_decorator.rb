@@ -45,7 +45,7 @@ class ServiceDecorator < ApplicationDecorator
     end
   end
 
-  def used_by_backend_table_data
+  def table_data
     {
       name: name,
       description: system_name,
