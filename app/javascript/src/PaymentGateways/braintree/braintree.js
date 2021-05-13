@@ -1,5 +1,6 @@
-/* eslint-disable flowtype/no-weak-types */
 // @flow
+
+/* eslint-disable flowtype/no-weak-types */
 
 import type { BillingAddressData, HostedFieldsOptions } from 'PaymentGateways'
 
