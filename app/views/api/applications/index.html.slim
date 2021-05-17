@@ -1,4 +1,4 @@
 h1 Applications
-= pf_button_in_title 'Create Application', new_admin_service_application_path(@service)
+= pf_button_in_title 'Create Application', new_admin_service_application_path(@service) unless current_account.master?
 
 = render 'shared/applications/listing'

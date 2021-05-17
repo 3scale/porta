@@ -13,7 +13,7 @@ h1
     ' for
     = @account.name
 
-= pf_button_in_title 'Create Application', create_application_link_href(@account)
+= pf_button_in_title 'Create Application', create_application_link_href(@account) unless current_account.master?
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'
