@@ -45,6 +45,19 @@ const Select = <T: Record>({
     onSelect(selected || null)
   }
 
+  const handleFilter = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
+    let filteredItems = items
+
+    if (value !== '') {
+      const term = new RegExp(value, 'i')
+      filteredItems = items.filter(i => term.test(i.name))
+    }
+
+    // $FlowIssue[prop-missing] className and disabled are optional
+    return filteredItems.map(toSelectOption)
+  }
+
   return (
     <FormGroup
       isRequired={isRequired}
@@ -65,6 +78,7 @@ const Select = <T: Record>({
         onClear={() => onSelect(null)}
         aria-labelledby={fieldId}
         isDisabled={isDisabled}
+        onFilter={handleFilter}
       >
         {/* $FlowIssue[prop-missing] className and disabled are optional */}
         {items.map(toSelectOption)}
