@@ -50,20 +50,10 @@ it('should render itself', () => {
   expect(wrapper.exists()).toBe(true)
 })
 
-it('should display all items, a title and a sticky button', () => {
+it('should display all items and a title, but no sticky footer', () => {
   const wrapper = mountWrapper()
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length + 2)
-})
-
-it('should be able to show a modal', () => {
-  const wrapper = mountWrapper()
-  expect(wrapper.find('TableModal').props().isOpen).toBe(false)
-
-  openModal(wrapper)
-
-  expect(wrapper.find('TableModal').props().isOpen).toBe(true)
-  expect(onSelect).toBeCalledTimes(0)
+  expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length + 1)
 })
 
 it('should be able to select and submit an item', () => {
@@ -94,23 +84,56 @@ it('should have a helper text', () => {
   `)
 })
 
-it('should be able to select an option from the modal', () => {
-  const wrapper = mountWrapper()
+describe('with more than 20 items', () => {
+  const items = new Array(21).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
 
-  openModal(wrapper)
-  wrapper.find('input[type="radio"]').first().simulate('change', { value: true })
-  wrapper.find('button[data-testid="select"]').simulate('click')
+  it('should display up to 20 items, a title and a sticky footer', () => {
+    const wrapper = mountWrapper({ items })
+    wrapper.find('.pf-c-select__toggle-button').simulate('click')
+    expect(wrapper.find('.pf-c-select__menu li').length).toEqual(22)
+  })
 
-  expect(onSelect).toHaveBeenCalledWith(items[0])
+  it('should be able to show a modal', () => {
+    const wrapper = mountWrapper({ items })
+    expect(wrapper.find('TableModal').props().isOpen).toBe(false)
+
+    openModal(wrapper)
+    expect(wrapper.find('TableModal').props().isOpen).toBe(true)
+    expect(onSelect).toBeCalledTimes(0)
+  })
+
+  it('should be able to select an option from the modal', () => {
+    const wrapper = mountWrapper({ items })
+
+    openModal(wrapper)
+    wrapper.find('input[type="radio"]').first().simulate('change', { value: true })
+    wrapper.find('button[data-testid="select"]').simulate('click')
+
+    expect(onSelect).toHaveBeenCalledWith(items[0])
+  })
+
+  it('should display all columns in the modal', () => {
+    const wrapper = mountWrapper({ items })
+
+    openModal(wrapper)
+    const ths = wrapper.find('table th')
+
+    cells.forEach(c => (
+      expect(ths.find(`[data-label="${c.title}"]`).exists()).toBe(true)
+    ))
+  })
 })
 
-it('should display all columns in the modal', () => {
-  const wrapper = mountWrapper()
+describe('with no items', () => {
+  it('should show an empty message that is disabled', () => {
+    const wrapper = mountWrapper({ items: [] })
+    wrapper.find('.pf-c-select__toggle-button').simulate('click')
 
-  openModal(wrapper)
-  const ths = wrapper.find('table th')
+    const items = wrapper.find('SelectOption')
+    expect(items.length).toEqual(2)
 
-  cells.forEach(c => (
-    expect(ths.find(`[data-label="${c.title}"]`).exists()).toBe(true)
-  ))
+    const emptyItem = items.last()
+    expect(emptyItem.prop('isDisabled')).toBe(true)
+    expect(emptyItem.text()).toEqual('No results found')
+  })
 })
