@@ -10,6 +10,11 @@ module Stats
 
       ALLOWED_GRANULARITIES = GRANULARITIES.values
 
+      ALLOWED_TIME_RANGES = {:month  => 10.years,
+                             :day    => 1.year,
+                             6.hours => 6.months, # 6.hours looks unused, but since it's a valid granularity we need to check it as well
+                             :hour   => 90.days}.with_indifferent_access
+
       def usage(options)
         range, granularity, metric = extract_range_and_granularity_and_metric(options)
 
@@ -174,16 +179,9 @@ module Stats
       end
 
       def validate_time_range(range, granularity)
-        case granularity
-        when :month
-        when 6.hours #week
-
-        when :day
-        when :hour
-
+        if ALLOWED_TIME_RANGES.key?(granularity) and range.length > ALLOWED_TIME_RANGES[granularity]
+          raise InvalidParameterError, "Time range for the granularity must be less than #{ALLOWED_TIME_RANGES[granularity].inspect}"
         end
-
-
       end
     end
   end
