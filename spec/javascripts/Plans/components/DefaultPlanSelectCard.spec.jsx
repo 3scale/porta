@@ -15,7 +15,7 @@ const post = (ajax.post: JestMockFn<empty, any>)
 
 const plan = { id: 1, name: 'My Plan' }
 const props = {
-  product: { id: 0, name: 'My API', appPlans: [plan] },
+  product: { id: 0, name: 'My API', appPlans: [plan], systemName: 'my_api' },
   initialDefaultPlan: null,
   path: '/foo/bar'
 }

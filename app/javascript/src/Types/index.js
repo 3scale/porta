@@ -29,6 +29,8 @@ export type ApplicationPlan = Plan & {
 export type Product = {
   id: number,
   name: string,
+  systemName: string,
+  path?: string,
   appPlans: Plan[]
 }
 
