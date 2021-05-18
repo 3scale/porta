@@ -85,8 +85,8 @@ const SelectWithModal = <T: Record>({
 
   const options = getItems(items).map(toSelectOption)
 
-  const handleOnFilter = (e) => {
-    const { value } = e.target
+  const handleOnFilter = (e: SyntheticEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
     const term = new RegExp(value, 'i')
 
     const filteredRecords: T[] = value !== '' ? items.filter(b => term.test(b.name)) : items

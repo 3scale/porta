@@ -47,6 +47,22 @@ it('should filter via typeahead', () => {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   expect(wrapper.find('ul button').length).toEqual(items.length)
 
-  wrapper.find('.pf-c-select__toggle-typeahead').simulate('change', { target: { value: 'troll' } })
+  const input = wrapper.find('.pf-c-select__toggle-typeahead')
+  // $FlowIgnore[incompatible-type]
+  const inputElement: HTMLInputElement = input.getDOMNode()
+
+  inputElement.value = 'o'
+  input.update()
+  input.simulate('change')
+  expect(wrapper.find('ul button').length).toEqual(2)
+
+  inputElement.value = 'oll'
+  input.update()
+  input.simulate('change')
+  expect(wrapper.find('ul button').length).toEqual(1)
+
+  inputElement.value = 'TROLL'
+  input.update()
+  input.simulate('change')
   expect(wrapper.find('ul button').length).toEqual(1)
 })
