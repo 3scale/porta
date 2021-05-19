@@ -179,9 +179,10 @@ module Stats
       end
 
       def validate_time_range(range, granularity)
-        return unless ALLOWED_TIME_RANGES[granularity] && range.length > ALLOWED_TIME_RANGES[granularity]
+        allowed_time = ALLOWED_TIME_RANGES[granularity]
+        return unless allowed_time
 
-        raise InvalidParameterError, "Time range for the granularity must be less than #{ALLOWED_TIME_RANGES[granularity].inspect}"
+        raise InvalidParameterError, "Time range for the granularity must be less than #{ALLOWED_TIME_RANGES[granularity].inspect}" if range.length > allowed_time
       end
     end
   end
