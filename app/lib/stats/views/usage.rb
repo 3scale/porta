@@ -182,7 +182,7 @@ module Stats
         allowed_time = ALLOWED_TIME_RANGES[granularity]
         return unless allowed_time
 
-        raise InvalidParameterError, "Time range for the granularity must be less than #{ALLOWED_TIME_RANGES[granularity].inspect}" if range.length > allowed_time
+        raise InvalidParameterError, "Time range for the granularity must be less than #{allowed_time.inspect}" if range.length > allowed_time
       end
     end
   end
