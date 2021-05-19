@@ -36,7 +36,7 @@ const defaultProps = {
 
 function openModal <T> (wrapper: ReactWrapper<T>) {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button').last().simulate('click')
+  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--view-all').last().simulate('click')
 }
 
 const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
@@ -48,12 +48,6 @@ afterEach(() => {
 it('should render itself', () => {
   const wrapper = mountWrapper()
   expect(wrapper.exists()).toBe(true)
-})
-
-it('should display all items and a title, but no sticky footer', () => {
-  const wrapper = mountWrapper()
-  wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length + 1)
 })
 
 it('should be able to select and submit an item', () => {
@@ -82,6 +76,24 @@ it('should have a helper text', () => {
       I'm helpful
     </p>
   `)
+})
+
+describe('with 20 items or less', () => {
+  const items = new Array(20).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
+
+  it('should display all items and a title, but no sticky footer', () => {
+    const wrapper = mountWrapper({ items })
+    wrapper.find('.pf-c-select__toggle-button').simulate('click')
+    expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length + 1)
+  })
+
+  it('should not be able to show a modal', () => {
+    const wrapper = mountWrapper({ items })
+    expect(wrapper.find('TableModal').props().isOpen).toBe(false)
+
+    wrapper.find('.pf-c-select__toggle-button').simulate('click')
+    expect(wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--view-all').exists()).toBe(false)
+  })
 })
 
 describe('with more than 20 items', () => {

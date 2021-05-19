@@ -61,7 +61,7 @@ const SelectWithModal = <T: Record>({
 }: Props<T>): React.Node => {
   const emptyItem = { id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' }
-  const footerItem = { id: 'foo', name: footer }
+  const footerItem = { id: 'foo', name: footer, className: 'pf-c-select__menu-item--view-all' }
   const shouldShowFooter = items.length > MAX_ITEMS
 
   const [expanded, setExpanded] = React.useState(false)
