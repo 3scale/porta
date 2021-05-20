@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Master::Api::ProvidersControllerTest < ActionDispatch::IntegrationTest
+class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::IntegrationTest
 
   def setup
     @account_plan = master_account.default_account_plan
