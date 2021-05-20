@@ -18,6 +18,8 @@ module ThreeScale
       end
 
       def self.resolve_servers_from_variables(server_url, variables = {})
+        variables.keys = {} if variables.keys.empty?
+        variables.values = {} if variables.values.empty?
         variable_names = variables.keys
         variable_values = variables.values.map { |variable| variable['enum'] || [variable['default']] }
         value_combinations = variable_values.reduce(&:product).map(&Array.method(:wrap)).map { |values| variable_names.zip(values).to_h }
