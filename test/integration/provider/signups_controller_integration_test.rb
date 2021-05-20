@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Provider::SignupsControllerTest < ActionDispatch::IntegrationTest
+class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTest
   def setup
     login! master_account
   end

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Master::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
+class Master::Api::ServicesControllerIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     @provider = FactoryBot.create(:provider_account, provider_account: master_account)
