@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Provider::PasswordsControllerTest < ActionDispatch::IntegrationTest
+class Provider::PasswordsControllerIntTest < ActionDispatch::IntegrationTest
 
-  class WithProviderUserTest < Provider::PasswordsControllerTest
+  class WithProviderUserTest < Provider::PasswordsControllerIntTest
     def setup
       @user = FactoryBot.create(:simple_user)
 
@@ -50,7 +50,7 @@ class Provider::PasswordsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  class WithMasterUserTest < Provider::PasswordsControllerTest
+  class WithMasterUserTest < Provider::PasswordsControllerIntTest
     test '#destroy does not work for master account' do
       login_provider master_account
 

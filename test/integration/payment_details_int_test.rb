@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PaymentDetailsTest < ActionDispatch::IntegrationTest
+class PaymentDetailsIntTest < ActionDispatch::IntegrationTest
   test 'access is denied if finance is not visible' do
     provider = FactoryBot.create(:provider_account)
     plan = FactoryBot.create(:application_plan, :issuer => provider.default_service)
