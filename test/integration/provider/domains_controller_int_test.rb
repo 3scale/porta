@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Provider::DomainsControllerTest < ActionDispatch::IntegrationTest
+class Provider::DomainsControllerIntTest < ActionDispatch::IntegrationTest
   def setup
     login! master_account
   end

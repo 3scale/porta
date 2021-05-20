@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Buyers::UsersControllerTest < ActionDispatch::IntegrationTest
+class Buyers::UsersControllerIntTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     login! provider

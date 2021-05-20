@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-class Provider::Admin::Dashboard::Service::TopTrafficControllerTest < ActionDispatch::IntegrationTest
+class Provider::Admin::Dashboard::Service::TopTrafficControllerIntTest < ActionDispatch::IntegrationTest
   setup do
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
