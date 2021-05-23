@@ -42,7 +42,7 @@ class ThreeScale::OpenApi::UrlResolverTest < ActiveSupport::TestCase
   test 'url empty variable' do
     specification = {
       'servers' => [{
-        'url' => '{protocol}://api.example.com',
+        'url' => 'https://api.example.com',
         'variables' => {}
       }]
     }
