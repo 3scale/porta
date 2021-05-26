@@ -17,6 +17,7 @@ gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 5.0.7'
 
 # Needed for XML serialization of ActiveRecord::Base
+gem "activejob-uniqueness", "~> 0.2.0"
 gem 'activemodel-serializers-xml'
 
 gem 'protected_attributes_continued', '~> 1.3.0'
@@ -244,6 +245,7 @@ group :test do
 
   # performance tests
   gem 'ruby-prof'
+  gem 'with_env'
 end
 
 group :development, :test do

@@ -127,6 +127,9 @@ GEM
     activejob (5.0.7.2)
       activesupport (= 5.0.7.2)
       globalid (>= 0.3.6)
+    activejob-uniqueness (0.2.0)
+      activejob (>= 4.2, < 7)
+      redlock (>= 1.2, < 2)
     activemerchant (1.107.4)
       activesupport (>= 4.2)
       builder (>= 2.1.2, < 4.0.0)
@@ -569,6 +572,8 @@ GEM
     redis-namespace (1.7.0)
       redis (>= 3.0.4)
     redis-prescription (1.0.0)
+    redlock (1.2.1)
+      redis (>= 3.0.0, < 5.0)
     reform (2.0.5)
       disposable (~> 0.1.11)
       uber (~> 0.0.11)
@@ -824,6 +829,7 @@ DEPENDENCIES
   3scale_time_range (= 0.0.6)
   RedCloth (~> 4.3)
   active-docs!
+  activejob-uniqueness (~> 0.2.0)
   activemerchant (~> 1.107.4)
   activemodel-serializers-xml
   activerecord-oracle_enhanced-adapter (~> 1.7.0)
@@ -981,6 +987,7 @@ DEPENDENCIES
   webpacker (~> 4)
   whenever (~> 0.9.7)
   will_paginate (~> 3.1.6)
+  with_env
   xpath (~> 2.1)
   yabeda-prometheus-mmap
   yabeda-rails
