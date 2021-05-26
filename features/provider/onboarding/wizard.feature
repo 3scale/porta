@@ -1,3 +1,4 @@
+@javascript
 Feature: Onboarding Wizard
   In order to onboard customers faster,
   we want them to go through a wizard,
