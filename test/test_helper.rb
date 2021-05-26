@@ -75,3 +75,5 @@ Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |file| require file }
 
 include TestHelpers::XmlAssertions
 include TestHelpers::SectionsPermissions
+
+ActiveJob::Uniqueness.test_mode!
