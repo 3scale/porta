@@ -39,6 +39,9 @@ it('should have a table with Name, Private Base URL and Last updated', () => {
   wrapper.find('.pf-c-select__toggle button').simulate('click')
   wrapper.find('.pf-c-select__menu li button').last().simulate('click')
 
-  expect(wrapper.find('TableModal').prop('isOpen')).toBe(true)
-  expect(wrapper.find('th')).toMatchSnapshot()
+  expect(wrapper.find('TableModal').prop('cells')).toMatchObject([
+    { title: 'Name', propName: 'name' },
+    { title: 'Private Base URL', propName: 'privateEndpoint' },
+    { title: 'Last updated', propName: 'updatedAt' }
+  ])
 })
