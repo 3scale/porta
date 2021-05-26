@@ -12,6 +12,7 @@ class CreateDefaultProxyWorker < ApplicationJob
   end
 
   class BatchEnqueueWorker < ApplicationJob
+    unique :until_executed
 
     # :reek:UtilityFunction
     def perform(*)
