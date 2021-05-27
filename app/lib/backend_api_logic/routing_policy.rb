@@ -13,7 +13,8 @@ module BackendApiLogic
 
       return other_policies if routing_policy['configuration']['rules'].concat(other_routing_rules).empty?
 
-      [routing_policy, *other_policies].compact
+      apicast_policy_index = other_policies.index { |policy| policy['name'] == 'apicast'}
+      other_policies.insert(apicast_policy_index, routing_policy).compact
     end
 
     def with_subpaths?
