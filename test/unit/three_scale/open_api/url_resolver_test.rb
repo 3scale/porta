@@ -39,6 +39,17 @@ class ThreeScale::OpenApi::UrlResolverTest < ActiveSupport::TestCase
     assert_equal ['https://api.example.com'], resolver.servers
   end
 
+  test 'url empty variable' do
+    specification = {
+      'servers' => [{
+        'url' => 'https://api.example.com',
+        'variables' => {}
+      }]
+    }
+    resolver = UrlResolver.new(specification)
+    assert_equal ['https://api.example.com'], resolver.servers
+  end
+
   test 'url with enum variable' do
     specification = {
       'servers' => [{
