@@ -72,4 +72,15 @@ class UserSessionTest < ActiveSupport::TestCase
     assert_includes stale, session2
     refute_includes stale, session3
   end
+
+  test 'parse session ttl settings value' do
+    assert_kind_of ActiveSupport::Duration, UserSession::TTL
+    assert UserSession::TTL.frozen?
+
+    assert_equal 2.weeks, UserSession.send(:ttl_value, nil)
+    assert_equal 2.weeks, UserSession.send(:ttl_value, "")
+    assert_equal 1.week, UserSession.send(:ttl_value, 1.week.seconds.to_i)
+    assert_equal 3.weeks, UserSession.send(:ttl_value, 3.weeks.seconds.to_s)
+    assert_raise(ApplicationConfigurationError) { UserSession.send(:ttl_value, "123p") }
+  end
 end

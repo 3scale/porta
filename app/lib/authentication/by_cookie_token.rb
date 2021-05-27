@@ -25,7 +25,7 @@ module Authentication
 
       # These create and unset the fields required for remembering users between browser closes
       def remember_me
-        remember_me_for 2.weeks
+        remember_me_for UserSession::TTL
       end
 
       def remember_me_for(time)

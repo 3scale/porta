@@ -1,7 +1,5 @@
 class UserSession < ApplicationRecord
 
-  TTL = 2.weeks.freeze
-
   belongs_to :user
   belongs_to :sso_authorization, required: false
   has_one :account, through: :user
@@ -60,4 +58,18 @@ class UserSession < ApplicationRecord
     def set_unique_key
       self.key = SecureRandom.urlsafe_base64(32)
     end
+
+  class << self
+    def ttl_value(duration)
+
+      return 2.weeks if duration.blank?
+
+      ActiveSupport::Duration.seconds(Integer(duration))
+    rescue ArgumentError
+      raise ApplicationConfigurationError, "user session TTL should be specified as a number of seconds"
+    end
+  end
+
+  TTL = ttl_value(Rails.configuration.three_scale.user_session_ttl).freeze
+
 end
