@@ -13,7 +13,7 @@ module ThreeScale
         @specification.fetch('servers', []).map do |server|
           url = server['url']
           variables = server['variables']
-          variables ? resolve_servers_from_variables(url, variables) : url
+          variables.present? ? resolve_servers_from_variables(url, variables) : url
         end.flatten
       end
 
