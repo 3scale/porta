@@ -97,16 +97,6 @@ section class="service-widget"
             = pluralize service.contracts.service.size, 'contract'
             | .
 
-    - if current_user.accessible_services.empty?
-      = render 'shared/service_access'
-
-    section[name="activity"]
-
-      - if can? :manage, :monitoring
-        h2 = link_to 'Analytics', admin_service_stats_usage_path(service), :title => 'Show more stats for this service'
-        = render 'stats/inlinechart',
-                 :metrics => service.metrics.top_level
-
       - if can? :manage, :partners
         h2
           = link_to 'Configuration', admin_service_integration_path(service), title: 'Change integration settings for this service'
@@ -136,12 +126,17 @@ section class="service-widget"
           - [:buyers_manage_keys, :buyers_manage_apps, :buyer_plan_change_permission, :buyer_can_select_plan ].map { |setting| friendly_service_setting(service, setting) }.compact.each do |setting|
             li.item
               = setting
-          li.item
-            strong> Backends
-            ' used in this product:
-            ul
-              - service.backend_apis.each do |backend_api|
-                li = link_to backend_api.name, provider_admin_backend_api_path(backend_api)
+
+      - if current_user.accessible_services.empty?
+        = render 'shared/service_access'
+
+    section[name="activity"]
+
+      - if can? :manage, :monitoring
+        h2 = link_to 'Analytics', admin_service_stats_usage_path(service), title: 'Show more stats for this service'
+        = render 'stats/inlinechart', metrics: service.metrics.top_level
+
+      = render 'api/services/cards/backends_table', product: service
 
 javascript:
   document.addEventListener('DOMContentLoaded', function () {
