@@ -12,4 +12,8 @@ Bugsnag.configure do |config|
   config.ignore_classes << ->(error) do
     ignore_error_names.include?(error.class.name)
   end
+
+  config.ignore_classes << ->(error) do
+    error.is_a?(Liquid::SyntaxError) && error.message.include?("Unknown tag 'do_not_send'")
+  end
 end
