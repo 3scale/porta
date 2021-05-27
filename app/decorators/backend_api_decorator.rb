@@ -23,6 +23,14 @@ class BackendApiDecorator < ApplicationDecorator
                     .to_json
   end
 
+  def table_data
+    {
+      name: name,
+      description: private_endpoint,
+      href: link
+    }
+  end
+
   alias link api_selector_api_link
 
   private
