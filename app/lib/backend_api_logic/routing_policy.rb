@@ -15,7 +15,6 @@ module BackendApiLogic
 
       apicast_policy_index = other_policies.index { |policy| policy['name'] == 'apicast'}
       other_policies.insert(apicast_policy_index, routing_policy).compact
-
     end
 
     def with_subpaths?
