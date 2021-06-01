@@ -16,7 +16,7 @@ table#mapping_rules.data
         th colspan="3"
           = s.text_field :query, size: 20, class: :query, placeholder: 'Search for Pattern'
         th colspan="4"
-          = s.submit 'Search'
+          = s.button 'Search', name: 'commit', data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
   tbody
     - proxy_rules.each do |rule|
       tr

@@ -37,7 +37,7 @@
               <th colspan=4>
               </th>
               <th>
-                <%= s.submit 'Search', :name => nil %>
+                <%= s.button 'Search', :name => nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary' %>
               </th>
             <% end %>
         </tr>

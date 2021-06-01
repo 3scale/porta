@@ -77,7 +77,7 @@ table class="data"
           th
           th
           th
-            = s.submit 'Search', name: nil
+            = s.button 'Search', name: nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
 
   tbody class="cinstances"
     - @cinstances.each do |cinstance|
