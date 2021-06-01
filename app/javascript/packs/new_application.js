@@ -1,8 +1,10 @@
 // @flow
 
-// $FlowIgnore[missing-export] it is exported but name-mapper is failing
 import { NewApplicationFormWrapper } from 'NewApplication'
 import { safeFromJsonString } from 'utilities'
+
+import type { Buyer, Product } from 'NewApplication/types'
+import type { FieldDefinition } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'new-application-form'
@@ -15,12 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const { dataset } = container
 
   const { createServicePlanPath, createApplicationPath, createApplicationPlanPath, serviceSubscriptionsPath } = dataset
-  const product = safeFromJsonString(dataset.product)
-  const products = safeFromJsonString(dataset.products)
-  const servicePlansAllowed = safeFromJsonString(dataset.servicePlansAllowed)
-  const buyer = safeFromJsonString(dataset.buyer)
-  const buyers = safeFromJsonString(dataset.buyers)
-  const definedFields = safeFromJsonString(dataset.definedFields)
+  const product = safeFromJsonString<Product>(dataset.product)
+  const products = safeFromJsonString<Product[]>(dataset.products)
+  const servicePlansAllowed = safeFromJsonString<boolean>(dataset.servicePlansAllowed)
+  const buyer = safeFromJsonString<Buyer>(dataset.buyer)
+  const buyers = safeFromJsonString<Buyer[]>(dataset.buyers)
+  const definedFields = safeFromJsonString<FieldDefinition[]>(dataset.definedFields)
   const validationErrors = safeFromJsonString(dataset.errors) || {}
   const error: string | void = validationErrors.hasOwnProperty('base') ? validationErrors.base[0] : undefined
 
