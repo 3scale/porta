@@ -16,7 +16,7 @@ import {
   ServicePlanSelect
 } from 'NewApplication'
 import { UserDefinedField } from 'Common'
-import { CSRFToken } from 'utilities'
+import { createReactWrapper, CSRFToken } from 'utilities'
 import * as flash from 'utilities/alert'
 
 import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'
@@ -31,7 +31,7 @@ type Props = {
   serviceSubscriptionsPath: string,
   product?: Product,
   products?: Product[],
-  servicePlansAllowed: boolean,
+  servicePlansAllowed?: boolean,
   buyer?: Buyer,
   buyers?: Buyer[],
   definedFields?: FieldDefinition[],
@@ -46,7 +46,7 @@ const NewApplicationForm = ({
   createApplicationPlanPath,
   createServicePlanPath,
   serviceSubscriptionsPath,
-  servicePlansAllowed,
+  servicePlansAllowed = false,
   product: defaultProduct,
   products,
   definedFields,
@@ -187,4 +187,6 @@ const NewApplicationForm = ({
   )
 }
 
-export { NewApplicationForm }
+const NewApplicationFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewApplicationForm {...props} />, containerId)
+
+export { NewApplicationForm, NewApplicationFormWrapper }
