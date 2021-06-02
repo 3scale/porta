@@ -1,7 +1,4 @@
 section.Configuration class=('Configuration--is-promoted' unless deployment_option_is_service_mesh?(@service))
-  / TODO: THREESCALE-3759 remove edit_admin_service_integration_path associated stuff
-  / = link_to edit_deployment_option_title(@service), edit_admin_service_integration_path(@service), class: 'SettingsBox-toggle'
-
   article.Configuration-summary data-state="open"
     h3.Configuration-title = deployment_option_is_service_mesh?(@service) ? 'Service mesh Configuration' : 'APIcast Configuration'
 
