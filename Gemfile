@@ -17,7 +17,7 @@ gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 5.0.7'
 
 # Needed for XML serialization of ActiveRecord::Base
-gem "activejob-uniqueness", "~> 0.2.0"
+gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
 gem 'activemodel-serializers-xml'
 
 gem 'protected_attributes_continued', '~> 1.3.0'
