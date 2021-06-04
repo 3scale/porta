@@ -61,6 +61,7 @@ module Api::IntegrationsHelper
   end
 
   def apicast_endpoint_input_hint(service, environment:)
+    service.deployment_option ||= 'hosted'
     openshift = Rails.application.config.three_scale.apicast_custom_url && service.proxy.hosted?
     t( "formtastic.hints.proxy.endpoint_apicast_2#{'_openshift' if openshift}_html", environment_name: environment)
   end
