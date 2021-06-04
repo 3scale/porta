@@ -14,6 +14,7 @@ base: &default
   onpremises: true
   recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
+  user_session_ttl: <%= ENV.fetch('USER_SESSION_TTL', 2.weeks) %>
 
   # System Emails
   noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', "no-reply@#{superdomain}") %>
