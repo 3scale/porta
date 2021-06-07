@@ -1,8 +1,23 @@
+// @flow
+
 import * as React from 'react'
-import { act } from 'react-dom/test-utils'
 
 import { BraintreeForm } from 'PaymentGateways'
 import { mount } from 'enzyme'
+
+jest.mock('braintree-web/hosted-fields')
+import * as hostedFields from 'braintree-web/hosted-fields'
+jest.spyOn(hostedFields, 'create').mockImplementation(() => Promise.resolve({
+  getState: () => ({ fields: {} }),
+  on: (event, fn) => {
+    if (event === 'validityChange') {
+      fn()
+    }
+  }
+}))
+
+jest.mock('validate.js')
+import * as validate from 'validate.js'
 
 const COUNTRIES_LIST = '[["Afghanistan","AF"],["Albania","AL"],["Algeria","DZ"],["Spain","ES"]]'
 
@@ -25,10 +40,6 @@ const props = {
   selectedCountryCode: 'ES'
 }
 
-// TODO: Investigate how to test Braintree
-// Since braintree fields are injected dinamycally and are owned by a external script,
-// we can't test them here, we can just test the form is displayed and disabled by default.
-
 it('should render properly', () => {
   const wrapper = mount(<BraintreeForm {...props} />)
   expect(wrapper.exists()).toBe(true)
@@ -48,24 +59,21 @@ it('should pre-fill billing address inputs when a value is provided', () => {
   expect(wrapper.find('select#customer_credit_card_billing_address_country_name').props().value).toEqual('ES')
 })
 
-it('should enable submit button when form is valid', () => {
-  // We can't access braintree card fields, mocking state to pass form vaidation
-  const stateSetter = jest.fn()
-  jest.spyOn(React, 'useState')
-    .mockImplementationOnce(init => [null, stateSetter]) // hostedFieldsInstance
-    .mockImplementationOnce(init => ['', stateSetter]) // braintreeNonceValue
-    .mockImplementationOnce(init => [props.billingAddress, stateSetter]) // billingAddressData
-    .mockImplementationOnce(init => [true, stateSetter]) // isCardValid
-    .mockImplementationOnce(init => [null, stateSetter]) // formErrors
-    .mockImplementationOnce(init => [null, stateSetter]) // cardError
-    .mockImplementationOnce(init => [false, stateSetter]) // isLoading
+// $FlowIgnore supress console error until FIXME is resolved to keep tests output clean
+console.error = () => {}
 
-  const wrapper = mount(<BraintreeForm {...props} />)
-  act(() => {
-    wrapper.find('input#customer_first_name').props().onChange({currentTarget: { value: 'Jane' }})
-    wrapper.find('input#customer_last_name').props().onChange({currentTarget: { value: 'Doe' }})
-    wrapper.find('input#customer_phone').props().onChange({currentTarget: { value: '1234567890' }})
-  })
+// FIXME: Fix log error 'Warning: An update to BraintreeForm inside a test was not wrapped in act'
+// Using 'act' or other solutions like 'runAllImmediates' does not seem to be valid solutions. Instead, the component BraintreeForm
+// probably has to be refactored to reduce the number of async effects. Upgrading Enzyme to 3.10 is also irrelevant.
+// Refs:
+// - https://stackoverflow.com/q/55388587/5466997
+// - https://github.com/eps1lon/react-act-immediate/blob/4d61b67dc98dd8dd422a41d07b82e08a8031bded/src/index.test.js
+// - https://github.com/airbnb/enzyme/issues/2073
+it('should enable submit button when form is valid', async () => {
+  jest.spyOn(validate, 'validate')
+    .mockReturnValueOnce(undefined)
 
+  const wrapper = await mount(<BraintreeForm {...props} />)
+  wrapper.update()
   expect(wrapper.find('.btn-primary').prop('disabled')).toEqual(false)
 })
