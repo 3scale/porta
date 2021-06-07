@@ -90,6 +90,8 @@ system-builder-ruby25: &system-builder-ruby25
 
 mysql-container: &mysql-container
   image: circleci/mysql:8-ram
+  command:
+    - --default-authentication-plugin=mysql_native_password
   environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: yes
     MYSQL_ROOT_PASSWORD: ''
