@@ -1099,14 +1099,14 @@ en:
 
     services:
       create:
-        notice: "%{resource_type} created."
+        notice: "Product created."
         errors:
-          default: "Couldn't create %{resource_type}. Check your Plan limits"
+          default: "Couldn't create Product. Check your Plan limits"
       update:
-        notice: "%{resource_type} information updated."
-        error: "Couldn't update %{resource_type}."
+        notice: "Product information updated."
+        error: "Couldn't update Product."
       destroy:
-        notice: "%{resource_type} '%{resource_name}' will be deleted shortly. You will receive a notification when it is done"
+        notice: "Product '%{resource_name}' will be deleted shortly. You will receive a notification when it is done"
 
   proxy:
     credentials_location:

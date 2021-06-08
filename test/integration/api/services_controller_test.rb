@@ -44,7 +44,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       page = Nokogiri::HTML::Document.parse(response.body)
 
-      assert_template 'api/services/settings_apiap'
+      assert_template 'api/services/settings'
       section_titles = page.xpath("//fieldset[@class='inputs']/legend").text
 
       ['Deployment',
