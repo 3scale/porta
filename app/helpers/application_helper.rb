@@ -40,7 +40,7 @@ module ApplicationHelper
                     scope: [:controller, :action, name],
                     default: action.humanize)
 
-    "#{controller_name} - #{action_name}"
+    "#{controller_name == "Services" ? "Products" : controller_name} - #{action_name}"
   end
 
   def link_to_unless_current_styled(text, url, options = {})
