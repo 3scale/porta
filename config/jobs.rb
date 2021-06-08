@@ -35,6 +35,7 @@ module ThreeScale
       Pdf::Dispatch.daily
       DeleteProvidedAccessTokensWorker.perform_async
       DestroyAllDeletedObjectsWorker.perform_later(Service.to_s)
+      CreateDefaultProxyWorker::BatchEnqueueWorker.perform_later
     ].freeze
 
     BILLING = %w[
