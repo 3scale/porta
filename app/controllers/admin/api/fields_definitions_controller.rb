@@ -1,10 +1,11 @@
 #frozen_string_literal: true
 
 class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
-  # token scope?
 
   wrap_parameters FieldsDefinition
   representer FieldsDefinition
+
+  ##~ @parameter_fields_definition_target = {:name => "target", :description => "Target entity of fields definition.", :dataType => "string", :required => true, :paramType => "query", :defaultValue => "account", :allowableValues => {:values => ["Account","User","Cinstance"], :valueType => "LIST"}}
 
   # swagger
   ##~ sapi = source2swagger.namespace("Account Management API")
@@ -36,12 +37,13 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.group = "fields_definition"
   #
   ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "target", :description => "Target entity of fields definition.", :dataType => "string", :required => true, :paramType => "query", :defaultValue => "account", :allowableValues => {:values => ["user", "cinstance"], :valueType => "LIST"}}
+  ##~ op.parameters.add @parameter_fields_definition_target
   ##~ op.parameters.add :name => "name", :description => "Name of the fields definition to be created.", :dataType => "string", :required => true, :paramType => "query"
   ##~ op.parameters.add :name => "label", :description => "The field title your developers will see.", :dataType => "string", :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "required", :description => "Makes the field required for developers.", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "hidden", :description => "Developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "read_only", :description => "Developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "required", :description => "If 'true' the field will be required for developers.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "hidden", :description => "If 'true' the developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "read_only", :description => "If 'true' the developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "position", :description => "Position of the fields definition.", :dataType => "integer", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def create
@@ -78,12 +80,12 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "id", :description => "ID of the fields definition.", :dataType => "int", :required => true, :paramType => "path"
-  ##~ op.parameters.add :name => "target", :description => "Target entity of fields definition.", :dataType => "string", :required => true, :paramType => "query", :defaultValue => "account", :allowableValues => {:values => ["user", "cinstance"], :valueType => "LIST"}}
-  ##~ op.parameters.add :name => "name", :description => "Name of the fields definition to be created.", :dataType => "string", :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "label", :description => "The field title your developers will see.", :dataType => "string", :required => true, :paramType => "query"
-  ##~ op.parameters.add :name => "required", :description => "Makes the field required for developers.", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "hidden", :description => "Developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "read_only", :description => "Developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add @parameter_fields_definition_target
+  ##~ op.parameters.add :name => "label", :description => "The field title your developers will see.", :dataType => "string", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "required", :description => "If 'true' the field will be required for developers.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "hidden", :description => "If 'true' the developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "read_only", :description => "If 'true' the developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "position", :description => "Position of the fields definition.", :dataType => "integer", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def update
@@ -107,7 +109,8 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
 
   private
 
-  DEFAULT_PARAMS = %i[target label name choices required hidden read_only].freeze
+  DEFAULT_PARAMS = %i[target label choices required hidden read_only position].freeze
+  private_constant :DEFAULT_PARAMS
 
   def field_definitions
     @fields_definitions ||= current_account.fields_definitions
@@ -118,11 +121,11 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   end
 
   def create_params
-    params.require(:field_definition).permit(DEFAULT_PARAMS)
+    params.require(:fields_definition).permit(DEFAULT_PARAMS | %i[name])
   end
 
   def update_params
-    params.require(:field_definition).permit(DEFAULT_PARAMS)
+    params.require(:fields_definition).permit(DEFAULT_PARAMS)
   end
 
 end
