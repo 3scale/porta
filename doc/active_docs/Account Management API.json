@@ -4973,13 +4973,6 @@
               "paramType": "query"
             },
             {
-              "name": "position",
-              "description": "Position of the fields definition.",
-              "dataType": "integer",
-              "required": false,
-              "paramType": "query"
-            },
-            {
               "name": "choices",
               "defaultName": "choices[]",
               "description": "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].",
