@@ -2,7 +2,8 @@
 
 class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
 
-  wrap_parameters FieldsDefinition
+  # we need to include position, because FieldsDefinition is creating it as an alias
+  wrap_parameters include: FieldsDefinition.attribute_names << 'position'
   representer FieldsDefinition
 
   ##~ @parameter_fields_definition_target = {:name => "target", :description => "Target entity of fields definition.", :dataType => "string", :required => true, :paramType => "query", :defaultValue => "account", :allowableValues => {:values => ["Account","User","Cinstance"], :valueType => "LIST"}}
@@ -43,7 +44,6 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "required", :description => "If 'true' the field will be required for developers.", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "hidden", :description => "If 'true' the developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "read_only", :description => "If 'true' the developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "position", :description => "Position of the fields definition.", :dataType => "integer", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def create
@@ -109,7 +109,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
 
   private
 
-  DEFAULT_PARAMS = %i[target label choices required hidden read_only position].freeze
+  DEFAULT_PARAMS = %i[target label choices required hidden read_only].freeze
   private_constant :DEFAULT_PARAMS
 
   def field_definitions
@@ -125,7 +125,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   end
 
   def update_params
-    params.require(:fields_definition).permit(DEFAULT_PARAMS)
+    params.require(:fields_definition).permit(DEFAULT_PARAMS | %i[position])
   end
 
 end
