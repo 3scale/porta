@@ -69,16 +69,6 @@ const NewApplicationForm = ({
     setDefinedFieldsState(state => ({ ...state, [id]: value }))
   }
 
-  const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
-  const servicePlanValid = !servicePlansAllowed || servicePlan !== null
-  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
-  const isFormComplete = buyer !== null &&
-    product !== null &&
-    servicePlanValid &&
-    appPlan !== null &&
-    buyerValid &&
-    definedFieldsValid
-
   const resetServicePlan = () => {
     let plan = null
 
@@ -107,6 +97,16 @@ const NewApplicationForm = ({
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
   const contractedServicePlan = (buyer && product) ? new BuyerLogic(buyer).getContractedServicePlan(product) : null
+
+  const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
+  const servicePlanValid = !servicePlansAllowed || servicePlan !== null || contractedServicePlan !== null
+  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
+  const isFormComplete = buyer !== null &&
+    product !== null &&
+    servicePlanValid &&
+    appPlan !== null &&
+    buyerValid &&
+    definedFieldsValid
 
   if (error) {
     flash.error(error)
