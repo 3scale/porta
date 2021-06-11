@@ -822,7 +822,6 @@ without fake Core server your after commit callbacks will crash and you might ge
           resource :integration, except: %i[create destroy edit] do
             member do
               patch 'promote_to_production'
-              patch 'toggle_apicast_version'
             end
           end
           resources :proxy_logs, :only => [:index, :show ]
