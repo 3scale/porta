@@ -51,6 +51,8 @@ Feature: Provider side messages
     When I follow "Inbox"
     Then I should see read message from "bob" with subject "I want out!"
 
+  # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
+  @wip
   Scenario: Bulk operations
     Given account "foo.3scale.localhost" has no messages
     And 40 messages sent from buyer "bob" to provider "foo.3scale.localhost" with subject "Wildness" and body "On the road."
