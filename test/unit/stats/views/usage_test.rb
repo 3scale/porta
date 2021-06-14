@@ -40,6 +40,33 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
      end
   end
 
+  test '#usage raises InvalidParameterError when range is more than one year for day granularity' do
+    # should work
+    @dummy.usage(@options.merge!(until: '2010-12-31'))
+
+    assert_raise Stats::InvalidParameterError do
+      @dummy.usage(@options.merge!(until: '2011-01-01'))
+    end
+  end
+
+
+  test '#usage raises InvalidParameterError when range is more than 90 days for hour granularity' do
+    # should work
+    @dummy.usage(@options.merge!(until: '2010-03-31', granularity: :hour))
+
+    assert_raise Stats::InvalidParameterError do
+      @dummy.usage(@options.merge!(until: '2010-04-01', granularity: :hour))
+    end
+  end
+
+  test '#usage raises InvalidParameterError when range is more than 10 years for month granularity' do
+    # should work
+    @dummy.usage(@options.merge!(until: '2019-12-31', granularity: :month))
+
+    assert_raise Stats::InvalidParameterError do
+      @dummy.usage(@options.merge!(until: '2020-01-01', granularity: :month))
+    end
+  end
 
   test "#usage calculates previous if asked for it" do
     d1 = Time.zone.parse('2009-12-30')

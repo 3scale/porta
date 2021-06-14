@@ -6,10 +6,6 @@ module Stats
     include ActiveSupport::Benchmarkable
     delegate :logger, to: :Rails
 
-    # TODO: - join with stats/views/usage
-    #
-    ALLOWED_GRANULARITIES = [ 6.hours, :hour, :day, :month ].freeze
-
     def values_in_range(range, granularity, prefix)
       # TODO: - refactor, isolate to strategies?
       case granularity
@@ -26,7 +22,8 @@ module Stats
           mget(*keys).map(&:to_i)
         end
       else
-        raise InvalidParameterError, "Granularity #{options[:granularity]} not allowed (use #{ALLOWED_GRANULARITIES.inspect})"
+        raise InvalidParameterError,
+              "Granularity #{options[:granularity]} not allowed (use #{Stats::Views::Usage::ALLOWED_GRANULARITIES.inspect})"
       end
     end
 
