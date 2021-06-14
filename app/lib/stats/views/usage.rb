@@ -8,6 +8,13 @@ module Stats
                        :week  => 6.hours,
                        :day   => :hour}.with_indifferent_access
 
+      ALLOWED_GRANULARITIES = GRANULARITIES.values
+
+      ALLOWED_TIME_RANGES = {:month  => 10.years,
+                             :day    => 1.year,
+                             6.hours => 6.months, # 6.hours looks unused, but since it's a valid granularity we need to check it as well
+                             :hour   => 90.days}.with_indifferent_access
+
       def usage(options)
         range, granularity, metric = extract_range_and_granularity_and_metric(options)
 
@@ -117,6 +124,7 @@ module Stats
         options = options.symbolize_keys
 
         range, granularity = extract_range_and_granularity(options)
+        validate_time_range(range, granularity)
         metric             = extract_metric(options)
 
         [range, granularity, metric]
@@ -136,7 +144,7 @@ module Stats
         else
           options.assert_required_keys!(:granularity)
           # due to the unfortunate use of 21600 as a valid granularity  the parameter is required to a symbol or fixnum
-          raise InvalidParameterError, "Granularity must be one of #{GRANULARITIES.values.inspect}, not #{options[:granularity]}" unless GRANULARITIES.values.include?(options[:granularity]) || GRANULARITIES.values.include?(options[:granularity].to_sym)
+          raise InvalidParameterError, "Granularity must be one of #{ALLOWED_GRANULARITIES.inspect}, not #{options[:granularity]}" unless ALLOWED_GRANULARITIES.include?(options[:granularity]) || ALLOWED_GRANULARITIES.include?(options[:granularity].to_sym)
 
           if options[:since].present? && options[:until].present?
             timezone = extract_timezone(options)
@@ -168,6 +176,13 @@ module Stats
         range = range.to_time_range.round(granularity)
 
         [range, granularity]
+      end
+
+      def validate_time_range(range, granularity)
+        allowed_time = ALLOWED_TIME_RANGES[granularity]
+        return unless allowed_time
+
+        raise InvalidParameterError, "Time range for the granularity must be less than #{allowed_time.inspect}" if range.length > allowed_time
       end
     end
   end
