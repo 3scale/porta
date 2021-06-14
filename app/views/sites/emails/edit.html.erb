@@ -14,7 +14,7 @@
 
       <% @services.each do |service| %>
         <%= form.semantic_fields_for service do |sf| %>
-          <%= sf.input :support_email, :label => "Service #{service.name}", :input_html => { :value => service.support_email, :id => "service_#{service.id}_support_email", :name => "service_#{service.id}_support_email" } %>
+          <%= sf.input :support_email, :label => "Service #{ sanitize service.name }", :input_html => { :value => service.support_email, :id => "service_#{service.id}_support_email", :name => "service_#{service.id}_support_email" } %>
        <% end
         end
       end %>
