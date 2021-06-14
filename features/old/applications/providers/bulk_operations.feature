@@ -18,6 +18,8 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
+  # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
+  @wip
   Scenario: Show and hide bulk operations controls
     Given I am logged in as provider "foo.3scale.localhost"
 
@@ -31,6 +33,8 @@ Feature: Bulk operations
     When I uncheck select for "BobApp"
     Then "Bulk operations" should not be visible
 
+  # FIXME: THREESCALE-7195 this scenario is failing in CircleCI. We need to refactor it as an integration test.
+  @wip
   Scenario: Check all applications with main checkbox
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
