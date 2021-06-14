@@ -1,4 +1,4 @@
-FROM centos/ruby-25-centos7
+FROM quay.io/centos7/ruby-25-centos7
 
 USER root
 
