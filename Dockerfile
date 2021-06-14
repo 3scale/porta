@@ -1,4 +1,4 @@
-FROM quay.io/3scale/system-builder:ruby25-oracle
+FROM quay.io/3scale/system-builder:ruby26
 
 ARG CUSTOM_DB=mysql
 
