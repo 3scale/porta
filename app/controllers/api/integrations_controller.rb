@@ -126,23 +126,6 @@ class Api::IntegrationsController < Api::BaseController
     end
   end
 
-  def async_update
-    if (@deploy_id = @proxy.save_and_async_deploy(proxy_params, current_user))
-      flash.now[:notice] = flash_message(:async_update_success)
-    else
-      attrs = params.fetch(:proxy, {}).fetch(:proxy_rules_attributes,{})
-      splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
-
-      @marked_for_destroy = splitted[true]
-      @marked_for_update = splitted[false]
-
-      flash.now[:error] = flash_message(:async_update_error)
-      @api_test_form_error = true
-    end
-
-    render :show
-  end
-
   def find_proxy
     @proxy = @service.proxy
   end

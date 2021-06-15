@@ -15,8 +15,6 @@ en:
     update_production_success: 'Proxy settings deployed'
     update_error: "Couldn't update the Staging Configuration"
     update_success: '%{environment} Configuration Updated'
-    async_update_success: 'Staging Configuration Updated'
-    async_update_error: "Couldn't update the Staging Configuration"
     proxy_pro_update_sucess: 'Proxy settings saved.'
     stale_object: 'Someone else edited the Staging Configuration'
     apicast_version_reverted: 'The APIcast version for this service was successfully reverted to the old APIcast.'
