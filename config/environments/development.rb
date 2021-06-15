@@ -57,8 +57,15 @@ Rails.application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   config.action_mailer.perform_deliveries = true
-  # See emails in browser
-  config.action_mailer.delivery_method = defined?(LetterOpener) ? :letter_opener : :test
+
+  config.action_mailer.delivery_method =
+    if defined?(LetterOpener)
+      :letter_opener
+    elsif config.action_mailer.smtp_settings[:address]
+      :smtp
+    else
+      :test
+    end
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large

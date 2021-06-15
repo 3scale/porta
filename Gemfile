@@ -175,7 +175,7 @@ group :development do
   gem 'bullet', '~> 5.6'
   gem 'listen'
 
-  gem 'letter_opener', require: false if ENV.fetch('LETTER_OPENER', '1') == '0'
+  gem 'letter_opener', require: ENV.fetch('LETTER_OPENER', '0') == '1'
 
   gem 'yard', require: false
 
