@@ -28,7 +28,7 @@
         <%= link_to 'Cancel', provider_admin_messages_root_path, :class => 'fancybox-close' %>
       </li>
     <% end %>
-    <%= form.commit_button 'Send' %>
+    <%= form.button 'Send', button_html: { class: 'pf-c-button pf-m-primary' } %>
   <% end %>  
 
   <%= hidden_field_tag :to, params[:to] if params[:to] %>
