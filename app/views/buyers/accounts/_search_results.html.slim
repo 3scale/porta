@@ -37,7 +37,7 @@ table class="data" id="buyer_accounts"
                   { :include_blank => true, :selected => @search.state },
                   { :class => :state }
         th
-          = s.submit 'Search', :name => nil
+          = s.button 'Search', :name => nil, :class => "pf-c-button pf-m-primary"
 
   tbody
     - accounts.each do |account|
