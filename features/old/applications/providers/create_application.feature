@@ -23,7 +23,6 @@
        And I go to the account context create application page for "bob"
      Then I should see "New Application"
       And I select "API" from "Product"
-      And I select "Default" from "Service plan"
       But the application plans select should not contain custom plans of provider "foo.3scale.localhost"
       And I select "Basic" from "Application plan"
       And I fill in "Name" with "UltimateWidget"
@@ -42,7 +41,6 @@
        And I go to the account context create application page for "bob"
      Then I should see "New Application"
       And I select "API" from "Product"
-      And I select "Default" from "Service plan"
       But the application plans select should not contain custom plans of provider "foo.3scale.localhost"
       And I select "Basic" from "Application plan"
       And I fill in "Name" with "UltimateWidget"
@@ -58,7 +56,6 @@
       And I go to the product context create application page for "API"
       Then I should see "New Application"
       And I select "bob" from "Account"
-      And I select "Default" from "Service plan"
       But the application plans select should not contain custom plans of provider "foo.3scale.localhost"
       And I select "Basic" from "Application plan"
       And I fill in "Name" with "UltimateWidget"
@@ -75,7 +72,6 @@
       Then I should see "New Application"
       And I select "bob" from "Account"
       And I select "API" from "Product"
-      And I select "Default" from "Service plan"
       But the application plans select should not contain custom plans of provider "foo.3scale.localhost"
       And I select "Basic" from "Application plan"
       And I fill in "Name" with "UltimateWidget"
@@ -133,7 +129,6 @@
       And I fill in "Womm" with "12/10"
       And I select "API" from "Product"
       And I select "Basic" from "Application plan"
-      And I select "Default" from "Service plan"
       And I press "Create Application"
      Then I should be on the provider side "UltimateWidget" application page
       And should see "Application was successfully created"
@@ -149,8 +144,6 @@
       And I should see button "Create Application" disabled
      Then I select "API" from "Product"
       And I should see button "Create Application" disabled
-     Then I select "Default" from "Service plan"
-     And I should see button "Create Application" disabled
      Then I select "Basic" from "Application plan"
      And I should see button "Create Application"
 
@@ -159,7 +152,6 @@
      And  I go to the account context create application page for "bob"
      When I should see "New Application"
      And I select "API" from "Product"
-     And I select "Default" from "Service plan"
      And I select "Basic" from "Application plan"
      And I fill in "Name" with "name"
      And I fill in "Description" with "description"

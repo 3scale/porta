@@ -16,6 +16,7 @@ import {
   ServicePlanSelect
 } from 'NewApplication'
 import { UserDefinedField } from 'Common'
+import { BuyerLogic } from 'Logic'
 import { createReactWrapper, CSRFToken } from 'utilities'
 import * as flash from 'utilities/alert'
 
@@ -68,16 +69,6 @@ const NewApplicationForm = ({
     setDefinedFieldsState(state => ({ ...state, [id]: value }))
   }
 
-  const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
-  const servicePlanValid = !servicePlansAllowed || servicePlan !== null
-  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
-  const isFormComplete = buyer !== null &&
-    product !== null &&
-    servicePlanValid &&
-    appPlan !== null &&
-    buyerValid &&
-    definedFieldsValid
-
   const resetServicePlan = () => {
     let plan = null
 
@@ -105,8 +96,17 @@ const NewApplicationForm = ({
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
-  const contract = (buyer && product && buyer.contractedProducts.find(p => p.id === product.id)) || null
-  const contractedServicePlan: ServicePlan | null = (contract && contract.withPlan) || (product && product.defaultServicePlan)
+  const contractedServicePlan = (buyer && product) ? new BuyerLogic(buyer).getContractedServicePlan(product) : null
+
+  const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
+  const servicePlanValid = !servicePlansAllowed || servicePlan !== null || contractedServicePlan !== null
+  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
+  const isFormComplete = buyer !== null &&
+    product !== null &&
+    servicePlanValid &&
+    appPlan !== null &&
+    buyerValid &&
+    definedFieldsValid
 
   if (error) {
     flash.error(error)
@@ -142,7 +142,7 @@ const NewApplicationForm = ({
 
         {servicePlansAllowed && (
           <ServicePlanSelect
-            servicePlan={servicePlan}
+            servicePlan={contractedServicePlan || servicePlan}
             servicePlans={product ? product.servicePlans : []}
             onSelect={setServicePlan}
             showHint={product !== null && buyer !== null}
