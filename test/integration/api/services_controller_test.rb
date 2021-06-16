@@ -63,6 +63,33 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
+    test 'shows the correct deployment option' do
+      # Default value
+      service.stubs(:deployment_option).returns(nil)
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      hosted_option = page.at_css('#service_deployment_option_hosted')
+      assert hosted_option.attribute('checked').present?
+      service.unstub(:deployment_option)
+
+      # Self managed
+      service.update!(deployment_option: 'self_managed')
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      self_managed_option = page.at_css('#service_deployment_option_self_managed')
+      assert self_managed_option.attribute('checked').present?
+
+      # Hosted
+      service.update!(deployment_option: 'hosted')
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      hosted_option = page.at_css('#service_deployment_option_hosted')
+      assert hosted_option.attribute('checked').present?
+    end
+
     test 'update the settings' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       service.update!(deployment_option: 'self_managed')
