@@ -1,6 +1,6 @@
 - content_for :sublayout_title, 'Settings'
 
-= semantic_form_for @service, :url => admin_service_path(@service) do |form|
-  = render :partial => 'api/services/forms/integration_settings', :locals => {:form => form}
+= semantic_form_for @service, url: admin_service_path(@service) do |form|
+  = render partial: 'api/services/forms/integration_settings', locals: { form: form, service: @service }
   = form.buttons do
     = form.commit_button 'Update Product', button_html: { name: 'update_settings', class: 'pf-c-button pf-m-primary' }
