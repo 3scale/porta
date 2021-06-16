@@ -12,14 +12,14 @@
             input_html: {class: 'integration-method'}
 
     = form.semantic_fields_for :proxy do |f|
-      = render 'api/integrations/apicast/shared/proxy_endpoints', f: f, service: @service, proxy: @service.proxy
+      = render 'api/integrations/apicast/shared/proxy_endpoints', f: f, service: service
 
   = form.inputs 'Authentication', id: 'auth-wrapper' do
     = form.input :proxy_authentication_method,
             name: 'service[backend_version]',
             as: :radio,
             required: false,
-            collection: BackendVersion.visible_versions(service: @service),
+            collection: BackendVersion.visible_versions(service: service),
             value_as_class: true,
             label: false,
             input_html: {class: 'auth-method'}
