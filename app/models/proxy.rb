@@ -224,10 +224,6 @@ class Proxy < ApplicationRecord
   end
 
   class SelfManagedAPIcast < DeploymentStrategy
-    def default_staging_endpoint
-      staging_endpoint = proxy.apicast_configuration_driven ? nil : :sandbox_endpoint
-      generate(staging_endpoint)
-    end
   end
 
   class HostedAPIcast < DeploymentStrategy
