@@ -2,5 +2,7 @@
 
 <%= cms_form_for(@group) do |f| %>
   <%= render 'form', :f => f %>
-  <%= f.buttons :commit %>
+  <%= f.buttons do %>
+    <%= f.button 'Create Group', button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <% end %>
 <% end %>
