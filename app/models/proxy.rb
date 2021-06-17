@@ -151,8 +151,6 @@ class Proxy < ApplicationRecord
   end
 
   def policy_chain
-    # TODO: We need to remove this rolling update as it should be available for everyone using APIcast V2
-    return [] unless provider_can_use?(:policies)
     (policies_config.presence || []).each_with_object([]) do |config, chain|
       chain << config.slice('name', 'version', 'configuration') if config['enabled']
     end

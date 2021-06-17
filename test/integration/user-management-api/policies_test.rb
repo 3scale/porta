@@ -8,12 +8,6 @@ class Admin::Api::PoliciesTest < ActionDispatch::IntegrationTest
     host! @provider.admin_domain
   end
 
-  def test_index_forbidden
-    rolling_updates_off
-    get(admin_api_policies_path, format: :json, provider_key: @provider.api_key)
-    assert_response :not_found
-  end
-
   def test_index
     rolling_updates_on
     Policies::PoliciesListService.expects(:call).with(@provider).returns("{\"cors\":[{\"schema\":\"1\"}]}")

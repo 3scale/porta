@@ -18,12 +18,6 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
     assert_match "{\"name\":\"schema\",\"version\":\"1\",\"configuration\":{}}", response.body
   end
 
-  def test_show_forbidden
-    rolling_updates_off
-    get admin_api_service_proxy_policies_path(valid_params)
-    assert_response :not_found
-  end
-
   def test_update_without_errors
     put admin_api_service_proxy_policies_path(valid_params.merge(
       { proxy: { policies_config: [{'name' => 'alaska', 'version' => '1', 'configuration' => {}}].to_json }}))
