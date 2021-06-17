@@ -327,18 +327,6 @@ class Proxy < ApplicationRecord
     end
   end
 
-  def save_and_async_deploy(attrs, user)
-    saved = update_attributes(attrs)
-
-    analytics.track('Sandbox Proxy updated', analytics_attributes.merge(success: saved))
-
-    saved && async_deploy(user)
-  end
-
-  def async_deploy(user)
-    ApicastV1DeploymentService.async_deploy(user, self)
-  end
-
   def hosts
     [endpoint, sandbox_endpoint].map do |endpoint|
       begin
