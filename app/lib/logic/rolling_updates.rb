@@ -271,17 +271,7 @@ module Logic
         end
       end
 
-      class Policies < Base
-        def missing_config
-          false
-        end
-      end
-
       class PolicyRegistry < Base
-        def enabled?
-          super && provider_can_use?(:policies)
-        end
-
         def missing_config
           false
         end
