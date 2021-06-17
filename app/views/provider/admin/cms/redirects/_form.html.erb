@@ -1,2 +1,4 @@
 <%= form.inputs :source, :target %>
-<%= form.buttons %>
+<%= form.buttons do %>
+  <%= form.button "#{params[:action] == 'edit' ? 'Update' : 'Create'} Redirect", button_html: { class: 'pf-c-button pf-m-primary' } %>
+<% end %>

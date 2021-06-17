@@ -28,7 +28,7 @@
           <%= select_year @search.year.try(:to_i), :prefix => :search, :field_name => :year, :include_blank => true, :start_year => years.first, :end_year => years.last %>
         <th></th>
         <th><%= s.select :state, Invoice.state_machine.states.keys.collect(&:to_s).sort, :include_blank => true, :selected => @search.state %></th>
-        <th><%= s.submit 'Search', :name => nil %></th>
+        <th><%= s.button 'Search', :name => nil, :class => "pf-c-button pf-m-primary" %></th>
       <%- end -%>
     </tr>
   </thead>

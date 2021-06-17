@@ -36,7 +36,7 @@ table.data .less-important-button,
   @include internal-potato-button($secondary-button-color, $secondary-button-bg-color, $secondary-button-border-color);
 }
 
-table [type='submit']:not(.action) {
+table [type='submit']:not(.action):not(.pf-c-button) {
   float: right;
   @include internal-potato-button($important-button-color, $important-button-bg-color, $important-button-border-color);
 }

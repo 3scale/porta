@@ -6,5 +6,7 @@
   <%= render 'form', :f => f %>
   <%= f.input :draft, :as => :codemirror %>
 
-  <%= f.buttons %>
+  <%= f.buttons do %>
+    <%= f.button 'Create Page', button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <% end %>
 <% end %>

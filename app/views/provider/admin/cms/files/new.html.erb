@@ -6,6 +6,6 @@
   <%= render 'form', :f => f %>
 
   <%= f.buttons do %>
-    <%= f.commit_button :button_html => {:title => 'Create File'} %>
+    <%= f.button 'Create File', button_html: { class: 'pf-c-button pf-m-primary' } %>
   <% end %>
 <% end %>
