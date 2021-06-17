@@ -386,15 +386,6 @@ class Proxy < ApplicationRecord
     !!self.deployed_at
   end
 
-  def sandbox_deployed?
-    proxy_log = provider.proxy_logs.latest_first.first or return sandbox_config_saved?
-    proxy_log.created_at > self.created_at && proxy_log.status == ApicastV1DeploymentService::SUCCESS_MESSAGE
-  end
-
-  def sandbox_config_saved?
-    proxy_configs.sandbox.exists?
-  end
-
   def endpoint_port
     URI(endpoint.presence).port
   rescue ArgumentError, URI::InvalidURIError

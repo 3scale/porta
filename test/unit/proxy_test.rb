@@ -478,17 +478,6 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
-  test 'sandbox_deployed? when last proxy log entry says so' do
-    proxy = FactoryBot.create(:proxy, created_at: Time.now)
-    refute proxy.sandbox_deployed?
-    FactoryBot.create(:proxy_log, provider: proxy.service.account, status: 'Deployed successfully.', created_at: Time.now - 1.minute)
-    refute proxy.sandbox_deployed?
-    FactoryBot.create(:proxy_log, provider: proxy.service.account, status: 'Deployed successfully.', created_at: Time.now + 1.minute)
-    assert proxy.sandbox_deployed?
-    FactoryBot.create(:proxy_log, provider: proxy.service.account, status: 'Deploy failed.', created_at: Time.now + 2.minutes)
-    refute proxy.sandbox_deployed?
-  end
-
   test 'save_and_deploy' do
     proxy = FactoryBot.build(:proxy,
                               api_backend: 'http://example.com',
