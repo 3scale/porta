@@ -4,55 +4,12 @@ require 'test_helper'
 
 class Buyers::ApplicationsHelperTest < ActionView::TestCase
 
-  def setup
-    @product = { name: 'Service' }
-    ServiceDecorator.any_instance.stubs(:new_application_data).returns(@product)
-    ProviderDecorator.any_instance.stubs(:application_products_data).returns([@product])
-
-    @buyer = { name: 'Buyer' }
-    BuyerDecorator.any_instance.stubs(:new_application_data).returns(@buyer)
-    ProviderDecorator.any_instance.stubs(:application_buyers_data).returns([@buyer])
-
-    @fields = { name: 'Field' }
-    ProviderDecorator.any_instance.stubs(:application_defined_fields_data).returns([@fields])
-  end
-
-  test 'new_application_form_metadata in Dashboard context' do
+  test 'new_application_form_metadata' do
+    data = { foo: 'bar' }
+    ProviderDecorator.any_instance.stubs(:new_application_form_data).returns(data)
     provider = FactoryBot.create(:provider_account)
 
-    data = new_application_form_metadata(provider)
-    assert_equal data[:products], [@product].to_json
-    assert_equal data[:buyers], [@buyer].to_json
-    assert_equal data[:'defined-fields'], [@fields].to_json
-  end
-
-  test 'new_application_form_metadata in Account context' do
-    provider = FactoryBot.create(:provider_account)
-    buyer = FactoryBot.create(:buyer_account)
-
-    data = new_application_form_metadata(provider, buyer: buyer)
-    assert_equal data[:buyer], @buyer.to_json
-    assert_equal data[:products], [@product].to_json
-    assert data[:'create-application-path']
-  end
-
-  test 'new_application_form_metadata in Product context' do
-    provider = FactoryBot.create(:provider_account)
-    service = FactoryBot.create(:simple_service)
-
-    data = new_application_form_metadata(provider, service: service)
-    assert_equal data[:product], @product.to_json
-    assert_equal data[:buyers], [@buyer].to_json
-  end
-
-  test 'new_application_form_metadata inline errors' do
-    provider = FactoryBot.create(:provider_account)
-    cinstance = FactoryBot.create(:cinstance)
-    errors = ['Name is required']
-    cinstance.stubs(:errors).returns(errors)
-
-    data = new_application_form_metadata(provider, cinstance: cinstance)
-    assert_equal data[:errors], errors.to_json
+    assert_equal data, new_application_form_metadata(provider)
   end
 
   test "remaining_trial_days should return the right expiration date text" do
