@@ -2,15 +2,19 @@
 
 class ProviderDecorator < ApplicationDecorator
   include System::UrlHelpers.system_url_helpers
+  include PlansHelper
+
+  delegate :can?, :settings, to: :h
 
   self.include_root_in_json = false
 
   def new_application_form_data(buyer: nil, service: nil, cinstance: nil)
+    # TODO: Reduce data by not including service_plans when service_plans_management_visible? is false
     data = {
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
       'create-service-plan-path': new_admin_service_service_plan_path(':id'),
       'service-subscriptions-path': admin_buyers_account_service_contracts_path(':id'),
-      'service-plans-allowed': settings.service_plans.allowed?.to_json,
+      'service-plans-allowed': service_plans_management_visible?.to_json,
       'defined-fields': application_defined_fields_data.to_json
     }
     data[:errors] = cinstance.errors.to_json if cinstance

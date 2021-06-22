@@ -83,7 +83,6 @@
 
    Scenario: Create a new application without having a service subscription
      Given a service "second" of provider "foo.3scale.localhost"
-       And provider has "service_plans_ui_visible" hidden
        And a published service plan "non_default" of service "second" of provider "foo.3scale.localhost"
        And a published application plan "second_app_plan" of service "second" of provider "foo.3scale.localhost"
        And buyer "bob" is not subscribed to the default service of provider "foo.3scale.localhost"
@@ -168,7 +167,6 @@
       And I press "Update Application"
       And should see "can't be blank"
 
-
    Scenario: Edit an application
      Given buyer "bob" has application "UltraWidget" with description "Slightly less awesome widget"
      And I go to the buyer account page for "bob"
@@ -180,7 +178,6 @@
      Then I should see "Application was successfully updated"
      And I should be on the provider side "Not So Ultra Widget" application page
      And I should see "Not So Ultra Widget" in a header
-
 
    # TODO: also in single app mode
    Scenario: Edit an application with extra fields
