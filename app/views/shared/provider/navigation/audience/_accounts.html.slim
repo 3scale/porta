@@ -8,7 +8,7 @@
        title: 'Account Plans',
        path:   admin_buyers_account_plans_path
 
-- if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
+- if service_plans_management_visible?
    = render vertical_nav_item,
         title: 'Subscriptions',
         path: admin_buyers_service_contracts_path

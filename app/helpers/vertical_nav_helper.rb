@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module VerticalNavHelper
+  include PlansHelper
+
   def vertical_nav_data
     {
       'current-api': current_api.to_json(root: false, only: %i[name]),
@@ -90,8 +92,8 @@ module VerticalNavHelper
   def audience_accounts_items
     items = []
     items << {id: :listing,       title: 'Listing',       path: admin_buyers_accounts_path}           if can?(:manage, :partners)
-    items << {id: :account_plans,  title: 'Account Plans', path: admin_buyers_account_plans_path}      if can?(:manage, :plans) && current_account.settings.account_plans.allowed? && current_account.settings.account_plans_ui_visible?
-    items << {id: :subscriptions, title: 'Subscriptions', path: admin_buyers_service_contracts_path}  if can?(:manage, :service_contracts) && current_account.settings.service_plans.allowed? && current_account.settings.service_plans_ui_visible?
+    items << {id: :account_plans,  title: 'Account Plans', path: admin_buyers_account_plans_path}     if account_plans_management_visible?
+    items << {id: :subscriptions, title: 'Subscriptions', path: admin_buyers_service_contracts_path}  if service_plans_management_visible?
 
     if can?(:manage, :settings)
       items << {                          title: 'Settings'}
