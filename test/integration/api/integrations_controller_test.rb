@@ -221,10 +221,12 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     proxy_attributes = attrs['proxy']
     proxy_attributes.delete('proxy_rules_attributes')
     api_backend = proxy_attributes.delete 'api_backend'
+    policies_config = proxy_attributes.delete 'policies_config'
     proxy.reload
 
     assert_equal proxy.attributes.slice(*proxy_attributes.keys), proxy_attributes
     assert_equal 'http://bye-world-api.3scale.net:80', proxy.api_backend
+    assert_includes proxy.policies_config.map(&:to_h), *JSON.parse(policies_config)
 
     assert_equal 1, proxy.proxy_rules.count
 

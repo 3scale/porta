@@ -24,7 +24,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     put admin_service_policies_path(@service), proxy: {policies_config: config}
     # Checking flash won't work anymore in rails 5+
     assert_equal 'The policies are saved successfully', flash[:notice]
-    assert_equal expected_policies, @service.proxy.policies_config
+    assert_equal Proxy::PoliciesConfig.new(expected_policies), @service.proxy.policies_config
     assert_redirected_to edit_admin_service_policies_path(@service)
   end
 
@@ -40,7 +40,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
     put admin_service_policies_path(@service), proxy: {policies_config: invalid_config}
     # Checking flash won't work anymore in rails 5+
     assert_equal 'The policies cannot be saved', flash[:error]
-    assert_equal [Proxy::DEFAULT_POLICY], @service.proxy.policies_config
+    assert_equal Proxy::PoliciesConfig.new([Proxy::PolicyConfig::DEFAULT_POLICY]), @service.proxy.policies_config
     assert_response :unprocessable_entity
   end
 

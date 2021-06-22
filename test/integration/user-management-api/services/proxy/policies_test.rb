@@ -2,6 +2,9 @@ require 'test_helper'
 
 class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTest
 
+  # hardcoding default policy hash to make sure changes to Proxy::PolicyConfig are being tested
+  DEFAULT_POLICY = {"name"=>"apicast", "version"=>"builtin", "configuration"=>{}, "enabled"=>true}.freeze
+
   def setup
     account  = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:simple_service, account: account)
@@ -12,23 +15,28 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
   end
 
   def test_show
-    proxy.policies_config = [{ 'name' => 'schema', 'version' => '1', 'configuration' => {} }]
+    example_policy = { 'name' => 'schema', 'version' => '1', 'configuration' => {} }
+    proxy.policies_config = [example_policy]
     proxy.save!
     get admin_api_service_proxy_policies_path(valid_params)
-    assert_match "{\"name\":\"schema\",\"version\":\"1\",\"configuration\":{}}", response.body
+    assert_equal JSON.parse(response.body)["policies_config"], [example_policy, DEFAULT_POLICY]
+  end
+
+  def test_show_default
+    get admin_api_service_proxy_policies_path(format: :json, **valid_params)
+    assert_response :success
+    assert_equal JSON.parse(response.body), {"policies_config"=>[DEFAULT_POLICY]}
   end
 
   def test_update_without_errors
-    put admin_api_service_proxy_policies_path(valid_params.merge(
-      { proxy: { policies_config: [{'name' => 'alaska', 'version' => '1', 'configuration' => {}}].to_json }}))
-    assert_match "{\"name\":\"alaska\",\"version\":\"1\",\"configuration\":{}}", response.body
-    assert_response :success
-    policies_config = proxy.reload.policies_config
-        .map { |attrs| Proxy::PolicyConfig.new(attrs) }
-        .select { |policy_config| policy_config.name == 'alaska' \
-          && policy_config.version == '1' && policy_config.configuration == {} }
+    example_policy = {'name' => 'alaska', 'version' => '1', 'configuration' => {}}
 
-    assert_equal 1, policies_config.length
+    put admin_api_service_proxy_policies_path(valid_params.merge({ proxy: { policies_config: [example_policy].to_json }}))
+    assert_response :success
+
+    get admin_api_service_proxy_policies_path(format: :json, **valid_params)
+    assert_response :success
+    assert_equal JSON.parse(response.body)["policies_config"], [example_policy, DEFAULT_POLICY]
   end
 
   def test_update_json
@@ -50,6 +58,9 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
   def test_invalid_policies_config
     put admin_api_service_proxy_policies_path(valid_params.merge({ proxy: { policies_config: { name: 'echo '} }}))
     assert_response :unprocessable_entity
+    json_response = JSON.parse(response.body)
+    assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'version')
+    assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'configuration')
   end
 
   def test_invalid_json_policies_config

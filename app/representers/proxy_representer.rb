@@ -31,7 +31,7 @@ class ProxyRepresenter < ThreeScale::Representer
   property  :sandbox_endpoint
   property  :api_test_path
   property  :api_test_success
-  property  :policies_config
+  property  :policies_config, exec_context: :decorator
 
   property :created_at
   property :updated_at
@@ -46,6 +46,10 @@ class ProxyRepresenter < ThreeScale::Representer
 
   property :jwt_claim_with_client_id, if: ->(*) { oidc? }
   property :jwt_claim_with_client_id_type, if: ->(*) { oidc? }
+
+  def policies_config
+    represented.policies_config.to_json
+  end
 
   class JSON < ProxyRepresenter
     include Roar::JSON
