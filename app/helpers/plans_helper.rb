@@ -1,8 +1,15 @@
+# frozen_string_literal: true
+
 module PlansHelper
 
+  delegate :settings, to: :current_account
+
   def account_plans_management_visible?
-    settings = current_account.settings
     can?(:manage, :account_plans) && settings.account_plans.allowed? && settings.account_plans_ui_visible?
+  end
+
+  def service_plans_management_visible?
+    can?(:manage, :service_contracts) && settings.service_plans.allowed? && settings.service_plans_ui_visible?
   end
 
   def can_create_plan?(plan)
