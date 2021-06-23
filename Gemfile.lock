@@ -806,8 +806,6 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    whenever (0.9.7)
-      chronic (>= 0.6.3)
     will_paginate (3.1.6)
     with_env (1.1.0)
     xml-simple (1.1.8)
@@ -994,7 +992,6 @@ DEPENDENCIES
   unicorn-rails
   webmock (~> 3.8.0)
   webpacker (~> 4)
-  whenever (~> 0.9.7)
   will_paginate (~> 3.1.6)
   with_env
   xpath (~> 2.1)
