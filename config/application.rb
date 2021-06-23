@@ -81,13 +81,13 @@ module System
 
     # Activate observers that should always be running.
     config.active_record.observers = :account_observer,
-                                     :message_observer,
-                                     :billing_observer,
-                                     :post_observer,
-                                     :user_observer,
-                                     :billing_strategy_observer,
-                                     :provider_plan_change_observer,
-                                     :plan_observer
+      :message_observer,
+      :billing_observer,
+      :post_observer,
+      :user_observer,
+      :billing_strategy_observer,
+      :provider_plan_change_observer,
+      :plan_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -114,7 +114,7 @@ module System
       extname = File.extname(basename)
 
       # skip files that start with underscore, do not have extension or are sourcemap
-      extname.present? && ! extname.in?(%w[.map .LICENSE .es6]) && ! basename.start_with?('_'.freeze)
+      extname.present? && !extname.in?(%w[.map .LICENSE .es6]) && !basename.start_with?('_'.freeze)
     end
     config.assets.precompile += %w(
       font-awesome.css
@@ -128,7 +128,6 @@ module System
     config.assets.initialize_on_precompile = false
 
     config.assets.version = '1437647386' # unix timestamp
-
 
     config.public_file_server.enabled = false
 
@@ -147,7 +146,6 @@ module System
     config.liquid.resolver_caching = false
 
     config.representer.default_url_options = { protocol: 'https' }
-
 
     config.zync = ActiveSupport::InheritableOptions.new(try_config_for(:zync))
 
@@ -211,7 +209,7 @@ module System
 
     config.action_mailer.default_url_options = { protocol: 'https' }
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = smtp_config = (try_config_for(:smtp) || { })
+    config.action_mailer.smtp_settings = smtp_config = (try_config_for(:smtp) || {})
     config.action_mailer.raise_delivery_errors = smtp_config[:address].present?
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
@@ -224,7 +222,7 @@ module System
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
 
-    config.unicorn  = ActiveSupport::OrderedOptions[after_fork: []]
+    config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
     config.unicorn.after_fork << MessageBus.method(:after_fork)
 
     config.action_dispatch.cookies_serializer = :hybrid
@@ -274,11 +272,6 @@ module System
     end
 
     config.assets.quiet = true
-
-    initializer :jobs do
-      # Loading jobs used by Whenever
-      require_relative 'jobs'
-    end
 
     console do
       if sandbox?

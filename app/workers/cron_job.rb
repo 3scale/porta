@@ -1,30 +1,24 @@
 # frozen_string_literal: true
 
 module CronJob
-  class Worker
-    include Sidekiq::Worker
+  class Worker < ApplicationJob
 
-    def perform(task)
-      Rails.logger.debug("Executing cron task #{task}")
-      instance_exec(task, &ThreeScale::Jobs::JOB_PROC)
-    end
-
-    def rake(task)
-      system('rake', task)
-    end
-
-    def runner(command)
-      system('rails', 'runner', command)
+    def perform(hash)
+      task = ThreeScale::Jobs::Task.deserialize(hash)
+      task.run
+    rescue => error
+      System::ErrorReporting.report_error(error,
+                                          component: 'job',
+                                          action: task)
+      raise
     end
   end
 
-  class Enqueuer
-    include Sidekiq::Worker
-
+  class Enqueuer < ApplicationJob
     def perform(constant_name)
       enqueue_tasks(constant_name) do |task|
         Rails.logger.debug("Enqueueing cron task [#{constant_name}] #{task}")
-        CronJob::Worker.perform_async(task)
+        CronJob::Worker.perform_later(task.serialize)
       end
     end
 
