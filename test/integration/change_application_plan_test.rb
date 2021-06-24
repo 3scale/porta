@@ -20,7 +20,7 @@ class ChangeApplicationPlanTest < ActionDispatch::IntegrationTest
     assert_equal 1, plan_1.contracts_count
     assert_equal 0, plan_2.contracts_count
 
-    put change_plan_admin_buyers_application_path(id: app, cinstance: { plan_id: plan_2.id })
+    put change_plan_provider_admin_application_path(id: app, cinstance: { plan_id: plan_2.id })
     assert_response :redirect
 
     [plan_1, plan_2, app].each(&:reload)

@@ -290,7 +290,7 @@ World(Module.new do
       new_admin_application_path
     when /^the new application page for service "([^"]*)"$/
       service = Service.find_by_name!($1)
-      new_admin_application_path(:service_id => service.id)
+      new_admin_service_application_path(service_id: service.id)
 
     when /^my application page$/
       admin_application_path(@application)
@@ -329,7 +329,7 @@ World(Module.new do
       new_admin_buyers_account_application_path(buyer)
 
     when /^the audience context create application page$/
-      new_admin_buyers_application_path
+      new_provider_admin_application_path
 
     when /^the product context create application page for "([^"]*)"$/
       product = Service.find_by!(name: $1)
@@ -337,23 +337,23 @@ World(Module.new do
 
     when /^the provider side "([^"]*)" application page$/
       application = Cinstance.find_by_name!($1)
-      admin_service_application_path(application.service, application)
+      provider_admin_application_path(application)
 
     when /^the provider side "([^"]*)" edit application page$/
       application = Cinstance.find_by_name!($1)
-      edit_admin_service_application_path(application.service, application)
+      edit_provider_admin_application_path(application)
 
     when /^the provider side application page for "([^"]*)"$/
       application = Account.find_by_org_name!($1).bought_cinstance
-      admin_service_application_path(application.service, application)
+      provider_admin_application_path(application)
 
     when 'the applications admin page',
          /^the applications admin page with (\d+) records? per page$/
-      admin_buyers_applications_path(:per_page => $1)
+      provider_admin_applications_path(per_page: $1)
 
     when /^the account context applications page for "([^"]*)"$/
       buyer = Account.buyers.find_by!(org_name: $1)
-      admin_buyers_account_applications_path(buyer)
+      admin_buyers_account_applications_path(buyer) # TODO: replace this route with audience context show page
 
     when /^the product context applications page for "([^"]*)"$/
       product = Service.find_by!(name: $1)
@@ -361,7 +361,7 @@ World(Module.new do
 
     when /^the provider side edit page for application "([^"]*)" of buyer "([^"]*)"$/
       application = Account.find_by_org_name!($2).bought_cinstances.find_by_name!($1)
-      edit_admin_service_application_path(application.service, application)
+      edit_provider_admin_application_path(application)
 
     #
     # Service contracts (provider side)
