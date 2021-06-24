@@ -18,7 +18,9 @@ div id="bulk-operations" style="display: none;"
     = javascript_include_tag 'bulk_operations.js'
     = javascript_include_tag 'vendor/jquery.tipsy.js'
 
-- show_application_plans = @application_plans.size > 1 && !master_on_premises?
+/ FIXME: The first condition does not make any sense but application_plans used to be accessible_plans, now it's accessible_plans.stock
+- show_application_plans = application_plans.size > 0 && !master_on_premises?
+- service_column_visible = service.nil? && current_account.multiservice?
 
 table class="data"
   thead
@@ -26,9 +28,9 @@ table class="data"
       th class="select" = bulk_select_all
       th = sortable('cinstances.name', 'Name')
       th = sortable('cinstances.state', 'State')
-      - unless @account
+      - unless account
         th = sortable('accounts.org_name', 'Account')
-      - if display_view_portion?(:service)
+      - if service_column_visible
         th Service
       - if show_application_plans
         th = sortable('plans.name', 'Plan')
@@ -39,40 +41,39 @@ table class="data"
       th = sortable('cinstances.created_at', 'Created At')
       th = sortable('cinstances.first_daily_traffic_at', 'Traffic On')
 
-    - if @cinstances.present? || @account.nil?
+    - if applications.present? || account.nil?
       tr class="search"
         th class="select"
-        = form_for @search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
+        = form_for search, as: :search, url: search_path, html: { method: :get, class: :search } do |s|
           th
             = s.text_field :name, size: 15
 
           th
-            = s.select :state, @states,
-                         include_blank: 'All', selected: @search.state
+            = s.select :state, states, include_blank: 'All', selected: search.state
 
-          - unless @account
+          - unless account
             th class="small"
               = s.text_field :account_query, size: 7
 
-          - if display_view_portion?(:service)
+          - if service_column_visible
             th
               = s.collection_select :service_id, accessible_services, :id, :name,
                                       { include_blank: true },
-                                      { disabled: @service }
+                                      { disabled: service }
 
           - if show_application_plans
-            - if display_view_portion?(:service)
+            - if service_column_visible
               th = s.grouped_collection_select :plan_id, accessible_services,
                                               :application_plans, :name, :id, :name,
                                               { include_blank: true },
-                                              { disabled: @plan }
+                                              { disabled: plan }
             - else
-              th = s.collection_select :plan_id, @application_plans, :id, :name,
+              th = s.collection_select :plan_id, application_plans, :id, :name,
                                           { include_blank: true },
-                                          { disabled: @plan }
+                                          { disabled: plan }
 
           - if current_account.settings.finance.allowed?
-            th = s.select :plan_type, [ ['free'], ['paid'] ], {include_blank: true}, { disabled: @plan }
+            th = s.select :plan_type, [ ['free'], ['paid'] ], {include_blank: true}, { disabled: plan }
 
           th
           th
@@ -80,17 +81,17 @@ table class="data"
             = s.button 'Search', name: nil, data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
 
   tbody class="cinstances"
-    - @cinstances.each do |cinstance|
+    - applications.each do |cinstance|
       tr id=dom_id(cinstance)
         td class="select" = bulk_select_one cinstance
-        td = link_to cinstance.display_name, admin_service_application_path(cinstance.service, cinstance)
+        td = link_to cinstance.display_name, provider_admin_application_path(cinstance)
         td class="state"
           => cinstance.state
           - if cinstance.trial?
             = remaining_trial_days(cinstance)
-        - unless @account
+        - unless account
           td = link_to_buyer_or_deleted cinstance.account, :admin_buyers_account_path
-        - if display_view_portion?(:service)
+        - if service_column_visible
           td = link_to_service cinstance.service
         - if show_application_plans
           td class="plan" = link_to_plan_edit cinstance.plan
@@ -99,12 +100,12 @@ table class="data"
         td = time_tag_with_title cinstance.created_at
         td = last_traffic(cinstance)
         td
-    - if @cinstances.empty?
+    - if applications.empty?
       tr class="no_results"
-        td colspan=(display_view_portion?(:service) ? 10 : 9)
+        td colspan=(service_column_visible ? 10 : 9)
           | No applications
 
-= will_paginate @cinstances
+= will_paginate applications
 
-- unless @account
+- unless account
   = link_to_export_widget_for('Applications')
