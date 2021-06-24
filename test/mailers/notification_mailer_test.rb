@@ -51,8 +51,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "A new application subscribed to the #{application.plan.name} plan on the #{service.name} service of the #{application.account.name} account.", body.encoded
       assert_match 'Application details:', body.encoded
-      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
-                                                                                         host: service.account.external_admin_domain)
+      cinstance_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(application, host: service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
 
       assert_html_email(mail) do
@@ -116,8 +115,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
-      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
-                                                                                         host: service.account.external_admin_domain)
+      cinstance_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(application, host: service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
     end
   end
@@ -137,8 +135,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Application #{application.name} of your client #{application.user_account.name}", body.encoded
       assert_match "is above #{alert.level}% limit utilization of #{alert.message}.", body.encoded
-      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(service, application,
-                                                                                         host: service.account.external_admin_domain)
+      cinstance_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(application, host: service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
     end
   end
@@ -301,7 +298,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     [mail.html_part.body, mail.text_part.body].each do |body|
       assert_match 'Dear Foobar Admin', body.encoded
       assert_match "Alex's trial of the LALA application on the planLALA has expired.", body.encoded
-      assert_match url_helpers.admin_service_application_url(service, cinstance, host: service.provider.external_admin_domain), body.encoded
+      assert_match url_helpers.provider_admin_application_url(cinstance, host: service.provider.external_admin_domain), body.encoded
     end
   end
 
@@ -394,8 +391,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Previous plan: #{old_plan.name}", body.encoded
       assert_match "Current plan: #{cinstance.plan.name}", body.encoded
       assert_match "Application #{cinstance.name} has changed to plan #{cinstance.plan.name}.", body.encoded
-      cinstance_url = System::UrlHelpers.system_url_helpers.admin_service_application_url(cinstance.service, cinstance,
-                                                                                         host: cinstance.service.account.external_admin_domain)
+      cinstance_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(cinstance, host: cinstance.service.account.external_admin_domain)
       assert_match cinstance_url, body.encoded
     end
   end
@@ -537,7 +533,7 @@ class NotificationMailerTest < ActionMailer::TestCase
       assert_match "Application: Boo App", body.encoded
       assert_match "Current plan: #{plan.name}", body.encoded
       assert_match "Requested plan: #{plan_2.name}", body.encoded
-      assert_match url_helpers.admin_service_application_url(application.service, application, host: application.service.provider.external_admin_domain), body.encoded
+      assert_match url_helpers.provider_admin_application_url(application, host: application.service.provider.external_admin_domain), body.encoded
     end
   end
 

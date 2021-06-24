@@ -30,7 +30,7 @@ class ProviderDecorator < ApplicationDecorator
 
   def audience_context_new_application_form_data
     {
-      'create-application-path': admin_buyers_applications_path,
+      'create-application-path': provider_admin_applications_path,
       buyers: application_buyers_data.to_json,
       products: application_products_data.to_json,
     }
@@ -46,7 +46,7 @@ class ProviderDecorator < ApplicationDecorator
 
   def product_context_new_application_form_data(product)
     {
-      'create-application-path': admin_buyers_applications_path,
+      'create-application-path': admin_service_applications_path(product),
       product: ServiceDecorator.new(product).new_application_data.to_json,
       buyers: application_buyers_data.to_json,
     }

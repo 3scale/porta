@@ -11,7 +11,7 @@ article.DashboardWidget id = widget.id
         - widget.items.each do |item|
           li class="DashboardWidgetList-item DashboardWidgetList-item--#{item.state}"
             - show_application_path_exists = ((application = item.application) && widget_service_id)
-            - link = show_application_path_exists ? admin_service_application_path(widget_service_id, application) : '#'
+            - link = show_application_path_exists ? provider_admin_application_path(application) : '#'
             = link_to link, class: 'DashboardWidgetList-link' do
               span.DashboardWidgetList-position
                 => item.position
