@@ -12,22 +12,6 @@ module CinstancesHelper
     cinstance.name =~ /(application)/i ? cinstance.name : "#{cinstance.name} application"
   end
 
-  # def path_for_applications_put(account,application)
-  #   if account.provider?
-  #     admin_buyers_account_applications_path(application.buyer_account)
-  #   else
-  #     admin_application_path(application)
-  #   end
-  # end
-  #
-  def path_for_applications_put(account, application)
-    if account.provider?
-      admin_buyers_application_path(application)
-    else
-      admin_application_path(application)
-    end
-  end
-
   def suspend_application_confirmation(cinstance)
     if cinstance.plan.free?
       %{
