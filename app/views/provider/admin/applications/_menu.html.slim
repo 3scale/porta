@@ -1,7 +1,7 @@
 ul.subsubmenu
   li.SubSubMenuItem.SubSubMenuItem--trunk
     = link_to_unless_current_styled "Application '#{@cinstance.name}'",
-      admin_service_application_path(@cinstance.service, @cinstance),
+      provider_admin_application_path(@cinstance),
       title: "application",
       class: "SubSubMenuItem-link"
   li.SubSubMenuItem.SubSubMenuItem--leaf
