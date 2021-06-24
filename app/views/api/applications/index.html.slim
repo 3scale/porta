@@ -1,4 +1,15 @@
-h1 Applications
+h2 = "Applications on #{@service.name}"
+
 = pf_button_in_title 'Create Application', new_admin_service_application_path(@service)
 
-= render 'shared/applications/listing'
+- if current_user.accessible_services.empty?
+  = render 'shared/service_access'
+- else
+  = render 'shared/applications/listing', { applications: @cinstances,
+                                            application_plans: @application_plans,
+                                            plan: @plan,
+                                            account: @account,
+                                            search: @search,
+                                            service: @service,
+                                            states: @states }
+
