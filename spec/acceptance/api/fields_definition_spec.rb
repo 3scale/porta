@@ -1,11 +1,15 @@
+#frozen_string_literal: true
+
 require 'rails_helper'
 
 resource 'FieldsDefinition' do
-  let(:resource) { FactoryBot.create(:fields_definition,
-                                     account: provider,
-                                     target: 'Account',
-                                     name: 'stuff',
-                                     choices: %w[Orange Apple Banana]) }
+  let(:resource) do
+    FactoryBot.create(:fields_definition, account: provider,
+                                          target: 'Account',
+                                          name: 'stuff',
+                                          choices: %w[Orange Apple Banana])
+  end
+
   let(:expected_properties) { %i[target label name choices required hidden read_only position] }
 
   api 'fields definition', options = { format: [:json] } do
