@@ -23,7 +23,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_access_token
   #
   def index
-    respond_with(field_definitions)
+    respond_with(fields_definitions)
   end
 
   # swagger
@@ -47,7 +47,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def create
-    field_def = field_definitions.build(create_params)
+    field_def = fields_definitions.build(create_params)
 
     field_def.save
 
@@ -69,7 +69,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "id", :description => "ID of the fields definition.", :dataType => "int", :required => true, :paramType => "path"
   #
   def show
-    respond_with(field_definition)
+    respond_with(fields_definition)
   end
 
   ##~ op            = e.operations.add
@@ -89,8 +89,8 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def update
-    field_definition.update_attributes(update_params)
-    respond_with(field_definition)
+    fields_definition.update(update_params)
+    respond_with(fields_definition)
   end
 
   ##~ op            = e.operations.add
@@ -103,8 +103,8 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "id", :description => "ID of the fields definition.", :dataType => "int", :required => true, :paramType => "path"
   #
   def destroy
-    field_definition.destroy
-    respond_with(field_definition)
+    fields_definition.destroy
+    respond_with(fields_definition)
   end
 
   private
@@ -112,12 +112,12 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   DEFAULT_PARAMS = %i[target label choices required hidden read_only].freeze
   private_constant :DEFAULT_PARAMS
 
-  def field_definitions
+  def fields_definitions
     @fields_definitions ||= current_account.fields_definitions
   end
 
-  def field_definition
-    @fields_definition ||= field_definitions.find(params[:id])
+  def fields_definition
+    @fields_definition ||= fields_definitions.find(params[:id])
   end
 
   def create_params
@@ -129,4 +129,3 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   end
 
 end
-
