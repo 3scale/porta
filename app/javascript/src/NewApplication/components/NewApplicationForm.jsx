@@ -123,13 +123,14 @@ const NewApplicationForm = ({
         <CSRFToken />
         <input name='utf8' type='hidden' value='✓' />
 
-        {buyers && (
+        {buyers ? (
           <BuyerSelect
             buyer={buyer}
             buyers={buyers}
             onSelectBuyer={setBuyer}
           />
-        )}
+          // $FlowExpectedError[incompatible-use] either buyers or defaultBuyer is always defined
+        ) : <input type="hidden" name="account_id" value={defaultBuyer.id} />}
 
         {products && (
           <ProductSelect
