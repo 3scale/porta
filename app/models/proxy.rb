@@ -129,14 +129,8 @@ class Proxy < ApplicationRecord
     deployment_option&.inquiry
   end
 
-  def find_policy_config_by(name:, version:)
-    policies_config.find { |config| config['name'] == name && config['version'] == version }
-  end
-
-  def policy_chain
-    policies_config.chain
-  end
-
+  delegate :find_policy_config_by, to: :policy_config
+  delegate :policy_chain, to: :policies_config
   delegate :self_managed?, :hosted?, to: :deployment_option
   delegate :service_token, to: :service, allow_nil: true
 
@@ -506,6 +500,12 @@ class Proxy < ApplicationRecord
       end.compact
     end
 
+    def ==(other)
+      self.class == other.class &&
+        [:name, :version, :configuration, :enabled].all? { |key| send(key) == other.send(key) }
+    end
+    alias eql? ==
+
     private
 
     def configuration_is_object
@@ -516,8 +516,9 @@ class Proxy < ApplicationRecord
   class PoliciesConfig
     include ActiveModel::Validations
 
-    delegate :each, to: :policies_config
+    delegate :each, :find, :select, :map, :detect, to: :policies_config
     attr_reader :policies_config
+    protected :policies_config
 
     validate :policies_configs_are_correct
 
@@ -536,41 +537,56 @@ class Proxy < ApplicationRecord
       @policies_config = parsed_config.map { |attrs| PolicyConfig.new(attrs) }
     end
 
-    # def policies_config=(attr_policies_config)
-    #   super(attr_policies_config.is_a?(String) ? attr_policies_config : attr_policies_config.to_json)
-    # end
-
     def self.name
       'PoliciesConfig'
     end
 
-    def to_json(*_args)
-      policies_config.map(&:to_h).to_json(*_args)
+    def to_json(*args)
+      map(&:to_h).to_json(*args)
     end
 
-    def chain
-      policies_config.select(&:enabled).map(&:to_h).stringify_keys.slice('name', 'version', 'configuration')
+    def find_by(name:, version:)
+      find { |config| config.name == name && config.version == version }
     end
+    alias find_policy_config_by find_by
+
+    def chain
+      select(&:enabled).map(&:to_h).map(&:stringify_keys).map { |p| p.slice('name', 'version', 'configuration') }
+    end
+    alias policy_chain chain
+
+    def ==(other)
+      self.class == other.class &&
+        policies_config == other.policies_config
+    end
+    alias eql? ==
 
     private
 
     def read_and_parse_policies_config(attr_policies_config)
       read_and_parse_policies_config!(attr_policies_config)
     rescue JSON::ParserError
+      # TODO: is this a proper invalid value handling? In original
       logger.error "Invalid attribute policies_config: #{attr_policies_config}"
       []
     end
 
     def read_and_parse_policies_config!(attr_policies_config)
-      attr_policies_config.blank? ? [] : Array(JSON.parse(attr_policies_config))
+      if attr_policies_config.blank?
+        []
+      elsif attr_policies_config.is_a? Array
+        attr_policies_config
+      else
+        Array(JSON.parse(attr_policies_config))
+      end
     end
 
     def policies_configs_are_correct
-      policies_config.each do |policy_config|
+      each do |policy_config|
         # TODO: 5: errors.merge!(policy_config.errors)
         policy_config.errors.each { |attribute, message| errors.add(attribute, message) } unless policy_config.valid?
       end
-      unless policies_config.detect { |c| c.name == DEFAULT_POLICY['name'] }
+      unless detect { |c| c.name == DEFAULT_POLICY['name'] }
         errors.add(:policies_config, "must include default policy")
       end
     end
@@ -578,11 +594,19 @@ class Proxy < ApplicationRecord
 
   class PoliciesConfigType < ActiveRecord::Type::Text
     def cast(value)
-      PoliciesConfig.new(value)
+      if value.is_a?(PoliciesConfig)
+        value
+      else
+        PoliciesConfig.new(value)
+      end
     end
 
     def serialize(value)
       value.to_json
+    end
+
+    def changed_in_place?(raw_old_value, new_value)
+      new_value != cast(raw_old_value)
     end
   end
 

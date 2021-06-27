@@ -574,6 +574,58 @@ class ProxyTest < ActiveSupport::TestCase
     assert_equal policy_config2, @proxy.find_policy_config_by(name: 'my-other-policy', version: '0.5.0')
   end
 
+  test 'policies config changes' do
+    policies_config_dup = JSON.parse(@proxy.policies_config.to_json).freeze
+
+    policy_config_example = { name: 'my-policy', version: '1.0.0', configuration: {}, enabled: true }.stringify_keys
+
+    refute @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup + policy_config_example
+
+    assert @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup
+
+    refute @proxy.policies_config_changed?
+
+    policy_config_first = policies_config_dup.send[:policies_config].first.freeze
+
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"configuration" => {"key" => "value"}})
+
+    assert @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"version" => "42"})
+
+    assert @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"name" => "another"})
+
+    assert @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"enabled" => !policy_config_first["enabled"]})
+
+    assert @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first)
+
+    refute @proxy.policies_config_changed?
+  end
+
+  test 'policies config casting' do
+    org = @proxy.policies_config
+    json = @proxy.policies_config.to_json
+    struct = JSON.parse json
+
+    @proxy.policies_config = json
+
+    refute @proxy.changed?
+
+    @proxy.policies_config = struct
+
+    refute @proxy.changed?
+  end
+
   test 'domain changes events on update of hosted proxy' do
     @proxy.service.deployment_option = 'hosted'
 
