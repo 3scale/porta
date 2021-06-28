@@ -2,42 +2,53 @@
 
 import * as React from 'react'
 
-import { SelectWithModal } from 'Common'
+import { sortable } from '@patternfly/react-table'
+import { fetchPaginatedBuyers } from 'NewApplication'
+import { SelectWithPaginatedModal } from 'Common'
 
 import type { Buyer } from 'NewApplication/types'
 
 type Props = {
   buyer: Buyer | null,
-  buyers: Buyer[],
+  mostRecentlyCreatedBuyers: Array<Buyer>,
+  buyersCount: number,
   onSelectBuyer: (Buyer | null) => void,
+  buyersPath: string,
   isDisabled?: boolean
 }
 
-const BuyerSelect = ({ buyer, buyers, onSelectBuyer, isDisabled }: Props): React.Node => {
-  const cells = [
-    { title: 'Name', propName: 'name' },
-    { title: 'Admin', propName: 'admin' },
-    { title: 'Signup date', propName: 'createdAt' }
-  ]
+const cells = [
+  { title: 'Name', propName: 'name' },
+  { title: 'Admin', propName: 'admin' },
+  { title: 'Signup date', propName: 'createdAt', transforms: [sortable] }
+]
 
-  return (
-    <SelectWithModal
-      label="Account"
-      fieldId="account_id"
-      id="account_id"
-      name="account_id"
-      // $FlowIgnore[incompatible-type] Buyer implements Record
-      item={buyer}
-      items={buyers.map(b => ({ ...b, description: b.admin }))}
-      cells={cells}
-      modalTitle="Select an Account"
-      // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
-      onSelect={onSelectBuyer}
-      header="Most recently created Accounts"
-      footer="View all Accounts"
-      isDisabled={isDisabled}
-    />
-  )
-}
+const BuyerSelect = ({
+  buyer,
+  mostRecentlyCreatedBuyers,
+  buyersCount,
+  onSelectBuyer,
+  buyersPath,
+  isDisabled
+}: Props): React.Node => (
+  // $FlowIssue[incompatible-type-arg] id can be string too
+  <SelectWithPaginatedModal
+    label="Account"
+    fieldId="account_id"
+    id="account_id"
+    name="account_id"
+    item={buyer}
+    items={mostRecentlyCreatedBuyers}
+    itemsCount={buyersCount}
+    cells={cells}
+    onSelect={onSelectBuyer}
+    fetchItems={(params) => fetchPaginatedBuyers(buyersPath, params)}
+    header="Most recently created Accounts"
+    isDisabled={isDisabled}
+    title="Select an Account"
+    placeholder="Select an Account"
+    footerLabel="View all Accounts"
+  />
+)
 
 export { BuyerSelect }

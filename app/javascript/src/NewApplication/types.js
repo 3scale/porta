@@ -13,7 +13,7 @@ export type ApplicationPlan = {
 export type Product = {
   id: string,
   name: string,
-  systemName: string,
+  description?: string,
   updatedAt: string,
   appPlans: ApplicationPlan[],
   servicePlans: ServicePlan[],
@@ -29,8 +29,16 @@ export type ContractedProduct = {
 export type Buyer = {
   id: string,
   name: string,
-  admin: string,
+  description?: string,
   createdAt: string,
   contractedProducts: ContractedProduct[],
   createApplicationPath: string,
 }
+
+export type FetchItemsRequestParams = $Exact<{
+  page: number,
+  perPage: number,
+  query?: string
+}>
+
+export type FetchItemsResponse<T> = Promise<{ items: T[], count: number }>

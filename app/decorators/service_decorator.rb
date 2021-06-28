@@ -59,7 +59,7 @@ class ServiceDecorator < ApplicationDecorator
     {
       id: id.to_s,
       name: name,
-      systemName: system_name,
+      description: system_name,
       updatedAt: updated_at,
       appPlans: plans.stock.select(:id, :name).as_json(root: false),
       servicePlans: service_plans.select(:id, :name).as_json(root: false),
