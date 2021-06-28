@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationsControllerMethods
-  # Common methods should be index, new, create
-
   def index
     @states = Cinstance.allowed_states.collect(&:to_s).sort
     define_search_scope
