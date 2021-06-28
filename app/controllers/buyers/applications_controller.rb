@@ -37,8 +37,8 @@ class Buyers::ApplicationsController < FrontendController
 
   protected
 
-  def define_search_scope
-    super({ account: @account.id })
+  def define_search_scope(opts = {})
+    super opts.reverse_merge(account: @account.id)
   end
 
 end
