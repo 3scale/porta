@@ -64,6 +64,9 @@ module Logic
         OPENSHIFT_PROVIDER_ID = 2
 
         def initialize(provider)
+          if deprecated?
+            Rails.logger.warn "Deprecated rolling update used: #{name} at:\n\t" + caller(4).join("\n\t")
+          end
           @provider = provider
         end
 
@@ -86,6 +89,10 @@ module Logic
           else
             raise_invalid_config
           end
+        end
+
+        def deprecated?
+          false
         end
 
         def raise_invalid_config
@@ -268,6 +275,16 @@ module Logic
       class BillableContracts < Base
         def missing_config
           false
+        end
+      end
+
+      class Policies < Base
+        def enabled?
+          true
+        end
+
+        def deprecated?
+          true
         end
       end
 
