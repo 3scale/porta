@@ -16,13 +16,13 @@ module ApplicationsControllerMethods
 
   def new; end
 
+  protected
+
   # TODO: this should be done by buy! method
-  def create
+  def initialize_cinstance
     @cinstance = current_account.provider_builds_application_for(@account, @application_plan, params[:cinstance], @service_plan)
     @cinstance.validate_human_edition!
   end
-
-  protected
 
   def define_search_scope(opts = {})
     @search = ThreeScale::Search.new(params[:search] || params)
