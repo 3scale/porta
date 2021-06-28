@@ -33,8 +33,8 @@ class Api::ApplicationsController < FrontendController
 
   protected
 
-  def define_search_scope
-    super({ service: @service.id })
+  def define_search_scope(opts = {})
+    super opts.reverse_merge(service: @service.id)
   end
 
   def find_service
