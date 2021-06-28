@@ -11,6 +11,7 @@ class Api::ApplicationsController < FrontendController
   before_action :authorize_multiple_applications, only: :create
   before_action :find_application_plan, only: :create
   before_action :find_service_plan, only: :create
+  before_action :initialize_cinstance, only: :create
 
   helper_method :accessible_services
 
