@@ -1,19 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationsControllerMethods
-  def index
-    @states = Cinstance.allowed_states.collect(&:to_s).sort
-    define_search_scope
-
-    @cinstances = accessible_not_bought_cinstances.scope_search(@search)
-                                                  .order_by(params[:sort], params[:direction])
-                                                  .preload(:service, user_account: %i[admin_user], plan: %i[pricing_rules])
-                                                  .paginate(pagination_params)
-                                                  .decorate
-  end
-
-  def new; end
-
   protected
 
   # TODO: this should be done by buy! method
@@ -43,6 +30,19 @@ module ApplicationsControllerMethods
         render action: 'update_state'
       end
     end
+  end
+
+  def find_states
+    @states = Cinstance.allowed_states.collect(&:to_s).sort
+  end
+
+  def find_applications
+    define_search_scope
+    @cinstances = accessible_not_bought_cinstances.scope_search(@search)
+                                                  .order_by(params[:sort], params[:direction])
+                                                  .preload(:service, user_account: %i[admin_user], plan: %i[pricing_rules])
+                                                  .paginate(pagination_params)
+                                                  .decorate
   end
 
   def find_cinstance

@@ -7,6 +7,8 @@ class Api::ApplicationsController < FrontendController
   before_action :authorize_partners
   before_action :find_plans
   before_action :find_service
+  before_action :find_states, only: :index
+  before_action :find_applications, only: :index
   before_action :find_buyer, only: :create
   before_action :authorize_multiple_applications, only: :create
   before_action :find_application_plan, only: :create
@@ -19,9 +21,11 @@ class Api::ApplicationsController < FrontendController
 
   sublayout 'api/service'
 
-  def create
-    super
+  def index; end
 
+  def new; end
+
+  def create
     if @cinstance.save
       flash[:notice] = 'Application was successfully created.'
       redirect_to provider_admin_application_path(@cinstance)

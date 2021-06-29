@@ -6,6 +6,8 @@ class Provider::Admin::ApplicationsController < FrontendController
 
   before_action :authorize_partners
   before_action :find_plans
+  before_action :find_states, only: :index
+  before_action :find_applications, only: :index
   before_action :find_buyer, only: :create
   before_action :authorize_multiple_applications, only: :create
   before_action :find_application_plan, only: :create
@@ -20,21 +22,15 @@ class Provider::Admin::ApplicationsController < FrontendController
 
   layout 'provider'
 
-  def index
-    super
-  end
+  def index; end
 
   def show
     @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
   end
 
-  def new
-    super
-  end
+  def new; end
 
   def create
-    super
-
     if @cinstance.save
       flash[:notice] = 'Application was successfully created.'
       redirect_to provider_admin_application_path(@cinstance)
