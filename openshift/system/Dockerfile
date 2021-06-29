@@ -16,12 +16,15 @@ ARG SPHINX_VERSION=2.2.11-1
 ADD openshift/system/sphinx-${SPHINX_VERSION}.rhel7.x86_64.rpm /tmp/sphinxsearch.rpm
 
 RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.skip_if_unavailable=true \
+    && rpm -Uvh https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
     && yum -y update \
+    && yum remove -y postgresql \
     && yum -y install centos-release-scl-rh \
               ImageMagick \
               ImageMagick-devel \
               unixODBC-devel \
               mysql \
+              postgresql10 postgresql10-devel postgresql10-libs \
               file \
               rh-nodejs10 \
     && rpm -i /tmp/sphinxsearch.rpm \
@@ -47,6 +50,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
 RUN export ${BUNDLER_ENV} >/dev/null\
     && source /opt/system/etc/scl_enable \
     && gem install bundler --version 2.2.18 \
+    && bundle config build.pg --with-pg-config=/usr/pgsql-10/bin/pg_config \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
