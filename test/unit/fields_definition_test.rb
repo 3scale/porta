@@ -258,8 +258,8 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
       @hidden = FactoryBot.create(:fields_definition, :account => @provider, :name => "hidden", :hidden => true)
       @read_only = FactoryBot.create(:fields_definition, :account => @provider, :name => "read_only", :read_only => true)
       @required = FactoryBot.create(:fields_definition, :account => @provider, :name => "required", :required => true)
-      @account_target = FactoryBot.create(:fields_definition, :account => @provider, :name => "other", :required => true, target: 'Account')
-      @account_target2 = FactoryBot.create(:fields_definition, :account => @provider, :name => "other2", :required => true, target: 'Account')
+      @acc_target = FactoryBot.create(:fields_definition, :account => @provider, :name => "other", :required => true, target: 'Account')
+      @acc_target_another = FactoryBot.create(:fields_definition, :account => @provider, :name => "other2", :required => true, target: 'Account')
     end
     should 'return correct positions' do
       assert @hidden.pos    == @read_only.pos - 1
@@ -267,22 +267,22 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
     end
     should 'change position when updated' do
       hidden_pos, read_only_pos = @hidden.pos, @read_only.pos
-      required_pos, acc_target_pos = @required.pos, @account_target.pos
-      acc_target_pos_2 = @account_target2.pos
+      required_pos, acc_target_pos = @required.pos, @acc_target.pos
+      acc_target_another_pos = @acc_target_another.pos
 
       @read_only.update_attribute(:pos, read_only_pos - 1)
 
       assert @read_only.reload.pos == hidden_pos
       assert @hidden.reload.pos == read_only_pos
       assert @required.reload.pos == required_pos
-      assert @account_target.reload.pos == acc_target_pos
-      assert @account_target2.reload.pos == acc_target_pos_2
+      assert @acc_target.reload.pos == acc_target_pos
+      assert @acc_target_another.reload.pos == acc_target_another_pos
     end
 
     should 'not change the position when update fails' do
       hidden_pos, read_only_pos = @hidden.pos, @read_only.pos
-      required_pos, acc_target_pos = @required.pos, @account_target.pos
-      acc_target_pos_2 = @account_target2.pos
+      required_pos, acc_target_pos = @required.pos, @acc_target.pos
+      acc_target_another_pos = @acc_target_another.pos
 
       @required.update(position: 1, name: '%*&#^%@)*$')
 
@@ -290,8 +290,8 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
       assert @hidden.reload.pos == hidden_pos
       assert @read_only.reload.pos == read_only_pos
       assert @required.reload.pos == required_pos
-      assert @account_target.reload.pos == acc_target_pos
-      assert @account_target2.reload.pos == acc_target_pos_2
+      assert @acc_target.reload.pos == acc_target_pos
+      assert @acc_target_another.reload.pos == acc_target_another_pos
     end
   end
 end
