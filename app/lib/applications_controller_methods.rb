@@ -23,7 +23,7 @@ module ApplicationsControllerMethods
   end
 
   def change_state(action, message, *rest)
-    @cinstance.send("#{action}!", *rest)
+    @cinstance.public_send("#{action}!", *rest)
 
     respond_to do |format|
       format.html do
