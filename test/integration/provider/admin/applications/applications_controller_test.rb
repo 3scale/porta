@@ -16,8 +16,11 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       get provider_admin_applications_path
 
       assert_response :ok
+      page = Nokogiri::HTML::Document.parse(response.body)
       expected_cinstances_ids = master_account.provided_cinstances.not_bought_by(master_account).pluck(:id)
-      assert_same_elements expected_cinstances_ids, assigns(:cinstances).map(&:id)
+      expected_cinstances_ids.each do |id|
+        assert page.xpath %(//tbody[@class="cinstances"]//tr[contains(@id, "#{id}")])
+      end
     end
 
     test 'show is visible for all master\'s provided cinstances except those whose buyer is master' do
@@ -56,14 +59,14 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         assert provider.reload.multiservice?
         get provider_admin_applications_path
         page = Nokogiri::HTML::Document.parse(response.body)
-        assert page.xpath("//tr").text.match /Service/
+        assert page.xpath '//thead/tr/td[text() = "Service"]'
       end
 
       test 'index does not show the services column when the provider is not multiservice' do
-        refute provider.reload.multiservice?
+        assert_not provider.reload.multiservice?
         get provider_admin_applications_path
         page = Nokogiri::HTML::Document.parse(response.body)
-        refute page.xpath("//tr").text.match /Service/
+        assert_empty page.xpath '//thead/tr/td[text() = "Service"]'
       end
 
       test 'index shows an application of a custom plan' do
@@ -76,7 +79,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         get provider_admin_applications_path
         assert_response :success
         page = Nokogiri::HTML::Document.parse(response.body)
-        assert page.xpath("//td").text.match /my custom cinstance/
+        assert page.xpath('//tbody[@class="cinstances"]/tr').text.include? cinstance.display_name
       end
     end
 
@@ -99,8 +102,8 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         page = Nokogiri::HTML::Document.parse(response.body)
-        assert page.xpath("//tr[@class='feature enabled']").text  =~ /ticked/
-        assert page.xpath("//tr[@class='feature disabled']").text =~ /crossed/
+        assert page.xpath("//tr[@class='feature enabled']").text.include? 'ticked'
+        assert page.xpath("//tr[@class='feature disabled']").text.include? 'crossed'
       end
 
       test 'show plan of the app does not show in the plans select' do
@@ -143,6 +146,24 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       end
     end
 
+    class Create < ProviderLoggedInTest
+      def setup
+        service = provider.default_service
+        @application_plan = FactoryBot.create(:application_plan, issuer: service)
+        @service_plan = FactoryBot.create(:service_plan, service: service)
+        @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      end
+
+      attr_reader :service_plan, :buyer, :application_plan
+
+      test 'crate application redirects to the provider admin index page' do
+        post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                         cinstance: { plan_id: application_plan.id, service_plan_id: service_plan.id, name: 'My Application' } }
+
+        assert_redirected_to provider_admin_application_path(Cinstance.last)
+      end
+    end
+
     class Edit < ProviderLoggedInTest
       setup do
         plan = FactoryBot.create(:application_plan, issuer: provider.default_service)
@@ -176,12 +197,12 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         app_plan = FactoryBot.create(:application_plan, issuer: service)
         custom_plan = app_plan.customize
 
-        put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: custom_plan.id }
+        put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: custom_plan.id } }
 
         assert_response :not_found
         assert_equal initial_plan.id, cinstance.reload.plan_id
 
-        put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: app_plan.id }
+        put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: app_plan.id } }
 
         assert_redirected_to provider_admin_application_path(cinstance)
         assert_equal app_plan.id, cinstance.reload.plan_id
@@ -197,7 +218,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         provider.reload.billing_strategy.update_attribute(:prepaid, true)
 
         Timecop.freeze(Date.new(2001,1,25)) do
-          put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: new_plan.id }
+          put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
         end
 
         assert_response :redirect
@@ -209,7 +230,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
         ActionMailer::Base.deliveries = []
-        put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: new_plan.id }
+        put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
 
         assert_equal cinstance.reload.plan, new_plan
         assert mail = ActionMailer::Base.deliveries.first, 'missing email'
@@ -221,7 +242,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         provider.settings.allow_multiple_applications!
         provider.settings.show_multiple_applications!
 
-        put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: new_plan.id }
+        put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
 
         assert_response :redirect
         assert_equal cinstance.reload.plan, new_plan
