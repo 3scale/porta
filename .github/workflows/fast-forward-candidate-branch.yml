@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'The release version number e.g (2.11 or 2.12)'
+        description: 'The release version number (e.g, 2.11)'
         required: true
       ref:
         description: 'The SHA1 or branch name the candidate branch will point to'
