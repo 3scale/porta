@@ -288,22 +288,6 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     assert_match "Promote v. #{config.version} to Production APIcast", response.body
   end
 
-  test 'download nginx config' do
-    provider.create_onboarding
-    get admin_service_integration_path(service_id: service.id, format: :zip)
-
-    assert_response :success
-    assert_equal 'application/zip', response.content_type
-    assert_includes response.headers, 'Content-Transfer-Encoding', 'Content-Disposition'
-    assert_equal 'attachment; filename="proxy_configs.zip"', response['Content-Disposition']
-    assert_equal 'binary', response['Content-Transfer-Encoding']
-
-    Zip::InputStream.open(StringIO.new(response.body)) do |zip|
-      assert zip.get_next_entry
-    end
-
-  end
-
   test 'promote to production' do
     FactoryBot.create(:service_token, service: service)
     proxy.update_columns(apicast_configuration_driven: true)
