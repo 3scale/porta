@@ -85,19 +85,19 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     FieldsDefinition.delete_all
 
     account = FactoryBot.create(:fields_definition, account: @provider, target: 'Account')
-    account2 = FactoryBot.create(:fields_definition, account: @provider, target: 'Account')
+    another_account = FactoryBot.create(:fields_definition, account: @provider, target: 'Account')
     user = FactoryBot.create(:fields_definition, account: @provider, target: 'User')
-    user2 = FactoryBot.create(:fields_definition, account: @provider, target: 'User')
+    another_user = FactoryBot.create(:fields_definition, account: @provider, target: 'User')
 
-    account_pos, account2_pos = account.pos, account2.pos
-    user_pos, user2_pos = user.pos, user2.pos
+    account_pos, account2_pos = account.pos, another_account.pos
+    user_pos, user2_pos = user.pos, another_user.pos
 
-    post :sort, fields_definition: [ account2.id, account.id ]
+    post :sort, fields_definition: [ another_account.id, account.id ]
     assert_response :success
 
     assert account.reload.pos == account2_pos
-    assert account2.reload.pos == account_pos
+    assert another_account.reload.pos == account_pos
     assert user.reload.pos == user_pos
-    assert user2.reload.pos == user2_pos
+    assert another_user.reload.pos == user2_pos
   end
 end
