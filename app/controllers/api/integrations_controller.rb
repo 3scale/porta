@@ -50,27 +50,7 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def show
-    respond_to do |format|
-      format.html do
-        @show_presenter = Api::IntegrationsShowPresenter.new(@proxy)
-      end
-
-      format.zip do
-
-        source = if provider_can_use?(:apicast_per_service)
-                   Apicast::UserSource.new(current_user)
-                 else
-                   Apicast::ProviderSource.new(@service.account)
-        end
-
-        generator = Apicast::ZipGenerator.new(source)
-
-        send_file generator.data,
-                  type: 'application/zip',
-                  disposition: 'attachment',
-                  filename: 'proxy_configs.zip'
-      end
-    end
+    @show_presenter = Api::IntegrationsShowPresenter.new(@proxy)
   end
 
   def toggle_apicast_version
