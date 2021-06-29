@@ -161,27 +161,70 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       end
     end
 
-    class Update < ProviderLoggedInTest
-      test 'buying a stock plan is allowed but buying a custom plan is not' do
-        service = provider.default_service
-        initial_plan = FactoryBot.create(:application_plan, issuer: service)
+    class ChangePlan < ProviderLoggedInTest
+      def setup
+        @service = provider.default_service
+        @initial_plan = FactoryBot.create(:application_plan, issuer: service)
+        @new_plan = FactoryBot.create(:published_plan, issuer: service)
         buyer = FactoryBot.create(:buyer_account, provider_account: provider)
-        cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: initial_plan)
+        @cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: initial_plan, paid_until: Date.new(2001,1,10))
+      end
 
+      attr_reader :service, :cinstance, :initial_plan, :new_plan
+
+      test 'buying a stock plan is allowed but buying a custom plan is not' do
         app_plan = FactoryBot.create(:application_plan, issuer: service)
         custom_plan = app_plan.customize
-
 
         put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: custom_plan.id }
 
         assert_response :not_found
         assert_equal initial_plan.id, cinstance.reload.plan_id
 
-
         put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: app_plan.id }
 
         assert_redirected_to provider_admin_application_path(cinstance)
         assert_equal app_plan.id, cinstance.reload.plan_id
+      end
+
+      # Regression test of https://github.com/3scale/system/issues/1354
+      test 'change plan should correctly mark paid_until' do
+        cinstance.update_attribute(:trial_period_expires_at, nil)
+
+        provider.timezone = 'Mountain Time (US & Canada)'
+        provider.save!
+        provider.settings.allow_finance!
+        provider.reload.billing_strategy.update_attribute(:prepaid, true)
+
+        Timecop.freeze(Date.new(2001,1,25)) do
+          put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: new_plan.id }
+        end
+
+        assert_response :redirect
+        assert_equal cinstance.reload.plan, new_plan
+        assert_equal Date.new(2001,1,31), cinstance.reload.paid_until.to_date
+      end
+
+      test 'change_plan should email provider with link to app page' do
+        Logic::RollingUpdates.expects(skipped?: true).at_least_once
+
+        ActionMailer::Base.deliveries = []
+        put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: new_plan.id }
+
+        assert_equal cinstance.reload.plan, new_plan
+        assert mail = ActionMailer::Base.deliveries.first, 'missing email'
+        assert_match provider_admin_application_url(cinstance, host: provider.self_domain), mail.body.to_s
+      end
+
+      #regression test for https://github.com/3scale/system/issues/1889
+      test 'change plan should work even when cinstance misses description' do
+        provider.settings.allow_multiple_applications!
+        provider.settings.show_multiple_applications!
+
+        put change_plan_provider_admin_application_path(cinstance), cinstance: { plan_id: new_plan.id }
+
+        assert_response :redirect
+        assert_equal cinstance.reload.plan, new_plan
       end
     end
   end
