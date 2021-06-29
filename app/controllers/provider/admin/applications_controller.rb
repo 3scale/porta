@@ -16,8 +16,6 @@ class Provider::Admin::ApplicationsController < FrontendController
   before_action :find_cinstance, except: %i[index new create]
   before_action :initialize_cinstance, only: :create
 
-  helper_method :accessible_services
-
   activate_menu :audience, :applications, :listing
 
   layout 'provider'

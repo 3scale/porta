@@ -15,8 +15,6 @@ class Api::ApplicationsController < FrontendController
   before_action :find_service_plan, only: :create
   before_action :initialize_cinstance, only: :create
 
-  helper_method :accessible_services
-
   activate_menu :serviceadmin, :applications, :listing
 
   sublayout 'api/service'

@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module ApplicationsControllerMethods
+  def self.included(base)
+    base.class_eval do
+      helper_method :accessible_services
+    end
+  end
+
   protected
 
   # TODO: this should be done by buy! method
