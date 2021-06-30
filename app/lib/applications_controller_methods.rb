@@ -78,9 +78,12 @@ module ApplicationsControllerMethods
   end
 
   def find_service_plan
-    return unless (service_plan_id = params[:cinstance].delete(:service_plan_id))
-
-    @service_plan = @service.service_plans.find(service_plan_id)
+    service_plans = @service.service_plans
+    @service_plan = if (service_plan_id = params[:cinstance].delete(:service_plan_id))
+                      service_plans.find(service_plan_id)
+                    else
+                      @service.default_service_plan || service_plans.first
+                    end
   end
 
   def plan_id
