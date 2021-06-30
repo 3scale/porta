@@ -496,7 +496,7 @@ class Proxy < ApplicationRecord
 
     def to_h
       [:name, :version, :configuration, :enabled].each_with_object({}) do |key, obj|
-        obj[key] = instance_variable_get(:"@#{key}")
+        obj[key] = public_send key
       end.compact
     end
 
