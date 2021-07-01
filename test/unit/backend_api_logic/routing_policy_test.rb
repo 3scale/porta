@@ -44,7 +44,7 @@ module BackendApiLogic
         enabled: true,
         configuration: { rules: [routing_rule] }
       }
-      proxy.stubs(:policies_config).returns([routing_policy, apicast_policy].as_json)
+      proxy.stubs(:policies_config).returns(Proxy::PoliciesConfig.new([routing_policy, apicast_policy]))
 
       injected_policy = {
         name: 'routing',
@@ -77,13 +77,13 @@ module BackendApiLogic
       policy_blah = { name: 'blah', version: 'builtin', enabled: true, configuration: {} }
       policy_bleh = { name: 'bleh', version: 'builtin', enabled: true, configuration: {} }
 
-      proxy.stubs(:policies_config).returns([apicast_policy, policy_blah, policy_bleh].as_json)
+      proxy.stubs(:policies_config).returns(Proxy::PoliciesConfig.new([apicast_policy, policy_blah, policy_bleh]))
       assert_equal [injected_policy, apicast_policy.except(:enabled), policy_blah.except(:enabled), policy_bleh.except(:enabled)].as_json, proxy.policy_chain
 
-      proxy.stubs(:policies_config).returns([policy_blah, apicast_policy, policy_bleh].as_json)
+      proxy.stubs(:policies_config).returns(Proxy::PoliciesConfig.new([policy_blah, apicast_policy, policy_bleh]))
       assert_equal [policy_blah.except(:enabled), injected_policy, apicast_policy.except(:enabled), policy_bleh.except(:enabled)].as_json, proxy.policy_chain
 
-      proxy.stubs(:policies_config).returns([policy_blah, policy_bleh, apicast_policy].as_json)
+      proxy.stubs(:policies_config).returns(Proxy::PoliciesConfig.new([policy_blah, policy_bleh, apicast_policy]))
       assert_equal [policy_blah.except(:enabled), policy_bleh.except(:enabled), injected_policy, apicast_policy.except(:enabled)].as_json, proxy.policy_chain
     end
 
