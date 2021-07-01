@@ -12,7 +12,6 @@ base: &default
   new_notification_system: true
   cms_api: false
   forum: true
-  policies: false
   policy_registry: false
   apicast_v2: true
   proxy_private_base_path: true
