@@ -55,7 +55,7 @@ end
 
 And(/^sends the test request$/) do
   stub_request(:get, %r{//test.proxy/deploy/}).to_return(status: 200)
-  stub_request(:get, /staging.apicast.dev/).to_return(status: 200, body: response = 'Hey! successful request')
+  stub_request(:get, /staging.apicast.dev/).to_return(status: 200, body: 'Hey! successful request')
 
   click_on 'Send request'
 
