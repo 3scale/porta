@@ -4,8 +4,6 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   wrap_parameters ::Proxy
   representer Proxy::PoliciesConfig
 
-  before_action :authorize_rolling_update
-
   ##~ e = sapi.apis.add
   ##~ e.path = "/admin/api/services/{service_id}/proxy/policies.json"
   ##~ e.responseClass = "json"
@@ -49,10 +47,6 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   end
 
   private
-
-  def authorize_rolling_update
-    provider_can_use!(:policies)
-  end
 
   def proxy_params
     proxy_params = params.require(:proxy).dup

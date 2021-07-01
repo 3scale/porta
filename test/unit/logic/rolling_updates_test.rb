@@ -7,29 +7,13 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     System::ErrorReporting.expects(:report_error).never
   end
 
-  def test_policies
-    account = FactoryBot.build_stubbed(:simple_account)
-
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: true })
-    assert account.provider_can_use?(:policies)
-
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: false })
-    refute account.provider_can_use?(:policies)
-  end
-
   def test_policy_registry
     account = FactoryBot.build_stubbed(:simple_account)
 
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: true, policy_registry: true })
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policy_registry: true })
     assert account.provider_can_use?(:policy_registry)
 
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: true, policy_registry: false })
-    refute account.provider_can_use?(:policy_registry)
-
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: false, policy_registry: false })
-    refute account.provider_can_use?(:policy_registry)
-
-    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policies: false, policy_registry: true })
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({ policy_registry: false })
     refute account.provider_can_use?(:policy_registry)
   end
 
