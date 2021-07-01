@@ -591,19 +591,19 @@ class ProxyTest < ActiveSupport::TestCase
 
     policy_config_first = policies_config_dup.send[:policies_config].first.freeze
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"configuration" => {"key" => "value"}})
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"configuration" => {"key" => "value"}}))
 
     assert @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"version" => "42"})
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"version" => "42"}))
 
     assert @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"name" => "another"})
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"name" => "another"}))
 
     assert @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge {"enabled" => !policy_config_first["enabled"]})
+    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"enabled" => !policy_config_first["enabled"]}))
 
     assert @proxy.policies_config_changed?
 
