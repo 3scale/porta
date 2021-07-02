@@ -13,7 +13,7 @@ env :MAILTO, ENV.fetch('SYSADMIN_EMAIL', '') # TODO: I'm not entirely convinced 
 bundle_path = ENV.fetch('BUNDLE_BIN_PATH') { `which bundle`.strip }
 
 set :bundle_command, "BUNDLE_GEMFILE=#{bundle_gemfile_env} #{Gem.ruby} #{bundle_path} exec"
-set :runner_command, "script/rails runner"
+set :runner_command, "rails runner"
 set :rake_command, " #{`which rake`.strip}"
 set :ruby_command, Gem.ruby.to_s
 
