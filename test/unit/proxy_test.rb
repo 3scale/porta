@@ -28,15 +28,15 @@ class ProxyTest < ActiveSupport::TestCase
     def test_not_valid_json_policies_config
       service = FactoryBot.create(:simple_service)
       proxy = Proxy.new(policies_config: 'not-valid-json', service: service)
-      refute proxy.valid?
-
-      assert_match 'Policies config has invalid format. The Correct format is:', proxy.errors.full_messages.to_sentence
+      # TODO: this is the change of behaviour
+      assert proxy.valid?
+      assert_equal proxy.policies_config.send(:policies_config).first.to_h, Proxy::PolicyConfig::DEFAULT_POLICY
     end
 
     def test_policies_config
       policy_config_example = { name: 'my-policy', version: '1.0.0', configuration: {}, enabled: true }.stringify_keys
       proxy = Proxy.new(policies_config: [policy_config_example].to_json)
-      assert_equal proxy.send(:policies_config).first, Proxy::PolicyConfig.new(policy_config_example)
+      assert_equal proxy.policies_config.send(:policies_config).first, Proxy::PolicyConfig.new(policy_config_example)
       assert_equal 2, proxy.policy_chain.count
       # it should not add default policy again
       assert_equal 2, proxy.policy_chain.count
@@ -571,8 +571,8 @@ class ProxyTest < ActiveSupport::TestCase
     @proxy.save!
     @proxy.reload
 
-    assert_equal policy_config1, @proxy.find_policy_config_by(name: 'my-policy', version: '1.0.0')
-    assert_equal policy_config2, @proxy.find_policy_config_by(name: 'my-other-policy', version: '0.5.0')
+    assert_equal policy_config1, @proxy.find_policy_config_by(name: 'my-policy', version: '1.0.0').to_h
+    assert_equal policy_config2, @proxy.find_policy_config_by(name: 'my-other-policy', version: '0.5.0').to_h
   end
 
   test 'policies config changes' do
@@ -590,25 +590,25 @@ class ProxyTest < ActiveSupport::TestCase
 
     refute @proxy.policies_config_changed?
 
-    policy_config_first = policies_config_dup.send(:policies_config).first.freeze
+    policy_config_first = policies_config_dup.first.freeze
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"configuration" => {"key" => "value"}}))
-
-    assert @proxy.policies_config_changed?
-
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"version" => "42"}))
+    @proxy.policies_config = policies_config_dup.tap(&:shift).unshift(policy_config_first.merge({"configuration" => {"key" => "value"}}))
 
     assert @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"name" => "another"}))
+    @proxy.policies_config = policies_config_dup.tap(&:shift).unshift(policy_config_first.merge({"version" => "42"}))
 
     assert @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"enabled" => !policy_config_first["enabled"]}))
+    @proxy.policies_config = policies_config_dup.tap(&:shift).unshift(policy_config_first.merge({"name" => "another"}))
 
     assert @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first)
+    @proxy.policies_config = policies_config_dup.tap(&:shift).unshift(policy_config_first.merge({"enabled" => !policy_config_first["enabled"]}))
+
+    assert @proxy.policies_config_changed?
+
+    @proxy.policies_config = policies_config_dup.tap(&:shift).unshift(policy_config_first)
 
     refute @proxy.policies_config_changed?
   end
