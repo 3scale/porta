@@ -43,6 +43,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
   def test_update
     params = provider_key_params.merge(proxy: { endpoint: 'https://alaska.wild' })
 
+    ProxyDeploymentService.any_instance.expects(:deploy_v2).times(2)
     Proxy.update_all(apicast_configuration_driven: false)
 
     assert_no_change of: ProxyConfig.method(:count) do
@@ -51,7 +52,6 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     end
 
     Proxy.update_all(apicast_configuration_driven: true)
-    ProxyDeploymentService.any_instance.expects(:deploy_v2).once
 
     put(admin_api_service_proxy_path(params))
     assert_response :success
@@ -59,6 +59,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
 
   def test_update_for_service_mesh
     rolling_updates_on
+    Proxy.update_all(apicast_configuration_driven: false)
     params = provider_key_params.merge(proxy: { credentials_location: 'headers' })
     @service.update_column :deployment_option, 'service_mesh_istio'
 
