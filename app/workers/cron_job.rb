@@ -6,8 +6,8 @@ module CronJob
     def perform(hash)
       task = ThreeScale::Jobs::Task.deserialize(hash)
       task.run
-    rescue => error
-      System::ErrorReporting.report_error(error,
+    rescue StandardError => exception
+      System::ErrorReporting.report_error(exception,
                                           component: 'job',
                                           action: task)
       raise
