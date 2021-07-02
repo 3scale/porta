@@ -824,7 +824,6 @@ without fake Core server your after commit callbacks will crash and you might ge
               patch 'promote_to_production'
             end
           end
-          resources :proxy_logs, :only => [:index, :show ]
           resources :proxy_configs, only: %i(index show)
           resources :proxy_rules, except: %i[show], defaults: { owner_type: 'Proxy' }
           resource :policies, except: [:show, :destroy]
