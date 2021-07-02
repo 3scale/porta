@@ -483,7 +483,6 @@ class ProxyTest < ActiveSupport::TestCase
                               api_backend: 'http://example.com',
                               api_test_path: '/path',
                               apicast_configuration_driven: false)
-    # TODO: remove this when ApicastV1DeploymentService class is removed
     ::ApicastV1DeploymentService.any_instance.expects(:deploy).with(proxy).returns(true).never
 
     assert proxy.save_and_deploy
