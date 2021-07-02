@@ -36,27 +36,33 @@ module ThreeScale
         }
       end
 
+      def ==(other)
+        serialize == other.serialize
+      end
+
       def self.deserialize(hash)
-        hash['klass'].constantize.new(*YAML.load(hash['init_args']))  # rubocop:disable Security/YAMLLoad
+        klass, method, arguments = YAML.load(hash[:init_args]) # rubocop:disable Security/YAMLLoad
+        hash[:klass].constantize.new(klass, method, *arguments)
       end
 
       protected
 
       def init_args
-        YAML.dump([@object, @method, @arguments])
+        YAML.dump([@object, @method, *@arguments])
       end
     end
 
     class RakeTask < Task
 
-      def initialize(task_name) # rubocop:disable Lint/MissingSuper
+      def initialize(task_name, *) # rubocop:disable Lint/MissingSuper
         @task_name = task_name
       end
 
       def run
         # Do not reload the tasks if it is already loaded
-        Rails.application.load_tasks unless ::Rake.application
-        task = ::Rake.application[@task_name]
+        rake_application = ::Rake.application
+        Rails.application.load_tasks unless rake_application
+        task = rake_application[@task_name]
         return unless task
 
         task.invoke
