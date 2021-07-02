@@ -101,8 +101,5 @@ module ThreeScale
                     ]).freeze # just a fake job to ensure cron works
 
     SPHINX_INDEX_ALL = [RakeTask.new('sphinx:enqueue')].freeze
-
-    CUSTOM = [].freeze
-
   end
 end
