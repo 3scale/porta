@@ -34,11 +34,12 @@ class ProxyTest < ActiveSupport::TestCase
     end
 
     def test_policies_config
-      proxy = Proxy.new(policies_config: "[{\"data\":{\"request\":\"1\",\"config\":\"123\"}}]")
-      assert_equal proxy.policies_config.first, { "data" => { "request" => "1", "config" => "123" }}
-      assert_equal 2, proxy.policies_config.count
+      policy_config_example = { name: 'my-policy', version: '1.0.0', configuration: {}, enabled: true }.stringify_keys
+      proxy = Proxy.new(policies_config: [policy_config_example].to_json)
+      assert_equal proxy.send(:policies_config).first, Proxy::PolicyConfig.new(policy_config_example)
+      assert_equal 2, proxy.policy_chain.count
       # it should not add default policy again
-      assert_equal 2, proxy.policies_config.count
+      assert_equal 2, proxy.policy_chain.count
     end
 
     def test_policy_chain
@@ -581,7 +582,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     refute @proxy.policies_config_changed?
 
-    @proxy.policies_config = policies_config_dup + policy_config_example
+    @proxy.policies_config = policies_config_dup + [policy_config_example]
 
     assert @proxy.policies_config_changed?
 

@@ -129,8 +129,7 @@ class Proxy < ApplicationRecord
     deployment_option&.inquiry
   end
 
-  delegate :find_policy_config_by, to: :policy_config
-  delegate :policy_chain, to: :policies_config
+  delegate :find_policy_config_by, :policy_chain, to: :policies_config
   delegate :self_managed?, :hosted?, to: :deployment_option
   delegate :service_token, to: :service, allow_nil: true
 
