@@ -148,19 +148,57 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
 
     class Create < ProviderLoggedInTest
       def setup
-        service = provider.default_service
+        @service = provider.default_service
         @application_plan = FactoryBot.create(:application_plan, issuer: service)
         @service_plan = FactoryBot.create(:service_plan, service: service)
         @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
       end
 
-      attr_reader :service_plan, :buyer, :application_plan
+      attr_reader :service_plan, :buyer, :application_plan, :service
 
       test 'crate application redirects to the provider admin index page' do
         post provider_admin_applications_path, params: { account_id: buyer.id,
                                                          cinstance: { plan_id: application_plan.id, service_plan_id: service_plan.id, name: 'My Application' } }
 
         assert_redirected_to provider_admin_application_path(Cinstance.last)
+      end
+
+      test 'crate application with no service plan selected' do
+        post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                         cinstance: { plan_id: application_plan.id, name: 'My Application' } }
+
+        application = Cinstance.last
+        assert_redirected_to provider_admin_application_path(application)
+      end
+
+      test 'crate application with no service plan selected and a default service plan' do
+        default_service_plan = FactoryBot.create(:service_plan, service: service)
+        service.update(default_service_plan: default_service_plan)
+        post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                         cinstance: { plan_id: application_plan.id, name: 'My Application' } }
+
+        assert_response :redirect
+        assert_equal default_service_plan, buyer.bought_service_contracts.first.service_plan
+      end
+
+      test 'crate application with no service plan selected and no default service plan' do
+        other_service_plan = FactoryBot.create(:service_plan, service: service)
+        service.update(default_service_plan: nil)
+        post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                         cinstance: { plan_id: application_plan.id, name: 'My Application' } }
+
+        assert_response :redirect
+        assert_not_equal other_service_plan, buyer.bought_service_contracts.first.service_plan
+      end
+
+      test 'crate application with no service plan selected and a subscription' do
+        subscribed_service_plan = FactoryBot.create(:service_plan, service: service)
+        buyer.bought_service_contracts.create(plan: subscribed_service_plan)
+        post provider_admin_applications_path, params: { account_id: buyer.id,
+                                                         cinstance: { plan_id: application_plan.id, name: 'My Application' } }
+
+        assert_response :redirect
+        assert_equal subscribed_service_plan, buyer.bought_service_contracts.first.service_plan
       end
     end
 
