@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
 
 # If you precompile assets before deploying to production, use this line
-Bundler.require *Rails.groups(:assets => %w(development production preview test))
+Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
 # If you want your assets lazily compiled in production, use this line
 # Bundler.require(:default, :assets, Rails.env)
 
@@ -14,6 +15,7 @@ module System
 
   def self.rails4?
     raise 'does not accept block' if block_given?
+
     Rails::VERSION::MAJOR == 4
   end
 
@@ -43,8 +45,8 @@ module System
 
     def simple_try_config_for(*args)
       config_for(*args)
-    rescue => error # rubocop:disable Style/RescueStandardError
-      warn "[Warning][ConfigFor] Failed to load config with: #{error}" if $VERBOSE
+    rescue => exception # rubocop:disable Style/RescueStandardError
+      warn "[Warning][ConfigFor] Failed to load config with: #{exception}" if $VERBOSE
       nil
     end
 
@@ -56,9 +58,7 @@ module System
       require 'three_scale'
     end
 
-    if ENV['RAILS_LOG_TO_STDOUT'].present?
-      config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
-    end
+    config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT)) if ENV['RAILS_LOG_TO_STDOUT'].present?
 
     config.active_record.whitelist_attributes = false
 
@@ -81,13 +81,13 @@ module System
 
     # Activate observers that should always be running.
     config.active_record.observers = :account_observer,
-      :message_observer,
-      :billing_observer,
-      :post_observer,
-      :user_observer,
-      :billing_strategy_observer,
-      :provider_plan_change_observer,
-      :plan_observer
+                                     :message_observer,
+                                     :billing_observer,
+                                     :post_observer,
+                                     :user_observer,
+                                     :billing_strategy_observer,
+                                     :provider_plan_change_observer,
+                                     :plan_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -98,7 +98,7 @@ module System
     # config.i18n.default_locale = :de
 
     if (expansions = config.action_view.javascript_expansions)
-      expansions[:defaults] = %w()
+      expansions[:defaults] = %w[]
     end
 
     config.assets.paths << Rails.root.join('assets')
@@ -114,14 +114,14 @@ module System
       extname = File.extname(basename)
 
       # skip files that start with underscore, do not have extension or are sourcemap
-      extname.present? && !extname.in?(%w[.map .LICENSE .es6]) && !basename.start_with?('_'.freeze)
+      extname.present? && !extname.in?(%w[.map .LICENSE .es6]) && !basename.start_with?('_')
     end
-    config.assets.precompile += %w(
+    config.assets.precompile += %w[
       font-awesome.css
       provider/signup_v2.js
       provider/signup_form.js
       provider/layout/provider.js
-    )
+    ]
 
     config.assets.compile = false
     config.assets.digest = true
@@ -244,11 +244,11 @@ module System
       s3_credentials: ->(*) { CMS::S3.credentials },
       bucket: ->(*) { CMS::S3.bucket },
       s3_protocol: ->(*) { CMS::S3.protocol },
-      s3_permissions: 'private'.freeze,
+      s3_permissions: 'private',
       s3_region: ->(*) { CMS::S3.region },
       s3_host_name: ->(*) { CMS::S3.hostname },
-      url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension'.freeze,
-      path: ':rails_root/public/system/:url'.freeze
+      url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',
+      path: ':rails_root/public/system/:url'
     }.merge(try_config_for(:paperclip) || {})
 
     initializer :paperclip_defaults, after: :load_config_initializers do
@@ -275,11 +275,11 @@ module System
 
     console do
       if sandbox?
-        puts <<-WARNING.strip_heredoc
-\e[5;37;41m
-YOU ARE USING SANDBOX MODE. DO NOT MODIFY RECORDS! THIS IS DANGEROUS AS IT WILL LOCK TABLES!
-See https://github.com/3scale/system/issues/6616
-\e[0m
+        puts <<~WARNING.strip_heredoc
+          \e[5;37;41m
+          YOU ARE USING SANDBOX MODE. DO NOT MODIFY RECORDS! THIS IS DANGEROUS AS IT WILL LOCK TABLES!
+          See https://github.com/3scale/system/issues/6616
+          \e[0m
         WARNING
       end
     end

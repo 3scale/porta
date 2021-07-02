@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'sidekiq/job_retry'
 
 module ThreeScale
@@ -37,7 +38,7 @@ module ThreeScale
         logger.info "Running #{retry_identifier} (#{retry_attempt}/#{retry_limit})"
 
         yield
-      rescue => exception
+      rescue StandardError => exception
         logger.info "#{retry_identifier} attempt ##{retry_attempt} failed with #{exception}"
 
         logger.info "Retrying #{retry_identifier}" unless last_attempt?
