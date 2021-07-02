@@ -14,7 +14,6 @@
 .deploy_info
 .ruby-gemset
 .ruby-version
-.tool-versions
 .pt
 .pivotalrc
 .pivotal_cache
@@ -98,6 +97,7 @@ C:\\nppdf32Log\\debuglog.txt
 /public/system
 /public/test*.html
 /tmp/*
+!/tmp/metrics
 !.gitkeep
 !.eslint*
 !.babelrc

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Provider::InviteeSignupsControllerTest < ActionDispatch::IntegrationTest
+class Provider::InviteeSignupsControllerIntTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     host! provider.admin_domain
