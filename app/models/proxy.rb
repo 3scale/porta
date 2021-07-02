@@ -566,7 +566,7 @@ class Proxy < ApplicationRecord
       read_and_parse_policies_config!(attr_policies_config)
     rescue JSON::ParserError
       # TODO: is this a proper invalid value handling? In original
-      logger.error "Invalid attribute policies_config: #{attr_policies_config}"
+      Rails.logger.error "Invalid attribute policies_config: #{attr_policies_config}"
       []
     end
 

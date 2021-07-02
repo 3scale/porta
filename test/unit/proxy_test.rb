@@ -567,7 +567,7 @@ class ProxyTest < ActiveSupport::TestCase
     policy_config1 = { name: 'my-policy', version: '1.0.0', configuration: {}, enabled: true }.stringify_keys
     policy_config2 = { name: 'my-other-policy', version: '0.5.0', configuration: {}, enabled: false }.stringify_keys
 
-    @proxy.policies_config = [policy_config1, policy_config2].map { |attr| Proxy::PolicyConfig.new(attr) }
+    @proxy.policies_config = [policy_config1, policy_config2]
     @proxy.save!
     @proxy.reload
 
@@ -590,7 +590,7 @@ class ProxyTest < ActiveSupport::TestCase
 
     refute @proxy.policies_config_changed?
 
-    policy_config_first = policies_config_dup.send[:policies_config].first.freeze
+    policy_config_first = policies_config_dup.send(:policies_config).first.freeze
 
     @proxy.policies_config = policies_config_dup.shift.unshift(policy_config_first.merge({"configuration" => {"key" => "value"}}))
 
