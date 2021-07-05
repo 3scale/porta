@@ -9,9 +9,9 @@ class ApiDocsProxy
   NO_CACHE_HEADERS = { "Cache-Control": "no-cache"  }
 
   execute: (httpClient, obj) ->
-    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
-    if @originHttps() then obj.url = @forceHttpsProtocol obj.url
-    <% end %>
+    unless @enableApiDocsProxy()
+      if @originHttps() then obj.url = @forceHttpsProtocol obj.url
+
     @createLinkElement obj.url
     obj.originalUrl = obj.url
     # console.log "[ApiDocsProxy] incoming url #{obj.url}"
@@ -51,12 +51,11 @@ class ApiDocsProxy
     @linkElement
 
   sameOrigin: ->
-    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
-      true
-    <% else %>
-      @desiredOrigin() == @locationOrigin()
-    <% end %>
+    !@enableApiDocsProxy() || @desiredOrigin() == @locationOrigin()
 
+
+  enableApiDocsProxy: ->
+    window.enableApiDocsProxy
 
   apiDocsPath: ->
     # In some browsers like IE pathname do not includes (/) slash at the
