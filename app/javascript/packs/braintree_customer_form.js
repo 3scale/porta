@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const { clientToken, billingAddress, threeDSecureEnabled, formActionPath, countriesList, selectedCountryCode } = container.dataset
-  const billingAddressParsed = safeFromJsonString(billingAddress)
+  const billingAddressParsed = safeFromJsonString(billingAddress) || {}
   for (let key in billingAddressParsed) {
     if (billingAddressParsed[key] === null) {
       billingAddressParsed[key] = ''

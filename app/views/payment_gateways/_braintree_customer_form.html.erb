@@ -6,7 +6,9 @@
   data-form-action-path="<%= developer_portal.hosted_success_admin_account_braintree_blue_path %>"
   data-three-d-secure-enabled="<%= site_account.payment_gateway_options[:three_ds_enabled] %>"
   data-client-token="<%= client_token = j @braintree_authorization %>"
-  data-billing-address="<%= billing_address_data ? billing_address_data.to_json : nil %>"
+  <% unless billing_address_data == nil %>
+    data-billing-address="<%= billing_address_data.to_json  %>"
+  <% end %>
   data-countries-list="<%= merchant_countries.to_json %>"
   data-selected-country-code="<%= selected_country_code %>"
 ></div>
