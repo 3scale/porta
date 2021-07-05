@@ -21,7 +21,7 @@ nav.DashboardNavigation
       li.DashboardNavigation-list-item
         = dashboard_collection_link 'Application',
                                     applications,
-                                    admin_buyers_applications_path,
+                                    provider_admin_applications_path,
                                     icon_name: 'cubes'
 
         - if can?(:manage, :monitoring) && alerts.any?

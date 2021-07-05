@@ -17,7 +17,7 @@ module Liquid
       # Filter might be better, as in Shopify: http://cheat.markdunkley.com/
       desc "Returns the admin_url of the application."
       def admin_url
-        System::UrlHelpers.system_url_helpers.admin_service_application_url(@contract.service, @contract, host: @contract.provider_account.external_self_domain)
+        System::UrlHelpers.system_url_helpers.provider_admin_application_url(@contract, host: @contract.provider_account.external_self_domain)
       end
 
       def path

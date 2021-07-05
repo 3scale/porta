@@ -12,7 +12,7 @@ class CinstanceMessenger < ContractMessenger
   def new_contract(cinstance)
     @_template_name = 'new_application'
 
-    @url = app_routes.admin_service_application_url(cinstance.service, cinstance, host: cinstance.account.provider_account.admin_domain)
+    @url = app_routes.provider_admin_application_url(cinstance, host: cinstance.account.provider_account.admin_domain)
 
     assign_drops :url => @url
 

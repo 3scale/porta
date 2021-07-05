@@ -25,6 +25,6 @@ class Provider::Admin::Dashboard::Service::TopTrafficControllerTest < ActionDisp
     get provider_admin_dashboard_service_top_traffic_path(@service)
     page = Nokogiri::HTML::Document.parse(response.body)
     application_show_paths_displayed = page.xpath("//a[@class='DashboardWidgetList-link']").map { |node| node['href'] }
-    assert_same_elements cinstances.map { |cinstance| admin_service_application_path(@service.id, cinstance) }, application_show_paths_displayed
+    assert_same_elements cinstances.map { |cinstance| provider_admin_application_path(cinstance) }, application_show_paths_displayed
   end
 end

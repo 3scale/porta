@@ -3,7 +3,7 @@
 h1
   => @cinstance.display_name
   = pf_link_to 'Edit',
-            edit_admin_service_application_path(@cinstance.service, @cinstance),
+            edit_provider_admin_application_path(@cinstance),
             class: 'action edit'
 
 div#twoCol.equal-width
@@ -23,8 +23,8 @@ div#twoCol.equal-width
             th Service
             td
               = link_to service.name, admin_service_path(service)
-      = render '/buyers/applications/state'
-    div.wide_dashboard_card.round#application_keys data-object="cinstance" data-url=(admin_service_application_path(@cinstance.service, @cinstance, format: :json))
+      = render 'state'
+    div.wide_dashboard_card.round#application_keys data-object="cinstance" data-url=(provider_admin_application_path(@cinstance, format: :json))
       h3 API Credentials
       = render partial: 'provider/admin/keys/widget',
                locals: { cinstance: @cinstance }
@@ -43,13 +43,13 @@ div#twoCol.equal-width
 
     div.wide_dashboard_card.round
       h3 Current Utilization
-      = render partial: 'buyers/applications/utilization',
+      = render partial: 'utilization',
                locals: { utilization: @utilization, cinstance: @cinstance }
 
   - unless master_on_premises?
     div.right_narrow
-      = render partial: '/buyers/applications/plan', locals: { contract: @cinstance }
+      = render partial: 'plan', locals: { contract: @cinstance }
 
       // HACK: this condition really hurts - more than dancing CanCan
       - if can?( :manage, :plans) && @cinstance.available_application_plans.size > 0 && !current_account.master?
-        = render '/buyers/applications/change_plan'
+        = render 'change_plan'

@@ -93,7 +93,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
 
   def choose_service
     @services = current_account.services_can_create_app_on
-    redirect_to new_admin_application_path(:service_id => @services.first.id) if @services.count == 1
+    redirect_to new_provider_admin_application_path(service_id: @services.first.id) if @services.count == 1
     assign_drops services: Liquid::Drops::Collection.new(@services)
   end
 

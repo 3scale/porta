@@ -135,7 +135,8 @@ Feature: Buyer's application management
       | app_extra_hidden    |          |           | true   |
 
     When I log in as "bob" on foo.3scale.localhost
-      And I go to the new application page
+    When I go to the applications page
+    And I follow "Create new application"
 
     Then fields should be required:
       | required           |
@@ -227,4 +228,4 @@ Feature: Buyer's application management
      And I should see "Awesome"
 
     When I go to the new application page for service "Fancy"
-    Then I should be on the services list for buyers
+    Then I should be on the new application page for service "Fancy"

@@ -12,22 +12,6 @@ module CinstancesHelper
     cinstance.name =~ /(application)/i ? cinstance.name : "#{cinstance.name} application"
   end
 
-  # def path_for_applications_put(account,application)
-  #   if account.provider?
-  #     admin_buyers_account_applications_path(application.buyer_account)
-  #   else
-  #     admin_application_path(application)
-  #   end
-  # end
-  #
-  def path_for_applications_put(account, application)
-    if account.provider?
-      admin_buyers_application_path(application)
-    else
-      admin_application_path(application)
-    end
-  end
-
   def suspend_application_confirmation(cinstance)
     if cinstance.plan.free?
       %{
@@ -54,6 +38,6 @@ Are you sure?}
 
   def delete_application_link(application)
     msg = t('api.applications.edit.delete_confirmation', name: j(application.name))
-    pf_delete_link_for(admin_buyers_application_path(application), confirm: msg, title: 'Delete Application')
+    pf_delete_link_for(provider_admin_application_path(application), confirm: msg, title: 'Delete Application')
   end
 end
