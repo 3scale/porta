@@ -17,7 +17,6 @@ module Apicast
       return enum_for unless block_given?
 
       yield nginx_conf, -> { Apicast::ProviderNginxGenerator.new.emit(source) }
-      yield lua_file, -> { Apicast::ProviderLuaGenerator.new.emit(source) }
 
       yield 'readme.txt', -> { README.read }
       yield 'license.txt', -> { LICENSE.read }
@@ -34,10 +33,6 @@ module Apicast
 
     def nginx_conf
       "nginx_#{source.id}.conf"
-    end
-
-    def lua_file
-      "nginx_#{source.id}.lua"
     end
 
     def needs_oauth_helpers?
