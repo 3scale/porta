@@ -1,3 +1,6 @@
+<%= javascript_tag do %>
+  window.enableApiDocsProxy = <%= Rails.configuration.three_scale.active_docs_proxy_disabled.blank? %>;
+<% end %>
 <%= javascript_include_tag "swagger-ui2" -%>
 <%= javascript_include_tag "swagger-ui2/api_docs_proxy" %>
 <%= javascript_include_tag "swagger-ui2/autocomplete" %>

@@ -1,4 +1,10 @@
 <% content_for :sublayout_title, 'ActiveDocs' %>
+<% content_for :javascripts do %>
+  <%= javascript_tag do %>
+    window.enableApiDocsProxy = <%= Rails.configuration.three_scale.active_docs_proxy_disabled.blank? %>;
+  <% end %>
+<% end %>
+
 <%= render "menu" -%>
 
 <div class="swagger-section">

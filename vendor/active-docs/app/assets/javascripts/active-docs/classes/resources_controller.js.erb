@@ -1,16 +1,12 @@
 (function(global, $){
 
+  function apiDocsProxyEnabled(){
+    window.enableApiDocsProxy;
+  }
+
   function ResourcesController(){
     this.path = "/api_docs/services.json";
-    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
-      if(originHttps()) {
-        this.url = forceHttpsProtocol(global.host) + this.path
-      } else {
-        this.url = global.host + this.path;
-      }
-    <% else %>
-      this.url = global.host + this.path;
-    <% end %>
+    this.url = (!apiDocsProxyEnabled() && originHttps()) ?  forceHttpsProtocol(global.host) + this.path : global.host + this.path;
   }
 
   function originHttps() {
