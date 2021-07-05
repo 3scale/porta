@@ -40,10 +40,13 @@ class ThreeScaleHttp
   constructor: (swagger_http) ->
     @swagger_http = swagger_http
 
+  enableApiDocsProxy: ->
+    window.enableApiDocsProxy
+
   execute: (obj) ->
-    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
-    if @originHttps() then obj.url = @forceHttpsProtocol obj.url
-    <% end %>
+    unless @enableApiDocsProxy()
+      if @originHttps() then obj.url = @forceHttpsProtocol obj.url
+
     @createLinkElement obj.url
     obj.useJQuery = true
     obj.originalUrl = obj.url
@@ -94,11 +97,7 @@ class ThreeScaleHttp
     @linkElement
 
   sameOrigin: ->
-    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
-      true
-    <% else %>
-      @desiredOrigin() == @locationOrigin()
-    <% end %>
+      !@enableApiDocsProxy() || @desiredOrigin() == @locationOrigin()
 
   desiredOrigin: ->
      # This is to make IE happy.

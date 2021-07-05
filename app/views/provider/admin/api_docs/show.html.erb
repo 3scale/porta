@@ -1,4 +1,7 @@
 <%= stylesheet_link_tag 'active-docs/application.css' %>
+<%= javascript_tag do %>
+  window.enableApiDocsProxy = <%= Rails.configuration.three_scale.active_docs_proxy_disabled.blank? %>;
+<% end %>
 <%= javascript_include_tag 'active-docs/application.js' %>
 
 <% content_for :title do %>
