@@ -6,7 +6,7 @@
                           'Are you sure you want to change the application plan?'
                         end -%>
 
-  <%= form_for @cinstance, :url => change_plan_admin_buyers_application_path(@cinstance),
+  <%= form_for @cinstance, url: change_plan_provider_admin_application_path(@cinstance),
                           :html => {:method => :put, class: "formtastic"}, :'data-confirm' => confirm_message do |form| %>
 
       <fieldset class="inputs">

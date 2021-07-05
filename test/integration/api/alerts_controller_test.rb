@@ -16,7 +16,7 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     alert_limit_collection.each do |alert_limit|
       cinstance = alert_limit.cinstance
-      assert_xpath("//a[contains(@href, '#{admin_service_application_path(cinstance.service, cinstance)}')]", cinstance.name)
+      assert_xpath("//a[contains(@href, '#{provider_admin_application_path(cinstance)}')]", cinstance.name)
     end
   end
 

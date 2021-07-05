@@ -28,7 +28,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
 
     login_buyer @buyer
 
-    get new_admin_application_path(:service_id => @service.id)
+    get new_admin_application_path(service_id: @service.id)
     assert_response :not_found
   end
 
@@ -41,7 +41,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
 
     login_buyer @buyer
 
-    get new_admin_application_path(:service_id => @service.id)
+    get new_admin_application_path(service_id: @service.id)
     assert_response :success
   end
 

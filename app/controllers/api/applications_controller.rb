@@ -1,74 +1,54 @@
 # frozen_string_literal: true
 
-class Api::ApplicationsController < Api::BaseController
-  before_action :authorize_partners
-
-  before_action :find_service
-  before_action :find_cinstance, only: %i[show edit]
-
+class Api::ApplicationsController < FrontendController
   include ThreeScale::Search::Helpers
-  include DisplayViewPortion
-  helper DisplayViewPortion::Helper
+  include ApplicationsControllerMethods
+
+  before_action :authorize_partners
+  before_action :find_plans
+  before_action :find_service
+  before_action :find_states, only: :index
+  before_action :find_applications, only: :index
+  before_action :find_buyer, only: :create
+  before_action :authorize_multiple_applications, only: :create
+  before_action :find_application_plan, only: :create
+  before_action :find_service_plan, only: :create
+  before_action :initialize_cinstance, only: :create
 
   activate_menu :serviceadmin, :applications, :listing
+
   sublayout 'api/service'
 
-  def index
-    # TODO: This code is REALLY bad but it is copied and pasted from Buyers::ApplicationsController#index because
-    # doing it well requires time and we don't have time right now.
-    # Editing this action may require touching the other one
+  def index; end
 
-    @states = Cinstance.allowed_states.collect(&:to_s).sort
-    @search = ThreeScale::Search.new(params[:search] || params)
-    service_application_plans = @service.application_plans
-    @application_plans = service_application_plans.stock
-    @stock_and_custom_application_plans = service_application_plans.size
+  def new; end
 
-    @search.service_id = @service.id
-
-    if params[:application_plan_id]
-      @plan = @service.application_plans.find params[:application_plan_id]
-      @search.plan_id = @plan.id
+  def create
+    if @cinstance.save
+      flash[:notice] = 'Application was successfully created.'
+      redirect_to provider_admin_application_path(@cinstance)
+    else
+      @cinstance.extend(AccountForNewPlan)
+      render action: :new
     end
-
-    if params[:account_id]
-      @account = current_account.buyers.find params[:account_id]
-      @search.account = @account.id
-      activate_menu :buyers, :accounts
-    end
-
-    @cinstances = accessible_not_bought_cinstances
-                      .scope_search(@search).order_by(params[:sort], params[:direction])
-                      .preload(:service, user_account: [:admin_user], plan: [:pricing_rules])
-                      .paginate(pagination_params)
-                      .decorate
   end
 
-  def show
-    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
+  protected
+
+  def define_search_scope(opts = {})
+    super opts.reverse_merge(service: @service.id)
   end
 
-  def edit; end
-
-  def new
-    @provider = current_account
+  def find_service
+    @service = accessible_services.find params[:service_id]
   end
 
-  private
+  def accessible_plans
+    super.where(issuer: @service)
+  end
 
   def accessible_not_bought_cinstances
-    current_user.accessible_cinstances.not_bought_by(current_account)
-  end
-
-  def find_cinstance
-    @cinstance = accessible_not_bought_cinstances
-                   .includes(plan: %i[service original plan_metrics pricing_rules])
-                   .where(service: @service)
-                   .find(params[:id])
-  end
-
-  def authorize_partners
-    authorize! :manage, :partners
+    super.where(service: @service)
   end
 
 end

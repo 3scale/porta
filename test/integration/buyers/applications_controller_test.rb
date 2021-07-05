@@ -1,122 +1,93 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Buyers::ApplicationsTest < ActionDispatch::IntegrationTest
-  class MasterLoggedInTest < Buyers::ApplicationsTest
+  class TenantLoggedInTest < Buyers::ApplicationsTest
     setup do
-      login! master_account
-      FactoryBot.create(:cinstance, service: master_account.default_service)
-    end
-
-    attr_reader :service
-
-    test 'index retrieves all master\'s provided cinstances except those whose buyer is master' do
-      get admin_buyers_applications_path
-
-      assert_response :ok
-      expected_cinstances_ids = master_account.provided_cinstances.not_bought_by(master_account).pluck(:id)
-      assert_same_elements expected_cinstances_ids, assigns(:cinstances).map(&:id)
-    end
-  end
-
-  class ProviderLoggedInTest < Buyers::ApplicationsTest
-    def setup
       @provider = FactoryBot.create(:provider_account)
-
-      login! provider
-
-      #TODO: dry with @ignore-backend tag on cucumber
-      stub_backend_get_keys
-      stub_backend_referrer_filters
-      stub_backend_utilization
+      login! @provider
     end
 
     attr_reader :provider
 
-    test 'index shows the services column when the provider is multiservice' do
-      provider.services.create!(name: '2nd-service')
-      assert provider.reload.multiservice?
-      get admin_buyers_applications_path
-      page = Nokogiri::HTML::Document.parse(response.body)
-      assert page.xpath("//tr").text.match /Service/
-    end
+    class Create < TenantLoggedInTest
+      def setup
+        @service = provider.default_service
+        @application_plan = FactoryBot.create(:application_plan, issuer: service)
+        @service_plan = FactoryBot.create(:service_plan, service: service)
+        @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      end
 
-    test 'index does not show the services column when the provider is not multiservice' do
-      refute provider.reload.multiservice?
-      get admin_buyers_applications_path
-      page = Nokogiri::HTML::Document.parse(response.body)
-      refute page.xpath("//tr").text.match /Service/
-    end
+      attr_reader :service_plan, :buyer, :application_plan, :service
 
-    test 'index shows an application of a custom plan' do
-      service = provider.default_service
-      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
-      app_plan = FactoryBot.create(:application_plan, issuer: service)
-      custom_plan = app_plan.customize
-      cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: custom_plan, name: 'my custom cinstance')
+      test 'crate application redirects to the provider admin index page' do
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { service_plan_id: service_plan.id, plan_id: application_plan.id, name: 'My Application' } }
 
-      get admin_buyers_applications_path
-      assert_response :success
-      page = Nokogiri::HTML::Document.parse(response.body)
-      assert page.xpath("//td").text.match /my custom cinstance/
-    end
+        assert_redirected_to provider_admin_application_path(Cinstance.last)
+      end
 
-    test 'member cannot create an application when lacking access to a service' do
-      forbidden_service = FactoryBot.create(:service, account: provider)
-      forbidden_plan = FactoryBot.create(:application_plan, issuer: forbidden_service)
-      forbidden_service_plan = FactoryBot.create(:service_plan, issuer: forbidden_service)
+      test 'crate application with no service plan selected' do
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { plan_id: application_plan.id, name: 'My Application' } }
 
-      authorized_service = FactoryBot.create(:service, account: provider)
-      authorized_plan = FactoryBot.create(:application_plan, issuer: authorized_service)
-      authorized_service_plan = FactoryBot.create(:service_plan, issuer: authorized_service)
+        application = Cinstance.last
+        assert_redirected_to provider_admin_application_path(application)
+      end
 
-      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
+      test 'crate application with no service plan selected and a default service plan' do
+        default_service_plan = FactoryBot.create(:service_plan, service: service)
+        service.update(default_service_plan: default_service_plan)
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { plan_id: application_plan.id, name: 'My Application' } }
 
-      member = FactoryBot.create(:member, account: provider,
-                                          member_permission_ids: [:partners])
-      member.activate!
-      FactoryBot.create(:member_permission, user: member,
-                                            admin_section: :services,
-                                            service_ids: [authorized_service.id])
+        assert_response :redirect
+        assert_equal default_service_plan, buyer.bought_service_contracts.first.service_plan
+      end
 
-      login_provider provider, user: member
+      test 'crate application with no service plan selected and no default service plan' do
+        other_service_plan = FactoryBot.create(:service_plan, service: service)
+        service.update(default_service_plan: nil)
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { plan_id: application_plan.id, name: 'My Application' } }
 
-      post admin_buyers_account_applications_path(account_id: buyer.id), cinstance: {
-        plan_id: forbidden_plan.id,
-        name: 'Not Allowed!',
-        service_plan_id: forbidden_service_plan.id
-      }
+        assert_response :redirect
+        assert_not_equal other_service_plan, buyer.bought_service_contracts.first.service_plan
+      end
 
-      assert_response :not_found
+      test 'crate application with no service plan selected and a subscription' do
+        subscribed_service_plan = FactoryBot.create(:service_plan, service: service)
+        buyer.bought_service_contracts.create(plan: subscribed_service_plan)
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { plan_id: application_plan.id, name: 'My Application' } }
 
-      post admin_buyers_account_applications_path(account_id: buyer.id), cinstance: {
-        plan_id: authorized_plan.id,
-        name: 'Allowed',
-        service_plan_id: authorized_service_plan.id
-      }
+        assert_response :redirect
+        assert_equal subscribed_service_plan, buyer.bought_service_contracts.first.service_plan
+      end
 
-      assert_response :found
-    end
+      test 'member cannot create an application when lacking access to a service' do
+        stub_backend_get_keys
+        stub_backend_referrer_filters
+        stub_backend_utilization
 
-    test 'buying a stock plan is allowed but buying a custom plan is not' do
-      service = provider.default_service
-      initial_plan = FactoryBot.create(:application_plan, issuer: service)
-      buyer = FactoryBot.create(:buyer_account, provider_account: provider)
-      cinstance = FactoryBot.create(:cinstance, user_account: buyer, plan: initial_plan)
+        forbidden_service = FactoryBot.create(:service, account: provider)
+        forbidden_plan = FactoryBot.create(:application_plan, issuer: forbidden_service)
+        forbidden_service_plan = FactoryBot.create(:service_plan, issuer: forbidden_service)
 
-      app_plan = FactoryBot.create(:application_plan, issuer: service)
-      custom_plan = app_plan.customize
+        authorized_service = FactoryBot.create(:service, account: provider)
+        authorized_plan = FactoryBot.create(:application_plan, issuer: authorized_service)
+        authorized_service_plan = FactoryBot.create(:service_plan, issuer: authorized_service)
 
+        member = FactoryBot.create(:member, account: provider, member_permission_ids: [:partners])
+        member.activate!
+        FactoryBot.create(:member_permission, user: member, admin_section: :services, service_ids: [authorized_service.id])
 
-      put change_plan_admin_buyers_application_path(account_id: buyer.id, id: cinstance.id), cinstance: {plan_id: custom_plan.id}
+        login_provider provider, user: member
 
-      assert_response :not_found
-      assert_equal initial_plan.id, cinstance.reload.plan_id
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { service_plan_id: forbidden_service_plan.id, plan_id: forbidden_plan.id, name: 'Not Allowed!' } }
 
+        assert_response :not_found
 
-      put change_plan_admin_buyers_application_path(account_id: buyer.id, id: cinstance.id), cinstance: {plan_id: app_plan.id}
+        post admin_buyers_account_applications_path(buyer), params: { cinstance: { service_plan_id: authorized_service_plan.id, plan_id: authorized_plan.id, name: 'Allowed' } }
 
-      assert_redirected_to admin_service_application_path(service, cinstance)
-      assert_equal app_plan.id, cinstance.reload.plan_id
+        assert_response :found
+      end
     end
   end
 end

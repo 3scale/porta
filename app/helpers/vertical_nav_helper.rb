@@ -106,8 +106,8 @@ module VerticalNavHelper
 
   def audience_applications_items
     items = []
-    items << {id: :listing, title: 'Listing', path: admin_buyers_applications_path} if can?(:manage, :partners)
-    items << {id: :alerts,  title: 'Alerts',  path: admin_alerts_path}              if can?(:manage, :monitoring)
+    items << {id: :listing, title: 'Listing', path: provider_admin_applications_path} if can?(:manage, :partners)
+    items << {id: :alerts,  title: 'Alerts',  path: admin_alerts_path}                if can?(:manage, :monitoring)
     items
   end
 

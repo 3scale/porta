@@ -9,4 +9,4 @@ Application details:
   <%= @application.field_label(field.name) %>: <%= @application.field_value(field.name).presence || 'not provided by user' %>
 <% end %>
 
-To view application, follow this link: <%= admin_service_application_url(@service, @application) %>
+To view application, follow this link: <%= provider_admin_application_url(@application) %>
