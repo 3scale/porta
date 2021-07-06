@@ -63,9 +63,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     params = provider_key_params.merge(proxy: { credentials_location: 'headers' })
     @service.update_column :deployment_option, 'service_mesh_istio'
 
-    assert_difference @service.proxy.proxy_configs.production.method(:count), +1 do
-      put(admin_api_service_proxy_path(params))
-    end
+    put(admin_api_service_proxy_path(params))
     assert_response :success
   end
 
