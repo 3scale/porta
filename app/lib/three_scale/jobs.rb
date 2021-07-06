@@ -25,10 +25,6 @@ module ThreeScale
         "#{self.class} with: #{init_args.inspect}"
       end
 
-      def self.map(tasks)
-        tasks.map {|task_args| new(*task_args)}
-      end
-
       def serialize
         {
           klass: self.class.to_s,
@@ -40,9 +36,33 @@ module ThreeScale
         serialize == other.serialize
       end
 
-      def self.deserialize(hash)
-        klass, method, arguments = YAML.load(hash[:init_args]) # rubocop:disable Security/YAMLLoad
-        hash[:klass].constantize.new(klass, method, *arguments)
+      class << self
+        def map(tasks)
+          tasks.map { |task_args| new(*task_args) }
+        end
+
+        def deserialize(args)
+          hash = normalize_task_args(args)
+          klass, method, arguments = YAML.load(hash[:init_args]) # rubocop:disable Security/YAMLLoad
+          hash[:klass].constantize.new(klass, method, *arguments)
+        end
+
+        protected
+
+        def normalize_task_args(args)
+          case args
+          when String
+            { klass: StringEvaluator.to_s, init_args: args }
+          when Hash
+            if args.key?('rake')
+              { klass: ThreeScale::Jobs::RakeTask.to_s, init_args: args['rake'] }
+            else
+              args
+            end
+          else
+            raise ArgumentError, "#{args.inspect} is not a valid Task"
+          end
+        end
       end
 
       protected
@@ -53,7 +73,6 @@ module ThreeScale
     end
 
     class RakeTask < Task
-
       def initialize(task_name, *) # rubocop:disable Lint/MissingSuper
         @task_name = task_name
       end
@@ -73,6 +92,12 @@ module ThreeScale
 
       def init_args
         [@task_name]
+      end
+    end
+
+    class StringEvaluator < RakeTask
+      def run
+        instance_eval @task_name
       end
     end
 
