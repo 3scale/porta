@@ -4,6 +4,8 @@ require 'test_helper'
 
 class ThreeScale::JobsTest < ActiveSupport::TestCase
 
+  include ActiveJob::TestHelper
+
   def test_task_run
     task = ThreeScale::Jobs::Task.new(String, :new, 'hello world')
     task.run
@@ -33,6 +35,21 @@ class ThreeScale::JobsTest < ActiveSupport::TestCase
     task = ThreeScale::Jobs::Task.new(Account, :new, org_name: 'Company')
     serialized = YAML.dump([Account, :new, [{org_name: 'Company'}]])
     assert_equal(task, ThreeScale::Jobs::Task.deserialize(klass: 'ThreeScale::Jobs::Task', init_args: serialized))
+  end
+
+  def test_backward_compatibility_deserialize
+    serialized = "DestroyAllDeletedObjectsWorker.perform_later(Service.to_s)"
+    task = ThreeScale::Jobs::StringEvaluator.new(serialized)
+    assert_equal(task, ThreeScale::Jobs::Task.deserialize(serialized))
+    assert_enqueued_with job: DestroyAllDeletedObjectsWorker, args: ['Service'] do
+      task.run
+    end
+  end
+
+  def test_backward_compatibility_rake_deserialize
+    serialized = {'rake' => 'sphinx:enqueue'}
+    task = ThreeScale::Jobs::RakeTask.new('sphinx:enqueue')
+    assert_equal(task, ThreeScale::Jobs::Task.deserialize(serialized))
   end
 
   include ThreeScale::Jobs

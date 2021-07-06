@@ -3,8 +3,8 @@
 module CronJob
   class Worker < ApplicationJob
 
-    def perform(hash)
-      task = ThreeScale::Jobs::Task.deserialize(hash)
+    def perform(args)
+      task = ThreeScale::Jobs::Task.deserialize(args)
       task.run
     rescue StandardError => exception
       System::ErrorReporting.report_error(exception,
@@ -12,6 +12,7 @@ module CronJob
                                           action: task)
       raise
     end
+
   end
 
   class Enqueuer < ApplicationJob
