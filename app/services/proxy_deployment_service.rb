@@ -3,7 +3,6 @@
 class ProxyDeploymentService
   delegate :apicast_configuration_driven,
            :deployable?,
-           :service_mesh_integration?,
            :provider,
            :proxy_configs, to: :@proxy
 
@@ -15,11 +14,9 @@ class ProxyDeploymentService
     new(*args).call
   end
 
-  # TODO: remove v1_compatible when deploy_v1 is finally removed
-  def initialize(proxy, environment: :staging, v1_compatible: false)
+  def initialize(proxy, environment: :staging)
     @proxy = proxy
     @environment = environment
-    @v1_compatible = v1_compatible
   end
 
   def call
@@ -38,12 +35,10 @@ class ProxyDeploymentService
   def deploy
     return true unless deployable?
 
-    if service_mesh_integration?
-      deploy_v2 && deploy_production_v2
-    elsif apicast_configuration_driven?
+    if apicast_configuration_driven?
       deploy_v2
-    elsif @v1_compatible
-      deploy_v1
+    else
+      deploy_v2 && deploy_production_v2
     end
   end
 
@@ -53,11 +48,6 @@ class ProxyDeploymentService
     elsif @proxy.ready_to_deploy?
       provider.deploy_production_apicast
     end
-  end
-
-  # Deprecated
-  def deploy_v1
-    ApicastV1DeploymentService.new(provider).deploy(@proxy)
   end
 
   def deploy_v2
