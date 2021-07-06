@@ -496,7 +496,7 @@ class Proxy < ApplicationRecord
     def to_h
       [:name, :version, :configuration, :enabled].each_with_object({}) do |key, obj|
         obj[key] = public_send key
-      end.compact
+      end.compact.as_json
     end
 
     def ==(other)
@@ -550,7 +550,7 @@ class Proxy < ApplicationRecord
     alias find_policy_config_by find_by
 
     def chain
-      select(&:enabled).map(&:to_h).map(&:stringify_keys).map { |p| p.slice('name', 'version', 'configuration') }
+      select(&:enabled).map(&:to_h).map { |p| p.slice('name', 'version', 'configuration') }
     end
     alias policy_chain chain
 
@@ -574,7 +574,7 @@ class Proxy < ApplicationRecord
       if attr_policies_config.blank?
         []
       elsif attr_policies_config.is_a? Array
-        attr_policies_config
+        attr_policies_config.as_json
       else
         Array(JSON.parse(attr_policies_config))
       end
