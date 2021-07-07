@@ -33,6 +33,7 @@ development:
   <<: *default
   compile: true
   webpack_compile_output: true
+  check_yarn_integrity: false
 
   dev_server:
     host: localhost
