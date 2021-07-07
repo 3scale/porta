@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
 
 # If you precompile assets before deploying to production, use this line
-Bundler.require *Rails.groups(:assets => %w(development production preview test))
+Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
 # If you want your assets lazily compiled in production, use this line
 # Bundler.require(:default, :assets, Rails.env)
 
@@ -14,6 +15,7 @@ module System
 
   def self.rails4?
     raise 'does not accept block' if block_given?
+
     Rails::VERSION::MAJOR == 4
   end
 
@@ -43,8 +45,8 @@ module System
 
     def simple_try_config_for(*args)
       config_for(*args)
-    rescue => error # rubocop:disable Style/RescueStandardError
-      warn "[Warning][ConfigFor] Failed to load config with: #{error}" if $VERBOSE
+    rescue => exception # rubocop:disable Style/RescueStandardError
+      warn "[Warning][ConfigFor] Failed to load config with: #{exception}" if $VERBOSE
       nil
     end
 
@@ -56,9 +58,7 @@ module System
       require 'three_scale'
     end
 
-    if ENV['RAILS_LOG_TO_STDOUT'].present?
-      config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
-    end
+    config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT)) if ENV['RAILS_LOG_TO_STDOUT'].present?
 
     config.active_record.whitelist_attributes = false
 
@@ -98,7 +98,7 @@ module System
     # config.i18n.default_locale = :de
 
     if (expansions = config.action_view.javascript_expansions)
-      expansions[:defaults] = %w()
+      expansions[:defaults] = %w[]
     end
 
     config.assets.paths << Rails.root.join('assets')
@@ -114,21 +114,20 @@ module System
       extname = File.extname(basename)
 
       # skip files that start with underscore, do not have extension or are sourcemap
-      extname.present? && ! extname.in?(%w[.map .LICENSE .es6]) && ! basename.start_with?('_'.freeze)
+      extname.present? && !extname.in?(%w[.map .LICENSE .es6]) && !basename.start_with?('_')
     end
-    config.assets.precompile += %w(
+    config.assets.precompile += %w[
       font-awesome.css
       provider/signup_v2.js
       provider/signup_form.js
       provider/layout/provider.js
-    )
+    ]
 
     config.assets.compile = false
     config.assets.digest = true
     config.assets.initialize_on_precompile = false
 
     config.assets.version = '1437647386' # unix timestamp
-
 
     config.public_file_server.enabled = false
 
@@ -147,7 +146,6 @@ module System
     config.liquid.resolver_caching = false
 
     config.representer.default_url_options = { protocol: 'https' }
-
 
     config.zync = ActiveSupport::InheritableOptions.new(try_config_for(:zync))
 
@@ -211,7 +209,7 @@ module System
 
     config.action_mailer.default_url_options = { protocol: 'https' }
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = smtp_config = (try_config_for(:smtp) || { })
+    config.action_mailer.smtp_settings = smtp_config = (try_config_for(:smtp) || {})
     config.action_mailer.raise_delivery_errors = smtp_config[:address].present?
 
     config.cms_files_path = ':url_root/:date_partition/:basename-:random_secret.:extension'
@@ -224,7 +222,7 @@ module System
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
 
-    config.unicorn  = ActiveSupport::OrderedOptions[after_fork: []]
+    config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
     config.unicorn.after_fork << MessageBus.method(:after_fork)
 
     config.action_dispatch.cookies_serializer = :hybrid
@@ -246,11 +244,11 @@ module System
       s3_credentials: ->(*) { CMS::S3.credentials },
       bucket: ->(*) { CMS::S3.bucket },
       s3_protocol: ->(*) { CMS::S3.protocol },
-      s3_permissions: 'private'.freeze,
+      s3_permissions: 'private',
       s3_region: ->(*) { CMS::S3.region },
       s3_host_name: ->(*) { CMS::S3.hostname },
-      url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension'.freeze,
-      path: ':rails_root/public/system/:url'.freeze
+      url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',
+      path: ':rails_root/public/system/:url'
     }.merge(try_config_for(:paperclip) || {})
 
     initializer :paperclip_defaults, after: :load_config_initializers do
@@ -275,18 +273,13 @@ module System
 
     config.assets.quiet = true
 
-    initializer :jobs do
-      # Loading jobs used by Whenever
-      require_relative 'jobs'
-    end
-
     console do
       if sandbox?
-        puts <<-WARNING.strip_heredoc
-\e[5;37;41m
-YOU ARE USING SANDBOX MODE. DO NOT MODIFY RECORDS! THIS IS DANGEROUS AS IT WILL LOCK TABLES!
-See https://github.com/3scale/system/issues/6616
-\e[0m
+        puts <<~WARNING.strip_heredoc
+          \e[5;37;41m
+          YOU ARE USING SANDBOX MODE. DO NOT MODIFY RECORDS! THIS IS DANGEROUS AS IT WILL LOCK TABLES!
+          See https://github.com/3scale/system/issues/6616
+          \e[0m
         WARNING
       end
     end

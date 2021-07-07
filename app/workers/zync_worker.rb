@@ -316,9 +316,9 @@ class ZyncWorker
 
     http_put(tenant_url, tenant, event_id)
 
-    [ tenant, provider ]
+    [tenant, provider]
   rescue ActiveRecord::RecordNotFound
-    [ { id: event.tenant_id }, nil ]
+    [{ id: event.tenant_id }, nil]
   end
 
   def provider_endpoint(provider)
