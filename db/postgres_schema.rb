@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210128155025) do
+ActiveRecord::Schema.define(version: 20210708100519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -785,6 +785,7 @@ ActiveRecord::Schema.define(version: 20210128155025) do
     t.string   "owner_type"
     t.index ["owner_type", "owner_id", "system_name"], name: "index_metrics_on_owner_type_and_owner_id_and_system_name", unique: true, using: :btree
     t.index ["owner_type", "owner_id"], name: "index_metrics_on_owner_type_and_owner_id", using: :btree
+    t.index ["parent_id"], name: "index_metrics_on_parent_id", using: :btree
     t.index ["service_id", "system_name"], name: "index_metrics_on_service_id_and_system_name", unique: true, using: :btree
     t.index ["service_id"], name: "index_metrics_on_service_id", using: :btree
   end
