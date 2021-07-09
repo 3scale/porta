@@ -123,6 +123,7 @@ const FancySelect = <T: Record>({
         className={footer ? 'pf-c-select__menu--with-fixed-link' : undefined}
         isGrouped
         onFilter={handleOnFilter}
+        placeholderText={placeholderText}
       >
         {getSelectOptionsForItems(items)}
       </Select>
