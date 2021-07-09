@@ -2,22 +2,21 @@
 
 require 'test_helper'
 
-class Buyers::ApplicationsHelperTest < ActionView::TestCase
+class Buyers::ApplicationsNewPresenterTest < ActiveSupport::TestCase
+
+  Presenter = Buyers::ApplicationsNewPresenter
+
   def setup
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:buyer_account)
-    @cinstance = FactoryBot.create(:cinstance)
-
-    expects(:raw_products).returns([])
-    expects(:most_recently_updated_products).returns([])
-    expects(:service_plans_management_visible?).returns(true)
+    @user = FactoryBot.create(:simple_admin)
   end
 
-  attr_reader :provider, :buyer, :cinstance
+  attr_reader :provider, :buyer, :user, :cinstance
 
   test 'new_application_form_data' do
-
-    form_data = new_application_form_data(provider: provider, buyer: buyer)
+    presenter = Presenter.new(provider: provider, buyer: buyer, user: user)
+    form_data = presenter.new_application_form_data
 
     assert form_data.key? :"create-application-path"
     assert form_data.key? :"create-application-plan-path"
@@ -35,8 +34,12 @@ class Buyers::ApplicationsHelperTest < ActionView::TestCase
   end
 
   test 'new_application_form_data with errors' do
-    form_data = new_application_form_data(provider: provider, buyer: buyer, cinstance: cinstance)
+    cinstance = FactoryBot.create(:simple_cinstance)
+    cinstance.expects(:errors).returns(['error'])
+    presenter = Presenter.new(provider: provider, buyer: buyer, user: user, cinstance: cinstance)
+    form_data = presenter.new_application_form_data
 
     assert form_data.key? :errors
+    assert_equal form_data[:errors], ['error'].to_json
   end
 end
