@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 Given /^(provider "[^"]*") requires cinstances to be approved before use$/ do |provider|
   provider.application_plans.each do |plan|
@@ -6,6 +7,6 @@ Given /^(provider "[^"]*") requires cinstances to be approved before use$/ do |p
   end
 end
 
-Then /^(buyer "[^"]*") should have (\d+) cinstances?$/ do |buyer_account, number|
+Then /^(buyer "[^"]*") should(?: still)? have (\d+) cinstances?$/ do |buyer_account, number|
   assert_equal number.to_i, buyer_account.bought_cinstances.count
 end
