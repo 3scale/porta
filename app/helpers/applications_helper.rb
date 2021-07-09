@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 module ApplicationsHelper
-  protected
-
   def raw_buyers
     # This has to be the samne collection as in Buyers::AccountsController#index
-    current_account.buyer_accounts
-                   .not_master
-                   .order(created_at: :desc, id: :asc)
+    provider.buyer_accounts
+            .not_master
+            .order(created_at: :desc, id: :asc)
   end
 
   def filtered_buyers
@@ -20,7 +18,8 @@ module ApplicationsHelper
 
   def raw_products
     # This has to be the samne collection as in Api::ServicesController#index
-    accessible_services.order(updated_at: :desc)
+    provider.accessible_services
+            .order(updated_at: :desc)
   end
 
   def filtered_products
@@ -66,7 +65,7 @@ module ApplicationsHelper
     "&ndash; trial expires in #{expiration_tag}".html_safe
   end
 
-  def new_application_form_data(provider, cinstance)
+  def new_application_form_base_data(provider, cinstance)
     # TODO: Reduce data by not including service_plans when service_plans_management_visible? is false
     data = {
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
@@ -84,7 +83,7 @@ module ApplicationsHelper
                   .map(&:new_application_data)
   end
 
-  def most_recent_updated_products
+  def most_recently_updated_products
     ServiceDecorator.decorate_collection(raw_products.limit(20))
                     .map(&:new_application_data)
   end
