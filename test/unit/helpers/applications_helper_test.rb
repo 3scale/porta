@@ -43,7 +43,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     skip 'TODO'
   end
 
-  test "most_recently_created_buyers(current_account)" do
+  test "most_recently_created_buyers" do
     skip 'TODO'
   end
 
