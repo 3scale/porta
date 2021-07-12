@@ -35,17 +35,6 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
     assert service.call
   end
 
-  test 'deploy production not apicast configuration driven but api test success' do
-    @proxy.expects(:apicast_configuration_driven).returns(false)
-    @proxy.expects(:api_test_success).returns(true)
-
-    service = ProxyDeploymentService.new(@proxy, environment: :production)
-
-    @proxy.provider.expects(:deploy_production_apicast).returns(true)
-
-    assert service.call
-  end
-
   test 'deploy to unknown stage should raise' do
     assert_raise ProxyDeploymentService::UnknownStageError do
       ProxyDeploymentService.call(@proxy, environment: :false_stage)
