@@ -80,4 +80,24 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     assert_equal [1, 2], fields.pluck(:pos)
     assert_equal [field_definition, other],fields.to_a
   end
+
+  test 'sort wont break other positions' do
+    FieldsDefinition.delete_all
+
+    account = FactoryBot.create(:fields_definition, account: @provider, target: 'Account')
+    another_account = FactoryBot.create(:fields_definition, account: @provider, target: 'Account')
+    user = FactoryBot.create(:fields_definition, account: @provider, target: 'User')
+    another_user = FactoryBot.create(:fields_definition, account: @provider, target: 'User')
+
+    account_pos, account2_pos = account.pos, another_account.pos
+    user_pos, user2_pos = user.pos, another_user.pos
+
+    post :sort, fields_definition: [ another_account.id, account.id ]
+    assert_response :success
+
+    assert account.reload.pos == account2_pos
+    assert another_account.reload.pos == account_pos
+    assert user.reload.pos == user_pos
+    assert another_user.reload.pos == user2_pos
+  end
 end
