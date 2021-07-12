@@ -476,6 +476,9 @@ class Proxy < ApplicationRecord
   class PolicyConfig
     include ActiveModel::Validations
 
+    DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
+                       'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
+
     attr_accessor :name, :version, :configuration, :enabled
 
     validates :name, :version, presence: true
@@ -493,15 +496,27 @@ class Proxy < ApplicationRecord
       @enabled = symbolized_attributes[:enabled]
     end
 
+    def matches?(name:, version:)
+      self.name == name && self.version == version
+    end
+
+    def default?
+      name == DEFAULT_POLICY["name"]
+    end
+
+    def get_default
+      self.new(DEFAULT_POLICY)
+    end
+
     def to_h
-      [:name, :version, :configuration, :enabled].each_with_object({}) do |key, obj|
+      %i[name version configuration enabled].each_with_object({}) do |key, obj|
         obj[key] = public_send key
       end.compact.as_json
     end
 
     def ==(other)
       self.class == other.class &&
-        [:name, :version, :configuration, :enabled].all? { |key| send(key) == other.send(key) }
+        %i[name version configuration enabled].all? { |key| send(key) == other.send(key) }
     end
     alias eql? ==
 
@@ -515,20 +530,17 @@ class Proxy < ApplicationRecord
   class PoliciesConfig
     include ActiveModel::Validations
 
-    delegate :each, :find, :select, :map, :detect, to: :policies_config
+    delegate :each, :find, :select, :map, :detect, :reject, to: :policies_config
     attr_reader :policies_config
     protected :policies_config
 
     validate :policies_configs_are_correct
 
-    DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
-                       'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
-
     def initialize(policies_config)
-      parsed_config = read_and_parse_policies_config!(policies_config)
+      parsed_config = read_and_parse_policies_config(policies_config)
       policies = parsed_config.map { |attrs| PolicyConfig.new(attrs) }
 
-      policies.push(PolicyConfig.new(DEFAULT_POLICY)) if policies.none? { |c| c.name == DEFAULT_POLICY['name'] }
+      policies.push(PolicyConfig.get_default) if policies.none?(&:default?)
 
       @policies_config = policies
     rescue JSON::ParserError
@@ -544,12 +556,12 @@ class Proxy < ApplicationRecord
     end
 
     def find_by(name:, version:)
-      find { |config| config.name == name && config.version == version }
+      find { |config| config.matches?(name: name, version: version) }
     end
     alias find_policy_config_by find_by
 
     def chain
-      select(&:enabled).map(&:to_h).map { |p| p.slice('name', 'version', 'configuration') }
+      select(&:enabled).map(&:to_h).map { |policy| policy.slice('name', 'version', 'configuration') }
     end
     alias policy_chain chain
 
@@ -561,7 +573,7 @@ class Proxy < ApplicationRecord
 
     private
 
-    def read_and_parse_policies_config!(attr_policies_config)
+    def read_and_parse_policies_config(attr_policies_config)
       if attr_policies_config.blank?
         []
       elsif attr_policies_config.is_a? Array
@@ -572,20 +584,19 @@ class Proxy < ApplicationRecord
     end
 
     def policies_configs_are_correct
-      each do |policy_config|
+      reject(&:valid?).each do |policy_config|
         # TODO: 5: errors.merge!(policy_config.errors)
-        policy_config.errors.each { |attribute, message| errors.add(attribute, errors.full_message(attribute, message).downcase) } unless policy_config.valid?
+        policy_config.errors.each { |attribute, message| errors.add(attribute, errors.full_message(attribute, message).downcase) }
       end
-      unless detect { |c| c.name == DEFAULT_POLICY['name'] }
-        errors.add(:base, :missing_apicast)
-      end
-    rescue => e
-        errors.add(:base, :invalid_format)
+      errors.add(:base, :missing_apicast) unless detect(&:default?)
+    rescue NoMethodError
+      errors.add(:base, :invalid_format)
     end
   end
 
   def policies_config_structure
     return if policies_config.valid?
+
     policies_config.errors.each do |attribute, message|
       errors.add(:policies_config, errors.full_message(attribute, message))
     end

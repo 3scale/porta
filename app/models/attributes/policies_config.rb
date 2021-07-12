@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Attributes::PoliciesConfig < ActiveRecord::Type::Text
   def cast(value)
     if value.is_a?(Proxy::PoliciesConfig)
