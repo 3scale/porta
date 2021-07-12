@@ -504,8 +504,8 @@ class Proxy < ApplicationRecord
       name == DEFAULT_POLICY["name"]
     end
 
-    def get_default
-      self.new(DEFAULT_POLICY)
+    def create_default
+      new(DEFAULT_POLICY)
     end
 
     def to_h
@@ -540,7 +540,7 @@ class Proxy < ApplicationRecord
       parsed_config = read_and_parse_policies_config(policies_config)
       policies = parsed_config.map { |attrs| PolicyConfig.new(attrs) }
 
-      policies.push(PolicyConfig.get_default) if policies.none?(&:default?)
+      policies.push(PolicyConfig.create_default) if policies.none?(&:default?)
 
       @policies_config = policies
     rescue JSON::ParserError
