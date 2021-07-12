@@ -18,7 +18,7 @@ class FieldsDefinition < ApplicationRecord
   serialize :choices, Array
 
   belongs_to :account, :inverse_of => :fields_definitions
-  acts_as_list :scope => :account, :column => :pos
+  acts_as_list :scope => %i[account_id target], :column => :pos
 
   scope :by_provider,  ->(provider) { where(['account_id = ?', provider.id]) }
   scope :by_target, ->(class_name) { where(['target = ?', class_name])}

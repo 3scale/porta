@@ -251,4 +251,49 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
 
   end
 
+  context 'positions' do
+    setup do
+      @provider = FactoryBot.create :provider_account
+      FieldsDefinition.delete_all
+      @hidden = FactoryBot.create(:fields_definition, account: @provider, name: 'hidden', hidden: true)
+      @read_only = FactoryBot.create(:fields_definition, account: @provider, name: 'read_only', read_only: true)
+      @required = FactoryBot.create(:fields_definition, account: @provider, name: 'required', required: true)
+      @acc_target = FactoryBot.create(:fields_definition, account: @provider, name: 'other', required: true, target: 'Account')
+      @acc_target_another = FactoryBot.create(:fields_definition, account: @provider, name: 'other2', required: true, target: 'Account')
+    end
+
+    should 'return correct positions' do
+      assert_equal @hidden.pos, @read_only.pos - 1
+      assert_equal @read_only.pos, @required.pos  - 1
+    end
+
+    should 'change position when updated' do
+      hidden_pos, read_only_pos = @hidden.pos, @read_only.pos
+      required_pos, acc_target_pos = @required.pos, @acc_target.pos
+      acc_target_another_pos = @acc_target_another.pos
+
+      @read_only.update_attribute(:pos, read_only_pos - 1)
+
+      assert_equal @read_only.reload.pos, hidden_pos
+      assert_equal @hidden.reload.pos, read_only_pos
+      assert_equal @required.reload.pos, required_pos
+      assert_equal @acc_target.reload.pos, acc_target_pos
+      assert_equal @acc_target_another.reload.pos, acc_target_another_pos
+    end
+
+    should 'not change the position when update fails' do
+      hidden_pos, read_only_pos = @hidden.pos, @read_only.pos
+      required_pos, acc_target_pos = @required.pos, @acc_target.pos
+      acc_target_another_pos = @acc_target_another.pos
+
+      @required.update(position: 1, name: '%*&#^%@)*$')
+
+      assert_not @required.errors.empty?
+      assert_equal @hidden.reload.pos, hidden_pos
+      assert_equal @read_only.reload.pos, read_only_pos
+      assert_equal @required.reload.pos, required_pos
+      assert_equal @acc_target.reload.pos, acc_target_pos
+      assert_equal @acc_target_another.reload.pos, acc_target_another_pos
+    end
+  end
 end
