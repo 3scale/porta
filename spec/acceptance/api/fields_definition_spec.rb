@@ -34,6 +34,12 @@ resource 'FieldsDefinition' do
       let(:label) { 'another label' }
       let(:target) { 'Account' }
     end
+
+    get '/admin/api/fields_definitions.:format', action: :index do
+      let(:collection) { provider.fields_definitions }
+    end
+
+    delete '/admin/api/fields_definitions/:id.:format', action: :destroy
   end
   json(:resource) do
     let(:root) { 'fields_definition' }
