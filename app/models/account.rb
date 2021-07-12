@@ -35,7 +35,6 @@ class Account < ApplicationRecord
   include Logic::ProviderSignup::Provider
   include Logic::ProviderUpgrade::Provider
   include Logic::RollingUpdates::Provider
-  include Logic::NginxProxy::Provider
   include Logic::Contracting::Provider
   include Logic::ProviderSettings
   include Logic::ProviderConstraints
