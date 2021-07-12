@@ -6,11 +6,11 @@
 
   = form.input :buyers_manage_apps
 
-  - if @service.backend_version == "2"
+  - if @service.backend_version.v2?
     = form.input :buyers_manage_keys
     = form.input :mandatory_app_key
 
-  - if @service.backend_version > "2"
+  - if @service.oauth?
     = form.input :buyer_key_regenerate_enabled
 
   = form.input :referrer_filters_required, as: :boolean
