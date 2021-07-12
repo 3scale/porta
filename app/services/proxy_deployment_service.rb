@@ -43,11 +43,7 @@ class ProxyDeploymentService
   end
 
   def deploy_production
-    if apicast_configuration_driven?
-      deploy_production_v2
-    elsif @proxy.ready_to_deploy?
-      provider.deploy_production_apicast
-    end
+    deploy_production_v2 if apicast_configuration_driven?
   end
 
   def deploy_v2
