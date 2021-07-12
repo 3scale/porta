@@ -28,9 +28,8 @@ class ProxyTest < ActiveSupport::TestCase
     def test_not_valid_json_policies_config
       service = FactoryBot.create(:simple_service)
       proxy = Proxy.new(policies_config: 'not-valid-json', service: service)
-      # TODO: this is the change of behaviour
-      assert proxy.valid?
-      assert proxy.policies_config.send(:policies_config).first.to_h <= Proxy::PoliciesConfig::DEFAULT_POLICY
+      refute proxy.valid?
+      assert_match 'Policies config has invalid format. The Correct format is:', proxy.errors.full_messages.to_sentence
     end
 
     def test_policies_config
@@ -45,7 +44,6 @@ class ProxyTest < ActiveSupport::TestCase
     end
 
     def test_policy_chain
-      rolling_updates_on
       raw_config = [{
                       name: 'cors',
                       humanName: 'Cors Proxy',
@@ -627,6 +625,15 @@ class ProxyTest < ActiveSupport::TestCase
     @proxy.policies_config = struct
 
     refute @proxy.changed?
+  end
+
+  test 'policy apicast not added when it already exists' do
+    @proxy.policies_config = [
+      { "name" => "routing", "version" => "builtin", "enabled" => true, "configuration" => {} },
+      { "name" => "apicast", "version" => "4.12", "configuration" => {} },
+      { 'name' => 'cors', 'version' => '0.0.1', 'configuration' => { 'hello' => 'Aloha' } },
+    ]
+    assert @proxy.policy_chain.count, 3
   end
 
   test 'domain changes events on update of hosted proxy' do

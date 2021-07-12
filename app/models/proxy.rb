@@ -16,6 +16,7 @@ class Proxy < ApplicationRecord
 
   belongs_to :service, touch: true, inverse_of: :proxy, required: true
   attr_readonly :service_id
+  attribute :policies_config, Attributes::PoliciesConfig.new
 
   has_many :proxy_rules, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :proxy
   has_many :proxy_configs, dependent: :delete_all, inverse_of: :proxy
@@ -524,15 +525,14 @@ class Proxy < ApplicationRecord
                        'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
 
     def initialize(policies_config)
-      parsed_config = read_and_parse_policies_config(policies_config)
+      parsed_config = read_and_parse_policies_config!(policies_config)
+      policies = parsed_config.map { |attrs| PolicyConfig.new(attrs) }
 
-      if parsed_config.detect { |c| c['name'] == DEFAULT_POLICY['name'] }
-        parsed_config
-      else
-        parsed_config.push(DEFAULT_POLICY)
-      end
+      policies.push(PolicyConfig.new(DEFAULT_POLICY)) if policies.none? { |c| c.name == DEFAULT_POLICY['name'] }
 
-      @policies_config = parsed_config.map { |attrs| PolicyConfig.new(attrs) }
+      @policies_config = policies
+    rescue JSON::ParserError
+      @policies_config = policies_config
     end
 
     def self.name
@@ -561,14 +561,6 @@ class Proxy < ApplicationRecord
 
     private
 
-    def read_and_parse_policies_config(attr_policies_config)
-      read_and_parse_policies_config!(attr_policies_config)
-    rescue JSON::ParserError
-      # TODO: is this a proper invalid value handling? In original
-      Rails.logger.error "Invalid attribute policies_config: #{attr_policies_config}"
-      []
-    end
-
     def read_and_parse_policies_config!(attr_policies_config)
       if attr_policies_config.blank?
         []
@@ -582,36 +574,20 @@ class Proxy < ApplicationRecord
     def policies_configs_are_correct
       each do |policy_config|
         # TODO: 5: errors.merge!(policy_config.errors)
-        policy_config.errors.each { |attribute, message| errors.add(attribute, message) } unless policy_config.valid?
+        policy_config.errors.each { |attribute, message| errors.add(attribute, errors.full_message(attribute, message).downcase) } unless policy_config.valid?
       end
       unless detect { |c| c.name == DEFAULT_POLICY['name'] }
-        errors.add(:policies_config, "must include default policy")
+        errors.add(:base, :missing_apicast)
       end
-    end
-  end
-
-  class PoliciesConfigType < ActiveRecord::Type::Text
-    def cast(value)
-      if value.is_a?(PoliciesConfig)
-        value
-      else
-        PoliciesConfig.new(value)
-      end
-    end
-
-    def serialize(value)
-      value.to_json
-    end
-
-    def changed_in_place?(raw_old_value, new_value)
-      new_value != cast(raw_old_value)
+    rescue => e
+        errors.add(:base, :invalid_format)
     end
   end
 
   def policies_config_structure
     return if policies_config.valid?
     policies_config.errors.each do |attribute, message|
-      errors.add(:policies_config, errors.full_message(attribute, message).downcase)
+      errors.add(:policies_config, errors.full_message(attribute, message))
     end
   end
 
@@ -695,5 +671,4 @@ class Proxy < ApplicationRecord
     PortGenerator.new(self).call(proxy_attribute)
   end
 
-  attribute :policies_config, PoliciesConfigType.new
 end
