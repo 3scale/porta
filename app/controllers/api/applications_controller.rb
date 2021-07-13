@@ -19,6 +19,8 @@ class Api::ApplicationsController < FrontendController
 
   sublayout 'api/service'
 
+  helper_method :presenter
+
   def index; end
 
   def new; end
@@ -51,4 +53,10 @@ class Api::ApplicationsController < FrontendController
     super.where(service: @service)
   end
 
+  def presenter
+    @presenter ||= Api::ApplicationsNewPresenter.new(provider: current_account,
+                                                     service: @service,
+                                                     user: current_user,
+                                                     cinstance: @cinstance)
+  end
 end

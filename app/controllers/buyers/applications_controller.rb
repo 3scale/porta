@@ -17,6 +17,8 @@ class Buyers::ApplicationsController < FrontendController
 
   activate_menu :buyers, :accounts, :listing
 
+  helper_method :presenter
+
   def index; end
 
   def new
@@ -38,6 +40,13 @@ class Buyers::ApplicationsController < FrontendController
 
   def define_search_scope(opts = {})
     super opts.reverse_merge(account: @account.id)
+  end
+
+  def presenter
+    @presenter ||= Buyers::ApplicationsNewPresenter.new(provider: current_account,
+                                                        buyer: @account,
+                                                        user: current_user,
+                                                        cinstance: @cinstance)
   end
 
 end
