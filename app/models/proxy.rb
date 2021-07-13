@@ -540,10 +540,7 @@ class Proxy < ApplicationRecord
       parsed = policies_config.presence || []
       parsed = parsed.is_a?(Array) ? parsed.as_json : Array(JSON.parse(parsed))
 
-      policies = parsed.map { |attrs| PolicyConfig.new(attrs) }
-      policies.push(PolicyConfig.create_default) if policies.none?(&:default?)
-
-      @policies_config = policies
+      @policies_config = policies_normalize(parsed)
     rescue JSON::ParserError
       @policies_config = policies_config
     end
@@ -573,6 +570,11 @@ class Proxy < ApplicationRecord
     alias eql? ==
 
     private
+
+    def policies_normalize(parsed_policies)
+      policies = parsed_policies.map { |attrs| PolicyConfig.new(attrs) }
+      policies.push(PolicyConfig.create_default) if policies.none?(&:default?)
+    end
 
     def policies_configs_are_correct
       # TODO: 5: errors.merge!(policy_config.errors)
