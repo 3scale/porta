@@ -739,6 +739,11 @@ en:
         street_address: Street Address
     errors:
       models:
+        policies_config:
+          attributes:
+            base:
+              invalid_format: "has invalid format. The Correct format is: [{ \"name\": \"apicast\"... }]"
+              missing_apicast: "is missing apicast policy"
         sso_token:
           cannot_be_generated: SSO Token cannot be generated
           one_of_user_id_or_username_is_required: One of user_id or username is required
@@ -815,8 +820,6 @@ en:
               invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
         proxy:
           attributes:
-            policies_config:
-              invalid_format: "has invalid format. The Correct format is: [{ \"name\": \"apicast\"... }]"
             api_backend:
               invalid: "the accepted format is 'scheme://address(:port)(/path)'. Accepted schemes are http, https, ws and wss"
             api_test_path:

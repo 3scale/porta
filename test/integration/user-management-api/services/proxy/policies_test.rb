@@ -24,7 +24,6 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
     assert_match "{\"name\":\"alaska\",\"version\":\"1\",\"configuration\":{}}", response.body
     assert_response :success
     policies_config = proxy.reload.policies_config
-        .map { |attrs| Proxy::PolicyConfig.new(attrs) }
         .select { |policy_config| policy_config.name == 'alaska' \
           && policy_config.version == '1' && policy_config.configuration == {} }
 
@@ -50,6 +49,9 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
   def test_invalid_policies_config
     put admin_api_service_proxy_policies_path(valid_params.merge({ proxy: { policies_config: { name: 'echo '} }}))
     assert_response :unprocessable_entity
+    json_response = JSON.parse(response.body)
+    assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'version')
+    assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'configuration')
   end
 
   def test_invalid_json_policies_config
