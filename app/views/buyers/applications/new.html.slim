@@ -2,6 +2,6 @@
 
 h2 New Application
 
-div id="new-application-form" data=(new_application_form_metadata(current_account, buyer: @account, cinstance: @cinstance))
+div id="new-application-form" data=presenter.new_application_form_data
   = javascript_pack_tag 'new_application'
   = javascript_pack_tag 'PF4Styles/application'
