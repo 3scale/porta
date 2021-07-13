@@ -2,18 +2,6 @@ class Admin::Api::NginxesController < Admin::Api::BaseController
 
   before_action :disable_on_premises
 
-  def show
-    respond_to do |format|
-      format.zip do
-        generator = Apicast::ZipGenerator.new(apicast_source)
-        send_file generator.data,
-                    type: 'application/zip',
-                    disposition: 'attachment',
-                    filename: 'proxy_configs.zip'
-      end
-    end
-  end
-
   def spec
     spec = apicast_source.attributes_for_proxy
 
