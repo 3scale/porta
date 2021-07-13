@@ -537,13 +537,8 @@ class Proxy < ApplicationRecord
     validate :policies_configs_are_correct
 
     def initialize(policies_config)
-      parsed = if policies_config.blank?
-                 []
-               elsif policies_config.is_a? Array
-                 policies_config.as_json
-               else
-                 Array(JSON.parse(policies_config))
-               end
+      parsed = policies_config.presence || []
+      parsed = parsed.is_a?(Array) ? parsed.as_json : Array(JSON.parse(parsed))
 
       policies = parsed.map { |attrs| PolicyConfig.new(attrs) }
       policies.push(PolicyConfig.create_default) if policies.none?(&:default?)
