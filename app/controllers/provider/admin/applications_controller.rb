@@ -20,6 +20,8 @@ class Provider::Admin::ApplicationsController < FrontendController
 
   layout 'provider'
 
+  helper_method :presenter
+
   def index; end
 
   def show
@@ -104,4 +106,11 @@ class Provider::Admin::ApplicationsController < FrontendController
     end
   end
 
+  protected
+
+  def presenter
+    @presenter ||= Provider::Admin::ApplicationsNewPresenter.new(provider: current_account,
+                                                                 user: current_user,
+                                                                 cinstance: @cinstance)
+  end
 end

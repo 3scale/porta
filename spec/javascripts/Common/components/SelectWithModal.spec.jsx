@@ -36,7 +36,7 @@ const defaultProps = {
 
 function openModal <T> (wrapper: ReactWrapper<T>) {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--view-all').last().simulate('click')
+  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
 }
 
 const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
@@ -92,7 +92,7 @@ describe('with 20 items or less', () => {
     expect(wrapper.find('TableModal').props().isOpen).toBe(false)
 
     wrapper.find('.pf-c-select__toggle-button').simulate('click')
-    expect(wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--view-all').exists()).toBe(false)
+    expect(wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').exists()).toBe(false)
   })
 })
 

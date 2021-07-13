@@ -18,12 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { createServicePlanPath, createApplicationPath, createApplicationPlanPath, serviceSubscriptionsPath } = dataset
   const product = safeFromJsonString<Product>(dataset.product)
-  const products = safeFromJsonString<Product[]>(dataset.products)
-  const servicePlansAllowed = safeFromJsonString<boolean>(dataset.servicePlansAllowed)
+  const mostRecentlyUpdatedProducts = safeFromJsonString<Product[]>(dataset.mostRecentlyUpdatedProducts)
+  const productsCount = safeFromJsonString<number>(dataset.productsCount)
   const buyer = safeFromJsonString<Buyer>(dataset.buyer)
-  const buyers = safeFromJsonString<Buyer[]>(dataset.buyers)
+  const mostRecentlyCreatedBuyers = safeFromJsonString<Buyer[]>(dataset.mostRecentlyCreatedBuyers)
+  const buyersCount = safeFromJsonString<number>(dataset.buyersCount)
   const definedFields = safeFromJsonString<FieldDefinition[]>(dataset.definedFields)
   const validationErrors = safeFromJsonString(dataset.errors) || {}
+  const servicePlansAllowed = safeFromJsonString<boolean>(dataset.servicePlansAllowed)
   const error: string | void = validationErrors.hasOwnProperty('base') ? validationErrors.base[0] : undefined
 
   NewApplicationFormWrapper({
@@ -33,9 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     serviceSubscriptionsPath,
     servicePlansAllowed,
     product,
-    products,
+    mostRecentlyUpdatedProducts,
+    productsCount,
     buyer,
-    buyers,
+    mostRecentlyCreatedBuyers,
+    buyersCount,
     definedFields,
     validationErrors,
     error

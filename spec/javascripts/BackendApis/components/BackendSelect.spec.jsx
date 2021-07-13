@@ -34,14 +34,19 @@ it('should render itself', () => {
   expect(wrapper.exists()).toBe(true)
 })
 
-it('should have a table with Name, Private Base URL and Last updated', () => {
-  const wrapper = mountWrapper()
-  wrapper.find('.pf-c-select__toggle button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button').last().simulate('click')
+describe('when there are more than 20 backends', () => {
+  const backends = new Array(21).fill({}).map((_, i) => ({ id: i, name: `API ${i}`, privateEndpoint: `api/${i}`, systemName: `api_${i}` }))
 
-  expect(wrapper.find('TableModal').prop('cells')).toMatchObject([
-    { title: 'Name', propName: 'name' },
-    { title: 'Private Base URL', propName: 'privateEndpoint' },
-    { title: 'Last updated', propName: 'updatedAt' }
-  ])
+  it('should have a table with Name, Private Base URL and Last updated', () => {
+    const wrapper = mountWrapper({ backends })
+    wrapper.find('.pf-c-select__toggle-button').simulate('click')
+    wrapper.find('.pf-c-select__menu li button').last().simulate('click')
+
+    expect(wrapper.find('TableModal').prop('isOpen')).toBe(true)
+    expect(wrapper.find('TableModal').prop('cells')).toMatchObject([
+      { title: 'Name', propName: 'name' },
+      { title: 'Private Base URL', propName: 'privateEndpoint' },
+      { title: 'Last updated', propName: 'updatedAt' }
+    ])
+  })
 })

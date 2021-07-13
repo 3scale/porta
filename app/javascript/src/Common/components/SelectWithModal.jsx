@@ -18,7 +18,7 @@ import type { Record } from 'utilities'
 
 import './SelectWithModal.scss'
 
-type Props<T: Record> = {
+export type Props<T: Record> = {
   item: T | null,
   items: T[],
   onSelect: (T | null) => void,
@@ -61,7 +61,7 @@ const SelectWithModal = <T: Record>({
 }: Props<T>): React.Node => {
   const emptyItem = { id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' }
-  const footerItem = { id: 'foo', name: footer, className: 'pf-c-select__menu-item--view-all' }
+  const footerItem = { id: 'foo', name: footer, className: 'pf-c-select__menu-item--sticky-footer' }
   const shouldShowFooter = items.length > MAX_ITEMS
 
   const [expanded, setExpanded] = React.useState(false)

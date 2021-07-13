@@ -22,9 +22,15 @@ class Api::ServicesController < Api::BaseController
     @services = current_user.accessible_services
                             .order(updated_at: :desc)
                             .scope_search(search)
-    @page_services = @services.paginate(pagination_params)
-                              .decorate
-                              .to_json(only: %i[name updated_at id system_name], methods: %i[links apps_count backends_count unread_alerts_count])
+    paginated_services = @services.paginate(pagination_params)
+                                  .decorate
+    # TODO: move this to a helper, used in app/views/api/services/index.html.slim
+    @page_services = paginated_services.to_json(only: %i[name updated_at id system_name], methods: %i[links apps_count backends_count unread_alerts_count])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { items: ServiceDecorator.decorate_collection(paginated_services).map(&:new_application_data), count: paginated_services.total_entries } }
+    end
   end
 
   def show

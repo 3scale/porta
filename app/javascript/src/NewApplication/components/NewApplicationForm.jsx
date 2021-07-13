@@ -30,11 +30,13 @@ type Props = {
   createApplicationPlanPath: string,
   createServicePlanPath: string,
   serviceSubscriptionsPath: string,
-  product?: Product,
-  products?: Product[],
   servicePlansAllowed?: boolean,
+  product?: Product,
+  mostRecentlyUpdatedProducts?: Product[],
+  productsCount?: number,
   buyer?: Buyer,
-  buyers?: Buyer[],
+  buyersCount?: number,
+  mostRecentlyCreatedBuyers?: Buyer[],
   definedFields?: FieldDefinition[],
   validationErrors: {[string]: string[] | void},
   error?: string
@@ -42,14 +44,16 @@ type Props = {
 
 const NewApplicationForm = ({
   buyer: defaultBuyer,
-  buyers,
+  mostRecentlyCreatedBuyers,
+  buyersCount = 0,
   createApplicationPath,
   createApplicationPlanPath,
   createServicePlanPath,
   serviceSubscriptionsPath,
   servicePlansAllowed = false,
   product: defaultProduct,
-  products,
+  mostRecentlyUpdatedProducts,
+  productsCount = 0,
   definedFields,
   validationErrors,
   error
@@ -123,20 +127,24 @@ const NewApplicationForm = ({
         <CSRFToken />
         <input name='utf8' type='hidden' value='✓' />
 
-        {buyers ? (
+        {mostRecentlyCreatedBuyers ? (
           <BuyerSelect
             buyer={buyer}
-            buyers={buyers}
+            mostRecentlyCreatedBuyers={mostRecentlyCreatedBuyers}
+            buyersCount={buyersCount}
             onSelectBuyer={setBuyer}
+            buyersPath="/buyers/accounts.json" // TODO: pass url in props
           />
           // $FlowExpectedError[incompatible-use] either buyers or defaultBuyer is always defined
         ) : <input type="hidden" name="account_id" value={defaultBuyer.id} />}
 
-        {products && (
+        {mostRecentlyUpdatedProducts && (
           <ProductSelect
             product={product}
-            products={products}
+            mostRecentlyUpdatedProducts={mostRecentlyUpdatedProducts}
+            productsCount={productsCount}
             onSelectProduct={setProduct}
+            productsPath="/apiconfig/services.json"
             isDisabled={buyer === null}
           />
         )}

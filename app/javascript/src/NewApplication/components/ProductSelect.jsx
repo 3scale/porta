@@ -2,39 +2,56 @@
 
 import * as React from 'react'
 
-import { SelectWithModal } from 'Common'
+import { sortable } from '@patternfly/react-table'
+import { fetchPaginatedProducts } from 'NewApplication'
+import { SelectWithPaginatedModal } from 'Common'
 
 import type { Product } from 'NewApplication/types'
 
 type Props = {
   product: Product | null,
-  products: Product[],
+  mostRecentlyUpdatedProducts: Product[],
+  productsCount: number,
   onSelectProduct: (Product | null) => void,
+  productsPath: string,
   isDisabled?: boolean
 }
 
-const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props): React.Node => {
-  const cells = [
-    { title: 'Name', propName: 'name' },
-    { title: 'System Name', propName: 'systemName' },
-    { title: 'Last updated', propName: 'updatedAt' }
-  ]
+const cells = [
+  { title: 'Name', propName: 'name' },
+  { title: 'System Name', propName: 'systemName' },
+  { title: 'Last updated', propName: 'updatedAt', transforms: [sortable] }
+]
 
-  return (
-    <SelectWithModal
-      label="Product"
-      id="product"
-      // $FlowIgnore[incompatible-type] Product implements Record
-      item={product}
-      items={products.map(p => ({ ...p, description: p.systemName }))}
-      cells={cells}
-      modalTitle="Select an Account"
-      // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
-      onSelect={onSelectProduct}
-      header="Most recently created Accounts"
-      footer="View all Accounts"
-      isDisabled={isDisabled}
-    />
-  )
-}
+const ProductSelect = ({
+  product,
+  mostRecentlyUpdatedProducts,
+  productsCount,
+  onSelectProduct,
+  productsPath,
+  isDisabled
+}: Props): React.Node => (
+  // $FlowIssue[incompatible-type-arg] id can be string too
+  <SelectWithPaginatedModal
+    label="Product"
+    fieldId="account_id"
+    id="product"
+    name=""
+    item={product}
+    items={mostRecentlyUpdatedProducts}
+    itemsCount={productsCount}
+    onSelect={onSelectProduct}
+    cells={cells}
+    onSelect={onSelectProduct}
+    fetchItems={(params) => fetchPaginatedProducts(productsPath, params)}
+    header="Most recently updated Products"
+    title="Select a Product"
+    isDisabled={isDisabled}
+    placeholder="Select a Product"
+    footerLabel="View all Products"
+    isDisabled={isDisabled}
+    cells={cells}
+  />
+)
+
 export { ProductSelect }
