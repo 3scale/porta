@@ -4882,6 +4882,245 @@
       ]
     },
     {
+      "path": "/admin/api/fields_definitions.json",
+      "responseClass": "List[fields_definition]",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Fields Definitions List",
+          "description": "Returns the list of all fields definitions.",
+          "group": "fields_definition",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/fields_definitions.json",
+      "responseClass": "FieldsDefinition",
+      "operations": [
+        {
+          "httpMethod": "POST",
+          "summary": "Fields Definition Create",
+          "description": "Creates a new fields definition.",
+          "group": "fields_definition",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "target",
+              "description": "Target entity of fields definition.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "defaultValue": "account",
+              "allowableValues": {
+                "values": [
+                  "Account",
+                  "User",
+                  "Cinstance"
+                ],
+                "valueType": "LIST"
+              }
+            },
+            {
+              "name": "name",
+              "description": "Name of the fields definition to be created.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "label",
+              "description": "The field title your developers will see.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query"
+            },
+            {
+              "name": "required",
+              "description": "If 'true' the field will be required for developers.",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "hidden",
+              "description": "If 'true' the developers won't be able to see this field.",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "read_only",
+              "description": "If 'true' the developers won't be able to change this field.",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "choices",
+              "defaultName": "choices[]",
+              "description": "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].",
+              "dataType": "custom",
+              "allowMultiple": true,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/admin/api/fields_definitions/{id}.json",
+      "responseClass": "service",
+      "operations": [
+        {
+          "httpMethod": "GET",
+          "summary": "Fields Definition Read",
+          "description": "Returns the fields definition by id.",
+          "group": "fields_definition",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the fields definition.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        },
+        {
+          "httpMethod": "PUT",
+          "summary": "Fields Definition Update",
+          "description": "Updates the fields definition.",
+          "group": "fields_definition",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the fields definition.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            },
+            {
+              "name": "target",
+              "description": "Target entity of fields definition.",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "defaultValue": "account",
+              "allowableValues": {
+                "values": [
+                  "Account",
+                  "User",
+                  "Cinstance"
+                ],
+                "valueType": "LIST"
+              }
+            },
+            {
+              "name": "label",
+              "description": "The field title your developers will see.",
+              "dataType": "string",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "required",
+              "description": "If 'true' the field will be required for developers.",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "hidden",
+              "description": "If 'true' the developers won't be able to see this field.",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "read_only",
+              "description": "If 'true' the developers won't be able to change this field.",
+              "dataType": "boolean",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "position",
+              "description": "Position of the fields definition.",
+              "dataType": "integer",
+              "required": false,
+              "paramType": "query"
+            },
+            {
+              "name": "choices",
+              "defaultName": "choices[]",
+              "description": "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].",
+              "dataType": "custom",
+              "allowMultiple": true,
+              "required": false,
+              "paramType": "query"
+            }
+          ]
+        },
+        {
+          "httpMethod": "DELETE",
+          "summary": "Fields Definition Delete",
+          "description": "Deletes the fields definition.",
+          "group": "fields_definition",
+          "parameters": [
+            {
+              "name": "access_token",
+              "description": "A personal Access Token",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "threescale_name": "access_token"
+            },
+            {
+              "name": "id",
+              "description": "ID of the fields definition.",
+              "dataType": "int",
+              "required": true,
+              "paramType": "path"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "/admin/api/users/{id}/permissions.xml",
       "operations": [
         {

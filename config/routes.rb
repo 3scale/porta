@@ -658,6 +658,8 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       resources :features, :controller => 'account_features', :except => [:new, :edit]
 
+      resources :fields_definitions, controller: 'fields_definitions', except: %i[new edit]
+
       resource :nginx, :only => [:show], :defaults => { :format => 'zip' } do
         collection do
           get :spec
