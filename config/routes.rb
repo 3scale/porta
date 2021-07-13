@@ -660,7 +660,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
       resources :fields_definitions, controller: 'fields_definitions', except: %i[new edit]
 
-      resource :nginx, :only => [:show], :defaults => { :format => 'zip' } do
+      resource :nginx do
         collection do
           get :spec
         end
