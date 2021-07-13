@@ -8,6 +8,6 @@ class Apicast::SandboxProxyTest < ActiveSupport::TestCase
     service.proxy.apicast_configuration_driven = false
     service.proxy.sandbox_endpoint = nil
 
-    assert_equal "#{service.system_name}-#{service.account_id}.staging.apicast.io", proxy.proxy_host
+    assert_equal "#{service.system_name}-#{service.account_id}.staging.apicast.dev", proxy.proxy_host
   end
 end
