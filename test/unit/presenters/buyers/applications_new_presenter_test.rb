@@ -27,7 +27,7 @@ class Buyers::ApplicationsNewPresenterTest < ActiveSupport::TestCase
     assert form_data.key? :"most-recently-updated-products"
     assert form_data.key? :"products-count"
 
-    assert_equal data, new_application_form_metadata(provider)
+    assert_equal form_data, new_application_form_metadata(provider)
   end
 
   test 'new_application_form_data with errors' do
