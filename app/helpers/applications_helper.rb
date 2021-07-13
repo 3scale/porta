@@ -8,8 +8,8 @@ module ApplicationsHelper
             .order(created_at: :desc, id: :asc)
   end
 
-  def filtered_buyers
-    raw_buyers.scope_search(@search)
+  def filtered_buyers(search)
+    raw_buyers.scope_search(search)
   end
 
   def paginated_buyers
@@ -22,8 +22,8 @@ module ApplicationsHelper
             .order(updated_at: :desc)
   end
 
-  def filtered_products
-    raw_buyers.scope_search(@search)
+  def filtered_products(search)
+    raw_products.scope_search(search)
   end
 
   def paginated_products
@@ -44,11 +44,11 @@ module ApplicationsHelper
   end
 
   def last_traffic(cinstance)
-    if cinstance.first_daily_traffic_at?
-      date = cinstance.first_daily_traffic_at
-      title = time_ago_in_words(date) + ' ago'
-      time_tag(date, date.strftime("%B %e, %Y"), :title => title)
-    end
+    return unless cinstance.first_daily_traffic_at?
+
+    date = cinstance.first_daily_traffic_at
+    title = "#{time_ago_in_words(date)} ago"
+    time_tag(date, date.strftime("%B %e, %Y"), title: title)
   end
 
   def time_tag_with_title(date_or_time, *args)
@@ -78,7 +78,7 @@ module ApplicationsHelper
     data
   end
 
-  def most_recently_created_buyers(current_account)
+  def most_recently_created_buyers
     BuyerDecorator.decorate_collection(raw_buyers.limit(20))
                   .map(&:new_application_data)
   end
