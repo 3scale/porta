@@ -504,7 +504,7 @@ class Proxy < ApplicationRecord
       name == DEFAULT_POLICY["name"]
     end
 
-    def create_default
+    def self.create_default
       new(DEFAULT_POLICY)
     end
 
@@ -537,9 +537,15 @@ class Proxy < ApplicationRecord
     validate :policies_configs_are_correct
 
     def initialize(policies_config)
-      parsed_config = read_and_parse_policies_config(policies_config)
-      policies = parsed_config.map { |attrs| PolicyConfig.new(attrs) }
+      parsed = if policies_config.blank?
+                 []
+               elsif policies_config.is_a? Array
+                 policies_config.as_json
+               else
+                 Array(JSON.parse(policies_config))
+               end
 
+      policies = parsed.map { |attrs| PolicyConfig.new(attrs) }
       policies.push(PolicyConfig.create_default) if policies.none?(&:default?)
 
       @policies_config = policies
@@ -573,20 +579,12 @@ class Proxy < ApplicationRecord
 
     private
 
-    def read_and_parse_policies_config(attr_policies_config)
-      if attr_policies_config.blank?
-        []
-      elsif attr_policies_config.is_a? Array
-        attr_policies_config.as_json
-      else
-        Array(JSON.parse(attr_policies_config))
-      end
-    end
-
     def policies_configs_are_correct
-      reject(&:valid?).each do |policy_config|
-        # TODO: 5: errors.merge!(policy_config.errors)
-        policy_config.errors.each { |attribute, message| errors.add(attribute, errors.full_message(attribute, message).downcase) }
+      # TODO: 5: errors.merge!(policy_config.errors)
+      reject(&:valid?).map(&:errors).each do |policy_errors|
+        policy_errors.each do |attribute, message|
+          errors.add(attribute, errors.full_message(attribute, message).downcase)
+        end
       end
       errors.add(:base, :missing_apicast) unless detect(&:default?)
     rescue NoMethodError
