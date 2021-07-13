@@ -90,23 +90,6 @@ class ProxyExampleTest < ActiveSupport::TestCase
     yield
   end
 
-  def generate_config(source)
-    package = Apicast::ProviderPackageGenerator.new(source)
-    folder = Pathname(nginx_prefix)
-
-    folder.mkpath
-    folder.join('logs').mkpath
-
-    package.each do |file, contents|
-      folder.join(file).write(contents.call)
-    end
-
-    conf = folder.join(nginx_config)
-
-    conf.unlink if conf.exist?
-    conf.make_symlink(package.nginx_conf)
-  end
-
   def enable_proxy(proxy = nil)
     p = proxy || @proxy
 
