@@ -60,9 +60,10 @@ module ApplicationsHelper
 
   def remaining_trial_days(cinstance)
     expiration_date = cinstance.trial_period_expires_at
-    expiration_tag = time_tag(expiration_date, distance_of_time_in_words(Time.zone.now, expiration_date),
-                              :title => l(expiration_date))
-    "&ndash; trial expires in #{expiration_tag}".html_safe
+    expiration_tag = time_tag(expiration_date,
+                              distance_of_time_in_words(Time.zone.now, expiration_date),
+                              title: l(expiration_date))
+    "&ndash; trial expires in #{expiration_tag}".html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def new_application_form_base_data(provider, cinstance)
