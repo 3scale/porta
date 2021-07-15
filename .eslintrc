@@ -8,13 +8,10 @@
   "env": {
     "browser": true,
     "node": true,
-    "jest": true,
-    "jasmine": true
+    "jest": true
   },
   "globals": {
-    "$": true,
-    "fixture": true,
-    "spyOnEvent": true
+    "$": true
   },
   "extends": "standard",
   "plugins": [
@@ -80,7 +77,12 @@
       "always"
     ],
     "flowtype/use-flow-type": 1,
-    "flowtype/valid-syntax": 1
+    "flowtype/valid-syntax": 1,
+    // Workaround to bypass error: TypeError: Cannot read property 'range' of null
+    // See: https://github.com/babel/babel-eslint/issues/681#issuecomment-420663038
+    // We should upgrade from babel-eslint (deprecated) to @babel/eslint-parser
+    "template-curly-spacing": "off",
+    "indent": "off"
   },
   "settings": {
     "react": {

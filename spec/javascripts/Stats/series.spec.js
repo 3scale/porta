@@ -6,7 +6,8 @@ describe('StatsSeries', () => {
   }
 
   beforeEach((done) => {
-    spyOn(source, 'data').and.callFake(() => {
+    jest.spyOn(source, 'data')
+      .mockImplementation(() => {
       return new Promise((resolve) => {
         resolve({
           metric: {

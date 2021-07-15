@@ -37,7 +37,8 @@ describe('StatsTopAppsSourceCollector', () => {
   })
 
   it('should get the right sources', (done) => {
-    spyOn($, 'getJSON').and.callFake(() => {
+    jest.spyOn($, 'getJSON')
+      .mockImplementation(() => {
       let deferred = new $.Deferred()
       deferred.resolve({
         period: {since: '2016-11-21T00:00:00-00:00', until: '2016-11-27T23:59:59-00:00', name: 'week'},
