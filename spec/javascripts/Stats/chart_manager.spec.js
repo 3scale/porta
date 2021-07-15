@@ -1,10 +1,23 @@
 import $ from 'jquery'
 import {StatsChartManager} from 'Stats/lib/chart_manager'
 
-let statsState = jasmine.createSpyObj('statsState', ['setState', 'state'])
-let sources = jasmine.createSpyObj('sources', ['getSources'])
-let chart = jasmine.createSpyObj('chart', ['render', 'update'])
-let metricsSelector = jasmine.createSpyObj('metricsSelector', ['render'])
+const statsState = {
+  setState: jest.fn(),
+  state: jest.fn()
+}
+
+const sources = {
+  getSources: jest.fn()
+}
+
+const chart = {
+  render: jest.fn(),
+  update: jest.fn()
+}
+
+const metricsSelector = {
+  render: jest.fn()
+}
 
 let chartManager = new StatsChartManager({statsState, metricsSelector, sources, chart})
 let data = {
@@ -28,24 +41,24 @@ let data = {
 
 describe('ChartManager', () => {
   beforeEach((done) => {
-    spyOn(chartManager, '_getChartData').and.callFake(() => {
-      return new Promise((resolve) => {
-        resolve(data)
+    jest.spyOn(chartManager, '_getChartData')
+      .mockImplementation(() => {
+        return new Promise((resolve) => resolve(data))
       })
-    })
     done()
   })
 
   it('should render chart with metrics selector and all series', (done) => {
     chartManager.renderChart('#container').then(() => {
       expect(chart.render).toHaveBeenCalled()
-      expect(chart.render).toHaveBeenCalledWith({data, selectedSeries: ['Hits', 'Hots']})
+      expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hits', 'Hots'] })
       done()
     })
   })
 
   it('should render chart with stored selected series', (done) => {
-    spyOn(chartManager, '_getStoredSelectedSeries').and.returnValue('Hots')
+    jest.spyOn(chartManager, '_getStoredSelectedSeries')
+      .mockImplementation(() => 'Hots')
     chartManager.renderChart('#container').then(() => {
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hots'] })
       done()
@@ -65,7 +78,7 @@ describe('ChartManager', () => {
   })
 
   it('should update chart when refresh event was triggered', () => {
-    spyOn(chartManager, 'updateChart')
+    jest.spyOn(chartManager, 'updateChart')
     $(statsState).trigger('refresh')
 
     expect(chartManager.updateChart).toHaveBeenCalled()

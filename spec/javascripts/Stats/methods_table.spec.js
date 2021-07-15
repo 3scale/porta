@@ -1,10 +1,11 @@
+import $ from 'jquery'
 import { StatsMethodsTable } from 'Stats/lib/methods_table'
 
 describe('StatsMethodsTable', () => {
   let methodsTable = new StatsMethodsTable({container: '#methods_table'})
 
   beforeEach(() => {
-    fixture.set('<table id="methods_table"></table>')
+    document.body.innerHTML = '<table id="methods_table"></table>'
   })
 
   it('should display the right data on the template', () => {
@@ -27,9 +28,9 @@ describe('StatsMethodsTable', () => {
     let $untilCell = $table.find('.StatsMethodsTable-until').first()
     let $totalCell = $table.find('.StatsMethodsTable-total').first()
 
-    expect($nameCell).toContainText('Charles Bukowski')
-    expect($sinceCell).toContainText('16 Aug 1920 00:00:00 PST')
-    expect($untilCell).toContainText('09 Mar 1994 00:00:00 PST')
-    expect($totalCell).toContainText('42,000')
+    expect($nameCell.text()).toEqual('Charles Bukowski')
+    expect($sinceCell.text()).toEqual('16 Aug 1920 00:00:00 PST')
+    expect($untilCell.text()).toEqual('09 Mar 1994 00:00:00 PST')
+    expect($totalCell.text()).toEqual('42,000')
   })
 })

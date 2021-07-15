@@ -31,6 +31,6 @@ module.exports = {
     '__snapshots__'
   ],
   testURL: 'http://localhost',
-  testRegex: '.*.spec.jsx',
+  testRegex: ['.*.spec.js', '.*.spec.jsx'],
   verbose: true
 }

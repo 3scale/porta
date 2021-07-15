@@ -53,7 +53,8 @@ describe('StatsAverageMetricsSource', () => {
     ]
 
     beforeEach((done) => {
-      spyOn($, 'getJSON').and.callFake(() => {
+      jest.spyOn($, 'getJSON')
+        .mockImplementation(() => {
         return $.Deferred().resolve({
           values: stubbedValues,
           period: {
