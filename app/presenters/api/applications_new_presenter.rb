@@ -16,6 +16,8 @@ class Api::ApplicationsNewPresenter
 
   attr_reader :provider, :service, :cinstance, :ability
 
+  alias current_account provider
+
   def new_application_form_data
     data = {
       'create-application-path': admin_service_applications_path(service),
@@ -24,11 +26,5 @@ class Api::ApplicationsNewPresenter
       'buyers-count': raw_buyers.size,
     }
     data.merge new_application_form_base_data(provider, cinstance)
-  end
-
-  protected
-
-  def current_account
-    provider
   end
 end

@@ -18,19 +18,11 @@ class Buyers::ApplicationsNewPresenterTest < ActiveSupport::TestCase
     presenter = Presenter.new(provider: provider, buyer: buyer, user: user)
     form_data = presenter.new_application_form_data
 
-    assert form_data.key? :"create-application-path"
-    assert form_data.key? :"create-application-plan-path"
-    assert form_data.key? :"service-subscriptions-path"
-    assert form_data.key? :"service-plans-allowed"
-    assert form_data.key? :"defined-fields"
-    assert form_data.key? :buyer
-    assert form_data.key? :"most-recently-updated-products"
-    assert form_data.key? :"products-count"
+    expected_keys = %i[create-application-path create-application-plan-path create-service-plan-path service-subscriptions-path service-plans-allowed defined-fields buyer most-recently-updated-products products-count]
+    unexpected_keys = %i[most-recently-created-buyers buyers-count product errors]
 
-    assert_not form_data.key? :"most-recently-created-buyers"
-    assert_not form_data.key? :"buyers-count"
-    assert_not form_data.key? :product
-    assert_not form_data.key? :errors
+    assert_same_elements expected_keys, form_data.keys
+    unexpected_keys.each { |key| assert_does_not_contain form_data.keys, key }
   end
 
   test 'new_application_form_data with errors' do
