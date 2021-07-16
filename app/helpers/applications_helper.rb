@@ -66,7 +66,7 @@ module ApplicationsHelper
     "&ndash; trial expires in #{expiration_tag}".html_safe # rubocop:disable Rails/OutputSafety
   end
 
-  def new_application_form_base_data(provider, cinstance)
+  def new_application_form_base_data(provider, cinstance = nil)
     # TODO: Reduce data by not including service_plans when service_plans_management_visible? is false
     data = {
       'create-application-plan-path': new_admin_service_application_plan_path(':id'),
