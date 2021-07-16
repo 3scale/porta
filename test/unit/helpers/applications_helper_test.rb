@@ -13,6 +13,10 @@ class ApplicationsHelperTest < ActionView::TestCase
     @master_account ||= Account.master || FactoryBot.create(:master_account)
   end
 
+  def service_plans_management_visible?
+    true
+  end
+
   attr_reader :provider, :pagination_params
 
   test "raw_buyers" do
@@ -72,35 +76,48 @@ class ApplicationsHelperTest < ActionView::TestCase
   end
 
   test "new application path when no applications" do
-    assert account.bought_cinstances.size.zero?
+    buyer = FactoryBot.create(:simple_buyer)
 
-    assert_equal new_admin_buyers_account_application_path(account), create_application_link_href
+    assert buyer.bought_cinstances.size.zero?
+    assert_equal new_admin_buyers_account_application_path(buyer), create_application_link_href(buyer)
   end
 
   test "new application path when multiple applications enabled" do
-    assert_not account.bought_cinstances.size.zero?
-    assert can?(:admin, :multiple_applications)
-    assert can?(:see, :multiple_applications)
+    buyer = FactoryBot.create(:simple_buyer)
+    FactoryBot.create(:simple_cinstance, user_account: buyer)
+    expects(:can?).with(:admin, :multiple_applications).returns(true).once
+    expects(:can?).with(:see, :multiple_applications).returns(true).once
 
-    assert_equal new_admin_buyers_account_application_path(account), create_application_link_href
+    assert_not buyer.bought_cinstances.size.zero?
+    assert_equal new_admin_buyers_account_application_path(buyer), create_application_link_href(buyer)
+  end
 
-    assert_not can?(:see, :multiple_applications)
+  test "new application path when upgrade needed" do
+    buyer = FactoryBot.create(:simple_buyer)
+    FactoryBot.create(:simple_cinstance, user_account: buyer)
 
-    assert_equal admin_upgrade_notice_path(:multiple_applications), create_application_link_href
+    expects(:can?).with(:admin, :multiple_applications).returns(true).once
+    expects(:can?).with(:see, :multiple_applications).returns(false).once
+
+    assert_not buyer.bought_cinstances.size.zero?
+    assert_equal admin_upgrade_notice_path(:multiple_applications), create_application_link_href(buyer)
   end
 
   test "new application path when single application" do
-    assert_not account.bought_cinstances.size.zero?
-    assert_not can?(:admin, :multiple_applications)
+    buyer = FactoryBot.create(:simple_buyer)
+    FactoryBot.create(:simple_cinstance, user_account: buyer)
 
-    assert_equal nil, create_application_link_href
+    expects(:can?).with(:admin, :multiple_applications).returns(false)
+
+    assert_not buyer.bought_cinstances.size.zero?
+    assert_nil create_application_link_href(buyer)
   end
 
   test "last_traffic first day" do
     application = FactoryBot.create(:cinstance)
     application.expects(:first_daily_traffic_at?).returns(false).once
 
-    assert_equal nil, last_traffic(application)
+    assert_nil last_traffic(application)
   end
 
   test "last_traffic after first day" do
@@ -128,21 +145,26 @@ class ApplicationsHelperTest < ActionView::TestCase
     assert_equal 'January 01, 2021', time.text
   end
 
-  test "remaining_trial_days" do
-    application = FactoryBot.create(:cinstance, trial_period_expires_at: nil)
-    assert_equal "&ndash; trial expires in".html_safe, remaining_trial_days(application)
+  test "new_application_form_base_data" do
+    form_data = new_application_form_base_data(provider)
+
+    expected_keys = %i[create-application-plan-path create-service-plan-path service-subscriptions-path service-plans-allowed defined-fields]
+    unexpected_keys = %i[most-recently-updated-products products-count buyer errors product most-recently-created-buyers buyers-count]
+
+    assert_same_elements expected_keys, form_data.keys
+    unexpected_keys.each { |key| assert_does_not_contain form_data.keys, key }
   end
 
-  test "new_application_form_base_data(provider, cinstance)" do
+  test "new_application_form_base_data with application" do
     application = FactoryBot.create(:cinstance)
 
     form_data = new_application_form_base_data(provider, application)
 
-    assert form_data.key? 'create-application-plan-path'
-    assert form_data.key? 'create-service-plan-path'
-    assert form_data.key? 'service-subscriptions-path'
-    assert form_data.key? 'service-plans-allowed'
-    assert form_data.key? 'defined-fields'
+    expected_keys = %i[create-application-plan-path create-service-plan-path service-subscriptions-path service-plans-allowed defined-fields errors]
+    unexpected_keys = %i[most-recently-updated-products products-count buyer product most-recently-created-buyers buyers-count]
+
+    assert_same_elements expected_keys, form_data.keys
+    unexpected_keys.each { |key| assert_does_not_contain form_data.keys, key }
   end
 
   test "most_recently_created_buyers is limited to 20" do
@@ -153,6 +175,7 @@ class ApplicationsHelperTest < ActionView::TestCase
 
   test "most_recently_updated_products is limited to 20" do
     FactoryBot.create_list(:simple_service, 21, account: provider)
+
     assert_equal 20, most_recently_updated_products.size
   end
 
@@ -164,13 +187,32 @@ class ApplicationsHelperTest < ActionView::TestCase
     assert_equal "cinstance[#{field.name}]", data.first[:name]
   end
 
+  test "remaining_trial_days default" do
+    application = FactoryBot.create(:cinstance, trial_period_expires_at: nil)
+    expected_text = '– trial expires in less than a minute'
+
+    html = Nokogiri::HTML.parse remaining_trial_days(application)
+    assert_equal expected_text, html.text
+  end
+
+  test "remaining_trial_days expired" do
+    today = Time.zone.now
+    application = FactoryBot.build(:cinstance, trial_period_expires_at: today - 1.day)
+    expected_text = '– trial expires in 1 day'
+
+    Timecop.freeze(today) do
+      html = Nokogiri::HTML.parse remaining_trial_days(application)
+      assert_equal expected_text, html.text
+    end
+  end
+
   test "remaining_trial_days should return the right expiration date text" do
     today = Time.zone.now
-    cinstance = FactoryBot.build(:cinstance, trial_period_expires_at: today)
-    expected_text = '– trial expires in 20 days'
+    application = FactoryBot.build(:cinstance, trial_period_expires_at: today + 1.day)
+    expected_text = '– trial expires in 1 day'
 
-    Timecop.freeze(today - 20.days) do
-      html = Nokogiri::HTML.parse remaining_trial_days(cinstance)
+    Timecop.freeze(today) do
+      html = Nokogiri::HTML.parse remaining_trial_days(application)
       assert_equal expected_text, html.text
     end
   end
