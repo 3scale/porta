@@ -134,7 +134,11 @@ module System
     # We don't want Rack::Cache to be used
     config.action_dispatch.rack_cache = false
 
-    config.cache_store = config_for(:cache_store)
+    args = config_for(:cache_store)
+    store_type = args.shift
+    options = args.extract_options!
+    servers = args.flat_map { |arg| arg.split(',') }
+    config.cache_store = [store_type, servers, options]
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
