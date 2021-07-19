@@ -569,7 +569,6 @@ class ServiceTest < ActiveSupport::TestCase
     service = Service.new(account: account = Account.new)
     service.proxy = Proxy.new(service: service)
 
-    account.stubs(:provider_can_use?).with(:apicast_v1).returns(true) # irrelevant for this test
     account.stubs(:provider_can_use?).with(:apicast_v2).returns(true) # irrelevant for this test
 
     account.stubs(:provider_can_use?).with(:proxy_pro).returns(false)
