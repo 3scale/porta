@@ -113,10 +113,10 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def service
-    @service ||= if (service_id = params[:service_id])
-                   services.find_by(id: service_id) || services.find_by(system_name: service_id)
-                 elsif single_service?
+    @service ||= if single_service?
                    services.default
+                 elsif (service_id = params[:service_id])
+                   services.find_by(id: service_id) || services.find_by(system_name: service_id)
                  elsif current_account.services_can_create_app_on.count == 1
                    current_account.services_can_create_app_on.first
                  end
