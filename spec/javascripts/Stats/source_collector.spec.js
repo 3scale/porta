@@ -14,12 +14,12 @@ describe('StatsSourceCollector', () => {
 
   beforeEach((done) => {
     jest.spyOn(sourceCollector, '_fetchMetrics')
-      .mockImplementation(() => {
-      return Promise.resolve({ metrics: [
+      .mockResolvedValue({
+        metrics: [
         { id: 1, systemName: 'awesome_metric' },
         { id: 2, systemName: 'amazing_metric' }
-      ]})
-    })
+        ]
+      })
     done()
   })
 
@@ -44,10 +44,10 @@ describe('StatsSourceCollector', () => {
 
   // Todo: update  this test
   it.skip('should get the correct sources', (done) => {
-    jest.spyOn(sourceCollector, 'buildSources')
+    const buildSourcesSpy = jest.spyOn(sourceCollector, 'buildSources')
     sourceCollector.getMetrics('/le/cool/url')
     sourceCollector.getSources({id: 42, selectedMetricName: 'awesome_metric'}).then(_res => {
-      expect(sourceCollector.buildSources).toHaveBeenCalledWith(42, [{id: 1, systemName: 'awesome_metric'}])
+      expect(buildSourcesSpy).toHaveBeenCalledWith(42, [{ id: 1, systemName: 'awesome_metric' }])
       done()
     })
   })

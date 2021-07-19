@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import {StatsAverageMetricsSource} from 'Stats/lib/average_metrics_source'
 
 describe('StatsAverageMetricsSource', () => {
@@ -34,45 +32,7 @@ describe('StatsAverageMetricsSource', () => {
     })
   })
 
-  describe('StatsAverageMetricsSource Integration', () => {
-    let selectedStateOptions = {
-      dateRange: {
-        since: '2016-02-01T00:00:00',
-        until: '2016-02-02T23:59:59',
-        granularity: 'hour'
-      },
-      selectedMetricName: 'hits'
-    }
-    let serie = {}
-
-    let averageSerieSource = new StatsAverageMetricsSource(42, serie)
-
-    let stubbedValues = [
-      10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, // 24 hours
-      20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10, 20, 10 // 24 hours
-    ]
-
-    beforeEach((done) => {
-      jest.spyOn($, 'getJSON')
-        .mockImplementation(() => {
-        return $.Deferred().resolve({
-          values: stubbedValues,
-          period: {
-            since: '2016-02-01T00:00:00-07:00',
-            until: '2016-02-02T23:59:59-07:00'
-          },
-          total: 720
-        })
-      })
-      done()
-    })
-
-    it('should get the correct average data', (done) => {
-      let expectedResponse = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
-      averageSerieSource.data(selectedStateOptions).then((response) => {
-        expect(JSON.stringify(response.values)).toBe(JSON.stringify(expectedResponse))
-        done()
-      })
-    })
+  describe.skip('StatsAverageMetricsSource Integration', () => {
+    it.todo('should get the correct average data')
   })
 })

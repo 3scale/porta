@@ -7,26 +7,22 @@ describe('StatsSeries', () => {
 
   beforeEach((done) => {
     jest.spyOn(source, 'data')
-      .mockImplementation(() => {
-      return new Promise((resolve) => {
-        resolve({
-          metric: {
-            id: 7,
-            name: 'Bond, James Bond',
-            system_name: 'james_bond',
-            unit: 'spies'
-          },
-          period: {
-            granularity: 'day',
-            since: '2006-11-17T00:00:00-07:00',
-            until: '2006-11-18T23:59:59-07:00',
-            timezone: 'America/Los_Angeles'
-          },
-          total: 42,
-          values: [42]
-        })
+      .mockResolvedValue({
+        metric: {
+          id: 7,
+          name: 'Bond, James Bond',
+          system_name: 'james_bond',
+          unit: 'spies'
+        },
+        period: {
+          granularity: 'day',
+          since: '2006-11-17T00:00:00-07:00',
+          until: '2006-11-18T23:59:59-07:00',
+          timezone: 'America/Los_Angeles'
+        },
+        total: 42,
+        values: [42]
       })
-    })
     done()
   })
 
