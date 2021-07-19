@@ -17,7 +17,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
 
   liquify prefix: 'applications'
 
-  delegate :services, :multiservice?, to: :site_account
+  delegate :services, :single_service?, to: :site_account
 
   def index
     cinstances = current_account.bought_cinstances.includes(:service)
@@ -113,12 +113,12 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def service
-    @service ||= if !multiservice?
-                   services.default
-                 elsif current_account.services_can_create_app_on.count == 1
-                   services.first
-                 elsif (service_id = params[:service_id])
+    @service ||= if (service_id = params[:service_id])
                    services.find_by(id: service_id) || services.find_by(system_name: service_id)
+                 elsif single_service?
+                   services.default
+                 elsif (available_services = current_account.services_can_create_app_on && available_services.count == 1)
+                   available_services.first
                  end
   end
 
