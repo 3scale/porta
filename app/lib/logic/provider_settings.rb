@@ -24,7 +24,7 @@ module Logic
       try(:settings).try!(:forum_enabled?) && provider_can_use?(:forum)
     end
 
-    def service_items_in_menu?
+    def single_service?
       !multiservice?
     end
 

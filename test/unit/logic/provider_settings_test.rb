@@ -50,4 +50,17 @@ class Logic::ProviderSettingsTest < ActiveSupport::TestCase
     refute provider.multiple_accessible_services?(Service.where(id: scoped_ids.first))
     assert provider.multiple_accessible_services?(Service.where(id: scoped_ids))
   end
+
+  test '#single_service?' do
+    provider = FactoryBot.build(:simple_provider)
+    buyer = FactoryBot.build(:simple_buyer, provider_account: provider)
+
+    provider.stubs(multiple_accessible_services?: false)
+    assert provider.single_service?
+    assert buyer.single_service?
+
+    provider.stubs(multiple_accessible_services?: false)
+    refute provider.single_service?
+    refute buyer.single_service?
+  end
 end
