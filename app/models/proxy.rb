@@ -405,14 +405,6 @@ class Proxy < ApplicationRecord
     assign_attributes(endpoints) if endpoints
   end
 
-  def apicast_configuration_driven
-    if provider && provider.provider_can_use?(:apicast_v2) && !provider.provider_can_use?(:apicast_v1)
-      true
-    else
-      super
-    end
-  end
-
   def force_apicast_version
     self.apicast_configuration_driven = apicast_configuration_driven
     true # this can be removed when we swith to thow callbacks

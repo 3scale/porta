@@ -250,16 +250,6 @@ module Logic
         end
       end
 
-      class ApicastV1 < Base
-        def missing_config
-          Rails.env.test? || provider_created_at < Date.new(2017, 6, 30)
-        end
-
-        def provider_created_at
-          provider.created_at.try(:to_date) || Date.today
-        end
-      end
-
       class ApicastOIDC < Base
         def missing_config
           false

@@ -90,7 +90,6 @@ module ServiceDiscovery
     test 'unsupported backend base path' do
       @import_service.stubs(cluster_service: @cluster_service)
 
-      @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
       @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
       @account.stubs(:provider_can_use?).with(:proxy_private_base_path).returns(false)
       @service.backend_api.stubs(account: @account)

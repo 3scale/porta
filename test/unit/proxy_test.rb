@@ -191,20 +191,6 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
-  def test_apicast_configuration_driven
-    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
-    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
-
-    @proxy.apicast_configuration_driven = true
-    assert @proxy.apicast_configuration_driven
-
-    @proxy.apicast_configuration_driven = false
-    refute @proxy.apicast_configuration_driven
-
-    @proxy.provider.stubs(:provider_can_use?).with(:apicast_v1).returns(false)
-    assert @proxy.apicast_configuration_driven
-  end
-
   test 'hosts' do
     @proxy.endpoint = 'http://foobar.example.com:3000/path'
     @proxy.sandbox_endpoint = 'http://example.com:8080'
@@ -291,7 +277,6 @@ class ProxyTest < ActiveSupport::TestCase
   end
 
   test 'proxy api backend with base path' do
-    @account.stubs(:provider_can_use?).with(:apicast_v1).returns(true)
     @account.stubs(:provider_can_use?).with(:apicast_v2).returns(true)
     @account.expects(:provider_can_use?).with(:proxy_private_base_path).at_least_once.returns(false)
     backend_api = @proxy.backend_api

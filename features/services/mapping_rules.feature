@@ -6,7 +6,6 @@ Feature: Product mapping rules
 
   Background:
     Given all the rolling updates features are off
-    And I have apicast_v2 feature enabled
     And I have oauth_api feature enabled
     Given a provider "foo.3scale.localhost"
     And a default service of provider "foo.3scale.localhost" has name "one"
