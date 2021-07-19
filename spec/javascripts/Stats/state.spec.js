@@ -4,12 +4,11 @@ import MockDate from 'mockdate'
 import { StatsState, PeriodRangeDate, CustomRangeDate } from 'Stats/lib/state'
 
 describe('StatsState', () => {
+  const save = jest.fn()
   const fakeStore = {
     getStateFromURL: jest.fn(),
-    save: jest.fn()
+    save
   }
-
-  const spySave = jest.spyOn(fakeStore, 'save')
 
   let stubbedState = {
     dateRange: {
@@ -33,7 +32,7 @@ describe('StatsState', () => {
 
     statsState.setState(state)
 
-    expect(spySave).toHaveBeenCalled()
+    expect(save).toHaveBeenCalled()
     expect(JSON.stringify(statsState.state)).toBe(JSON.stringify(state))
   })
 
@@ -42,13 +41,13 @@ describe('StatsState', () => {
     let state = {jesus: 'you dont fu*ck with the jaysus!'}
     let topics = ['jesus']
 
-    statsState.fakeFunction = jest.fn()
-    const spyFakeFuntion = jest.spyOn(statsState, 'fakeFunction')
+    const fakeFunction = jest.fn()
+    statsState.fakeFunction = fakeFunction
     $(statsState).on('jesus', statsState.fakeFunction)
 
     statsState.setState(state, topics)
 
-    expect(spyFakeFuntion).toHaveBeenCalled()
+    expect(fakeFunction).toHaveBeenCalled()
   })
 
   it('should return the right state when loading from store', () => {
@@ -68,7 +67,7 @@ describe('StatsState', () => {
     let statsState = new StatsState(fakeStore)
     let stubbedState = {milonga: true}
     jest.spyOn(statsState, 'setState')
-    jest.spyOn(statsState, 'getStoredState').mockImplementation(() => stubbedState)
+    jest.spyOn(statsState, 'getStoredState').mockReturnValue(stubbedState)
 
     $(statsState.store).triggerHandler('navigation')
 

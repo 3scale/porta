@@ -42,9 +42,7 @@ let data = {
 describe('ChartManager', () => {
   beforeEach((done) => {
     jest.spyOn(chartManager, '_getChartData')
-      .mockImplementation(() => {
-        return new Promise((resolve) => resolve(data))
-      })
+      .mockResolvedValue(data)
     done()
   })
 
