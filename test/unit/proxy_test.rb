@@ -482,9 +482,14 @@ class ProxyTest < ActiveSupport::TestCase
     proxy = FactoryBot.build(:proxy,
                               api_backend: 'http://example.com',
                               api_test_path: '/path',
-                              apicast_configuration_driven: false)
-    ::ApicastV1DeploymentService.any_instance.expects(:deploy).with(proxy).returns(true).never
+                              apicast_configuration_driven: true)
+    ::ApicastV2DeploymentService.any_instance.expects(:call).returns(true)
 
+    analytics.expects(:track).with('Sandbox Proxy Deploy', {success: true})
+    analytics.expects(:track).with('Sandbox Proxy updated',
+                                   {api_backend: 'http://example.com:80',
+                                    api_test_path: '/path',
+                                    success: true})
     assert proxy.save_and_deploy
     assert proxy.persisted?
   end
