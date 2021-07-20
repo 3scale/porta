@@ -19,15 +19,15 @@ describe('StatsMetricsSelector', () => {
   let metricsSelector = new StatsMetricsSelector({statsState: userSelectedState, metrics, container: '#selector'})
 
   beforeEach(() => {
-    fixture.set('<div id="selector"></div>')
+    document.body.innerHTML = '<div id="selector"></div>'
   })
 
   it('should render the right selector', () => {
     metricsSelector.render()
 
-    expect($('.StatsSelector-toggle')).toBeInDOM()
-    expect($('.StatsSelector-menu')).toBeInDOM()
-    expect($('.StatsSelector-toggle')).toContainHtml('42.5K Pierogi')
+    expect($('.StatsSelector-toggle')).toBeTruthy()
+    expect($('.StatsSelector-menu')).toBeTruthy()
+    expect($('.StatsSelector-toggle').text()).toContain('42.5K Pierogi')
     expect($('.StatsSelector-menu > li')).toHaveLength(2)
   })
 })

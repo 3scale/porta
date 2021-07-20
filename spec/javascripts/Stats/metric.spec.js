@@ -15,7 +15,7 @@ describe('StatsMetric', () => {
     }
     let method = new StatsMetric(methodAttributes)
 
-    expect(method).toEqual(jasmine.any(StatsMetric))
+    expect(method).toEqual(expect.any(StatsMetric))
     expect(method.isMethod).toEqual(true)
     expect(method.isHits).toEqual(false)
     expect(method.id).toEqual(42)

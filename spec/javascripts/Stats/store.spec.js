@@ -44,7 +44,7 @@ describe('StatsStore', () => {
   })
 
   it('should call triggerNavigationEvent method when popstate event is triggered', () => {
-    let spyOnNavigation = spyOn(store, 'triggerNavigationEvent')
+    const spyOnNavigation = jest.spyOn(store, 'triggerNavigationEvent')
 
     $(store.window).triggerHandler('popstate')
 

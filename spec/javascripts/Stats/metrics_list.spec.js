@@ -2,12 +2,13 @@ import {StatsMetrics} from 'Stats/lib/metrics_list'
 
 describe('StatsMetrics', () => {
   beforeEach((done) => {
-    spyOn(StatsMetrics, '_makeRequest').and.callFake(() => {
-      return Promise.resolve({metrics: [
-        { metric: {id: 1, service_id: 1, friendly_name: 'Awesome Metric', system_name: 'awesome_metric'} },
-        { metric: {id: 2, service_id: 1, firendly_name: 'Amazing Metric', system_name: 'amazing_metric'} }
-      ]})
-    })
+    jest.spyOn(StatsMetrics, '_makeRequest')
+      .mockResolvedValue({
+        metrics: [
+          { metric: {id: 1, service_id: 1, friendly_name: 'Awesome Metric', system_name: 'awesome_metric'} },
+          { metric: {id: 2, service_id: 1, firendly_name: 'Amazing Metric', system_name: 'amazing_metric'} }
+        ]
+      })
     done()
   })
 

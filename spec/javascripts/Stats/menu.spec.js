@@ -48,7 +48,7 @@ describe('StatsMenu', () => {
 
   describe('HTML', () => {
     beforeEach(() => {
-      fixture.set('<div id="menu"></div>')
+      document.body.innerHTML = '<div id="menu"></div>'
     })
 
     let window = { history: new FakeHistory() }
@@ -65,7 +65,7 @@ describe('StatsMenu', () => {
 
       expect(element.find('ol > li a[data-number][data-unit]')).toHaveLength(4)
       expect(element.find('select > option')).toHaveLength(3)
-      expect(element.find('select > option:first')).toHaveValue('hour')
+      expect(element.find('select > option:first').val()).toBe('hour')
     })
 
     it('should set the right period state', () => {
@@ -87,7 +87,7 @@ describe('StatsMenu', () => {
 
   describe('URL', () => {
     beforeEach(() => {
-      fixture.set('<div id="menu"></div>')
+      document.body.innerHTML = '<div id="menu"></div>'
     })
 
     it('should update URL when period is selected', () => {
@@ -124,8 +124,8 @@ describe('StatsMenu', () => {
       menu.render()
       menu.statsState.store.getStateFromURL()
 
-      expect($(menu.element).find('.StatsMenu-customLink--since')).toContainText('08/01/2015')
-      expect($(menu.element).find('.StatsMenu-customLink--until')).toContainText('08/10/2015')
+      expect($(menu.element).find('.StatsMenu-customLink--since').text()).toBe('08/01/2015')
+      expect($(menu.element).find('.StatsMenu-customLink--until').text()).toBe('08/10/2015')
     })
   })
 })

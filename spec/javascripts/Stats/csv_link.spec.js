@@ -30,7 +30,7 @@ describe('StatsCSVLink', () => {
   let expectedCsvString = 'datetime,zaphod,marvin%0A11 Mar 1952 07:00:00 GMT,12,11%0A11 May 2001 08:00:00 BST,30,31'
 
   beforeEach(() => {
-    fixture.set('<div id="csv_link"></div>')
+    document.body.innerHTML = '<div id="csv_link"></div>'
     csvLink.render()
   })
 
@@ -44,9 +44,9 @@ describe('StatsCSVLink', () => {
     csvLink.update(data)
     let $link = $('#csv_link').find('a')
 
-    expect($link).toBeInDOM()
-    expect($link).toContainText('Download CSV')
-    expect($link).toHaveAttr('href', `data:attachment/csv,${expectedCsvString}`)
+    expect($link).toBeDefined()
+    expect($link.text()).toEqual('Download CSV')
+    expect($link.attr('href')).toBe(`data:attachment/csv,${expectedCsvString}`)
   })
 
   it('should throw error if no container was provided', () => {

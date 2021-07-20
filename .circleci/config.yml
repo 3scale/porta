@@ -484,24 +484,6 @@ jobs:
           path: doc/active_docs
           destination: active_docs
 
-  karma:
-    parameters:
-      executor:
-        type: string
-        default: builder-ruby25
-    executor:
-      name: << parameters.executor >>
-    steps:
-      - checkout-with-submodules
-      - *attach-to-workspace
-      - run:
-          name: Karma tests
-          command: |
-            yarn test --reporters dots,junit --browsers ChromeHeadless
-      - *store-junit-test-results
-      - *store-test-artifacts
-      - *upload-coverage
-
   jest:
     resource_class: medium+
     parameters:
@@ -980,22 +962,17 @@ workflows:
       - lint:
           requires:
             - assets_precompile
-      - karma:
-          requires:
-            - dependencies_npm
       - jest:
           requires:
             - dependencies_npm
       - notify_success:
           requires:
             - lint
-            - karma
             - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
             - lint
-            - karma
             - jest
           <<: *only-master-filter
 
@@ -1175,10 +1152,6 @@ workflows:
           executor: builder-ruby25
           requires:
             - assets_precompile
-      - karma:
-          executor: builder-ruby25
-          requires:
-            - dependencies_npm
       - jest:
           executor: builder-ruby25
           requires:
@@ -1186,13 +1159,11 @@ workflows:
       - notify_success:
           requires:
             - lint
-            - karma
             - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
             - lint
-            - karma
             - jest
           <<: *only-master-filter
     <<: *nightly-trigger
