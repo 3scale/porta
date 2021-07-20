@@ -43,6 +43,7 @@ describe('StatsStore', () => {
     })
   })
 
+  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should call triggerNavigationEvent method when popstate event is triggered', () => {
     const spyOnNavigation = jest.spyOn(store, 'triggerNavigationEvent')
 

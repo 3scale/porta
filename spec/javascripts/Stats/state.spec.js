@@ -36,6 +36,7 @@ describe('StatsState', () => {
     expect(JSON.stringify(statsState.state)).toBe(JSON.stringify(state))
   })
 
+  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should trigger the right events when setting the state', () => {
     let statsState = new StatsState(fakeStore)
     let state = {jesus: 'you dont fu*ck with the jaysus!'}
@@ -63,6 +64,7 @@ describe('StatsState', () => {
     expect(statsState.state).toEqual({ dateRange: dataRange })
   })
 
+  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should call setState when navigation event was triggered with the rigth params', () => {
     let statsState = new StatsState(fakeStore)
     let stubbedState = {milonga: true}
