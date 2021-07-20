@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import {StatsCSVLink} from 'Stats/lib/csv_link'
 
 describe('StatsCSVLink', () => {
@@ -42,11 +41,11 @@ describe('StatsCSVLink', () => {
 
   it('should render correctly', () => {
     csvLink.update(data)
-    let $link = $('#csv_link').find('a')
+    let link = document.querySelector('#csv_link').querySelector('a')
 
-    expect($link).toBeDefined()
-    expect($link.text()).toEqual('Download CSV')
-    expect($link.attr('href')).toBe(`data:attachment/csv,${expectedCsvString}`)
+    expect(link).toBeDefined()
+    expect(link.innerHTML).toEqual('Download CSV')
+    expect(link.href).toBe(`data:attachment/csv,${expectedCsvString}`)
   })
 
   it('should throw error if no container was provided', () => {

@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import { StatsMetricsSelector } from 'Stats/lib/metrics_selector'
 
 describe('StatsMetricsSelector', () => {
@@ -25,9 +23,9 @@ describe('StatsMetricsSelector', () => {
   it('should render the right selector', () => {
     metricsSelector.render()
 
-    expect($('.StatsSelector-toggle')).toBeTruthy()
-    expect($('.StatsSelector-menu')).toBeTruthy()
-    expect($('.StatsSelector-toggle').text()).toContain('42.5K Pierogi')
-    expect($('.StatsSelector-menu > li')).toHaveLength(2)
+    expect(document.querySelector('.StatsSelector-toggle')).toBeTruthy()
+    expect(document.querySelector('.StatsSelector-menu')).toBeTruthy()
+    expect(document.querySelector('.StatsSelector-toggle').innerHTML).toContain('42.5K Pierogi')
+    expect(document.querySelectorAll('.StatsSelector-menu > li')).toHaveLength(2)
   })
 })

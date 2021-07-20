@@ -35,6 +35,7 @@ describe('StatsMetricsSource', () => {
   })
 })
 
+// Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
 describe('CustomMetricSource', () => {
   let options = {
     dateRange: {

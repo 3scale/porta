@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import { StatsMethodsTable } from 'Stats/lib/methods_table'
 
 describe('StatsMethodsTable', () => {
@@ -22,15 +21,15 @@ describe('StatsMethodsTable', () => {
     ]
     methodsTable.render()
 
-    let $table = $('table.StatsMethodsTable')
-    let $nameCell = $table.find('.StatsMethodsTable-name').first()
-    let $sinceCell = $table.find('.StatsMethodsTable-since').first()
-    let $untilCell = $table.find('.StatsMethodsTable-until').first()
-    let $totalCell = $table.find('.StatsMethodsTable-total').first()
+    let table = document.querySelector('table.StatsMethodsTable')
+    let nameCell = table.querySelectorAll('.StatsMethodsTable-name')[0]
+    let sinceCell = table.querySelectorAll('.StatsMethodsTable-since')[0]
+    let untilCell = table.querySelectorAll('.StatsMethodsTable-until')[0]
+    let totalCell = table.querySelectorAll('.StatsMethodsTable-total')[0]
 
-    expect($nameCell.text()).toEqual('Charles Bukowski')
-    expect($sinceCell.text()).toEqual('16 Aug 1920 00:00:00 PST')
-    expect($untilCell.text()).toEqual('09 Mar 1994 00:00:00 PST')
-    expect($totalCell.text()).toEqual('42,000')
+    expect(nameCell.innerHTML).toEqual('Charles Bukowski')
+    expect(sinceCell.innerHTML).toEqual('16 Aug 1920 00:00:00 PST')
+    expect(untilCell.innerHTML).toEqual('09 Mar 1994 00:00:00 PST')
+    expect(totalCell.innerHTML).toEqual('42,000')
   })
 })
