@@ -59,7 +59,7 @@ class Logic::ProviderSettingsTest < ActiveSupport::TestCase
     assert provider.single_service?
     assert buyer.single_service?
 
-    provider.stubs(multiple_accessible_services?: false)
+    provider.stubs(multiple_accessible_services?: true)
     refute provider.single_service?
     refute buyer.single_service?
   end
