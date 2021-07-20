@@ -1,5 +1,19 @@
 # Setup Oracle
 
+## Install Oracle dependencies using the script
+
+1. Run the script with sudo
+```shell
+$ sudo ./script/oracle/install-instantclient-packages.sh 
+```
+
+2. Add following ENV variables to your system (`~/.profile` or `~/.zshrc`)
+
+```shell
+LD_LIBRARY_PATH="/opt/oracle/instantclient/:$LD_LIBRARY_PATH"
+ORACLE_HOME=/opt/oracle/instantclient/
+```
+
 ## Install Oracle Instant Client
 
 1. Go to [the official Oracle Instant Client Downloads site](https://www.oracle.com/database/technologies/instant-client/downloads.html) and download the following **.rpm** packages for your operative system:
@@ -37,3 +51,14 @@ You need to have Docker installed and running. You also need to be able to [run 
 1. From this repository, do `make oracle-database` and wait to see *DATABASE IS READY TO USE!*.
 
 2. Finally initialize the database with some seed data by running: `DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG=AMERICAN_AMERICA.UTF8 USER_PASSWORD=123456 MASTER_PASSWORD=123456 MASTER_ACCESS_TOKEN=token bundle exec rake db:drop db:create db:setup`
+
+
+## Troubleshooting
+
+### ORA-12637: Packet receive failed
+
+Add `DISABLE_OOB=ON` to `sqlnet.ora` ([github issue](https://github.com/oracle/docker-images/issues/1352)).
+
+```shell
+echo "DISABLE_OOB=ON" >> /opt/oracle/instantclient/network/admin/sqlnet.ora
+```
