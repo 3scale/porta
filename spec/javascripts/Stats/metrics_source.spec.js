@@ -51,9 +51,8 @@ describe('CustomMetricSource', () => {
   }
 
   beforeEach((done) => {
-    spyOn($, 'getJSON').and.callFake(() => {
-      return new $.Deferred()
-    })
+    jest.spyOn($, 'getJSON')
+      .mockResolvedValue('{}')
     done()
   })
 

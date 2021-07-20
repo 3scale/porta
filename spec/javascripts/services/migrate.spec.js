@@ -4,7 +4,7 @@ describe('Services migrate', () => {
   beforeEach(() => {
     document.cookie = 'cms-toggle-ids=; path=/; expires=Thu, 21 Sep 1979 00:00:01 UTC;'
     localStorage.clear()
-    let basicStructure = `
+    document.body.innerHTML = `
       <div id='widget_1' class='u-legacy-cookie service-widget is-closed'>
         <article>
           <p id='title_1' class='title-toggle'>Title</p>
@@ -19,8 +19,6 @@ describe('Services migrate', () => {
           <div id='service_2' class='content-service'>Article</div>
         </article>
       </div>`
-
-    fixture.set(basicStructure)
   })
 
   it('migrates data to local storage', () => {

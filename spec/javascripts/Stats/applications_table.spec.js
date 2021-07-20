@@ -1,10 +1,11 @@
 import { StatsApplicationsTable } from 'Stats/lib/applications_table'
+import $ from 'jquery'
 
 describe('StatsApplicationsTable', () => {
-  let applicationsTable = new StatsApplicationsTable({container: '#applications_table'})
+  let applicationsTable = new StatsApplicationsTable({ container: '#applications_table' })
 
   beforeEach(() => {
-    fixture.set('<table id="applications_table"></table>')
+    document.body.innerHTML = '<table id="applications_table"></table>'
   })
 
   it('should display the right data on the template', () => {
@@ -30,10 +31,10 @@ describe('StatsApplicationsTable', () => {
     let $account = $table.find('.StatsApplicationsTable-account').first()
     let $total = $table.find('.StatsApplicationsTable-total').first()
 
-    expect($application).toHaveProp('href', `${window.location.origin}/apiconfig/services/5/application/13`)
-    expect($application).toContainText('Xiam')
-    expect($account).toHaveProp('href', `${window.location.origin}/buyers/account/7`)
-    expect($account).toContainText('Chino')
-    expect($total).toContainText('42')
+    expect($application.prop('href')).toBe(`${window.location.origin}/apiconfig/services/5/application/13`)
+    expect($application.text()).toBe('Xiam')
+    expect($account.prop('href')).toBe(`${window.location.origin}/buyers/account/7`)
+    expect($account.text()).toBe('Chino')
+    expect($total.text()).toBe('42')
   })
 })

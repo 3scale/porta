@@ -20,25 +20,24 @@ describe('StatsApplicationsSelector', () => {
   })
 
   beforeEach(() => {
-    fixture.set('<div id="selector-container"></div>')
+    document.body.innerHTML = '<div id="selector-container"></div>'
     applicationsSelector.render()
   })
 
   it('should render the right applications selector', () => {
     let selector = $('#selector-container .StatsApplicationSelector')
-    expect(selector).toBeInDOM()
-    expect(selector).toContainHtml(
+    expect(selector.html()).toEqual(
       '<optgroup label="Dumplings"><option value="666">Wan Tun App</option><option value="42">Pierogi App</option></optgroup>' +
       '<optgroup label="Empanadas"><option value="7">Argenta</option></optgroup>'
     )
   })
 
   it('should have the correct application selected', () => {
-    expect($('.StatsApplicationSelector option[value="42"]')).toBeSelected()
+    expect($('.StatsApplicationSelector option[value="42"]').prop('selected')).toBe(true)
   })
 
   it('should set the application id on the state when changing the dropdown and default metric', () => {
-    spyOn(userSelectedState, 'setState')
+    jest.spyOn(userSelectedState, 'setState')
     $('.StatsApplicationSelector').val('666').trigger('change')
 
     expect(userSelectedState.setState).toHaveBeenCalledWith({selectedApplicationId: '666', selectedMetricName: 'hits'}, ['applicationSelected'])

@@ -20,16 +20,16 @@ describe('Services index', () => {
         </article>
       </div>`
 
-    fixture.set(basicStructure)
+    document.body.innerHTML = basicStructure
   })
 
   it('attaches the click event to the title-toggle element', () => {
-    let widget = fixture.el.querySelector('#widget_1')
+    let widget = document.body.querySelector('#widget_1')
     let toggle = widget.querySelector('#title_1')
 
-    expect(widget).toHaveClass('is-closed')
+    expect(widget.classList.contains('is-closed')).toBe(true)
     index.initialize()
     toggle.click()
-    expect(widget).not.toHaveClass('is-closed')
+    expect(widget.classList.contains('is-closed')).toBe(false)
   })
 })

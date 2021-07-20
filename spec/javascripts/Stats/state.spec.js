@@ -1,9 +1,14 @@
 import $ from 'jquery'
+import MockDate from 'mockdate'
 
 import { StatsState, PeriodRangeDate, CustomRangeDate } from 'Stats/lib/state'
 
 describe('StatsState', () => {
-  let fakeStore = jasmine.createSpyObj('fakeStore', ['getStateFromURL', 'save', 'triggerNavigationEvent'])
+  const save = jest.fn()
+  const fakeStore = {
+    getStateFromURL: jest.fn(),
+    save
+  }
 
   let stubbedState = {
     dateRange: {
@@ -27,7 +32,7 @@ describe('StatsState', () => {
 
     statsState.setState(state)
 
-    expect(fakeStore.save).toHaveBeenCalled()
+    expect(save).toHaveBeenCalled()
     expect(JSON.stringify(statsState.state)).toBe(JSON.stringify(state))
   })
 
@@ -36,12 +41,13 @@ describe('StatsState', () => {
     let state = {jesus: 'you dont fu*ck with the jaysus!'}
     let topics = ['jesus']
 
-    statsState.fakeFunction = jasmine.createSpy('fakeFunction')
+    const fakeFunction = jest.fn()
+    statsState.fakeFunction = fakeFunction
     $(statsState).on('jesus', statsState.fakeFunction)
 
     statsState.setState(state, topics)
 
-    expect(statsState.fakeFunction).toHaveBeenCalled()
+    expect(fakeFunction).toHaveBeenCalled()
   })
 
   it('should return the right state when loading from store', () => {
@@ -60,8 +66,8 @@ describe('StatsState', () => {
   it('should call setState when navigation event was triggered with the rigth params', () => {
     let statsState = new StatsState(fakeStore)
     let stubbedState = {milonga: true}
-    spyOn(statsState, 'setState')
-    spyOn(statsState, 'getStoredState').and.returnValue(stubbedState)
+    jest.spyOn(statsState, 'setState')
+    jest.spyOn(statsState, 'getStoredState').mockReturnValue(stubbedState)
 
     $(statsState.store).triggerHandler('navigation')
 
@@ -70,14 +76,9 @@ describe('StatsState', () => {
 
   describe('State Date', () => {
     describe('PeriodRangeDate', () => {
-      beforeEach(function () {
-        jasmine.clock().install()
-      })
-
-      let mockTimestamp = new Date(Date.UTC(1986, 6, 29, 16, 0, 0))
+      MockDate.set('1986-07-29T16:00:00Z')
 
       it('should return the correctly formatted timestamp by default', () => {
-        jasmine.clock().mockDate(mockTimestamp)
         let periodRangeDate = new PeriodRangeDate()
         // Period Range needs UTC Offset when granularity is hour in order to avoid asking for the future.
         expect(periodRangeDate.since).toBe('1986-07-28T17:00:00Z')
@@ -85,7 +86,6 @@ describe('StatsState', () => {
       })
 
       it('should return the timestamp without offset when granularity != hour', () => {
-        jasmine.clock().mockDate(mockTimestamp)
         let customPeriodGranularityHour = {
           number: 7,
           unit: 'day'
