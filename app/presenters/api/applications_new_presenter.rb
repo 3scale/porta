@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::ApplicationsNewPresenter
-  include ApplicationsHelper
+  include Applications
   include PlansHelper
   include System::UrlHelpers.system_url_helpers
 
