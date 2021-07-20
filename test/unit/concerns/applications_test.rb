@@ -6,6 +6,7 @@ module Concerns
   class ApplicationsTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
     include Applications
+    include System::UrlHelpers.system_url_helpers
 
     def setup
       @provider = FactoryBot.create(:simple_provider)
