@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210708100519) do
+ActiveRecord::Schema.define(version: 20210713124929) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -74,20 +74,12 @@ ActiveRecord::Schema.define(version: 20210708100519) do
     t.string   "s3_prefix"
     t.integer  "prepared_assets_version",                                   precision: 38
     t.boolean  "sample_data"
-    t.integer  "proxy_configs_file_size",                                   precision: 38
-    t.datetime "proxy_configs_updated_at",                                  precision: 6
-    t.string   "proxy_configs_content_type"
-    t.string   "proxy_configs_file_name"
     t.string   "support_email"
     t.string   "finance_support_email"
     t.string   "billing_address_first_name"
     t.string   "billing_address_last_name"
     t.boolean  "email_all_users",                                                                    default: false
     t.integer  "partner_id",                                                precision: 38
-    t.string   "proxy_configs_conf_file_name"
-    t.string   "proxy_configs_conf_content_type"
-    t.integer  "proxy_configs_conf_file_size",                              precision: 38
-    t.datetime "proxy_configs_conf_updated_at",                             precision: 6
     t.datetime "hosted_proxy_deployed_at",                                  precision: 6
     t.string   "po_number"
     t.datetime "state_changed_at",                                          precision: 6

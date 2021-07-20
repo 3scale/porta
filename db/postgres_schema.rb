@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210708100519) do
+ActiveRecord::Schema.define(version: 20210713124929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,20 +77,12 @@ ActiveRecord::Schema.define(version: 20210708100519) do
     t.string   "s3_prefix",                                       limit: 255
     t.integer  "prepared_assets_version"
     t.boolean  "sample_data"
-    t.integer  "proxy_configs_file_size"
-    t.datetime "proxy_configs_updated_at"
-    t.string   "proxy_configs_content_type",                      limit: 255
-    t.string   "proxy_configs_file_name",                         limit: 255
     t.string   "support_email",                                   limit: 255
     t.string   "finance_support_email",                           limit: 255
     t.string   "billing_address_first_name",                      limit: 255
     t.string   "billing_address_last_name",                       limit: 255
     t.boolean  "email_all_users",                                                                      default: false
     t.bigint   "partner_id"
-    t.string   "proxy_configs_conf_file_name",                    limit: 255
-    t.string   "proxy_configs_conf_content_type",                 limit: 255
-    t.integer  "proxy_configs_conf_file_size"
-    t.datetime "proxy_configs_conf_updated_at"
     t.datetime "hosted_proxy_deployed_at"
     t.string   "po_number",                                       limit: 255
     t.datetime "state_changed_at"
