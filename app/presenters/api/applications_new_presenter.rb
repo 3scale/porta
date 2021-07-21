@@ -3,7 +3,6 @@
 class Api::ApplicationsNewPresenter
   include Applications
   include PlansHelper
-  include System::UrlHelpers.system_url_helpers
 
   delegate :can?, to: :ability
 

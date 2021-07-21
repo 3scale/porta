@@ -3,6 +3,10 @@
 module Applications
   extend ActiveSupport::Concern
 
+  included do
+    include System::UrlHelpers.system_url_helpers
+  end
+
   def new_application_form_base_data(provider, cinstance = nil)
     # TODO: Reduce data by not including service_plans when service_plans_management_visible? is false
     data = {
