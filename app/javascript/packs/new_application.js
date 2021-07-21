@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { createServicePlanPath, createApplicationPath, createApplicationPlanPath, serviceSubscriptionsPath } = dataset
   const product = safeFromJsonString<Product>(dataset.product)
-  const products = safeFromJsonString<Product[]>(dataset.products)
+  const products = safeFromJsonString<Product[]>(dataset.mostRecentlyUpdatedProducts)
   const servicePlansAllowed = safeFromJsonString<boolean>(dataset.servicePlansAllowed)
   const buyer = safeFromJsonString<Buyer>(dataset.buyer)
-  const buyers = safeFromJsonString<Buyer[]>(dataset.buyers)
+  const buyers = safeFromJsonString<Buyer[]>(dataset.mostRecentlyCreatedBuyers)
   const definedFields = safeFromJsonString<FieldDefinition[]>(dataset.definedFields)
   const validationErrors = safeFromJsonString(dataset.errors) || {}
   const error: string | void = validationErrors.hasOwnProperty('base') ? validationErrors.base[0] : undefined
