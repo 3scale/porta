@@ -114,7 +114,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
 
   def service
     @service ||= if single_service?
-                   services.default
+                   services.first
                  elsif (service_id = params[:service_id])
                    services.where(id: service_id).or(services.where(system_name: service_id)).first
                  elsif current_account.services_can_create_app_on.count == 1
