@@ -11,10 +11,6 @@ module Concerns
       @provider = FactoryBot.create(:simple_provider)
     end
 
-    def master_account
-      @master_account ||= Account.master || FactoryBot.create(:master_account)
-    end
-
     def service_plans_management_visible?
       true
     end
