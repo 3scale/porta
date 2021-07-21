@@ -35,7 +35,6 @@ module Account::ProviderMethods
     has_many :backend_api_metrics, through: :backend_apis, source: :metrics
     has_many :proxies, through: :services
     has_many :proxy_rules, through: :proxies
-    has_many :proxy_logs, foreign_key: :provider_id
     has_many :authentication_providers, -> { developer }, dependent: :destroy, inverse_of: :account do
       def build_kind(kind:, **attributes)
         complete_attributes = attributes.merge(account: build.account).symbolize_keys!

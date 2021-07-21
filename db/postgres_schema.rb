@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210708100519) do
+ActiveRecord::Schema.define(version: 20210721105420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1096,15 +1096,6 @@ ActiveRecord::Schema.define(version: 20210708100519) do
     t.index ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version", using: :btree
     t.index ["proxy_id"], name: "index_proxy_configs_on_proxy_id", using: :btree
     t.index ["user_id"], name: "index_proxy_configs_on_user_id", using: :btree
-  end
-
-  create_table "proxy_logs", force: :cascade do |t|
-    t.bigint   "provider_id"
-    t.bigint   "tenant_id"
-    t.text     "lua_file"
-    t.string   "status",      limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "proxy_rules", force: :cascade do |t|

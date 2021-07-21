@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210708100519) do
+ActiveRecord::Schema.define(version: 20210721105420) do
 
   create_table "access_tokens", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.bigint   "owner_id",                 null: false
@@ -1096,15 +1096,6 @@ ActiveRecord::Schema.define(version: 20210708100519) do
     t.index ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version", using: :btree
     t.index ["proxy_id"], name: "index_proxy_configs_on_proxy_id", using: :btree
     t.index ["user_id"], name: "index_proxy_configs_on_user_id", using: :btree
-  end
-
-  create_table "proxy_logs", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
-    t.bigint   "provider_id"
-    t.bigint   "tenant_id"
-    t.text     "lua_file",    limit: 16777215
-    t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "proxy_rules", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210721095401) do
+ActiveRecord::Schema.define(version: 20210721105420) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -1150,15 +1150,6 @@ ActiveRecord::Schema.define(version: 20210721095401) do
   add_index "proxy_configs", ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version"
   add_index "proxy_configs", ["proxy_id"], name: "index_proxy_configs_on_proxy_id"
   add_index "proxy_configs", ["user_id"], name: "index_proxy_configs_on_user_id"
-
-  create_table "proxy_logs", force: :cascade do |t|
-    t.integer  "provider_id", precision: 38
-    t.integer  "tenant_id",   precision: 38
-    t.text     "lua_file"
-    t.string   "status"
-    t.datetime "created_at",  precision: 6
-    t.datetime "updated_at",  precision: 6
-  end
 
   create_table "proxy_rules", force: :cascade do |t|
     t.integer  "proxy_id",           precision: 38
