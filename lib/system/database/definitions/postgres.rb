@@ -437,12 +437,6 @@ System::Database::Postgres.define do
     SQL
   end
 
-  trigger 'proxy_logs' do
-    <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.provider_id AND master <> TRUE;
-    SQL
-  end
-
   trigger 'proxies' do
     <<~SQL
       SELECT tenant_id INTO NEW.tenant_id FROM services WHERE id = NEW.service_id AND tenant_id <> master_id;
