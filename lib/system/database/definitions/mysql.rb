@@ -427,12 +427,6 @@ System::Database::MySQL.define do
     SQL
   end
 
-  trigger 'proxy_logs' do
-    <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.provider_id AND NOT master);
-    SQL
-  end
-
   trigger 'proxies' do
     <<~SQL
       SET NEW.tenant_id = (SELECT tenant_id FROM services WHERE id = NEW.service_id AND tenant_id <> master_id);
