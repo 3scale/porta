@@ -437,12 +437,6 @@ System::Database::Oracle.define do
     SQL
   end
 
-  trigger 'proxy_logs' do
-    <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.provider_id AND master <> 1;
-    SQL
-  end
-
   trigger 'proxies' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM services WHERE id = :new.service_id AND tenant_id <> master_id;
