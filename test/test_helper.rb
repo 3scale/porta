@@ -33,6 +33,7 @@ require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
 require 'minitest/reporters'
 
 junit = MiniTest::Reporters::JUnitReporter.new([junit_reporter_path, Process.pid].compact.join('-'))
+# this environment variable is set by Intellij IDEA which is not compatible with those reporters
 unless ENV['RM_INFO']
   # we skip this for IntelliJ IDEA compatibility
   MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
