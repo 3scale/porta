@@ -11,9 +11,7 @@ Feature: Posting in the forum
     And a buyer "alice" signed up to provider "foo.3scale.localhost"
     And a buyer "bob" signed up to provider "foo.3scale.localhost"
 
-  @recaptcha
   Scenario: New topic
-    Given provider "foo.3scale.localhost" has "spam protection level" set to "auto"
     When I log in as "alice" on foo.3scale.localhost
     And I go to the forum page
 
@@ -25,10 +23,8 @@ Feature: Posting in the forum
     And I should see "What is this?" in a header
     And I should see post "I have no idea what is all this about. Can you help me out?"
 
-  @recaptcha
   Scenario: Reply to a topic
     Given the forum of "foo.3scale.localhost" has topic "How to get rich using this API?" from user "alice"
-      And provider "foo.3scale.localhost" has "spam protection level" set to "captcha"
     When I log in as "bob" on foo.3scale.localhost
     And I go to the forum page
     And I follow "How to get rich using this API?"
