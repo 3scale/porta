@@ -14,11 +14,9 @@ class Proxy < ApplicationRecord
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
 
-  DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
-                     'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
-
   belongs_to :service, touch: true, inverse_of: :proxy, required: true
   attr_readonly :service_id
+  attribute :policies_config, Attributes::PoliciesConfig.new
 
   has_many :proxy_rules, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :proxy
   has_many :proxy_configs, dependent: :delete_all, inverse_of: :proxy
@@ -131,31 +129,7 @@ class Proxy < ApplicationRecord
     deployment_option&.inquiry
   end
 
-  def policies_config
-    parsed_config = read_and_parse_policies_config
-    return parsed_config if errors[:policies_config].present?
-
-    if parsed_config.detect { |c| c['name'] == DEFAULT_POLICY['name'] }
-      parsed_config
-    else
-      parsed_config.push(DEFAULT_POLICY)
-    end
-  end
-
-  def policies_config=(attr_policies_config)
-    super(attr_policies_config.is_a?(String) ? attr_policies_config : attr_policies_config.to_json)
-  end
-
-  def find_policy_config_by(name:, version:)
-    policies_config.find { |config| config['name'] == name && config['version'] == version }
-  end
-
-  def policy_chain
-    (policies_config.presence || []).each_with_object([]) do |config, chain|
-      chain << config.slice('name', 'version', 'configuration') if config['enabled']
-    end
-  end
-
+  delegate :policy_chain, to: :policies_config
   delegate :self_managed?, :hosted?, to: :deployment_option
   delegate :service_token, to: :service, allow_nil: true
 
@@ -163,6 +137,9 @@ class Proxy < ApplicationRecord
     !hosted? && !self_managed?
   end
 
+  def find_policy_config_by(name:, version:)
+    policies_config.find_by(name: name, version: version)
+  end
 
   def oidc_configuration
     super || build_oidc_configuration(standard_flow_enabled: true)
@@ -494,7 +471,12 @@ class Proxy < ApplicationRecord
   class PolicyConfig
     include ActiveModel::Validations
 
+    DEFAULT_POLICY = { 'name' => 'apicast', 'humanName' => 'APIcast policy', 'description' => 'Main functionality of APIcast.',
+                       'configuration' => {}, 'version' => 'builtin', 'enabled' => true, 'removable' => false, 'id' => 'apicast-policy'  }.freeze
+
     attr_accessor :name, :version, :configuration, :enabled
+
+    delegate :to_json, :as_json, to: :to_h
 
     validates :name, :version, presence: true
     validate :configuration_is_object
@@ -511,6 +493,38 @@ class Proxy < ApplicationRecord
       @enabled = symbolized_attributes[:enabled]
     end
 
+    def matches?(other)
+      name == other.name && version == other.version
+    end
+    alias =~ matches?
+
+    def default?
+      name == DEFAULT_POLICY["name"]
+    end
+
+    def self.default
+      new(DEFAULT_POLICY)
+    end
+
+    def to_chain_value
+      to_h.slice('name', 'version', 'configuration')
+    end
+
+    def to_h
+      %i[name version configuration enabled].each_with_object({}) do |key, obj|
+        obj[key] = public_send key
+      end.compact.as_json
+    end
+
+    def ==(other)
+      %i[name version configuration enabled].all? { |key| public_send(key) == other.public_send(key) }
+    end
+    alias eql? ==
+
+    def hash
+      to_h.hash
+    end
+
     private
 
     def configuration_is_object
@@ -520,50 +534,73 @@ class Proxy < ApplicationRecord
 
   class PoliciesConfig
     include ActiveModel::Validations
+    include Enumerable
 
-    delegate :each, to: :policies_config
+    delegate :each, :to_json, :as_json, to: :policies_config
     attr_reader :policies_config
+    protected :policies_config
 
     validate :policies_configs_are_correct
 
     def initialize(policies_config)
-      @policies_config = policies_config.map { |attrs| PolicyConfig.new(attrs) }
+      parsed = policies_config.presence || []
+      parsed = parsed.is_a?(Array) ? parsed.as_json : Array(JSON.parse(parsed))
+
+      @policies_config = policies_normalize(parsed)
+    rescue JSON::ParserError
+      @policies_config = policies_config
     end
 
     def self.name
       'PoliciesConfig'
     end
 
+    def find_by(name:, version:)
+      target = PolicyConfig.new({name: name, version: version, configuration: {}, enabled: false})
+      find { |config| config.matches?(target) }
+    end
+
+    def chain
+      select(&:enabled).map(&:to_chain_value)
+    end
+    alias policy_chain chain
+    alias to_chain chain
+
+    def ==(other)
+      policies_config == other.policies_config
+    end
+    alias eql? ==
+
+    def hash
+      policies_config.hash
+    end
+
     private
 
-    def policies_configs_are_correct
-      policies_config.each do |policy_config|
-        # TODO: 5: errors.merge!(policy_config.errors)
-        policy_config.errors.each { |attribute, message| errors.add(attribute, message) } unless policy_config.valid?
-      end
+    def policies_normalize(parsed_policies)
+      policies = parsed_policies.map { |attrs| PolicyConfig.new(attrs) }
+      policies.tap { |list| list.push(PolicyConfig.default) if policies.none?(&:default?) }
     end
-  end
 
-  def read_and_parse_policies_config
-    read_and_parse_policies_config!
-  rescue JSON::ParserError
-    []
-  end
-
-  def read_and_parse_policies_config!
-    attr_policies_config = read_attribute(:policies_config)
-    attr_policies_config.blank? ? [] : Array(JSON.parse(attr_policies_config))
+    def policies_configs_are_correct
+      # TODO: 5: errors.merge!(policy_config.errors)
+      select(&:invalid?).map(&:errors).each do |policy_errors|
+        policy_errors.each do |attribute, message|
+          errors.add(attribute, errors.full_message(attribute, message).downcase)
+        end
+      end
+      errors.add(:base, :missing_apicast) unless detect(&:default?)
+    rescue NoMethodError
+      errors.add(:base, :invalid_format)
+    end
   end
 
   def policies_config_structure
-    parsed_config = read_and_parse_policies_config!
-    policies_object = PoliciesConfig.new(parsed_config)
-    return if policies_object.valid?
-    policies_object.errors.each do |attribute, message|
-      errors.add(:policies_config, errors.full_message(attribute, message).downcase)
+    return if policies_config.valid?
+
+    policies_config.errors.each do |attribute, message|
+      errors.add(:policies_config, errors.full_message(attribute, message))
     end
-  rescue JSON::ParserError
-    errors.add(:policies_config, :invalid_format)
   end
 
   def create_default_secret_token
@@ -645,4 +682,5 @@ class Proxy < ApplicationRecord
   def generate_port(proxy_attribute)
     PortGenerator.new(self).call(proxy_attribute)
   end
+
 end

@@ -18,8 +18,7 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
   ##~ op.parameters.add @parameter_service_id_by_id_name
   #
   def show
-    policies_config = Proxy::PoliciesConfig.new(proxy.policies_config)
-    respond_with(policies_config, represent_on_error: :resource)
+    respond_with(proxy.policies_config, represent_on_error: :resource)
   end
 
   ##~ e = sapi.apis.add
@@ -41,9 +40,7 @@ class Admin::Api::Services::Proxy::PoliciesController < Admin::Api::Services::Ba
       ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox)
     end
 
-    policies_config = Proxy::PoliciesConfig.new(proxy.policies_config)
-    policies_config.valid? # Needed to set errors if any
-    respond_with(policies_config, represent_on_error: :resource)
+    respond_with(proxy.policies_config, represent_on_error: :resource)
   end
 
   private
