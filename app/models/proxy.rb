@@ -129,7 +129,7 @@ class Proxy < ApplicationRecord
     deployment_option&.inquiry
   end
 
-  delegate :find_policy_config_by, :policy_chain, to: :policies_config
+  delegate :policy_chain, to: :policies_config
   delegate :self_managed?, :hosted?, to: :deployment_option
   delegate :service_token, to: :service, allow_nil: true
 
@@ -137,6 +137,9 @@ class Proxy < ApplicationRecord
     !hosted? && !self_managed?
   end
 
+  def find_policy_config_by(name:, version:)
+    policies_config.find_by(name: name, version: version)
+  end
 
   def oidc_configuration
     super || build_oidc_configuration(standard_flow_enabled: true)
@@ -498,15 +501,16 @@ class Proxy < ApplicationRecord
       @enabled = symbolized_attributes[:enabled]
     end
 
-    def matches?(name:, version:)
-      self.name == name && self.version == version
+    def matches?(other)
+      name == other.name && version == other.version
     end
+    alias =~ matches?
 
     def default?
       name == DEFAULT_POLICY["name"]
     end
 
-    def self.create_default
+    def self.default
       new(DEFAULT_POLICY)
     end
 
@@ -521,7 +525,7 @@ class Proxy < ApplicationRecord
     end
 
     def ==(other)
-      %i[name version configuration enabled].all? { |key| send(key) == other.send(key) }
+      %i[name version configuration enabled].all? { |key| public_send(key) == other.public_send(key) }
     end
     alias eql? ==
 
@@ -560,9 +564,9 @@ class Proxy < ApplicationRecord
     end
 
     def find_by(name:, version:)
-      find { |config| config.matches?(name: name, version: version) }
+      target = PolicyConfig.new({name: name, version: version, configuration: {}, enabled: false})
+      find { |config| config.matches?(target) }
     end
-    alias find_policy_config_by find_by
 
     def chain
       select(&:enabled).map(&:to_chain_value)
@@ -583,7 +587,7 @@ class Proxy < ApplicationRecord
 
     def policies_normalize(parsed_policies)
       policies = parsed_policies.map { |attrs| PolicyConfig.new(attrs) }
-      policies.tap { |list| list.push(PolicyConfig.create_default) if policies.none?(&:default?) }
+      policies.tap { |list| list.push(PolicyConfig.default) if policies.none?(&:default?) }
     end
 
     def policies_configs_are_correct

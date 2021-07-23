@@ -30,11 +30,10 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
 
   def test_update_without_errors
     example_policy = {'name' => 'alaska', 'version' => '1', 'configuration' => {}}
-
     put admin_api_service_proxy_policies_path(valid_params.merge({ proxy: { policies_config: [example_policy].to_json }}))
     assert_response :success
 
-    get admin_api_service_proxy_policies_path(format: :json, **valid_params)
+    get admin_api_service_proxy_policies_path(**valid_params)
     assert_response :success
     assert_equal JSON.parse(response.body)["policies_config"], [example_policy, DEFAULT_POLICY]
   end
