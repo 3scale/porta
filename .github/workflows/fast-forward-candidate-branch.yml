@@ -8,7 +8,7 @@ on:
       ref:
         description: 'The SHA1 or branch name the candidate branch will point to'
         required: true
-        default: refs/heads/master
+        default: origin/master
 
 jobs:
   fast-forward:
@@ -16,6 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.ref }}
-      - run: git push origin HEAD:3scale-${{ github.event.inputs.release }}-candidate
+          ref: 3scale-${{ github.event.inputs.release }}-candidate
+          fetch-depth: 0
+      - run: |
+            git checkout -b 3scale-${{ github.event.inputs.release }}-candidate
+            git merge ${{ github.event.inputs.ref }} --ff-only
+            git push origin HEAD:3scale-${{ github.event.inputs.release }}-candidate
+
         name: Push to candidate branch
