@@ -17,6 +17,8 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
 
   liquify prefix: 'applications'
 
+  delegate :services, :single_service?, to: :site_account
+
   def index
     cinstances = current_account.bought_cinstances.includes(:service)
                    .order_for_dev_portal.paginate(page: params[:page])
@@ -92,9 +94,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def choose_service
-    @services = current_account.services_can_create_app_on
-    redirect_to new_provider_admin_application_path(service_id: @services.first.id) if @services.count == 1
-    assign_drops services: Liquid::Drops::Collection.new(@services)
+    assign_drops services: Liquid::Drops::Collection.new(current_account.services_can_create_app_on)
   end
 
   def destroy
@@ -113,10 +113,12 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def service
-    @service ||= if not site_account.multiservice?
-                   site_account.services.default
-                 elsif service_id = params[:service_id]
-                   site_account.services.find_by_id_or_system_name(service_id)
+    @service ||= if single_service?
+                   services.first
+                 elsif (service_id = params[:service_id])
+                   services.where(id: service_id).or(services.where(system_name: service_id)).first
+                 elsif current_account.services_can_create_app_on.count == 1
+                   current_account.services_can_create_app_on.first
                  end
   end
 
