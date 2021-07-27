@@ -105,13 +105,17 @@
     return (xhr.getResponseHeader('Content-Type').search(/xml/) > -1) ? true : false;
   }
 
+  function apiDocsProxyEnabled(){
+    window.enableApiDocsProxy;
+  }
+
   function dispatch(){
-    <% if Rails.configuration.three_scale.active_docs_proxy_disabled %>
+    if (apiDocsProxyEnabled() && !(getHost()) === window.location.origin) {
+       dispatchProxy();
+    }
+    else{
       dispatchDirect();
-    <% else %>
-      if((getHost()) === window.location.origin) { dispatchDirect(); }
-      else { dispatchProxy(); }
-    <% end %>
+    }
   }
 
   /**

@@ -13,6 +13,7 @@ module Liquid
       THREESCALE_JAVASCRIPTS = %w[buyer/1/analytics plans_widget.js plans_widget_v2.js active-docs/application.js stats.js].freeze
       THREESCALE_WEBPACK_PACKS = %w[stats.js active_docs.js load_stripe.js].freeze
       THREESCALE_IMAGES      = %w[spinner.gif tick.png cross.png].freeze
+      ACTIVE_DOCS_JS = %w[active-docs/application.js active_docs.js].freeze
 
       desc "Group collection by some key."
       example "Group applications by service.", %(
@@ -50,9 +51,9 @@ module Liquid
         js = RailsHelpers.replace_googleapis(name)
         case
         when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
-          view.javascript_pack_tag(name, options)
+          active_docs_proxy(name) + view.javascript_pack_tag(name, options)
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
-          view.javascript_include_tag(js)
+          active_docs_proxy(js) + view.javascript_include_tag(js)
         else
           RailsHelpers.content_tag(:script, '', src: get_path(name))
         end
@@ -267,6 +268,16 @@ module Liquid
 
       def button(title, url, method, options={})
         view.button_to title.to_s, url.to_s, {method: method}.merge(options)
+      end
+
+      ENABLE_API_DOCS_PROXY = "window.enableApiDocsProxy = #{Rails.configuration.three_scale.active_docs_proxy_disabled.blank?};\n"
+
+      def active_docs_proxy(name)
+        if name.in?(ACTIVE_DOCS_JS)
+          view.javascript_tag ENABLE_API_DOCS_PROXY
+        else
+          "".html_safe
+        end
       end
     end
   end
