@@ -154,15 +154,6 @@ build-envs:
 
 commands: # reusable commands with parameters
 
-  checkout-with-submodules:
-    steps:
-      - checkout
-      - run:
-          name: "Pull Submodules"
-          command: |
-            git submodule init
-            git submodule update
-
   install-gem-dependencies:
     parameters:
       extra-deps:
@@ -170,7 +161,7 @@ commands: # reusable commands with parameters
         type: steps
         default: []
     steps:
-      - checkout-with-submodules
+      - checkout
       - restore-gem-cache
       - steps: << parameters.extra-deps >>
       - run:
@@ -216,7 +207,7 @@ commands: # reusable commands with parameters
         type: steps
         default: []
     steps:
-      - checkout-with-submodules
+      - checkout
       - *attach-to-workspace
       - *use-example-config-files
       - steps: << parameters.extra-deps >>
@@ -236,7 +227,7 @@ commands: # reusable commands with parameters
         type: steps
         default: []
     steps:
-      - checkout-with-submodules
+      - checkout
       - *attach-to-workspace
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
@@ -260,7 +251,7 @@ commands: # reusable commands with parameters
         type: steps
         default: []
     steps:
-      - checkout-with-submodules
+      - checkout
       - *attach-to-workspace
       - *use-example-config-files
       - steps: << parameters.extra-deps >>
@@ -412,7 +403,7 @@ jobs:
     executor:
       name: << parameters.executor >>
     steps:
-      - checkout-with-submodules
+      - checkout
       - *restore-npm-cache
       - run:
           name: Install Node dependencies
@@ -434,7 +425,7 @@ jobs:
     executor:
       name: << parameters.executor >>
     steps:
-      - checkout-with-submodules
+      - checkout
       - *attach-to-workspace
       - run:
           name: Precompile assets
@@ -459,7 +450,7 @@ jobs:
     executor:
       name: << parameters.executor >>
     steps:
-      - checkout-with-submodules
+      - checkout
       - *attach-to-workspace
       - run:
           name: Licences check
@@ -493,7 +484,7 @@ jobs:
     executor:
       name: << parameters.executor >>
     steps:
-      - checkout-with-submodules
+      - checkout
       - *attach-to-workspace
       - run:
           name: Jest specs

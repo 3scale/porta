@@ -2,12 +2,10 @@
 
 Follow these instructions to set up a development environment, build and deploy this project on your machine.
 
-## Clone the repo, including submodules
-
-This project uses [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), so please ensure you include them by simply adding `--recurse-submodules`:
+## Clone the repo
 
 ```bash
-git clone --recurse-submodules https://github.com/3scale/porta.git
+git clone https://github.com/3scale/porta.git
 ```
 
 ## Quick Setup with Docker
