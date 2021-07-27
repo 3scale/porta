@@ -1240,7 +1240,7 @@ en:
         buyers_manage_keys: "Developers can manage Keys"
         referrer_filters_required: "Require referrer filtering"
         custom_keys_enabled: "Enable custom keys"
-        buyer_key_regenerate_enabled: "Allow developers to regenerate access keys"
+        buyer_key_regenerate_enabled: "Allow developers to regenerate client secret"
         mandatory_app_key: "Require at least 1 application key"
         buyer_can_select_plan: "Developers can select a plan when creating a new application"
         backend_version: "Authentication: Parameters developers must send to the API in order to identify themselves:"
