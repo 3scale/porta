@@ -2,6 +2,9 @@
 
 class Account < ApplicationRecord
   attribute :credit_card_expires_on, :date
+  self.ignored_columns = %i[proxy_configs_file_name proxy_configs_content_type proxy_configs_file_size
+                            proxy_configs_updated_at proxy_configs_conf_file_name proxy_configs_conf_content_type
+                            proxy_configs_conf_file_size proxy_configs_conf_updated_at]
 
   # need to reset column information to clear column_names and such
   reset_column_information
@@ -265,9 +268,8 @@ class Account < ApplicationRecord
             :billing_address_name, :billing_address_address1, :billing_address_address2, :billing_address_city,
             :billing_address_state, :billing_address_country, :billing_address_zip, :billing_address_phone,
             :org_legaladdress_cont, :city, :state_region, :state, :timezone, :from_email, :primary_business,
-            :business_category, :zip, :self_domain, :s3_prefix, :proxy_configs_file_name, :support_email,
-            :finance_support_email, :billing_address_first_name, :billing_address_last_name, :proxy_configs_conf_file_name,
-            :proxy_configs_conf_content_type, :po_number, :vat_code, :fiscal_code, :proxy_configs_content_type,
+            :business_category, :zip, :self_domain, :s3_prefix, :support_email, :finance_support_email,
+            :billing_address_first_name, :billing_address_last_name, :po_number, :vat_code, :fiscal_code,
             length: { maximum: 255 }
 
   validates :extra_fields, :invoice_footnote, :vat_zero_text,
