@@ -109,6 +109,7 @@ oracle-database:
 		--security-opt apparmor=docker-default \
 		-p 1521:1521 -p 5500:5500 \
 		--name oracle-database \
+		-v $(ORACLE_DATA_DIR)/oracle-database:/opt/oracle/oradata \
 		-e ORACLE_PDB=systempdb \
 		-e ORACLE_SID=threescale \
 		-e ORACLE_PWD=threescalepass \
