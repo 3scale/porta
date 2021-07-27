@@ -6,7 +6,11 @@ class Attributes::PoliciesConfig < ActiveRecord::Type::Text
   end
 
   def serialize(value)
-    value.to_json
+    if :oracle == System::Database.adapter.to_sym
+      value.as_json
+    else
+      value.to_json
+    end
   end
 
   def changed_in_place?(raw_old_value, new_value)
