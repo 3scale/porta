@@ -112,7 +112,6 @@ Style/ClassVars:
     - 'app/lib/three_scale/xml/builder.rb'
     - 'script/stress-test/signup.rb'
     - 'test/integration/finance/api/invoices_test.rb'
-    - 'test/proxy_helpers/sentiment/sentiment_api.rb'
     - 'test/test_helpers/time.rb'
     - 'test/unit/permalink_fu_test.rb'
 
@@ -207,7 +206,6 @@ Style/EmptyLiteral:
     - 'app/lib/three_scale/middleware/multitenant.rb'
     - 'test/functional/developer_portal/admin/account/ogone_controller_test.rb'
     - 'test/functional/developer_portal/admin/account/plan_changes_controller_test.rb'
-    - 'test/proxy_helpers/sentiment/analyzer.rb'
     - 'test/unit/apicast/abstract_generator_test.rb'
     - 'test/unit/proxy_rule_test.rb'
     - 'test/unit/sso_token_test.rb'
@@ -552,7 +550,6 @@ Style/RedundantReturn:
     - 'app/models/plan.rb'
     - 'lib/developer_portal/lib/cms/toolbar.rb'
     - 'lib/messenger_old.rb'
-    - 'test/proxy_helpers/sentiment/analyzer.rb'
 
 # Offense count: 353
 # Cop supports --auto-correct.
@@ -614,7 +611,6 @@ Style/Semicolon:
     - 'lib/tasks/fields_definitions.rake'
     - 'lib/tasks/multitenant.rake'
     - 'test/factories/account.rb'
-    - 'test/proxy_helpers/sentiment/sentiment_api.rb'
     - 'test/unit/logic/buyer_test.rb'
     - 'test/unit/permalink_fu_test.rb'
     - 'test/unit/service_test.rb'
