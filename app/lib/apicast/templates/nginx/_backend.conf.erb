@@ -1,4 +1,0 @@
-upstream backend_<%= backend.id %> {
-  # service name: <%= backend.name %> ;
-  server <%= backend.host %>:<%= backend.port %> max_fails=5 fail_timeout=30;
-}
