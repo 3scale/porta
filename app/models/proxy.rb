@@ -537,6 +537,7 @@ class Proxy < ApplicationRecord
     include Enumerable
 
     delegate :each, :to_json, :as_json, to: :policies_config
+    alias to_s to_json
     attr_reader :policies_config
     protected :policies_config
 
