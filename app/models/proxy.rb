@@ -16,7 +16,7 @@ class Proxy < ApplicationRecord
 
   belongs_to :service, touch: true, inverse_of: :proxy, required: true
   attr_readonly :service_id
-  attribute :policies_config, Attributes::PoliciesConfig.new
+  attribute :policies_config, :policies_config
 
   has_many :proxy_rules, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :proxy
   has_many :proxy_configs, dependent: :delete_all, inverse_of: :proxy
