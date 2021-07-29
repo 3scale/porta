@@ -25,8 +25,8 @@ class Provider::Admin::ApplicationsController < FrontendController
   def index; end
 
   def show
-    @utilization = @cinstance.backend_object.utilization(@cinstance.service.metrics)
-    @service = Cinstance.find(params.require(:id)).service
+    @service = @cinstance.service
+    @utilization = @cinstance.backend_object.utilization(@service.metrics)
   end
 
   def new; end

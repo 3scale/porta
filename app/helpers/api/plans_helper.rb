@@ -2,6 +2,13 @@
 
 module Api::PlansHelper
 
+  def change_application_plan_data(application)
+    {
+      'application-plans': application_plans_data(application.available_application_plans),
+      'path': change_plan_provider_admin_application_path
+    }
+  end
+
   def default_application_plan_data(service, plans)
     {
       'service': service.to_json(root: false, only: %i[id name]),
