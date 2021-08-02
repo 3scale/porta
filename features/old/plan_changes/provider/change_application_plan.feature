@@ -1,3 +1,4 @@
+@javascript
 Feature: Change Application Plan
   In order to fullfill special requirements of my clients
   As a provider
@@ -21,9 +22,8 @@ Feature: Change Application Plan
      And I log in as provider "foo.3scale.localhost"
      And I go to the provider side "app" application page
 
-    Then I should see "Change Plan"
-    When I select "Advanced" from "cinstance_plan_id"
-     And I press "Change"
+    When I select "Advanced" from "Change plan"
+     And I press "Change plan"
     Then I should see "Plan changed to 'Advanced'"
      And I log out
 
