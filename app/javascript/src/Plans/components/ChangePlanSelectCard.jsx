@@ -9,8 +9,7 @@ import {
   Button,
   Form,
   Card,
-  CardBody,
-  CardHeader
+  CardBody
 } from '@patternfly/react-core'
 import { Select as SelectFormGroup } from 'Common'
 import { CSRFToken } from 'utilities'
@@ -31,9 +30,6 @@ const ChangePlanSelectCard = ({ applicationPlans, path }: Props): React.Node => 
 
   return (
     <Card id="change_plan_card">
-      <CardHeader>
-        <h3>Change plan</h3>
-      </CardHeader>
       <CardBody>
         <Form
           acceptCharset="UTF-8"
@@ -46,7 +42,7 @@ const ChangePlanSelectCard = ({ applicationPlans, path }: Props): React.Node => 
 
           {/* $FlowIgnore[prop-missing] description is optional */}
           <SelectFormGroup
-            label=""
+            label={<h3>Change plan</h3>}
             // $FlowIgnore[incompatible-type] plan is either Plan or null
             item={plan}
             // $FlowIgnore[incompatible-type] id can be either number or string

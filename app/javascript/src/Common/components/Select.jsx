@@ -11,7 +11,7 @@ type Props<T: Record> = {
   item: T | null,
   items: T[],
   onSelect: (T | null) => void,
-  label: string,
+  label: React.Node,
   fieldId: string,
   name: string,
   placeholderText?: string,
