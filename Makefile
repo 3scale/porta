@@ -102,14 +102,11 @@ schema:
 	DATABASE_URL=$(POSTGRES_DATABASE_URL) bundle exec rake db:migrate
 
 oracle-database: ## Starts Oracle database container
-oracle-database: ORACLE_DATA_DIR ?= $(HOME)
 oracle-database:
 	[ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" = "true" ] || docker start oracle-database || docker run \
 		--shm-size=6gb \
-		--security-opt apparmor=docker-default \
 		-p 1521:1521 -p 5500:5500 \
 		--name oracle-database \
-		-v $(ORACLE_DATA_DIR)/oracle-database:/opt/oracle/oradata \
 		-e ORACLE_PDB=systempdb \
 		-e ORACLE_SID=threescale \
 		-e ORACLE_PWD=threescalepass \
