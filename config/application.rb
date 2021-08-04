@@ -177,8 +177,6 @@ module System
     config.three_scale.redhat_customer_portal.merge!(try_config_for(:redhat_customer_portal) || {})
 
     config.three_scale.payments.enabled = false
-    config.three_scale.active_merchant_mode ||= Rails.env.production? ? :production : :test
-
     config.three_scale.rolling_updates.features = try_config_for(:rolling_updates).deep_merge(try_config_for(:"extra-rolling_updates") || {})
 
     config.three_scale.service_discovery = ActiveSupport::OrderedOptions.new
@@ -210,6 +208,7 @@ module System
     three_scale.each do |key, val|
       config.public_send("#{key}=", val)
     end
+    config.three_scale.active_merchant_mode ||= Rails.env.production? ? :production : :test
 
     config.action_mailer.default_url_options = { protocol: 'https' }
     config.action_mailer.delivery_method = :smtp
