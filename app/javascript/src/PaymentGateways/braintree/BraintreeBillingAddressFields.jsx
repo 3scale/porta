@@ -27,7 +27,7 @@ const BraintreeBillingAddressFields = ({
 
   return (
     <>
-      <legend>Biling address</legend>
+      <legend>Billing address</legend>
       <ul className="list-unstyled">
         <ListItem id="customer_credit_card_billing_address_company_input">
           <Label
