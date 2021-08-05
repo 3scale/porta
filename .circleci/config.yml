@@ -104,8 +104,8 @@ postgres-container: &postgres-container
 oracle-db-container: &oracle-db-container
   image: quay.io/3scale/oracle:19.3.0-ee-ci-prebuilt
   auth:
-    username: $DOCKER_USER
-    password: $DOCKER_PASS
+    username: $DOCKER_USERNAME
+    password: $DOCKER_PASSWORD
   environment:
     ORACLE_CHARACTERSET: 'AL32UTF8'
     ORACLE_SID: 'threescale'
@@ -902,18 +902,28 @@ workflows:
       - unit-oracle:
           requires:
             - deps_bundler_oracle
+          context:
+            - quay
       - functional-oracle:
           requires:
             - assets_precompile
+          context:
+            - quay
       - integration-oracle:
           requires:
             - assets_precompile
+          context:
+            - quay
       - rspec-oracle:
           requires:
             - deps_bundler_oracle
+          context:
+            - quay
       - cucumber-oracle:
           requires:
             - assets_precompile
+          context:
+            - quay
       - notify_success:
           requires:
             - rspec-oracle
