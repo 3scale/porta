@@ -22,10 +22,10 @@ describe('StatsMethodsTable', () => {
     methodsTable.render()
 
     let table = document.querySelector('table.StatsMethodsTable')
-    let nameCell = table.querySelectorAll('.StatsMethodsTable-name')[0]
-    let sinceCell = table.querySelectorAll('.StatsMethodsTable-since')[0]
-    let untilCell = table.querySelectorAll('.StatsMethodsTable-until')[0]
-    let totalCell = table.querySelectorAll('.StatsMethodsTable-total')[0]
+    let nameCell = table.querySelector('.StatsMethodsTable-name')
+    let sinceCell = table.querySelector('.StatsMethodsTable-since')
+    let untilCell = table.querySelector('.StatsMethodsTable-until')
+    let totalCell = table.querySelector('.StatsMethodsTable-total')
 
     expect(nameCell.innerHTML).toEqual('Charles Bukowski')
     expect(sinceCell.innerHTML).toEqual('16 Aug 1920 00:00:00 PST')
