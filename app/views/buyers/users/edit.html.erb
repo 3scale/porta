@@ -24,7 +24,7 @@
   <% end %>
 
   <%= form.buttons do %>
-    <%= form.commit_button %>
+    <%= form.button 'Update User', button_html: { class: "pf-c-button pf-m-primary" } %>
     <% if @user.can_be_destroyed? -%>
       <%= delete_link_for admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), data: {confirm: "Are you sure you want to destroy user #{@user.username}?" } %>
     <% end -%>
