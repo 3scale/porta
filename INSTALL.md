@@ -321,8 +321,18 @@ You may need to set up the database from scratch again, in that case, use `db:re
 bundle exec rake db:reset # This will drop and set up the database
 ```
 
-**NOTE:** This will seed the application and creates the Master, Provider & Developer accounts that are accessible through: `http://master-account.3scale.localhost:3000/`, `http://provider-admin.3scale.localhost:3000/`, `http://provider.3scale.localhost:3000/` respectively.
-Note down the credentials generated at this moment, to log in to each of the portals above.
+### Generating credentials
+
+Command above will seed the application and create the Master, Provider & Developer accounts that are accessible through: `http://master-account.3scale.localhost:3000/`, `http://provider-admin.3scale.localhost:3000/`, `http://provider.3scale.localhost:3000/` respectively. Take note of the credentials generated at this moment, to log in to each of the portals above.
+
+Alternatively you can set environment variables before running command to have predictable setup. For more you can look at `db/seed.rb`.
+
+```bash
+MASTER_PASSWORD=p
+USER_PASSWORD=p # this is provider admin password
+ADMIN_ACCESS_TOKEN=secret
+APICAST_ACCESS_TOKEN=secret
+```
 
 ## Run Porta
 
@@ -333,3 +343,19 @@ $ env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at 
 ```
 
 > The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
+
+### Environment
+
+You can modify behavior with the following environment variables.
+
+```bash
+APICAST_REGISTRY_URL=https://apicast-staging.proda.3sca.net/policies
+# modify Prometheus port in case of a conflict
+PROMETHEUS_EXPORTER_PORT=9398
+# queried in config/core.yml, must match APIsonator configuration
+CONFIG_INTERNAL_API_USER=system_app
+CONFIG_INTERNAL_API_PASSWORD=token
+# queried in config/zync.yml
+ZYNC_AUTHENTICATION_TOKEN=token
+ZYNC_ENDPOINT=http://127.0.0.1:5000
+```
