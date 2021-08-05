@@ -210,7 +210,7 @@ Run [Yarn](https://www.yarnpkg.com/) to install all the required dependencies:
 yarn install
 ```
 
-## Manual setup on Fedora (29)
+## Manual setup on Fedora (34)
 
 ### Prerequisites
 
@@ -228,9 +228,11 @@ ruby -v
 
 #### Node version
 
-The project supports **Version: 8.X.X**.
+The project supports **Version: 10.X.X**.
 
-Install Node version 8 and ensure that the node is properly configured in the `PATH` environment variable.
+```bash
+dnf module install nodejs:10
+```
 
 #### Dependencies
 
@@ -249,6 +251,15 @@ docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mys
 ```
 
 Alternatively, you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
+
+#### Sphinx Search
+
+Install package and run it
+
+```shell
+sudo dnf install sphinx
+bundle exec rake ts:configure ts:start
+```
 
 #### Redis
 
