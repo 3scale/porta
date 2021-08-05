@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 import {StatsMenu} from 'Stats/lib/menu'
 import {StatsStore} from 'Stats/lib/store'
 import {StatsState} from 'Stats/lib/state'
@@ -61,16 +59,15 @@ describe('StatsMenu', () => {
     })
 
     it('should render HTML', () => {
-      let element = $('#menu')
+      let element = document.querySelector('#menu')
 
-      expect(element.find('ol > li a[data-number][data-unit]')).toHaveLength(4)
-      expect(element.find('select > option')).toHaveLength(3)
-      expect(element.find('select > option:first').val()).toBe('hour')
+      expect(element.querySelectorAll('ol > li a[data-number][data-unit]')).toHaveLength(4)
+      expect(element.querySelectorAll('select > option')).toHaveLength(3)
+      expect(element.querySelector('select > option:first-child').value).toBe('hour')
     })
 
     it('should set the right period state', () => {
-      let periodLink = $('#menu').find('.period-24-hour')
-
+      let periodLink = document.querySelector('#menu .period-24-hour')
       periodLink.click()
 
       expect(menu.statsState.state.dateRange.granularity).toBe('hour')
@@ -78,8 +75,12 @@ describe('StatsMenu', () => {
     })
 
     it('should set the right granularity when selected', () => {
-      $(menu.element).find('select>option:eq(2)').attr('selected', true)
-      $(menu.element).find('select').trigger('change')
+      const menuElement = document.querySelector('#menu')
+      const select = menuElement.querySelector('select')
+      select.querySelectorAll('option')[2].selected = true
+
+      const event = new Event('change')
+      select.dispatchEvent(event)
 
       expect(menu.statsState.state.dateRange.granularity).toBe('month')
     })
@@ -103,12 +104,12 @@ describe('StatsMenu', () => {
 
       menu.render()
 
-      let periodLink = $('#menu').find('.period-24-hour')
+      let periodLink = document.querySelector('#menu .period-24-hour')
 
       periodLink.click()
 
-      expect(window.history.state.dateRange.granularity).toBe(periodLink.data('unit'))
-      expect(window.history.state.dateRange.period.number).toBe(periodLink.data('number'))
+      expect(window.history.state.dateRange.granularity).toBe('hour')
+      expect(window.history.state.dateRange.period.number).toBe(24)
     })
 
     it('should show the right menu when load from url', () => {
@@ -124,8 +125,10 @@ describe('StatsMenu', () => {
       menu.render()
       menu.statsState.store.getStateFromURL()
 
-      expect($(menu.element).find('.StatsMenu-customLink--since').text()).toBe('08/01/2015')
-      expect($(menu.element).find('.StatsMenu-customLink--until').text()).toBe('08/10/2015')
+      const statsMenu = document.querySelector('.StatsMenu')
+
+      expect(statsMenu.querySelector('.StatsMenu-customLink--since').innerHTML).toBe('08/01/2015')
+      expect(statsMenu.querySelector('.StatsMenu-customLink--until').innerHTML).toBe('08/10/2015')
     })
   })
 })

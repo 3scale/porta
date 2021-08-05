@@ -1,5 +1,4 @@
 import { StatsApplicationsTable } from 'Stats/lib/applications_table'
-import $ from 'jquery'
 
 describe('StatsApplicationsTable', () => {
   let applicationsTable = new StatsApplicationsTable({ container: '#applications_table' })
@@ -26,15 +25,15 @@ describe('StatsApplicationsTable', () => {
     ]
     applicationsTable.render()
 
-    let $table = $('table#applications_table')
-    let $application = $table.find('.StatsApplicationsTable-application').first()
-    let $account = $table.find('.StatsApplicationsTable-account').first()
-    let $total = $table.find('.StatsApplicationsTable-total').first()
+    let table = document.querySelector('table#applications_table')
+    let application = table.querySelectorAll('.StatsApplicationsTable-application')[0]
+    let account = table.querySelectorAll('.StatsApplicationsTable-account')[0]
+    let total = table.querySelectorAll('.StatsApplicationsTable-total').[0]
 
-    expect($application.prop('href')).toBe(`${window.location.origin}/apiconfig/services/5/application/13`)
-    expect($application.text()).toBe('Xiam')
-    expect($account.prop('href')).toBe(`${window.location.origin}/buyers/account/7`)
-    expect($account.text()).toBe('Chino')
-    expect($total.text()).toBe('42')
+    expect(application.href).toBe(`${window.location.origin}/apiconfig/services/5/application/13`)
+    expect(application.innerHTML).toBe('Xiam')
+    expect(account.href).toBe(`${window.location.origin}/buyers/account/7`)
+    expect(account.innerHTML).toBe('Chino')
+    expect(total.innerHTML).toBe('42')
   })
 })

@@ -75,6 +75,7 @@ describe('ChartManager', () => {
     expect(statsState.setState).toHaveBeenCalledWith({seriesTotal: 111}, [ 'seriesTotal' ], false)
   })
 
+  // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should update chart when refresh event was triggered', () => {
     jest.spyOn(chartManager, 'updateChart')
     $(statsState).trigger('refresh')
