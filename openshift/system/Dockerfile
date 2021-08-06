@@ -7,7 +7,7 @@ ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
-    NODEJS_SCL=rh-nodejs10
+    NODEJS_SCL=rh-nodejs12
 
 WORKDIR /opt/system
 
@@ -26,7 +26,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby25-rh-c
               mysql \
               postgresql10 postgresql10-devel postgresql10-libs \
               file \
-              rh-nodejs10 \
+              rh-nodejs12 \
     && rpm -i /tmp/sphinxsearch.rpm \
     && rm /tmp/*.rpm \
     && yum install -y epel-release \

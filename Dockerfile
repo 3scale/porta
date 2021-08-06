@@ -1,4 +1,4 @@
-FROM quay.io/3scale/system-builder:ruby26
+FROM quay.io/3scale/system-builder:ruby26-nodejs12
 
 ARG CUSTOM_DB=mysql
 
@@ -9,7 +9,7 @@ ENV DISABLE_SPRING="true" \
     MASTER_PASSWORD="p" \
     USER_PASSWORD="p" \
     LC_ALL="en_US.UTF-8" \
-    PATH="./node_modules/.bin:/opt/rh/rh-nodejs10/root/usr/bin:$PATH" \
+    PATH="./node_modules/.bin:/opt/rh/rh-nodejs12/root/usr/bin:$PATH" \
     DNSMASQ="#" \
     BUNDLE_FROZEN=1 \
     BUNDLE_JOBS=5 \
