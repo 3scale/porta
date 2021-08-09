@@ -59,8 +59,8 @@ const injectParametersToPath = (path: PathItemObject, commonParameters?: Array<P
   }, {})
 )
 
-const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
-  {
+const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => {
+  const res = (responseBody.paths && accountData) ? {
     ...responseBody,
     paths: Object.keys(responseBody.paths).reduce(
       (paths, path) => {
@@ -69,10 +69,15 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
         paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
         return paths
       }, {})
-  }
-)
+  } : responseBody
+  return res
+}
 
-const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint: string): ResponseBody => {
+const injectServerToResponseBody = (responseBody: ResponseBody | string, serviceEndpoint: string): ResponseBody => {
+  if (typeof responseBody === 'string') {
+    return responseBody
+  }
+
   const originalServers = responseBody.servers || []
   const servers = serviceEndpoint ? [{ url: serviceEndpoint }] : originalServers
 
