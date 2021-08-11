@@ -15,7 +15,7 @@ ARG SPHINX_VERSION=2.2.11-1
 
 ADD openshift/system/sphinx-${SPHINX_VERSION}.rhel7.x86_64.rpm /tmp/sphinxsearch.rpm
 
-RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby25-rh-candidate_x86_64_os_.skip_if_unavailable=true \
+RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-candidate_x86_64_os_.skip_if_unavailable=true \
     && rpm -Uvh https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
     && yum -y update \
     && yum remove -y postgresql \
