@@ -58,7 +58,7 @@ export type ResponseBody = {
 }
 
 export type SwaggerResponse = {
- body: ResponseBody,
+ body: ResponseBody | string,
  data: string,
  headers: {},
  obj: {},

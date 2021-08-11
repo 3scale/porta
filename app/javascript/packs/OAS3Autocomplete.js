@@ -59,8 +59,8 @@ const injectParametersToPath = (path: PathItemObject, commonParameters?: Array<P
   }, {})
 )
 
-const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountData: AccountData): ResponseBody => (
-  {
+const injectAutocompleteToResponseBody = (responseBody: ResponseBody | string, accountData: AccountData): ResponseBody | string => {
+  const res = (typeof responseBody !== 'string' && responseBody.paths && accountData) ? {
     ...responseBody,
     paths: Object.keys(responseBody.paths).reduce(
       (paths, path) => {
@@ -69,10 +69,15 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody, accountDat
         paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
         return paths
       }, {})
-  }
-)
+  } : responseBody
+  return res
+}
 
-const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint: string): ResponseBody => {
+const injectServerToResponseBody = (responseBody: ResponseBody | string, serviceEndpoint: string): ResponseBody | string => {
+  if (typeof responseBody === 'string') {
+    return responseBody
+  }
+
   const originalServers = responseBody.servers || []
   const servers = serviceEndpoint ? [{ url: serviceEndpoint }] : originalServers
 
@@ -83,15 +88,7 @@ const injectServerToResponseBody = (responseBody: ResponseBody, serviceEndpoint:
   }
 }
 
-// response.body.method is not present when fetching the spec,
-// is present when doing a request to one of the paths
-const isSpecFetched = (response: SwaggerResponse): boolean => !!response.body.method
-
 export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string, serviceEndpoint: string): Promise<SwaggerResponse> => {
-  if (isSpecFetched(response)) {
-    return response
-  }
-
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
   const body = await fetchData(accountDataUrl)
     .then(data => (
