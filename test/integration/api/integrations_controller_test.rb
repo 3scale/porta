@@ -93,7 +93,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_update_proxy_rule_position
-    ProxyDeploymentService.any_instance.expects(:deploy_v2).returns(true).times(3)
+    ProxyDeploymentService.any_instance.expects(:deploy_staging_v2).returns(true).times(3)
 
     proxy.proxy_rules.destroy_all
     proxy_rule_1, proxy_rule_2 = FactoryBot.create_list(:proxy_rule, 2, proxy: proxy)
