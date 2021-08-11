@@ -29,6 +29,17 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
     }
   }
 
+  const handleOnFilter = (e: SyntheticEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
+    const term = new RegExp(value, 'i')
+
+    const filteredPlans = value !== '' ? plans.filter(b => term.test(b.name)) : plans
+
+    // $FlowIssue[prop-missing] description is optional
+    // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
+    return filteredPlans.map(toSelectOption)
+  }
+
   return (
     <Select
       id="default-plan-select"
@@ -42,6 +53,7 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
       isDisabled={isDisabled}
       selections={selection}
       isCreatable={false}
+      onFilter={handleOnFilter}
     >
       {/* $FlowIssue[prop-missing] description is optional */}
       {/* $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string" */}
