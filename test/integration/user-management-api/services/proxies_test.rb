@@ -43,7 +43,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
   def test_update
     params = provider_key_params.merge(proxy: { endpoint: 'https://alaska.wild' })
 
-    ProxyDeploymentService.any_instance.expects(:deploy_v2).times(2)
+    ProxyDeploymentService.any_instance.expects(:deploy_staging_v2).times(2)
     Proxy.update_all(apicast_configuration_driven: false)
 
     assert_no_change of: ProxyConfig.method(:count) do

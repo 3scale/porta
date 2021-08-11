@@ -11,16 +11,16 @@ class ProxyDeploymentServiceTest < ActiveSupport::TestCase
     @proxy.expects(:apicast_configuration_driven).returns(true)
 
     service = ProxyDeploymentService.new(@proxy)
-    service.expects(:deploy_v2).returns(true)
+    service.expects(:deploy_staging_v2).returns(true)
 
     assert service.call
   end
 
-  test 'deploy with service mesh integration' do
-    @proxy.expects(:apicast_configuration_driven).returns(false)
+  test 'deploy for service mesh' do
+    @proxy.expects(:service_mesh_integration?).returns(true)
 
     service = ProxyDeploymentService.new(@proxy)
-    service.expects(:deploy_v2).returns(true)
+    service.expects(:deploy_staging_v2).returns(true)
     service.expects(:deploy_production_v2).returns(true)
 
     assert service.call
