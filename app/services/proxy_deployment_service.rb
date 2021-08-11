@@ -3,6 +3,7 @@
 class ProxyDeploymentService
   delegate :apicast_configuration_driven,
            :deployable?,
+           :service_mesh_integration?,
            :provider,
            :proxy_configs, to: :@proxy
 
@@ -35,10 +36,10 @@ class ProxyDeploymentService
   def deploy
     return true unless deployable?
 
-    if apicast_configuration_driven?
-      deploy_v2
+    if service_mesh_integration? || !apicast_configuration_driven?
+      deploy_staging_and_production_v2
     else
-      deploy_v2 && deploy_production_v2
+      deploy_staging_v2
     end
   end
 
@@ -46,14 +47,16 @@ class ProxyDeploymentService
     deploy_production_v2 if apicast_configuration_driven?
   end
 
-  def deploy_v2
+  def deploy_staging_v2
     ApicastV2DeploymentService.new(@proxy).call(environment: :sandbox)
   end
 
   def deploy_production_v2
     newest_sandbox_config = proxy_configs.sandbox.newest_first.first
-
     newest_sandbox_config.clone_to(environment: :production) if newest_sandbox_config
   end
 
+  def deploy_staging_and_production_v2
+    deploy_staging_v2 && deploy_production_v2
+  end
 end
