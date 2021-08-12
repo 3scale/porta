@@ -1,11 +1,13 @@
-Given /^(provider "[^"]*") requires accounts to be approved$/ do |provider|
+# frozen_string_literal: true
+
+Given "{provider} requires accounts to be approved" do |provider|
   provider.account_plans.each do |plan|
     plan.approval_required = true
     plan.save!
   end
 end
 
-Given /^(provider "[^"]*") has valid personal details$/ do |provider|
+Given "{provider} has valid personal details" do |provider|
   provider.state_region = "foo"
   provider.city = "bar"
   provider.zip = "zop"
@@ -14,27 +16,26 @@ Given /^(provider "[^"]*") has valid personal details$/ do |provider|
 end
 
 
-Given /^(account "[^"]*") has address "([^"]*)"$/ do |account, address|
+Given "{account} has address {string}" do |account, address|
   account.update_attribute(:org_legaladdress, address)
 end
 
-
-Given /^an account "([^"]*)" signed up to (plan "[^"]*")$/ do |account_name, plan|
+Given "an account {string} signed up to {plan}" do |account_name, plan|
   account = FactoryBot.create(:account, :provider_account => plan.provider_account,
                            :org_name         => account_name)
   account.admin.activate!
   account.buy!(plan)
 end
 
-Given /^(account "[^\"]*") has telephone number "([^\"]*)"$/ do |account, telephone_number|
+Given "{account} has telephone number {string}" do |account, telephone_number|
   account.update_attribute(:telephone_number, telephone_number)
 end
 
-Given /^admin of (account "[^\"]*") has email "([^\"]*)"$/ do |account, email|
+Given "admin of {account} has email {string}" do |account, email|
   account.admins.first.update_attribute(:email, email)
 end
 
-Given /^(account "[^\"]*") is deleted$/ do |account|
+Given "{account} is deleted" do |account|
   account.delete
 end
 
@@ -80,7 +81,7 @@ Then /^I should see the value of the customers type field is "([^\"]*)"$/ do |va
   response.should have_xpath("//input[@id='account_profile_attributes_customers_type_#{value.downcase}' and @checked='checked']")
 end
 
-Then /^(account "[^\"]*") should be (pending|approved|rejected)$/ do |account, state|
+Then "{account} should be {state}" do |account, state|
   assert_equal state, account.state
 end
 
@@ -96,7 +97,7 @@ Then /^I should see the account details:$/ do |table|
   table.diff! extract_table('#account-overview', 'tr', 'th,td')
 end
 
-Then /^(provider "[^"]*") time zone should be "([^"]*)"$/ do |provider, time_zone|
+Then "{provider} time zone should be {string}" do |provider, time_zone|
   provider.timezone.should == time_zone
 end
 
@@ -104,11 +105,12 @@ Then /^the provider time zone is "([^"]*)"$/ do |time_zone|
   @provider.update_column(:timezone, time_zone)
 end
 
-Then /^(account "[^"]*") should be (provider|buyer|master)$/ do |account,type|
+# FIXME: it should be possible to use regex Then /^{account} should be (provider|buyer|master)$/ do |account,type|
+Then "{account} should be {account_type}" do |account, type|
   assert account.send("#{type}?"), "Account '#{account.org_name}' is not a #{type}"
 end
 
-Given /^((?:account|buyer|provider) "[^"]*") has only one admin "([^"]*)"$/ do |account, username|
+Given "{buyer} has only one admin {string}" do |buyer, username|
   to_be_admin = account.users.find_by_username!(username)
 
   account.users.each do |user|

@@ -1,18 +1,15 @@
+# frozen_string_literal: true
 
-Given /^(provider "[^"]*") has config value "([^"]*)" set to (true|false)$/ do |provider, name, value|
-  raise 'Use specific settings step!'
-end
-
-Given /^(provider "[^"]*") has signup (enabled|disabled)$/ do |provider, value|
-  if value == 'enabled'
+Given "{provider} has signup {enabled}" do |provider, enabled|
+  if enabled
     provider.enable_signup!
   else
     provider.disable_signup!
   end
 end
 
-Given /^(provider "[^"]*") has multiple applications (enabled|disabled)$/ do |provider, value|
-  if value == 'enabled'
+Given "{provider} has multiple applications {enabled}" do |provider, enabled|
+  if enabled
     provider.settings.allow_multiple_applications!
     provider.settings.show_multiple_applications!
   elsif provider.settings.can_deny_multiple_applications?
@@ -31,9 +28,9 @@ Given /^provider "([^"]*)" has Browser CMS (activated|deactivated)$/ do |provide
 end
 
 
-Given /^(provider "[^\"]*") uses backend (?:v(\d+)|(oauth)) in his default service$/ do |provider, version,oauth|
+Given "{provider} uses backend {backend_version} in his default service" do |provider, backend_version|
   service = provider.default_service
-  service.backend_version = oauth || version
+  service.backend_version = backend_version
   service.save!
 end
 
@@ -59,15 +56,15 @@ When /^I select "([^"]*)" for config value "([^"]*)"$/ do |value, name|
   field.find(%(option:contains("#{value}"))).select_option
 end
 
-Then /^(provider "[^"]*") should have config value "([^"]*)" set to "([^"]*)"$/ do |provider, name, value|
+Then "{provider} should have config value {string} set to {string}" do |provider, name, value|
   assert_equal value, provider.config[name]
 end
 
-Then /^(provider "[^"]*") should have config value "([^"]*)" set to (true|false)$/ do |provider, name, value|
-  assert_equal (value == 'true'), provider.config[name]
+Then "{provider} should have config value {string} set to {true_or_false}" do |provider, name, set|
+  assert_equal set, provider.config[name]
 end
 
-Then /^(provider "[^"]*") should not have config value "([^"]*)"$/ do |provider, name|
+Then "{provider} should not have config value {string}" do |provider, name|
   assert_nil provider.config[name]
 end
 
@@ -110,7 +107,7 @@ Then /^I should not see button "([^"]*)" for config value "([^"]*)"$/ do |label,
 end
 
 
-Given /^(provider "[^\"]*") uses (Janrain|internal|Cas) authentication$/ do |provider, strategy|
+Given "{provider} uses {authentication_strategy} authentication" do |provider, strategy|
   settings = provider.settings
   settings.authentication_strategy = strategy.downcase
   settings.cas_server_url = "http://mamacit.as" if strategy.casecmp("cas").zero?

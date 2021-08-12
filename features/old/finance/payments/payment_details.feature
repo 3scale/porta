@@ -9,6 +9,7 @@ Feature: Buyer's payment details
     And provider "foo.3scale.localhost" is charging
     Given provider "foo.3scale.localhost" has "finance" switch visible
 
+  @javascript @chrome
   Scenario: Informational billing, credit card details provided.
     Given a published plan "Basic" of provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" manages payments with "braintree_blue"

@@ -7,6 +7,7 @@ Feature: Notifications
     Given a provider
       And all the rolling updates features are off
 
+  # FIXME: current_account.provider_can_use? :new_notification_system -> true so the test fails
   Scenario: Navigate to notifications page
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"

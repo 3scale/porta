@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 When /^I want to go to (.+)$/ do |page|
+  # TODO: move path_to into transformer and use "I want to go to {link_to_page}"
   @want_path = path_to(page)
 end
 

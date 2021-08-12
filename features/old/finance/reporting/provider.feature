@@ -12,7 +12,7 @@ Feature: Billing Reporting for Provider
       And provider "foo.3scale.localhost" is fake charging
       And provider "foo.3scale.localhost" has valid payment gateway
       And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
-      And an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
+      And an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 10 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
 
   Scenario: I should be notified about upcoming issue of non-zero invoices
@@ -22,4 +22,5 @@ Feature: Billing Reporting for Provider
 
      When the time flies to 1st June 2009
       And I act as "foo.3scale.localhost"
+     # FIXME: recevied emails is 0
      Then I should receive an email with subject "Invoices to review"

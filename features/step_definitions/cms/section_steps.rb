@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 
-Given /^(provider "[^\"]*") has section "(.+?)"$/ do |provider, title|
+Given "{provider} has section {string}" do |provider, title|
   section = FactoryBot.create :cms_section, :provider => provider, :title => title, :system_name => title, :parent => provider.sections.first
 end
 
@@ -11,7 +12,15 @@ end
 #   FactoryBot.create :cms_section, :name => name, :public => false, :account => provider
 # end
 
-Given /^(provider "[^\"]*") has a (public|private|restricted) section "([^"]*)"(?: with path "([^"]*)")?$/ do |provider, protection, name, path|
+Given "{provider} has a {word} section {string}" do |provider, protection, name|
+  add_section_to_provider(provider, protection, name)
+end
+
+Given "{provider} has a {word} section {string} with path {string}" do |provider, protection, name, path|
+  add_section_to_provider(provider, protection, name, path)
+end
+
+def add_section_to_provider(provider, protection, name, path = nil)
   root = provider.sections.root || FactoryBot.create(:root_cms_section, :account => provider)
 
   options = {:title => name,
@@ -25,12 +34,12 @@ Given /^(provider "[^\"]*") has a (public|private|restricted) section "([^"]*)"(
   provider.sections.create!(options)
 end
 
-Given /^the (section "[^\"]*" of provider "[^\"]*") is access restricted$/ do |section|
+Given "the {section_of_provider} is access restricted" do |section|
   section.update_attributes({ :public => false })
 end
 
 #TODO: use test_helper TestHelpers::SectionsPermissions
-Given /^the buyer "(.+?)" has access to the section "(.+?)" of (provider ".+?")$/ do |account, section_name, provider|
+Given "the buyer {string} has access to the section {string} of {provider}" do |account, section_name, provider|
   account = provider.buyer_accounts.find_by_org_name!(account)
   section = provider.sections.find_by_system_name!(section_name)
   group = provider.provided_groups.create!(:name => "#{account.org_name}_#{rand}")
@@ -43,22 +52,22 @@ Given /^the buyer "(.+?)" has access to the section "(.+?)" of (provider ".+?")$
 end
 
 
-When /^I click the (section "[^\"]*" of provider "[^\"]*")$/ do |section|
+When "I click the {section_of_provider}" do |section|
   find(:xpath, "//td[@id='section_#{section.id}']").click
 end
 
-When /^I create the root section$/ do
+When "I create the root section" do
   visit cms_sections_path
   click_button "Create Root Section"
 end
 
-When /^I update "(.+?)" section title to "(.+?)"$/ do |section_system_name, title|
+When "I update {string} section title to {string}" do |section_system_name, title|
   visit edit_provider_admin_cms_section_path(CMS::Section.find_by_system_name(section_system_name).id)
   fill_in "Title", :with => title
   click_button "Update"
 end
 
-Then /^the (section "[^\"]*" of provider "[^\"]*") should be access restricted$/ do |section|
+Then "the {section_of_provider} should be access restricted" do |section|
   assert !section.public?
 end
 

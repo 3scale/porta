@@ -1,4 +1,6 @@
-Given /^(provider "[^\"]*") is requiring strong passwords$/ do |provider|
+# frozen_string_literal: true
+
+Given "{provider} is requiring strong passwords" do |provider|
   provider.settings.update_attribute :strong_passwords_enabled, true
 end
 

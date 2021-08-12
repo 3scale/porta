@@ -1,21 +1,24 @@
-Given /^(provider "[^"]*"|the provider) has "(.+?)"(?: switch)? allowed$/ do |provider, switch|
+# frozen_string_literal: true
+
+Given "{provider} has {switch} allowed" do |provider, switch|
   settings = provider.settings
   settings.send("allow_#{switch}!") unless settings.send(switch).allowed?
 end
 
-Given /^(provider "[^"]*") has "(.+?)"(?: switch)? denied$/ do |provider, switch|
+Given "{provider} has {switch} denied" do |provider, switch|
   settings = provider.settings
   settings.send("deny_#{switch}!") unless settings.send(switch).denied?
 end
 
-Given /^(provider "[^"]*") has "(.+?)"(?: switch)? visible$/ do |provider, switch|
+Given "{provider} has {switch} visible" do |provider, switch|
   settings = provider.settings
   settings.send("allow_#{switch}!") unless settings.send(switch).allowed?
   settings.send("show_#{switch}!")  unless settings.send(switch).visible?
 end
 
-Given /^the provider has ("(?:.+?)"(?: switch)? visible)$/ do |sentence|
-  step %(provider "#{@provider.domain}" has #{sentence})
+# FIXME: "the provider" should be included in the ParameterType {provider}, but @provider is not accessible from there
+Given "the provider has {string}( switch) {word}" do |switch, state|
+  step %(provider "#{@provider.domain}" has "#{switch}" switch #{state})
 end
 
 Then /^I should see the invitation to upgrade my plan$/ do

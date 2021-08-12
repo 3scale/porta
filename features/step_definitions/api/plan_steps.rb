@@ -1,27 +1,32 @@
-Then /^I should not see any plans$/ do
+# frozen_string_literal: true
+
+# Then /^I should not see any plans$/ do
+Then "I should not see any plans" do
   within plans_table do
     page.should have_css('tbody tr', size: 0)
   end
 end
 
-Then /^I should see a (published|hidden) plan "([^"]*)"$/ do |state, name|
+# Then /^I should see a (published|hidden) plan "([^"]*)"$/ do |state, name|
+Then "I should see a {published} plan {string}" do |published, name|
   within plans_table do
-    assert has_table_row_with_cells?(name, state)
+    assert has_table_row_with_cells?(name, published ? 'published' : 'hidden')
   end
 end
 
-Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
+# Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
+Then "I {should} see plan {string}" do |visible, name|
   within plans_table do
-    method = negate ? :have_no_css : :have_css
+    method = visible ? :have_css : :have_no_css
     page.should send(method, 'td', text: name)
   end
 end
 
-When /^I follow "([^"]*)" for (plan "[^"]*")$/ do |label, plan|
+When "I follow {string} for {plan}" do |label, plan|
   step %(I follow "#{label}" within "##{dom_id(plan)}")
 end
 
-When /^I select "(.*?)" as default plan$/ do | plan |
+When "I select {string} as default plan" do |plan|
   # if React default plan select
   if page.has_css?('#default_plan_card .pf-c-select')
     select = find(:css, '#default_plan_card .pf-c-select')
@@ -32,22 +37,16 @@ When /^I select "(.*?)" as default plan$/ do | plan |
   end
 end
 
-Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
-  within default_plan_select do
-    page.should_not have_content(plan_name)
-  end
-end
-
-Then /^I should see "(.*?)" in the default plans list$/ do | plan_name |
+Then "I {should} see {string} in the default plans list" do |visible, plan_name|
+  method = visible ? :have_content : :have_no_content
   # if React default plan select
-
   if page.has_css?('#default_plan_card .pf-c-select')
     select = find(:css, '#default_plan_card .pf-c-select')
     select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
-    select.should have_content(plan_name)
+    select.should send(method, plan_name)
   else
-    within(default_plan) do
-      page.should have_content(plan_name)
+    within default_plan_select do
+      page.should send(method, plan_name)
     end
   end
 end
@@ -69,7 +68,7 @@ def new_application_plan_form
   find(:css, '#new_application_plan')
 end
 
-When(/^the provider creates a plan$/) do
+When "the provider creates a plan" do
   name = SecureRandom.hex(10)
 
   step 'I go to the application plans admin page'
@@ -87,6 +86,6 @@ When(/^the provider creates a plan$/) do
   @plan = Plan.find_by!(name: name)
 end
 
-When /^(plan "[^"]*") has been deleted$/ do |plan|
+When "{plan} has been deleted" do |plan|
   plan.destroy
 end

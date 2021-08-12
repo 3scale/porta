@@ -71,6 +71,7 @@ Feature: Invitations
     And I go to the provider sent invitations page
     Then I should not see "ubuntu@foo.3scale.localhost"
 
+  # FIXME: alice.access_to_service_admin_sections? -> false so the test fails
   @javascript
   Scenario: Accepting an invitation
     Given an invitation from account "foo.3scale.localhost" sent to "alice@foo.3scale.localhost"

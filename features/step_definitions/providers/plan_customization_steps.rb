@@ -1,4 +1,6 @@
-Given /^(buyer "[^\"]*") has customized plan$/ do |buyer_account|
+# frozen_string_literal: true
+
+Given "{buyer} has customized plan" do |buyer_account|
   buyer_account.bought_cinstance.customize_plan!
 end
 

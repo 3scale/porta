@@ -39,7 +39,8 @@ Feature: Instant biling plan change feature
       | Metric   | Value  |
       | hits     |   2000 |
     When time flies to 3rd February 2017
-
+    # FIXME: in master there are 5 invoices, here it's like all transactions ended up in the same invoice
+    Then the buyer should have 5 invoices
     Then the buyer should have following line items for "January, 2017" in the 1st invoice:
       | name                                                    | quantity |  cost     |
       | Fixed fee ('NoVariable')                                |          |     31.00 |

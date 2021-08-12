@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'selenium/webdriver'
 require 'capybara/minitest'
 include Capybara::Minitest::Assertions
@@ -14,6 +16,10 @@ DEFAULT_JS_DRIVER = :headless_chrome
 Capybara.default_driver = :rack_test
 Capybara.javascript_driver = DEFAULT_JS_DRIVER
 Capybara.default_selector    = :css
+Capybara.disable_animation = true
+
+# Capybara 3 changes the default server to Puma. It can be reverted to the previous default of WEBRick by specifying:
+Capybara.server = :webrick
 
 # see http://www.elabs.se/blog/60-introducing-capybara-2-1
 Capybara.configure do |config|

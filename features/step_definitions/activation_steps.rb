@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 When /^I follow the activation link in an email sent to "([^\"]*)"$/ do |email|
   visit_in_email(%r{http://[^/]+/(p/)?activate/[a-z0-9]+}, email)
 end
 
-When /^I follow the activation link in an email sent to (user "[^"]*")$/ do |user|
+When "I follow the activation link in an email sent to {user}" do |user|
   step %(I follow the activation link in an email sent to "#{user.email}")
 end
 

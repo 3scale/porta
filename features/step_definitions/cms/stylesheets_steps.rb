@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 
-Then /^the current page should link a stylesheet "([^"]*)" with timestamp (.+)$/ do |name, timestamp|
+Then "the current page should link a stylesheet {string} with timestamp {}" do |name, timestamp|
   timestamp = Time.zone.parse(timestamp).to_i
 
   link = all('link[rel = "stylesheet"]').find { |node| node[:href].include?(name) }

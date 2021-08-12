@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Commonly used email steps
 #
 # To add your own steps make a custom_email_steps.rb

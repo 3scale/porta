@@ -26,7 +26,7 @@ Feature: Provider plans section authorization
      Then I should see "Backends" in the apis dashboard widget
 
     When I go to the <page> page
-    Then I should be at url for the <page> page
+    Then I should be on the <page> page
   Examples:
       | page                            |
       | API dashboard                   |
@@ -48,7 +48,7 @@ Feature: Provider plans section authorization
     Then I should not see "Products" in the apis dashboard widget
     Then I should not see "Backends" in the apis dashboard widget
 
-    When I request the url of the '<page>' page then I should see an exception
+    When I request the url of the <page> page then I should see an exception
 
   Examples:
       | page                            |
@@ -74,7 +74,7 @@ Feature: Provider plans section authorization
      Then I should see "Backends" in the apis dashboard widget
 
     When I go to the <page> page
-    Then I should be at url for the <page> page
+    Then I should be on the <page> page
   Examples:
       | page                            |
       | API dashboard                   |

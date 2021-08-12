@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 
-Given /^(provider "[^\"]*") has no links$/ do |provider|
+Given "{provider} has no links" do |provider|
   assert provider.provided_groups_for_providers.empty?
 end
 
-When /^I create a bcms link/ do
+When "I create a bcms link" do
   visit cms_sitemap_path
   find(:xpath, ".//td[@id='section_#{Section.root(current_account).first.id}']").click
 
@@ -25,8 +26,8 @@ When /^I update a link$/ do
 
 end
 
-Then /^the link "([^\"]*)" should be created$/ do |name|
-  Link.find_by_name(name).should_not be_nil
+Then "the link {string} should be created" do |name|
+  Link.find_by!(name: name).should_not be_nil
 end
 
 Then /^I should see no links$/ do

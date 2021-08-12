@@ -41,7 +41,7 @@ Feature: Provider settings authorization
      And I go to the provider dashboard
 
     Then I should not see the link "<link>"
-    When I request the url of the '<page>' page then I should see an exception
+    When I request the url of the <page> page then I should see an exception
 
     Examples:
       | link                 | page                     |

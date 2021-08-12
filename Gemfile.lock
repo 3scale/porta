@@ -194,6 +194,7 @@ GEM
       join_dependency (~> 0.1.2)
       polyamorous (~> 1.3)
     backport (1.1.2)
+    backports (3.21.0)
     bcrypt (3.1.13)
     benchmark (0.1.0)
     binding_of_caller (0.8.0)
@@ -211,13 +212,14 @@ GEM
       uniform_notifier (~> 1.10.0)
     byebug (11.1.3)
     cancancan (2.3.0)
-    capybara (2.18.0)
+    capybara (3.35.3)
       addressable
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (>= 2.0, < 4.0)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (>= 1.5, < 3.0)
+      xpath (~> 3.2)
     childprocess (3.0.0)
     chronic (0.10.2)
     chunky_png (1.3.10)
@@ -260,22 +262,29 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cucumber (2.99.0)
+    cucumber (3.2.0)
       builder (>= 2.1.2)
-      cucumber-core (~> 1.5.0)
+      cucumber-core (~> 3.2.0)
+      cucumber-expressions (~> 6.0.1)
       cucumber-wire (~> 0.0.1)
-      diff-lcs (>= 1.1.3)
-      gherkin (~> 4.0)
+      diff-lcs (~> 1.3)
+      gherkin (~> 5.1.0)
       multi_json (>= 1.7.5, < 2.0)
       multi_test (>= 0.1.2)
-    cucumber-core (1.5.0)
-      gherkin (~> 4.0)
-    cucumber-rails (1.5.0)
-      capybara (>= 1.1.2, < 3)
-      cucumber (>= 1.3.8, < 4)
-      mime-types (>= 1.17, < 4)
-      nokogiri (~> 1.5)
-      railties (>= 4, < 5.2)
+    cucumber-core (3.2.1)
+      backports (>= 3.8.0)
+      cucumber-tag_expressions (~> 1.1.0)
+      gherkin (~> 5.0)
+    cucumber-expressions (6.0.1)
+    cucumber-rails (2.4.0)
+      capybara (>= 2.18, < 4)
+      cucumber (>= 3.2, < 8)
+      mime-types (~> 3.3)
+      nokogiri (~> 1.10)
+      railties (>= 5.0, < 7)
+      rexml (~> 3.0)
+      webrick (~> 1.7)
+    cucumber-tag_expressions (1.1.1)
     cucumber-wire (0.0.1)
     daemons (1.3.1)
     dalli (2.7.10)
@@ -335,7 +344,7 @@ GEM
     fugit (1.5.0)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
-    gherkin (4.1.3)
+    gherkin (5.1.0)
     github-markdown (0.6.9)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -809,8 +818,8 @@ GEM
     will_paginate (3.1.6)
     with_env (1.1.0)
     xml-simple (1.1.8)
-    xpath (2.1.0)
-      nokogiri (~> 1.3)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     yabeda (0.8.0)
       concurrent-ruby
       dry-initializer
@@ -856,7 +865,7 @@ DEPENDENCIES
   bugsnag (~> 6.11)
   bullet (~> 5.6)
   cancancan (~> 2.3.0)
-  capybara (~> 2.18)!
+  capybara (~> 3.35.3)!
   childprocess
   chronic
   ci_reporter_shell!
@@ -866,8 +875,8 @@ DEPENDENCIES
   colorize
   commonmarker
   compass-rails (~> 3.0.2)
-  cucumber (~> 2.0)
-  cucumber-rails
+  cucumber (~> 3.2.0)
+  cucumber-rails (~> 2.4.0)
   dalli (~> 2.7)
   database_cleaner (~> 1.7)
   developer_portal!
@@ -994,7 +1003,7 @@ DEPENDENCIES
   webpacker (~> 4)
   will_paginate (~> 3.1.6)
   with_env
-  xpath (~> 2.1)
+  xpath (~> 3.2)
   yabeda-prometheus-mmap
   yabeda-rails
   yabeda-sidekiq
@@ -1002,4 +1011,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   2.2.18
+   2.2.25

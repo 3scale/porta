@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Then /^I should see following table:$/ do |expected|
+Then "I should see following table:" do |expected|
   ThreeScale::Deprecation.warn "Detected old table. Move to PF4 and use step 'I should see the following table:'"
   table = extract_table('table.data', 'tr:not(.search)', 'td:not(.select), th:not(.select)')
 
@@ -30,7 +30,7 @@ Then /^I should see following table:$/ do |expected|
   end
 end
 
-Then /^I should see the following table:$/ do |expected|
+Then "I should see the following table:" do |expected|
   table = if has_css?('.pf-c-table')
             extract_pf4_table
           else

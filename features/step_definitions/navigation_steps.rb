@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When /^I navigate to the sent invitations page$/ do
   click_link "Account"
   click_link "Users"
@@ -13,7 +15,7 @@ When 'I navigate to the accounts page' do
   click_link href: admin_buyers_accounts_path
 end
 
-When /^I navigate to a topic in (the forum of "[^\"]*")$/ do |forum|
+When "I navigate to a topic in the forum of {forum}" do |forum|
   visit forum_path
   click_link forum.topics.first.title
 end
