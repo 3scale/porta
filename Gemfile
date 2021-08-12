@@ -15,7 +15,7 @@ gem 'aws-sdk-rails', '~> 2'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.0.7'
+gem 'rails', '~> 5.1.7'
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
@@ -262,7 +262,7 @@ gem 'unicorn', require: false, group: %i[production preview]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 1.7.0', install_if: oracle
+gem 'activerecord-oracle_enhanced-adapter', '~> 1.8.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
 
 gem 'kubeclient'
