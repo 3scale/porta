@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # on servers we don't have proper LANG
 Encoding.default_external = Encoding::UTF_8
 
