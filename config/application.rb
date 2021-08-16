@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'boot'
 
 require 'rails/all'
@@ -34,6 +32,9 @@ module System
   mattr_accessor :redis
 
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
+
     # The old config_for gem returns HashWithIndifferentAccess
     # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
     def config_for(*args)
