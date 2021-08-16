@@ -75,7 +75,10 @@ const Select = <T: Record>({
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleSelect}
         isExpanded={expanded}
-        onClear={() => onSelect(null)}
+        onClear={() => {
+          onSelect(null)
+          setExpanded(false) // TODO: in PF4 this is done automatically. Remove this after upgrading.
+        }}
         aria-labelledby={fieldId}
         isDisabled={isDisabled}
         onFilter={handleFilter}
