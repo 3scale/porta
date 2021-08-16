@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'routing_constraints'
 require 'prometheus_exporter_port'
 
