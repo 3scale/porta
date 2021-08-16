@@ -26,6 +26,7 @@ type Props = {
 const ChangePlanSelectCard = ({ applicationPlans, path }: Props): React.Node => {
   const [plan, setPlan] = useState<Plan | null>(null)
 
+  // TODO: in PF4, "isDisabled" behaviour is replaced by ticking the selected item. Remove this after upgrading.
   const plans = plan ? applicationPlans.map(p => ({ ...p, disabled: p.id === plan.id })) : applicationPlans
 
   return (
