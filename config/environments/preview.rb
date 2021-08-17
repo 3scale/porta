@@ -22,7 +22,14 @@ System::Application.configure do
 
   config.asset_host = proc { |_source, request = nil| request && request.headers["X-Forwarded-For-Domain"] }
 
+  # TODO: do we need and when a public file server?
   config.public_file_server.enabled = true
+  config.public_file_server.headers = {
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Headers' => 'x-requested-with',
+    'Access-Control-Allow-Methods' => 'GET',
+    'Access-Control-Max-Age' => "3628800",
+  }
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.log_tags = [ :uuid, :host, :remote_ip ]

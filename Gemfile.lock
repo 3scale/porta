@@ -15,14 +15,6 @@ GIT
       ci_reporter (~> 2.0)
 
 GIT
-  remote: https://github.com/3scale/font_assets.git
-  revision: da97b8601528ee189795cc94b953ec9a30f47e83
-  ref: da97b8601528ee189795cc94b953ec9a30f47e83
-  specs:
-    font_assets (0.1.11)
-      rack
-
-GIT
   remote: https://github.com/3scale/json-schema.git
   revision: 26487618a68443e94d623bb585cb464b07d36702
   specs:
@@ -892,7 +884,6 @@ DEPENDENCIES
   faraday (~> 0.15.3)
   faraday_middleware (~> 0.13.1)
   font-awesome-rails (~> 4.7.0.5)
-  font_assets!
   formtastic (~> 1.2.4)
   github-markdown
   gruff (~> 0.3)
