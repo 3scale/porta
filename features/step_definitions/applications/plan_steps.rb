@@ -1,5 +1,5 @@
 When /^I change the app plan to "([^\"]*)"$/ do |plan|
-  select plan, :from => 'Change Plan'
+  pf4_select(plan, from: 'Change plan')
   click_button 'Change'
 end
 

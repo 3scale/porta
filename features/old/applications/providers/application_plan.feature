@@ -22,7 +22,7 @@ Feature: Applications plan
     Then I should see the plan details widget
       But I should not see the change plan widget
 
-
+  @javascript
   Scenario: Changing plan to app
     Given an application plan "Another" of provider "foo.3scale.localhost"
     When I navigate to the application "OKWidget" of the partner "bob"
