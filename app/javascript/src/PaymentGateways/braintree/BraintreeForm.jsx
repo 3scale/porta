@@ -57,14 +57,8 @@ const BraintreeForm = ({
   }, [braintreeNonceValue])
 
   const get3DSecureError = (response) => {
-    if (
-      response.name === 'BraintreeError' ||
-      response.threeDSecureInfo.status !== 'authenticate_successful' ||
-      response.threeDSecureInfo.status !== 'authenticate_attempt_successful'
-    ) {
-      return CC_ERROR_MESSAGE
-    }
-    return null
+    const { threeDSecureInfo: { status: message } = { status: null } } = response
+    return message && message.match(/authenticate_(attempt_)?successful/) ? null : CC_ERROR_MESSAGE
   }
 
   const get3DSecureNonce = async (payload) => {
