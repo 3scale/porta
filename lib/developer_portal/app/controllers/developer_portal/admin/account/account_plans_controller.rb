@@ -24,7 +24,7 @@ class DeveloperPortal::Admin::Account::AccountPlansController < ::DeveloperPorta
           redirect_to :action => :index
         end
 
-        format.any(:xml, :json) { render :nothing => true, :status => :ok }
+        format.any(:xml, :json) { head :ok }
       end
     end
 

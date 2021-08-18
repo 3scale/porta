@@ -149,7 +149,7 @@ class Account::SearchTest < ActiveSupport::TestCase
   # For mysterious reason, the thing didn't use to work when indifferent hash was passed in.
   test 'search without query works with options with indifferent access' do
     assert_nothing_raised do
-      results = Account.search(nil, HashWithIndifferentAccess.new)
+      results = Account.search(nil, ActiveSupport::HashWithIndifferentAccess.new)
     end
   end
 
