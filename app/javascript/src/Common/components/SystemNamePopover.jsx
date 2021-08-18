@@ -19,6 +19,6 @@ const SystemNamePopover = (): React.Node => (
   </Popover>
 )
 
-const SystemNamePopoverWrapper = (container: Element): React.Node => render(<SystemNamePopover />, container)
+const SystemNamePopoverWrapper = (container: Element): void => render(<SystemNamePopover />, container)
 
 export { SystemNamePopoverWrapper }
