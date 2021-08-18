@@ -1,0 +1,16 @@
+= form.inputs do
+  = form.input :friendly_name, input_html: { autofocus: true }
+  li id='metric_system_name_input' class='string required'
+    label for='metric_system_name' System name
+    div
+      input maxlength='255' id='metric_system_name' type='text' name='backend_api[system_name]'
+      p
+        = ".#{backend_api.id}"
+      div id='system_name_popover'
+        = javascript_pack_tag('system_name_input_popover')
+    p class='inline-hints' Only ASCII letters, numbers, dashes and underscores are allowed.
+  = form.input :unit unless @metric.child?
+  = form.input :description, input_html: { rows: 3 }
+
+= form.buttons do
+  = form.button "#{metric.new_record? ? 'Create' : 'Update'} #{metric.child? ? 'Method' : 'Metric'}", button_html: { class: 'pf-c-button pf-m-primary' }
