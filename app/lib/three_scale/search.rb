@@ -1,4 +1,4 @@
-class ThreeScale::Search < HashWithIndifferentAccess
+class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
 
   class FormBuilder < ActionView::Helpers::FormBuilder
     def fields_for(record_name, record_object = nil, fields_options = {}, &block)
