@@ -3,7 +3,7 @@
 <% content_for :sublayout_title, "Edit #{method_or_metric.capitalize}" %>
 
 <%= semantic_form_for @metric, :url => provider_admin_backend_api_metric_path(@backend_api, @metric) do |form| %>
-  <%= render 'form', :form => form %>
+  <%= render 'form_edit', form: form, backend_api: @backend_api, metric: @metric %>
 <% end %>
 <% unless @metric.default?(:hits) %>
   <%= pf_delete_button_for provider_admin_backend_api_metric_path(@backend_api, @metric), data: {:confirm => "Removing this #{method_or_metric} will affect all plans that contain this #{method_or_metric}, all associated mapping rules will be deleted too. Are you sure? "} %>
