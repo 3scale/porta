@@ -21,6 +21,8 @@ import './BraintreeCustomerForm.scss'
 import type { Node } from 'react'
 import type { BraintreeFormProps, BillingAddressData } from 'PaymentGateways'
 
+const CC_ERROR_MESSAGE = 'An error occurred, please review your CC details or try later.'
+
 const BraintreeForm = ({
   braintreeClient,
   billingAddress,
@@ -54,12 +56,16 @@ const BraintreeForm = ({
     }
   }, [braintreeNonceValue])
 
+  const get3DSecureError = (response) => {
+    const { threeDSecureInfo: { status: message } = { status: null } } = response
+    return message && message.match(/authenticate_(attempt_)?successful/) ? null : CC_ERROR_MESSAGE
+  }
+
   const get3DSecureNonce = async (payload) => {
     const threeDSecureInstance = await create3DSecureInstance(threeDSecure, braintreeClient)
     const response = await veryfyCard(threeDSecureInstance, payload, billingAddressData)
-    const error = response.name === 'BraintreeError'
-      ? response.code === 'THREEDS_LOOKUP_VALIDATION_ERROR' ? response.details.originalError.details.originalError.error.message : response.message
-      : null
+
+    const error = get3DSecureError(response)
     const nonce = response.nonce || null
 
     return {
@@ -80,7 +86,7 @@ const BraintreeForm = ({
   }
 
   const handleCardError = (error: string) => {
-    setCardError(`Credit card errors found: ${error}. Please correct your CC data.`)
+    setCardError(error)
     clearHostedFields()
     setIsLoading(false)
   }
