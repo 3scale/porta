@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 
-Given /^the following messages were sent to (provider "[^\"]*"):$/ do |provider, table|
+Given "the following messages were sent to {provider}" do |provider, table|
   if provider.buyer_accounts.empty?
     step %{a buyer "messenger" signed up to application plan "#{provider.application_plans.first.name}"}
   end
@@ -21,19 +22,19 @@ Given(/^the following messages were sent to provider:$/) do |table|
   step %{the following messages were sent to provider "#{@provider.org_name}":}, table
 end
 
-Given /^a message sent from ((?:provider|buyer) "[^"]*") to ((?:provider|buyer) "[^"]*") with subject "([^"]*)" and body "([^"]*)"$/ do |sender, receiver, subject, body|
+Given "a message(s) sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
   message = sender.messages.create!(:to => receiver, :subject => subject, :body => body)
   message.deliver!
 end
 
-And /^(\d+) messages sent from ((?:provider|buyer) "[^"]*") to ((?:provider|buyer) "[^"]*") with subject "([^"]*)" and body "([^"]*)"$/ do |count, sender, receiver, subject, body|
+And "{int} message(s) sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |count, sender, receiver, subject, body|
   count.to_i.times do
     message = sender.messages.create!(to: receiver, subject: subject, body: body)
     message.deliver!
   end
 end
 
-Given /^(account ".+?") has no messages$/ do |account|
+Given "{account} has no messages" do |account|
   account.messages.each(&:destroy)
   account.received_messages.destroy_all
 end
@@ -59,7 +60,7 @@ end
 
 
 
-Then /^a message should be sent from ((?:provider|buyer) "[^"]*") to ((?:provider|buyer) "[^"]*") with subject "([^"]*)" and body "([^"]*)"$/ do |sender, receiver, subject, body|
+Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
   message = receiver.received_messages.to_a.find do |message|
     message.sender  == sender  &&
     message.subject == subject &&
@@ -80,12 +81,12 @@ Then('a message should be sent from buyer to provider requesting to change plan 
   assert_match %(#{@buyer.org_name} are requesting to have their plan changed to #{@paid_application_plan.name} for application #{@application.name}. You can do this from the application page), msg.body
 end
 
-Then /^a message should be sent to ((?:provider|buyer) "[^"]*") with subject "([^"]*)"$/ do |receiver, subject|
+Then "a message should be sent to {provider_or_buyer} with subject {string}" do |receiver, subject|
   message = receiver.received_messages.last
   assert_match subject, message.subject
 end
 
-Then /^there should be no message from (provider "[^"]*") to (buyer "[^"]*") with subject "([^"]*)"$/ do |sender, receiver, subject|
+Then "there should be no message from {provider} to {buyer} with subject {string}" do |sender, receiver, subject|
   messages = receiver.received_messages.to_a.select do |message|
     message.sender  == sender &&
     message.subject == subject
@@ -94,11 +95,11 @@ Then /^there should be no message from (provider "[^"]*") to (buyer "[^"]*") wit
   assert messages.empty?
 end
 
-Then /^(account ".+?") should have (\d+) messages?$/ do |account, count|
+Then "{account} should have {int} message(s)" do |account, count|
   assert_equal count.to_i, account.messages.count
 end
 
-Then /^the message from (provider "[^"]*") to (buyer "[^"]*") with subject "([^"]*)" should be hidden$/ do |sender, receiver, subject|
+Then "the message from {provider} to {buyer} with subject {string} should be hidden" do |sender, receiver, subject|
   message = receiver.hidden_messages.to_a.find do |message|
     message.sender  == sender &&
     message.subject == subject

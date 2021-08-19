@@ -1,4 +1,6 @@
-Given(/^an invoice of (buyer "[^"]*") for (\w+, *\d+)$/) do |buyer, month|
+# frozen_string_literal: true
+
+Given "an invoice of {buyer} for {month}" do |buyer, month|
   create_invoice buyer, month
 end
 
@@ -9,12 +11,12 @@ Given(/^I create a new invoice from the (?:API|UI) for this buyer for (\w+, *\d+
   end
 end
 
-Given(/^an issued invoice of (buyer "[^"]*") for (\w+, *\d+)$/) do |buyer, month|
+Given "an issued invoice of {buyer} for {month}" do |buyer, month|
   invoice = create_invoice buyer, month
   invoice.issue_and_pay_if_free!
 end
 
-Given(/^an invoice of (buyer "[^"]*") for (\w+, *\d+) with items:?$/) do |buyer, month, items|
+Given "an invoice of {buyer} for {month} with items(:)" do |buyer, month, items|
   invoice = create_invoice buyer, month
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end

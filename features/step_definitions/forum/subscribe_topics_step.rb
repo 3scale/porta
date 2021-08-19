@@ -1,8 +1,10 @@
-Given /^(user "[^\"]*") is subscribed to the topic in (the forum of "[^\"]*")$/ do |user, forum|
+# frozen_string_literal: true
+
+Given "{user} is subscribed to the topic in the forum of {forum}" do |user, forum|
   user.user_topics.create! :topic => forum.topics.first
 end
 
-Given /^the (user "[^\"]*") is subscribed to the topics:$/ do |user, table|
+Given "the {user} is subscribed to the topics:" do |user, table|
   table.hashes.each do |hash|
     user.user_topics.create! :topic => Topic.find_by_title(hash['topic'])
   end
@@ -10,7 +12,7 @@ end
 
 #FIXME: forum complexity because of reusing everything!
 # These ugly steps are needed due to the crazy forum using the same views and routes for both public and admin sides
-When /^(user "[^\"]*") subscribe to the topic in (the forum of "[^\"]*")$/ do |user, forum|
+When "{user} subscribe to the topic in the forum of {forum}" do |user, forum|
   user.user_topics.create! :topic => forum.topics.first
   step %{I navigate to a topic in the forum of "#{user.provider_account.org_name}"}
 end
@@ -35,11 +37,11 @@ Then /^I unsubscribe the topic$/ do
   click_button('Unsubscribe')
 end
 
-Then /^the (user "[^\"]*") should receive an email notifying of the new post$/ do |user|
+Then "the {user} should receive an email notifying of the new post" do |user|
   step %{"#{user.email}" should receive an email with subject "New post in topic"}
 end
 
-Then /^the (user "[^\"]*") should not receive an email notifying of the new post$/ do |user|
+Then "the {user} should not receive an email notifying of the new post" do |user|
   step %{"#{user.email}" should receive no email with subject "New post in topic"}
 end
 

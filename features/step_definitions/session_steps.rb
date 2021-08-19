@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given /^I am logged in as (provider )?"([^\"]*)"$/ do |provider,username|
   if provider
     step %{I log in as provider "#{username}"}
@@ -72,7 +74,7 @@ When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domai
   end
 end
 
-When /^I log in as "([^"]*)" on the admin domain of (provider "[^"]*")$/ do |username, provider|
+When "I log in as {string} on the admin domain of {provider}" do |username, provider|
   step %(I log in as provider "#{username}" on #{provider.admin_domain})
 end
 

@@ -1,17 +1,18 @@
+# frozen_string_literal: true
 
-Given /^the (buyer "[^\"]*") does not sign legal terms$/ do |buyer|
+Given "the {buyer} does not sign legal terms" do |buyer|
   buyer.update_attribute :signs_legal_terms, false
 end
 
 #tricky since we are not doing proper js test
-When /^I do the (buyer "[^\"]*") inmune from signing legal terms$/ do |buyer|
+When "I do the {buyer} inmune from signing legal terms" do |buyer|
   step "I should see the buyer signs up legal terms"
 
   put "partners/#{buyer.id}/toggle_signs_legal_terms"
   follow_redirect!
 end
 
-When /^I do the (buyer "[^\"]*") sign legal terms$/ do |buyer|
+When "I do the {buyer} sign legal terms" do |buyer|
   step "I should see the buyer signs up an external legal terms agreement"
 
   put "partners/#{buyer.id}/toggle_signs_legal_terms"

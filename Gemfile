@@ -200,12 +200,12 @@ group :test do
   gem 'rails-controller-testing'
   gem 'simplecov', '~> 0.21.2', require: false
 
-  gem 'capybara', '~> 2.18', source: 'https://rubygems.org'
-  gem 'xpath', '~>2.1'
+  gem 'capybara', '~>3.35.3', source: 'https://rubygems.org'
+  gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
-  gem 'cucumber', '~>2.0'
-  gem 'cucumber-rails', require: false
+  gem 'cucumber', '~>3.2.0'
+  gem 'cucumber-rails', '~> 2.4.0', require: false
   gem 'email_spec', require: false
   gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
   gem 'launchy'

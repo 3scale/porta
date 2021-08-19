@@ -1,6 +1,7 @@
-Given 'I have following countries:' do |table|
+# frozen_string_literal: true
 
-  table.hashes.each do |country|
+Given 'I have following countries:' do |table|
+  transform_table(table).hashes.each do |country|
     FactoryBot.create(:country, :code => country[:code], :name => country[:name])
   end
 

@@ -287,6 +287,9 @@ module System
         WARNING
       end
     end
+
+    # Fixes 'DEPRECATION WARNING: Time columns will become time zone aware in Rails 5.1' keeping backwards compatibility
+    config.active_record.time_zone_aware_types = [:datetime]
   end
 end
 

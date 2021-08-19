@@ -1,16 +1,18 @@
-Given /^the plan the (provider "[^\"]*") signed has custom_plans enabled$/ do |provider|
+# frozen_string_literal: true
+
+Given "the plan the {provider} signed has custom_plans enabled" do |provider|
   #FIXME: we do not use the step in features_steps.rb:11 because it's broken
   # Given /^feature "([^\"]*)" is (enabled|disabled) for (plan "[^"]*")$/
   provider.bought_plan
     .features << Feature.new(:system_name => 'custom_plans', :visible => true)
 end
 
-Given /^the plan the (provider "[^\"]*") signed has custom_plans disabled$/ do |provider|
+Given "the plan the {provider} signed has custom_plans disabled" do |provider|
   f = provider.bought_plan.features.find_by_system_name('custom_plans')
   f.destroy if f
 end
 
-Given /^(plan "[^"]*") is customized$/ do |plan|
+Given "{plan} is customized" do |plan|
   plan.customize
 end
 
@@ -26,25 +28,25 @@ Given /^a (published|hidden) plan "([^\"]*)" of provider "([^\"]*)"$/ do |state,
 end
 
 # TODO: make a general, attribute setting step for plan?
-Given /^(plan "[^\"]*") has trial period of (\d+) days$/ do |plan, days|
+Given "{plan} has trial period of {int} days" do |plan, days|
   plan.update_attribute(:trial_period_days, days)
 end
 
 # TODO: make a general, attribute setting step for plan?
-Given /^(plan "[^\"]*") has monthly fee of (\d+)$/ do |plan, fee|
+Given "{plan} has monthly fee of {int}" do |plan, fee|
   plan.update_attribute(:cost_per_month, fee)
 end
 
 # TODO: make a general, attribute setting step for plan?
-Given /^(plan "[^\"]*") has setup fee of (\d+)$/ do |plan, fee|
+Given "{plan} has setup fee of {int}" do |plan, fee|
   plan.update_attribute(:setup_fee, fee)
 end
 
-Given /^(plan "[^\"]*") has "([^\"]*)" (enabled|disabled)$/ do |plan, feature_name, enabled|
+Given "{plan} has {string} {enabled}" do |plan, feature_name, enabled|
   feature = plan.service.features.find_or_create_by(name: feature_name)
   assert_not_nil feature
 
-  if enabled == 'enabled'
+  if enabled
     plan.features << feature
   else
     plan.features.delete(feature)
@@ -53,11 +55,11 @@ Given /^(plan "[^\"]*") has "([^\"]*)" (enabled|disabled)$/ do |plan, feature_na
   plan.save!
 end
 
-Given /^(provider "[^"]*") has no published application plans$/ do |provider|
+Given "{provider} has no published application plans" do |provider|
   provider.application_plans.each{|p| p.hide!}
 end
 
-Given /^(plan "[^\"]*") has applications$/ do |plan|
+Given "{plan} has applications" do |plan|
   FactoryBot.create(:cinstance, :application_id => SecureRandom.hex(8), :plan => plan)
 end
 
@@ -66,11 +68,11 @@ When /^I change application plan to "([^"]*)"$/ do |name|
   current_account.bought_cinstance.change_plan!(plan)
 end
 
-Then /^(plan "[^\"]*") should be published$/ do |plan|
+Then "{plan} should be published" do |plan|
   assert plan.published?
 end
 
-Then /^(plan "[^\"]*") should be hidden$/ do |plan|
+Then "{plan} should be hidden" do |plan|
   assert plan.hidden?
 end
 
@@ -81,8 +83,7 @@ Then /^I should see the monthly fee is "([^\"]*)"$/ do |fee|
   end)
 end
 
-
-Then /^there should be plan "([^"]*)" of (provider "[^"]*")$/ do |plan_name, provider|
+Then "there should be plan {string} of provider {plan}" do |plan_name, provider|
   assert_not_nil provider.default_service.plans.find_by_name(plan_name)
 end
 
@@ -102,7 +103,7 @@ Then /^I should see the details of plan "([^"]*)"$/ do |plan_name|
   assert has_css? 'h3', :text => plan_name
 end
 
-Then /^I should see I have signed up (plan "[^"]*")$/ do |plan|
+Then "I should see I have signed up {plan}" do |plan|
   assert has_xpath?("//td[@id='plan_#{plan.id}']", :text => 'Your Plan')
 end
 
@@ -126,7 +127,7 @@ Then /^I should be able to customize the plan$/ do
   should have_link("Convert to a Custom Plan")
 end
 
-Then /^the application plans select should not contain custom plans of (provider "[^\"]*")$/ do |provider|
+Then "the application plans select should not contain custom plans of {provider}" do |provider|
   provider.application_plans.customized.each do |custom_plan|
     step %{the "Application plan" select should not contain "#{custom_plan.name}" option}
   end

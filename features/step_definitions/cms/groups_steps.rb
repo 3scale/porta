@@ -1,23 +1,24 @@
+# frozen_string_literal: true
 
-Given /^(provider "[^\"]*") has groups for buyers:$/ do |provider, table|
+Given "{provider} has groups for buyers:" do |provider, table|
   table.hashes.each do |hash|
-    FactoryBot.create :cms_group, :name => hash['name'], :provider => provider
+    FactoryBot.create :cms_group, name: hash['name'], provider: provider
   end
 end
 
-Given /^(provider "[^\"]*") has no groups for buyers$/ do |provider|
+Given "{provider} has no groups for buyers" do |provider|
   assert provider.provided_groups_for_buyers.empty?
 end
 
-Given /^(user "[^"]*") has access to the admin section "(.+?)"$/ do |user, group|
-  user.member_permissions.create! :admin_section => group
+Given "{user} has access to the admin section {string}" do |user, group|
+  user.member_permissions.create! admin_section: group
 end
 
-Given /^(user "[^"]*") belongs to the (buyer group "[^"]*" of provider "[^"]*")$/ do |user, group|
-  user.user_group_memberships.create! :group_id => group.id
+Given "{user} belongs to the {buyer_group_of_provider}" do |user, group|
+  user.user_group_memberships.create! group_id: group.id
 end
 
-Given /^(user "[^"]*") does not belong to the admin group "([^"]*)" of provider "[^"]*"$/ do |user, admin_section|
+Given "{user} does not belong to the admin group {string} of provider {string}" do |user, admin_section, _provider|
   if user.has_permission?(admin_section)
     user.admin_sections = user.admin_sections - [admin_section]
     user.save
@@ -40,8 +41,8 @@ Then /^the group "([^\"]*)" should be created$/ do |name|
   Group.find_by_name(name).should_not be_nil
 end
 
-Then /^I should see the (buyer "[^"]*") belongs to the (buyer group "[^"]*" of provider "[^\"]*")$/ do |account, group|
-  assert account.groups.include?(group)
+Then "I should see the {buyer} {does}( )belong(s) to the {buyer_group_of_provider}" do |account, belongs, group|
+  assert_equal belongs, account.groups.include?(group)
 end
 
 Then /^I should see the (buyer "[^"]*") does not belong to the (buyer group "[^"]*" of provider "[^\"]*")$/ do |account, group|

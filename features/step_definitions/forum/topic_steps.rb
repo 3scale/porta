@@ -1,8 +1,10 @@
-Given /^(the forum of "[^\"]*") have topics$/ do |forum|
+# frozen_string_literal: true
+
+Given "{forum} have topics" do |forum|
   FactoryBot.create(:topic, :forum => forum, :user => forum.account.users.first)
 end
 
-Given /^(the forum of "[^"]*") has topics? #{QUOTED_LIST_PATTERN}$/ do |forum, titles|
+Given "{forum} has topic(s) {list_of_strings}" do |forum, titles|
   user = forum.account.admins.first
 
   titles.each do |item|
@@ -10,31 +12,31 @@ Given /^(the forum of "[^"]*") has topics? #{QUOTED_LIST_PATTERN}$/ do |forum, t
   end
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" with "([^"]*)"$/ do |forum, title, body|
+Given "{forum} has topic {string} with {string}" do |forum, title, body|
   FactoryBot.create(:topic, :forum => forum,
                   :title => title,
                   :body  => body,
                   :user  => forum.account.admins.first)
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" from (user "[^"]*")$/ do |forum, title, user|
+Given "{forum} has topic {string} from {user}" do |forum, title, user|
   FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" from (user "[^"]*") created (.*)$/ do |forum, title, user, time|
+Given "{forum} has topic {string} from {user} created {word}" do |forum, title, user, time|
   Timecop.travel(Chronic.parse(time)) do
     FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
   end
 end
 
-Given /^(the forum of "[^"]*") has topic "([^"]*)" in category "([^"]*)"$/ do |forum, title, category_name|
+Given "{forum} has topic {string} in category {string}" do |forum, title, category_name|
   FactoryBot.create(:topic, :forum    => forum,
                   :category => forum.categories.find_by_name!(category_name),
                   :title    => title,
                   :user     => forum.account.admins.first)
 end
 
-Given /^(the forum of "[^"]*") has the following topics:$/ do |forum, table|
+Given "{forum} has the following topics:" do |forum, table|
   table.hashes.each do |hash|
     category = TopicCategory.find_by_name(hash['Category'])
 
@@ -68,31 +70,31 @@ When /^I create a new topic "([^\"]*)"$/ do |topic|
   step %(I press "Create thread")
 end
 
-When /^the (user "[^"]*") post in the topic in (the forum of "[^"]*")$/ do |user, forum|
+When "the {user} post in the topic in {forum}" do |user, forum|
   FactoryBot.create(:post, :topic => forum.topics.first, :forum => forum, :user => user)
 end
 
-Then /^(the forum of "[^"]*") should have topic "([^"]*)"$/ do |forum, title|
+Then "{forum} should have topic {string}" do |forum, title|
   assert_not_nil forum.topics.find_by_title(title)
 end
 
-Then /^(the forum of "[^"]*") should not have topic "([^"]*)"$/ do |forum, title|
+Then "{forum} should not have topic {string}" do |forum, title|
   assert_nil forum.topics.find_by_title(title)
 end
 
-Then /^(the forum of "[^"]*") should have topic "([^"]*)" in category "([^"]*)"$/ do |forum, title, category|
+Then "{forum} should have topic {string} in category {string}" do |forum, title, category|
   topic = forum.topics.find_by_title(title)
   assert_not_nil topic
   assert_equal category, topic.category.try!(:name)
 end
 
-Then /^(the forum of "[^"]*") should have sticky topic "([^"]*)"$/ do |forum, title|
+Then "{forum} should have sticky topic {string}" do |forum, title|
   topic = forum.topics.find_by_title(title)
   assert_not_nil topic
   assert topic.sticky?
 end
 
-Then /^(the forum of "[^"]*") should have non\-sticky topic "([^"]*)"$/ do |forum, title|
+Then "{forum} should have non-sticky topic {string}" do |forum, title|
   topic = forum.topics.find_by_title(title)
   assert_not_nil topic
   assert !topic.sticky?
@@ -110,7 +112,7 @@ When /^I leave the obligatory topic fields blank$/ do
 end
 
 
-Then /^I should see all the topics on the (forum of "[^\"]*")$/ do |forum|
+Then "I should see all the topics on {forum}" do |forum|
   step %{I should see "#{forum.topics.length} topics"}
   forum.topics.each do |topic|
     step %{I should see "#{topic.title}"}
@@ -122,13 +124,13 @@ Then /^I should see only the (\w+) topic$/ do |title|
   step %{I should see "#{title}"}
 end
 
-Then /^I should see topics? #{QUOTED_LIST_PATTERN}$/ do |titles|
+Then "I should see topic(s) {list_of_strings}" do |titles|
   titles.each do |title|
     assert has_css?('tr.topic', :text => title)
   end
 end
 
-Then /^I should not see topics? #{QUOTED_LIST_PATTERN}$/ do |titles|
+Then "I should not see topic(s) {list_of_strings}" do |titles|
   titles.each do |title|
     assert has_no_css?('tr.topic', :text => title)
   end
