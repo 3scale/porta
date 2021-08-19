@@ -12,7 +12,7 @@ Given "a method {string} of {provider}" do |name, provider|
   FactoryBot.create(:metric, :friendly_name => name, :parent => provider.default_service.metrics.hits)
 end
 
-Given "the metrics {with_or_without} usage limits of {plan}:" do |enabled, app_plan, table|
+Given "the metrics {with} usage limits of {plan}:" do |enabled, app_plan, table|
   table.hashes.each do |hash|
     metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => hash['metric'])
     if enabled
@@ -23,7 +23,7 @@ Given "the metrics {with_or_without} usage limits of {plan}:" do |enabled, app_p
   end
 end
 
-Given "the metric {string} {with_or_without} usage limit {int} of {plan}" do |name, enabled, limit, app_plan|
+Given "the metric {string} {with} usage limit {int} of {plan}" do |name, enabled, limit, app_plan|
   metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => name)
   if enabled
     ul = app_plan.usage_limits.new(:period => "day", :value => limit.to_i)

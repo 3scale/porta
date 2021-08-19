@@ -60,7 +60,7 @@ Then "{provider} should have config value {string} set to {string}" do |provider
   assert_equal value, provider.config[name]
 end
 
-Then "{provider} should have config value {string} set to {true_or_false}" do |provider, name, set|
+Then "{provider} should have config value {string} set to {true}" do |provider, name, set|
   assert_equal set, provider.config[name]
 end
 

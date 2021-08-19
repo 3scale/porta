@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# TODO: double check which parameterTypes are not used and remove them
-
 quoted_list_subpattern = '"[^"]*"(?:(?:,| and) "[^"]*")'
 
 QUOTED_ONE_OR_MORE_PATTERN = "(#{quoted_list_subpattern}*)"
@@ -31,17 +29,6 @@ ParameterType(
   }
 )
 
-ParameterType(
-  name: 'provider_or_service',
-  regexp: /(provider|service) "([^"]*)"/,
-  transformer: ->(type, name) {
-    case type
-    when 'provider' then provider_by_name(name)
-    when 'service' then Service.find_by!(name: name)
-    end
-  }
-)
-
 def provider_by_name(name)
   # TODO: fix this hacky way of getting master
   if name == 'master'
@@ -56,31 +43,9 @@ def provider_by_name(name)
 end
 
 ParameterType(
-  name: 'amount',
-  regexp: /(a|an|no|\d+)/,
-  transformer: ->(amount) {
-    # From: EmailSpec::Helpers.parse_email_count
-    case amount
-    when 'no'
-      0
-    when 'an', 'a'
-      1
-    else
-      amount.to_i
-    end
-  }
-)
-
-ParameterType(
   name: 'prepaid_or_postpaid',
   regexp: /(prepaid|postpaid)?/,
   transformer: ->(mode = nil) { mode }
-)
-
-ParameterType(
-  name: 'list',
-  regexp: /^#{QUOTED_LIST_PATTERN}$/,
-  transformer: ->(list) { list.from_sentence.map { |item| item.delete('"') } }
 )
 
 ParameterType(
@@ -93,36 +58,6 @@ ParameterType(
   name: 'page',
   regexp: /page "([^"]*)"/,
   transformer: ->(title) { Page.find_by!(title: title) }
-)
-
-ParameterType(
-  name: 'time_period',
-  regexp: /(second|minute|hour|day|week|month|year)s?/,
-  transformer: ->(period) { period.to_sym }
-)
-
-ParameterType(
-  name: 'regexp',
-  regexp: %r{/([^/]*)/},
-  transformer: ->(r) { Regexp.new(regexp, Regexp::IGNORECASE) }
-)
-
-ParameterType(
-  name: 'page_number',
-  regexp: /(d+)st|nd|rd|th page/,
-  transformer: ->(int) { int }
-)
-
-# FIXME: regexp too complex?
-ParameterType(
-  name: 'link_to_page',
-  regexp: /(the .+page.*)|(my .*page)|(the provider dashboard)|(my invoices)/,
-  # regexp: /(the.+page(?: for ".+")*(?: (?:of|for) service ".+")*(?: of provider ".+")*)|(the provider dashboard)/,
-  transformer: ->(page_name) {
-    # FIXME: it should transform the page_name into a path, but @provider is nil
-    # PathsHelper::PathFinder.new(@provider).path_to(page_name)
-    page_name
-  }
 )
 
 ParameterType(
@@ -167,16 +102,8 @@ ParameterType(
   name: 'provider',
   type: Account,
   regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
-  # FIXME: This alternative regexp would be useful but "@provider" is not accessible from the transformer
-  # regexp: /provider "([^"]*)"|(master) provider|provider (master)|the provider/,
+  # TODO check this .present? condition
   transformer: ->(name) { name.present? ? provider_by_name(name) : @provider }
-)
-
-ParameterType(
-  name: 'master_provider',
-  type: Account,
-  regexp: /^(master provider)$/,
-  transformer: ->(_) { Account.master }
 )
 
 ParameterType(
@@ -184,12 +111,6 @@ ParameterType(
   type: Account,
   regexp: /buyer "([^"]*)"/,
   transformer: ->(org_name) { Account.buyers.find_by!(org_name: org_name) }
-)
-
-ParameterType(
-  name: 'status',
-  regexp: /denied|allowed|hidden|visible/,
-  transformer: ->(status) { status }
 )
 
 ParameterType(
@@ -211,19 +132,11 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'the application id of buyer',
-  regexp: /^the application id of buyer "([^"]*)"$/,
-  transformer: ->(name) { Account.buyers.find_by!(org_name: name).bought_cinstance.application_id }
-)
-
-ParameterType(
   name: 'application',
   type: Cinstance,
   regexp: /application "([^"]*)"/,
   transformer: ->(name) { Cinstance.find_by!(name: name) }
 )
-
-# Potato CMS
 
 ParameterType(
   name: 'cms_page',
@@ -240,50 +153,12 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'page of provider',
-  regexp: /^page "([^"]*)" of provider "([^"]*)"$/,
-  transformer: ->(title, provider_name) do
-    provider = providerl(org_name)
-    Page.find_by!(title: title, account_id: provider.id)
-  end
-)
-
-ParameterType(
-  name: 'page at of provider',
-  regexp: /^page at (.*) of provider "([^"]*)"$/,
-  transformer: ->(path, provider_name) do
-    provider = providerl(org_name)
-    Page.find_by!(path: path, account_id: provider.id)
-  end
-)
-
-ParameterType(
   name: 'section_of_provider',
   regexp: /section "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(name, provider_name) do
     provider_by_name(provider_name).provided_sections.find_by!(title: name)
   end
 )
-
-ParameterType(
-  name: 'html block',
-  regexp: /^html block "([^"]*)"$/,
-  transformer: ->(name) { HtmlBlock.find_by!(name: name) }
-)
-
-ParameterType(
-  name: 'country',
-  regexp: /^country "([^"]*)"$/,
-  transformer: ->(name) { Country.find_by!(name: name) }
-)
-
-ParameterType(
-  name: 'feature',
-  regexp: /^feature "([^"]*)"$/,
-  transformer: ->(name) { Feature.find_by!(name: name) }
-)
-
-# Forum
 
 ParameterType(
   name: 'forum',
@@ -298,28 +173,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'post',
-  regexp: /^post "([^"]*)"$/,
-  transformer: ->(body) do
-    post = Post.all.to_a.find { |p| p.body == body }
-    assert post
-    post
-  end
-)
-
-ParameterType(
-  name: 'the_last_post_under_topic',
-  regexp: /the last post under topic "([^"]*)"/,
-  transformer: ->(title) { Topic.find_by!(title: title).posts.last }
-)
-
-ParameterType(
-  name: 'category',
-  regexp: /^category "([^"]*)"$/,
-  transformer: ->(name) { TopicCategory.find_by!(name: name) }
-)
-
-ParameterType(
   name: 'metric',
   regexp: /metric "([^"]*)"/,
   transformer: ->(name) { Metric.find_by!(system_name: name) }
@@ -331,15 +184,6 @@ ParameterType(
   transformer: ->(metric_name, plan_name) do
     plan = ApplicationPlan.find_by!(name: plan_name)
     plan.metrics.find_by!(system_name: metric_name)
-  end
-)
-
-ParameterType(
-  name: 'metric of provider',
-  regexp: /^metric "([^"]*)" of provider "([^"]*)$/,
-  transformer: ->(metric_name, provider_name) do
-    provider = Account.find_by!(org_name: provider_name)
-    provider.first_service!.metrics.find_by!(system_name: name)
   end
 )
 
@@ -401,21 +245,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'invoice',
-  regexp: /^invoice "(.+?)"$/,
-  transformer: ->(service_name, provider_name) { Invoice.find_by(id: id) or Invoice.find_by(friendly_id: id) or raise "Couldn't find Invoice with id #{id}" }
-)
-
-OAUTH_PROVIDER_OPTIONS = {
-  auth0: {
-    site: "https://client.auth0.com"
-  },
-  keycloak: {
-    site: "http://localhost:8080/auth/realms/3scale"
-  }
-}.freeze
-
-ParameterType(
   name: 'date',
   regexp: /(.*)/,
   transformer: ->(date) { Date.parse(date) }
@@ -425,12 +254,6 @@ ParameterType(
   name: 'enabled',
   regexp: /enabled|disabled|not enabled/,
   transformer: ->(value) { value == 'enabled' }
-)
-
-ParameterType(
-  name: 'activated',
-  regexp: /activated|deactivated/,
-  transformer: ->(value) { value == 'activated' }
 )
 
 ParameterType(
@@ -458,7 +281,7 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'with_or_without',
+  name: 'with',
   regexp: /with|without/,
   transformer: ->(value) { value == 'with' }
 )
@@ -488,63 +311,21 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'check',
-  regexp: /check|uncheck/,
-  transformer: ->(value) { value == 'check' }
-)
-
-ParameterType(
-  name: 'checked',
-  regexp: /checked|unchecked/,
-  transformer: ->(value) { value == 'checked' }
-)
-
-ParameterType(
-  name: 'set',
-  regexp: /set|unset/,
-  transformer: ->(value) { value == 'set' }
-)
-
-ParameterType(
-  name: 'true_or_false',
+  name: 'true',
   regexp: /true|false/,
   transformer: ->(value) { value == 'true' }
 )
 
 ParameterType(
-  name: 'today_or_yesterday',
+  name: 'today',
   regexp: /today|yesterday/,
   transformer: ->(value) { value }
-)
-
-ParameterType(
-  name: 'should',
-  regexp: /should|should't|should not/,
-  transformer: ->(value) { value == 'should' }
-)
-
-ParameterType(
-  name: 'valid',
-  regexp: /valid|invalid/,
-  transformer: ->(value) { value == 'valid' }
-)
-
-ParameterType(
-  name: 'on_off',
-  regexp: /(on|off)/,
-  transformer: ->(state) { state == 'on' }
 )
 
 ParameterType(
   name: 'does',
   regexp: /|does|does not|doesn't/,
   transformer: ->(value) { value == 'does' || value.blank? }
-)
-
-ParameterType(
-  name: 'strings',
-  regexp: /"(.+?)"/,
-  transformer: ->(name) { name.from_sentence.map { |n| n.delete('"') } }
 )
 
 ParameterType(
