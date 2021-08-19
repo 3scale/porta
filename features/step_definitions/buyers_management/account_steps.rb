@@ -5,7 +5,7 @@ Given "{provider} has the following buyers:" do |provider, table|
   table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
 
   table.hashes.each do |hash|
-    step %{a buyer "#{hash[:name]}" signed up to provider "#{provider_name}"}
+    step %{a buyer "#{hash[:name]}" signed up to provider "#{provider.org_name}"}
 
     buyer = Account.buyers.find_by_org_name!(hash[:name])
 
