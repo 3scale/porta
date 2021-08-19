@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: - DRY all these steps
 Given /^a provider "([^\"]*)" with (postpaid|prepaid)?\s*billing (enabled|disabled)?$/ do |provider_name,mode,status|
   step %(a provider "#{provider_name}")
@@ -10,18 +12,18 @@ Given /^a provider "([^\"]*)" with charging enabled$/ do |provider_name|
   step %(provider "#{provider_name}" is charging)
 end
 
-Given /^(provider "[^\"]*") is (not )?charging$/ do |provider,not_charging|
+Given "{provider} {is} charging" do |provider, charging_enabled|
   unless provider.billing_strategy
     provider.billing_strategy = FactoryBot.create(:postpaid_billing)
     provider.save!
   end
 
-  if not_charging.nil?
+  if charging_enabled
     provider.payment_gateway_type = :bogus
     provider.payment_gateway_options = {:login => 'foo', :password => 'bar', :user => 'user', :merchant_id => '123', :public_key => 'key', :private_key => 'priv key'}
   end
 
-  provider.billing_strategy.charging_enabled = not_charging.nil?
+  provider.billing_strategy.charging_enabled = charging_enabled
   provider.billing_strategy.currency = 'EUR'
   provider.billing_strategy.save!
   provider.save!
@@ -31,7 +33,7 @@ Given(/^the provider is (not )?charging$/) do |not_charging|
   step %(provider "#{@provider.domain}" is #{not_charging}charging)
 end
 
-Given /^(provider "[^\"]*") is fake charging$/ do |provider|
+Given "{provider} is fake charging" do |provider|
   provider.settings.allow_finance! unless provider.settings.finance.allowed?
 
   unless provider.billing_strategy
@@ -46,8 +48,8 @@ Given /^(provider "[^\"]*") is fake charging$/ do |provider|
   provider.save!
 end
 
-Given /^(provider "[^\"]*") has ?(prepaid|postpaid)? billing (enabled|disabled)$/ do |provider,mode,status|
-  if status.to_sym == :enabled
+Given "{provider} has {prepaid_or_postpaid}( )billing {enabled}" do |provider, mode, enabled|
+  if enabled
     provider.settings.allow_finance! unless provider.settings.finance.allowed?
 
     type = if (mode && mode.strip == 'prepaid')
@@ -63,12 +65,13 @@ Given /^(provider "[^\"]*") has ?(prepaid|postpaid)? billing (enabled|disabled)$
   end
 end
 
+# FIXME: "the provider" should be inside ParameterType 'provider' but @provider is not accesible from there
 Given /^the provider has (prepaid|postpaid) billing enabled/ do |mode|
   step %(provider "#{@provider.name}" has #{mode} billing enabled)
 end
 
 
-Given /^(provider ".+?") doesn't have billing address$/ do |provider| #'
+Given "{provider} doesn't have billing address" do |provider|
   %w[zip name city state country phone address1].each do |attr|
     provider.send("billing_address_#{attr}=", nil)
   end

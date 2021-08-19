@@ -1,4 +1,6 @@
-Given /^(buyer "[^\"]*") has extra fields:$/ do |buyer, table|
+# frozen_string_literal: true
+
+Given "{buyer} has extra fields:" do |buyer, table|
   buyer.extra_fields = table.hashes.first
   buyer.save!
 end

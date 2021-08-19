@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Then /^I should not see any plans$/ do
   within plans_table do
     page.should have_css('tbody tr', size: 0)
@@ -17,7 +19,7 @@ Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
   end
 end
 
-When /^I follow "([^"]*)" for (plan "[^"]*")$/ do |label, plan|
+When "I follow {string} for {plan}" do |label, plan|
   step %(I follow "#{label}" within "##{dom_id(plan)}")
 end
 
@@ -87,6 +89,6 @@ When(/^the provider creates a plan$/) do
   @plan = Plan.find_by!(name: name)
 end
 
-When /^(plan "[^"]*") has been deleted$/ do |plan|
+When "{plan} has been deleted" do |plan|
   plan.destroy
 end

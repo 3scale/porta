@@ -1,7 +1,9 @@
-Given /^((?:buyer|provider) "[^\"]*") has last digits of credit card number "([^\"]*)" and expiration date (.*)$/ do |account, partial_number, expiration_date|
+# frozen_string_literal: true
+
+Given "{provider_or_buyer} has last digits of credit card number {string} and expiration date {date}" do |account, partial_number, expiration_date|
   account.credit_card_partial_number = partial_number
   account.credit_card_auth_code = 'valid_code'
-  account.credit_card_expires_on = Date.parse(expiration_date)
+  account.credit_card_expires_on = expiration_date
   account.save!
 end
 
@@ -43,7 +45,7 @@ Then /^I should see the refunds link linking to path "([^\"]*)"$/ do |path|
   assert find("#refunds-link")[:href] =~ /#{path}\Z/
 end
 
-Given /^(provider "[^"]*") manages payments with "([^"]*)"$/ do |provider, payment_gateway_type|
+Given "{provider} manages payments with {string}" do |provider, payment_gateway_type|
   provider.payment_gateway_type = payment_gateway_type.to_sym
   provider.save!
 end
@@ -54,7 +56,7 @@ Given /^the provider has unconfigured payment gateway$/ do
   @provider.save!
 end
 
-Given /^(provider ".+?") has testing credentials for braintree$/ do |provider|
+Given "{provider} has testing credentials for braintree" do |provider|
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
   provider.payment_gateway_type = :braintree_blue
   provider.payment_gateway_options = {:public_key => 'AnY-pUbLiC-kEy', :merchant_id => 'my-payment-gw-mid', :private_key => 'a1b2c3d4e5'}

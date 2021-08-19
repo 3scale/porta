@@ -582,15 +582,17 @@ World(Module.new do
     when 'my invoices'
       admin_account_invoices_path
 
-    when /^the invoices of (account ".+?") page$/
-      account = Transform $1
+    when /^the invoices of account "(.+?)" page$/
+      account = Account.find_by!(org_name: $1)
       admin_buyers_account_invoices_path(account)
 
     when /^the invoices issued by me$/
       admin_finance_invoices_path
 
-    when /^the (invoice ".+?") page$/
-      invoice = Transform $1
+    when /^the invoice "(.+?)" page$/
+      invoice = Invoice.find_by(id: $1) || Invoice.find_by(friendly_id: $1)
+      raise "Couldn't find Invoice with id #{$1}" unless invoice
+
       admin_finance_account_invoice_path(invoice.buyer_account, invoice)
 
     when /^the invoices page$/
@@ -625,19 +627,23 @@ World(Module.new do
     # Proxy
     when 'the service definition page'
       admin_service_metrics_path(provider_first_service!)
-    when /^the integration show page for (service ".+?")/
-      admin_service_integration_path(Transform $1)
-    when /^the mapping rules index page for (service ".+?")/
-      admin_service_proxy_rules_path(Transform $1)
+    when /^the integration show page for service "(.+?)"/
+      service = Service.find_by!(name: $1)
+      admin_service_integration_path(service)
+    when /^the mapping rules index page for service "(.+?)"/
+      service = Service.find_by!(name: $1)
+      admin_service_proxy_rules_path(service)
     when /^the mapping rules index page for backend "(.+?)"/
       provider_admin_backend_api_mapping_rules_path(BackendApi.find_by!(name: $1))
-    when /^the create mapping rule page for (service ".+?")/
-      new_admin_service_proxy_rule_path(Transform $1)
+    when /^the create mapping rule page for service "(.+?)"/
+      service = Service.find_by!(name: $1)
+      new_admin_service_proxy_rule_path(service)
     when /^the create mapping rule page for backend "(.+?)"/
       new_provider_admin_backend_api_mapping_rule_path(BackendApi.find_by!(name: $1))
-    when /^the integration page for (service ".+?")/
+    when /^the integration page for service "(.+?)"/
       # TODO: THREESCALE-3759 edit page no longer exist, remove or replace
-      edit_admin_service_integration_path(Transform $1)
+      service = Service.find_by!(name: $1)
+      edit_admin_service_integration_path(service)
 
     when 'the 404 page'
       '/the-404-page'

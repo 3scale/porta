@@ -1,4 +1,6 @@
-Given(/^(provider ".*?") has all the templates setup$/) do |provider|
+# frozen_string_literal: true
+
+Given "{provider} has all the templates setup" do |provider|
   provider.files.delete_all
   provider.templates.delete_all
   SimpleLayout.new(provider).import!

@@ -1,4 +1,6 @@
-Given /^the key limit for (application "[^"]*") is reached$/ do |application|
+# frozen_string_literal: true
+
+Given "the key limit for {application} is reached" do |application|
   fake_application_keys_count(application, application.keys_limit)
 end
 
@@ -10,11 +12,11 @@ Given /^I care about application keys$/ do
   unstub_backend_get_keys
 end
 
-Given /^(application "[^"]*") has the following keys:$/ do |application, table|
+Given "{application} has the following keys:" do |application, table|
   fake_application_keys(application, table.raw.map(&:first))
 end
 
-Given /^(application "[^"]*") has (\d+) keys$/ do |application, number|
+Given "{application} has {int} keys" do |application, number|
   fake_application_keys_count(application, number)
 end
 
@@ -22,15 +24,15 @@ Given /^application "([^"]*)" has no keys$/ do |name|
   step %(application "#{name}" has 0 keys)
 end
 
-Given /^the application of (buyer "[^"]*") has the following keys:$/ do |buyer, table|
+Given "the application of {buyer} has the following keys:" do |buyer, table|
   fake_application_keys(buyer.bought_cinstance, table.raw.map(&:first))
 end
 
-Given /^the application of (buyer "[^"]*") has (\d+) keys$/ do |buyer, number|
+Given "the application of {buyer} has {int} keys" do |buyer, number|
   fake_application_keys_count(buyer.bought_cinstance, number)
 end
 
-Given /^the backend will create key "([^"]*)" for (application "[^"]*")$/ do |key, application|
+Given "the backend will create key {string} for {application}" do |key, application|
   stub_request(:post, backend_application_url(application, '/keys.xml'))
     .to_return(status: fake_status(201), body: %(<key value="#{key}"/>))
   fake_application_keys(application, [key])
@@ -44,12 +46,12 @@ Given /^the backend will create key "([^"]*)" for an application$/ do |key|
     .to_return(status: fake_status(200), body: %(<keys><key value="#{key}"</key>))
 end
 
-Given /^the backend will delete key "([^"]*)" for (application "[^"]*")$/ do |key, application|
+Given "the backend will delete key {string} for {application}" do |key, application|
   stub_request(:delete, backend_application_url(application, "/keys/#{key}.xml?provider_key=#{application.provider_account.api_key}&service_id=#{application.service.backend_id}"))
     .to_return(status: fake_status(200), body: '')
 end
 
-Given %r{^the backend will delete all keys for (application "[^"]*")$} do |application|
+Given "the backend will delete all keys for {application}" do |application|
   application.keys.each do |key|
     step %{the backend will delete key "#{key}" for application "#{application.name}"}
   end
@@ -79,19 +81,19 @@ Then /^I should not see application key "([^"]*)"$/ do |key|
   step %(I should not see "#{key}" within "#application_keys")
 end
 
-Then /^I should see all keys of (application "[^"]*")$/ do |application|
+Then "I should see all keys of {application}" do |application|
   application.keys.each do |key|
     step %(I should see "#{key}")
   end
 end
 
-Then /^I should not see any key of (application "[^"]*")$/ do |application|
+Then "I should not see any key of {application}" do |application|
   application.keys.each do |key|
     step %(I should not see "#{key}")
   end
 end
 
-Then /^I should see all keys of the application of (buyer "[^"]*")$/ do |buyer|
+Then "I should see all keys of the application of {buyer}" do |buyer|
   buyer.bought_cinstance.keys.each do |key|
     step %(I should see "#{key}")
   end

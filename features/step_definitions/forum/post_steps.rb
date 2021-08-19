@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 When /^I reply to topic "([^\"]*)" with "([^"]*)"$/ do |topic_title, body|
@@ -44,14 +43,12 @@ Then /^I should not see the post has been removed$/ do
   response.body.should_not have_regexp /This post has been removed/
 end
 
-Given /^(topic "[^\"]*") has only one post$/ do |topic|
+Given "{topic} has only one post" do |topic|
   topic.posts[1..-1].each(&:destroy)
   assert_equal 1, topic.posts.count
 end
 
-Given /^(topic "[^"]*") has (\d+) posts$/ do |topic, number|
-  number = number.to_i
-
+Given "{topic} has {int} posts" do |topic, number|
   if topic.posts.count > number
     topic.posts[number..-1].each(&:destroy)
   elsif topic.posts.count < number
@@ -59,29 +56,29 @@ Given /^(topic "[^"]*") has (\d+) posts$/ do |topic, number|
   end
 end
 
-Then /^(topic "[^"]*") should have (\d+) posts?$/ do |topic, number|
+Then "{topic} should have {int} post(s)" do |topic, number|
   assert number, topic.posts.count.to_s
 end
 
-Then /^(topic "[^"]*") should have post "([^"]*)"$/ do |topic, body|
+Then "{topic} should have post {string}" do |topic, body|
   assert_not_nil(topic.posts.to_a.find { |post| post.body == body })
 end
 
-Then /^(topic "[^"]*") should not have post "([^"]*)"$/ do |topic, body|
+Then "{topic} should not have post {string}" do |topic, body|
   assert_nil(topic.posts.to_a.find { |post| post.body == body })
 end
 
-Given /^a post "([^"]*)" under (topic "[^"]*")$/ do |body, topic|
+Given "a post {string} under {topic}" do |body, topic|
   FactoryBot.create(:post, :user => topic.user, :topic => topic, :body => body)
 end
 
-Given /^(user "[^"]*") posted "([^"]*)" (today|yesterday) under (topic "[^"]*")$/ do |user, body, time, topic|
+Given "{user} posted {string} {today_or_yesterday} under {topic}" do |user, body, time, topic|
   Timecop.travel(Chronic.parse(time)) do
     FactoryBot.create(:post, :user => user, :topic => topic, :body => body)
   end
 end
 
-Given /^(the forum of "[^"]*") has the following posts:$/ do |forum, table|
+Given "{forum} has the following posts:" do |forum, table|
   table.hashes.each do |hash|
     topic = forum.topics.find_by_title!(hash['Topic'])
     user  = User.find_by_username!(hash['User'])
@@ -116,13 +113,15 @@ Then /^I should not see post "([^"]*)" by "([^"]*)"$/ do |body, author|
   assert elements.empty?
 end
 
-Then /^(.+) for (post "[^"]*")$/ do |lstep, post|
+Then /^(.+) for post "([^"]*)"$/ do |lstep, body|
+  post = Post.find_by!(body: body)
   within "##{dom_id(post)}" do
     step lstep
   end
 end
 
-Then /^(.+) for (the last post under topic "[^"]*")$/ do |lstep, post|
+Then /^(.+) for the last post under topic "([^"]*)"$/ do |lstep, topic_title|
+  post = Topic.find_by!(title: topic_title).posts.last
   within "##{dom_id(post)}" do
     step lstep
   end

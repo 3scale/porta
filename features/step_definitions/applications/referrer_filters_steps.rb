@@ -1,26 +1,28 @@
+# frozen_string_literal: true
+
 # multi-app
 
-Given /^(application "[^"]*") has the following referrer filters:$/ do |application, table|
+Given "{application} has the following referrer filters:" do |application, table|
   fake_application_referrer_filters(application, table.raw.map(&:first))
 end
 
-Given /^(application "[^"]*") has no referrer filters$/ do |application|
+Given "{application} has no referrer filters" do |application|
   fake_application_referrer_filters(application, [])
 end
 
-Given /^the backend will create referrer filter "([^"]*)" for (application "[^"]*")$/ do |referrer_filter, application|
+Given "the backend will create referrer filter {string} for {application}" do |referrer_filter, application|
   fake_application_referrer_filter_creation(application, referrer_filter)
 end
 
-Given /^the backend will delete referrer filter "([^"]*)" for (application "[^"]*")$/ do |referrer_filter, application|
+Given "the backend will delete referrer filter {string} for {application}" do |referrer_filter, application|
   fake_application_referrer_filter_deletion(application, referrer_filter)
 end
 
-Given /^the backend will respond with error on attempt to create blank referrer filter for (application "[^"]*")$/ do |application|
+Given "the backend will respond with error on attempt to create blank referrer filter for {application}" do |application|
   fake_application_referrer_filter_creation_error(application)
 end
 
-Given /^the referrer filter limit for (application "[^"]*") is reached$/ do |application|
+Given "the referrer filter limit for {application} is reached" do |application|
   filters = Array.new(application.filters_limit) do |i|
     "#{i}.example.org"
   end
@@ -39,23 +41,23 @@ end
 
 # single-app
 
-Given /^the application of (buyer "[^"]*") has the following referrer filters:$/ do |buyer, table|
+Given "the application of {buyer} has the following referrer filters:" do |buyer, table|
   fake_application_referrer_filters(buyer.bought_cinstance, table.raw.map(&:first))
 end
 
-Given /^the application of (buyer "[^"]*") has no referrer filters$/ do |buyer|
+Given "the application of {buyer} has no referrer filters" do |buyer|
   fake_application_referrer_filters(buyer.bought_cinstance, [])
 end
 
-Given /^the backend will create referrer filter "([^"]*)" for the application of (buyer "[^"]*")$/ do |referrer_filter, buyer|
+Given "the backend will create referrer filter {string} for the application of {buyer}" do |referrer_filter, buyer|
   fake_application_referrer_filter_creation(buyer.bought_cinstance, referrer_filter)
 end
 
-Given /^the backend will respond with error on attempt to create blank referrer filter for the application of (buyer "[^"]*")$/ do |buyer|
+Given "the backend will respond with error on attempt to create blank referrer filter for the application of {buyer}" do |buyer|
   fake_application_referrer_filter_creation_error(buyer.bought_cinstance)
 end
 
-Given /^the backend will delete referrer filter "([^"]*)" for the application of (buyer "[^"]*")$/ do |referrer_filter, buyer|
+Given "the backend will delete referrer filter {string} for the application of {buyer}" do |referrer_filter, buyer|
   fake_application_referrer_filter_deletion(buyer.bought_cinstance, referrer_filter)
 end
 
@@ -96,15 +98,15 @@ Then /^the new referrer filter form should be hidden$/ do
   assert has_no_xpath? "//div[@id='referrer_filters']/div[@class='enabled_block']"
 end
 
-Given /^referrer filters are( not)? required for the service of (provider "[^"]*")$/ do |disabled, provider|
-  provider.default_service.update_attribute(:referrer_filters_required, disabled.blank?)
+Given "referrer filters {are} required for the service of {provider}" do |required, provider|
+  provider.default_service.update!(referrer_filters_required: required)
 end
 
-Then /^referrer filters should be required for the service of (provider "[^"]*")$/ do |provider|
+Then "referrer filters should be required for the service of {provider}" do |provider|
   assert provider.default_service.referrer_filters_required?
 end
 
-Then /^referrer filters should not be required for the service of (provider "[^"]*")$/ do |provider|
+Then "referrer filters should not be required for the service of {provider}" do |provider|
   assert !provider.default_service.referrer_filters_required?
 end
 

@@ -1,8 +1,10 @@
-Given /^(provider "[^\"]*") has no site access code$/ do |account|
+# frozen_string_literal: true
+
+Given "{provider} has no site access code" do |account|
   account.update_attribute(:site_access_code, nil)
 end
 
-Given /^(provider "[^\"]*") has site access code "([^\"]*)"$/ do |account, code|
+Given "{provider} has site access code {string}" do |account, code|
   account.update_attribute(:site_access_code, code)
 end
 

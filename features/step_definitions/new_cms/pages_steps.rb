@@ -1,8 +1,10 @@
-Given /^I have(?: a)? cms page "(.+?)" of (provider ".+?")$/i do |path, provider|
+# frozen_string_literal: true
+
+Given "I have (a )cms page {string} of {provider}" do |path, provider|
   FactoryBot.create(:cms_page, :path => path, :provider => provider)
 end
 
-Given /^I have(?: a)? cms page "(.+?)" of (provider ".+?") with markdown content$/i do |path, provider|
+Given "I have (a )cms page {string} of {provider} with markdown content" do |path, provider|
   FactoryBot.create(:cms_page, :path => path, :provider => provider, :handler => :markdown, :published => '# Markdown content')
 end
 
@@ -10,7 +12,7 @@ Then /^I should see rendered markdown content$/ do
   page.should have_css('h1', :text => 'Markdown content')
 end
 
-Then /^(CMS Page ".+?") should have:/ do |page, table|
+Then "{cms_page} should have:" do |page, table|
   table = table.transpose
   actual = table.headers.map do |header|
 

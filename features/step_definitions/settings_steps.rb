@@ -1,25 +1,23 @@
-Given /^(provider "[^\"]*") has "([^\"]*)" disabled$/ do |account, toggle|
-  account.settings.update_attribute("#{underscore_spaces(toggle)}_enabled", false)
+# frozen_string_literal: true
+
+Given "{provider} has {string} {enabled}" do |account, toggle, enabled|
+  account.settings.update_attribute("#{underscore_spaces(toggle)}_enabled", enabled)
 end
 
-Given /^(provider "[^\"]*") has "([^\"]*)" enabled$/ do |account, toggle|
-  account.settings.update_attribute("#{underscore_spaces(toggle)}_enabled", true)
-end
 
-
-Given /^(provider "[^\"]*") has "([^\"]*)" set to "([^\"]*)"$/ do |account, name, value|
+Given "{provider} has {string} set to {string}" do |account, name, value|
   account.settings.update_attribute(underscore_spaces(name), value)
 end
 
-Given /^(provider "[^\"]*") has the following settings:$/ do |account, table|
+Given "{provider} has the following settings:" do |account, table|
   attributes = table.rows_hash
   attributes.map_keys! { |key| underscore_spaces(key) }
 
   account.settings.update_attributes!(attributes)
 end
 
-Given /^(buyer "[^\"]*") has "([^\"]*)" enabled$/ do |account, setting|
-  account.settings.update_attribute("#{underscore_spaces(setting)}_enabled", true)
+Given "{buyer} has {string} {enabled}" do |account, setting, enabled|
+  account.settings.update_attribute("#{underscore_spaces(setting)}_enabled", enabled)
 end
 
 When /^I (check|uncheck) "([^"]*)" for the "([^"]*)" module$/ do |action, widget, name|
@@ -30,11 +28,11 @@ Then /^I should see the settings updated$/ do
   assert has_content?("Settings updated.")
 end
 
-Then /^(provider "[^"]*") should have strong passwords enabled$/ do |provider|
-  assert provider.settings.strong_passwords_enabled
+Then "{provider} should have strong passwords {enabled}" do |provider, enabled|
+  assert provider.settings.strong_passwords_enabled == enabled
 end
 
-Then /^(provider "[^"]*") should have strong passwords disabled$/ do |provider|
+Then "{provider} should have a strong password disabled" do |provider|
   assert false == provider.settings.strong_passwords_enabled
 end
 
