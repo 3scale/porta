@@ -19,8 +19,7 @@ module Api::PlansHelper
   end
 
   def application_plans_data(plans)
-    plans.not_custom
-         .alphabetically
+    plans.alphabetically
          .to_json(root: false, only: %i[id name])
   end
 
@@ -37,8 +36,7 @@ module Api::PlansHelper
   end
 
   def application_plans_index_data(plans)
-    plans.not_custom
-         .alphabetically
+    plans.alphabetically
          .decorate
          .map(&:index_table_data)
   end

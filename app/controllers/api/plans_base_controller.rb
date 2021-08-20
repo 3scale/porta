@@ -43,7 +43,8 @@ class Api::PlansBaseController < Api::BaseController
 
   def find_plans
     search = ThreeScale::Search.new(params[:search] || params)
-    @plans = collection.order_by(params[:sort], params[:direction])
+    @plans = collection.not_custom
+                       .order_by(params[:sort], params[:direction])
                        .scope_search(search)
     @page_plans = @plans.paginate(pagination_params)
   end

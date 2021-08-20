@@ -73,6 +73,16 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_xpath "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create Application plan'
     end
 
+    test 'index pagination does not count custom plans' do
+      get admin_service_application_plans_path(service)
+      table = Nokogiri::HTML.parse(response.body).xpath "//*[@id='plans_table']"
+
+      pagination_count = JSON.parse table.attribute('data-count')
+      table_count = JSON.parse(table.attribute('data-plans').value).length
+
+      assert_equal pagination_count, table_count
+    end
+
     test 'actions are authorized for Saas' do
       get admin_service_application_plans_path(service)
       assert_response :ok
