@@ -10,7 +10,7 @@ p
   = pf_button_in_title 'Create Application plan', new_polymorphic_path([:admin, @service, @new_plan])
 
 section class="pf-c-page__main-section pf-m-no-padding"
-  - if @plans.not_custom.size > 0
+  - if @plans.size > 0
     div id='default_plan' data=default_application_plan_data(@service, @plans)
       = javascript_pack_tag 'default_plan_selector'
 
