@@ -17,7 +17,7 @@ Given "{provider} has {switch} visible" do |provider, switch|
 end
 
 # FIXME: "the provider" should be included in the ParameterType {provider}, but @provider is not accessible from there
-Given /^the provider has ("(?:.+?)"(?: switch)? visible)$/ do |sentence|
+Given /^the provider has ("(?:.+?)"(?: switch)? (?:visible|allowed))$/ do |sentence|
   step %(provider "#{@provider.domain}" has #{sentence})
 end
 
