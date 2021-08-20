@@ -109,7 +109,7 @@ Then "{account} should be {account_type}" do |account, type|
   assert account.send("#{type}?"), "Account '#{account.org_name}' is not a #{type}"
 end
 
-Given "{buyer} has only one admin {string}" do |buyer, username|
+Given "{buyer} has only one admin {string}" do |account, username|
   to_be_admin = account.users.find_by_username!(username)
 
   account.users.each do |user|
