@@ -298,12 +298,9 @@ When /^I visit "(.+?)"$/ do |path|
 end
 
 
-And(/^I press "([^"]*)" inside the dropdown$/) do |name|
-  link = find(:link, text: name) || find(:button, text: name)
-  toggle = find :xpath, XPath.generate{ |x| x.css('.dropdown')[link].next_sibling(:a) }.to_s
-
-  toggle.click
-  find(:xpath, link).click
+And(/^I press "Hide" inside the dropdown$/) do
+  find(:button, text: 'Publish').sibling('a').click
+  find(:button, name: 'hide').click
   wait_for_requests
 end
 
