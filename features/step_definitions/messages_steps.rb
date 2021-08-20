@@ -48,7 +48,7 @@ When /^I press a button to restore the message from "([^"]*)" with subject "([^"
 end
 
 
-Then /^a message should be sent from ((?:provider|buyer) "[^"]*") to ((?:provider|buyer) "[^"]*") with subject "([^"]*)" and body match with "([^"]*)"$/ do |sender, receiver, subject, body|
+Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body match with {string}" do |sender, receiver, subject, body|
   message = receiver.received_messages.to_a.find do |message|
     message.sender  == sender  &&
     message.subject == subject &&
