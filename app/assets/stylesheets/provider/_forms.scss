@@ -591,3 +591,27 @@ li.hidden {
 form#liquid-settings > fieldset {
   border-top: 0;
 }
+
+// TODO: will be moved eventually to a NewMetric React component
+form.formtastic#new_metric {
+  li#metric_system_name_input {
+    div {
+      display: block;
+
+      input,
+      p,
+      #system_name_popover {
+        display: inline;
+      }
+
+      input {
+        margin-right: .5rem;
+        width: 60%;
+      }
+
+      p {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
