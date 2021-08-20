@@ -18,9 +18,11 @@ jobs:
         with:
           ref: 3scale-${{ github.event.inputs.release }}-candidate
           fetch-depth: 0
+          token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
       - run: |
-            git checkout -b 3scale-${{ github.event.inputs.release }}-candidate
+            export candidate_branch="3scale-${{ github.event.inputs.release }}-candidate"
+            git checkout ${candidate_branch} && git pull ||  git checkout -b ${candidate_branch}
             git merge ${{ github.event.inputs.ref }} --ff-only
-            git push origin HEAD:3scale-${{ github.event.inputs.release }}-candidate
+            git push origin ${candidate_branch}
 
         name: Push to candidate branch
