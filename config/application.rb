@@ -11,16 +11,6 @@ ActiveSupport::XmlMini.backend = 'Nokogiri'
 
 module System
 
-  def self.rails4?
-    raise 'does not accept block' if block_given?
-
-    Rails::VERSION::MAJOR == 4
-  end
-
-  def self.rails4
-    block_given? ? (rails4? && yield) : rails4?
-  end
-
   module AssociationExtension
     def self.included(base)
       base.define_singleton_method(:to_proc) do
@@ -33,7 +23,13 @@ module System
 
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
+    # we do here instead of using initializers because of a Rails 5.1 vs
+    # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
+    # before initializers and causes configuration not to be respected.
+    # This is fixed in Rails 5.2
     config.load_defaults 5.1
+    config.active_record.belongs_to_required_by_default = false
+    config.active_record.include_root_in_json = true
 
     # The old config_for gem returns HashWithIndifferentAccess
     # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
@@ -278,7 +274,9 @@ module System
       # Prevents concurrent threads (e.g. sidekiq, puma) to deadlock while racing to obtain access to the mutex block at https://github.com/pat/thinking-sphinx/blob/v3.4.2/lib/thinking_sphinx/configuration.rb#L78
       # This is a ThinkingSphinx's known bug, fixed in v4.3.0+ - see: https://github.com/pat/thinking-sphinx/commit/814beb0aa3d9dd1227c0f41d630888a738f7c0d6
       # See also https://github.com/pat/thinking-sphinx/issues/1051 and https://github.com/pat/thinking-sphinx/issues/1132
-      ThinkingSphinx::Configuration.instance.preload_indices if ActiveRecord::Base.connected?
+      ActiveSupport.on_load(:active_record) do
+        ThinkingSphinx::Configuration.instance.preload_indices if ActiveRecord::Base.connected?
+      end
     end
 
     config.assets.quiet = true
