@@ -49,7 +49,7 @@ ENV BASH_ENV=/opt/system/etc/scl_enable \
 
 RUN export ${BUNDLER_ENV} >/dev/null\
     && source /opt/system/etc/scl_enable \
-    && gem install bundler --version 2.2.18 \
+    && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-10/bin/pg_config \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
