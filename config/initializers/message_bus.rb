@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: probably use the now supported channel_prefix option in cable.yml
 # Monkey patching message_bus to enforce redis namespace
 require 'message_bus/backends/redis'
 
@@ -8,6 +9,8 @@ class MessageBus::Redis::ReliablePubSub
     ::Redis.new_with_namespace(@redis_config.symbolize_keys)
   end
 end
+
+ActiveSupport.on_load(:active_record) do
 
 ThreeScale::MessageBusConfig.new(Rails.configuration.three_scale.message_bus).configure_message_bus!
 
@@ -46,4 +49,6 @@ MessageBus.site_id_lookup do |env = {}| # provider_id
       param
     end
   end
+end
+
 end

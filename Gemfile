@@ -101,7 +101,7 @@ gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
 gem 'prawn-layout', '0.2.1'
-gem 'rails_event_store', '~> 0.9.0'
+gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
@@ -112,7 +112,7 @@ gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
-gem 'thinking-sphinx', '~> 3.0'
+gem 'thinking-sphinx', '~> 5.3.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.1.6'
 gem 'zip-zip', require: false
