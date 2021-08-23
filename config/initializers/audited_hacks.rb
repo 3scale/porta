@@ -1,6 +1,3 @@
-# we want to audit created_at field
-Audited.ignored_attributes = %w(lock_version updated_at created_on updated_on)
-
 module AuditHacks
   extend ActiveSupport::Concern
 
@@ -91,10 +88,6 @@ module AuditHacks
 
 end
 
-Audited.audit_class.class_eval do
-  include AuditHacks
-end
-
 module AuditedHacks
   extend ActiveSupport::Concern
 
@@ -173,14 +166,22 @@ module AuditedHacks
   end
 end
 
-::ActiveRecord::Base.class_eval do
-  include AuditedHacks
-end
+ActiveSupport.on_load(:active_record) do
+  # we want to audit created_at field
+  Audited.ignored_attributes = %w(lock_version updated_at created_on updated_on)
 
-# This fixes issues with overloading current_user in our controllers
-Audited::Sweeper.prepend(Module.new do
-  def current_user
-    User.current
+  Audited.audit_class.class_eval do
+    include AuditHacks
   end
-end)
 
+  # This fixes issues with overloading current_user in our controllers
+  Audited::Sweeper.prepend(Module.new do
+    def current_user
+      User.current
+    end
+  end)
+
+  ::ActiveRecord::Base.class_eval do
+    include AuditedHacks
+  end
+end

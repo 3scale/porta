@@ -2,6 +2,8 @@ require_relative 'boot'
 
 require 'rails/all'
 
+ActiveSupport.on_load(:active_record) { puts "ActiveRecord init:\n", *caller.map{|l| "  #{l}" }}
+
 # If you precompile assets before deploying to production, use this line
 Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
 # If you want your assets lazily compiled in production, use this line
@@ -10,16 +12,6 @@ Bundler.require(*Rails.groups(:assets => %w[development production preview test]
 ActiveSupport::XmlMini.backend = 'Nokogiri'
 
 module System
-
-  def self.rails4?
-    raise 'does not accept block' if block_given?
-
-    Rails::VERSION::MAJOR == 4
-  end
-
-  def self.rails4
-    block_given? ? (rails4? && yield) : rails4?
-  end
 
   module AssociationExtension
     def self.included(base)
@@ -34,6 +26,8 @@ module System
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
+    # config.active_record.belongs_to_required_by_default = false
+    # config.active_record.include_root_in_json = true
 
     # The old config_for gem returns HashWithIndifferentAccess
     # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
@@ -271,6 +265,11 @@ module System
     end
 
     config.after_initialize do
+      if defined?(ActiveRecord::ConnectionAdapters::Transaction)
+        Rails.logger.warn "ActiveRecord loaded before initializers completed. Configuration set in initializers may not be effective."
+        puts "############### ActiveRecord prematurely loaded ##################"
+      end
+
       ThreeScale.validate_settings!
       require 'system/redis_pool'
       redis_config = ThreeScale::RedisConfig.new(config.redis)
@@ -279,7 +278,9 @@ module System
       # Prevents concurrent threads (e.g. sidekiq, puma) to deadlock while racing to obtain access to the mutex block at https://github.com/pat/thinking-sphinx/blob/v3.4.2/lib/thinking_sphinx/configuration.rb#L78
       # This is a ThinkingSphinx's known bug, fixed in v4.3.0+ - see: https://github.com/pat/thinking-sphinx/commit/814beb0aa3d9dd1227c0f41d630888a738f7c0d6
       # See also https://github.com/pat/thinking-sphinx/issues/1051 and https://github.com/pat/thinking-sphinx/issues/1132
-      ThinkingSphinx::Configuration.instance.preload_indices if ActiveRecord::Base.connected?
+      ActiveSupport.on_load(:active_record) do
+        ThinkingSphinx::Configuration.instance.preload_indices if ActiveRecord::Base.connected?
+      end
     end
 
     config.assets.quiet = true
