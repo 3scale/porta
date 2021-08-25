@@ -9,9 +9,14 @@ resource "Message" do
   api 'message' do
     post '/admin/api/accounts/:account_id/messages.:format', action: :create do
       parameter :body, 'Message Body'
+      parameter :subject, 'Message Subject'
       let(:body) { 'This is some text' }
+      let(:subject) { 'custom subject' }
 
-      after { serializable.body.should == body }
+      after do
+        serializable.body.should == body
+        serializable.subject.should_not == subject
+      end
     end
   end
 
