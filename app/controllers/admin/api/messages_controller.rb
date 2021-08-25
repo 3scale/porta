@@ -18,7 +18,7 @@ class Admin::Api::MessagesController < Admin::Api::BuyersBaseController
   ##~ op.parameters.add :name => "body", :description => "Text to send", :dataType => "string", :required => true, :paramType => "query", :allowMultiple => false
   #
   def create
-    message = current_account.messages.build params[:message]
+    message = current_account.messages.build params[:message].permit(:body)
     message.to = buyer
     message.deliver!
 
