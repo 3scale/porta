@@ -90,8 +90,22 @@
     </div>
   </div>
 </div>
-
+{{ 'validateSignup.js' | javascript_include_tag }}
 <script type="text/javascript">
+  function onCaptchaSuccess () {
+    if (window.ThreeScaleSignUPData){
+      window.ThreeScaleSignUPData.captchaValidOrAbsent = true
+      window.ThreeScaleSignUPData.validateForm()
+    }
+  }
+  
+  function onCaptchaFail () {
+    if (window.ThreeScaleSignUPData){
+      window.ThreeScaleSignUPData.captchaValidOrAbsent = false
+      window.ThreeScaleSignUPData.validateForm()
+    }
+  }
+  
   $(document).ready(function() {
       $('form:first *:input[type!=hidden]:first').focus();
   });

@@ -77,7 +77,7 @@ module ThreeScale::SpamProtection
         if captcha_needed?
           Rails.logger.info "[SpamProtection] CAPTCHA is needed. Inserting reCaptcha."
 
-          buff << recaptcha_tags
+          buff << recaptcha_tags(:callback => 'onCaptchaSuccess', :error_callback => 'onCaptchaFail', :expired_callback => 'onCaptchaFail')
           buff << form.semantic_errors(:recaptcha)
         else
           Rails.logger.info "[SpamProtection] CAPTCHA not needed. Inserting regular checks."
