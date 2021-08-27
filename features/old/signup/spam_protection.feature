@@ -23,11 +23,13 @@ Feature: Spam protection for buyer signup
      And I should not see the captcha
      And I fill in the signup fields as "hugo"
      And I should not see the captcha
-
+  
+  @javascript
   Scenario: Captcha is forced
     Given provider "foo.3scale.localhost" has "spam protection level" set to "captcha"
     When I go to the sign up page
     Then I should see the captcha
+    Then I should see submit button disabled
 
   Scenario: Spam check fails (because of fast fill and no js)
     When I go to the sign up page
