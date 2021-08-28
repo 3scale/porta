@@ -27,9 +27,10 @@
 ##=
 class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
 
-  wrap_parameters :template, include: [ :type, :system_name, :title, :path,
-                                        :draft, :section_id, :layout_name, :layout_id,
-                                        :liquid_enabled, :handler, :content_type ],
+  ALLOWED_PARAMS = %i[type system_name title path draft section_id layout_name
+                      layout_id liquid_enabled handler content_type].freeze
+
+  wrap_parameters :template, include: ALLOWED_PARAMS,
                              format: [:json, :xml, :multipart_form, :url_encoded_form]
 
   before_action :find_template, :except => [ :index, :create ]
@@ -55,14 +56,15 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##=  }
   ##=
   def create
-    type = cms_template_params.delete('type')
+    cms_params = cms_template_params
+    type = cms_params.delete('type')
 
     collections = { page: current_account.pages,
                     partial: current_account.partials,
                     layout: current_account.layouts }
 
     if type && (collection = collections[type.to_sym])
-      template = collection.new(cms_template_params)
+      template = collection.new(cms_params)
       if template.respond_to?(:section)
         template.section ||= find_section
       end
@@ -129,12 +131,12 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   def cms_template_params
-    attrs = params[:template] || {}
+    attrs = params.require(:template).permit(*ALLOWED_PARAMS)
 
     set_layout_by(:layout_name, :find_by_system_name, attrs)
     set_layout_by(:layout_id, :find_by_id, attrs)
 
-    attrs
+    attrs.to_h
   end
 
   private
