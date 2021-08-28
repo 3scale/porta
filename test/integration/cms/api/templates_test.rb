@@ -202,7 +202,7 @@ module CMS
         assert_response :not_acceptable
 
         post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml }
-        assert_response :not_acceptable
+        assert_response :bad_request
       end
 
       test 'create' do
