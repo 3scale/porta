@@ -45,8 +45,9 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##=    }
   ##=  }
   def create
-    parent_id = params[:section].delete(:parent_id)
-    @section = current_account.sections.build(params[:section])
+    create_params = params.require(:section).permit!
+    parent_id = create_params.delete(:parent_id)
+    @section = current_account.sections.build(create_params)
 
     if current_account.sections.exists?(id: parent_id)
       @section.parent_id = parent_id
