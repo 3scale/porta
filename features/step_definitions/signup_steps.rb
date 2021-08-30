@@ -1,4 +1,6 @@
-Given /^(provider "[^"]*") conditions to allow signup are met$/ do |provider|
+# frozen_string_literal: true
+
+Given "{provider} conditions to allow signup are met" do |provider|
   step %{provider "#{provider.org_name}" has multiple applications enabled}
   #only one of these conditions seems to suffice, but we are using both (review!)
   provider.first_service!.plans.create!(:name => 'Provider plan')
@@ -139,8 +141,7 @@ Then /^I should not see the password field$/ do
 end
 
 module ReadonlyField
-  include XPath::HTML
-  extend self
+  module_function
 
   def readonly_field(locator)
     xpath = descendant(:input)[attr(:readonly)] # rubocop:disable Style/Attr

@@ -46,9 +46,9 @@ Feature: Buyer's application management
      And I fill in "Description" with "Awesome ultimate super widget"
      And I press "Create"
      And I should be on the "UltimateWidget" application page
-     And I should see "Name UltimateWidget"
+     And I should see "UltimateWidget"
      And I should see "Awesome ultimate super widget"
-     And I should see "Plan Train"
+     And I should see "Train"
      And buyer "bob" should have 1 cinstance
 
     Scenario: Cannot select a plan when creating a new application

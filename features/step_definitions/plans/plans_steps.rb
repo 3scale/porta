@@ -1,26 +1,28 @@
-PLANS = /account|service|application/
+# frozen_string_literal: true
 
-Given /^the (provider ".+?") has following (#{PLANS} plan)s?:$/ do |provider, plan, table|
-  plan = plan.parameterize.underscore # application plan => application_plan
+PLANS = /account|service|application/.freeze
 
-  table.hashes.each do |row|
+Given "the {provider} has following {plan_type} plan(s):" do |provider, plan_type, table|
+  plan = "#{plan_type}_plan"
+
+  transform_application_plans_table(table).hashes.each do |row|
     FactoryBot.create plan, row.reverse_merge!(:issuer => provider.first_service!)
   end
 end
 
-Given /^a published service plan "([^\"]*)" of (service "[^\"]*" of provider "[^\"]*")$/ do |plan_name, service|
+Given "a published service plan {string} of {service_of_provider}" do |plan_name, service|
   create_plan :service, :name => plan_name, :issuer => service, :published => true
 end
 
-Given /^a default published service plan "([^\"]*)" of (service "[^\"]*" of provider "[^\"]*")$/ do |plan_name, service|
+Given "a default published service plan {string} of {service_of_provider}" do |plan_name, service|
   create_plan :service, :name => plan_name, :issuer => service, :published => true, :default => true
 end
 
-Given /^a published application plan "([^\"]*)" of (service "[^\"]*" of provider "[^\"]*")$/ do |plan_name, service|
+Given "a published application plan {string} of {service_of_provider}" do |plan_name, service|
   create_plan :application, :name => plan_name, :issuer => service, :published => true
 end
 
-Given /^a default published application plan "([^\"]*)" of (service "[^\"]*" of provider "[^\"]*")$/ do |plan_name, service|
+Given "a default published application plan {string} of {service_of_provider}" do |plan_name, service|
   create_plan :application, :name => plan_name, :issuer => service, :published => true, :default => true
 end
 
@@ -46,12 +48,19 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
 
-Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^\"]*)" (?:of|for) ((?:provider|service) "[^\"]*")(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, issuer, cost|
+Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^\"]*)" (?:of|for) (?:provider) "([^\"]*)"(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, domain, cost|
   type ||= :application
+  issuer = provider_by_name(domain)
   create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
 end
 
-Given /^(buyer "[^"]*") signed up for plans? (.+)$/  do |buyer, lst|
+Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^\"]*)" (?:of|for) (?:service) "([^\"]*)"(?: for (\d+) monthly)?(?: exists)?$/ do |default, published, type, plan_name, issuer, cost|
+  type ||= :application
+  issuer = Service.find_by!(name: issuer)
+  create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
+end
+
+Given "{buyer} signed up for plan(s) {}" do |buyer, lst|
   lst.each do |name|
     name = name.strip.delete('"')
     sign_up(buyer, name)
@@ -79,15 +88,15 @@ Given /^the buyer's (application|service|account) plan contract is (.*)$/ do |pl
   contract.update_column(:state, state)
 end
 
-Given /^(plan "[^"]*") is (published|hidden)$/ do |plan,state|
-  if state == 'published'
+Given "{plan} is {published}" do |plan, published|
+  if published
     plan.publish! unless plan.published?
   else
     plan.hide! unless plan.hidden?
   end
 end
 
-Given /^(#{PLANS} plan "[^\"]*") requires approval(?: of contracts)?$/  do |plan|
+Given "{plan} requires approval( of contracts)" do |plan|
   plan.update_attribute :approval_required, true
 end
 

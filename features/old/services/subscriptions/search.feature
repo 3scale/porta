@@ -38,16 +38,11 @@ Feature: Providers's subscription searching, sorting and filtering
     When I search for:
       | Plan  |
       | Basic |
-    Then I should see 2 pages
     And I follow "Account" within table header
     And I should see following table:
       | Account ▲ |
       | bob       |
-    When I look at 2nd page
-    Then I should see following table:
-      | Account ▲ |
       | jane      |
-    And I should see 2 pages
 
   Scenario Outline: Ordering
     Given I am on the subscriptions admin page

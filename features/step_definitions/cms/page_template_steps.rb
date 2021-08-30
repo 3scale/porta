@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When /^I fill in (?:the )?draft with:$/ do |text|
   fill_draft(text)
 end
@@ -18,7 +20,7 @@ def fill_draft(text)
   end
 end
 
-Given /^the template "([^"]*)" of (provider "[^"]*") is$/ do |name, provider, html|
+Given "the template {string} of {provider} is" do |name, provider, html|
   #TODO: extract PageTemplate construction to FactoryBot or whatever factory
   if layout = provider.layouts.find_by_system_name(name)
     layout.update_attribute(:body, html)

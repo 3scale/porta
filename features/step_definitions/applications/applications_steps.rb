@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 #TODO: does this step belong to extra_field steps
-Given /^(buyer "[^\"]*") has application "([^\"]*)" with extra fields:$/ do |buyer, app_name, table|
+Given "{buyer} has application {string} with extra fields:" do |buyer, app_name, table|
   plan = buyer.provider_account.first_service!.plans.default or raise 'Provider has no default application plan'
   cinstance = FactoryBot.build(:cinstance, { :user_account => buyer, :plan => plan,
                               :name => app_name, :description => app_name })
@@ -7,7 +9,7 @@ Given /^(buyer "[^\"]*") has application "([^\"]*)" with extra fields:$/ do |buy
   cinstance.save!
 end
 
-Given /^(buyer "[^"]*") has application "([^"]*)" with description "([^"]*)"$/ do |buyer, name, description|
+Given "{buyer} has application {string} with description {string}" do |buyer, name, description|
   plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
   FactoryBot.create(:cinstance, :user_account => buyer,
                       :plan         => plan,
@@ -19,7 +21,7 @@ Given /^buyer "([^"]*)" has application "([^"]*)"$/ do |buyer_name, application_
   step %(buyer "#{buyer_name}" has application "#{application_name}" with description "Blah blah")
 end
 
-Given /^(buyer "[^"]*") has application "([^"]*)" with ID "([^"]*)"$/ do |buyer, name, id|
+Given "{buyer} has application {string} with ID {string}" do |buyer, name, id|
   plan = buyer.provider_account.first_service!.application_plans.default
   FactoryBot.create(:cinstance, :application_id => id,
                       :user_account   => buyer,
@@ -28,11 +30,11 @@ Given /^(buyer "[^"]*") has application "([^"]*)" with ID "([^"]*)"$/ do |buyer,
                       :description    => 'Blah blah')
 end
 
-Given /^(buyer "[^"]*") has no applications$/ do |buyer|
+Given "{buyer} has no applications" do |buyer|
   buyer.bought_cinstances.destroy_all
 end
 
-Given /^(buyer "[^"]*") has the following applications:$/ do |buyer, table|
+Given "{buyer} has the following applications:" do |buyer, table|
   plan = buyer.provider_account.first_service!.plans.default
 
   table.map_headers! { |header| header.downcase.gsub(/\s+/, '_') }
@@ -48,7 +50,7 @@ Given /^(buyer "[^"]*") has the following applications:$/ do |buyer, table|
 
 end
 
-Given /^(buyer "[^"]*") has (\d+) applications?$/ do |buyer, number|
+Given "{buyer} has {int} application(s)" do |buyer, number|
   plan = buyer.provider_account.first_service!.plans.default
 
   buyer.bought_cinstances.destroy_all
@@ -61,7 +63,8 @@ Given /^(buyer "[^"]*") has (\d+) applications?$/ do |buyer, number|
   end
 end
 
-Given /^the (provider ".+?") has the following applications:$/ do |provider, table|
+Given "the {provider} has the following applications:" do |provider, table|
+  transform_applications_table(table)
   table.hashes.each do |row|
     assert provider.application_plans.include?(row[:plan]) if row[:plan]
     FactoryBot.create :cinstance, :user_account => row[:buyer],
@@ -71,33 +74,33 @@ Given /^the (provider ".+?") has the following applications:$/ do |provider, tab
   end
 end
 
-Given /^(application "[^"]*") is suspended$/ do |application|
+Given "{application} is suspended" do |application|
   application.suspend!
 end
 
-Given /^(application "[^"]*") has extra field "([^"]*)" blank$/ do |app, attr|
+Given "{application} has extra field {string} blank" do |app, attr|
   app.update_attribute(:extra_fields, {attr => nil})
 end
 
-Given /^(buyer "[^"]*") has no live applications$/ do |buyer|
+Given "{buyer} has no live applications" do |buyer|
   buyer.bought_cinstances.map &:suspend!
 end
 
-When /^I follow "([^"]*)" for (application "[^"]*")$/ do |label, application|
+When "I follow {string} for {application}" do |label, application|
   step %(I follow "#{label}" within "#application_#{application.id}")
 end
 
 
-Then /^(application "[^"]*") should be live$/ do |application|
+Then "{application} should be live" do |application|
   assert application.live?
 end
 
-Then /^(application "[^"]*") should be suspended$/ do |application|
+Then "{application} should be suspended" do |application|
   assert application.suspended?
 end
 
-Then /^I should see that (application "[^"]*") is (live|suspended)$/ do |application, state|
-  step %(I should see "#{state.titleize}" within "#cinstance_state")
+Then "I should see that {application} is {live_or_suspended}" do |application, state|
+  step %(I should see "#{state}" within "#cinstance_state")
 end
 
 Then /^(.*) in the applications widget$/ do |action|
@@ -118,11 +121,11 @@ end
 
 Then /^I should see button to "(.*?)"$/ do | text |
   #assert has_xpath? "//input[@value = '#{text}']"
-  assert has_xpath?(XPath::HTML.button(text) || "//input[@value = '#{text}']")
+  assert has_xpath?("//button[contains(text(),'#{text}')]") || has_xpath?("//input[@value = '#{text}']")
 end
 
 Then /^I should not see button to "(.*?)"$/ do | text |
-  assert has_no_xpath?(XPath::HTML.button(text) || "//input[@value = '#{text}']")
+  assert has_no_xpath?("//button[contains(text(),'#{text}')]") || has_xpath?("//input[@value = '#{text}']")
 end
 
 Then /^I should see the app menu$/ do
@@ -146,12 +149,11 @@ When /^I click on Select this plan for the "([^"]*)" plan$/ do |plan|
   end
 end
 
-When /^I request to change to plan "([^"]*)"$/ do |plan|
-  plan = Plan.find_by_name plan
+When "I request to change to {plan}" do |plan|
   step %(I press "Request Plan Change" within "div.plan-preview[data-plan-id='#{plan.id}']")
 end
 
-When /^I follow the link to (application "[^"]*")$/ do |app|
+When "I follow the link to {application}" do |app|
   find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
 end
 

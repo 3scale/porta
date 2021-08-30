@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When /^(.*) in the request password reset form$/ do |action|
   within "form[action='#{provider_password_path}']" do
     step action
@@ -8,7 +10,7 @@ Given /^no user exists with an email of "(.*)"$/ do |email|
   assert_nil User.find_by_email(email)
 end
 
-Then /^the password of (user "[^"]*") should not be "([^"]*)"$/ do |user, password|
+Then "the password of {user} should not be {string}"  do |user, password|
   assert !user.authenticated?(password)
 end
 
