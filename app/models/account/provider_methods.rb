@@ -29,6 +29,26 @@ module Account::ProviderMethods
 
     has_many :provider_audits, foreign_key: :provider_id, class_name: Audited.audit_class.name
 
+    has_many :backend_apis, inverse_of: :account, dependent: :destroy
+    has_many :accessible_backend_apis, -> { accessible }, class_name: 'BackendApi'
+
+    module FindOrDefault
+      def find_or_default(id = nil)
+        owner = proxy_association.owner
+        raise ProviderOnlyMethodCalledError if owner.buyer?
+
+        # TODO
+        # in Service#update_account_default_service default_service_id has been updated
+        # but account.object_id != owner.object_id (inverse_of is needed)
+        # because default_service_id may not exist anymore
+        id ||= owner.try!(:default_service_id)
+        id ? find_by_id(id) : first
+      end
+
+      alias default find_or_default
+    end
+
+    has_many :services, dependent: :destroy, extend: FindOrDefault
     has_many :usage_limits, through: :services
     has_many :metrics, through: :services
     has_many :top_level_metrics, through: :services
@@ -48,9 +68,6 @@ module Account::ProviderMethods
       end
     end
 
-    has_many :backend_apis, inverse_of: :account, dependent: :destroy
-    has_many :accessible_backend_apis, -> { accessible }, class_name: 'BackendApi'
-
     has_many :buyer_accounts, class_name: 'Account', foreign_key: 'provider_account_id', dependent: :destroy, inverse_of: :provider_account do
       def latest
         order(created_at: :desc).includes([:admin_users]).limit(5)
@@ -68,23 +85,6 @@ module Account::ProviderMethods
     has_many :buyer_line_items, through: :buyer_invoices, source: :line_items
     has_many :buyer_invitations, through: :buyer_accounts, source: :invitations
 
-    module FindOrDefault
-      def find_or_default(id = nil)
-        owner = proxy_association.owner
-        raise ProviderOnlyMethodCalledError if owner.buyer?
-
-        # TODO
-        # in Service#update_account_default_service default_service_id has been updated
-        # but account.object_id != owner.object_id (inverse_of is needed)
-        # because default_service_id may not exist anymore
-        id ||= owner.try!(:default_service_id)
-        id ? find_by_id(id) : first
-      end
-
-      alias default find_or_default
-    end
-
-    has_many :services, dependent: :destroy, extend: FindOrDefault
     has_many :service_tokens, through: :services
     has_many :accessible_services, -> { accessible }, class_name: 'Service', extend: FindOrDefault
     has_many :accessible_proxies, through: :accessible_services, source: :proxy
