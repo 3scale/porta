@@ -204,7 +204,7 @@ group :test do
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
-  gem 'cucumber', '~>3.2.0'
+  gem 'cucumber', '~> 5.0'
   gem 'cucumber-rails', '~> 2.4.0', require: false
   gem 'email_spec', require: false
   gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
@@ -249,7 +249,7 @@ end
 
 group :development, :test do
   gem 'colorize'
-  gem 'factory_bot_rails', '~> 6.0'
+  gem 'factory_bot_rails', '~> 6.2'
   gem 'license_finder', '~> 6.12.0'
 
   gem 'pry-doc', '>= 0.8', require: false

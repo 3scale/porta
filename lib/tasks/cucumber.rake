@@ -41,6 +41,7 @@ begin
       ::CodeStatistics::TEST_TYPES << "Cucumber features" if File.exist?('features')
     end
 
+
     task :annotations_setup do
       Rails.application.configure do
         if config.respond_to?(:annotations)
@@ -49,7 +50,9 @@ begin
         end
       end
     end
+
   end
+
   desc 'Alias for cucumber:ok'
   task cucumber: 'cucumber:ok'
 
@@ -59,13 +62,15 @@ begin
     STDERR.puts "*** The 'features' task is deprecated. See rake -T cucumber ***"
   end
 
-  # In case we don't have ActiveRecord, append a no-op task that we can depend upon.
+  # In case we don't have the generic Rails test:prepare hook, append a no-op task that we can depend upon.
   task 'test:prepare' do
   end
 
   task stats: 'cucumber:statsetup'
 
+
   task notes: 'cucumber:annotations_setup'
+
 rescue LoadError
   desc 'cucumber rake task not available (cucumber not installed)'
   task :cucumber do

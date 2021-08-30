@@ -103,7 +103,7 @@ ParameterType(
   type: Account,
   regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
   # TODO check this .present? condition
-  transformer: ->(name) { name.present? ? provider_by_name(name) : @provider }
+  transformer: ->(name, _, _) { name.present? ? provider_by_name(name) : @provider }
 )
 
 ParameterType(
