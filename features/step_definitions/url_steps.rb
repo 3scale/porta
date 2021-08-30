@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When /^the current domain is "?([^"\s]+)"?$/ do |domain|
   @provider = Account.same_domain(domain).take
   @domain = domain
@@ -17,7 +19,7 @@ When /^I hit "([^"]*)" on ([^\s]+)$/ do |path,domain|
   visit path
 end
 
-When /^current domain is the (admin|master) domain of (provider "[^"]*")$/ do |level, provider|
+Given "current domain is the {word} domain of {provider}" do |level, provider|
   raise "Missing admin domain of #{provider.name}" if provider.admin_domain.blank?
   step %(the current domain is #{level == 'admin' ? provider.admin_domain : 'the master domain'})
   @provider = provider
@@ -41,7 +43,7 @@ Then /^the current domain is the master domain$/ do
   step %(the current domain is "#{Account.master.domain}")
 end
 
-Then /^the current domain should be the admin domain of (provider "[^"]*")$/ do |provider|
+Then "the current domain should be the admin domain of {provider}" do |provider|
   step %(the current domain should be #{provider.admin_domain})
 end
 
@@ -56,18 +58,18 @@ Then /^the current port should not be (\d+)$/ do |port|
   assert_not_equal port.to_i, uri.port
 end
 
-Given /^the admin domain of (provider "[^"]*") is "([^"]*)"$/ do |provider, domain|
+Given "the admin domain of {provider} is {string}" do |provider, domain|
   provider.update_attribute :self_domain, domain
 end
 
-Given /^the domain of (provider "[^"]*") is "([^"]*)"$/ do |provider, domain|
+Given "the domain of {provider} is {string}" do |provider, domain|
   provider.update_attribute :domain, domain
 end
 
-Then /^the domain of (provider "[^"]*") should be "([^"]*)"$/ do |provider, domain|
+Then "the domain of {provider} should be {string}" do |provider, domain|
   assert_equal domain, provider.domain
 end
 
-Then /^the admin domain of (provider "[^"]*") should be "([^"]*)"$/ do |provider, domain|
+Then "the admin domain of {provider} should be {string}" do |provider, domain|
   assert_equal domain, provider.admin_domain
 end

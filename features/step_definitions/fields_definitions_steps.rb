@@ -1,4 +1,6 @@
-Given /^#{PROVIDER} only has the following fields defined for "([^"]*)":$/ do |provider, target, table|
+# frozen_string_literal: true
+
+Given "{provider} only has the following fields defined for {string}:" do |provider, target, table|
   # first we remove all other optional fields defined (this is what *only* means)
   provider.fields_definitions.by_target("Account").each(&:destroy)
   table.hashes.each do |hash|
@@ -9,7 +11,7 @@ Given /^#{PROVIDER} only has the following fields defined for "([^"]*)":$/ do |p
   end
 end
 
-Given /^#{PROVIDER} has the following fields defined for "([^"]*)":$/ do |provider, target, table|
+Given "{provider} has the following fields defined for {string}:" do |provider, target, table|
   table.hashes.each do |hash|
     hash.delete_if { |k ,v| v.blank? }
 
@@ -22,7 +24,7 @@ Given /^#{PROVIDER} has the following fields defined for "([^"]*)":$/ do |provid
   end
 end
 
-Given /^(provider "[^"]*") has the field "([^"]*)" for "([^"]*)" in the position (\d+)$/ do |provider, name, klass, pos|
+Given "{provider} has the field {string} for {string} in the position {int}" do |provider, name, klass, pos|
   a = provider.fields_definitions.by_target(klass.underscore).find{ |fd| fd.name == name }
   a.pos = pos
   a.save!

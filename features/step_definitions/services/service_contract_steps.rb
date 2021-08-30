@@ -1,4 +1,6 @@
-Given /^the following buyers with service subscriptions signed up to (provider "[^"]*"):$/ do |provider, table|
+# frozen_string_literal: true
+
+Given "the following buyers with service subscriptions signed up to {provider}:" do |provider, table|
   # table is a Cucumber::MultilineArgument::DataTable
   table.map_column!(:plans) { |plans| plans.from_sentence.map{ |plan| Plan.find_by_name!(plan) } }
   table.map_column!(:name) { |name| FactoryBot.create :buyer_account, :provider_account => provider, :org_name => name }
@@ -12,19 +14,19 @@ Given /^the following buyers with service subscriptions signed up to (provider "
   end
 end
 
-Given /^(buyer "[^"]*") subscribed (service "[^"]*")(?: with plan "([^"]*)")?$/ do |buyer, service, plan_name|
+Given "{buyer} subscribed {service}" do |buyer, service|
   plans = service.service_plans
-
-  plan = if plan_name
-    plans.find_by_name! plan_name
-         else
-    plans.default_or_first or plans.first
-  end
-
+  plan = plans.default_or_first || plans.first
   buyer.buy! plan
 end
 
-Given /^a buyer "([^"]*)" signed up to (service "[^"]*")$/ do |name, service|
+Given "{buyer} subscribed {service} with plan {string}" do |buyer, service, plan_name|
+  plans = service.service_plans
+  plan = plans.find_by!(name: plan_name)
+  buyer.buy! plan
+end
+
+Given "a buyer {string} signed up to {service}" do |name, service|
   provider = service.account
   step %{a buyer "#{name}" signed up to provider "#{provider.name}"}
   step %{buyer "#{name}" subscribed service "#{service.name}"}

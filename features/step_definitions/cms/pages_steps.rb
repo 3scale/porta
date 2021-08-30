@@ -1,47 +1,49 @@
+# frozen_string_literal: true
+
 # MT start
-Given /^(provider "[^\"]*") has pages on the root section$/ do |provider|
-  page = FactoryBot.create :cms_page, :provider => provider, :section => provider.sections.root
+Given "{provider} has pages on the root section" do |provider|
+  FactoryBot.create :cms_page, provider: provider, section: provider.sections.root
 end
 
-Given /^(provider "[^\"]*") has a page on the root section named "([^\"]*)"$/ do |provider, name|
-  page = FactoryBot.create :cms_page, :provider => provider, :title => name, :section => provider.sections.root
+Given "{provider} has a page on the root section named {string}" do |provider, name|
+  FactoryBot.create :cms_page, provider: provider, title: name, section: provider.sections.root
 end
 
-Given /^(provider "[^\"]*") has no pages$/ do |provider|
-   provider.pages.delete_all
+Given "{provider} has no pages" do |provider|
+  provider.pages.delete_all
 end
 # MT End
 
-Given /^the page at "([^\"]*)" of (provider "[^\"]*") is public$/ do |path, provider|
+Given "the page at {string} of {provider} is public" do |path, provider|
   page = provider.pages.find_by_path!(path)
   page.section.public = true
   page.section.save!
 end
 
-Given /^(provider "[^\"]*") has a hidden page with the title "([^\"]*)"$/ do |provider, title|
+Given "{provider} has a hidden page with the title {string}" do |provider, title|
   FactoryBot.create :hidden_page, :title => title, :account => provider
 end
 
-Given /^(provider "[^\"]*") has a draft page with the title "([^\"]*)"$/ do |provider, title|
+Given "{provider} has a draft page with the title {string}" do |provider, title|
   FactoryBot.create :page, :title => title, :account => provider
 end
 
-Given /^(provider "[^\"]*") has a published page with the title "([^\"]*)"$/ do |provider, title|
+Given "{provider} has a published page with the title {string}" do |provider, title|
   FactoryBot.create :published_page, :title => title, :account => provider, :section => provider.provided_sections.first # HACK: hack
 end
 
-Given /^(provider "[^\"]*") has a published page with the title "([^"]*)" of section "([^"]*)"$/ do |provider, title, sec_name|
+Given "{provider} has a published page with the title {string} of section {string}" do |provider, title, sec_name|
   section = provider.sections.find_by_system_name(sec_name)
   FactoryBot.create :cms_page, :title => title, :body => title, :section => section, :provider_id => provider.id, :path => "#{section.full_path}/#{title.parameterize}"
 end
 
-Given /^(provider "[^\"]*") has a published page with the title "([^"]*)" and path "([^"]*)" of section "([^"]*)"$/ do |provider, title, path, sec_name|
+Given "{provider} has a published page with the title {string} and path {string} of section {string}" do |provider, title, path, sec_name|
   section = provider.sections.find_by_system_name(sec_name)
   FactoryBot.create :cms_page, :title => title, :body => title, :section => section, :provider_id => provider.id, :path => path, :tenant_id => provider.id
 end
 
 
-Given /^(provider "[^\"]*") has a page at "([^"]*)" with content$/ do |provider, path, content|
+Given "{provider} has a page at {string} with content" do |provider, path, content|
   if page = provider.pages.find_by_path(path)
     page.update_attribute(:draft, content)
     page.publish!
@@ -59,7 +61,7 @@ Given /^there are no pages$/ do
   CMS::Page.destroy_all
 end
 
-Given /^a route "([^"]*)" of (page "[^"]*")$/ do |route, page|
+Given "a route {string} of {page}" do |route, page|
   page.page_routes.create!(:name => route.gsub(/\//,'-'),
                            :pattern => route, :code => "")
 end

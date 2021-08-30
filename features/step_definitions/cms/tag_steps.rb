@@ -1,8 +1,10 @@
-Given /^(provider "[^\"]*") has tags$/ do |provider|
+# frozen_string_literal: true
+
+Given "{provider} has tags" do |provider|
   FactoryBot.create :tag, :account => provider
 end
 
-Given /^(provider "[^\"]*") has the tag "lorem"$/ do |provider|
+Given "{provider} has the tag {string}" do |provider, tag|
   FactoryBot.create :tag, :account => provider, :name => "lorem"
 end
 

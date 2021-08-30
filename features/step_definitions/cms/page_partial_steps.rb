@@ -1,9 +1,10 @@
-Given /^(provider "[^\"]*") has page partials$/ do |provider|
+# frozen_string_literal: true
+
+Given "{provider} has page partials" do |provider|
   FactoryBot.create :page_partial, :account => provider
 end
 
-
-Given /^the partial "([^\"]*)" of (provider "[^\"]*") is$/ do |name, provider, body|
+Given "the partial {string} of {provider} is" do |name, provider, body|
   FactoryBot.create(:cms_partial, :system_name => name, :provider => provider, :draft => body).publish!
 end
 

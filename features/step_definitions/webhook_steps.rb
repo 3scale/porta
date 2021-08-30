@@ -1,4 +1,6 @@
-Given /^(provider ".+?") has all webhooks enabled$/ do |provider|
+# frozen_string_literal: true
+
+Given "{provider} has all webhooks enabled" do |provider|
   attrs = Hash[ [ "account_created_on",
                   "account_updated_on",
                   "account_deleted_on",

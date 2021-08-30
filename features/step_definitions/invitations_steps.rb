@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 # TODO: the second step wording reads better, replace the occurences of the first one
-Given(/^an invitation from (account "[^\"]*") sent to "([^\"]*)"$/) do |account, email|
+Given "an invitation from {account} sent to {string}" do |account, email|
   FactoryBot.create(:invitation, account: account, email: email)
 end
 
-Given(/^an invitation sent to "([^\"]*)" to join (account "[^\"]*")$/) do |address, account|
+Given "an invitation sent to {string} to join {account}" do |address, account|
   FactoryBot.create(:invitation, account: account, email: address)
 end
 
-Given(/^the following invitations from (account "[^\"]*") exist:$/) do |account, table|
+Given "the following invitations from {account} exist:" do |account, table|
   table.hashes.each do |row|
     invitation = FactoryBot.create(:invitation, account: account, email: row['Email'])
     invitation.accept! if row['State'] == 'accepted'
   end
 end
 
-Given(/^(?:an|the) invitation sent to "([^\"]*)" to join (account "[^\"]*") was accepted$/) do |address, account|
+Given "an/the invitation sent to {string} to join {account} was accepted" do |address, account|
   FactoryBot.create(:invitation, account: account, email: address)
   invitation = account.invitations.find_by_email!(address)
   invitation.accept!
@@ -32,7 +34,7 @@ When(/^I follow the link to signup provider "(.*?)" in the invitation sent to "(
 end
 
 # OPTIMIZE: this reads awful
-When(/^I press "([^"]*)" for an invitation from (account "[^"]*") for "([^"]*)"$/) do |label, account, email|
+When "I press {string} for an invitation from {account} for {string}" do |label, account, email|
   invitation = account.invitations.find_by_email!(email)
   step %(I follow "#{label}" within "##{dom_id(invitation)}")
 end
@@ -94,11 +96,11 @@ When(/^I send a provider invitation to "([^\"]*)"$/) do |address|
 end
 
 # TODO: agree on a wording for these 2 steps and leave only one
-Then(/^"([^"]*)" should receive an invitation to (account "[^"]*")$/) do |address, account|
+Then "{string} should receive an invitation to {account}" do |address, account|
   invitation_message_should_be_valid find_latest_email(to: address), account
 end
 
-Then(/^an invitation with the admin domain of (account "[^\"]*") should be sent to "([^\"]*)"$/) do |provider, address|
+Then "an invitation with the admin domain of {account} should be sent to {string}" do |provider, address|
   invitation_message_should_be_valid find_latest_email(to: address), provider, provider.self_domain
 end
 
@@ -162,7 +164,7 @@ Then(/^I should see an error saying an user with that email already exists$/) do
   assert has_content?('has been taken by another user')
 end
 
-Then(/^invitation from (account "[^\"]*") should be resent to "([^\"]*)"$/) do |account, address|
+Then "invitation from {account} should be resent to {string}" do |account, address|
   assert_equal @last_emails_count + 1, ActionMailer::Base.deliveries.length
   message = ActionMailer::Base.deliveries.last
   assert message.to.include?(address)

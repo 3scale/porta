@@ -63,16 +63,11 @@ Feature: Providers's applications searching, sorting and filtering
     When I search for:
       | Plan  |
       | Cheap |
-    Then I should see 2 pages
     And I follow "Account" within table header
     And I should see following table:
       | Account ▲ |
       | bob       |
-    When I look at 2nd page
-    Then I should see following table:
-      | Account ▲ |
       | jane      |
-    And I should see 2 pages
 
 
   Scenario Outline: Ordering

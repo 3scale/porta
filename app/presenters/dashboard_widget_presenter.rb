@@ -9,7 +9,7 @@ class DashboardWidgetPresenter
   def initialize(name, params = {}, variables = {})
     @name = name
     @params = params.respond_to?(:permit!) ? params.dup.permit! : params
-    @params = @params.symbolize_keys.with_indifferent_access
+    @params = @params.transform_keys(&:to_sym)
     @variables = variables
     @data = nil
     @value = spinner

@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 
-Given /^(provider "[^\"]*") has no layouts$/ do |provider|
+Given "{provider} has no layouts" do |provider|
   assert provider.page_templates.empty?
 end
 

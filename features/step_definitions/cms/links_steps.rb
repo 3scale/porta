@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 
-Given /^(provider "[^\"]*") has no links$/ do |provider|
+Given "{provider} has no links" do |provider|
   assert provider.provided_groups_for_providers.empty?
 end
 

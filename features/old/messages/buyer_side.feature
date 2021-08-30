@@ -14,7 +14,7 @@ Feature: Buyer side messages
     When I go to the dashboard
     And I follow "Messages"
     And I follow "Compose"
-    Then I should see "To foo.3scale.localhost"
+    Then I should see "foo.3scale.localhost"
     When I fill in "Subject" with "Hello there"
     And I fill in "Body" with "Just wanted to say hi"
     And I press "Send"

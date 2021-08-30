@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 Given /^a buyer "([^\"]*)" have not signed up to plan "([^\"]*)"$/ do |buyer_name, plan_name|
   # do nothing. I should not be signed up to plan
   # if getting too paranoid about loose assumption you could:
   # find buyer and remove plan in case it exists :-)
 end
 
-When /^(?:a )?buyer "(.+?)" with email "(.+?)" signs up to (provider ".+?")$/ do |name, email, provider|
+When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
   buyer = FactoryBot.build(:buyer_account, :provider_account => provider,
                         :org_name => name, :state => :created)
   buyer.users.each do |user|
@@ -18,7 +20,7 @@ When /^(?:a )?buyer "(.+?)" with email "(.+?)" signs up to (provider ".+?")$/ do
   buyer.buy! provider.account_plans.default
 end
 
-Given /^a buyer "([^"]*)" of (provider "[^"]*")$/ do |org_name, provider|
+Given "a buyer {string} of {provider}" do |org_name, provider|
   account = FactoryBot.create(:buyer_account, :provider_account => provider,
                     :org_name => org_name)
   account.buy! provider.account_plans.default
@@ -29,15 +31,15 @@ Given /^a buyer "([^"]*)" signed up to plan "([^"]*)"$/ do |buyer, plan|
   step %{a buyer "#{buyer}" signed up to application plan "#{plan}"}
 end
 
-Given /^a buyer "([^"]*)" signed up to ((?:application|service) plan "[^"]*")$/ do |org_name, plan|
+Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   account = FactoryBot.create(:buyer_account,
                     :provider_account => plan.provider_account,
                     :org_name => org_name)
-  account.buy! plan.provider_account.account_plans.default
+  account.buy! plan.provider_account.account_plans.default unless plan.is_a? AccountPlan
   account.buy!(plan)
 end
 
-Given /^a buyer without billing address "([^"]*)" signed up to ((?:application|service) plan "[^"]*")$/ do |org_name, plan|
+Given "a buyer without billing address {string} signed up to {plan}" do |org_name, plan|
   account = FactoryBot.create(:buyer_account_without_billing_address,
                     :provider_account => plan.provider_account,
                     :org_name => org_name)
@@ -45,14 +47,7 @@ Given /^a buyer without billing address "([^"]*)" signed up to ((?:application|s
   account.buy!(plan)
 end
 
-Given /^a buyer "([^"]*)" signed up to (account plan "[^"]*")$/ do |org_name, plan|
-  account = FactoryBot.create(:buyer_account,
-                    :provider_account => plan.provider_account,
-                    :org_name => org_name)
-  account.buy! plan
-end
-
-Given /^a buyer "([^"]*)" with application ID "([^"]*)" signed up to (plan "[^"]*")$/ do |org_name, app_id, plan|
+Given "a buyer {string} with application ID {string} signed up to {plan}" do |org_name, app_id, plan|
   account = FactoryBot.create(:buyer_account, :provider_account => plan.provider_account,
                                     :org_name => org_name)
   account.buy! plan.provider_account.account_plans.default
@@ -72,7 +67,7 @@ Given(/^a buyer signed up to the provider$/) do
   @application = @buyer.application_contracts.find_by_name!('TimeMachine')
 end
 
-Given /^a freshly created buyer "([^\"]*)" signed up to (provider "[^\"]*")$/ do |account_name, provider|
+Given "a freshly created buyer {string} signed up to {provider}" do |account_name, provider|
   buyer = FactoryBot.create(:buyer_account, :provider_account => provider,
                   #buyer = FactoryBot.create(:account, :provider_account => provider,
                   :org_name => account_name,
@@ -147,7 +142,7 @@ Given /^buyer "([^"]*)" has ([0-9\.]+) in credit$/ do |buyer_name, credit|
   buyer_account.bought_cinstances.each(&:pay_fixed_cost!)
 end
 
-Given /^there are no buyers of (provider "[^"]*")$/ do |provider_account|
+Given "there are no buyers of {provider}" do |provider_account|
   provider_account.buyer_accounts.destroy_all
 end
 
@@ -157,7 +152,7 @@ When /^I follow the link to create a new buyer account$/ do
   click_link "Create new account"
 end
 
-When /^(buyer "[^\"]*") is approved$/ do |buyer|
+When "{buyer} is approved" do |buyer|
   buyer.approve!
 end
 
@@ -174,7 +169,7 @@ Then /^buyer "([^\"]*)" should be (pending|approved|rejected)$/ do |name, state|
   step %(account "#{name}" should be #{state})
 end
 
-Then /^(buyer "[^"]*") should be signed up to (plan "[^"]*")$/ do |buyer, plan|
+Then "{buyer} should be signed up to {plan}" do |buyer, plan|
   assert plan.bought_by?(buyer)
 end
 

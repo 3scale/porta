@@ -1,22 +1,24 @@
-Given /^(the forum of "[^"]*") has category "([^"]*)"$/ do |forum, name|
-  forum.categories.create!(:name => name)
+# frozen_string_literal: true
+
+Given "the forum of {forum} has category {string}" do |forum, name|
+  forum.categories.create!(name: name)
 end
 
-Given /^(the forum of "[^"]*") has categories "([^"]*)" and "([^"]*)"$/ do |forum, one, two|
-  forum.categories.create!(:name => one)
-  forum.categories.create!(:name => two)
+Given "the forum of {forum} has categories {string} and {string}" do |forum, one, two|
+  forum.categories.create!(name: one)
+  forum.categories.create!(name: two)
 end
 
-Given /^(the forum of "[^"]*") has no categories$/ do |forum|
+Given "the forum of {forum} has no categories" do |forum|
   forum.categories.destroy_all
 end
 
-Then /^(the forum of "[^"]*") should have category "([^"]*)"$/ do |forum, name|
-  assert_not_nil forum.categories.find_by_name(name)
+Then "the forum of {forum} should have category {string}" do |forum, name|
+  assert_not_nil forum.categories.find_by!(name: name)
 end
 
-Then /^(the forum of "[^"]*") should not have category "([^"]*)"$/ do |forum, name|
-  assert_nil forum.categories.find_by_name(name)
+Then "the forum of {forum} should not have category {string}" do |forum, name|
+  assert_nil forum.categories.find_by!(name: name)
 end
 
 Then /^I should see category "([^"]*)" in the list$/ do |name|

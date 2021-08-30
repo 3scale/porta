@@ -64,7 +64,7 @@ Before('@saas-only') do
   raise ::Cucumber::Core::Test::Result::Skipped, 'SaaS only features do not support OracleDB' if System::Database.oracle?
 end
 
-Before '~@javascript' do
+Before 'not @javascript' do
   Timecop.scale(100)
 end
 

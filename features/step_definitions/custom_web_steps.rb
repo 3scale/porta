@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #TODO: is this a web step anyway?
 Given /^my remote address is "([^"]*)"$/ do |address|
   # This works only with RackTest driver.
@@ -51,7 +53,7 @@ end
 # Then I should see "foo", "bar" and "baz"
 # Then I should see "foo", "bar", "baz" and "qux"
 # ...
-Then /^I should (see|not see) #{QUOTED_TWO_OR_MORE_PATTERN}$/ do |action, items|
+Then "I should {word} {list_of_2_plus_strings}" do |action, items|
   items.each do |item|
     step %(I should #{action} "#{item}")
   end
@@ -296,12 +298,9 @@ When /^I visit "(.+?)"$/ do |path|
 end
 
 
-And(/^I press "([^"]*)" inside the dropdown$/) do |name|
-  link = XPath::HTML.link_or_button(name)
-  toggle = find :xpath, XPath.generate{ |x| x.css('.dropdown')[link].next_sibling(:a) }.to_s
-
-  toggle.click
-  find(:xpath, link).click
+And(/^I press "Hide" inside the dropdown$/) do
+  find(:button, text: 'Publish').sibling('a').click
+  find(:button, name: 'hide').click
   wait_for_requests
 end
 
