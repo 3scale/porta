@@ -24,28 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
     'account[user][password_confirmation]': {
       presence: true,
       equality: 'account[user][password]'
+    },
+    'captchaChecked': {
+      presence: true,
+      length: { minimum: 1 }
     }
   }
+
+  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLFormElement
+  const form: HTMLFormElement = document.querySelector('#signup_form')
   // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
   const submitBtn: HTMLInputElement = document.querySelector('input[type="submit"]')
+  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
+  const captchaInput: HTMLInputElement = document.querySelector('#captchaChecked')
+
+  const captchaRequired: boolean = !!document.querySelector('.g-recaptcha')
   submitBtn.disabled = true
+  captchaInput.value = captchaRequired ? '' : 'ok'
 
   const inputs = document.querySelectorAll('input')
   inputs.forEach(input => input.addEventListener('keyup', (event: KeyboardEvent) => {
-    window.ThreeScaleSignUPData.validateForm()
+    const errors = validate(form, constraints)
+    submitBtn.disabled = !!errors
   }))
-
-  window.ThreeScaleSignUPData = {
-    captchaValidOrAbsent: !document.querySelector('.g-recaptcha '),
-    isFormValid: false,
-    validateForm: function () {
-      const form = document.querySelector('#signup_form')
-      const errors = this.validate(form, this.constraints)
-      this.isFormValid = !errors
-      const formValid = this.isFormValid && this.captchaValidOrAbsent
-      submitBtn.disabled = !formValid
-    },
-    validate,
-    constraints
-  }
 })
