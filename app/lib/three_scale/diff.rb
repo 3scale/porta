@@ -22,7 +22,7 @@ module ThreeScale
       return @stats if @stats
 
       @stats = Hash.new(0)
-      pieces.flatten.each do |change|
+      pieces.flatten(1).each do |change|
         case
         when change.adding?
           @stats[:addition] += 1
