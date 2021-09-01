@@ -250,18 +250,18 @@ end
 group :development, :test do
   gem 'colorize'
   gem 'factory_bot_rails', '~> 4.11.1'
-  gem 'unicorn-rails'
+  gem 'license_finder', '~> 6.12.0'
 
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
-
-  gem 'license_finder', '~> 6.12.0'
+  gem 'pry-shell'
 
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
 
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
+  gem 'unicorn-rails'
 end
 
 gem 'webpacker', '~> 4'
