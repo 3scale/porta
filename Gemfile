@@ -86,15 +86,6 @@ gem 'mysql2', '~> 0.5.3'
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
-group :development, :test do
-  gem 'bootsnap', '~> 1.4'
-
-  platform :mri_25 do
-    gem 'pry-byebug', '>= 3.7.0', require: false
-    gem 'pry-stack_explorer', require: false
-  end
-end
-
 gem 'dalli', '~> 2.7'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
@@ -248,9 +239,16 @@ group :test do
 end
 
 group :development, :test do
+  gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 4.11.1'
   gem 'unicorn-rails'
+
+  platform :mri_25, :mri_26 do
+    gem 'gitlab-pry-byebug'
+    gem 'pry-remote'
+    gem 'pry-stack_explorer'
+  end
 
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
