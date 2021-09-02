@@ -45,7 +45,7 @@ FactoryBot.define do
 
   factory :cms_file, :class => CMS::File do
     sequence(:path) { |n| "/file-#{n}" }
-    association(:provider, :factory => :provider_account)
+    association(:provider, factory: :provider_account)
     section { |f| f.provider && f.provider.builtin_sections.root }
     attachment { Rails.root.join('test', 'fixtures', 'hypnotoad.jpg').open }
   end

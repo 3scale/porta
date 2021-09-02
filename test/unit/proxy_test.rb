@@ -464,11 +464,12 @@ class ProxyTest < ActiveSupport::TestCase
     end
   end
 
-  test 'save_and_deploy' do
+  def test_save_and_deploy
     proxy = FactoryBot.build(:proxy,
                               api_backend: 'http://example.com',
                               api_test_path: '/path',
-                              apicast_configuration_driven: true)
+                              apicast_configuration_driven: true,
+                             service: FactoryBot.create(:service))
     ::ApicastV2DeploymentService.any_instance.expects(:call).returns(true)
 
     analytics.expects(:track).with('Sandbox Proxy Deploy', {success: true})
@@ -580,7 +581,6 @@ class ProxyTest < ActiveSupport::TestCase
     @proxy.save!
 
     example_changes.each do |change|
-      puts change
       @proxy.policies_config = [policy_example.merge(change), Proxy::PolicyConfig.default.as_json]
       assert @proxy.policies_config_changed?
       assert_equal 2, @proxy.policies_config.count
