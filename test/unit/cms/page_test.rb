@@ -83,8 +83,7 @@ class PageTest < ActiveSupport::TestCase
 
   test 'not searchable when not html' do
     page = FactoryBot.build(:cms_page, :published => 'simple page', :content_type => 'text/whatever')
-
-    assert page.save
+    page.save!
     assert ! page.searchable?
   end
 
