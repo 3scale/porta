@@ -85,14 +85,23 @@
               </fieldset>
             </div>
           </div>
+          <input type="hidden" id="captchaChecked" name="captchaChecked" value="">
         {% endform %}
       </div>
     </div>
   </div>
 </div>
-
+{{ 'validateSignup.js' | javascript_include_tag }}
 <script type="text/javascript">
-  $(document).ready(function() {
-      $('form:first *:input[type!=hidden]:first').focus();
-  });
+  document.querySelector('input:not([type="hidden"])').focus()
+  
+  const inputCaptcha = document.querySelector('#captchaChecked')
+  function onCaptchaSuccess () {
+    inputCaptcha.value = 'ok'
+    inputCaptcha.dispatchEvent(new Event('keyup'))
+  }
+  function onCaptchaFail () {
+    inputCaptcha.value = ''
+    inputCaptcha.dispatchEvent(new Event('keyup'))
+  }
 </script>

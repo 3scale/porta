@@ -29,6 +29,13 @@ Feature: Spam protection for buyer signup
     When I go to the sign up page
     Then I should see the captcha
 
+  @javascript
+  Scenario: Signup form is validated
+    When I go to the sign up page
+    Then I should see submit button disabled
+    And I fill in the signup fields as "hugo"
+    Then I should see submit button enabled
+
   Scenario: Spam check fails (because of fast fill and no js)
     When I go to the sign up page
     Then I should not see the captcha
