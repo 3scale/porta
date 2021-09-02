@@ -18,6 +18,17 @@ class DomainConstraint
   end
 end
 
+module FontAssetsConstraint
+  FONT_EXTENSIONS = %w[eot svg ttf otf woff woff2].freeze
+
+  module_function
+
+  def matches?(request)
+    extension = request.params["format"]
+    extension.present? && FONT_EXTENSIONS.include?(extension)
+  end
+end
+
 module ProviderDomainConstraint
   module_function
 

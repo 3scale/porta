@@ -56,6 +56,15 @@ without fake Core server your after commit callbacks will crash and you might ge
     get '/p/admin/dashboard', to: redirect('/admin')
   end
 
+  # Respond to pre-flight CSRF requests for font assets
+  if Rails.configuration.public_file_server.enabled &&
+     Rails.configuration.public_file_server.headers.include?("Access-Control-Allow-Origin")
+    constraints FontAssetsConstraint do
+      match "*path", via: :options, to: ->(hash) { [204, Rails.configuration.public_file_server.headers, []] }
+    end
+  end
+
+
   #
   #   Master
   #
