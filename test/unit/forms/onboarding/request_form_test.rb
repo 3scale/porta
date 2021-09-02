@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Onboarding::RequestFormTest < ActiveSupport::TestCase
   setup do
-    @proxy = FactoryBot.build(:proxy)
+    @proxy = FactoryBot.build(:proxy, service: FactoryBot.create(:service))
     @form = Onboarding::RequestForm.new(proxy)
   end
 
