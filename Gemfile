@@ -218,7 +218,7 @@ group :test do
 
   gem 'equivalent-xml', require: false
 
-  gem 'rspec-rails', '~> 3.8', require: false # version 3 and up require capybara >= 2.2
+  gem 'rspec-rails', '~> 4.1', require: false # version 5.x is needed for Rails 6
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
   gem 'rspec_api_documentation'
