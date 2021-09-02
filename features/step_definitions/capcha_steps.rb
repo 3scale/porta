@@ -10,19 +10,10 @@ Then /^I should see the captcha$/ do
   page.should have_selector(RECAPTCHA_SCRIPT, visible: false)
 end
 
-When /^I leave the captcha empty$/ do
-  captcha_evaluates_to false
+Then /^I should see submit button (disabled|enabled)$/ do |value|
+  if value == 'disabled'
+    page.should have_css("input[type='submit'][disabled]")
+  else
+    page.should_not have_css("input[type='submit'][disabled]")
+  end
 end
-
-When /^I fill in the captcha incorrectly$/ do
-  captcha_evaluates_to false
-end
-
-When /^I fill in the captcha correctly$/ do
-  captcha_evaluates_to true
-end
-
-Then /^I should see captcha check fail$/ do
-  page.should have_content('Word verification response is incorrect, please try again.')
-end
-
