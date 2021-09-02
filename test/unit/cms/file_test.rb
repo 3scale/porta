@@ -6,7 +6,7 @@ class CMS::FileTest < ActiveSupport::TestCase
     default_options = Paperclip::Attachment.default_options
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
 
-    @file = FactoryBot.build(:cms_file, downloadable: true)
+    @file = FactoryBot.build(:cms_file, downloadable: true, provider: FactoryBot.create(:provider_account))
 
     url = @file.url
     assert_match(/amazonaws/, url) # Check that is a amazon url
@@ -27,14 +27,14 @@ class CMS::FileTest < ActiveSupport::TestCase
   end
 
   test 'path should be normalized' do
-    @file = FactoryBot.build(:cms_file, :path => " do whatever / you want ")
+    @file = FactoryBot.build(:cms_file, :path => " do whatever / you want ", provider: FactoryBot.create(:provider_account))
     assert @file.invalid?
     assert_equal "/do-whatever/you-want", @file.path
     assert_valid @file
   end
 
   test 'detects correct content type for css' do
-    file = FactoryBot.build(:cms_file)
+    file = FactoryBot.build(:cms_file, provider: FactoryBot.create(:provider_account))
 
     file.attachment = Rails.root.join('test', 'fixtures', 'test.css').open
 

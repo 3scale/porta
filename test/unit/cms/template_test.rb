@@ -64,7 +64,7 @@ class CMS::TemplateTest < ActiveSupport::TestCase
   end
 
   test 'liquid syntax validation' do
-    page = FactoryBot.build(:cms_page, draft: '{% invalid liquid %}', published: '{{ valid.one }}', liquid_enabled: false)
+    page = FactoryBot.build(:cms_page, draft: '{% invalid liquid %}', published: '{{ valid.one }}', liquid_enabled: false, provider: FactoryBot.create(:provider_account))
 
     assert page.valid?
 

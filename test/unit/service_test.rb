@@ -68,7 +68,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_create_with_plugin
-    service = FactoryBot.build(:simple_service, deployment_option: 'plugin_rest')
+    service = FactoryBot.build(:simple_service, deployment_option: 'plugin_rest', account: FactoryBot.create(:simple_account))
 
     assert service.save!
   end

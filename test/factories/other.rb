@@ -15,8 +15,8 @@ FactoryBot.define do
   factory(:topic) do
     title { "Title #{SecureRandom.hex}" }
     body { 'body body body of the first post' }
-    forum { |topic| topic.association(:forum) }
-    user  { |topic| topic.association(:user_with_account) }
+    association(:forum)
+    association(:user, factory: :user_with_account)
   end
 
   factory(:post) do

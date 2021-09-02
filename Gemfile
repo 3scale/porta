@@ -249,7 +249,7 @@ end
 
 group :development, :test do
   gem 'colorize'
-  gem 'factory_bot_rails', '~> 4.11.1'
+  gem 'factory_bot_rails', '~> 6.0'
   gem 'license_finder', '~> 6.12.0'
 
   gem 'pry-doc', '>= 0.8', require: false

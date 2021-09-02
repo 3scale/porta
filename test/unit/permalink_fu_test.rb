@@ -70,14 +70,14 @@ class PermalinkFuTest < ActiveSupport::TestCase
   class TopicPermalink < ActiveSupport::TestCase
     test 'topic generates the permalink correctly' do
       DATA.each do |topic_data|
-        topic = FactoryBot.build(:topic, title: topic_data[:name])
+        topic = FactoryBot.build(:topic, title: topic_data[:name], forum: FactoryBot.create(:forum), user: FactoryBot.create(:simple_user))
         assert topic.valid?
         assert_equal topic_data[:expected_permalink], topic.permalink
       end
     end
 
     test 'topic has the right error when permalink is generated empty for invalid characters' do
-      topic = FactoryBot.build(:topic, title:'зҖҨ')
+      topic = FactoryBot.build(:topic, title:'зҖҨ', forum: FactoryBot.create(:forum), user: FactoryBot.create(:simple_user))
       refute topic.valid?
       assert_equal '', topic.permalink
       assert_match /Title must contain latin characters/, topic.errors.full_messages.to_sentence
@@ -100,14 +100,14 @@ class PermalinkFuTest < ActiveSupport::TestCase
     test 'topic does not check itself for unique permalink' do
       forum = FactoryBot.create(:forum)
       topic_1 = FactoryBot.create(:topic, title: 'my example', forum: forum)
-      topic_2 = FactoryBot.build(:topic, title: 'my example', forum: forum, id: topic_1.id)
+      topic_2 = FactoryBot.build(:topic, title: 'my example', forum: forum, id: topic_1.id, user: FactoryBot.create(:simple_user))
       assert topic_2.valid?
       assert_equal 'my-example', topic_1.permalink
       assert_equal 'my-example', topic_2.permalink
     end
 
     test 'topic always auto-generates permalinks and it is never written from the outside' do
-      topic = FactoryBot.build(:topic, title: 'my example')
+      topic = FactoryBot.build(:topic, title: 'my example', forum: FactoryBot.create(:forum), user: FactoryBot.create(:simple_user))
 
       topic.permalink = 'permalink'
       assert topic.valid?
@@ -119,7 +119,7 @@ class PermalinkFuTest < ActiveSupport::TestCase
     end
 
     test 'topic permalink validates that it contains maximum 255 characters' do
-      topic = FactoryBot.build(:topic)
+      topic = FactoryBot.build(:topic, forum: FactoryBot.create(:forum), user: FactoryBot.create(:simple_user))
 
       topic.title = 'a' * 255
       assert topic.valid?
