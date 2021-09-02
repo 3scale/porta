@@ -45,8 +45,6 @@ class Liquid::Drops::FieldTest < ActiveSupport::TestCase
 
     assert_equal 'Country', drop.label
     assert_equal 'country', drop.name
-
-    puts drop.choices.inspect
   end
 
 end

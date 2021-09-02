@@ -13,7 +13,7 @@ class PolicyTest < ActiveSupport::TestCase
   end
 
   test 'sets identifier on create' do
-    policy = FactoryBot.build(:policy, name: 'custom-policy', version: '7.6.5')
+    policy = FactoryBot.build(:policy, name: 'custom-policy', version: '7.6.5', account: FactoryBot.create(:simple_provider))
     assert_nil policy.identifier
     policy.save!
     assert_equal 'custom-policy-7.6.5', policy.identifier
@@ -32,7 +32,7 @@ class PolicyTest < ActiveSupport::TestCase
     different_name_policy = FactoryBot.build(:policy, version: persisted_policy.version, account: persisted_policy.account)
     assert different_name_policy.save
 
-    different_provider_policy = FactoryBot.build(:policy, name: persisted_policy.name, version: persisted_policy.version)
+    different_provider_policy = FactoryBot.build(:policy, name: persisted_policy.name, version: persisted_policy.version, account: FactoryBot.create(:simple_provider))
     assert different_provider_policy.save
   end
 
@@ -53,7 +53,7 @@ class PolicyTest < ActiveSupport::TestCase
   end
 
   test 'validates schema' do
-    policy = FactoryBot.build(:policy, schema: 'invalid JSON')
+    policy = FactoryBot.build(:policy, schema: 'invalid JSON', account: FactoryBot.create(:simple_provider))
     assert_equal ['Invalid JSON schema'], policy.errors[:schema]
     assert_nil policy.schema
 
@@ -68,7 +68,7 @@ class PolicyTest < ActiveSupport::TestCase
   end
 
   test 'validates same version in schema and in field' do
-    policy = FactoryBot.build(:policy, version: '0.5.0')
+    policy = FactoryBot.build(:policy, version: '0.5.0', account: FactoryBot.create(:simple_provider))
     policy.schema['version'] = '1.2.0'
     refute policy.valid?
     assert_includes policy.errors[:version], policy.errors.generate_message(:version, :mismatch)
@@ -108,7 +108,7 @@ class PolicyTest < ActiveSupport::TestCase
   end
 
   test 'to_param' do
-    policy = FactoryBot.build(:policy, name: 'my-policy', version: '1.2.0')
+    policy = FactoryBot.build(:policy, name: 'my-policy', version: '1.2.0', account: FactoryBot.create(:simple_provider))
     assert_nil policy.to_param
 
     policy.save!

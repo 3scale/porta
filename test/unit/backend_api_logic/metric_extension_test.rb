@@ -49,7 +49,7 @@ class MetricExtensionTest < ActiveSupport::TestCase
     metric.system_name = "foo.#{backend_api.id}0" # not the id of the backend api
     refute metric.valid?
 
-    proxy_metric = FactoryBot.build(:metric, system_name: 'foo')
+    proxy_metric = FactoryBot.build(:metric, system_name: 'foo', service: FactoryBot.create(:service))
     assert proxy_metric.valid?
 
     proxy_metric.system_name = "foo.123"
