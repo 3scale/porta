@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DeveloperPortal::Admin::Messages::OutboxControllerTest < ActionDispatch::IntegrationTest
+class DeveloperPortal::Admin::Messages::OutboxControllerIntegrationTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
 
   def setup
