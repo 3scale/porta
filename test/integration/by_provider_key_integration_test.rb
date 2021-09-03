@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ApiAuthentication::ByProviderKeyTest < ActionDispatch::IntegrationTest
+class ApiAuthentication::ByProviderKeyIntegrationTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account)

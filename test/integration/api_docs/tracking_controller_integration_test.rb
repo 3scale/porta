@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ApiDocs::TrackingControllerTest < ActionDispatch::IntegrationTest
+class ApiDocs::TrackingControllerIntegrationTest < ActionDispatch::IntegrationTest
   def setup
     provider = FactoryBot.create(:provider_account)
     login_provider provider

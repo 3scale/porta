@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class DeveloperPortal::ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
+class DeveloperPortal::ApiDocs::ServicesControllerIntegrationTest < ActionDispatch::IntegrationTest
   include DeveloperPortal::Engine.routes.url_helpers
 
   def setup
