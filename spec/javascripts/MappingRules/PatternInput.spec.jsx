@@ -7,7 +7,9 @@ import { PatternInput } from 'MappingRules'
 
 const defaultProps = {
   pattern: '',
-  setPattern: () => {}
+  validatePattern: () => {},
+  validated: 'default',
+  helperTextInvalid: ''
 }
 
 const mountWrapper = (props) => mount(<PatternInput {...{ ...defaultProps, ...props }} />)

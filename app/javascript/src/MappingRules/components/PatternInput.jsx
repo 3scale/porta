@@ -6,25 +6,30 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 type Props = {
   pattern: string,
-  setPattern: string => void
+  validatePattern: string => void,
+  validated: string,
+  helperTextInvalid: string
 }
 
-const PatternInput = ({ pattern, setPattern }: Props): React.Node => (
-  <FormGroup
-    isRequired
-    label="Pattern"
-    validated="default"
-    fieldId="proxy_rule_pattern"
-    helperText="Examples: /my-path/{some-id}, /collection/{id}?filter={value}"
-  >
-    <TextInput
-      type="text"
-      id="proxy_rule_pattern"
-      name="proxy_rule[pattern]"
-      value={pattern}
-      onChange={setPattern}
-    />
-  </FormGroup>
-)
+const PatternInput = ({ pattern, validatePattern, validated = 'default', helperTextInvalid = '' }: Props): React.Node => {
+  return (
+    <FormGroup
+      isRequired
+      label="Pattern"
+      validated={validated}
+      fieldId="proxy_rule_pattern"
+      helperText="Examples: /my-path/{someid}, /collection/{id}?filter={value}"
+      helperTextInvalid={helperTextInvalid}
+    >
+      <TextInput
+        type="text"
+        id="proxy_rule_pattern"
+        name="proxy_rule[pattern]"
+        value={pattern}
+        onChange={validatePattern}
+      />
+    </FormGroup>
+  )
+}
 
 export { PatternInput }
