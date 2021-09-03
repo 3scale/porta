@@ -24,17 +24,26 @@ import type { Metric } from 'Types'
 
 import './NewMappingRule.scss'
 
+type Error = {
+  [string]: Array<string>
+}
+
 type Props = {
   url: string,
   isProxyProEnabled?: boolean,
   topLevelMetrics: Array<Metric>,
   methods: Array<Metric>,
-  httpMethods: Array<string>
+  httpMethods: Array<string>,
+  errors?: Error
 }
 
-const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, methods, httpMethods }: Props): React.Node => {
+type Validated = 'success' | 'warning' | 'error' | 'default'
+
+const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, methods, httpMethods, errors }: Props): React.Node => {
   const [httpMethod, setHttpMethod] = React.useState(httpMethods[0])
   const [pattern, setPattern] = React.useState('')
+  const [patternValidated, setPatternValidated] = React.useState<Validated>('default')
+  const [helperTextInvalid, setHelperTextInvalid] = React.useState('')
   const [metric, setMetric] = React.useState<Metric | null>(null)
   const [redirectUrl, setRedirectUrl] = React.useState('')
   const [increment, setIncrement] = React.useState(1)
@@ -42,8 +51,21 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
   const [position, setPosition] = React.useState(0)
   const [loading, setLoading] = React.useState(false)
 
+  React.useEffect(() => {
+    if (errors && errors.pattern) {
+      setPatternValidated('error')
+      setHelperTextInvalid(errors.pattern.slice().join())
+    }
+  }, [])
+
+  const validatePattern = (value, _event) => {
+    setPattern(value)
+    setPatternValidated('default')
+  }
+
   const isFormComplete = httpMethod &&
     pattern &&
+    patternValidated !== 'error' &&
     metric !== null &&
     increment > 0 &&
     position >= 0
@@ -62,7 +84,7 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
         <input name="utf8" type="hidden" value="✓" />
 
         <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
-        <PatternInput pattern={pattern} setPattern={setPattern} />
+        <PatternInput pattern={pattern} validatePattern={validatePattern} validated={patternValidated} helperTextInvalid={helperTextInvalid}/>
         {/* $FlowIssue[incompatible-type] Yes it can be null, that's the whole point */}
         <MetricInput metric={metric} topLevelMetrics={topLevelMetrics} methods={methods} setMetric={setMetric} />
         {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
