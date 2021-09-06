@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   # Disable CSRF protection for non xml requests.
   skip_before_action :verify_authenticity_token, if: -> do
-    (params.key?(:provider_key) || params.key?(:access_token)) && request.format.xml?
+    (params.key?(:provider_key) || params.key?(:access_token)) && !request.format.xml?
   end
 
   before_action :set_timezone
