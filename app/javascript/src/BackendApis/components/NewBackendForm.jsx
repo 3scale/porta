@@ -23,8 +23,9 @@ type Props = {
 }
 
 const VALIDATION_CONSTRAINTS = {
-  name: { length: { minimum: 1 } },
-  privateEndpoint: { url: { schemes: ['http', 'https', 'ws', 'wss'] } }
+  name: { presence: { allowEmpty: false } },
+  systemName: { format: { pattern: '^[a-z0-9-_]*$', flags: 'i' } },
+  privateEndpoint: { url: { schemes: ['http', 'https', 'ws', 'wss'] }, presence: { allowEmpty: false } }
 }
 
 const NewBackendForm = ({ action, onCancel, isLoading = false, errors = {} }: Props): React.Node => {
@@ -33,7 +34,7 @@ const NewBackendForm = ({ action, onCancel, isLoading = false, errors = {} }: Pr
   const [description, setDescription] = useState('')
   const [privateEndpoint, setPrivateEndpoint] = useState('')
 
-  const validationErrors = validate({ name, privateEndpoint }, VALIDATION_CONSTRAINTS)
+  const validationErrors = validate({ name, systemName, privateEndpoint }, VALIDATION_CONSTRAINTS)
 
   return (
     <Form
