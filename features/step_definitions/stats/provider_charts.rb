@@ -24,7 +24,7 @@ Then(/^there should be a c3 chart with the following data:$/) do |table|
 
     raise Selenium::WebDriver::Error::JavascriptError, 'Could not get values from c3' if values.blank?
 
-    data = Cucumber::Core::Ast::DataTable.new(values, table.location)
+    data = Cucumber::Core::Test::DataTable.new(values)
     series = Cucumber::MultilineArgument::DataTable.new(data)
     series.map_column!('start', false) { |start| Time.at(start/1000) if start }
 
