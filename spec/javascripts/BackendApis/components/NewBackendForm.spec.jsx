@@ -6,18 +6,46 @@ import { mount } from 'enzyme'
 
 import { NewBackendForm } from 'BackendApis'
 
+const validNames = [
+  'M',
+  'My Backend'
+]
+
+const invalidNames = [
+  ''
+]
+
+const validSystemNames = [
+  '',
+  'name',
+  'some-system-name',
+  '_another_one_',
+  'thismakes4'
+]
+
+const invalidSystemNames = [
+  // '/invalid'
+]
+
 const validPaths = [
+  'http://54.156.165.4:80',
+  'https://54.156.165.4:80',
   'http://example.com',
   'https://example.com',
   'ws://example.com',
   'wss://example.com',
-  'http://example.com:3000'
+  'ws://example.com:2222',
+  'wss://example.com:2222',
+  'http://example.com:3000',
+  'https://example.com:3000'
 ]
 
 const invalidPaths = [
+  '',
   'foo',
   'ftp://exaple.org',
-  'www.example.org'
+  'www.example.org',
+  'http://invalid.port:0'
 ]
 
 const defaultProps = {
@@ -65,7 +93,44 @@ it('should enable submit button only when form is filled', () => {
   expect(isSubmitButtonDisabled(wrapper)).toBe(false)
 })
 
-it('should enable submit button only when form is valid', () => {
+it('should enable submit button only when name is valid', () => {
+  const wrapper = mountWrapper()
+  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  act(() => wrapper.find('PrivateEndpointInput').props().setPrivateEndpoint('http://foo.bar'))
+
+  invalidNames.forEach(path => {
+    act(() => wrapper.find('NameInput').props().setName(path))
+    wrapper.update()
+    expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  })
+
+  validNames.forEach(path => {
+    act(() => wrapper.find('NameInput').props().setName(path))
+    wrapper.update()
+    expect(isSubmitButtonDisabled(wrapper)).toBe(false)
+  })
+})
+
+it('should enable submit button only when system name is valid', () => {
+  const wrapper = mountWrapper()
+  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  act(() => wrapper.find('PrivateEndpointInput').props().setPrivateEndpoint('http://foo.bar'))
+  act(() => wrapper.find('NameInput').props().setName('Backend'))
+
+  invalidSystemNames.forEach(path => {
+    act(() => wrapper.find('SystemNameInput').props().setSystemName(path))
+    wrapper.update()
+    expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  })
+
+  validSystemNames.forEach(path => {
+    act(() => wrapper.find('SystemNameInput').props().setSystemName(path))
+    wrapper.update()
+    expect(isSubmitButtonDisabled(wrapper)).toBe(false)
+  })
+})
+
+it('should enable submit button only when private endpoint is valid', () => {
   const wrapper = mountWrapper()
   expect(isSubmitButtonDisabled(wrapper)).toBe(true)
   act(() => wrapper.find('NameInput').props().setName('My Backend API'))
