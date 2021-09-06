@@ -19,5 +19,9 @@
 
   #proxy_rule_pattern-helper {
     font-family: monospace;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
 }
