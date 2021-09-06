@@ -86,15 +86,6 @@ gem 'mysql2', '~> 0.5.3'
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
-group :development, :test do
-  gem 'bootsnap', '~> 1.4'
-
-  platform :mri_25 do
-    gem 'pry-byebug', '>= 3.7.0', require: false
-    gem 'pry-stack_explorer', require: false
-  end
-end
-
 gem 'dalli', '~> 2.7'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
@@ -157,7 +148,6 @@ gem 'after_commit_queue', '~> 1.1.0'
 gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.5.0'
 
-
 # for liquid docs on-fly generation
 gem 'commonmarker'
 gem 'escape_utils'
@@ -204,7 +194,7 @@ group :test do
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
-  gem 'cucumber', '~> 5.0'
+  gem 'cucumber', '~> 6.0'
   gem 'cucumber-rails', '~> 2.4.0', require: false
   gem 'email_spec', require: false
   gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
@@ -212,7 +202,6 @@ group :test do
   gem 'mechanize'
   gem 'selenium-webdriver', '~> 3.142', require: false
   gem 'webmock', '~> 3.8.0'
-
 
   gem 'childprocess'
 
@@ -248,14 +237,16 @@ group :test do
 end
 
 group :development, :test do
+  gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'license_finder', '~> 6.12.0'
 
+  gem 'pry-byebug', '>= 3.7.0'
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
   gem 'pry-shell'
-
+  gem 'pry-stack_explorer'
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
 
