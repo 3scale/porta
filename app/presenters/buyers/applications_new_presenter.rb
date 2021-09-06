@@ -21,7 +21,7 @@ class Buyers::ApplicationsNewPresenter
     data = {
       'create-application-path': admin_buyers_account_applications_path(buyer),
       buyer: BuyerDecorator.new(buyer).new_application_data.to_json,
-      'most-recently-updated-products': most_recently_updated_products.to_json,
+      'most-recently-updated-products': products.to_json,
       'products-count': raw_products.size,
     }
     data.merge new_application_form_base_data(provider, cinstance)
