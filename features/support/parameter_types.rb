@@ -163,7 +163,7 @@ ParameterType(
 ParameterType(
   name: 'forum',
   regexp: /"([^"]*)"|the forum of "([^"]*)"/,
-  transformer: ->(name) { provider_by_name(name).forum }
+  transformer: ->(name, other_name) { provider_by_name(name.presence || other_name.presence).forum }
 )
 
 ParameterType(
