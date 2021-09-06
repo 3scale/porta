@@ -26,7 +26,7 @@ module Alerts
       table[index + 1] << tr['data-state']
     end
 
-    data = Cucumber::Core::Ast::DataTable.new(table, nil)
+    data = Cucumber::Core::Test::DataTable.new(table)
 
     table = Cucumber::MultilineArgument::DataTable.new data
 

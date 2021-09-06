@@ -4,14 +4,6 @@ Then "{plan} should be the default" do |plan|
   assert plan.master?
 end
 
-Given "account/service/application {plan} is {default}" do |plan, default|
-  unless default
-    assert !default_plan?(plan)
-  else
-    make_plan_default(plan)
-  end
-end
-
 Given "{plan} is {default}" do |plan, default|
   unless default
     assert !default_plan?(plan)
@@ -19,7 +11,6 @@ Given "{plan} is {default}" do |plan, default|
     make_plan_default(plan)
   end
 end
-
 
 Given /^a default application plan of provider "([^"]*)"$/ do |provider_name|
   step %(a default application plan "Default" of provider "#{provider_name}")
