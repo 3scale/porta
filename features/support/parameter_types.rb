@@ -4,7 +4,7 @@ quoted_list_subpattern = '"[^"]*"(?:(?:,| and) "[^"]*")'
 
 QUOTED_ONE_OR_MORE_PATTERN = "(#{quoted_list_subpattern}*)"
 QUOTED_TWO_OR_MORE_PATTERN = "(#{quoted_list_subpattern}+)"
-QUOTED_LIST_PATTERN        = QUOTED_ONE_OR_MORE_PATTERN # 1 or more is the default
+QUOTED_LIST_PATTERN = QUOTED_ONE_OR_MORE_PATTERN # 1 or more is the default
 
 ParameterType(
   name: 'list_of_strings',
@@ -23,8 +23,10 @@ ParameterType(
   regexp: /(provider|buyer) "([^"]*)"/,
   transformer: ->(type, name) {
     case type
-    when 'provider' then provider_by_name(name)
-    when 'buyer' then Account.buyers.find_by!(name: name)
+    when 'provider' then
+      provider_by_name(name)
+    when 'buyer' then
+      Account.buyers.find_by!(name: name)
     end
   }
 )
@@ -51,7 +53,7 @@ ParameterType(
 ParameterType(
   name: 'backend_version',
   regexp: /(?:v(\d+)|(oauth))/,
-  transformer: ->(version) { version }
+  transformer: ->(version, oauth) { version.presence || oauth.presence }
 )
 
 ParameterType(
@@ -65,10 +67,14 @@ ParameterType(
   regexp: /(application|account|service)?\s?plan "([^"]*)"/,
   transformer: ->(type = nil, name) do
     case type
-    when 'application' then ApplicationPlan.find_by!(name: name)
-    when 'account' then AccountPlan.find_by!(name: name)
-    when 'service' then ServicePlan.find_by!(name: name)
-    else Plan.find_by!(name: name)
+    when 'application' then
+      ApplicationPlan.find_by!(name: name)
+    when 'account' then
+      AccountPlan.find_by!(name: name)
+    when 'service' then
+      ServicePlan.find_by!(name: name)
+    else
+      Plan.find_by!(name: name)
     end
   end
 )
@@ -103,7 +109,10 @@ ParameterType(
   type: Account,
   regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
   # TODO check this .present? condition
-  transformer: ->(name) { name.present? ? provider_by_name(name) : @provider }
+  transformer: ->(*args) do
+    name = args.map(&:presence).compact.first
+    name.present? ? provider_by_name(name) : @provider
+  end
 )
 
 ParameterType(
@@ -163,7 +172,7 @@ ParameterType(
 ParameterType(
   name: 'forum',
   regexp: /"([^"]*)"|the forum of "([^"]*)"/,
-  transformer: ->(name) { provider_by_name(name).forum }
+  transformer: ->(name, other_name) { provider_by_name(name.presence || other_name.presence).forum }
 )
 
 ParameterType(
@@ -219,7 +228,7 @@ ParameterType(
 
 ParameterType(
   name: 'legal_terms',
-  regexp: /legal terms "[^"]*"/,
+  regexp: /legal terms "([^"]*)"/,
   transformer: ->(name) { CMS::LegalTerm.find_by!(title: name) }
 )
 
@@ -271,7 +280,7 @@ ParameterType(
 ParameterType(
   name: 'public',
   regexp: /public|private|restricted/,
-  transformer: ->(visibility) { visibility == 'public'}
+  transformer: ->(visibility) { visibility == 'public' }
 )
 
 ParameterType(

@@ -7,7 +7,7 @@ Before do |scenario|
     'US' => 'United States of America'}
 
   countries.each do |code, name|
-    FactoryBot.create(:country, :name => name, :code => code) unless Country.exists?(:code => code)
+    Country.create(name: name, code: code)
   end
 
   ThreeScale.config.stubs(superdomain: '3scale.localhost')

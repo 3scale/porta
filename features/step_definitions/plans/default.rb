@@ -4,7 +4,7 @@ Then "{plan} should be the default" do |plan|
   assert plan.master?
 end
 
-Given "(account/service/application ){plan} is {default}" do |plan, default|
+Given "{plan} is {default}" do |plan, default|
   unless default
     assert !default_plan?(plan)
   else
