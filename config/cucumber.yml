@@ -1,4 +1,4 @@
-<% std_opts = "--strict --tags 'not @wip' #{ENV['CUCUMBER_OPTIONS']}" %>
+<% std_opts = "--strict --tags 'not @wip' #{ENV['CUCUMBER_OPTIONS']} --publish-quiet" %>
 default: <%= std_opts %>
 <% tags = %w[ @backend @emails @stats @no-txn ] %>
 list: --dry-run --format Cucumber::Formatter::List
