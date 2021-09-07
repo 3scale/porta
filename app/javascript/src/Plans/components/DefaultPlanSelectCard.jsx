@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { post } from 'utilities'
+import { post, createReactWrapper } from 'utilities'
 import {
   Form,
   FormGroup,
@@ -14,7 +14,7 @@ import * as alert from 'utilities/alert'
 import type { Product, Plan } from 'Types'
 import './DefaultPlanSelectCard.scss'
 
-export type Props = {
+type Props = {
   product: Product,
   initialDefaultPlan: Plan | null,
   path: string
@@ -78,4 +78,6 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
   )
 }
 
-export { DefaultPlanSelectCard }
+const DefaultPlanSelectWrapper = (props: Props, containerId: string): void => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
+
+export { DefaultPlanSelectCard, DefaultPlanSelectWrapper }

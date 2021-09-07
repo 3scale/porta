@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 
+import escapeRegExp from 'lodash.escaperegexp'
 import { SelectOption } from '@patternfly/react-core'
 
 export type Record = {
@@ -39,3 +40,19 @@ export const toSelectOption = ({ id, name, description, disabled = false, classN
     isDisabled={disabled}
   />
 )
+
+/**
+ * It creates a callback that's to be passed to a PF4 select of variant "typeahead"
+ */
+export const handleOnFilter = (items: Array<Record>): Function => {
+  return (e: SyntheticEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget
+    const term = new RegExp(escapeRegExp(value), 'i')
+
+    const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
+
+    // $FlowIssue[prop-missing] description is optional
+    // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
+    return filteredItems.map(toSelectOption)
+  }
+}
