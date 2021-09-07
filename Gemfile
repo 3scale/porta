@@ -171,7 +171,6 @@ group :development do
   gem 'rubocop', '~> 0.92', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
-  gem 'solargraph'
 end
 
 gem 'message_bus', '~> 2.0.2'
