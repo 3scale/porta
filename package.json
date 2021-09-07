@@ -82,6 +82,7 @@
     "core-js": "^2.6.9",
     "jquery": "^3.5.0",
     "jquery-ui": "^1.12.1",
+    "lodash.escaperegexp": "^4.1.2",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "moment-timezone": "^0.5.5",
