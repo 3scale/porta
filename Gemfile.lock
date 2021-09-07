@@ -193,9 +193,7 @@ GEM
       activerecord (>= 4.2.0)
       join_dependency (~> 0.1.2)
       polyamorous (~> 1.3)
-    backport (1.1.2)
     bcrypt (3.1.13)
-    benchmark (0.1.0)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
     bootsnap (1.4.5)
@@ -324,7 +322,6 @@ GEM
       request_store (~> 1.0)
     dry-initializer (3.0.4)
     dynamic_form (1.1.4)
-    e2mmap (0.1.0)
     email_spec (2.2.0)
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
@@ -391,7 +388,6 @@ GEM
       responders
     injectedlogger (0.0.13)
     innertube (1.1.0)
-    jaro_winkler (1.5.4)
     jmespath (1.4.0)
     join_dependency (0.1.4)
       activerecord (>= 4.2.0)
@@ -432,7 +428,6 @@ GEM
       mini_mime (>= 0.1.1)
     mail_view (2.0.4)
       tilt
-    maruku (0.7.3)
     mechanize (2.7.7)
       domain_name (~> 0.5, >= 0.5.1)
       http-cookie (~> 1.0)
@@ -627,8 +622,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    reverse_markdown (2.0.0)
-      nokogiri
     rexml (3.2.5)
     riddle (2.4.0)
     rmagick (2.15.4)
@@ -751,20 +744,6 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 5.0)
-    solargraph (0.39.17)
-      backport (~> 1.1)
-      benchmark
-      bundler (>= 1.17.2)
-      e2mmap
-      jaro_winkler (~> 1.5)
-      maruku (~> 0.7, >= 0.7.3)
-      nokogiri (~> 1.9, >= 1.9.1)
-      parser (~> 2.3)
-      reverse_markdown (>= 1.0.5, < 3)
-      rubocop (~> 0.52)
-      thor (~> 1.0)
-      tilt (~> 2.0)
-      yard (~> 0.9, >= 0.9.24)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -1030,7 +1009,6 @@ DEPENDENCIES
   simplecov (~> 0.21.2)
   sinatra
   slim-rails (~> 3.2)
-  solargraph
   sour!
   source2swagger!
   sprockets-rails
