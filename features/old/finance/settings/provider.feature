@@ -16,9 +16,6 @@ Scenario: Turning charging on/off
   Then I should see "Finance settings updated."
    And the "Charging enabled" checkbox should be checked
 
-Scenario: Switch postpaid/prepaid mode
-
-
 Scenario: Setting a currency
   Given provider "foo.3scale.localhost" has "finance" switch allowed
   When I go to the finance settings page
