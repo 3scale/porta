@@ -19,7 +19,7 @@ module Api::PlansHelper
   end
 
   def application_plans_data(plans)
-    plans.alphabetically
+    plans.order(name: :asc)
          .to_json(root: false, only: %i[id name])
   end
 
@@ -36,8 +36,7 @@ module Api::PlansHelper
   end
 
   def application_plans_index_data(plans)
-    plans.alphabetically
-         .decorate
+    plans.decorate
          .map(&:index_table_data)
   end
 
