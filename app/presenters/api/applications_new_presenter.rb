@@ -21,7 +21,7 @@ class Api::ApplicationsNewPresenter
     data = {
       'create-application-path': admin_service_applications_path(service),
       product: ServiceDecorator.new(service).new_application_data.to_json,
-      'most-recently-created-buyers': most_recently_created_buyers.to_json,
+      'most-recently-created-buyers': buyers.to_json,
       'buyers-count': raw_buyers.size,
     }
     data.merge new_application_form_base_data(provider, cinstance)
