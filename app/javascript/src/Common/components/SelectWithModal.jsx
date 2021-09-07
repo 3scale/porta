@@ -10,7 +10,8 @@ import {
 import {
   toSelectOption,
   toSelectOptionObject,
-  SelectOptionObject
+  SelectOptionObject,
+  handleOnFilter
 } from 'utilities'
 import { TableModal } from 'Common'
 
@@ -101,15 +102,6 @@ const SelectWithModal = <T: Record>({
 
   const options = getSelectOptions(items)
 
-  const handleOnFilter = (e: SyntheticEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget
-    const term = new RegExp(value, 'i')
-
-    const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
-
-    return getSelectOptions(filteredItems)
-  }
-
   return (
     <>
       <FormGroup
@@ -133,7 +125,9 @@ const SelectWithModal = <T: Record>({
           aria-labelledby={id}
           className={shouldShowFooter ? 'pf-c-select__menu--with-fixed-link' : undefined}
           isGrouped
-          onFilter={handleOnFilter}
+          // $FlowIssue[prop-missing] description is optional
+          // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
+          onFilter={handleOnFilter(items)}
         >
           {options}
         </Select>

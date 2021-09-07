@@ -2,8 +2,15 @@
 
 import * as React from 'react'
 import { Select, SelectVariant } from '@patternfly/react-core'
-import { toSelectOptionObject, toSelectOption, SelectOptionObject } from 'utilities'
+import {
+  toSelectOptionObject,
+  toSelectOption,
+  SelectOptionObject,
+  handleOnFilter
+} from 'utilities'
+
 import './DefaultPlanSelect.scss'
+
 import type { Plan } from 'Types'
 
 type Props = {
@@ -29,17 +36,6 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
     }
   }
 
-  const handleOnFilter = (e: SyntheticEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget
-    const term = new RegExp(value, 'i')
-
-    const filteredPlans = value !== '' ? plans.filter(b => term.test(b.name)) : plans
-
-    // $FlowIssue[prop-missing] description is optional
-    // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
-    return filteredPlans.map(toSelectOption)
-  }
-
   return (
     <Select
       id="default-plan-select"
@@ -53,7 +49,9 @@ const DefaultPlanSelect = ({ plan, plans, onSelectPlan, isDisabled = false }: Pr
       isDisabled={isDisabled}
       selections={selection}
       isCreatable={false}
-      onFilter={handleOnFilter}
+      // $FlowIssue[prop-missing] description is optional
+      // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
+      onFilter={handleOnFilter(plans)}
     >
       {/* $FlowIssue[prop-missing] description is optional */}
       {/* $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string" */}

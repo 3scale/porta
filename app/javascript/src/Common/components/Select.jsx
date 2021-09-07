@@ -3,7 +3,12 @@
 import * as React from 'react'
 
 import { FormGroup, Select as PF4Select, SelectVariant } from '@patternfly/react-core'
-import { toSelectOption, toSelectOptionObject, SelectOptionObject } from 'utilities'
+import {
+  toSelectOption,
+  toSelectOptionObject,
+  SelectOptionObject,
+  handleOnFilter
+} from 'utilities'
 
 import type { Record } from 'utilities'
 
@@ -45,19 +50,6 @@ const Select = <T: Record>({
     onSelect(selected || null)
   }
 
-  const handleFilter = (e: SyntheticInputEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget
-    let filteredItems = items
-
-    if (value !== '') {
-      const term = new RegExp(value, 'i')
-      filteredItems = items.filter(i => term.test(i.name))
-    }
-
-    // $FlowIssue[prop-missing] className and disabled are optional
-    return filteredItems.map(toSelectOption)
-  }
-
   return (
     <FormGroup
       isRequired={isRequired}
@@ -81,7 +73,9 @@ const Select = <T: Record>({
         }}
         aria-labelledby={fieldId}
         isDisabled={isDisabled}
-        onFilter={handleFilter}
+        // $FlowIssue[prop-missing] description is optional
+        // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
+        onFilter={handleOnFilter(items)}
       >
         {/* $FlowIssue[prop-missing] className and disabled are optional */}
         {items.map(toSelectOption)}
