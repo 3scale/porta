@@ -23,8 +23,11 @@ type Props = {
 }
 
 const VALIDATION_CONSTRAINTS = {
-  name: { length: { minimum: 1 } },
-  privateEndpoint: { url: { schemes: ['http', 'https', 'ws', 'wss'] } }
+  name: { presence: { allowEmpty: false } },
+  // Regexp taken from app/lib/system_name.rb#L15
+  systemName: { format: { pattern: /^(\w[\w\-/]+)?$/ } },
+  // This does not mean to be exhaustive, let the server do the real validation
+  privateEndpoint: { format: { pattern: /(https?|wss?):\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/ } }
 }
 
 const NewBackendForm = ({ action, onCancel, isLoading = false, errors = {} }: Props): React.Node => {
@@ -33,7 +36,7 @@ const NewBackendForm = ({ action, onCancel, isLoading = false, errors = {} }: Pr
   const [description, setDescription] = useState('')
   const [privateEndpoint, setPrivateEndpoint] = useState('')
 
-  const validationErrors = validate({ name, privateEndpoint }, VALIDATION_CONSTRAINTS)
+  const validationErrors = validate({ name, systemName, privateEndpoint }, VALIDATION_CONSTRAINTS)
 
   return (
     <Form
