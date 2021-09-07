@@ -10,8 +10,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'rack', '~> 2.1.4'
 
-gem 'aws-sdk', '~> 2'
-gem 'aws-sdk-rails', '~> 1.0'
+gem 'aws-sdk', '~> 3'
+gem 'aws-sdk-rails', '~> 2'
+gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 5.0.7'
@@ -100,7 +101,7 @@ gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
-gem 'paperclip', '~> 5.3.0'
+gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
 gem 'prawn-layout', '0.2.1'
