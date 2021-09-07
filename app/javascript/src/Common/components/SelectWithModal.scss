@@ -1,3 +1,8 @@
+.pf-c-select__menu {
+  max-height: 20em;
+  overflow: auto;
+}
+
 // For a select box with fixed link at the bottom, select the last li to be that sticky link
 .pf-c-select__menu--with-fixed-link li:last-of-type {
   position: sticky;
