@@ -1,11 +1,7 @@
 class Stats::Data::BaseController < ApplicationController
   include SiteAccountSupport
-  include ApiAuthentication::SuspendedAccount
-  include ApiAuthentication::ByAccessToken
-  include ApiAuthentication::ByProviderKey
   include ErrorHandling::Handlers
 
-  self.access_token_scopes = :stats
 
   before_action :login_required
 
