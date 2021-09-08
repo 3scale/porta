@@ -3,17 +3,7 @@
 module ThreeScale::Middleware
   class Cors < Rack::Cors
     def initialize(app, opts = {}, &block)
-      origins = config.origins.presence || '*'
-      resources = config.resources.presence || '*'
-
-      super(app, opts) do
-        allow do
-          self.origins origins
-          [*resources].each do |resource|
-            self.resource resource, headers: :any, methods: [:get, :post, :patch, :put, :delete]
-          end
-        end
-      end
+      super(app, opts) { set_config }
 
       if block_given?
         if block.arity == 1
@@ -26,6 +16,7 @@ module ThreeScale::Middleware
 
     def call(env)
       return @app.call(env) unless enabled?
+
       super
     end
 
@@ -35,5 +26,24 @@ module ThreeScale::Middleware
 
     delegate :enabled, to: :config
     alias enabled? enabled
+
+    private
+
+    def set_config
+      rules = config.allow.presence || []
+
+      rules.map(&:symbolize_keys).each do |rule|
+        origins = rule[:origins].presence || '*'
+        resources = rule[:resources].presence || '*'
+        methods = rule[:methods].presence || :get
+
+        allow do
+          self.origins origins
+          [*resources].each do |resource|
+            self.resource resource, headers: rule[:headers].presence, methods: methods, credentials: rule[:credentials].present?, max_age: rule[:max_age].presence, vary: rule[:vary], expose: rule[:expose].presence
+          end
+        end
+      end
+    end
   end
 end
