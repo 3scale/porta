@@ -505,6 +505,26 @@ without fake Core server your after commit callbacks will crash and you might ge
     # api routes, be careful
     namespace :api, :defaults => { :format => 'xml' } do
 
+      namespace :stats do
+        # horrible hacks with path to get parameter to be named :service_id
+        resources :services, :path => 'services/:service_id' do  #, :applications do
+          collection do
+            get 'usage'
+            get 'top_applications'
+          end
+        end
+        resources :applications, :path => 'applications/:application_id' do
+          collection do
+            get 'usage'
+          end
+        end
+        resources :backend_apis, :path => 'backend_apis/:backend_api_id' do
+          collection do
+            get 'usage'
+          end
+        end
+      end
+
       get 'objects/status' => 'objects#status', as: :objects_status, controller: :objects, defaults: { format: :json }
 
       namespace :personal, defaults: { format: :json } do

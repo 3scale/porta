@@ -1,45 +1,6 @@
 class Stats::Data::ServicesController < Stats::Data::BaseController
   before_action :set_source
 
-  ##~ sapi = source2swagger.namespace("Analytics API")
-  ##
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/stats/services/{service_id}/usage.{format}"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Service Traffic by Metric"
-  ##~ op.description = "Returns the usage data of a given metric (or method) of a service."
-  ##~ op.group = "service_ops"
-  #
-  ##~ op.parameters.add @parameter_format
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id
-  ##~ op.parameters.add @parameter_metric_name
-  ##~ op.parameters.add @parameter_since
-  ##~ op.parameters.add @parameter_period
-  ##~ op.parameters.add @parameter_until
-  ##~ op.parameters.add @parameter_granularity
-  ##~ op.parameters.add @parameter_timezone
-  ##~ op.parameters.add @parameter_skip_change
-  #
-  ##
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/stats/services/{service_id}/top_applications.{format}"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Service Top Applications"
-  ##~ op.description = "Returns usage and application data for the top 10 most active applications of a service."
-  ##~ op.group = "service_ops"
-  #
-  ##~ op.parameters.add @parameter_format
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_service_id
-  ##~ op.parameters.add @parameter_since
-  ##~ op.parameters.add @parameter_period
-  ##~ op.parameters.add @parameter_metric_name
-  #
   def top_applications
     options = slice_and_use_defaults(params, :metric_name, :period, :since, :timezone)
 

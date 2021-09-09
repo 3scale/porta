@@ -1,7 +1,7 @@
 {
   "apis": [
     {
-      "path": "/stats/applications/{application_id}/usage.{format}",
+      "path": "/admin/api/stats/applications/{application_id}/usage.{format}",
       "operations": [
         {
           "httpMethod": "GET",
@@ -267,7 +267,7 @@
       ]
     },
     {
-      "path": "/stats/backend_apis/{backend_api_id}/usage.json",
+      "path": "/admin/api/stats/backend_apis/{backend_api_id}/usage.json",
       "operations": [
         {
           "httpMethod": "GET",
@@ -531,7 +531,7 @@
       ]
     },
     {
-      "path": "/stats/services/{service_id}/usage.{format}",
+      "path": "/admin/api/stats/services/{service_id}/usage.{format}",
       "operations": [
         {
           "httpMethod": "GET",
@@ -797,7 +797,7 @@
       ]
     },
     {
-      "path": "/stats/services/{service_id}/top_applications.{format}",
+      "path": "/admin/api/stats/services/{service_id}/top_applications.{format}",
       "operations": [
         {
           "httpMethod": "GET",

@@ -3,29 +3,6 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
   before_action :find_service
   before_action :set_source
 
-  ##~ sapi = source2swagger.namespace("Analytics API")
-  ##
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/stats/applications/{application_id}/usage.{format}"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Application Traffic by Metric"
-  ##~ op.description = "Returns the usage data for a given metric (or method) of an application."
-  ##~ op.group = "application_ops"
-  #
-  ##~ op.parameters.add @parameter_format
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_application_id
-  ##~ op.parameters.add @parameter_metric_name
-  ##~ op.parameters.add @parameter_since
-  ##~ op.parameters.add @parameter_period
-  ##~ op.parameters.add @parameter_until
-  ##~ op.parameters.add @parameter_granularity
-  ##~ op.parameters.add @parameter_timezone
-  ##~ op.parameters.add @parameter_skip_change
-  #
-
 
   def summary
     @metrics = @service.metrics.top_level

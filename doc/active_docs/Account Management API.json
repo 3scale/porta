@@ -1115,10 +1115,11 @@
             },
             {
               "name": "service_id",
-              "description": "Service ID of the ActiveDocs spec",
+              "description": "ID of the service.",
               "dataType": "int",
-              "paramType": "query",
-              "required": false
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
             },
             {
               "name": "body",
@@ -1212,10 +1213,11 @@
             },
             {
               "name": "service_id",
-              "description": "Service ID of the ActiveDocs spec",
+              "description": "ID of the service.",
               "dataType": "int",
-              "paramType": "query",
-              "required": false
+              "required": true,
+              "paramType": "path",
+              "threescale_name": "service_ids"
             },
             {
               "name": "body",

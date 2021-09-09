@@ -3,29 +3,6 @@
 class Stats::Data::BackendApisController < Stats::Data::BaseController
   before_action :set_source
 
-  ##~ sapi = source2swagger.namespace("Analytics API")
-  ##
-  ##~ e = sapi.apis.add
-  ##~ e.path = "/stats/backend_apis/{backend_api_id}/usage.json"
-  #
-  ##~ op            = e.operations.add
-  ##~ op.httpMethod = "GET"
-  ##~ op.summary    = "Backend Traffic by Metric"
-  ##~ op.description = "Returns the traffic data of a given metric (or method) of a backend."
-  ##~ op.group = "backend_api_ops"
-  #
-  ##~ op.parameters.add @parameter_format
-  ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add @parameter_backend_api_id_by_id_name
-  ##~ op.parameters.add @parameter_backend_api_metric_name
-  ##~ op.parameters.add @parameter_since
-  ##~ op.parameters.add @parameter_period
-  ##~ op.parameters.add @parameter_until
-  ##~ op.parameters.add @parameter_granularity
-  ##~ op.parameters.add @parameter_timezone
-  ##~ op.parameters.add @parameter_skip_change
-  #
-
   private
 
   def set_source
