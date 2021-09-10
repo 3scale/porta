@@ -32,11 +32,16 @@ require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
 
 require 'minitest/reporters'
 
-junit = MiniTest::Reporters::JUnitReporter.new([junit_reporter_path, Process.pid].compact.join('-'))
+report_dir = [junit_reporter_path, Process.pid].compact.join('-')
+# junit = MiniTest::Reporters::JUnitReporter.new(report_dir)
+
 # this environment variable is set by Intellij IDEA which is not compatible with those reporters
 unless ENV['RM_INFO']
+  require 'minitest/ci'
+  Minitest::Ci.report_dir = report_dir
   # we skip this for IntelliJ IDEA compatibility
-  MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
+  # MiniTest::Reporters.use!([junit, MiniTest::Reporters::DefaultReporter.new])
+  MiniTest::Reporters.use!([MiniTest::Reporters::DefaultReporter.new])
 end
 
 require 'webmock/minitest'

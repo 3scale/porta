@@ -219,6 +219,7 @@ group :test do
 
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
   gem 'minitest', '5.10.3'
+  gem 'minitest-ci', require: false
   gem 'minitest-reporters', require: false
   gem 'minitest-stub-const'
   gem 'rspec_junit_formatter'
