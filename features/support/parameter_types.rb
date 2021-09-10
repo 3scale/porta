@@ -254,8 +254,8 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'date',
-  regexp: /(.*)/,
+  name: 'expiration_date',
+  regexp: /expiration date (\w+, *\d+|\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))/,
   transformer: ->(date) { Date.parse(date) }
 )
 
