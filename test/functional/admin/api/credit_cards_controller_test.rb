@@ -5,6 +5,8 @@ class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
   def setup
     provider = FactoryBot.create(:provider_account)
     @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
+    host! provider.admin_domain
+    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
 
     @params = {
       id: @buyer.provider_account_id,
@@ -20,10 +22,9 @@ class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
       billing_address_state: 'Barcelona',
       billing_address_phone: '+34567890123',
       billing_address_zip: '08013',
-      format: :xml
+      format: :xml,
+      access_token: @token
     }
-
-    login_provider provider
   end
 
   def test_update
@@ -46,7 +47,7 @@ class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
   end
 
   def test_delete
-    delete :destroy, id: @buyer.provider_account_id, account_id: @buyer.id, format: :xml
+    delete :destroy, id: @buyer.provider_account_id, account_id: @buyer.id, format: :xml, access_token: @token
     assert_response :success
   end
 end

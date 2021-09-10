@@ -6,7 +6,8 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    login! @provider
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    host! @provider.admin_domain
   end
 
   # This simple test is because rails 5.0 upgrade.
@@ -26,14 +27,14 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
     # represented.to_hash
 
     xml = represented.to_xml
-    get admin_api_account_plans_path(format: :xml)
+    get admin_api_account_plans_path(format: :xml, access_token: @token)
 
     assert_response :success
     assert_equal xml, response.body
 
     represented.to_hash
     json = represented.to_json
-    get admin_api_account_plans_path(format: :json)
+    get admin_api_account_plans_path(format: :json, access_token: @token)
     assert_response :success
     assert_equal json, response.body
   end
@@ -89,6 +90,6 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
   attr_reader :provider
 
   def account_plan_params(state_event: 'publish', approval_required: 0)
-    @account_plan_params ||= { account_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json }
+    @account_plan_params ||= { account_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json, access_token: @token,}
   end
 end

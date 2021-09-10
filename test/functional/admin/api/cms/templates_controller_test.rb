@@ -5,8 +5,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   def setup
     @provider     = FactoryBot.create(:provider_account)
     @request.host = @provider.admin_domain
-
-    login_provider @provider
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[cms]).value
   end
 
   def test_show
@@ -14,7 +13,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       portlet = FactoryBot.create(:cms_portlet, provider: @provider,
         portlet_type: portlet_type.to_s, type: portlet_type.to_s)
 
-      get :show, id: portlet.id, format: :xml
+      get :show, id: portlet.id, format: :xml, access_token: @token
 
       assert_response :success
       assert_equal 0, xml_elements_by_key(@response.body, 'builtin_partial').count
@@ -25,7 +24,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   def test_show_builtin_partial
     partial = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
-    get :show, id: partial.id, format: :xml
+    get :show, id: partial.id, format: :xml, access_token: @token
 
     assert_response :success
     assert_equal 1, xml_elements_by_key(@response.body, 'builtin_partial').count
@@ -34,7 +33,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
   def test_create
     post :create, section_name: { '0' => 'foooo' }, template: { type: 'page',
-      title: 'About', path: '/about' }, format: :json
+      title: 'About', path: '/about' }, format: :json, access_token: @token
 
     assert_response :success
   end
@@ -42,7 +41,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   def test_destroy_success
     page = FactoryBot.create(:cms_page, provider: @provider)
 
-    delete :destroy, id: page.id, format: :json
+    delete :destroy, id: page.id, format: :json, access_token: @token
 
     assert_response :success
   end
@@ -51,7 +50,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
     # builtin pages cannot be destroyed
     page = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
-    delete :destroy, id: page.id, format: :json
+    delete :destroy, id: page.id, format: :json, access_token: @token
 
     assert_response :locked
   end

@@ -6,7 +6,8 @@ class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::Integrat
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    login! @provider
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    host! @provider.admin_domain
   end
 
   def test_index
@@ -16,13 +17,16 @@ class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::Integrat
     metric.usage_limits.create(period: :week, value: 1, plan: app_plan)
     metric.usage_limits.create(period: :month, value: 1, plan: app_plan)
 
-    get admin_api_application_plan_limits_path(app_plan, format: :json)
+    get admin_api_application_plan_limits_path(app_plan, format: :json, access_token: @token)
+    assert_response :success
     assert_equal 2, JSON.parse(response.body)['limits'].length
 
-    get admin_api_application_plan_limits_path(app_plan, per_page: 1, format: :json)
+    get admin_api_application_plan_limits_path(app_plan, per_page: 1, format: :json, access_token: @token)
+    assert_response :success
     assert_equal 1, JSON.parse(response.body)['limits'].length
 
-    get admin_api_application_plan_limits_path(app_plan, per_page: 2, page: 2, format: :json)
+    get admin_api_application_plan_limits_path(app_plan, per_page: 2, page: 2, format: :json, access_token: @token)
+    assert_response :success
     assert_equal 0, JSON.parse(response.body)['limits'].length
   end
 end
