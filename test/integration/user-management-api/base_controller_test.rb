@@ -35,19 +35,20 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     def setup
       provider = FactoryBot.create(:provider_account)
-      login! provider
+      @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
+      host! provider.admin_domain
     end
 
     test 'JSON for a representer class without pagination' do
       with_api_routes do
-        get '/api/klas', params: { format: :json, words: %w[hello world example] }
+        get '/api/klas', params: { format: :json, words: %w[hello world example], access_token: @token }
         assert_nil JSON.parse(response.body)['metadata']
       end
     end
 
     test 'JSON pagination metadata for a representer class' do
       with_api_routes do
-        get '/api/klas', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2 }
+        get '/api/klas', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2, access_token: @token }
         response_hash = JSON.parse(response.body)
         assert_equal 1, response_hash.dig('metadata', 'per_page')
         assert_equal 3, response_hash.dig('metadata', 'total_entries')
@@ -58,14 +59,14 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     test 'JSON for a representer module without pagination' do
       with_api_routes do
-        get '/api/mods', params: { format: :json, words: %w[hello world example] }
+        get '/api/mods', params: { format: :json, words: %w[hello world example], access_token: @token }
         assert_nil JSON.parse(response.body)['metadata']
       end
     end
 
     test 'JSON pagination metadata for a representer module' do
       with_api_routes do
-        get '/api/mods', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2 }
+        get '/api/mods', params: { format: :json, words: %w[hello world example], per_page: 1, page: 2, access_token: @token }
         response_hash = JSON.parse(response.body)
         assert_equal 1, response_hash.dig('metadata', 'per_page')
         assert_equal 3, response_hash.dig('metadata', 'total_entries')
@@ -76,7 +77,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     test 'XML for a representer class without pagination' do
       with_api_routes do
-        get '/api/klas', params: { format: :xml, words: %w[hello world example] }
+        get '/api/klas', params: { format: :xml, words: %w[hello world example], access_token: @token }
         response_hash = Hash.from_xml(response.body)
         assert_nil response_hash.dig('klass', 'per_page')
         assert_nil response_hash.dig('klass', 'total_entries')
@@ -87,7 +88,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     test 'XML pagination metadata (attributes) for a representer class' do
       with_api_routes do
-        get '/api/klas', params: { format: :xml, words: %w[hello world example], per_page: 1, page: 2 }
+        get '/api/klas', params: { format: :xml, words: %w[hello world example], per_page: 1, page: 2, access_token: @token }
         response_hash = Hash.from_xml(response.body)
         assert_equal '1', response_hash.dig('klass', 'per_page')
         assert_equal '3', response_hash.dig('klass', 'total_entries')
@@ -98,7 +99,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     test 'XML for a representer module without pagination' do
       with_api_routes do
-        get '/api/mods', params: { format: :xml, words: %w[hello world example] }
+        get '/api/mods', params: { format: :xml, words: %w[hello world example], access_token: @token }
         response_hash = Hash.from_xml(response.body)
         assert_nil response_hash.dig('mods', 'per_page')
         assert_nil response_hash.dig('mods', 'total_entries')
@@ -109,7 +110,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
 
     test 'XML pagination metadata (attributes) for a representer module' do
       with_api_routes do
-        get '/api/mods', params: { format: :xml, words: %w[hello world example], per_page: 1, page: 2 }
+        get '/api/mods', params: { format: :xml, words: %w[hello world example], per_page: 1, page: 2, access_token: @token }
         response_hash = Hash.from_xml(response.body)
         assert_equal '1', response_hash.dig('mods', 'per_page')
         assert_equal '3', response_hash.dig('mods', 'total_entries')
