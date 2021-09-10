@@ -5,18 +5,18 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     provider = FactoryBot.create(:provider_account)
     @admin = FactoryBot.create(:simple_admin, account: provider, username: 'alaska123')
     @admin.activate!
-    login! provider
+    @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: 'account_management', permission: 'rw').value
+
+    host! provider.admin_domain
   end
 
   test 'post create without sso_token params' do
-    post admin_api_sso_tokens_path
+    post admin_api_sso_tokens_path(access_token: @access_token)
     assert_response :bad_request
   end
 
   test 'successful post create' do
-    # access token
-    access_token = FactoryBot.create(:access_token, owner: @admin, scopes: 'account_management', permission: 'rw')
-    post admin_api_sso_tokens_path(access_token: access_token.value, sso_token: { username: 'alaska123', expires_in: 60 })
+    post admin_api_sso_tokens_path(access_token: @access_token, sso_token: { username: 'alaska123', expires_in: 60 })
     assert_response :success
 
     # provider key
@@ -34,7 +34,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
       @admin.activate!
 
       @access_token =FactoryBot.create(:access_token, owner: @admin, scopes: 'account_management', permission: 'ro')
-      login! master_account
+      host! @admin.account.admin_domain
     end
 
     test 'provider_create' do
