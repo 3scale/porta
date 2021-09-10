@@ -50,6 +50,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/application.yml
 /config/backend.yml
 /config/backend_redis.yml
+/config/cors.yml
 /config/database.yml
 /config/domain_substitution.yml
 /config/redis.yml

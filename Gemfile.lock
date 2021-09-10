@@ -15,14 +15,6 @@ GIT
       ci_reporter (~> 2.0)
 
 GIT
-  remote: https://github.com/3scale/font_assets.git
-  revision: da97b8601528ee189795cc94b953ec9a30f47e83
-  ref: da97b8601528ee189795cc94b953ec9a30f47e83
-  specs:
-    font_assets (0.1.11)
-      rack
-
-GIT
   remote: https://github.com/3scale/json-schema.git
   revision: 26487618a68443e94d623bb585cb464b07d36702
   specs:
@@ -1566,7 +1558,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.10.3)
-    minitest-reporters (1.3.8)
+    minitest-reporters (1.4.3)
       ansi
       builder
       minitest (>= 5.0)
@@ -1648,6 +1640,8 @@ GEM
     public_suffix (4.0.6)
     raabro (1.4.0)
     rack (2.1.4)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-no_animations (1.0.3)
     rack-openid (1.4.2)
       rack (>= 1.1.0)
@@ -1797,11 +1791,10 @@ GEM
     ruby-enum (0.7.2)
       i18n
     ruby-oci8 (2.2.6.1)
-      i18n
     ruby-openid (2.9.2)
     ruby-plsql (0.7.1)
     ruby-prof (0.17.0)
-    ruby-progressbar (1.10.1)
+    ruby-progressbar (1.11.0)
     ruby_event_store (0.9.0)
     rubyzip (1.3.0)
     sass (3.4.25)
@@ -2034,7 +2027,6 @@ DEPENDENCIES
   faraday (~> 0.15.3)
   faraday_middleware (~> 0.13.1)
   font-awesome-rails (~> 4.7.0.5)
-  font_assets!
   formtastic (~> 1.2.4)
   github-markdown
   gruff (~> 0.3)
@@ -2081,6 +2073,7 @@ DEPENDENCIES
   pry-shell
   pry-stack_explorer
   rack (~> 2.1.4)
+  rack-cors
   rack-no_animations (~> 1.0.3)
   rack-utf8_sanitizer
   rack-x_served_by (~> 0.1.1)

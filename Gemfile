@@ -44,9 +44,7 @@ gem 'i18n'
 # Apisonator client
 gem 'pisoni', '~> 1.29'
 
-# 3scale fork that allows OPTIONS passthrough
 gem '3scale_time_range', '0.0.6'
-gem 'font_assets', git: 'https://github.com/3scale/font_assets.git', ref: 'da97b8601528ee189795cc94b953ec9a30f47e83', groups: %i[production preview]
 
 gem 'statsd-ruby', require: false
 
@@ -125,6 +123,7 @@ gem 'acts_as_tree'
 gem 'addressable', require: false
 gem 'hashie', require: false
 gem 'rack-x_served_by', '~> 0.1.1'
+gem 'rack-cors'
 gem 'roar-rails'
 
 gem 'reform', '~> 2.0.3', require: false

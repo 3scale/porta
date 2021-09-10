@@ -15,10 +15,11 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Disable serving static files from the `/public` folder by default since
-  # Apache or NGINX already handles this.
   # config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
   config.public_file_server.enabled = true
+  config.public_file_server.headers = {
+    'Cache-Control' => "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}",
+  }
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = Uglifier.new(harmony: true)
@@ -114,7 +115,6 @@ Rails.application.configure do
   # https://github.com/3scale/puppet/blob/ac161671aee2019eefa87b51b150cb78fcb417e9/modules/logstash/templates/config/system-mt/filter.erb
   config.log_tags = [ :uuid, :host, :remote_ip ]
 
-  config.public_file_server.headers = { 'Cache-Control' => "public, max-age=#{(config.assets.digest ? 1.year : 1.minute).to_i}" }
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.liquid.resolver_caching = true
