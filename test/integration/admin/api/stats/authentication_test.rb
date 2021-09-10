@@ -10,22 +10,22 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
 
   test 'access allowed with authentication' do
     params = { period: 'day', metric_name: 'hits' }
-    get "/stats/services/#{@service.id}/usage.json", params.merge(provider_key: @provider_account.api_key)
+    get "/admin/api/stats/services/#{@service.id}/usage.json", params.merge(provider_key: @provider_account.api_key)
     assert_response :success
     assert_content_type 'application/json'
 
     token = FactoryBot.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
-    get "/stats/services/#{@service.id}/usage.json", params.merge(access_token: token.value)
+    get "/admin/api/stats/services/#{@service.id}/usage.json", params.merge(access_token: token.value)
     assert_response :success
     assert_content_type 'application/json'
   end
 
-  test 'access forbidden without authentication' do
-    get "/stats/services/#{@service.id}/usage.json", period: 'day', metric_name: "hits"
+  test 'access denied without authentication' do
+    get "/admin/api/stats/services/#{@service.id}/usage.json", period: 'day', metric_name: "hits"
 
     assert_response :forbidden
     assert_content_type 'application/json'
-    assert_json 'status' => 'Forbidden'
+    assert_json 'error' => 'Access denied'
   end
 
   # Regression test - DoubleRender error
