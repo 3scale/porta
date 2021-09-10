@@ -112,10 +112,10 @@ class Master::Api::Finance::Accounts::BillingJobsControllerTest < ActionDispatch
       assert_response :accepted
     end
 
-    test 'can create jobs without an access token if logged in' do
+    test 'can\'t create jobs without an access token if logged in' do
       login! master_account, user: @master_admin
       post master_api_provider_account_billing_jobs_path(@provider, @buyer, date: '2018-02-08')
-      assert_response :accepted
+      assert_response :unauthorized
     end
   end
 end
