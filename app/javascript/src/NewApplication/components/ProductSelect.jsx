@@ -28,11 +28,11 @@ const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props
       item={product}
       items={products.map(p => ({ ...p, description: p.systemName }))}
       cells={cells}
-      modalTitle="Select an Account"
+      modalTitle="Select a Product"
       // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
       onSelect={onSelectProduct}
-      header="Most recently created Accounts"
-      footer="View all Accounts"
+      header="Most recently updated Products"
+      footer="View all Products"
       isDisabled={isDisabled}
     />
   )
