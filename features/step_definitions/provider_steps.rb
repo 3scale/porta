@@ -145,6 +145,15 @@ Given('stub integration errors dashboard') do
 end
 
 Given(/^a provider( is logged in)?$/) do |login|
+  setup_provider(login)
+end
+
+Given(/^a provider( is logged in)? with a product "([^"]*)"$/) do |login, name|
+  setup_provider(login)
+  @service = @provider.services.create!(name: name, mandatory_app_key: false)
+end
+
+def setup_provider(login)
   step 'a provider "foo.3scale.localhost"'
   step 'current domain is the admin domain of provider "foo.3scale.localhost"'
   step 'stub integration errors dashboard'
