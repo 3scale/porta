@@ -33,7 +33,6 @@ class Admin::Api::Stats::ApplicationsController < Admin::Api::Stats::BaseControl
     @metrics = @service.metrics.top_level
     @methods = @service.method_metrics
     respond_to do |format|
-      format.html { render action: action }
       format.json { render json: metrics_with_methods }
     end
   end

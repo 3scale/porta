@@ -516,6 +516,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resources :applications, :path => 'applications/:application_id' do
           collection do
             get 'usage'
+            get 'summary'
           end
         end
         resources :backend_apis, :path => 'backend_apis/:backend_api_id' do
