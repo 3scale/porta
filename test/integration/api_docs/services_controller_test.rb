@@ -84,7 +84,10 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
 
       get '/api_docs/services/account_management_api.json'
-      actual_backed_api_routes = Rails.application.routes.named_routes.select { |name, route| name.to_s.match(name_or_path_regex) }
+      actual_backed_api_routes = Rails.application.routes.named_routes.select { |name, _|
+        # ignore stats endpoint
+        name.to_s.match(name_or_path_regex) && name.to_s !~ /stats/
+      }
       assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['apis'].each_with_object(Set.new, &select_endpoints).length
     end
   end
