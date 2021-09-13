@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class Stats::Data::ApplicationsControllerTest < ActionController::TestCase
+class Stats::Api::ApplicationsControllerTest < ActionController::TestCase
 
-  should route(:get, '/stats/applications/42/usage.json').to :application_id => '42', :action => 'usage', :format => 'json'
+  should route(:get, '/stats/api/applications/42/usage.json').to :application_id => '42', :action => 'usage', :format => 'json'
 
   def test_summary
     setup_data(login_as: :buyer)
