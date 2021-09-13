@@ -70,3 +70,23 @@ end
 Given(/^the service "([^"]*)" does not have service plan$/) do |name|
   Service.find_by(name: name).service_plans.destroy_all
 end
+
+Given /^it uses the following backends:$/ do |table|
+  transform_table(table).hashes.each do |hash|
+    name, path = hash.values_at(:name, :path)
+    backend = @provider.backend_apis.create!(name: name, private_endpoint: 'https://foo')
+    @service.backend_api_configs.create!(backend_api: backend, path: path)
+  end
+end
+
+Then /^I should see the following backends being used:$/ do |table|
+  within backends_used_table do
+    table.raw.each do |row|
+      should have_css('[data-label="Name"]', text: row[0])
+    end
+  end
+end
+
+def backends_used_table
+  find('#backends-used-list-container')
+end

@@ -235,6 +235,8 @@ World(Module.new do
 
     when /(the )?API dashboard( page)?/
       admin_service_path provider_first_service!
+    when /^the overview page of product "([^"]+)"$/
+      admin_service_path @provider.services.find_by!(name: $1)
 
     when 'the API alerts page'
       admin_alerts_path

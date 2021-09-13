@@ -68,7 +68,7 @@ class ServiceDecorator < ApplicationDecorator
   end
 
   def backends_table_data
-    BackendApiDecorator.decorate_collection(backend_apis.sort_by(&:name))
+    BackendApiDecorator.decorate_collection(backend_apis.reorder(name: :asc))
                        .map(&:table_data)
                        .to_json
   end
