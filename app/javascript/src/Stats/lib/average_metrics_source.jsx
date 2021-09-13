@@ -8,7 +8,7 @@ const moment = extendMoment(Moment)
 
 export class StatsAverageMetricsSource extends StatsMetricsSource {
   get url () {
-    return `/stats/services/${this.id}/usage.json`
+    return `/stats/api/services/${this.id}/usage.json`
   }
 
   _processResponse (response, options) {
