@@ -41,7 +41,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
 
     def test_create_sets_all_attributes
       assert_difference ::ApiDocs::Service.method(:count) do
-        post admin_api_active_docs_path(create_params(service_id: service.id, system_name: 'smart_service', access_token: @token))
+        post admin_api_active_docs_path(access_token: @token), create_params(service_id: service.id, system_name: 'smart_service')
         assert_response :created
       end
 
