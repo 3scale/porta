@@ -63,15 +63,6 @@ class Stats::Data::RequestsToApiTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'summary with access token' do
-    member = FactoryBot.create(:member, account: @provider_account, admin_sections: ['monitoring'])
-    token  = FactoryBot.create(:access_token, owner: member, scopes: ['stats'])
-    params = { period: 'day', metric_name: 'hits', access_token: token.value }
-
-    get "/admin/api/stats/applications/#{@application.id}/summary.json", params
-    assert_response :success
-  end
-
   # Provider key
 
   test 'respond on json for applications' do
