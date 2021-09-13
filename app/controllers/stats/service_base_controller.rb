@@ -3,6 +3,8 @@
 #
 
 class Stats::ServiceBaseController < Stats::BaseController
+  include ApiAuthentication::ByAccessToken
+  self.access_token_scopes = :stats
 
   before_action :authorize_monitoring
   before_action :find_service
