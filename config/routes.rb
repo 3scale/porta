@@ -444,6 +444,29 @@ without fake Core server your after commit callbacks will crash and you might ge
 
   # These are API routes, beware
   namespace :stats do
+    namespace :api do
+      # horrible copy paste, but we need to create separate endpoints
+      resources :services, :path => 'services/:service_id' do  #, :applications do
+        collection do
+          get 'usage'
+          get 'usage_response_code'
+          get 'top_applications'
+          get 'summary'
+        end
+      end
+      resources :applications, :path => 'applications/:application_id' do
+        collection do
+          get 'usage'
+          get 'usage_response_code'
+          get 'summary'
+        end
+      end
+      resources :backend_apis, :path => 'backend_apis/:backend_api_id' do
+        collection do
+          get 'usage'
+        end
+      end
+    end
     namespace :data, :path => '' do
       # horrible hacks with path to get parameter to be named :service_id
       resources :services, :path => 'services/:service_id' do  #, :applications do

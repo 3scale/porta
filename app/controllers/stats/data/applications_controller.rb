@@ -31,7 +31,6 @@ class Stats::Data::ApplicationsController < Stats::Data::BaseController
     @metrics = @service.metrics.top_level
     @methods = @service.method_metrics
     respond_to do |format|
-      format.html { render action: action }
       format.json { render json: metrics_with_methods }
     end
   end
