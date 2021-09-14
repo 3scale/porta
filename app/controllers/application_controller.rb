@@ -14,9 +14,9 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :reset_session # See ActionController::RequestForgeryProtection for details
 
-  # Disable CSRF protection for non xml requests.
+  # Disable CSRF protection for requests to REST API.
   skip_before_action :verify_authenticity_token, if: -> do
-    (params.key?(:provider_key) || params.key?(:access_token)) && !request.format.xml?
+    (params.key?(:provider_key) || params.key?(:access_token)) && is_api_controller?
   end
 
   before_action :set_timezone
@@ -131,6 +131,10 @@ class ApplicationController < ActionController::Base
 
   def report_traffic
     ReportTrafficWorker.enqueue(current_account, metric_to_report, request, response)
+  end
+
+  def is_api_controller?
+    false
   end
 
   private
