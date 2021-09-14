@@ -23,6 +23,7 @@ type Props<T: Record> = {
   cells: Array<{ title: string, propName: string, transforms?: [typeof sortable] }>,
   onSelect: (T | null) => void,
   fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>,
+  onAbortFetch: () => void,
   header: string,
   isDisabled?: boolean,
   title: string,
@@ -44,6 +45,7 @@ const SelectWithModal = <T: Record>({
   cells,
   onSelect,
   fetchItems,
+  onAbortFetch,
   header,
   isDisabled,
   title,
@@ -141,7 +143,7 @@ const SelectWithModal = <T: Record>({
           onSelect={handleOnModalSelect}
           onClose={() => {
             setModalOpen(false)
-            // TODO: cancel ongoing requests
+            onAbortFetch()
           }}
           page={page}
           setPage={handleModalOnSetPage}
