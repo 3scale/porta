@@ -501,7 +501,7 @@ World(Module.new do
     when 'the buyer stats page'
       buyer_stats_path
     when 'the buyer stats usage page'
-      usage_stats_data_applications_path provider_first_service!.cinstances.first, *args
+      usage_stats_api_applications_path provider_first_service!.cinstances.first, *args
     #
     # Potato CMS
     when /^the (?:CMS|cms) page$/

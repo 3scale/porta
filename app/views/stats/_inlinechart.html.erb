@@ -2,7 +2,7 @@
 
 <div id="mini-charts">
   <% Array.wrap(metrics).each do |metric| %>
-  <% endpoint = defined?(cinstance) ? usage_stats_data_applications_path(cinstance) : usage_stats_data_services_path(metric.service_id) %>
+  <% endpoint = defined?(cinstance) ? usage_stats_api_applications_path(cinstance) : usage_stats_api_services_path(metric.service_id) %>
     <div class="charts inlinechart" id="chart-<%= metric.id %>" data-unit-pluralized="<%= metric.unit.pluralize %>" data-metric="<%= metric.name %>" data-source="<%= endpoint %>">
       <%= content_tag :div,
         class: "inline-chart-container",
