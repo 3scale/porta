@@ -59,7 +59,7 @@ it('should pre-fill billing address inputs when a value is provided', () => {
   expect(wrapper.find('select#customer_credit_card_billing_address_country_name').props().value).toEqual('ES')
 })
 
-// $FlowIgnore supress console error until FIXME is resolved to keep tests output clean
+// $FlowIgnore[cannot-write] suppress console error until FIXME is resolved to keep tests output clean
 console.error = () => {}
 
 // FIXME: Fix log error 'Warning: An update to BraintreeForm inside a test was not wrapped in act'

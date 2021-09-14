@@ -73,7 +73,6 @@ const Select = <T: Record>({
         }}
         aria-labelledby={fieldId}
         isDisabled={isDisabled}
-        // $FlowIssue[prop-missing] description is optional
         // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
         onFilter={handleOnFilter(items)}
       >
