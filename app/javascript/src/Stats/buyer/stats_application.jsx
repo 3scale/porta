@@ -43,13 +43,13 @@ export class StatsApplicationChartManager extends StatsUsageChartManager {
   }
 
   _metricUrl (id) {
-    return `/stats/applications/${id}/summary.json?version=2.0`
+    return `/stats/api/applications/${id}/summary.json?version=2.0`
   }
 }
 
 let statsApplication = (applicationId, options = {}) => {
   const id = getStoredApplicationId() || applicationId
-  const applicationMetricsUrl = `/stats/applications/${id}/summary.json?version=2.0`
+  const applicationMetricsUrl = `/stats/api/applications/${id}/summary.json?version=2.0`
   const metrics = StatsMetrics.getMetrics(applicationMetricsUrl)
   const csvLink = new StatsCSVLink({container: options.csvLinkContainer})
   const methodsTable = new StatsMethodsTable({container: options.methodsTableContainer})
