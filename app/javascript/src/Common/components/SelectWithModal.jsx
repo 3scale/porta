@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useState, useEffect } from 'react'
 
 import { SortByDirection, sortable } from '@patternfly/react-table'
+import escapeRegExp from 'lodash.escaperegexp'
 import { FancySelect, PaginatedTableModal } from 'Common'
 import { paginateCollection } from 'utilities'
 
@@ -72,6 +73,7 @@ const SelectWithModal = <T: Record>({
   const handleOnModalSelect = (selected) => {
     setModalOpen(false)
     onSelect(selected)
+    // TODO: reset search
   }
 
   useEffect(() => {
@@ -100,16 +102,24 @@ const SelectWithModal = <T: Record>({
       setIsOnMount(false)
     } else {
       fetchItems({ page: 1, perPage: 20, query }) // perPage 20 to get 4 pages
-        .then(({ items, count }) => {
-          setPageDictionary(paginateCollection(items, PER_PAGE))
-          setCount(count)
-          setPage(1)
-        })
+        .then(({ items, count }) => setSearchResults(items, count))
     }
   }, [query])
 
+  const setSearchResults = (items, count) => {
+    setPageDictionary(paginateCollection(items, PER_PAGE))
+    setCount(count)
+    setPage(1)
+  }
+
   const handleModalOnSetPage = (page: number) => {
     setPage(page)
+  }
+
+  const onLocalSearch = (value: string) => {
+    const term = new RegExp(escapeRegExp(value), 'i')
+    const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
+    setSearchResults(filteredItems, filteredItems.length)
   }
 
   return (
@@ -147,7 +157,7 @@ const SelectWithModal = <T: Record>({
           }}
           page={page}
           setPage={handleModalOnSetPage}
-          onSearch={fetchItems ? setQuery : undefined}
+          onSearch={fetchItems ? setQuery : onLocalSearch}
           sortBy={sortBy}
         />
       )}
