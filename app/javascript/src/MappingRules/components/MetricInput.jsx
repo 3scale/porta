@@ -67,7 +67,6 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
             onSelect={handleOnSelect}
             // $FlowIssue[incompatible-type] metrics can be null, that's the point
             item={metric}
-            // $FlowIssue[incompatible-type] it is compatible
             items={methods}
             isExpanded={isExpanded}
             label=""
@@ -96,7 +95,6 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
             onSelect={handleOnSelect}
             // $FlowIssue[incompatible-type] metrics can be null, that's the point
             item={metric}
-            // $FlowIssue[incompatible-type] it is compatible
             items={topLevelMetrics}
             isExpanded={isExpanded}
             label=""
