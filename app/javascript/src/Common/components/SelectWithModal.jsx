@@ -1,149 +1,154 @@
 // @flow
 
 import * as React from 'react'
+import { useState, useEffect } from 'react'
 
-import {
-  FormGroup,
-  Select,
-  SelectVariant
-} from '@patternfly/react-core'
-import {
-  toSelectOption,
-  toSelectOptionObject,
-  SelectOptionObject,
-  handleOnFilter
-} from 'utilities'
-import { TableModal } from 'Common'
+import { SortByDirection, sortable } from '@patternfly/react-table'
+import { FancySelect, PaginatedTableModal } from 'Common'
+import { paginateCollection } from 'utilities'
 
 import type { Record } from 'utilities'
+import type { FetchItemsRequestParams, FetchItemsResponse } from 'Types'
 
 import './SelectWithModal.scss'
 
 type Props<T: Record> = {
-  item: T | null,
-  items: T[],
-  onSelect: (T | null) => void,
-  isDisabled?: boolean,
-  isValid?: boolean,
   label: string,
+  fieldId: string,
   id: string,
-  name?: string,
-  helperText?: React.Node,
-  helperTextInvalid?: string,
-  placeholderText?: string,
-  maxItems?: number,
-  header?: string,
-  footer?: string,
-  cells: { title: string, propName: string }[],
-  modalTitle: string,
+  name: string,
+  item: T | null,
+  items: Array<T>,
+  itemsCount: number,
+  cells: Array<{ title: string, propName: string, transforms?: [typeof sortable] }>,
+  onSelect: (T | null) => void,
+  fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>,
+  header: string,
+  isDisabled?: boolean,
+  title: string,
+  placeholder: string,
+  footerLabel: string
 }
 
+const PER_PAGE = 5
 const MAX_ITEMS = 20
-const HEADER = 'Most recently created'
-const FOOTER = 'View all'
 
 const SelectWithModal = <T: Record>({
-  item,
-  items,
-  onSelect,
-  isDisabled,
-  isValid,
   label,
+  fieldId,
   id,
   name,
-  helperText,
-  helperTextInvalid,
-  placeholderText,
-  maxItems = MAX_ITEMS,
-  header = HEADER,
-  footer = FOOTER,
+  item,
+  items,
+  itemsCount,
   cells,
-  modalTitle
+  onSelect,
+  fetchItems,
+  header,
+  isDisabled,
+  title,
+  placeholder,
+  footerLabel
 }: Props<T>): React.Node => {
-  const emptyItem = { id: -1, name: 'No results found', disabled: true, privateEndpoint: '' }
-  const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' }
-  const footerItem = { id: 'foo', name: footer, className: 'pf-c-select__menu-item--view-all' }
-  const shouldShowFooter = items.length > MAX_ITEMS
+  const [count, setCount] = useState(itemsCount)
+  const [isLoading, setIsLoading] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [page, setPage] = useState(1)
+  const [isOnMount, setIsOnMount] = useState(true)
+  const [query, setQuery] = useState('')
+  const [pageDictionary, setPageDictionary] = useState(() => paginateCollection(items, PER_PAGE))
 
-  const [expanded, setExpanded] = React.useState(false)
-  const [modalOpen, setModalOpen] = React.useState(false)
+  const shouldHaveModal = itemsCount > MAX_ITEMS
 
-  const handleOnSelect = (_e, option: SelectOptionObject) => {
-    setExpanded(false)
+  // TODO: needs to parameterize this probably
+  const sortBy = { index: 3, direction: SortByDirection.desc }
 
-    if (option.id === footerItem.id) {
-      setModalOpen(true)
-    } else {
-      const selectedBackend = items.find(b => String(b.id) === option.id)
-
-      if (selectedBackend) {
-        onSelect(selectedBackend)
-      }
-    }
+  const handleOnFooterClick = () => {
+    setModalOpen(true)
   }
 
-  // Takes an array of local items and returns the list of options for the select.
-  // If the sum of all items is higher than 20, display link button to "View all Products"
-  const getSelectOptions = (forItems: Array<T>) => {
-    const selectItems = [headerItem]
-
-    if (forItems.length === 0) {
-      selectItems.push(emptyItem)
-    } else {
-      selectItems.push(...forItems.slice(0, maxItems).map(i => ({ ...i, className: 'pf-c-select__menu-item-description' })))
-    }
-
-    if (shouldShowFooter) {
-      selectItems.push(footerItem)
-    }
-
-    return selectItems.map(toSelectOption)
+  const handleOnModalSelect = (selected) => {
+    setModalOpen(false)
+    onSelect(selected)
   }
 
-  const options = getSelectOptions(items)
+  useEffect(() => {
+    if (!shouldHaveModal || !modalOpen) {
+      return
+    }
+
+    const pageItems = pageDictionary[page]
+    const pageIsEmpty = pageItems === undefined || pageItems.length === 0
+    const thereAreMoreItems = itemsCount > (page - 1) * PER_PAGE
+
+    if (pageIsEmpty && thereAreMoreItems) {
+      setIsLoading(true)
+
+      fetchItems({ page, perPage: PER_PAGE })
+        .then(({ items, count }) => {
+          setPageDictionary({ ...pageDictionary, [page]: items })
+          setCount(count)
+        })
+        .finally(() => setIsLoading(false))
+    }
+  }, [page, shouldHaveModal, modalOpen])
+
+  useEffect(() => {
+    if (isOnMount) {
+      setIsOnMount(false)
+    } else {
+      fetchItems({ page: 1, perPage: 20, query }) // perPage 20 to get 4 pages
+        .then(({ items, count }) => {
+          setPageDictionary(paginateCollection(items, PER_PAGE))
+          setCount(count)
+          setPage(1)
+        })
+    }
+  }, [query])
+
+  const handleModalOnSetPage = (page: number) => {
+    setPage(page)
+  }
 
   return (
     <>
-      <FormGroup
-        isRequired
+      <FancySelect
         label={label}
-        fieldId={id}
-        helperText={helperText}
-        helperTextInvalid={helperTextInvalid}
-        isValid={isValid}
-      >
-        {item && <input type="hidden" name={name} value={item.id} />}
-        <Select
-          variant={SelectVariant.typeahead}
-          placeholderText="Select a item"
-          selections={item && toSelectOptionObject(item)}
-          onToggle={() => setExpanded(!expanded)}
-          onSelect={handleOnSelect}
-          isExpanded={expanded}
-          isDisabled={isDisabled}
-          onClear={() => onSelect(null)}
-          aria-labelledby={id}
-          className={shouldShowFooter ? 'pf-c-select__menu--with-fixed-link' : undefined}
-          isGrouped
-          // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
-          onFilter={handleOnFilter(items)}
-        >
-          {options}
-        </Select>
-      </FormGroup>
-
-      <TableModal
-        title={modalTitle}
-        cells={cells}
-        isOpen={modalOpen}
+        fieldId={fieldId}
+        id={id}
+        name={name}
         item={item}
-        items={items}
-        onSelect={b => {
-          onSelect(b)
-          setModalOpen(false)
-        }}
-        onClose={() => setModalOpen(false)}
+        items={items.slice(0, MAX_ITEMS)}
+        onSelect={onSelect}
+        header={header}
+        footer={shouldHaveModal ? {
+          label: footerLabel,
+          onClick: handleOnFooterClick
+        } : undefined}
+        isDisabled={isDisabled}
+        placeholderText={placeholder}
       />
+
+      {shouldHaveModal && (
+        <PaginatedTableModal
+          title={title}
+          cells={cells}
+          isOpen={modalOpen}
+          isLoading={isLoading}
+          selectedItem={item}
+          pageItems={pageDictionary[page]}
+          itemsCount={count}
+          onSelect={handleOnModalSelect}
+          onClose={() => {
+            setModalOpen(false)
+            // TODO: cancel ongoing requests
+          }}
+          page={page}
+          setPage={handleModalOnSetPage}
+          onSearch={fetchItems ? setQuery : undefined}
+          sortBy={sortBy}
+        />
+      )}
     </>
   )
 }

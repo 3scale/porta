@@ -1,0 +1,18 @@
+// For a select box with fixed link at the bottom, select the last li to be that sticky link
+.pf-c-select__menu--with-fixed-link li:last-of-type {
+  background-color: var(--pf-global--BackgroundColor--100);
+  bottom: calc(-1 * var(--pf-global--spacer--sm));
+  padding-bottom: var(--pf-global--spacer--sm);
+  padding-top: var(--pf-global--spacer--xs);
+  position: sticky;
+
+  // Make the sticky link look like a link
+  .pf-c-select__menu-item {
+    color: var(--pf-global--link--Color);
+
+    &:hover {
+      background-color: var(--pf-global--BackgroundColor--100);
+      color: var(--pf-global--link--Color--hover);
+    }
+  }
+}
