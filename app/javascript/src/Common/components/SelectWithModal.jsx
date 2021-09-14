@@ -62,7 +62,7 @@ const SelectWithModal = <T: Record>({
 
   const shouldHaveModal = itemsCount > MAX_ITEMS
 
-  // TODO: needs to parameterize this probably
+  // TODO: Implement sorting by means of fetchItems, right now it's fixed
   const sortBy = { index: 3, direction: SortByDirection.desc }
 
   const handleOnFooterClick = () => {
