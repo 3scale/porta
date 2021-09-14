@@ -18,6 +18,10 @@ class Master::Api::BaseController < Master::BaseController
     render plain: 'unauthorized', status: 401 unless logged_in?
   end
 
+  def is_api_controller?
+    true
+  end
+
   ## Defining common parameters
 
   ##~ @parameter_access_token = { :name => "access_token", :description => "A personal Access Token", :dataType => "string", :required => true, :paramType => "query", :threescale_name => "access_token"}
