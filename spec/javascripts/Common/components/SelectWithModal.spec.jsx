@@ -6,8 +6,8 @@ import type { ReactWrapper } from 'enzyme'
 
 import { SelectWithModal } from 'Common'
 
-const onClose = jest.fn()
 const onSelect = jest.fn()
+const fetchItems = jest.fn()
 
 const cells = [
   { propName: 'name', title: 'Name' },
@@ -21,25 +21,29 @@ const items = [
 ]
 
 const defaultProps = {
+  label: 'Label',
+  fieldId: 'fieldId',
+  id: 'id',
+  name: 'name',
   item: null,
   items,
-  onClose,
+  itemsCount: items.length,
+  cells,
   onSelect,
-  isOpen: true,
-  helperText: '',
-  id: '',
-  label: '',
-  modalTitle: 'Pick a crew member',
-  name: 'input_name',
-  cells
+  fetchItems,
+  header: 'Header',
+  isDisabled: undefined,
+  title: 'Title',
+  placeholder: 'Placeholder',
+  footerLabel: 'Footer Label'
 }
 
+// $FlowIgnore[incompatible-type] ignore fetchItems implementation
+const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
 function openModal <T> (wrapper: ReactWrapper<T>) {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--view-all').last().simulate('click')
+  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
 }
-
-const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -50,7 +54,7 @@ it('should render itself', () => {
   expect(wrapper.exists()).toBe(true)
 })
 
-it('should be able to select and submit an item', () => {
+it('should be able to select an item', () => {
   const targetItem = items[0]
   const wrapper = mountWrapper()
 
@@ -60,62 +64,50 @@ it('should be able to select and submit an item', () => {
   expect(onSelect).toBeCalledWith(targetItem)
 })
 
-it('should be able to submit the selected backend', () => {
-  const targetItem = items[0]
-  const wrapper = mountWrapper({ item: targetItem })
-
-  const input = wrapper.find('input[name="input_name"]')
-  expect(input.exists()).toBe(true)
-  expect(input.prop('value')).toBe(targetItem.id)
-})
-
-it('should have a helper text', () => {
-  const wrapper = mountWrapper({ helperText: <p>I'm helpful</p> })
-  expect(wrapper.find('.pf-c-form__helper-text').children()).toMatchInlineSnapshot(`
-    <p>
-      I'm helpful
-    </p>
-  `)
-})
-
 describe('with 20 items or less', () => {
   const items = new Array(20).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
+  const props = {
+    items,
+    itemsCount: items.length
+  }
 
   it('should display all items and a title, but no sticky footer', () => {
-    const wrapper = mountWrapper({ items })
+    const wrapper = mountWrapper(props)
     wrapper.find('.pf-c-select__toggle-button').simulate('click')
     expect(wrapper.find('.pf-c-select__menu li').length).toEqual(items.length + 1)
   })
 
   it('should not be able to show a modal', () => {
-    const wrapper = mountWrapper({ items })
-    expect(wrapper.find('TableModal').props().isOpen).toBe(false)
-
-    wrapper.find('.pf-c-select__toggle-button').simulate('click')
-    expect(wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--view-all').exists()).toBe(false)
+    const wrapper = mountWrapper(props)
+    expect(wrapper.find('PaginatedTableModal').exists()).toBe(false)
   })
 })
 
 describe('with more than 20 items', () => {
-  const items = new Array(21).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
+  const items = new Array(25).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
+  const props = {
+    items,
+    itemsCount: items.length
+  }
 
   it('should display up to 20 items, a title and a sticky footer', () => {
-    const wrapper = mountWrapper({ items })
+    const wrapper = mountWrapper(props)
     wrapper.find('.pf-c-select__toggle-button').simulate('click')
-    expect(wrapper.find('.pf-c-select__menu li').length).toEqual(22)
+    expect(wrapper.find('.pf-c-select__menu li')).toHaveLength(22)
   })
 
   it('should be able to show a modal', () => {
-    const wrapper = mountWrapper({ items })
-    expect(wrapper.find('TableModal').props().isOpen).toBe(false)
+    const wrapper = mountWrapper(props)
+
+    expect(wrapper.find('PaginatedTableModal').props().isOpen).toBe(false)
 
     openModal(wrapper)
-    expect(wrapper.find('TableModal').props().isOpen).toBe(true)
+    expect(wrapper.find('PaginatedTableModal').props().isOpen).toBe(true)
     expect(onSelect).toBeCalledTimes(0)
   })
 
   it('should be able to select an option from the modal', () => {
-    const wrapper = mountWrapper({ items })
+    const wrapper = mountWrapper(props)
 
     openModal(wrapper)
     wrapper.find('input[type="radio"]').first().simulate('change', { value: true })
@@ -125,7 +117,7 @@ describe('with more than 20 items', () => {
   })
 
   it('should display all columns in the modal', () => {
-    const wrapper = mountWrapper({ items })
+    const wrapper = mountWrapper(props)
 
     openModal(wrapper)
     const ths = wrapper.find('table th')
@@ -134,11 +126,47 @@ describe('with more than 20 items', () => {
       expect(ths.find(`[data-label="${c.title}"]`).exists()).toBe(true)
     ))
   })
+
+  // FIXME: simulate change
+  it.skip('should be able to search an item by name', () => {
+    const wrapper = mountWrapper(props)
+
+    openModal(wrapper)
+    wrapper.find('input[type="search"]').simulate('change', { value: 'pepe' })
+    expect(fetchItems).toHaveBeenCalledTimes(1)
+    expect(fetchItems).toHaveBeenCalledWith(expect.objectContaining({ query: 'pepe' }))
+  })
+
+  describe('when there are remote items that have not been fetched', () => {
+    const props = {
+      items: [],
+      itemsCount: 30
+    }
+
+    it('should fetch more items', async () => {
+      // HACK: suppress error logs during test becouse wrapping openModal inside act() makes the test fail
+      const spy = jest.spyOn(console, 'error')
+      spy.mockImplementation(() => {})
+
+      fetchItems.mockResolvedValue({ items, count: 30 })
+      const wrapper = mountWrapper(props)
+      openModal(wrapper)
+      expect(fetchItems).toHaveBeenCalledTimes(1)
+      expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage: 5 })
+
+      spy.mockClear()
+    })
+  })
 })
 
 describe('with no items', () => {
+  const props = {
+    items: [],
+    itemsCount: 0
+  }
+
   it('should show an empty message that is disabled', () => {
-    const wrapper = mountWrapper({ items: [] })
+    const wrapper = mountWrapper(props)
     wrapper.find('.pf-c-select__toggle-button').simulate('click')
 
     const items = wrapper.find('SelectOption')

@@ -1,6 +1,44 @@
+@import "~@patternfly/patternfly/components/ModalBox/modal-box.css";
+
+.pf-c-modal-box h1.pf-c-title {
+  text-align: initial;
+  font-size: var(--pf-global--FontSize--2xl);
+}
+
 // Targets PF modal dialog
 div[role="dialog"] {
+
   .pf-c-options-menu {
     visibility: hidden !important;
   }
+
+  // Adds some room between table header and empty state
+  .pf-c-empty-state {
+    padding: 2rem;
+  }
+
+  // Disable pointer effect since changing sorting is fixed
+  .pf-c-table__sort.pf-m-selected {
+    pointer-events: none;
+  }
+
+  // HACK: Manually patching some PF4 styling until we upgrade @patternfly/react-core
+  .pf-c-form-control:disabled,
+  .pf-c-button:disabled {
+    background-color: rgb(240, 240, 240);
+  }
+
+  th.pf-c-table__sort,
+  th.pf-c-table__sort.pf-m-selected {
+    padding: var(--pf-c-table-cell--PaddingTop) var(--pf-c-table-cell--PaddingRight)
+      var(--pf-c-table-cell--PaddingBottom) var(--pf-c-table-cell--PaddingLeft);
+
+    .pf-c-table__button {
+      border: unset;
+      color: var(--pf-c-table__sort--sorted--Color);
+      font-size: var(--pf-c-table-cell--FontSize);
+      font-weight: var(--pf-c-table--FontWeight);
+    }
+  }
+  // END_HACK
 }
