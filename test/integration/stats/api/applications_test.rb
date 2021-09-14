@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Stats::Data::ApplicationsTest < ActionDispatch::IntegrationTest
+class Stats::Api::ApplicationsTest < ActionDispatch::IntegrationTest
   def setup
     @cinstance = FactoryBot.create :cinstance
     host! @cinstance.provider_account.admin_domain
@@ -11,7 +11,7 @@ class Stats::Data::ApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'usage_response_code with no data as json' do
     provider_login_with @admin, 'supersecret'
-    get "/stats/applications/#{@cinstance.id}/usage_response_code.json",
+    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json",
       period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false
 
     assert_response :success

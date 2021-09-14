@@ -7,20 +7,19 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
     @service  = FactoryBot.create(:service, account: provider)
     @plan    = FactoryBot.create(:application_plan, service: @service)
     @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
+    @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
 
     host! provider.admin_domain
-
-    login_provider provider
   end
 
   def test_index
-    get admin_api_account_applications_path(account_id: @buyer.id, format: :xml)
+    get admin_api_account_applications_path(account_id: @buyer.id, format: :xml, access_token: @token)
 
     assert_response :success
   end
 
   def test_create
-    post admin_api_account_applications_path(account_id: @buyer.id, plan_id: @plan.id, format: :xml)
+    post admin_api_account_applications_path(account_id: @buyer.id, plan_id: @plan.id, format: :xml, access_token: @token)
 
     assert_response :success
   end
@@ -28,7 +27,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
   def test_delete
     application = FactoryBot.create(:cinstance, user_account: @buyer, service: @service)
 
-    delete admin_api_account_application_path(account_id: @buyer.id, id: application.id, format: :xml)
+    delete admin_api_account_application_path(account_id: @buyer.id, id: application.id, format: :xml, access_token: @token)
 
     assert_response :success
     assert_raises(ActiveRecord::RecordNotFound) { application.reload }
@@ -39,7 +38,8 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
       application_id: 'cba0c140',
       account_id:     @buyer.id,
       plan_id:        @plan.id,
-      format:         :xml
+      format:         :xml,
+      access_token: @token
     }
 
     post admin_api_account_applications_path(params)

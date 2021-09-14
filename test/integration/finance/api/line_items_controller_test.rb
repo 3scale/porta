@@ -6,7 +6,8 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     @provider.settings.allow_finance!
-    login! @provider
+    @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+    host! @provider.admin_domain
     @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
   end
@@ -16,15 +17,16 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
       @buyer = FactoryBot.create(:simple_account, provider_account: master_account)
       @invoice = FactoryBot.create(:invoice, provider_account: master_account, buyer_account: @buyer)
       @line_item = FactoryBot.create(:line_item, invoice: @invoice, name: 'fakeName')
-      login! master_account
+      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+      host! master_account.admin_domain
     end
 
     test '#index for provider' do
-      get api_invoice_line_items_path(@invoice.id), nil, accept: Mime[:json]
+      get api_invoice_line_items_path(@invoice.id), { access_token: @token }, accept: Mime[:json]
       assert_response :success
 
       ThreeScale.config.stubs(onpremises: true)
-      get api_invoice_line_items_path(@invoice.id), nil, accept: Mime[:json]
+      get api_invoice_line_items_path(@invoice.id), { access_token: @token }, accept: Mime[:json]
       assert_response :forbidden
     end
 
@@ -39,13 +41,13 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
 
     test '#destroy' do
       assert_difference(LineItem.method(:count), -1 ) do
-        delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), nil, accept: Mime[:json]
+        delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), { access_token: @token }, accept: Mime[:json]
         assert_response :success
       end
 
       ThreeScale.config.stubs(onpremises: true)
       assert_no_difference LineItem.method(:count) do
-        delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), nil, accept: Mime[:json]
+        delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), { access_token: @token }, accept: Mime[:json]
         assert_response :forbidden
       end
     end
@@ -53,12 +55,12 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     protected
 
     def line_item_params
-      { name: 'LineItemName', description: 'Description for the line item', quantity: 2, cost: 32.50 }
+      { name: 'LineItemName', description: 'Description for the line item', quantity: 2, cost: 32.50, access_token: @token }
     end
   end
 
   test '#index' do
-    get api_invoice_line_items_path(@invoice.id), nil, accept: Mime[:json]
+    get api_invoice_line_items_path(@invoice.id), { access_token: @token }, accept: Mime[:json]
     assert_response :success
   end
 
@@ -67,7 +69,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
     line_item = @invoice.line_items.first
     contract = @buyer.buy! plan
     line_item.update_attribute(:contract, contract)
-    get api_invoice_line_items_path(@invoice.id), nil, accept: Mime::XML
+    get api_invoice_line_items_path(@invoice.id), { access_token: @token }, accept: Mime::XML
 
     assert_response :success
     doc = Nokogiri::XML.parse(response.body)
@@ -77,7 +79,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
 
   test '#index returns plan_id' do
     @invoice.line_items.first.update_attribute(:plan_id, 2222)
-    get api_invoice_line_items_path(@invoice.id), nil, accept: Mime[:json]
+    get api_invoice_line_items_path(@invoice.id), { access_token: @token }, accept: Mime[:json]
 
     assert_response :success
     json = JSON.parse(response.body)
@@ -90,7 +92,7 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
       post api_invoice_line_items_path(@invoice.id), line_item_params, accept: Mime[:json]
     end
     new_line_item = LineItem.reorder(:id).last!
-    line_item_params.each do |field_name, field_value|
+    line_item_params_without_token.each do |field_name, field_value|
       assert_equal field_value, new_line_item.send(field_name)
     end
   end
@@ -113,21 +115,21 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
 
   test '#destroy' do
     assert_difference( LineItem.method(:count), -1 ) do
-      delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), nil, accept: Mime[:json]
+      delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), { access_token: @token }, accept: Mime[:json]
       assert_response :success
     end
   end
 
   test '#destroy gives the right error message when the invoice doesn\'t allow to manage its line items' do
     @line_item.invoice.update_attribute(:state, 'pending')
-    delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), nil, accept: Mime[:json]
+    delete api_invoice_line_item_path(invoice_id: @line_item.invoice.id, id: @line_item.id), { access_token: @token }, accept: Mime[:json]
     assert_equal ({errors: {base: ['Invalid invoice state']}}).to_json, @response.body
     assert_response 403
   end
 
   test '#destroy gives the right error when the line item doesn\'t belong to the send invoice' do
     another_invoice = FactoryBot.create(:invoice, provider_account: @provider)
-    delete api_invoice_line_item_path(invoice_id: another_invoice, id: @line_item.id), nil, accept: Mime[:json]
+    delete api_invoice_line_item_path(invoice_id: another_invoice, id: @line_item.id), { access_token: @token }, accept: Mime[:json]
     assert_equal ({status: 'Not found'}).to_json, @response.body
     assert_response 404
   end
@@ -237,6 +239,10 @@ class Finance::Api::LineItemsControllerTest < ActionDispatch::IntegrationTest
   protected
 
   def line_item_params
+    line_item_params_without_token.merge(access_token: @token)
+  end
+
+  def line_item_params_without_token
     { name: 'LineItemName', description: 'Description for the line item', quantity: 2, cost: 32.50 }
   end
 end

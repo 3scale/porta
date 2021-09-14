@@ -5,7 +5,8 @@ require 'test_helper'
 class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   class MasterHostTest < Admin::Api::ServicesControllerTest
     setup do
-      login! master_account
+      @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
+      host! master_account.admin_domain
     end
 
     test 'create' do
@@ -14,7 +15,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
         requested_name = "example name #{format.to_s}"
         requested_description = "example description #{format.to_s}"
         assert_difference(master_account.services.method(:count)) do
-          post admin_api_services_path(format: format), {name: requested_name, description: requested_description}
+          post admin_api_services_path(format: format, access_token: @token), {name: requested_name, description: requested_description}
           assert_response :created
         end
         service = master_account.services.last
@@ -28,7 +29,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       %i[xml json].each do |format|
         requested_name = "example name #{format.to_s}"
         requested_description = "example description #{format.to_s}"
-        put admin_api_service_path(service, format: format), {name: requested_name, description: requested_description}
+        put admin_api_service_path(service, format: format, access_token: @token), {name: requested_name, description: requested_description}
         assert_response :ok
         assert_equal requested_name, service.reload.name
         assert_equal requested_description, service.description
@@ -38,7 +39,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'show' do
       service = master_account.default_service
       %i[xml json].each do |format|
-        get admin_api_service_path(service, format: format)
+        get admin_api_service_path(service, format: format, access_token: @token)
         assert_response :ok
         assert response.body.include?('deployment_option')
         assert response.body.include?(service.deployment_option)
@@ -47,11 +48,11 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'index works for SaaS but it is unauthorized for Master On-prem' do
       ThreeScale.stubs(master_on_premises?: false)
-      get admin_api_services_path
+      get admin_api_services_path(access_token: @token)
       assert_response :ok
 
       ThreeScale.stubs(master_on_premises?: true)
-      get admin_api_services_path
+      get admin_api_services_path(access_token: @token)
       assert_response :forbidden
     end
   end

@@ -9,7 +9,7 @@ export class StatsTopAppsSourceCollector extends StatsSourceCollector {
   }
 
   get url () {
-    return `/stats/services/${this.id}/top_applications.json`
+    return `/stats/api/services/${this.id}/top_applications.json`
   }
 
   params ({dateRange, selectedMetricName}) {

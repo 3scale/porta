@@ -31,7 +31,7 @@ describe('StatsTopAppsSourceCollector', () => {
   })
 
   it('should provide the correct url', () => {
-    expect(sourceCollector.url).toEqual('/stats/services/42/top_applications.json')
+    expect(sourceCollector.url).toEqual('/stats/api/services/42/top_applications.json')
   })
 
   it.todo('should get the right sources')

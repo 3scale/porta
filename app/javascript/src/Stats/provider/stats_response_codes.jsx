@@ -102,7 +102,7 @@ class StatsResponseCodeChart extends StatsChart {
 
 class StatsResponseCodeSource extends StatsMetricsSource {
   get url () {
-    return `/stats/services/${this.id}/usage_response_code.json`
+    return `/stats/api/services/${this.id}/usage_response_code.json`
   }
 
   params ({dateRange}) {

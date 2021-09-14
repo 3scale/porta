@@ -2,13 +2,13 @@
 
 require 'test_helper'
 
-class Stats::Data::ServicesControllerTest < ActionController::TestCase
+class Stats::Api::ServicesControllerTest < ActionController::TestCase
 
-  should route(:get, '/stats/services/1/usage.json').to :service_id => '1', :action => 'usage', :format => 'json'
-  should route(:get, '/stats/services/1/usage.xml').to :service_id => '1', :action => 'usage', :format => 'xml'
+  should route(:get, '/stats/api/services/1/usage.json').to :service_id => '1', :action => 'usage', :format => 'json'
+  should route(:get, '/stats/api/services/1/usage.xml').to :service_id => '1', :action => 'usage', :format => 'xml'
 
-  should route(:get, '/stats/services/1/top_applications.json').to :service_id => '1', :action => 'top_applications', :format => 'json'
-  should route(:get, '/stats/services/1/top_applications.xml').to :service_id => '1', :action => 'top_applications', :format => 'xml'
+  should route(:get, '/stats/api/services/1/top_applications.json').to :service_id => '1', :action => 'top_applications', :format => 'json'
+  should route(:get, '/stats/api/services/1/top_applications.xml').to :service_id => '1', :action => 'top_applications', :format => 'xml'
 
 
 
