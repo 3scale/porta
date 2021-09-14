@@ -125,7 +125,6 @@ const SelectWithModal = <T: Record>({
           aria-labelledby={id}
           className={shouldShowFooter ? 'pf-c-select__menu--with-fixed-link' : undefined}
           isGrouped
-          // $FlowIssue[prop-missing] description is optional
           // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
           onFilter={handleOnFilter(items)}
         >
