@@ -15,7 +15,7 @@ describe('StatsResponseCodeSource', () => {
   let responseSource = new StatsResponseCodeSource({id: 42, details: metric})
 
   it('should return the right url', () => {
-    expect(responseSource.url).toEqual('/stats/services/42/usage_response_code.json')
+    expect(responseSource.url).toEqual('/stats/api/services/42/usage_response_code.json')
   })
 
   it('should return the right params', () => {

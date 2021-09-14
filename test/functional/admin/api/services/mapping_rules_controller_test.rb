@@ -4,16 +4,16 @@ module Admin::Api::Services
   class MappingRulesControllerTest < ActionController::TestCase
     def setup
       provider = FactoryBot.create(:provider_account)
+      @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
       assert @service = provider.first_service!
       assert @proxy = @service.proxy
 
       host! provider.admin_domain
-      login_provider provider
     end
 
     def test_index_json
       @proxy.proxy_rules.create!(http_method: 'GET', pattern: '/', delta: 2, metric_id: @service.metrics.first!.id)
-      get :index, { service_id: @service.id, format: :json }
+      get :index, { service_id: @service.id, format: :json, access_token: @token }
       assert_response :success
 
       mapping_rules = JSON.parse(@response.body).fetch('mapping_rules')
@@ -24,7 +24,7 @@ module Admin::Api::Services
 
     def test_index_xml
       @proxy.proxy_rules.create!(http_method: 'GET', pattern: '/', delta: 2, metric_id: @service.metrics.first!.id)
-      get :index, { service_id: @service.id, format: :xml }
+      get :index, { service_id: @service.id, format: :xml, access_token: @token }
 
       assert_response :success
       mapping_rules = Hash.from_xml(@response.body).fetch('mapping_rules').fetch('mapping_rule')
@@ -32,7 +32,7 @@ module Admin::Api::Services
     end
 
     def test_show_json
-      get :show, { id: @service.proxy.proxy_rules.first!, service_id: @service.id, format: :json }
+      get :show, { id: @service.proxy.proxy_rules.first!, service_id: @service.id, format: :json, access_token: @token }
       assert_response :success
 
       mapping_rule = JSON.parse(@response.body).fetch('mapping_rule')
@@ -42,7 +42,7 @@ module Admin::Api::Services
     def test_show_json_without_proxy_pro
       Service.any_instance.expects(:using_proxy_pro?).returns(false).at_least_once
 
-      get :show, { id: @service.proxy.proxy_rules.first!, service_id: @service.id, format: :json }
+      get :show, { id: @service.proxy.proxy_rules.first!, service_id: @service.id, format: :json, access_token: @token }
       assert_response :success
 
       assert mapping_rule = JSON.parse(@response.body).fetch('mapping_rule')
@@ -51,7 +51,7 @@ module Admin::Api::Services
     end
 
     def test_show_xml
-      get :show, { id: @service.proxy.proxy_rules.first!, service_id: @service.id, format: :xml }
+      get :show, { id: @service.proxy.proxy_rules.first!, service_id: @service.id, format: :xml, access_token: @token }
       assert_response :success
 
       mapping_rule = Hash.from_xml(@response.body).fetch('mapping_rule')
@@ -62,7 +62,7 @@ module Admin::Api::Services
       Service.any_instance.expects(:using_proxy_pro?).returns(false).at_least_once
 
       assert_difference @proxy.proxy_rules.method(:count) do
-        post :create, { service_id: @service.id, format: :json, mapping_rule: {
+        post :create, { service_id: @service.id, format: :json, access_token: @token, mapping_rule: {
             http_method: 'POST', pattern: '/', delta: 1, metric_id: @service.metrics.first!.id, redirect_url: 'http://example.com/'
         } }
         assert_response :success
@@ -76,7 +76,7 @@ module Admin::Api::Services
       Service.any_instance.expects(:using_proxy_pro?).returns(true).at_least_once
 
       assert_difference @proxy.proxy_rules.method(:count) do
-        post :create, { service_id: @service.id, format: :json, mapping_rule: {
+        post :create, { service_id: @service.id, format: :json, access_token: @token, mapping_rule: {
             http_method: 'POST', pattern: '/', delta: 1, metric_id: @service.metrics.first!.id, redirect_url: 'http://example.com/'
         } }
         assert_response :success
@@ -89,7 +89,7 @@ module Admin::Api::Services
       proxy_rule = @service.proxy.proxy_rules.first!
 
       patch :update, {
-          id: proxy_rule, service_id: @service.id, format: :json,
+          id: proxy_rule, service_id: @service.id, format: :json, access_token: @token,
           mapping_rule: {
             http_method: 'POST', pattern: '/foo', delta: 2
           }
@@ -110,7 +110,7 @@ module Admin::Api::Services
       Service.any_instance.expects(:using_proxy_pro?).returns(true).at_least_once
 
       patch :update, {
-          id: proxy_rule, service_id: @service.id, format: :json,
+          id: proxy_rule, service_id: @service.id, format: :json, access_token: @token,
           mapping_rule: {
               redirect_url: redirect_url = 'http://example.com/foobar',
           }
@@ -128,7 +128,7 @@ module Admin::Api::Services
       proxy_rule = @service.proxy.proxy_rules.first!
 
       assert_difference @proxy.proxy_rules.method(:count), -1 do
-        delete :destroy, { id: proxy_rule, service_id: @service.id, format: :json }
+        delete :destroy, { id: proxy_rule, service_id: @service.id, format: :json, access_token: @token }
         assert_response :success
       end
 

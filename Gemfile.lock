@@ -1558,6 +1558,8 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.10.3)
+    minitest-ci (3.4.0)
+      minitest (>= 5.0.6)
     minitest-reporters (1.4.3)
       ansi
       builder
@@ -2052,6 +2054,7 @@ DEPENDENCIES
   message_bus_client!
   mimemagic (~> 0.3.10)
   minitest (= 5.10.3)
+  minitest-ci
   minitest-reporters
   minitest-stub-const
   mocha (~> 1.1.0)

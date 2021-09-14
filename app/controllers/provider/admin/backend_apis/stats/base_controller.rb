@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Provider::Admin::BackendApis::Stats::BaseController < Stats::BaseController
-  include ApiAuthentication::ByAccessToken
-  self.access_token_scopes = :stats
 
   before_action :authorize_monitoring
   before_action :find_backend_api

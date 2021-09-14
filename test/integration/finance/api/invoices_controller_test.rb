@@ -5,26 +5,27 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   class MasterOnPremisesTest < ActionDispatch::IntegrationTest
     def setup
       ThreeScale.config.stubs(onpremises: true)
-      login_provider master_account
+      @access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[finance]).value
+      host! master_account.domain
     end
 
     test '#index' do
-      get api_invoices_path, nil, accept: Mime[:json]
+      get api_invoices_path, nil, accept: Mime[:json], access_token: @access_token
       assert_response :forbidden
     end
 
     test '#show' do
-      get api_invoice_path(1), nil, accept: Mime[:json]
+      get api_invoice_path(1), nil, accept: Mime[:json], access_token: @access_token
       assert_response :forbidden
     end
 
     test '#state' do
-      put state_api_invoice_path(1, state: 'cancelled'), nil, accept: Mime[:json]
+      put state_api_invoice_path(1, state: 'cancelled'), nil, accept: Mime[:json], access_token: @access_token
       assert_response :forbidden
     end
 
     test '#create' do
-      post api_invoices_path, nil, accept: Mime[:json]
+      post api_invoices_path, nil, accept: Mime[:json], access_token: @access_token
       assert_response :forbidden
     end
   end
@@ -35,70 +36,71 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @provider.settings.allow_finance!
-    login_provider @provider
+    @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[finance]).value
+    host! @provider.admin_domain
 
     %w[2017-07 2018-08].each { | month| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
   end
 
   test '#index' do
-    get api_invoices_path, nil, accept: Mime[:json]
+    get api_invoices_path, { access_token: @access_token }, accept: Mime[:json]
     assert_response :success
   end
 
   test '#show' do
-    get api_invoice_path(invoice), nil, accept: Mime[:json]
+    get api_invoice_path(invoice), { access_token: @access_token }, accept: Mime[:json]
     assert_response :success
   end
 
   test '#state' do
-    put state_api_invoice_path(invoice, state: 'cancelled'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'cancelled'), { access_token: @access_token }, accept: Mime[:json]
     invoice.reload
     assert_equal 'cancelled', invoice.state
   end
 
   test '#state fail state' do
     invoice.update_attribute(:state, 'unpaid')
-    put state_api_invoice_path(invoice, state: 'failed'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'failed'), { access_token: @access_token }, accept: Mime[:json]
     invoice.reload
     assert_equal 'failed', invoice.state
   end
 
   test '#state mark_as_unpaid state' do
     invoice.update_attribute(:state, 'pending')
-    put state_api_invoice_path(invoice, state: 'unpaid'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'unpaid'), { access_token: @access_token }, accept: Mime[:json]
     invoice.reload
     assert_equal 'unpaid', invoice.state
   end
 
   test '#state pay state' do
     invoice.fire_events!(:issue)
-    put state_api_invoice_path(invoice, state: 'paid'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'paid'), { access_token: @access_token }, accept: Mime[:json]
     invoice.reload
     assert_equal 'paid', invoice.state
   end
 
   test '#state issue state' do
-    put state_api_invoice_path(invoice, state: 'pending'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'pending'), { access_token: @access_token }, accept: Mime[:json]
     invoice.reload
     assert_equal 'pending', invoice.state
   end
 
   test '#wrong transition state' do
     invoice.update_attribute(:state, 'paid')
-    put state_api_invoice_path(invoice, state: 'pending'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'pending'), { access_token: @access_token } , accept: Mime[:json]
     invoice.reload
     assert_equal 'paid', invoice.state
     assert_response 422
   end
 
   test '#state inalize state' do
-    put state_api_invoice_path(invoice, state: 'finalized'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'finalized'), { access_token: @access_token }, accept: Mime[:json]
     invoice.reload
     assert_equal 'finalized', invoice.state
   end
 
   test '#state incorrect state' do
-    put state_api_invoice_path(invoice, state: 'wrong_state'), nil, accept: Mime[:json]
+    put state_api_invoice_path(invoice, state: 'wrong_state'), { access_token: @access_token }, accept: Mime[:json]
     assert_equal '{"errors":{"base":["Cannot transition to wrong_state"]}}', response.body
     assert_response 422
   end
@@ -153,7 +155,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test '#charge' do
-    post charge_api_invoice_path(invoice), {}, accept: Mime[:json]
+    post charge_api_invoice_path(invoice), { access_token: @access_token }, accept: Mime[:json]
     assert_response 422
     assert_contains JSON.parse(response.body)['errors']['state'], invoice.errors.generate_message(:state, :not_in_chargeable_state, id: invoice.id)
 
@@ -164,13 +166,13 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     # Heavy/ugly mocking on buyer charge!
     Account.any_instance.expects(:charge!).returns(true)
 
-    post charge_api_invoice_path(invoice), {}, accept: Mime[:json]
+    post charge_api_invoice_path(invoice), { access_token: @access_token }, accept: Mime[:json]
     assert_equal invoice.reload.state, 'paid'
     assert_response :success
 
     Account.any_instance.expects(:charge!).returns(false)
     invoice.update_column :state, :pending
-    post charge_api_invoice_path(invoice), {}, accept: Mime[:json]
+    post charge_api_invoice_path(invoice), { access_token: @access_token }, accept: Mime[:json]
     assert_response 422
     assert_contains JSON.parse(response.body)['errors']['base'], invoice.errors.generate_message(:base, :charging_failed)
   end
@@ -184,7 +186,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def invoice_params
-    { account_id: @buyer.id, period: invoice_new_values[:month].to_param, friendly_id: invoice_new_values[:friendly_id] }
+    { account_id: @buyer.id, period: invoice_new_values[:month].to_param, friendly_id: invoice_new_values[:friendly_id], access_token: @access_token }
   end
 
   def invoice_new_values

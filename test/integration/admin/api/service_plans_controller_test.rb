@@ -14,7 +14,8 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
 
   class ProviderAdminTest < self
     setup do
-      login! provider
+      @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
+      host! @provider.admin_domain
     end
 
     test 'create' do
@@ -37,7 +38,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
 
     test 'update' do
       service_plan = FactoryBot.create(:service_plan, name: 'firstname', state: 'hidden', service: service)
-      put admin_api_service_service_plan_path(service_plan, service_plan_params)
+      put admin_api_service_service_plan_path(service_plan, service_plan_params )
       assert_response :success
       assert_equal service_plan_params[:service_plan][:name], service_plan.reload.name
       assert_equal 'published', service_plan.state
@@ -46,7 +47,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
     test 'update with invalid params' do
       original_values = {name: 'firstname', state: 'hidden', service: service}
       service_plan = FactoryBot.create(:service_plan, original_values)
-      put admin_api_service_service_plan_path(service_plan, service_plan_params(state_event: 'fakestate'))
+      put admin_api_service_service_plan_path(service_plan, service_plan_params(state_event: 'fakestate') )
       assert_response :unprocessable_entity
       assert_equal ['invalid'], JSON.parse(response.body).dig('errors', 'state_event')
       assert_equal original_values[:name], service_plan.reload.name
@@ -66,7 +67,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
     private
 
     def service_plan_params(state_event: 'publish', approval_required: 0)
-      @service_plan_params ||= { service_id: service.id, service_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json }
+      @service_plan_params ||= { service_id: service.id, service_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json, access_token: @token }
     end
   end
 

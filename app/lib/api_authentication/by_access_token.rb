@@ -5,7 +5,7 @@ module ApiAuthentication
     extend ActiveSupport::Concern
 
     def current_user
-      @current_user ||= User.current = authenticated_token&.owner or defined?(super) && super
+      @current_user ||= User.current = authenticated_token&.owner
     end
 
     included do
