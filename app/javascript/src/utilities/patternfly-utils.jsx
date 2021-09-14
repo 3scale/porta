@@ -52,7 +52,6 @@ export const handleOnFilter = (items: Array<Record>): Function => {
     const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
 
     // $FlowIssue[prop-missing] description is optional
-    // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
     return filteredItems.map(toSelectOption)
   }
 }

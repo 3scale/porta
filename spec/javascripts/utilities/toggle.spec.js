@@ -55,14 +55,12 @@ describe('Toggle', () => {
   })
 
   it('fires window resize event on click', () => {
-    // $FlowIgnore[cannot-resolve-name]
     global.onresize = jest.fn()
     const event = jest.spyOn(global, 'onresize')
     toggle(article.id, article.classList, icon, 'toggle')
 
     icon.click()
 
-    // $FlowIgnore[incompatible-call]
     expect(event).toHaveBeenCalled()
   })
 })
