@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   # Disable CSRF protection for requests to REST API.
   skip_before_action :verify_authenticity_token, if: -> do
-    (params.key?(:provider_key) || params.key?(:access_token)) && is_api_controller?
+    (params.key?(:provider_key) || params.key?(:access_token)) && api_controller?
   end
 
   before_action :set_timezone
@@ -133,7 +133,7 @@ class ApplicationController < ActionController::Base
     ReportTrafficWorker.enqueue(current_account, metric_to_report, request, response)
   end
 
-  def is_api_controller?
+  def api_controller?
     false
   end
 

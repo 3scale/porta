@@ -18,7 +18,7 @@ class Master::Api::BaseController < Master::BaseController
     render plain: 'unauthorized', status: 401 unless logged_in?
   end
 
-  def is_api_controller?
+  def api_controller?
     true
   end
 
