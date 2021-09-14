@@ -29,13 +29,15 @@ const BuyerSelect = ({ buyer, buyers, onSelectBuyer, isDisabled }: Props): React
       // $FlowIgnore[incompatible-type] Buyer implements Record
       item={buyer}
       items={buyers.map(b => ({ ...b, description: b.admin }))}
+      itemsCount={buyers.length}
       cells={cells}
-      modalTitle="Select an Account"
       // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
       onSelect={onSelectBuyer}
       header="Most recently created Accounts"
-      footer="View all Accounts"
       isDisabled={isDisabled}
+      title="Select an Account"
+      placeholder="Select an Account"
+      footerLabel="View all Accounts"
     />
   )
 }
