@@ -152,6 +152,9 @@ describe('with more than 20 items', () => {
     expect(fetchItems).toHaveBeenCalledWith(expect.objectContaining({ query: 'pepe' }))
   })
 
+  // FIXME: simulate change not working, also this might be tricky to implement
+  it.todo('should not clear search input after closing modal')
+
   describe('when there are remote items that have not been fetched', () => {
     const props = {
       items: [],
