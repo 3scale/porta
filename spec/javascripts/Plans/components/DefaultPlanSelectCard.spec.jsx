@@ -10,8 +10,8 @@ const noticeSpy = jest.spyOn(alert, 'notice')
 const errorSpy = jest.spyOn(alert, 'error')
 
 jest.mock('utilities/ajax')
-import * as ajax from 'utilities/ajax'
-const post = (ajax.post: JestMockFn<empty, any>)
+import * as AJAX from 'utilities/ajax'
+const ajax = (AJAX.ajax: JestMockFn<empty, any>)
 
 const plan = { id: 1, name: 'My Plan' }
 const props = {
@@ -26,7 +26,7 @@ it('should render', () => {
 })
 
 it('should show a success message if request goes well', async () => {
-  post.mockResolvedValue({ ok: true })
+  ajax.mockResolvedValue({ ok: true })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
   await act(async () => {
@@ -37,7 +37,7 @@ it('should show a success message if request goes well', async () => {
 })
 
 it('should show an error message when selected plan does not exist', async () => {
-  post.mockResolvedValueOnce({ status: 404 })
+  ajax.mockResolvedValueOnce({ status: 404 })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
   await act(async () => {
@@ -48,7 +48,7 @@ it('should show an error message when selected plan does not exist', async () =>
 })
 
 it('should show an error message when server returns an error', async () => {
-  post.mockResolvedValue({ status: 403 })
+  ajax.mockResolvedValue({ status: 403 })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
   await act(async () => {
@@ -62,7 +62,7 @@ it('should show an error message when connection fails', async () => {
   // $FlowExpectedError[cannot-write] suppress error logs during test
   console.error = jest.fn()
 
-  post.mockRejectedValue()
+  ajax.mockRejectedValue()
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
 
   await act(async () => {
