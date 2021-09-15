@@ -338,8 +338,8 @@ class Plan < ApplicationRecord
     raise PeriodRangeCalculationError, 'Beginning and end of the period must both be in the same month' unless same_month_period
 
     # our ranges are actually correct but for arithmetic purposes we do want the + 1 (length of the range/month)
-    month_part = (BigDecimal.new((period.end.to_i + 1).to_s) - BigDecimal.new(period.begin.to_i.to_s)) /
-                 (BigDecimal.new((period.begin.end_of_month.to_i + 1).to_s) - BigDecimal.new(period.begin.beginning_of_month.to_i.to_s))
+    month_part = (BigDecimal((period.end.to_i + 1).to_s) - BigDecimal(period.begin.to_i.to_s)) /
+                 (BigDecimal((period.begin.end_of_month.to_i + 1).to_s) - BigDecimal(period.begin.beginning_of_month.to_i.to_s))
 
     (cost_per_month * month_part).round(2)
   end
