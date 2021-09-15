@@ -41,7 +41,7 @@ class PaymentGatewaysTest < ActiveSupport::TestCase
   #   @buyer_account.billing_address = @billing_address
   #   @buyer_account.save!
 
-  #   transaction = @buyer_account.charge! BigDecimal.new("1.81")
+  #   transaction = @buyer_account.charge! BigDecimal("1.81")
 
   #   assert transaction.success?
   #   assert_equal 1.81.to_has_money('EUR'), transaction.amount
