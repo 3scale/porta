@@ -64,7 +64,7 @@ const PaginatedTableModal = <T: Record>({
   const [selected, setSelected] = useState<T | null>(selectedItem)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 
-  // FIXME: this should really be done by useSearchInputEffect. The ref won't work though.
+  // FIXME: this should really be done by useSearchInputEffect. The ref won't work though. searchInputRef.current is defined only after the first search even though the effect won't be trigger
   useEffect(() => {
     if (searchInputRef.current && onSearch) {
       const { current } = searchInputRef
