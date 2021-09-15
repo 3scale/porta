@@ -18,13 +18,13 @@ class Api::ServicesController < Api::BaseController
 
   def index
     activate_menu :products
-    search = ThreeScale::Search.new(params[:search] || params)
-    @services = current_user.accessible_services
-                            .order(updated_at: :desc)
-                            .scope_search(search)
-    @page_services = @services.paginate(pagination_params)
-                              .decorate
-                              .to_json(only: %i[name updated_at id system_name], methods: %i[links apps_count backends_count unread_alerts_count])
+    @presenter ||= Api::ServicesIndexPresenter.new(user: current_user, search_params: params[:search] || params, pagination_params: pagination_params)
+    services = @presenter.paginated_services
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { items: services.map(&:new_application_data), count: services.total_entries } }
+    end
   end
 
   def show
