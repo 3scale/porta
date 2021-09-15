@@ -55,6 +55,7 @@ export class StatsMenu extends StatsUI {
     let untilDateHook = new Hook({
       dateFormat: 'yy-mm-dd',
       minDate: new Date(statsState.state.dateRange.since),
+      maxDate: new Date(),
       onSelect: date => {
         let dateRange = statsState.state.dateRange
         let selectedDate = new CustomRangeDate({
