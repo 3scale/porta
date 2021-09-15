@@ -49,26 +49,18 @@ module Applications
     raw_products.paginate(pagination_params)
   end
 
-  # TODO: use most_recently_updated_products when SelectWithModal updated
-  def buyers
-    BuyerDecorator.decorate_collection(raw_buyers)
-                  .map(&:new_application_data)
-  end
-
   def most_recently_created_buyers
-    BuyerDecorator.decorate_collection(raw_buyers.limit(20))
-                  .map(&:new_application_data)
-  end
-
-  # TODO: use most_recently_updated_products when SelectWithModal updated
-  def products
-    ServiceDecorator.decorate_collection(raw_products)
-                    .map(&:new_application_data)
+    raw_buyers.reorder(created_at: :desc)
+              .limit(20)
+              .decorate
+              .map(&:new_application_data)
   end
 
   def most_recently_updated_products
-    ServiceDecorator.decorate_collection(raw_products.limit(20))
-                    .map(&:new_application_data)
+    raw_products.reorder(updated_at: :desc)
+                .limit(20)
+                .decorate
+                .map(&:new_application_data)
   end
 
   def application_defined_fields_data(provider)
