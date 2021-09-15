@@ -175,3 +175,75 @@ Given(/^I'm on that application page$/) do
   assert @application, '@application is missing'
   click_on @application.name
 end
+
+When /^I create an application "([^"]*)" from the audience context/ do |name|
+  visit path_to 'the provider new application page'
+  fill_in_new_application_form(name)
+  click_on 'Create Application'
+end
+
+When /^I create an application "([^"]*)" from the account "([^"]*)" context/ do |name, account_name|
+  visit path_to %(the account context create application page for "#{account_name}")
+  fill_in_new_application_form(name)
+  click_on 'Create Application'
+end
+
+When /^I create an application "([^"]*)" from the product "([^"]*)" context/ do |name, service_name|
+  visit path_to %(the product context create application page for "#{service_name}")
+  fill_in_new_application_form(name)
+  click_on 'Create Application'
+end
+
+When 'I fill in the new application form' do
+  fill_in_new_application_form
+end
+
+When /^I fill in the new application form for "([^"]*)"/ do |name|
+  fill_in_new_application_form(name)
+end
+
+When 'I fill in the new application form with extra fields:' do |table|
+  fill_in_new_application_form
+  table.hashes.each do |h|
+    # step %(I fill in "#{hash[:field]}" with "#{hash[:value]}")
+    find('.pf-c-form__label', text: h[:field]).sibling('input').set(h[:value])
+  end
+end
+
+When 'I should not be allowed to create more applications' do
+  visit path_to 'the provider new application page'
+  fill_in_new_application_form(name)
+  click_on 'Create Application'
+  assert has_content?('Access Denied')
+end
+
+When /^buyer "([^"]*)" should not be allowed to create more applications/ do |buyer_name|
+  visit path_to %(the account context create application page for "#{buyer_name}")
+  fill_in_new_application_form(name)
+  click_on 'Create Application'
+  assert has_content?('Access Denied')
+end
+
+When /^I should not be allowed to create more applications for product "([^"]*)"/ do |service_name|
+  visit path_to %(the product context create application page for "#{service_name}")
+  fill_in_new_application_form(name)
+  click_on 'Create Application'
+  assert has_content?('Access Denied')
+end
+
+When /^a service "([^"]*)" of (provider "[^"]*") with no service plans/ do |service_name, provider|
+  service = provider.services.create!(name: service_name)
+  service.service_plans.destroy_all
+end
+
+When "I won't be able to select an application plan" do
+  assert find('.pf-c-form__label', text: 'Application plan').sibling('.pf-c-select').has_css?('.pf-m-disabled')
+end
+
+def fill_in_new_application_form(name = 'My App')
+  pf4_select('bob', from: 'Account') if page.has_css?('.pf-c-form__label', text: 'Account')
+  pf4_select('API', from: 'Product') if page.has_css?('.pf-c-form__label', text: 'Product')
+  pf4_select('Basic', from: 'Application plan') unless find('.pf-c-form__label', text: 'Application plan').sibling('.pf-c-select').has_css?('.pf-m-disabled')
+  find('.pf-c-form__label', text: 'Name').sibling('input').set(name || 'My App')
+  find('.pf-c-form__label', text: 'Description').sibling('input').set('This is some kind of application')
+end

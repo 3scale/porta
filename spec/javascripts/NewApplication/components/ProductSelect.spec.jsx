@@ -8,17 +8,20 @@ import { mount } from 'enzyme'
 const product = {
   id: '0',
   name: 'The Product',
-  systemName: 'the_product',
+  description: 'the_product',
   updatedAt: '',
   appPlans: [],
   servicePlans: [],
-  defaultServicePlan: null
+  defaultServicePlan: undefined
 }
+const products = [product]
 const props = {
   product,
-  products: [product],
+  mostRecentlyUpdatedProducts: products,
+  productsCount: products.length,
   onSelectProduct: jest.fn(),
-  isDisabled: false
+  productsPath: '/products',
+  isDisabled: undefined
 }
 
 it('should render', () => {
