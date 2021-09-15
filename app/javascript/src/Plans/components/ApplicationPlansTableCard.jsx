@@ -6,7 +6,6 @@ import { Card } from '@patternfly/react-core'
 import { ApplicationPlansTable } from 'Plans'
 import * as alert from 'utilities/alert'
 import {
-  post,
   ajax,
   safeFromJsonString,
   confirm
@@ -24,7 +23,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
   const [plans, setPlans] = React.useState<ApplicationPlan[]>(initialPlans)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  const handleActionCopy = (path) => post(path)
+  const handleActionCopy = (path) => ajax(path, 'POST')
     .then(data => data.json()
       .then(res => {
         if (data.status === 201) {
@@ -62,7 +61,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
     })
     .finally(() => setIsLoading(false))
 
-  const handleActionPublishHide = (path) => post(path)
+  const handleActionPublishHide = (path) => ajax(path, 'POST')
     .then(data => data.json()
       .then(res => {
         if (data.status === 200) {

@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { post, createReactWrapper } from 'utilities'
+import { ajax, createReactWrapper } from 'utilities'
 import {
   Form,
   FormGroup,
@@ -31,7 +31,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
     const body = plan.id >= 0 ? new URLSearchParams({ id: plan.id.toString() }) : undefined
     const url = path.replace(':id', String(product.id))
 
-    post(url, body)
+    ajax(url, 'POST', body)
       .then(data => {
         if (data.ok) {
           alert.notice('Default plan was updated')
