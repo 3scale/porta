@@ -8,6 +8,7 @@ import { SelectWithModal } from 'Common'
 
 const onSelect = jest.fn()
 const fetchItems = jest.fn()
+const onAbortFetch = jest.fn()
 
 const cells = [
   { propName: 'name', title: 'Name' },
@@ -20,6 +21,8 @@ const items = [
   { id: 2, name: 'A. Kamal', role: 'Pilot' }
 ]
 
+const title = 'Select a crew member'
+
 const defaultProps = {
   label: 'Label',
   fieldId: 'fieldId',
@@ -30,19 +33,31 @@ const defaultProps = {
   itemsCount: items.length,
   cells,
   onSelect,
-  fetchItems,
   header: 'Header',
   isDisabled: undefined,
-  title: 'Title',
+  title,
   placeholder: 'Placeholder',
-  footerLabel: 'Footer Label'
+  footerLabel: 'Footer Label',
+  fetchItems,
+  onAbortFetch
 }
 
 // $FlowIgnore[incompatible-type] ignore fetchItems implementation
 const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
+
 function openModal <T> (wrapper: ReactWrapper<T>) {
+  // HACK: suppress error logs during this step cause wrapping it inside act() makes the test fail
+  const spy = jest.spyOn(console, 'error')
+  spy.mockImplementation(() => {})
+
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
+
+  spy.mockClear()
+}
+
+function closeModal <T> (wrapper: ReactWrapper<T>) {
+  wrapper.find(`.pf-c-modal-box[aria-label="${title}"]`).find('.pf-c-button[aria-label="Close"]').simulate('click')
 }
 
 afterEach(() => {
@@ -144,17 +159,20 @@ describe('with more than 20 items', () => {
     }
 
     it('should fetch more items', async () => {
-      // HACK: suppress error logs during test becouse wrapping openModal inside act() makes the test fail
-      const spy = jest.spyOn(console, 'error')
-      spy.mockImplementation(() => {})
-
       fetchItems.mockResolvedValue({ items, count: 30 })
       const wrapper = mountWrapper(props)
       openModal(wrapper)
       expect(fetchItems).toHaveBeenCalledTimes(1)
       expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage: 5 })
+    })
 
-      spy.mockClear()
+    it('should abort the ongoing fetch when modal closed', () => {
+      fetchItems.mockResolvedValue({ items, count: 30 })
+      const wrapper = mountWrapper(props)
+      openModal(wrapper)
+      closeModal(wrapper)
+      expect(fetchItems).toHaveBeenCalledTimes(1)
+      expect(onAbortFetch).toHaveBeenCalledTimes(1)
     })
   })
 })
