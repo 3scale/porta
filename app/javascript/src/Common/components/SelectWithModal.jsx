@@ -41,7 +41,7 @@ const SelectWithModal = <T: Record>({
   id,
   name,
   item,
-  items,
+  items: initialItems,
   itemsCount,
   cells,
   onSelect,
@@ -59,7 +59,7 @@ const SelectWithModal = <T: Record>({
   const [page, setPage] = useState(1)
   const [isOnMount, setIsOnMount] = useState(true)
   const [query, setQuery] = useState('')
-  const [pageDictionary, setPageDictionary] = useState(() => paginateCollection(items, PER_PAGE))
+  const [pageDictionary, setPageDictionary] = useState(() => paginateCollection(initialItems, PER_PAGE))
 
   const shouldHaveModal = itemsCount > MAX_ITEMS
 
@@ -73,7 +73,8 @@ const SelectWithModal = <T: Record>({
   const handleOnModalSelect = (selected) => {
     setModalOpen(false)
     onSelect(selected)
-    // TODO: reset search
+    // FIXME: search input is cleared on modal close even though the items are filtered. This is a bit confusing,
+    // however resetting the search results would require a new request that would be ineffectual
   }
 
   useEffect(() => {
@@ -89,8 +90,8 @@ const SelectWithModal = <T: Record>({
       setIsLoading(true)
 
       fetchItems({ page, perPage: PER_PAGE })
-        .then(({ items, count }) => {
-          setPageDictionary({ ...pageDictionary, [page]: items })
+        .then(({ items: newItems, count }) => {
+          setPageDictionary({ ...pageDictionary, [page]: newItems })
           setCount(count)
         })
         .finally(() => setIsLoading(false))
@@ -102,7 +103,7 @@ const SelectWithModal = <T: Record>({
       setIsOnMount(false)
     } else {
       fetchItems({ page: 1, perPage: 20, query }) // perPage 20 to get 4 pages
-        .then(({ items, count }) => setSearchResults(items, count))
+        .then(({ items: fetchedItems, count }) => setSearchResults(fetchedItems, count))
     }
   }, [query])
 
@@ -123,7 +124,7 @@ const SelectWithModal = <T: Record>({
 
   const onLocalSearch = (value: string) => {
     const term = new RegExp(escapeRegExp(value), 'i')
-    const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
+    const filteredItems = value !== '' ? initialItems.filter(b => term.test(b.name)) : initialItems
     setSearchResults(filteredItems, filteredItems.length)
   }
 
@@ -135,7 +136,7 @@ const SelectWithModal = <T: Record>({
         id={id}
         name={name}
         item={item}
-        items={items.slice(0, MAX_ITEMS)}
+        items={initialItems.slice(0, MAX_ITEMS)}
         onSelect={onSelect}
         header={header}
         footer={shouldHaveModal ? {
