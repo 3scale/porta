@@ -21,6 +21,7 @@ const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props
   ]
 
   return (
+    // $FlowFixMe[prop-missing] Implement async pagination
     <SelectWithModal
       label="Product"
       id="product"

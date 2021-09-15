@@ -52,7 +52,7 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
           id="proxy_rule_metric_id_radio_method"
         />
         {checked === 'method' && (
-          // $FlowIssue[prop-missing]
+          // $FlowFixMe[prop-missing] implement async pagination
           // $FlowIssue[incompatible-type-arg]
           <SelectWithModal
             label=""
@@ -84,7 +84,7 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
           id="proxy_rule_metric_id_radio_metric"
         />
         {checked === 'metric' && (
-          // $FlowIssue[prop-missing]
+          // $FlowFixMe[prop-missing] implement async pagination
           // $FlowIssue[incompatible-type-arg]
           <SelectWithModal
             label=""
