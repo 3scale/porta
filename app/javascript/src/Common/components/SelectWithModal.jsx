@@ -23,13 +23,13 @@ type Props<T: Record> = {
   itemsCount: number,
   cells: Array<{ title: string, propName: string, transforms?: [typeof sortable] }>,
   onSelect: (T | null) => void,
-  fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>,
-  onAbortFetch: () => void,
   header: string,
   isDisabled?: boolean,
   title: string,
   placeholder: string,
-  footerLabel: string
+  footerLabel: string,
+  fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>,
+  onAbortFetch: () => void,
 }
 
 const PER_PAGE = 5
@@ -45,13 +45,13 @@ const SelectWithModal = <T: Record>({
   itemsCount,
   cells,
   onSelect,
-  fetchItems,
-  onAbortFetch,
   header,
   isDisabled,
   title,
   placeholder,
-  footerLabel
+  footerLabel,
+  fetchItems,
+  onAbortFetch
 }: Props<T>): React.Node => {
   const [count, setCount] = useState(itemsCount)
   const [isLoading, setIsLoading] = useState(false)
@@ -116,6 +116,11 @@ const SelectWithModal = <T: Record>({
     setPage(page)
   }
 
+  const handleOnModalClose = () => {
+    setModalOpen(false)
+    onAbortFetch()
+  }
+
   const onLocalSearch = (value: string) => {
     const term = new RegExp(escapeRegExp(value), 'i')
     const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
@@ -151,10 +156,7 @@ const SelectWithModal = <T: Record>({
           pageItems={pageDictionary[page]}
           itemsCount={count}
           onSelect={handleOnModalSelect}
-          onClose={() => {
-            setModalOpen(false)
-            onAbortFetch()
-          }}
+          onClose={handleOnModalClose}
           page={page}
           setPage={handleModalOnSetPage}
           onSearch={fetchItems ? setQuery : onLocalSearch}
