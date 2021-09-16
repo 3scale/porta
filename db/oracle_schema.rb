@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210708100519) do
+ActiveRecord::Schema.define(version: 20210917163154) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -171,9 +171,9 @@ ActiveRecord::Schema.define(version: 20210708100519) do
   end
 
   add_index "audits", ["action"], name: "index_audits_on_action"
-  add_index "audits", ["associated_id", "associated_type"], name: "associated_index"
+  add_index "audits", ["associated_type", "associated_id"], name: "associated_index"
   add_index "audits", ["auditable_id", "auditable_type", "version"], name: "index_audits_on_auditable_id_and_auditable_type_and_version"
-  add_index "audits", ["auditable_id", "auditable_type"], name: "auditable_index"
+  add_index "audits", ["auditable_type", "auditable_id", "version"], name: "auditable_index"
   add_index "audits", ["created_at"], name: "index_audits_on_created_at"
   add_index "audits", ["kind"], name: "index_audits_on_kind"
   add_index "audits", ["provider_id"], name: "index_audits_on_provider_id"
