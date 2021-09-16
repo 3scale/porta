@@ -1,6 +1,6 @@
 // @flow
 
-import { getJSON } from 'utilities'
+import { ajaxJSON } from 'utilities'
 
 import type { Product, FetchItemsRequestParams, FetchItemsResponse } from 'NewApplication/types'
 
@@ -21,7 +21,7 @@ const fetchPaginatedProducts = (path: string, params: FetchItemsRequestParams): 
 
   const url = `${path}?${searchParams.toString()}`
 
-  return getJSON(url).then(data => data.json())
+  return ajaxJSON(url, { method: 'GET' }).then(data => data.json())
 }
 
 export { fetchPaginatedProducts }

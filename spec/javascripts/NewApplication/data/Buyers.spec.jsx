@@ -1,9 +1,9 @@
 // @flow
 
 import { fetchPaginatedBuyers } from 'NewApplication/data/Buyers'
-import * as ajax from 'utilities/ajax'
 
-const getJsonSpy = jest.spyOn(ajax, 'getJSON')
+import * as ajax from 'utilities/ajax'
+const ajaxJSONSpy = jest.spyOn(ajax, 'ajaxJSON')
   .mockResolvedValue({
     json: () => ({ items: [], count: 100 })
   })
@@ -12,7 +12,7 @@ const path = '/buyers'
 
 describe('fetchPaginatedBuyers', () => {
   beforeEach(() => {
-    getJsonSpy.mockClear()
+    ajaxJSONSpy.mockClear()
   })
 
   it('should fetch paginated buyers and the total count', async () => {
@@ -21,19 +21,19 @@ describe('fetchPaginatedBuyers', () => {
       items: expect.any(Array),
       count: expect.any(Number)
     })
-    expect(getJsonSpy).toHaveBeenCalledTimes(1)
-    expect(getJsonSpy).toHaveBeenCalledWith('/buyers?page=1&per_page=10&sort=created_at&direction=desc')
+    expect(ajaxJSONSpy).toHaveBeenCalledTimes(1)
+    expect(ajaxJSONSpy).toHaveBeenCalledWith('/buyers?page=1&per_page=10&sort=created_at&direction=desc', { method: 'GET' })
   })
 
   it('should filter by query', async () => {
     const opts = { page: 1, perPage: 10, query: 'some query' }
     await fetchPaginatedBuyers(path, opts)
-    expect(getJsonSpy).toHaveBeenCalledWith(expect.stringContaining('search%5Bquery%5D=some+query&utf8=%E2%9C%93'))
-    expect(getJsonSpy).toHaveBeenCalledTimes(1)
+    expect(ajaxJSONSpy).toHaveBeenCalledTimes(1)
+    expect(ajaxJSONSpy).toHaveBeenCalledWith(expect.stringContaining('search%5Bquery%5D=some+query&utf8=%E2%9C%93'), { method: 'GET' })
 
     delete opts.query
     await fetchPaginatedBuyers(path, opts)
-    expect(getJsonSpy).not.toHaveBeenCalledWith(expect.stringContaining('search[query]=some query&utf8=✓'))
-    expect(getJsonSpy).toHaveBeenCalledTimes(2)
+    expect(ajaxJSONSpy).toHaveBeenCalledTimes(2)
+    expect(ajaxJSONSpy).not.toHaveBeenCalledWith(expect.stringContaining('search[query]=some query&utf8=✓'))
   })
 })
