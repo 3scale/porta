@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import { SortByDirection, sortable } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
 import { FancySelect, PaginatedTableModal } from 'Common'
-import { paginateCollection, ajaxAbort } from 'utilities'
+import { paginateCollection } from 'utilities'
 
 import type { Record } from 'utilities'
 import type { FetchItemsRequestParams, FetchItemsResponse } from 'Types'
@@ -117,7 +117,8 @@ const SelectWithModal = <T: Record>({
 
   const handleOnModalClose = () => {
     setModalOpen(false)
-    ajaxAbort()
+    // TODO: abort any ongoing request? (using signal).
+    // This makes the component much more complex and it might not worth it.
   }
 
   const onLocalSearch = (value: string) => {
