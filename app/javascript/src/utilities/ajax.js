@@ -20,7 +20,7 @@ const _ajax = (headers: { [key: string]: string }) => {
   }
 }
 
-const ajax: FetchFunction = _ajax({ 'ContentType': 'application/x-www-form-urlencoded; charset=UTF-8' })
+const ajax: FetchFunction = _ajax({ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' })
 const ajaxJSON: FetchFunction = _ajax({ 'Content-Type': 'application/json; charset=UTF-8' })
 
 export { ajax, ajaxJSON }
