@@ -8,7 +8,10 @@ import { SelectWithModal } from 'Common'
 
 const onSelect = jest.fn()
 const fetchItems = jest.fn()
-const onAbortFetch = jest.fn()
+
+import * as ajax from 'utilities/ajax'
+const ajaxAbortSpy = jest.spyOn(ajax, 'ajaxAbort')
+  .mockReturnValue()
 
 const cells = [
   { propName: 'name', title: 'Name' },
@@ -38,8 +41,7 @@ const defaultProps = {
   title,
   placeholder: 'Placeholder',
   footerLabel: 'Footer Label',
-  fetchItems,
-  onAbortFetch
+  fetchItems
 }
 
 // $FlowIgnore[incompatible-type] ignore fetchItems implementation
@@ -175,7 +177,7 @@ describe('with more than 20 items', () => {
       openModal(wrapper)
       closeModal(wrapper)
       expect(fetchItems).toHaveBeenCalledTimes(1)
-      expect(onAbortFetch).toHaveBeenCalledTimes(1)
+      expect(ajaxAbortSpy).toHaveBeenCalledTimes(1)
     })
   })
 })
