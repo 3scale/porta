@@ -11,10 +11,7 @@ const _ajax = (headers: { [key: string]: string }) => {
   return function (url, method, body?) {
     return fetch(url, {
       method: method,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'X-CSRF-Token': token
-      },
+      headers: { ...headers, 'X-CSRF-Token': token },
       body
     })
   }
