@@ -4,7 +4,7 @@ export type Method = 'GET' | 'POST' | 'DELETE'
 
 type FetchFunction = (url: string, method: Method, body?: URLSearchParams) => Promise<Response>
 
-const _ajax = (headers: Object) => {
+const _ajax = (headers: { [key: string]: string }) => {
   const meta = document.querySelector('meta[name="csrf-token"]')
   const token = (meta && meta.getAttribute('content')) || ''
 
