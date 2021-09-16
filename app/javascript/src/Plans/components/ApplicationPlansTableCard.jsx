@@ -23,7 +23,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
   const [plans, setPlans] = React.useState<ApplicationPlan[]>(initialPlans)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  const handleActionCopy = (path) => ajax(path, 'POST')
+  const handleActionCopy = (path) => ajax(path, { method: 'POST' })
     .then(data => data.json()
       .then(res => {
         if (data.status === 201) {
@@ -45,7 +45,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
   const handleActionDelete = (path) => confirm('Are you sure?')
     .then(confirmed => {
       if (confirmed) {
-        return ajax(path, 'DELETE')
+        return ajax(path, { method: 'DELETE' })
           .then(data => data.json().then(res => {
             if (data.status === 200) {
               alert.notice(res.notice)
@@ -61,7 +61,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
     })
     .finally(() => setIsLoading(false))
 
-  const handleActionPublishHide = (path) => ajax(path, 'POST')
+  const handleActionPublishHide = (path) => ajax(path, { method: 'POST' })
     .then(data => data.json()
       .then(res => {
         if (data.status === 200) {
