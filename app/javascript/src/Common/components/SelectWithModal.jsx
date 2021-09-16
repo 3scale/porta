@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import { SortByDirection, sortable } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
 import { FancySelect, PaginatedTableModal } from 'Common'
-import { paginateCollection } from 'utilities'
+import { paginateCollection, ajaxAbort } from 'utilities'
 
 import type { Record } from 'utilities'
 import type { FetchItemsRequestParams, FetchItemsResponse } from 'Types'
@@ -28,8 +28,7 @@ type Props<T: Record> = {
   title: string,
   placeholder: string,
   footerLabel: string,
-  fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>,
-  onAbortFetch: () => void,
+  fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
 }
 
 const PER_PAGE = 5
@@ -50,8 +49,7 @@ const SelectWithModal = <T: Record>({
   title,
   placeholder,
   footerLabel,
-  fetchItems,
-  onAbortFetch
+  fetchItems
 }: Props<T>): React.Node => {
   const [count, setCount] = useState(itemsCount)
   const [isLoading, setIsLoading] = useState(false)
@@ -119,7 +117,7 @@ const SelectWithModal = <T: Record>({
 
   const handleOnModalClose = () => {
     setModalOpen(false)
-    onAbortFetch()
+    ajaxAbort()
   }
 
   const onLocalSearch = (value: string) => {
