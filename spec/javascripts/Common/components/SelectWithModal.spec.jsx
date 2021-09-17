@@ -2,16 +2,12 @@
 
 import React from 'react'
 import { mount } from 'enzyme'
-import type { ReactWrapper } from 'enzyme'
 
+import { openSelectWithModal as openModal } from 'utilities/test-utils'
 import { SelectWithModal } from 'Common'
 
 const onSelect = jest.fn()
 const fetchItems = jest.fn()
-
-import * as ajax from 'utilities/ajax'
-const ajaxAbortSpy = jest.spyOn(ajax, 'ajaxAbort')
-  .mockReturnValue()
 
 const cells = [
   { propName: 'name', title: 'Name' },
@@ -47,21 +43,6 @@ const defaultProps = {
 // $FlowIgnore[incompatible-type] ignore fetchItems implementation
 const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
 
-function openModal <T> (wrapper: ReactWrapper<T>) {
-  // HACK: suppress error logs during this step cause wrapping it inside act() makes the test fail
-  const spy = jest.spyOn(console, 'error')
-  spy.mockImplementation(() => {})
-
-  wrapper.find('.pf-c-select__toggle-button').simulate('click')
-  wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
-
-  spy.mockClear()
-}
-
-function closeModal <T> (wrapper: ReactWrapper<T>) {
-  wrapper.find(`.pf-c-modal-box[aria-label="${title}"]`).find('.pf-c-button[aria-label="Close"]').simulate('click')
-}
-
 afterEach(() => {
   jest.resetAllMocks()
 })
@@ -96,7 +77,7 @@ describe('with 20 items or less', () => {
 
   it('should not be able to show a modal', () => {
     const wrapper = mountWrapper(props)
-    expect(wrapper.find('PaginatedTableModal').exists()).toBe(false)
+    expect(wrapper.find('TableModal').exists()).toBe(false)
   })
 })
 
@@ -116,10 +97,10 @@ describe('with more than 20 items', () => {
   it('should be able to show a modal', () => {
     const wrapper = mountWrapper(props)
 
-    expect(wrapper.find('PaginatedTableModal').props().isOpen).toBe(false)
+    expect(wrapper.find('TableModal').props().isOpen).toBe(false)
 
     openModal(wrapper)
-    expect(wrapper.find('PaginatedTableModal').props().isOpen).toBe(true)
+    expect(wrapper.find('TableModal').props().isOpen).toBe(true)
     expect(onSelect).toBeCalledTimes(0)
   })
 
@@ -169,15 +150,6 @@ describe('with more than 20 items', () => {
       openModal(wrapper)
       expect(fetchItems).toHaveBeenCalledTimes(1)
       expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage: 5 })
-    })
-
-    it('should abort the ongoing fetch when modal closed', () => {
-      fetchItems.mockResolvedValue({ items, count: 30 })
-      const wrapper = mountWrapper(props)
-      openModal(wrapper)
-      closeModal(wrapper)
-      expect(fetchItems).toHaveBeenCalledTimes(1)
-      expect(ajaxAbortSpy).toHaveBeenCalledTimes(1)
     })
   })
 })

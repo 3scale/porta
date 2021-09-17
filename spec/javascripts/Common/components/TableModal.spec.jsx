@@ -7,25 +7,37 @@ import { TableModal } from 'Common'
 
 const onSelectSpy = jest.fn()
 const onCloseSpy = jest.fn()
+const setPageSpy = jest.fn()
+const onSearchSpy = jest.fn()
+const searchInputRef: {| current: HTMLInputElement | null |} = {
+  // $FlowIgnore[incompatible-type]
+  current: jest.fn()
+}
 
 const cells = [
-  { title: 'Name', propName: 'name' },
-  { title: 'Role', propName: 'role' }
+  { title: 'Name', propName: 'name' }
 ]
 
-const crew = [
-  { id: 0, name: 'J. Holden', role: 'Captain' },
-  { id: 1, name: 'A. Burton', role: 'Muscle' }
-]
+const collection = new Array(11).fill({}).map((_, j) => ({ id: j, name: `Item ${j}` }))
+const perPage = 5
+const pageItems = collection.slice(0, perPage)
 
 const defaultProps = {
-  title: 'The Rocinante',
-  item: null,
-  items: crew,
+  title: 'The Paginated Table Modal',
+  selectedItem: null,
+  pageItems,
   onSelect: onSelectSpy,
   onClose: onCloseSpy,
+  onSearch: onSearchSpy,
+  searchInputRef,
   cells,
-  isOpen: true
+  isOpen: true,
+  isLoading: false,
+  itemsCount: collection.length,
+  perPage,
+  page: 1,
+  setPage: setPageSpy,
+  sortBy: { index: 1, direction: 'desc' }
 }
 
 const mountWrapper = (props) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
@@ -51,48 +63,7 @@ it('should render a table when open', () => {
   cells.forEach(c => {
     expect(wrapper.find('th').findWhere(th => th.text() === c.title).exists()).toBe(true)
   })
-  expect(wrapper.find('tbody tr').length).toEqual(crew.length)
-  expect(wrapper.find('.pf-c-pagination__nav button[data-action="next"]').first().prop('disabled')).toBe(true)
-})
-
-it('should have a paginated table', () => {
-  const items = new Array(10).fill({}).map((_n, i) => ({
-    id: i,
-    name: `Name ${i}`,
-    role: `Mate ${i}`
-  }))
-  const perPage = 4
-  const wrapper = mountWrapper({ items, perPage })
-
-  const pages = Math.ceil(items.length / perPage)
-
-  let topPagination = wrapper.find('.pf-c-pagination__nav-page-select').first()
-  expect(topPagination.find('input').prop('value')).toEqual(1)
-  expect(topPagination.text()).toEqual(`of ${pages}`)
-
-  const rows = wrapper.find('tbody tr')
-  expect(rows.length).toEqual(perPage)
-
-  const buttonNext = wrapper.find('.pf-c-pagination__nav button[data-action="next"]').first()
-  expect(buttonNext.prop('disabled')).toBe(false)
-  buttonNext.simulate('click')
-
-  topPagination = wrapper.find('.pf-c-pagination__nav-page-select').first()
-  expect(topPagination.find('input').prop('value')).toEqual(2)
-})
-
-it.skip('should have a filterable table', () => {
-  const wrapper = mountWrapper()
-  expect(wrapper.find('tbody tr').length).toEqual(crew.length)
-
-  const textInput = wrapper.find('.pf-c-toolbar input[type="search"]')
-  // FIXME: input not receiving text for some reason
-  textInput.simulate('change', { target: { value: 'Kamal' } })
-  expect(wrapper.find('.pf-c-toolbar input[type="search"]').text()).toEqual('Kamal')
-
-  const searchButton = wrapper.find('button[data-testid="search"]')
-  searchButton.simulate('click')
-  expect(wrapper.update().find('tbody tr').length).toEqual(0)
+  expect(wrapper.find('tbody tr').length).toEqual(pageItems.length)
 })
 
 it('should be closeable', () => {
@@ -111,27 +82,21 @@ it('should disable the select button until an item is selected', () => {
   expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(false)
 })
 
-it('should be able to select an item', () => {
-  const item = { id: 0, name: 'N. Nagata', role: 'Engineer' }
-  const wrapper = mountWrapper({ items: [item] })
-
-  const radio = wrapper.find('tbody tr').first().find('input')
-  radio.simulate('change', { currentTarget: { checked: true } })
-
-  wrapper.find('button[data-testid="select"]').simulate('click')
-  expect(onSelectSpy).toHaveBeenCalledWith(item)
-})
-
 it('should be cancelable', () => {
   const wrapper = mountWrapper()
   wrapper.find('button[data-testid="cancel"]').simulate('click')
   expect(onCloseSpy).toHaveBeenCalledTimes(1)
 })
 
-it('should check the current item if previously selected', () => {
-  const item = { id: 0, name: 'N. Nagata', role: 'Engineer' }
-  const wrapper = mountWrapper({ items: [item], item })
+it.todo('should have a paginated table')
+it.todo('should have a filterable table')
+it.todo('should be able to select an item')
+it.todo('should check the current item if previously selected')
 
-  const radio = wrapper.find('tbody tr').first().find('input')
-  expect(radio.prop('checked')).toBe(true)
+describe.skip('when the whole collection is local', () => {
+  it.todo('should not fetch any more items')
+})
+
+describe.skip('when the collection is too big to be local', () => {
+  it.todo('should fetch for items of empty pages')
 })

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 
 import { SortByDirection, sortable } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
-import { FancySelect, PaginatedTableModal } from 'Common'
+import { FancySelect, TableModal } from 'Common'
 import { paginateCollection } from 'utilities'
 
 import type { Record } from 'utilities'
@@ -28,6 +28,7 @@ type Props<T: Record> = {
   title: string,
   placeholder: string,
   footerLabel: string,
+  helperTextInvalid?: string,
   fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
 }
 
@@ -49,6 +50,7 @@ const SelectWithModal = <T: Record>({
   title,
   placeholder,
   footerLabel,
+  helperTextInvalid,
   fetchItems
 }: Props<T>): React.Node => {
   const [count, setCount] = useState(itemsCount)
@@ -144,10 +146,11 @@ const SelectWithModal = <T: Record>({
         } : undefined}
         isDisabled={isDisabled}
         placeholderText={placeholder}
+        helperTextInvalid={helperTextInvalid}
       />
 
       {shouldHaveModal && (
-        <PaginatedTableModal
+        <TableModal
           title={title}
           cells={cells}
           isOpen={modalOpen}
