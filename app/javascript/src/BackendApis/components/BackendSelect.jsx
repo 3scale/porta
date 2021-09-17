@@ -45,7 +45,6 @@ const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, error 
         placeholder="Select a Backend"
         footerLabel="View all Backends"
         helperTextInvalid={error}
-        isValid={!error}
       />
       <Button
         variant="link"

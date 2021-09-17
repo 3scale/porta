@@ -26,7 +26,6 @@ type Props<T: Record> = {
   id: string,
   header: string,
   isDisabled?: boolean,
-  isValid?: boolean,
   name?: string,
   helperText?: React.Node,
   helperTextInvalid?: string,
@@ -48,7 +47,6 @@ const FancySelect = <T: Record>({
   id,
   header,
   isDisabled,
-  isValid,
   name,
   helperText,
   helperTextInvalid,
@@ -99,7 +97,7 @@ const FancySelect = <T: Record>({
       fieldId={id}
       helperText={helperText}
       helperTextInvalid={helperTextInvalid}
-      isValid={isValid}
+      isValid={!helperTextInvalid}
     >
       {name && item && <input type="hidden" name={name} value={item.id} />}
       <Select

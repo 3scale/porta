@@ -1,19 +1,26 @@
 // @flow
 
 import * as React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
 import {
   Button,
   Modal,
   InputGroup,
   TextInput,
   Pagination,
+  Spinner,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
-import { Table, TableHeader, TableBody } from '@patternfly/react-table'
-import { useSearchInputEffect } from 'utilities'
-import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  SortByDirection
+} from '@patternfly/react-table'
+import { SearchIcon } from '@patternfly/react-icons'
+import { NoMatchFound } from 'Common'
 
 import type { Record } from 'utilities'
 
@@ -21,94 +28,127 @@ import './TableModal.scss'
 
 type Props<T: Record> = {
   title: string,
-  item: T | null,
-  items: T[],
-  onSelect: (T) => void,
+  selectedItem: T | null,
+  pageItems?: T[],
+  itemsCount: number,
+  onSelect: (T | null) => void,
   onClose: () => void,
-  cells: { title: string, propName: string }[],
+  cells: Array<{ title: string, propName: string, transforms?: any }>,
   isOpen?: boolean,
+  isLoading?: boolean,
+  page: number,
+  setPage: (number) => void,
   perPage?: number,
+  onSearch?: (term: string) => void,
+  sortBy: { index: number, direction: $Keys<typeof SortByDirection> }
 }
 
 const PER_PAGE_DEFAULT = 5
 
-const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, perPage = PER_PAGE_DEFAULT, cells }: Props<T>): React.Node => {
-  const [selectedId, setSelectedId] = useState(item ? item.id : null)
-  const [page, setPage] = useState(1)
-  const [filteredItems, setFilteredItems] = useState(items)
-  const searchInputRef = useRef(null)
+const TableModal = <T: Record>({
+  title,
+  isOpen,
+  isLoading = false,
+  selectedItem,
+  pageItems = [],
+  itemsCount,
+  onSelect,
+  onClose,
+  cells,
+  perPage = PER_PAGE_DEFAULT,
+  page,
+  setPage,
+  onSearch,
+  sortBy
+}: Props<T>): React.Node => {
+  const [selected, setSelected] = useState<T | null>(selectedItem)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
+
+  // FIXME: this should really be done by useSearchInputEffect. The ref won't work though. searchInputRef.current is defined only after the first search even though the effect won't be trigger
+  useEffect(() => {
+    if (searchInputRef.current && onSearch) {
+      const { current } = searchInputRef
+
+      current.addEventListener('input', ({ inputType }: InputEvent) => {
+        if (!inputType) onSearch('')
+      })
+
+      current.addEventListener('keydown', ({ key }: KeyboardEvent) => {
+        if (key === 'Enter' && searchInputRef.current) onSearch(searchInputRef.current.value)
+      })
+    }
+  }, [searchInputRef])
 
   useEffect(() => {
-    if (item !== null && item.id !== selectedId) {
-      setSelectedId(item.id)
-    }
-  }, [item])
-
-  useEffect(() => {
-    if (isOpen) {
-      setFilteredItems(items)
-      setPage(1)
-    }
-  }, [isOpen])
-
-  const handleOnSearch = () => {
-    if (searchInputRef.current) {
-      search(searchInputRef.current.value)
-    }
-  }
-
-  const search = (term: string = '') => {
-    setFilteredItems(items.filter(i => i.name.includes(term)))
-    setPage(1)
-  }
-
-  useSearchInputEffect(searchInputRef, search)
+    // Need to use effect since selected won't be re-declared on param item selectedItem change
+    setSelected(selectedItem)
+  }, [selectedItem])
 
   const handleOnSelect = (_e, _i, rowId: number) => {
-    setSelectedId(pageItems[rowId].id)
+    setSelected(pageItems[rowId])
   }
 
-  const handleOnTextInputKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleOnSearch()
+  const handleOnClickSearch = () => {
+    if (searchInputRef.current) {
+      // $FlowIgnore[not-a-function] not clickable if onSearch undefined
+      onSearch(searchInputRef.current.value)
     }
   }
 
   const pagination = (
     <Pagination
       perPage={perPage}
-      itemCount={filteredItems.length}
+      itemCount={itemsCount}
       page={page}
       onSetPage={(_e, page) => setPage(page)}
       widgetId="pagination-options-menu-top"
+      isDisabled={isLoading}
     />
   )
 
-  const pageItems = filteredItems.slice((page - 1) * perPage, page * perPage)
-
   const rows = pageItems.map((i) => ({
-    selected: i.id === selectedId,
+    selected: i.id === selected?.id,
     cells: cells.map(({ propName }) => i[propName])
   }))
 
   const onAccept = () => {
-    const item = items.find(i => i.id === selectedId)
-    if (item) {
-      onSelect(item)
-    }
+    onSelect(selected)
   }
+
+  const onCancel = () => {
+    setSelected(selectedItem)
+    onClose()
+  }
+
+  const actions = [
+    <Button
+      key="Select"
+      variant="primary"
+      isDisabled={selected === null || isLoading}
+      onClick={onAccept}
+      data-testid="select"
+    >
+      Select
+    </Button>,
+    <Button
+      key="Cancel"
+      variant="secondary"
+      isDisabled={isLoading}
+      onClick={onCancel}
+      data-testid="cancel"
+    >
+      Cancel
+    </Button>
+  ]
 
   return (
     <Modal
       isLarge
       title={title}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onCancel}
       isFooterLeftAligned={true}
-      actions={[
-        <Button key="Select" variant="primary" isDisabled={selectedId === null} onClick={onAccept} data-testid="select">Select</Button>,
-        <Button key="Cancel" variant="secondary" onClick={onClose} data-testid="cancel">Cancel</Button>
-      ]}
+      actions={actions}
     >
       {/* Toolbar is a component in the css, but a layout in react, so the class names are mismatched (pf-c-toolbar vs pf-l-toolbar) Styling doesn't work, but if you change it to pf-c in the inspector, it works */}
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
@@ -118,9 +158,15 @@ const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, 
               type="search"
               aria-label="search for an item"
               ref={searchInputRef}
-              onKeyDown={handleOnTextInputKeyDown}
+              isDisabled={isLoading || !onSearch}
             />
-            <Button variant="control" aria-label="search button for search input" onClick={handleOnSearch} data-testid="search">
+            <Button
+              variant="control"
+              aria-label="search button for search input"
+              onClick={handleOnClickSearch}
+              data-testid="search"
+              isDisabled={isLoading || !onSearch}
+            >
               <SearchIcon />
             </Button>
           </InputGroup>
@@ -129,18 +175,20 @@ const TableModal = <T: Record>({ title, isOpen, item, items, onSelect, onClose, 
           {pagination}
         </ToolbarItem>
       </Toolbar>
-      <Table
-        aria-label={title}
-        sortBy={() => {}}
-        onSort={() => {}}
-        onSelect={handleOnSelect}
-        cells={cells}
-        rows={rows}
-        selectVariant='radio'
-      >
-        <TableHeader />
-        <TableBody />
-      </Table>
+      {isLoading ? <Spinner size='xl' /> : rows.length === 0 ? <NoMatchFound /> : (
+        <Table
+          aria-label={title}
+          sortBy={sortBy}
+          onSort={() => {}}
+          onSelect={handleOnSelect}
+          cells={cells}
+          rows={rows}
+          selectVariant='radio'
+        >
+          <TableHeader />
+          <TableBody />
+        </Table>
+      )}
       {pagination}
     </Modal>
   )
