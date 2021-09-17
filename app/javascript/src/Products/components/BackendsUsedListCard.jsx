@@ -35,8 +35,8 @@ const BackendsUsedListCard = ({ backends }: Props): React.Node => {
       onSearch={handleOnSearch}
       page={page}
       setPage={setPage}
-      searchInputPlaceholder="Find a Backend"
-      tableAriaLabel="Backends used by this product"
+      searchInputPlaceholder="Find a backend"
+      tableAriaLabel="Backends used in this product"
     />
   )
 }

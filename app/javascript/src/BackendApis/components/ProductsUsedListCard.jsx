@@ -35,8 +35,8 @@ const ProductsUsedListCard = ({ products }: Props): React.Node => {
       onSearch={handleOnSearch}
       page={page}
       setPage={setPage}
-      searchInputPlaceholder="Find a Product"
-      tableAriaLabel="Products used by this backend"
+      searchInputPlaceholder="Find a product"
+      tableAriaLabel="Products using this backend"
     />
   )
 }
