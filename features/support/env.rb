@@ -13,18 +13,17 @@ non_transactional = %w[
   @audit
   @commit-transactions
   @javascript
+  @no-txn
 ].freeze
 
 transactional = non_transactional.map {|t| "not #{t}" }
 
 Before(*transactional) do
-  Cucumber::Rails::Database.javascript_strategy = :transaction
-  Cucumber::Rails::Database.before_js if Cucumber::Rails::Database.autorun_database_cleaner
+  ThreeScale::DatabaseTestStrategy.current_mode = :non_shared_transaction
 end
 
 Before non_transactional.join(' or ') do
-  Cucumber::Rails::Database.javascript_strategy = :truncation
-  Cucumber::Rails::Database.before_non_js if Cucumber::Rails::Database.autorun_database_cleaner
+  ThreeScale::DatabaseTestStrategy.current_mode = :truncation
 end
 
 require 'cucumber/rails'
@@ -53,8 +52,12 @@ ActionController::Base.allow_rescue = false
 
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
+# Possible values are :truncation and :transaction or a class
+# The :transaction strategy is faster, but might give you threading problems.
+# See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 begin
-  DatabaseCleaner.strategy = :transaction
+  require_relative 'database_test_strategy'
+  Cucumber::Rails::Database.javascript_strategy = ::ThreeScale::DatabaseTestStrategy
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
@@ -72,9 +75,3 @@ end
 #   Before('not @no-txn', 'not @selenium', 'not @culerity', 'not @celerity', 'not @javascript') do
 #     DatabaseCleaner.strategy = :transaction
 #   end
-#
-
-# Possible values are :truncation and :transaction
-# The :transaction strategy is faster, but might give you threading problems.
-# See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
-Cucumber::Rails::Database.javascript_strategy = :truncation
