@@ -1,4 +1,4 @@
-h1 Backend Overview
+h1 Backend overview
 
 section.Section
   .SettingsBox
@@ -6,12 +6,12 @@ section.Section
     dl.SettingsBox-summary.u-dl data-state="open"
       dt.u-dl-term Name
       dd.u-dl-definition = @backend_api.name
-      dt.u-dl-term System Name
+      dt.u-dl-term System name
       dd.u-dl-definition = @backend_api.system_name
       - if (description = @backend_api.description.presence)
         dt.u-dl-term Description
         dd.u-dl-definition = description
-      dt.u-dl-term Private Base URL
+      dt.u-dl-term Private base URL
       dd.u-dl-definition = @backend_api.private_endpoint
 
 section class="overview-widget"
@@ -21,7 +21,7 @@ section class="overview-widget"
       = render 'provider/admin/backend_apis/cards/products_used_list', backend_api: @backend_api
 
     div.right
-      h2 Methods & Mapping Rules
+      h2 Methods & mapping rules
       ul.listing#backend_metrics_and_mapping_rules
         li.item
           = link_to pluralize(@backend_api.method_metrics.size, 'method'), provider_admin_backend_api_metrics_path(@backend_api)
