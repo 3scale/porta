@@ -1,3 +1,4 @@
+@no-txn
 Feature: Groups and permissions
   In order to access my allowed pages on the bcms
   As a buyer
