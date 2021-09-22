@@ -37,6 +37,24 @@ const setValue = (el, val) => {
 }
 const setInputValue = (val) => (isReadOnly) => isReadOnly ? setting => setValue(setting, val) : setting => setting
 
+const clearPublicURLs = () => {
+  document.querySelector('#service_proxy_attributes_sandbox_endpoint').value = ''
+  document.querySelector('#service_proxy_attributes_endpoint').value = ''
+}
+
+const confirmDeploymentOptionChange = (event) => {
+  const isHostedToSelfManaged = event.target.value === 'self_managed'
+  const message = `This action will have the effect to ${isHostedToSelfManaged
+      ? 'clear out your Public Base URLs'
+      : 'set your Public Base URLs to a system generated'} as well as to ${ isHostedToSelfManaged
+      ? 'delete the corresponding routes in OpenShift'
+      : 'create the corresponding routes in OpenShift'}`
+  window.confirm(message)
+  if (isHostedToSelfManaged) {
+    clearPublicURLs()
+  }
+}
+
 export function initialize () {
   const authWrapper = document.getElementById(AUTH_WRAPPER_ID)
   const authSettingsWrapper = document.getElementById(AUTH_SETS_WRP_ID)
@@ -48,6 +66,7 @@ export function initialize () {
   const apicastCustomUrl = document.getElementById(PROXY_ENDPOINTS_ID).dataset.apicastCustomUrls === 'true'
   const oidc = document.getElementById(OIDC_ID)
   const serviceMesh = document.getElementById(SERVICE_MESH_ID)
+  const deploymentOptionsRadio = document.querySelectorAll('input[name="service[deployment_option]"]')
 
   methods.forEach(m => m.addEventListener('click', () => {
     toggle(toggleDisabled, toggleHiddenClass)(serviceMesh && serviceMesh.checked && !oidc.checked)(authSettingsWrapper)
@@ -58,4 +77,5 @@ export function initialize () {
     proxyEndpoints.forEach(e => toggle(toggleReadOnly, setInputValue(e.dataset.default))(!apicastCustomUrl && i.id !== SELF_MANAGED)(e))
     toggle(toggleDisabled, toggleHiddenClass)(i.id === SERVICE_MESH_ID && !oidc.checked)(authSettingsWrapper)
   }))
+  deploymentOptionsRadio.forEach(input => input.addEventListener('click', confirmDeploymentOptionChange))
 }

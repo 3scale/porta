@@ -7,6 +7,7 @@
             input_html: { class: 'proxy-endpoint',
                           data: { default: (proxy.default_staging_endpoint_apiap ) },
                           readonly: apicast_urls_readonly?,
+                          required: true,
                           placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
             hint: apicast_endpoint_input_hint(service, environment: 'staging')
 
@@ -14,5 +15,6 @@
             input_html: { class: 'proxy-endpoint',
                           data: { default: (proxy.default_production_endpoint_apiap ) },
                           readonly: apicast_urls_readonly?,
+                          required: true,
                           placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
             hint: apicast_endpoint_input_hint(service, environment: 'production')
