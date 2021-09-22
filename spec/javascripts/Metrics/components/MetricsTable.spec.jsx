@@ -4,6 +4,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { MetricsTable } from 'Metrics'
+import { mockLocation } from 'utilities/test-utils'
 
 const metrics = new Array(6).fill({}).map((i, j) => ({
   id: j,
@@ -25,14 +26,6 @@ const defaultProps = {
 }
 
 const mountWrapper = (props) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)
-
-const mockLocation = (href: string) => {
-  delete window.location
-  const location: Location = (new URL(href): any) // emulates Location object
-  // $FlowIgnore[cannot-write]
-  location.replace = jest.fn()
-  window.location = location
-}
 
 afterEach(() => {
   jest.resetAllMocks()
