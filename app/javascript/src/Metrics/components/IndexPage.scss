@@ -1,0 +1,35 @@
+@import "~@patternfly/patternfly/sass-utilities/mixins.scss"; // Required by tabs.scss
+@import "~@patternfly/patternfly/components/Tabs/tabs.scss";
+@import "~@patternfly/patternfly/components/Card/card.scss";
+@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/components/Pagination/pagination.css';
+@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+
+main.Main {
+  // Since the whole content is rendered by React, we need to eliminate the padding adding by .Main
+  padding: 0;
+
+  // This rules modify PF-React Tabs so they match the ones in our Mockup
+  .pf-c-tabs {
+    background-color: #fff;
+  }
+
+  .pf-c-tabs__list {
+    padding-left: var(--pf-c-page__main-section--PaddingLeft);
+  }
+
+  .pf-c-tabs__item {
+    padding-right: var(--pf-c-tabs__link--PaddingRight);
+  }
+
+  .pf-c-tabs__link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // HACK? Adds a margin between both cards.
+  .pf-c-card:first-of-type {
+    margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
+  }
+}
