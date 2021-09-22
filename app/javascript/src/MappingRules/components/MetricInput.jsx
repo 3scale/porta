@@ -2,11 +2,7 @@
 
 import * as React from 'react'
 
-import {
-  FormGroup,
-  SelectVariant,
-  Radio
-} from '@patternfly/react-core'
+import { FormGroup, Radio } from '@patternfly/react-core'
 import { SelectWithModal } from 'Common'
 
 import type { Metric } from 'Types'
@@ -56,22 +52,26 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
           id="proxy_rule_metric_id_radio_method"
         />
         {checked === 'method' && (
-          // $FlowIssue[prop-missing]
+          // $FlowFixMe[prop-missing] implement async pagination
           // $FlowIssue[incompatible-type-arg]
           <SelectWithModal
-            cells={cells}
+            label=""
+            fieldId="proxy_rule_metric_id"
             id="proxy_rule_metric_id_select_method"
-            variant={SelectVariant.single}
-            aria-label="Select a method"
-            onToggle={setIsExpanded}
-            onSelect={handleOnSelect}
+            name="proxy_rule[metric_id]"
             // $FlowIssue[incompatible-type] metrics can be null, that's the point
             item={metric}
             items={methods}
+            itemsCount={methods.length}
+            cells={cells}
+            onSelect={handleOnSelect}
+            header="Most recently created methods"
+            title="Select a method"
+            placeholder="Select a method"
+            aria-label="Select a method"
+            onToggle={setIsExpanded}
             isExpanded={isExpanded}
-            label=""
-            modalTitle="Select a method"
-            name="proxy_rule[metric_id]"
+            footerLabel="Show all methods"
           />
         )}
       </div>
@@ -84,22 +84,26 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
           id="proxy_rule_metric_id_radio_metric"
         />
         {checked === 'metric' && (
-          // $FlowIssue[prop-missing]
+          // $FlowFixMe[prop-missing] implement async pagination
           // $FlowIssue[incompatible-type-arg]
           <SelectWithModal
-            cells={cells}
+            label=""
+            fieldId="proxy_rule_metric_id"
             id="proxy_rule_metric_id_select_metric"
-            variant={SelectVariant.single}
-            aria-label="Select a metric"
-            onToggle={setIsExpanded}
-            onSelect={handleOnSelect}
+            name="proxy_rule[metric_id]"
             // $FlowIssue[incompatible-type] metrics can be null, that's the point
             item={metric}
             items={topLevelMetrics}
+            itemsCount={topLevelMetrics.length}
+            cells={cells}
+            onSelect={handleOnSelect}
+            header="Most recently created metrics"
+            title="Select a metric"
+            placeholder="Select a metric"
+            aria-label="Select a metric"
+            onToggle={setIsExpanded}
             isExpanded={isExpanded}
-            label=""
-            modalTitle="Select a metric"
-            name="proxy_rule[metric_id]"
+            footerLabel="Show all metrics"
           />
         )}
       </div>

@@ -44,14 +44,15 @@ export const toSelectOption = ({ id, name, description, disabled = false, classN
 /**
  * It creates a callback that's to be passed to a PF4 select of variant "typeahead"
  */
-export const handleOnFilter = (items: Array<Record>): Function => {
+export const handleOnFilter = (items: Array<Record>, getSelectOptionsForItems?: Array<Record> => Array<React.Node>): Function => {
   return (e: SyntheticEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
     const term = new RegExp(escapeRegExp(value), 'i')
 
     const filteredItems = value !== '' ? items.filter(b => term.test(b.name)) : items
 
-    // $FlowIssue[prop-missing] description is optional
-    return filteredItems.map(toSelectOption)
+    return getSelectOptionsForItems ? getSelectOptionsForItems(filteredItems)
+      // $FlowIssue[prop-missing] description is optional
+      : filteredItems.map(toSelectOption)
   }
 }

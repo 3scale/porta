@@ -97,8 +97,6 @@ it('should be able to show inline errors', () => {
   }
   const wrapper = mountWrapper({ inlineErrors })
 
-  // $FlowIgnore[incompatible-use]
-  expect(wrapper.find('BackendSelect .pf-c-form__helper-text.pf-m-error').text()).toEqual(inlineErrors.backend_api_id[0])
-  // $FlowIgnore[incompatible-use]
-  expect(wrapper.find('PathInput .pf-c-form__helper-text.pf-m-error').text()).toEqual(inlineErrors.path[0])
+  expect(wrapper.find('BackendSelect .pf-c-form__helper-text.pf-m-error').text()).toEqual('invalid backend')
+  expect(wrapper.find('PathInput .pf-c-form__helper-text.pf-m-error').text()).toEqual('invalid path')
 })

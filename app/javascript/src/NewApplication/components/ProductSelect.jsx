@@ -21,19 +21,22 @@ const ProductSelect = ({ product, products, onSelectProduct, isDisabled }: Props
   ]
 
   return (
+    // $FlowFixMe[prop-missing] Implement async pagination
     <SelectWithModal
       label="Product"
       id="product"
       // $FlowIgnore[incompatible-type] Product implements Record
       item={product}
       items={products.map(p => ({ ...p, description: p.systemName }))}
+      itemsCount={products.length}
       cells={cells}
-      modalTitle="Select a Product"
       // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
       onSelect={onSelectProduct}
       header="Most recently updated Products"
-      footer="View all Products"
       isDisabled={isDisabled}
+      title="Select a Product"
+      placeholder="Select a Product"
+      footerLabel="View all Products"
     />
   )
 }
