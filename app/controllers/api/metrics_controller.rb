@@ -10,15 +10,13 @@ class Api::MetricsController < Api::BaseController
   activate_menu :serviceadmin, :integration, :methods_metrics
   sublayout 'api/service'
 
-  def index
-    respond_to do |format|
-      format.html do
-        @metrics = @service.metrics.top_level.includes(:proxy_rules)
-        @methods = @service.method_metrics.includes(:proxy_rules)
-        @hits_metric = @service.metrics.hits
-      end
-    end
-  end
+  helper_method :presenter
+
+  attr_reader :service
+
+  delegate :metrics, to: :service, prefix: true
+
+  def index; end
 
   def new
     @metric = collection.build
@@ -33,8 +31,9 @@ class Api::MetricsController < Api::BaseController
       if @metric.save
         flash.now[:notice] = 'Metric has been created.'
         format.html do
-          flash[:notice] = "The #{@metric.child? ? 'method' : 'metric'} was created"
-          redirect_to admin_service_metrics_path(@service)
+          method = @metric.child?
+          flash[:notice] = "The #{method ? 'method' : 'metric'} was created"
+          redirect_to admin_service_metrics_path(@service, tab: method ? 'methods' : 'metrics')
         end
       else
         format.html { render :new }
@@ -77,15 +76,12 @@ class Api::MetricsController < Api::BaseController
     end
   end
 
-  private
+  protected
 
   def find_service
     service_id = params[:service_id]
     @service   = current_user.accessible_services.find(service_id) if service_id
   end
-
-  attr_reader :service
-  delegate :metrics, to: :service, prefix: true
 
   def find_metric
     @metric = service_metrics.find(params[:id])
@@ -94,5 +90,9 @@ class Api::MetricsController < Api::BaseController
   def collection
     metric_id = params[:metric_id]
     metric_id ? service_metrics.find(metric_id).children : service_metrics
+  end
+
+  def presenter
+    @presenter ||= ::MetricsIndexPresenter.new(service: @service, params: params)
   end
 end
