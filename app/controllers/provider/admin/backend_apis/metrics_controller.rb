@@ -8,9 +8,9 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   activate_menu :backend_api, :methods_metrics
   sublayout 'api/service'
 
-  def index
-    @metrics = @backend_api.top_level_metrics.includes(:proxy_rules)
-  end
+  helper_method :presenter
+
+  def index; end
 
   def new
     @metric = collection.build
@@ -49,7 +49,11 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
     end
   end
 
-  private
+  protected
+
+  def presenter
+    @presenter ||= ::MetricsIndexPresenter.new(service: @backend_api, params: params)
+  end
 
   def find_metric
     @metric = find_backend_api_metric_by(params[:id])
