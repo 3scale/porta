@@ -80,10 +80,9 @@ const NewApplicationForm = ({
   const resetServicePlan = () => {
     let plan = null
 
-    if (buyer !== null && product !== null) {
-      const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
-      const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan || null
-      plan = contractedServicePlan
+    if (buyer && product) {
+      const contractedServicePlan = new BuyerLogic(buyer).getContractedServicePlan(product)
+      plan = contractedServicePlan || product.defaultServicePlan || product.servicePlans[0]
     }
 
     setServicePlan(plan)
@@ -116,17 +115,12 @@ const NewApplicationForm = ({
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
-  const contractedServicePlan = (buyer && product) ? new BuyerLogic(buyer).getContractedServicePlan(product) : null
+  const isServiceSubscribedToBuyer: boolean = (buyer !== null && product !== null) && new BuyerLogic(buyer).isSubscribedTo(product)
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
-  const servicePlanValid = !servicePlansAllowed || servicePlan !== null || contractedServicePlan !== null
-  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
-  const isFormComplete = buyer !== null &&
-    product !== null &&
-    servicePlanValid &&
-    appPlan !== null &&
-    buyerValid &&
-    definedFieldsValid
+  const servicePlanValid = !servicePlansAllowed || servicePlan
+  const definedFieldsValid = !definedFields || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
+  const isFormComplete = Boolean(buyer && product && servicePlanValid && appPlan && buyerValid && definedFieldsValid)
 
   if (error) {
     flash.error(error)
@@ -161,18 +155,17 @@ const NewApplicationForm = ({
             productsCount={productsCount}
             onSelectProduct={setProduct}
             productsPath={productsPath ? `${productsPath}.json` : ''}
-            isDisabled={buyer === null}
+            isDisabled={!buyer}
           />
         )}
 
         {servicePlansAllowed && (
           <ServicePlanSelect
-            servicePlan={contractedServicePlan || servicePlan}
-            servicePlans={product ? product.servicePlans : []}
+            servicePlan={servicePlan}
+            servicePlans={product ? product.servicePlans : null}
             onSelect={setServicePlan}
-            showHint={product !== null && buyer !== null}
-            isPlanContracted={contractedServicePlan !== null}
-            isDisabled={product === null || contractedServicePlan !== null || buyer === null}
+            isPlanContracted={isServiceSubscribedToBuyer}
+            isDisabled={!buyer || !product || isServiceSubscribedToBuyer || !servicePlan}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', buyer.id) : ''}
             createServicePlanPath={product ? createServicePlanPath.replace(':id', product.id) : ''}
           />
