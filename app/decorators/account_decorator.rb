@@ -24,9 +24,6 @@ class AccountDecorator < ApplicationDecorator
   end
 
   def contracts
-    bought_service_contracts.map do |contract|
-      hash = contract.service.as_json(only: %i[id name], root: false)
-      hash['withPlan'] = contract.plan.as_json(only: %i[id name], root: false)
-    end
+    bought_service_contracts.decorate.map(&:new_application_data)
   end
 end
