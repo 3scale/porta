@@ -11,13 +11,12 @@ type Props = {
   appPlan: ApplicationPlan | null,
   product: Product | null,
   onSelect: (ApplicationPlan | null) => void,
-  createApplicationPlanPath: string,
-  isDisabled?: boolean
+  createApplicationPlanPath: string
 }
 
-const ApplicationPlanSelect = ({ appPlan, product, onSelect, createApplicationPlanPath, isDisabled }: Props): React.Node => {
+const ApplicationPlanSelect = ({ appPlan, product, onSelect, createApplicationPlanPath }: Props): React.Node => {
   const appPlans = product ? product.appPlans : []
-  const showHint = product && (appPlans.length === 0 || !product.defaultAppPlan)
+  const showHint = product && appPlans.length === 0
 
   const hint = (
     <p className="hint">
@@ -41,7 +40,7 @@ const ApplicationPlanSelect = ({ appPlan, product, onSelect, createApplicationPl
       name="cinstance[plan_id]"
       placeholderText="Select an application plan"
       hint={showHint && hint}
-      isDisabled={isDisabled || product === null || !product.buyerCanSelectPlan}
+      isDisabled={product === null || !product.buyerCanSelectPlan}
       isRequired
     />
   )

@@ -82,18 +82,20 @@ const NewApplicationForm = ({
 
     if (buyer && product) {
       const contractedServicePlan = new BuyerLogic(buyer).getContractedServicePlan(product)
-      plan = contractedServicePlan || product.defaultServicePlan || product.servicePlans[0]
+      plan = contractedServicePlan || product.defaultServicePlan || product.servicePlans[0] || null
     }
 
     setServicePlan(plan)
   }
 
   const resetAppPlan = () => {
-    if (product && !product.buyerCanSelectPlan) {
-      setAppPlan(product.defaultAppPlan || null)
-    } else {
-      setAppPlan(null)
+    let plan = null
+
+    if (product) {
+      plan = product.defaultAppPlan || null
     }
+
+    setAppPlan(plan)
   }
 
   useEffect(() => {
@@ -106,16 +108,12 @@ const NewApplicationForm = ({
 
   useEffect(() => {
     resetServicePlan()
-    if (product && !product.buyerCanSelectPlan) {
-      setAppPlan(product.defaultAppPlan || null)
-    } else {
-      setAppPlan(null)
-    }
+    resetAppPlan()
   }, [product])
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
-  const isServiceSubscribedToBuyer: boolean = (buyer !== null && product !== null) && new BuyerLogic(buyer).isSubscribedTo(product)
+  const isServiceSubscribedToBuyer = Boolean(buyer && product && new BuyerLogic(buyer).isSubscribedTo(product))
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan
