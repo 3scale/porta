@@ -39,12 +39,12 @@ Feature: Integration Settings
       | App_ID and App_Key Pair  |
       | OpenID Connect           |
 
-  @javascript
+  @javascript @chrome
   Scenario: Integration Settings and authentication method interaction
     Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
-    When I click on the label "APIcast self-managed"
+    When I click on the label "APIcast self-managed" and I confirm dialog box "OK"
 
     And I click on the label "API Key (user_key)"
     Then I should see "API KEY (USER_KEY) BASICS"
