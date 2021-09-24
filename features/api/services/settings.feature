@@ -39,12 +39,12 @@ Feature: Integration Settings
       | App_ID and App_Key Pair  |
       | OpenID Connect           |
 
-  @javascript @chrome
+  @javascript
   Scenario: Integration Settings and authentication method interaction
     Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
-    When I click on the label "APIcast self-managed" and I confirm dialog box "OK"
+    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect to clear out your Public Base URLs as well as to delete the corresponding routes in OpenShift"
 
     And I click on the label "API Key (user_key)"
     Then I should see "API KEY (USER_KEY) BASICS"
@@ -63,7 +63,7 @@ Feature: Integration Settings
     And I should see "GATEWAY RESPONSE"
 
 
-    When I click on the label "Istio"
+    When I click on the label "Istio" and I confirm dialog box "This action will have the effect to set your Public Base URLs to a system generated as well as to create the corresponding routes in OpenShift"
 
     And I click on the label "API Key (user_key)"
     Then I should not see "API KEY (USER_KEY) BASICS"
