@@ -1556,7 +1556,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.0.2)
-    mini_portile2 (2.4.0)
+    mini_portile2 (2.6.1)
     minitest (5.10.3)
     minitest-ci (3.4.0)
       minitest (>= 5.0.6)
@@ -1581,8 +1581,9 @@ GEM
       connection_pool (~> 2.2)
     netrc (0.11.0)
     nio4r (2.5.2)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
+      racc (~> 1.4)
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
     ntlm-http (0.1.1)
@@ -1641,6 +1642,7 @@ GEM
       pry (~> 0.13)
     public_suffix (4.0.6)
     raabro (1.4.0)
+    racc (1.5.2)
     rack (2.1.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -2059,7 +2061,7 @@ DEPENDENCIES
   minitest-stub-const
   mocha (~> 1.1.0)
   mysql2 (~> 0.5.3)
-  nokogiri (~> 1.10.10)
+  nokogiri (~> 1.12.5)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
   open_id_authentication
