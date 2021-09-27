@@ -40,5 +40,12 @@ div[role="dialog"] {
       font-weight: var(--pf-c-table--FontWeight);
     }
   }
+
+  // Force auto width for numeric (page) input
+  .pf-c-pagination__input-auto-width {
+    input.pf-c-form-control[type="number"] {
+      width: auto;
+    }
+  }
   // END_HACK
 }
