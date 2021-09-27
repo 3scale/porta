@@ -47,5 +47,12 @@ div[role="dialog"] {
       width: auto;
     }
   }
+
+  // Stick bottom pagination to the right of the table
+  .pf-c-toolbar {
+    .pf-l-toolbar__item:last-child {
+      margin-left: auto;
+    }
+  }
   // END_HACK
 }

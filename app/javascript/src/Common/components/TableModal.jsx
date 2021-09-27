@@ -190,7 +190,11 @@ const TableModal = <T: Record>({
           <TableBody />
         </Table>
       )}
-      {pagination}
+      <Toolbar className="pf-c-toolbar">
+        <ToolbarItem>
+          {pagination}
+        </ToolbarItem>
+      </Toolbar>
     </Modal>
   )
 }
