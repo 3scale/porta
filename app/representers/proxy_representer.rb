@@ -48,7 +48,7 @@ class ProxyRepresenter < ThreeScale::Representer
   property :jwt_claim_with_client_id_type, if: ->(*) { oidc? }
 
   def policies_config
-    represented.policies_config.to_json
+    represented.policies_config.as_json
   end
 
   class JSON < ProxyRepresenter
