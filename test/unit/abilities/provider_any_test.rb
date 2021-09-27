@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Abilities
-  class ProviderAdminTest < ActiveSupport::TestCase
+  class ProviderAnyTest < ActiveSupport::TestCase
     setup do
       @account = Account.new
       @account.stubs(provider?: true)
