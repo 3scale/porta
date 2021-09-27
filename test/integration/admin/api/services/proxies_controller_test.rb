@@ -23,6 +23,9 @@ module Admin::Api::Services
       json = JSON.parse(response.body).fetch('proxy').except('created_at', 'updated_at')
 
       assert_equal json.transform_values(&:to_s).except('links'), xml
+      assert_instance_of Array, json['policies_config']
+      # this is strange but see https://issues.redhat.com/browse/THREESCALE-7605
+      assert_instance_of String, xml['policies_config']
     end
 
     def test_update
