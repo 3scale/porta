@@ -95,10 +95,10 @@ const MetricsTable = ({
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
-          <Form acceptCharset="UTF-8" method="get">
+          <Form acceptCharset="UTF-8" method="get" role="search">
             <InputGroup>
               <input name="utf8" type="hidden" value="✓" />
-              <TextInput placeholder="Find an Application plan" name="search[query]" type="search" aria-label="Find an Application plan" />
+              <TextInput placeholder={`Find a ${activeTabKey === 'metrics' ? 'metric' : 'method'}`} name="search[query]" type="search" aria-label="Search"/>
               <Button variant={ButtonVariant.control} aria-label="search button for search input" type="submit">
                 <SearchIcon />
               </Button>

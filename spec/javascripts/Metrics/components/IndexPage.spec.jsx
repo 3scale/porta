@@ -63,7 +63,7 @@ describe('when in Methods tab', () => {
   it('should have a button to create new methods', () => {
     const wrapper = mountWrapper()
     const button = wrapper.find(`.pf-c-button[href="${createMetricPath}"]`)
-    expect(button.text()).toBe('Add Method')
+    expect(button.text()).toBe('Add a method')
   })
 })
 
@@ -82,6 +82,6 @@ describe('when in Metrics tab', () => {
   it('should have a button to create new methods', () => {
     const wrapper = mountWrapper()
     const button = wrapper.find(`.pf-c-button[href="${createMetricPath}"]`)
-    expect(button.text()).toBe('Add Metric')
+    expect(button.text()).toBe('Add a metric')
   })
 })
