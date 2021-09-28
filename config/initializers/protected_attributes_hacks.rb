@@ -3,10 +3,6 @@
 # They just reopened Rails module instead of using their proper module ...
 # Thus they totally short circuit all the other modules, not really good with integration with other gems like BabySqueel
 
-ActiveRecord::QueryMethods.module_eval do
-  remove_method :sanitize_forbidden_attributes
-end
-
 module ProtectedAttributesHacks
   module QueryMethods
     def sanitize_forbidden_attributes(attributes)
@@ -20,6 +16,12 @@ module ProtectedAttributesHacks
   end
 end
 
-ActiveRecord::Relation.class_eval do
-  include ProtectedAttributesHacks::QueryMethods
+ActiveSupport.on_load(:active_record) do
+  ActiveRecord::QueryMethods.module_eval do
+    remove_method :sanitize_forbidden_attributes
+  end
+
+  ActiveRecord::Relation.class_eval do
+    include ProtectedAttributesHacks::QueryMethods
+  end
 end
