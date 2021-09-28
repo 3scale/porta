@@ -275,7 +275,7 @@ class Proxy < ApplicationRecord
     nil
   end
 
-  DEPLOYMENT_OPTION_CHANGED = ->(record) { record.changed_attributes.key?(:deployment_option) }
+  DEPLOYMENT_OPTION_CHANGED = ->(record) { record.saved_changes.key?(:deployment_option) }
 
   def deployment_option_changed?
     [ self, service ].any?(&DEPLOYMENT_OPTION_CHANGED)
