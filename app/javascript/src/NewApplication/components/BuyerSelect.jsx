@@ -43,7 +43,6 @@ const BuyerSelect = ({
     cells={cells}
     onSelect={onSelectBuyer}
     fetchItems={(params) => fetchPaginatedBuyers(buyersPath, params)}
-    onAbortFetch={() => console.log('abort')}
     header="Most recently created Accounts"
     title="Select an Account"
     isDisabled={isDisabled}

@@ -43,7 +43,6 @@ const ProductSelect = ({
     cells={cells}
     onSelect={onSelectProduct}
     fetchItems={(params) => fetchPaginatedProducts(productsPath, params)}
-    onAbortFetch={() => console.log('abort')}
     header="Most recently updated Products"
     isDisabled={isDisabled}
     title="Select a Product"
