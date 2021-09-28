@@ -164,7 +164,7 @@ class Account < ApplicationRecord
   has_many :api_docs_services, class_name: 'ApiDocs::Service', dependent: :destroy
   has_many :log_entries, foreign_key: 'provider_id'
 
-  has_many :events, class_name: EventStore::Event, foreign_key: :provider_id, inverse_of: :account
+  has_many :events, class_name: 'EventStore::Event', foreign_key: :provider_id, inverse_of: :account
   has_many :access_tokens, through: :users
   has_many :sso_authorizations, through: :users
   has_many :user_sessions, through: :users
