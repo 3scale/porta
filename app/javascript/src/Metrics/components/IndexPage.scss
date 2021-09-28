@@ -5,6 +5,7 @@
 @import '~@patternfly/patternfly/components/Pagination/pagination.css';
 @import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
 @import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+@import "~@patternfly/patternfly/components/List/list.scss";
 
 main.Main {
   // Since the whole content is rendered by React, we need to eliminate the padding adding by .Main

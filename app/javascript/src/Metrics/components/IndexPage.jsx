@@ -42,7 +42,7 @@ const IndexPage = ({
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
-        <h1>Methods & Metrics</h1>
+        <h1>Methods and Metrics</h1>
       </PageSection>
 
       <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
@@ -67,7 +67,7 @@ const IndexPage = ({
               href={createMetricPath}
               component="a"
               variant="primary"
-              isInline>{`Add ${activeTabKey === 'metrics' ? 'Metric' : 'Method'}`}
+              isInline>{`Add a ${activeTabKey === 'metrics' ? 'metric' : 'method'}`}
             </Button>
             )}
           />
