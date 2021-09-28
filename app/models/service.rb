@@ -538,7 +538,7 @@ class Service < ApplicationRecord
   end
 
   def deleted_without_state_machine
-    if state_changed? && deleted? && !@deleted_by_state_machine
+    if saved_change_to_state? && deleted? && !@deleted_by_state_machine
       System::ErrorReporting.report_error('Service has been deleted without using State Machine')
     end
   end

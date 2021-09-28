@@ -78,7 +78,7 @@ module Account::ProviderDomains
   end
 
   def domains_changed?
-    attribute_changed?(:domain) || attribute_changed?(:self_domain)
+    saved_change_to_attribute?(:domain) || saved_change_to_attribute?(:self_domain)
   end
 
   def publish_domain_events
