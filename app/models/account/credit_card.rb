@@ -113,7 +113,7 @@ module Account::CreditCard
   end
 
   def notify_credit_card_change
-    credit_card_changes = previous_changes.slice(credit_card_stored_attribute,
+    credit_card_changes = saved_changes.slice(credit_card_stored_attribute,
                                      :credit_card_partial_number,
                                      :credit_card_expires_on)
 
