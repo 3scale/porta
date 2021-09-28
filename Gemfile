@@ -92,7 +92,7 @@ gem 'mimemagic', '~> 0.3.10'
 gem 'nokogiri', '~> 1.10.10'
 gem 'secure_headers', '~> 6.3.0'
 
-gem 'acts-as-taggable-on', '~> 4.0'
+gem 'acts-as-taggable-on', '~> 8.0'
 gem 'baby_squeel', '~> 1.3.1'
 gem 'browser'
 gem 'diff-lcs', '~> 1.2'
