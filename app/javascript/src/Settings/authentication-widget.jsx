@@ -14,6 +14,8 @@ const OIDC_ID = 'service_proxy_authentication_method_oidc'
 const PROXY_ENDPOINT_CLASS = 'proxy-endpoint'
 const PROXY_ENDPOINTS_ID = 'proxy-endpoints'
 const SELF_MANAGED = 'service_deployment_option_self_managed'
+const STAGING_URL_INPUT_ID = 'service_proxy_attributes_sandbox_endpoint'
+const PRODUCTION_URL_INPUT_ID = 'service_proxy_attributes_endpoint'
 
 const toggle = (...toggleFns) => active => setting => toggleFns.map(toggle => toggle(active)).reduce((s, t) => t(s), setting)
 
@@ -42,17 +44,11 @@ const clearPublicURLs = () => {
   document.querySelector('#service_proxy_attributes_endpoint').value = ''
 }
 
-const confirmDeploymentOptionChange = (event) => {
-  const isHostedToSelfManaged = event.target.value === 'self_managed'
-  const message = `This action will have the effect to ${isHostedToSelfManaged
-      ? 'clear out your Public Base URLs'
-      : 'set your Public Base URLs to a system generated'} as well as to ${ isHostedToSelfManaged
-      ? 'delete the corresponding routes in OpenShift'
-      : 'create the corresponding routes in OpenShift'}`
-  window.confirm(message)
-  if (isHostedToSelfManaged) {
-    clearPublicURLs()
-  }
+const confirmDeploymentOptionChange = (isHostedToSelfManaged) => {
+  const message = isHostedToSelfManaged
+    ? 'This action will have the effect of deleting the corresponding routes in OpenShift'
+    : 'This action will have the effect of setting your Public Base URLs to a system generated as well as creating the corresponding routes in OpenShift'
+  return window.confirm(message)
 }
 
 export function initialize () {
@@ -66,16 +62,29 @@ export function initialize () {
   const apicastCustomUrl = document.getElementById(PROXY_ENDPOINTS_ID).dataset.apicastCustomUrls === 'true'
   const oidc = document.getElementById(OIDC_ID)
   const serviceMesh = document.getElementById(SERVICE_MESH_ID)
-  const deploymentOptionsRadio = document.querySelectorAll('input[name="service[deployment_option]"]')
+  const isSelfManaged = document.getElementById(PROXY_ENDPOINTS_ID).dataset.isSelfManaged === 'true'
+  const selfManagedStagingURL = isSelfManaged ? document.getElementById(STAGING_URL_INPUT_ID).value : ''
+  const selfManagedProductionURL = isSelfManaged ? document.getElementById(PRODUCTION_URL_INPUT_ID).value : ''
 
   methods.forEach(m => m.addEventListener('click', () => {
     toggle(toggleDisabled, toggleHiddenClass)(serviceMesh && serviceMesh.checked && !oidc.checked)(authSettingsWrapper)
     settings.forEach(s => toggle(toggleDisabled, toggleHiddenClass)(s.id !== `${m.id}_settings`)(s))
   }))
-  integrations.forEach(i => i.addEventListener('click', () => {
+  integrations.forEach(i => i.addEventListener('click', event => {
+    const isHostedToSelfManaged = event.target.value === 'self_managed'
+    if (!confirmDeploymentOptionChange(isHostedToSelfManaged)) {
+      event.preventDefault()
+      return
+    }
+    if (isHostedToSelfManaged) {
+      clearPublicURLs()
+    }
     apicastSettings.forEach(s => toggle(toggleDisabled, toggleHiddenClass)(i.id === SERVICE_MESH_ID)(s))
     proxyEndpoints.forEach(e => toggle(toggleReadOnly, setInputValue(e.dataset.default))(!apicastCustomUrl && i.id !== SELF_MANAGED)(e))
+    if (isSelfManaged && isHostedToSelfManaged) {
+      document.getElementById(STAGING_URL_INPUT_ID).value = selfManagedStagingURL
+      document.getElementById(PRODUCTION_URL_INPUT_ID).value = selfManagedProductionURL
+    }
     toggle(toggleDisabled, toggleHiddenClass)(i.id === SERVICE_MESH_ID && !oidc.checked)(authSettingsWrapper)
   }))
-  deploymentOptionsRadio.forEach(input => input.addEventListener('click', confirmDeploymentOptionChange))
 }

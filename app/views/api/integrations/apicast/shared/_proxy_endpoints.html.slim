@@ -2,7 +2,7 @@
 - is_service_mesh = proxy.service_mesh_integration?
 - is_self_managed = proxy.self_managed?
 
-= f.inputs "API gateway", id: 'proxy-endpoints', data: {apicast_custom_urls: apicast_custom_urls?}, class: "apicast-only-settings #{'hidden' if is_service_mesh}", disabled: is_service_mesh do
+= f.inputs "API gateway", id: 'proxy-endpoints', data: {apicast_custom_urls: apicast_custom_urls?, is_self_managed: is_self_managed}, class: "apicast-only-settings #{'hidden' if is_service_mesh}", disabled: is_service_mesh do
   = f.input :sandbox_endpoint, label: "Staging Public Base URL",
             input_html: { class: 'proxy-endpoint',
                           data: { default: (proxy.default_staging_endpoint_apiap ) },
