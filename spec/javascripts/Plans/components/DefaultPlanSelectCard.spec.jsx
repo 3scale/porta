@@ -25,6 +25,8 @@ it('should render', () => {
   expect(wrapper.exists()).toBe(true)
 })
 
+it.todo('should have a "no default plan" option')
+
 it('should show a success message if request goes well', async () => {
   ajax.mockResolvedValue({ ok: true })
   const wrapper = mount(<DefaultPlanSelectCard {...props} />)
