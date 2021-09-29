@@ -22,7 +22,7 @@ const defaultProps = {
   activeTabKey: 'methods',
   metrics,
   metricsCount,
-  createButton: <button>Add metric</button>
+  createButton: <button>Add a metric</button>
 }
 
 const mountWrapper = (props) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)
