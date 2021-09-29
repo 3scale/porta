@@ -44,7 +44,12 @@ Feature: Integration Settings
     Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
-    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect to clear out your Public Base URLs as well as to delete the corresponding routes in OpenShift"
+    When I click on the label "APIcast self-managed"
+    Then I should see deployment option "APIcast" checked
+    And I should see field "Staging Public Base URL" disabled
+    And I should see field "Production Public Base URL" disabled
+
+    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect of deleting the corresponding routes in OpenShift"
 
     And I click on the label "API Key (user_key)"
     Then I should see "API KEY (USER_KEY) BASICS"
@@ -89,7 +94,7 @@ Feature: Integration Settings
     Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
-    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect to clear out your Public Base URLs as well as to delete the corresponding routes in OpenShift"
+    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect of deleting the corresponding routes in OpenShift"
     Then I should see field "Staging Public Base URL" enabled
     And I should see field "Production Public Base URL" enabled
 
@@ -98,6 +103,6 @@ Feature: Integration Settings
     Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
-    When I click on the label "APIcast" and I confirm dialog box "This action will have the effect to set your Public Base URLs to a system generated as well as to create the corresponding routes in OpenShift"
+    When I click on the label "APIcast" and I confirm dialog box "This action will have the effect of setting your Public Base URLs to a system generated as well as creating the corresponding routes in OpenShift"
     Then I should see field "Staging Public Base URL" disabled
     And I should see field "Production Public Base URL" disabled

@@ -50,3 +50,13 @@ Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
     assert input.readonly?
   end
 end
+
+Then(/^I should see deployment option "([^"]*)" checked$/) do |option|
+  option_checked = find("[name='service[deployment_option]'][checked]").value
+
+  if option == 'APIcast'
+    assert option_checked == 'hosted'
+  else
+    assert option_checked == 'self_managed'
+  end
+end
