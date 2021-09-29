@@ -28,7 +28,6 @@ class MetricsIndexPresenter
     @raw_collection ||= metrics? ? top_level_metrics : method_metrics
   end
 
-
   def collection
     @collection ||= raw_collection.scope_search(search)
                                   .paginate(pagination_params)
