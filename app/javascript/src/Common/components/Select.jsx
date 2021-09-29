@@ -26,6 +26,7 @@ type Props<T: Record> = {
   placeholderText?: string,
   hint?: React.Node,
   isValid?: boolean,
+  helperText?: string,
   helperTextInvalid?: string,
   isDisabled?: boolean,
   isLoading?: boolean,
@@ -43,6 +44,7 @@ const Select = <T: Record>({
   placeholderText = '',
   hint,
   isValid = true,
+  helperText,
   helperTextInvalid,
   isDisabled = false,
   isLoading = false,
@@ -70,6 +72,7 @@ const Select = <T: Record>({
       label={label}
       fieldId={fieldId}
       isValid={isValid}
+      helperText={helperText}
       helperTextInvalid={helperTextInvalid}
     >
       {isLoading && <Spinner size="md" isSVG className="pf-u-ml-md" />}
