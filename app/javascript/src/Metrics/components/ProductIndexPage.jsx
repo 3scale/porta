@@ -26,12 +26,12 @@ const ProductIndexPage = ({
   metrics,
   metricsCount
 }: Props): React.Node => {
-  const currentTabKey = (new URL(window.location.href)).searchParams.get('tab')
+  const isActiveTabMetrics = new URL(window.location.href).searchParams.get('tab') === 'metrics'
   return (
     <IndexPage
       metrics={metrics}
       metricsCount={metricsCount}
-      infoCard={currentTabKey === 'metrics' ? (
+      infoCard={isActiveTabMetrics ? (
         <>
         Metrics track API usage. Metrics have these features:
         <List>
