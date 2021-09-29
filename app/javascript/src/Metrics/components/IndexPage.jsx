@@ -37,6 +37,8 @@ const IndexPage = ({
 
   const handleTabClick = (_event, tabKey: TabKey) => {
     url.searchParams.set('tab', tabKey)
+    url.searchParams.delete('search[query]')
+    url.searchParams.delete('utf8')
     window.location.replace(url.toString())
   }
 
