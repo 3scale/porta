@@ -39,8 +39,10 @@ const MetricsTable = ({
   metricsCount,
   createButton
 }: Props): React.Node => {
+  const isActiveTabMetrics = activeTabKey === 'metrics'
+
   const tableColumns = [
-    { title: activeTabKey === 'metrics' ? 'Metric' : 'Method' },
+    { title: isActiveTabMetrics ? 'Metric' : 'Method' },
     { title: 'System name' },
     { title: 'Unit' },
     { title: 'Description' },

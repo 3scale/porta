@@ -32,7 +32,8 @@ const IndexPage = ({
   createMetricPath
 }: Props): React.Node => {
   const url = new URL(window.location.href)
-  const activeTabKey: TabKey = url.searchParams.get('tab') === 'metrics' ? 'metrics' : 'methods'
+  const isActiveTabMetrics = url.searchParams.get('tab') === 'metrics'
+  const activeTabKey: TabKey = isActiveTabMetrics ? 'metrics' : 'methods'
 
   const handleTabClick = (_event, tabKey: TabKey) => {
     url.searchParams.set('tab', tabKey)
@@ -67,7 +68,7 @@ const IndexPage = ({
               href={createMetricPath}
               component="a"
               variant="primary"
-              isInline>{`Add a ${activeTabKey === 'metrics' ? 'metric' : 'method'}`}
+              isInline>{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
             </Button>
             )}
           />
