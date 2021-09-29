@@ -1,3 +1,8 @@
 .pf-l-toolbar__item-left-align {
   flex: auto
 }
+
+// HACK: we're using inconsistent PF versions and therefore missing the correct color. Remove this patch once we upgrade everything to PF4.
+.pf-c-button.pf-m-control:disabled {
+  background-color: var(--pf-c-button--disabled--BackgroundColor);
+}

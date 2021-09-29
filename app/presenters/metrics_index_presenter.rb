@@ -12,7 +12,7 @@ class MetricsIndexPresenter
     @search = ThreeScale::Search.new(params[:search] || params)
   end
 
-  attr_reader :service, :pagination_params, :tab
+  attr_reader :service, :pagination_params, :tab, :search
 
   def index_data
     {
@@ -28,8 +28,10 @@ class MetricsIndexPresenter
     @raw_collection ||= metrics? ? top_level_metrics : method_metrics
   end
 
+
   def collection
-    @collection ||= raw_collection.paginate(pagination_params)
+    @collection ||= raw_collection.scope_search(search)
+                                  .paginate(pagination_params)
   end
 
   def create_path
