@@ -79,7 +79,7 @@ const Select = <T: Record>({
         onSelect={handleSelect}
         isExpanded={expanded}
         onClear={handleOnClear}
-        aria-labelledby={fieldId}
+        aria-label={label}
         isDisabled={isDisabled}
         // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
         onFilter={handleOnFilter(items)}
