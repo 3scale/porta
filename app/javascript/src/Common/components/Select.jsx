@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { FormGroup, Select as PF4Select, SelectVariant } from '@patternfly/react-core'
+import { Spinner } from 'Common'
 import {
   toSelectOption,
   toSelectOptionObject,
