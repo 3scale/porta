@@ -22,8 +22,10 @@ const defaultProps = {
   placeholderText: 'Select a toy',
   hint: undefined,
   isValid: undefined,
+  helperText: undefined,
   helperTextInvalid: undefined,
   isDisabled: undefined,
+  isLoading: undefined,
   isRequired: undefined
 }
 
@@ -46,6 +48,12 @@ afterEach(() => {
 it('should render itself', () => {
   const wrapper = mountWrapper()
   expect(wrapper.exists()).toBe(true)
+})
+
+it('should have a hidden input for the selected item', () => {
+  const item = items[0]
+  const wrapper = mountWrapper({ item })
+  expect(wrapper.find('input[type="hidden"]').prop('value')).toEqual(item.id)
 })
 
 it('should be able to select an item', () => {
@@ -73,22 +81,30 @@ it('should filter via typeahead', () => {
   expect(wrapper.find('ul button').length).toEqual(1)
 })
 
-it('should not be clearable when specified', () => {
-  const wrapper = mountWrapper({ isClearable: false })
-  expect(wrapper.find('.pf-c-select__toggle-clear').exists()).toBe(false)
+it('should be aria-labelled', () => {
+  const wrapper = mountWrapper()
+  expect(wrapper.find(`[aria-label="${defaultProps.label}"]`))
+})
 
-  updateInput(wrapper, 'anything')
-  // Note the button is still on the DOM, since it's rendered by Patternfly, but hidden by .pf-m-select__toggle-clear-hidden
-  expect(wrapper.find('.pf-c-select__toggle-clear').exists()).toBe(true)
+it('should show a spinner when loading', () => {
+  const wrapper = mountWrapper()
+  expect(wrapper.find('Spinner').exists()).toBe(false)
+
+  wrapper.setProps({ isLoading: true })
+  expect(wrapper.find('Spinner').exists()).toBe(true)
+})
+
+it('should clear the selection only when clearable', () => {
+  const wrapper = mountWrapper({ item: items[0], isClearable: false })
+  const clearButton = () => wrapper.find('[aria-label="Clear all"]')
+
   expect(wrapper.find('.pf-m-select__toggle-clear-hidden').exists()).toBe(true)
-
-  wrapper.find('.pf-c-select__toggle-clear').simulate('click')
+  // Note the button is still on the DOM, since it's rendered by Patternfly, but hidden by .pf-m-select__toggle-clear-hidden
+  clearButton().simulate('click')
   expect(onSelect).not.toHaveBeenCalled()
 
-  wrapper.setProps({ isClearable: true })
-  updateInput(wrapper, 'anything')
+  wrapper.setProps({ item: items[0], isClearable: true })
   expect(wrapper.find('.pf-m-select__toggle-clear-hidden').exists()).toBe(false)
-
-  wrapper.find('.pf-c-select__toggle-clear').simulate('click')
-  expect(onSelect).toHaveBeenLastCalledWith(null)
+  clearButton().simulate('click')
+  expect(onSelect).toHaveBeenCalledWith(null)
 })
