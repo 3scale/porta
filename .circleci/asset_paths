@@ -1,0 +1,17 @@
+Gemfile.lock
+yarn.lock
+.babelrc
+.postcssrc.yml
+app/javascript
+app/assets
+app/lib/pdf/images
+cdn
+config/compass.rb
+config/webpack
+lib/developer_portal/app/assets
+lib/developer_portal/app/views/developer_portal/css
+lib/developer_portal/app/views/developer_portal/javascripts
+lib/developer_portal/app/views/developer_portal/images
+vendor/active-docs/app/assets
+vendor/active-docs/vendor/assets
+vendor/assets
