@@ -27,6 +27,7 @@ type Props<T: Record> = {
   isValid?: boolean,
   helperTextInvalid?: string,
   isDisabled?: boolean,
+  isLoading?: boolean,
   isRequired?: boolean
 }
 
@@ -43,6 +44,7 @@ const Select = <T: Record>({
   isValid = true,
   helperTextInvalid,
   isDisabled = false,
+  isLoading = false,
   isRequired = false
 }: Props<T>): React.Node => {
   const [expanded, setExpanded] = React.useState(false)
@@ -69,6 +71,7 @@ const Select = <T: Record>({
       isValid={isValid}
       helperTextInvalid={helperTextInvalid}
     >
+      {isLoading && <Spinner size="md" isSVG className="pf-u-ml-md" />}
       {item && <input type="hidden" name={name} value={item.id} />}
       <PF4Select
         id={fieldId}
