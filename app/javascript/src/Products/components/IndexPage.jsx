@@ -1,53 +1,37 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import {
-  Form,
-  Level,
-  LevelItem,
-  InputGroup,
-  TextInput,
   Button,
   ButtonVariant,
+  Divider,
+  Form,
+  InputGroup,
+  Level,
+  LevelItem,
   PageSection,
+  PageSectionVariants,
   Pagination as PFPagination,
   PaginationVariant,
-  PageSectionVariants,
+  TextInput,
   Title,
-  Divider,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
-import {
-  Table,
-  TableHeader,
-  TableBody
-} from '@patternfly/react-table'
-import SearchIcon from '@patternfly/react-icons/dist/js/icons/search-icon'
+import { Table, TableHeader, TableBody } from '@patternfly/react-table'
+import { SearchIcon } from '@patternfly/react-icons'
 import { createReactWrapper } from 'utilities'
 
-import 'Products/components/styles/products.scss'
+import type { Product } from 'Products/types'
+
+import './IndexPage.scss'
 
 type Props = {
-  productsCount: number,
-  products: Array<{
-    apps_count: number,
-    backends_count: number,
-    id: number,
-    system_name: string,
-    link: string,
-    links: Array<{
-      name: string,
-      path: string
-    }>,
-    name: string,
-    type: string,
-    unread_alerts_count: number,
-    updated_at: string
-  }>
+  products: Array<Product>,
+  productsCount: number
 }
 
-const ProductsIndexPage = ({ productsCount, products }: Props) => {
+const IndexPage = ({ productsCount, products }: Props): React.Node => {
   const tableColumns = [
     'Name',
     'System name',
@@ -60,11 +44,11 @@ const ProductsIndexPage = ({ productsCount, products }: Props) => {
   const tableRows = products.map(tableRow => ({
     cells: [
       { title: <Button href={tableRow.links[1].path} component="a" variant="link" isInline>{tableRow.name}</Button> },
-      tableRow.system_name,
-      <span className="api-table-timestamp">{tableRow.updated_at}</span>,
-      tableRow.apps_count,
-      tableRow.backends_count,
-      tableRow.unread_alerts_count
+      tableRow.systemName,
+      <span className="api-table-timestamp">{tableRow.updatedAt}</span>,
+      tableRow.appsCount,
+      tableRow.backendsCount,
+      tableRow.unreadAlertsCount
     ]
   }))
 
@@ -165,6 +149,6 @@ const ProductsIndexPage = ({ productsCount, products }: Props) => {
   )
 }
 
-const ProductsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsIndexPage {...props} />, containerId)
+const ProductsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
 
-export { ProductsIndexPageWrapper }
+export { IndexPage, ProductsIndexPageWrapper }
