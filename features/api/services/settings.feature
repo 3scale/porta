@@ -49,7 +49,7 @@ Feature: Integration Settings
     And I should see field "Staging Public Base URL" disabled
     And I should see field "Production Public Base URL" disabled
 
-    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect of deleting the corresponding routes in OpenShift"
+    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will delete the corresponding routes in OpenShift. Do you want to continue?"
 
     And I click on the label "API Key (user_key)"
     Then I should see "API KEY (USER_KEY) BASICS"
@@ -94,7 +94,7 @@ Feature: Integration Settings
     Given I log in as provider "foo.3scale.localhost"
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
 
-    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will have the effect of deleting the corresponding routes in OpenShift"
+    When I click on the label "APIcast self-managed" and I confirm dialog box "This action will delete the corresponding routes in OpenShift. Do you want to continue?"
     Then I should see field "Staging Public Base URL" enabled
     And I should see field "Production Public Base URL" enabled
 

@@ -46,7 +46,7 @@ const clearPublicURLs = () => {
 
 const confirmDeploymentOptionChange = (isHostedToSelfManaged) => {
   const message = isHostedToSelfManaged
-    ? 'This action will have the effect of deleting the corresponding routes in OpenShift'
+    ? 'This action will delete the corresponding routes in OpenShift. Do you want to continue?'
     : 'This action will have the effect of setting your Public Base URLs to a system generated as well as creating the corresponding routes in OpenShift'
   return window.confirm(message)
 }
