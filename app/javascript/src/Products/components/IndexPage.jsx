@@ -92,7 +92,7 @@ const IndexPage = ({ productsCount, products }: Props): React.Node => {
   }
 
   return (
-    <PageSection className="api-table-page-section" variant={PageSectionVariants.light}>
+    <PageSection variant={PageSectionVariants.light}>
       <Level>
         <LevelItem>
           <Title headingLevel="h1" size="2xl">Products</Title>
@@ -108,7 +108,7 @@ const IndexPage = ({ productsCount, products }: Props): React.Node => {
           </Button>
         </LevelItem>
       </Level>
-      <p className="api-table-description">
+      <p>
         Explore and manage all customer-facing APIs that contain one or more of your Backends.
       </p>
       <Divider/>
@@ -116,11 +116,11 @@ const IndexPage = ({ productsCount, products }: Props): React.Node => {
         <ToolbarItem>
           <ToolbarSearch />
         </ToolbarItem>
-        <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
+        <ToolbarItem align={{ default: 'alignRight' }}>
           <Pagination />
         </ToolbarItem>
       </Toolbar>
-      <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
+      <Table aria-label="Products Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
