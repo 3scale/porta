@@ -16,9 +16,10 @@ import { createReactWrapper } from 'utilities'
 import './ToolbarSearch.scss'
 
 type Props = {
+  placeholder: string
 }
 
-const ToolbarSearch = (props: Props): React.Node => {
+const ToolbarSearch = ({ placeholder }: Props): React.Node => {
   const formId = 'toolbar-search-form'
   const query = new URL(window.location).searchParams.get('search[query]')
   const [searchText, setSearchText] = React.useState<string>(query || '')
@@ -71,7 +72,7 @@ const ToolbarSearch = (props: Props): React.Node => {
         <TextInput
           // $FlowIgnore[incompatible-type] it's fine, really
           ref={ref}
-          placeholder="Find a product"
+          placeholder={placeholder}
           name="search[query]"
           type="search"
           aria-label="Search"

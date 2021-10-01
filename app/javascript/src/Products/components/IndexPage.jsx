@@ -108,7 +108,7 @@ const IndexPage = ({ newProductPath, productsCount, products }: Props): React.No
       <Divider/>
       <Toolbar id="top-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
-          <ToolbarSearch />
+          <ToolbarSearch placeholder="Find a product" />
         </ToolbarItem>
         <ToolbarItem align={{ default: 'alignRight' }}>
           <Pagination />
