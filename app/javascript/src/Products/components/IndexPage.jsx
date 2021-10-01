@@ -23,11 +23,12 @@ import type { Product } from 'Products/types'
 import './IndexPage.scss'
 
 type Props = {
+  newProductPath: string,
   products: Array<Product>,
   productsCount: number
 }
 
-const IndexPage = ({ productsCount, products }: Props): React.Node => {
+const IndexPage = ({ newProductPath, productsCount, products }: Props): React.Node => {
   const tableColumns = [
     'Name',
     'System name',
@@ -98,19 +99,12 @@ const IndexPage = ({ productsCount, products }: Props): React.Node => {
           <Title headingLevel="h1" size="2xl">Products</Title>
         </LevelItem>
         <LevelItem>
-          <Button
-            data-testid="productsIndexCreateProduct-buttonLink"
-            variant="primary"
-            component="a"
-            href="/apiconfig/services/new"
-          >
+          <Button variant="primary" component="a" href={newProductPath}>
             Create Product
           </Button>
         </LevelItem>
       </Level>
-      <p>
-        Explore and manage all customer-facing APIs that contain one or more of your Backends.
-      </p>
+      <p>Explore and manage all customer-facing APIs that contain one or more of your Backends.</p>
       <Divider/>
       <Toolbar id="top-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>

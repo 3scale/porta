@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::ServicesIndexPresenter
+  include System::UrlHelpers.system_url_helpers
+
   def initialize(current_user:, params: {})
     @current_user = current_user
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
@@ -11,6 +13,7 @@ class Api::ServicesIndexPresenter
 
   def data
     {
+      'new-product-path': new_admin_service_path,
       products: page_products.decorate.map(&:index_page_data).to_json,
       'products-count': page_products.total_entries.to_json
     }

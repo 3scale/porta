@@ -14,9 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { products, productsCount } = container.dataset
+  const { newProductPath, products, productsCount } = container.dataset
 
   ProductsIndexPageWrapper({
+    newProductPath,
     products: safeFromJsonString<Product[]>(products) || [],
     productsCount: safeFromJsonString<number>(productsCount) || 0
   }, containerId)
