@@ -3,7 +3,15 @@
 import validate from 'validate.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const constraints = {
+  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLFormElement
+  const form: HTMLFormElement = document.querySelector('#signup_form')
+  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
+  const submitBtn: HTMLInputElement = document.querySelector('input[type="submit"]')
+  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
+  const captchaInput: HTMLInputElement = document.querySelector('#captchaChecked')
+
+  // Fields 'org_name', 'username' and 'email' are always required
+  const mandatoryFields = {
     'account[org_name]': {
       presence: true,
       length: { minimum: 1 }
@@ -16,7 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
       presence: true,
       email: true,
       length: { minimum: 1 }
-    },
+    }
+  }
+  // Fields 'password' and 'password_confirmation' are optional (can be disabled)
+  const isPasswordRequired = document.querySelectorAll('input[type="password"]').length > 0
+  const passwordFields = isPasswordRequired ? {
     'account[user][password]': {
       presence: true,
       length: { minimum: 1 }
@@ -24,22 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
     'account[user][password_confirmation]': {
       presence: true,
       equality: 'account[user][password]'
-    },
+    }
+  } : null
+
+  // Captcha fields are optional
+  const captchaRequired: boolean = !!document.querySelector('.g-recaptcha')
+  const captchaFields = captchaRequired ? {
     'captchaChecked': {
       presence: true,
       length: { minimum: 1 }
     }
-  }
+  } : null
 
-  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLFormElement
-  const form: HTMLFormElement = document.querySelector('#signup_form')
-  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
-  const submitBtn: HTMLInputElement = document.querySelector('input[type="submit"]')
-  // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
-  const captchaInput: HTMLInputElement = document.querySelector('#captchaChecked')
+  const constraints = Object.assign({}, mandatoryFields, passwordFields, captchaFields)
 
-  const captchaRequired: boolean = !!document.querySelector('.g-recaptcha')
-  submitBtn.disabled = true
+  submitBtn.disabled = !!validate(form, constraints)
   captchaInput.value = captchaRequired ? '' : 'ok'
 
   const inputs = document.querySelectorAll('input')
