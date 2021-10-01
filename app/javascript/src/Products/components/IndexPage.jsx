@@ -3,23 +3,19 @@
 import * as React from 'react'
 import {
   Button,
-  ButtonVariant,
   Divider,
-  Form,
-  InputGroup,
   Level,
   LevelItem,
   PageSection,
   PageSectionVariants,
   Pagination as PFPagination,
   PaginationVariant,
-  TextInput,
   Title,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
 import { Table, TableHeader, TableBody } from '@patternfly/react-table'
-import { SearchIcon } from '@patternfly/react-icons'
+import { ToolbarSearch } from 'Common'
 import { createReactWrapper } from 'utilities'
 
 import type { Product } from 'Products/types'
@@ -62,17 +58,17 @@ const IndexPage = ({ productsCount, products }: Props): React.Node => {
     onClick: (_event, rowId) => linkToPage(rowId, i)
   }))
 
-  const url = new URL(window.location.href)
+  const url = new URL(window.location)
 
   const selectPerPage = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', selectedPerPage)
     url.searchParams.delete('page')
-    window.location.href = url.toString()
+    window.location.replace(url.toString())
   }
 
   const goToPage = (page) => {
     url.searchParams.set('page', page)
-    window.location.href = url.toString()
+    window.location.replace(url.toString())
   }
 
   const Pagination = ({ variant }: { variant?: string }) => {
@@ -116,34 +112,22 @@ const IndexPage = ({ productsCount, products }: Props): React.Node => {
         Explore and manage all customer-facing APIs that contain one or more of your Backends.
       </p>
       <Divider/>
-      <Toolbar id="top-toolbar" className="pf-c-toolbar">
-        <div className="pf-c-toolbar__content">
-          <ToolbarItem>
-            <Form id="new_search" action="/apiconfig/services" acceptCharset="UTF-8" method="get">
-              <InputGroup className="api-table-search">
-                <input name="utf8" type="hidden" value="✓" />
-                <TextInput placeholder="Find a Product" name="search[query]" id="findProduct" type="search" aria-label="Find a product" />
-                <Button variant={ButtonVariant.control} aria-label="search button for search input" type="submit">
-                  <SearchIcon />
-                </Button>
-              </InputGroup>
-            </Form>
-          </ToolbarItem>
-          <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
-            <Pagination />
-          </ToolbarItem>
-        </div>
+      <Toolbar id="top-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
+        <ToolbarItem>
+          <ToolbarSearch />
+        </ToolbarItem>
+        <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
+          <Pagination />
+        </ToolbarItem>
       </Toolbar>
       <Table aria-label="Actions Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar id="bottom-toolbar" className="pf-c-toolbar">
-        <div className="pf-c-toolbar__content">
-          <ToolbarItem className="api-toolbar-pagination" align={{ default: 'alignRight' }}>
-            <Pagination variant={PaginationVariant.bottom} />
-          </ToolbarItem>
-        </div>
+      <Toolbar id="bottom-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
+        <ToolbarItem>
+         <Pagination variant={PaginationVariant.bottom} />
+       </ToolbarItem>
       </Toolbar>
     </PageSection>
   )

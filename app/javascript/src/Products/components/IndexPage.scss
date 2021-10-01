@@ -1,48 +1,20 @@
 @import '~@patternfly/patternfly/components/Button/button.css';
+@import '~@patternfly/patternfly/components/Divider/divider.css';
 @import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
-@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
 @import '~@patternfly/patternfly/layouts/Level/level.css';
 @import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+@import '~@patternfly/patternfly/components/Page/page.css';
 @import '~@patternfly/patternfly/components/Pagination/pagination.css';
 @import '~@patternfly/patternfly/components/Table/table.css';
 @import '~@patternfly/patternfly/components/Title/title.css';
 @import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
 
-.api-table-description {
-  margin-top: 16px;
+// HACK: removes Main 1.5 rem padding
+main.Main {
+  padding: unset;
 }
 
-.pf-c-input-group.api-table-search {
-  width: 300px;
-}
-
-.api-table-timestamp {
-  color: var(--pf-global--disabled-color--100);
-  font-size: var(--pf-global--FontSize--sm);
-}
-
-.pf-c-toolbar__content {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  position: relative;
-  padding-right: var(--pf-c-toolbar__content--PaddingRight);
-  padding-left: var(--pf-c-toolbar__content--PaddingLeft);
-}
-
-.api-toolbar-pagination {
-  margin-left: auto;
-}
-
-.pf-c-toolbar {
-  display: block !important;
-  padding-top: var(--pf-global--spacer--md);
-  padding-bottom: var(--pf-global--spacer--md);
-}
-
-.api-table-page-section {
-  margin-top: -1.5rem;
-  margin-right: -1.5rem;
-  margin-bottom: -1.5rem;
-  margin-left: -1.5rem;
+// HACK: force pagination in bottom toolbar to stick to the right
+#bottom-toolbar .pf-l-toolbar__item {
+  flex: auto;
 }
