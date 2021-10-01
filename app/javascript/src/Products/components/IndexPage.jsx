@@ -93,7 +93,7 @@ const IndexPage = ({ newProductPath, productsCount, products }: Props): React.No
   }
 
   return (
-    <PageSection variant={PageSectionVariants.light}>
+    <PageSection variant={PageSectionVariants.light} id="products-index-page">
       <Level>
         <LevelItem>
           <Title headingLevel="h1" size="2xl">Products</Title>
