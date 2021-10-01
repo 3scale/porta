@@ -1,4 +1,2 @@
-= javascript_pack_tag 'backend_apis_index'
-= javascript_pack_tag 'PF4Styles/dashboard'
-
-div#backend-apis data-backends=(@page_backend_apis) data-backends-count=(@backend_apis.count)
+div#backend-apis data=presenter.data
+  = javascript_pack_tag 'backend_apis_index'

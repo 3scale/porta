@@ -1,15 +1,24 @@
+// @flow
+
 import { BackendsIndexPageWrapper } from 'BackendApis/components/IndexPage'
 import { safeFromJsonString } from 'utilities'
+
+import type { Backend } from 'BackendApis/types'
 
 const containerId = 'backend-apis'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
 
-  const { backends, backendsCount } = container.dataset
+  if (!container) {
+    return
+  }
+
+  const { newBackendPath, backends, backendsCount } = container.dataset
 
   BackendsIndexPageWrapper({
-    backends: safeFromJsonString(backends),
-    backendsCount: safeFromJsonString(backendsCount)
+    newBackendPath,
+    backends: safeFromJsonString<Backend[]>(backends) || [],
+    backendsCount: safeFromJsonString<number>(backendsCount) || 0
   }, containerId)
 })
