@@ -17,7 +17,8 @@ import { createReactWrapper } from 'utilities'
 import './ToolbarSearch.scss'
 
 type Props = {
-  placeholder: string
+  placeholder: string,
+  children?: React.Node
 }
 
 const FORM_ID = 'toolbar-search-form'
@@ -84,6 +85,7 @@ const ToolbarSearch = ({ placeholder }: Props): React.Node => {
     >
       <InputGroup>
         <input name={INPUT_NAME_UTF8} type="hidden" value="✓" />
+        {children}
         <TextInput
           // $FlowIgnore[incompatible-type] it's fine, really
           ref={inputRef}
