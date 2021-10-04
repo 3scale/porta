@@ -7,9 +7,12 @@
 @import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
 @import "~@patternfly/patternfly/components/List/list.scss";
 
-main.Main {
-  // Since the whole content is rendered by React, we need to eliminate the padding adding by .Main
-  padding: 0;
+#metrics-index-page {
+  // HACK: removes Main 1.5 rem padding
+  margin-top: -1.5rem;
+  margin-right: -1.5rem;
+  margin-bottom: -1.5rem;
+  margin-left: -1.5rem;
 
   // This rules modify PF-React Tabs so they match the ones in our Mockup
   .pf-c-tabs {
