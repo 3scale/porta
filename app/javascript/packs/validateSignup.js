@@ -4,11 +4,11 @@ import validate from 'validate.js'
 
 document.addEventListener('DOMContentLoaded', () => {
   // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLFormElement
-  const form: HTMLFormElement = document.querySelector('#signup_form')
+  const form: HTMLFormElement = document.getElementById('signup_form')
   // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
   const submitBtn: HTMLInputElement = document.querySelector('input[type="submit"]')
   // $FlowFixMe[incompatible-type] should be safe to assume it is HTMLInputElement
-  const captchaInput: HTMLInputElement = document.querySelector('#captchaChecked')
+  const captchaInput: HTMLInputElement = document.getElementById('captchaChecked')
 
   // Fields 'org_name', 'username' and 'email' are always required
   const mandatoryFields = {
@@ -39,8 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } : null
 
-  // Captcha fields are optional
-  const captchaRequired: boolean = !!document.querySelector('.g-recaptcha')
+  const captchaRequired: boolean = document.querySelector('.g-recaptcha') !== null
   const captchaFields = captchaRequired ? {
     'captchaChecked': {
       presence: true,
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const constraints = Object.assign({}, mandatoryFields, passwordFields, captchaFields)
 
-  submitBtn.disabled = !!validate(form, constraints)
+  submitBtn.disabled = validate(form, constraints) !== undefined
   captchaInput.value = captchaRequired ? '' : 'ok'
 
   const inputs = document.querySelectorAll('input')
