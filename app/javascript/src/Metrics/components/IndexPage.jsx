@@ -43,7 +43,7 @@ const IndexPage = ({
   }
 
   return (
-    <>
+    <div id="metrics-index-page">
       <PageSection variant={PageSectionVariants.light}>
         <h1>Methods and Metrics</h1>
       </PageSection>
@@ -77,7 +77,7 @@ const IndexPage = ({
         </Card>
       </PageSection>
 
-    </>
+    </div>
   )
 }
 
