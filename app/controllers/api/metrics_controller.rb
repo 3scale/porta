@@ -93,6 +93,6 @@ class Api::MetricsController < Api::BaseController
   end
 
   def presenter
-    @presenter ||= ::MetricsIndexPresenter.new(service: @service, params: params)
+    @presenter ||= Api::MetricsIndexPresenter.new(service: @service, params: params)
   end
 end
