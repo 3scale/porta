@@ -7,6 +7,7 @@ import {
   ButtonVariant,
   Form,
   InputGroup,
+  Popover,
   TextInput
 } from '@patternfly/react-core'
 import { SearchIcon } from '@patternfly/react-icons'
@@ -19,30 +20,44 @@ type Props = {
   placeholder: string
 }
 
-const ToolbarSearch = ({ placeholder }: Props): React.Node => {
-  const formId = 'toolbar-search-form'
-  const query = new URL(window.location).searchParams.get('search[query]')
-  const [searchText, setSearchText] = React.useState<string>(query || '')
+const FORM_ID = 'toolbar-search-form'
+const INPUT_NAME_QUERY = 'search[query]'
+const INPUT_NAME_UTF8 = 'utf8'
 
-  const ref = React.useRef()
+const ToolbarSearch = ({ placeholder }: Props): React.Node => {
+  const query = new URL(window.location).searchParams.get(INPUT_NAME_QUERY)
+  const [searchText, setSearchText] = React.useState<string>(query || '')
+  const [showPopover, setShowPopover] = React.useState<boolean>(false)
+
+  const inputRef = React.useRef()
 
   React.useEffect(() => {
-    const input = ref.current
+    const input = inputRef.current
     if (input) input.addEventListener('search', handleOnSearch)
 
     // $FlowIgnore[incompatible-use] should not be null at this point
     return () => input.removeEventListener('search', handleOnSearch)
   }, [])
 
-  const onSubmitSearch = (value: string) => {
-    const form: HTMLFormElement = document.forms[formId]
+  React.useEffect(() => {
+    if (showPopover) {
+      setShowPopover(false)
+    }
+  }, [searchText])
 
-    if (!query && value.length === 0) {
+  const onSubmitSearch = (value: string) => {
+    const form: HTMLFormElement = document.forms[FORM_ID]
+
+    const inputClearedBeforeAnySearch = !query && value.length === 0
+    const inputCleared = value.length === 0
+    const searchTextTooShortForSphinx = value.length < 3
+
+    if (inputClearedBeforeAnySearch) {
       return
-    } else if (value.length === 0) {
+    } else if (inputCleared) {
       removeEmptySearchQueryFromURL(form)
-    } else if (value.length < 3) {
-      // Sphinx does not index less than 3 characters. Prevent form from being submitted.
+    } else if (searchTextTooShortForSphinx) {
+      setShowPopover(true)
       return
     }
 
@@ -50,8 +65,8 @@ const ToolbarSearch = ({ placeholder }: Props): React.Node => {
   }
 
   const removeEmptySearchQueryFromURL = (form: HTMLFormElement) => {
-    form.elements['search[query]'].removeAttribute('name')
-    form.elements['utf8'].removeAttribute('name')
+    form.elements[INPUT_NAME_QUERY].removeAttribute('name')
+    form.elements[INPUT_NAME_UTF8].removeAttribute('name')
   }
 
   const handleOnSearch = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -61,33 +76,39 @@ const ToolbarSearch = ({ placeholder }: Props): React.Node => {
 
   return (
     <Form
-      id={formId}
+      id={FORM_ID}
       acceptCharset="UTF-8"
       method="get"
       role="search"
       onSubmit={e => e.preventDefault()}
     >
       <InputGroup>
-        <input name="utf8" type="hidden" value="✓" />
+        <input name={INPUT_NAME_UTF8} type="hidden" value="✓" />
         <TextInput
           // $FlowIgnore[incompatible-type] it's fine, really
-          ref={ref}
+          ref={inputRef}
           placeholder={placeholder}
-          name="search[query]"
+          name={INPUT_NAME_QUERY}
           type="search"
           aria-label="Search"
           value={searchText}
           onChange={setSearchText}
           autoComplete="off"
         />
-        <Button
-          variant={ButtonVariant.control}
-          aria-label="search button for search input"
-          isDisabled={searchText.length > 0 && searchText.length < 3}
-          onClick={() => onSubmitSearch(searchText)}
+        <Popover
+          aria-label="search minimum length"
+          bodyContent={<div>To search, type at least 3 characters.</div>}
+          isVisible={showPopover}
+          shouldClose={() => setShowPopover(false)}
         >
-          <SearchIcon />
-        </Button>
+          <Button
+            variant={ButtonVariant.control}
+            aria-label="search button for search input"
+            onClick={() => onSubmitSearch(searchText)}
+          >
+            <SearchIcon />
+          </Button>
+        </Popover>
       </InputGroup>
     </Form>
   )
