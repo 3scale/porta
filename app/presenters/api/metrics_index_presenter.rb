@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MetricsIndexPresenter
+class Api::MetricsIndexPresenter
   include System::UrlHelpers.system_url_helpers
 
   delegate :top_level_metrics, :method_metrics, :metrics, to: :service
@@ -44,6 +44,19 @@ class MetricsIndexPresenter
   end
 
   def page_metrics
-    collection.decorate.map(&:index_data)
+    collection.map { |m| metric_table_data(m) }
+  end
+
+  def metric_table_data(metric)
+    {
+      id: metric.id,
+      name: metric.friendly_name,
+      systemName: metric.system_name,
+      updatedAt: metric.updated_at,
+      path: edit_admin_service_metric_path(metric.owner, metric),
+      unit: metric.unit,
+      description: metric.description,
+      mapped: metric.owner.proxy.proxy_rules.map(&:metric).include?(metric)
+    }
   end
 end
