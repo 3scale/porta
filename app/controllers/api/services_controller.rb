@@ -12,19 +12,14 @@ class Api::ServicesController < Api::BaseController
   before_action :authorize_action, only: %i[new create]
   load_and_authorize_resource :service, through: :current_user, through_association: :accessible_services, except: [:create]
 
+  helper_method :presenter
+
   with_options only: %i[edit update settings usage_rules] do |actions|
     actions.sublayout 'api/service'
   end
 
   def index
     activate_menu :products
-    search = ThreeScale::Search.new(params[:search] || params)
-    @services = current_user.accessible_services
-                            .order(updated_at: :desc)
-                            .scope_search(search)
-    @page_services = @services.paginate(pagination_params)
-                              .decorate
-                              .to_json(only: %i[name updated_at id system_name], methods: %i[links apps_count backends_count unread_alerts_count])
   end
 
   def show
@@ -158,5 +153,9 @@ class Api::ServicesController < Api::BaseController
 
   def can_create?
     can? :create, Service
+  end
+
+  def presenter
+    @presenter ||= Api::ServicesIndexPresenter.new(current_user: current_user, params: params)
   end
 end
