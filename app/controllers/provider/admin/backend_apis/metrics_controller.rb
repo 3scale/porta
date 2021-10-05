@@ -52,7 +52,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   protected
 
   def presenter
-    @presenter ||= ::MetricsIndexPresenter.new(service: @backend_api, params: params)
+    @presenter ||= Provider::Admin::BackendApis::MetricsIndexPresenter.new(backend_api: @backend_api, params: params)
   end
 
   def find_metric

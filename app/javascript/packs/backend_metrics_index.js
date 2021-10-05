@@ -15,16 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const { applicationPlansPath, createMetricPath, mappingRulesPath } = dataset
+  const { createMetricPath } = dataset
   const metrics = safeFromJsonString<Array<Metric>>(dataset.metrics) || []
   const metricsCount = safeFromJsonString<number>(dataset.metricsCount) || metrics.length
 
-  console.log(metrics, dataset)
-
   BackendIndexPageWrapper({
-    applicationPlansPath,
     createMetricPath,
-    mappingRulesPath,
     metrics,
     metricsCount
   }, containerId)
