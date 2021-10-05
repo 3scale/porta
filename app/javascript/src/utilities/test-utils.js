@@ -17,4 +17,21 @@ function closeSelectWithModal <T> (wrapper: ReactWrapper<T>) {
   wrapper.find(`.pf-c-modal-box`).find('.pf-c-button[aria-label="Close"]').simulate('click')
 }
 
-export { openSelectWithModal, closeSelectWithModal }
+/**
+  * Mocks window.location allowing to spy on URL changes.
+  * Useful to test links, pagination, search... anything that expects an update to window.location
+  *
+  * @example
+  * mockLocation('https://example.org)
+  * expect(window.location).toHaveBeenCalledWith(...)
+  * @param {string} href - the URL to be expected
+  */
+ function mockLocation (href: string) {
+   delete window.location
+   const location: Location = (new URL(href): any) // emulates Location object
+   // $FlowIgnore[cannot-write] yes we can
+   location.replace = jest.fn()
+   window.location = location
+ }
+
+ export { openSelectWithModal, closeSelectWithModal, mockLocation }

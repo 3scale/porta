@@ -73,6 +73,19 @@ class ServiceDecorator < ApplicationDecorator
                        .to_json
   end
 
+  def index_page_data
+    {
+      id: id,
+      name: name,
+      systemName: system_name,
+      updatedAt: updated_at,
+      links: links,
+      appsCount: apps_count,
+      backendsCount: backends_count,
+      unreadAlertsCount: unread_alerts_count
+    }
+  end
+
   private
 
   def backend_api?

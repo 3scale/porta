@@ -1,15 +1,24 @@
-import { ProductsIndexPageWrapper } from 'Products/components/IndexPage'
+// @flow
+
+import { ProductsIndexPageWrapper } from 'Products'
 import { safeFromJsonString } from 'utilities'
+
+import type { Product } from 'Products/types'
 
 const containerId = 'products'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
 
-  const { products, productsCount } = container.dataset
+  if (!container) {
+    return
+  }
+
+  const { newProductPath, products, productsCount } = container.dataset
 
   ProductsIndexPageWrapper({
-    products: safeFromJsonString(products),
-    productsCount: safeFromJsonString(productsCount)
+    newProductPath,
+    products: safeFromJsonString<Product[]>(products) || [],
+    productsCount: safeFromJsonString<number>(productsCount) || 0
   }, containerId)
 })
