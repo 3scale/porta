@@ -51,7 +51,7 @@ Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
   end
 end
 
-Then(/^I should see deployment option "([^"]*)" checked$/) do |option|
+Then "I should see deployment option {string} checked" do |option|
   option_checked = find("[name='service[deployment_option]'][checked]").value
 
   if option == 'APIcast'
