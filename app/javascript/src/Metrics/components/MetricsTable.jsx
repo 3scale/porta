@@ -55,7 +55,7 @@ const MetricsTable = ({
       m.systemName,
       m.unit,
       m.description,
-      { title: m.mapped ? <CheckIcon /> : '' } // or m.mapped && <CheckIcon />
+      { title: m.mapped ? <CheckIcon color="var(--pf-global--primary-color--100)" /> : '' }
     ]
   }))
 
