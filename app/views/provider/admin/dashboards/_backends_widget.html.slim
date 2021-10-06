@@ -1,4 +1,2 @@
-div#backends-widget data-backends-widget={ backends: @widget_backends,
-                                           newBackendPath: new_provider_admin_backend_api_path,
-                                           backendsPath: provider_admin_backend_apis_path }.to_json
+div#backends-widget data-backends-widget=backend_apis_presenter.dashboard_widget_data.to_json
   = javascript_pack_tag 'dashboard_backends_widget'

@@ -19,6 +19,14 @@ class Provider::Admin::BackendApisIndexPresenter
     }
   end
 
+  def dashboard_widget_data
+    {
+      backends: dashboard_widget_backends,
+      newBackendPath: new_provider_admin_backend_api_path,
+      backendsPath: provider_admin_backend_apis_path
+    }
+  end
+
   protected
 
   def scoped_backen_apis
@@ -45,7 +53,22 @@ class Provider::Admin::BackendApisIndexPresenter
     end
   end
 
-  def backend_links(backend_api)
+  def dashboard_widget_backends
+    current_account.backend_apis
+                   .order(updated_at: :desc)
+                   .take(5)
+                   .map do |backend_api|
+                     {
+                       id: backend_api.id,
+                       name: backend_api.name,
+                       updated_at: backend_api.updated_at,
+                       link: backend_api.decorate.link,
+                       links: links(backend_api)
+                     }
+                   end
+  end
+
+  def links(backend_api)
     [
       { name: 'Edit', path: edit_provider_admin_backend_api_path(backend_api) },
       { name: 'Overview', path: provider_admin_backend_api_path(backend_api) },
