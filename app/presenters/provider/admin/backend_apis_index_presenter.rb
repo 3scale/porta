@@ -14,21 +14,44 @@ class Provider::Admin::BackendApisIndexPresenter
   def data
     {
       'new-backend-path': new_provider_admin_backend_api_path,
-      backends: page_backend_apis.decorate.map(&:index_page_data).to_json,
+      backends: backends_data.to_json,
       'backends-count': page_backend_apis.total_entries.to_json
     }
   end
 
   protected
 
-  # TODO: is .order needed?
   def scoped_backen_apis
-    @backend_apis ||= current_account.backend_apis
-                                     .order(updated_at: :desc)
-                                     .scope_search(search)
+    @scoped_backen_apis ||= current_account.backend_apis
+                                           .order(updated_at: :desc)
+                                           .scope_search(search)
   end
 
   def page_backend_apis
     @page_backend_apis ||= scoped_backen_apis.paginate(pagination_params)
+  end
+
+  def backends_data
+    page_backend_apis.map do |backend_api|
+      {
+        id: backend_api.id,
+        name: backend_api.name,
+        systemName: backend_api.system_name,
+        updatedAt: backend_api.updated_at,
+        privateEndpoint: backend_api.private_endpoint,
+        links: backend_links(backend_api),
+        productsCount: backend_api.decorate.products_count
+      }
+    end
+  end
+
+  def backend_links(backend_api)
+    [
+      { name: 'Edit', path: edit_provider_admin_backend_api_path(backend_api) },
+      { name: 'Overview', path: provider_admin_backend_api_path(backend_api) },
+      { name: 'Analytics', path: provider_admin_backend_api_stats_usage_path(backend_api) },
+      { name: 'Methods and Metrics', path: provider_admin_backend_api_metrics_path(backend_api) },
+      { name: 'Mapping Rules', path: provider_admin_backend_api_mapping_rules_path(backend_api) },
+    ]
   end
 end
