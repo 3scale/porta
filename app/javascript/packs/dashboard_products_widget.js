@@ -11,6 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ProductsWidgetWrapper({
     newProductPath,
     productsPath,
-    products: safeFromJsonString(products)
+    products
   }, containerId)
 })
