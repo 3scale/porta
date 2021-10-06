@@ -12,6 +12,8 @@ import {
 
 import type { Record } from 'utilities'
 
+import './Select.scss'
+
 type Props<T: Record> = {
   item: T | null,
   items: T[],
@@ -19,6 +21,7 @@ type Props<T: Record> = {
   label: React.Node,
   fieldId: string,
   name: string,
+  isClearable?: boolean,
   placeholderText?: string,
   hint?: React.Node,
   isValid?: boolean,
@@ -34,6 +37,7 @@ const Select = <T: Record>({
   label,
   fieldId,
   name,
+  isClearable = true,
   placeholderText = '',
   hint,
   isValid = true,
@@ -48,6 +52,13 @@ const Select = <T: Record>({
 
     const selected = items.find(i => i.id.toString() === option.id)
     onSelect(selected || null)
+  }
+
+  const handleOnClear = () => {
+    if (isClearable) {
+      onSelect(null)
+      setExpanded(false) // TODO: in PF4 this is done automatically. Remove this after upgrading.
+    }
   }
 
   return (
@@ -67,14 +78,12 @@ const Select = <T: Record>({
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleSelect}
         isExpanded={expanded}
-        onClear={() => {
-          onSelect(null)
-          setExpanded(false) // TODO: in PF4 this is done automatically. Remove this after upgrading.
-        }}
+        onClear={handleOnClear}
         aria-labelledby={fieldId}
         isDisabled={isDisabled}
         // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
         onFilter={handleOnFilter(items)}
+        className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
       >
         {/* $FlowIssue[prop-missing] className and disabled are optional */}
         {items.map(toSelectOption)}
