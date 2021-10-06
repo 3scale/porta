@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::DashboardsController < FrontendController
   before_action :ensure_provider_domain
 
@@ -14,20 +16,10 @@ class Provider::Admin::DashboardsController < FrontendController
     @services           = current_user.accessible_services
     @messages_presenter = current_presenter
     @unread_messages_presenter = unread_messages_presenter
-
-    @widget_products = @services.order(updated_at: :desc)
-                                .decorate
-                                .take(5)
-                                .to_json(only: %i[name updated_at id], methods: %i[link links])
-    @widget_backends = current_account.backend_apis.includes(:services)
-                                                    .order(updated_at: :desc)
-                                                    .decorate
-                                                    .take(5)
-                                                    .to_json(only: %i[name updated_at id], methods: %i[link links])
   end
 
   include DashboardTimeRange
-  helper_method :current_range, :previous_range
+  helper_method :current_range, :previous_range, :backend_apis_presenter, :products_presenter
 
   private
 
@@ -49,5 +41,13 @@ class Provider::Admin::DashboardsController < FrontendController
 
   def unread_messages_presenter
     ::Dashboard::UnreadMessagesPresenter.new(current_account.received_messages.not_system)
+  end
+
+  def backend_apis_presenter
+    Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account)
+  end
+
+  def products_presenter
+    Api::ServicesIndexPresenter.new(current_user: current_user)
   end
 end
