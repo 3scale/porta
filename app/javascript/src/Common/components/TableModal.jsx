@@ -97,6 +97,7 @@ const TableModal = <T: Record>({
 
   const pagination = (
     <Pagination
+      className='pf-c-pagination__input-auto-width'
       perPage={perPage}
       itemCount={itemsCount}
       page={page}
@@ -189,7 +190,11 @@ const TableModal = <T: Record>({
           <TableBody />
         </Table>
       )}
-      {pagination}
+      <Toolbar className="pf-c-toolbar">
+        <ToolbarItem>
+          {pagination}
+        </ToolbarItem>
+      </Toolbar>
     </Modal>
   )
 }
