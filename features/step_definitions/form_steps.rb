@@ -6,6 +6,6 @@ Then /^I fill the form with following:$/ do |table|
   end
 end
 
-When /^I click on the label "(.*?)"$/ do |label_text|
+When "I click on the label {string}" do |label_text|
   page.find('label', :text => label_text).click
 end
