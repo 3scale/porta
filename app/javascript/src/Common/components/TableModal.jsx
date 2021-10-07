@@ -38,8 +38,8 @@ type Props<T: Record> = {
   isLoading?: boolean,
   page: number,
   setPage: (number) => void,
+  onSearch: (term: string) => void,
   perPage?: number,
-  onSearch?: (term: string) => void,
   sortBy: { index: number, direction: $Keys<typeof SortByDirection> }
 }
 
