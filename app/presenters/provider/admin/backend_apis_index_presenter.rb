@@ -6,10 +6,11 @@ class Provider::Admin::BackendApisIndexPresenter
   def initialize(current_account:, params: {})
     @current_account = current_account
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
-    @search = ThreeScale::Search.new(params[:search] || params)
+    @sorting_params = [params[:sort] || 'updated_at', params[:direction] || 'desc']
+    @search = ThreeScale::Search.new(params[:search])
   end
 
-  attr_reader :current_account, :pagination_params, :search
+  attr_reader :current_account, :pagination_params, :sorting_params, :search
 
   def data
     {
@@ -31,7 +32,7 @@ class Provider::Admin::BackendApisIndexPresenter
 
   def scoped_backen_apis
     @scoped_backen_apis ||= current_account.backend_apis
-                                           .order(updated_at: :desc)
+                                           .order_by(*sorting_params)
                                            .scope_search(search)
   end
 
@@ -47,7 +48,7 @@ class Provider::Admin::BackendApisIndexPresenter
         systemName: backend_api.system_name,
         updatedAt: backend_api.updated_at,
         privateEndpoint: backend_api.private_endpoint,
-        links: backend_links(backend_api),
+        links: links(backend_api),
         productsCount: backend_api.decorate.products_count
       }
     end
