@@ -62,6 +62,7 @@ const ServicePlanSelect = ({
       hint={showHint && hint}
       isDisabled={isDisabled}
       isRequired={!isPlanContracted}
+      isClearable={false}
     />
   )
 }
