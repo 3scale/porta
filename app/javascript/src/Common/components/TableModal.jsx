@@ -38,8 +38,8 @@ type Props<T: Record> = {
   isLoading?: boolean,
   page: number,
   setPage: (number) => void,
+  onSearch: (term: string) => void,
   perPage?: number,
-  onSearch?: (term: string) => void,
   sortBy: { index: number, direction: $Keys<typeof SortByDirection> }
 }
 
@@ -97,6 +97,7 @@ const TableModal = <T: Record>({
 
   const pagination = (
     <Pagination
+      className='pf-c-pagination__input-auto-width'
       perPage={perPage}
       itemCount={itemsCount}
       page={page}
@@ -189,7 +190,11 @@ const TableModal = <T: Record>({
           <TableBody />
         </Table>
       )}
-      {pagination}
+      <Toolbar className="pf-c-toolbar">
+        <ToolbarItem>
+          {pagination}
+        </ToolbarItem>
+      </Toolbar>
     </Modal>
   )
 }
