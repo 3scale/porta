@@ -73,9 +73,8 @@ const NewApplicationForm = ({
     let plan = null
 
     if (buyer !== null && product !== null) {
-      const contract = buyer && buyer.contractedProducts.find(p => p.id === product.id)
-      const contractedServicePlan = (contract && contract.withPlan) || product.defaultServicePlan
-      plan = contractedServicePlan
+      const contractedServicePlan = new BuyerLogic(buyer).getContractedServicePlan(product)
+      plan = contractedServicePlan || product.defaultServicePlan
     }
 
     setServicePlan(plan)
@@ -96,10 +95,10 @@ const NewApplicationForm = ({
 
   const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
 
-  const contractedServicePlan = (buyer && product) ? new BuyerLogic(buyer).getContractedServicePlan(product) : null
+  const isServiceSubscribedToBuyer = (buyer && product) ? new BuyerLogic(buyer).isSubscribedTo(product) : false
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
-  const servicePlanValid = !servicePlansAllowed || servicePlan !== null || contractedServicePlan !== null
+  const servicePlanValid = !servicePlansAllowed || servicePlan !== null
   const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
   const isFormComplete = buyer !== null &&
     product !== null &&
@@ -143,12 +142,12 @@ const NewApplicationForm = ({
 
         {servicePlansAllowed && (
           <ServicePlanSelect
-            servicePlan={contractedServicePlan || servicePlan}
+            servicePlan={servicePlan}
             servicePlans={product ? product.servicePlans : []}
             onSelect={setServicePlan}
             showHint={product !== null && buyer !== null}
-            isPlanContracted={contractedServicePlan !== null}
-            isDisabled={product === null || contractedServicePlan !== null || buyer === null}
+            isPlanContracted={isServiceSubscribedToBuyer}
+            isDisabled={product === null || isServiceSubscribedToBuyer || buyer === null}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', buyer.id) : ''}
             createServicePlanPath={product ? createServicePlanPath.replace(':id', product.id) : ''}
           />
