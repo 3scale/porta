@@ -40,5 +40,19 @@ div[role="dialog"] {
       font-weight: var(--pf-c-table--FontWeight);
     }
   }
+
+  // Force auto width for numeric (page) input
+  .pf-c-pagination__input-auto-width {
+    input.pf-c-form-control[type="number"] {
+      width: auto;
+    }
+  }
+
+  // Stick bottom pagination to the right of the table
+  .pf-c-toolbar {
+    .pf-l-toolbar__item:last-child {
+      margin-left: auto;
+    }
+  }
   // END_HACK
 }

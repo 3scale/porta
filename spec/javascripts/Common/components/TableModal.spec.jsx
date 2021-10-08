@@ -4,39 +4,31 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { TableModal } from 'Common'
+import { updateInput } from 'utilities/test-utils'
 
-const onSelectSpy = jest.fn()
-const onCloseSpy = jest.fn()
-const setPageSpy = jest.fn()
-const onSearchSpy = jest.fn()
-const searchInputRef: {| current: HTMLInputElement | null |} = {
-  // $FlowIgnore[incompatible-type]
-  current: jest.fn()
-}
+const onSelect = jest.fn()
+const onClose = jest.fn()
+const setPage = jest.fn()
+const onSearch = jest.fn()
 
 const cells = [
   { title: 'Name', propName: 'name' }
 ]
 
-const collection = new Array(11).fill({}).map((_, j) => ({ id: j, name: `Item ${j}` }))
-const perPage = 5
-const pageItems = collection.slice(0, perPage)
-
 const defaultProps = {
-  title: 'The Paginated Table Modal',
+  title: 'My Table',
   selectedItem: null,
-  pageItems,
-  onSelect: onSelectSpy,
-  onClose: onCloseSpy,
-  onSearch: onSearchSpy,
-  searchInputRef,
+  pageItems: undefined,
+  itemsCount: 0,
+  onSelect,
+  onClose,
   cells,
-  isOpen: true,
-  isLoading: false,
-  itemsCount: collection.length,
-  perPage,
-  page: 1,
-  setPage: setPageSpy,
+  isOpen: undefined,
+  isLoading: undefined,
+  page: 0,
+  setPage,
+  perPage: undefined,
+  onSearch,
   sortBy: { index: 1, direction: 'desc' }
 }
 
@@ -47,7 +39,7 @@ afterEach(() => {
 })
 
 it('should render itself', () => {
-  const wrapper = mountWrapper({ isOpen: true })
+  const wrapper = mountWrapper()
   expect(wrapper.exists()).toBe(true)
 })
 
@@ -56,47 +48,107 @@ it('should be hidden by default', () => {
   expect(wrapper.html()).toBe('')
 })
 
-it('should render a table when open', () => {
-  const wrapper = mountWrapper({ isOpen: true })
-  expect(wrapper.find('table').exists()).toBe(true)
-  expect(wrapper.find('h1').text()).toMatch(defaultProps.title)
-  cells.forEach(c => {
-    expect(wrapper.find('th').findWhere(th => th.text() === c.title).exists()).toBe(true)
+describe('when is open', () => {
+  const props = { ...defaultProps, isOpen: true }
+
+  it('should be closeable', () => {
+    const wrapper = mountWrapper(props)
+    wrapper.find('button[aria-label="Close"]').simulate('click')
+    expect(onClose).toHaveBeenCalledTimes(1)
   })
-  expect(wrapper.find('tbody tr').length).toEqual(pageItems.length)
-})
 
-it('should be closeable', () => {
-  const wrapper = mountWrapper()
-  wrapper.find('button[aria-label="Close"]').simulate('click')
-  expect(onCloseSpy).toHaveBeenCalledTimes(1)
-})
+  it('should be cancelable', () => {
+    const wrapper = mountWrapper(props)
+    wrapper.find('button[data-testid="cancel"]').simulate('click')
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
 
-it('should disable the select button until an item is selected', () => {
-  const wrapper = mountWrapper()
-  expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(true)
+  it('should be filterable', () => {
+    const wrapper = mountWrapper(props)
+    const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[type="search"]')
+    const searchButton = wrapper.find('.pf-c-toolbar').at(0).find('button[data-testid="search"]')
 
-  const radio = wrapper.find('tbody tr').first().find('input')
-  radio.simulate('change', { currentTarget: { checked: true } })
+    expect(searchInput.prop('disabled')).toBe(false)
+    expect(searchButton.prop('disabled')).toBe(false)
 
-  expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(false)
-})
+    updateInput(wrapper, 'foo', searchInput)
+    searchButton.simulate('click')
 
-it('should be cancelable', () => {
-  const wrapper = mountWrapper()
-  wrapper.find('button[data-testid="cancel"]').simulate('click')
-  expect(onCloseSpy).toHaveBeenCalledTimes(1)
-})
+    expect(onSearch).toHaveBeenCalledWith('foo')
+  })
 
-it.todo('should have a paginated table')
-it.todo('should have a filterable table')
-it.todo('should be able to select an item')
-it.todo('should check the current item if previously selected')
+  describe('when collection empty', () => {
+    beforeAll(() => {
+      props.pageItems = []
+    })
 
-describe.skip('when the whole collection is local', () => {
-  it.todo('should not fetch any more items')
-})
+    it('should render an empty message', () => {
+      const wrapper = mountWrapper(props)
+      expect(wrapper.find('NoMatchFound').exists()).toBe(true)
+    })
+  })
 
-describe.skip('when the collection is too big to be local', () => {
-  it.todo('should fetch for items of empty pages')
+  describe('when there are items', () => {
+    const collection = new Array(11).fill({}).map((_, j) => ({ id: j, name: `Item ${j}` }))
+    const perPage = 10
+
+    beforeAll(() => {
+      props.perPage = perPage
+      props.pageItems = collection.slice(0, perPage)
+    })
+
+    it('should render a table filled with items', () => {
+      const wrapper = mountWrapper(props)
+
+      const rows = wrapper.find('tbody tr')
+      expect(rows.length).toEqual(perPage)
+
+      cells.forEach(({ title, propName }) => {
+        expect(rows.at(0).find(`td[data-label="${title}"]`).text()).toEqual(collection[0][propName])
+      })
+    })
+
+    it('should have pagination', () => {
+      const wrapper = mountWrapper({ ...props, page: 1, itemsCount: collection.length })
+      const button = wrapper.find('.pf-c-pagination button[data-action="next"]').at(0)
+      button.simulate('click')
+      expect(setPage).toHaveBeenCalledWith(2)
+    })
+
+    describe('when no item is yet selected', () => {
+      beforeAll(() => {
+        props.selectedItem = null
+      })
+
+      it('should enable select button after an item is picked', () => {
+        const wrapper = mountWrapper(props)
+        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(true)
+
+        const radio = wrapper.find('tbody tr').first().find('input')
+        radio.simulate('change', { currentTarget: { checked: true } })
+
+        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(false)
+      })
+    })
+
+    describe('when an item is already selected', () => {
+      const selectedItem = collection[5]
+
+      beforeAll(() => {
+        // $FlowIgnore[incompatible-type]
+        props.selectedItem = selectedItem
+      })
+
+      it('should not disable select button', () => {
+        const wrapper = mountWrapper(props)
+        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(false)
+      })
+
+      it('should be able to select an item', () => {
+        const wrapper = mountWrapper(props)
+        wrapper.find('button[data-testid="select"]').simulate('click')
+        expect(onSelect).toHaveBeenCalledWith(selectedItem)
+      })
+    })
+  })
 })
