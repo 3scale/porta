@@ -73,48 +73,16 @@ class ServiceDecorator < ApplicationDecorator
                        .to_json
   end
 
-  def index_page_data
-    {
-      id: id,
-      name: name,
-      systemName: system_name,
-      updatedAt: updated_at,
-      links: links,
-      appsCount: apps_count,
-      backendsCount: backends_count,
-      unreadAlertsCount: unread_alerts_count
-    }
+  def unread_alerts_count
+    account.buyer_alerts
+           .by_service(object)
+           .unread
+           .size
   end
 
   private
 
   def backend_api?
     false
-  end
-
-  def links
-    [
-      { name: 'Edit', path: h.edit_admin_service_path(object) },
-      { name: 'Overview', path: h.admin_service_path(object) },
-      { name: 'Analytics', path: h.admin_service_stats_usage_path(object) },
-      { name: 'Applications', path: h.admin_service_applications_path(object) },
-      { name: 'ActiveDocs', path: h.admin_service_api_docs_path(object) },
-      { name: 'Integration', path: h.admin_service_integration_path(object) },
-    ]
-  end
-
-  def apps_count
-    cinstances.size
-  end
-
-  def backends_count
-    backend_api_configs.size
-  end
-
-  def unread_alerts_count
-    account.buyer_alerts
-           .by_service(object)
-           .unread
-           .size
   end
 end

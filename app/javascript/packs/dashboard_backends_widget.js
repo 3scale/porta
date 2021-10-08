@@ -11,6 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   BackendsWidgetWrapper({
     newBackendPath,
     backendsPath,
-    backends: safeFromJsonString(backends)
+    backends
   }, containerId)
 })
