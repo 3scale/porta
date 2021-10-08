@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { FormGroup, Select as PF4Select, SelectVariant } from '@patternfly/react-core'
+import { Spinner } from 'Common'
 import {
   toSelectOption,
   toSelectOptionObject,
@@ -25,8 +26,10 @@ type Props<T: Record> = {
   placeholderText?: string,
   hint?: React.Node,
   isValid?: boolean,
+  helperText?: string,
   helperTextInvalid?: string,
   isDisabled?: boolean,
+  isLoading?: boolean,
   isRequired?: boolean
 }
 
@@ -41,8 +44,10 @@ const Select = <T: Record>({
   placeholderText = '',
   hint,
   isValid = true,
+  helperText,
   helperTextInvalid,
   isDisabled = false,
+  isLoading = false,
   isRequired = false
 }: Props<T>): React.Node => {
   const [expanded, setExpanded] = React.useState(false)
@@ -67,8 +72,10 @@ const Select = <T: Record>({
       label={label}
       fieldId={fieldId}
       isValid={isValid}
+      helperText={helperText}
       helperTextInvalid={helperTextInvalid}
     >
+      {isLoading && <Spinner size="md" isSVG className="pf-u-ml-md" />}
       {item && <input type="hidden" name={name} value={item.id} />}
       <PF4Select
         id={fieldId}
@@ -79,7 +86,7 @@ const Select = <T: Record>({
         onSelect={handleSelect}
         isExpanded={expanded}
         onClear={handleOnClear}
-        aria-labelledby={fieldId}
+        aria-label={label}
         isDisabled={isDisabled}
         // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
         onFilter={handleOnFilter(items)}

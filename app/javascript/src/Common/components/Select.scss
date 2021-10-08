@@ -1,5 +1,10 @@
 .pf-m-select__toggle-clear-hidden {
   .pf-c-select__toggle-clear {
     display: none;
+
+    // Clear button makes padding-left shorter. Override this when Select is "notClearable"
+    + .pf-c-select__toggle-button {
+      padding-left: var(--pf-c-button--PaddingLeft);
+    }
   }
 }
