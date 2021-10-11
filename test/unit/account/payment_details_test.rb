@@ -77,7 +77,7 @@ class PaymentDetailsTest < ActiveSupport::TestCase
   end
 
   test 'delegates audits on cc attributes to payment detail' do
-    PaymentDetail.with_auditing do
+    PaymentDetail.with_synchronous_auditing do
 
       @account.credit_card_partial_number ='1111'
       @account.save

@@ -129,8 +129,8 @@ module AuditedHacks
       Thread.current.thread_variable_set(:audit_hacks_synchronous, original)
     end
 
-    def with_auditing(synchronous: true)
-      synchronous ? self.synchronous { super() { yield } } : super() { yield }
+    def with_synchronous_auditing(&block)
+      synchronous { with_auditing(&block) }
     end
   end
 
