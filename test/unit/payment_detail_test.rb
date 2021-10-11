@@ -54,7 +54,7 @@ class PaymentDetailTest < ActiveSupport::TestCase
   end
 
   test 'audits' do
-    PaymentDetail.with_auditing do
+    PaymentDetail.with_synchronous_auditing do
       payment_detail = FactoryBot.create(:payment_detail, account: @account, credit_card_partial_number: '1111')
 
       audit = payment_detail.audits.last
