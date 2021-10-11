@@ -202,6 +202,7 @@ module VerticalNavHelper
   def service_nav_sections
     sections = []
     return sections unless @service
+
     sections << {id: :overview,      title: 'Overview',      path: admin_service_path(@service)} if can? :manage, :plans
     sections << {id: :monitoring,    title: 'Analytics',     items: service_analytics}           if can? :manage, :monitoring
     sections << {id: :applications,  title: 'Applications',  items: service_applications}        if (can? :manage, :plans) || (can? :manage, :applications)
@@ -258,6 +259,7 @@ module VerticalNavHelper
   def backend_api_nav_sections
     sections = []
     return sections unless @backend_api.persisted?
+
     sections << {id: :overview,         title: 'Overview',           path: provider_admin_backend_api_path(@backend_api)}
     sections << {id: :monitoring,       title: 'Analytics',          path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
     sections << {id: :methods_metrics,  title: 'Methods & Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
