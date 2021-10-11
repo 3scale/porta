@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   # Disable CSRF protection for requests to REST API.
   skip_before_action :verify_authenticity_token, if: -> do
-    (params.key?(:provider_key) || params.key?(:access_token)) && api_controller?
+    api_controller? && (params.key?(:provider_key) || params.key?(:access_token))
   end
 
   before_action :set_timezone
