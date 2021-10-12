@@ -35,7 +35,7 @@ module EventStore
       end
 
       def load(str)
-        deserialize([YAML.load(str)]).first.symbolize_keys
+        deserialize([YAML.load(str)]).first&.symbolize_keys
       end
     end
 
