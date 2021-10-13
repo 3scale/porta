@@ -172,7 +172,7 @@ class FieldsDefinition < ApplicationRecord
   end
 
   def avoid_destroy_required_field_on_target
-    !required_field_on_target?
+    throw :abort if required_field_on_target?
   end
 
 end
