@@ -634,7 +634,7 @@ class UserTest < ActiveSupport::TestCase
       end
 
       should 'return true on call to can_be_destroyed?' do
-        assert @not_admin.can_be_destroyed?
+        assert_nil @not_admin.can_be_destroyed?
       end
     end
 
@@ -659,7 +659,7 @@ class UserTest < ActiveSupport::TestCase
         should 'return true on call to can_be_destroyed?' do
           assert @account.admins.length > 1
 
-          assert @admin.can_be_destroyed?
+          assert_nil @admin.can_be_destroyed?
         end
       end
 
@@ -675,7 +675,7 @@ class UserTest < ActiveSupport::TestCase
         should 'return true on call to can_be_destroyed?' do
           assert @account.admins.length == 1
 
-          assert !@account.admins.first.can_be_destroyed?
+          assert_throws(:abort) { @account.admins.first.can_be_destroyed? }
         end
       end
 
