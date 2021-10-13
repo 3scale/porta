@@ -67,8 +67,7 @@ class CMS::EmailTemplate < CMS::Template
     end
   end
 
-  # TODO: On Rails 5.1+, change in argument contructor ::ActiveRecord::Coders::YAMLColumn.new(attr_name, class_or_coder)
-  serialize :options, HashOrParameters.new(Hash)
+  serialize :options, HashOrParameters.new(:options, Hash)
 
   attr_accessor :file
 
