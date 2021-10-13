@@ -543,8 +543,6 @@ class PlanTest < ActiveSupport::TestCase
       plan = FactoryBot.create(:simple_application_plan)
       cinstance = FactoryBot.create(:simple_cinstance, :plan => plan)
 
-      refute plan.can_be_destroyed?
-
       ThreeScale::Core::Application.expects(:delete).never
       # I don't know why this does not do the trick
       # cinstance.expects(:delete_backend_application).never
