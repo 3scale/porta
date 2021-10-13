@@ -9,7 +9,7 @@ module EventStore
     module WithGlobalId
       module_function
 
-      YAML = ActiveRecord::Coders::YAMLColumn.new(Hash)
+      YAML = ActiveRecord::Coders::YAMLColumn.new('EventStore', object_class = Hash)
 
       class << self
         delegate :serialize, :deserialize, to: 'ActiveJob::Arguments'
