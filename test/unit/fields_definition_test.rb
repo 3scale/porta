@@ -49,7 +49,7 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
   context "validations" do
     setup do
       @provider = FactoryBot.create(:provider_account)
-      FieldsDefinition.delete_all(:account_id => @provider.id) # removing default ones
+      FieldsDefinition.where(:account_id => @provider.id).delete_all # removing default ones
       @field_definition1 = FieldsDefinition.create(:account => @provider, :name => 'org_name', :target => 'Account', :label => 'foo')
     end
 
