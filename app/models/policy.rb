@@ -98,7 +98,7 @@ class Policy < ApplicationRecord
   def validate_not_in_use
     return true if idle?
     errors.add(:base, :currently_in_use)
-    false
+    throw :abort
   end
 
   def set_identifier

@@ -44,7 +44,7 @@ class CMS::Layout < CMS::Template
   end
 
   def can_be_destroyed?
-    pages.empty?
+    throw :abort unless pages.empty?
   end
 
   def search

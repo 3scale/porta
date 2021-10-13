@@ -203,7 +203,7 @@ class Plan < ApplicationRecord
       errors.add :base, :customizations_has_contracts
     end
 
-    errors.empty?
+    throws :abort unless errors.empty?
   end
 
   def cost_per_month

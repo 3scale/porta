@@ -217,7 +217,7 @@ class Metric < ApplicationRecord
 
   def destroyable?
     return true if destroyed_by_association
-    system_name != 'hits'
+    throw :abort if system_name == 'hits'
   end
 
   def find_or_create_plan_metric(plan)
