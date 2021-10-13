@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211109141544) do
+ActiveRecord::Schema.define(version: 20210917163154) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -171,9 +171,9 @@ ActiveRecord::Schema.define(version: 20211109141544) do
   end
 
   add_index "audits", ["action"], name: "index_audits_on_action"
-  add_index "audits", ["associated_id", "associated_type"], name: "associated_index"
+  add_index "audits", ["associated_type", "associated_id"], name: "associated_index"
   add_index "audits", ["auditable_id", "auditable_type", "version"], name: "index_audits_on_auditable_id_and_auditable_type_and_version"
-  add_index "audits", ["auditable_id", "auditable_type"], name: "auditable_index"
+  add_index "audits", ["auditable_type", "auditable_id", "version"], name: "auditable_index"
   add_index "audits", ["created_at"], name: "index_audits_on_created_at"
   add_index "audits", ["kind"], name: "index_audits_on_kind"
   add_index "audits", ["provider_id"], name: "index_audits_on_provider_id"
@@ -920,15 +920,17 @@ ActiveRecord::Schema.define(version: 20211109141544) do
   end
 
   create_table "payment_intents", force: :cascade do |t|
-    t.integer  "invoice_id", precision: 38, null: false
+    t.integer  "invoice_id",        precision: 38, null: false
+    t.string   "payment_intent_id"
     t.string   "state"
-    t.integer  "tenant_id",  precision: 38
-    t.datetime "created_at", precision: 6,  null: false
-    t.datetime "updated_at", precision: 6,  null: false
+    t.integer  "tenant_id",         precision: 38
+    t.datetime "created_at",        precision: 6,  null: false
+    t.datetime "updated_at",        precision: 6,  null: false
     t.string   "reference"
   end
 
   add_index "payment_intents", ["invoice_id"], name: "index_payment_intents_on_invoice_id"
+  add_index "payment_intents", ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id"
   add_index "payment_intents", ["reference"], name: "index_payment_intents_on_reference", unique: true
   add_index "payment_intents", ["state"], name: "index_payment_intents_on_state"
 
