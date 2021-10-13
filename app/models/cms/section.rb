@@ -186,7 +186,7 @@ class CMS::Section < ApplicationRecord
   end
 
   def not_root?
-    !root?
+    throw :abort if root?
   end
 
 

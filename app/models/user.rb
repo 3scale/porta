@@ -40,7 +40,7 @@ class User < ApplicationRecord
 
   def can_be_destroyed?
     errors.add :base, :last_admin unless destroyable?
-    errors.empty?
+    throw :abort unless errors.empty?
   end
 
   belongs_to :account, :autosave => false, :inverse_of => :users

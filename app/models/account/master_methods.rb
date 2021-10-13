@@ -19,7 +19,7 @@ module Account::MasterMethods
 
     def avoid_destroy_of_master_account
       # Should return false if master
-      !master?
+      throw :abort if master?
     end
 
     def master_on_premises?

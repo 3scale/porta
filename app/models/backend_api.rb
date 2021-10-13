@@ -112,6 +112,7 @@ class BackendApi < ApplicationRecord
 
   def validate_destroyed_by_association_or_not_used_by_services
     return true if destroyed_by_association || backend_api_configs.empty?
-    errors.add(:base, :cannot_be_destroyed_with_products) and return false
+    errors.add(:base, :cannot_be_destroyed_with_products)
+    throw :abort
   end
 end
