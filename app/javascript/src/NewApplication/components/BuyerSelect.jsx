@@ -29,7 +29,7 @@ const BuyerSelect = ({ buyer, buyers, onSelectBuyer, isDisabled }: Props): React
       name="account_id"
       // $FlowIgnore[incompatible-type] Buyer implements Record
       item={buyer}
-      items={buyers.map(b => ({ ...b, description: b.admin }))}
+      items={buyers.map(b => ({ ...b, description: `Admin: ${b.admin}` }))}
       itemsCount={buyers.length}
       cells={cells}
       // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"

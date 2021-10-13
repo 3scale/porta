@@ -12,16 +12,12 @@ class Buyers::AccountsController < Buyers::BaseController
 
   activate_menu :buyers, :accounts, :listing
 
+  helper_method :presenter
+
   def index
     @countries = Country.all
     @account_plans = current_account.account_plans.stock
     @search = ThreeScale::Search.new(params[:search] || params)
-    @accounts = current_account.buyer_accounts.not_master.scope_search(@search).
-        # this preloading collides with joins for sorting by country and plan
-        includes(:bought_account_plan, :country)
-                    .order_by(params[:sort], params[:direction])
-                    .paginate(pagination_params)
-                    .decorate
   end
 
   def new
@@ -127,4 +123,7 @@ class Buyers::AccountsController < Buyers::BaseController
     @plans = [] # this is here only to make new_signups/form happy
   end
 
+  def presenter
+    @presenter ||= Buyers::AccountsIndexPresenter.new(provider: current_account, params: params)
+  end
 end

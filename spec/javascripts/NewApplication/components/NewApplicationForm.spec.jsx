@@ -11,12 +11,12 @@ const errorSpy = jest.spyOn(alert, 'error')
 
 const appPlans = [{ id: 0, name: 'Basic Plan', issuer_id: 0, default: false }]
 const products = [
-  { id: '0', name: 'API 0', systemName: 'api-0', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null },
-  { id: '1', name: 'API 1', systemName: 'api-1', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null }
+  { id: 0, name: 'API 0', systemName: 'api-0', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null, defaultAppPlan: null },
+  { id: 1, name: 'API 1', systemName: 'api-1', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null, defaultAppPlan: null }
 ]
 const buyers = [
-  { id: '0', name: 'Buyer 0', admin: '', createdAt: '', contractedProducts: [], createApplicationPath: '/buyers/0/applications/new' },
-  { id: '1', name: 'Buyer 1', admin: '', createdAt: '', contractedProducts: [], createApplicationPath: '/buyers/1/applications/new' }
+  { id: 0, name: 'Buyer 0', admin: '', createdAt: '', contractedProducts: [], createApplicationPath: '/buyers/0/applications/new' },
+  { id: 1, name: 'Buyer 1', admin: '', createdAt: '', contractedProducts: [], createApplicationPath: '/buyers/1/applications/new' }
 ]
 const defaultProps = {
   createApplicationPath: '/applications/new',
@@ -59,13 +59,14 @@ describe('when in Service context', () => {
   let props
   const servicePlan = { id: 0, name: 'Service Plan' }
   const currentProduct = {
-    id: '10',
+    id: 10,
     name: 'Current Product',
     description: '',
     updatedAt: '',
     appPlans,
     servicePlans: [servicePlan],
     defaultServicePlan: null,
+    defaultAppPlan: null,
     systemName: 'current_api'
   }
 
@@ -102,11 +103,11 @@ describe('when in Service context', () => {
 
     describe('when the selected buyer is subscribed to the current product', () => {
       const buyerSubscribed = {
-        id: '10',
+        id: 10,
         name: 'Buyer 10',
         admin: '',
         createdAt: '',
-        contractedProducts: [{ id: Number(currentProduct.id), name: currentProduct.name, withPlan: servicePlan }],
+        contractedProducts: [{ id: currentProduct.id, name: currentProduct.name, withPlan: servicePlan }],
         createApplicationPath: '/buyers/0/applications/new'
       }
 
@@ -134,7 +135,7 @@ describe('when in Service context', () => {
 
     describe('when the buyer is not subscribed to the current product', () => {
       const buyerNotSubscribed = {
-        id: '10',
+        id: 10,
         name: 'Buyer 10',
         admin: '',
         createdAt: '',
@@ -228,7 +229,7 @@ describe('when in Service context', () => {
 describe('when in Account context', () => {
   let props
   const currentBuyer = {
-    id: '0',
+    id: 0,
     name: 'Mr. Buyer',
     admin: '',
     description: '',
@@ -340,11 +341,11 @@ describe('when in Account context', () => {
 
     describe('when the current buyer is subscribed to the selected product', () => {
       const servicePlan = { id: 0, name: 'Service plan' }
-      const [id, name] = ['33', 'Subscribed API']
+      const [id, name] = [33, 'Subscribed API']
       const subscribedProduct = { ...products[0], id, name, servicePlans: [servicePlan] }
 
       beforeEach(() => {
-        props.buyer = { ...currentBuyer, contractedProducts: [{ id: Number(id), name, withPlan: servicePlan }] }
+        props.buyer = { ...currentBuyer, contractedProducts: [{ id, name, withPlan: servicePlan }] }
         props.products = [subscribedProduct]
       })
 
@@ -532,9 +533,9 @@ describe('when in Audience context', () => {
 
     describe('when the selected buyer is subscribed to the selected product', () => {
       const servicePlan = { id: 0, name: 'Service Plan' }
-      const [id, name] = ['12', 'Subscribed API']
+      const [id, name] = [12, 'Subscribed API']
       const contractedProduct = { ...products[0], id, name, servicePlans: [servicePlan] }
-      const subscribedBuyer = { ...buyers[0], contractedProducts: [{ id: Number(id), name: name, withPlan: servicePlan }] }
+      const subscribedBuyer = { ...buyers[0], contractedProducts: [{ id, name: name, withPlan: servicePlan }] }
 
       beforeEach(() => {
         props.buyers = [subscribedBuyer]

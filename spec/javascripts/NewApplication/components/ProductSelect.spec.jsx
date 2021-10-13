@@ -6,13 +6,15 @@ import { ProductSelect } from 'NewApplication'
 import { mount } from 'enzyme'
 
 const product = {
-  id: '0',
+  id: 0,
   name: 'The Product',
   systemName: 'the_product',
   updatedAt: '',
   appPlans: [],
   servicePlans: [],
-  defaultServicePlan: null
+  defaultServicePlan: null,
+  defaultAppPlan: null,
+  buyerCanSelectPlan: false
 }
 const props = {
   product,

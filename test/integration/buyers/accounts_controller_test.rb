@@ -265,8 +265,8 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       login! another_provider
 
       get admin_buyers_accounts_path
-      assert assigns(:accounts)
-      assert_equal 0, assigns(:accounts).size
+      assert assigns(:presenter).buyers
+      assert_equal 0, assigns(:presenter).buyers.size
 
       get admin_buyers_account_path(@buyer)
       assert_response :not_found

@@ -93,7 +93,7 @@ const NewApplicationForm = ({
     setAppPlan(null)
   }, [product])
 
-  const url = buyer ? createApplicationPath.replace(':id', buyer.id) : createApplicationPath
+  const url = buyer ? createApplicationPath.replace(':id', String(buyer.id)) : createApplicationPath
 
   const isServiceSubscribedToBuyer = (buyer && product) ? new BuyerLogic(buyer).isSubscribedTo(product) : false
 
@@ -148,8 +148,8 @@ const NewApplicationForm = ({
             showHint={product !== null && buyer !== null}
             isPlanContracted={isServiceSubscribedToBuyer}
             isDisabled={product === null || isServiceSubscribedToBuyer || buyer === null}
-            serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', buyer.id) : ''}
-            createServicePlanPath={product ? createServicePlanPath.replace(':id', product.id) : ''}
+            serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
+            createServicePlanPath={product ? createServicePlanPath.replace(':id', String(product.id)) : ''}
           />
         )}
 
@@ -159,7 +159,7 @@ const NewApplicationForm = ({
           onSelect={setAppPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(
             ':id',
-            product ? product.id : ''
+            product ? String(product.id) : ''
           )}
           isDisabled={product === null}
         />

@@ -31,7 +31,7 @@ type Props = Record & {
 
 export const toSelectOption = ({ id, name, description, disabled = false, className }: Props): React.Node => (
   <SelectOption
-    key={id}
+    key={String(id)}
     value={toSelectOptionObject({ id, name, description })}
     className={className}
     // TODO: when we upgrade PF, use description prop directly
