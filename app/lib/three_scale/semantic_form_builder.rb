@@ -28,12 +28,6 @@ module ThreeScale
       text_field(method, opts)
     end
 
-    # Get a column object for a specified attribute method - if possible.
-    #
-    def column_for(method) #:nodoc:
-      @object.column_for_attribute(method) if @object.respond_to?(:column_for_attribute) && @object.try(:has_attribute?, method)
-    end
-
     def toggled_inputs(title, opts = {}, &block)
       # to_str because title can be SafeBuffer and parameterize blows on it
       cookie_name = opts.delete(:cookie_name) || "#{title.to_str.parameterize}-toggle-cookie"
