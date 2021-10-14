@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when in Account context when service plans are allowed when the current buyer is not subscribed to the selected product when it has no service plans should hint the user to create a service plan 1`] = `
+Array [
+  <p
+    className="hint"
+  >
+    In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan.
+  </p>,
+  <p
+    className="hint"
+  >
+    No Service plans exist for the selected Product. 
+    <Component
+      component="a"
+      href="/bar"
+      isInline={true}
+      variant="link"
+    >
+      <ComponentWithOuia
+        component={[Function]}
+        componentProps={
+          Object {
+            "children": "Create a new Service plan",
+            "component": "a",
+            "href": "/bar",
+            "isInline": true,
+            "variant": "link",
+          }
+        }
+        consumerContext={null}
+      >
+        <Button
+          component="a"
+          href="/bar"
+          isInline={true}
+          ouiaContext={
+            Object {
+              "isOuia": false,
+              "ouiaId": null,
+            }
+          }
+          variant="link"
+        >
+          <a
+            aria-disabled={false}
+            aria-label={null}
+            className="pf-c-button pf-m-link pf-m-inline"
+            disabled={null}
+            href="/bar"
+            tabIndex={null}
+            type={null}
+          >
+            <span
+              className="pf-c-button__text"
+            >
+              Create a new Service plan
+            </span>
+          </a>
+        </Button>
+      </ComponentWithOuia>
+    </Component>
+  </p>,
+]
+`;
+
+exports[`when in Audience context when service plans are allowed when the selected buyer is not subscribed to the selected product when it has no service plans should hint the user to create a service plan 1`] = `
+Array [
+  <p
+    className="hint"
+  >
+    In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan.
+  </p>,
+  <p
+    className="hint"
+  >
+    No Service plans exist for the selected Product. 
+    <Component
+      component="a"
+      href="/bar"
+      isInline={true}
+      variant="link"
+    >
+      <ComponentWithOuia
+        component={[Function]}
+        componentProps={
+          Object {
+            "children": "Create a new Service plan",
+            "component": "a",
+            "href": "/bar",
+            "isInline": true,
+            "variant": "link",
+          }
+        }
+        consumerContext={null}
+      >
+        <Button
+          component="a"
+          href="/bar"
+          isInline={true}
+          ouiaContext={
+            Object {
+              "isOuia": false,
+              "ouiaId": null,
+            }
+          }
+          variant="link"
+        >
+          <a
+            aria-disabled={false}
+            aria-label={null}
+            className="pf-c-button pf-m-link pf-m-inline"
+            disabled={null}
+            href="/bar"
+            tabIndex={null}
+            type={null}
+          >
+            <span
+              className="pf-c-button__text"
+            >
+              Create a new Service plan
+            </span>
+          </a>
+        </Button>
+      </ComponentWithOuia>
+    </Component>
+  </p>,
+]
+`;
+
+exports[`when in Service context when service plans are allowed when the buyer is not subscribed to the current product when the current product has no service plans should hint the user to create a service plan 1`] = `
+Array [
+  <p
+    className="hint"
+  >
+    In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan.
+  </p>,
+  <p
+    className="hint"
+  >
+    No Service plans exist for the selected Product. 
+    <Component
+      component="a"
+      href="/bar"
+      isInline={true}
+      variant="link"
+    >
+      <ComponentWithOuia
+        component={[Function]}
+        componentProps={
+          Object {
+            "children": "Create a new Service plan",
+            "component": "a",
+            "href": "/bar",
+            "isInline": true,
+            "variant": "link",
+          }
+        }
+        consumerContext={null}
+      >
+        <Button
+          component="a"
+          href="/bar"
+          isInline={true}
+          ouiaContext={
+            Object {
+              "isOuia": false,
+              "ouiaId": null,
+            }
+          }
+          variant="link"
+        >
+          <a
+            aria-disabled={false}
+            aria-label={null}
+            className="pf-c-button pf-m-link pf-m-inline"
+            disabled={null}
+            href="/bar"
+            tabIndex={null}
+            type={null}
+          >
+            <span
+              className="pf-c-button__text"
+            >
+              Create a new Service plan
+            </span>
+          </a>
+        </Button>
+      </ComponentWithOuia>
+    </Component>
+  </p>,
+]
+`;
