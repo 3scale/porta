@@ -71,7 +71,7 @@ class Plan < ApplicationRecord
   # Use `:prepend => true` so it is called before any other callback.
   # Especially there is a bug with *acts_as_list* that will call `#lock!` on the record before destroy
   # But calling `#lock!` will call `#reload` so some instance variables are reset
-  before_destroy :can_be_destroyed?, prepend: true
+  before_destroy :avoid_destruction, prepend: true
 
   has_many :cinstances, :dependent => :destroy
 
@@ -203,7 +203,7 @@ class Plan < ApplicationRecord
       errors.add :base, :customizations_has_contracts
     end
 
-    throw :abort unless errors.empty?
+    errors.empty?
   end
 
   def cost_per_month
@@ -499,5 +499,9 @@ class Plan < ApplicationRecord
     base, _   = system_name.split(separator, 2)
 
     [base.first(200), randomized].join(separator)
+  end
+
+  def avoid_destruction
+    throw :abort unless can_be_destroyed?
   end
 end

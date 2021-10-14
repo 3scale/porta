@@ -8,7 +8,7 @@ class CMS::Layout < CMS::Template
   validates :system_name, presence: true
   validate :yield_content_presence, :if => :is_main_layout?
 
-  before_destroy :can_be_destroyed?
+  before_destroy :avoid_destruction
 
   def human_name
     title or I18n.t(system_name, :scope => [:cms, :layout], :default => system_name)
@@ -44,7 +44,7 @@ class CMS::Layout < CMS::Template
   end
 
   def can_be_destroyed?
-    throw :abort unless pages.empty?
+    pages.empty?
   end
 
   def search
@@ -53,6 +53,10 @@ class CMS::Layout < CMS::Template
   end
 
   private
+
+  def avoid_destruction
+    throw :abort unless can_be_destroyed?
+  end
 
   def set_rails_view_path
     self.rails_view_path = "layouts/#{system_name}"

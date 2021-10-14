@@ -31,7 +31,7 @@ class CMS::Section < ApplicationRecord
   verify_path_format :partial_path
   before_validation :set_provider, :on => :create
 
-  before_destroy :not_root?
+  before_destroy :avoid_destruction
 
   validate :not_own_child
 
@@ -185,10 +185,9 @@ class CMS::Section < ApplicationRecord
     self.provider = parent.provider if self.parent && self.provider.nil?
   end
 
-  def not_root?
+  def avoid_destruction
     throw :abort if root?
   end
-
 
   def label
     title || system_name
