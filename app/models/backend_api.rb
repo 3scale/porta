@@ -14,7 +14,7 @@ class BackendApi < ApplicationRecord
 
   before_validation :set_port_private_endpoint
   after_create :create_default_metrics
-  before_destroy :validate_destroyed_by_association_or_not_used_by_services
+  before_destroy :avoid_destruction
 
   has_many :proxy_rules, as: :owner, dependent: :destroy, inverse_of: :owner
   has_many :metrics, as: :owner, dependent: :destroy, inverse_of: :owner
@@ -112,7 +112,11 @@ class BackendApi < ApplicationRecord
 
   def validate_destroyed_by_association_or_not_used_by_services
     return true if destroyed_by_association || backend_api_configs.empty?
-    errors.add(:base, :cannot_be_destroyed_with_products)
-    throw :abort
+    errors.add(:base, :cannot_be_destroyed_with_products) and return false
+  end
+
+  # avoid destruction if destroyed by association or used by service
+  def avoid_destruction
+    throw :abort unless validate_destroyed_by_association_or_not_used_by_services
   end
 end

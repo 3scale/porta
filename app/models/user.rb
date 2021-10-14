@@ -40,7 +40,7 @@ class User < ApplicationRecord
 
   def can_be_destroyed?
     errors.add :base, :last_admin unless destroyable?
-    throw :abort unless errors.empty?
+    errors.empty?
   end
 
   belongs_to :account, :autosave => false, :inverse_of => :users
@@ -468,6 +468,10 @@ class User < ApplicationRecord
 
   def username_is_unique
     errors.add(:username, :taken) if username.present? && (not unique?(:username))
+  end
+
+  def avoid_destruction
+    throw :abort unless can_be_destroyed?
   end
 
   class << self
