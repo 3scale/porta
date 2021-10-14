@@ -20,7 +20,7 @@ class BackendApiPresenter < SimpleDelegator
       id: id,
       name: name,
       updated_at: updated_at.to_s(:long),
-      link: self.decorate.link,
+      link: decorate.link,
       links: links
     }
   end
