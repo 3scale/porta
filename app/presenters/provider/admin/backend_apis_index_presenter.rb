@@ -33,7 +33,7 @@ class Provider::Admin::BackendApisIndexPresenter
 
   def dashboard_widget_data
     {
-      backends: backend_apis.map { |s| BackendApiPresenter.new(s).dashboard_widget_data.as_json }.to_json,
+      backends: backend_apis.map { |s| BackendApiPresenter.new(s).dashboard_widget_data.as_json },
       newBackendPath: new_provider_admin_backend_api_path,
       backendsPath: provider_admin_backend_apis_path
     }
