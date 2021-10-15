@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::FieldsDefinitionsController < Sites::BaseController
   respond_to :html
   activate_menu :audience, :accounts, :fields_definitions
@@ -69,7 +71,7 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
       fields.fetch(field_id.to_i).update_attribute(:pos, index + 1)
     end
 
-    render nothing: true
+    head :no_content
   end
 
   private

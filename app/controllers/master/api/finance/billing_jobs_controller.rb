@@ -35,7 +35,7 @@ class Master::Api::Finance::BillingJobsController < Master::Api::Finance::BaseCo
   #
   def create
     Finance::BillingService.async_call(provider, billing_date)
-    render nothing: true, status: :accepted
+    head :accepted
   end
 
   private

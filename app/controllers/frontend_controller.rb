@@ -48,7 +48,7 @@ class FrontendController < ApplicationController
   end
 
   def do_nothing_if_head
-    render head: :success, nothing: true if request.head?
+    head :success if request.head?
   end
 
   def protect_suspended_account
