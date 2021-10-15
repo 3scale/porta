@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
@@ -6,7 +8,6 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     @provider = FactoryBot.create(:provider_account)
     login_provider @provider
   end
-
 
   def field_definition
     @field_definition ||= FactoryBot.create(:fields_definition, account: @provider)
@@ -19,19 +20,19 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
   end
 
   test 'show' do
-    get :show, id: field_definition
+    get :show, params: { id: field_definition }
 
     assert_response :success
   end
 
   test 'edit' do
-    get :edit, id: field_definition
+    get :edit, params: { id: field_definition }
 
     assert_response :success
   end
 
   test 'create' do
-    post :create, fields_definition: { target: 'User', name: 'some_field', label: 'some_field' }
+    post :create, params: { fields_definition: { target: 'User', name: 'some_field', label: 'some_field' } }
     assert_redirected_to action: :index
 
     field = FieldsDefinition.last!
@@ -42,7 +43,7 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
   end
 
   test 'update' do
-    put :update, id: field_definition, fields_definition: { label: 'super_random_new_name' }
+    put :update, params: { id: field_definition, fields_definition: { label: 'super_random_new_name' } }
     assert_redirected_to action: :index
 
     field = FieldsDefinition.last!
@@ -51,13 +52,13 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
 
   test 'update fails' do
     FieldsDefinition.any_instance.stubs(:save).returns(false)
-    put :update, id: field_definition
+    put :update, params: { id: field_definition }
     assert assigns(:required_fields)
   end
 
 
   test 'destroy' do
-    delete :destroy, id: field_definition
+    delete :destroy, params: { id: field_definition }
     assert_redirected_to action: :index
 
     assert_raise(ActiveRecord::RecordNotFound) do
@@ -66,16 +67,15 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
   end
 
   test 'sort' do
-    FieldsDefinition.delete_all
+    @provider.fields_definitions.delete_all
 
     other = FactoryBot.create(:fields_definition, account: @provider, target: 'Account', pos: 1)
     field_definition = FactoryBot.create(:fields_definition, account: @provider, pos: 2)
 
-    assert_equal [other, field_definition], @provider.fields_definitions(true).order(:id).to_a
-
-    post :sort, fields_definition: [ field_definition.id, other.id ]
+    assert_equal [other, field_definition], @provider.fields_definitions.order(:id).to_a
+    post :sort, params: { fields_definition: [field_definition.id, other.id] }
     assert_response :success
-    fields = @provider.fields_definitions(true)
+    fields = @provider.fields_definitions.all
 
     assert_equal [1, 2], fields.pluck(:pos)
     assert_equal [field_definition, other],fields.to_a
@@ -92,7 +92,7 @@ class Admin::FieldsDefinitionsControllerTest < ActionController::TestCase
     account_pos, account2_pos = account.pos, another_account.pos
     user_pos, user2_pos = user.pos, another_user.pos
 
-    post :sort, fields_definition: [ another_account.id, account.id ]
+    post :sort, params: { fields_definition: [another_account.id, account.id] }
     assert_response :success
 
     assert account.reload.pos == account2_pos
