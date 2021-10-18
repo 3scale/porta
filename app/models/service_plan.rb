@@ -8,7 +8,7 @@ class ServicePlan < Plan
 
   belongs_to :service, :foreign_key => :issuer_id, :inverse_of => :service_plans
 
-  before_destroy :destroy_contracts, prepend: true
+  before_destroy :destroy_contracts
 
   def provider_account
     service && service.account
