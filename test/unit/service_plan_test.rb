@@ -20,9 +20,7 @@ class ServicePlanTest < ActiveSupport::TestCase
   end
 
   test "deleting a service plan will be stopped if service contract deletion fails" do
-    ServiceContract.class_eval do
-      before_destroy -> { throw :abort }
-    end
+    ServiceContract.any_instance.stubs(:destroy).returns(false)
 
     contract = FactoryBot.create(:service_contract)
     service_plan = contract.service_plan

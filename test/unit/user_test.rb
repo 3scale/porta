@@ -917,15 +917,13 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "won't destroy user if invitation can't be destroyed" do
-    Invitation.class_eval do
-      before_destroy -> { throw :abort }
-    end
+    Invitation.any_instance.stubs(:destroy).returns(false)
 
     invitation = FactoryBot.create :invitation
     user = invitation.make_user :username => "username", :password => "password"
     user.save!
 
-    user.destroy
+    refute user.destroy
     assert_not_nil invitation.reload
   end
 
