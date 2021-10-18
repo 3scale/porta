@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::IntegrationTest
@@ -26,7 +28,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_difference Account.method(:count), 1 do
       assert_difference User.method(:count), 2 do # the main user and the 3
         assert_difference AccessToken.method(:count), 1 do
-          post master_api_providers_path, signup_params
+          post master_api_providers_path, params: signup_params
           assert_response :created
         end
       end
@@ -66,7 +68,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create with published account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
     new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'published')
-    post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
+    post master_api_providers_path, params: signup_params({account_plan_id: new_account_plan.id})
     refute user.can_login?
     assert user.pending?
     assert account.created?
@@ -77,7 +79,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create with unpublished account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
     new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'hidden')
-    post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
+    post master_api_providers_path, params: signup_params({account_plan_id: new_account_plan.id})
     refute user.can_login?
     assert user.pending?
     assert account.created?
@@ -88,35 +90,35 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create with account plan send (for on-premises) is ignored' do
     ThreeScale.config.stubs(onpremises: true)
     new_account_plan = FactoryBot.create(:account_plan, provider: master_account)
-    post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
+    post master_api_providers_path, params: signup_params({account_plan_id: new_account_plan.id})
     assert_equal account_plan, account.bought_account_plan
   end
 
   test '#create returns the right errors when account validation fails' do
-    post master_api_providers_path, signup_params({org_name: ''})
+    post master_api_providers_path, params: signup_params({org_name: ''})
     assert_response :unprocessable_entity
     assert_contains JSON.parse(response.body).dig('errors', 'account'), 'Domain can\'t be blank'
   end
 
   test '#create returns the right errors when user validation fails for json' do
-    post master_api_providers_path, signup_params({email: ''})
+    post master_api_providers_path, params: signup_params({email: ''})
     assert_response :unprocessable_entity
     assert_contains JSON.parse(response.body).dig('errors', 'user'), 'Email should look like an email address'
   end
 
   test '#create returns the right errors when user validation fails for xml' do
-    post master_api_providers_path(format: :xml), signup_params({email: ''})
+    post master_api_providers_path(format: :xml), params: signup_params({email: ''})
     assert_response :unprocessable_entity
     assert_xml Nokogiri::XML::Document.parse(response.body), '//errors/error', /User Email should look like an email address/
   end
 
   test '#create without the api_key or access_token, the response status should be unauthorized' do
-    post master_api_providers_path, signup_params({api_key: '', access_token: ''})
+    post master_api_providers_path, params: signup_params({api_key: '', access_token: ''})
     assert_response :unauthorized
   end
 
   test '#create returns unauthorized when the provider_key param is sent instead of api_key or access_token' do
-    post master_api_providers_path, signup_params({provider_key: master_account.api_key, api_key: '', access_token: ''})
+    post master_api_providers_path, params: signup_params({provider_key: master_account.api_key, api_key: '', access_token: ''})
     assert_response :unauthorized
   end
 
@@ -124,7 +126,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token = FactoryBot.create(:access_token, owner: master_account.admins.first, scopes: 'account_management')
     assert_difference Account.method(:count), 1 do
       assert_difference User.method(:count), 2 do # the main user and the impersonation_admin user
-        post master_api_providers_path, signup_params({api_key: '', access_token: token.value})
+        post master_api_providers_path, params: signup_params({api_key: '', access_token: token.value})
         assert_response :created
       end
     end
@@ -134,7 +136,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_no_difference Account.method(:count) do
       user = FactoryBot.create(:member, account: master_account)
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-      post master_api_providers_path, signup_params({access_token: token.value}).except(:api_key)
+      post master_api_providers_path, params: signup_params({access_token: token.value}).except(:api_key)
       assert_response :forbidden
       assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body).dig('error')
     end
@@ -144,20 +146,20 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_difference Account.method(:count) do
       user = FactoryBot.create(:member, account: master_account, member_permission_ids: [:partners])
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-      post master_api_providers_path, signup_params({access_token: token.value}).except(:api_key)
+      post master_api_providers_path, params: signup_params({access_token: token.value}).except(:api_key)
       assert_response :created
     end
   end
 
   test '#create for a master without account plan, the response status should be unprocessable_entity' do
     account_plan.destroy!
-    post master_api_providers_path, signup_params
+    post master_api_providers_path, params: signup_params
     assert_response :unprocessable_entity
   end
 
   test '#create for a master without service plan, the response status should be unprocessable_entity' do
     service_plan.destroy!
-    post master_api_providers_path, signup_params
+    post master_api_providers_path, params: signup_params
     assert_response :unprocessable_entity
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::IntegrationTest
@@ -24,10 +26,10 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
 
     get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id))
     assert_response :forbidden
-    get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id), access_token: token.value)
+    get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-    get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id), access_token: token.value)
+    get(admin_api_application_plan_metric_pricing_rules_path(@app_plan, @metric.id), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -35,24 +37,21 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
 
   test 'application_plan not found' do
     get(admin_api_application_plan_metric_pricing_rules_path(:application_plan_id => 0,
-                                                                  :metric_id => @metric.id),
-             :provider_key => @provider.api_key, :format => :xml)
+                                                                  :metric_id => @metric.id), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'application metric not found' do
     get(admin_api_application_plan_metric_pricing_rules_path(:application_plan_id => @app_plan.id,
-                                                             :metric_id => 0),
-        :provider_key => @provider.api_key, :format => :xml)
+                                                             :metric_id => 0), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'application_plan_metric_pricing_rules_index' do
     get(admin_api_application_plan_metric_pricing_rules_path(:application_plan_id => @app_plan,
-                                                                  :metric_id => @metric.id),
-             :provider_key => @provider.api_key, :format => :xml)
+                                                                  :metric_id => @metric.id), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 

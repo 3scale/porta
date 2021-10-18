@@ -21,7 +21,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   test "PUT: enable 'analytics' section for service 1" do
     params = { allowed_sections: ['monitoring'], allowed_service_ids: [@services.first.id], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['monitoring'], permissions['allowed_sections']
@@ -36,7 +36,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_sections: ['settings'], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
@@ -51,7 +51,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_service_ids: [@services.last.id.to_s], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['partners'], permissions['allowed_sections']
@@ -67,7 +67,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: '', access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
@@ -83,7 +83,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D=%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: ["[]"], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
     assert_equal ['settings'], permissions['allowed_sections']
@@ -98,7 +98,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attribute :role, 'admin'
     params = { allowed_sections: ['monitoring'], allowed_service_ids: [@services.first.id], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_response :forbidden
     assert_equal '{"status":"Forbidden"}', response.body
@@ -110,7 +110,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: '', access_token: token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_response :forbidden
     assert_equal '{"error":"Your access token does not have the correct permissions"}', response.body
@@ -124,7 +124,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     # allowed_sections%5B%5D=settings&allowed_service_ids%5B%5D
     params = { allowed_sections: ['settings'], allowed_service_ids: '', access_token: @token }
 
-    put admin_api_permissions_path(id: another_user.id, format: :json), params
+    put admin_api_permissions_path(id: another_user.id, format: :json), params: params
 
     assert_response :forbidden
   end
@@ -133,7 +133,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_sections: ['invalid'], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_response :success
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
@@ -149,7 +149,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_sections: ['invalid', 'settings'], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_response :success
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
@@ -165,7 +165,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_service_ids: [[@services.last.id.to_s],'22'], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_response :success
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
@@ -181,7 +181,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
     params = { allowed_service_ids: ['22'], access_token: @token }
 
-    put admin_api_permissions_path(id: @user.id, format: :json), params
+    put admin_api_permissions_path(id: @user.id, format: :json), params: params
 
     assert_response :success
     assert_not_nil (permissions = JSON.parse(response.body)['permissions'])
@@ -196,7 +196,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
   test 'disable all allowed_sections' do
     @user.update_attributes({ allowed_sections: ['partners'], allowed_service_ids: [@services.first.id] })
 
-    put admin_api_permissions_path(id: @user.id, format: :json, access_token: @token), { allowed_sections: ['[]'] }
+    put admin_api_permissions_path(id: @user.id, format: :json, access_token: @token), params: { allowed_sections: ['[]'] }
 
     @user.member_permissions.reload
     assert_empty @user.allowed_sections.to_a

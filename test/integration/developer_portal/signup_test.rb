@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
@@ -33,13 +35,13 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     post session_path(system_name: @auth.system_name, code: 'alaska')
     assert_redirected_to signup_path
 
-    post(signup_path, {account: {
+    post(signup_path, params: { account: {
         org_name:   'alaska',
         user: {
             email:    'foo@example.edu',
             username: 'supertramp',
         }
-    }})
+    } })
 
     user = @provider.buyer_users.find_by!(email: 'foo@example.edu')
     assert user.active?
@@ -52,11 +54,11 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    get signup_path, plan_ids: ''
+    get signup_path, params: { plan_ids: '' }
 
     assert_response :success
 
-    get signup_path, plan_ids: nil
+    get signup_path, params: { plan_ids: nil }
 
     assert_response :success
 
@@ -66,11 +68,11 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
 
     plan_id = @provider.provided_plans.published.first.id
 
-    get signup_path, plan_ids: plan_id
+    get signup_path, params: { plan_ids: plan_id }
 
     assert_response :success
 
-    get signup_path, plan_ids: Array(plan_id)
+    get signup_path, params: { plan_ids: Array(plan_id) }
 
     assert_response :success
   end

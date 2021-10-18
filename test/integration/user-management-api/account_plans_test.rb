@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
@@ -23,13 +25,13 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
 
     # member does not have the plans permission
-    get(admin_api_account_plans_path(format: :xml), access_token: token.value)
+    get(admin_api_account_plans_path(format: :xml), params: { access_token: token.value })
     assert_response :forbidden
 
     user.admin_sections = ['partners', 'plans']
     user.save!
 
-    get(admin_api_account_plans_path(format: :xml), access_token: token.value)
+    get(admin_api_account_plans_path(format: :xml), params: { access_token: token.value })
     assert_response :success
 
     user.admin_sections = []
@@ -37,21 +39,20 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     user.save!
 
     # provider admin
-    get(admin_api_account_plans_path(format: :xml), access_token: token.value)
+    get(admin_api_account_plans_path(format: :xml), params: { access_token: token.value })
     assert_response :success
 
     Account.any_instance.expects(:master?).returns(true).at_least_once
 
     # master admin
-    get(admin_api_account_plans_path(format: :xml), access_token: token.value)
+    get(admin_api_account_plans_path(format: :xml), params: { access_token: token.value })
     assert_response :success
   end
 
   # Provider key
 
   test 'index' do
-    get(admin_api_account_plans_path(:format => :xml),
-             :provider_key => @provider.api_key)
+    get(admin_api_account_plans_path(:format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -64,8 +65,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
 
   test 'security wise: index is access denied in buyer side' do
     host! @provider.domain
-    get(admin_api_account_plans_path(:format => :xml),
-             :provider_key => @provider.api_key)
+    get(admin_api_account_plans_path(:format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :forbidden
   end
@@ -74,17 +74,14 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     host! @provider.admin_domain
     Account.master.update_attribute :site_access_code, "123456"
 
-    get(admin_api_account_plans_path(:format => :xml),
-             :provider_key => @provider.api_key)
+    get(admin_api_account_plans_path(:format => :xml), params: { :provider_key => @provider.api_key })
 
     assert @response.body =~ /Access code/
   end
 
   test 'show' do
     # admin_account_plan
-    get("/admin/api/account_plans/#{@provider.account_plans.first.id}",
-             :format => :xml,
-             :provider_key => @provider.api_key)
+    get("/admin/api/account_plans/#{@provider.account_plans.first.id}", params: { :format => :xml, :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -97,10 +94,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post(admin_api_account_plans_path(:format => :xml),
-              :name => 'awesome account plan',
-              :state_event => 'publish',
-              :provider_key => @provider.api_key)
+    post(admin_api_account_plans_path(:format => :xml), params: { :name => 'awesome account plan', :state_event => 'publish', :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -115,10 +109,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
   test 'update' do
     plan = FactoryBot.create :account_plan, :issuer => @provider, :name => 'namy'
 
-    put("/admin/api/account_plans/#{plan.id}.xml",
-             :state_event => 'publish',
-             :name => 'new name',
-             :provider_key => @provider.api_key)
+    put("/admin/api/account_plans/#{plan.id}.xml", params: { :state_event => 'publish', :name => 'new name', :provider_key => @provider.api_key })
 
     assert_response :success
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
@@ -14,12 +16,10 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'POST creates the user and the account also when extra_fields are sent' do
       FactoryBot.create(:fields_definition, account: @provider, target: 'User', name: 'created_by')
 
-      post admin_buyers_accounts_path, {
-          account: {
+      post admin_buyers_accounts_path, params: { account: {
               org_name: 'Alaska',
               user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
-          }
-      }
+          } }
 
       account = Account.last
       user = User.last
@@ -40,10 +40,10 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       assert_difference @provider.buyers.method(:count) do
         assert_equal 0, WebHookWorker.jobs.size
-        post admin_buyers_accounts_path, account: {
+        post admin_buyers_accounts_path, params: { account: {
             org_name: 'hello', org_legaladdress: 'address',
             user: { username: 'hello', email: 'foo@example.com', password: 'password'}
-        }
+        } }
         assert_equal 1, WebHookWorker.jobs.size
 
         assert_response :redirect
@@ -176,12 +176,10 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       @provider.account_plans.delete_all
       @provider.account_plans.create!(name: 'non default account plan')
 
-      post admin_buyers_accounts_path, {
-        account: {
+      post admin_buyers_accounts_path, params: { account: {
           org_name: 'Alaska',
           user: { email: 'foo@example.com', password: '123456', username: 'hello' }
-        }
-      }
+        } }
 
       assert_redirected_to admin_buyers_account_plans_path
       assert_equal 'Please, create an Account Plan first', flash[:alert]
@@ -193,12 +191,10 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       errors.add(:base, 'another error')
       Signup::Result.any_instance.stubs(errors: errors)
 
-      post admin_buyers_accounts_path, {
-        account: {
+      post admin_buyers_accounts_path, params: { account: {
           org_name: 'Alaska',
           user: { email: 'foo@example.com', password: '123456', username: 'hello' }
-        }
-      }
+        } }
 
       assert_equal 'error that is not in "user" or "account". another error', flash[:error]
     end
@@ -240,22 +236,22 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
     test '#create' do
       assert_no_difference(-> { @provider.buyers.count }) do
-        post admin_buyers_accounts_path, account: {
+        post admin_buyers_accounts_path, params: { account: {
             org_name: 'My organization'
-        }
+        } }
         assert_select '#account_user_username_input.required.error'
         assert_response :success
       end
 
       assert_difference(-> { @provider.buyers.count }) do
-        post admin_buyers_accounts_path, account: {
+        post admin_buyers_accounts_path, params: { account: {
             org_name: 'My organization',
             user: {
                 username: 'johndoe',
                 email: 'user@example.org',
                 password: 'secretpassword'
             }
-        }
+        } }
         assert_response :redirect
       end
     end
@@ -296,12 +292,12 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'User with invalid data shows an flash error' do
-      post admin_buyers_accounts_path, account: {
+      post admin_buyers_accounts_path, params: { account: {
           org_name: 'My organization',
           user: {
             username: 'hello'
           }
-      }
+      } }
       assert_equal 'Users invalid', flash[:error]
     end
   end

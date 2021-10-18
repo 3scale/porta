@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::ClientsTest < ActionDispatch::IntegrationTest
@@ -18,7 +20,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
 
   test 'usage with invalid period' do
     login! @provider_account
-    get "/stats/api/applications/#{@cinstance.id}/usage.json", :period => 'XSScript', :metric_name => @metric.system_name
+    get "/stats/api/applications/#{@cinstance.id}/usage.json", params: { :period => 'XSScript', :metric_name => @metric.system_name }
     assert_response :bad_request
   end
 
@@ -36,7 +38,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     login! @provider_account
     @provider_account.update_attribute(:timezone, 'Madrid')
 
-    get "/stats/api/applications/#{@cinstance.id}/usage.json", period:'month', metric_name: @metric.system_name, skip_change: false
+    get "/stats/api/applications/#{@cinstance.id}/usage.json", params: { period:'month', metric_name: @metric.system_name, skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -76,7 +78,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     login! @provider_account
     @provider_account.update_attribute(:timezone, 'Madrid')
 
-    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json", period:'month', response_code: 200
+    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json", params: { period:'month', response_code: 200 }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -98,7 +100,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
        "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 21 + [2] + [0] * 7 + [1, 0]
 
-    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json", period:'month', response_code: 404
+    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json", params: { period:'month', response_code: 404 }
 
     assert_response :success
     assert_content_type 'application/json'

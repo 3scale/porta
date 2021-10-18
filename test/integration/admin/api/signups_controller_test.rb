@@ -19,7 +19,7 @@ class Admin::Api::SignupsControllerTest < ActionDispatch::IntegrationTest
 
       assert_difference(provider.buyers.method(:count)) do
         assert_difference(WebHookWorker.jobs.method(:size)) do
-          post(admin_api_signup_path, format: :json, access_token: token.value, org_name: 'company', username: 'person')
+          post(admin_api_signup_path, params: { format: :json, access_token: token.value, org_name: 'company', username: 'person' })
           assert_response :created
         end
       end
@@ -31,7 +31,7 @@ class Admin::Api::SignupsControllerTest < ActionDispatch::IntegrationTest
 
       assert_difference(provider.buyers.method(:count)) do
         assert_no_difference(WebHookWorker.jobs.method(:size)) do
-          post(admin_api_signup_path, format: :json, provider_key: provider.provider_key, org_name: 'company', username: 'person')
+          post(admin_api_signup_path, params: { format: :json, provider_key: provider.provider_key, org_name: 'company', username: 'person' })
           assert_response :created
         end
       end

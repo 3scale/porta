@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
@@ -20,10 +22,10 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
 
     get(admin_api_service_feature_path(@service, feature))
     assert_response :forbidden
-    get(admin_api_service_feature_path(@service, feature), access_token: token.value)
+    get(admin_api_service_feature_path(@service, feature), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-    get(admin_api_service_feature_path(@service, feature), access_token: token.value)
+    get(admin_api_service_feature_path(@service, feature), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -33,8 +35,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
     service = FactoryBot.create :service, :account => @provider
     FactoryBot.create :feature, :featurable => service
 
-    get(admin_api_service_features_path(service),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_features_path(service), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -46,8 +47,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   test 'show' do
     feature = FactoryBot.create :feature, :featurable => @service
 
-    get(admin_api_service_feature_path(@service, feature),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_feature_path(@service, feature), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -60,9 +60,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post(admin_api_service_features_path(@service),
-              :provider_key => @provider.api_key, :format => :xml,
-              :name => 'example', :system_name => 'system_example')
+    post(admin_api_service_features_path(@service), params: { :provider_key => @provider.api_key, :format => :xml, :name => 'example', :system_name => 'system_example' })
 
     assert_response :success
 
@@ -81,9 +79,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create with scope == service_account' do
-    post(admin_api_service_features_path(@service),
-              :provider_key => @provider.api_key, :format => :xml,
-              :scope => 'ServicePlan')
+    post(admin_api_service_features_path(@service), params: { :provider_key => @provider.api_key, :format => :xml, :scope => 'ServicePlan' })
 
     assert_response :success
 
@@ -97,9 +93,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create with wrong scope' do
-    post(admin_api_service_features_path(@service),
-              :provider_key => @provider.api_key, :format => :xml,
-              :scope => 'AccountPlan')
+    post(admin_api_service_features_path(@service), params: { :provider_key => @provider.api_key, :format => :xml, :scope => 'AccountPlan' })
 
     assert_response :unprocessable_entity
     assert_xml_error @response.body, "Scope"
@@ -112,9 +106,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
     feature = FactoryBot.create(:feature, :featurable => @service,
                       :name => 'old name', :system_name => 'old_system_name')
 
-    put("/admin/api/services/#{@service.id}/features/#{feature.id}",
-             :provider_key => @provider.api_key, :format => :xml,
-             :name => 'new name', :system_name => 'new_system_name')
+    put("/admin/api/services/#{@service.id}/features/#{feature.id}", params: { :provider_key => @provider.api_key, :format => :xml, :name => 'new name', :system_name => 'new_system_name' })
 
     assert_response :success
 

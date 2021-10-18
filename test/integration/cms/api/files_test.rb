@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module CMS
@@ -19,7 +21,7 @@ module CMS
 
       test 'index' do
         21.times { create_file }
-        get admin_api_cms_files_path, provider_key: @provider.provider_key, format: :xml
+        get admin_api_cms_files_path, params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :success
 
         doc = Nokogiri::XML::Document.parse(@response.body)
@@ -31,7 +33,7 @@ module CMS
         FactoryBot.create :cms_file, provider: @provider, title: 'file-in-root-section'
         FactoryBot.create :cms_file, provider: @provider, section_id: section.id, title: 'a file'
 
-        get admin_api_cms_section_files_path(section, format: :xml), provider_key: @provider.provider_key
+        get admin_api_cms_section_files_path(section, format: :xml), params: { provider_key: @provider.provider_key }
 
         assert_response :success
         assert_not_match 'file-in-root-section', response.body
@@ -39,14 +41,14 @@ module CMS
 
         other_provider = FactoryBot.create :provider_account
         other_section  = FactoryBot.create :cms_section, provider: other_provider, parent: other_provider.sections.root
-        get admin_api_cms_section_files_path(other_section, format: :xml), provider_key: @provider.provider_key
+        get admin_api_cms_section_files_path(other_section, format: :xml), params: { provider_key: @provider.provider_key }
         assert_response :not_found
 
-        get admin_api_cms_section_files_path(@provider.sections.root.system_name, format: :json), provider_key: @provider.provider_key
+        get admin_api_cms_section_files_path(@provider.sections.root.system_name, format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
         assert_match 'file-in-root-section', response.body
 
-        get admin_api_cms_section_files_path('yada', format: :json), provider_key: @provider.provider_key
+        get admin_api_cms_section_files_path('yada', format: :json), params: { provider_key: @provider.provider_key }
         assert_response :not_found
       end
 
@@ -54,7 +56,7 @@ module CMS
         21.times { create_file  }
 
         # first page
-        get admin_api_cms_files_path, provider_key: @provider.provider_key, format: :xml
+        get admin_api_cms_files_path, params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :success
         doc = Nokogiri::XML::Document.parse(@response.body)
 
@@ -64,7 +66,7 @@ module CMS
         assert_equal 20, doc.xpath('/files/*').size
 
         # second page
-        get admin_api_cms_files_path, provider_key: @provider.provider_key, page: 2, format: :xml
+        get admin_api_cms_files_path, params: { provider_key: @provider.provider_key, page: 2, format: :xml }
         assert_response :success
         doc = Nokogiri::XML::Document.parse(@response.body)
         assert_equal 1, doc.xpath('/files/*').size
@@ -74,7 +76,7 @@ module CMS
         11.times { create_file  }
 
         common = { provider_key: @provider.provider_key, format: :xml }
-        get admin_api_cms_files_path, common.merge(per_page: 5)
+        get admin_api_cms_files_path, params: common.merge(per_page: 5)
         assert_response :success
         doc = Nokogiri::XML::Document.parse(@response.body)
 
@@ -86,7 +88,7 @@ module CMS
 
       test 'show file' do
         file = create_file
-        get admin_api_cms_file_path(file), provider_key: @provider.provider_key, format: :xml
+        get admin_api_cms_file_path(file), params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :success
 
         doc = Nokogiri::XML::Document.parse(@response.body)
@@ -101,7 +103,7 @@ module CMS
       test 'update' do
         file = create_file
 
-        put admin_api_cms_file_path(file, format: :xml), provider_key: @provider.provider_key, attachment: attachment_for_upload
+        put admin_api_cms_file_path(file, format: :xml), params: { provider_key: @provider.provider_key, attachment: attachment_for_upload }
 
         file.reload
 
@@ -110,7 +112,7 @@ module CMS
       end
 
       test 'create' do
-        post admin_api_cms_files_path,  provider_key: @provider.provider_key, format: :xml, path: "/foo.bar", attachment: attachment_for_upload, section_id: @provider.sections.root.id
+        post admin_api_cms_files_path, params: { provider_key: @provider.provider_key, format: :xml, path: "/foo.bar", attachment: attachment_for_upload, section_id: @provider.sections.root.id }
         assert_response :success
 
         doc = Nokogiri::XML(@response.body)
@@ -120,7 +122,7 @@ module CMS
       end
 
       test 'create with errors' do
-        post admin_api_cms_files_path(format: :xml), provider_key: @provider.provider_key
+        post admin_api_cms_files_path(format: :xml), params: { provider_key: @provider.provider_key }
 
         assert_response :unprocessable_entity
 
@@ -128,7 +130,7 @@ module CMS
       end
 
       test 'create without section will put the file in root section' do
-        post admin_api_cms_files_path(format: :json),  provider_key: @provider.provider_key, path: "/foo.script", attachment: attachment_for_upload
+        post admin_api_cms_files_path(format: :json), params: { provider_key: @provider.provider_key, path: "/foo.script", attachment: attachment_for_upload }
         assert_response :success
 
         assert_equal @provider.sections.root.id, JSON.parse(response.body)['file']['section_id']
@@ -136,7 +138,7 @@ module CMS
 
       test 'delete' do
         file = create_file
-        delete admin_api_cms_file_path(file), provider_key: @provider.provider_key, format: :xml
+        delete admin_api_cms_file_path(file), params: { provider_key: @provider.provider_key, format: :xml }
         assert_nil CMS::File.find_by_id(file.id)
       end
 

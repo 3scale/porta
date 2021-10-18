@@ -14,7 +14,7 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'creates a user for its buyer' do
     assert_difference(buyer.users.method(:count)) do
-      post admin_api_account_users_path(buyer), params
+      post admin_api_account_users_path(buyer), params: params
     end
 
     user = buyer.users.order(created_at: :asc).last!

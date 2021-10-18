@@ -19,7 +19,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     ProviderUserMailer.expects(:activation).returns(mock(deliver_now: true))
 
     account_plan.update_attribute(:approval_required, false)
-    post provider_admin_accounts_path, valid_params
+    post provider_admin_accounts_path, params: valid_params
     user = User.find_by!(email: valid_params[:account][:user][:email])
     account = user.account
 
@@ -57,7 +57,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test '#create for on-prem' do
     ThreeScale.config.stubs(onpremises: true)
-    post provider_admin_accounts_path, valid_params
+    post provider_admin_accounts_path, params: valid_params
     account = User.find_by!(email: valid_params[:account][:user][:email]).account
     # account has the right plans
     assert_equal account_plan, account.bought_account_plan
@@ -69,7 +69,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test '#create for saas' do
     ThreeScale.config.stubs(onpremises: false)
-    post provider_admin_accounts_path, valid_params
+    post provider_admin_accounts_path, params: valid_params
     account = User.find_by!(email: valid_params[:account][:user][:email]).account
     # account has the right plans
     assert_equal account_plan, account.bought_account_plan
@@ -82,7 +82,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test '#create approves the account when the account plan does not require approval' do
     account_plan.update_attribute(:approval_required, true)
-    post provider_admin_accounts_path, valid_params
+    post provider_admin_accounts_path, params: valid_params
     user = User.find_by!(email: valid_params[:account][:user][:email])
     account = user.account
     refute user.can_login?

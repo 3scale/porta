@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
@@ -10,18 +12,18 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
 
   test 'access allowed with authentication' do
     params = { period: 'day', metric_name: 'hits' }
-    get "/stats/services/#{@service.id}/usage.json", params.merge(provider_key: @provider_account.api_key)
+    get "/stats/services/#{@service.id}/usage.json", params: params.merge(provider_key: @provider_account.api_key)
     assert_response :success
     assert_content_type 'application/json'
 
     token = FactoryBot.create(:access_token, owner: @provider_account.first_admin, scopes: ['stats'])
-    get "/stats/services/#{@service.id}/usage.json", params.merge(access_token: token.value)
+    get "/stats/services/#{@service.id}/usage.json", params: params.merge(access_token: token.value)
     assert_response :success
     assert_content_type 'application/json'
   end
 
   test 'access forbidden without authentication' do
-    get "/stats/services/#{@service.id}/usage.json", period: 'day', metric_name: "hits"
+    get "/stats/services/#{@service.id}/usage.json", params: { period: 'day', metric_name: "hits" }
 
     assert_response :forbidden
     assert_content_type 'application/json'
@@ -33,7 +35,7 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
   # https://3scale.hoptoadapp.com/errors/9899473
   #
   test 'access forbidden without authentication and invalid format' do
-    get "/stats/services/#{@service.id}/usage.INVALID", period: 'day', metric_name: "hits"
+    get "/stats/services/#{@service.id}/usage.INVALID", params: { period: 'day', metric_name: "hits" }
 
     assert_response 403
   end

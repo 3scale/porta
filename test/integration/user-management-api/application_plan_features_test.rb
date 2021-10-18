@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
@@ -19,10 +21,10 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
 
     get(admin_api_application_plan_features_path(@app_plan))
     assert_response :forbidden
-    get(admin_api_application_plan_features_path(@app_plan), access_token: token.value)
+    get(admin_api_application_plan_features_path(@app_plan), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([@provider.default_service.id]).at_least_once
-    get(admin_api_application_plan_features_path(@app_plan), access_token: token.value)
+    get(admin_api_application_plan_features_path(@app_plan), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -33,8 +35,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     @app_plan.features << feat
     @app_plan.save!
 
-    get(admin_api_application_plan_features_path(@app_plan),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_features_path(@app_plan), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -44,8 +45,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'not found application_plan replies 404' do
-    get(admin_api_application_plan_features_path(0),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_features_path(0), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_xml_404
   end
@@ -56,9 +56,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   test 'enable new feature' do
     feat = FactoryBot.create :feature, :featurable => @provider.default_service
 
-    post(admin_api_application_plan_features_path(@app_plan),
-              :feature_id => feat.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_application_plan_features_path(@app_plan), params: { :feature_id => feat.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -71,9 +69,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     feature_not_in_service = FactoryBot.create(:feature, :featurable => @provider,
                                      :scope => "AccountPlan")
 
-    post(admin_api_application_plan_features_path(@app_plan),
-              :feature_id => feature_not_in_service.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_application_plan_features_path(@app_plan), params: { :feature_id => feature_not_in_service.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_xml_404
   end
@@ -82,9 +78,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     wrong_feature = FactoryBot.create(:feature, :featurable => @provider.default_service,
                             :scope => "ServicePlan")
 
-    post(admin_api_application_plan_features_path(@app_plan),
-              :feature_id => wrong_feature.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_application_plan_features_path(@app_plan), params: { :feature_id => wrong_feature.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :unprocessable_entity
     assert_xml_error @response.body, "Plan type mismatch"
@@ -95,9 +89,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   test 'disable feature' do
     feat = FactoryBot.create :feature, :featurable => @provider.default_service
 
-    post(admin_api_application_plan_features_path(@app_plan),
-              :feature_id => feat.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_application_plan_features_path(@app_plan), params: { :feature_id => feat.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 

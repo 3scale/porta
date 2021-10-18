@@ -41,7 +41,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
 
     def test_create_sets_all_attributes
       assert_difference ::ApiDocs::Service.method(:count) do
-        post admin_api_active_docs_path(access_token: @token), create_params(service_id: service.id, system_name: 'smart_service')
+        post admin_api_active_docs_path(access_token: @token), params: create_params(service_id: service.id, system_name: 'smart_service')
         assert_response :created
       end
 
@@ -56,7 +56,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
     end
 
     def test_update_with_right_params
-      put admin_api_active_doc_path(api_docs_service, access_token: @token), update_params(service_id: service.id)
+      put admin_api_active_doc_path(api_docs_service, access_token: @token), params: update_params(service_id: service.id)
       assert_response :success
 
       api_docs_service.reload
@@ -69,28 +69,28 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
 
     def test_update_can_remove_service
       api_docs_service.update_attribute(:service_id, provider.default_service_id)
-      put admin_api_active_doc_path(api_docs_service, access_token: @token), update_params(service_id: '')
+      put admin_api_active_doc_path(api_docs_service, access_token: @token), params: update_params(service_id: '')
       assert_response :success
       assert_nil api_docs_service.reload.service_id
     end
 
     def test_system_name_is_not_updated
       old_system_name = api_docs_service.system_name
-      put admin_api_active_doc_path(api_docs_service, access_token: @token), update_params(system_name: "#{old_system_name}-2")
+      put admin_api_active_doc_path(api_docs_service, access_token: @token), params: update_params(system_name: "#{old_system_name}-2")
       assert_response :success
       assert_equal old_system_name, api_docs_service.reload.system_name
     end
 
     def test_update_invalid_params
       old_body = api_docs_service.body
-      put admin_api_active_doc_path(api_docs_service, format: :json, access_token: @token), update_params(body: '{apis: []}')
+      put admin_api_active_doc_path(api_docs_service, format: :json, access_token: @token), params: update_params(body: '{apis: []}')
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'body'), 'JSON Spec is invalid'
       assert_equal old_body, api_docs_service.reload.body
     end
 
     def test_update_unexistent_service
-      put admin_api_active_doc_path(api_docs_service, format: :json, access_token: @token), update_params(service_id: Service.last.id + 1)
+      put admin_api_active_doc_path(api_docs_service, format: :json, access_token: @token), params: update_params(service_id: Service.last.id + 1)
       assert_response :unprocessable_entity
       assert_equal 'Service not found', JSON.parse(response.body)['error']
     end
@@ -141,12 +141,12 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
       end
 
       test 'create with forbidden service' do
-        post admin_api_active_docs_path(path_params), api_doc_params(service_id: forbidden_service.id)
+        post admin_api_active_docs_path(path_params), params: api_doc_params(service_id: forbidden_service.id)
         assert_response :unprocessable_entity
       end
 
       test 'update to forbidden service' do
-        put admin_api_active_doc_path(accessible_api_docs_service, **path_params), { service_id: forbidden_service.id }
+        put admin_api_active_doc_path(accessible_api_docs_service, **path_params), params: { service_id: forbidden_service.id }
         assert_response :unprocessable_entity
       end
 

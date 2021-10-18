@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::IntegrationTest
@@ -109,7 +111,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
 
     def request_plan_change(new_plan = create_new_plan_same_service)
       params = { access_token: @access_token.value, plan_id: new_plan.id }
-      put change_plan_admin_api_account_application_path(account_id: @buyer.id, id: @application.id, format: :xml), params
+      put change_plan_admin_api_account_application_path(account_id: @buyer.id, id: @application.id, format: :xml), params: params
     end
 
     def create_new_plan_same_service

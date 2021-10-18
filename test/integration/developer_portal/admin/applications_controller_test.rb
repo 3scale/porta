@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::IntegrationTest
@@ -110,7 +112,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           @provider.settings.allow_multiple_applications!
           @provider.settings.show_multiple_applications!
 
-          patch admin_application_url(cinstance), application: { redirect_url: "http://example.com" }
+          patch admin_application_url(cinstance), params: { application: { redirect_url: "http://example.com" } }
           cinstance.reload
           assert_equal 'http://example.com', cinstance.redirect_url
         end
@@ -124,7 +126,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           @provider.settings.allow_multiple_applications!
           @provider.settings.show_multiple_applications!
 
-          patch admin_application_url(cinstance), application: { redirect_url: "http://example.com", name: "foo" }
+          patch admin_application_url(cinstance), params: { application: { redirect_url: "http://example.com", name: "foo" } }
           assert assigns(:cinstance).errors[:lol].present?
         end
 
@@ -183,7 +185,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           @buyer_auth.buy! @plan
           @buyer_auth.reload
 
-          put admin_application_url(@buyer_auth.bought_cinstance), cinstance: { "name" => "updated" }
+          put admin_application_url(@buyer_auth.bought_cinstance), params: { cinstance: { "name" => "updated" } }
           assert_response :redirect
           assert_equal "updated", @buyer_auth.bought_cinstance.name
         end
@@ -258,7 +260,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
         end
 
         should 'allow access to update' do
-          put admin_application_url(@buyer_auth.bought_cinstance), cinstance: { "name" => "updated" }
+          put admin_application_url(@buyer_auth.bought_cinstance), params: { cinstance: { "name" => "updated" } }
           assert_response :redirect
           assert_equal "updated", @buyer_auth.bought_cinstance.name
         end

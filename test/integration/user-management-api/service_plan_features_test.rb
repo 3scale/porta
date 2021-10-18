@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
@@ -16,8 +18,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     @service_plan.features << feat
     @service_plan.save!
 
-    get(admin_api_service_plan_features_path(@service_plan),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_plan_features_path(@service_plan), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -27,8 +28,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'not found service_plan replies 404' do
-    get(admin_api_service_plan_features_path(0),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_plan_features_path(0), params: { :provider_key => @provider.api_key, :format => :xml })
     assert_xml_404
   end
 
@@ -39,9 +39,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     feat = FactoryBot.create(:feature, :featurable => @provider.default_service,
                    :scope => "ServicePlan")
 
-    post(admin_api_service_plan_features_path(@service_plan),
-              :feature_id => feat.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_service_plan_features_path(@service_plan), params: { :feature_id => feat.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -54,9 +52,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     feature_not_in_service = FactoryBot.create(:feature, :featurable => @provider,
                                      :scope => "AccountPlan")
 
-    post(admin_api_service_plan_features_path(@service_plan),
-              :feature_id => feature_not_in_service.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_service_plan_features_path(@service_plan), params: { :feature_id => feature_not_in_service.id, :provider_key => @provider.api_key, :format => :xml })
     assert_xml_404
   end
 
@@ -64,9 +60,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     wrong_feature = FactoryBot.create(:feature, :featurable => @provider.default_service,
                             :scope => "ApplicationPlan")
 
-    post(admin_api_service_plan_features_path(@service_plan),
-              :feature_id => wrong_feature.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_service_plan_features_path(@service_plan), params: { :feature_id => wrong_feature.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :unprocessable_entity
     assert_xml_error @response.body, "Plan type mismatch"
@@ -78,9 +72,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     feat = FactoryBot.create(:feature, :featurable => @provider.default_service,
                    :scope => "ServicePlan")
 
-    post(admin_api_service_plan_features_path(@service_plan),
-              :feature_id => feat.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_service_plan_features_path(@service_plan), params: { :feature_id => feat.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 

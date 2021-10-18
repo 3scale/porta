@@ -12,10 +12,10 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
   end
 
   test 'update' do
-    put admin_account_payment_gateway_path(@provider), account: {
+    put admin_account_payment_gateway_path(@provider), params: { account: {
       payment_gateway_type: 'stripe',
       payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
-    }
+    } }
 
     @provider.reload
     @provider.gateway_setting.reload
@@ -38,10 +38,10 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
       deprecated_gateway = PaymentGateway.new(:bogus, deprecated: true, foo: 'Foo')
       PaymentGateway.stubs(all: [deprecated_gateway])
 
-      put admin_account_payment_gateway_path(@provider), account: {
+      put admin_account_payment_gateway_path(@provider), params: { account: {
         payment_gateway_type: 'bogus',
         payment_gateway_options: { foo: :bar }
-      }
+      } }
     end
   end
 
@@ -52,10 +52,10 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     @provider.gateway_setting.gateway_type = :bogus
     @provider.gateway_setting.save(validate: false)
 
-    put admin_account_payment_gateway_path(@provider), account: {
+    put admin_account_payment_gateway_path(@provider), params: { account: {
       payment_gateway_type: 'stripe',
       payment_gateway_options: { 'login' => 'bob', 'publishable_key' => 'monkey', 'endpoint_secret' => 'some-secret' }
-    }
+    } }
 
     @provider.reload
     @provider.gateway_setting.reload
@@ -74,10 +74,10 @@ class Admin::Account::PaymentGatewaysControllerTest < ActionDispatch::Integratio
     deprecated_gateway = PaymentGateway.new(:bogus, deprecated: true, foo: 'Foo')
     PaymentGateway.stubs(all: [deprecated_gateway])
 
-    put admin_account_payment_gateway_path(@provider), account: {
+    put admin_account_payment_gateway_path(@provider), params: { account: {
       payment_gateway_type: 'bogus',
       payment_gateway_options: { foo: :baz }
-    }
+    } }
 
     @provider.reload
     @provider.gateway_setting.reload

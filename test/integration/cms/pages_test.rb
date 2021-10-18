@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module CMS
@@ -12,12 +14,11 @@ module CMS
       new_layout = FactoryBot.create(:cms_layout, system_name: 'NEW', provider: @provider)
       page = FactoryBot.create(:cms_page, provider: @provider, layout: new_layout)
 
-      patch provider_admin_cms_page_path(page), provider_key: @provider.provider_key, id: page.id, format: :js,
-        cms_template: {
+      patch provider_admin_cms_page_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :js, cms_template: {
         title: 'new title',
         content_type: 'text/xml',
         layout_id: ''
-      }
+      } }
 
       assert_response :success
 

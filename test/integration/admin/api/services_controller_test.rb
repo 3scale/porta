@@ -15,7 +15,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
         requested_name = "example name #{format.to_s}"
         requested_description = "example description #{format.to_s}"
         assert_difference(master_account.services.method(:count)) do
-          post admin_api_services_path(format: format, access_token: @token), {name: requested_name, description: requested_description}
+          post admin_api_services_path(format: format, access_token: @token), params: { name: requested_name, description: requested_description }
           assert_response :created
         end
         service = master_account.services.last
@@ -29,7 +29,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       %i[xml json].each do |format|
         requested_name = "example name #{format.to_s}"
         requested_description = "example description #{format.to_s}"
-        put admin_api_service_path(service, format: format, access_token: @token), {name: requested_name, description: requested_description}
+        put admin_api_service_path(service, format: format, access_token: @token), params: { name: requested_name, description: requested_description }
         assert_response :ok
         assert_equal requested_name, service.reload.name
         assert_equal requested_description, service.description
@@ -85,7 +85,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'create' do
       assert_difference(provider_services.method(:count)) do
-        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge(forbidden_params)
+        post admin_api_services_path(access_token: access_token_value, format: :json), params: permitted_params.merge(forbidden_params)
         assert_response :created
       end
       assert_correct_params
@@ -93,7 +93,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'create with provider' do
       assert_difference(provider_services.method(:count)) do
-        post admin_api_services_path(provider_key: @provider.provider_key, format: :json), permitted_params
+        post admin_api_services_path(provider_key: @provider.provider_key, format: :json), params: permitted_params
         assert_response :created
       end
       assert_correct_params
@@ -102,7 +102,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'create with unauthorize provider key' do
       Account.any_instance.stubs(can_create_service?: false)
       assert_no_difference(provider_services.method(:count)) do
-        post admin_api_services_path(provider_key: @provider.provider_key, format: :json), permitted_params
+        post admin_api_services_path(provider_key: @provider.provider_key, format: :json), params: permitted_params
         assert_response :forbidden
       end
     end
@@ -110,14 +110,14 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'create with unauthorize admin user' do
       Account.any_instance.stubs(can_create_service?: false)
       assert_no_difference(provider_services.method(:count)) do
-        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params
+        post admin_api_services_path(access_token: access_token_value, format: :json), params: permitted_params
         assert_response :forbidden
       end
     end
 
     test 'create with errors in the model' do
       assert_no_difference(provider_services.method(:count)) do
-        post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({backend_version: 'fake'})
+        post admin_api_services_path(access_token: access_token_value, format: :json), params: permitted_params.merge({backend_version: 'fake'})
         assert_response :unprocessable_entity
       end
       assert_contains JSON.parse(response.body).dig('errors', 'backend_version'), 'is not included in the list'
@@ -128,49 +128,49 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       member_access_token_value = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw').value
 
       assert_no_difference(provider_services.method(:count)) do
-        post admin_api_services_path(access_token: member_access_token_value, format: :json), permitted_params
+        post admin_api_services_path(access_token: member_access_token_value, format: :json), params: permitted_params
         assert_response :forbidden
       end
     end
 
     test 'update' do
-      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge(forbidden_params)
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), params: permitted_params.merge(forbidden_params)
       assert_response :success
       assert_correct_params
     end
 
     test 'update with errors in the model' do
       old_backend_version = service.backend_version
-      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({backend_version: 'fake'})
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), params: permitted_params.merge({backend_version: 'fake'})
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'backend_version'), 'is not included in the list'
       assert_equal old_backend_version, service.reload.backend_version
     end
 
     test 'system_name can be created but not updated' do
-      post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({system_name: 'first-system-name'})
+      post admin_api_services_path(access_token: access_token_value, format: :json), params: permitted_params.merge({system_name: 'first-system-name'})
       service = provider_services.last!
       assert_equal 'first-system-name', service.system_name
 
-      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge(forbidden_params).merge({system_name: 'updated-system-name'})
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), params: permitted_params.merge(forbidden_params).merge({system_name: 'updated-system-name'})
       assert_equal 'first-system-name', service.reload.system_name
     end
 
     test 'the state cannot be created or updated through the attribute' do
-      post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({state: 'published'})
+      post admin_api_services_path(access_token: access_token_value, format: :json), params: permitted_params.merge({state: 'published'})
       service = provider_services.last!
       refute_equal 'published', service.state
 
-      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({state: 'published'})
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), params: permitted_params.merge({state: 'published'})
       refute_equal 'published', service.reload.state
     end
 
     test 'the state can be created and updated through the state event of the action machine' do
-      post admin_api_services_path(access_token: access_token_value, format: :json), permitted_params.merge({state_event: 'publish'})
+      post admin_api_services_path(access_token: access_token_value, format: :json), params: permitted_params.merge({state_event: 'publish'})
       service = provider_services.last!
       assert_equal 'published', service.state
 
-      put admin_api_service_path(service, access_token: access_token_value, format: :json), permitted_params.merge({state_event: 'publish'})
+      put admin_api_service_path(service, access_token: access_token_value, format: :json), params: permitted_params.merge({state_event: 'publish'})
       assert_equal 'published', service.reload.state
     end
 

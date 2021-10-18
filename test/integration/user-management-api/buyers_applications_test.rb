@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
@@ -29,7 +31,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    get admin_api_account_applications_path(@buyer, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_applications_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
 
@@ -54,9 +56,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     assert @buyer.bought_cinstances.find_by_plan_id(suspend_plan.id).suspended?
 
     [:pending, :live, :suspended].each do |state|
-      get(admin_api_account_applications_path(@buyer, :format => :xml),
-               :state => state,
-               :provider_key => @provider.api_key)
+      get(admin_api_account_applications_path(@buyer, :format => :xml), params: { :state => state, :provider_key => @provider.api_key })
 
       assert_response :success
 
@@ -69,7 +69,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'security wise: buyers applications is access denied in buyer side' do
     host! @provider.domain
-    get admin_api_account_applications_path(@buyer, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_applications_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :forbidden
   end
@@ -77,7 +77,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   test 'show' do
     application = @buyer.bought_cinstances.last
 
-    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :xml), :provider_key => @provider.api_key)
+    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -92,7 +92,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     application = @buyer.bought_cinstances.last
     application.update_attributes :name => "tomatoes < > &", :description => "rotten < > &"
 
-    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :xml), :provider_key => @provider.api_key)
+    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -103,7 +103,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     application = @buyer.bought_cinstances.last
     application.update_attributes :name => "CoinBase", :description => "Mining bitcoins in your screesaver like a boss"
 
-    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :json), :provider_key => @provider.api_key)
+    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :json), params: { :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -119,7 +119,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     app.extra_fields = { :some_extra_field => "< > &" }
     app.save
 
-    get(admin_api_account_application_path(@buyer, :id => app.id, :format => :xml), :provider_key => @provider.api_key)
+    get(admin_api_account_application_path(@buyer, :id => app.id, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, :extra_fields => { :some_extra_field => '&lt; &gt; &amp;' })
@@ -133,7 +133,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     app.extra_fields = { "mind-control" => "", "spiciness_level" => "Habanero" }
     app.save
 
-    get(admin_api_account_application_path(@buyer, id: app.id, format: :json), provider_key: @provider.api_key)
+    get(admin_api_account_application_path(@buyer, id: app.id, format: :json), params: { provider_key: @provider.api_key })
 
     assert_response :success
 
@@ -150,7 +150,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     expect_backend_create_referrer_filter(application, "foo.example.org")
     application.referrer_filters.add('foo.example.org')
 
-    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :xml), :provider_key => @provider.api_key)
+    get(admin_api_account_application_path(@buyer, :id => application.id, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, { :id => application.id, "referrer_filters/referrer_filter" => "foo.example.org" })
@@ -163,7 +163,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     stub_backend_referrer_filters("foo.example.org")
     expect_backend_create_referrer_filter(application, "foo.example.org")
 
-    post(admin_api_account_application_referrer_filters_path(@buyer, application, :referrer_filter => "foo.example.org", :format => :xml), :provider_key => @provider.api_key)
+    post(admin_api_account_application_referrer_filters_path(@buyer, application, :referrer_filter => "foo.example.org", :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, { :id => application.id, "referrer_filters/referrer_filter" => "foo.example.org" })
@@ -176,7 +176,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     end
 
     should 'return 404 on non found app' do
-      get(find_admin_api_account_applications_path(@buyer.id, :format => :xml), :user_key => "SHAWARMA", :provider_key => @provider.api_key)
+      get(find_admin_api_account_applications_path(@buyer.id, :format => :xml), params: { :user_key => "SHAWARMA", :provider_key => @provider.api_key })
       assert_xml_404
     end
 
@@ -185,9 +185,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
       @service.save!
 
       get(find_admin_api_account_applications_path(@buyer.id,
-                                                   :format => :xml),
-                                                   :user_key => @application.user_key,
-                                                   :provider_key => @provider.api_key)
+                                                   :format => :xml), params: { :user_key => @application.user_key, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -201,9 +199,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
       @service.save!
 
       get(find_admin_api_account_applications_path(@buyer.id,
-                                                   :format => :xml),
-                                                   :app_id => @application.application_id,
-                                                   :provider_key => @provider.api_key)
+                                                   :format => :xml), params: { :app_id => @application.application_id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -217,9 +213,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
       @service.save!
 
       get(find_admin_api_account_applications_path(@buyer.id,
-                                                   :format => :xml),
-                                                   :app_id => @application.application_id,
-                                                   :provider_key => @provider.api_key)
+                                                   :format => :xml), params: { :app_id => @application.application_id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -232,10 +226,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'create' do
     post(admin_api_account_applications_path(@buyer,
-                                             :format => :xml),
-                                             :plan_id => @hidden_app_plan.id,
-                                             :name => "chucky", :description => "rocks awesome",
-                                             :provider_key => @provider.api_key)
+                                             :format => :xml), params: { :plan_id => @hidden_app_plan.id, :name => "chucky", :description => "rocks awesome", :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, { :name => "chucky",
@@ -251,10 +242,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     @buyer.bought_service_contracts.map &:destroy
 
     post(admin_api_account_applications_path(@buyer,
-                                             :format => :xml),
-                                             :plan_id => @hidden_app_plan.id,
-                                             :name => "chucky", :description => "rocks awesome",
-                                             :provider_key => @provider.api_key)
+                                             :format => :xml), params: { :plan_id => @hidden_app_plan.id, :name => "chucky", :description => "rocks awesome", :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, { :name => "chucky",
@@ -270,10 +258,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     @service.update_attribute(:backend_version, '2')
 
     post(admin_api_account_applications_path(@buyer,
-                                             :format => :xml),
-                                             :plan_id => @hidden_app_plan.id,
-                                             :name => "chucky", :description => "rocks awesome", :application_id => "superawesomeid",
-                                             :provider_key => @provider.api_key)
+                                             :format => :xml), params: { :plan_id => @hidden_app_plan.id, :name => "chucky", :description => "rocks awesome", :application_id => "superawesomeid", :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, { :name => "chucky",
@@ -293,12 +278,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
                   { :target => "Cinstance", "name" => "some_other_extra_field" })
 
     post(admin_api_account_applications_path(@buyer,
-                                             :format => :xml),
-                                             :plan_id => @hidden_app_plan.id,
-                                             :name => "extra app", :description => "extra app",
-                                             "some_extra_field" => 'extra value',
-                                             "some_other_extra_field" => 'other extra value',
-                                             :provider_key => @provider.api_key)
+                                             :format => :xml), params: { :plan_id => @hidden_app_plan.id, :name => "extra app", :description => "extra app", "some_extra_field" => 'extra value', "some_other_extra_field" => 'other extra value', :provider_key => @provider.api_key })
 
     extra_fields = {
       "some_extra_field" => 'extra value',
@@ -316,8 +296,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'update' do
     app = @buyer.bought_cinstances.last
-    put(admin_api_account_application_path(@buyer, id: app.id, format: :xml), name: "descriptive",
-        provider_key: @provider.api_key, redirect_url: 'http://example.com')
+    put(admin_api_account_application_path(@buyer, id: app.id, format: :xml), params: { name: "descriptive", provider_key: @provider.api_key, redirect_url: 'http://example.com' })
 
     assert_response :success
     assert_application response.body, { :name => "descriptive" }
@@ -335,8 +314,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     key = "k"*256
 
     put(admin_api_account_application_path(@buyer, :id => app.id,
-                                           :format => :xml),
-                                           :user_key => key, :provider_key => @provider.api_key)
+                                           :format => :xml), params: { :user_key => key, :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -357,8 +335,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
       "some_other_extra_field" => 'other extra value'}
 
       app = @buyer.bought_cinstances.last
-      put(admin_api_account_application_path(@buyer, :id => app.id, :format => :xml),
-          extra_fields.merge(:provider_key => @provider.api_key))
+      put(admin_api_account_application_path(@buyer, :id => app.id, :format => :xml), params: extra_fields.merge(:provider_key => @provider.api_key))
 
       assert_response :success
       assert_application(response.body, :extra_fields => extra_fields)
@@ -372,9 +349,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     plan = application.plan
 
     assert_difference plan.method(:contracts_count), -1 do
-      put(customize_plan_admin_api_account_application_path(@buyer, application),
-          provider_key: @provider.api_key,
-          format: :xml)
+      put(customize_plan_admin_api_account_application_path(@buyer, application), params: { provider_key: @provider.api_key, format: :xml })
 
       assert_response :success
       plan.reload
@@ -398,9 +373,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
     original = plan.original.reload
 
     assert_difference original.method(:contracts_count), +1 do
-      put(decustomize_plan_admin_api_account_application_path(@buyer, application),
-          provider_key: @provider.api_key,
-          format: :xml)
+      put(decustomize_plan_admin_api_account_application_path(@buyer, application), params: { provider_key: @provider.api_key, format: :xml })
       assert_response :success
       original.reload
     end

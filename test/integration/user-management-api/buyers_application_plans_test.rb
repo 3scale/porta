@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
@@ -58,7 +60,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index for an inexistent account replies 404' do
-    get admin_api_account_application_plans_path(0, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_application_plans_path(0, :format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_xml_404
   end
@@ -74,9 +76,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   test 'buy' do
     app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
 
-    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml, :name => "name", :description => "description")
+    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml, :name => "name", :description => "description" })
 
     assert_response :success
     assert @buyer.reload.bought_cinstances.detect{|c| c.plan_id == app_plan.id}
@@ -95,9 +95,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
 
     @buyer.buy! app_plan, {:name => "name1", :description => "description1"}
 
-    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml, :name => "name2", :description => "description2")
+    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml, :name => "name2", :description => "description2" })
 
     assert_response :success
     assert_equal 2, @buyer.reload.bought_cinstances.select{|c| c.plan_id == app_plan.id}.size
@@ -114,9 +112,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
     app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
     custom_plan = app_plan.customize
 
-    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{custom_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml, :name => "name", :description => "desc")
+    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{custom_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml, :name => "name", :description => "desc" })
 
     assert_xml_404
   end

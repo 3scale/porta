@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::IntegrationTest
@@ -15,32 +17,32 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
 
     provider_2 = FactoryBot.create(:simple_provider)
     # none token
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key })
     assert_response :success
 
     # blank token
-    get(admin_api_accounts_path(format: :xml), access_token: '')
+    get(admin_api_accounts_path(format: :xml), params: { access_token: '' })
     assert_response :forbidden
 
     # valid token
-    get(admin_api_accounts_path(format: :xml), access_token: @token.value)
+    get(admin_api_accounts_path(format: :xml), params: { access_token: @token.value })
     assert_response :success
 
     # token belongs to a different admin domain
     host! provider_2.admin_domain
-    get(admin_api_accounts_path(format: :xml), access_token: @token.value)
+    get(admin_api_accounts_path(format: :xml), params: { access_token: @token.value })
     assert_response :forbidden
 
     host! @provider.admin_domain
     # invalid token
-    get(admin_api_accounts_path(format: :xml), access_token: 'alaska')
+    get(admin_api_accounts_path(format: :xml), params: { access_token: 'alaska' })
     assert_response :forbidden
 
     @token.scopes = ['finance']
     @token.save!
 
     # invalid scope
-    get(admin_api_accounts_path(format: :xml), access_token: @token.value)
+    get(admin_api_accounts_path(format: :xml), params: { access_token: @token.value })
     assert_response :forbidden
 
     @token.scopes = ['account_management']
@@ -49,7 +51,7 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     @user.save!
 
     # user does not have a permission
-    get(admin_api_accounts_path(format: :xml), access_token: @token.value)
+    get(admin_api_accounts_path(format: :xml), params: { access_token: @token.value })
     assert_response :forbidden
   end
 

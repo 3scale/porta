@@ -52,14 +52,12 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:fields_definition, account: provider, target: 'User', name: 'country')
     user = FactoryBot.create(:member, account: buyer)
 
-    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), {
-      user: {
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), params: { user: {
         role: 'admin',
         username: 'updatedusername',
         email: 'newemail@example.org',
         country: 'Japan'
-      }
-    }
+      } }
 
     assert user.reload.admin?
     assert_equal 'updatedusername', user.username

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
@@ -21,26 +23,24 @@ class Admin::Api::ApplicationPlanLimitsTest < ActionDispatch::IntegrationTest
 
     get(admin_api_application_plan_limits_path(@app_plan))
     assert_response :forbidden
-    get(admin_api_application_plan_limits_path(@app_plan), access_token: token.value)
+    get(admin_api_application_plan_limits_path(@app_plan), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-    get(admin_api_application_plan_limits_path(@app_plan), access_token: token.value)
+    get(admin_api_application_plan_limits_path(@app_plan), params: { access_token: token.value })
     assert_response :success
   end
 
   # Provider key
 
   test 'application_plan not found' do
-    get(admin_api_application_plan_limits_path(:application_plan_id => 0),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_limits_path(:application_plan_id => 0), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
 
   test 'application_plan_limits_index' do
-    get(admin_api_application_plan_limits_path(@app_plan),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_limits_path(@app_plan), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 

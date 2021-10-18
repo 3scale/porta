@@ -24,7 +24,7 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
     end
 
     test 'create' do
-      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), {}, HEADERS_XHR
+      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), session: HEADERS_XHR
 
       assert_response :success
       assert_template 'create'
@@ -33,7 +33,7 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
     test 'create with error' do
       ReferrerFilter.any_instance.stubs(persisted?: false)
 
-      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), {}, HEADERS_XHR
+      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), session: HEADERS_XHR
 
       assert_response :success
       assert_template 'error'
@@ -42,7 +42,7 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
     test 'delete' do
       id = cinstance.referrer_filters.add(referrer).id
 
-      delete provider_admin_application_referrer_filter_path(application_id: cinstance.to_param, id: id), {}, HEADERS_XHR
+      delete provider_admin_application_referrer_filter_path(application_id: cinstance.to_param, id: id), session: HEADERS_XHR
 
       assert_response :success
     end
@@ -55,14 +55,14 @@ class Provider::Admin::ReferrerFiltersControllerTest < ActionDispatch::Integrati
     end
 
     test 'create' do
-      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), {}, HEADERS_XHR
+      post provider_admin_application_referrer_filters_path(application_id: cinstance.to_param, referrer_filter: referrer), session: HEADERS_XHR
       assert_response :not_found
     end
 
     test 'delete' do
       id = cinstance.referrer_filters.add(referrer).id
 
-      delete provider_admin_application_referrer_filter_path(application_id: cinstance.to_param, id: id), {}, HEADERS_XHR
+      delete provider_admin_application_referrer_filter_path(application_id: cinstance.to_param, id: id), session: HEADERS_XHR
 
       assert_response :not_found
     end

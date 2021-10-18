@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
@@ -17,16 +19,16 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
     # member should not be able to work with webhooks at all
-    get(admin_api_webhooks_failures_path, access_token: token.value)
+    get(admin_api_webhooks_failures_path, params: { access_token: token.value })
     assert_response :forbidden
 
     user.role = 'admin'
     user.save!
-    get(admin_api_webhooks_failures_path, access_token: token.value)
+    get(admin_api_webhooks_failures_path, params: { access_token: token.value })
     assert_response :success
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(false)
-    get(admin_api_webhooks_failures_path, access_token: token.value)
+    get(admin_api_webhooks_failures_path, params: { access_token: token.value })
     assert_response :forbidden
   end
 
@@ -35,7 +37,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
-    delete(admin_api_webhooks_failures_path, access_token: token.value)
+    delete(admin_api_webhooks_failures_path, params: { access_token: token.value })
     assert_response :success
   end
 
@@ -44,7 +46,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   test '#show' do
     WebHookFailures.add @provider.id, "FakedException", 'uuid', 'url', '<fake><xml/></fake>'
 
-    get("/admin/api/webhooks/failures.xml", :provider_key => @provider.api_key)
+    get("/admin/api/webhooks/failures.xml", params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_equal @response.body,  WebHookFailures.new(@provider.id).to_xml
@@ -53,7 +55,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   test '#delete empties the list if no time passed' do
     WebHookFailures.new(@provider.id).add("id" => "2")
 
-    delete("/admin/api/webhooks/failures.xml", :provider_key => @provider.api_key)
+    delete("/admin/api/webhooks/failures.xml", params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_empty_xml @response.body
@@ -64,8 +66,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     WebHookFailures.new(@provider.id).add("id" => "2", time: '2010-01-01')
     WebHookFailures.new(@provider.id).add("id" => "3", time: '2011-01-01')
 
-    delete("/admin/api/webhooks/failures.xml", :provider_key => @provider.api_key,
-                "time" => '2010-01-01')
+    delete("/admin/api/webhooks/failures.xml", params: { :provider_key => @provider.api_key, "time" => '2010-01-01' })
 
     assert_response :success
     assert_empty_xml @response.body

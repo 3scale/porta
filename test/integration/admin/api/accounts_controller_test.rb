@@ -57,7 +57,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       rolling_updates_on
       rolling_update(:service_permissions, enabled: true)
 
-      put admin_api_account_path(buyer, format: :xml), update_params
+      put admin_api_account_path(buyer, format: :xml), params: update_params
       assert_response :ok
       assert_xml '//account/id'
       assert buyer.reload.settings.monthly_billing_enabled
@@ -67,7 +67,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       rolling_updates_on
       rolling_update(:service_permissions, enabled: false)
 
-      put admin_api_account_path(buyer, format: :xml), update_params
+      put admin_api_account_path(buyer, format: :xml), params: update_params
       assert_xml_403
       refute buyer.reload.settings.monthly_billing_enabled
     end
@@ -76,7 +76,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       rolling_updates_on
       rolling_update(:service_permissions, enabled: false)
 
-      put admin_api_account_path(buyer, format: :json), update_params
+      put admin_api_account_path(buyer, format: :json), params: update_params
       assert_equal 'Forbidden', JSON.parse(response.body).dig('status')
       assert_response :forbidden
       refute buyer.reload.settings.monthly_billing_enabled
@@ -144,7 +144,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
 
       assert_difference(WebHookWorker.jobs.method(:size)) do
-        put admin_api_account_path(buyer, format: :json), { monthly_billing_enabled: true, access_token: token.value }
+        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, access_token: token.value }
         assert_response :success
       end
     end
@@ -154,7 +154,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
 
       assert_no_difference(WebHookWorker.jobs.method(:size)) do
-        put admin_api_account_path(buyer, format: :json), { monthly_billing_enabled: true, provider_key: provider.provider_key }
+        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, provider_key: provider.provider_key }
         assert_response :success
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
@@ -28,7 +30,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     get(admin_api_accounts_path(format: :xml))
     assert_response :forbidden
 
-    get(admin_api_accounts_path(format: :xml), access_token: token.value)
+    get(admin_api_accounts_path(format: :xml), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -36,13 +38,13 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
-    get(admin_api_account_path(@buyer, format: :xml), access_token: token.value)
+    get(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :success
 
     user.admin_sections = []
     user.save!
 
-    get(admin_api_account_path(@buyer, format: :xml), access_token: token.value)
+    get(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :forbidden
   end
 
@@ -50,16 +52,16 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
-    get(find_admin_api_accounts_path(format: :xml), access_token: token.value)
+    get(find_admin_api_accounts_path(format: :xml), params: { access_token: token.value })
     assert_response :not_found
 
-    get(find_admin_api_accounts_path(format: :xml), access_token: token.value, username: @buyer.users.first.username)
+    get(find_admin_api_accounts_path(format: :xml), params: { access_token: token.value, username: @buyer.users.first.username })
     assert_response :success
 
     user.admin_sections = []
     user.save!
 
-    get(find_admin_api_accounts_path(format: :xml), access_token: token.value, username: @buyer.users.first.username)
+    get(find_admin_api_accounts_path(format: :xml), params: { access_token: token.value, username: @buyer.users.first.username })
     assert_response :forbidden
   end
 
@@ -69,18 +71,18 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     # member cannot update an account
     rolling_updates_off
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska')
+    put(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, org_name: 'alaska' })
     assert_response :forbidden
 
     # member cann update an account when service_permissions rolling update is enabled
     rolling_update(:service_permissions, enabled: true)
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska')
+    put(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, org_name: 'alaska' })
     assert_response :success
 
     user.role = 'admin'
     user.save!
 
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska')
+    put(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, org_name: 'alaska' })
     assert_response :success
   end
 
@@ -93,7 +95,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     assert_equal false, settings.monthly_charging_enabled
     assert_equal false, settings.monthly_billing_enabled
 
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, monthly_billing_enabled: true, monthly_charging_enabled: true, org_name: 'ooooooooo')
+    put(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, monthly_billing_enabled: true, monthly_charging_enabled: true, org_name: 'ooooooooo' })
 
     settings.reload
     assert_response :success
@@ -106,13 +108,13 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot destroy an account
-    delete(admin_api_account_path(format: :xml, id: @buyer.id), access_token: token.value)
+    delete(admin_api_account_path(format: :xml, id: @buyer.id), params: { access_token: token.value })
     assert_response :forbidden
 
     user.role = 'admin'
     user.save!
 
-    delete(admin_api_account_path(format: :xml, id: @buyer.id), access_token: token.value)
+    delete(admin_api_account_path(format: :xml, id: @buyer.id), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -123,18 +125,18 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     # member cannot update an account
     rolling_updates_off
-    put(change_plan_admin_api_account_path(@buyer, format: :xml), access_token: token.value, plan_id: plan.id)
+    put(change_plan_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, plan_id: plan.id })
     assert_response :forbidden
 
     # member can update an account when service_permissions rolling update is enabled
     rolling_update(:service_permissions, enabled: true)
-    put(change_plan_admin_api_account_path(@buyer, format: :xml), access_token: token.value, plan_id: plan.id)
+    put(change_plan_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, plan_id: plan.id })
     assert_response :success
 
     user.role = 'admin'
     user.save!
 
-    put(change_plan_admin_api_account_path(@buyer, format: :xml), access_token: token.value, plan_id: plan.id)
+    put(change_plan_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, plan_id: plan.id })
     assert_response :success
   end
 
@@ -143,26 +145,26 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     # member cannot reject or approve an account
-    put(approve_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
+    put(approve_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :forbidden
-    put(reject_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
+    put(reject_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :forbidden
 
     user.role = 'admin'
     user.save!
 
     Account.any_instance.expects(:approve).returns(true)
-    put(approve_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
+    put(approve_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :success
     Account.any_instance.expects(:reject).returns(true)
-    put(reject_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
+    put(reject_admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :success
   end
 
   # Provider key
 
   test 'index' do
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_accounts @response.body
@@ -171,8 +173,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'pagination is off unless needed' do
     buyers_max = @provider.buyers.count
 
-    get(admin_api_accounts_path(format: :xml),
-             provider_key: @provider.api_key, per_page: (buyers_max +1))
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, per_page: (buyers_max +1) })
 
     assert_response :success
     assert_not_pagination @response.body, "accounts"
@@ -184,7 +185,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     buyers_max = @provider.buyers.count
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, per_page: (buyers_max -1))
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, per_page: (buyers_max -1) })
 
     assert_response :success
     assert_pagination @response.body, "accounts"
@@ -196,7 +197,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     buyer.buy! @provider.default_account_plan
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, per_page: (max_per_page +1))
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, per_page: (max_per_page +1) })
 
     assert_response :success
     assert_pagination(@response.body, "accounts", per_page: max_per_page)
@@ -208,7 +209,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(to: 1)
 
-    get(admin_api_accounts_path, provider_key: @provider.api_key, page: "invalid")
+    get(admin_api_accounts_path, params: { provider_key: @provider.api_key, page: "invalid" })
 
     assert_response :success
     assert_pagination @response.body, "accounts", current_page: "1"
@@ -220,7 +221,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(to: 1)
 
-    get(admin_api_accounts_path, provider_key: @provider.api_key, per_page: "invalid")
+    get(admin_api_accounts_path, params: { provider_key: @provider.api_key, per_page: "invalid" })
 
     assert_response :success
     assert_pagination @response.body, "accounts", per_page: max_per_page
@@ -234,7 +235,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(to: 2)
 
-    get(admin_api_accounts_path, provider_key: @provider.api_key, per_page: "-1")
+    get(admin_api_accounts_path, params: { provider_key: @provider.api_key, per_page: "-1" })
 
     assert_response :success
     assert_pagination @response.body, "accounts", per_page: "2"
@@ -247,7 +248,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     @buyer.extra_fields = { some_extra_field: "< > &" }
     @buyer.save
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_accounts(@response.body, extra_fields: { some_extra_field: '&lt; &gt; &amp;' })
@@ -255,7 +256,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
   test 'security wise: index is access denied in buyer side' do
     host! @provider.domain
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :forbidden
   end
@@ -268,7 +269,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     buyer.make_pending!
     assert_equal 'pending', buyer.state # I lol'd
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'approved')
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, state: 'approved' })
 
     assert_response :success
     assert_accounts @response.body, state: 'approved'
@@ -282,7 +283,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       assert buyer.state == 'pending'
     end
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'pending', per_page: 1, page: 1)
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, state: 'pending', per_page: 1, page: 1 })
 
     assert_response :success
     assert_pagination @response.body, "accounts"
@@ -294,7 +295,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     buyer.make_pending!
     assert buyer.state == 'pending'
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'pending')
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, state: 'pending' })
 
     assert_response :success
     assert_accounts @response.body, state: 'pending'
@@ -306,7 +307,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     buyer.reject!
     assert buyer.state == 'rejected'
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'rejected')
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, state: 'rejected' })
 
     assert_response :success
     assert_accounts @response.body, state: 'rejected'
@@ -328,16 +329,16 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     assert_equal 3, @provider.buyer_users.size
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, username: "#{buyer1.users.first.username}_fake")
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, username: "#{buyer1.users.first.username}_fake" })
     assert_xml_404
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, user_id: - 1)
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, user_id: - 1 })
     assert_xml_404
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, email: "#{buyer2.emails.first}_fake")
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, email: "#{buyer2.emails.first}_fake" })
     assert_xml_404
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key })
     assert_xml_404
   end
 
@@ -362,28 +363,28 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     assert_equal 3, @provider.buyer_users.size
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, username: buyer1.users.first.username)
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, username: buyer1.users.first.username })
 
     assert_response :success
     assert_equal @response.body, buyer1.to_xml
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, user_id: buyer1.users.first.id)
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, user_id: buyer1.users.first.id })
 
     assert_response :success
     assert_equal @response.body, buyer1.to_xml
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, username: "#{buyer1.users.first.username}_fake", email: buyer2.emails.first)
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, username: "#{buyer1.users.first.username}_fake", email: buyer2.emails.first })
 
     assert_xml_404
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, email: buyer2.emails.first)
+    get(find_admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key, email: buyer2.emails.first })
 
     assert_response :success
     assert_equal @response.body, buyer2.to_xml
   end
 
   test 'show' do
-    get(admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    get(admin_api_account_path(@buyer, format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, { created_at: @buyer.created_at.xmlschema, updated_at: @buyer.updated_at.xmlschema })
@@ -397,7 +398,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     @buyer.update_attributes org_legaladdress: "non < > &", country_id: country.id
 
-    get(admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    get(admin_api_account_path(@buyer, format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, {org_legaladdress: "non &lt; &gt; &amp;", country: country.name})
@@ -408,7 +409,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     assert @buyer.defined_fields.map(&:name).exclude?(:org_legaladdress)
 
-    get(admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    get(admin_api_account_path(@buyer, format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     xml = Nokogiri::XML::Document.parse(@response.body)
@@ -416,7 +417,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update' do
-    put(admin_api_account_path(@buyer, format: :xml), org_name: "updated", provider_key: @provider.api_key)
+    put(admin_api_account_path(@buyer, format: :xml), params: { org_name: "updated", provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, { id: @buyer.id, org_name: "updated" })
@@ -428,7 +429,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'update with extra fields' do
     field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
 
-    put(admin_api_account_path(@buyer, format: :xml), some_extra_field: "stuff", vat_rate: 33, provider_key: @provider.api_key)
+    put(admin_api_account_path(@buyer, format: :xml), params: { some_extra_field: "stuff", vat_rate: 33, provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, { id: @buyer.id, extra_fields: { some_extra_field: "stuff" }})
@@ -444,23 +445,23 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     user.save!
 
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain')
+    put(admin_api_account_path(@buyer, format: :xml), params: { access_token: token.value, org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain' })
     assert_response :unprocessable_entity
 
     billing_address =  {name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain'}.transform_keys { |k| "billing_address[#{k}]"}
-    put(admin_api_account_path(@buyer, format: :xml), billing_address.merge(access_token: token.value, org_name: 'alaska'))
+    put(admin_api_account_path(@buyer, format: :xml), params: billing_address.merge(access_token: token.value, org_name: 'alaska'))
     assert_response :success
   end
 
   test 'destroy' do
-    delete(admin_api_account_path(format: :xml, id: @buyer.id), provider_key: @provider.api_key)
+    delete(admin_api_account_path(format: :xml, id: @buyer.id), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_empty_xml response.body
   end
 
   test 'destroy not found' do
-    delete(admin_api_account_path(format: :xml, id: 0), provider_key: @provider.api_key)
+    delete(admin_api_account_path(format: :xml, id: 0), params: { provider_key: @provider.api_key })
 
     assert_xml_404
   end
@@ -468,7 +469,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'make_pending' do
     assert @buyer.pending? == false
 
-    put(make_pending_admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    put(make_pending_admin_api_account_path(@buyer, format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, { id: @buyer.id, state: "pending" })
@@ -481,7 +482,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     @buyer.make_pending!
     assert @buyer.pending?
 
-    put(approve_admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    put(approve_admin_api_account_path(@buyer, format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, { id: @buyer.id, state: "approved" })
@@ -493,7 +494,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   test 'reject' do
     assert @buyer.rejected? == false
 
-    put(reject_admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    put(reject_admin_api_account_path(@buyer, format: :xml), params: { provider_key: @provider.api_key })
 
     assert_response :success
     assert_account(@response.body, { id: @buyer.id, state: "rejected" })
@@ -509,7 +510,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     Admin::Api::AccountsController.any_instance.expects(:report_traffic)
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    get(admin_api_accounts_path(format: :xml), params: { provider_key: @provider.api_key })
     assert_response :success
     assert_accounts @response.body
   end

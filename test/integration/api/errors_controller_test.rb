@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Api::ErrorsControllerTest < ActionDispatch::IntegrationTest
@@ -11,7 +13,7 @@ class Api::ErrorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'index with pagination' do
-    get admin_service_errors_path(@service), {per_page: 1, page: 2}
+    get admin_service_errors_path(@service), params: { per_page: 1, page: 2 }
     assigned_errors = assigns(:errors)
     assert_equal 2, assigned_errors.size
     assigned_errors.each { |error| assert_instance_of(ThreeScale::Core::ServiceError, error) }

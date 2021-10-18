@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
@@ -32,10 +34,10 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     get(admin_api_applications_path)
     assert_response :forbidden
-    get(admin_api_applications_path, access_token: token.value)
+    get(admin_api_applications_path, params: { access_token: token.value })
     assert_response :success
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-    get(admin_api_applications_path, access_token: token.value, service_id: @service.id)
+    get(admin_api_applications_path, params: { access_token: token.value, service_id: @service.id })
     assert_response :success
   end
 
@@ -44,7 +46,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   test 'index on backend v2' do
     @service.backend_version = '2'
     @service.save!
-    get admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key
+    get admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
     assert_applications @response.body, :backend => "2"
@@ -54,7 +56,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     @service.backend_version = '1'
     @service.save!
 
-    get admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key
+    get admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
     assert_applications @response.body, :backend => "1"
@@ -64,14 +66,14 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     @service.backend_version = 'oauth'
     @service.save!
 
-    get admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key
+    get admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
     assert_applications @response.body, :backend => :oauth
   end
 
   test 'pagination is off unless needed' do
-    get admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key
+    get admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
     assert_not_pagination @response.body, "applications"
@@ -86,8 +88,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     @application_plan.publish!
     buyer.buy! @application_plan
 
-    get(admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key,
-             :per_page => 1)
+    get(admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key, :per_page => 1 })
 
     assert_response :success
     assert_pagination @response.body, "applications"
@@ -100,8 +101,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(:to => 1)
 
-    get(admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key,
-             :per_page => (max_per_page +1))
+    get(admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key, :per_page => (max_per_page +1) })
 
     assert_response :success
     assert_pagination @response.body, "applications", :per_page => max_per_page
@@ -114,7 +114,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(:to => 1)
 
-    get(admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key, :page => "invalid")
+    get(admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key, :page => "invalid" })
 
     assert_response :success
     assert_pagination @response.body, "applications", :current_page => "1"
@@ -127,7 +127,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(:to => 1)
 
-    get(admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key, :per_page => "invalid")
+    get(admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key, :per_page => "invalid" })
 
     assert_response :success
     assert_pagination @response.body, "applications", :per_page => max_per_page
@@ -141,7 +141,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     max_per_page = set_api_pagination_max_per_page(:to => 2)
 
-    get(admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key, :per_page => "-1")
+    get(admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key, :per_page => "-1" })
 
     assert_response :success
     assert_pagination @response.body, "applications", :per_page => "2"
@@ -156,9 +156,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
     end
 
     should 'return 404 on non found app' do
-      get(find_admin_api_applications_path(:format => :xml),
-               :user_key => "SHAWARMA",
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :user_key => "SHAWARMA", :provider_key => @provider.api_key })
 
       assert_xml_404
     end
@@ -167,9 +165,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = '1'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-               :user_key => @application.user_key,
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :user_key => @application.user_key, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -181,9 +177,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = '2'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-               :app_id => @application.application_id,
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :app_id => @application.application_id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -196,9 +190,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = 'oauth'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-               :app_id => @application.application_id,
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :app_id => @application.application_id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -213,9 +205,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = 'oidc'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-          :app_id => @application.application_id,
-          :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :app_id => @application.application_id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -232,9 +222,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       config.service_accounts_enabled = true
       config.save!
 
-      get(find_admin_api_applications_path(:format => :json),
-          :app_id => @application.application_id,
-          :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :json), params: { :app_id => @application.application_id, :provider_key => @provider.api_key })
 
       assert_response :success
 
@@ -249,9 +237,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = 'oauth'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-               :application_id => @application.id,
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :application_id => @application.id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -262,9 +248,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = '2'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-               :application_id => @application.id,
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :application_id => @application.id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -275,9 +259,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.backend_version = '1'
       @service.save!
 
-      get(find_admin_api_applications_path(:format => :xml),
-               :application_id => @application.id,
-               :provider_key => @provider.api_key)
+      get(find_admin_api_applications_path(:format => :xml), params: { :application_id => @application.id, :provider_key => @provider.api_key })
 
       assert_response :success
       assert_application(@response.body,
@@ -291,7 +273,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'security wise: applications is access denied in buyer side' do
     host! @provider.domain
-    get admin_api_applications_path(:format => :xml), :provider_key => @provider.api_key
+    get admin_api_applications_path(:format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :forbidden
   end

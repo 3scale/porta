@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
@@ -20,7 +22,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'index with access token as a member' do
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
-    get(admin_api_users_path(format: :xml), access_token: token.value)
+    get(admin_api_users_path(format: :xml), params: { access_token: token.value })
 
     assert_response :forbidden
   end
@@ -29,11 +31,11 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(false)
-    get(admin_api_users_path(format: :xml), access_token: token.value)
+    get(admin_api_users_path(format: :xml), params: { access_token: token.value })
     assert_response :forbidden
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    get(admin_api_users_path(format: :xml), access_token: token.value)
+    get(admin_api_users_path(format: :xml), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -43,7 +45,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     impersonation_admin.save!
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    get(admin_api_users_path(format: :xml), access_token: token.value)
+    get(admin_api_users_path(format: :xml), params: { access_token: token.value })
     assert_response :success
     refute_xpath ".//username", /impersonation_admin/
   end
@@ -52,18 +54,18 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: @member, scopes: ['account_management'])
 
     # member's opening his page
-    get(admin_api_user_path(format: :xml, id: @member.id), access_token: token.value)
+    get(admin_api_user_path(format: :xml, id: @member.id), params: { access_token: token.value })
     assert_response :success
 
     # member's opening admin's page
-    get(admin_api_user_path(format: :xml, id: admin.id), access_token: token.value)
+    get(admin_api_user_path(format: :xml, id: admin.id), params: { access_token: token.value })
     assert_response :forbidden
   end
 
   test 'show with access token as an admin' do
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
-    get(admin_api_user_path(format: :xml, id: @member.id), access_token: token.value)
+    get(admin_api_user_path(format: :xml, id: @member.id), params: { access_token: token.value })
 
     assert_response :success
   end
@@ -72,11 +74,11 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(false)
-    post(admin_api_users_path(format: :xml), username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value)
+    post(admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value })
     assert_response :forbidden
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    post(admin_api_users_path(format: :xml), username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value)
+    post(admin_api_users_path(format: :xml), params: { username: 'aaa', email: 'aaa@aaa.hu', access_token: token.value })
     assert_response :success
   end
 
@@ -134,8 +136,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: ['account_management'])
     service = @provider.services.default
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value),
-        { member_permission_service_ids: [ service.id ], member_permission_ids: %w[monitoring services] }
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value), params: { member_permission_service_ids: [ service.id ], member_permission_ids: %w[monitoring services] }
 
     assert_response :success
 
@@ -149,8 +150,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     service = @provider.services.default
     admin_sections = @member.admin_sections
 
-    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value),
-        { member_permission_service_ids: [ service.id], member_permission_ids: %w[monitoring] }
+    put admin_api_user_path(format: :xml, id: @member.id, access_token: token.value), params: { member_permission_service_ids: [ service.id], member_permission_ids: %w[monitoring] }
 
     assert_response :success
 
@@ -188,8 +188,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   #TODO: explicitly test the extra fields
   test 'index' do
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key)
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_users @response.body, { :account_id => @provider.id }
@@ -197,16 +196,14 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   #TODO: dry these roles tests
   test 'admins' do
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key, :role => 'admin')
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key, :role => 'admin' })
 
     assert_response :success
     assert_users @response.body, { :account_id => @provider.id, :role => "admin" }
   end
 
   test 'members' do
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key, :role => 'member')
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key, :role => 'member' })
 
     assert_response :success
     assert_users @response.body, { :account_id => @provider.id, :role => "member" }
@@ -214,16 +211,14 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   #TODO: dry these states tests
   test 'actives' do
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key, :state => 'active')
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key, :state => 'active' })
 
     assert_response :success
     assert_users @response.body, { :account_id => @provider.id, :state => "active" }
   end
 
   test 'pendings' do
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key, :state => 'pending')
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key, :state => 'pending' })
 
     assert_response :success
     assert_users @response.body, { :account_id => @provider.id, :state => "pending" }
@@ -234,16 +229,14 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     chuck.activate!
     chuck.suspend!
 
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key, :state => 'suspended')
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key, :state => 'suspended' })
 
     assert_response :success
     assert_users @response.body, {:account_id => @provider.id, :state => "suspended"}
   end
 
   test 'invalid role' do
-    get(admin_api_users_path(:format => :xml),
-             :provider_key => @provider.api_key, :role => 'invalid')
+    get(admin_api_users_path(:format => :xml), params: { :provider_key => @provider.api_key, :role => 'invalid' })
 
     assert_response :success
 
@@ -254,10 +247,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'create defaults is pending member' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    post(admin_api_users_path(:format => :xml),
-              :username => 'chuck',
-              :email => 'chuck@norris.us',
-              :provider_key => @provider.api_key)
+    post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :email => 'chuck@norris.us', :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user(@response.body,
@@ -273,11 +263,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     field_defined(@master,
                   { :target => "User", "name" => "some_extra_field" })
 
-    post(admin_api_users_path(:format => :xml),
-              :username => 'chuck',
-              :email => 'chuck@norris.us',
-              :some_extra_field => "extra value",
-              :provider_key => @provider.api_key)
+    post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :email => 'chuck@norris.us', :some_extra_field => "extra value", :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -290,10 +276,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test "create sends no email" do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
     assert_no_change :of => -> { ActionMailer::Base.deliveries.count } do
-      post(admin_api_users_path(:format => :xml),
-                :username => 'chuck',
-                :email => 'chuck@norris.us',
-                :provider_key => @provider.api_key)
+      post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :email => 'chuck@norris.us', :provider_key => @provider.api_key })
     end
 
     assert_response :success
@@ -301,11 +284,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test "create with cas_identifier" do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    post(admin_api_users_path(:format => :xml),
-                :username => 'luis',
-                :email => 'luis@norris.us',
-                :cas_identifier => 'luis',
-                :provider_key => @provider.api_key)
+    post(admin_api_users_path(:format => :xml), params: { :username => 'luis', :email => 'luis@norris.us', :cas_identifier => 'luis', :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user body, {:cas_identifier => 'luis'}
@@ -313,10 +292,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'create does not creates admins nor active users' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    post(admin_api_users_path(:format => :xml),
-              :username => 'chuck', :role => "admin",
-              :email => 'chuck@norris.us', :state => "active",
-              :provider_key => @provider.api_key)
+    post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :role => "admin", :email => 'chuck@norris.us', :state => "active", :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user(@response.body,
@@ -330,11 +306,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'create also sets user password' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    post(admin_api_users_path(:format => :xml),
-              :username => 'chuck', :email => 'chuck@norris.us',
-              :password => "posted-password",
-              :password_confirmation => "posted-password",
-              :provider_key => @provider.api_key)
+    post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :email => 'chuck@norris.us', :password => "posted-password", :password_confirmation => "posted-password", :provider_key => @provider.api_key })
 
     chuck = User.last
     assert chuck.authenticated?('posted-password')
@@ -342,9 +314,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test 'create errors' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
-    post(admin_api_users_path(:format => :xml),
-              :username => 'chuck', :role => "admin",
-              :provider_key => @provider.api_key)
+    post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :role => "admin", :provider_key => @provider.api_key })
 
     assert_response :unprocessable_entity
     assert_xml_error @response.body, "Email should look like an email address"
@@ -352,18 +322,14 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
   test "create forbidden if multiple_users is not allowed" do
     assert_no_change :of => -> { ActionMailer::Base.deliveries.count } do
-      post(admin_api_users_path(:format => :xml),
-                :username => 'chuck',
-                :email => 'chuck@norris.us',
-                :provider_key => @provider.api_key)
+      post(admin_api_users_path(:format => :xml), params: { :username => 'chuck', :email => 'chuck@norris.us', :provider_key => @provider.api_key })
     end
 
     assert_response :forbidden
   end
 
   test 'show' do
-    get(admin_api_user_path(:format => :xml, :id => @member.id),
-             :provider_key => @provider.api_key)
+    get(admin_api_user_path(:format => :xml, :id => @member.id), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user(@response.body, {
@@ -377,8 +343,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     impersonation_admin  = Signup::ImpersonationAdminBuilder.build(account: @provider)
     impersonation_admin.save!
 
-    get(admin_api_user_path(:format => :xml, :id => impersonation_admin.id),
-        :provider_key => @provider.api_key)
+    get(admin_api_user_path(:format => :xml, :id => impersonation_admin.id), params: { :provider_key => @provider.api_key })
 
     assert_response :not_found
     assert_empty_xml @response.body
@@ -387,8 +352,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   test 'show with cas identifier' do
     cas_user = FactoryBot.create :user, :account => @provider, :role => 'member', :cas_identifier => 'xxx-enterprise'
 
-    get(admin_api_user_path(:format => :xml, :id => cas_user.id),
-             :provider_key => @provider.api_key)
+    get(admin_api_user_path(:format => :xml, :id => cas_user.id), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user body, :cas_identifier => 'xxx-enterprise'
@@ -403,8 +367,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
     @member.save
 
-    get(admin_api_user_path(:format => :xml, :id => @member.id),
-                                 :provider_key => @provider.api_key)
+    get(admin_api_user_path(:format => :xml, :id => @member.id), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user(@response.body, :extra_fields => {
@@ -412,8 +375,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'show user not found' do
-    get(admin_api_user_path(:format => :xml, :id => 0),
-             :provider_key => @provider.api_key)
+    get(admin_api_user_path(:format => :xml, :id => 0), params: { :provider_key => @provider.api_key })
 
     assert_response :not_found
     assert_empty_xml @response.body
@@ -425,8 +387,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
     chuck = FactoryBot.create :user, :account => @provider, :role => "member"
     put(admin_api_user_path(:format => :xml, :id => chuck.id,
-                                 :some_extra_field => "extra value" ),
-             :provider_key => @provider.api_key)
+                                 :some_extra_field => "extra value" ), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user(@response.body, { :account_id => @provider.id,
@@ -442,8 +403,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
     put(admin_api_user_path(:format => :xml, :id => chuck.id,
                                  :password => "updated-password",
-                                 :password_confirmation => "updated-password"),
-             :provider_key => @provider.api_key)
+                                 :password_confirmation => "updated-password"), params: { :provider_key => @provider.api_key })
 
     chuck.reload
     assert_response :success
@@ -455,9 +415,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
     assert chuck.pending?
     assert chuck.member?
 
-    put(admin_api_user_path(:format => :xml, :id => chuck.id),
-             :username => 'chuck', :role => "admin", :state => "active",
-             :provider_key => @provider.api_key)
+    put(admin_api_user_path(:format => :xml, :id => chuck.id), params: { :username => 'chuck', :role => "admin", :state => "active", :provider_key => @provider.api_key })
 
     assert_response :success
     assert_user(@response.body,
@@ -471,24 +429,21 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
   end
 
   test 'update not found' do
-    put(admin_api_user_path(:format => :xml, :id => 0),
-             :provider_key => @provider.api_key)
+    put(admin_api_user_path(:format => :xml, :id => 0), params: { :provider_key => @provider.api_key })
 
     assert_response :not_found
     assert_empty_xml @response.body
   end
 
   test 'destroy' do
-    delete(admin_api_user_path(:format => :xml, :id => @member.id),
-                :provider_key => @provider.api_key)
+    delete(admin_api_user_path(:format => :xml, :id => @member.id), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_empty_xml @response.body
   end
 
   test 'destroy not found' do
-    delete(admin_api_user_path(:format => :xml, :id => 0),
-                :provider_key => @provider.api_key)
+    delete(admin_api_user_path(:format => :xml, :id => 0), params: { :provider_key => @provider.api_key })
 
     assert_response :not_found
     assert_empty_xml @response.body

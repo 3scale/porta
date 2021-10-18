@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
@@ -12,8 +14,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
     service = FactoryBot.create :service, :account => @provider
     FactoryBot.create :metric, :service => service
 
-    get(admin_api_service_metrics_path(service),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_metrics_path(service), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -25,7 +26,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   test 'show' do
     metric = FactoryBot.create :metric, :service => @service
 
-    get(admin_api_service_metric_path(@service, metric), :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_metric_path(@service, metric), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -46,14 +47,13 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
     # a metric of another service
     metric = FactoryBot.create :metric, :service => FactoryBot.create(:service, :account => @provider)
 
-    get(admin_api_service_metric_path(@service, metric), :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_service_metric_path(@service, metric), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'create' do
-    post(admin_api_service_metrics_path(@service), :provider_key => @provider.api_key, :format => :xml,
-         :system_name => 'example', :friendly_name => 'friendly example', :unit => 'Mb')
+    post(admin_api_service_metrics_path(@service), params: { :provider_key => @provider.api_key, :format => :xml, :system_name => 'example', :friendly_name => 'friendly example', :unit => 'Mb' })
 
     assert_response :success
 
@@ -69,7 +69,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create errors xml' do
-    post(admin_api_service_metrics_path(@service), :provider_key => @provider.api_key, :format => :xml, :unit => "pounds")
+    post(admin_api_service_metrics_path(@service), params: { :provider_key => @provider.api_key, :format => :xml, :unit => "pounds" })
 
     assert_response :unprocessable_entity
 
@@ -79,9 +79,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   test 'update' do
     metric = @service.metrics.create!(:system_name => 'old_name', :friendly_name => "old friendly", :unit => 'Mb')
 
-    put("/admin/api/services/#{@service.id}/metrics/#{metric.id}",
-        :provider_key => @provider.api_key, :format => :xml,
-        :system_name => 'new_name', :friendly_name => "new friendly", :unit => 'bucks')
+    put("/admin/api/services/#{@service.id}/metrics/#{metric.id}", params: { :provider_key => @provider.api_key, :format => :xml, :system_name => 'new_name', :friendly_name => "new friendly", :unit => 'bucks' })
 
     assert_response :success
 
@@ -96,7 +94,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   end
 
   test 'update with wrong id' do
-    put("/admin/api/services/#{@service.id}/metrics/libanana", :provider_key => @provider.api_key, :format => :xml, :system_name => "jk")
+    put("/admin/api/services/#{@service.id}/metrics/libanana", params: { :provider_key => @provider.api_key, :format => :xml, :system_name => "jk" })
 
     assert_response :not_found
   end
@@ -104,8 +102,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   test 'destroy' do
     metric = FactoryBot.create :metric, :service => @service
 
-    delete("/admin/api/services/#{@service.id}/metrics/#{metric.id}",
-           :provider_key => @provider.api_key, :format => :xml)
+    delete("/admin/api/services/#{@service.id}/metrics/#{metric.id}", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -117,7 +114,7 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy with wrong id' do
-    delete("/admin/api/services/#{@service.id}/metrics/libanana", :provider_key => @provider.api_key, :format => :xml)
+    delete("/admin/api/services/#{@service.id}/metrics/libanana", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end

@@ -17,7 +17,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansControllerTest < ActionDispatch
       errors.add(:base, 'any error')
       false
     end
-    post admin_buyers_service_contracts_bulk_change_plan_path, selected: [service_contract.id], change_plans: {plan_id: change_service_plan.id}, action: 'create'
+    post admin_buyers_service_contracts_bulk_change_plan_path, params: { selected: [service_contract.id], change_plans: {plan_id: change_service_plan.id}, action: 'create' }
     assert_response :unprocessable_entity
     assert_template 'buyers/applications/bulk/shared/errors.html'
   end
@@ -28,7 +28,7 @@ class Buyers::ServiceContracts::Bulk::ChangePlansControllerTest < ActionDispatch
 
     tenant.settings.service_plans_ui_visible = true
 
-    get new_admin_buyers_service_contracts_bulk_change_plan_path, selected: contracts.map(&:id)
+    get new_admin_buyers_service_contracts_bulk_change_plan_path, params: { selected: contracts.map(&:id) }
 
     page = Nokogiri::HTML::Document.parse(response.body)
 

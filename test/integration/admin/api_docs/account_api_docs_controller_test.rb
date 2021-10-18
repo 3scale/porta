@@ -125,7 +125,7 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
       put toggle_visible_admin_api_docs_service_path(forbidden_api_docs_service)
       assert_response :not_found
 
-      put admin_api_docs_service_path(forbidden_api_docs_service), api_docs_service: { service_id: forbidden_api_docs_service.id }
+      put admin_api_docs_service_path(forbidden_api_docs_service), params: { api_docs_service: { service_id: forbidden_api_docs_service.id } }
       assert_response :not_found
 
       delete admin_api_docs_service_path(forbidden_api_docs_service)

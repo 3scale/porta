@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
@@ -29,10 +31,10 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
     post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'))
     assert_response :forbidden
-    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), access_token: token.value)
+    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([app.issuer.id]).at_least_once
-    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), access_token: token.value)
+    post(admin_api_account_application_keys_path(@buyer, app, key: 'alaska'), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -44,8 +46,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
     post(admin_api_account_application_keys_path(@buyer, application,
                                                       :key => new_key,
-                                                      :format => :xml),
-              :provider_key => @provider.api_key)
+                                                      :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(body,
@@ -61,8 +62,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
     post(admin_api_account_application_keys_path(@buyer, application,
                                                       :key => key,
-                                                      :format => :xml),
-              :provider_key => @provider.api_key)
+                                                      :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(@response.body,
@@ -100,9 +100,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
 
-    delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key),
-                :provider_key => @provider.api_key,
-                :format => :xml)
+    delete(admin_api_account_application_key_path(@buyer.id, application.id, rm_key), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 

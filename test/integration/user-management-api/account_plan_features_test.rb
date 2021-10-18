@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
@@ -14,8 +16,7 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
     @account_plan.features << feat
     @account_plan.save!
 
-    get(admin_api_account_plan_features_path(@account_plan.id),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_account_plan_features_path(@account_plan.id), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -25,17 +26,14 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'not found account_plan replies 404' do
-    get(admin_api_account_plan_features_path(0),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_account_plan_features_path(0), params: { :provider_key => @provider.api_key, :format => :xml })
     assert_xml_404
   end
 
   test 'enable new feature' do
     feat = FactoryBot.create :feature, :featurable => @provider
 
-    post(admin_api_account_plan_features_path(@account_plan.id),
-              :feature_id => feat.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_account_plan_features_path(@account_plan.id), params: { :feature_id => feat.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -49,9 +47,7 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
                                      :featurable => FactoryBot.create(:provider_account),
                                      :scope => "AccountPlan")
 
-    post(admin_api_account_plan_features_path(@account_plan.id),
-              :feature_id => feature_not_in_account.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_account_plan_features_path(@account_plan.id), params: { :feature_id => feature_not_in_account.id, :provider_key => @provider.api_key, :format => :xml })
     assert_xml_404
   end
 
@@ -60,9 +56,7 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
   test 'disable feature' do
     feat = FactoryBot.create :feature, :featurable => @provider
 
-    post(admin_api_account_plan_features_path(@account_plan.id),
-              :feature_id => feat.id,
-              :provider_key => @provider.api_key, :format => :xml)
+    post(admin_api_account_plan_features_path(@account_plan.id), params: { :feature_id => feat.id, :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 

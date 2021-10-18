@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class SessionsTest < ActionDispatch::IntegrationTest
@@ -25,10 +27,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   test 'sso end-to-end integration' do
     host! @provider.admin_domain
 
-    post(admin_api_sso_tokens_path, :format => :xml,
-              :provider_key => @provider.api_key,
-              :user_id => @buyer.users.first.id, :expires_in => 6000
-        )
+    post(admin_api_sso_tokens_path, params: { :format => :xml, :provider_key => @provider.api_key, :user_id => @buyer.users.first.id, :expires_in => 6000 })
 
     assert_response :created
 
@@ -51,11 +50,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     host! @provider.admin_domain
 
-    post(admin_api_sso_tokens_path, :format => :xml,
-              :provider_key => @provider.api_key,
-              :user_id => user_id, :username => user.username,
-              :redirect_url => forum_path(:host => @provider.domain)
-        )
+    post(admin_api_sso_tokens_path, params: { :format => :xml, :provider_key => @provider.api_key, :user_id => user_id, :username => user.username, :redirect_url => forum_path(:host => @provider.domain) })
 
     assert_response :created
 
@@ -74,10 +69,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   test "sso end-to-end with username and without expires_in" do
     host! @provider.admin_domain
 
-    post(admin_api_sso_tokens_path, :format => :xml,
-              :provider_key => @provider.api_key,
-              :username => @buyer.users.first.username
-        )
+    post(admin_api_sso_tokens_path, params: { :format => :xml, :provider_key => @provider.api_key, :username => @buyer.users.first.username })
 
     assert_response :created
 
@@ -222,7 +214,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     assert_equal 1, user.user_sessions.count
 
     assert_no_difference '@provider.reload.updated_at' do
-      with_forgery_protection { put provider_admin_account_path, {account: {org_name: 'jose'}} }
+      with_forgery_protection { put provider_admin_account_path, params: { account: {org_name: 'jose'} } }
     end
 
     assert_redirected_to provider_login_url
@@ -242,10 +234,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
     host! @provider.admin_domain
     provider_login_with user.username, 'supersecret'
     assert_equal 2, user.user_sessions.count
-    put provider_admin_user_personal_details_path, {user: {current_password: 'supersecret' ,
+    put provider_admin_user_personal_details_path, params: { user: {current_password: 'supersecret' ,
                                                               password: 'newpwd',
                                                               username: 'test',
-                                                              email: 'test2@example.com'}}
+                                                              email: 'test2@example.com'} }
 
     assert_equal 1, user.user_sessions.count
   end
@@ -258,10 +250,10 @@ class SessionsTest < ActionDispatch::IntegrationTest
     host! @provider.domain
     login_with user.username, 'supersecret'
     assert_equal 2, user.user_sessions.count
-    put '/admin/account/personal_details', {user: {current_password: 'supersecret' ,
+    put '/admin/account/personal_details', params: { user: {current_password: 'supersecret' ,
                                                      password: 'newpwd',
                                                      username: 'test',
-                                                     email: 'test2@example.com'}}
+                                                     email: 'test2@example.com'} }
 
     assert_equal 1, user.user_sessions.count
   end

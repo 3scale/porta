@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
@@ -12,21 +14,21 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
   end
 
   test 'list active docs as json' do
-    get admin_api_active_docs_path(:format => :json), :provider_key => @provider.api_key
+    get admin_api_active_docs_path(:format => :json), params: { :provider_key => @provider.api_key }
     assert_response :success
 
     assert_equal [@active_doc1, @active_doc2].extend(::ApiDocs::ServicesRepresenter).to_json, response.body
   end
 
   test 'list active docs as xml' do
-    get admin_api_active_docs_path(:format => :xml), :provider_key => @provider.api_key
+    get admin_api_active_docs_path(:format => :xml), params: { :provider_key => @provider.api_key }
     assert_response :success
 
     assert_equal [@active_doc1, @active_doc2].extend(::ApiDocs::ServicesRepresenter).to_xml, response.body
   end
 
   test 'create the json spec' do
-    post admin_api_active_docs_path(:format => :json), :provider_key => @provider.api_key, api_docs_service: { :name => 'test', :system_name => 'test_system_name', :body => '{"basePath":"https://example.com", "apis":[{"zoo":"pop"}]}', :description => 'test1' }
+    post admin_api_active_docs_path(:format => :json), params: { :provider_key => @provider.api_key, api_docs_service: { :name => 'test', :system_name => 'test_system_name', :body => '{"basePath":"https://example.com", "apis":[{"zoo":"pop"}]}', :description => 'test1' } }
 
     assert_response :success
 
@@ -37,7 +39,7 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create the xml spec' do
-    post admin_api_active_docs_path(:format => :xml), :provider_key => @provider.api_key, api_docs_service: { :name => 'test', :system_name => 'test_system_name', :body => '{"basePath":"https://example.com", "apis":[{"zoo":"pop"}]}', :description => 'test1' }
+    post admin_api_active_docs_path(:format => :xml), params: { :provider_key => @provider.api_key, api_docs_service: { :name => 'test', :system_name => 'test_system_name', :body => '{"basePath":"https://example.com", "apis":[{"zoo":"pop"}]}', :description => 'test1' } }
 
     assert_response :success
 
@@ -103,14 +105,14 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
   end
 
   test 'delete the json spec' do
-    delete admin_api_active_doc_path(:format => :json, :id => @active_doc1.id), :provider_key => @provider.api_key
+    delete admin_api_active_doc_path(:format => :json, :id => @active_doc1.id), params: { :provider_key => @provider.api_key }
     assert_response :success
 
     assert_raise(ActiveRecord::RecordNotFound){ @active_doc1.reload }
   end
 
   test 'delete the xml spec' do
-    delete admin_api_active_doc_path(:format => :xml, :id => @active_doc1.id), :provider_key => @provider.api_key
+    delete admin_api_active_doc_path(:format => :xml, :id => @active_doc1.id), params: { :provider_key => @provider.api_key }
     assert_response :success
 
     assert_raise(ActiveRecord::RecordNotFound){ @active_doc1.reload }
@@ -133,7 +135,7 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
   end
 
   test 'active id not found behaves properly with json' do
-    put admin_api_active_doc_path(:format => :json, :id => 0), :provider_key => @provider.api_key
+    put admin_api_active_doc_path(:format => :json, :id => 0), params: { :provider_key => @provider.api_key }
     assert_response :not_found
     assert_equal @response.body, '{"status":"Not found"}'
     assert_equal @active_doc1.reload.body, '{"basePath":"http://zebra.example.net", "apis":[]}'
@@ -142,7 +144,7 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
 
   test 'security wise: active docs is access denied in buyer side' do
     host! @provider.domain
-    get admin_api_active_doc_path(:format => :json, :id => @active_doc1.id), :provider_key => @provider.api_key
+    get admin_api_active_doc_path(:format => :json, :id => @active_doc1.id), params: { :provider_key => @provider.api_key }
     assert_response :forbidden
   end
 

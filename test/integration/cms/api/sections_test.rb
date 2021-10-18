@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module CMS
@@ -16,7 +18,7 @@ module CMS
       test 'index' do
         20.times { create_section }
 
-        get admin_api_cms_sections_path, provider_key: @provider.provider_key, format: :xml
+        get admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :success
 
         doc = Nokogiri::XML::Document.parse(@response.body)
@@ -28,7 +30,7 @@ module CMS
         20.times { create_section  }
 
         # first page
-        get admin_api_cms_sections_path, provider_key: @provider.provider_key, format: :xml
+        get admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :success
         doc = Nokogiri::XML::Document.parse(@response.body)
 
@@ -38,7 +40,7 @@ module CMS
         assert_equal 20, doc.xpath('/sections/*').size
 
         # second page
-        get admin_api_cms_sections_path, provider_key: @provider.provider_key, page: 2, format: :xml
+        get admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, page: 2, format: :xml }
         assert_response :success
         doc = Nokogiri::XML::Document.parse(@response.body)
         assert_equal 1, doc.xpath('/sections/*').size
@@ -48,7 +50,7 @@ module CMS
         10.times { create_section  }
 
         common = { provider_key: @provider.provider_key, format: :xml }
-        get admin_api_cms_sections_path, common.merge(per_page: 5)
+        get admin_api_cms_sections_path, params: common.merge(per_page: 5)
         assert_response :success
         doc = Nokogiri::XML::Document.parse(@response.body)
 
@@ -60,7 +62,7 @@ module CMS
 
       test 'show section' do
         section = create_section
-        get admin_api_cms_section_path(section), provider_key: @provider.provider_key, format: :xml
+        get admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :success
 
         doc = Nokogiri::XML::Document.parse(@response.body)
@@ -74,19 +76,19 @@ module CMS
       end
 
       test 'find section by system name' do
-        get admin_api_cms_section_path(id: 'root', format: :json), provider_key: @provider.provider_key
+        get admin_api_cms_section_path(id: 'root', format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
         assert_equal 'root', JSON.parse(response.body)['section']['system_name']
       end
 
       test 'invalid system name or id' do
-        get admin_api_cms_section_path(id: 'lamb', format: :json), provider_key: @provider.provider_key
+        get admin_api_cms_section_path(id: 'lamb', format: :json), params: { provider_key: @provider.provider_key }
         assert_response :not_found
       end
 
       test 'update' do
         section = create_section
-        put admin_api_cms_section_path(section), provider_key: @provider.provider_key, format: :xml, title: 'foo'
+        put admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key, format: :xml, title: 'foo' }
         assert_response :success
 
         section.reload
@@ -95,7 +97,7 @@ module CMS
 
       test 'create' do
 
-        post admin_api_cms_sections_path, { provider_key: @provider.provider_key, format: :xml, title: 'Foo Bar Lol' }
+        post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml, title: 'Foo Bar Lol' }
 
         assert_response :success
 

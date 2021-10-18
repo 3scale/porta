@@ -23,7 +23,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
       'HTTP_IF_MODIFIED_SINCE' => response.header['Last-Modified'],
       'HTTP_IF_NONE_MATCH'     => response.header['ETag']
     }
-    get(latest_admin_api_service_proxy_configs_path(params), {}, headers)
+    get(latest_admin_api_service_proxy_configs_path(params), session: headers)
     assert_response :not_modified
 
     get latest_admin_api_service_proxy_configs_path(params.merge(format: :xml))
@@ -48,7 +48,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
       'HTTP_IF_MODIFIED_SINCE' => response.header['Last-Modified'],
       'HTTP_IF_NONE_MATCH'     => response.header['ETag']
     }
-    get(admin_api_service_proxy_config_path(params), {}, headers)
+    get(admin_api_service_proxy_config_path(params), session: headers)
     assert_response :not_modified
 
     get admin_api_service_proxy_config_path(params.merge(version: 'non-existing-version'))

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
@@ -9,7 +11,7 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
   end
 
   test 'get to show' do
-    get admin_api_provider_path(format: :json), provider_key: @provider.api_key
+    get admin_api_provider_path(format: :json), params: { provider_key: @provider.api_key }
 
     assert_response :success
 
@@ -20,8 +22,7 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
   end
 
   test 'update support emails test' do
-    put admin_api_provider_path(format: :json), provider_key: @provider.api_key, from_email: 'from@op.pl',
-                                  support_email: 'supsup@ssup.pl', finance_support_email: 'fino@op.pl'
+    put admin_api_provider_path(format: :json), params: { provider_key: @provider.api_key, from_email: 'from@op.pl', support_email: 'supsup@ssup.pl', finance_support_email: 'fino@op.pl' }
 
     assert_response :success
     @provider.reload

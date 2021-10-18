@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
@@ -17,17 +19,17 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
     get(admin_api_service_path(@service))
     assert_response :forbidden
-    get(admin_api_service_path(@service), access_token: token.value)
+    get(admin_api_service_path(@service), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-    get(admin_api_service_path(@service), access_token: token.value)
+    get(admin_api_service_path(@service), params: { access_token: token.value })
     assert_response :success
   end
 
   # Provider key
 
   test 'index' do
-    get admin_api_services_path, :provider_key => @provider.api_key, :format => :xml
+    get admin_api_services_path, params: { :provider_key => @provider.api_key, :format => :xml }
 
     assert_response :success
 
@@ -35,7 +37,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'show' do
-    get admin_api_service_path(@service), :provider_key => @provider.api_key, :format => :xml
+    get admin_api_service_path(@service), params: { :provider_key => @provider.api_key, :format => :xml }
 
     assert_response :success
 
@@ -48,8 +50,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
   test 'create' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
-    post(admin_api_services_path, :provider_key => @provider.api_key,
-              :format => :xml, :name => 'service foo')
+    post(admin_api_services_path, params: { :provider_key => @provider.api_key, :format => :xml, :name => 'service foo' })
 
     assert_response :success
     assert_service(@response.body,
@@ -63,22 +64,19 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
 
     assert_difference @provider.services.method(:count) do
 
-      post(admin_api_services_path(provider_key: @provider.api_key),
-           { name: 'foo' }.to_json, { 'CONTENT_TYPE' => 'application/json' })
+      post(admin_api_services_path(provider_key: @provider.api_key), params: { name: 'foo' }.to_json, session: { 'CONTENT_TYPE' => 'application/json' })
       assert_response :success
     end
   end
 
   test 'create fails without multiple_services switch' do
-    post(admin_api_services_path, :provider_key => @provider.api_key,
-              :format => :xml, :name => 'service foo')
+    post(admin_api_services_path, params: { :provider_key => @provider.api_key, :format => :xml, :name => 'service foo' })
 
     assert_response :forbidden
   end
 
   test 'update' do
-    put("/admin/api/services/#{@service.id}", :provider_key => @provider.api_key,
-             :format => :xml, :name => 'new service name')
+    put("/admin/api/services/#{@service.id}", params: { :provider_key => @provider.api_key, :format => :xml, :name => 'new service name' })
 
     assert_response :success
     assert_service(@response.body,
@@ -88,8 +86,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'update the support email' do
-    put(admin_api_service_path(@service), provider_key: @provider.api_key, :format => :xml,
-                                          support_email: 'supp@topo.com')
+    put(admin_api_service_path(@service), params: { provider_key: @provider.api_key, :format => :xml, support_email: 'supp@topo.com' })
 
     assert_response :success
 
@@ -128,12 +125,12 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
       ro_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'ro')
       rw_token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw')
 
-      put("/admin/api/services/#{@service.id}", access_token: rw_token.value, format: :xml, name: 'new service name')
+      put("/admin/api/services/#{@service.id}", params: { access_token: rw_token.value, format: :xml, name: 'new service name' })
       assert_response :success
       @service.reload
       assert_equal 'new service name', @service.name
 
-      put("/admin/api/services/#{@service.id}", access_token: ro_token.value, format: :xml, name: 'other service name')
+      put("/admin/api/services/#{@service.id}", params: { access_token: ro_token.value, format: :xml, name: 'other service name' })
       assert_response :forbidden
       @service.reload
       assert_equal 'new service name', @service.name

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::IntegrationTest
@@ -27,10 +29,10 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
     get(admin_api_account_application_referrer_filters_path(@buyer, app))
     assert_response :forbidden
-    get(admin_api_account_application_referrer_filters_path(@buyer, app), access_token: token.value)
+    get(admin_api_account_application_referrer_filters_path(@buyer, app), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([app.issuer.id]).at_least_once
-    get(admin_api_account_application_referrer_filters_path(@buyer, app), access_token: token.value)
+    get(admin_api_account_application_referrer_filters_path(@buyer, app), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -42,7 +44,7 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
     referrer = 'foo.example.org'
     expect_backend_create_referrer_filter(application, referrer)
 
-    post(admin_api_account_application_referrer_filters_path(@buyer, application, :referrer_filter => referrer, :format => :xml), :provider_key => @provider.api_key)
+    post(admin_api_account_application_referrer_filters_path(@buyer, application, :referrer_filter => referrer, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
     assert_application(response.body, { :id => application.id, "referrer_filters/referrer_filter" => referrer })
@@ -60,8 +62,7 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
     expect_backend_create_referrer_filter(application, referrer)
     filter = application.referrer_filters.add(referrer)
 
-    delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, filter.id),
-                :provider_key => @provider.api_key, :format => :xml)
+    delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, filter.id), params: { :provider_key => @provider.api_key, :format => :xml })
     assert_response :success
   end
 
@@ -82,8 +83,7 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
     #delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, referrer, :format => :xml),
     #            :provider_key => @provider.api_key, :method => "_destroy")
 
-    delete("/admin/api/accounts/#{@buyer.id}/applications/#{application.id}/referrer_filters/#{filter.id}.xml",
-              :provider_key => @provider.api_key, :format => :xml)
+    delete("/admin/api/accounts/#{@buyer.id}/applications/#{application.id}/referrer_filters/#{filter.id}.xml", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
   end
@@ -101,12 +101,10 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
     expect_backend_create_referrer_filter(application, referrer)
     filter = application.referrer_filters.add(referrer)
 
-    delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, filter.id + 1),
-                :provider_key => @provider.api_key, :format => :xml)
+    delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, filter.id + 1), params: { :provider_key => @provider.api_key, :format => :xml })
     assert_response :not_found
 
-    delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, filter.id),
-                :provider_key => @provider.api_key, :format => :xml)
+    delete(admin_api_account_application_referrer_filter_path(@buyer.id, application.id, filter.id), params: { :provider_key => @provider.api_key, :format => :xml })
     assert_response :success
 
   end

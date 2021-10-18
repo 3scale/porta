@@ -71,7 +71,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
   class Admin::Api::Personal::CreateAccessTokenTest < Admin::Api::Personal::AccessTokensTest
     test 'POST creates an access token for the admin user of the access token' do
       assert_difference @admin.access_tokens.method(:count) do
-        post admin_api_personal_access_tokens_path({access_token: @admin_access_token.value}), access_token_params
+        post admin_api_personal_access_tokens_path({access_token: @admin_access_token.value}), params: access_token_params
         assert_response :created
         assert JSON.parse(response.body).dig('access_token', 'value')
       end
@@ -110,7 +110,7 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
     end
 
     def perform_request(authentication: {access_token: @admin_access_token.value}, different_params: {})
-      post admin_api_personal_access_tokens_path(authentication.merge(different_params)), access_token_params
+      post admin_api_personal_access_tokens_path(authentication.merge(different_params)), params: access_token_params
     end
   end
 

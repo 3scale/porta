@@ -26,26 +26,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
 
   test "receive ok for storage changes customer data" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
-
-    {"CN"=>"Josep Maria Pujol Serra",
-      "orderID"=>"raitest_1323947064",
-      "PAYID"=>"413811165",
-      "amount"=>"0.01",
-      "action"=>"hosted_success",
-      "ALIAS"=>"3scale-959306862-959421232",
-      "ACCEPTANCE"=>"211730",
-      "CARDNO"=>"XXXXXXXXXXXX2053",
-      "IP"=>"81.38.77.15",
-      "PM"=>"CreditCard",
-      "TRXDATE"=>"12/15/11",
-      "currency"=>"EUR",
-      "controller"=>"accounts/payment_gateways/ogone",
-      "SHASIGN"=>"B49A41EB7302FCDEAB6BDB17DE8B9045DC020096",
-      "BRAND"=>"VISA",
-      "ED"=>"0215",
-      "STATUS"=>"5",
-      "NCERROR"=>"0"}
+    get "/admin/account/ogone/hosted_success", params: { "CN"=>"Josep Maria Pujol Serra", "orderID"=>"raitest_1323947064", "PAYID"=>"413811165", "amount"=>"0.01", "action"=>"hosted_success", "ALIAS"=>"3scale-959306862-959421232", "ACCEPTANCE"=>"211730", "CARDNO"=>"XXXXXXXXXXXX2053", "IP"=>"81.38.77.15", "PM"=>"CreditCard", "TRXDATE"=>"12/15/11", "currency"=>"EUR", "controller"=>"accounts/payment_gateways/ogone", "SHASIGN"=>"B49A41EB7302FCDEAB6BDB17DE8B9045DC020096", "BRAND"=>"VISA", "ED"=>"0215", "STATUS"=>"5", "NCERROR"=>"0" }
 
     @buyer_account.reload
     assert_equal  Date.new(2015, 02, 1), @buyer_account.credit_card_expires_on_with_default
@@ -55,25 +36,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
 
   test "supports empty ED" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
-    { "ACCEPTANCE" => "0000",
-      "BRAND" => "PAYPAL",
-      "CARDNO" => "Batman@t-XXXXXXXX-et",
-      "CN"=> "Bruce Wayne",
-      "ED"=>"", # Notice that ED is empty
-      "IP"=> "213.133.142.4",
-      "NCERROR" => "0",
-      "PAYID"=>"413811165",
-      "PM" => "PAYPAL",
-      "SHASIGN" => "077FAFE22C99336ACCFD032CA0687B76299A0112",
-      "STATUS" => "5",
-      "TRXDATE" => "10/29/14",
-      "action" => "hosted_success",
-      "amount" => "0.01",
-      "controller" => "developer_portal/admin/account/ogone",
-      "currency" => "GBP",
-      "orderID"=>"raitest_1323947064",
-    }
+    get "/admin/account/ogone/hosted_success", params: { "ACCEPTANCE" => "0000", "BRAND" => "PAYPAL", "CARDNO" => "Batman@t-XXXXXXXX-et", "CN"=> "Bruce Wayne", "ED"=>"", "IP"=> "213.133.142.4", "NCERROR" => "0", "PAYID"=>"413811165", "PM" => "PAYPAL", "SHASIGN" => "077FAFE22C99336ACCFD032CA0687B76299A0112", "STATUS" => "5", "TRXDATE" => "10/29/14", "action" => "hosted_success", "amount" => "0.01", "controller" => "developer_portal/admin/account/ogone", "currency" => "GBP", "orderID"=>"raitest_1323947064" }
 
     @buyer_account.reload
     assert_equal "X-et", @buyer_account.credit_card_partial_number
@@ -83,25 +46,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
 
   test "nok status value (!=5) doesn't change customer data" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
-    {"CN"=>"Josep Maria Pujol Serra",
-      "orderID"=>"raitest_1323947064",
-      "PAYID"=>"413811165",
-      "amount"=>"0.01",
-      "action"=>"hosted_success",
-      "ALIAS"=>"3scale-959306862-959421232",
-      "ACCEPTANCE"=>"211730",
-      "CARDNO"=>"XXXXXXXXXXXX2053",
-      "IP"=>"81.38.77.15",
-      "PM"=>"CreditCard",
-      "TRXDATE"=>"12/15/11",
-      "currency"=>"EUR",
-      "controller"=>"accounts/payment_gateways/ogone",
-      "SHASIGN"=>"BC313E2D30365DCF887CD77CF760F8FE952BF661",
-      "BRAND"=>"VISA",
-      "ED"=>"0215",
-      "STATUS"=>"1",
-      "NCERROR"=>"0"}
+    get "/admin/account/ogone/hosted_success", params: { "CN"=>"Josep Maria Pujol Serra", "orderID"=>"raitest_1323947064", "PAYID"=>"413811165", "amount"=>"0.01", "action"=>"hosted_success", "ALIAS"=>"3scale-959306862-959421232", "ACCEPTANCE"=>"211730", "CARDNO"=>"XXXXXXXXXXXX2053", "IP"=>"81.38.77.15", "PM"=>"CreditCard", "TRXDATE"=>"12/15/11", "currency"=>"EUR", "controller"=>"accounts/payment_gateways/ogone", "SHASIGN"=>"BC313E2D30365DCF887CD77CF760F8FE952BF661", "BRAND"=>"VISA", "ED"=>"0215", "STATUS"=>"1", "NCERROR"=>"0" }
 
     @buyer_account.reload
     assert_nil @buyer_account.credit_card_partial_number
@@ -110,25 +55,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
 
   test "bad sha1 hash doesn't change customer data" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
-    {"CN"=>"Josep Maria Pujol Serra",
-      "orderID"=>"raitest_1323947064",
-      "PAYID"=>"413811165",
-      "amount"=>"0.01",
-      "action"=>"hosted_success",
-      "ALIAS"=>"3scale-959306862-959421232",
-      "ACCEPTANCE"=>"211730",
-      "CARDNO"=>"XXXXXXXXXXXX2053",
-      "IP"=>"81.38.77.15",
-      "PM"=>"CreditCard",
-      "TRXDATE"=>"12/15/11",
-      "currency"=>"EUR",
-      "controller"=>"accounts/payment_gateways/ogone",
-      "SHASIGN"=>"B49A41EB7302FCDEAB6BDB17DE8B9045DC020095",
-      "BRAND"=>"VISA",
-      "ED"=>"0215",
-      "STATUS"=>"5",
-      "NCERROR"=>"0"}
+    get "/admin/account/ogone/hosted_success", params: { "CN"=>"Josep Maria Pujol Serra", "orderID"=>"raitest_1323947064", "PAYID"=>"413811165", "amount"=>"0.01", "action"=>"hosted_success", "ALIAS"=>"3scale-959306862-959421232", "ACCEPTANCE"=>"211730", "CARDNO"=>"XXXXXXXXXXXX2053", "IP"=>"81.38.77.15", "PM"=>"CreditCard", "TRXDATE"=>"12/15/11", "currency"=>"EUR", "controller"=>"accounts/payment_gateways/ogone", "SHASIGN"=>"B49A41EB7302FCDEAB6BDB17DE8B9045DC020095", "BRAND"=>"VISA", "ED"=>"0215", "STATUS"=>"5", "NCERROR"=>"0" }
 
     @buyer_account.reload
     assert_nil @buyer_account.credit_card_partial_number

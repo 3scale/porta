@@ -29,7 +29,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     end
 
     assert_no_difference(ReferrerFilter.method(:count)) do
-      post admin_application_referrer_filters_path(cinstance), {referrer_filter: "#{cinstance.filters_limit + 1}.example.org"}
+      post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: "#{cinstance.filters_limit + 1}.example.org" }
     end
 
     assert_equal 'Limit reached', flash[:error]
@@ -51,7 +51,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
 
     test 'Creating referrer filter is forbidden if not logged in' do
       assert_no_difference(ReferrerFilter.method(:count)) do
-        post admin_application_referrer_filters_path(cinstance), {referrer_filter: 'only.my.example.com'}
+        post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: 'only.my.example.com' }
       end
 
       assert_redirected_to login_path
@@ -73,7 +73,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     login_buyer another_buyer
 
     assert_no_difference(ReferrerFilter.method(:count)) do
-      post admin_application_referrer_filters_path(cinstance), {referrer_filter: 'only.my.example.com'}
+      post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: 'only.my.example.com' }
     end
 
     assert_response :not_found

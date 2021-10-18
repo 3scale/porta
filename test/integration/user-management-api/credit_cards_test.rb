@@ -30,13 +30,13 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['finance'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'finance')
 
-    put(admin_api_account_credit_card_path(@buyer, format: :xml), valid_params(token))
+    put(admin_api_account_credit_card_path(@buyer, format: :xml), params: valid_params(token))
     assert_response :success
 
     user.admin_sections = []
     user.save!
 
-    put(admin_api_account_credit_card_path(@buyer, format: :xml), valid_params(token))
+    put(admin_api_account_credit_card_path(@buyer, format: :xml), params: valid_params(token))
     assert_response :forbidden
 
     user.admin_sections = ['finance']
@@ -44,7 +44,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     token.scopes = ['cms']
     token.save!
 
-    put(admin_api_account_credit_card_path(@buyer, format: :xml), valid_params(token))
+    put(admin_api_account_credit_card_path(@buyer, format: :xml), params: valid_params(token))
     assert_response :forbidden
   end
 
@@ -52,13 +52,13 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider, admin_sections: ['finance'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'finance')
 
-    delete(admin_api_account_credit_card_path(@buyer, format: :xml), access_token: token.value)
+    delete(admin_api_account_credit_card_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :success
 
     user.role = 'admin'
     user.save!
 
-    delete(admin_api_account_credit_card_path(@buyer, format: :xml), access_token: token.value)
+    delete(admin_api_account_credit_card_path(@buyer, format: :xml), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -67,8 +67,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
   test 'credit_card_stored is false if buyer has no cc' do
     @provider.update!(payment_gateway_type: :bogus)
 
-    get(admin_api_account_path(@buyer, :format => :xml),
-             :provider_key => @provider.api_key)
+    get(admin_api_account_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -81,8 +80,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
 
     @buyer.credit_card_auth_code = 'foo'
     @buyer.save!
-    get(admin_api_account_path(@buyer, :format => :xml),
-             :provider_key => @provider.api_key)
+    get(admin_api_account_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key })
 
     assert_response :success
 
@@ -96,8 +94,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     @provider.save!
     @provider.reload
 
-    put(admin_api_account_credit_card_path(@buyer, :format => :xml),
-             :provider_key => @provider.api_key)
+    put(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key })
     @buyer.reload
     assert !@buyer.credit_card_stored?
   end
@@ -108,16 +105,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     @provider.save!
     @provider.reload
 
-    put(admin_api_account_credit_card_path(@buyer, :format => :xml),
-             :credit_card_token => 'secret',
-             :credit_card_partial_number => '1234',
-             :billing_address_name => 'foo',
-             :billing_address_address => 'elm street',
-             :billing_address_city => 'sin city',
-             :billing_address_country => 'spain',
-             :credit_card_expiration_year => '2013',
-             :credit_card_expiration_month => '13',
-             :provider_key => @provider.api_key)
+    put(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :credit_card_token => 'secret', :credit_card_partial_number => '1234', :billing_address_name => 'foo', :billing_address_address => 'elm street', :billing_address_city => 'sin city', :billing_address_country => 'spain', :credit_card_expiration_year => '2013', :credit_card_expiration_month => '13', :provider_key => @provider.api_key })
 
     assert_response :unprocessable_entity
 
@@ -131,16 +119,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     @provider.save!
     @provider.reload
 
-    put(admin_api_account_credit_card_path(@buyer, :format => :xml),
-             :credit_card_token => 'secret',
-             :credit_card_partial_number => '1234',
-             :billing_address_name => 'foo',
-             :billing_address_address => ' ',
-             :billing_address_city => 'sin city',
-             :billing_address_country => 'spain',
-             :credit_card_expiration_year => '2013',
-             :credit_card_expiration_month => '13',
-             :provider_key => @provider.api_key)
+    put(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :credit_card_token => 'secret', :credit_card_partial_number => '1234', :billing_address_name => 'foo', :billing_address_address => ' ', :billing_address_city => 'sin city', :billing_address_country => 'spain', :credit_card_expiration_year => '2013', :credit_card_expiration_month => '13', :provider_key => @provider.api_key })
 
     assert_response :unprocessable_entity
 
@@ -153,8 +132,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     assert !@buyer.credit_card_stored?
     @provider.update_attribute(:payment_gateway_type, :authorize_net) # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
     @provider.reload
-    put(admin_api_account_credit_card_path(@buyer, :format => :xml), :credit_card_token => 'fdsa',
-             :provider_key => @provider.api_key)
+    put(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :credit_card_token => 'fdsa', :provider_key => @provider.api_key })
 
     @buyer.reload
     assert_response :unprocessable_entity
@@ -167,16 +145,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     @provider.save!
     @provider.reload
 
-    put(admin_api_account_credit_card_path(@buyer, :format => :xml),
-             :credit_card_token => 'secret',
-             :credit_card_partial_number => '1234',
-             :billing_address_name => 'foo',
-             :billing_address_address => 'elm street',
-             :billing_address_city => 'sin city',
-             :billing_address_country => 'spain',
-             :credit_card_expiration_year => '2013',
-             :credit_card_expiration_month => '12',
-             :provider_key => @provider.api_key)
+    put(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :credit_card_token => 'secret', :credit_card_partial_number => '1234', :billing_address_name => 'foo', :billing_address_address => 'elm street', :billing_address_city => 'sin city', :billing_address_country => 'spain', :credit_card_expiration_year => '2013', :credit_card_expiration_month => '12', :provider_key => @provider.api_key })
     @buyer.reload
 
     assert @buyer.credit_card_stored?
@@ -194,17 +163,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     @provider.update_attribute(:payment_gateway_type, :authorize_net) # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
     @provider.reload
 
-    put(admin_api_account_credit_card_path(@buyer, :format => :xml),
-             :credit_card_token => 'secret',
-             :credit_card_authorize_net_payment_profile_token => 'cctoken',
-             :credit_card_partial_number => '1234',
-             :billing_address_name => 'foo',
-             :billing_address_address => 'elm street',
-             :billing_address_city => 'sin city',
-             :billing_address_country => 'spain',
-             :credit_card_expiration_year => '2013',
-             :credit_card_expiration_month => '12',
-             :provider_key => @provider.api_key)
+    put(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :credit_card_token => 'secret', :credit_card_authorize_net_payment_profile_token => 'cctoken', :credit_card_partial_number => '1234', :billing_address_name => 'foo', :billing_address_address => 'elm street', :billing_address_city => 'sin city', :billing_address_country => 'spain', :credit_card_expiration_year => '2013', :credit_card_expiration_month => '12', :provider_key => @provider.api_key })
     @buyer.reload
 
     assert @buyer.credit_card_stored?
@@ -224,7 +183,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:payment_detail, account: @buyer)
     assert @buyer.reload.credit_card_stored?
 
-    delete(admin_api_account_credit_card_path(@buyer, :format => :xml), :provider_key => @provider.api_key)
+    delete(admin_api_account_credit_card_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key })
     @buyer.reload
 
     assert !@buyer.credit_card_stored?

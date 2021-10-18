@@ -23,28 +23,28 @@ class Provider::Admin::Account::DataExportsControllerTest < ActionDispatch::Inte
   end
 
   test 'for: today/this_week/period not given' do
-    post provider_admin_account_data_exports_path, {period: 'today', data: 'messages'}
+    post provider_admin_account_data_exports_path, params: { period: 'today', data: 'messages' }
     assert_redirected_to new_provider_admin_account_data_exports_path
 
-    post provider_admin_account_data_exports_path, {period: 'this_week', data: 'messages'}
+    post provider_admin_account_data_exports_path, params: { period: 'this_week', data: 'messages' }
     assert_redirected_to new_provider_admin_account_data_exports_path
 
-    post provider_admin_account_data_exports_path, {data: 'messages'}
+    post provider_admin_account_data_exports_path, params: { data: 'messages' }
     assert_redirected_to new_provider_admin_account_data_exports_path
   end
 
   test 'invalid params to export submitted redirect to new action on empty/invalid params' do
-    post provider_admin_account_data_exports_path, {data: ''}
+    post provider_admin_account_data_exports_path, params: { data: '' }
     assert_redirected_to new_provider_admin_account_data_exports_path
 
-    post provider_admin_account_data_exports_path, {data: 'invalid'}
+    post provider_admin_account_data_exports_path, params: { data: 'invalid' }
     assert_redirected_to new_provider_admin_account_data_exports_path
   end
 
   test 'with correct params enqueue sidekiq'  do
     DataExportsWorker.jobs.clear
     assert_difference 'DataExportsWorker.jobs.size' do
-      post provider_admin_account_data_exports_path, {period: 'this_week', data: 'applications'}
+      post provider_admin_account_data_exports_path, params: { period: 'this_week', data: 'applications' }
     end
     DataExportsWorker.jobs.clear
   end

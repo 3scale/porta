@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
@@ -26,10 +28,10 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
 
     get(admin_api_service_service_plan_path(service, plan))
     assert_response :forbidden
-    get(admin_api_service_service_plan_path(service, plan), access_token: token.value)
+    get(admin_api_service_service_plan_path(service, plan), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([service.id]).at_least_once
-    get(admin_api_service_service_plan_path(service, plan), access_token: token.value)
+    get(admin_api_service_service_plan_path(service, plan), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -92,10 +94,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post admin_api_service_service_plans_path(@provider.default_service, format: :xml),
-                                                   :name => 'awesome service plan',
-                                                   :state_event => 'publish',
-                                                   :provider_key => @provider.api_key
+    post admin_api_service_service_plans_path(@provider.default_service, format: :xml), params: { :name => 'awesome service plan', :state_event => 'publish', :provider_key => @provider.api_key }
 
     assert_response :success
 
@@ -111,10 +110,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   test 'update' do
     plan = FactoryBot.create(:service_plan, issuer: @provider.default_service, name: 'namy')
 
-    put admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml),
-                                                 :state_event => 'publish',
-                                                 :name => 'new name',
-                                                 :provider_key => @provider.api_key
+    put admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml), params: { :state_event => 'publish', :name => 'new name', :provider_key => @provider.api_key }
 
     assert_response :success
 
@@ -131,8 +127,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create :service_plan, :issuer => @provider.default_service, :name => 'namy'
     plan.publish!
 
-    put default_admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml),
-                                                    :provider_key => @provider.api_key
+    put default_admin_api_service_service_plan_path(@provider.default_service, plan, format: :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
 
@@ -150,9 +145,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   test 'destroy' do
     service_plan = FactoryBot.create :service_plan, :issuer => @provider.default_service
 
-    delete("/admin/api/services/#{@provider.default_service.id}/service_plans/#{service_plan.id}",
-                :provider_key => @provider.api_key,
-                :format => :xml)
+    delete("/admin/api/services/#{@provider.default_service.id}/service_plans/#{service_plan.id}", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
     refute @response.body.presence

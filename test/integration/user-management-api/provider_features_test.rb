@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
@@ -11,9 +13,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   test 'index' do
     FactoryBot.create :feature, :featurable => @provider
 
-    get(admin_api_features_path,
-             :provider_key => @provider.api_key,
-             :format => :xml)
+    get(admin_api_features_path, params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -25,8 +25,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   test 'show' do
     feature = FactoryBot.create :feature, :featurable => @provider
 
-    get(admin_api_feature_path(feature),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_feature_path(feature), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -38,9 +37,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post(admin_api_features_path,
-              :provider_key => @provider.api_key, :format => :xml,
-              :name => 'example', :system_name => 'system_example')
+    post(admin_api_features_path, params: { :provider_key => @provider.api_key, :format => :xml, :name => 'example', :system_name => 'system_example' })
 
     assert_response :success
 
@@ -63,9 +60,7 @@ class EnterpriseApiProviderFeaturesTest < ActionDispatch::IntegrationTest
     feature = FactoryBot.create(:feature, :featurable => @provider,
                       :name => 'old name', :system_name => 'old_system_name')
 
-    put("/admin/api/features/#{feature.id}",
-             :provider_key => @provider.api_key, :format => :xml,
-             :name => 'new name', :system_name => 'new_system_name')
+    put("/admin/api/features/#{feature.id}", params: { :provider_key => @provider.api_key, :format => :xml, :name => 'new name', :system_name => 'new_system_name' })
 
     assert_response :success
 

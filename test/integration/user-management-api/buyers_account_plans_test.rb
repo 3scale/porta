@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyerAccountPlansTest < ActionDispatch::IntegrationTest
@@ -14,7 +16,7 @@ class Admin::Api::BuyerAccountPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'account plans listing' do
-    get admin_api_account_buyer_account_plan_path(:account_id => @buyer.id, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_buyer_account_plan_path(:account_id => @buyer.id, :format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :success
 
@@ -30,13 +32,13 @@ class Admin::Api::BuyerAccountPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'account plans for an inexistent buyer replies 404' do
-    get admin_api_account_buyer_account_plan_path(0, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_buyer_account_plan_path(0, :format => :xml), params: { :provider_key => @provider.api_key }
     assert_xml_404
   end
 
   test 'security wise: buyers account plans is access denied in buyer side' do
     host! @provider.domain
-    get admin_api_account_buyer_account_plan_path(@buyer, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_buyer_account_plan_path(@buyer, :format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_response :forbidden
   end

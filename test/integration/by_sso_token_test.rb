@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
@@ -10,7 +12,7 @@ class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
     # apicast mapping service use case
     FactoryBot.create(:active_admin, account: @account, username: ThreeScale.config.impersonation_admin['username'])
     host! Account.master.admin_domain
-    post '/admin/api/sso_tokens/provider_create.json', provider_key: @master.api_key, provider_id: @account.id
+    post '/admin/api/sso_tokens/provider_create.json', params: { provider_key: @master.api_key, provider_id: @account.id }
     sso_token = JSON.parse(response.body)['sso_token']
 
     host! @account.admin_domain

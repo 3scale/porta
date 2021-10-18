@@ -14,7 +14,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     test 'admin user with cms scope has permission' do
       token = FactoryBot.create(:access_token, owner: @provider.admin_users.first, scopes: ['cms'], permission: 'rw')
       with_api_routes do
-        get '/cms_api', access_token: token.value
+        get '/cms_api', params: { access_token: token.value }
         assert_response :ok
       end
     end
@@ -22,7 +22,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     test 'admin user without cms scope does not have permission' do
       with_api_routes do
         token = FactoryBot.create(:access_token, owner: @provider.admin_users.first)
-        get '/cms_api', access_token: token.value
+        get '/cms_api', params: { access_token: token.value }
         assert_response :forbidden
       end
     end
@@ -31,7 +31,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider, admin_sections: ['portal'])
       token  = FactoryBot.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
       with_api_routes do
-        get '/cms_api', access_token: token.value
+        get '/cms_api', params: { access_token: token.value }
         assert_response :ok
       end
     end
@@ -40,7 +40,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider, admin_sections: ['portal'])
       token  = FactoryBot.create(:access_token, owner: member)
       with_api_routes do
-        get '/cms_api', access_token: token.value
+        get '/cms_api', params: { access_token: token.value }
         assert_response :forbidden
       end
     end
@@ -49,7 +49,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider)
       token  = FactoryBot.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
       with_api_routes do
-        get '/cms_api', access_token: token.value
+        get '/cms_api', params: { access_token: token.value }
         assert_response :forbidden
       end
     end
@@ -72,7 +72,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
           token = FactoryBot.create(:access_token, owner: user, permission: 'rw')
           token.update_column(:scopes, ['cms']) # It must be done this way because it is invalid now.
           with_api_routes do
-            get '/cms_api', access_token: token.value
+            get '/cms_api', params: { access_token: token.value }
             assert_response :forbidden
           end
         end
@@ -84,7 +84,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         [admin, member].each do |user|
           token  = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
           with_api_routes do
-            get '/cms_api', access_token: token.value
+            get '/cms_api', params: { access_token: token.value }
             assert_response :forbidden
           end
         end
@@ -98,7 +98,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         [admin, member].each do |user|
           token  = FactoryBot.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
           with_api_routes do
-            get '/cms_api', access_token: token.value
+            get '/cms_api', params: { access_token: token.value }
             assert_response :success
           end
         end
@@ -110,7 +110,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         [admin, member].each do |user|
           token  = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
           with_api_routes do
-            get '/cms_api', access_token: token.value
+            get '/cms_api', params: { access_token: token.value }
             assert_response :success
           end
         end

@@ -13,7 +13,7 @@ class Buyers::Applications::Bulk::ChangePlansControllerTest < ActionDispatch::In
   test '#new renders with the display_name in the title of the contract' do
     contracts = FactoryBot.create_list(:cinstance, 2, plan: FactoryBot.create(:application_plan, service: tenant.default_service))
 
-    get new_admin_buyers_applications_bulk_change_plan_path, selected: contracts.map(&:id)
+    get new_admin_buyers_applications_bulk_change_plan_path, params: { selected: contracts.map(&:id) }
 
     page = Nokogiri::HTML::Document.parse(response.body)
     expected_display_names = contracts.map { |contract| contract.decorate.account_admin_user_display_name }

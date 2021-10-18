@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
@@ -34,7 +36,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index for an inexistent account replies 404' do
-    get admin_api_account_service_plans_path(0, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_service_plans_path(0, :format => :xml), params: { :provider_key => @provider.api_key }
 
     assert_xml_404
   end
@@ -51,9 +53,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
     service = FactoryBot.create(:service, account: @provider)
     service_plan = FactoryBot.create(:service_plan, :issuer => service)
 
-    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml)
+    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -68,9 +68,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   test 'buy an already subscribed service' do
     service_plan = FactoryBot.create(:service_plan, :issuer => @provider.first_service!)
 
-    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml)
+    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response 422
     assert_match 'already subscribed to this service', @response.body
@@ -81,9 +79,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
     service_plan = FactoryBot.create(:service_plan, :issuer => service)
 
     assert service_plan.hidden?
-    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml)
+    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{service_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
   end
@@ -93,9 +89,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
     service_plan = FactoryBot.create(:service_plan, :issuer => service)
     custom_plan = service_plan.customize
 
-    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{custom_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml)
+    post("/admin/api/accounts/#{@buyer.id}/service_plans/#{custom_plan.id}/buy", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_xml_404
   end

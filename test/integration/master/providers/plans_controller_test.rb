@@ -16,7 +16,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
   test '#update from an unauthenticated user' do
     host! master_account.self_domain
 
-    put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
+    put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }
 
     assert_response :redirect
     assert_equal [old_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
@@ -25,7 +25,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
   test '#update for an admin' do
     login! master_account
 
-    put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
+    put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }
 
     assert_response :success
     assert_equal [new_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
@@ -35,7 +35,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
     master_member.update!({member_permission_ids: ['partners'], member_permission_service_ids: [service.id]})
     login! master_account, user: master_member
 
-    put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
+    put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }
 
     assert_response :success
     assert_equal [new_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
@@ -45,7 +45,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
     master_member.update!({member_permission_ids: [], member_permission_service_ids: [service.id]})
     login! master_account, user: master_member
 
-    put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
+    put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }
 
     assert_response :forbidden
     assert_equal [old_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)
@@ -55,7 +55,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
     master_member.update!({member_permission_ids: ['partners'], member_permission_service_ids: '[]'})
     login! master_account, user: master_member
 
-    put master_provider_plan_path(tenant), plan_id: new_plan.id, format: :js
+    put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }
 
     assert_response :forbidden
     assert_equal [old_plan.id], tenant.bought_application_plans.select(:id, :position).map(&:id)

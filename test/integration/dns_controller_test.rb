@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
@@ -17,7 +19,7 @@ class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
     }
 
     Rails.configuration.three_scale.stubs(readonly_custom_domains_settings: true)
-    put admin_site_dns_path, account_params
+    put admin_site_dns_path, params: account_params
 
     @provider.reload
     assert_equal 'abcdefgh', @provider.site_access_code
@@ -26,7 +28,7 @@ class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
 
 
     Rails.configuration.three_scale.stubs(readonly_custom_domains_settings: false)
-    put admin_site_dns_path, account_params
+    put admin_site_dns_path, params: account_params
 
     @provider.reload
     assert_equal 'abcdefgh', @provider.site_access_code
@@ -37,7 +39,7 @@ class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
 
   test 'update shows an error message when fails' do
     Rails.application.config.three_scale.stubs(readonly_custom_domains_settings: false)
-    put admin_site_dns_path, {account: {domain: 'INVALID'}}
+    put admin_site_dns_path, params: { account: {domain: 'INVALID'} }
     assert_match 'Domain must be downcase', flash[:error]
   end
 end

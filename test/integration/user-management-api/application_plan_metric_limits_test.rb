@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationTest
@@ -20,10 +22,10 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
 
     get(admin_api_application_plan_metric_limits_path(@app_plan, @metric))
     assert_response :forbidden
-    get(admin_api_application_plan_metric_limits_path(@app_plan, @metric), access_token: token.value)
+    get(admin_api_application_plan_metric_limits_path(@app_plan, @metric), params: { access_token: token.value })
     assert_response :not_found
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-    get(admin_api_application_plan_metric_limits_path(@app_plan, @metric), access_token: token.value)
+    get(admin_api_application_plan_metric_limits_path(@app_plan, @metric), params: { access_token: token.value })
     assert_response :success
   end
 
@@ -31,16 +33,14 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
 
   test 'application_plan not found' do
     get(admin_api_application_plan_metric_limits_path(:application_plan_id => 0,
-                                                           :metric_id => @metric.id),
-             :provider_key => @provider.api_key, :format => :xml)
+                                                           :metric_id => @metric.id), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'application metric not found' do
     get(admin_api_application_plan_metric_limits_path(:application_plan_id => @app_plan.id,
-                                                    :metric_id => 0),
-             :provider_key => @provider.api_key, :format => :xml)
+                                                    :metric_id => 0), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
@@ -50,8 +50,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
     another_metric = FactoryBot.create :metric, :service => @service
     alien_limit    = FactoryBot.create :usage_limit, :plan => @app_plan, :metric => another_metric
 
-    get(admin_api_application_plan_metric_limits_path(@app_plan, @metric),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_metric_limits_path(@app_plan, @metric), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -65,8 +64,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
     metric  = FactoryBot.create(:metric, owner: backend)
     FactoryBot.create(:backend_api_config, backend_api: backend, service: @app_plan.service)
 
-    get(admin_api_application_plan_metric_limits_path(@app_plan, metric),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_metric_limits_path(@app_plan, metric), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
   end
@@ -75,15 +73,13 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
     backend = FactoryBot.create(:backend_api)
     metric  = FactoryBot.create(:metric, owner: backend)
 
-    get(admin_api_application_plan_metric_limits_path(@app_plan, metric),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_metric_limits_path(@app_plan, metric), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'application_plan_metric_limit_show' do
-    get(admin_api_application_plan_metric_limit_path(@app_plan, @metric, @limit),
-             :provider_key => @provider.api_key, :format => :xml)
+    get(admin_api_application_plan_metric_limit_path(@app_plan, @metric, @limit), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :success
 
@@ -96,16 +92,13 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
   test 'application_plan_plan_metric show not found' do
     get(admin_api_application_plan_metric_limit_path(:application_plan_id => @app_plan.id,
                                                           :metric_id => @metric.id,
-                                                          :id => 0),
-             :provider_key => @provider.api_key, :format => :xml)
+                                                          :id => 0), params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'application_plan_metric create' do
-    post(admin_api_application_plan_metric_limits_path(@app_plan, @metric),
-              :provider_key => @provider.api_key, :format => :xml,
-              :period => 'week', :value => 15)
+    post(admin_api_application_plan_metric_limits_path(@app_plan, @metric), params: { :provider_key => @provider.api_key, :format => :xml, :period => 'week', :value => 15 })
 
     assert_response :success
 
@@ -121,9 +114,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
   end
 
   test 'application_plan_metric create errors' do
-    post(admin_api_application_plan_metric_limits_path(@app_plan, @metric),
-              :provider_key => @provider.api_key, :format => :xml,
-              :period => 'a-while')
+    post(admin_api_application_plan_metric_limits_path(@app_plan, @metric), params: { :provider_key => @provider.api_key, :format => :xml, :period => 'a-while' })
 
     assert_response :unprocessable_entity
     assert_xml_error body, "Period is invalid"
@@ -133,9 +124,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
     assert @limit.period != "month"
     assert @limit.value  != 20
 
-    put("/admin/api/application_plans/#{@app_plan.id}/metrics/#{@metric.id}/limits/#{@limit.id}",
-             :provider_key => @provider.api_key,
-             :format => :xml, :period => 'month', :value => "20")
+    put("/admin/api/application_plans/#{@app_plan.id}/metrics/#{@metric.id}/limits/#{@limit.id}", params: { :provider_key => @provider.api_key, :format => :xml, :period => 'month', :value => "20" })
 
 
     assert_response :success
@@ -151,16 +140,13 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
   end
 
   test 'application_plan_metrics_limit update not found' do
-    put("/admin/api/application_plans/#{@app_plan.id}/metrics/#{@metric.id}/limits/0",
-             :provider_key => @provider.api_key, :format => :xml)
+    put("/admin/api/application_plans/#{@app_plan.id}/metrics/#{@metric.id}/limits/0", params: { :provider_key => @provider.api_key, :format => :xml })
 
     assert_response :not_found
   end
 
   test 'application_plan_metrics_limit update errors' do
-    put("/admin/api/application_plans/#{@app_plan.id}/metrics/#{@metric.id}/limits/#{@limit.id}",
-             :provider_key => @provider.api_key,
-             :format => :xml, :period => 'century')
+    put("/admin/api/application_plans/#{@app_plan.id}/metrics/#{@metric.id}/limits/#{@limit.id}", params: { :provider_key => @provider.api_key, :format => :xml, :period => 'century' })
 
     assert_response :unprocessable_entity
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
@@ -39,7 +41,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
 
     test 'provider_create' do
       FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin['username'])
-      post provider_create_admin_api_sso_tokens_path(format: :json), provider_id: @provider.id, access_token: @access_token.value
+      post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.value }
       assert_response :success
 
       assert sso_token = JSON.parse(response.body)['sso_token']
@@ -51,7 +53,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:simple_admin, account: @provider, username: ThreeScale.config.impersonation_admin['username'])
 
       Timecop.freeze do
-        post provider_create_admin_api_sso_tokens_path(format: :json), provider_id: @provider.id, access_token: @access_token.value, expires_in: 60
+        post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_id: @provider.id, access_token: @access_token.value, expires_in: 60 }
         assert_response :success
 
         assert_equal (Time.now.utc + 60).httpdate, response.headers['Expires']

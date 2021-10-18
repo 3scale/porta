@@ -14,7 +14,7 @@ class Buyers::Accounts::Bulk::ChangePlansControllerTest < ActionDispatch::Integr
   attr_reader :buyer
 
   test '#new displays the buyer\'s admin_user_display_name' do
-    get new_admin_buyers_accounts_bulk_change_plan_path, selected: [buyer.id]
+    get new_admin_buyers_accounts_bulk_change_plan_path, params: { selected: [buyer.id] }
 
     assert_xpath('//main//span', buyer.decorate.admin_user_display_name)
   end

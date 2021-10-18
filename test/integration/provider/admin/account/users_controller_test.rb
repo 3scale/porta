@@ -39,7 +39,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
   def test_update_blank_member_permission_ids
     assert_equal @default_ids, @user.admin_sections.to_a
 
-    put provider_admin_account_user_path(@user), user: {member_permission_ids: ['']}
+    put provider_admin_account_user_path(@user), params: { user: {member_permission_ids: ['']} }
 
     @user.reload
 
@@ -49,7 +49,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
   def test_update_no_member_permission_ids
     assert_equal @default_ids, @user.admin_sections.to_a
 
-    put provider_admin_account_user_path(@user), user: {}
+    put provider_admin_account_user_path(@user), params: { user: {} }
 
     @user.reload
 
@@ -75,7 +75,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
   test 'admin changes role of another admin' do
     user = FactoryBot.create(:admin, account: provider)
 
-    put provider_admin_account_user_path(user), user: {role: 'member'}
+    put provider_admin_account_user_path(user), params: { user: {role: 'member'} }
 
     assert user.reload.member?
   end
@@ -83,7 +83,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
   test 'admin cannot edit his own role' do
     user = provider.admin_users.first!
 
-    put provider_admin_account_user_path(user), user: {role: 'member'}
+    put provider_admin_account_user_path(user), params: { user: {role: 'member'} }
 
     assert user.reload.admin?
   end

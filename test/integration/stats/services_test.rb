@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::ServicesTest < ActionDispatch::IntegrationTest
@@ -21,7 +23,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     @cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/api/services/#{@cinstance.service_id}/usage_response_code.json", period:'day', :response_code => 200, timezone:'Madrid', skip_change: false
+    get "/stats/api/services/#{@cinstance.service_id}/usage_response_code.json", params: { period:'day', :response_code => 200, timezone:'Madrid', skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -46,7 +48,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     @cinstance = FactoryBot.create(:cinstance, :plan => plan)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/api/services/#{@cinstance.service_id}/usage.json", period:'day', :metric_name => @metric.system_name, timezone:'Madrid', skip_change: false
+    get "/stats/api/services/#{@cinstance.service_id}/usage.json", params: { period:'day', :metric_name => @metric.system_name, timezone:'Madrid', skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -81,7 +83,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
       @provider_account.update_attribute(:timezone, 'Madrid')
 
       opts = { :period => 'day', :metric_name => @metric.system_name }
-      get "/stats/api/services/#{@cinstance.service_id}/usage.json", opts
+      get "/stats/api/services/#{@cinstance.service_id}/usage.json", params: opts
 
       assert_response :success
       assert_content_type 'application/json'
@@ -97,7 +99,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
     should 'retrieve data with specified timezone' do
       opts = { :period => 'day', :metric_name => @metric.system_name, :timezone => 'Kamchatka' }
-      get "/stats/api/services/#{@cinstance.service_id}/usage.json", opts
+      get "/stats/api/services/#{@cinstance.service_id}/usage.json", params: opts
 
       assert_response :success
       assert_content_type 'application/json'
@@ -126,7 +128,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
     Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/api/services/#{@provider_account.default_service.id}/usage.json", period:'day', metric_name: @metric.system_name, timezone:'UTC', skip_change: false
+    get "/stats/api/services/#{@provider_account.default_service.id}/usage.json", params: { period:'day', metric_name: @metric.system_name, timezone:'UTC', skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -162,7 +164,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2011, 01, 01, 23, 21), :cinstance_id => cinstance.id)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/api/services/#{@provider_account.default_service.id}/usage.json", period: 'year', metric_name: @metric.system_name, timezone: 'Madrid', since: "2010-01-01", skip_change: false
+    get "/stats/api/services/#{@provider_account.default_service.id}/usage.json", params: { period: 'year', metric_name: @metric.system_name, timezone: 'Madrid', since: "2010-01-01", skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -197,7 +199,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2011, 01, 01, 01, 21), :cinstance_id => cinstance.id)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/api/services/#{@provider_account.default_service.id}/usage.json", :period => 'year', :metric_name => @metric.system_name, :timezone => 'Azores', "since"=>"2010-01-01", skip_change: false
+    get "/stats/api/services/#{@provider_account.default_service.id}/usage.json", params: { :period => 'year', :metric_name => @metric.system_name, :timezone => 'Azores', "since"=>"2010-01-01", skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -228,7 +230,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
     Timecop.freeze(Time.utc(2009, 12, 22))
     provider_login_with @provider_account.admins.first.username, 'supersecret'
-    get "/stats/api/services/#{@provider_account.default_service.id}/top_applications.json", period: :month, metric_name: @metric.system_name
+    get "/stats/api/services/#{@provider_account.default_service.id}/top_applications.json", params: { period: :month, metric_name: @metric.system_name }
 
     assert_response :success
     assert_content_type 'application/json'

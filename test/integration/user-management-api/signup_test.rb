@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
@@ -33,7 +35,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     user  = FactoryBot.create(:member, account: @provider)
     token = FactoryBot.create(:access_token, owner: user)
 
-    post(admin_api_signup_path, format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona' })
     assert_response :forbidden
 
     user.admin_sections = ['partners']
@@ -41,7 +43,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     token.scopes = ['account_management']
     token.save!
 
-    post(admin_api_signup_path, format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, access_token: token.value, org_name: 'fiona', username: 'fiona' })
     assert_response :created
   end
 
@@ -55,10 +57,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'successful api signup creates app with default fields' do
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona' })
 
     assert_response :created
     buyer = Account.buyers.find_by_org_name('fiona')
@@ -72,11 +71,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'successful api signup with country' do
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona',
-              country: 'Spain')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona', country: 'Spain' })
 
     assert_response :created
     buyer = Account.buyers.find_by_org_name('fiona')
@@ -91,10 +86,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   test 'api signup successful with minimal fields (default plans)' do
     UserMailer.expects(:deliver_signup_notification).never
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona' })
 
     assert_response :created
 
@@ -126,14 +118,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     field_defined(@provider,
                   { target: "User", "name" => "user_extra_field" })
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona', org_legaladdress: "account address",
-              account_extra_field: "account extra value",
-              username: 'fiona', email: "mail@example.com",
-              user_extra_field: "user extra value",
-              vat_rate: 33
-        )
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', org_legaladdress: "account address", account_extra_field: "account extra value", username: 'fiona', email: "mail@example.com", user_extra_field: "user extra value", vat_rate: 33 })
 
     assert_response :created
 
@@ -169,11 +154,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     field_defined(@provider,
                   { target: "User", name: "address", required: true })
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona', email: "mail@example.com",
-              address: "Rue del Percebe, 13")
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona', email: "mail@example.com", address: "Rue del Percebe, 13" })
 
     assert_response :created
 
@@ -197,13 +178,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   test 'api signup with plans params passed' do
     UserMailer.expects(:deliver_signup_notification).never
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              account_plan_id: @account_plan1.id,
-              service_plan_id: @service_plan1.id,
-              application_plan_id: @application_plan1.id,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, account_plan_id: @account_plan1.id, service_plan_id: @service_plan1.id, application_plan_id: @application_plan1.id, org_name: 'fiona', username: 'fiona' })
 
     assert_response :created
 
@@ -220,11 +195,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     service = @provider.services.first
     service.update_attribute :default_application_plan, @application_plan1
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              application_plan_id: @application_plan2.id,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, application_plan_id: @application_plan2.id, org_name: 'fiona', username: 'fiona' })
 
     assert_response :created
 
@@ -245,20 +216,13 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
 
     UserMailer.expects(:deliver_signup_notification).never
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              application_plan_id: @application_plan1.id,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, application_plan_id: @application_plan1.id, org_name: 'fiona', username: 'fiona' })
 
     assert_response :created
   end
 
   test 'api signup failure and account and user errors' do
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: nil,
-              username: nil)
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: nil, username: nil })
 
     assert_response :unprocessable_entity
 
@@ -270,10 +234,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
 
   test 'security wise: api signup is access denied in buyer side' do
     host! @provider.domain # buyer domain
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona' })
 
     assert_response :forbidden
   end
@@ -282,10 +243,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     @provider.account_plans.destroy_all
     assert @provider.account_plans.empty?
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona' })
 
     assert_xml_404
   end
@@ -294,11 +252,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     @provider.account_plans.destroy_all
     assert @provider.account_plans.empty?
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              org_name: 'fiona',
-              username: 'fiona',
-              plan_id: 0)
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, org_name: 'fiona', username: 'fiona', plan_id: 0 })
 
     assert_xml_404
   end
@@ -318,13 +272,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     usage_limit2.metric = metric_local
     usage_limit2.save!
 
-    post(admin_api_signup_path, format: :xml,
-              provider_key: @provider.api_key,
-              account_plan_id: @account_plan1.id,
-              service_plan_id: @service_plan1.id,
-              application_plan_id: application_plan_local.id,
-              org_name: 'fiona',
-              username: 'fiona')
+    post(admin_api_signup_path, params: { format: :xml, provider_key: @provider.api_key, account_plan_id: @account_plan1.id, service_plan_id: @service_plan1.id, application_plan_id: application_plan_local.id, org_name: 'fiona', username: 'fiona' })
 
     xml = Nokogiri::XML::Document.parse @response.body
 

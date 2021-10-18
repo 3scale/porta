@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < ActionDispatch::IntegrationTest
@@ -64,7 +66,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
     ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
-    post hosted_success_provider_admin_account_braintree_blue_path, form_params
+    post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
 
     @provider.reload
 
@@ -76,7 +78,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     @provider.provider_account.update(payment_gateway_options: gateway_options)
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
 
-    post hosted_success_provider_admin_account_braintree_blue_path, form_params
+    post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
 
     @provider.reload
 

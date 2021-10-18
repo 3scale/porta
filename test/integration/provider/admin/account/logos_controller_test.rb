@@ -17,7 +17,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
 
   test 'update when it should work' do
     assert_change(of: -> { provider.profile.reload.logo_file_name }, from: nil, to: 'hypnotoad.jpg') do
-      put provider_admin_account_logo_path, {profile: {logo: logo_file}}
+      put provider_admin_account_logo_path, params: { profile: {logo: logo_file} }
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
@@ -27,7 +27,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
 
   test 'update when it should fail' do
     assert_no_change(of: -> { provider.profile.reload.logo_file_name }) do
-      put provider_admin_account_logo_path, {profile: {logo: countries_yaml_file}}
+      put provider_admin_account_logo_path, params: { profile: {logo: countries_yaml_file} }
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
@@ -39,7 +39,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     provider.settings.deny_branding!
 
     assert_no_change(of: -> { provider.profile.reload.logo_file_name }) do
-      put provider_admin_account_logo_path, {profile: {logo: logo_file}}
+      put provider_admin_account_logo_path, params: { profile: {logo: logo_file} }
     end
 
     assert_response :forbidden
@@ -49,7 +49,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     provider.profile.update_attribute(:logo, Rack::Test::UploadedFile.new(logo_file, 'image/jpeg', true))
 
     assert_change(of: -> { provider.profile.reload.logo_file_name }, from: provider.profile.logo_file_name, to: nil) do
-      delete provider_admin_account_logo_path, {profile: {logo: logo_file}}
+      delete provider_admin_account_logo_path, params: { profile: {logo: logo_file} }
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
@@ -63,7 +63,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     ActiveModel::Errors.any_instance.stubs(full_messages: ['Error 1st', 'Another Error'])
 
     assert_no_change(of: -> { provider.profile.reload.logo_file_name }, to: nil) do
-      delete provider_admin_account_logo_path, {profile: {logo: logo_file}}
+      delete provider_admin_account_logo_path, params: { profile: {logo: logo_file} }
     end
 
     assert_redirected_to edit_provider_admin_account_logo_path
@@ -75,7 +75,7 @@ class Provider::Admin::Account::LogosControllerTest < ActionDispatch::Integratio
     provider.settings.deny_branding!
 
     assert_no_change(of: -> { provider.profile.reload.logo_file_name }) do
-      delete provider_admin_account_logo_path, {profile: {logo: logo_file}}
+      delete provider_admin_account_logo_path, params: { profile: {logo: logo_file} }
     end
 
     assert_response :forbidden

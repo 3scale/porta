@@ -16,7 +16,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
     ThreeScale::Analytics::UserTracking.any_instance.expects(:track).at_least_once.with('Signup', {mkt_cookie: nil, analytics: {}})
 
     assert_difference(master_account.buyer_accounts.method(:count)) do
-      post provider_signup_path, create_params({account: {name: 'theorganization'}})
+      post provider_signup_path, params: create_params({account: {name: 'theorganization'}})
     end
 
     assert_redirected_to success_provider_signup_path
@@ -40,7 +40,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
 
   test 'POST without params' do
     assert_no_difference(master_account.buyer_accounts.method(:count)) do
-      post provider_signup_path, {}
+      post provider_signup_path
     end
 
     assert_response :bad_request
@@ -48,7 +48,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
 
   test 'POST in case of invalid params' do
     assert_no_difference(master_account.buyer_accounts.method(:count)) do
-      post provider_signup_path, create_params({account: {user: {email: 'invalid email'}}})
+      post provider_signup_path, params: create_params({account: {user: {email: 'invalid email'}}})
     end
 
     assert_response :success
@@ -58,7 +58,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
     Provider::SignupsController.any_instance.expects(:spam_check).returns(false)
 
     assert_no_difference(master_account.buyer_accounts.method(:count)) do
-      post provider_signup_path, create_params
+      post provider_signup_path, params: create_params
     end
 
     assert_response :success
@@ -66,7 +66,7 @@ class Provider::SignupsControllerIntegrationTest < ActionDispatch::IntegrationTe
 
   test 'POST accepts the subdomain if given' do
     assert_difference(master_account.buyer_accounts.method(:count)) do
-      post provider_signup_path, create_params({account: {org_name: 'organization', subdomain: 'mysubdomain', self_subdomain: 'selfsubdomain-admin'}})
+      post provider_signup_path, params: create_params({account: {org_name: 'organization', subdomain: 'mysubdomain', self_subdomain: 'selfsubdomain-admin'}})
     end
 
     provider = master_account.buyer_accounts.order(:id).last!
