@@ -90,7 +90,7 @@ module Stats
     protected
 
     def metric_and_period_details(options)
-      metric = extract_metric(options.symbolize_keys)
+      metric = extract_metric(options.to_h.symbolize_keys)
       metric_name = metric.class.name.underscore.to_sym
 
       { metric_name => detail(metric), period: period_detail(options) }

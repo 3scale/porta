@@ -6,7 +6,7 @@ module Stats
 
 
       def top(name, options)
-        options = options.symbolize_keys
+        options = options.to_h.symbolize_keys
         options.assert_valid_keys(:period, :since, :metric, :metric_name, :limit, :timezone, :skip_change)
         options.assert_required_keys(:period)
 

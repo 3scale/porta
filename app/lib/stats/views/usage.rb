@@ -121,7 +121,7 @@ module Stats
       end
 
       def extract_range_and_granularity_and_metric(options)
-        options = options.symbolize_keys
+        options = options.to_h.symbolize_keys
 
         range, granularity = extract_range_and_granularity(options)
         validate_time_range(range, granularity)
