@@ -58,7 +58,7 @@ module ErrorHandling
 
         format.json { render json: {status: title}, status: status }
 
-        format.xml  { render nothing: true, status: status }
+        format.xml  { head status }
 
         format.any  { render plain: title, status: status }
       end

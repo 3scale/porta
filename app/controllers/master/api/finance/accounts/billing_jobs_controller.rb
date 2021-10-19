@@ -31,7 +31,7 @@ class Master::Api::Finance::Accounts::BillingJobsController < Master::Api::Finan
   #
   def create
     Finance::BillingService.async_call(provider, billing_date, buyers_scope)
-    render nothing: true, status: :accepted
+    head :accepted
   end
 
   private
