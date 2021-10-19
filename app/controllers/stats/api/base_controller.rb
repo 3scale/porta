@@ -36,7 +36,7 @@ class Stats::Api::BaseController < ApplicationController
   private
 
   def render_usage(parameter)
-    options = slice_and_use_defaults(usage_params(parameter), parameter,
+    options = permit_and_use_defaults(usage_params(parameter), parameter,
                                      :period, :since, :timezone, :granularity, :until, :skip_change)
     @data = @source.usage(options)
 
@@ -61,8 +61,8 @@ class Stats::Api::BaseController < ApplicationController
   # Slices supplied params to allowed set, using defaults
   # when some neccessary are missing (like timezone)
   #
-  def slice_and_use_defaults(params, *allowed)
-    options = params.slice(*allowed)
+  def permit_and_use_defaults(params, *allowed)
+    options = params.permit(*allowed)
 
     options[:skip_change] = (options[:skip_change] == 'false') ? false : true
 

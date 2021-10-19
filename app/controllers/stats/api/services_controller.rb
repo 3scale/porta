@@ -4,7 +4,7 @@ class Stats::Api::ServicesController < Stats::Api::BaseController
   before_action :set_source
 
   def top_applications
-    options = slice_and_use_defaults(params, :metric_name, :period, :since, :timezone)
+    options = permit_and_use_defaults(params, :metric_name, :period, :since, :timezone)
 
     begin
       @data = @source.top_clients(options)
