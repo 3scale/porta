@@ -44,7 +44,7 @@ module Account::Billing
   def check_unresolved_invoices
     return true if !invoices.unresolved.exists? || should_be_deleted?
     errors.add(:invoices, :unresolved_invoices)
-    false
+    throw :abort
   end
 
   def save_in_payment!

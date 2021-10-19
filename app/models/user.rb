@@ -33,7 +33,7 @@ class User < ApplicationRecord
                      authentication_id open_id last_login_at last_login_ip crypted_password].freeze
 
   before_validation :trim_white_space_from_username
-  before_destroy :can_be_destroyed?
+  before_destroy :avoid_destruction
 
   include WebHooksHelpers #TODO: make this inclusion more dsl-ish
   fires_human_web_hooks_on_events
@@ -468,6 +468,10 @@ class User < ApplicationRecord
 
   def username_is_unique
     errors.add(:username, :taken) if username.present? && (not unique?(:username))
+  end
+
+  def avoid_destruction
+    throw :abort unless can_be_destroyed?
   end
 
   class << self

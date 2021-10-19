@@ -20,7 +20,8 @@ module User::Invitations
   def destroy_invitation
     if account # some tests fail because of account being nil
       invit = account.invitations.find_by_email(email) || account.invitations.find_by_user_id(id) # || eventually invitation
-      invit.destroy if invit
+      # halt the destruction if the destruction of invitation failed
+      throw :abort if invit && invit.destroy == false
     end
   end
 end

@@ -6,7 +6,7 @@ class Metric < ApplicationRecord
 
   self.background_deletion = %i[pricing_rules usage_limits plan_metrics proxy_rules]
 
-  before_destroy :destroyable?
+  before_destroy :avoid_destruction
   before_validation :associate_to_service_of_parent, :fill_owner
 
   # update Service's updated_at when Metric caches for nicer cache keys
@@ -218,6 +218,10 @@ class Metric < ApplicationRecord
   def destroyable?
     return true if destroyed_by_association
     system_name != 'hits'
+  end
+
+  def avoid_destruction
+    throw :abort unless destroyable?
   end
 
   def find_or_create_plan_metric(plan)
