@@ -924,7 +924,7 @@ class UserTest < ActiveSupport::TestCase
     user.save!
 
     refute user.destroy
-    assert_not_nil invitation.reload
+    assert Invitation.exists?(invitation[:id])
   end
 
   test "kill user sessions but current one" do
