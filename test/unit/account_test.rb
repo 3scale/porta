@@ -584,6 +584,21 @@ class AccountTest < ActiveSupport::TestCase
     assert_nil Feature.find_by_id(feature.id)
   end
 
+  test "destroying account will stop if features deletion fails" do
+    Feature.any_instance.stubs(:destroy).returns(false)
+
+    account = FactoryBot.create(:provider_account)
+    service = account.default_service
+    metric  = FactoryBot.create(:metric, service: service)
+    feature = FactoryBot.create(:feature, featurable: service)
+
+    refute account.destroy
+
+    assert_not_nil Service.find_by_id(service.id)
+    assert_not_nil Metric.find_by_id(metric.id)
+    assert_not_nil Feature.find_by_id(feature.id)
+  end
+
   test 'destroying provider account with buyer accounts' do
     provider_account = FactoryBot.create(:provider_account)
     plan = FactoryBot.create(:simple_application_plan, service: provider_account.default_service)

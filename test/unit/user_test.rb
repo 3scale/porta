@@ -916,6 +916,17 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test "won't destroy user if invitation can't be destroyed" do
+    Invitation.any_instance.stubs(:destroy).returns(false)
+
+    invitation = FactoryBot.create :invitation
+    user = invitation.make_user :username => "username", :password => "password"
+    user.save!
+
+    refute user.destroy
+    assert Invitation.exists?(invitation[:id])
+  end
+
   test "kill user sessions but current one" do
     user = FactoryBot.create :user
     session1 = user.user_sessions.create

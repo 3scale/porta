@@ -268,7 +268,7 @@ class Service < ApplicationRecord
   def stop_destroy_if_last_or_default
     return if destroyable?
     errors.add :base, 'This product cannot be removed'
-    false
+    throw :abort
   end
 
   # Returns either a service between that service and buyer account or nil.
