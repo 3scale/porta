@@ -22,7 +22,7 @@ class Admin::Api::MetricMethodsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post admin_api_service_metric_methods_path(path_params), metric: { system_name: 'alaska', friendly_name: 'alaska' }
+    post admin_api_service_metric_methods_path(path_params), params: { metric: { system_name: 'alaska', friendly_name: 'alaska' } }
     assert_response :success
   end
 
@@ -30,19 +30,19 @@ class Admin::Api::MetricMethodsControllerTest < ActionDispatch::IntegrationTest
     Admin::Api::MetricMethodsController.any_instance.stubs(:create).raises(
       ActiveRecord::RecordNotUnique, 'Mysql2::Error: Duplicate entry')
 
-    post admin_api_service_metric_methods_path(path_params), metric: { system_name: 'alaska', friendly_name: 'alaska' }
+    post admin_api_service_metric_methods_path(path_params), params: { metric: { system_name: 'alaska', friendly_name: 'alaska' } }
     assert_response :conflict
   end
 
   test 'update' do
-    put admin_api_service_metric_method_path(path_params(id: method_metric.id)), metric: { friendly_name: 'new friendly name' }
+    put admin_api_service_metric_method_path(path_params(id: method_metric.id)), params: { metric: { friendly_name: 'new friendly name' } }
     assert_response :success
     assert_equal 'new friendly name', method_metric.reload.friendly_name
   end
 
   test 'cannot update system_name' do
     old_system_name = method_metric.system_name
-    put admin_api_service_metric_method_path(path_params(id: method_metric.id)), metric: { system_name: 'new_system_name' }
+    put admin_api_service_metric_method_path(path_params(id: method_metric.id)), params: { metric: { system_name: 'new_system_name' } }
     assert_response :success
     assert_equal old_system_name, method_metric.reload.system_name
   end

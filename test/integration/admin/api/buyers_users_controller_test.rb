@@ -14,13 +14,13 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'creates a user for its buyer' do
     assert_difference(buyer.users.method(:count)) do
-      post admin_api_account_users_path(buyer), params
+      post admin_api_account_users_path(buyer), params: params
     end
 
     user = buyer.users.order(created_at: :asc).last!
     params.except(:password, :access_token).each do |attr_name, expected_value|
       assert_equal expected_value, user.public_send(attr_name),
-        "#{attr_name} expected to be #{expected_value} but is #{user.public_send(attr_name)}"
+                   "#{attr_name} expected to be #{expected_value} but is #{user.public_send(attr_name)}"
     end
   end
 
