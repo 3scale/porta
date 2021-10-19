@@ -9,7 +9,7 @@ class NestedAssociationValidator < ActiveModel::EachValidator
   def validate_each(record, _attribute, value)
     return if !value || value.valid? || value.marked_for_destruction?
     options[:report].each do |alternate, attr|
-      errors = value.errors.get(alternate)
+      errors = value.errors.messages[alternate]
       record.errors[attr || alternate].concat(errors) if errors.present?
     end
   end
