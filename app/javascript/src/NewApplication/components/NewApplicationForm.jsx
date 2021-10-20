@@ -95,7 +95,7 @@ const NewApplicationForm = ({
 
   const url = buyer ? createApplicationPath.replace(':id', String(buyer.id)) : createApplicationPath
 
-  const isServiceSubscribedToBuyer = (buyer && product) ? new BuyerLogic(buyer).isSubscribedTo(product) : false
+  const isServiceSubscribedToBuyer = (buyer && product && new BuyerLogic(buyer).isSubscribedTo(product)) || false
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan !== null
