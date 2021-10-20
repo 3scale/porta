@@ -40,7 +40,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
       buyer_user = FactoryBot.create(:admin, account: buyer)
-      buyer_user.update_column(:email, nil)
+      buyer_user.update(email: nil)
 
       get find_admin_api_accounts_path(format: :json, access_token: token.value)
       assert_response :not_found
@@ -57,7 +57,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       rolling_updates_on
       rolling_update(:service_permissions, enabled: true)
 
-      put admin_api_account_path(buyer, format: :xml), update_params
+      put admin_api_account_path(buyer, format: :xml), params: update_params
       assert_response :ok
       assert_xml '//account/id'
       assert buyer.reload.settings.monthly_billing_enabled
@@ -67,19 +67,19 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       rolling_updates_on
       rolling_update(:service_permissions, enabled: false)
 
-      put admin_api_account_path(buyer, format: :xml), update_params
+      put admin_api_account_path(buyer, format: :xml), params: update_params
       assert_xml_403
-      refute buyer.reload.settings.monthly_billing_enabled
+      assert_not buyer.reload.settings.monthly_billing_enabled
     end
 
     test '#update from a member without service_permissions returns error message in json' do
       rolling_updates_on
       rolling_update(:service_permissions, enabled: false)
 
-      put admin_api_account_path(buyer, format: :json), update_params
-      assert_equal 'Forbidden', JSON.parse(response.body).dig('status')
+      put admin_api_account_path(buyer, format: :json), params: update_params
+      assert_equal 'Forbidden', JSON.parse(response.body)['status']
       assert_response :forbidden
-      refute buyer.reload.settings.monthly_billing_enabled
+      assert_not buyer.reload.settings.monthly_billing_enabled
     end
   end
 
@@ -112,8 +112,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       token.permission = 'ro'
       token.save!
 
-      buyer.update_columns(credit_card_auth_code: 'abcd',
-        credit_card_expires_on: Date.new(2020, 4, 2), credit_card_partial_number: '0989')
+      buyer.update_columns(credit_card_auth_code: 'abcd', credit_card_expires_on: Date.new(2020, 4, 2), credit_card_partial_number: '0989')
       buyer.payment_detail.destroy!
 
       assert_difference(PaymentDetail.method(:count), 0) do
@@ -144,7 +143,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
 
       assert_difference(WebHookWorker.jobs.method(:size)) do
-        put admin_api_account_path(buyer, format: :json), { monthly_billing_enabled: true, access_token: token.value }
+        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, access_token: token.value }
         assert_response :success
       end
     end
@@ -154,7 +153,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       FactoryBot.create(:webhook, account: provider, account_updated_on: true, active: true)
 
       assert_no_difference(WebHookWorker.jobs.method(:size)) do
-        put admin_api_account_path(buyer, format: :json), { monthly_billing_enabled: true, provider_key: provider.provider_key }
+        put admin_api_account_path(buyer, format: :json), params: { monthly_billing_enabled: true, provider_key: provider.provider_key }
         assert_response :success
       end
     end
@@ -184,12 +183,12 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   def buyer
     @buyer ||= FactoryBot.create(:buyer_account, provider_account: provider).tap do |buyer|
-      buyer.settings.update_column(:monthly_billing_enabled, false)
+      buyer.settings.update(monthly_billing_enabled: false)
     end
   end
 
   def update_params
-    @params ||= { monthly_billing_enabled: true, access_token: token.value }
+    @update_params ||= { monthly_billing_enabled: true, access_token: token.value }
   end
 
   def token(user: provider.admin_user)
