@@ -242,7 +242,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   end
 
   def test_audit_prepaid_postpaid
-    Finance::BillingStrategy.with_auditing do
+    Finance::BillingStrategy.with_synchronous_auditing do
       @provider = FactoryBot.create(:provider_with_billing)
       strategy = @provider.billing_strategy
       assert 'postpaid', strategy.type
