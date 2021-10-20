@@ -140,7 +140,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     token = FactoryBot.create(:access_token, owner: admin, scopes: %w[finance])
 
     assert_difference(Audited.audit_class.method(:count)) do
-      Invoice.with_auditing do
+      Invoice.with_synchronous_auditing do
         assert_difference(Invoice.method(:count)) do
           post api_invoices_path, invoice_params.merge!(access_token: token.value), accept: Mime[:json]
           assert_response :created

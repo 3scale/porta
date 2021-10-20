@@ -201,7 +201,7 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     app_key = FactoryBot.build(:application_key)
 
     assert_difference(Audited.audit_class.method(:count)) do
-      ApplicationKey.with_auditing do
+      ApplicationKey.with_synchronous_auditing do
         app_key.save!
       end
     end
@@ -209,7 +209,7 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     assert_app_key_audit_data(app_key, Audited.audit_class.last!)
 
     assert_difference(Audited.audit_class.method(:count)) do
-      ApplicationKey.with_auditing do
+      ApplicationKey.with_synchronous_auditing do
         app_key.destroy!
       end
     end
