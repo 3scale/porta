@@ -8,7 +8,7 @@ AddMissingUniqueIndices.class_eval do
   disable_ddl_transaction! if System::Database.postgres?
 
   def self.up
-    add_index ActsAsTaggableOn.tags_table, :name, unique: true, **index_options
+    add_index ActsAsTaggableOn.tags_table, [:name, :tenant_id], unique: true, name: 'index_tags_on_name', **index_options
 
     remove_index ActsAsTaggableOn.taggings_table, :tag_id if index_exists?(ActsAsTaggableOn.taggings_table, :tag_id)
     remove_index ActsAsTaggableOn.taggings_table, name: 'taggings_taggable_context_idx' if index_exists?(ActsAsTaggableOn.taggings_table, :taggings_taggable_context_idx)
@@ -18,7 +18,7 @@ AddMissingUniqueIndices.class_eval do
   end
 
   def self.down
-    remove_index ActsAsTaggableOn.tags_table, :name
+    remove_index ActsAsTaggableOn.tags_table, name: 'index_tags_on_name'
 
     remove_index ActsAsTaggableOn.taggings_table, name: 'taggings_idx'
 
