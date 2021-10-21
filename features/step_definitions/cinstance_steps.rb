@@ -7,6 +7,6 @@ Given "{provider} requires cinstances to be approved before use" do |provider|
   end
 end
 
-Then "{buyer} should have {int} cinstance(s)" do |buyer_account, number|
+Then "{buyer} should( still) have {int} cinstance(s)" do |buyer_account, number|
   assert_equal number.to_i, buyer_account.bought_cinstances.count
 end
