@@ -16,12 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = container
 
-  const { createServicePlanPath, createApplicationPath, createApplicationPlanPath, serviceSubscriptionsPath } = dataset
+  const {
+    buyersPath,
+    productsPath,
+    createServicePlanPath,
+    createApplicationPath,
+    createApplicationPlanPath,
+    serviceSubscriptionsPath
+  } = dataset
   const product = safeFromJsonString<Product>(dataset.product)
   const products = safeFromJsonString<Product[]>(dataset.mostRecentlyUpdatedProducts)
+  const productsCount = safeFromJsonString<number>(dataset.productsCount)
   const servicePlansAllowed = safeFromJsonString<boolean>(dataset.servicePlansAllowed)
   const buyer = safeFromJsonString<Buyer>(dataset.buyer)
   const buyers = safeFromJsonString<Buyer[]>(dataset.mostRecentlyCreatedBuyers)
+  const buyersCount = safeFromJsonString<number>(dataset.buyersCount)
   const definedFields = safeFromJsonString<FieldDefinition[]>(dataset.definedFields)
   const validationErrors = safeFromJsonString(dataset.errors) || {}
   const error: string | void = validationErrors.hasOwnProperty('base') ? validationErrors.base[0] : undefined
@@ -34,8 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     servicePlansAllowed,
     product,
     products,
+    productsCount,
+    productsPath,
     buyer,
     buyers,
+    buyersCount,
+    buyersPath,
     definedFields,
     validationErrors,
     error

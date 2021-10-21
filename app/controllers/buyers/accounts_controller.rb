@@ -18,6 +18,11 @@ class Buyers::AccountsController < Buyers::BaseController
     @countries = Country.all
     @account_plans = current_account.account_plans.stock
     @search = ThreeScale::Search.new(params[:search] || params)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: presenter.render_json }
+    end
   end
 
   def new

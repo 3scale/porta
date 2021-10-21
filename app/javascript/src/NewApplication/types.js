@@ -17,7 +17,7 @@ export type Product = {
   updatedAt: string,
   appPlans: ApplicationPlan[],
   servicePlans: ServicePlan[],
-  buyerCanSelectPlan?: boolean,
+  buyerCanSelectPlan: boolean,
   defaultAppPlan: ApplicationPlan | null,
   defaultServicePlan: ServicePlan | null
 }

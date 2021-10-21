@@ -32,9 +32,13 @@ type Props = {
   serviceSubscriptionsPath: string,
   product?: Product,
   products?: Product[],
+  productsCount?: number,
+  productsPath?: string,
   servicePlansAllowed?: boolean,
   buyer?: Buyer,
   buyers?: Buyer[],
+  buyersCount?: number,
+  buyersPath?: string,
   definedFields?: FieldDefinition[],
   validationErrors: {[string]: string[] | void},
   error?: string
@@ -43,6 +47,8 @@ type Props = {
 const NewApplicationForm = ({
   buyer: defaultBuyer,
   buyers,
+  buyersCount = 0,
+  buyersPath,
   createApplicationPath,
   createApplicationPlanPath,
   createServicePlanPath,
@@ -50,6 +56,8 @@ const NewApplicationForm = ({
   servicePlansAllowed = false,
   product: defaultProduct,
   products,
+  productsCount = 0,
+  productsPath,
   definedFields,
   validationErrors,
   error
@@ -57,7 +65,7 @@ const NewApplicationForm = ({
   const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
   const [product, setProduct] = useState<Product | null>(defaultProduct || null)
   const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
-  const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(null)
+  const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(defaultProduct?.defaultAppPlan || null)
   const [loading, setLoading] = useState<boolean>(false)
 
   const definedFieldsInitialState = definedFields ? definedFields.reduce((state, field) => {
@@ -72,12 +80,23 @@ const NewApplicationForm = ({
   const resetServicePlan = () => {
     let plan = null
 
-    if (buyer !== null && product !== null) {
+    if (buyer && product) {
       const contractedServicePlan = new BuyerLogic(buyer).getContractedServicePlan(product)
-      plan = contractedServicePlan || product.defaultServicePlan
+      plan = contractedServicePlan || product.defaultServicePlan || product.servicePlans[0] || null
     }
 
     setServicePlan(plan)
+  }
+
+  const resetAppPlan = () => {
+    let plan = null
+
+    if (product) {
+      // FIXME: when there is no default plan and buyer cannot select plan, it will be null and disabled.
+      plan = product.defaultAppPlan || null
+    }
+
+    setAppPlan(plan)
   }
 
   useEffect(() => {
@@ -85,27 +104,22 @@ const NewApplicationForm = ({
 
     setProduct(product)
     resetServicePlan()
-    setAppPlan(null)
+    resetAppPlan()
   }, [buyer])
 
   useEffect(() => {
     resetServicePlan()
-    setAppPlan(null)
+    resetAppPlan()
   }, [product])
 
   const url = buyer ? createApplicationPath.replace(':id', String(buyer.id)) : createApplicationPath
 
-  const isServiceSubscribedToBuyer = (buyer && product && new BuyerLogic(buyer).isSubscribedTo(product)) || false
+  const isServiceSubscribedToBuyer = Boolean(buyer && product && new BuyerLogic(buyer).isSubscribedTo(product))
 
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
-  const servicePlanValid = !servicePlansAllowed || servicePlan !== null
-  const definedFieldsValid = definedFields === undefined || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
-  const isFormComplete = buyer !== null &&
-    product !== null &&
-    servicePlanValid &&
-    appPlan !== null &&
-    buyerValid &&
-    definedFieldsValid
+  const servicePlanValid = !servicePlansAllowed || servicePlan
+  const definedFieldsValid = !definedFields || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
+  const isFormComplete = Boolean(buyer && product && servicePlanValid && appPlan && buyerValid && definedFieldsValid)
 
   if (error) {
     flash.error(error)
@@ -126,7 +140,9 @@ const NewApplicationForm = ({
           <BuyerSelect
             buyer={buyer}
             buyers={buyers}
+            buyersCount={buyersCount}
             onSelectBuyer={setBuyer}
+            buyersPath={buyersPath && `${buyersPath}.json`}
           />
           // $FlowExpectedError[incompatible-use] either buyers or defaultBuyer is always defined
         ) : <input type="hidden" name="account_id" value={defaultBuyer.id} />}
@@ -135,19 +151,20 @@ const NewApplicationForm = ({
           <ProductSelect
             product={product}
             products={products}
+            productsCount={productsCount}
             onSelectProduct={setProduct}
-            isDisabled={buyer === null}
+            isDisabled={!buyer}
+            productsPath={productsPath && `${productsPath}.json`}
           />
         )}
 
         {servicePlansAllowed && (
           <ServicePlanSelect
             servicePlan={servicePlan}
-            servicePlans={product ? product.servicePlans : []}
+            servicePlans={product ? product.servicePlans : null}
             onSelect={setServicePlan}
-            showHint={product !== null && buyer !== null}
             isPlanContracted={isServiceSubscribedToBuyer}
-            isDisabled={product === null || isServiceSubscribedToBuyer || buyer === null}
+            isDisabled={!buyer || !product || !servicePlan}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
             createServicePlanPath={product ? createServicePlanPath.replace(':id', String(product.id)) : ''}
           />
@@ -155,13 +172,12 @@ const NewApplicationForm = ({
 
         <ApplicationPlanSelect
           appPlan={appPlan}
-          appPlans={product ? product.appPlans : []}
+          product={product}
           onSelect={setAppPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(
             ':id',
             product ? String(product.id) : ''
           )}
-          isDisabled={product === null}
         />
 
         {definedFields && definedFields.map(f => (

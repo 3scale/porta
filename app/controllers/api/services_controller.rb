@@ -20,6 +20,11 @@ class Api::ServicesController < Api::BaseController
 
   def index
     activate_menu :products
+
+    respond_to do |format|
+      format.html
+      format.json { render json: presenter.render_json }
+    end
   end
 
   def show
