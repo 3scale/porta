@@ -24,6 +24,9 @@ class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
 
       perform_request(id: admin_access_token.id, access_token: another_admins_token.value)
       assert_response :not_found
+
+      perform_request(id: admin_access_token.value, access_token: another_admins_token.value)
+      assert_response :not_found
     end
 
     test 'using the token ID works well' do
