@@ -86,3 +86,10 @@ include TestHelpers::XmlAssertions
 include TestHelpers::SectionsPermissions
 
 ActiveJob::Uniqueness.test_mode!
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :minitest
+    with.library :rails
+  end
+end

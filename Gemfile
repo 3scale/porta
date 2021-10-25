@@ -212,9 +212,9 @@ group :test do
   gem 'rspec_api_documentation'
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
 
-  gem 'shoulda', '~> 3.5.0', require: false
-  gem 'shoulda-context', '~> 1.2.2'
-  gem 'shoulda-matchers', '~> 2.8.0'
+  gem 'shoulda', '~> 4.0.0'
+  gem 'shoulda-context', '~> 2.0.0'
+  gem 'shoulda-matchers', '~> 4.5.1'
   gem 'timecop', '~> 0.9'
 
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false

@@ -146,3 +146,10 @@ RspecApiDocumentation.configure do |config|
   config.curl_host = 'http://localhost:3000'
   config.api_name = "Example App API"
 end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
