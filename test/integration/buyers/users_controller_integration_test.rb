@@ -40,7 +40,7 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     non_destroyable_user = buyer.admin_user
 
     delete admin_buyers_account_user_path(account_id: buyer.id, id: destroyable_user.id)
-    refute User.exists?(destroyable_user.id)
+    assert_not User.exists?(destroyable_user.id)
     assert_equal 'User was successfully deleted.', flash[:notice]
 
     delete admin_buyers_account_user_path(account_id: buyer.id, id: non_destroyable_user.id)
@@ -52,7 +52,7 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:fields_definition, account: provider, target: 'User', name: 'country')
     user = FactoryBot.create(:member, account: buyer)
 
-    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), {
+    put admin_buyers_account_user_path(account_id: buyer.id, id: user.id), params: {
       user: {
         role: 'admin',
         username: 'updatedusername',

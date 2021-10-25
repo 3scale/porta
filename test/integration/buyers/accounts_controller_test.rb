@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
@@ -14,7 +16,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'POST creates the user and the account also when extra_fields are sent' do
       FactoryBot.create(:fields_definition, account: @provider, target: 'User', name: 'created_by')
 
-      post admin_buyers_accounts_path, {
+      post admin_buyers_accounts_path, params: {
           account: {
               org_name: 'Alaska',
               user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
@@ -40,9 +42,11 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       assert_difference @provider.buyers.method(:count) do
         assert_equal 0, WebHookWorker.jobs.size
-        post admin_buyers_accounts_path, account: {
+        post admin_buyers_accounts_path, params: {
+          account: {
             org_name: 'hello', org_legaladdress: 'address',
             user: { username: 'hello', email: 'foo@example.com', password: 'password'}
+          }
         }
         assert_equal 1, WebHookWorker.jobs.size
 
@@ -73,7 +77,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       plan.publish!
       buyer.buy! plan
       cinstance = service.cinstances.last
-      cinstance.update_attributes(name: 'Alaska Application App')
+      cinstance.update(name: 'Alaska Application App')
 
       User.any_instance.expects(:has_access_to_all_services?).returns(true).at_least_once
       get admin_buyers_account_path(buyer)
@@ -98,7 +102,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_account_invoices_path(buyer)
       assert_response :forbidden
 
-      assert_no_difference ->{ Invoice.count } do
+      assert_no_difference -> { Invoice.count } do
         post admin_buyers_account_invoices_path(buyer)
         assert_response :forbidden
       end
@@ -109,7 +113,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'member user with billing permission can manage invoice' do
-      user.member_permission_ids = [:partners, :finance]
+      user.member_permission_ids = %i[partners finance]
       user.save!
       buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
       provider.settings.allow_finance!
@@ -117,7 +121,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_account_invoices_path(buyer)
       assert_response :success
 
-      assert_difference ->{ Invoice.count }, 1 do
+      assert_difference -> { Invoice.count }, 1 do
         post admin_buyers_account_invoices_path(buyer)
         assert_response :redirect
       end
@@ -127,7 +131,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
     end
 
-    test 'can\'t manage buyer accounts' do
+    test "can't manage buyer accounts" do
       user.member_permission_ids = []
       user.save!
 
@@ -176,7 +180,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       @provider.account_plans.delete_all
       @provider.account_plans.create!(name: 'non default account plan')
 
-      post admin_buyers_accounts_path, {
+      post admin_buyers_accounts_path, params: {
         account: {
           org_name: 'Alaska',
           user: { email: 'foo@example.com', password: '123456', username: 'hello' }
@@ -193,7 +197,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       errors.add(:base, 'another error')
       Signup::Result.any_instance.stubs(errors: errors)
 
-      post admin_buyers_accounts_path, {
+      post admin_buyers_accounts_path, params: {
         account: {
           org_name: 'Alaska',
           user: { email: 'foo@example.com', password: '123456', username: 'hello' }
@@ -218,7 +222,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       get admin_buyers_accounts_path
 
-      assert_select %{td a[href="#{admin_buyers_account_applications_path(@buyer)}"]}, text: '5'
+      assert_select %(td a[href="#{admin_buyers_account_applications_path(@buyer)}"]), text: '5'
     end
 
     test 'checks if link under number of applications is correct as member' do
@@ -235,32 +239,36 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       login! @provider, user: member
       get admin_buyers_accounts_path
 
-      assert_select %{td a[href="#{admin_buyers_account_applications_path(@buyer)}"]}, text: '3'
+      assert_select %(td a[href="#{admin_buyers_account_applications_path(@buyer)}"]), text: '3'
     end
 
     test '#create' do
       assert_no_difference(-> { @provider.buyers.count }) do
-        post admin_buyers_accounts_path, account: {
+        post admin_buyers_accounts_path, params: {
+          account: {
             org_name: 'My organization'
+          }
         }
         assert_select '#account_user_username_input.required.error'
         assert_response :success
       end
 
       assert_difference(-> { @provider.buyers.count }) do
-        post admin_buyers_accounts_path, account: {
+        post admin_buyers_accounts_path, params: {
+          account: {
             org_name: 'My organization',
             user: {
                 username: 'johndoe',
                 email: 'user@example.org',
                 password: 'secretpassword'
             }
+          }
         }
         assert_response :redirect
       end
     end
 
-    test 'can\'t manage buyer\'s of other providers' do
+    test "can't manage buyer's of other providers" do
       another_provider = FactoryBot.create(:provider_account)
       login! another_provider
 
@@ -296,11 +304,13 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'User with invalid data shows an flash error' do
-      post admin_buyers_accounts_path, account: {
+      post admin_buyers_accounts_path, params: {
+        account: {
           org_name: 'My organization',
           user: {
             username: 'hello'
           }
+        }
       }
       assert_equal 'Users invalid', flash[:error]
     end
@@ -344,7 +354,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   class NotLoggedInTest < ActionDispatch::IntegrationTest
-    test 'anonymous users can\'t manage buyer accounts' do
+    test "anonymous users can't manage buyer accounts" do
       provider = FactoryBot.create(:provider_account)
       host! provider.admin_domain
 
