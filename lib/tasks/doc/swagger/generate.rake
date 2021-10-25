@@ -33,7 +33,7 @@ namespace :doc do
       end
 
       task :cms do
-        cmd = 'bundle exec sour --comment="##=" app/controllers/admin/api/cms/*.rb > doc/active_docs/cms.json'
+        cmd = 'bundle exec sour --comment="##=" app/controllers/admin/api/cms/*.rb > "doc/active_docs/CMS API.json"'
         run_command cmd
       end
     end
