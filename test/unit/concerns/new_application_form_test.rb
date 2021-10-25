@@ -2,21 +2,49 @@
 
 require 'test_helper'
 
+class MyForm
+  include NewApplicationForm
+
+  def initialize(provider:, service_plans_management_visible:)
+    @provider = provider
+    @user = FactoryBot.create(:simple_user, account: @provider)
+    @service_plans_management_visible = service_plans_management_visible
+  end
+
+  attr_reader :provider, :user
+
+  def service_plans_management_visible?
+    @service_plans_management_visible
+  end
+end
+
 module Concerns
   class NewApplicationFormTest < ActiveSupport::TestCase
     include ActiveJob::TestHelper
-    include NewApplicationForm
 
-    def setup
+    def setup(**opts)
       @provider = FactoryBot.create(:simple_provider)
-      @user = FactoryBot.create(:simple_user, account: @provider)
+      @form = MyForm.new(provider: @provider, **opts)
     end
 
-    def service_plans_management_visible?
-      true
+    attr_reader :provider, :form
+
+    delegate :new_application_form_base_data,
+             :buyers,
+             :products,
+             :application_defined_fields_data, to: :form
+
+    class WithServicePlansManagementVisible < NewApplicationFormTest
+      def setup
+        super(service_plans_management_visible: true)
+      end
     end
 
-    attr_reader :provider, :pagination_params, :user
+    class WithoutServicePlansManagementVisible < NewApplicationFormTest
+      def setup
+        super(service_plans_management_visible: false)
+      end
+    end
 
     test "new_application_form_base_data" do
       form_data = new_application_form_base_data(provider)
@@ -60,6 +88,10 @@ module Concerns
 
       assert_equal 1, data.size
       assert_equal "cinstance[#{field.name}]", data.first[:name]
+    end
+
+    def self.runnable_methods
+      Concerns::NewApplicationFormTest == self ? [] : super
     end
   end
 end
