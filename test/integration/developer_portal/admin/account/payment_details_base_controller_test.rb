@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'test_helper'
+
 class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
 
@@ -28,6 +30,6 @@ class DeveloperPortal::Admin::Account::PaymentDetailsBaseTest < ActionDispatch::
     }.deep_stringify_keys
 
     Account.any_instance.expects(:update_attributes).with(account_params).returns(true)
-    put admin_account_payment_details_path, { account: account_params.deep_merge('billing_address' => { 'injected_param' => 'unauthorized' }) }
+    put admin_account_payment_details_path, params: { account: account_params.deep_merge(billing_address: { injected_param: 'unauthorized' }) }
   end
 end

@@ -13,10 +13,10 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     @cinstance = buyer.buy! app_plan
 
     service.update!(backend_version: '2')
-    service.update_attribute(:referrer_filters_required, true)
+    service.update(referrer_filters_required: true)
     provider.settings.allow_multiple_applications!
     provider.settings.show_multiple_applications!
-    service.update_attribute(:default_application_plan_id, app_plan.id)
+    service.update(default_application_plan_id: app_plan.id)
 
     login_buyer buyer
   end
@@ -29,7 +29,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     end
 
     assert_no_difference(ReferrerFilter.method(:count)) do
-      post admin_application_referrer_filters_path(cinstance), {referrer_filter: "#{cinstance.filters_limit + 1}.example.org"}
+      post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: "#{cinstance.filters_limit + 1}.example.org" }
     end
 
     assert_equal 'Limit reached', flash[:error]
@@ -39,7 +39,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     include System::UrlHelpers.cms_url_helpers
 
     def setup
-      @provider  = FactoryBot.create(:simple_provider)
+      @provider = FactoryBot.create(:simple_provider)
       service = FactoryBot.create(:simple_service, account: provider)
       plan = FactoryBot.create(:simple_application_plan, issuer: service)
       @cinstance = FactoryBot.create(:simple_cinstance, plan: plan)
@@ -51,7 +51,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
 
     test 'Creating referrer filter is forbidden if not logged in' do
       assert_no_difference(ReferrerFilter.method(:count)) do
-        post admin_application_referrer_filters_path(cinstance), {referrer_filter: 'only.my.example.com'}
+        post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: 'only.my.example.com' }
       end
 
       assert_redirected_to login_path
@@ -73,7 +73,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     login_buyer another_buyer
 
     assert_no_difference(ReferrerFilter.method(:count)) do
-      post admin_application_referrer_filters_path(cinstance), {referrer_filter: 'only.my.example.com'}
+      post admin_application_referrer_filters_path(cinstance), params: { referrer_filter: 'only.my.example.com' }
     end
 
     assert_response :not_found
@@ -93,7 +93,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
   end
 
   test 'xhr create' do
-    xhr :post, admin_application_referrer_filters_path(application_id: cinstance.id, referrer_filter: 'only.my.example.com', format: :js)
+    post admin_application_referrer_filters_path(application_id: cinstance.id, referrer_filter: 'only.my.example.com', format: :js), xhr: true
 
     assert_response :success
   end
