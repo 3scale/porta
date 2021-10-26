@@ -50,6 +50,7 @@ WebMock.enable!
 WebMock.disable_net_connect!
 
 require 'monkey_patches/active_job_test_helper'
+require 'monkey_patches/route_params'
 class ActiveSupport::TestCase
   self.use_transactional_tests = true
   self.use_instantiated_fixtures  = false
