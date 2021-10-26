@@ -2,6 +2,8 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
+  include ActiveJob::TestHelper
+
   subject { @user || FactoryBot.create(:user) }
 
   should belong_to :account
@@ -96,8 +98,8 @@ class UserTest < ActiveSupport::TestCase
 
   def test_accessible_service_tokens
     provider = FactoryBot.create(:simple_provider)
-    service  = FactoryBot.create(:service, account: provider)
-    member   = FactoryBot.build_stubbed(:member, account: provider)
+    service = FactoryBot.create(:service, account: provider)
+    member = FactoryBot.build_stubbed(:member, account: provider)
 
     service.service_tokens.create!(value: 'money-makes-people-cautious')
 
@@ -111,9 +113,9 @@ class UserTest < ActiveSupport::TestCase
 
   def test_accessible_services
     provider = FactoryBot.create(:simple_provider)
-    service  = FactoryBot.create(:service, account: provider)
-    admin    = FactoryBot.build_stubbed(:admin, account: provider)
-    member   = FactoryBot.build_stubbed(:member, account: provider)
+    service = FactoryBot.create(:service, account: provider)
+    admin = FactoryBot.build_stubbed(:admin, account: provider)
+    member = FactoryBot.build_stubbed(:member, account: provider)
 
     assert_equal [service.id], admin.accessible_services.map(&:id)
     assert_equal [service.id], member.accessible_services.map(&:id)
@@ -131,14 +133,13 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal [], member.accessible_services.map(&:id)
 
-
     member.stubs(:has_access_to_all_services?).returns(true)
     member.stubs(:member_permission_service_ids).returns(nil)
     assert_equal [service.id], member.accessible_services.map(&:id)
   end
 
   test '#find_by_username_or_email returns nil for TypeError' do
-    assert_nil User.find_by_username_or_email({"＄foo" => "bar1"})
+    assert_nil User.find_by_username_or_email({ "＄foo" => "bar1" })
   end
 
   test '#multiple_accessible_services?' do
@@ -324,10 +325,10 @@ class UserTest < ActiveSupport::TestCase
 
       account = FactoryBot.create(:simple_account, :provider_account => provider_account, state: 'approved')
 
-      @user = FactoryBot.create(:simple_user, :account  => account,
-                      :username => 'person',
-                      :email    => 'person@example.org',
-                      :password => 'redpanda')
+      @user = FactoryBot.create(:simple_user, :account => account,
+                                :username => 'person',
+                                :email => 'person@example.org',
+                                :password => 'redpanda')
       @user.activate!
     end
 
@@ -393,24 +394,30 @@ class UserTest < ActiveSupport::TestCase
       @user.lost_password_token = nil
 
       @user.generate_lost_password_token!
+
       assert_not_nil @user.lost_password_token
       assert_not_nil @user.lost_password_token_generated_at
     end
 
     should 'send lost password email on :generate_lost_password_token!' do
-      @user.account.provider = true
-      @user.generate_lost_password_token!
+      @user.account.update_column(:provider, true)
 
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        @user.generate_lost_password_token!
+      end
       message = ActionMailer::Base.deliveries.last
 
       assert_not_nil message
-      assert_equal 'Password Recovery',  message.subject
+      assert_equal 'Password Recovery', message.subject
       assert_equal [@user.email], message.to
     end
 
     should 'send buyer lost password email on :generate_lost_password_token!' do
-      @user.account.provider = false
-      @user.generate_lost_password_token!
+      @user.account.update_column(:provider, false)
+
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        @user.generate_lost_password_token!
+      end
 
       message = ActionMailer::Base.deliveries.last
 
@@ -562,7 +569,7 @@ class UserTest < ActiveSupport::TestCase
     user.update_last_login!(:time => Time.utc(2010, 6, 30, 12, 36), :ip => '2.3.4.5')
 
     assert_equal Time.utc(2010, 6, 30, 12, 36), user.last_login_at
-    assert_equal '2.3.4.5',                 user.last_login_ip
+    assert_equal '2.3.4.5', user.last_login_ip
   end
 
   test '#can_login? returns false if user is not active' do
@@ -590,7 +597,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#can_login? returns false if the account is pending' do
     account = FactoryBot.create(:account_without_users)
-    user    = FactoryBot.create(:user, :account => account)
+    user = FactoryBot.create(:user, :account => account)
 
     user.activate!
     account.make_pending!
@@ -600,7 +607,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#can_login? returns false if the account is rejected' do
     account = FactoryBot.create(:account_without_users)
-    user    = FactoryBot.create(:user, :account => account)
+    user = FactoryBot.create(:user, :account => account)
 
     user.activate!
     account.reject!
@@ -610,7 +617,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#can_login? returns true if the user is active and the account is approved' do
     account = FactoryBot.create(:account_without_users)
-    user    = FactoryBot.create(:user, :account => account)
+    user = FactoryBot.create(:user, :account => account)
 
     user.activate!
 
@@ -778,8 +785,8 @@ class UserTest < ActiveSupport::TestCase
     context 'users with sections' do
       setup do
         @section = FactoryBot.create(:cms_section, :public => false,
-                           :title => "protected-section",
-                           :parent => @buyer.provider_account.sections.root)
+                                     :title => "protected-section",
+                                     :parent => @buyer.provider_account.sections.root)
 
         grant_buyer_access_to_section @buyer, @section
 
@@ -816,7 +823,7 @@ class UserTest < ActiveSupport::TestCase
     context 'strong passwords' do
       setup do
         @buyer.provider_account.settings
-          .update_attribute :strong_passwords_enabled, true
+              .update_attribute :strong_passwords_enabled, true
       end
 
       context 'existing users' do
