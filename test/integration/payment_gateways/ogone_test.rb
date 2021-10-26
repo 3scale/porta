@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class OgoneTest < ActionDispatch::IntegrationTest
+  include System::UrlHelpers.cms_url_helpers
+
   def setup
     @provider_account, plan = create_provider_account
     @provider_account.save
@@ -19,15 +21,13 @@ class OgoneTest < ActionDispatch::IntegrationTest
     get "/admin/account/"
 
     # active_merchant sets type to bogus and don't know how to change it
-    details_url = "/admin/account/ogone"
-    assert_select('a[href=?]', details_url)
+    assert_select('a[href=?]', admin_account_ogone_path)
   end
 
 
   test "receive ok for storage changes customer data" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
-
+    get hosted_success_admin_account_ogone_path, params:
     {"CN"=>"Josep Maria Pujol Serra",
       "orderID"=>"raitest_1323947064",
       "PAYID"=>"413811165",
@@ -48,14 +48,14 @@ class OgoneTest < ActionDispatch::IntegrationTest
       "NCERROR"=>"0"}
 
     @buyer_account.reload
-    assert_equal  Date.new(2015, 02, 1), @buyer_account.credit_card_expires_on_with_default
+    assert_equal Date.new(2015, 0o2, 1), @buyer_account.credit_card_expires_on_with_default
     assert_equal "2053", @buyer_account.credit_card_partial_number
-    assert_equal  "3scale-#{@provider_account.id}-#{@buyer_account.id}", @buyer_account.credit_card_auth_code
+    assert_equal "3scale-#{@provider_account.id}-#{@buyer_account.id}", @buyer_account.credit_card_auth_code
   end
 
   test "supports empty ED" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
+    get hosted_success_admin_account_ogone_path, params:
     { "ACCEPTANCE" => "0000",
       "BRAND" => "PAYPAL",
       "CARDNO" => "Batman@t-XXXXXXXX-et",
@@ -77,13 +77,13 @@ class OgoneTest < ActionDispatch::IntegrationTest
 
     @buyer_account.reload
     assert_equal "X-et", @buyer_account.credit_card_partial_number
-    assert_equal  "3scale-#{@provider_account.id}-#{@buyer_account.id}", @buyer_account.credit_card_auth_code
+    assert_equal "3scale-#{@provider_account.id}-#{@buyer_account.id}", @buyer_account.credit_card_auth_code
     assert_equal PaymentGateways::OgoneCrypt::DEFAULT_EXPIRATION_DATE, @buyer_account.credit_card_expires_on_with_default
   end
 
   test "nok status value (!=5) doesn't change customer data" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
+    get hosted_success_admin_account_ogone_path, params:
     {"CN"=>"Josep Maria Pujol Serra",
       "orderID"=>"raitest_1323947064",
       "PAYID"=>"413811165",
@@ -110,7 +110,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
 
   test "bad sha1 hash doesn't change customer data" do
     assert_nil @buyer_account.credit_card_partial_number
-    get "/admin/account/ogone/hosted_success" ,
+    get hosted_success_admin_account_ogone_path, params:
     {"CN"=>"Josep Maria Pujol Serra",
       "orderID"=>"raitest_1323947064",
       "PAYID"=>"413811165",
@@ -144,7 +144,7 @@ class OgoneTest < ActionDispatch::IntegrationTest
     } # to prevent ActiveRecord::RecordInvalid since the payment gateway has been deprecated
     provider_account.gateway_setting.save!(validate: false) # We cannot use update_columns wit Oracle
 
-    plan = FactoryBot.create(:application_plan, :issuer => provider_account.default_service)
+    plan = FactoryBot.create(:application_plan, issuer: provider_account.default_service)
 
     [provider_account, plan]
   end
