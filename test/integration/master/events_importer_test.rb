@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Master::EventsImporterTest < ActionDispatch::IntegrationTest
@@ -10,7 +12,7 @@ class Master::EventsImporterTest < ActionDispatch::IntegrationTest
     host! @provider.self_domain
 
     ThreeScale.config.stubs(tenant_mode: 'multitenant')
-    post master_events_import_url, secret: 'shared-secret!'
+    post master_events_import_url, params: { secret: 'shared-secret!' }
     assert_response :forbidden
   end
 
@@ -18,11 +20,11 @@ class Master::EventsImporterTest < ActionDispatch::IntegrationTest
     host! Account.master.self_domain
 
     ThreeScale.config.stubs(tenant_mode: 'multitenant')
-    post master_events_import_url, secret: 'shared-secret!'
+    post master_events_import_url, params: { secret: 'shared-secret!' }
     assert_response :success
 
     ThreeScale.config.stubs(tenant_mode: 'master')
-    post master_events_import_url, secret: 'shared-secret!'
+    post master_events_import_url, params: { secret: 'shared-secret!' }
     assert_response :success
   end
 end
