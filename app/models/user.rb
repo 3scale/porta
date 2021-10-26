@@ -244,9 +244,9 @@ class User < ApplicationRecord
   def generate_lost_password_token!
     if generate_lost_password_token
       if account.provider?
-        ProviderUserMailer.lost_password(self).deliver_now
+        ProviderUserMailer.lost_password(self).deliver_later
       else
-        UserMailer.lost_password(self).deliver_now
+        UserMailer.lost_password(self).deliver_later
       end
     end
   end
