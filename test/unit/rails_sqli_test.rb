@@ -8,7 +8,7 @@ class RailsSqliTest < ActiveSupport::TestCase
     # No error should be raised on that and the SQL
 
     CMS::Section.find_by(params)
-    sanitized = ActiveRecord::Base.sanitize params['system_name'].to_s
+    sanitized = ActiveRecord::Base.connection.quote params['system_name'].to_s
     assert_match sanitized, CMS::Section.where(params).to_sql
   end
 
