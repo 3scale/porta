@@ -11,14 +11,15 @@ class Stats::Api::ApplicationsTest < ActionDispatch::IntegrationTest
 
   test 'usage_response_code with no data as json' do
     provider_login_with @admin, 'supersecret'
-    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json",
+    get usage_response_code_stats_api_applications_path(@cinstance, format: :json), params: {
       period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false
+    }
 
     assert_response :success
     assert_content_type 'application/json'
 
     response = ActiveSupport::JSON.decode(@response.body)
-    response["values"] == [0] * 25
-    response["change"] == 0.0
+    assert_equal response["values"], [0] * 25
+    assert response["change"].to_d.zero?
   end
 end
