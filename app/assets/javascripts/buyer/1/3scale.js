@@ -4,7 +4,6 @@
 //= require flash
 //= require remote
 //= require switch
-//= require ajax_upload
 //= require autosubmit
 //= require extra_fields
 

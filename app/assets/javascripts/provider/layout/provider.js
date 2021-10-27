@@ -4,7 +4,6 @@
 //= require remote
 //= require switch
 //= require ajax_events
-//= require ajax_upload
 //= require autosubmit
 //= require extra_fields
 //= require vendor/underscore.min.js

@@ -6,9 +6,6 @@
     $(this).parents('tr').toggleClass('showing');
   });
 
-  // Enable ajax multipart forms.
-  $("form.remote-multipart").ajaxUpload();
-
   // rest
   $(document).ready(function() {
 
