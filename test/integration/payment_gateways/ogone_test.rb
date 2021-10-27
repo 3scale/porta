@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class OgoneTest < ActionDispatch::IntegrationTest
-  include System::UrlHelpers.cms_url_helpers
+  delegate :hosted_success_admin_account_ogone_path, :admin_account_ogone_path, to: :developer_portal
 
   def setup
     @provider_account, plan = create_provider_account
