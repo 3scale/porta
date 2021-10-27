@@ -10,7 +10,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     @account_plan = @master.default_account_plan
     @service_plan = master.default_service_plans.first
     @application_plan = master.default_application_plans.first
-    @application_plan.update_attribute(:system_name, 'enterprise') # for the switches tested later
+    @application_plan.update(system_name: 'enterprise') # for the switches tested later
     FactoryBot.create(:fields_definition, account: @master, target: 'User', name: 'created_by')
   end
 
@@ -18,14 +18,14 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     # sends activation email
     ProviderUserMailer.expects(:activation).returns(mock(deliver_now: true))
 
-    account_plan.update_attribute(:approval_required, false)
-    post provider_admin_accounts_path, valid_params
+    account_plan.update(approval_required: false)
+    post provider_admin_accounts_path, params: valid_params
     user = User.find_by!(email: valid_params[:account][:user][:email])
     account = user.account
 
     # because it sent activation email
     assert user.pending?
-    refute user.can_login?
+    assert_not user.can_login?
 
     # creates the main user with its right attributes
     assert_equal 'foo@example.com', user.email
@@ -57,7 +57,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test '#create for on-prem' do
     ThreeScale.config.stubs(onpremises: true)
-    post provider_admin_accounts_path, valid_params
+    post provider_admin_accounts_path, params: valid_params
     account = User.find_by!(email: valid_params[:account][:user][:email]).account
     # account has the right plans
     assert_equal account_plan, account.bought_account_plan
@@ -69,7 +69,7 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   test '#create for saas' do
     ThreeScale.config.stubs(onpremises: false)
-    post provider_admin_accounts_path, valid_params
+    post provider_admin_accounts_path, params: valid_params
     account = User.find_by!(email: valid_params[:account][:user][:email]).account
     # account has the right plans
     assert_equal account_plan, account.bought_account_plan
@@ -77,15 +77,15 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [application_plan], account.bought_application_plans
     # should set the switches to nothing is allowed (because the enterprise plan for saas is not automatically validated)
     switches = account.settings.switches
-    switches.each { |_name, switch| refute switch.allowed? }
+    switches.each { |_name, switch| assert_not switch.allowed? }
   end
 
   test '#create approves the account when the account plan does not require approval' do
-    account_plan.update_attribute(:approval_required, true)
-    post provider_admin_accounts_path, valid_params
+    account_plan.update(approval_required: true)
+    post provider_admin_accounts_path, params: valid_params
     user = User.find_by!(email: valid_params[:account][:user][:email])
     account = user.account
-    refute user.can_login?
+    assert_not user.can_login?
     assert account.created?
   end
 
@@ -94,9 +94,11 @@ class Provider::Admin::AccountsControllerTest < ActionDispatch::IntegrationTest
   attr_reader :master, :account_plan, :service_plan, :application_plan
 
   def valid_params
-    { account: {
+    {
+      account: {
         org_name: 'Alaska',
         user: { email: 'foo@example.com', extra_fields: { created_by: 'hi' }, password: '123456', username: 'hello' }
-     } }
+      }
+    }
   end
 end
