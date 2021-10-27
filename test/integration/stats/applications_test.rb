@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
@@ -15,11 +17,15 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
   def test_show
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :success
+  end
 
+  def test_show_without_access_to_all_services
     User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :forbidden
+  end
 
+  def test_show_with_member_permissions
     User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :success

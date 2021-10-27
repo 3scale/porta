@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Stats::ClientsTest < ActionDispatch::IntegrationTest
@@ -18,7 +20,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
 
   test 'usage with invalid period' do
     login! @provider_account
-    get "/stats/api/applications/#{@cinstance.id}/usage.json", :period => 'XSScript', :metric_name => @metric.system_name
+    get usage_stats_api_applications_path(@cinstance, format: :json), params: { :period => 'XSScript', :metric_name => @metric.system_name }
     assert_response :bad_request
   end
 
@@ -34,17 +36,17 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     Timecop.freeze(Time.utc(2009, 12, 13))
 
     login! @provider_account
-    @provider_account.update_attribute(:timezone, 'Madrid')
+    @provider_account.update(timezone: 'Madrid')
 
-    get "/stats/api/applications/#{@cinstance.id}/usage.json", period:'month', metric_name: @metric.system_name, skip_change: false
+    get usage_stats_api_applications_path(@cinstance, format: :json), params: { period: 'month', metric_name: @metric.system_name, skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
     assert_json "period"=>
       {"name"=>"month",
        "granularity"=>"day",
-       "since"=>Time.parse("2009-11-13T00:00:00+01:00"),
-       "until"=>Time.parse("2009-12-13T23:59:59+01:00"),
+       "since"=>Time.zone.parse("2009-11-13T00:00:00+01:00"),
+       "until"=>Time.zone.parse("2009-12-13T23:59:59+01:00"),
        "timezone"=>"Europe/Madrid"},
      "total"=>3,
      "application"=>
@@ -74,9 +76,9 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     Timecop.freeze(Time.utc(2009, 12, 13))
 
     login! @provider_account
-    @provider_account.update_attribute(:timezone, 'Madrid')
+    @provider_account.update(timezone: 'Madrid')
 
-    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json", period:'month', response_code: 200
+    get usage_response_code_stats_api_applications_path(@cinstance, format: :json), params: { period: 'month', response_code: 200 }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -84,8 +86,8 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     "period"=>
       {"name"=>"month",
        "granularity"=>"day",
-       "since"=>Time.parse("2009-11-13T00:00:00+01:00"),
-       "until"=>Time.parse("2009-12-13T23:59:59+01:00"),
+       "since"=>Time.zone.parse("2009-11-13T00:00:00+01:00"),
+       "until"=>Time.zone.parse("2009-12-13T23:59:59+01:00"),
        "timezone"=>"Europe/Madrid"},
      "total"=>3,
      "application"=>
@@ -98,7 +100,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
        "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 21 + [2] + [0] * 7 + [1, 0]
 
-    get "/stats/api/applications/#{@cinstance.id}/usage_response_code.json", period:'month', response_code: 404
+    get usage_response_code_stats_api_applications_path(@cinstance, format: :json), params: { period: 'month', response_code: 404 }
 
     assert_response :success
     assert_content_type 'application/json'
@@ -106,8 +108,8 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     "period"=>
       {"name"=>"month",
        "granularity"=>"day",
-       "since"=>Time.parse("2009-11-13T00:00:00+01:00"),
-       "until"=>Time.parse("2009-12-13T23:59:59+01:00"),
+       "since"=>Time.zone.parse("2009-11-13T00:00:00+01:00"),
+       "until"=>Time.zone.parse("2009-12-13T23:59:59+01:00"),
        "timezone"=>"Europe/Madrid"},
      "total"=>1,
      "application"=>

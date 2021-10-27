@@ -15,13 +15,13 @@ class Stats::Data::BackendApisControllerTest < ActionDispatch::IntegrationTest
   attr_reader :provider, :backend_api, :metric, :access_token
 
   test 'usage_response_code with no data as json' do
-    get usage_stats_data_backend_apis_path(backend_api_id: backend_api.id, format: :json, access_token: access_token.value), stats_params
+    get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: access_token.value), params: stats_params
 
     assert_response :success
     assert_content_type 'application/json'
 
     expected_response = {
-      metric: metric.attributes.slice(*%w[id system_name unit]).merge(name: metric.friendly_name),
+      metric: metric.attributes.slice('id', 'system_name', 'unit').merge(name: metric.friendly_name),
       period: { name: 'day', since: '2020-03-19T00:00:00Z', until: '2020-03-19T23:59:59Z', timezone: 'Etc/UTC', granularity: 'hour' },
       total: 0,
       values: [0] * 24,
@@ -33,17 +33,17 @@ class Stats::Data::BackendApisControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'inexistent source' do
-    get usage_stats_data_backend_apis_path(backend_api_id: 0, format: :json, access_token: access_token.value), stats_params
+    get usage_stats_data_backend_apis_path(backend_api_id: 0, format: :json, access_token: access_token.value), params: stats_params
     assert_response :not_found
   end
 
   test 'user permissions' do
     member_user = FactoryBot.create(:member, account: provider)
     member_access_token  = FactoryBot.create(:access_token, owner: member_user, scopes: ['stats'])
-    get usage_stats_data_backend_apis_path(backend_api_id: backend_api.id, format: :json, access_token: member_access_token.value), stats_params
+    get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: member_access_token.value), params: stats_params
     assert_response :forbidden
 
-    get usage_stats_data_backend_apis_path(backend_api_id: backend_api.id, format: :json, access_token: access_token.value), stats_params
+    get usage_stats_data_backend_apis_path(backend_api, format: :json, access_token: access_token.value), params: stats_params
     assert_response :success
   end
 
