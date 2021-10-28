@@ -576,11 +576,13 @@ class PlanTest < ActiveSupport::TestCase
   should "don't raise exception when setup_fee is nil" do
     plan = FactoryBot.build_stubbed(:application_plan)
     plan.setup_fee = nil
+    plan.valid?
   end
 
   should "don't raise exception when cost_per_month is nil" do
     plan = FactoryBot.build_stubbed(:application_plan)
     plan.cost_per_month = nil
+    plan.valid?
   end
 
   test 'setup_fee cannot be negative' do
