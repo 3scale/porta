@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::IntegrationTest
@@ -40,8 +42,8 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
       token_url: "http://token_url", user_info_url: "http://user_info_url", authorize_url: "http://authorize_url",
       site: "http://site", kind: 'github', skip_ssl_certificate_verification: true
     }
-    assert_difference -> {@provider.authentication_providers.count } do
-      post provider_admin_authentication_providers_path, authentication_provider: attributes
+    assert_difference -> { @provider.authentication_providers.count } do
+      post provider_admin_authentication_providers_path, params: { authentication_provider: attributes }
     end
 
     github = @provider.authentication_providers.find_by! kind: :github
@@ -49,7 +51,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
 
     assert_equal 'client_id', github.client_id
 
-    put provider_admin_authentication_provider_path(github), authentication_provider: {client_id: 'clientID'}
+    put provider_admin_authentication_provider_path(github), params: { authentication_provider: {client_id: 'clientID'} }
     assert_template 'provider/admin/authentication_providers/show'
     github.reload
     assert_equal 'clientID', github.client_id
@@ -57,17 +59,16 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
 
   test 'POST create success' do
     attrs = FactoryBot.attributes_for(:authentication_provider)
-    refute @provider.authentication_providers.find_by kind: attrs[:kind]
-    post provider_admin_authentication_providers_path, authentication_provider: attrs
+    assert_not @provider.authentication_providers.find_by(kind: attrs[:kind])
+    post provider_admin_authentication_providers_path, params: { authentication_provider: attrs }
     authentication_provider = @provider.authentication_providers.find_by! kind: attrs[:kind]
     assert_redirected_to edit_provider_admin_authentication_provider_path(authentication_provider)
   end
 
   test 'PUT update automatically_approve_accounts' do
     authentication_provider = FactoryBot.create(:authentication_provider, account: @provider)
-    refute authentication_provider.automatically_approve_accounts
-    put provider_admin_authentication_provider_path(authentication_provider),
-        authentication_provider: {automatically_approve_accounts: true}
+    assert_not authentication_provider.automatically_approve_accounts
+    put provider_admin_authentication_provider_path(authentication_provider), params: { authentication_provider: {automatically_approve_accounts: true } }
     authentication_provider.reload
     assert authentication_provider.automatically_approve_accounts
   end
@@ -102,7 +103,7 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
     @provider.settings.deny_branding
     AuthenticationProvider.any_instance.stubs(:update_attributes).returns(false)
     authentication_provider = FactoryBot.create(:github_authentication_provider, account: @provider, branding_state: 'threescale_branded')
-    patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: {published: true})
+    patch publish_or_hide_provider_admin_authentication_provider_path(authentication_provider, authentication_provider: { published: true })
     assert_template 'provider/admin/authentication_providers/show'
     assert_equal 'Authentication provider has not been updated', flash[:notice]
   end
@@ -118,5 +119,4 @@ class Provider::Admin::AuthenticationProvidersControllerTest < ActionDispatch::I
       authentication_provider.reload
     end
   end
-
 end

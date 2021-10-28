@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::PasswordsControllerIntegrationTest < ActionDispatch::IntegrationTest
@@ -54,7 +56,7 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
     test '#destroy does not work for master account' do
       login_provider master_account
 
-      assert_raise(ActionController::RoutingError) { delete provider_password_path, email: 'example@test.com' }
+      assert_raise(ActionController::RoutingError) { delete provider_password_path, params: { email: 'example@test.com' } }
     end
   end
 end

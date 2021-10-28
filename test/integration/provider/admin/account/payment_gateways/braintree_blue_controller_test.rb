@@ -1,20 +1,45 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < ActionDispatch::IntegrationTest
   include ActiveMerchantTestHelpers::BraintreeBlue
+
   def setup
     @provider = FactoryBot.create(:provider_account, credit_card_auth_code: 'foo')
     login_provider @provider
   end
 
+  form_params = {
+    customer: {
+      first_name: 'John',
+      last_name: 'Doe',
+      phone: '123456789',
+      credit_card: {
+        billing_address: {
+          company: 'Invisible Inc.',
+          street_address: '123 Main Street',
+          postal_code: '12345',
+          locality: 'Anytown',
+          region: 'Nowhere',
+          country_name: 'US'
+        }
+      }
+    },
+    braintree: {
+      nonce: 'a_nonce',
+      last_four: '7654'
+    }
+  }.freeze
+
   test 'delete destroy' do
-    assert  @provider.credit_card_stored?
+    assert @provider.credit_card_stored?
     ActiveMerchant::Billing::BogusGateway.any_instance.expects(:unstore)
     delete provider_admin_account_braintree_blue_path
 
     assert_response :redirect
     @provider.reload
-    refute @provider.credit_card_stored?
+    assert_not @provider.credit_card_stored?
   end
 
   test 'when finance is disabled for master' do
@@ -64,7 +89,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
     ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
-    post hosted_success_provider_admin_account_braintree_blue_path, form_params
+    post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
 
     @provider.reload
 
@@ -76,11 +101,11 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
     @provider.provider_account.update(payment_gateway_options: gateway_options)
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
 
-    post hosted_success_provider_admin_account_braintree_blue_path, form_params
+    post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
 
     @provider.reload
 
-    refute @provider.suspended?
+    assert_not @provider.suspended?
   end
 
   test 'invalid credentials' do
@@ -92,8 +117,8 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
       public_key: 'also-incorrect',
       private_key: 'yeah-it-is-a-mess'
     }
-    master_account.update_attributes(payment_gateway_options: payment_gateway_options)
-    @provider.update_attributes(state_region: 'State', city: 'City', zip: '1234')
+    master_account.update(payment_gateway_options: payment_gateway_options)
+    @provider.update(state_region: 'State', city: 'City', zip: '1234')
 
     ::PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:try_find_customer).raises(Braintree::AuthenticationError)
     get edit_provider_admin_account_braintree_blue_path
@@ -104,36 +129,10 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
   test 'missing credentials' do
     ThreeScale.config.stubs(onpremises: false)
 
-    @provider.update_attributes(state_region: 'State', city: 'City', zip: '1234')
+    @provider.update(state_region: 'State', city: 'City', zip: '1234')
 
     get edit_provider_admin_account_braintree_blue_path
     assert_redirected_to provider_admin_account_braintree_blue_path
     assert_equal 'Invalid merchant id', flash[:error]
-  end
-
-  private
-
-  def form_params
-    {
-      customer: {
-        first_name: 'John',
-        last_name: 'Doe',
-        phone: '123456789',
-        credit_card: {
-          billing_address: {
-            company: 'Invisible Inc.',
-            street_address: '123 Main Street',
-            postal_code: '12345',
-            locality: 'Anytown',
-            region: 'Nowhere',
-            country_name: 'US'
-          }
-        }
-      },
-      braintree: {
-        nonce: 'a_nonce',
-        last_four: '7654'
-      }
-    }
   end
 end
