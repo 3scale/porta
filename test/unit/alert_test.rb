@@ -16,7 +16,6 @@ class AlertTest < ActiveSupport::TestCase
     FactoryBot.create(:limit_alert, level: 80)
 
     alerts = Alert.by_level(80)
-    assert_kind_of Alert.const_get(:ActiveRecord_Relation), alerts
     assert_equal 1, alerts.count
   end
 
