@@ -11,7 +11,7 @@ class Finance::Provider::BillingStrategiesController < Finance::Provider::BaseCo
 
     if type
       @billing_strategy.change_mode(type)
-      redirect_to :back
+      redirect_back(fallback_location: @billing_strategy)
     else
       render_error(:not_found)
     end
