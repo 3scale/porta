@@ -223,16 +223,6 @@
       }
     }
 
-    // React to topics sort dropdown
-
-    $('#forum select#s').change(function(){
-      var param = this.options[this.selectedIndex].value || '',
-	  view = $('div.by-category').attr('data-view'),
-	  category = $('div.by-category').attr('data-category');
-
-      location.href = "?view=" + view + "&s=" + param + "&for_category=" + category;
-    });
-
     // DEPRECATED: since the introduction of PF4 and React, colorbox is being removed. Also jquery-ujs has been replaced with rails-ujs.
     // Added #colorbox selector to target only non-React forms
     // show errors from ajax in formtastic

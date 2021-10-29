@@ -14,8 +14,6 @@
       <%= text_field_tag :query, params[:query] %>
       <%= submit_tag 'Search' %>
     <% end %>
-
-    <!-- Order threads by <%# select_tag 's', options_for_select(Topic::ORDER_BY, :selected => (params[:s] || '')) %> -->
   </div>
 
   <% if @topics.present? %>
