@@ -26,7 +26,6 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   def test_show_with_member_permissions
-    User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
     get admin_buyers_stats_application_path(id: @application.id)
     assert_response :success
   end
