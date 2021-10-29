@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Provider::Admin::ApplicationsNewPresenter
-  include Applications
+  include NewApplicationForm
   include PlansHelper
 
   delegate :can?, to: :ability
@@ -9,10 +9,11 @@ class Provider::Admin::ApplicationsNewPresenter
   def initialize(provider:, user:, cinstance: nil)
     @provider = provider
     @cinstance = cinstance
+    @user = user
     @ability = Ability.new(user)
   end
 
-  attr_reader :provider, :cinstance, :ability
+  attr_reader :provider, :cinstance, :user, :ability
 
   alias current_account provider
 
@@ -20,9 +21,9 @@ class Provider::Admin::ApplicationsNewPresenter
     data = {
       'create-application-path': provider_admin_applications_path,
       'most-recently-created-buyers': buyers.to_json,
-      'buyers-count': raw_buyers.size,
+      'buyers-count': accounts_presenter.total_entries,
       'most-recently-updated-products': products.to_json,
-      'products-count': raw_products.size,
+      'products-count': products_presenter.total_entries
     }
     data.merge new_application_form_base_data(provider, cinstance)
   end

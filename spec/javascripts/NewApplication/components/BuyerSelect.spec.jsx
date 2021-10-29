@@ -6,12 +6,13 @@ import { BuyerSelect } from 'NewApplication'
 import { mount } from 'enzyme'
 
 const buyer = {
-  id: '0',
+  id: 0,
   name: 'The Buyer',
   admin: 'admin',
   contractedProducts: [],
   createApplicationPath: '',
-  createdAt: ''
+  createdAt: '',
+  multipleAppsAllowed: false
 }
 const props = {
   buyer,

@@ -55,18 +55,6 @@ class ServiceDecorator < ApplicationDecorator
 
   alias link service_path
 
-  def new_application_data
-    {
-      id: id.to_s,
-      name: name,
-      systemName: system_name,
-      updatedAt: updated_at,
-      appPlans: plans.stock.select(:id, :name).as_json(root: false),
-      servicePlans: service_plans.select(:id, :name).as_json(root: false),
-      defaultServicePlan: default_service_plan.as_json(root: false, only: %i[id name])
-    }
-  end
-
   def backends_table_data
     BackendApiDecorator.decorate_collection(backend_apis.reorder(name: :asc))
                        .map(&:table_data)

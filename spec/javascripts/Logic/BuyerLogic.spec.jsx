@@ -9,15 +9,16 @@ afterEach(() => {
 })
 
 const buyer: Buyer = {
-  id: '0',
+  id: 0,
   name: 'Mr. Buyer',
   admin: 'The Admin',
   createApplicationPath: '',
   createdAt: '',
-  contractedProducts: []
+  contractedProducts: [],
+  multipleAppsAllowed: false
 }
 const plan: $Shape<ServicePlan> = { id: 10, name: 'The Plan' }
-const product: $Shape<Product> = { id: '1', name: 'The Product' }
+const product: $Shape<Product> = { id: 1, name: 'The Product' }
 
 describe('getContractedServicePlan', () => {
   it('should return the contracted product', () => {

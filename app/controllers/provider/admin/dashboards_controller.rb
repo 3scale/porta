@@ -44,10 +44,10 @@ class Provider::Admin::DashboardsController < FrontendController
   end
 
   def backend_apis_presenter
-    Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account)
+    Provider::Admin::BackendApisIndexPresenter.new(current_account: current_account, params: { per_page: 5 })
   end
 
   def products_presenter
-    Api::ServicesIndexPresenter.new(current_user: current_user)
+    Api::ServicesIndexPresenter.new(current_user: current_user, params: { per_page: 5 })
   end
 end

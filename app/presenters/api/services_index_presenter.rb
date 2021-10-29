@@ -6,77 +6,44 @@ class Api::ServicesIndexPresenter
   def initialize(current_user:, params: {})
     @current_user = current_user
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
-    @search = ThreeScale::Search.new(params[:search] || params)
+    @search = ThreeScale::Search.new(params[:search])
+    @sorting_params = "#{params[:sort].presence || 'updated_at'} #{params[:direction].presence || 'desc'}"
   end
 
-  attr_reader :current_user, :pagination_params, :search
+  attr_reader :current_user, :pagination_params, :search, :sorting_params
+
+  delegate :total_entries, to: :products
+
+  def products
+    @products ||= current_user.accessible_services
+                              .order(sorting_params)
+                              .scope_search(search)
+                              .paginate(pagination_params)
+  end
+
+  alias paginated_products products
 
   def data
     {
       'new-product-path': new_admin_service_path,
-      products: products_data.to_json,
-      'products-count': page_products.total_entries.to_json
+      products: products.map { |p| ServicePresenter.new(p).index_data.as_json }.to_json,
+      'products-count': total_entries
     }
   end
 
   def dashboard_widget_data
     {
-      products: dashboard_widget_products,
+      products: products.map { |p| ServicePresenter.new(p).dashboard_widget_data.as_json },
       newProductPath: new_admin_service_path,
       productsPath: admin_services_path
     }
   end
 
-  protected
-
-  def scoped_products
-    @scoped_products ||= current_user.accessible_services
-                                     .order(updated_at: :desc)
-                                     .scope_search(search)
-  end
-
-  def page_products
-    @page_products ||= scoped_products.paginate(pagination_params)
-  end
-
-  def products_data
-    page_products.map do |product|
-      {
-        id: product.id,
-        name: product.name,
-        systemName: product.system_name,
-        updatedAt: product.updated_at,
-        links: links(product),
-        appsCount: product.cinstances.size,
-        backendsCount: product.backend_api_configs.size,
-        unreadAlertsCount: product.decorate.unread_alerts_count
-      }
-    end
-  end
-
-  def dashboard_widget_products
-    current_user.accessible_services
-                .order(updated_at: :desc)
-                .take(5)
-                .map do |product|
-                  {
-                    id: product.id,
-                    name: product.name,
-                    updated_at: product.updated_at,
-                    link: product.decorate.link,
-                    links: links(product)
-                  }
-                end
-  end
-
-  def links(product)
-    [
-      { name: 'Edit', path: edit_admin_service_path(product) },
-      { name: 'Overview', path: admin_service_path(product) },
-      { name: 'Analytics', path: admin_service_stats_usage_path(product) },
-      { name: 'Applications', path: admin_service_applications_path(product) },
-      { name: 'ActiveDocs', path: admin_service_api_docs_path(product) },
-      { name: 'Integration', path: admin_service_integration_path(product) },
-    ]
+  # The JSON response of index endpoint is used to populate NewApplicationForm's BuyerSelect
+  def render_json
+    {
+      items: products.map { |p| ServicePresenter.new(p).new_application_data.as_json }.to_json,
+      count: total_entries
+    }
   end
 end

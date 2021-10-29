@@ -11,12 +11,14 @@ export type ApplicationPlan = {
 }
 
 export type Product = {
-  id: string,
+  id: number,
   name: string,
   systemName: string,
   updatedAt: string,
   appPlans: ApplicationPlan[],
   servicePlans: ServicePlan[],
+  buyerCanSelectPlan?: boolean,
+  defaultAppPlan: ApplicationPlan | null,
   defaultServicePlan: ServicePlan | null
 }
 
@@ -27,10 +29,11 @@ export type ContractedProduct = {
 }
 
 export type Buyer = {
-  id: string,
+  id: number,
   name: string,
   admin: string,
   createdAt: string,
   contractedProducts: ContractedProduct[],
   createApplicationPath: string,
+  multipleAppsAllowed?: boolean
 }
