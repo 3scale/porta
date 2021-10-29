@@ -8,7 +8,7 @@ class Provider::PasswordsController < FrontendController
   before_action :instantiate_presenter, only: %i(show update)
 
   def new
-    return redirect_to :back, error: t('.has_password') if current_user.using_password?
+    return redirect_back(fallback_location: root_path), error: t('.has_password') if current_user.using_password?
 
     reset_session_password_token
     token = current_user.generate_lost_password_token
