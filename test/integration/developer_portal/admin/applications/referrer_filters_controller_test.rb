@@ -12,11 +12,9 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
     app_plan   = FactoryBot.create(:simple_application_plan, issuer: service)
     @cinstance = buyer.buy! app_plan
 
-    service.update!(backend_version: '2')
-    service.update(referrer_filters_required: true)
+    service.update!(backend_version: '2', referrer_filters_required: true, default_application_plan_id: app_plan.id)
     provider.settings.allow_multiple_applications!
     provider.settings.show_multiple_applications!
-    service.update(default_application_plan_id: app_plan.id)
 
     login_buyer buyer
   end
