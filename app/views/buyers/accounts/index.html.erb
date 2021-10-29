@@ -25,5 +25,5 @@
 </div>
 
 <div id="results_list">
-  <%= render :partial => 'search_results', :locals => { :accounts => @accounts } %>
+  <%= render :partial => 'search_results', :locals => { :accounts => presenter.buyers.decorate } %>
 </div>

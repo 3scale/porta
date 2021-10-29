@@ -10,12 +10,12 @@ class BuyerLogic {
   }
 
   getContractedServicePlan (product: Product): ServicePlan | null {
-    const contract = this.buyer.contractedProducts.find(p => String(p.id) === product.id)
+    const contract = this.buyer.contractedProducts.find(p => p.id === product.id)
     return (contract && contract.withPlan) || null
   }
 
   isSubscribedTo (product: Product): boolean {
-    return this.buyer.contractedProducts.some(p => String(p.id) === product.id)
+    return this.buyer.contractedProducts.some(p => p.id === product.id)
   }
 }
 
