@@ -156,11 +156,11 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
     # This is in
     make_transaction_at(Time.utc(2009, 12, 31, 23, 20), cinstance_id: cinstance.id)
-    make_transaction_at(Time.utc(2010, 0o1, 0o1, 12, 21), cinstance_id: cinstance.id)
-    make_transaction_at(Time.utc(2010, 12, 0o1, 12, 21), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2010, 1, 1, 12, 21), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2010, 12, 1, 12, 21), cinstance_id: cinstance.id)
 
     # This is out
-    make_transaction_at(Time.utc(2011, 0o1, 0o1, 23, 21), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2011, 1, 1, 23, 21), cinstance_id: cinstance.id)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Madrid', since: "2010-01-01", skip_change: false }
@@ -187,15 +187,15 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     cinstance = FactoryBot.create(:cinstance, plan: plan)
 
     # This one is outside of the time range
-    make_transaction_at(Time.utc(2010, 0o1, 0o1, 0o0, 35), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2010, 1, 1, 0, 35), cinstance_id: cinstance.id)
 
     # This is in
-    make_transaction_at(Time.utc(2010, 0o1, 0o1, 0o1, 20), cinstance_id: cinstance.id)
-    make_transaction_at(Time.utc(2010, 0o1, 0o1, 23, 55), cinstance_id: cinstance.id)
-    make_transaction_at(Time.utc(2011, 0o1, 0o1, 0o0, 21), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2010, 1, 1, 1, 20), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2010, 1, 1, 23, 55), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2011, 1, 1, 0, 21), cinstance_id: cinstance.id)
 
     # This is out
-    make_transaction_at(Time.utc(2011, 0o1, 0o1, 0o1, 21), cinstance_id: cinstance.id)
+    make_transaction_at(Time.utc(2011, 1, 1, 1, 21), cinstance_id: cinstance.id)
 
     provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Azores', since: "2010-01-01", skip_change: false }
