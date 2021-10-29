@@ -691,11 +691,9 @@ class ProxyTest < ActiveSupport::TestCase
     f2 = Fiber.new { proxy.affecting_change_history }
 
     f1.resume
-    assert_nothing_raised(ActiveRecord::RecordNotUnique) do
-      f2.resume
-      f1.resume
-      f2.resume
-    end
+    f2.resume
+    f1.resume
+    f2.resume
     assert_equal 1, ProxyConfigAffectingChange.where(proxy: proxy).count
   end
 
@@ -814,10 +812,8 @@ class ProxyTest < ActiveSupport::TestCase
       fiber_touch = Fiber.new { Proxy.find(proxy_id).touch }
 
       fiber_update.resume
-      assert_nothing_raised(ActiveRecord::StaleObjectError) do
-        fiber_touch.resume
-        fiber_update.resume
-      end
+      fiber_touch.resume
+      fiber_update.resume
     end
   end
 end
