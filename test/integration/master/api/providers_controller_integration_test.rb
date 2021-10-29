@@ -6,7 +6,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
   def setup
     @account_plan = master_account.default_account_plan
-    @account_plan.expects(:approval_required).returns(false)
+    @account_plan.update(approval_required: false)
     @service_plan = master_account.default_service_plans.first
     @application_plan = master_account.default_application_plans.first
 
