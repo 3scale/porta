@@ -2,6 +2,13 @@ require_relative 'boot'
 
 require 'rails/all'
 
+ActiveSupport.on_load(:active_record) do
+  unless $last_initializer_loaded
+    warning = "WARNING: ActiveRecord loading before initializers completed. Configuration set in initializers may not be effective:#{caller.map { |l| "\n  #{l}"}.join}"
+    STDERR.puts warning rescue nil # avoid failing if write fails
+  end
+end
+
 # If you precompile assets before deploying to production, use this line
 Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
 # If you want your assets lazily compiled in production, use this line
