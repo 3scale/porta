@@ -151,12 +151,12 @@ class ProxyTest < ActiveSupport::TestCase
 
       service.deployment_option = 'self_managed'
       service.save
-      proxy.endpoint = "http://api-2.production.apicast.localhost:8080"
+      proxy.endpoint = "http://localhost:8080"
       assert proxy.valid?
 
       service.deployment_option = 'hosted'
       service.save
-      proxy.endpoint = "http://api-2.production.apicast.localhost:8080"
+      proxy.endpoint = "http://localhost:8080"
       refute proxy.valid?
     end
 
@@ -170,12 +170,12 @@ class ProxyTest < ActiveSupport::TestCase
 
       assert proxy.valid?
 
-      proxy.sandbox_endpoint = "http://api-2.staging.apicast.localhost:8080"
+      proxy.sandbox_endpoint = "http://localhost:8080"
       assert proxy.valid?
 
       service.deployment_option = 'hosted'
       service.save
-      proxy.sandbox_endpoint = "http://api-2.staging.apicast.localhost:8080"
+      proxy.sandbox_endpoint = "http://localhost:8080"
       refute proxy.valid?
     end
 
