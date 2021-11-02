@@ -194,9 +194,6 @@ module System
     config.three_scale.features = ActiveSupport::OrderedOptions.new
     config.three_scale.features.merge!(try_config_for(:features) || {})
 
-    config.three_scale.message_bus = ActiveSupport::OrderedOptions.new
-    config.three_scale.message_bus.merge!(try_config_for(:message_bus) || {})
-
     config.domain_substitution = ActiveSupport::OrderedOptions.new
     config.domain_substitution.merge!(try_config_for(:domain_substitution) || {})
 
@@ -233,7 +230,6 @@ module System
     config.middleware.insert_before 0, ThreeScale::Middleware::Cors
 
     config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
-    config.unicorn.after_fork << MessageBus.method(:after_fork)
 
     config.action_dispatch.cookies_serializer = :hybrid
 

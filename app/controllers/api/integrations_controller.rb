@@ -110,14 +110,6 @@ class Api::IntegrationsController < Api::BaseController
     @proxy = @service.proxy
   end
 
-  def last_message_bus_id(proxy)
-    MessageBus.last_id("/integration/#{proxy.to_gid_param}/#{proxy.lock_version + 1}")
-  end
-
-  def message_bus?(proxy)
-    proxy.oidc? && ZyncWorker.config.message_bus
-  end
-
   def authorize
     authorize! :manage, :plans
     authorize! :edit, @service
