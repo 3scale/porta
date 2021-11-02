@@ -70,16 +70,12 @@ module Concerns
 
     test "buyers are limited to 20" do
       FactoryBot.create_list(:simple_buyer, 21, provider_account: provider)
-
-      # TODO: change to 20 when SelectWithModal is updated https://github.com/3scale/porta/pull/2459
-      assert_equal 21, buyers.size
+      assert_equal 20, buyers.size
     end
 
     test "products are limited to 20" do
       FactoryBot.create_list(:simple_service, 21, account: provider)
-
-      # TODO: change to 20 when SelectWithModal is updated https://github.com/3scale/porta/pull/2459
-      assert_equal 21, products.size
+      assert_equal 20, products.size
     end
 
     test "application_defined_fields_data" do

@@ -9,7 +9,7 @@ import { FancySelect, TableModal } from 'Common'
 import { paginateCollection } from 'utilities'
 
 import type { Record } from 'utilities'
-import type { FetchItemsRequestParams, FetchItemsResponse } from 'Types'
+import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
 
 import './SelectWithModal.scss'
 

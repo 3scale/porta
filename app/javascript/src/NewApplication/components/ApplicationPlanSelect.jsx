@@ -5,18 +5,18 @@ import * as React from 'react'
 import { Button } from '@patternfly/react-core'
 import { Select } from 'Common'
 
-import type { ApplicationPlan } from 'NewApplication/types'
+import type { ApplicationPlan, Product } from 'NewApplication/types'
 
 type Props = {
   appPlan: ApplicationPlan | null,
-  appPlans: ApplicationPlan[],
+  product: Product | null,
   onSelect: (ApplicationPlan | null) => void,
-  createApplicationPlanPath: string,
-  isDisabled?: boolean
+  createApplicationPlanPath: string
 }
 
-const ApplicationPlanSelect = ({ appPlan, appPlans, onSelect, createApplicationPlanPath, isDisabled }: Props): React.Node => {
-  const showHint = !isDisabled && appPlans.length === 0
+const ApplicationPlanSelect = ({ appPlan, product, onSelect, createApplicationPlanPath }: Props): React.Node => {
+  const appPlans = product ? product.appPlans : []
+  const showHint = product && appPlans.length === 0
 
   const hint = (
     <p className="hint">
@@ -40,7 +40,7 @@ const ApplicationPlanSelect = ({ appPlan, appPlans, onSelect, createApplicationP
       name="cinstance[plan_id]"
       placeholderText="Select an application plan"
       hint={showHint && hint}
-      isDisabled={isDisabled}
+      isDisabled={product === null || !product.buyerCanSelectPlan}
       isRequired
     />
   )

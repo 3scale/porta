@@ -9,17 +9,15 @@ import type { ServicePlan } from 'NewApplication/types'
 
 type Props = {
   servicePlan: ServicePlan | null,
-  servicePlans: ServicePlan[],
+  servicePlans: ServicePlan[] | null,
   onSelect: (ServicePlan | null) => void,
   isPlanContracted: boolean,
-  showHint: boolean,
   serviceSubscriptionsPath: string,
   createServicePlanPath: string,
   isDisabled?: boolean
 }
 
 const ServicePlanSelect = ({
-  showHint,
   isDisabled,
   isPlanContracted,
   servicePlans,
@@ -36,7 +34,7 @@ const ServicePlanSelect = ({
   ) : (
     <>
       <p className="hint">In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan.</p>
-      {servicePlans.length === 0 && (
+      {servicePlans && servicePlans.length === 0 && (
         <p className="hint">
           {'No Service plans exist for the selected Product. '}
           <Button component="a" variant="link" href={createServicePlanPath} isInline>
@@ -53,14 +51,14 @@ const ServicePlanSelect = ({
     <Select
       // $FlowIssue[incompatible-type] ServicePlan implements Record
       item={servicePlan}
-      items={servicePlans}
+      items={servicePlans || []}
       onSelect={onSelect}
       label="Service plan"
       fieldId="cinstance_service_plan_id"
       name="cinstance[service_plan_id]"
       placeholderText="Select a service plan"
-      hint={showHint && hint}
-      isDisabled={isDisabled}
+      hint={hint}
+      isDisabled={isDisabled || isPlanContracted}
       isRequired={!isPlanContracted}
       isClearable={false}
     />
