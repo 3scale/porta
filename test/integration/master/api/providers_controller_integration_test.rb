@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::IntegrationTest
 
   def setup
     @account_plan = master_account.default_account_plan
-    @account_plan.update_attribute(:approval_required, false)
+    @account_plan.update(approval_required: false)
     @service_plan = master_account.default_service_plans.first
     @application_plan = master_account.default_application_plans.first
 
@@ -26,7 +28,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_difference Account.method(:count), 1 do
       assert_difference User.method(:count), 2 do # the main user and the 3
         assert_difference AccessToken.method(:count), 1 do
-          post master_api_providers_path, signup_params
+          post master_api_providers_path, params: signup_params
           assert_response :created
         end
       end
@@ -37,7 +39,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_equal account.id, json_response.dig('signup', 'account', 'id')
 
     # creates the main user with its right attributes
-    refute user.can_login?
+    assert_not user.can_login?
     assert user.pending?
     assert_equal signup_params[:username], user.username
     assert_equal signup_params[:user_extra_field], user.extra_fields['user_extra_field']
@@ -66,8 +68,8 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create with published account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
     new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'published')
-    post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
-    refute user.can_login?
+    post master_api_providers_path, params: signup_params({ account_plan_id: new_account_plan.id })
+    assert_not user.can_login?
     assert user.pending?
     assert account.created?
     assert account.has_impersonation_admin?
@@ -77,8 +79,8 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create with unpublished account plan sent (for Saas) as a param that requires approval' do
     ThreeScale.config.stubs(onpremises: false)
     new_account_plan = FactoryBot.create(:account_plan, approval_required: true, provider: master_account, state: 'hidden')
-    post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
-    refute user.can_login?
+    post master_api_providers_path, params: signup_params({ account_plan_id: new_account_plan.id })
+    assert_not user.can_login?
     assert user.pending?
     assert account.created?
     assert account.has_impersonation_admin?
@@ -88,35 +90,35 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   test '#create with account plan send (for on-premises) is ignored' do
     ThreeScale.config.stubs(onpremises: true)
     new_account_plan = FactoryBot.create(:account_plan, provider: master_account)
-    post master_api_providers_path, signup_params({account_plan_id: new_account_plan.id})
+    post master_api_providers_path, params: signup_params({ account_plan_id: new_account_plan.id })
     assert_equal account_plan, account.bought_account_plan
   end
 
   test '#create returns the right errors when account validation fails' do
-    post master_api_providers_path, signup_params({org_name: ''})
+    post master_api_providers_path, params: signup_params({ org_name: '' })
     assert_response :unprocessable_entity
     assert_contains JSON.parse(response.body).dig('errors', 'account'), 'Domain can\'t be blank'
   end
 
   test '#create returns the right errors when user validation fails for json' do
-    post master_api_providers_path, signup_params({email: ''})
+    post master_api_providers_path, params: signup_params({ email: '' })
     assert_response :unprocessable_entity
     assert_contains JSON.parse(response.body).dig('errors', 'user'), 'Email should look like an email address'
   end
 
   test '#create returns the right errors when user validation fails for xml' do
-    post master_api_providers_path(format: :xml), signup_params({email: ''})
+    post master_api_providers_path(format: :xml), params: signup_params({ email: '' })
     assert_response :unprocessable_entity
     assert_xml Nokogiri::XML::Document.parse(response.body), '//errors/error', /User Email should look like an email address/
   end
 
   test '#create without the api_key or access_token, the response status should be unauthorized' do
-    post master_api_providers_path, signup_params({api_key: '', access_token: ''})
+    post master_api_providers_path, params: signup_params({ api_key: '', access_token: '' })
     assert_response :unauthorized
   end
 
   test '#create returns unauthorized when the provider_key param is sent instead of api_key or access_token' do
-    post master_api_providers_path, signup_params({provider_key: master_account.api_key, api_key: '', access_token: ''})
+    post master_api_providers_path, params: signup_params({ provider_key: master_account.api_key, api_key: '', access_token: '' })
     assert_response :unauthorized
   end
 
@@ -124,7 +126,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token = FactoryBot.create(:access_token, owner: master_account.admins.first, scopes: 'account_management')
     assert_difference Account.method(:count), 1 do
       assert_difference User.method(:count), 2 do # the main user and the impersonation_admin user
-        post master_api_providers_path, signup_params({api_key: '', access_token: token.value})
+        post master_api_providers_path, params: signup_params({ api_key: '', access_token: token.value })
         assert_response :created
       end
     end
@@ -134,9 +136,9 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_no_difference Account.method(:count) do
       user = FactoryBot.create(:member, account: master_account)
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-      post master_api_providers_path, signup_params({access_token: token.value}).except(:api_key)
+      post master_api_providers_path, params: signup_params({ access_token: token.value }).except(:api_key)
       assert_response :forbidden
-      assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body).dig('error')
+      assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body)['error']
     end
   end
 
@@ -144,20 +146,20 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_difference Account.method(:count) do
       user = FactoryBot.create(:member, account: master_account, member_permission_ids: [:partners])
       token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-      post master_api_providers_path, signup_params({access_token: token.value}).except(:api_key)
+      post master_api_providers_path, params: signup_params({ access_token: token.value }).except(:api_key)
       assert_response :created
     end
   end
 
   test '#create for a master without account plan, the response status should be unprocessable_entity' do
     account_plan.destroy!
-    post master_api_providers_path, signup_params
+    post master_api_providers_path, params: signup_params
     assert_response :unprocessable_entity
   end
 
   test '#create for a master without service plan, the response status should be unprocessable_entity' do
     service_plan.destroy!
-    post master_api_providers_path, signup_params
+    post master_api_providers_path, params: signup_params
     assert_response :unprocessable_entity
   end
 
@@ -167,9 +169,9 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     update_params = { account: {
-        from_email: 'from@email.com', support_email: 'support@email.com',
-        finance_support_email: 'finance@email.com', site_access_code: 'new-access-code',
-        account_extra_field: 'testing-account-extra-field', state_event: 'suspend'
+      from_email: 'from@email.com', support_email: 'support@email.com',
+      finance_support_email: 'finance@email.com', site_access_code: 'new-access-code',
+      account_extra_field: 'testing-account-extra-field', state_event: 'suspend'
     }, access_token: token.value, format: :json }
     put master_api_provider_path(provider, update_params)
     assert_response :ok
@@ -195,7 +197,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     assert_response :ok
 
     provider.reload
-    refute_equal update_params[:account][:from_email], provider.from_email
+    assert_not_equal update_params[:account][:from_email], provider.from_email
     assert_equal 'approved',                           provider.state
   end
 
@@ -219,7 +221,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     delete master_api_provider_path(provider, access_token: token.value, format: :json)
     assert_response :forbidden
-    assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body).dig('error')
+    assert_equal 'Your access token does not have the correct permissions', JSON.parse(response.body)['error']
   end
 
   test '#show' do
@@ -245,8 +247,14 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
   end
 
   def signup_params(different_params = {})
-    { api_key: master_account.api_key, org_name: 'Alaska', username: 'person', email: 'person@example.com',
-      password: '123456', user_extra_field: 'hi-user', account_extra_field: 'hi-account'
+    {
+      api_key: master_account.api_key,
+      org_name: 'Alaska',
+      username: 'person',
+      email: 'person@example.com',
+      password: '123456',
+      user_extra_field: 'hi-user',
+      account_extra_field: 'hi-account'
     }.merge(different_params)
   end
 
