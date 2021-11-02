@@ -173,8 +173,6 @@ group :development do
   gem 'rubocop-rails', require: false
 end
 
-gem 'message_bus', '~> 2.0.2'
-gem 'message_bus_client', github: '3scale/message_bus_client'
 
 gem 'mail_view', '~> 2.0.4'
 
