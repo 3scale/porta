@@ -42,8 +42,6 @@ class Proxy < ApplicationRecord
 
   HTTP_HEADER =  /\A[{}\[\]\d,.;@#~%&()?\w_"= \/\\:-]+\Z/
 
-  LOCALHOST =  /localhost/i.freeze
-
   OIDC_ISSUER_TYPES = {
     keycloak: I18n.t(:keycloak, scope: 'proxy.oidc_issuer_type').freeze,
     rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
@@ -56,8 +54,8 @@ class Proxy < ApplicationRecord
   validates :endpoint,         uri: true, allow_nil: true, allow_blank: true
   validates :sandbox_endpoint, uri: true, allow_nil: true, allow_blank: true
 
-  validates :sandbox_endpoint, format: { without: LOCALHOST, on: :update, if: :hosted? }
-  validates :endpoint, format: { without: LOCALHOST, on: :update, if: :hosted? }
+  validates :sandbox_endpoint, non_localhost: true,  if: :hosted?
+  validates :endpoint, non_localhost: true, if: :hosted?
 
   validates :hostname_rewrite, format: { with: HOST, allow_nil: true, allow_blank: true }
 
