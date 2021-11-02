@@ -330,7 +330,7 @@ World(Module.new do
       buyer = Account.buyers.find_by!(org_name: $1)
       new_admin_buyers_account_application_path(buyer)
 
-    when /^the audience context create application page$/
+    when 'the provider new application page'
       new_provider_admin_application_path
 
     when /^the product context create application page for "([^"]*)"$/

@@ -41,12 +41,10 @@ module NewApplicationForm
   protected
 
   def accounts_presenter
-    # TODO: remove per_page when SelectWithModal updated https://github.com/3scale/porta/pull/2459
-    @accounts_presenter ||= Buyers::AccountsIndexPresenter.new(provider: provider, params: { per_page: 500 })
+    @accounts_presenter ||= Buyers::AccountsIndexPresenter.new(provider: provider)
   end
 
   def products_presenter
-    # TODO: remove per_page when SelectWithModal updated https://github.com/3scale/porta/pull/2459
-    @products_presenter ||= Api::ServicesIndexPresenter.new(current_user: user, params: { per_page: 500 })
+    @products_presenter ||= Api::ServicesIndexPresenter.new(current_user: user)
   end
 end

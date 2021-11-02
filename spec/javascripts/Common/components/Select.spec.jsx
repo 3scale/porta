@@ -4,6 +4,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { Select } from 'Common'
+import { updateInput } from 'utilities/test-utils'
 
 const onSelect = jest.fn()
 const items = [
@@ -30,16 +31,6 @@ const defaultProps = {
 }
 
 const mountWrapper = (props) => mount(<Select {...{ ...defaultProps, ...props }} />)
-
-const updateInput = (wrapper, value) => {
-  const input = wrapper.find('.pf-c-select__toggle-typeahead')
-  // $FlowIgnore[incompatible-type]
-  const inputElement: HTMLInputElement = input.getDOMNode()
-
-  inputElement.value = value
-  input.update()
-  input.simulate('change')
-}
 
 afterEach(() => {
   jest.resetAllMocks()
