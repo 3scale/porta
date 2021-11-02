@@ -231,7 +231,7 @@ When /^I should not be allowed to create more applications for product "([^"]*)"
   assert has_content?('Access Denied')
 end
 
-When /^a service "([^"]*)" of (provider "[^"]*") with no service plans/ do |service_name, provider|
+When "a service {string} of {provider} with no service plans" do |service_name, provider|
   service = provider.services.create!(name: service_name)
   service.service_plans.destroy_all
 end
