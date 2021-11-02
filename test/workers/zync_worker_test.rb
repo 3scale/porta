@@ -62,8 +62,6 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     zync_events = RailsEventStoreActiveRecord::Event.where(event_type: 'ZyncEvent')
 
-    ZyncWorker::MessageBusPublisher.expects(:enabled).returns(false)
-
     assert_difference(zync_events.method(:count), +2) do
       worker.perform(event.event_id, event.data.with_indifferent_access)
     end
@@ -76,7 +74,6 @@ class ZyncWorkerTest < ActiveSupport::TestCase
 
     setup do
       EventStore::Repository.stubs(raise_errors: true)
-      ZyncWorker::MessageBusPublisher.any_instance.stubs(enabled?: false)
 
       @worker = ZyncWorker.new
       @application = FactoryBot.create(:simple_cinstance).reload # reload to get tenant_id
@@ -209,7 +206,6 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     ZyncEvent.create_and_publish!(application_event, application_event.application)
 
     Rails.configuration.zync.stubs(endpoint: 'http://example.com') # so it makes http request
-    Rails.configuration.zync.stubs(message_bus: true)
 
     stub_request(:put, 'http://example.com/tenant').to_return(status: 200)
     stub_request(:put, 'http://example.com/notification').to_return(status: 422)
@@ -225,24 +221,5 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     assert_equal 'Service', dependency_event_service.data[:type]
     assert_equal zync_event.data[:service_id], dependency_event_service.data[:id]
     Sidekiq::Testing.inline! { ZyncWorker.perform_async( dependency_event_service.event_id,  dependency_event_service.data) }
-  end
-
-  class MessageBusPublisherTest < ActiveSupport::TestCase
-    test 'enabled only for proxy' do
-      ZyncWorker::MessageBusPublisher.stubs(enabled: true)
-
-      refute_predicate ZyncWorker::MessageBusPublisher.new(type: 'Application', id: 42), :enabled?
-      refute_predicate ZyncWorker::MessageBusPublisher.new(type: 'Service', id: 42), :enabled?
-      assert_predicate ZyncWorker::MessageBusPublisher.new(type: 'Proxy', id: 42), :enabled?
-    end
-
-    test 'wait_for' do
-      publisher = ZyncWorker::MessageBusPublisher.new({})
-      queue = Queue.new
-
-      assert_raises ZyncWorker::MessageBusPublisher::MessageBusTimeoutError do
-        publisher.wait_for(queue, timeout: 0.1)
-      end
-    end
   end
 end
