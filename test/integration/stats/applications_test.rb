@@ -14,19 +14,39 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
     login_provider @provider
   end
 
-  def test_show
-    get admin_buyers_stats_application_path(id: @application.id)
-    assert_response :success
+  context 'with access to all services' do
+    setup do
+      User.any_instance.expects(:has_access_to_all_services?).returns(true).at_least_once
+    end
+
+    should '#show with member permission' do
+      User.any_instance.expects(:member_permission_service_ids).never
+      get admin_buyers_stats_application_path(id: @application.id)
+      assert_response :success
+    end
+
+    should '#show without member permission' do
+      User.any_instance.expects(:member_permission_service_ids).never
+      get admin_buyers_stats_application_path(id: @application.id)
+      assert_response :success
+    end
   end
 
-  def test_show_without_access_to_all_services
-    User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
-    get admin_buyers_stats_application_path(id: @application.id)
-    assert_response :forbidden
-  end
+  context 'without access to all services' do
+    setup do
+      User.any_instance.expects(:has_access_to_all_services?).returns(false).at_least_once
+    end
 
-  def test_show_with_member_permissions
-    get admin_buyers_stats_application_path(id: @application.id)
-    assert_response :success
+    should '#show with member permission' do
+      User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+      get admin_buyers_stats_application_path(id: @application.id)
+      assert_response :success
+    end
+
+    should '#show without member permission' do
+      User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
+      get admin_buyers_stats_application_path(id: @application.id)
+      assert_response :forbidden
+    end
   end
 end
