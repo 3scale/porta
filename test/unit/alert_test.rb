@@ -15,8 +15,8 @@ class AlertTest < ActiveSupport::TestCase
     FactoryBot.create(:limit_alert, level: 50)
     FactoryBot.create(:limit_alert, level: 80)
 
-    alerts = Alert.by_level(80)
-    assert_equal 1, alerts.count
+    alert = Alert.by_level(80).last
+    assert_equal alert.level, 80
   end
 
   context 'Alert#kind' do
