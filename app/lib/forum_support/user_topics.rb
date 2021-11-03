@@ -27,7 +27,8 @@ module ForumSupport
 
       respond_to do |format|
         flash[:notice] = 'You have successfully subscribed to the thread.' if @user_topic.save
-        format.html { redirect_to :back }
+
+        format.html { redirect_back(fallback_location: forum_subscriptions_path) }
       end
     end
 
@@ -39,7 +40,8 @@ module ForumSupport
 
       respond_to do |format|
         flash[:notice] = 'You have successfully unsubscribed from the thread.'
-        format.html { redirect_to :back }
+
+        format.html { redirect_back(fallback_location: root_path) }
       end
     end
   end
