@@ -44,7 +44,7 @@ class ApplicationKeysTest < ActiveSupport::TestCase
 
   test 'remove key' do
     key = FactoryBot.create(:application_key, :application => @application)
-    assert_equal [key], @application.application_keys(true)
+    assert_equal [key], @application.application_keys.reload
     assert @application.application_keys.remove(key.value)
     assert_equal [], @application.application_keys
   end
