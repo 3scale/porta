@@ -59,7 +59,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
     sec3 = @root.children.create!(:title => 'sec3', :system_name => 'sec3', :provider => @provider)
 
     sec2.add_remove_by_ids(:section, [sec3.id])
-    assert_contains sec2.children(true), sec3
+    assert_contains sec2.children.reload, sec3
   end
 
   test "adding child sections" do
@@ -68,7 +68,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
     sec3 = @root.children.create!(:title => 'sec3', :system_name => 'sec3', :provider => @provider)
 
     sec2.add_remove_by_ids(:section, [sec3.id])
-    assert_contains sec2.children(true), sec3
+    assert_contains sec2.children.reload, sec3
   end
 
   test "cannot include itself as a child" do
@@ -77,7 +77,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
     sec3 = @root.children.create!(:title => 'sec3', :system_name => 'sec3', :provider => @provider)
 
     sec2.add_remove_by_ids(:section, [sec2.id])
-    assert !(sec2.children(true).member? sec2)
+    assert !(sec2.children.reload.member? sec2)
   end
 
   test "cannot include itself as a child of a child" do
@@ -86,7 +86,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
     sec3 = @root.children.create!(:title => 'sec3', :system_name => 'sec3', :provider => @provider)
 
     sec3.add_remove_by_ids(:section, [sec2.id])
-    assert !(sec2.children(true).member? sec2)
+    assert !(sec2.children.reload.member? sec2)
   end
 
   test "removes subsections" do
@@ -96,7 +96,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
 
     sec2.add_remove_by_ids(:section, [sec3.id])
 
-    assert !(sec2.children(true).member? sec3)
+    assert !(sec2.children.reload.member? sec3)
     assert_contains @root.children, sec3
   end
 
