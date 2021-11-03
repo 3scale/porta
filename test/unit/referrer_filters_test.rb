@@ -74,7 +74,7 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
 
     should 'remove key' do
       key = FactoryBot.create(:referrer_filter, :application => @application)
-      assert_equal [key], @application.referrer_filters(true)
+      assert_equal [key], @application.referrer_filters.reload
       assert @application.referrer_filters.remove(key.value)
       assert_equal [], @application.referrer_filters
     end
