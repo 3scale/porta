@@ -13,7 +13,7 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
   def update
     if @page.update_attributes(params[:cms_template])
       flash[:info] = 'Legal terms saved.'
-      redirect_to :back # action: :edit, id: @page.id
+      redirect_back(fallback_location: { action: "edit", id: @page.id})
     else
       render :edit
     end
