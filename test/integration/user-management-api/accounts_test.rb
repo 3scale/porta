@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
@@ -5,13 +7,12 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
   include TestHelpers::ApiPagination
 
   def setup
-    @provider = FactoryBot.create :provider_account, domain: 'provider.example.com'
+    @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @application_plan = FactoryBot.create(:application_plan,
-                                issuer: @provider.default_service)
+    @application_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     @application_plan.publish!
 
     @buyer.buy! @application_plan
@@ -19,498 +20,595 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     host! @provider.admin_domain
   end
 
-  # Access token
+  class AccessTokenTest < Admin::Api::AccountsTest
+    test '#index without token' do
+      get admin_api_accounts_path(format: :xml)
+      assert_response :forbidden
+    end
 
-  test 'index (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+    context 'admin' do
+      setup do
+        admin = FactoryBot.create(:admin, account: @provider, admin_sections: [])
+        @token = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
+      end
 
-    get(admin_api_accounts_path(format: :xml))
-    assert_response :forbidden
+      should 'admin can update' do
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+        assert_response :success
+      end
 
-    get(admin_api_accounts_path(format: :xml), access_token: token.value)
-    assert_response :success
+      should '#destroy' do
+        delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
+        assert_response :success
+      end
+
+      should 'change plan' do
+        plan = FactoryBot.create(:account_plan, issuer: @provider)
+        put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+        assert_response :success
+      end
+
+      should '#approve' do
+        Account.any_instance.expects(:approve).returns(true)
+        put approve_admin_api_account_path(@buyer, format: :xml), params: params
+        assert_response :success
+      end
+
+      should '#reject' do
+        Account.any_instance.expects(:reject).returns(true)
+        put reject_admin_api_account_path(@buyer, format: :xml), params: params
+        assert_response :success
+      end
+
+      should 'update billing_address' do
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain' })
+        assert_response :unprocessable_entity
+
+        billing_address = { name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain' }.transform_keys { |k| "billing_address[#{k}]" }
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge(billing_address).merge({ org_name: 'alaska' })
+        assert_response :success
+      end
+
+      should '#update' do
+        rolling_updates_off
+        put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+        assert_response :success
+      end
+
+      should '#change_plan' do
+        rolling_updates_off
+        plan = FactoryBot.create(:account_plan, issuer: @provider)
+        put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+        assert_response :success
+      end
+    end
+
+    context 'member' do
+      context 'without admin sections' do
+        setup do
+          member = FactoryBot.create(:member, account: @provider, admin_sections: [])
+          @token = FactoryBot.create(:access_token, owner: member, scopes: 'account_management')
+        end
+
+        should '#index' do
+          get admin_api_accounts_path(format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        should '#show' do
+          get admin_api_account_path(@buyer, format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        should '#find without id' do
+          get find_admin_api_accounts_path(format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        should '#find' do
+          get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: @buyer.users.first.username })
+          assert_response :forbidden
+        end
+
+        should 'changing billing status' do
+          put admin_api_account_path(@buyer, format: :xml), params: {
+            access_token: token.value,
+            monthly_billing_enabled: true,
+            monthly_charging_enabled: true,
+            org_name: 'ooooooooo'
+          }
+          assert_response :forbidden
+        end
+
+        should '#destroy' do
+          delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
+          assert_response :forbidden
+        end
+
+        should '#reject' do
+          put reject_admin_api_account_path(@buyer, format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        should '#approve' do
+          put approve_admin_api_account_path(@buyer, format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        should '#update' do
+          rolling_updates_on
+          put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+          assert_response :forbidden
+        end
+
+        should '#change_plan' do
+          plan = FactoryBot.create(:account_plan, issuer: @provider)
+          put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+          assert_response :forbidden
+        end
+
+        # pending_test 'change plan'
+      end
+
+      context 'with admin sections' do
+        setup do
+          member = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners])
+          @token = FactoryBot.create(:access_token, owner: member, scopes: 'account_management')
+        end
+
+        attr_reader :token
+
+        should '#index' do
+          get admin_api_accounts_path(format: :xml), params: params
+          assert_response :success
+        end
+
+        should '#show' do
+          get admin_api_account_path(@buyer, format: :xml), params: params
+          assert_response :success
+        end
+
+        should '#find without id' do
+          get find_admin_api_accounts_path(format: :xml), params: params
+          assert_response :not_found
+        end
+
+        should '#find' do
+          get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: @buyer.users.first.username })
+          assert_response :success
+        end
+
+        should 'changing billing status' do
+          settings = @buyer.settings
+          settings.update!(monthly_charging_enabled: false, monthly_billing_enabled: false)
+          assert_not settings.monthly_charging_enabled
+          assert_not settings.monthly_billing_enabled
+
+          put admin_api_account_path(@buyer, format: :xml), params: {
+            access_token: token.value,
+            monthly_billing_enabled: true,
+            monthly_charging_enabled: true,
+            org_name: 'ooooooooo'
+          }
+          assert_response :success
+
+          settings.reload
+          assert settings.monthly_charging_enabled
+          assert settings.monthly_billing_enabled
+        end
+
+        should '#destroy' do
+          delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
+          assert_response :forbidden
+        end
+
+        should '#reject' do
+          put reject_admin_api_account_path(@buyer, format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        should '#approve' do
+          put approve_admin_api_account_path(@buyer, format: :xml), params: params
+          assert_response :forbidden
+        end
+
+        context 'when service_permissions rolling update is disabled' do
+          setup do
+            rolling_updates_off
+          end
+
+          should '#update' do
+            put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+            assert_response :forbidden
+          end
+
+          should '#change_plan' do
+            plan = FactoryBot.create(:account_plan, issuer: @provider)
+            put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+            assert_response :forbidden
+          end
+        end
+
+        context 'when service_permissions rolling update is enabled' do
+          setup do
+            rolling_updates_off
+            rolling_update(:service_permissions, enabled: true)
+          end
+
+          should '#update' do
+            put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+            assert_response :success
+          end
+
+          should '#change_plan' do
+            plan = FactoryBot.create(:account_plan, issuer: @provider)
+            put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+            assert_response :success
+          end
+        end
+
+        private
+
+        def params(token = @token)
+          params
+        end
+      end
+    end
+
+    protected
+
+    def access_token_params(token = @token)
+      { access_token: token.value }
+    end
+
+    alias params access_token_params
   end
 
-  test 'show (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+  class ProviderKeyTest < Admin::Api::AccountsTest
+    test 'index' do
+      get admin_api_accounts_path(format: :xml), params: params
 
-    get(admin_api_account_path(@buyer, format: :xml), access_token: token.value)
-    assert_response :success
+      assert_response :success
+      assert_accounts @response.body
+    end
 
-    user.admin_sections = []
-    user.save!
-
-    get(admin_api_account_path(@buyer, format: :xml), access_token: token.value)
-    assert_response :forbidden
-  end
-
-  test 'find (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-
-    get(find_admin_api_accounts_path(format: :xml), access_token: token.value)
-    assert_response :not_found
+    test 'pagination is off unless needed' do
+      buyers_max = @provider.buyers.count
 
-    get(find_admin_api_accounts_path(format: :xml), access_token: token.value, username: @buyer.users.first.username)
-    assert_response :success
-
-    user.admin_sections = []
-    user.save!
-
-    get(find_admin_api_accounts_path(format: :xml), access_token: token.value, username: @buyer.users.first.username)
-    assert_response :forbidden
-  end
-
-  test 'update (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-
-    # member cannot update an account
-    rolling_updates_off
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska')
-    assert_response :forbidden
+      get admin_api_accounts_path(format: :xml), params: params.merge({ per_page: (buyers_max +1) })
 
-    # member cann update an account when service_permissions rolling update is enabled
-    rolling_update(:service_permissions, enabled: true)
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska')
-    assert_response :success
+      assert_response :success
+      assert_not_pagination @response.body, "accounts"
+    end
 
-    user.role = 'admin'
-    user.save!
+    test 'index is paginated' do
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
 
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska')
-    assert_response :success
-  end
+      buyers_max = @provider.buyers.count
 
-  test 'changing billing status' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+      get admin_api_accounts_path(format: :xml), params: params.merge({ per_page: (buyers_max -1) })
 
-    settings = @buyer.settings
-    settings.update!(monthly_charging_enabled: false, monthly_billing_enabled: false)
-    assert_equal false, settings.monthly_charging_enabled
-    assert_equal false, settings.monthly_billing_enabled
+      assert_response :success
+      assert_pagination @response.body, "accounts"
+    end
 
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, monthly_billing_enabled: true, monthly_charging_enabled: true, org_name: 'ooooooooo')
+    test 'pagination per_page has a maximum allowed' do
+      max_per_page = set_api_pagination_max_per_page(to: 1)
 
-    settings.reload
-    assert_response :success
-    assert_equal true, settings.monthly_charging_enabled
-    assert_equal true, settings.monthly_billing_enabled
-  end
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
 
-  test 'destroy (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+      get admin_api_accounts_path(format: :xml), params: params.merge({ per_page: (max_per_page +1) })
 
-    # member cannot destroy an account
-    delete(admin_api_account_path(format: :xml, id: @buyer.id), access_token: token.value)
-    assert_response :forbidden
+      assert_response :success
+      assert_pagination(@response.body, "accounts", per_page: max_per_page)
+    end
 
-    user.role = 'admin'
-    user.save!
+    test 'pagination page defaults to 1 for invalid values' do
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
 
-    delete(admin_api_account_path(format: :xml, id: @buyer.id), access_token: token.value)
-    assert_response :success
-  end
+      set_api_pagination_max_per_page(to: 1)
 
-  test 'change_plan (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-    plan  = FactoryBot.create(:account_plan, issuer: @provider)
+      get admin_api_accounts_path, params: params.merge({ page: "invalid" })
 
-    # member cannot update an account
-    rolling_updates_off
-    put(change_plan_admin_api_account_path(@buyer, format: :xml), access_token: token.value, plan_id: plan.id)
-    assert_response :forbidden
+      assert_response :success
+      assert_pagination @response.body, "accounts", current_page: "1"
+    end
 
-    # member can update an account when service_permissions rolling update is enabled
-    rolling_update(:service_permissions, enabled: true)
-    put(change_plan_admin_api_account_path(@buyer, format: :xml), access_token: token.value, plan_id: plan.id)
-    assert_response :success
+    test 'pagination per_page defaults to max for invalid values' do
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
 
-    user.role = 'admin'
-    user.save!
+      max_per_page = set_api_pagination_max_per_page(to: 1)
 
-    put(change_plan_admin_api_account_path(@buyer, format: :xml), access_token: token.value, plan_id: plan.id)
-    assert_response :success
-  end
+      get admin_api_accounts_path, params: params.merge({ per_page: "invalid" })
 
-  test 'approve/reject (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+      assert_response :success
+      assert_pagination @response.body, "accounts", per_page: max_per_page
+    end
 
-    # member cannot reject or approve an account
-    put(approve_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
-    assert_response :forbidden
-    put(reject_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
-    assert_response :forbidden
+    test 'pagination per_page defaults to 1 for values lesser than 1' do
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
+      buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer2.buy! @provider.default_account_plan
 
-    user.role = 'admin'
-    user.save!
+      set_api_pagination_max_per_page(to: 2)
 
-    Account.any_instance.expects(:approve).returns(true)
-    put(approve_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
-    assert_response :success
-    Account.any_instance.expects(:reject).returns(true)
-    put(reject_admin_api_account_path(@buyer, format: :xml), access_token: token.value)
-    assert_response :success
-  end
+      get admin_api_accounts_path, params: params.merge({ per_page: "-1" })
 
-  # Provider key
+      assert_response :success
+      assert_pagination @response.body, "accounts", per_page: "2"
+    end
 
-  test 'index' do
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
+    test 'index returns extra fields escaped' do
+      field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
 
-    assert_response :success
-    assert_accounts @response.body
-  end
+      @buyer.reload
+      @buyer.extra_fields = { some_extra_field: "< > &" }
+      @buyer.save
 
-  test 'pagination is off unless needed' do
-    buyers_max = @provider.buyers.count
+      get admin_api_accounts_path(format: :xml), params: params
 
-    get(admin_api_accounts_path(format: :xml),
-             provider_key: @provider.api_key, per_page: (buyers_max +1))
+      assert_response :success
+      assert_accounts(@response.body, extra_fields: { some_extra_field: '&lt; &gt; &amp;' })
+    end
 
-    assert_response :success
-    assert_not_pagination @response.body, "accounts"
-  end
+    test 'security wise: index is access denied in buyer side' do
+      host! @provider.domain
+      get admin_api_accounts_path(format: :xml), params: params
 
-  test 'index is paginated' do
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
+      assert_response :forbidden
+    end
 
-    buyers_max = @provider.buyers.count
+    test 'index approved' do
+      #building a pending one to assert it does no go in the search afterward
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, per_page: (buyers_max -1))
+      buyer.make_pending!
+      assert_equal 'pending', buyer.state
 
-    assert_response :success
-    assert_pagination @response.body, "accounts"
-  end
+      get admin_api_accounts_path(format: :xml), params: params.merge({ state: 'approved' })
 
-  test 'pagination per_page has a maximum allowed' do
-    max_per_page = set_api_pagination_max_per_page(to: 1)
+      assert_response :success
+      assert_accounts @response.body, state: 'approved'
+    end
 
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
+    test 'index by states is paginated' do
+      2.times do
+        buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+        buyer.buy! @provider.default_account_plan
+        buyer.make_pending!
+        assert_equal buyer.state, 'pending'
+      end
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, per_page: (max_per_page +1))
+      get admin_api_accounts_path(format: :xml), params: params.merge({ state: 'pending', per_page: 1, page: 1 })
 
-    assert_response :success
-    assert_pagination(@response.body, "accounts", per_page: max_per_page)
-  end
+      assert_response :success
+      assert_pagination @response.body, "accounts"
+    end
 
-  test 'pagination page defaults to 1 for invalid values' do
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
-
-    max_per_page = set_api_pagination_max_per_page(to: 1)
-
-    get(admin_api_accounts_path, provider_key: @provider.api_key, page: "invalid")
-
-    assert_response :success
-    assert_pagination @response.body, "accounts", current_page: "1"
-  end
-
-  test 'pagination per_page defaults to max for invalid values' do
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
-
-    max_per_page = set_api_pagination_max_per_page(to: 1)
-
-    get(admin_api_accounts_path, provider_key: @provider.api_key, per_page: "invalid")
-
-    assert_response :success
-    assert_pagination @response.body, "accounts", per_page: max_per_page
-  end
-
-  test 'pagination per_page defaults to 1 for values lesser than 1' do
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
-    buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer2.buy! @provider.default_account_plan
-
-    max_per_page = set_api_pagination_max_per_page(to: 2)
-
-    get(admin_api_accounts_path, provider_key: @provider.api_key, per_page: "-1")
-
-    assert_response :success
-    assert_pagination @response.body, "accounts", per_page: "2"
-  end
-
-  test 'index returns extra fields escaped' do
-    field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
-
-    @buyer.reload
-    @buyer.extra_fields = { some_extra_field: "< > &" }
-    @buyer.save
-
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
-
-    assert_response :success
-    assert_accounts(@response.body, extra_fields: { some_extra_field: '&lt; &gt; &amp;' })
-  end
-
-  test 'security wise: index is access denied in buyer side' do
-    host! @provider.domain
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
-
-    assert_response :forbidden
-  end
-
-  test 'index approved' do
-    #building a pending one to assert it does no go in the search afterward
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
-
-    buyer.make_pending!
-    assert_equal 'pending', buyer.state # I lol'd
-
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'approved')
-
-    assert_response :success
-    assert_accounts @response.body, state: 'approved'
-  end
-
-  test 'index by states is paginated' do
-    2.times do
+    test 'index pending' do
       buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       buyer.buy! @provider.default_account_plan
       buyer.make_pending!
-      assert buyer.state == 'pending'
+      assert_equal buyer.state, 'pending'
+
+      get admin_api_accounts_path(format: :xml), params: params.merge({ state: 'pending' })
+
+      assert_response :success
+      assert_accounts @response.body, state: 'pending'
     end
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'pending', per_page: 1, page: 1)
+    test 'index rejected' do
+      buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer.buy! @provider.default_account_plan
+      buyer.reject!
+      assert_equal buyer.state, 'rejected'
 
-    assert_response :success
-    assert_pagination @response.body, "accounts"
-  end
+      get admin_api_accounts_path(format: :xml), params: params.merge({ state: 'rejected' })
 
-  test 'index pending' do
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
-    buyer.make_pending!
-    assert buyer.state == 'pending'
+      assert_response :success
+      assert_accounts @response.body, state: 'rejected'
+    end
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'pending')
+    test 'find accounts by username or user_id or email empty when empty' do
+      assert_equal 1, @provider.buyer_users.size
 
-    assert_response :success
-    assert_accounts @response.body, state: 'pending'
-  end
+      buyer1 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
 
-  test 'index rejected' do
-    buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer.buy! @provider.default_account_plan
-    buyer.reject!
-    assert buyer.state == 'rejected'
+      assert_not_nil buyer1.emails.first
+      assert_not_nil buyer1.users.first.username
+      assert_not_nil buyer1.users.first.id
 
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, state: 'rejected')
+      assert_not_nil buyer2.emails.first
+      assert_not_nil buyer2.users.first.username
+      assert_not_nil buyer2.users.first.id
 
-    assert_response :success
-    assert_accounts @response.body, state: 'rejected'
-  end
+      assert_equal 3, @provider.buyer_users.size
 
-  test 'find accounts by username or user_id or email empty when empty' do
-    assert_equal 1, @provider.buyer_users.size
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: "#{buyer1.users.first.username}_fake" })
+      assert_xml_404
 
-    buyer1 = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ user_id: - 1 })
+      assert_xml_404
 
-    assert_not_nil buyer1.emails.first
-    assert_not_nil buyer1.users.first.username
-    assert_not_nil buyer1.users.first.id
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ email: "#{buyer2.emails.first}_fake" })
+      assert_xml_404
 
-    assert_not_nil buyer2.emails.first
-    assert_not_nil buyer2.users.first.username
-    assert_not_nil buyer2.users.first.id
+      get find_admin_api_accounts_path(format: :xml), params: params
+      assert_xml_404
+    end
 
-    assert_equal 3, @provider.buyer_users.size
+    test 'account find' do
+      assert_equal 1, @provider.buyer_users.size
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, username: "#{buyer1.users.first.username}_fake")
-    assert_xml_404
+      buyer1 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer1.buy! @provider.default_account_plan
+      buyer1.reload
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, user_id: - 1)
-    assert_xml_404
+      buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
+      buyer2.buy! @provider.default_account_plan
+      buyer2.reload
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, email: "#{buyer2.emails.first}_fake")
-    assert_xml_404
+      assert_not_nil buyer1.emails.first
+      assert_not_nil buyer1.users.first.username
+      assert_not_nil buyer1.users.first.id
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
-    assert_xml_404
-  end
+      assert_not_nil buyer2.emails.first
+      assert_not_nil buyer2.users.first.username
+      assert_not_nil buyer2.users.first.id
 
-  test 'account find' do
-    assert_equal 1, @provider.buyer_users.size
+      assert_equal 3, @provider.buyer_users.size
 
-    buyer1 = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer1.buy! @provider.default_account_plan
-    buyer1.reload
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: buyer1.users.first.username })
 
-    buyer2 = FactoryBot.create(:buyer_account, provider_account: @provider)
-    buyer2.buy! @provider.default_account_plan
-    buyer2.reload
+      assert_response :success
+      assert_equal @response.body, buyer1.to_xml
 
-    assert_not_nil buyer1.emails.first
-    assert_not_nil buyer1.users.first.username
-    assert_not_nil buyer1.users.first.id
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ user_id: buyer1.users.first.id })
 
-    assert_not_nil buyer2.emails.first
-    assert_not_nil buyer2.users.first.username
-    assert_not_nil buyer2.users.first.id
+      assert_response :success
+      assert_equal @response.body, buyer1.to_xml
 
-    assert_equal 3, @provider.buyer_users.size
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: "#{buyer1.users.first.username}_fake", email: buyer2.emails.first })
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, username: buyer1.users.first.username)
+      assert_xml_404
 
-    assert_response :success
-    assert_equal @response.body, buyer1.to_xml
+      get find_admin_api_accounts_path(format: :xml), params: params.merge({ email: buyer2.emails.first })
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, user_id: buyer1.users.first.id)
+      assert_response :success
+      assert_equal @response.body, buyer2.to_xml
+    end
 
-    assert_response :success
-    assert_equal @response.body, buyer1.to_xml
+    test 'show' do
+      get admin_api_account_path(@buyer, format: :xml), params: params
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, username: "#{buyer1.users.first.username}_fake", email: buyer2.emails.first)
+      assert_response :success
+      assert_account(@response.body, { created_at: @buyer.created_at.xmlschema, updated_at: @buyer.updated_at.xmlschema })
+    end
 
-    assert_xml_404
+    test 'show returns fields defined' do
+      FactoryBot.create(:fields_definition, account: @provider, target: "Account", name: "org_legaladdress")
+      FactoryBot.create(:fields_definition, account: @provider, target: "Account", name: "country")
 
-    get(find_admin_api_accounts_path(format: :xml), provider_key: @provider.api_key, email: buyer2.emails.first)
+      country = Country.first
 
-    assert_response :success
-    assert_equal @response.body, buyer2.to_xml
-  end
+      @buyer.update org_legaladdress: "non < > &", country_id: country.id
 
-  test 'show' do
-    get(admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+      get admin_api_account_path(@buyer, format: :xml), params: params
 
-    assert_response :success
-    assert_account(@response.body, { created_at: @buyer.created_at.xmlschema, updated_at: @buyer.updated_at.xmlschema })
-  end
+      assert_response :success
+      assert_account(@response.body, { org_legaladdress: "non &lt; &gt; &amp;", country: country.name })
+    end
 
-  test 'show returns fields defined' do
-    FactoryBot.create(:fields_definition, account: @provider, target: "Account", name: "org_legaladdress")
-    FactoryBot.create(:fields_definition, account: @provider, target: "Account", name: "country")
+    test 'show does not returns fields not defined' do
+      @buyer.update org_legaladdress: "legal-address-not-returned"
 
-    country = Country.first
+      assert @buyer.defined_fields.map(&:name).exclude?(:org_legaladdress)
 
-    @buyer.update_attributes org_legaladdress: "non < > &", country_id: country.id
+      get admin_api_account_path(@buyer, format: :xml), params: params
 
-    get(admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+      assert_response :success
+      xml = Nokogiri::XML::Document.parse(@response.body)
+      assert xml.xpath('.//account/org_legaladdress').empty?
+    end
 
-    assert_response :success
-    assert_account(@response.body, {org_legaladdress: "non &lt; &gt; &amp;", country: country.name})
-  end
+    test 'update' do
+      put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: "updated" })
 
-  test 'show does not returns fields not defined' do
-    @buyer.update_attributes org_legaladdress: "legal-address-not-returned"
+      assert_response :success
+      assert_account(@response.body, { id: @buyer.id, org_name: "updated" })
 
-    assert @buyer.defined_fields.map(&:name).exclude?(:org_legaladdress)
+      @buyer.reload
+      assert_equal @buyer.org_name, "updated"
+    end
 
-    get(admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+    test 'update with extra fields' do
+      field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
 
-    assert_response :success
-    xml = Nokogiri::XML::Document.parse(@response.body)
-    assert xml.xpath('.//account/org_legaladdress').empty?
-  end
+      put admin_api_account_path(@buyer, format: :xml), params: params.merge({ some_extra_field: "stuff", vat_rate: 33 })
 
-  test 'update' do
-    put(admin_api_account_path(@buyer, format: :xml), org_name: "updated", provider_key: @provider.api_key)
+      assert_response :success
+      assert_account(@response.body, { id: @buyer.id, extra_fields: { some_extra_field: "stuff" }})
 
-    assert_response :success
-    assert_account(@response.body, { id: @buyer.id, org_name: "updated" })
+      @buyer.reload
+      assert_equal "stuff", @buyer.extra_fields["some_extra_field"]
+      assert_equal 33, @buyer.vat_rate
+    end
 
-    @buyer.reload
-    assert @buyer.org_name == "updated"
-  end
+    test 'destroy' do
+      delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
 
-  test 'update with extra fields' do
-    field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
+      assert_response :success
+      assert_empty_xml response.body
+    end
 
-    put(admin_api_account_path(@buyer, format: :xml), some_extra_field: "stuff", vat_rate: 33, provider_key: @provider.api_key)
+    test 'destroy not found' do
+      delete admin_api_account_path(format: :xml, id: 0), params: params
 
-    assert_response :success
-    assert_account(@response.body, { id: @buyer.id, extra_fields: { some_extra_field: "stuff" }})
+      assert_xml_404
+    end
 
-    @buyer.reload
-    assert_equal "stuff", @buyer.extra_fields["some_extra_field"]
-    assert_equal 33, @buyer.vat_rate
-  end
+    test 'make_pending' do
+      assert_not @buyer.pending?
 
-  test 'update billing_address' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
-    user.role = 'admin'
-    user.save!
+      put make_pending_admin_api_account_path(@buyer, format: :xml), params: params
 
-    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
-    put(admin_api_account_path(@buyer, format: :xml), access_token: token.value, org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain')
-    assert_response :unprocessable_entity
+      assert_response :success
+      assert_account(@response.body, { id: @buyer.id, state: "pending" })
 
-    billing_address =  {name: '3scale', address1: 'Calle Napoles 187', city: 'Barcelona', country:  'Spain'}.transform_keys { |k| "billing_address[#{k}]"}
-    put(admin_api_account_path(@buyer, format: :xml), billing_address.merge(access_token: token.value, org_name: 'alaska'))
-    assert_response :success
-  end
+      @buyer.reload
+      assert @buyer.pending?
+    end
 
-  test 'destroy' do
-    delete(admin_api_account_path(format: :xml, id: @buyer.id), provider_key: @provider.api_key)
+    test 'approve' do
+      @buyer.make_pending!
+      assert @buyer.pending?
 
-    assert_response :success
-    assert_empty_xml response.body
-  end
+      put approve_admin_api_account_path(@buyer, format: :xml), params: params
 
-  test 'destroy not found' do
-    delete(admin_api_account_path(format: :xml, id: 0), provider_key: @provider.api_key)
+      assert_response :success
+      assert_account(@response.body, { id: @buyer.id, state: "approved" })
 
-    assert_xml_404
-  end
+      @buyer.reload
+      assert @buyer.approved?
+    end
 
-  test 'make_pending' do
-    assert @buyer.pending? == false
+    test 'reject' do
+      assert_not @buyer.rejected?
 
-    put(make_pending_admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+      put reject_admin_api_account_path(@buyer, format: :xml), params: params
 
-    assert_response :success
-    assert_account(@response.body, { id: @buyer.id, state: "pending" })
+      assert_response :success
+      assert_account(@response.body, { id: @buyer.id, state: "rejected" })
 
-    @buyer.reload
-    assert @buyer.pending?
-  end
+      @buyer.reload
+      assert @buyer.rejected?
+    end
 
-  test 'approve' do
-    @buyer.make_pending!
-    assert @buyer.pending?
+    test 'stats aggregation in master' do
+      stub_request(:post, 'http://example.org/transactions.xml')
+        .to_return(status: 202, body: '')
+      Account.master.services.first.metrics.create! friendly_name: "Account Management API", system_name: "account", unit: "hit"
 
-    put(approve_admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
+      Admin::Api::AccountsController.any_instance.expects(:report_traffic)
 
-    assert_response :success
-    assert_account(@response.body, { id: @buyer.id, state: "approved" })
+      get admin_api_accounts_path(format: :xml), params: params
+      assert_response :success
+      assert_accounts @response.body
+    end
 
-    @buyer.reload
-    assert @buyer.approved?
-  end
+    private
 
-  test 'reject' do
-    assert @buyer.rejected? == false
+    def provider_key_params
+      { provider_key: @provider.api_key }
+    end
 
-    put(reject_admin_api_account_path(@buyer, format: :xml), provider_key: @provider.api_key)
-
-    assert_response :success
-    assert_account(@response.body, { id: @buyer.id, state: "rejected" })
-
-    @buyer.reload
-    assert @buyer.rejected?
-  end
-
-  test 'stats aggregation in master' do
-    stub_request(:post, 'http://example.org/transactions.xml')
-      .to_return(status: 202, body: '')
-    Account.master.services.first.metrics.create! friendly_name: "Account Management API", system_name: "account", unit: "hit"
-
-    Admin::Api::AccountsController.any_instance.expects(:report_traffic)
-
-    get(admin_api_accounts_path(format: :xml), provider_key: @provider.api_key)
-    assert_response :success
-    assert_accounts @response.body
+    alias params provider_key_params
   end
 end
