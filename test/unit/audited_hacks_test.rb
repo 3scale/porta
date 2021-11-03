@@ -7,14 +7,18 @@ class AuditedHacksTest < ActiveSupport::TestCase
     Audited.audit_class.delete_all
   end
 
-  def test_user_synch
+  def test_user
     User.current = @provider.provider_account.users.first!
 
     stub_core_change_provider_key(@provider.provider_key)
 
     Cinstance.with_auditing do
       assert_difference Audited.audit_class.method(:count) do
-        @provider.bought_cinstance.change_user_key!
+        SphinxIndexationWorker.stubs(:perform_later)
+
+        Sidekiq::Testing.inline! do
+          @provider.bought_cinstance.change_user_key!
+        end
       end
     end
 
