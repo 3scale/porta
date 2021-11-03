@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
 
   def setup
-    @provider  = FactoryBot.create(:provider_account)
+    @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
 
     @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @service.service_plans.first
 
-    @plan  = FactoryBot.create :application_plan, :issuer => @service
+    @plan = FactoryBot.create :application_plan, :issuer => @service
     @plan.publish!
 
     @buyer.buy! @plan
@@ -20,8 +22,8 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
   end
 
   test 'no default nor published application plan' do
-    @service.update_attribute :buyers_manage_apps, true
-    @service.application_plans.each { |p| p.hide! }
+    @service.update(buyers_manage_apps: true)
+    @service.application_plans.each(&:hide!)
 
     @provider.settings.allow_multiple_applications!
     @provider.settings.show_multiple_applications!
@@ -33,8 +35,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
   end
 
   test 'open new app form' do
-    @service.update_attribute :buyers_manage_apps, true
-    # @service.application_plans.each { |p| p.publish! }
+    @service.update(buyers_manage_apps: true)
 
     @provider.settings.allow_multiple_applications!
     @provider.settings.show_multiple_applications!
@@ -47,7 +48,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
 
   context 'authorization' do
     setup do
-      @buyer_auth = FactoryBot.create(:buyer_account, :provider_account => @provider)
+      @buyer_auth = FactoryBot.create(:buyer_account, provider_account: @provider)
       @buyer_auth.buy! @service.service_plans.first
       login_buyer @buyer_auth
     end
@@ -59,7 +60,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
 
       context 'manage apps is disabled' do
         setup do
-          @service.update_attribute :buyers_manage_apps, false
+          @service.update(buyers_manage_apps: false)
         end
 
         should 'grant access to index' do
@@ -105,12 +106,12 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           @buyer_auth.buy! @plan
           @buyer_auth.reload
           @provider.fields_definitions.create({"target"=>"Cinstance", "name"=>"lol", "label"=>"lol", "required"=>"1"})
-          @service.update_attribute :buyers_manage_apps, true
+          @service.update(buyers_manage_apps: true)
           cinstance = @buyer_auth.bought_cinstance
           @provider.settings.allow_multiple_applications!
           @provider.settings.show_multiple_applications!
 
-          patch admin_application_url(cinstance), application: { redirect_url: "http://example.com" }
+          patch admin_application_url(cinstance), params: { application: { redirect_url: "http://example.com" } }
           cinstance.reload
           assert_equal 'http://example.com', cinstance.redirect_url
         end
@@ -119,12 +120,12 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           @buyer_auth.buy! @plan
           @buyer_auth.reload
           @provider.fields_definitions.create({"target"=>"Cinstance", "name"=>"lol", "label"=>"lol", "required"=>"1"})
-          @service.update_attribute :buyers_manage_apps, true
+          @service.update(buyers_manage_apps: true)
           cinstance = @buyer_auth.bought_cinstance
           @provider.settings.allow_multiple_applications!
           @provider.settings.show_multiple_applications!
 
-          patch admin_application_url(cinstance), application: { redirect_url: "http://example.com", name: "foo" }
+          patch admin_application_url(cinstance), params: { application: { redirect_url: "http://example.com", name: "foo" } }
           assert assigns(:cinstance).errors[:lol].present?
         end
 
@@ -183,7 +184,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
           @buyer_auth.buy! @plan
           @buyer_auth.reload
 
-          put admin_application_url(@buyer_auth.bought_cinstance), cinstance: { "name" => "updated" }
+          put admin_application_url(@buyer_auth.bought_cinstance), params: { cinstance: { name: "updated" } }
           assert_response :redirect
           assert_equal "updated", @buyer_auth.bought_cinstance.name
         end
@@ -245,7 +246,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
         end
 
         should 'allow access to create' do
-          new_plan  = FactoryBot.create :application_plan, :issuer => @service
+          new_plan  = FactoryBot.create :application_plan, issuer: @service
           post admin_applications_path(cinstance: { plan_id: new_plan.id, name: 'App name', description: 'Desc' })
 
           assert_response :redirect
@@ -258,7 +259,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
         end
 
         should 'allow access to update' do
-          put admin_application_url(@buyer_auth.bought_cinstance), cinstance: { "name" => "updated" }
+          put admin_application_url(@buyer_auth.bought_cinstance), params: { cinstance: { name: "updated" } }
           assert_response :redirect
           assert_equal "updated", @buyer_auth.bought_cinstance.name
         end
