@@ -14,6 +14,14 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
     login_provider @provider
   end
 
+  should '#show nonexistent application does not check permissions' do
+    User.any_instance.expects(:has_access_to_all_services?).never
+    User.any_instance.expects(:member_permission_service_ids).never
+
+    get admin_buyers_stats_application_path(id: 'foo')
+    assert_response :not_found
+  end
+
   context 'with access to all services' do
     setup do
       User.any_instance.expects(:has_access_to_all_services?).returns(true).at_least_once
