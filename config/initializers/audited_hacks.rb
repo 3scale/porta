@@ -109,28 +109,32 @@ module AuditedHacks
       self.disable_auditing if Rails.env.test?
 
       include InstanceMethods
-      class << self
-        prepend ClassMethods
-      end
     end
 
     def synchronous
-      original = Thread.current.thread_variable_get(:audit_hacks_synchronous)
+      original = Thread.current[:audit_hacks_synchronous]
 
-      Thread.current.thread_variable_set(:audit_hacks_synchronous, true)
+      Thread.current[:audit_hacks_synchronous] = true
+
       yield if block_given?
 
       original
     ensure
-      Thread.current.thread_variable_set(:audit_hacks_synchronous, original)
+      Thread.current[:audit_hacks_synchronous] = original
     end
 
     def with_auditing
-      synchronous { super { yield } }
+      original_state = auditing_enabled
+      enable_auditing
+
+      synchronous {  yield }
+    ensure
+      self.auditing_enabled = original_state
     end
   end
 
   module InstanceMethods
+
     def auditing_enabled?
       auditing_enabled
     end
