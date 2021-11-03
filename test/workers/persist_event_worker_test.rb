@@ -28,7 +28,7 @@ class PersistEventWorkerTest < ActiveSupport::TestCase
   end
 
   test "perform handle ActiveRecord::RecordNotUnique" do
-    BackendEvent.any_instance.expects(:save!).raises(ActiveRecord::RecordNotUnique.new("forced error", nil))
+    BackendEvent.any_instance.expects(:save!).raises(ActiveRecord::RecordNotUnique.new("forced error"))
     event_attrs = {id: 213, foo: :bar}
     assert_difference "BackendEvent.count", 0 do
       PersistEventWorker.new.perform(event_attrs)
