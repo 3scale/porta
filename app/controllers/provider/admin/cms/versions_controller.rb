@@ -25,7 +25,7 @@ class Provider::Admin::CMS::VersionsController < Provider::Admin::CMS::BaseContr
       redirect_to polymorphic_path([:edit, :provider, :admin, @page])
     else
       flash[:error] = "Problem reverting version"
-      redirect_back(fallback_location: root_path)
+      redirect_back(fallback_location: provider_admin_cms_template_version_path(@page, version))
     end
   end
 
