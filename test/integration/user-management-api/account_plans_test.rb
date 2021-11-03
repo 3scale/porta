@@ -65,17 +65,17 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     end
 
     test 'security wise: index is access denied in buyer side' do
-      host! @provider.domain
       get admin_api_account_plans_path(format: :xml), params: provider_key_params
       assert_response :forbidden
     end
 
-    test 'apis can be behind the site_access code' do
+    pending_test 'apis can be behind the site_access code' do
       host! @provider.admin_domain
-      Account.master.update(site_access_code: "123456")
+      Account.master.update_attribute :site_access_code, "123456"
 
       get admin_api_account_plans_path(format: :xml), params: provider_key_params
-      assert @response.body.include? 'Access code'
+
+      assert @response.body =~ /Access code/
     end
 
     test 'show' do
