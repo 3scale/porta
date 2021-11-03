@@ -78,11 +78,7 @@ module AuditHacks
       if synchronous
         super
       elsif !enqueued
-        # all before_create callbacks except version
-        set_audit_user
-        set_request_uuid
-        set_remote_address
-
+        run_callbacks :create
         run_after_commit(:enqueue_job)
         self.enqueued = true
       end
@@ -129,8 +125,8 @@ module AuditedHacks
       Thread.current.thread_variable_set(:audit_hacks_synchronous, original)
     end
 
-    def with_auditing(synchronous: true)
-      synchronous ? self.synchronous { super() { yield } } : super() { yield }
+    def with_auditing
+      synchronous { super { yield } }
     end
   end
 
