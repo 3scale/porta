@@ -113,7 +113,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
 
     # are these assertions testing too much!?
     buyer = Account.buyers.find_by_org_name('fiona')
-    assert @provider.buyers(true).include? buyer
+    assert @provider.buyers.reload.include? buyer
     assert buyer.admins.include? User.find_by_username('fiona')
     assert_equal @provider.default_account_plan, buyer.bought_account_plan
   end
@@ -154,7 +154,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     # testing objects creation
     # are these assertions testing too much!?
     buyer = Account.buyers.find_by_org_name('fiona')
-    assert @provider.buyers(true).include? buyer
+    assert @provider.buyers.reload.include? buyer
     assert_equal  "account address", buyer.org_legaladdress
     assert_equal "account extra value", buyer.extra_fields["account_extra_field"]
     assert_equal 33, buyer.vat_rate
