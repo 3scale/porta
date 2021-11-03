@@ -69,7 +69,8 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
     def test_perform_destroy_by_association
       DeletePlainObjectWorker.perform_now(object, %w[HTestClass123 HTestClass1123])
       System::ErrorReporting.expects(:report_error).never
-      assert_nothing_raised(ActiveRecord::RecordNotDestroyed) { DeletePlainObjectWorker.perform_now(object, %w[HTestClass123 HTestClass1123]) }
+      # shouldn't raise anything
+      DeletePlainObjectWorker.perform_now(object, %w[HTestClass123 HTestClass1123])
       refute object.destroyed?
     end
 
@@ -80,7 +81,8 @@ class DeletePlainObjectWorkerTest < ActiveSupport::TestCase
           && parameters[:caller_worker_hierarchy] == ['Hierarchy-TestClass-123', "Plain-#{object.class}-#{object.id}"] \
           && parameters[:error_messages] == ['This product cannot be removed']
       end
-      assert_nothing_raised(ActiveRecord::RecordNotDestroyed) { DeletePlainObjectWorker.perform_now(object, %w[Hierarchy-TestClass-123]) }
+      # shouldn't raise anything
+      DeletePlainObjectWorker.perform_now(object, %w[Hierarchy-TestClass-123])
       refute object.destroyed?
     end
   end

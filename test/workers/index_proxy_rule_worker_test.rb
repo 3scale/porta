@@ -2,9 +2,8 @@ require 'test_helper'
 
 class IndexProxyRuleWorkerTest < ActiveSupport::TestCase
   test 'it does not raises RecordNotFound if id does not exist' do
-    assert_nothing_raised ActiveRecord::RecordNotFound do
-      IndexProxyRuleWorker.perform_now(42)
-    end
+    # shouldn't raise anything
+    IndexProxyRuleWorker.perform_now(42)
   end
 
   test 'indexes the proxy rule in Sphinx if record exists' do
