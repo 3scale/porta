@@ -1,5 +1,5 @@
 common: &sphinx
-  configuration_file: <%= ENV['THINKING_SPHINX_CONFIGURATION_FILE'] %>
+  configuration_file: <%= ENV.fetch('THINKING_SPHINX_CONFIGURATION_FILE') { Rails.root.join("config/#{Rails.env}.sphinx.conf")} %>
   big_document_ids: true
   html_strip: 1
   html_remove_elements: "style, script"
