@@ -182,7 +182,7 @@ class ApplicationController < ActionController::Base
     options = options.dup
 
     respond_to do |format|
-      format.text { options[:text] = error }
+      format.text { options[:plain] = error }
       format.json { options[:json] = {:error => error} }
 
       format.xml do
@@ -192,7 +192,7 @@ class ApplicationController < ActionController::Base
 
       format.any do
         headers['Content-Type'] = 'text/plain'
-        options[:text] = error
+        options[:plain] = error
       end
     end
 
