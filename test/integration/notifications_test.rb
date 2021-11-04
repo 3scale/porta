@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class NotificationsTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   setup do
     Logic::RollingUpdates.stubs(skipped?: true)
   end
@@ -55,7 +57,7 @@ class NotificationsTest < ActiveSupport::TestCase
       MailDispatchRule.delete_all
 
       @message.save!
-      @message.deliver!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
       assert_equal true, @message_recipient.notifiable?
@@ -68,7 +70,7 @@ class NotificationsTest < ActiveSupport::TestCase
       @message.system_operation = @operation
 
       @message.save!
-      @message.deliver!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
       assert_equal false, @message_recipient.notifiable?
@@ -81,7 +83,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
       assert_difference ActionMailer::Base.deliveries.method(:count) do
         @message.save!
-        @message.deliver!
+        perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
       end
 
       @message_recipient = @provider_recipient.received_messages.last
@@ -95,7 +97,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
       assert_no_difference ActionMailer::Base.deliveries.method(:count) do
         @message.save!
-        @message.deliver!
+        perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
       end
     end
 
@@ -103,7 +105,7 @@ class NotificationsTest < ActiveSupport::TestCase
       @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider_recipient, :dispatch => false,  :system_operation => @operation
 
       @message.save!
-      @message.deliver!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
 
@@ -113,7 +115,7 @@ class NotificationsTest < ActiveSupport::TestCase
     should 'notify recipient when operation has no corresponding system operation' do
       @message.update_attribute(:system_operation, nil)
       @message.save!
-      @message.deliver!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
 
@@ -195,7 +197,7 @@ class NotificationsTest < ActiveSupport::TestCase
     end
 
     should 'be notified' do
-      @buyer.buy! @plan
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.buy! @plan }
       assert ActionMailer::Base.deliveries.last.bcc.include?(@admin.email)
     end
 
@@ -204,7 +206,7 @@ class NotificationsTest < ActiveSupport::TestCase
       rule = @provider.mail_dispatch_rules.create! :system_operation => op, :emails => @admin.email
       rule.update_attribute :dispatch, false
 
-      @buyer.buy! @plan
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.buy! @plan }
 
       assert ActionMailer::Base.deliveries.empty?
     end
@@ -226,7 +228,7 @@ class NotificationsTest < ActiveSupport::TestCase
     should 'notify admins' do
       @mail_rule.update_attribute :dispatch, true
 
-      @buyer.make_pending!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.make_pending! }
 
       assert ActionMailer::Base.deliveries.map(&:bcc).flatten.include?(@admin.email)
     end
@@ -234,7 +236,7 @@ class NotificationsTest < ActiveSupport::TestCase
     should 'not notify admins if mail_dispatch_rule denies it' do
       @mail_rule.update_attribute :dispatch, false
 
-      @buyer.make_pending!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.make_pending! }
 
       assert false == ActionMailer::Base.deliveries.map(&:bcc).flatten.include?(@admin.email)
     end
