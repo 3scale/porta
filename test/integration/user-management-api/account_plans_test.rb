@@ -5,10 +5,11 @@ require 'test_helper'
 class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
+    service = @provider.default_service
 
     FactoryBot.create(:account_plan, issuer: @provider)
-    FactoryBot.create(:application_plan, issuer: @provider.default_service)
-    FactoryBot.create(:service_plan, issuer: @provider.default_service)
+    FactoryBot.create(:application_plan, issuer: service)
+    FactoryBot.create(:service_plan, issuer: service)
 
     host! @provider.admin_domain
   end
@@ -59,13 +60,14 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     end
 
     test 'index' do
-      get admin_api_account_plans_path(format: :xml), params: provider_key_params
+      get admin_api_account_plans_path(format: :xml), params: params
       assert_response :success
       assert_only_account_plans xml
     end
 
     test 'security wise: index is access denied in buyer side' do
-      get admin_api_account_plans_path(format: :xml), params: provider_key_params
+      host! @provider.domain
+      get admin_api_account_plans_path(format: :xml), params: params
       assert_response :forbidden
     end
 
@@ -73,13 +75,13 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
       host! @provider.admin_domain
       Account.master.update_attribute :site_access_code, "123456"
 
-      get admin_api_account_plans_path(format: :xml), params: provider_key_params
+      get admin_api_account_plans_path(format: :xml), params: params
 
       assert @response.body =~ /Access code/
     end
 
     test 'show' do
-      get admin_api_account_plan_path(@provider.account_plans.first, format: :xml), params: provider_key_params
+      get admin_api_account_plan_path(@provider.account_plans.first, format: :xml), params: params
       assert_response :success
 
       #TODO: move this to account_plan_test#to_xml
@@ -88,7 +90,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
 
     test 'create' do
       assert_difference(-> { @provider.account_plans.count }) do
-        post admin_api_account_plans_path(format: :xml), params: provider_key_params.merge({ name: 'awesome account plan', state_event: 'publish' })
+        post admin_api_account_plans_path(format: :xml), params: params.merge({ name: 'awesome account plan', state_event: 'publish' })
         assert_response :success
       end
 
@@ -100,7 +102,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     test 'update' do
       plan = FactoryBot.create(:account_plan, issuer: @provider, name: 'namy')
 
-      put admin_api_account_plan_path(plan, format: :xml), params: provider_key_params.merge({ state_event: 'publish', name: 'new name' })
+      put admin_api_account_plan_path(plan, format: :xml), params: params.merge({ state_event: 'publish', name: 'new name' })
       assert_response :success
 
       assert_an_account_plan xml, @provider
@@ -132,7 +134,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     test 'destroy' do
       plan = FactoryBot.create(:account_plan, issuer: @provider)
 
-      delete admin_api_account_plan_path(plan, format: :xml), params: provider_key_params.merge({ method: "_destroy" })
+      delete admin_api_account_plan_path(plan, format: :xml), params: params.merge({ method: "_destroy" })
       assert_response :success
 
       assert_not @response.body.presence
@@ -146,7 +148,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
       buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       buyer.buy! account_plan
 
-      delete admin_api_account_plan_path(account_plan, format: :xml), params: provider_key_params.merge({ method: "_destroy" })
+      delete admin_api_account_plan_path(account_plan, format: :xml), params: params.merge({ method: "_destroy" })
       assert_response :forbidden
 
       assert_xml_error(@response.body, "This account plan cannot be deleted")
@@ -157,6 +159,8 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     def provider_key_params
       { provider_key: @provider.api_key }
     end
+
+    alias params provider_key_params
 
     def xml
       @xml ||= Nokogiri::XML::Document.parse(@response.body)
