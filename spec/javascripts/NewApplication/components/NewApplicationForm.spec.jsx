@@ -97,17 +97,17 @@ describe('when in Service context', () => {
         props.product = productCanChangePlan
       })
 
-      it('should enable the application plan select', () => {
+      it('should disable the application plan select', () => {
         const wrapper = mountWrapper(props)
         const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-        expect(isDisabled()).toBe(false)
+        expect(isDisabled()).toBe(true)
       })
 
       it('should not be able to submit', () => {
         const wrapper = mountWrapper(props)
         expect(isSubmitDisabled(wrapper)).toBe(true)
 
-        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the item does not exist in the select')
+        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
         expect(isSubmitDisabled(wrapper)).toBe(true)
       })
     })
@@ -383,7 +383,7 @@ describe('when in Service context', () => {
           expect(wrapper.find('Select[name="cinstance[service_plan_id]"]').prop('item')).toBe(servicePlans[1])
         })
       })
-   })
+    })
   })
 
   describe('when service plans are not allowed', () => {
@@ -438,12 +438,12 @@ describe('when in Account context', () => {
     describe('when buyer can select plan', () => {
       const productCanChangePlan = { ...productWithNoAppPlans, buyerCanSelectPlan: true }
 
-      it('should enable the application plan select', () => {
+      it('should disable the application plan select', () => {
         const wrapper = mountWrapper({ ...props, products: [productCanChangePlan] })
         const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
 
         selectProduct(wrapper, productCanChangePlan)
-        expect(isDisabled()).toBe(false)
+        expect(isDisabled()).toBe(true)
       })
 
       it('should not be able to submit', () => {
@@ -453,7 +453,7 @@ describe('when in Account context', () => {
         selectProduct(wrapper, productCanChangePlan)
         expect(isSubmitDisabled(wrapper)).toBe(true)
 
-        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the item does not exist in the select')
+        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
         expect(isSubmitDisabled(wrapper)).toBe(true)
       })
     })
