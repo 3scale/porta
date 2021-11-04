@@ -73,6 +73,11 @@ describe('when a product is selected', () => {
         expect(hint.exists()).toBe(true)
         expect(hint.find('a').props().href).toEqual(createApplicationPlanPath)
       })
+
+      it('should be disabled', () => {
+        const wrapper = mountWrapper(props)
+        expectToBeDisabled(wrapper)
+      })
     })
   })
 
@@ -81,7 +86,7 @@ describe('when a product is selected', () => {
 
     it('should be disabled', () => {
       const wrapper = mountWrapper(props)
-      expectToBeDisabled(wrapper, true)
+      expectToBeDisabled(wrapper)
     })
   })
 })
