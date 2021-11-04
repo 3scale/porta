@@ -58,7 +58,7 @@ class LineItemTest < ActiveSupport::TestCase
   test 'audited' do
     invoice = FactoryBot.create :invoice
 
-    LineItem.with_auditing do
+    LineItem.with_synchronous_auditing do
       item = invoice.line_items.create!(name: 'Item #1', cost: 10.0, quantity: 1)
       audit = invoice.associated_audits.last
       assert_equal 'create', audit.action
