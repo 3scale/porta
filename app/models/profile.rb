@@ -107,7 +107,7 @@ class Profile < ApplicationRecord
   protected
 
   def validate_presence_of_account
-    !self.account.nil?
+    throw :abort if self.account.nil?
   end
 
   def fix_http str
