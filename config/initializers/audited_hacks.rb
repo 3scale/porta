@@ -75,7 +75,11 @@ module AuditHacks
       if synchronous
         super
       elsif !enqueued
-        run_callbacks :create
+        # all before_create callbacks except version
+        set_audit_user
+        set_request_uuid
+        set_remote_address
+
         run_after_commit(:enqueue_job)
         self.enqueued = true
       end
@@ -102,32 +106,28 @@ module AuditedHacks
       self.disable_auditing if Rails.env.test?
 
       include InstanceMethods
+      class << self
+        prepend ClassMethods
+      end
     end
 
     def synchronous
-      original = Thread.current[:audit_hacks_synchronous]
+      original = Thread.current.thread_variable_get(:audit_hacks_synchronous)
 
-      Thread.current[:audit_hacks_synchronous] = true
-
+      Thread.current.thread_variable_set(:audit_hacks_synchronous, true)
       yield if block_given?
 
       original
     ensure
-      Thread.current[:audit_hacks_synchronous] = original
+      Thread.current.thread_variable_set(:audit_hacks_synchronous, original)
     end
 
-    def with_auditing
-      original_state = auditing_enabled
-      enable_auditing
-
-      synchronous {  yield }
-    ensure
-      self.auditing_enabled = original_state
+    def with_synchronous_auditing(&block)
+      synchronous { with_auditing(&block) }
     end
   end
 
   module InstanceMethods
-
     def auditing_enabled?
       auditing_enabled
     end

@@ -63,7 +63,7 @@ gem 'yabeda-rails'
 gem 'yabeda-sidekiq'
 
 gem 'activemerchant', '~> 1.107.4'
-gem 'audited'
+gem 'audited', '~> 5.0.2'
 gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can not generate Stripe's "customers"
 
 gem 'acts_as_list', '~> 0.9.17'

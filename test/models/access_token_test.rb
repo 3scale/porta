@@ -135,7 +135,7 @@ class AccessTokenTest < ActiveSupport::TestCase
     access_token = FactoryBot.build(:access_token, owner: user)
 
     assert_difference(Audited.audit_class.method(:count)) do
-      AccessToken.with_auditing do
+      AccessToken.with_synchronous_auditing do
         access_token.save!
       end
     end
@@ -151,7 +151,7 @@ class AccessTokenTest < ActiveSupport::TestCase
     access_token = FactoryBot.create(:access_token, owner: user)
 
     assert_difference(Audited.audit_class.method(:count)) do
-      AccessToken.with_auditing do
+      AccessToken.with_synchronous_auditing do
         access_token.destroy!
       end
     end
@@ -170,7 +170,7 @@ class AccessTokenTest < ActiveSupport::TestCase
 
     Timecop.freeze(1.day.from_now.utc.round) do
       assert_difference(Audited.audit_class.method(:count)) do
-        AccessToken.with_auditing do
+        AccessToken.with_synchronous_auditing do
           access_token.update!(name: 'updated-name')
         end
       end
