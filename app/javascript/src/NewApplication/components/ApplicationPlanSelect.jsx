@@ -40,7 +40,7 @@ const ApplicationPlanSelect = ({ appPlan, product, onSelect, createApplicationPl
       name="cinstance[plan_id]"
       placeholderText="Select an application plan"
       hint={showHint && hint}
-      isDisabled={product === null || !product.buyerCanSelectPlan || !appPlans.length}
+      isDisabled={product === null || !appPlans.length}
       isRequired
     />
   )
