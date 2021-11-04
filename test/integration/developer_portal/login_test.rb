@@ -3,12 +3,13 @@ require 'test_helper'
 class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
   include UserDataHelpers
+  include ActiveJob::TestHelper
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    @buyer    = FactoryBot.create(:simple_buyer, provider_account: @provider)
-    @user     = FactoryBot.create(:user, account: @buyer, authentication_id: 'bar')
-    @auth     = FactoryBot.create(:authentication_provider, account: @provider, kind: 'base')
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
+    @user = FactoryBot.create(:user, account: @buyer, authentication_id: 'bar')
+    @auth = FactoryBot.create(:authentication_provider, account: @provider, kind: 'base')
 
     @user.activate!
     host! @provider.domain
@@ -81,7 +82,9 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     @provider.authentication_providers.update_all(automatically_approve_accounts: false)
     stub_user_data(uid: 'uid1', email: 'foo@example.com', username: 'foo', org_name: 'company', email_verified: true)
     stub_oauth2_request
-    post session_path(system_name: @auth.system_name, code: 'example')
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      post session_path(system_name: @auth.system_name, code: 'example')
+    end
     assert_match "Your account isn't active or hasn't been approved yet.", flash[:error]
     assert_match 'email once we have approved your account', waiting_list_confirmation_email('foo@example.com').body.to_s
     user = @provider.buyer_users.find_by_email('foo@example.com')
@@ -120,9 +123,9 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     post session_path(system_name: @auth.system_name, code: 'example')
     assert_match 'Successfully authenticated, please complete the signup form', flash[:notice]
     post signup_path(account: {
-      org_name:   'company',
+      org_name: 'company',
       user: {
-        email:    'foo2@example.com',
+        email: 'foo2@example.com',
         username: 'username',
         password: 'password'
       }
