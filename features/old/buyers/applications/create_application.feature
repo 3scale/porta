@@ -45,13 +45,6 @@ Feature: Create application from Account
     And I select "No plans API" from "Product"
     Then I won't be able to select an application plan
 
-  Scenario: Create an application for a service that doesn't allow choosing the plan and no default plan
-    Given a service "Not Broken API" of provider "foo.3scale.localhost"
-    And an application plan "Not a default plan" of service "Not Broken API"
-    When I go to the account context create application page for "bob"
-    And I select "Not Broken API" from "Product"
-    Then I should select an application plan myself
-
   Scenario: Create an application when the service doesn't have a service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans

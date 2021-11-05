@@ -46,13 +46,6 @@ Feature: Create application from product context
     When I go to the product context create application page for "No plans API"
     Then I won't be able to select an application plan
 
-  Scenario: Create an application for a service that doesn't allow choosing the plan and no default plan
-    Given a service "Not Broken API" of provider "foo.3scale.localhost"
-    And a published application plan "App plan" of service "Not Broken API"
-    When I go to the product context create application page for "Not Broken API"
-    Then I fill in the new application form
-    And I should see button "Create Application"
-
   Scenario: Create an application when the service doesn't have a service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans
