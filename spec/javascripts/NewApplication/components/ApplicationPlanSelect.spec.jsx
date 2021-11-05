@@ -41,48 +41,34 @@ describe('when a product is selected', () => {
     updatedAt: '1 Jan 2021',
     appPlans: [{ id: 0, name: 'The Plan' }],
     servicePlans: [],
-    buyerCanSelectPlan: false,
     defaultServicePlan: null,
     defaultAppPlan: null
   }
+  const props = { product }
 
-  describe('and buyer can select plan', () => {
-    const productCanSelectPlan = { ...product, buyerCanSelectPlan: true }
-    const props = { product: productCanSelectPlan }
+  it('should not be disabled', () => {
+    const wrapper = mountWrapper(props)
+    expectToBeDisabled(wrapper, false)
+  })
+
+  describe('and the product has some application plans', () => {
+    const props = { product: { ...product, appPlans: [appPlan] } }
 
     it('should not be disabled', () => {
       const wrapper = mountWrapper(props)
       expectToBeDisabled(wrapper, false)
     })
-
-    describe('and the product has some application plans', () => {
-      const props = { product: { ...productCanSelectPlan, appPlans: [appPlan] } }
-
-      it('should not be disabled', () => {
-        const wrapper = mountWrapper(props)
-        expectToBeDisabled(wrapper, false)
-      })
-    })
-
-    describe('but the product has no application plans', () => {
-      const props = { product: { ...productCanSelectPlan, appPlans: [] } }
-
-      it('should show a hint with a link to create a plan', () => {
-        const wrapper = mountWrapper(props)
-        const hint = wrapper.find('.hint')
-        expect(hint.exists()).toBe(true)
-        expect(hint.find('a').props().href).toEqual(createApplicationPlanPath)
-      })
-
-      it('should be disabled', () => {
-        const wrapper = mountWrapper(props)
-        expectToBeDisabled(wrapper)
-      })
-    })
   })
 
-  describe('and buyer cannot select plan', () => {
-    const props = { product: { ...product, buyerCanSelectPlan: false } }
+  describe('but the product has no application plans', () => {
+    const props = { product: { ...product, appPlans: [] } }
+
+    it('should show a hint with a link to create a plan', () => {
+      const wrapper = mountWrapper(props)
+      const hint = wrapper.find('.hint')
+      expect(hint.exists()).toBe(true)
+      expect(hint.find('a').props().href).toEqual(createApplicationPlanPath)
+    })
 
     it('should be disabled', () => {
       const wrapper = mountWrapper(props)

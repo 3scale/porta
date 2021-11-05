@@ -15,8 +15,7 @@ const product: Product = {
   appPlans: [],
   servicePlans: [],
   defaultServicePlan: null,
-  defaultAppPlan: null,
-  buyerCanSelectPlan: false
+  defaultAppPlan: null
 }
 const products = [product]
 const props = {
