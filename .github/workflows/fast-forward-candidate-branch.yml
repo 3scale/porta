@@ -11,8 +11,8 @@ on:
         default: master
       branch_suffix:
         description: 'The branch suffix can be `candidate|stable`. The output branch will be 3scale-{release}-{branch_suffix}'
-        require: true
-        defaul: candidate
+        required: true
+        default: candidate
 
 jobs:
   fast-forward:
