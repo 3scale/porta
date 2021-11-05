@@ -13,7 +13,7 @@ class Admin::Api::ApplicationPlanPricingRulesTest < ActionDispatch::IntegrationT
     host! @provider.admin_domain
   end
 
-  class AccessTokenTest < Admin::Api::ApplicationPlanLimitsTest
+  class AccessTokenTest < Admin::Api::ApplicationPlanPricingRulesTest
     def setup
       super
       user = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
