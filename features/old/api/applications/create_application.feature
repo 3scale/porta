@@ -36,7 +36,6 @@ Feature: Create application from product context
   Scenario: Create an application for a service that doesn't allow choosing the plan
     Given a service "My API" of provider "foo.3scale.localhost"
     And a default application plan "Default Plan" of service "My API"
-    And service "My API" does not allow to change application plan
     When I create an application "My App" from the product "My API" context
     Then I should be on the provider side "My App" application page
     And should see "Application was successfully created"
@@ -48,14 +47,12 @@ Feature: Create application from product context
     Then I won't be able to select an application plan
 
   Scenario: Create an application for a service that doesn't allow choosing the plan and no default plan
-    Given a service "Broken API" of provider "foo.3scale.localhost"
-    And a published application plan "App plan" of service "Broken API"
-    And service "Broken API" does not allow to change application plan
-    When I go to the product context create application page for "Broken API"
-    Then I won't be able to select an application plan
+    Given a service "Not Broken API" of provider "foo.3scale.localhost"
+    And a published application plan "App plan" of service "Not Broken API"
+    When I go to the product context create application page for "Not Broken API"
+    Then I fill in the new application form
+    And I should see button "Create Application"
 
-  # FIXME: Unsubscribed API do not have any application plans
-  @wip
   Scenario: Create an application when the service doesn't have a service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans
