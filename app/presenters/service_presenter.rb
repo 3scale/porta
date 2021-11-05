@@ -29,8 +29,7 @@ class ServicePresenter < SimpleDelegator
       appPlans: plans.stock.select(:id, :name).as_json(root: false),
       servicePlans: service_plans.select(:id, :name).as_json(root: false),
       defaultServicePlan: default_service_plan.as_json(root: false, only: %i[id name]),
-      defaultAppPlan: default_application_plan.as_json(root: false, only: %i[id name]),
-      buyerCanSelectPlan: buyer_can_select_plan?
+      defaultAppPlan: default_application_plan.as_json(root: false, only: %i[id name])
     }
   end
 
