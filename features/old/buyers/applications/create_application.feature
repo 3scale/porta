@@ -34,7 +34,6 @@ Feature: Create application from Account
     And buyer "bob" should have 1 cinstance
 
   Scenario: Create an application for a service that doesn't allow choosing the plan
-    Given service "API" does not allow to change application plan
     When I create an application "My App" from the account "bob" context
     Then I should be on the provider side "My App" application page
     And should see "Application was successfully created"
@@ -43,28 +42,28 @@ Feature: Create application from Account
   Scenario: Create an application with no application plans
     Given a service "No plans API" of provider "foo.3scale.localhost"
     When I go to the account context create application page for "bob"
-    And I fill in the new application form
+    And I select "No plans API" from "Product"
     Then I won't be able to select an application plan
 
   Scenario: Create an application for a service that doesn't allow choosing the plan and no default plan
-    Given a service "Broken API" of provider "foo.3scale.localhost"
-    And an application plan "Not a default plan" of service "Broken API"
+    Given a service "Not Broken API" of provider "foo.3scale.localhost"
+    And an application plan "Not a default plan" of service "Not Broken API"
     When I go to the account context create application page for "bob"
-    And I fill in the new application form
-    Then I won't be able to select an application plan
+    And I select "Not Broken API" from "Product"
+    Then I should select an application plan myself
 
   Scenario: Create an application when the service doesn't have a service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans
     When I go to the account context create application page for "bob"
-    And I fill in the new application form
+    And I fill in the new application form for product "Unsubscribed API"
     Then I should see "In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan."
 
   Scenario: Create an application when the service doesn't have a service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans
     When I go to the account context create application page for "bob"
-    And I fill in the new application form
+    And I fill in the new application form for product "Unsubscribed API"
     Then I should see "In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan."
 
   Scenario: Create an application with a required extra field

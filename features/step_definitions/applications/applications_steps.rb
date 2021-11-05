@@ -178,19 +178,19 @@ end
 
 When /^I create an application "([^"]*)" from the audience context/ do |name|
   visit path_to 'the provider new application page'
-  fill_in_new_application_form(name)
+  fill_in_new_application_form(name: name)
   click_on 'Create Application'
 end
 
 When /^I create an application "([^"]*)" from the account "([^"]*)" context/ do |name, account_name|
   visit path_to %(the account context create application page for "#{account_name}")
-  fill_in_new_application_form(name)
+  fill_in_new_application_form(name: name)
   click_on 'Create Application'
 end
 
 When /^I create an application "([^"]*)" from the product "([^"]*)" context/ do |name, service_name|
   visit path_to %(the product context create application page for "#{service_name}")
-  fill_in_new_application_form(name)
+  fill_in_new_application_form(name: name)
   click_on 'Create Application'
 end
 
@@ -199,7 +199,11 @@ When 'I fill in the new application form' do
 end
 
 When /^I fill in the new application form for "([^"]*)"/ do |name|
-  fill_in_new_application_form(name)
+  fill_in_new_application_form(name: name)
+end
+
+When 'I fill in the new application form for product {string}' do |service_name|
+  fill_in_new_application_form(service_name: service_name)
 end
 
 When 'I fill in the new application form with extra fields:' do |table|
@@ -212,21 +216,21 @@ end
 
 When 'I should not be allowed to create more applications' do
   visit path_to 'the provider new application page'
-  fill_in_new_application_form(name)
+  fill_in_new_application_form
   click_on 'Create Application'
   assert has_content?('Access Denied')
 end
 
 When /^buyer "([^"]*)" should not be allowed to create more applications/ do |buyer_name|
   visit path_to %(the account context create application page for "#{buyer_name}")
-  fill_in_new_application_form(name)
+  fill_in_new_application_form
   click_on 'Create Application'
   assert has_content?('Access Denied')
 end
 
 When /^I should not be allowed to create more applications for product "([^"]*)"/ do |service_name|
   visit path_to %(the product context create application page for "#{service_name}")
-  fill_in_new_application_form(name)
+  fill_in_new_application_form
   click_on 'Create Application'
   assert has_content?('Access Denied')
 end
@@ -237,13 +241,22 @@ When "a service {string} of {provider} with no service plans" do |service_name, 
 end
 
 When "I won't be able to select an application plan" do
-  assert find('.pf-c-form__label', text: 'Application plan').sibling('.pf-c-select').has_css?('.pf-m-disabled')
+  assert app_plan_select.has_css?('.pf-m-disabled')
 end
 
-def fill_in_new_application_form(name = 'My App')
-  pf4_select('bob', from: 'Account') if page.has_css?('.pf-c-form__label', text: 'Account')
-  pf4_select('API', from: 'Product') if page.has_css?('.pf-c-form__label', text: 'Product')
-  pf4_select('Basic', from: 'Application plan') unless find('.pf-c-form__label', text: 'Application plan').sibling('.pf-c-select').has_css?('.pf-m-disabled')
-  find('.pf-c-form__label', text: 'Name').sibling('input').set(name || 'My App')
+Then "I should select an application plan myself" do
+  assert_not app_plan_select.has_css?('.pf-m-disabled')
+  assert_not app_plan_select.find('input').value.present?
+end
+
+def fill_in_new_application_form(name: 'My App', service_name: 'API')
+  pf4_select_first(from: 'Account') if page.has_css?('.pf-c-form__label', text: 'Account')
+  pf4_select(service_name, from: 'Product') if page.has_css?('.pf-c-form__label', text: 'Product')
+  pf4_select_first(from: 'Application plan') unless app_plan_select.has_css?('.pf-m-disabled')
+  find('.pf-c-form__label', text: 'Name').sibling('input').set(name)
   find('.pf-c-form__label', text: 'Description').sibling('input').set('This is some kind of application')
+end
+
+def app_plan_select
+  find('.pf-c-form__label', text: 'Application plan').sibling('.pf-c-select')
 end
