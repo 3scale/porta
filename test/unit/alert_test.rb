@@ -16,7 +16,8 @@ class AlertTest < ActiveSupport::TestCase
     FactoryBot.create(:limit_alert, level: 80)
 
     alert = Alert.by_level(80).last
-    assert_equal alert.level, 80
+    assert_equal [alert], Alert.by_level(80).to_a
+
   end
 
   context 'Alert#kind' do
