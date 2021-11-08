@@ -157,7 +157,7 @@ class ProxyTest < ActiveSupport::TestCase
       service.deployment_option = 'hosted'
       service.save
       proxy.endpoint = "http://localhost:8080"
-      refute proxy.valid?
+      assert_not proxy.valid?
     end
 
     def test_sandbox_endpoint_validation
@@ -176,7 +176,7 @@ class ProxyTest < ActiveSupport::TestCase
       service.deployment_option = 'hosted'
       service.save
       proxy.sandbox_endpoint = "http://localhost:8080"
-      refute proxy.valid?
+      assert_not proxy.valid?
     end
 
     def test_endpoints_on_create
