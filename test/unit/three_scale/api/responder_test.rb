@@ -20,7 +20,7 @@ class ThreeScale::Api::ResponderTest < ActiveSupport::TestCase
     @controller.formats = [:json]
     @controller.request = ActionDispatch::Request.new('REQUEST_METHOD' => 'PATCH')
 
-    responder = ThreeScale::Api::Responder.new(@controller, ['foo'], representer: Representer, text: 'foo')
+    responder = ThreeScale::Api::Responder.new(@controller, ['foo'], representer: Representer, plain: 'foo')
 
     assert responder.to_format.presence
   end
