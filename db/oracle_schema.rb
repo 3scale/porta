@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210708100519) do
+ActiveRecord::Schema.define(version: 20211109141544) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -920,17 +920,15 @@ ActiveRecord::Schema.define(version: 20210708100519) do
   end
 
   create_table "payment_intents", force: :cascade do |t|
-    t.integer  "invoice_id",        precision: 38, null: false
-    t.string   "payment_intent_id"
+    t.integer  "invoice_id", precision: 38, null: false
     t.string   "state"
-    t.integer  "tenant_id",         precision: 38
-    t.datetime "created_at",        precision: 6,  null: false
-    t.datetime "updated_at",        precision: 6,  null: false
+    t.integer  "tenant_id",  precision: 38
+    t.datetime "created_at", precision: 6,  null: false
+    t.datetime "updated_at", precision: 6,  null: false
     t.string   "reference"
   end
 
   add_index "payment_intents", ["invoice_id"], name: "index_payment_intents_on_invoice_id"
-  add_index "payment_intents", ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id"
   add_index "payment_intents", ["reference"], name: "index_payment_intents_on_reference", unique: true
   add_index "payment_intents", ["state"], name: "index_payment_intents_on_state"
 
