@@ -12,6 +12,7 @@ class AlertTest < ActiveSupport::TestCase
   should validate_numericality_of(:utilization)
 
   def test_by_level
+    FactoryBot.create(:limit_alert, level: 50)
     alert = FactoryBot.create(:limit_alert, level: 80)
     assert_equal [alert], Alert.by_level(80).to_a
   end
