@@ -5,8 +5,6 @@ class PaymentIntent < ApplicationRecord
 
   belongs_to :invoice, inverse_of: :payment_intents
 
-  self.ignored_columns = %w[payment_intent_id]
-
   validates :invoice, :reference, :state, presence: true
   validates :reference, :state, length: { maximum: 255 }
   validates :reference, uniqueness: true
