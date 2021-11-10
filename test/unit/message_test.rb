@@ -466,7 +466,7 @@ class MessageTest < ActiveSupport::TestCase
     end
 
     should 'not be hidden' do
-      refute @message.hidden?
+      assert_not @message.hidden?
     end
 
     should 'have original subject prefixed with Re:' do
