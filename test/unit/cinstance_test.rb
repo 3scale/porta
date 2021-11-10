@@ -395,6 +395,7 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   class SuspendTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
 
     setup do
       @cinstance = FactoryBot.create(:cinstance)
@@ -423,7 +424,7 @@ class CinstanceTest < ActiveSupport::TestCase
               :system_operation => SystemOperation.for('app_suspended'),
               :account => @cinstance.provider_account)
 
-      @cinstance.suspend!
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @cinstance.suspend! }
 
       #TODO: write some email assertion helper?
       assert mail = ActionMailer::Base.deliveries.last, 'missing email'
