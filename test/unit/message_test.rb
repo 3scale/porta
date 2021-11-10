@@ -157,7 +157,7 @@ class MessageTest < ActiveSupport::TestCase
 
     should 'require a sender_id' do
       message = FactoryBot.build(:message, sender: nil)
-      assert !message.valid?
+      assert_not message.valid?
       assert_equal 1, message.errors[:sender_id].size
     end
 
