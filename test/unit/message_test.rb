@@ -451,13 +451,12 @@ class MessageTest < ActiveSupport::TestCase
       @richard = FactoryBot.create(:simple_account)
       @ralph = FactoryBot.create(:simple_account)
 
-      original_message = FactoryBot.create(:message,
-                                           :subject => 'Hello',
-                                           :body => 'How are you?',
-                                           :sender => @admin,
-                                           :to => @erich,
-                                           :cc => @richard,
-                                           :bcc => @ralph)
+      original_message = FactoryBot.create(:message, subject: 'Hello',
+                                                     body: 'How are you?',
+                                                     sender: @admin,
+                                                     to: @erich,
+                                                     cc: @richard,
+                                                     bcc: @ralph)
 
       @message = original_message.reply_to_all
     end
