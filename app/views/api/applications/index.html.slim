@@ -1,6 +1,6 @@
 h2 = "Applications on #{@service.name}"
 
-= pf_button_in_title 'Create Application', new_admin_service_application_path(@service)
+= pf_button_in_title 'Create application', new_admin_service_application_path(@service)
 
 - if current_user.accessible_services.empty?
   = render 'shared/service_access'
