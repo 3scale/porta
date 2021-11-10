@@ -61,22 +61,22 @@ Feature: Create application from product context
     And I fill in the new application form with extra fields:
       | field   | value   |
       | Wololo  | wololo  |
-    And I press "Create Application"
+    And I press "Create application"
     Then I should see "Application was successfully created"
     And buyer "bob" should have 1 cinstance
 
   Scenario: Submit button should be disabled until form is filled
     Given service "API" allows to choose plan on app creation
     When I go to the product context create application page for "API"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I select "bob" from "Account"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I select "Basic" from "Application plan"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I fill in "Name" with "Name"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I fill in "Description" with "Description"
-    Then I should see button "Create Application"
+    Then I should see button "Create application"
 
   Scenario: Create an application with a pending contract
     Given buyer "bob" is subscribed with state "pending" to the default service of provider "foo.3scale.localhost"
