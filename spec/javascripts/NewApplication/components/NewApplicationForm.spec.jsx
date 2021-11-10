@@ -193,7 +193,7 @@ describe('when in Service context', () => {
       const html = renderWrapper(props).find('.pf-c-form__group').toString()
 
       inputs.forEach(name => expect(html).toMatch(name))
-      expect(html).not.toMatch('product')
+      expect(html).not.toMatch('>Product</span>')
     })
 
     describe('when the selected buyer is subscribed to the current product', () => {
@@ -233,7 +233,7 @@ describe('when in Service context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This Account already subscribes to the selected Product’s Service plan')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -258,7 +258,7 @@ describe('when in Service context', () => {
 
         const hints = wrapper.find('ServicePlanSelect .hint')
         expect(hints.length).toBe(1)
-        expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+        expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
       })
 
       describe('when the current product has no service plans', () => {
@@ -281,7 +281,7 @@ describe('when in Service context', () => {
 
           const hints = wrapper.find('.hint')
           expect(hints.length).toBe(2)
-          expect(hints.at(1).text()).toMatch('No Service plans exist for the selected Product.')
+          expect(hints.at(1).text()).toMatch('No service plans exist for the selected product. Create a new service plan')
           expect(hints.find('a').prop('href')).toEqual(props.createServicePlanPath)
         })
       })
@@ -563,7 +563,7 @@ describe('when in Account context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This Account already subscribes to the selected Product’s Service plan')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -577,7 +577,7 @@ describe('when in Account context', () => {
         const wrapper = mountWrapper(props)
         const hints = wrapper.find('ServicePlanSelect .hint')
         expect(hints.length).toBe(1)
-        expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+        expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
       })
 
       describe('when it has no service plans', () => {
@@ -602,7 +602,7 @@ describe('when in Account context', () => {
 
           const hints = wrapper.find('.hint')
           expect(hints.length).toBe(2)
-          expect(hints.at(1).text()).toMatch('No Service plans exist for the selected Product.')
+          expect(hints.at(1).text()).toMatch('No service plans exist for the selected product. Create a new service plan')
           expect(hints.find('a').prop('href')).toEqual(props.createServicePlanPath)
         })
       })
@@ -881,7 +881,7 @@ describe('when in Audience context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This Account already subscribes to the selected Product’s Service plan')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -917,7 +917,7 @@ describe('when in Audience context', () => {
 
           const hints = wrapper.find('.hint')
           expect(hints.length).toBe(2)
-          expect(hints.at(1).text()).toMatch('No Service plans exist for the selected Product.')
+          expect(hints.at(1).text()).toMatch('No service plans exist for the selected product. Create a new service plan')
           expect(hints.find('a').prop('href')).toEqual(props.createServicePlanPath)
         })
       })
@@ -964,7 +964,7 @@ describe('when in Audience context', () => {
 
           const hints = wrapper.find('ServicePlanSelect .hint')
           expect(hints.length).toBe(1)
-          expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+          expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
         })
       })
 
@@ -999,7 +999,7 @@ describe('when in Audience context', () => {
 
           const hints = wrapper.find('ServicePlanSelect .hint')
           expect(hints.length).toBe(1)
-          expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+          expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
         })
       })
     })
