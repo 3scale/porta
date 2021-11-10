@@ -162,7 +162,7 @@ class MessageTest < ActiveSupport::TestCase
     end
 
     should 'not require a subject' do
-      message = FactoryBot.build(:message, :subject => nil, :sender => @account)
+      message = FactoryBot.build(:message, subject: nil, sender: @account)
       assert message.valid?
     end
 
