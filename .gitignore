@@ -18,7 +18,6 @@
 .pivotalrc
 .pivotal_cache
 .jenkins-build
-.idea
 .*rc
 .livereload
 ./Guardfile
@@ -27,6 +26,10 @@ C:\\nppdf32Log\\debuglog.txt
 .deploy
 .s3cfg
 .tool-versions
+
+# IntelliJ
+.idea
+out
 
 # Bundler Stuff
 .bundle
