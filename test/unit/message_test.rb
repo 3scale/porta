@@ -521,6 +521,6 @@ class MessageTest < ActiveSupport::TestCase
     refute provider_sent_message.reload.hidden?
 
     buyer_sent_message.restore_for!(provider)
-    refute provider_received_message.reload.hidden?
+    assert_not provider_received_message.reload.hidden?
   end
 end
