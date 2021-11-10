@@ -17,9 +17,10 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     @application_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     @application_plan.publish!
-    @buyer.buy! @application_plan
-
     @application = @buyer.buy! @application_plan
+
+    # Create additional apps to have more data
+    @buyer.buy! @application_plan
 
     host! @provider.admin_domain
   end
@@ -65,7 +66,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
         get admin_api_applications_path, params: params.merge({ service_id: @service.id })
 
         assert_response :success
-        assert_equal 2, Nokogiri::XML::Document.parse(@response.body).xpath("//applications").children.length
+        assert_equal @token.owner.accessible_cinstances.size, Nokogiri::XML::Document.parse(@response.body).xpath("//applications").children.length
       end
 
       should '#index with access to no service' do
