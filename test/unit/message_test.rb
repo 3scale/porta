@@ -141,7 +141,7 @@ class MessageTest < ActiveSupport::TestCase
 
     should 'not be hidden' do
       assert_nil @message.hidden_at
-      assert !@message.hidden?
+      assert_not @message.hidden?
     end
   end
 
