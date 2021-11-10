@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class Logic::PlanChangesTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
 
   def setup
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
@@ -50,7 +51,10 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
 
   test '#buyer_changes_plan! - :request' do
     @plan.issuer.stubs(plan_change_permission: :request)
-    @app.buyer_changes_plan!(@new_plan)
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      @app.buyer_changes_plan!(@new_plan)
+    end
+
     assert_equal 'Old plan', @app.plan.name
     assert_email_requests_exist
   end
@@ -59,7 +63,9 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :credit_card)
     @app.user_account.stubs(:credit_card_stored? => false)
 
-    @app.buyer_changes_plan!(@new_plan)
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      @app.buyer_changes_plan!(@new_plan)
+    end
 
     assert_equal 'Old plan', @app.plan.name
     assert_email_requests_exist
@@ -69,7 +75,9 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :credit_card)
     @app.user_account.stubs(:credit_card_stored? => true)
 
-    @app.buyer_changes_plan!(@new_plan)
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      @app.buyer_changes_plan!(@new_plan)
+    end
 
     assert_equal 'Better plan', @app.plan.name
     mail = ActionMailer::Base.deliveries.first
@@ -80,7 +88,9 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :request_credit_card)
     @app.user_account.stubs(:credit_card_stored? => true)
 
-    @app.buyer_changes_plan!(@new_plan)
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      @app.buyer_changes_plan!(@new_plan)
+    end
 
     assert_equal 'Better plan', @app.plan.name
     mail = ActionMailer::Base.deliveries.first
@@ -91,23 +101,27 @@ class Logic::PlanChangesTest < ActiveSupport::TestCase
     @plan.issuer.stubs(plan_change_permission: :request_credit_card)
     @app.user_account.stubs(:credit_card_stored? => false)
 
-    msg = @app.buyer_changes_plan!(@new_paid_plan)
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      msg = @app.buyer_changes_plan!(@new_paid_plan)
 
-    assert_equal "Please enter your credit card before changing the plan.", msg
-    assert_equal 'Old plan', @app.plan.name
-    assert_empty ActionMailer::Base.deliveries
+      assert_equal "Please enter your credit card before changing the plan.", msg
+      assert_equal 'Old plan', @app.plan.name
+      assert_empty ActionMailer::Base.deliveries
+    end
   end
 
   test '#buyer_changes_plan! - :request_credit_card (missing) - plan.free' do
     @plan.issuer.stubs(plan_change_permission: :request_credit_card)
     @app.user_account.stubs(:credit_card_stored? => false)
 
-    msg = @app.buyer_changes_plan!(@new_plan)
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      msg = @app.buyer_changes_plan!(@new_plan)
 
-    assert_equal "Plan change was successful.", msg
-    assert_equal 'Better plan', @app.plan.name
-    mail = ActionMailer::Base.deliveries.first
-    assert_equal 'API System: Application plan change', mail.subject
+      assert_equal "Plan change was successful.", msg
+      assert_equal 'Better plan', @app.plan.name
+      mail = ActionMailer::Base.deliveries.first
+      assert_equal 'API System: Application plan change', mail.subject
+    end
   end
 
   def test_request_plan_change_actions
