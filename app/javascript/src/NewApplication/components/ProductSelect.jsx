@@ -45,7 +45,7 @@ const ProductSelect = ({
       cells={cells}
       onSelect={onSelectProduct}
       fetchItems={(params) => fetchPaginatedProducts(productsPath, params)}
-      header="Most recently updated products"
+      header="Recently updated products"
       isDisabled={isDisabled}
       title="Select a product"
       placeholder="Select a product"
