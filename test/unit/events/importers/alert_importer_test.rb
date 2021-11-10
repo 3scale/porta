@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
 
   def setup
     Logic::RollingUpdates.expects(skipped?: true).at_least_once
@@ -87,7 +88,9 @@ class Events::Importers::AlertImporterTest < ActiveSupport::TestCase
     })
 
     ActionMailer::Base.deliveries = []
-    import_events
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      import_events
+    end
 
     assert_equal ActionMailer::Base.deliveries.size, 4
   end

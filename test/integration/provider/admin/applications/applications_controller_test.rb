@@ -221,6 +221,8 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
     end
 
     class ChangePlan < ProviderLoggedInTest
+      include ActiveJob::TestHelper
+
       def setup
         @service = provider.default_service
         @initial_plan = FactoryBot.create(:application_plan, issuer: service)
@@ -268,7 +270,9 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         Logic::RollingUpdates.expects(skipped?: true).at_least_once
 
         ActionMailer::Base.deliveries = []
-        put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
+        perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+          put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
+        end
 
         assert_equal cinstance.reload.plan, new_plan
         assert mail = ActionMailer::Base.deliveries.first, 'missing email'
