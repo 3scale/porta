@@ -497,9 +497,9 @@ class MessageTest < ActiveSupport::TestCase
   context 'message as a class' do
     setup do
       Message.delete_all
-      @hidden_message = FactoryBot.create(:message, :hidden_at => Time.now,
-                                          :sender => FactoryBot.create(:simple_account))
-      @visible_message = FactoryBot.create(:message, :sender => FactoryBot.create(:simple_account))
+      @hidden_message = FactoryBot.create(:message, hidden_at: Time.now,
+                                                    sender: FactoryBot.create(:simple_account))
+      @visible_message = FactoryBot.create(:message, sender: FactoryBot.create(:simple_account))
     end
 
     should 'include only visible messages in visible scope' do
