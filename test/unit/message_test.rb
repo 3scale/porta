@@ -151,7 +151,7 @@ class MessageTest < ActiveSupport::TestCase
     end
 
     should 'be valid with a set of valid attributes' do
-      message = FactoryBot.build(:message, :sender => @account)
+      message = FactoryBot.build(:message, sender: @account)
       assert message.valid?
     end
 
