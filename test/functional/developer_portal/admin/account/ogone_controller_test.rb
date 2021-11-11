@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::DeprecatedPaymentGatewaysControllerTest
@@ -5,7 +7,7 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
   test '#show' do
     ogone = mock
     ogone.expects(:url)
-    ogone.expects(:fields).returns Hash.new
+    ogone.expects(:fields).returns({})
     ogone.expects(:fill_fields).with "http://#{@provider.domain}/admin/account/ogone/hosted_success"
 
     PaymentGateways::OgoneCrypt.expects(:new).returns(ogone)
@@ -16,7 +18,7 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
   test '#hosted_success' do
     PaymentGateways::OgoneCrypt.any_instance.expects(:success?).returns(true)
 
-    get :hosted_success, ED: '0718', CARDNO: 'XXXXXXXXXXXX1111'
+    get :hosted_success, params: { ED: '0718', CARDNO: 'XXXXXXXXXXXX1111' }
 
     @account.reload
 
@@ -29,7 +31,7 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
     PaymentGateways::OgoneCrypt.any_instance.expects(:success?).returns(true)
     session[:plan_changes] = {1 => 2}
 
-    get :hosted_success, ED: '0718', CARDNO: 'XXXXXXXXXXXX1111'
+    get :hosted_success, params: { ED: '0718', CARDNO: 'XXXXXXXXXXXX1111' }
 
     @account.reload
 
@@ -56,6 +58,6 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
 
     @account.reload
 
-    refute @account.suspended?
+    assert_not @account.suspended?
   end
 end
