@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Buyers::AccountPlansControllerTest < ActionController::TestCase
@@ -102,6 +104,6 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
 
     login_as(@provider.first_admin)
     AccountPlan.any_instance.expects(can_be_destroyed?: false).at_least_once
-    delete :destroy, id: @provider.account_plans.first.id
+    delete :destroy, params: { id: @provider.account_plans.first.id }
   end
 end
