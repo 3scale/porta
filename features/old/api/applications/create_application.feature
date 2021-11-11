@@ -51,7 +51,7 @@ Feature: Create application from product context
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans
     When I go to the product context create application page for "Unsubscribed API"
     And I fill in the new application form
-    Then I should see "In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan."
+    Then I should see "To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product."
 
   Scenario: Create an application with a required extra field
     Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":

@@ -84,4 +84,4 @@ Feature: Providers's applications searching, sorting and filtering
       | Account    |
       | Plan       |
       | State      |
-      | Created At |
+      | Created on |
