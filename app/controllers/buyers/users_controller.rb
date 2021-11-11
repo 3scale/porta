@@ -92,8 +92,6 @@ class Buyers::UsersController < Buyers::BaseController
   end
 
   def redirect_back_or_show_detail
-    redirect_back(fallback_location: root_path)
-  rescue ActionController::RedirectBackError
-    redirect_to admin_buyers_account_user_path(account_id: user.account_id, id: user.id)
+    redirect_back(fallback_location: admin_buyers_account_user_path(account_id: user.account_id, id: user.id))
   end
 end
