@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::Account::PlanChangesControllerTest < DeveloperPortal::AbstractPaymentGatewaysControllerTest
@@ -5,7 +7,7 @@ class DeveloperPortal::Admin::Account::PlanChangesControllerTest < DeveloperPort
   self.payment_gateway_type = :bogus
 
   test '#new' do
-    get :new, plan_id: @paid_plan.id, contract_id: @application.id
+    get :new, params: { plan_id: @paid_plan.id, contract_id: @application.id }
 
     assert_redirected_to(@controller.instance_eval { payment_details_path })
 
@@ -15,9 +17,9 @@ class DeveloperPortal::Admin::Account::PlanChangesControllerTest < DeveloperPort
   test '#destroy with changes in session' do
     @controller.send(:store_plan_change!, @application.id, @paid_plan.id)
 
-    delete :destroy, id: @application.id
+    delete :destroy, params: { id: @application.id }
     assert_redirected_to admin_application_path(@application)
-    assert_equal Hash.new, @controller.session[:plan_changes]
+    assert_equal({}, @controller.session[:plan_changes])
   end
 
   test '#index' do
