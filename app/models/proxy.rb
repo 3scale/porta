@@ -54,6 +54,9 @@ class Proxy < ApplicationRecord
   validates :endpoint,         uri: true, allow_nil: true, allow_blank: true
   validates :sandbox_endpoint, uri: true, allow_nil: true, allow_blank: true
 
+  validates :sandbox_endpoint, non_localhost: true, if: :hosted?
+  validates :endpoint, non_localhost: true, if: :hosted?
+
   validates :hostname_rewrite, format: { with: HOST, allow_nil: true, allow_blank: true }
 
   validates :oauth_login_url, format: { with: URI_OR_LOCALHOST,    allow_nil: true, allow_blank: true }
