@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::ActionController::TestCase
@@ -21,7 +23,7 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
   test "creates messages with origin == 'web'" do
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
-    post :create, :message => { :subject => "message via web", :body => "message via web" }, :to => buyer.id
+    post :create, params: { message: { :subject => "message via web", :body => "message via web" }, :to => buyer.id }
 
     MessageWorker.drain
     assert msg = Message.last
