@@ -142,7 +142,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
 
   def build_authentication_provider
     attributes = authentication_provider_create_params
-    @authentication_provider = authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.symbolize_keys)
+    @authentication_provider = authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.to_h.symbolize_keys)
   end
 
   def authorize_authentication_provider

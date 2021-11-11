@@ -42,7 +42,7 @@ class Admin::Api::Account::AuthenticationProvidersController < Admin::Api::BaseC
   #
   def create
     attributes = authentication_provider_create_params
-    @authentication_provider = self_authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.symbolize_keys)
+    @authentication_provider = self_authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.to_h.symbolize_keys)
     authentication_provider.save
     respond_with authentication_provider_presenter
   end
