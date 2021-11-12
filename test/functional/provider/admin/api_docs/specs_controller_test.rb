@@ -9,22 +9,23 @@ class Provider::Admin::ApiDocs::SpecsControllerTest < ActionController::TestCase
   end
 
   test "#show should overrite the host" do
-    get :show, id: 'accounts'
+    get :show, params: { id: 'accounts' }
+
     spec = JSON.parse(response.body)
     assert_equal request.host, spec["host"]
   end
 
   test '#show for valid ids' do
-    get :show, id: 'accounts'
+    get :show, params: { id: 'accounts' }
     assert_equal 200, response.status
 
-    get :show, id: 'finance'
+    get :show, params: { id: 'finance' }
     assert_equal 200, response.status
 
-    get :show, id: 'analytics'
+    get :show, params: { id: 'analytics' }
     assert_equal 200, response.status
 
-    get :show, id: 'foobar'
+    get :show, params: { id: 'foobar' }
     assert_equal 404, response.status
   end
 

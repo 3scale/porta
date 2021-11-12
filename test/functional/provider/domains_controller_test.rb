@@ -13,7 +13,7 @@ class Provider::DomainsControllerTest < ActionController::TestCase
     @request.host = Account.master.domain
 
     assert_change :of => -> { ActionMailer::Base.deliveries.count } do
-      post :recover, :email => @provider1.emails.first
+      post :recover, params: { email: @provider1.emails.first }
     end
     assert_response :success
   end

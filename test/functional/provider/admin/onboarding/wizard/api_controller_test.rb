@@ -12,10 +12,10 @@ class Provider::Admin::Onboarding::Wizard::ApiControllerTest < ActionController:
   end
 
   def test_update
-    post :update, { api: { name: nil, endpoint: nil } }
+    post :update, params: { api: { name: nil, endpoint: nil } }
     assert_response :success
 
-    post :update, { api: { name: 'some name', backend: 'http://example.com' } }
+    post :update, params: { api: { name: 'some name', backend: 'http://example.com' } }
     assert_redirected_to new_provider_admin_onboarding_wizard_request_path
   end
 end

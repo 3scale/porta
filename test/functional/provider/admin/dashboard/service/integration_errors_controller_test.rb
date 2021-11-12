@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::Dashboard::Service::IntegrationErrorsControllerTest < ActionController::TestCase
@@ -10,7 +12,7 @@ class Provider::Admin::Dashboard::Service::IntegrationErrorsControllerTest < Act
     service = FactoryBot.create(:simple_service, account: @provider)
     stub_backend_service_errors(service)
 
-    xhr :get, :show, service_id: service
+    get :show, params: { service_id: service }, xhr: true
     assert_response :success
   end
 end
