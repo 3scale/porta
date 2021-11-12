@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::Admin::Dashboard::NewAccountsControllerTest < ActionController::TestCase
@@ -7,7 +9,7 @@ class Provider::Admin::Dashboard::NewAccountsControllerTest < ActionController::
   end
 
   test "should get show" do
-    xhr :get, :show
+    get :show, xhr: true
     assert_response :success
   end
 end
