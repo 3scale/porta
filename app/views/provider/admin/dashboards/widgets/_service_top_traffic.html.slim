@@ -3,7 +3,7 @@ article.DashboardWidget id = widget.id
   h1.DashboardWidget-title Top Applications
   span.DashboardWidget-intro Apps with consistently high traffic in the last 30 days
 
-  - widget_service_id = widget.params['service_id']
+  - widget_service_id = widget.params[:service_id]
 
   - if widget.loaded?
     - if widget.items.present?
