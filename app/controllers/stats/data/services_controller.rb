@@ -41,7 +41,7 @@ class Stats::Data::ServicesController < Stats::Data::BaseController
   ##~ op.parameters.add @parameter_metric_name
   #
   def top_applications
-    options = slice_and_use_defaults(params, :metric_name, :period, :since, :timezone)
+    options = slice_and_use_defaults(stats_params, :metric_name, :period, :since, :timezone)
 
     begin
       @data = @source.top_clients(options)
@@ -76,5 +76,13 @@ class Stats::Data::ServicesController < Stats::Data::BaseController
     rescue ActiveRecord::RecordNotFound
       render_error "Service not found", :status => :not_found
     end
+  end
+
+  def stats_params
+    required = %i[metric_name period since]
+
+    permitted_params = params.permit(required | %i[timezone])
+    permitted_params.require(required)
+    permitted_params
   end
 end
