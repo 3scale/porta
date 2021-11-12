@@ -8,13 +8,13 @@ class DeveloperPortal::Swagger::SpecControllerTest < ActionDispatch::Integration
   end
 
   def test_show
-    get developer_portal.swagger_spec_path(@active_doc), format: :json
+    get developer_portal.swagger_spec_path(@active_doc), params: { format: :json }
     assert_response :success
     assert_equal(@active_doc.body, response.body)
   end
 
   def test_show_404
-    get developer_portal.swagger_spec_path('undefined'), format: :json
+    get developer_portal.swagger_spec_path('undefined'), params: { format: :json }
     assert_response :not_found
     assert_equal({status: 'Not found'}.to_json, response.body)
   end
