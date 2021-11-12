@@ -1,5 +1,16 @@
 module TestHelpers
+  class TestVariables
+    include Singleton
+    attr_reader :previous_pagination_config
+
+    def initialize
+      super
+      @previous_pagination_config = Concurrent::Hash.new
+    end
+  end
+
   module ApiPagination
+
     extend ActiveSupport::Concern
 
     included do
@@ -7,8 +18,12 @@ module TestHelpers
       teardown(:reset_pagination_config!)
     end
 
+    def test_variables
+      ::TestHelpers::TestVariables.instance
+    end
+
     def set_api_pagination_max_per_page(opts)
-      config = @previous_pagination_config = {}
+      config = test_variables.previous_pagination_config
 
       Admin::Api::BaseController.class_eval do
         config[:per_page_range] = self.per_page_range
@@ -22,14 +37,16 @@ module TestHelpers
     end
 
     def reset_pagination_config!
-      config = @previous_pagination_config
-      return unless config
+      config = test_variables.previous_pagination_config
+      return if config.blank?
 
       Admin::Api::BaseController.class_eval do
         config.each_pair do |key, value|
           self.send("#{key}=", value)
         end
       end
+    ensure
+      config.clear
     end
 
   end
