@@ -15,7 +15,7 @@ module ThreeScale::Middleware
     end
 
     def call(env)
-      return @app.call(env) unless enabled?
+      return @app.call(env) if disabled? || signup_controller?(env)
 
       super
     end
@@ -26,6 +26,10 @@ module ThreeScale::Middleware
 
     delegate :enabled, to: :config
     alias enabled? enabled
+
+    def disabled?
+      !enabled?
+    end
 
     private
 
@@ -44,6 +48,10 @@ module ThreeScale::Middleware
           end
         end
       end
+    end
+
+    def signup_controller?(env)
+      evaluate_path(env).start_with? '/p/signup'
     end
   end
 end
