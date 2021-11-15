@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
+  include Rails.application.routes.url_helpers
+
   setup do
     provider = FactoryBot.create(:simple_provider)
     @provider_domain = provider.external_self_domain
@@ -68,10 +70,10 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
   end
 
   test 'signup path ignored' do
-    Rails.configuration.three_scale.cors.stubs(enabled: true, resources: '/p/signup')
+    Rails.configuration.three_scale.cors.stubs(enabled: true, resources: provider_signup_path)
 
     middleware = ThreeScale::Middleware::Cors.new(app)
-    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/p/signup'))
+    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => provider_signup_path))
     assert_equal 403, status
   end
 

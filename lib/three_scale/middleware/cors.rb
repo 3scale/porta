@@ -2,6 +2,8 @@
 
 module ThreeScale::Middleware
   class Cors < Rack::Cors
+    include Rails.application.routes.url_helpers
+
     def initialize(app, opts = {}, &block)
       super(app, opts) { set_config }
 
@@ -51,7 +53,7 @@ module ThreeScale::Middleware
     end
 
     def signup_controller?(env)
-      evaluate_path(env).start_with? '/p/signup'
+      evaluate_path(env).start_with? provider_signup_path # '/p/signup'
     end
   end
 end
