@@ -9,7 +9,7 @@ class Admin::Api::NginxesControllerTest < ActionController::TestCase
     provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     host! provider.admin_domain
 
-    get :spec, format: :json, provider_key: provider.api_key
+    get :spec, params: { format: :json, provider_key: provider.api_key }
 
     assert_response :success
     assert_equal provider.id, ActiveSupport::JSON.decode(@response.body)['id'].to_i
