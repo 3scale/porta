@@ -67,6 +67,14 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
     assert headers['Access-Control-Allow-Origin']
   end
 
+  test 'signup path ignored' do
+    Rails.configuration.three_scale.cors.stubs(enabled: true, resources: '/p/signup')
+
+    middleware = ThreeScale::Middleware::Cors.new(app)
+    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/p/signup'))
+    assert_equal 403, status
+  end
+
   protected
 
   def env
