@@ -23,20 +23,6 @@ class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     attr_reader :access_token
     delegate :value, to: :access_token, prefix: true
 
-    test 'index' do
-      FactoryBot.create(:metric, owner: backend_api, parent: backend_api.metrics.hits, service_id: nil) # a method metric
-      FactoryBot.create(:metric, owner: FactoryBot.create(:backend_api, account: provider), service_id: nil) # other backend api
-      FactoryBot.create(:metric, service: FactoryBot.create(:service, account: provider)) # owned by a service, not a backend api
-
-      get admin_api_backend_api_metrics_path(backend_api), params: { access_token: access_token_value }
-
-      assert_response :success
-      assert(response_metrics = JSON.parse(response.body)['metrics'])
-      assert_equal 3, response_metrics.length
-      response_metric_ids = response_metrics.map { |metric| metric.dig('metric', 'id') }
-      assert_same_elements backend_api.metrics.pluck(:id), response_metric_ids
-    end
-
     test 'show' do
       get admin_api_backend_api_metric_path(backend_api, metric), params: { access_token: access_token_value }
 
@@ -98,16 +84,6 @@ class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
         assert_response :success
       end
       assert_raises(ActiveRecord::RecordNotFound) { metric.reload }
-    end
-
-    test 'index can be paginated' do
-      FactoryBot.create_list(:metric, 5, owner: backend_api, service_id: nil)
-
-      get admin_api_backend_api_metrics_path(backend_api), params: { access_token: access_token_value, per_page: 3, page: 2 }
-
-      assert_response :success
-      response_ids = JSON.parse(response.body)['metrics'].map { |response| response.dig('metric', 'id') }
-      assert_equal backend_api.metrics.order(:id).offset(3).limit(3).select(:id).map(&:id), response_ids
     end
 
     test 'it cannot operate for metrics under a non-accessible backend api' do
