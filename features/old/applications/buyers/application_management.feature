@@ -147,7 +147,7 @@ Feature: Buyer's application management
       | App extra read only |
       | App extra hidden    |
 
-    When I press "Create application"
+    When I press "Create Application"
     Then I should see error in fields:
       | errors             |
       | Name               |
@@ -158,7 +158,7 @@ Feature: Buyer's application management
     And I fill in "Description" with "SuperApp"
     And I fill in "App extra required" with "MustBe"
 
-    When I press "Create application"
+    When I press "Create Application"
     Then I should see "MyApp"
       And I should see "SuperApp" in the "Description" field
       And I should see "MustBe" in the "App extra required" field
