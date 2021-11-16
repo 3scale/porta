@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
-
   def setup
     @account = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @account)
@@ -44,14 +45,14 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     params = provider_key_params.merge(proxy: { endpoint: 'https://alaska.wild' })
 
     ProxyDeploymentService.any_instance.expects(:deploy_staging_v2).times(2)
-    Proxy.update_all(apicast_configuration_driven: false)
+    Proxy.update_all(apicast_configuration_driven: false) # rubocop:disable Rails/SkipsModelValidations
 
     assert_no_change of: ProxyConfig.method(:count) do
-      put(admin_api_service_proxy_path(params))
+      put admin_api_service_proxy_path(params)
       assert_response :success
     end
 
-    Proxy.update_all(apicast_configuration_driven: true)
+    Proxy.update_all(apicast_configuration_driven: true) # rubocop:disable Rails/SkipsModelValidations
 
     put(admin_api_service_proxy_path(params))
     assert_response :success
@@ -59,9 +60,9 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
 
   def test_update_for_service_mesh
     rolling_updates_on
-    Proxy.update_all(apicast_configuration_driven: false)
+    Proxy.update_all(apicast_configuration_driven: false) # rubocop:disable Rails/SkipsModelValidations
     params = provider_key_params.merge(proxy: { credentials_location: 'headers' })
-    @service.update_column :deployment_option, 'service_mesh_istio'
+    @service.update(deployment_option: 'service_mesh_istio')
 
     assert_difference @service.proxy.proxy_configs.production.method(:count), +1 do
       put(admin_api_service_proxy_path(params))

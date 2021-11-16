@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTest
@@ -6,7 +8,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
   def setup
     @provider = FactoryBot.create(:simple_provider)
     @user = FactoryBot.create(:simple_admin, account: @provider)
-    @token = FactoryBot.create(:access_token, owner: @user, scopes: %w(account_management), permission: 'rw')
+    @token = FactoryBot.create(:access_token, owner: @user, scopes: %w[account_management], permission: 'rw')
 
     host! @provider.admin_domain
   end
@@ -128,7 +130,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     def setup
       @provider = FactoryBot.create(:simple_provider)
       @user = FactoryBot.create(:simple_admin, account: @provider)
-      @user.access_tokens.create!(name: 'API', scopes: %w(account_management), permission: 'ro') do |token|
+      @user.access_tokens.create!(name: 'API', scopes: %w[account_management], permission: 'ro') do |token|
         token.value = 'access_token'
       end
       ThreeScale.config.stubs(tenant_mode: 'multitenant')
@@ -156,7 +158,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
       ThreeScale.config.stubs(tenant_mode: 'master')
       ThreeScale.config.stubs(onpremises: true)
       user = FactoryBot.create(:simple_admin, account: master_account)
-      user.access_tokens.create!(name: 'API', scopes: %w(account_management), permission: 'ro') do |token|
+      user.access_tokens.create!(name: 'API', scopes: %w[account_management], permission: 'ro') do |token|
         token.value = 'master_access_token'
       end
 
@@ -194,7 +196,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     parts = {body: '{"hello": "world"}', name: 'Multipart request', access_token: @token.value}
     body = parts.map do |key, val|
       %(Content-Disposition: form-data; name="#{key}"\r\n\r\n#{val}\r\n)
-    end.join(boundary + "\r\n")
+    end.join("#{boundary}\r\n")
 
     "\r\n#{boundary}\r\n" + body + "#{boundary}--\r\n"
   end

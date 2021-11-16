@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = FactoryBot.create :provider_account, domain: 'yo-provider.example.com'
+    @provider = FactoryBot.create(:provider_account, domain: 'yo-provider.example.com')
     host! @provider.admin_domain
   end
 
   test 'get to show' do
-    get admin_api_provider_path(format: :json), provider_key: @provider.api_key
+    get admin_api_provider_path(format: :json), params: { provider_key: @provider.api_key }
 
     assert_response :success
 
@@ -20,8 +22,10 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
   end
 
   test 'update support emails test' do
-    put admin_api_provider_path(format: :json), provider_key: @provider.api_key, from_email: 'from@op.pl',
-                                  support_email: 'supsup@ssup.pl', finance_support_email: 'fino@op.pl'
+    put admin_api_provider_path(format: :json), params: { provider_key: @provider.api_key,
+                                                          from_email: 'from@op.pl',
+                                                          support_email: 'supsup@ssup.pl',
+                                                          finance_support_email: 'fino@op.pl' }
 
     assert_response :success
     @provider.reload
@@ -30,5 +34,4 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
     assert_equal 'supsup@ssup.pl', @provider.support_email
     assert_equal 'fino@op.pl',  @provider.finance_support_email
   end
-
 end
