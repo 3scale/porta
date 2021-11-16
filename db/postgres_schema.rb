@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210917163154) do
+ActiveRecord::Schema.define(version: 20211117094502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,9 +168,9 @@ ActiveRecord::Schema.define(version: 20210917163154) do
     t.string   "remote_address",  limit: 255
     t.string   "request_uuid",    limit: 255
     t.index ["action"], name: "index_audits_on_action", using: :btree
-    t.index ["associated_type", "associated_id"], name: "associated_index", using: :btree
+    t.index ["associated_id", "associated_type"], name: "associated_index", using: :btree
     t.index ["auditable_id", "auditable_type", "version"], name: "index_audits_on_auditable_id_and_auditable_type_and_version", using: :btree
-    t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index", using: :btree
+    t.index ["auditable_id", "auditable_type"], name: "auditable_index", using: :btree
     t.index ["created_at"], name: "index_audits_on_created_at", using: :btree
     t.index ["kind"], name: "index_audits_on_kind", using: :btree
     t.index ["provider_id"], name: "index_audits_on_provider_id", using: :btree
@@ -877,15 +877,13 @@ ActiveRecord::Schema.define(version: 20210917163154) do
   end
 
   create_table "payment_intents", force: :cascade do |t|
-    t.integer  "invoice_id",        null: false
-    t.string   "payment_intent_id"
+    t.integer  "invoice_id", null: false
     t.string   "state"
     t.bigint   "tenant_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "reference"
     t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id", using: :btree
-    t.index ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id", using: :btree
     t.index ["reference"], name: "index_payment_intents_on_reference", unique: true, using: :btree
     t.index ["state"], name: "index_payment_intents_on_state", using: :btree
   end
@@ -1304,7 +1302,7 @@ ActiveRecord::Schema.define(version: 20210917163154) do
     t.string   "tagger_type",   limit: 255
     t.string   "context",       limit: 255
     t.index ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+    t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx", using: :btree
   end
 
   create_table "tags", force: :cascade do |t|
@@ -1315,6 +1313,7 @@ ActiveRecord::Schema.define(version: 20210917163154) do
     t.bigint   "tenant_id"
     t.integer  "taggings_count",             default: 0
     t.index ["account_id"], name: "index_tags_on_account_id", using: :btree
+    t.index ["name", "tenant_id"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
   create_table "topic_categories", force: :cascade do |t|
