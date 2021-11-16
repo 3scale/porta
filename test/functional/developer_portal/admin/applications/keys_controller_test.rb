@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::Applications::KeysControllerTest < DeveloperPortal::ActionController::TestCase
@@ -21,7 +23,7 @@ class DeveloperPortal::Admin::Applications::KeysControllerTest < DeveloperPortal
   test 'provider can deny keys creation with the setting buyers_manage_apps' do
     @service.update_attribute :buyers_manage_apps, false
 
-    post :create, :application_id => @application.id
+    post :create, params: { :application_id => @application.id }
     assert_response 403
   end
 
@@ -29,39 +31,39 @@ class DeveloperPortal::Admin::Applications::KeysControllerTest < DeveloperPortal
     @service.update_attribute :buyers_manage_apps, true
     @service.update_attribute :buyers_manage_keys, false
 
-    post :create, :application_id => @application.id
+    post :create, params: { :application_id => @application.id }
     assert_response 403
   end
 
   test 'buyers can create keys' do
-    post :create, :application_id => @application.id
+    post :create, params: { :application_id => @application.id }
     assert_response :redirect
 
-    post :create, :application_id => @application.id, format: :js
+    post :create, params: { :application_id => @application.id, format: :js }
     assert_template 'developer_portal/admin/applications/keys/create'
   end
 
   test 'buyers can destroy keys' do
     @application.application_keys.add(key = 'app-key').save!
 
-    delete :destroy, :application_id => @application.id, id: key
+    delete :destroy, params: { :application_id => @application.id, id: key }
     assert_response :redirect
 
     @application.application_keys.add(key).save!
 
-    delete :destroy, :application_id => @application.id, id: key, format: :js
+    delete :destroy, params: { :application_id => @application.id, id: key, format: :js }
     assert_template 'developer_portal/admin/applications/keys/destroy'
   end
 
   test 'buyers can regenerate keys' do
     @application.application_keys.add(key = 'app-key').save!
 
-    put :regenerate, :application_id => @application.id, id: key
+    put :regenerate, params: { :application_id => @application.id, id: key }
     assert_response :redirect
 
     @application.application_keys.add(key).save!
 
-    put :regenerate, :application_id => @application.id, id: key, format: :js
+    put :regenerate, params: { :application_id => @application.id, id: key, format: :js }
     assert_template 'developer_portal/admin/applications/keys/regenerate'
   end
 end
