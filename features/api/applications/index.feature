@@ -11,4 +11,4 @@ Feature: Product > Applications index
 
   Scenario: Create a new application from Account context
     And I go to the product context applications page for "API"
-    Then I should see link "Create Application"
+    Then I should see link "Create application"
