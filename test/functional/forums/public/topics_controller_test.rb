@@ -18,10 +18,10 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       login_as @provider.admins.first
 
       # missing title
-      post :create, topic: { body: 'No idea why I wrote that.' }
+      post :create, params: { topic: { body: 'No idea why I wrote that.' } }
       assert_response :success
 
-      post :create, topic: { title: 'The king has returned!',  body: 'No idea why I wrote that.' }
+      post :create, params: { topic: { title: 'The king has returned!',  body: 'No idea why I wrote that.' } }
       assert_response :redirect
     end
 
@@ -29,10 +29,10 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       login_as @provider.admins.first
 
       # empty title
-      put :update, :id => @topic.permalink, topic: { title: '', body: 'new thing' }
+      put :update, params: { id: @topic.permalink, topic: { title: '', body: 'new thing' } }
       assert_response :success
 
-      put :update, :id => @topic.permalink, topic: { title: 'HOT STUFF', body: 'new thing' }
+      put :update, params: { id: @topic.permalink, topic: { title: 'HOT STUFF', body: 'new thing' } }
       assert_response :redirect
     end
 
@@ -43,7 +43,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       end
 
       should "anonymous have a hidden field" do
-        get :show, :id => @topic.permalink
+        get :show, params: { id: @topic.permalink }
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user[type=hidden]'
       end
@@ -52,7 +52,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       should "provider has a field" do
         login_as @provider.admins.first
 
-        get :show, :id => @topic.permalink
+        get :show, params: { id: @topic.permalink }
 
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user'
@@ -63,7 +63,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
         buyer = FactoryBot.create :buyer_account, :provider_account => @provider
         login_as buyer.admins.first
 
-        get :show, :id => @topic.permalink
+        get :show, params: { id: @topic.permalink }
         assert_match @topic.body, @response.body
 
         assert_select 'input#post_anonymous_user'
@@ -77,7 +77,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       end
 
       should "not have fields for anonymous" do
-        get :show, :id => @topic.permalink
+        get :show, params: { id: @topic.permalink }
 
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user', count: 0
@@ -87,7 +87,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       should "not have fields when logged in as a provider" do
         login_as @provider.admins.first
 
-        get :show, :id => @topic.permalink
+        get :show, params: { id: @topic.permalink }
 
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user', count: 0
@@ -97,7 +97,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
         buyer = FactoryBot.create :buyer_account, :provider_account => @provider
         login_as buyer.admins.first
 
-        get :show, :id => @topic.permalink
+        get :show, params: { id: @topic.permalink }
 
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user', count: 0
@@ -110,7 +110,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
     post1  = FactoryBot.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
     post2  = FactoryBot.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
 
-    get :show, :id => @topic.permalink
+    get :show, params: { id: @topic.permalink }
 
     posts = assigns(:posts)
 
