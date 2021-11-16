@@ -9,7 +9,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
   end
 
   test 'create user' do
-    post :create, provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", first_name: "foo_name", last_name: "foo_last_name", open_id: "bar_id", username: "aaron"
+    post :create, params: { provider_id: @account.id, api_key: @partner.api_key, email: "foo@example.net", first_name: "foo_name", last_name: "foo_last_name", open_id: "bar_id", username: "aaron" }
 
     user = assigns(:user)
 
@@ -29,7 +29,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
 
   test 'show user' do
     user = FactoryBot.create(:simple_user, account: @account, open_id: "lalala")
-    get :show, provider_id: @account.id, api_key: @partner.api_key, id: user.id
+    get :show, params: { provider_id: @account.id, api_key: @partner.api_key, id: user.id }
     body = JSON.parse(response.body)
 
     assert_equal "lalala", body["user"]["open_id"]
@@ -38,7 +38,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
   test 'find a user by open_id' do
     user = FactoryBot.create(:simple_user, account: @account, open_id: "abcde")
 
-    get :index, provider_id: @account.id, api_key: @partner.api_key, open_id: "abcde"
+    get :index, params: { provider_id: @account.id, api_key: @partner.api_key, open_id: "abcde" }
 
     users = assigns(:users)
 
@@ -48,7 +48,7 @@ class Partners::UsersControllerTest < ActionController::TestCase
   test 'delete a user' do
     user = FactoryBot.create(:simple_user, account: @account)
 
-    delete :destroy, provider_id: @account.id, api_key: @partner.api_key, id: user.id
+    delete :destroy, params: { provider_id: @account.id, api_key: @partner.api_key, id: user.id }
 
     refute User.find_by_id(user.id)
     assert JSON.parse(response.body)
