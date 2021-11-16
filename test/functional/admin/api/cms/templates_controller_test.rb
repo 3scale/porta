@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
@@ -13,7 +15,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       portlet = FactoryBot.create(:cms_portlet, provider: @provider,
         portlet_type: portlet_type.to_s, type: portlet_type.to_s)
 
-      get :show, id: portlet.id, format: :xml, access_token: @token
+      get :show, params: { id: portlet.id, format: :xml, access_token: @token }
 
       assert_response :success
       assert_equal 0, xml_elements_by_key(@response.body, 'builtin_partial').count
@@ -24,7 +26,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   def test_show_builtin_partial
     partial = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
-    get :show, id: partial.id, format: :xml, access_token: @token
+    get :show, params: { id: partial.id, format: :xml, access_token: @token }
 
     assert_response :success
     assert_equal 1, xml_elements_by_key(@response.body, 'builtin_partial').count
@@ -32,8 +34,8 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   end
 
   def test_create
-    post :create, section_name: { '0' => 'foooo' }, template: { type: 'page',
-      title: 'About', path: '/about' }, format: :json, access_token: @token
+    post :create, params: { section_name: { '0' => 'foooo' }, template: { type: 'page',
+      title: 'About', path: '/about' }, format: :json, access_token: @token }
 
     assert_response :success
   end
@@ -41,7 +43,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   def test_destroy_success
     page = FactoryBot.create(:cms_page, provider: @provider)
 
-    delete :destroy, id: page.id, format: :json, access_token: @token
+    delete :destroy, params: { id: page.id, format: :json, access_token: @token }
 
     assert_response :success
   end
@@ -50,7 +52,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
     # builtin pages cannot be destroyed
     page = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
-    delete :destroy, id: page.id, format: :json, access_token: @token
+    delete :destroy, params: { id: page.id, format: :json, access_token: @token }
 
     assert_response :locked
   end

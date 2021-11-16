@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
@@ -28,12 +30,12 @@ class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
   end
 
   def test_update
-    put :update, @params
+    put :update, params: @params
     assert_response :success
   end
 
   test '2-digit expiry year' do
-    put :update, @params
+    put :update, params: @params
     assert_response :success
     assert_equal '2025-03-01', @buyer.reload.credit_card_expires_on.to_s
   end
@@ -41,13 +43,13 @@ class Admin::Api::CreditCardsControllerTest < ActionController::TestCase
   test '4-digit expiry year' do
     @params[:credit_card_expiration_year] = '2025'
 
-    put :update, @params
+    put :update, params: @params
     assert_response :success
     assert_equal '2025-03-01', @buyer.reload.credit_card_expires_on.to_s
   end
 
   def test_delete
-    delete :destroy, id: @buyer.provider_account_id, account_id: @buyer.id, format: :xml, access_token: @token
+    delete :destroy, params: { id: @buyer.provider_account_id, account_id: @buyer.id, format: :xml, access_token: @token }
     assert_response :success
   end
 end

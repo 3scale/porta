@@ -16,7 +16,7 @@ class Admin::UpgradeNoticesControllerTest < ActionController::TestCase
     :multiple_services, :multiple_applications, :multiple_users,
     :groups, :branding ].map(&:to_s).each do |switch|
       test switch do
-        get :show, id: switch
+        get :show, params: { id: switch }
         assert_response :success
         assert_template 'feature_not_available'
       end
