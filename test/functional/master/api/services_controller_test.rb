@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Master::Api::ServicesControllerTest < ActionController::TestCase
@@ -6,7 +8,7 @@ class Master::Api::ServicesControllerTest < ActionController::TestCase
   end
 
   test 'required master api_key' do
-    delete :destroy, api_key: 'invalid-api-key', id: 42, provider_id: 42
+    delete :destroy, params: { api_key: 'invalid-api-key', id: 42, provider_id: 42 }
 
     assert_response 401
     assert_equal 'unauthorized', response.body
@@ -23,7 +25,7 @@ class Master::Api::ServicesControllerTest < ActionController::TestCase
     method_notification_event_count    = RailsEventStoreActiveRecord::Event.where(event_type: NotificationEvent).method(:count)
     assert_difference(method_notification_event_count, +1) do
       assert_difference(method_service_deleted_event_count, +1) do
-        delete :destroy, id: service.id, provider_id: provider.id, api_key: master_account.provider_key
+        delete :destroy, params: { id: service.id, provider_id: provider.id, api_key: master_account.provider_key }
       end
     end
 
