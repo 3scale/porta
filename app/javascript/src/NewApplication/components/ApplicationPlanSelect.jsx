@@ -20,9 +20,9 @@ const ApplicationPlanSelect = ({ appPlan, product, onSelect, createApplicationPl
 
   const hint = (
     <p className="hint">
-      {"An Application needs to subscribe to a Product's Application plan, and no Application plans exist for the selected Product. "}
+      {"An application must subscribe to a product's application plan. No application plans exist for the selected product. "}
       <Button component="a" variant="link" href={createApplicationPlanPath} isInline>
-        Create a new Application plan
+        Create a new application plan
       </Button>
     </p>
   )

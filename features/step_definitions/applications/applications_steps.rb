@@ -179,19 +179,19 @@ end
 When /^I create an application "([^"]*)" from the audience context/ do |name|
   visit path_to 'the provider new application page'
   fill_in_new_application_form(name: name)
-  click_on 'Create Application'
+  click_on 'Create application'
 end
 
 When /^I create an application "([^"]*)" from the account "([^"]*)" context/ do |name, account_name|
   visit path_to %(the account context create application page for "#{account_name}")
   fill_in_new_application_form(name: name)
-  click_on 'Create Application'
+  click_on 'Create application'
 end
 
 When /^I create an application "([^"]*)" from the product "([^"]*)" context/ do |name, service_name|
   visit path_to %(the product context create application page for "#{service_name}")
   fill_in_new_application_form(name: name)
-  click_on 'Create Application'
+  click_on 'Create application'
 end
 
 When 'I fill in the new application form' do
@@ -217,21 +217,21 @@ end
 When 'I should not be allowed to create more applications' do
   visit path_to 'the provider new application page'
   fill_in_new_application_form
-  click_on 'Create Application'
+  click_on 'Create application'
   assert has_content?('Access Denied')
 end
 
 When /^buyer "([^"]*)" should not be allowed to create more applications/ do |buyer_name|
   visit path_to %(the account context create application page for "#{buyer_name}")
   fill_in_new_application_form
-  click_on 'Create Application'
+  click_on 'Create application'
   assert has_content?('Access Denied')
 end
 
 When /^I should not be allowed to create more applications for product "([^"]*)"/ do |service_name|
   visit path_to %(the product context create application page for "#{service_name}")
   fill_in_new_application_form
-  click_on 'Create Application'
+  click_on 'Create application'
   assert has_content?('Access Denied')
 end
 
