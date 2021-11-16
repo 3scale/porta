@@ -36,7 +36,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     ThreeScale::Analytics::UserTracking.any_instance.expects(:track).once.with('Signup', {})
 
     assert_difference('Account.providers.count', 1) do
-      post :create, provider_params
+      post :create, params: provider_params
     end
 
     assert_response 200
@@ -74,7 +74,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with specific password' do
     prepare_master_account
-    post :create, provider_params.merge(password: 'foobar123')
+    post :create, params: provider_params.merge(password: 'foobar123')
     user = assigns(:user)
     account = assigns(:account)
     strategy = Authentication::Strategy::Internal.new(account, true)
@@ -85,7 +85,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with an invalid email' do
     prepare_master_account
-    post :create, provider_params.merge(email: 'invalid')
+    post :create, params: provider_params.merge(email: 'invalid')
     body = JSON.parse(response.body)
     refute body["success"]
     assert body["errors"]["user"]["email"].present?
@@ -95,7 +95,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
   test 'post with a existing subdomain' do
     prepare_master_account
     FactoryBot.create(:simple_provider, provider_account: master_account, subdomain: "taken-#{@partner.system_name}", partner: @partner)
-    post :create, provider_params.merge(subdomain: 'taken')
+    post :create, params: provider_params.merge(subdomain: 'taken')
 
     body = JSON.parse(response.body)
     refute body["success"]
@@ -105,7 +105,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
 
   test 'post with different plan' do
     prepare_master_account
-    post :create, provider_params.merge(application_plan: @partner.application_plans.last.system_name)
+    post :create, params: provider_params.merge(application_plan: @partner.application_plans.last.system_name)
     assert_equal assigns(:account).bought_cinstance.plan, @partner.application_plans.last
     body = JSON.parse(response.body)
     assert_equal body['success'], true
@@ -116,13 +116,13 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     account = FactoryBot.create(:provider_account, subdomain: 'troloro', org_name: 'foo-org', provider_account: master_account, partner: @partner)
 
     # upgrade
-    put :update, id: account.id, application_plan: @partner.application_plans.last.system_name, api_key: @partner.api_key
+    put :update, params: { id: account.id, application_plan: @partner.application_plans.last.system_name, api_key: @partner.api_key }
     assert_equal account.reload.bought_cinstance.plan, @partner.application_plans.last
     body = JSON.parse(response.body)
     assert_equal body['success'], true
 
     # downgrade
-    put :update, id: account.id, application_plan: @partner.application_plans.first.system_name, api_key: @partner.api_key
+    put :update, params: { id: account.id, application_plan: @partner.application_plans.first.system_name, api_key: @partner.api_key }
     assert_equal account.reload.bought_cinstance.plan, @partner.application_plans.first
     body = JSON.parse(response.body)
     assert_equal body['success'], true
@@ -132,7 +132,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     prepare_master_account
     account = FactoryBot.create(:provider_account, provider_account: master_account, partner: @partner)
     user = account.admin_users.first!
-    delete :destroy, id: account.id, api_key: @partner.api_key
+    delete :destroy, params: { id: account.id, api_key: @partner.api_key }
     assert_raise(ActiveRecord::RecordNotFound){ account.reload }
     assert_raise(ActiveRecord::RecordNotFound){ user.reload }
     body = JSON.parse(response.body)
