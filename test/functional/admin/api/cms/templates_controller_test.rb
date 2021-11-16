@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
@@ -32,8 +34,8 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
   end
 
   def test_create
-    post :create, params: { section_name: { '0' => 'foooo' }, type: 'page',
-      title: 'About', path: '/about', format: :json, access_token: @token }
+    post :create, params: { section_name: { '0' => 'foooo' }, template: { type: 'page',
+      title: 'About', path: '/about' }, format: :json, access_token: @token }
 
     assert_response :success
   end
