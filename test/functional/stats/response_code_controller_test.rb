@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class Stats::ResponseCodesControllerTest < ActionController::TestCase
@@ -10,7 +12,7 @@ class Stats::ResponseCodesControllerTest < ActionController::TestCase
   end
 
   test "assigns service" do
-    get :show, service_id: @service.id
+    get :show, params: { service_id: @service.id }
     assert_equal @service, assigns(:service)
   end
 end

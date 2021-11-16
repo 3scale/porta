@@ -15,8 +15,8 @@ class Stats::Api::ServicesControllerTest < ActionController::TestCase
   test 'csv format for errors' do
     setup_data
 
-    get :usage, format: :csv, service_id: @provider.default_service.id, period: 'troloro'
-    assert_match /text\/plain/, response.header['Content-Type']
+    get :usage, params: { format: :csv, service_id: @provider.default_service.id, period: 'troloro' }
+    assert_match %r{text/plain}, response.header['Content-Type']
     assert_equal 400, response.status
   end
 
