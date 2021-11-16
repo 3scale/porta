@@ -379,6 +379,12 @@ module TestHelpers
       assert_xml_nodes xml, ".//service", attrs
     end
 
+    def assert_applications_count(doc, count)
+      xml = Nokogiri::XML::Document.parse(doc)
+
+      assert_equal count, xml.xpath('.//applications/application').size
+    end
+
     def assert_applications(doc, attrs = {})
       xml = Nokogiri::XML::Document.parse(doc)
 
