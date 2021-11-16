@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Buyers::ApplicationsControllerTest < ActionController::TestCase
@@ -16,9 +18,9 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
     buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
     assert_no_difference Cinstance.method(:count) do
-      post :create, account_id: buyer.id, cinstance: {
+      post :create, params: { account_id: buyer.id, cinstance: {
         plan_id: @plan.id, service_plan_id: service_plan.id
-      }
+      } }
     end
     assert_response 200
   end
@@ -28,10 +30,10 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
     buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
     assert_difference Cinstance.method(:count) do
-      post :create, account_id: buyer.id, cinstance: {
+      post :create, params: { account_id: buyer.id, cinstance: {
         plan_id: @plan.id, service_plan_id: service_plan.id,
-        :name => 'whatever'
-      }
+        name: 'whatever'
+      } }
     end
     assert_response :redirect
   end
@@ -42,9 +44,9 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
 
     buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
-    post :create, account_id: buyer.id, cinstance: {
+    post :create, params: { account_id: buyer.id, cinstance: {
       name: 'whatever', plan_id: @plan.id, service_plan_id: service_plan2.id
-    }
+    } }
 
     buyer.reload
     assert buyer.bought_service_contracts.map(&:service_plan).include?(service_plan2), "Should include the service_plan2"
@@ -54,16 +56,16 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
     service_plan = FactoryBot.create(:service_plan, service: @service)
     buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
 
-    post :create, account_id: buyer.id, cinstance: {
+    post :create, params: { account_id: buyer.id, cinstance: {
       name: 'whatever', plan_id: @plan.id, service_plan_id: service_plan.id
-    }
+    } }
 
     buyer.reload
     assert_equal buyer.bought_service_contracts.count, 1
 
-    post :create, account_id: buyer.id, cinstance: {
+    post :create, params: { account_id: buyer.id, cinstance: {
       name: 'whatever', plan_id: @plan.id, service_plan_id: service_plan.id
-    }
+    } }
 
     buyer.reload
     assert_equal buyer.bought_service_contracts.count, 1
@@ -98,9 +100,9 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
         fake_backend_get_keys('key', params[:id], params[:service_id], @provider.api_key)
       end
 
-      post :create, :account_id => buyer.id, :cinstance => {
-        :name => 'whatever', :plan_id => @plan.id
-      }
+      post :create, params: { account_id: buyer.id, cinstance: {
+        name: 'whatever', plan_id: @plan.id
+      } }
 
       assert_response :redirect
 

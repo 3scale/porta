@@ -14,7 +14,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     login_provider @provider
 
-    post :activate, { id: user.id, account_id: @buyer.id }
+    post :activate, params: { id: user.id, account_id: @buyer.id }
 
     assert_response :redirect
     assert_not_nil flash[:error]
@@ -29,7 +29,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     assert_equal false, @buyer.onboarding.persisted?
 
-    post :activate, { id: user.id, account_id: @buyer.id }
+    post :activate, params: { id: user.id, account_id: @buyer.id }
 
     assert_equal true, @buyer.reload.onboarding.persisted?
   end
@@ -42,7 +42,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     login_provider @provider
 
-    post :activate, { id: first_user.id, account_id: @buyer.id }
+    post :activate, params: { id: first_user.id, account_id: @buyer.id }
 
     error_message = 'Failed to activate user: ' << I18n.t('errors.messages.duplicated_user_provider_side')
 
@@ -57,7 +57,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     request.env['HTTP_REFERER'] = index_url
 
-    post :activate, { id: user.id, account_id: @buyer.id }
+    post :activate, params: { id: user.id, account_id: @buyer.id }
 
     assert_redirected_to index_url
   end
@@ -69,7 +69,7 @@ class Buyers::UsersControllerTest < ActionController::TestCase
 
     request.env['HTTP_REFERER'] = nil
 
-    post :activate, { id: user.id, account_id: @buyer.id }
+    post :activate, params: { id: user.id, account_id: @buyer.id }
 
     assert_response :redirect
   end
