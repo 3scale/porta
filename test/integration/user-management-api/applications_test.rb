@@ -231,21 +231,21 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.save!
     end
 
-    should 'index on backend oauth' do
+    test 'index on backend oauth' do
       get admin_api_applications_path(format: :xml), params: params
 
       assert_response :success
       assert_applications @response.body, backend: :oauth
     end
 
-    should 'find by id' do
+    test 'find by id' do
       get find_admin_api_applications_path(format: :xml), params: params.merge({ application_id: @application.id })
 
       assert_response :success
       assert_application(@response.body, target)
     end
 
-    should 'find by app_id' do
+    test 'find by app_id' do
       get find_admin_api_applications_path(format: :xml), params: params.merge({ app_id: @application.application_id })
 
       assert_response :success
@@ -260,21 +260,21 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.save!
     end
 
-    should 'index on backend v1' do
+    test 'index on backend v1' do
       get admin_api_applications_path(format: :xml), params: params
 
       assert_response :success
       assert_applications @response.body, backend: '1'
     end
 
-    should 'find by user_key' do
+    test 'find by user_key' do
       get find_admin_api_applications_path(format: :xml), params: params.merge({ user_key: @application.user_key })
 
       assert_response :success
       assert_application(@response.body, { id: @application.id, user_key: @application.user_key })
     end
 
-    should 'find by id' do
+    test 'find by id' do
       get find_admin_api_applications_path(format: :xml), params: params.merge({ application_id: @application.id })
 
       assert_response :success
@@ -289,21 +289,21 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
       @service.save!
     end
 
-    should 'index on backend v2' do
+    test 'index on backend v2' do
       get admin_api_applications_path(format: :xml), params: params
 
       assert_response :success
       assert_applications @response.body, backend: '2'
     end
 
-    should 'find by id' do
+    test 'find by id' do
       get find_admin_api_applications_path(format: :xml), params: params.merge({ application_id: @application.id })
 
       assert_response :success
       assert_application(@response.body, target)
     end
 
-    should 'find by app_id' do
+    test 'find by app_id' do
       get find_admin_api_applications_path(format: :xml), params: params.merge({ app_id: @application.application_id })
 
       assert_response :success
