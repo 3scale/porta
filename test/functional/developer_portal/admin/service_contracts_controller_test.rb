@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 
@@ -17,8 +19,8 @@ class DeveloperPortal::Admin::ServiceContractsControllerTest <  DeveloperPortal:
 
   test "new accepts optional :service_id parameter" do
     carnivore_plan = FactoryBot.create(:service_plan,
-                             :name => 'Carnivore',
-                             :issuer => @provider.services.first)
+                                       :name => 'Carnivore',
+                                       :issuer => @provider.services.first)
     carnivore_plan.publish!
 
     second = FactoryBot.create(:service, :account => @provider)
@@ -26,7 +28,7 @@ class DeveloperPortal::Admin::ServiceContractsControllerTest <  DeveloperPortal:
     herbivore_plan = FactoryBot.create(:service_plan,  :name => 'Herbivore', :issuer => second)
     herbivore_plan.publish!
 
-    get :new, :service_id => second.id
+    get :new, params: { :service_id => second.id }
 
     assert_response :success
     assert_not_match /Carnivore/, @response.body

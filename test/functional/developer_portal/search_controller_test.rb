@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::SearchControllerTest < DeveloperPortal::ActionController::TestCase
@@ -7,7 +9,7 @@ class DeveloperPortal::SearchControllerTest < DeveloperPortal::ActionController:
     provider.settings.update_attribute(:public_search, false)
     request.host = provider.domain
 
-    get :index, format: 'json', q: 'stuff'
+    get :index, params: { format: 'json', q: 'stuff' }
 
     assert_json 'status' => 'Forbidden'
   end
@@ -16,10 +18,10 @@ class DeveloperPortal::SearchControllerTest < DeveloperPortal::ActionController:
     provider = FactoryBot.create(:provider_account)
     provider.settings.update_attribute(:public_search, true)
     request.host = provider.domain
-    SearchPresenters::IndexPresenter.any_instance.stubs(search_results: [ 'stuff' ])
+    SearchPresenters::IndexPresenter.any_instance.stubs(search_results: ['stuff'])
 
-    get :index, format: 'json', q: 'stuff'
+    get :index, params: { format: 'json', q: 'stuff' }
 
-    assert_json [ 'stuff' ]
+    assert_json ['stuff']
   end
 end
