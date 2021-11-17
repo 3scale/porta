@@ -7,7 +7,7 @@ class Provider::Admin::Dashboard::Service::TopTrafficControllerTest < ActionCont
   end
 
   test "should get show" do
-    xhr :get, :show, service_id: FactoryBot.create(:simple_service, account: @provider)
+    get :show, params: { service_id: FactoryBot.create(:simple_service, account: @provider) }, xhr: true
     assert_response :success
   end
 end
