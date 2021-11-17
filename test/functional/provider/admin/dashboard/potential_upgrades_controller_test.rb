@@ -7,7 +7,7 @@ class Provider::Admin::Dashboard::PotentialUpgradesControllerTest < ActionContro
   end
 
   test "should get show" do
-    xhr :get, :show
+    get :show, xhr: true
     assert_response :success
   end
 

@@ -35,7 +35,7 @@ class Provider::Admin::User::NotificationPreferencesControllerTest < ActionContr
   end
 
   test 'should update list of notification preferences' do
-    patch :update, notification_preferences: { enabled_notifications: %w[application_created] }
+    patch :update, params: { notification_preferences: { enabled_notifications: %w[application_created] } }
     assert_response :redirect
     assert_redirected_to action: :show
   end
@@ -44,7 +44,7 @@ class Provider::Admin::User::NotificationPreferencesControllerTest < ActionContr
     NotificationPreferences.delete_all
 
     assert_difference NotificationPreferences.method(:count) do
-      patch :update, notification_preferences: { enabled_notifications: %w[application_created] }
+      patch :update, params: { notification_preferences: { enabled_notifications: %w[application_created] } }
       assert_response :redirect
       assert_redirected_to action: :show
     end
