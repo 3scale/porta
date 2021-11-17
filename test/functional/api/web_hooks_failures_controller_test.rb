@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::WebHooksFailuresControllerTest < ActionController::TestCase
@@ -12,14 +14,14 @@ class Admin::Api::WebHooksFailuresControllerTest < ActionController::TestCase
   test '#destroy should rescue_form ArgumentError' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
-    delete :destroy, time: '323123122', access_token: @token
+    delete :destroy, params: { time: '323123122', access_token: @token }
     assert_response 400
   end
 
   test '#destroy without the permission' do
     Settings::Switch.any_instance.stubs(:allowed?).returns(false)
 
-    delete :destroy, time: '323123122', access_token: @token
+    delete :destroy, params: { time: '323123122', access_token: @token }
     assert_response :forbidden
   end
 end
