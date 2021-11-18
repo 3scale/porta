@@ -227,7 +227,7 @@ module System
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
-    config.middleware.insert_before 0, ThreeScale::Middleware::Cors
+    config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
 
     config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
 
