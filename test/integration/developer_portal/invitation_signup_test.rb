@@ -108,7 +108,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     assert_difference '@buyer.users.count' do
       post invitee_signup_path(invitation_token: @invitation.token, user: user_valid_params)
       assert_response :redirect
-      assert_empty @buyer.users(true).last.sso_authorizations
+      assert_empty @buyer.users.reload.last.sso_authorizations
     end
 
     client = mock('client')
@@ -121,7 +121,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     assert_difference '@buyer.users.count', +1 do
       post invitee_signup_path(invitation_token: @invitation.token, user: user_valid_params)
       assert_response :redirect
-      assert_not_empty authorizations = @buyer.users(true).order(:id).last.sso_authorizations
+      assert_not_empty authorizations = @buyer.users.reload.order(:id).last.sso_authorizations
       assert_equal ['alaska'], authorizations.pluck(:uid)
     end
   end
