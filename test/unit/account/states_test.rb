@@ -1,13 +1,15 @@
 require 'test_helper'
 
 class Account::StatesTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   test '.without_suspended' do
     accounts = FactoryBot.create_list(:simple_provider, 2)
     accounts.first.suspend!
 
     ids_without_suspended = Account.without_suspended.pluck(:id)
     assert_not_includes ids_without_suspended, accounts.first.id
-    assert_includes     ids_without_suspended, accounts.last.id
+    assert_includes ids_without_suspended, accounts.last.id
   end
 
   test '.without_deleted' do
@@ -16,7 +18,7 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     ids_without_deleted = Account.without_deleted.pluck(:id)
     assert_not_includes ids_without_deleted, accounts.first.id
-    assert_includes     ids_without_deleted, accounts.last.id
+    assert_includes ids_without_deleted, accounts.last.id
 
     ids_with_deleted = Account.without_deleted(false).pluck(:id)
     assert_includes ids_with_deleted, accounts.first.id
@@ -30,8 +32,8 @@ class Account::StatesTest < ActiveSupport::TestCase
                                       .with(account, 'approved').once
 
     PublishEnabledChangedEventForProviderApplicationsWorker
-        .expects(:perform_later)
-        .with(account, 'approved').once
+      .expects(:perform_later)
+      .with(account, 'approved').once
 
     account.make_pending!
   end
@@ -41,11 +43,11 @@ class Account::StatesTest < ActiveSupport::TestCase
     account.schedule_for_deletion!
 
     Accounts::AccountStateChangedEvent.expects(:create)
-        .with(account, 'approved').never
+                                      .with(account, 'approved').never
 
     PublishEnabledChangedEventForProviderApplicationsWorker
-        .expects(:perform_later)
-        .with(account, 'approved').never
+      .expects(:perform_later)
+      .with(account, 'approved').never
 
     account.schedule_for_deletion!
   end
@@ -58,9 +60,9 @@ class Account::StatesTest < ActiveSupport::TestCase
   test 'approve! transitions from pending to approved' do
     account = FactoryBot.create(:pending_account)
 
-    assert_change :of   => -> { account.state },
+    assert_change :of => -> { account.state },
                   :from => "pending",
-                  :to   => "approved" do
+                  :to => "approved" do
       account.approve!
     end
   end
@@ -69,9 +71,9 @@ class Account::StatesTest < ActiveSupport::TestCase
     account = FactoryBot.create(:pending_account)
     account.reject!
 
-    assert_change :of   => -> { account.state },
+    assert_change :of => -> { account.state },
                   :from => "rejected",
-                  :to   => "approved" do
+                  :to => "approved" do
       account.approve!
     end
   end
@@ -90,38 +92,41 @@ class Account::StatesTest < ActiveSupport::TestCase
   #
   # end
 
-  test 'sends notification email when account is made pending' do
+  test 'enqueues notification email when account is made pending' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    AccountMailer.any_instance.expects(:confirmed)
-    account.make_pending!
-
+    assert_enqueued_with(job: ActionMailer::DeliveryJob, args: ["AccountMailer", "confirmed", "deliver_now", account]) do
+      account.make_pending!
+    end
   end
 
-  test 'sends notification email when account is rejected' do
+  test 'enqueues notification email when account is rejected' do
     account = FactoryBot.create(:buyer_account_with_provider)
-    AccountMailer.any_instance.expects(:rejected)
-    account.reject!
+    assert_enqueued_with(job: ActionMailer::DeliveryJob, args: ["AccountMailer", "rejected", "deliver_now", account]) do
+      account.reject!
+    end
   end
 
-  test 'sends notification email when buyer account is approved' do
+  test 'enqueues notification email when buyer account is approved' do
     account = FactoryBot.create(:buyer_account_with_provider)
 
     account.update_attribute(:state, 'pending')
     account.buy! FactoryBot.create(:account_plan, :approval_required => true)
     account.reload
 
-    AccountMailer.any_instance.expects(:approved)
-    account.approve!
+    assert_enqueued_with(job: ActionMailer::DeliveryJob, args: ["AccountMailer", "approved", "deliver_now", account]) do
+      account.approve!
+    end
 
   end
 
-  test 'does not send notification email when non buyer account is approved' do
+  test 'does not enqueue notification email when non buyer account is approved' do
     AccountMailer.any_instance.expects(:approved).never
 
     account = FactoryBot.create(:pending_account)
-    account.approve!
+    assert_no_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      account.approve!
+    end
   end
-
 
   test 'suspend account' do
     account = Account.new(state: 'approved', domain: 'foo', self_domain: 'foobar', org_name: 'foo')
@@ -179,7 +184,7 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     results = Account.deleted_since.pluck(:id)
     assert_not_includes results, account_deleted_recently.id
-    assert_includes     results, account_deleted_long_ago.id
+    assert_includes results, account_deleted_long_ago.id
     assert_not_includes results, account_not_deleted.id
   end
 
@@ -219,8 +224,8 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     assert_raise(ArgumentError) { Account.inactive_since.pluck(:id) }
     results = Account.inactive_since(inactive_since_days.ago).pluck(:id)
-    assert_includes     results, old_account_without_traffic.id
-    assert_includes     results, old_account_with_old_traffic.id
+    assert_includes results, old_account_without_traffic.id
+    assert_includes results, old_account_with_old_traffic.id
     assert_not_includes results, recent_account_without_traffic.id
     assert_not_includes results, recent_account_with_recent_traffic.id
   end
@@ -238,11 +243,10 @@ class Account::StatesTest < ActiveSupport::TestCase
 
     assert_raise(ArgumentError) { Account.without_traffic_since.pluck(:id) }
     results = Account.without_traffic_since(inactive_since_days.ago).pluck(:id)
-    assert_includes     results, account_without_traffic.id
-    assert_includes     results, account_with_old_traffic.id
+    assert_includes results, account_without_traffic.id
+    assert_includes results, account_with_old_traffic.id
     assert_not_includes results, account_with_recent_traffic.id
   end
-
 
   class CallbacksTest < ActiveSupport::TestCase
 
