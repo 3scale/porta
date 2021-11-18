@@ -96,7 +96,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination per_page has a maximum allowed' do
-    # Two applications because pagination test be shown only if needed, so total_entries > per_page
+    # Two applications because pagination should be shown only if needed, so total_entries > per_page
     application_plan = FactoryBot.create :application_plan, issuer: @provider.first_service!
     @buyer.buy! application_plan
 
@@ -109,7 +109,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination page defaults to 1 for invalid values' do
-    # Two applications because pagination test be shown only if needed, so total_entries > per_page
+    # Two applications because pagination should be shown only if needed, so total_entries > per_page
     application_plan = FactoryBot.create :application_plan, issuer: @provider.first_service!
     @buyer.buy! application_plan
 
@@ -122,7 +122,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'pagination per_page defaults to max for invalid values' do
-    # Two applications because pagination test be shown only if needed, so total_entries > per_page
+    # Two applications because pagination should be shown only if needed, so total_entries > per_page
     application_plan = FactoryBot.create :application_plan, issuer: @provider.first_service!
     @buyer.buy! application_plan
 
