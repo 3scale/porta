@@ -52,7 +52,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   def create
     service = current_account.services.build
     create_service = ServiceCreator.new(service: service)
-    create_service.call(service_params)
+    create_service.call(service_params.to_h)
     service.reload if service.persisted? # It has been touched
     respond_with(service)
   end
@@ -91,7 +91,7 @@ class Admin::Api::ServicesController < Admin::Api::ServiceBaseController
   ##~ op.parameters.add :name => " ", :dataType => "custom", :paramType => "query", :allowMultiple => true, :description => "Extra parameters"
   #
   def update
-    service.update(service_params)
+    service.update(service_params.to_h)
 
     respond_with(service)
   end
