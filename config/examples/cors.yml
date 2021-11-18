@@ -8,6 +8,8 @@ cors: &default
     methods: :get
     max_age: 3628800
     credentials: false
+  exclude:
+    - path_prefix: /p/signup
 
 development:
   <<: *default
