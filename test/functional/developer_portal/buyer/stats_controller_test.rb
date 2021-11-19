@@ -84,12 +84,12 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
       end
 
       should 'only return enabled and visible metrics in app plan' do
-        get :metrics_list, :id => @live_app1.id
+        get :metrics_list, params: { id: @live_app1.id }
         assert_equal [@hits], assigns(:metrics)
       end
 
       should 'return 404 for non-existent app' do
-        get :metrics_list, :id => 'NON_EXISTENT'
+        get :metrics_list, params: { id: 'NON_EXISTENT' }
         assert_response :not_found
       end
 
@@ -108,7 +108,7 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
       end
 
       should 'only return enabled and visible methods in app plan' do
-        get :methods_list, :id => @live_app1.id
+        get :methods_list, params: { id: @live_app1.id }
         assert_equal [@method], assigns(:methods)
       end
     end # methods action
