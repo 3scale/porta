@@ -80,7 +80,7 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
   end
 
   def post_request(user_id, authentication = {}, different_params = {})
-    post admin_api_user_access_tokens_path(authentication.merge({user_id: user_id, format: :json})), access_token_params.merge(different_params)
+    post admin_api_user_access_tokens_path(authentication.merge({user_id: user_id, format: :json})), params: access_token_params.merge(different_params)
   end
 
   def access_token_params
