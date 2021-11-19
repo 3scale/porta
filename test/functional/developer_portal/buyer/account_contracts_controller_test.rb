@@ -16,7 +16,7 @@ class DeveloperPortal::Buyer::AccountContractsControllerTest < DeveloperPortal::
     @acc_contract =  FactoryBot.create(:account_contract, :plan => @acc_plan, :user_account => @buyer)
     AccountContract.any_instance.stubs(:buyer_changes_plan!).returns(false)
 
-    put :update, plan_id: @plan.id
+    put :update, params: { plan_id: @plan.id }
 
     assert_response :redirect
     assert flash[:error].present?
