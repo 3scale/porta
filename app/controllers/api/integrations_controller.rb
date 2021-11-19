@@ -123,7 +123,9 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def proxy_rules_attributes
-    params.fetch(:proxy, {}).fetch(:proxy_rules_attributes, {})
+    # we need to permit proxy_rules_attributes: {} because for some reason we are accepting single proxy rule
+    # and also hash with multiple `id: proxy_rule` values
+    params.require(:proxy).permit(proxy_rules_attributes: {}).fetch(:proxy_rules_attributes, {})
   end
 
   PROXY_BASIC_PARAMS = [
