@@ -65,10 +65,8 @@ class ApplicationController < ActionController::Base
   #
   helper_method :sublayout
 
-  def redirect_back_or_to(*fallback_params)
-    redirect_to :back
-  rescue ActionController::RedirectBackError
-    redirect_to(*fallback_params)
+  def redirect_back_or_to(fallback_location)
+    redirect_back(fallback_location: fallback_location)
   end
 
   def sublayout

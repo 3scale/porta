@@ -21,7 +21,7 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
         "version" => "builtin", "enabled" => true, "removable" => false, "id" => "apicast-policy"
       }
     ]
-    put admin_service_policies_path(@service), proxy: {policies_config: config}
+    put admin_service_policies_path(@service), params: { proxy: {policies_config: config} }
     # Checking flash won't work anymore in rails 5+
     assert_equal 'The policies are saved successfully', flash[:notice]
     assert_equal Proxy::PoliciesConfig.new(expected_policies), @service.proxy.policies_config
@@ -30,14 +30,14 @@ class Api::PoliciesControllerTest < ActionDispatch::IntegrationTest
 
   test 'invalid config - does not update policies' do
     invalid_config = 'invalid-config'.to_json
-    put admin_service_policies_path(@service), proxy: { policies_config: invalid_config }
+    put admin_service_policies_path(@service), params: { proxy: { policies_config: invalid_config } }
     assert_equal 'The policies cannot be saved', flash[:error]
     assert_response :unprocessable_entity
   end
 
   test 'update policies config with errors' do
     invalid_config = [{ 'name' => 'foo' }].to_json
-    put admin_service_policies_path(@service), proxy: {policies_config: invalid_config}
+    put admin_service_policies_path(@service), params: { proxy: {policies_config: invalid_config} }
     # Checking flash won't work anymore in rails 5+
     assert_equal 'The policies cannot be saved', flash[:error]
     assert_equal Proxy::PoliciesConfig.new([Proxy::PolicyConfig::DEFAULT_POLICY]), @service.proxy.policies_config
