@@ -6,12 +6,12 @@ module ThreeScale::Middleware
       super(app, opts) { set_config }
       set_excludes
 
-      if block_given? # rubocop:disable Style/GuardClause why: keep copy from superclass
-        if block.arity == 1
-          block.call(self) # rubocop:disable Performance/RedundantBlockCall why: keep copy from superclass
-        else
-          instance_eval(&block)
-        end
+      return unless block_given?
+
+      if block.arity == 1
+        yield(self)
+      else
+        instance_eval(&block)
       end
     end
 
