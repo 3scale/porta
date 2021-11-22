@@ -3,10 +3,9 @@
 require 'test_helper'
 
 class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
-
   def setup
-    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
-    @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+    @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
     host! @provider.self_domain
   end
@@ -14,7 +13,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   # Access token
 
   test 'show (access_token)' do
-    user  = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+    user = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
@@ -33,7 +32,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
   end
 
   test 'destroy (access_token)' do
-    user  = FactoryBot.create(:admin, account: @provider, admin_sections: ['partners'])
+    user = FactoryBot.create(:admin, account: @provider, admin_sections: ['partners'])
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
 
@@ -49,7 +48,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     get '/admin/api/webhooks/failures.xml', params: { provider_key: @provider.api_key }
 
     assert_response :success
-    assert_equal @response.body,  WebHookFailures.new(@provider.id).to_xml
+    assert_equal @response.body, WebHookFailures.new(@provider.id).to_xml
   end
 
   test '#delete empties the list if no time passed' do
@@ -72,5 +71,4 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     assert_empty_xml @response.body
     assert_equal '3', WebHookFailures.new(@provider.id).first.id
   end
-
 end
