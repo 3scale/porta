@@ -17,7 +17,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
   test '#create should login if the user can login' do
     User.any_instance.expects(:can_login?).returns(true)
-    post :create, valid_buyer_params
+    post :create, params: valid_buyer_params
     assert @controller.send(:current_user)
   end
 
@@ -30,7 +30,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     session[:authentication_id] = 'A1234'
     session[:authentication_provider] = auth_provider.system_name
     # First check that the confirmation link is send
-    post :create, valid_buyer_params
+    post :create, params: valid_buyer_params
     assert_response :redirect
 
     mail = deliveries.last
@@ -44,7 +44,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     session[:authentication_id] = 'A1234'
     session[:authentication_provider] = auth_provider.system_name
     session[:authentication_email] = valid_buyer_params[:account][:user][:email]
-    post :create, valid_buyer_params
+    post :create, params: valid_buyer_params
     assert_response :redirect
 
     mail = deliveries.last
@@ -55,7 +55,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
   test '#create should track the signup if success' do
     ThreeScale::Analytics.expects(:track).with(@provider.first_admin, 'Acquired new Developer Account', kind_of(Hash))
-    post :create, valid_buyer_params
+    post :create, params: valid_buyer_params
   end
 
   test '#create successfully from oauth2 should save the id_token' do
@@ -64,7 +64,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     session[:authentication_id] = 'foo'
     session[:authentication_provider] = auth_provider.system_name
     session[:authentication_kind] = auth_provider.kind
-    post :create, valid_buyer_params
+    post :create, params: valid_buyer_params
     assert_equal 'fake-token', User.last.sso_authorizations.last.id_token
   end
 
@@ -85,7 +85,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       #TODO: improve this by asserting the parameters
       WebHook::Event.expects(:enqueue).times(3)
 
-      post :create, valid_buyer_params
+      post :create, params: valid_buyer_params
     end
   end
 
@@ -95,7 +95,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     end
 
     should "not create account" do
-      post :create, valid_buyer_params
+      post :create, params: valid_buyer_params
 
       signup_result = assigns(:signup_result)
 
@@ -106,7 +106,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   end
 
   should "raise RecordNotFound with wrong plan ids" do
-    post :create, valid_buyer_params(:plans => [1, 2])
+    post :create, params: valid_buyer_params(:plans => [1, 2])
     assert_response :not_found
   end
 
@@ -120,7 +120,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     end
 
     should "allow only one service subsription" do
-      post :create, valid_buyer_params(:plans => [@service_two_plan_two, @service_two_plan].map(&:id))
+      post :create, params: valid_buyer_params(:plans => [@service_two_plan_two, @service_two_plan].map(&:id))
       signup_result = assigns(:signup_result)
 
       assert_includes signup_result.errors[:plans], 'Can subscribe only one plan per service'

@@ -11,13 +11,13 @@ class DeveloperPortal::CMS::NewContentControllerTest < DeveloperPortal::ActionCo
 
   test 'disabled when account is suspended' do
     @provider.update_columns(state: 'suspended')
-    get :show, path: @page.path
+    get :show, params: { path: @page.path }
 
     assert_response :not_found
   end
 
   test 'serve published page' do
-    get :show, path: @page.path
+    get :show, params: { path: @page.path }
 
     assert_response :success
     assert_equal 'foo', @response.body
@@ -29,7 +29,7 @@ class DeveloperPortal::CMS::NewContentControllerTest < DeveloperPortal::ActionCo
 
     file = FactoryBot.create(:cms_file, provider: @provider)
 
-    get :show, path: file.path
+    get :show, params: { path: file.path }
 
     assert_response :redirect
   end
