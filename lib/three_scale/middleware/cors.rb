@@ -4,32 +4,30 @@ module ThreeScale::Middleware
   class Cors < Rack::Cors
     def initialize(app, opts = {}, &block)
       super(app, opts) { set_config }
+      set_excludes
 
-      if block_given?
-        if block.arity == 1
-          block.call(self)
-        else
-          instance_eval(&block)
-        end
+      return unless block_given?
+
+      if block.arity == 1
+        yield(self)
+      else
+        instance_eval(&block)
       end
     end
 
     def call(env)
-      return @app.call(env) unless enabled?
+      return @app.call(env) if excluded?(env)
 
       super
     end
+
+    private
 
     def config
       Rails.configuration.three_scale.cors
     end
 
-    delegate :enabled, to: :config
-    alias enabled? enabled
-
-    private
-
-    def set_config
+    def set_config # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
       rules = config.allow.presence || []
 
       rules.map(&:symbolize_keys).each do |rule|
@@ -45,5 +43,68 @@ module ThreeScale::Middleware
         end
       end
     end
+
+    def set_excludes
+      rules = config.exclude.presence || []
+
+      @excludes = rules.map do |rule|
+        ExcludeMatcher.for(rule.symbolize_keys)
+      end
+    end
+
+    def excluded?(env)
+      @excludes.any? { |matcher| matcher.matches?(env) }
+    end
+  end
+
+  module ExcludeMatcher
+    class << self
+      def matchers
+        @matchers ||= Set.new
+      end
+
+      def add_matchers(*matcher_classes)
+        matchers.merge matcher_classes.flatten
+      end
+
+      def for(rule)
+        matcher = matchers.detect { |klass| klass.supports?(rule) }
+
+        raise ThreeScale::ConfigurationError, "Unsupported exclude specification: #{rule}" unless matcher
+
+        matcher.new(rule)
+      end
+    end
+
+    class PathRegexpMatcher
+      attr_reader :regexp
+
+      def initialize(rule)
+        regexp = rule[:path_regexp]
+        @regexp = regexp.is_a?(Regexp) ? regexp : /#{regexp}/
+      end
+
+      def matches?(env)
+        regexp.match? env["PATH_INFO"]
+      end
+
+      def self.supports?(rule)
+        rule[:path_regexp].present?
+      end
+    end
+
+    class PathPrefixMatcher < PathRegexpMatcher
+      def initialize(rule)
+        path = rule[:path_prefix]
+        segment_end_check = path.end_with?("/") ? "" : "(?:/|$)"
+        super({path_regexp: /^#{path}#{segment_end_check}/})
+      end
+
+      def self.supports?(rule)
+        rule[:path_prefix].present?
+      end
+    end
+
+    add_matchers PathPrefixMatcher, PathRegexpMatcher
   end
 end
