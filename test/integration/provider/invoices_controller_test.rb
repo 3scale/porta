@@ -34,8 +34,8 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
     context 'with existing Invoice' do
       setup do
         @invoice = FactoryBot.create(:invoice,
-                                  :buyer_account => @cinstance.buyer_account,
-                                  :provider_account => @cinstance.provider_account)
+                                     buyer_account: @cinstance.buyer_account,
+                                     provider_account: @cinstance.provider_account)
         Invoice.any_instance.stubs(:find).returns(@invoice)
       end
 
@@ -73,7 +73,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
           Invoice.any_instance.stubs("transition_allowed?").returns(true)
           Invoice.any_instance.stubs("#{action}!").returns(true)
 
-          put url_for([action, :admin, :finance, @invoice]), :format => 'js'
+          put url_for([action, :admin, :finance, @invoice, format: 'js'])
           assert_response :success
         end
 
@@ -81,7 +81,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
           Invoice.any_instance.stubs("transition_allowed?").returns(true)
           Invoice.any_instance.stubs("#{action}!").returns(false)
 
-          put url_for([action, :admin, :finance, @invoice]), :format => 'js'
+          put url_for([action, :admin, :finance, @invoice, format: 'js'])
           assert_response :success
           # TODO: update error messages
         end
@@ -89,7 +89,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
 
       context 'with line items' do
         setup do
-          @line_item = FactoryBot.create(:line_item, :invoice => @invoice, cost: 2000)
+          @line_item = FactoryBot.create(:line_item, invoice: @invoice, cost: 2000)
         end
 
         should 'show with current invoice renders link to add custom line item' do
@@ -122,11 +122,11 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
 
   test '#charge does not invoke invoice automatic charging' do
     invoice = FactoryBot.create(:invoice,
-                              buyer_account: @buyer, provider_account: @provider_account)
+                                buyer_account: @buyer, provider_account: @provider_account)
     Invoice.any_instance.stubs('transition_allowed?').returns(true)
     Invoice.any_instance.expects(:charge!).with(false).returns(true)
 
-    put charge_admin_finance_invoice_path invoice, format: :js
+    put charge_admin_finance_invoice_path invoice, params: { format: :js }
     assert_response :success
   end
 end
