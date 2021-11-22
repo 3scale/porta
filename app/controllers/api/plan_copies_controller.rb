@@ -13,7 +13,7 @@ class Api::PlanCopiesController < FrontendController
 
     if @plan.save
       # TODO: DRY this in model
-      @plans = @issuer.send("#{@type}s", true).not_custom
+      @plans = @issuer.send("#{@type}s").reload.not_custom
 
       @new_plan = @plan.class
     end

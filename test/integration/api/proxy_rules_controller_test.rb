@@ -43,14 +43,14 @@ class Api::ProxyRulesControllerTest < ActionDispatch::IntegrationTest
     proxy_rule_params = FactoryBot.attributes_for(:proxy_rule, proxy: @service.proxy, metric_id: @service.metrics.last.id)
 
     assert_difference -> { @service.proxy.proxy_rules.count }, 1 do
-      post admin_service_proxy_rules_path(@service), proxy_rule: proxy_rule_params
+      post admin_service_proxy_rules_path(@service), params: { proxy_rule: proxy_rule_params }
     end
   end
 
   test '#update saves the new attributes' do
     proxy_rule = FactoryBot.create(:proxy_rule, proxy: @service.proxy)
 
-    patch admin_service_proxy_rule_path(@service, proxy_rule), proxy_rule: { pattern: '/testing' }
+    patch admin_service_proxy_rule_path(@service, proxy_rule), params: { proxy_rule: { pattern: '/testing' } }
     follow_redirect!
     proxy_rule.reload
 

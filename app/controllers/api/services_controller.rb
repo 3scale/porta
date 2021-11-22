@@ -64,7 +64,7 @@ class Api::ServicesController < Api::BaseController
   end
 
   def update
-    if integration_settings_updater_service.call(service_attributes: service_params, proxy_attributes: proxy_params)
+    if integration_settings_updater_service.call(service_attributes: service_params.to_h, proxy_attributes: proxy_params.to_h)
       flash[:notice] =  t('flash.services.update.notice')
       redirect_back_or_to :action => :settings
     else
