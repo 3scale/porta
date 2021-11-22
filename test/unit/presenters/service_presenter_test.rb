@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ServicePresenterTest < ActiveSupport::TestCase
-  test 'new application application and service plans are sorted alphabetically' do
+  test 'new application plan and service plans are sorted alphabetically' do
     service = FactoryBot.create(:simple_service)
     FactoryBot.create(:application_plan, issuer: service, position: 1, name: 'Application Plan 3')
     FactoryBot.create(:application_plan, issuer: service, position: 3, name: 'Application Plan 1')
