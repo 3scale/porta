@@ -51,7 +51,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     res = stub :body => "yes\nlaurie", :code => 200
     HTTPClient.expects(:get).with(anything).returns(res)
 
-    get :create, :ticket => "made-up"
+    get :create, params: { ticket: "made-up" }
 
     assert_redirected_to '/'
 
@@ -68,7 +68,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     mock_oauth2('oauth|1234', 'C6789', authentication_provider.user_info_url)
 
     assert_equal 0, user.sso_authorizations.count
-    post :create, system_name: authentication_provider.system_name, code: 'C6789'
+    post :create, params: { system_name: authentication_provider.system_name, code: 'C6789' }
     assert_equal 'Signed in successfully', flash[:notice]
     assert_equal 'fake-id_token', user.sso_authorizations.last.id_token
   end
@@ -84,7 +84,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     mock_oauth2(user.authentication_id, 'C6789', authentication_provider.user_info_url)
 
     assert_equal 'first-id_token', user.sso_authorizations.last.id_token
-    post :create, system_name: authentication_provider.system_name, code: 'C6789'
+    post :create, params: { system_name: authentication_provider.system_name, code: 'C6789' }
     assert_equal 'Signed in successfully', flash[:notice]
     assert_equal 'fake-id_token', user.sso_authorizations.last.id_token
   end
@@ -95,7 +95,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
     mock_oauth2('foo', 'C6789', authentication_provider.user_info_url)
 
-    post :create, system_name: authentication_provider.system_name, code: 'C6789', plan_id: 42
+    post :create, params: { system_name: authentication_provider.system_name, code: 'C6789', plan_id: 42 }
 
     assert_redirected_to signup_path(plan_id: 42)
     assert_equal 'Successfully authenticated, please complete the signup form', flash[:notice]
@@ -117,7 +117,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     client = mock
     client.stubs(:authenticate!).returns(ThreeScale::OAuth2::ErrorData.new(error: error = 'hostname "example.com" does not match the server certificate'))
     ThreeScale::OAuth2::Client.expects(build: client)
-    post :create, system_name: authentication_provider.system_name, code: 'abcdefg1234567'
+    post :create, params: { system_name: authentication_provider.system_name, code: 'abcdefg1234567' }
     assert_equal error, flash[:error]
   end
 
