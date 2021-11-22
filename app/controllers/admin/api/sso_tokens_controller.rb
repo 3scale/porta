@@ -8,7 +8,7 @@ class Admin::Api::SSOTokensController < Admin::Api::BaseController
   #   * provider_key
   #   * protocol
   def create
-    sso_token = SSOToken.new sso_token_params
+    sso_token = SSOToken.new sso_token_params.to_h
     sso_token.account = domain_account
     sso_token.save
 
@@ -32,7 +32,7 @@ class Admin::Api::SSOTokensController < Admin::Api::BaseController
   private
 
   def sso_token_params
-    params.require(:sso_token)
+    params.require(:sso_token).permit(:user_id, :username, :expires_in, :redirect_url, :protocol)
   end
 
 end

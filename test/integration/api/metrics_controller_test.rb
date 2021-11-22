@@ -32,14 +32,14 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
 
   test 'create metric' do
     assert_difference @service.metrics.method(:count) do
-      post admin_service_metrics_path(service_id: @service.id), metric: { system_name: 'upgrades', friendly_name: 'upgrades', unit: 'upgrades' }
+      post admin_service_metrics_path(service_id: @service.id), params: { metric: { system_name: 'upgrades', friendly_name: 'upgrades', unit: 'upgrades' } }
       assert_response :redirect
     end
   end
 
   test 'create method' do
     assert_difference @service.metrics.method(:count) do
-      post admin_service_metrics_path(service_id: @service.id, metric_id: @service.metrics.hits), metric: { system_name: 'alaska', friendly_name: 'alaska' }
+      post admin_service_metrics_path(service_id: @service.id, metric_id: @service.metrics.hits), params: { metric: { system_name: 'alaska', friendly_name: 'alaska' } }
       assert_response :redirect
     end
   end
@@ -51,14 +51,14 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'update' do
-    patch admin_service_metric_path(service_id: @service.id, id: @metric.id), metric: { friendly_name: 'new friendly name' }
+    patch admin_service_metric_path(service_id: @service.id, id: @metric.id), params: { metric: { friendly_name: 'new friendly name' } }
     assert_response :redirect
     assert_equal 'new friendly name', @metric.reload.friendly_name
   end
 
   test 'cannot update system_name' do
     assert_equal 'super_metric', @metric.system_name
-    patch admin_service_metric_path(service_id: @service.id, id: @metric.id), metric: { system_name: 'new_system_name' }
+    patch admin_service_metric_path(service_id: @service.id, id: @metric.id), params: { metric: { system_name: 'new_system_name' } }
     assert_response :redirect
     assert_equal 'super_metric', @metric.reload.system_name
   end
