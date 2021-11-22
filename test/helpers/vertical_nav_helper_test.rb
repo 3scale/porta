@@ -9,15 +9,19 @@ class VerticalNavHelperTest < ActionView::TestCase
 
     # if permitted
     stubs(can?: true)
-    assert_equal(backend_api_nav_sections.pluck(:title), ["Overview", "Analytics", "Methods & Metrics", "Mapping Rules"])
+    assert_equal(["Overview", "Analytics", "Methods & Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
 
     # if not permitted
     stubs(can?: false)
-    assert_equal(backend_api_nav_sections.pluck(:title), ["Overview", "Methods & Metrics", "Mapping Rules"])
+    assert_equal(["Overview", "Methods & Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
 
     # When backend_api is not persisted
     @backend_api = BackendApi.new
-    assert_equal(backend_api_nav_sections.pluck(:title), [])
+    assert_equal([], backend_api_nav_sections.pluck(:title))
 
+
+    # When backend_api is nil
+    @backend_api = nil
+    assert_equal([], backend_api_nav_sections.pluck(:title))
   end
 end
