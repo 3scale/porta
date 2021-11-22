@@ -24,8 +24,8 @@ class Provider::Admin::Dashboard::PotentialUpgradesController < Provider::Admin:
   def is_set_up_correctly?
     usage_limits = current_account
       .application_plans.joins(:usage_limits)
-      .grouping{ issuer_id }.unscope(:order)
-      .references(:usage_limits).count{ usage_limits.id }
+      .grouping { issuer_id }.unscope(:order)
+      .references(:usage_limits).select { id }.count
 
     usage_notifications = current_user.accessible_services.pluck(:id, :notification_settings).to_h
 
