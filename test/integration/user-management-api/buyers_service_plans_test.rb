@@ -27,9 +27,9 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
     xml = Nokogiri::XML::Document.parse(@response.body)
 
     assert_not xml.xpath('.//plans').empty?
-    assert_equal xml.xpath('.//plans/plan/id').children.first.to_s, @service_plan.id.to_s
-    assert_equal xml.xpath('.//plans/plan/name').children.first.to_s, @service_plan.name.to_s
-    assert_equal xml.xpath('.//plans/plan/type').children.first.to_s, @service_plan.class.to_s.underscore
+    assert_equal @service_plan.id.to_s, xml.xpath('.//plans/plan/id').children.first.to_s
+    assert_equal @service_plan.name.to_s, xml.xpath('.//plans/plan/name').children.first.to_s
+    assert_equal @service_plan.class.to_s.underscore, xml.xpath('.//plans/plan/type').children.first.to_s
 
     assert xml.xpath(".//plans/plan[@id='#{@buyer.bought_account_plan.id}']").empty?
   end
@@ -60,7 +60,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
     xml = Nokogiri::XML::Document.parse(@response.body)
 
     assert_a_service_plan xml, service
-    assert_equal xml.xpath('.//plan/id').children.first.to_s, service_plan.id.to_s
+    assert_equal service_plan.id.to_s, xml.xpath('.//plan/id').children.first.to_s
   end
 
   test 'buy an already subscribed service' do

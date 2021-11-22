@@ -24,9 +24,9 @@ class Admin::Api::BuyerAccountPlansTest < ActionDispatch::IntegrationTest
     #testing xml response
     xml = Nokogiri::XML::Document.parse(@response.body)
 
-    assert_equal xml.xpath('.//plan/id').children.first.to_s, @buyer.bought_account_plan.id.to_s
-    assert_equal xml.xpath('.//plan/name').children.first.to_s, @buyer.bought_account_plan.name.to_s
-    assert_equal xml.xpath('.//plan/type').children.first.to_s, @buyer.bought_account_plan.class.to_s.underscore
+    assert_equal @buyer.bought_account_plan.id.to_s, xml.xpath('.//plan/id').children.first.to_s
+    assert_equal @buyer.bought_account_plan.name.to_s, xml.xpath('.//plan/name').children.first.to_s
+    assert_equal @buyer.bought_account_plan.class.to_s.underscore, xml.xpath('.//plan/type').children.first.to_s
 
     assert xml.xpath(".//plans/plan[@id='#{@not_plan.id}']").empty?
   end

@@ -24,12 +24,12 @@ class EnterpriseApiBuyersAccountPlanChangeTest < ActionDispatch::IntegrationTest
                                            format: :xml)
     assert_response :success
 
-    assert_equal @buyer.bought_account_plan, @published_account_plan
+    assert_equal @published_account_plan, @buyer.bought_account_plan
 
     #TODO: dry plan xml assertion into a helper
     #testing xml response
     xml = Nokogiri::XML::Document.parse(@response.body)
-    assert_equal xml.xpath('.//plan/id').children.first.to_s, @published_account_plan.id.to_s
+    assert_equal @published_account_plan.id.to_s, xml.xpath('.//plan/id').children.first.to_s
   end
 
   test 'change account plan to a non-published one is permitted' do
