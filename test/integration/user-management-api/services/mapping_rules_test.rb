@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
 
   def setup
-    @account    = FactoryBot.create(:provider_account)
-    @service    = FactoryBot.create(:simple_service, account: @account)
+    @account = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:simple_service, account: @account)
     @proxy_rule = @service.proxy.proxy_rules.last
 
     host! @account.admin_domain
@@ -87,7 +89,7 @@ class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
     assert_response :success
     rule.reload
     assert_equal 9, rule.position
-    refute rule.last
+    assert_not rule.last
   end
 
   private
