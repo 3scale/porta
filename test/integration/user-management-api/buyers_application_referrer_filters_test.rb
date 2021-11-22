@@ -39,7 +39,6 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
   #TODO: clean the tests
   test 'create referrer filters' do
     application = @buyer.bought_cinstances.last
-    application.application_id
     application.service.update(referrer_filters_required: true)
     referrer = 'foo.example.org'
     expect_backend_create_referrer_filter(application, referrer)
@@ -52,7 +51,6 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
   test 'destroy referrer filters' do
     application = @buyer.bought_cinstances.last
-    application.application_id
     application.service.update(referrer_filters_required: true)
 
     referrer = "*.example.org"
@@ -68,7 +66,6 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
   test 'destroy referrer filters with referrer ending on .xml' do
     application = @buyer.bought_cinstances.last
-    application.application_id
     application.service.update(referrer_filters_required: true)
 
     referrer = "*.example.xml"
@@ -91,7 +88,6 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
   test 'destroy not existing referrer filter returns not found' do
     application = @buyer.bought_cinstances.last
-    application.application_id
     application.service.update(referrer_filters_required: true)
 
     # to allow . on the referrers (now that is an :id) I had to add :requirements => {:id => /.*/} in routes.rb
