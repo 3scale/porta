@@ -1,7 +1,7 @@
 = form.inputs 'Naming' do
-  = form.input :name, input_html: { autofocus: true }
+  = form.input :name, input_html: { autofocus: true, required: true }
   = form.system_name
   = form.input :description, input_html: { rows: 3 }
 
 = form.inputs 'API' do
-  = form.input :private_endpoint, hint: t("formtastic.hints.proxy.api_backend_https"), label: "Private Base URL"
+  = form.input :private_endpoint, hint: t("formtastic.hints.proxy.api_backend_https"), label: "Private Base URL", input_html: { required: true }
