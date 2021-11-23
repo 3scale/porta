@@ -162,7 +162,7 @@ class Configuration
   end
 
   def self.preprocess(values)
-    (values || {}).map_values { |value| parse(value) }.with_indifferent_access
+    (values || {}).transform_values { |value| parse(value) }.with_indifferent_access
   end
 
   def self.parse(value)
