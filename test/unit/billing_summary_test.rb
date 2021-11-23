@@ -44,6 +44,13 @@ class BillingSummaryTest < ActiveSupport::TestCase
     assert_equal stored_summary, @billing_summary.to_hash
   end
 
+  test 'ttl' do
+    @billing_summary.expects(:summary_key).returns('my-key')
+
+    @billing_summary.store('1', { success: true, errors: [] })
+    assert_equal BillingSummary::TTL, @billing_summary.redis.ttl('my-key')
+  end
+
   test 'unstore' do
     @billing_summary.stubs(summary_key: 'my-key')
     @billing_summary.store(1, { success: false, errors: [3] })
