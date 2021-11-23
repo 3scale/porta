@@ -79,23 +79,4 @@ module ThreeScale
 
     alias assert_required_keys assert_required_keys!
   end
-
-  module OrderedHashHacks
-    # Clones ordered hash and its values.
-    #
-    # TODO: can it be simply replaced by #dup or #clone?
-    #
-    def deep_clone
-      cloned = ActiveSupport::OrderedHash.new
-      self.each { |key, value| cloned[key] = value.dup }
-      cloned
-    end
-
-    def sort_keys
-      keys.sort.inject(self.class.new) do |memo, key|
-        memo[key] = self[key]
-        memo
-      end
-    end
-  end
 end
