@@ -21,7 +21,7 @@ class Provider::Admin::AccountsController < Provider::Admin::Account::BaseContro
 
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
-      ProviderUserMailer.activation(@user).deliver_now
+      ProviderUserMailer.activation(@user).deliver_later
       flash[:notice] = 'Tenant account was successfully created.'
       redirect_to admin_buyers_account_path(@provider)
     else

@@ -62,7 +62,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
 
     if signup_result.persisted?
       signup_result.account_approve! unless signup_result.account_approval_required?
-      ProviderUserMailer.activation(signup_result.user).deliver_now
+      ProviderUserMailer.activation(signup_result.user).deliver_later
     end
 
     respond_with(signup_result)
