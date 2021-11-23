@@ -53,12 +53,12 @@ module Stats
       data = range.each(:day).to_a.zip(data)
 
       data = data.group_by { |day, value| day.wday }
-      data = data.sort_keys if data.is_a? ActiveSupport::OrderedHash # this doesnt apply in 1.9
+      data = data.sort.to_h
 
       data.map_keys! { |wday| weekday_name(wday) }
 
-      data.map_values! { |data_for_day| data_for_day.map(&:second) }
-      data.map_values! { |values| values.sum.to_f / weeks_count }
+      data.transform_values! { |data_for_day| data_for_day.map(&:second) }
+      data.transform_values! { |values| values.sum.to_f / weeks_count }
 
       data
     end
@@ -79,10 +79,10 @@ module Stats
       data = data[:values]
       data = range.each(:hour).to_a.zip(data)
       data = data.group_by { |day, value| day.hour }
-      data = data.sort_keys if data.is_a? ActiveSupport::OrderedHash # this doesnt apply in 1.9
+      data = data.sort.to_h
 
-      data.map_values! { |data_for_day| data_for_day.map(&:second) }
-      data.map_values! { |values| values.sum.to_f / days_count }
+      data.transform_values! { |data_for_day| data_for_day.map(&:second) }
+      data.transform_values! { |values| values.sum.to_f / days_count }
 
       format_hours(data)
     end

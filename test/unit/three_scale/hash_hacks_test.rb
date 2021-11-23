@@ -40,7 +40,7 @@ class HashKeysCaseConversionsTest < ActiveSupport::TestCase
 
   test 'map_values' do
     hash_one = {'foo' => 1, 'bar' => 2}
-    hash_two = hash_one.map_values { |value| value + 1 }
+    hash_two = hash_one.transform_values { |value| value + 1 }
 
     assert_equal({'foo' => 1, 'bar' => 2}, hash_one)
     assert_equal({'foo' => 2, 'bar' => 3}, hash_two)
@@ -48,7 +48,7 @@ class HashKeysCaseConversionsTest < ActiveSupport::TestCase
 
   test 'map_values!' do
     hash = {'foo' => 1, 'bar' => 2}
-    hash.map_values! { |value| value + 1 }
+    hash.transform_values! { |value| value + 1 }
 
     assert_equal({'foo' => 2, 'bar' => 3}, hash)
   end
@@ -77,6 +77,6 @@ class HashKeysCaseConversionsTest < ActiveSupport::TestCase
     expected[12] = 'bar'
     expected[42] = 'foo'
 
-    assert_equal expected, hash.sort_keys
+    assert_equal expected, hash.sort.to_h
   end
 end
