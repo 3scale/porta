@@ -142,7 +142,7 @@ module Stats
 
           sanitize_range_and_granularity(range_since..range_until, granularity)
         else
-          options.assert_required_keys!(:granularity)
+          raise InvalidParameterError, "Missing parameter :granularity" unless options.key?(:granularity)
           # due to the unfortunate use of 21600 as a valid granularity  the parameter is required to a symbol or fixnum
           raise InvalidParameterError, "Granularity must be one of #{ALLOWED_GRANULARITIES.inspect}, not #{options[:granularity]}" unless ALLOWED_GRANULARITIES.include?(options[:granularity]) || ALLOWED_GRANULARITIES.include?(options[:granularity].to_sym)
 

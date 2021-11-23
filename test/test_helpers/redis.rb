@@ -9,7 +9,7 @@ module TestHelpers
     end
 
     def start_redis_server(options = {})
-      options.assert_required_keys(:port)
+      raise InvalidParameterError, "Missing parameter :port" unless options.key?(:port)
 
       config_template = File.read(Rails.root.join('test', 'fixtures', 'redis.conf.erb'))
       config_filename = "/tmp/redis-#{options[:port]}.conf"
@@ -29,7 +29,7 @@ module TestHelpers
     # Send raw command to redis (via redis-cli)
     def redis_send(*args)
       options = args.extract_options!
-      options.assert_required_keys(:port)
+      raise InvalidParameterError, "Missing parameter :port" unless options.key?(:port)
 
       command = "redis-cli -p #{options[:port]} #{args.map(&:to_s).join(' ')}"
       `#{command} 2> /dev/null`
