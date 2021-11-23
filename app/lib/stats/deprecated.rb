@@ -57,8 +57,8 @@ module Stats
 
       data.map_keys! { |wday| weekday_name(wday) }
 
-      data.map_values! { |data_for_day| data_for_day.map(&:second) }
-      data.map_values! { |values| values.sum.to_f / weeks_count }
+      data.transform_values! { |data_for_day| data_for_day.map(&:second) }
+      data.transform_values! { |values| values.sum.to_f / weeks_count }
 
       data
     end
@@ -81,8 +81,8 @@ module Stats
       data = data.group_by { |day, value| day.hour }
       data = data.sort.to_h
 
-      data.map_values! { |data_for_day| data_for_day.map(&:second) }
-      data.map_values! { |values| values.sum.to_f / days_count }
+      data.transform_values! { |data_for_day| data_for_day.map(&:second) }
+      data.transform_values! { |values| values.sum.to_f / days_count }
 
       format_hours(data)
     end

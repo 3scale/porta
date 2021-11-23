@@ -64,7 +64,7 @@ class Metric < ApplicationRecord
   end
 
   def self.ids_indexed_by_names
-    all.index_by(&:system_name).downcase_keys.map_values(&:id)
+    all.index_by(&:system_name).downcase_keys.transform_values(&:id)
   end
 
   def self.ancestors_ids
