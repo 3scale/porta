@@ -26,8 +26,8 @@ class ServicePresenter < SimpleDelegator
       name: name,
       systemName: system_name,
       updatedAt: updated_at.to_s(:long),
-      appPlans: plans.stock.select(:id, :name).as_json(root: false),
-      servicePlans: service_plans.select(:id, :name).as_json(root: false),
+      appPlans: plans.reorder(:name).stock.select(:id, :name).as_json(root: false),
+      servicePlans: service_plans.reorder(:name).select(:id, :name).as_json(root: false),
       defaultServicePlan: default_service_plan.as_json(root: false, only: %i[id name]),
       defaultAppPlan: default_application_plan.as_json(root: false, only: %i[id name])
     }
