@@ -13,7 +13,7 @@ class Admin::Api::BackendApis::BaseController < Admin::Api::BaseController
   private
 
   def backend_api
-    @backend_api ||= current_account.backend_apis.accessible.find(params[:backend_api_id])
+    @backend_api ||= current_account.backend_apis.accessible.find(params.require(:backend_api_id))
   end
 
   def authorize

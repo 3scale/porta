@@ -48,7 +48,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   private
 
   def file_params
-    params[:cms_file].dup.tap do |params|
+    params.permit!.to_h[:cms_file].dup.tap do |params|
       if section = params[:section_id]
         params[:section] = current_account.sections.find(section)
       end
@@ -60,7 +60,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   end
 
   def file
-    @_file ||= files.find(params[:id])
+    @_file ||= files.find(params.require(:id))
   end
 
 end

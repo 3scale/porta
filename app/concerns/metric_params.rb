@@ -10,11 +10,11 @@ module MetricParams
     private
 
     def create_params
-      params.fetch(:metric).permit(DEFAULT_PARAMS | %i[system_name])
+      params.require(:metric).permit(DEFAULT_PARAMS | %i[system_name])
     end
 
     def update_params
-      params.fetch(:metric).permit(DEFAULT_PARAMS)
+      params.require(:metric).permit(DEFAULT_PARAMS)
     end
   end
 end

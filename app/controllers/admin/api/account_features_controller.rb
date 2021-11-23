@@ -91,7 +91,7 @@ class Admin::Api::AccountFeaturesController < Admin::Api::BaseController
   protected
 
   def feature_params
-    params.fetch(:feature)
+    params.require(:feature).permit!.to_h
   end
 
   def features
@@ -99,6 +99,6 @@ class Admin::Api::AccountFeaturesController < Admin::Api::BaseController
   end
 
   def feature
-    @feature ||= features.find(params[:id])
+    @feature ||= features.find(params.require(:id))
   end
 end

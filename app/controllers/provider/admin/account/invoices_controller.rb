@@ -12,7 +12,7 @@ class Provider::Admin::Account::InvoicesController < Provider::Admin::Account::B
   end
 
   def show
-    @invoice = current_account.invoices.find(params[:id])
+    @invoice = current_account.invoices.find(params.require(:id))
   end
 
   protected

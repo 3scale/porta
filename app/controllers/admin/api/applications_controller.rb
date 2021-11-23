@@ -60,7 +60,7 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   def applications
     @applications ||= begin
       cinstances = current_account.provided_cinstances.where(service: accessible_services)
-      if (service_id = params[:service_id])
+      if (service_id = app_params[:service_id])
         cinstances = cinstances.where(service_id: service_id)
       end
       cinstances
@@ -70,7 +70,7 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
   def application
     @application ||= case
 
-                     when user_key = params[:user_key]
+                     when user_key = app_params[:user_key]
       # TODO: these scopes should be in model layer
       # but there is scope named by_user_key already
       applications.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?)", user_key).first!
@@ -79,8 +79,11 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
       applications.joins(:service).where("(services.backend_version <> '1' AND cinstances.application_id = ?)", app_id).first!
 
                      else
-      applications.find(params[:application_id] || params[:id])
+      applications.find(app_params[:application_id] || app_params[:id])
     end
   end
 
+  def app_params
+    params.permit(%i[service_id app_id id application_id user_key]).to_h
+  end
 end

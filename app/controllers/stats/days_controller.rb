@@ -8,8 +8,8 @@ class Stats::DaysController < Stats::ServiceBaseController
   end
 
   def show
-    @day = params[:id]
-    @metric = @service.metrics.find(params[:metric_id])
+    @day = params.require(:id)
+    @metric = @service.metrics.find(params.require(:metric_id))
     @data = ::Stats::Deprecated.usage_in_day(@service, :day => @day, :metric => @metric)
   end
 

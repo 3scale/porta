@@ -109,7 +109,7 @@ class Admin::Api::BackendApis::MetricsController < Admin::Api::BackendApis::Base
   private
 
   def metric
-    @metric ||= metrics_collection.find(params[:id])
+    @metric ||= metrics_collection.find(params.require(:id))
   end
 
   def metrics_collection

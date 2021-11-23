@@ -133,7 +133,7 @@ class Admin::Api::AuthenticationProvidersController < Admin::Api::BaseController
   end
 
   def find_authentication_provider
-    @authentication_provider ||= authentication_providers.find(params[:id])
+    @authentication_provider ||= authentication_providers.find(params.require(:id))
   end
 
   def authentication_provider_presenter

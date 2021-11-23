@@ -17,8 +17,9 @@ class DeveloperPortal::AccessCodesController < ApplicationController
     # no need to do anything as DP is not protected by access code
     return(redirect_to(return_url)) if no_access_code?
 
-    if params[access_code_param].presence == access_code
-      cookies[access_code_param] = params[access_code_param]
+    show_params = params.permit(access_code_param).to_h
+    if show_params[access_code_param].presence == access_code
+      cookies[access_code_param] = show_params[access_code_param]
       redirect_return_url = return_url
       session[:return_to] = nil
       redirect_to redirect_return_url
@@ -34,7 +35,7 @@ class DeveloperPortal::AccessCodesController < ApplicationController
   end
 
   def return_url
-    return_to = params[:return_to] || session[:return_to]
+    return_to = params.permit(:return_to).to_h[:return_to] || session[:return_to]
     if return_to.blank? || return_to == access_code_path
       root_url(cms_params)
     else

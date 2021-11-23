@@ -61,15 +61,19 @@ class DeveloperPortal::Admin::Applications::AlertsController <  ::DeveloperPorta
   end
 
   def find_application
-    @cinstance = current_account.bought_cinstances.find(params[:application_id])
+    @cinstance = current_account.bought_cinstances.find(params.require(:application_id))
   end
 
   def collection
-    current_account.alerts.not_deleted.by_application(@cinstance).sorted.order_by(params[:sort], params[:direction])
+    current_account.alerts.not_deleted.by_application(@cinstance).sorted.order_by(alert_params[:sort], alert_params[:direction])
   end
 
   def resource
-    collection.find(params[:id])
+    collection.find(alert_params[:id])
+  end
+
+  def alert_params
+    params.permit(%i[sort direction id]).to_h
   end
 
 end

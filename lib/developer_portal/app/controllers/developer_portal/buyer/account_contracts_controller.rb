@@ -18,6 +18,6 @@ class DeveloperPortal::Buyer::AccountContractsController < DeveloperPortal::Base
   end
 
   def find_plan
-    @plan = current_account.provider_account.account_plans.published.find(params[:plan_id])
+    @plan = current_account.provider_account.account_plans.published.find(params.require(:plan_id))
   end
 end

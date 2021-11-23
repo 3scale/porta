@@ -29,15 +29,19 @@ class Admin::Api::FeaturingsBaseController < Admin::Api::BaseController
   end
 
   def feature
-    @feature ||= features.find(params[:feature_id] || params[:id])
+    @feature ||= features.find(feature_id_params[:feature_id] || feature_id_params[:id])
   end
 
   def issuer_feature
-    @issuer_feature ||= plan.issuer.features.find(params[:feature_id] || params[:id])
+    @issuer_feature ||= plan.issuer.features.find(feature_id_params[:feature_id] || feature_id_params[:id])
   end
 
   def feature_params
     { feature: issuer_feature }
+  end
+
+  def feature_id_params
+    params.permit(:feature_id, :id).to_h
   end
 
 end

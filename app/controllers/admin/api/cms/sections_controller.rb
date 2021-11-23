@@ -35,7 +35,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##=      requires_access_token
   ##=    }
   def index
-    @sections = current_account.sections.page(params[:page] || 1).per_page(per_page)
+    @sections = current_account.sections.page(page_params[:page] || 1).per_page(per_page)
     respond_with @sections
   end
 
@@ -72,7 +72,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##=       section_model_params
   ##=     }
   def update
-    @section.update_attributes(params[:section])
+    @section.update_attributes(section_params[:section])
     respond_with @section
   end
 
@@ -91,9 +91,14 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   end
 
   private
-    def find_section
-      @section = current_account.sections.find_by_id(params[:id]) || current_account.sections.find_by_system_name(params[:id])
 
-      raise ActiveRecord::RecordNotFound.new("Couldn't find CMS::Section with id or system_name=#{params[:id]}") if @section.nil?
-    end
+  def find_section
+    @section = current_account.sections.find_by(id: section_params[:id]) || current_account.sections.find_by(system_name: section_params[:id])
+
+    raise ActiveRecord::RecordNotFound, "Couldn't find CMS::Section with id or system_name=#{section_params[:id]}" if @section.nil?
+  end
+
+  def section_params
+    params.permit(%i[id section page]).to_h
+  end
 end

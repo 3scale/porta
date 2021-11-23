@@ -31,7 +31,7 @@ class Stats::Api::ServicesController < Stats::Api::BaseController
   def set_source
     begin
       services = (current_user || current_account).accessible_services
-      @service = services.find(params[:service_id])
+      @service = services.find(params.require(:service_id))
       @source  = Stats::Service.new(@service)
 
       authorize!(:show, @service) if current_user

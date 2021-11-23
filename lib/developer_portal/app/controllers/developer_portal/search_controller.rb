@@ -6,7 +6,7 @@ class DeveloperPortal::SearchController < DeveloperPortal::BaseController
   skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
 
   def index
-    presenter = SearchPresenters::IndexPresenter.new params, request, site_account.id
+    presenter = SearchPresenters::IndexPresenter.new search_params, request, site_account.id
 
     respond_to do |format|
       format.html do
@@ -16,13 +16,13 @@ class DeveloperPortal::SearchController < DeveloperPortal::BaseController
       end
 
       format.json do
-        render :json => presenter.search_results.as_json, callback: callback = params[:callback].presence, content_type: callback ? Mime[:js] : Mime[:json]
+        render :json => presenter.search_results.as_json, callback: callback = search_params[:callback].presence, content_type: callback ? Mime[:js] : Mime[:json]
       end
     end
   end
 
   def forum
-    @presenter = SearchPresenters::ForumPresenter.new params, request, site_account.id
+    @presenter = SearchPresenters::ForumPresenter.new search_params, request, site_account.id
     render :action => 'index'
   end
 
@@ -30,5 +30,9 @@ class DeveloperPortal::SearchController < DeveloperPortal::BaseController
 
   def login_required
     site_account.settings.public_search? or super
+  end
+
+  def search_params
+    params.permit!.to_h
   end
 end

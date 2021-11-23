@@ -38,7 +38,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersController < ::Develo
   private
 
     def find_cinstance
-      @cinstance = current_account.bought_cinstances.by_service(@service).find(params[:application_id])
+      @cinstance = current_account.bought_cinstances.by_service(@service).find(params.require(:application_id))
     end
 
     def return_url

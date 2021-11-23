@@ -30,7 +30,7 @@ module DeveloperPortal
     end
 
     def create
-      account_params = (params[:account] || {}) .dup
+      account_params = (signup_params[:account] || {}).dup
       user_params    = account_params.try(:delete, :user) || {}
 
       if signup_user!(account_params, user_params)
@@ -114,7 +114,7 @@ module DeveloperPortal
     def find_plans
       # :plans is kept for legacy reasons - can be removed one made sure
       # that noone is using it
-      plan_ids = Array(params[:plan_ids].presence || params[:plans])
+      plan_ids = Array(signup_params[:plan_ids].presence || signup_params[:plans])
       plan_ids.reject!(&:blank?)
 
       @plans = @provider.provided_plans.published.find(plan_ids)
@@ -128,11 +128,8 @@ module DeveloperPortal
       render :plain => 'Signup disabled', :status => :forbidden unless @provider.signup_enabled?
     end
 
-    def convert_legacy_params
-      %i[account_plan service_plan application_plan].each do |type|
-        params[:plans] ||= []
-        params[:plans] << params[type] if params[type].present?
-      end
+    def signup_params
+      params.permit(%i[plan_ids plans account]).to_h
     end
   end
 end

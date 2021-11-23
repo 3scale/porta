@@ -40,48 +40,40 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
       forced_parameters <<  :credit_card_authorize_net_payment_profile_token
     end
 
-    failed = nil
-    unless failed = required_params(forced_parameters)
 
-      @buyer.credit_card_auth_code = params[:credit_card_token]
+    params.require(forced_parameters)
 
-      @buyer.credit_card_authorize_net_payment_profile_token =
-        params[:credit_card_authorize_net_payment_profile_token]
+    @buyer.credit_card_auth_code = params[:credit_card_token]
 
-      @buyer.billing_address_name = params[:billing_address_name]
-      @buyer.billing_address_address1 = params[:billing_address_address]
+    @buyer.credit_card_authorize_net_payment_profile_token =
+      params[:credit_card_authorize_net_payment_profile_token]
 
-      @buyer.billing_address_city = params[:billing_address_city]
-      @buyer.billing_address_country = params[:billing_address_country]
+    @buyer.billing_address_name = params[:billing_address_name]
+    @buyer.billing_address_address1 = params[:billing_address_address]
 
-      @buyer.credit_card_partial_number = params[:credit_card_partial_number]
-      @buyer.billing_address_state = params[:billing_address_state]
-      @buyer.billing_address_phone = params[:billing_address_phone]
-      @buyer.billing_address_zip = params[:billing_address_zip]
+    @buyer.billing_address_city = params[:billing_address_city]
+    @buyer.billing_address_country = params[:billing_address_country]
 
-      begin
-        @buyer.credit_card_expires_on_month = params[:credit_card_expiration_month]
-      rescue  ArgumentError => e
-        failed = "credit_card_expiration_month"
-        @buyer.errors.add(:credit_card_expires_on)
-      end
+    @buyer.credit_card_partial_number = params[:credit_card_partial_number]
+    @buyer.billing_address_state = params[:billing_address_state]
+    @buyer.billing_address_phone = params[:billing_address_phone]
+    @buyer.billing_address_zip = params[:billing_address_zip]
 
-      begin
-        @buyer.credit_card_expires_on_year = params[:credit_card_expiration_year]
-      rescue ArgumentError => e
-        failed = "credit_card_expiration_year"
-        @buyer.errors.add(:credit_card_expires_on)
-      end
-    else
-      # TODO: this will return a misleading error message
-      real_names = {
-        :credit_card_token => :credit_card_auth_code ,
-        :billing_address_address => :billing_address_address1
-      }
-      @buyer.errors.add(real_names.fetch(failed.to_sym, failed.to_sym))
+    begin
+      @buyer.credit_card_expires_on_month = params[:credit_card_expiration_month]
+    rescue  ArgumentError
+      @buyer.errors.add(:credit_card_expiration_month)
+      @buyer.errors.add(:credit_card_expires_on)
     end
 
-    @buyer.save unless failed
+    begin
+      @buyer.credit_card_expires_on_year = params[:credit_card_expiration_year]
+    rescue ArgumentError
+      @buyer.errors.add(:credit_card_expiration_year)
+      @buyer.errors.add(:credit_card_expires_on)
+    end
+
+    @buyer.save
 
     respond_with(@buyer)
   end
@@ -96,15 +88,9 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
   ##~ op.parameters.add @parameter_account_id_by_id
 
   def destroy
-    failed = nil
-    unless failed = required_params(:account_id)
-      @buyer.delete_cc_details
-      @buyer.delete_billing_address
-    else
-      @buyer.errors.add(failed.to_sym)
-    end
-
-    @buyer.save unless failed
+    @buyer.delete_cc_details
+    @buyer.delete_billing_address
+    @buyer.save
 
     respond_with(@buyer)
   end
@@ -112,6 +98,6 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
   protected
 
   def find_buyer
-    @buyer = current_account.buyers.find(params[:account_id])
+    @buyer = current_account.buyers.find(params.require(:account_id))
   end
 end

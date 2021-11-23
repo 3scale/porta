@@ -47,10 +47,6 @@ class Admin::Api::BaseController < ApplicationController
     :account
   end
 
-  def required_params(*args)
-    args.flatten.detect {|key| params[key].blank? }
-  end
-
   def authorize_switch!(name)
     current_account.settings.switches[name].allowed? or raise CanCan::AccessDenied
   end

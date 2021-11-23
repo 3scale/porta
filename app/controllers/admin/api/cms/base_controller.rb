@@ -9,10 +9,18 @@ class Admin::Api::CMS::BaseController < Admin::Api::BaseController
   private
 
   def per_page
-    if params[:per_page].present?
-      [params[:per_page].to_i, MAX_PER_PAGE].min
+    if per_page_params[:per_page].present?
+      [per_page_params[:per_page].to_i, MAX_PER_PAGE].min
     else
       DEFAULT_PER_PAGE
     end
+  end
+
+  def per_page_params
+    params.permit(:per_page).to_h
+  end
+
+  def page_params
+    params.permit(:page).to_h
   end
 end

@@ -3,8 +3,8 @@ class Provider::Admin::ApiDocs::SpecsController < Provider::Admin::BaseControlle
     # TODO:
     # - add some kind of cache?
     availables = ['accounts', 'finance', 'analytics']
-    if availables.include?(params[:id].to_s)
-      json = File.read(Rails.root.join('doc', 'active_docs', "#{params[:id]}-s20.json"))
+    if availables.include?(show_params[:id].to_s)
+      json = File.read(Rails.root.join('doc', 'active_docs', "#{show_params[:id]}-s20.json"))
 
       hash = JSON.parse(json)
       hash["host"] = request.host_with_port
@@ -13,5 +13,11 @@ class Provider::Admin::ApiDocs::SpecsController < Provider::Admin::BaseControlle
     else
       render json: {error: :not_found}, status: 404
     end
+  end
+
+  private
+
+  def show_params
+    params.permit(:id).to_h
   end
 end

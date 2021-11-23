@@ -35,7 +35,7 @@ class DeveloperPortal::Buyer::StatsController < DeveloperPortal::BaseController
   end
 
   def application
-    @cinstance ||= if application_id = params[:id]
+    @cinstance ||= if application_id = params.permit(:id).to_h[:id]
                      applications.find(application_id)
                    else
                      applications.first
@@ -57,6 +57,6 @@ class DeveloperPortal::Buyer::StatsController < DeveloperPortal::BaseController
   end
 
   def metric
-    @metric ||= application.metrics.find(params[:metric_id])
+    @metric ||= application.metrics.find(params.require(:metric_id))
   end
 end

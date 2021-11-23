@@ -24,7 +24,7 @@ class Admin::Api::ApplicationPlanPricingRulesController < Admin::Api::BaseContro
   protected
 
   def application_plan
-    @application_plan ||= accessible_application_plans.find(params[:application_plan_id])
+    @application_plan ||= accessible_application_plans.find(params.require(:application_plan_id))
   end
 
   def pricing_rules

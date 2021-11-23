@@ -6,7 +6,7 @@ class Buyers::Applications::Bulk::ChangeStatesController < Buyers::Applications:
   end
 
   def create
-    @action = ( ACTIONS & [params[:change_states][:action]] ).first
+    @action = ( ACTIONS & [change_states_params[:change_states][:action]] ).first
 
     return unless @action.present?
 
@@ -22,4 +22,9 @@ class Buyers::Applications::Bulk::ChangeStatesController < Buyers::Applications:
     handle_errors
   end
 
+  private
+
+  def  change_states_params
+    params.permit(:change_states).to_h
+  end
 end
