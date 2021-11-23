@@ -22,19 +22,6 @@ module ThreeScale
       # rails things hash is a flashhash
     end
 
-    # Pass all values through block
-    def map_values(&block) #:yield:
-      dup.map_values!(&block)
-    end
-
-    def map_values! #:yield:
-      each do |key, value|
-        self[key] = yield(value)
-      end
-
-      self
-    end
-
     def map_keys
       inject(self.class.new) do |memo, (key, value)|
         memo[yield(key)] = value
