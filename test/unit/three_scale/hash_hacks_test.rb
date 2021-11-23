@@ -77,6 +77,6 @@ class HashKeysCaseConversionsTest < ActiveSupport::TestCase
     expected[12] = 'bar'
     expected[42] = 'foo'
 
-    assert_equal expected, hash.sort_keys
+    assert_equal expected, hash.sort.to_h
   end
 end
