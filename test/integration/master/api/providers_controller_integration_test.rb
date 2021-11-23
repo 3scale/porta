@@ -22,7 +22,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     AccessToken.stubs(:random_id).returns('randomValue')
 
     # sends activation email
-    ProviderUserMailer.expects(:activation).returns(mock(deliver_now: true))
+    ProviderUserMailer.expects(:activation).returns(mock(deliver_later: true))
 
     # persists the new provider
     assert_difference Account.method(:count), 1 do

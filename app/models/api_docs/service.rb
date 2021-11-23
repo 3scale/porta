@@ -133,7 +133,7 @@ class ApiDocs::Service < ApplicationRecord
   end
 
   def notify_new_base_path
-    ApiDocs::Mailer.new_path_notification(self).deliver_now if @send_notification
+    ApiDocs::Mailer.new_path_notification(self).deliver_later if @send_notification
     @send_notification = nil
   end
 
