@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController::TestCase
+  include ActiveJob::TestHelper
+
   def setup
     super
     @provider = FactoryBot.create(:provider_account)
@@ -30,7 +32,9 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     session[:authentication_id] = 'A1234'
     session[:authentication_provider] = auth_provider.system_name
     # First check that the confirmation link is send
-    post :create, params: valid_buyer_params
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      post :create, params: valid_buyer_params
+    end
     assert_response :redirect
 
     mail = deliveries.last
@@ -44,7 +48,9 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     session[:authentication_id] = 'A1234'
     session[:authentication_provider] = auth_provider.system_name
     session[:authentication_email] = valid_buyer_params[:account][:user][:email]
-    post :create, params: valid_buyer_params
+    perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+      post :create, params: valid_buyer_params
+    end
     assert_response :redirect
 
     mail = deliveries.last
@@ -70,9 +76,9 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
   context "with all default plans" do
     setup do
-      @provider.update_attribute :default_account_plan,  FactoryBot.create(:account_plan, :issuer => @provider)
-      @service.update_attribute :default_service_plan,  FactoryBot.create(:service_plan, :issuer => @service)
-      @service.update_attribute :default_application_plan,  FactoryBot.create(:application_plan, :issuer => @service)
+      @provider.update_attribute :default_account_plan, FactoryBot.create(:account_plan, :issuer => @provider)
+      @service.update_attribute :default_service_plan, FactoryBot.create(:service_plan, :issuer => @service)
+      @service.update_attribute :default_application_plan, FactoryBot.create(:application_plan, :issuer => @service)
     end
 
     # making sure create doesn't crash with an empty post, some browsers are weird
@@ -91,7 +97,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
   context "without any default plan" do
     setup do
-      @provider.update_attribute :default_account_plan,  nil
+      @provider.update_attribute :default_account_plan, nil
     end
 
     should "not create account" do
@@ -131,7 +137,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
   def valid_buyer_params(hash = {})
     { :account => { :org_name => "bar",
-               :user => { :username => "foobar", :email => "email@email.com",
-                 :password => "123456", :password_confirmation => "123456" } }}.merge(hash)
+                    :user => { :username => "foobar", :email => "email@email.com",
+                               :password => "123456", :password_confirmation => "123456" } } }.merge(hash)
   end
 end

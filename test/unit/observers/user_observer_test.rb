@@ -8,7 +8,7 @@ class UserObserverTest < ActiveSupport::TestCase
 
   test 'send email when new user is created' do
     user = buyer_user(signup_type: :new_signup)
-    UserMailer.expects(:signup_notification).with(user).returns(mock(deliver_now: true))
+    UserMailer.expects(:signup_notification).with(user).returns(mock(deliver_later: true))
     user.save!
   end
 
@@ -24,7 +24,7 @@ class UserObserverTest < ActiveSupport::TestCase
 
   test 'send provider activation email when new provider user is created' do
     user = provider_user
-    ProviderUserMailer.expects(:activation).with(user).returns(mock(deliver_now: true))
+    ProviderUserMailer.expects(:activation).with(user).returns(mock(deliver_later: true))
     user.save!
   end
 
