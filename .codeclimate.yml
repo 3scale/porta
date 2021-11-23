@@ -13,6 +13,9 @@ plugins:
   rubocop:
     enabled: true
     channel: "rubocop-0-92"
+    checks:
+      Rubocop/Rails/HelperInstanceVariable:
+        enabled: false
   reek:
     enabled: true
   eslint:
