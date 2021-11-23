@@ -37,7 +37,8 @@ module Stats
       raise InvalidParameterError, "'since' should be ActiveSupport::TimeWithZone" unless ActiveSupport::TimeWithZone === since
 
       options.assert_valid_keys(:from, :by, :order, :limit)
-      options.assert_required_keys(:from, :by)
+      raise InvalidParameterError, "Missing parameter :from" unless options.key?(:from)
+      raise InvalidParameterError, "Missing parameter :by"   unless options.key?(:by)
 
       source_key = key_for(options[:from])
       value_key  = key_for(options[:by].push(period => since.to_s(:compact)))
