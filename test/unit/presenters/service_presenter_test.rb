@@ -16,7 +16,7 @@ class ServicePresenterTest < ActiveSupport::TestCase
     data = ServicePresenter.new(service).new_application_data
 
     app_plans = data[:appPlans]
-    assert_equal app_plans, (app_plans.sort_by { |p| p[:name] })
+    assert_equal (app_plans.sort_by { |p| p[:name] }), app_plans
 
     service_plans = data[:servicePlans]
     assert_equal (service_plans.sort_by { |p| p[:name] }), service_plans
