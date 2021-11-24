@@ -23,7 +23,6 @@ class DeveloperPortal::Admin::Applications::UserKeysController < ::DeveloperPort
   end
 
   def resource
-    resource = collection.find(params[:application_id])
-    resource
+    collection.find(params.require(:application_id))
   end
 end

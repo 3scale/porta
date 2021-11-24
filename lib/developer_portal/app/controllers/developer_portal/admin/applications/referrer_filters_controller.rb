@@ -4,7 +4,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersController < ::Develo
   # TODO: this controller responds only with js, so redirect part doesn't make much sense.
 
   def create
-    @referrer_filter = @cinstance.referrer_filters.add(params[:referrer_filter])
+    @referrer_filter = @cinstance.referrer_filters.add(params.permit(:referrer_filter).to_h[:referrer_filter])
 
     if @referrer_filter.persisted?
       if request.xhr?
@@ -25,7 +25,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersController < ::Develo
   end
 
   def destroy
-    @referrer_filter = @cinstance.referrer_filters.find(params[:id])
+    @referrer_filter = @cinstance.referrer_filters.find(params.require(:id))
     @referrer_filter.destroy
 
     if request.xhr?
@@ -37,15 +37,15 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersController < ::Develo
 
   private
 
-    def find_cinstance
-      @cinstance = current_account.bought_cinstances.by_service(@service).find(params[:application_id])
-    end
+  def find_cinstance
+    @cinstance = current_account.bought_cinstances.by_service(@service).find(params.require(:application_id))
+  end
 
-    def return_url
-      if site_account.multiple_applications_allowed?
-        admin_application_path(@cinstance)
-      else
-        admin_applications_access_details_path
-      end
+  def return_url
+    if site_account.multiple_applications_allowed?
+      admin_application_path(@cinstance)
+    else
+      admin_applications_access_details_path
     end
+  end
 end

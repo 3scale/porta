@@ -13,7 +13,7 @@ class DeveloperPortal::Admin::Applications::KeysController < DeveloperPortal::Ba
   end
 
   def create
-    @key = @cinstance.application_keys.add(params[:key])
+    @key = @cinstance.application_keys.add(params.permit!.to_h[:key])
 
     respond_to do |format|
       format.html do
@@ -32,7 +32,7 @@ class DeveloperPortal::Admin::Applications::KeysController < DeveloperPortal::Ba
   end
 
   def destroy
-    @key = params[:id]
+    @key = params.require(:id)
     @remove = @cinstance.application_keys.remove(@key)
     unless @remove
       flash.now[:error] = 'One application key minimum is required.'
@@ -49,7 +49,7 @@ class DeveloperPortal::Admin::Applications::KeysController < DeveloperPortal::Ba
   end
 
   def regenerate
-    @key = params[:id]
+    @key = params.require(:id)
 
     @new_key = @cinstance.application_keys.regenerate(@key).value
 
@@ -70,7 +70,7 @@ class DeveloperPortal::Admin::Applications::KeysController < DeveloperPortal::Ba
   end
 
   def find_cinstance
-    @cinstance = current_account.bought_cinstances.by_service(@service).find(params[:application_id])
+    @cinstance = current_account.bought_cinstances.by_service(@service).find(params.require(:application_id))
   end
 
   def return_url
