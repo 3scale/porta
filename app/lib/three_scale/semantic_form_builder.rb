@@ -31,7 +31,10 @@ module ThreeScale
     # Get a column object for a specified attribute method - if possible.
     #
     def column_for(method) #:nodoc:
-      @object.column_for_attribute(method) if @object.respond_to?(:column_for_attribute) && @object.try(:has_attribute?, method)
+      # our old formtastic expects nil as in Rails 4, not a null object
+      # https://github.com/rails/rails/pull/15878
+      column = super
+      ActiveRecord::ConnectionAdapters::NullColumn === column ? nil : column
     end
 
     def toggled_inputs(title, opts = {}, &block)
