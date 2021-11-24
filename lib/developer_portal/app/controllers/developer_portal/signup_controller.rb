@@ -30,7 +30,7 @@ module DeveloperPortal
     end
 
     def create
-      account_params = (params[:account] || {}) .dup
+      account_params = (params[:account].permit! || {}) .dup
       user_params    = account_params.try(:delete, :user) || {}
 
       if signup_user!(account_params, user_params)
