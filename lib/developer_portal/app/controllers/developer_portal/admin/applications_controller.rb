@@ -21,7 +21,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
 
   def index
     cinstances = current_account.bought_cinstances.includes(:service)
-                   .order_for_dev_portal.paginate(page: params[:page])
+                   .order_for_dev_portal.paginate(page: local_params[:page])
     collection = Liquid::Drops::Collection.for_drop(Liquid::Drops::Application).new(cinstances)
     pagination = Liquid::Drops::Pagination.new(cinstances, self)
 
@@ -115,7 +115,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   def service
     @service ||= if single_service?
                    services.first
-                 elsif (service_id = params[:service_id])
+                 elsif (service_id = local_params[:service_id])
                    services.where(id: service_id).or(services.where(system_name: service_id)).first
                  elsif current_account.services_can_create_app_on.count == 1
                    current_account.services_can_create_app_on.first
@@ -123,7 +123,7 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def application
-    @cinstance ||= applications.find(params[:id])
+    @cinstance ||= applications.find(params.require(:id))
   end
 
   def new_application
@@ -169,14 +169,23 @@ class DeveloperPortal::Admin::ApplicationsController < ::DeveloperPortal::BaseCo
   end
 
   def accepted_application_params
+    # We need to permit all because of dynamic data (and somehow params[cinstance] wont return `{plan_id}`)
+    params_permit = params.permit!
     # cinstance[*] naming is present for legacy reasons
-    application_attributes = params[:application] || params[:cinstance]
+    application_attributes = params_permit[:application] || params_permit[:cinstance]
     return {} unless application_attributes
+
     permitted_params = fields_definitions + %i[plan_id redirect_url]
-    application_attributes.permit(*permitted_params)
+    application_attributes.permit(*permitted_params).to_h
   end
 
   def fields_definitions
     FieldsDefinition.by_provider(site_account).by_target('Cinstance').pluck(:name)
+  end
+
+  private
+
+  def local_params
+    params.permit(%i[plan_id service_id page]).to_h
   end
 end
