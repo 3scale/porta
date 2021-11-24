@@ -2,8 +2,8 @@ class DeveloperPortal::Admin::ContractsController < DeveloperPortal::BaseControl
   include ::DeveloperPortal::ControllerMethods::PlanChangesMethods
 
   def update
-    application = current_account.contracts.find(params[:id])
-    plan = current_account.provider_account.provided_plans.find(params[:plan_id])
+    application = current_account.contracts.find(params.require(:id))
+    plan = current_account.provider_account.provided_plans.find(params.require(:plan_id))
     # FIXME: buyer_changes_plan! should return a error/success code
     flash[:notice] = application.buyer_changes_plan!(plan)
 

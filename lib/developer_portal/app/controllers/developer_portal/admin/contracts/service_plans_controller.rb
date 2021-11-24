@@ -12,7 +12,7 @@ module DeveloperPortal
     private
 
     def find_contract
-      @contract = current_account.bought_service_contracts.find(params[:contract_id])
+      @contract = current_account.bought_service_contracts.find(params.require(:contract_id))
       @application = @contract
     end
 
