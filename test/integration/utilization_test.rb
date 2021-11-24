@@ -1,13 +1,12 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UtilizationTest < ActionDispatch::IntegrationTest
-
   include TestHelpers::BackendClientStubs
 
-  context :no_metrics_on_applications do
-
+  class NoMetricsOnApplicationsTest < ActionDispatch::IntegrationTest
     setup do
-
       @provider = FactoryBot.create :provider_account
       @plan1 = FactoryBot.create :application_plan, :issuer => @provider.default_service
 
@@ -42,7 +41,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
 
     end
 
-    should 'application is unmetered' do
+    test 'application is unmetered' do
       stub_backend_utilization(@data_empty)
       stub_backend_get_keys
 
@@ -55,7 +54,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
       assert_equal doc.search("div[@id='application-utilization']").children.first.class, Nokogiri::XML::Text
     end
 
-    should 'application has metrics' do
+    test 'application has metrics' do
       stub_backend_utilization(@data_full)
       stub_backend_get_keys
 
@@ -73,7 +72,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
       assert_equal table.search("td[@class='infinity']").size, 0*2
     end
 
-    should 'application has metrics with one disabled over the limit' do
+    test 'application has metrics with one disabled over the limit' do
       stub_backend_utilization(@data_infinity)
       stub_backend_get_keys
 
@@ -91,7 +90,5 @@ class UtilizationTest < ActionDispatch::IntegrationTest
       assert_equal table.search("td[@class='above-0']").size, 2*2
       assert_equal table.search("td[@class='infinity']").size, 1*2
     end
-
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Abilities
@@ -38,7 +40,7 @@ module Abilities
       assert ability.can?(:read, topic)
 
       ability = Ability.new(nil)
-      assert !ability.can?(:read, topic)
+      assert_not ability.can?(:read, topic)
     end
 
     test "topic owner can update and destroy topic if it is less than one day old" do
@@ -58,8 +60,8 @@ module Abilities
       ability = Ability.new(user)
 
       Timecop.travel(2.days.from_now) do
-        assert !ability.can?(:update, topic)
-        assert !ability.can?(:destroy, topic)
+        assert_not ability.can?(:update, topic)
+        assert_not ability.can?(:destroy, topic)
       end
     end
 
@@ -69,8 +71,8 @@ module Abilities
       topic = FactoryBot.create(:topic, :user => user_one)
 
       ability = Ability.new(user_two)
-      assert !ability.can?(:update, topic)
-      assert !ability.can?(:destroy, topic)
+      assert_not ability.can?(:update, topic)
+      assert_not ability.can?(:destroy, topic)
     end
 
     test "admin can manage any topic of his forum" do
@@ -103,7 +105,7 @@ module Abilities
       user  = FactoryBot.create(:user, :account => @provider)
 
       ability = Ability.new(user)
-      assert !ability.can?(:stick, topic)
+      assert_not ability.can?(:stick, topic)
     end
 
     test "post author can update and destroy post if it is less than one day old" do
@@ -123,8 +125,8 @@ module Abilities
       ability = Ability.new(user)
 
       Timecop.travel(2.days.from_now) do
-        assert !ability.can?(:update, post)
-        assert !ability.can?(:destroy, post)
+        assert_not ability.can?(:update, post)
+        assert_not ability.can?(:destroy, post)
       end
     end
 
@@ -135,8 +137,8 @@ module Abilities
 
       ability = Ability.new(user_two)
 
-      assert !ability.can?(:update, post)
-      assert !ability.can?(:destroy, post)
+      assert_not ability.can?(:update, post)
+      assert_not ability.can?(:destroy, post)
     end
 
     test "user can't destroy a post if it is the last one in the topic" do
@@ -144,7 +146,7 @@ module Abilities
       topic.posts[1..-1].each(&:destroy) # Just in case
 
       ability = Ability.new(topic.user)
-      assert !ability.can?(:destroy, topic.posts.first)
+      assert_not ability.can?(:destroy, topic.posts.first)
     end
 
     test "admin can manage any post of his forum" do
@@ -211,9 +213,9 @@ module Abilities
 
       ability = Ability.new(user)
 
-      assert !ability.can?(:create,  TopicCategory)
-      assert !ability.can?(:update,  category)
-      assert !ability.can?(:destroy, category)
+      assert_not ability.can?(:create,  TopicCategory)
+      assert_not ability.can?(:update,  category)
+      assert_not ability.can?(:destroy, category)
     end
 
     test "buyer admin can't manage category" do
@@ -222,9 +224,9 @@ module Abilities
 
       ability = Ability.new(buyer.admins.first)
 
-      assert !ability.can?(:create,  TopicCategory)
-      assert !ability.can?(:update,  category)
-      assert !ability.can?(:destroy, category)
+      assert_not ability.can?(:create,  TopicCategory)
+      assert_not ability.can?(:update,  category)
+      assert_not ability.can?(:destroy, category)
     end
 
     test "admin can manage category of his forum" do
@@ -267,46 +269,43 @@ module Abilities
 
       # anon users
       ability = Ability.new(nil)
-      assert !ability.can?(:reply, topic)
-      assert !ability.can?(:reply, post)
+      assert_not ability.can?(:reply, topic)
+      assert_not ability.can?(:reply, post)
     end
 
+    test "Topic with category should can reply" do
+      @forum.account.settings.update_attribute(:anonymous_posts_enabled, false)
 
-    context "Topic with category" do
-      should "can reply" do
-        @forum.account.settings.update_attribute(:anonymous_posts_enabled, false)
+      category = FactoryBot.create(:topic_category, :forum => @forum)
+      topic = category.topics.build
 
-        category = FactoryBot.create(:topic_category, :forum => @forum)
-        topic = category.topics.build
+      user  = FactoryBot.create(:user, :account => @provider)
+      # logged in provider
+      ability = Ability.new(user)
+      assert ability.can?(:reply, topic)
 
-        user  = FactoryBot.create(:user, :account => @provider)
-        # logged in provider
-        ability = Ability.new(user)
-        assert ability.can?(:reply, topic)
+      buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+      buyer_user = FactoryBot.create(:user, :account => buyer)
+      # logged in buyer
+      ability = Ability.new(user)
+      assert ability.can?(:reply, topic)
 
-        buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
-        buyer_user = FactoryBot.create(:user, :account => buyer)
-        # logged in buyer
-        ability = Ability.new(user)
-        assert ability.can?(:reply, topic)
+      # anon user
+      ability = Ability.new(nil)
+      assert_not ability.can?(:reply, topic)
 
-        # anon user
-        ability = Ability.new(nil)
-        assert !ability.can?(:reply, topic)
+      @forum.account.settings.update_attribute(:anonymous_posts_enabled, true)
+      topic = category.reload.topics.build
+      assert ability.can?(:reply, topic)
+    end
 
-        @forum.account.settings.update_attribute(:anonymous_posts_enabled, true)
-        topic = category.reload.topics.build
-        assert ability.can?(:reply, topic)
-      end
+    test "Topic with category should be manageable by admin" do
+      category = FactoryBot.create(:topic_category, :forum => @forum)
+      admin    = FactoryBot.create(:admin, :account => @provider)
 
-      should "be manageable by admin" do
-        category = FactoryBot.create(:topic_category, :forum => @forum)
-        admin    = FactoryBot.create(:admin, :account => @provider)
-
-        ability = Ability.new(admin)
-        assert ability.can?(:manage, category.topics.build)
-        assert ability.can?(:manage, @forum.topics.build)
-      end
+      ability = Ability.new(admin)
+      assert ability.can?(:manage, category.topics.build)
+      assert ability.can?(:manage, @forum.topics.build)
     end
   end
 end

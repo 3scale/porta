@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'minitest_helper'
 
 # TODO: one day, partialy load rails and leave this on autoloader
@@ -37,7 +39,7 @@ describe WebHook::Event do
 
   let(:web_hook) { stub_everything('web_hook', :enabled? => true) }
   let(:provider) { stub_everything('provider', :id => 16, :web_hook => web_hook, :provider? => true, :web_hooks_allowed? => true) }
-  let(:options)  { Hash.new }
+  let(:options)  { {} }
 
   let(:event)    { WebHook::Event.new(provider, resource, options) }
   let(:enqueue)  { WebHook::Event.enqueue(provider, resource, options) }
@@ -45,7 +47,7 @@ describe WebHook::Event do
   before { WebHook.stubs(:sanitized_url).returns('http://127.0.0.1/') }
 
   describe "valid event" do
-    let(:resource) { ResourceModel.new(:id => 16, :created => Time.now) }
+    let(:resource) { ResourceModel.new(:id => 16, :created => Time.zone.now) }
 
     it { event.must_be :valid? }
 
@@ -86,27 +88,25 @@ describe WebHook::Event do
       end
     end
 
-    context 'without transaction' do
-      before { WebHookWorker.clear }
-
-      it 'enqueues after commit' do
-        assert_equal 0, WebHookWorker.jobs.size
-        Account.transaction do
-          event.enqueue
-          assert_equal 0, WebHookWorker.jobs.size
-        end
-        assert_equal 1, WebHookWorker.jobs.size
-      end
-
-      it 'not enqueues after rollback' do
-        assert_equal 0, WebHookWorker.jobs.size
-        Account.transaction do
-          event.enqueue
-
-          raise ActiveRecord::Rollback
-        end
+    it 'enqueues after commit' do
+      WebHookWorker.clear
+      assert_equal 0, WebHookWorker.jobs.size
+      Account.transaction do
+        event.enqueue
         assert_equal 0, WebHookWorker.jobs.size
       end
+      assert_equal 1, WebHookWorker.jobs.size
+    end
+
+    it 'not enqueues after rollback' do
+      WebHookWorker.clear
+      assert_equal 0, WebHookWorker.jobs.size
+      Account.transaction do
+        event.enqueue
+
+        raise ActiveRecord::Rollback
+      end
+      assert_equal 0, WebHookWorker.jobs.size
     end
   end
 
@@ -115,9 +115,9 @@ describe WebHook::Event do
 
     it { event.resource_type.must_equal 'resource_model' }
     it { event.wont_be :valid? }
-    it { refute event.push_event? }
+    it { assert_not event.push_event? }
 
-    it { refute enqueue }
+    it { assert_not enqueue }
   end
 
   describe "destroyed resource" do
@@ -130,7 +130,7 @@ describe WebHook::Event do
   end
 
   describe "created resource" do
-    let(:now) { Time.now }
+    let(:now) { Time.zone.now }
     let(:resource) { mock_resource(:created_at => now, :updated_at => now) }
 
     it { event.event.must_equal 'created' }
@@ -141,8 +141,8 @@ describe WebHook::Event do
   describe "nil resource" do
     let(:resource) { nil }
 
-    it { proc{ event }.must_raise(WebHook::Event::MissingResourceError) }
-    it { proc{ enqueue }.must_raise(WebHook::Event::MissingResourceError) }
+    it { proc { event }.must_raise(WebHook::Event::MissingResourceError) }
+    it { proc { enqueue }.must_raise(WebHook::Event::MissingResourceError) }
   end
 
   describe "new resource" do
@@ -150,7 +150,7 @@ describe WebHook::Event do
 
     it { event.event.must_be :nil? }
     it { event.wont_be :valid? }
-    it { refute enqueue }
+    it { assert_not enqueue }
   end
 
   describe "push_user?" do

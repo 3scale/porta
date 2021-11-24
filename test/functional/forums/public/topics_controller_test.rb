@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Forums::Public::TopicsControllerTest < ActionController::TestCase
@@ -12,9 +14,8 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
     @provider.settings.forum_public  = true
   end
 
-
-  context "TopicsController" do
-    should "create topic" do
+  class RegardlessOfAnonymousPostingTest < Forums::Public::TopicsControllerTest
+    test "create topic" do
       login_as @provider.admins.first
 
       # missing title
@@ -25,7 +26,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       assert_response :redirect
     end
 
-    should "update topic" do
+    test "update topic" do
       login_as @provider.admins.first
 
       # empty title
@@ -36,20 +37,36 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       assert_response :redirect
     end
 
-    context "anonymous posting enabled" do
-      setup do
+    test 'list posts within topic ascendingly: oldest on the top' do
+      @topic.posts.delete_all
+      post1  = FactoryBot.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
+      post2  = FactoryBot.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
+
+      get :show, params: { id: @topic.permalink }
+
+      posts = assigns(:posts)
+
+      assert_equal [post1, post2], posts.to_a
+      assert_equal posts.first, post1
+      assert_equal posts.last,  post2
+    end
+  end
+
+  class AnonymousPostingTest < Forums::Public::TopicsControllerTest
+    class EnabledTest < AnonymousPostingTest
+      def setup
+        super
         @provider.settings.anonymous_posts_enabled = true
         @provider.settings.save!
       end
 
-      should "anonymous have a hidden field" do
+      test "should anonymous have a hidden field" do
         get :show, params: { id: @topic.permalink }
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user[type=hidden]'
       end
 
-
-      should "provider has a field" do
+      test "should provider has a field" do
         login_as @provider.admins.first
 
         get :show, params: { id: @topic.permalink }
@@ -58,8 +75,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
         assert_select 'input#post_anonymous_user'
       end
 
-
-      should "buyer has a field" do
+      test "should buyer has a field" do
         buyer = FactoryBot.create :buyer_account, :provider_account => @provider
         login_as buyer.admins.first
 
@@ -68,23 +84,23 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
 
         assert_select 'input#post_anonymous_user'
       end
-    end # enabled
+    end
 
-    context "anonymous posting when disabled" do
-      setup do
+    class DisabledTest < AnonymousPostingTest
+      def setup
+        super
         @provider.settings.anonymous_posts_enabled = false
         @provider.settings.save!
       end
 
-      should "not have fields for anonymous" do
+      test "should not have fields for anonymous" do
         get :show, params: { id: @topic.permalink }
 
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user', count: 0
       end
 
-
-      should "not have fields when logged in as a provider" do
+      test "should not have fields when logged in as a provider" do
         login_as @provider.admins.first
 
         get :show, params: { id: @topic.permalink }
@@ -93,7 +109,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
         assert_select 'input#post_anonymous_user', count: 0
       end
 
-      should "have no field when logged in as a buyer" do
+      test "should have no field when logged in as a buyer" do
         buyer = FactoryBot.create :buyer_account, :provider_account => @provider
         login_as buyer.admins.first
 
@@ -102,21 +118,6 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
         assert_match @topic.body, @response.body
         assert_select 'input#post_anonymous_user', count: 0
       end
-    end # disabled
+    end
   end
-
-  test 'list posts within topic ascendingly: oldest on the top' do
-    @topic.posts.delete_all
-    post1  = FactoryBot.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
-    post2  = FactoryBot.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
-
-    get :show, params: { id: @topic.permalink }
-
-    posts = assigns(:posts)
-
-    assert_equal [post1, post2], posts.to_a
-    assert_equal posts.first, post1
-    assert_equal posts.last,  post2
-  end
-
 end

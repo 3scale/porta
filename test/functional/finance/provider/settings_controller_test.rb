@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Finance::Provider::SettingsControllerTest < ActionController::TestCase
@@ -40,32 +42,30 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
     end
   end
 
-  context 'gateways options' do
-    should 'contain only the supported gateways' do
-      login_as(@provider.admins.first)
-      get :show
+  test 'contain only the supported gateways' do
+    login_as(@provider.admins.first)
+    get :show
 
-      assert_response :success
-      page = Nokogiri::HTML::Document.parse(response.body)
+    assert_response :success
+    page = Nokogiri::HTML::Document.parse(response.body)
 
-      values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
+    values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
-      assert_equal(['', 'braintree_blue', 'stripe', 'bogus'], values)
-    end
+    assert_equal(['', 'braintree_blue', 'stripe', 'bogus'], values)
+  end
 
-    should 'contain deprecated gateway if in use' do
-      @provider.gateway_setting.gateway_type = :ogone
-      @provider.gateway_setting.save(validate: false)
+  test 'contain deprecated gateway if in use' do
+    @provider.gateway_setting.gateway_type = :ogone
+    @provider.gateway_setting.save(validate: false)
 
-      login_as(@provider.admins.first)
-      get :show
+    login_as(@provider.admins.first)
+    get :show
 
-      assert_response :success
-      page = Nokogiri::HTML::Document.parse(response.body)
+    assert_response :success
+    page = Nokogiri::HTML::Document.parse(response.body)
 
-      values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
+    values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
-      assert_same_elements(['', 'braintree_blue', 'ogone', 'stripe', 'bogus'], values)
-    end
-  end # gateway options
+    assert_same_elements(['', 'braintree_blue', 'ogone', 'stripe', 'bogus'], values)
+  end
 end

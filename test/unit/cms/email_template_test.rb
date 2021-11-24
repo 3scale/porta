@@ -1,19 +1,20 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class EmailTemplateTest < ActiveSupport::TestCase
-
   def setup
     @subject = "subject"
     @bcc = "bcc@mail.example.com"
     @cc = "cc@mail.example.com"
     @custom = "CUSTOM"
-    @tags = %{\
+    @tags = %(\
 {% email %}
   {% subject "Subject!" %}
   {% bcc = "alias <bcc@mail.example.com>" "another <alias@mail.example.com>" %}
   {% header 'X-Custom' = 'X-Value' %}
 {% endemail %}\
-}
+)
   end
 
   test 'save headers' do
@@ -90,12 +91,11 @@ class EmailTemplateTest < ActiveSupport::TestCase
     assert template.errors['headers.bcc'].presence
   end
 
-  context "Account Messenger expired_credit_card_notification_for_buyer" do
-    setup do
-      @provider = FactoryBot.create(:provider_account)
-      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
-      @body = "more awesome content"
-      @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_expired_credit_card_notification_for_buyer', :published => @body,
+  test "Account Messenger expired_credit_card_notification_for_buyer should assign headers to messenger" do
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    @body = "more awesome content"
+    @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_expired_credit_card_notification_for_buyer', :published => @body,
                                         :provider => @provider,
                                         :headers => {
                                           :bcc => @bcc,
@@ -103,66 +103,62 @@ class EmailTemplateTest < ActiveSupport::TestCase
                                           :subject => @subject,
                                           :custom => @custom
                                         }
-    end
+    message = AccountMessenger.expired_credit_card_notification_for_buyer(@buyer) && Message.last
 
-    should "assign headers to messenger" do
-      message = AccountMessenger.expired_credit_card_notification_for_buyer(@buyer) && Message.last
+    assert_match("more awesome content", message.body)
+    assert_equal({"cc"=>@cc, "bcc"=>@bcc, "custom"=>@custom}, message.headers)
+    assert_equal(@subject, message.subject)
+  end
 
-      assert_equal("more awesome content", message.body)
-      assert_equal({"cc"=>@cc, "bcc"=>@bcc, "custom"=>@custom}, message.headers)
-      assert_equal(@subject, message.subject)
-    end
+  test "Account Messenger expired_credit_card_notification_for_buyer with headers should assign headers to messenger" do
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    @body = "more awesome content"
+    @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_expired_credit_card_notification_for_buyer', :published => @body,
+                                        :provider => @provider,
+                                        :headers => {
+                                          :bcc => @bcc,
+                                          :cc => @cc,
+                                          :subject => @subject,
+                                          :custom => @custom
+                                        }
+    @template.published = @tags + @template.published
+    @template.save!
+    message = AccountMessenger.expired_credit_card_notification_for_buyer(@buyer) && Message.last
 
-    context "with headers" do
-      setup do
-        @template.published =  @tags + @template.published
-        @template.save!
-      end
-
-      should "assign headers to messenger" do
-        message = AccountMessenger.expired_credit_card_notification_for_buyer(@buyer) && Message.last
-
-        assert_equal("Subject!", message.subject)
-        assert_equal("more awesome content", message.body)
-        assert_equal({
-          "cc"=>@cc,
-          "bcc"=>[ "alias <bcc@mail.example.com>", "another <alias@mail.example.com>"],
-          "custom"=>@custom,
-          'X-Custom' => 'X-Value'
-        }, message.headers)
-      end
-    end
+    assert_equal("Subject!", message.subject)
+    assert_match("more awesome content", message.body)
+    assert_equal({
+                   "cc"=>@cc,
+      "bcc"=>["alias <bcc@mail.example.com>", "another <alias@mail.example.com>"],
+      "custom"=>@custom,
+      'X-Custom' => 'X-Value'
+                 }, message.headers)
   end
 
   # this is to check we can override template of message send to provider to buyer
-  context "Account Messenger New Signup template" do
-    setup do
-      @provider = FactoryBot.create(:provider_account)
-      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
-      @body = "awesome content"
-      @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_new_signup', :published => @body,
-                                        :provider => @provider,
-                                        :headers => {
-                                          :bcc => @bcc,
-                                          :cc => @cc,
-                                          :subject => @subject,
-                                          :custom => @custom
-                                        }
-    end
+  test "Account Messenger New Signup template should assign headers to messenger" do
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    @body = "awesome content"
+    @template = CMS::EmailTemplate.create! :system_name => 'account_messenger_new_signup', :published => @body,
+                                      :provider => @provider,
+                                      :headers => {
+                                        :bcc => @bcc,
+                                        :cc => @cc,
+                                        :subject => @subject,
+                                        :custom => @custom
+                                      }
+    message = AccountMessenger.new_signup(@buyer) && Message.last
 
-    should "assign headers to messenger" do
-      message = AccountMessenger.new_signup(@buyer) && Message.last
-
-      assert_equal("awesome content", message.body)
-    end
+    assert_equal("awesome content", message.body)
   end
 
-  context "Account Approved template" do
-    setup do
-      @provider = FactoryBot.create(:provider_account)
-      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
-      @body = "My content"
-      @template = CMS::EmailTemplate.create! :system_name => 'account_approved', :published => @body,
+  test "Account Approved template should assign headers to mailer" do
+    @provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    @body = "My content"
+    @template = CMS::EmailTemplate.create! :system_name => 'account_approved', :published => @body,
                                         :provider => @provider,
                                         :headers => {
                                           :bcc => @bcc,
@@ -170,24 +166,20 @@ class EmailTemplateTest < ActiveSupport::TestCase
                                           :subject => @subject,
                                           :custom => @custom
                                         }
-    end
+    @template.published = @tags + @template.published
+    @template.save!
 
-    should "assign headers to mailer" do
-      @template.published =  @tags + @template.published
-      @template.save!
+    mail = AccountMailer.approved(@buyer)
 
-      mail = AccountMailer.approved(@buyer)
+    assert_equal "Subject!", mail.subject
+    assert_match 'My content', mail.body.to_s
+    assert_equal "alias <bcc@mail.example.com>, another <alias@mail.example.com>", mail.header['bcc'].to_s
+    assert_equal "cc@mail.example.com", mail.header['cc'].to_s
+    assert_equal @custom, mail.header['custom'].to_s
 
-      assert_equal "Subject!", mail.subject
-      assert_equal 'My content', mail.body.to_s
-      assert_equal "alias <bcc@mail.example.com>, another <alias@mail.example.com>", mail.header['bcc'].to_s
-      assert_equal "cc@mail.example.com", mail.header['cc'].to_s
-      assert_equal @custom, mail.header['custom'].to_s
+    mail.deliver_now
 
-      mail.deliver_now
-
-      assert_match /poweredby/, mail.body.to_s
-    end
+    assert_match /poweredby/, mail.body.to_s
   end
 
   def test_all_new_and_overriden
@@ -203,4 +195,30 @@ class EmailTemplateTest < ActiveSupport::TestCase
     templates = provider.email_templates.all_new_and_overridden.map(&:system_name)
     assert_empty templates & CMS::EmailTemplate::BUYER_BILLING_TEMPLATES
   end
+
+  # def subject
+  #   @subject ||= "subject"
+  # end
+
+  # def bcc
+  #   @bcc ||= "bcc@mail.example.com"
+  # end
+
+  # def cc
+  #   @cc ||= "cc@mail.example.com"
+  # end
+
+  # def custom
+  #   @custom ||= "CUSTOM"
+  # end
+
+  # def tags
+  #   @tags ||= %(\
+  #              {% email %}
+  #                {% subject "Subject!" %}
+  #                {% bcc = "alias <bcc@mail.example.com>" "another <alias@mail.example.com>" %}
+  #                {% header 'X-Custom' = 'X-Value' %}
+  #              {% endemail %}\
+  #              )
+  # end
 end
