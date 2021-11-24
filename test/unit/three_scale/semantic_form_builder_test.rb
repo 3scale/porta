@@ -29,6 +29,25 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     end
   end
 
+  def test_column_for_override_needed
+    file = FactoryBot.create(:cms_file)
+    message = "Probably Formtastic was updated and ThreeScale::SemanticFormBuilder#column_for can be removed."
+
+    assert_not_empty(semantic_form_for(file, url: '') { |f| f.input :tag_list; f.input :date })
+
+    assert_raises message do
+      semantic_form_for(file, url: '', builder: ::Formtastic::SemanticFormBuilder) do |f|
+        f.input :tag_list
+      end
+    end
+
+    assert_raises message do
+      semantic_form_for(file, url: '', builder: ::Formtastic::SemanticFormBuilder) do |f|
+        f.input :date
+      end
+    end
+  end
+
   test 'inline errors' do
     dummy = Dummy.new
 
