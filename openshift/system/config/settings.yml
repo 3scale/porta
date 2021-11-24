@@ -42,6 +42,7 @@ base: &default
 
   janitor_worker_enabled: true
 
+  # deprecated: use payments.yaml to configure payments instead
   active_merchant_logging: false
   billing_canaries:
 

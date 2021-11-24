@@ -80,6 +80,7 @@ C:\\nppdf32Log\\debuglog.txt
 /config/zync.yml
 /config/redhat_customer_portal.yml
 /config/prometheus.yml
+/config/payments.yml
 /db/*.sql
 /db/safe.json
 /db/*.sql*
