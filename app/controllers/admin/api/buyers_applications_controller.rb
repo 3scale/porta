@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseController
   representer Cinstance
 
@@ -18,7 +20,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ##~ op.parameters.add @parameter_account_id_by_id_name
   #
   def index
-    respond_with(applications.by_state(params[:state]))
+    respond_with(applications.by_state(params.require(:state)))
   end
 
   ##~ op = e.operations.add
@@ -45,10 +47,10 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   def create
     application = applications.new(user_account: buyer, plan: application_plan, create_origin: "api")
     application.unflattened_attributes = application_params
-    application.user_key = params[:user_key] if params[:user_key]
-    application.application_id = params[:application_id] if params[:application_id]
+    application.user_key = local_params[:user_key] if local_params[:user_key]
+    application.application_id = local_params[:application_id] if local_params[:application_id]
 
-    Array(params[:application_key]).each do |key|
+    Array(local_params[:application_key]).each do |key|
       application.application_keys.build(value: key)
     end
 
@@ -95,7 +97,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   #
   def update
     application.unflattened_attributes = flat_params
-    application.user_key = params[:user_key] if params[:user_key]
+    application.user_key = local_params[:user_key] if local_params[:user_key]
 
     application.save
 
@@ -136,7 +138,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ## op.parameters.add :name => "app_id", :description => "app_id of the application (for app_id/app_key and oauth authentication modes).", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def find
-    application = buyer.bought_cinstances.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?) OR (services.backend_version <> '1' AND cinstances.application_id = ?)", params[:user_key], params[:app_id]).first!
+    application = buyer.bought_cinstances.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?) OR (services.backend_version <> '1' AND cinstances.application_id = ?)", local_params[:user_key], local_params[:app_id]).first!
 
     respond_with application
   end
@@ -266,6 +268,12 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
     respond_with application
   end
 
+  private
+
+  def local_params
+    params.permit(%i[user_key application_id application_key app_id]).to_h
+  end
+
   protected
 
   def applications
@@ -274,11 +282,11 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   end
 
   def application
-    @application ||= applications.find params[:id]
+    @application ||= applications.find(params.require(:id))
   end
 
   def application_plan
-    @application_plan ||= accessible_application_plans.find(params[:plan_id])
+    @application_plan ||= accessible_application_plans.find(params.require(:plan_id))
   end
 
   def application_params
@@ -286,7 +294,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   end
 
   def application_attributes
-    current_account.fields.for(Cinstance) + %w|user_key application_id|
+    current_account.fields.for(Cinstance) + %w[user_key application_id]
   end
 
   def flat_params
@@ -294,9 +302,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   end
 
   def find_or_create_service_contract
-    unless current_account.find_or_create_service_contract(buyer, application_plan.service)
-      render_error 'You cannot subscribe to that service.', status: :unprocessable_entity
-    end
+    render_error 'You cannot subscribe to that service.', status: :unprocessable_entity unless current_account.find_or_create_service_contract(buyer, application_plan.service)
   end
 
 end

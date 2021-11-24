@@ -27,11 +27,12 @@ class Master::Api::Proxy::ConfigsController < Master::Api::BaseController
   end
 
   def host
-    params[:host].presence
+    params.require(:host).presence
   end
 
   def authenticate!
     return if logged_in?
-    render plain: 'unauthorized', status: 401
+
+    render plain: 'unauthorized', status: :unauthorized
   end
 end

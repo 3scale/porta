@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Master::Events::ImportsController < Master::BaseController
   include SiteAccountSupport
   respond_to :xml
@@ -13,6 +15,7 @@ class Master::Events::ImportsController < Master::BaseController
   private
 
   def check_shared_secret
-    head(403) unless params[:secret] == Events.shared_secret
+    permitted_params = params.permit(%i[secret])
+    head(403) unless permitted_params[:secret] == Events.shared_secret
   end
 end

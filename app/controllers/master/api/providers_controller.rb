@@ -29,7 +29,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
     @provider.partner = @partner # could be nil
     @provider.save
     @provider.force_upgrade_to_provider_plan!(@application_plan)
-    render json: @provider.as_json(include: [:bought_cinstance, :partner])
+    render json: @provider.as_json(include: %i[bought_cinstance partner])
   end
 
   # swagger
@@ -154,7 +154,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   private
 
   def provider_account
-    @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params[:id])
+    @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params.require(id))
   end
 
   def action_includes_deleted_providers?
@@ -163,13 +163,14 @@ class Master::Api::ProvidersController < Master::Api::BaseController
 
   def ensure_master_with_plans
     return if current_account.signup_provider_possible?
+
     System::ErrorReporting.report_error('Provider signup not enabled. Check all master\'s plans are in place.')
     render_error 'Provider signup not enabled.', :status => :unprocessable_entity
   end
 
   def update_params
     permitted_params = provider_account.scheduled_for_deletion? ? %i[state_event] : UPDATE_PARAMS
-    params.require(:account).permit(permitted_params)
+    params.require(:account).permit(permitted_params).to_h
   end
 
   def create_params
@@ -187,16 +188,16 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   end
 
   def get_partner
-    @partner = Partner.find_by_system_name(params[:partner])
+    @partner = Partner.find_by(system_name: params.require(:partner))
   end
 
   def get_application_plan
-    application_plans = Account.master.application_plans.where(partner_id: @partner.try!(:id))
-    @application_plan = application_plans.find_by_system_name(params[:application_plan])
+    application_plans = Account.master.application_plans.where(partner_id: @partner&.id)
+    @application_plan = application_plans.find_by(system_name: params.require(:application_plan))
     raise ActiveRecord::RecordNotFound if @application_plan.blank?
   end
 
   def get_provider
-    @provider = Account.providers.find(params[:id])
+    @provider = Account.providers.find(params.require(:id))
   end
 end
