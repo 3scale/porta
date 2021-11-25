@@ -154,7 +154,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   private
 
   def provider_account
-    @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params.require(id))
+    @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params.require(:id))
   end
 
   def action_includes_deleted_providers?

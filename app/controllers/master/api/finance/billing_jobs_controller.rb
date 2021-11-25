@@ -41,10 +41,10 @@ class Master::Api::Finance::BillingJobsController < Master::Api::Finance::BaseCo
   private
 
   def provider
-    @provider ||= Account.providers.find(billing_params.require(:provider_id))
+    @provider ||= Account.providers.find(billing_params[:provider_id])
   end
 
   def billing_params
-    @billing_params ||= params.permit(%i[provider_id account_id date]).to_h
+    @billing_params ||= params.permit(%i[provider_id account_id date])
   end
 end

@@ -48,7 +48,8 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
     application = applications.new(user_account: buyer, plan: application_plan, create_origin: "api")
     application.unflattened_attributes = application_params
     application.user_key = local_params[:user_key] if local_params[:user_key]
-    application.application_id = local_params[:application_id] if local_params[:application_id]
+    application_id_param = local_params[:application_id]
+    application.application_id = application_id_param if application_id_param
 
     Array(local_params[:application_key]).each do |key|
       application.application_keys.build(value: key)
@@ -97,7 +98,8 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   #
   def update
     application.unflattened_attributes = flat_params
-    application.user_key = local_params[:user_key] if local_params[:user_key]
+    user_key_param = local_params[:user_key]
+    application.user_key = user_key_param if user_key_param
 
     application.save
 
