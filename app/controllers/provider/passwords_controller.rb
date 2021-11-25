@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class Provider::PasswordsController < FrontendController
 
   skip_before_action :login_required, only: %i[destroy show update reset]
   before_action :find_provider
-  before_action :find_user, :only => [:show, :update]
-  before_action :instantiate_sessions_presenter, only: [:show, :update]
+  before_action :find_user, :only => %i[show update]
+  before_action :instantiate_sessions_presenter, only: %i[show update]
   before_action :passwords_allowed?
-  before_action :instantiate_presenter, only: %i(show update)
+  before_action :instantiate_presenter, only: %i[show update]
 
   def new
     return redirect_back(fallback_location: root_path), error: t('.has_password') if current_user.using_password?
@@ -17,7 +19,7 @@ class Provider::PasswordsController < FrontendController
 
   def destroy
     reset_session_password_token
-    if user = @provider.users.find_by_email(email)
+    if user = @provider.users.find_by(email: email)
       user.generate_lost_password_token!
       flash[:notice] = "A password reset link has been emailed to you."
       redirect_to provider_login_path
@@ -28,7 +30,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def show
-    if params[:password_reset_token].present? && session[:password_reset_token].blank?
+    if params.require(:password_reset_token).present? && session[:password_reset_token].blank?
       new_token = @user.generate_lost_password_token
       session[:password_reset_token] = new_token
       redirect_to provider_password_path
@@ -36,7 +38,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def update
-    user = params[:user]
+    user = params.require(:user)
     if @user.update_password(user[:password], user[:password_confirmation] )
       reset_session_password_token
       flash[:notice] = "The password has been changed."
@@ -94,6 +96,7 @@ class Provider::PasswordsController < FrontendController
 
   def passwords_allowed?
     return unless @provider.settings.enforce_sso?
+
     redirect_to provider_login_path, flash: {error: 'Password login has been disabled.'}
   end
 end

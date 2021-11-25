@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Provider::SessionsController < FrontendController
 
   layout 'provider/login'
@@ -6,7 +7,7 @@ class Provider::SessionsController < FrontendController
 
   before_action :ensure_provider_domain
   before_action :find_provider
-  before_action :instantiate_sessions_presenter, only: [:new, :create]
+  before_action :instantiate_sessions_presenter, only: %i[new create]
   before_action :redirect_if_logged_in, only: %i[new]
   before_action :redirect_to_enforced_sso, only: %i[new]
 
@@ -87,12 +88,12 @@ class Provider::SessionsController < FrontendController
   end
 
   def sso_params
-    params.permit(:token, :expires_at, :redirect_url, :system_name, :code).merge(request: request)
+    params.permit(%i[token expires_at redirect_url system_name code]).merge(request: request).to_h
   end
 
   def session_return_to
-    if params[:return_to]
-      return_to = safe_return_to(params[:return_to])
+    if params.require(:return_to)
+      return_to = safe_return_to(params.require(:return_to))
       session[:return_to] = return_to if return_to.present?
     end
   end
@@ -103,6 +104,7 @@ class Provider::SessionsController < FrontendController
 
   def redirect_to_enforced_sso
     return if !domain_account.settings.enforce_sso? || published_authentication_providers.count != 1
+
     redirect_to authorization_provider_bounce_path(published_authentication_providers.first.system_name)
   end
 end

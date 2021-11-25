@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::InviteeSignupsController < FrontendController
   skip_before_action :login_required
 
@@ -10,8 +12,7 @@ class Provider::InviteeSignupsController < FrontendController
 
   layout 'provider/login'
 
-  def show
-  end
+  def show; end
 
   def create
     @user.admin_sections = domain_account.provider_can_use?(:service_permissions) ? [] : ['monitoring']
@@ -40,7 +41,7 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def find_invitation
-    @invitation = domain_account.invitations.pending.find_by_token!(invitation_token)
+    @invitation = domain_account.invitations.pending.find_by!(token: invitation_token)
   end
 
   def can_create?
@@ -49,7 +50,7 @@ class Provider::InviteeSignupsController < FrontendController
   end
 
   def build_user
-    @user = @invitation.make_user(params[:user] || {})
+    @user = @invitation.make_user(params.require(:user) || {})
 
     # This is just a sanity guard added when splitting invitation
     # controllers. Remove when SURE.
