@@ -4,34 +4,40 @@ require 'test_helper'
 
 class Forums::Public::TopicsControllerTest < ActionController::TestCase
   setup do
-    @provider = FactoryBot.create :provider_account
+    @provider = FactoryBot.create(:provider_account)
     @request.host = @provider.domain
 
-    @forum = FactoryBot.create :forum, :account => @provider
-    @topic = FactoryBot.create :topic, :forum => @forum, :user => @provider.admins.first!
+    @forum = FactoryBot.create(:forum, account: @provider)
+    @topic = FactoryBot.create(:topic, forum: @forum, user: @provider.admins.first!)
 
     @provider.settings.forum_enabled = true
-    @provider.settings.forum_public  = true
+    @provider.settings.forum_public = true
   end
 
   class RegardlessOfAnonymousPostingTest < Forums::Public::TopicsControllerTest
-    test "create topic" do
+    test "create topic missing title" do
       login_as @provider.admins.first
 
-      # missing title
       post :create, params: { topic: { body: 'No idea why I wrote that.' } }
       assert_response :success
+    end
+
+    test "create topic" do
+      login_as @provider.admins.first
 
       post :create, params: { topic: { title: 'The king has returned!',  body: 'No idea why I wrote that.' } }
       assert_response :redirect
     end
 
-    test "update topic" do
+    test "update topic missing title" do
       login_as @provider.admins.first
 
-      # empty title
       put :update, params: { id: @topic.permalink, topic: { title: '', body: 'new thing' } }
       assert_response :success
+    end
+
+    test "update topic" do
+      login_as @provider.admins.first
 
       put :update, params: { id: @topic.permalink, topic: { title: 'HOT STUFF', body: 'new thing' } }
       assert_response :redirect
@@ -39,8 +45,8 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
 
     test 'list posts within topic ascendingly: oldest on the top' do
       @topic.posts.delete_all
-      post1  = FactoryBot.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
-      post2  = FactoryBot.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
+      post1 = FactoryBot.create(:post, topic: @topic, user_id: 99, created_at: 10.days.ago)
+      post2 = FactoryBot.create(:post, topic: @topic, user_id: 88, created_at: 1.day.ago)
 
       get :show, params: { id: @topic.permalink }
 
@@ -76,7 +82,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       end
 
       test "should buyer has a field" do
-        buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+        buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
         login_as buyer.admins.first
 
         get :show, params: { id: @topic.permalink }
@@ -110,7 +116,7 @@ class Forums::Public::TopicsControllerTest < ActionController::TestCase
       end
 
       test "should have no field when logged in as a buyer" do
-        buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+        buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
         login_as buyer.admins.first
 
         get :show, params: { id: @topic.permalink }
