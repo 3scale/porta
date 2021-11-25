@@ -1,27 +1,25 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class PaymentGatewayTest < ActiveSupport::TestCase
-
-  should 'have display_name' do
+  test 'have display_name' do
     assert_equal 'Authorize.Net', PaymentGateway.new(:authorize_net).display_name
   end
 
-  should 'have homepage_url' do
+  test 'have homepage_url' do
     assert_equal 'http://www.authorize.net/', PaymentGateway.new(:authorize_net).homepage_url
   end
 
-  context 'method #all' do
-    setup { PaymentGateway.stubs(:bogus_enabled?).returns(false) }
+  test 'method #all contain only supported gateways' do
+    PaymentGateway.stubs(:bogus_enabled?).returns(false)
+    assert_equal %i[authorize_net braintree_blue ogone stripe], PaymentGateway.all.map(&:type).sort
+  end
 
-    should 'contain only supported gateways' do
-      assert_equal %i[authorize_net braintree_blue ogone stripe], PaymentGateway.all.map(&:type).sort
-    end
-
-    should 'include bogus when enabled' do
-      PaymentGateway.stubs(:bogus_enabled?).returns(true)
-      assert_includes PaymentGateway.all.map(&:type), :bogus
-    end
-  end # method #all
+  test 'method #all include bogus when enabled' do
+    PaymentGateway.stubs(:bogus_enabled?).returns(true)
+    assert_includes PaymentGateway.all.map(&:type), :bogus
+  end
 
   test ':login and :password order in #fields' do
     PaymentGateway::GATEWAYS.each do |gateway|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class LineItemTest < ActiveSupport::TestCase
@@ -30,16 +32,10 @@ class LineItemTest < ActiveSupport::TestCase
     assert_equal 0, LineItem.sum_by_invoice_state('finalized')
   end
 
-  context 'LineItem' do
-    setup do
-      @line_item = FactoryBot.create(:line_item_plan_cost)
-    end
-
-
-    should 'respond to #to_xml' do
-      # TODO: add content assertioins
-      assert_not_nil @line_item.to_xml
-    end
+  test 'respond to #to_xml' do
+    @line_item = FactoryBot.create(:line_item_plan_cost)
+    # TODO: add content assertioins
+    assert_not_nil @line_item.to_xml
   end
 
   test 'plan_id' do
@@ -72,9 +68,7 @@ class LineItemTest < ActiveSupport::TestCase
     end
   end
 
-
   test 'type is a String' do
     assert_equal '', LineItem.new.type
   end
-
 end

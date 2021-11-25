@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 module Abilities
   class MultipleApplicationsTest < ActiveSupport::TestCase
-
     def setup
       @provider = FactoryBot.create(:provider_account)
       @admin = @provider.admins.first
       @member = FactoryBot.create(:user, :account => @provider, :role => :member)
     end
 
-    context "switch multiple applications denied" do
-      setup do
+    class SwitchDeniedTest < MultipleApplicationsTest
+      def setup
+        super
         assert @provider.settings.multiple_applications.denied?
       end
 
-      should "admin cannot manage multiple apps" do
+      test "should admin cannot manage multiple apps" do
         admin_ability = Ability.new(@admin)
 
         assert_can    admin_ability, :admin,  :multiple_applications
@@ -23,7 +25,7 @@ module Abilities
         assert_cannot admin_ability, :manage, :multiple_applications
       end
 
-      should "member cannot manage multiple apps" do
+      test "should member cannot manage multiple apps" do
         member_ability = Ability.new(@member)
 
         assert_cannot member_ability, :see,    :multiple_applications
@@ -32,13 +34,14 @@ module Abilities
       end
     end
 
-    context "switch multiple applications allowed" do
-      setup do
+    class SwitchAllowedTest < MultipleApplicationsTest
+      def setup
+        super
         @provider.settings.allow_multiple_applications!
         assert @provider.settings.multiple_applications.allowed?
       end
 
-      should "admin can manage multiple apps" do
+      test "should admin can manage multiple apps" do
         admin_ability = Ability.new(@admin)
 
         assert_can admin_ability, :see,    :multiple_applications
@@ -46,7 +49,7 @@ module Abilities
         assert_can admin_ability, :manage, :multiple_applications
       end
 
-      should "member cannot manage multiple apps" do
+      test "should member cannot manage multiple apps" do
         member_ability = Ability.new(@member)
 
         assert_can    member_ability, :see,    :multiple_applications
@@ -54,7 +57,7 @@ module Abilities
         assert_cannot member_ability, :manage, :multiple_applications
       end
 
-      should "member with partners group can manage multiple apps" do
+      test "should member with partners group can manage multiple apps" do
         #setup
         @member.admin_sections=['partners']
 
