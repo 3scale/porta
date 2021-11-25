@@ -40,7 +40,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
 
       mail = deliveries.last
       assert_match(/activate/, mail.body.to_s)
-      assert_equal valid_buyer_params[:account][:user][:email], mail.to[0]
+      assert_equal valid_buyer_params.dig(:account, :user, :email), mail.to[0]
       assert_match(/API account confirmation/, mail.subject)
       Account.last.destroy!
       deliveries.clear
@@ -48,12 +48,12 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       # Now check that the link is not send
       session[:authentication_id] = 'A1234'
       session[:authentication_provider] = auth_provider.system_name
-      session[:authentication_email] = valid_buyer_params[:account][:user][:email]
+      session[:authentication_email] = valid_buyer_params.dig(:account, :user, :email)
       post :create, params: valid_buyer_params
       assert_response :redirect
 
       mail = deliveries.last
-      assert_equal valid_buyer_params[:account][:user][:email], mail.to[0]
+      assert_equal valid_buyer_params.dig(:account, :user, :email), mail.to[0]
       assert_match(/API account confirmation/, mail.subject)
       assert_no_match(/activate/, mail.body.to_s)
     end
@@ -74,7 +74,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     end
 
     test "raise RecordNotFound with wrong plan ids" do
-      post :create, params: valid_buyer_params(:plans => [1, 2])
+      post :create, params: valid_buyer_params(plans: [1, 2])
       assert_response :not_found
     end
   end
@@ -82,7 +82,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   class WithoutAnyDefaultPlanTest < DeveloperPortal::SignupControllerTest
     def setup
       super
-      @provider.update_attribute :default_account_plan,  nil
+      @provider.update(default_account_plan:  nil)
     end
 
     test "not create account" do
@@ -99,13 +99,12 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   class WithAllDefaultPlansTest < DeveloperPortal::SignupControllerTest
     def setup
       super
-      @provider.update_attribute :default_account_plan,  FactoryBot.create(:account_plan, :issuer => @provider)
-      @service.update_attribute :default_service_plan,  FactoryBot.create(:service_plan, :issuer => @service)
-      @service.update_attribute :default_application_plan,  FactoryBot.create(:application_plan, :issuer => @service)
+      @provider.update(default_account_plan: FactoryBot.create(:account_plan, issuer: @provider))
+      @service.update(default_service_plan: FactoryBot.create(:service_plan, issuer: @service))
+      @service.update(default_application_plan: FactoryBot.create(:application_plan, issuer: @service))
     end
 
-    # making sure create doesn't crash with an empty post, some browsers are weird
-    test "work with empty post" do
+    test "create doesn't crash with an empty post" do
       post :create
       assert_response :success
     end
@@ -121,15 +120,16 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   class WithMultipleServicesAndServicePlansTest < DeveloperPortal::SignupControllerTest
     def setup
       super
-      @service_two = @provider.services.create :name => "Second"
-      @service_two_plan = FactoryBot.create(:service_plan, :issuer => @service)
-      @service_two_plan_two = FactoryBot.create(:service_plan, :issuer => @service)
+      service_two = @provider.services.create(name: "Second")
+      service_two_plan = FactoryBot.create(:service_plan, issuer: service_two)
+      service_two_plan_two = FactoryBot.create(:service_plan, issuer: service_two)
 
-      [@service_two_plan, @service_two_plan_two].each(&:publish!)
+      @plans = [service_two_plan, service_two_plan_two]
+      @plans.each(&:publish!)
     end
 
     test "allow only one service subsription" do
-      post :create, params: valid_buyer_params(:plans => [@service_two_plan_two, @service_two_plan].map(&:id))
+      post :create, params: valid_buyer_params(plans: @plans.map(&:id))
       signup_result = assigns(:signup_result)
 
       assert_includes signup_result.errors[:plans], 'Can subscribe only one plan per service'
@@ -139,8 +139,11 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
   private
 
   def valid_buyer_params(hash = {})
-    { :account => { :org_name => "bar",
-                    :user => { :username => "foobar", :email => "email@email.com",
-                               :password => "123456", :password_confirmation => "123456" } } }.merge(hash)
+    { account: { org_name: "bar",
+                 user: { username: "foobar",
+                         email: "email@email.com",
+                         password: "123456",
+                         password_confirmation: "123456" }
+    }}.merge(hash)
   end
 end
