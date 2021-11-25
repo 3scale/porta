@@ -3,9 +3,8 @@
 require 'test_helper'
 
 class Finance::Provider::SettingsControllerTest < ActionController::TestCase
-
   def setup
-    @provider = FactoryBot.create(:provider_account, :billing_strategy => FactoryBot.create(:postpaid_with_charging))
+    @provider = FactoryBot.create(:provider_account, billing_strategy: FactoryBot.create(:postpaid_with_charging))
     @provider.settings.allow_finance!
     @request.host = @provider.admin_domain
   end
@@ -24,15 +23,12 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
     PaymentGateway.stubs(:all).returns([gateway])
     login_as(@provider.admins.first)
     get :show
-
     assert_response :success
-    # assert_template 'admin/account/payment_gateways/show'
 
-    # assert_active_menu(:account)
     assert_equal @provider, assigns(:account)
     assert_equal [gateway], assigns(:payment_gateways)
 
-    assert_select_form admin_account_payment_gateway_path, :method => :patch do
+    assert_select_form admin_account_payment_gateway_path, method: :patch do
       assert_select 'select[name=?]', 'account[payment_gateway_type]'
       assert_select 'button[type=submit]'
 
