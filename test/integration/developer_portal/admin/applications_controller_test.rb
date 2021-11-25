@@ -9,10 +9,10 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.default_service
 
-    @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @buyer.buy! @service.service_plans.first
 
-    @plan = FactoryBot.create :application_plan, :issuer => @service
+    @plan = FactoryBot.create(:application_plan, issuer: @service)
     @plan.publish!
 
     @buyer.buy! @plan
@@ -104,7 +104,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
     class ManageAppsEnabledTest < SingleAppModeTest
       def setup
         super
-        @service.update_attribute :buyers_manage_apps, true
+        @service.update(buyers_manage_apps: true)
       end
 
       test 'allow access to new' do
@@ -174,7 +174,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
     class ManageAppsDisabledTest < MultiAppModeTest
       def setup
         super
-        @service.update_attribute :buyers_manage_apps, false
+        @service.update(buyers_manage_apps: false)
       end
 
       test 'grant access to index' do
@@ -211,7 +211,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
     class ManageAppsEnabledTest < MultiAppModeTest
       def setup
         super
-        @service.update_attribute :buyers_manage_apps, true
+        @service.update(buyers_manage_apps: true)
       end
 
       test 'allow access to new' do
