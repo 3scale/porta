@@ -25,8 +25,8 @@ class InvitationMailerTest < ActionMailer::TestCase
 
   test 'buyer invitation contains signup link to public domain of the provider' do
     buyer = FactoryBot.create :buyer_account
-    buyer_invitation = FactoryBot.create(:invitation, :account => buyer)
-    buyer_email      = InvitationMailer.invitation(buyer_invitation)
+    buyer_invitation = FactoryBot.create(:invitation, account: buyer)
+    buyer_email = InvitationMailer.invitation(buyer_invitation)
 
     assert_match("https://#{buyer.provider_account.external_domain}/signup/#{buyer_invitation.token}", buyer_email.body.to_s)
   end

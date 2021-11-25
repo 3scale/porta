@@ -14,14 +14,14 @@ class LineItemTest < ActiveSupport::TestCase
     provider_account_one = FactoryBot.create(:provider_with_billing)
     provider_account_two = FactoryBot.create(:provider_with_billing)
 
-    provider_account_one.billing_strategy.update_attribute(:currency, 'EUR')
-    provider_account_two.billing_strategy.update_attribute(:currency, 'USD')
+    provider_account_one.billing_strategy.update(currency: 'EUR')
+    provider_account_two.billing_strategy.update(currency: 'USD')
 
-    invoice_one = FactoryBot.create(:invoice, :provider_account => provider_account_one)
-    invoice_two = FactoryBot.create(:invoice, :provider_account => provider_account_two)
+    invoice_one = FactoryBot.create(:invoice, provider_account: provider_account_one)
+    invoice_two = FactoryBot.create(:invoice, provider_account: provider_account_two)
 
-    line_item_one = invoice_one.line_items.new(:cost => 10)
-    line_item_two = invoice_two.line_items.new(:cost => 42)
+    line_item_one = invoice_one.line_items.new(cost: 10)
+    line_item_two = invoice_two.line_items.new(cost: 42)
 
     assert_equal 'EUR', line_item_one.cost.currency
     assert_equal 'USD', line_item_two.cost.currency

@@ -7,7 +7,7 @@ module Abilities
     def setup
       @provider = FactoryBot.create(:provider_account)
       @admin = @provider.admins.first
-      @member = FactoryBot.create(:user, :account => @provider, :role => :member)
+      @member = FactoryBot.create(:member, account: @provider)
     end
 
     class SwitchDeniedTest < MultipleApplicationsTest
@@ -20,7 +20,6 @@ module Abilities
         admin_ability = Ability.new(@admin)
 
         assert_can    admin_ability, :admin,  :multiple_applications
-
         assert_cannot admin_ability, :see,    :multiple_applications
         assert_cannot admin_ability, :manage, :multiple_applications
       end
@@ -58,10 +57,8 @@ module Abilities
       end
 
       test "should member with partners group can manage multiple apps" do
-        #setup
-        @member.admin_sections=['partners']
-
-        partners_ability = Ability.new(@member)
+        member = FactoryBot.create(:member, account: @provider, admin_sections: ['partners'])
+        partners_ability = Ability.new(member)
 
         assert_can partners_ability, :see,    :multiple_applications
         assert_can partners_ability, :admin,  :multiple_applications
