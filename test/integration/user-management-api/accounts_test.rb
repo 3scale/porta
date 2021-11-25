@@ -113,11 +113,9 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         end
 
         test 'changing billing status' do
-          put admin_api_account_path(@buyer, format: :xml), params: params.merge({
-            monthly_billing_enabled: true,
-            monthly_charging_enabled: true,
-            org_name: 'ooooooooo'
-          })
+          put admin_api_account_path(@buyer, format: :xml), params: params.merge({ monthly_billing_enabled: true,
+                                                                                   monthly_charging_enabled: true,
+                                                                                   org_name: 'ooooooooo' })
           assert_response :forbidden
         end
 
@@ -147,8 +145,6 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
           assert_response :forbidden
         end
-
-        # pending_test 'change plan'
       end
 
       class WithAdminSectionsTest < MemberUserTest
@@ -333,7 +329,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     end
 
     test 'index returns extra fields escaped' do
-      field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
+      field_defined(@provider, { target: "Account", name: "some_extra_field" })
 
       @buyer.reload
       @buyer.extra_fields = { some_extra_field: "< > &" }
@@ -518,7 +514,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     end
 
     test 'update with extra fields' do
-      field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
+      field_defined(@provider, { target: "Account", name: "some_extra_field" })
 
       put admin_api_account_path(@buyer, format: :xml), params: params.merge({ some_extra_field: "stuff", vat_rate: 33 })
 

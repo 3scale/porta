@@ -30,7 +30,7 @@ class Finance::ChargingInvoiceStatesTest < ActionDispatch::IntegrationTest
       @provider = FactoryBot.create(:provider_account)
       @invoice = FactoryBot.create(:invoice, provider_account: @master,
                                              buyer_account: @provider,
-                                             period:  Month.new(Time.zone.local(1984, 1, 1)))
+                                             period: Month.new(Time.zone.local(1984, 1, 1)))
 
       @invoice.stubs(:cost).returns(100.to_has_money('EUR'))
       @invoice.issue_and_pay_if_free!

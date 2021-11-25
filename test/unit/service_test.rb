@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class ServiceTest < ActiveSupport::TestCase
-
   test '#accessible?' do
     service = Service.new
 
@@ -18,7 +17,7 @@ class ServiceTest < ActiveSupport::TestCase
     end
   end
 
-  def test_create_default_proxy
+  test 'create default proxy' do
     Service.any_instance.expects(:create_proxy!).at_least_once
     FactoryBot.create(:simple_service, proxy: nil)
 
@@ -27,14 +26,14 @@ class ServiceTest < ActiveSupport::TestCase
     assert_not_nil service.proxy
   end
 
-  def test_create_with_default_private_endpoint
+  test 'create with default private endpoint' do
     account = FactoryBot.build(:provider_account)
     account.save!
     service = account.default_service
     assert_equal BackendApi.default_api_backend, service.api_backend
   end
 
-  def test_backend_version=
+  test 'backend_version=' do
     service = FactoryBot.build_stubbed(:simple_service)
     service.backend_version = 'oauth'
     assert_equal 'oauth', service.backend_version
@@ -45,7 +44,7 @@ class ServiceTest < ActiveSupport::TestCase
     assert_equal 'oidc', service.proxy.authentication_method
   end
 
-  def test_parameterized_system_name
+  test 'parameterized system_name' do
     service = Service.new(system_name: 'api_2')
 
     assert_equal 'api-2', service.parameterized_system_name
@@ -53,29 +52,25 @@ class ServiceTest < ActiveSupport::TestCase
 
   # Backward compatibility with providers that still have default service.
   # It cannot be deleted in backend that is why we need this
-  def test_stop_destroy_if_last_default
+  test 'stop destroy if last default' do
     service = FactoryBot.create(:simple_service)
 
     service.expects(:default?).returns(true)
-
     service.destroy
-
     assert service.reload
 
     service.expects(:destroyed_by_association).returns(Account.new)
-
     service.destroy
-
     assert_raise(ActiveRecord::RecordNotFound) { service.reload }
   end
 
-  def test_create_with_plugin
+  test 'create with plugin' do
     service = FactoryBot.build(:simple_service, deployment_option: 'plugin_rest', account: FactoryBot.create(:simple_account))
 
     assert service.save!
   end
 
-  def test_deployment_option=
+  test 'deployment_option=' do
     FactoryBot.create(:simple_service, deployment_option: 'self_managed')
 
     service = Service.last!
@@ -90,7 +85,7 @@ class ServiceTest < ActiveSupport::TestCase
     assert proxy.staging_endpoint
   end
 
-  def test_deployment_options
+  test 'deployment_options' do
     deployment_options = Service.deployment_options
 
     assert_includes deployment_options, 'Gateway'
@@ -99,19 +94,15 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   # Now the last remaining service cannot be destroyed
-  def test_stop_destroy_if_last
+  test 'stop destroy if last' do
     service = FactoryBot.create(:simple_service)
 
     service.expects(:last_accessible?).returns(true)
-
     service.destroy
-
     assert service.reload
 
     service.expects(:destroyed_by_association).returns(Account.new)
-
     service.destroy
-
     assert_raise(ActiveRecord::RecordNotFound) { service.reload }
   end
 
@@ -139,7 +130,10 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'service_token' do
     account = FactoryBot.create(:simple_account)
-    service = Service.new { |s| s.account = account; s.system_name = 'foo' }
+    service = Service.new do |s|
+      s.account = account
+      s.system_name = 'foo'
+    end
     service.save(validate: false)
 
     assert_not service.service_token
@@ -154,12 +148,12 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test 'should be in incomplete state' do
-    @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
+    @service = Service.create!(account: FactoryBot.create(:simple_provider), name: 'PandaCam')
     assert @service.incomplete?
   end
 
   test 'should have default metrics' do
-    @service = Service.create!(:account => FactoryBot.create(:simple_provider), :name => 'PandaCam')
+    @service = Service.create!(account: FactoryBot.create(:simple_provider), name: 'PandaCam')
     assert_not_nil @service.metrics.first
     assert_equal 'hits', @service.metrics.first.name
   end
@@ -184,7 +178,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'Service#cinstances returns cinstances of plans of the service' do
     service = FactoryBot.create(:simple_service)
-    plan = FactoryBot.create(:application_plan, :issuer => service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
     buyer_account = FactoryBot.create(:simple_buyer)
 
     cinstance = buyer_account.buy!(plan)
@@ -193,7 +187,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test '#has_traffic?' do
     service = FactoryBot.create(:simple_service)
-    plan = FactoryBot.create(:application_plan, :issuer => service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
 
     buyer1 = FactoryBot.create(:simple_buyer)
     buyer2 = FactoryBot.create(:simple_buyer)
@@ -203,7 +197,7 @@ class ServiceTest < ActiveSupport::TestCase
 
     assert_equal false, service.has_traffic?
 
-    app1.update_attribute(:first_traffic_at, Time.zone.now)
+    app1.update(first_traffic_at: Time.zone.now)
     assert_equal true, service.has_traffic?
   end
 
@@ -224,7 +218,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'Service#cinstances does not return destroyed cinstances' do
     service = FactoryBot.create(:simple_service)
-    plan = FactoryBot.create(:application_plan, :issuer => service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
     buyer_account = FactoryBot.create(:simple_buyer)
 
     cinstance = buyer_account.buy!(plan)
@@ -235,7 +229,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'Service#cinstances returns read-write cinstances' do
     service = FactoryBot.create(:simple_service)
-    plan = FactoryBot.create(:application_plan, :issuer => service)
+    plan = FactoryBot.create(:application_plan, issuer: service)
     buyer_account = FactoryBot.create(:simple_buyer)
 
     buyer_account.buy!(plan)
@@ -246,7 +240,7 @@ class ServiceTest < ActiveSupport::TestCase
   test '#has_method_metrics? should return true if metric hits has children' do
     service = FactoryBot.create(:simple_service)
     metric = service.metrics.first
-    metric.children.create!(:system_name => 'foos', :friendly_name => 'Foos')
+    metric.children.create!(system_name: 'foos', friendly_name: 'Foos')
     assert service.has_method_metrics?
   end
 
@@ -258,14 +252,14 @@ class ServiceTest < ActiveSupport::TestCase
   test '#method_metrics should return only metrics that are children of hits' do
     service = FactoryBot.create(:simple_service)
     hits = service.metrics.hits!
-    method_1 = hits.children.create!(friendly_name: 'Foos')
-    method_2 = hits.children.create!(friendly_name: 'Bars')
+    method1 = hits.children.create!(friendly_name: 'Foos')
+    method2 = hits.children.create!(friendly_name: 'Bars')
 
-    assert_equal 'foos', method_1.system_name
+    assert_equal 'foos', method1.system_name
 
-    FactoryBot.create(:metric, :service => service)
+    FactoryBot.create(:metric, service: service)
 
-    assert_same_elements [method_1, method_2], service.method_metrics
+    assert_same_elements [method1, method2], service.method_metrics
   end
 
   test '#method_metrics should return null relation if service has no methods defined' do
@@ -274,8 +268,8 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   test "default service cannot be destroyed" do
-    provider = FactoryBot.create :provider_account
-    service  = provider.default_service
+    provider = FactoryBot.create(:provider_account)
+    service = provider.default_service
 
     service.destroy
     assert service.reload
@@ -284,15 +278,13 @@ class ServiceTest < ActiveSupport::TestCase
 
   test '#plugin_deployment? returns true when using a plugin as deployment option' do
     service = FactoryBot.build(:service, deployment_option: 'plugin_ruby')
-
     assert service.plugin_deployment?
 
     service = FactoryBot.build(:service, deployment_option: 'hosted')
-
     assert_not service.plugin_deployment?
   end
 
-  def test_default_service_plan
+  test 'default service plan' do
     service = FactoryBot.build(:simple_service)
     service.account.settings.service_plans_ui_visible = true
 
@@ -302,7 +294,7 @@ class ServiceTest < ActiveSupport::TestCase
     assert_equal 'hidden', service_plan.state
   end
 
-  def test_default_published_service_plan
+  test 'default published service plan' do
     Logic::RollingUpdates.stubs(skipped?: true)
 
     service = FactoryBot.build(:simple_service)
@@ -314,7 +306,7 @@ class ServiceTest < ActiveSupport::TestCase
     assert_equal 'hidden', service_plan.state
   end
 
-  def test_default_published_service_plan_with_rolling_update
+  test 'default published service plan with rolling update' do
     Logic::RollingUpdates.stubs(enabled?: true, skipped?: false)
 
     service = FactoryBot.build(:simple_service)
@@ -328,10 +320,9 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   class DestroyingServiceTest < ActiveSupport::TestCase
-
     test "destroying service destroys it's plans" do
-      service          = FactoryBot.create(:service)
-      service_plan     = FactoryBot.create(:application_plan, issuer: service)
+      service = FactoryBot.create(:service)
+      service_plan = FactoryBot.create(:application_plan, issuer: service)
       application_plan = FactoryBot.create(:service_plan, issuer: service)
 
       service.destroy
@@ -401,9 +392,9 @@ class ServiceTest < ActiveSupport::TestCase
   test 'reordering plans' do
     service = FactoryBot.create(:simple_service)
 
-    free = FactoryBot.create(:application_plan, :issuer => service)
-    basic = FactoryBot.create(:application_plan, :issuer => service)
-    pro = FactoryBot.create(:application_plan, :issuer => service)
+    free = FactoryBot.create(:application_plan, issuer: service)
+    basic = FactoryBot.create(:application_plan, issuer: service)
+    pro = FactoryBot.create(:application_plan, issuer: service)
 
     service.reorder_plans([free.id, basic.id, pro.id])
     [free, basic, pro].map(&:reload)
@@ -420,15 +411,15 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'support_email should fallback to account.support_email' do
     service = FactoryBot.create(:simple_service)
-    service.account.update_attribute :support_email, "support@accounts-table.example.net"
+    service.account.update(support_email: "support@accounts-table.example.net")
     assert_equal service.support_email, service.account.support_email
 
-    service.update_attribute :support_email, "support@services-table.example.net"
+    service.update(support_email: "support@services-table.example.net")
     assert_equal service.support_email, "support@services-table.example.net"
   end
 
   test "support_email should be validated by email format" do
-    service = FactoryBot.build(:simple_service, :support_email => "invalid email")
+    service = FactoryBot.build(:simple_service, support_email: "invalid email")
     service.valid?
     assert service.errors[:support_email].present?
   end
@@ -463,7 +454,7 @@ class ServiceTest < ActiveSupport::TestCase
     service = FactoryBot.create(:simple_service)
     assert_includes Service.accessible.to_a, service
 
-    service.update_column :state, 'deleted'
+    service.update(state: 'deleted')
     assert_not_includes Service.accessible.to_a, service
   end
 
@@ -476,7 +467,7 @@ class ServiceTest < ActiveSupport::TestCase
     service2 = FactoryBot.create(:simple_service, account: account)
     assert_not service.last_accessible?
 
-    service2.update_column :state, 'deleted'
+    service2.update(state: 'deleted')
     assert service.last_accessible?
   end
 
@@ -515,7 +506,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   test 'destroying service with customized plan' do
     service = FactoryBot.create(:simple_service)
-    service1 = FactoryBot.create(:simple_service, account: service.account)
+    FactoryBot.create(:simple_service, account: service.account)
     application_plan = FactoryBot.create(:simple_application_plan, service: service)
     custom_application_plan = application_plan.customize
     custom_application_plan.save!
@@ -679,10 +670,10 @@ class ServiceTest < ActiveSupport::TestCase
         tracker.flush
 
         service.expects(:track_proxy_affecting_changes).never
-        service.update_attribute(:name, 'new name')
+        service.update(name: 'new name')
 
         service.expects(:track_proxy_affecting_changes).once
-        service.update_attribute(:backend_version, 'oauth')
+        service.update(backend_version: 'oauth')
       end
     end
 

@@ -5,10 +5,8 @@ require 'test_helper'
 class ApplicationPlanTest < ActiveSupport::TestCase
   def setup
     @app_plan = FactoryBot.create(:application_plan)
-    @original_plan_metric = FactoryBot.create(:plan_metric, :plan => @app_plan,
-                                    :visible => false, :limits_only_text => false)
-    @original_usage_limit = FactoryBot.create(:usage_limit, :plan => @app_plan,
-                                    :period => "year", :value => 666)
+    @original_plan_metric = FactoryBot.create(:plan_metric, plan: @app_plan, visible: false, limits_only_text: false)
+    @original_usage_limit = FactoryBot.create(:usage_limit, plan: @app_plan, period: "year", value: 666)
   end
 
   should belong_to :partner
@@ -31,17 +29,17 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     custom_plan = @app_plan.customize
     custom_plan_metric = custom_plan.plan_metrics.first
 
-    assert custom_plan.plan_metrics.count == @app_plan.plan_metrics.count
-    assert custom_plan_metric.visible == @original_plan_metric.visible
-    assert custom_plan_metric.limits_only_text == @original_plan_metric.limits_only_text
+    assert_equal app_plan.plan_metrics.count, custom_plan.plan_metrics.count
+    assert_equal @original_plan_metric.visible, custom_plan_metric.visible
+    assert_equal @original_plan_metric.limits_only_text, custom_plan_metric.limits_only_text
   end
 
   test '#customize clone usage_limits' do
     custom_plan = @app_plan.customize
     custom_usage_limit = custom_plan.usage_limits.first
 
-    assert custom_plan.usage_limits.count == @app_plan.usage_limits.count
-    assert custom_usage_limit.period == @original_usage_limit.period
-    assert custom_usage_limit.value == @original_usage_limit.value
+    assert_equal @app_plan.usage_limits.count, custom_plan.usage_limits.count
+    assert_equal @original_usage_limit.period, custom_usage_limit.period
+    assert_equal @original_usage_limit.value, custom_usage_limit.value
   end
 end

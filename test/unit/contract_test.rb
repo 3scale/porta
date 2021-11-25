@@ -3,8 +3,7 @@
 require 'test_helper'
 
 class ContractTest < ActiveSupport::TestCase
-
-  def test_by_account
+  test '#by_account' do
     accounts = [FactoryBot.create(:simple_buyer), FactoryBot.create(:simple_provider)]
     accounts.each { |account| FactoryBot.create_list(:application, 2, user_account: account) }
 
@@ -12,9 +11,9 @@ class ContractTest < ActiveSupport::TestCase
     assert_same_elements Contract.where(user_account: accounts[1].id).pluck(:id), Contract.by_account(accounts[1].id).pluck(:id)
   end
 
-  def test_have_paid_on
+  test '#have_paid_on' do
     recent_date = (5.days - 1.minute).ago
-    old_date    = (5.days + 1.day).ago
+    old_date = (5.days + 1.day).ago
 
     paid_apps = [
       FactoryBot.create(:application, paid_until: recent_date, variable_cost_paid_until: nil),
@@ -34,11 +33,11 @@ class ContractTest < ActiveSupport::TestCase
     unpaid_apps.each { |unpaid_app| assert_not_includes response_paid_apps, unpaid_app.id }
   end
 
-  def test_plan_changed_is_notified_after_commit
-    plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
-    contract = FactoryBot.create(:account_contract, :plan => plan)
+  test '#plan_changed is notified after commit' do
+    plan = FactoryBot.create(:account_plan, issuer: FactoryBot.create(:simple_account))
+    contract = FactoryBot.create(:account_contract, plan: plan)
 
-    other_plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
+    other_plan = FactoryBot.create(:account_plan, issuer: FactoryBot.create(:simple_account))
 
     Contract.transaction do
       contract.change_plan!(other_plan)
@@ -51,15 +50,14 @@ class ContractTest < ActiveSupport::TestCase
     contract.save!
   end
 
-  def test_plan_changed_is_notified_just_once
-    plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
-    contract = FactoryBot.create(:account_contract, :plan => plan)
+  test '#plan_changed is notified just once' do
+    plan = FactoryBot.create(:account_plan, issuer: FactoryBot.create(:simple_account))
+    contract = FactoryBot.create(:account_contract, plan: plan)
 
     ## explicit transaction
-    other_plan = FactoryBot.create(:account_plan, :issuer => FactoryBot.create(:simple_account))
+    other_plan = FactoryBot.create(:account_plan, issuer: FactoryBot.create(:simple_account))
 
     contract.expects(:notify_observers).with(:plan_changed).once
-
     contract.expects(:notify_observers).with(:bill_variable_for_plan_changed, kind_of(Plan)).once
 
     Contract.transaction do
@@ -67,7 +65,7 @@ class ContractTest < ActiveSupport::TestCase
     end
 
     ## just save
-    other_contract = FactoryBot.create(:account_contract, :plan => plan)
+    other_contract = FactoryBot.create(:account_contract, plan: plan)
 
     other_contract.expects(:notify_observers).with(:plan_changed).once
     other_contract.expects(:notify_observers).with(:bill_variable_for_plan_changed, kind_of(Plan)).once
@@ -85,7 +83,7 @@ class ContractTest < ActiveSupport::TestCase
   end
 
   test '#paid? be delegated to plan' do
-    buyer = FactoryBot.create :buyer_account
+    buyer = FactoryBot.create(:buyer_account)
     service = buyer.provider_account.first_service!
     #making the service subscribeable
     service.publish!
@@ -94,13 +92,10 @@ class ContractTest < ActiveSupport::TestCase
     @contract = buyer.buy! @plan
     assert_not @plan.paid?
     assert_not @contract.paid?
-    @plan.update_attribute :cost_per_month, 10.0
+    @plan.update(cost_per_month: 10.0)
 
-    @plan.reload
-    @contract.reload
-
-    assert @plan.paid?
-    assert @contract.paid?
+    assert @plan.reload.paid?
+    assert @contract.reload.paid?
   end
 
   test '.permitted_for' do
@@ -116,7 +111,7 @@ class ContractTest < ActiveSupport::TestCase
     assert_equal [cinstances.first.id], Contract.permitted_for(user).pluck(:id)
   end
 
-  def test_bill_for
+  test '#bill_for' do
     invoice = FactoryBot.create(:invoice)
     month = Month.new(Time.zone.now)
 
@@ -128,10 +123,10 @@ class ContractTest < ActiveSupport::TestCase
     assert_in_delta month.end.to_time.end_of_day, contract.paid_until, 1.second
   end
 
-  def test_billable
+  test '#billable' do
     pending_contract = FactoryBot.create(:simple_cinstance)
     # Needed because of a callback `before_create :accept_on_create`
-    pending_contract.update_attribute :state, :pending
+    pending_contract.update_attribute :state, :pending # rubocop:disable Rails/SkipsModelValidations
 
     provider = FactoryBot.build_stubbed(:simple_provider)
     buyer = pending_contract.user_account
@@ -147,7 +142,7 @@ class ContractTest < ActiveSupport::TestCase
     assert_includes buyer.billable_contracts, active_contract
   end
 
-  def test_bill_plan_change_with_bad_period_due_to_time_zone
+  test 'bill plan change with bad period due to time zone' do
     Time.zone = 'CET'
     Timecop.freeze(Date.parse('2018-01-17')) do
       provider = FactoryBot.create(:simple_provider)
@@ -162,10 +157,10 @@ class ContractTest < ActiveSupport::TestCase
 
   class CanChangePlan < ActiveSupport::TestCase
     def setup
-      @provider = FactoryBot.create :provider_account
-      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+      @provider = FactoryBot.create(:provider_account)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
-      @service_plan = FactoryBot.create :service_plan, :issuer => @provider.first_service!
+      @service_plan = FactoryBot.create(:service_plan, issuer: @provider.first_service!)
 
       @provider.set_change_service_plan_permission!(:none)
     end
@@ -190,7 +185,7 @@ class ContractTest < ActiveSupport::TestCase
   test 'destroy customized plan callback only runs when the plan is not scheduled for deletion' do
     original_plan = FactoryBot.create(:simple_application_plan)
     plan_async_deletion, plan_sync_deletion = FactoryBot.create_list(:simple_application_plan, 2, original: original_plan)
-    plan_async_deletion.service.update_column(:state, :deleted)
+    plan_async_deletion.service.update(state: :deleted)
     contract_async_deletion, contract_sync_deletion = [plan_async_deletion.reload, plan_sync_deletion].map do |plan|
       FactoryBot.create(:simple_cinstance, plan: plan)
     end
