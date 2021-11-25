@@ -27,7 +27,7 @@ class Master::Api::Proxy::ConfigsController < Master::Api::BaseController
   end
 
   def host
-    params.require(:host).presence
+    params[:host].presence
   end
 
   def authenticate!

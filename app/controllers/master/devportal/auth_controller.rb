@@ -26,7 +26,7 @@ class Master::Devportal::AuthController < ApplicationController
     authentication_provider = account.authentication_providers.find_by!(system_name: params.require(:system_name))
     client = ThreeScale::OAuth2::Client.build(authentication_provider)
 
-    base_url = if params.require(:invitation_token).present?
+    base_url = if params[:invitation_token].present?
                  ThreeScale::Domain.callback_endpoint(request, account, domain)
                else
                  ThreeScale::Domain.current_endpoint(request, domain)

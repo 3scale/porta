@@ -11,7 +11,7 @@ class Master::ServiceDiscovery::AuthController < Master::BaseController
   protected
 
   def self_domain_url(self_domain)
-    options = params.permit(%i[code referrer state]).to_h.merge(host: self_domain, controller: 'provider/admin/service_discovery/auth', action: :show)
+    options = params.permit(%i[code referrer state]).merge(host: self_domain, controller: 'provider/admin/service_discovery/auth', action: :show).to_h
     url_for(options)
   end
 end

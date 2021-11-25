@@ -79,7 +79,7 @@ class Admin::Api::ApplicationsController < Admin::Api::BaseController
       applications.joins(:service).where("(services.backend_version <> '1' AND cinstances.application_id = ?)", app_id).first!
 
                      else
-      applications.find(params[:application_id] || params[:id])
+      applications.find(params.require(:application_id) || params.require(:id))
     end
   end
 

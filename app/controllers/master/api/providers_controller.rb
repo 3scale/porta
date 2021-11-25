@@ -188,12 +188,12 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   end
 
   def get_partner
-    @partner = Partner.find_by(system_name: params.require(:partner))
+    @partner = Partner.find_by(system_name: params[:partner])
   end
 
   def get_application_plan
     application_plans = Account.master.application_plans.where(partner_id: @partner&.id)
-    @application_plan = application_plans.find_by(system_name: params.require(:application_plan))
+    @application_plan = application_plans.find_by(system_name: params[:application_plan])
     raise ActiveRecord::RecordNotFound if @application_plan.blank?
   end
 

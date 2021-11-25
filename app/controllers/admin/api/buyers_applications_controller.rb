@@ -20,7 +20,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ##~ op.parameters.add @parameter_account_id_by_id_name
   #
   def index
-    respond_with(applications.by_state(params.require(:state)))
+    respond_with(applications.by_state(params[:state]))
   end
 
   ##~ op = e.operations.add
@@ -47,11 +47,11 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   def create
     application = applications.new(user_account: buyer, plan: application_plan, create_origin: "api")
     application.unflattened_attributes = application_params
-    application.user_key = local_params[:user_key] if local_params[:user_key]
-    application_id_param = local_params[:application_id]
+    application.user_key = params[:user_key] if params[:user_key]
+    application_id_param = params[:application_id]
     application.application_id = application_id_param if application_id_param
 
-    Array(local_params[:application_key]).each do |key|
+    Array(params[:application_key]).each do |key|
       application.application_keys.build(value: key)
     end
 
@@ -98,7 +98,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   #
   def update
     application.unflattened_attributes = flat_params
-    user_key_param = local_params[:user_key]
+    user_key_param = params[:user_key]
     application.user_key = user_key_param if user_key_param
 
     application.save
@@ -140,7 +140,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ## op.parameters.add :name => "app_id", :description => "app_id of the application (for app_id/app_key and oauth authentication modes).", :dataType => "string", :allowMultiple => false, :required => false, :paramType => "query"
   #
   def find
-    application = buyer.bought_cinstances.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?) OR (services.backend_version <> '1' AND cinstances.application_id = ?)", local_params[:user_key], local_params[:app_id]).first!
+    application = buyer.bought_cinstances.joins(:service).where("(services.backend_version = '1' AND cinstances.user_key = ?) OR (services.backend_version <> '1' AND cinstances.application_id = ?)", params[:user_key], params[:app_id]).first!
 
     respond_with application
   end
@@ -268,12 +268,6 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
     application.resume
 
     respond_with application
-  end
-
-  private
-
-  def local_params
-    params.permit(%i[user_key application_id application_key app_id]).to_h
   end
 
   protected
