@@ -5,7 +5,7 @@ require 'test_helper'
 class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionController::TestCase
   def setup
     super
-    @provider = FactoryBot.create :provider_account
+    @provider = FactoryBot.create(:provider_account)
     @request.host = @provider.domain
   end
 
@@ -19,8 +19,8 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
   class AfterLoginTest < DeveloperPortal::Buyer::StatsControllerTest
     def setup
       super
-      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
-      @app_plan = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
 
       login_as(@buyer.admins.first)
     end
@@ -42,8 +42,8 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
       def setup
         super
         @live_app1 = @buyer.buy! @app_plan
-        @live_app2 = @buyer.buy! FactoryBot.create(:application_plan, :issuer => @provider.default_service)
-        cinstance = @buyer.buy! FactoryBot.create(:application_plan, :issuer => @provider.default_service)
+        @live_app2 = @buyer.buy! FactoryBot.create(:application_plan, issuer: @provider.default_service)
+        cinstance = @buyer.buy! FactoryBot.create(:application_plan, issuer: @provider.default_service)
         cinstance.suspend!
       end
 
@@ -67,7 +67,6 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
       test '#index returns first live cinstance as default' do
         get :index
-        #assert_equal @live_app1, assigns(:cinstance)
         assert_equal @live_app1, @controller.instance_variable_get('@cinstance')
       end
     end
@@ -78,10 +77,10 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
         @live_app1 = @buyer.buy! @app_plan
         @hits = @provider.default_service.metrics.first
 
-        disabled_metric = FactoryBot.create(:metric, :service => @provider.default_service)
+        disabled_metric = FactoryBot.create(:metric, service: @provider.default_service)
         disabled_metric.disable_for_plan @app_plan
 
-        hidden_metric = FactoryBot.create(:metric, :service => @provider.default_service)
+        hidden_metric = FactoryBot.create(:metric, service: @provider.default_service)
         hidden_metric.toggle_visible_for_plan(@app_plan)
       end
 
@@ -102,11 +101,11 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
         @live_app1 = @buyer.buy! @app_plan
         @hits = @provider.default_service.metrics.first
 
-        @method = @hits.children.create! :system_name => "method", :friendly_name => "method"
-        disabled_method = @hits.children.create! :system_name => "disabled", :friendly_name => "disabled"
+        @method = @hits.children.create!(system_name: "method", friendly_name: "method")
+        disabled_method = @hits.children.create!(system_name: "disabled", friendly_name: "disabled")
         disabled_method.disable_for_plan @app_plan
 
-        hidden_method = @hits.children.create! :system_name => "hidden", :friendly_name => "hidden"
+        hidden_method = @hits.children.create!(system_name: "hidden", friendly_name: "hidden")
         hidden_method.toggle_visible_for_plan(@app_plan)
       end
 
