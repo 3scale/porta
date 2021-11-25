@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Partners::SessionsController < Partners::BaseController
 
   skip_before_action :authenticate!
 
   def openid
-    authenticate_with_open_id(params[:openid_url]) do |result, identity_url, registration|
+    authenticate_with_open_id(params.require(:openid_url)) do |result, identity_url, registration|
       if result.successful?
         @user = User.find_by!(open_id: identity_url)
         @account = @user.account
@@ -11,7 +13,8 @@ class Partners::SessionsController < Partners::BaseController
         sso_token.protocol = 'http' unless request.ssl?
         sso_token.account = @account
         sso_url = sso_token.sso_url!(@account.external_admin_domain)
-        sso_url << "&return_to=#{params[:return_to]}" if params[:return_to].present?
+        return_to_param = params.require(:return_to)
+        sso_url << "&return_to=#{return_to_param}" if return_to_param.present?
         redirect_to sso_url
       end
     end
