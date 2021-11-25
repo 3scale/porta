@@ -24,7 +24,13 @@ class MandatoryKeysTest < ActionDispatch::IntegrationTest
       assert_equal 1, app.application_keys.size
     end
 
-    pending_test 'create not be able to delete the last key'
+    test 'not be able to delete the last key' do
+      app = @buyer.buy! @plan
+      assert_not app.can_delete_key?
+
+      app.application_keys.new
+      assert app.can_delete_key?
+    end
   end
 
   class ServiceWithoutMandatoryAppKeyTest < self
@@ -37,6 +43,11 @@ class MandatoryKeysTest < ActionDispatch::IntegrationTest
       app = @buyer.buy! @plan
 
       assert_equal 0, app.application_keys.size
+    end
+
+    test 'be able to delete keys' do
+      app = @buyer.buy! @plan
+      assert app.can_delete_key?
     end
   end
 end
