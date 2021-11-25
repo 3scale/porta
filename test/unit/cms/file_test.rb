@@ -73,4 +73,16 @@ class CMS::FileTest < ActiveSupport::TestCase
     file.path = '/bar'
     assert_equal '/bar', file.path
   end
+
+  test "tags N+1 queries for tags" do
+    file = FactoryBot.create(:cms_file)
+    file.expects(:tag_list).never
+    file.as_json
+  end
+
+  test "as_json returns tag_list when requested" do
+    file = FactoryBot.create(:cms_file)
+    file.expects(:tag_list).returns([]).once
+    file.as_json(include: [:tag_list])
+  end
 end

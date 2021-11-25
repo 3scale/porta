@@ -86,4 +86,15 @@ class PageTest < ActiveSupport::TestCase
     assert ! page.searchable?
   end
 
+  test "tags N+1 queries for tags" do
+    page = FactoryBot.create(:cms_file)
+    page.expects(:tag_list).never
+    page.as_json
+  end
+
+  test "as_json returns tag_list when requested" do
+    page = FactoryBot.create(:cms_file)
+    page.expects(:tag_list).returns([]).once
+    page.as_json(include: [:tag_list])
+  end
 end
