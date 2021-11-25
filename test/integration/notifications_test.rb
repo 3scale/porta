@@ -16,7 +16,7 @@ class NotificationsTest < ActiveSupport::TestCase
         SystemOperation.for(o)
       end
       @account = FactoryBot.create(:account_without_users)
-      @admin = FactoryBot.create(:admin, :account => @account)
+      @admin = FactoryBot.create(:admin, account: @account)
     end
 
     test 'have dispatch rule created when called for the first time' do
@@ -46,14 +46,13 @@ class NotificationsTest < ActiveSupport::TestCase
     def setup
       super
       @operation = SystemOperation.for('plan_change')
-      @buyer_sender = FactoryBot.create :buyer_account
-      @provider_recipient = FactoryBot.create :provider_account
+      @buyer_sender = FactoryBot.create(:buyer_account)
+      @provider_recipient = FactoryBot.create(:provider_account)
 
-      @message = @buyer_sender.messages.build(
-        :to => @provider_recipient,
-        :subject => 'Plan Change',
-        :body => "Hello",
-        :system_operation => @operation)
+      @message = @buyer_sender.messages.build(to: @provider_recipient,
+                                              subject: 'Plan Change',
+                                              body: "Hello",
+                                              system_operation: @operation)
     end
 
     test 'notify recipient by email when no rules exist and operation is not a report' do
@@ -79,7 +78,7 @@ class NotificationsTest < ActiveSupport::TestCase
     end
 
     test 'notify recipient by email when rule for operation is set to true' do
-      @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider_recipient, :dispatch => true, :system_operation => @operation
+      @rule = FactoryBot.create(:mail_dispatch_rule, account: @provider_recipient, dispatch: true, system_operation: @operation)
 
       assert_difference ActionMailer::Base.deliveries.method(:count) do
         @message.save!
@@ -102,24 +101,22 @@ class NotificationsTest < ActiveSupport::TestCase
     end
 
     test 'NOT notify recipient when dispatch rule for operation is set to false' do
-      @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider_recipient, :dispatch => false,  :system_operation => @operation
+      @rule = FactoryBot.create(:mail_dispatch_rule, account: @provider_recipient, dispatch: false, system_operation: @operation)
 
       @message.save!
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
-
       assert_equal @message_recipient.notifiable?, false
     end
 
     test 'notify recipient when operation has no corresponding system operation' do
-      @message.update_attribute(:system_operation, nil)
+      @message.update(system_operation: nil)
       @message.save!
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @message.deliver! }
 
       @message_recipient = @provider_recipient.received_messages.last
-
-      assert_equal @message_recipient.notifiable?, true
+      assert_equal true, @message_recipient.notifiable?
     end
   end
 
@@ -129,19 +126,19 @@ class NotificationsTest < ActiveSupport::TestCase
       ActionMailer::Base.deliveries = []
 
       @operation = SystemOperation.for('plan_change')
-      @buyer_sender = FactoryBot.create :buyer_account
-      @provider = FactoryBot.create :provider_account
+      @buyer_sender = FactoryBot.create(:buyer_account)
+      @provider = FactoryBot.create(:provider_account)
 
-      @message = Message.create!(
-        :sender => @buyer_sender,
-        :system_operation => @operation,
-        :to => [@provider],
-        :subject => 'hello', :body => "what\'s up?")
+      @message = Message.create!(sender: @buyer_sender,
+                                 system_operation: @operation,
+                                 to: [@provider],
+                                 subject: 'hello',
+                                 body: "what\'s up?")
       @provider_recipient = @message.recipients.first
     end
 
     test 'be sent to provider when dispatch rule is true' do
-      @rule = FactoryBot.create :mail_dispatch_rule, :account => @provider, :dispatch => true, :system_operation => @operation
+      @rule = FactoryBot.create(:mail_dispatch_rule, account: @provider, dispatch: true, system_operation: @operation)
 
       PostOffice.message_notification(@message, @provider_recipient).deliver_now
       @email = ActionMailer::Base.deliveries.last
@@ -151,7 +148,7 @@ class NotificationsTest < ActiveSupport::TestCase
 
     test 'be sent to provider when no corresponding system operation object exists' do
       SystemOperation.delete_all
-      @message.update_attribute(:system_operation, nil)
+      @message.update(system_operation: nil)
       @message.reload
       PostOffice.message_notification(@message, @provider_recipient).deliver_now
       @email = ActionMailer::Base.deliveries.last
@@ -165,13 +162,14 @@ class NotificationsTest < ActiveSupport::TestCase
       super
       @system_operation = SystemOperation.for('plan_change')
 
-      buyer = FactoryBot.create :buyer_account
-      provider = FactoryBot.create :provider_account
+      buyer = FactoryBot.create(:buyer_account)
+      provider = FactoryBot.create(:provider_account)
 
-      @message = Message.create!(
-        :sender => buyer, :to => provider,
-        :subject => 'Changed plan', :body => "plan has changed",
-        :system_operation => @system_operation)
+      @message = Message.create!(sender: buyer,
+                                 to: provider,
+                                 subject: 'Changed plan',
+                                 body: "plan has changed",
+                                 system_operation: @system_operation)
     end
 
     test "have an operation attribute" do
@@ -182,24 +180,24 @@ class NotificationsTest < ActiveSupport::TestCase
   class ApplicationCreationTest < NotificationsTest
     def setup
       super
-      @provider = FactoryBot.create :provider_account
+      @provider = FactoryBot.create(:provider_account)
       @admin = @provider.admins.first
-      @admin.update_attribute :email, "provider-admin@example.com"
+      @admin.update(email: "provider-admin@example.com")
 
-      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-      @plan  = FactoryBot.create :application_plan, :issuer => @provider.default_service
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @plan  = FactoryBot.create(:application_plan, issuer: @provider.default_service)
       ActionMailer::Base.deliveries.clear
     end
 
     test 'be notified' do
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.buy! @plan }
-      assert ActionMailer::Base.deliveries.last.bcc.include?(@admin.email)
+      assert_includes ActionMailer::Base.deliveries.last.bcc, @admin.email
     end
 
     test 'not be notified if mail_dispatch_rule denies it' do
       op = SystemOperation.create_with(name: 'New Application created').find_or_create_by!(ref: 'new_app')
-      rule = @provider.mail_dispatch_rules.create! :system_operation => op, :emails => @admin.email
-      rule.update_attribute :dispatch, false
+      rule = @provider.mail_dispatch_rules.create!(system_operation: op, emails: @admin.email)
+      rule.update(dispatch: false)
 
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.buy! @plan }
 
@@ -212,29 +210,29 @@ class NotificationsTest < ActiveSupport::TestCase
       super
       @provider = FactoryBot.create :provider_account
       @admin = @provider.admins.first
-      @admin.update_attribute :email, "provider-admin@example.com"
+      @admin.update(email: "provider-admin@example.com")
 
-      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       ActionMailer::Base.deliveries.clear
 
       op = SystemOperation.for("user_signup")
-      @mail_rule = @provider.mail_dispatch_rules.create! :system_operation => op
+      @mail_rule = @provider.mail_dispatch_rules.create!(system_operation: op)
     end
 
     test 'notify admins' do
-      @mail_rule.update_attribute :dispatch, true
+      @mail_rule.update(dispatch: true)
 
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.make_pending! }
 
-      assert ActionMailer::Base.deliveries.map(&:bcc).flatten.include?(@admin.email)
+      assert_includes ActionMailer::Base.deliveries.map(&:bcc).flatten, @admin.email
     end
 
     test 'not notify admins if mail_dispatch_rule denies it' do
-      @mail_rule.update_attribute :dispatch, false
+      @mail_rule.update(dispatch: false)
 
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) { @buyer.make_pending! }
 
-      assert ActionMailer::Base.deliveries.map(&:bcc).flatten.include?(@admin.email) == false
+      assert_not_includes ActionMailer::Base.deliveries.map(&:bcc).flatten, @admin.email
     end
   end
 end
