@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AlertTest < ActiveSupport::TestCase
-  subject { @alert || Alert.new }
+  subject { Alert.new }
 
   should belong_to(:account)
   should belong_to(:cinstance)
@@ -17,16 +19,13 @@ class AlertTest < ActiveSupport::TestCase
     assert_equal [alert], Alert.by_level(80).to_a
   end
 
-  context 'Alert#kind' do
-    should 'should return :alert if its alert' do
-      assert_equal :alert, Alert.new(:level => 99).kind
-      assert_equal :alert, Alert.new(:level => 0).kind
-    end
-
-    should 'should return :violation if its violation' do
-      assert_equal :violation, Alert.new(:level => 100).kind
-      assert_equal :violation, Alert.new(:level => 300).kind
-    end
+  test 'Alert#kind should return :alert if its alert' do
+    assert_equal :alert, Alert.new(level: 99).kind
+    assert_equal :alert, Alert.new(level: 0).kind
   end
 
+  test 'Alert#kind should return :violation if its violation' do
+    assert_equal :violation, Alert.new(level: 100).kind
+    assert_equal :violation, Alert.new(level: 300).kind
+  end
 end
