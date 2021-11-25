@@ -45,6 +45,6 @@ class Master::Api::Finance::BillingJobsController < Master::Api::Finance::BaseCo
   end
 
   def billing_params
-    @billing_params ||= params.permit(%i[provider_id account_id date])
+    @billing_params ||= params.permit(%i[provider_id account_id date]).to_h
   end
 end
