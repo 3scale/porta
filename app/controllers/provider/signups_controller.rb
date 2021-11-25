@@ -23,15 +23,15 @@ class Provider::SignupsController < Provider::BaseController
     @provider = master.providers.build
     @user     = @provider.users.build_with_fields
     @plan     = plan
-    @signup_origin = default_params.require(:origin) || default_params.require(:signup_origin)
-    @fields = Fields::SignupForm.new(@provider, @user, default_params.require(:fields))
+    @signup_origin = default_params[:origin]|| default_params[:signup_origin]
+    @fields = Fields::SignupForm.new(@provider, @user, default_params[:fields])
   end
 
   def create
     @plan = plan
     provider_account_manager = Signup::ProviderAccountManager.new(master)
     signup_result = provider_account_manager.create(signup_params, &method(:build_signup_result_custom_fields))
-    @fields = Fields::SignupForm.new(@provider, @user, default_params.require(:fields))
+    @fields = Fields::SignupForm.new(@provider, @user, default_params[:fields])
 
     return render :show unless signup_result.persisted?
 
@@ -101,7 +101,7 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def plan
-    plan_ids = default_params.require(:plan_id).presence
+    plan_ids = default_params[:plan_id].presence
     master.accessible_services.default.application_plans.published.find(plan_ids) if plan_ids
   end
 

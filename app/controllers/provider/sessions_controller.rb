@@ -92,8 +92,9 @@ class Provider::SessionsController < FrontendController
   end
 
   def session_return_to
-    if params.require(:return_to)
-      return_to = safe_return_to(params.require(:return_to))
+    return_to_params = params.require(:return_to)
+    if return_to_params
+      return_to = safe_return_to(return_to_params)
       session[:return_to] = return_to if return_to.present?
     end
   end
