@@ -9,7 +9,7 @@ class Sites::ForumsController < Sites::BaseController
   end
 
   def update
-    if @settings.update_attributes(params[:settings])
+    if @settings.update(params[:settings].permit!)
       flash[:notice] = 'Forum settings updated.'
       redirect_to edit_admin_site_forum_url
     else

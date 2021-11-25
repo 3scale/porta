@@ -7,7 +7,7 @@ class Sites::DeveloperPortalsController < Sites::BaseController
   end
 
   def update
-    if settings.update_attributes(settings_params)
+    if settings.update(settings_params)
       flash[:notice] = 'Developer Portal settings updated.'
       redirect_to edit_admin_site_developer_portal_path
     else
@@ -19,7 +19,7 @@ class Sites::DeveloperPortalsController < Sites::BaseController
   private
 
   def settings_params
-    params[:settings]
+    params[:settings].permit!
   end
 
   def settings

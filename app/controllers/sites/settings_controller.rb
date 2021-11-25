@@ -18,7 +18,7 @@ class Sites::SettingsController < Sites::BaseController
   end
 
   def update
-    if @settings.update_attributes(params[:settings])
+    if @settings.update(params[:settings].permit!)
       flash[:notice] = 'Settings updated.'
       redirect_to edit_admin_site_settings_path
     else

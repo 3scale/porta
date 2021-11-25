@@ -3,11 +3,8 @@ class Sites::ApplicationsController < Sites::BaseController
   before_action :find_account
   before_action :authorize
 
-  def edit
-  end
-
   def update
-    if @account.update_attributes(params[:account])
+    if @account.update(params[:account].permit!)
       flash[:notice] = 'The applications settings were updated.'
       redirect_to admin_site_settings_url
     else

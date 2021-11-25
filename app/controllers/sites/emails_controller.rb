@@ -13,14 +13,11 @@ class Sites::EmailsController < Sites::BaseController
   end
 
   def update
-    unless @account.update_attributes(params[:account])
-      not_saved = true
-    end
+    not_saved = false
+    not_saved = true unless @account.update(params[:account].permit!)
 
     @services.each do |service|
-      unless service.update_attributes :support_email => params["service_#{service.id}_support_email"]
-        not_saved = true
-      end
+      not_saved = true unless service.update :support_email => params["service_#{service.id}_support_email"]
     end
 
     flash[:notice] = if not_saved
