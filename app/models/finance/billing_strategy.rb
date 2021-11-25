@@ -56,7 +56,7 @@ class Finance::BillingStrategy < ApplicationRecord
   end
 
   def self.canaries
-    ThreeScale.config.billing_canaries || []
+    ThreeScale.config.payments.billing_canaries || []
   end
 
   # Supported options
