@@ -2,6 +2,7 @@ class Topic < ApplicationRecord
   include PermalinkFu
 
   acts_as_taggable
+  include Tagging
 
   include ThreeScale::SpamProtection::Integration::Model
   has_spam_protection
