@@ -94,7 +94,7 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   ##~ op.parameters.add @parameter_extra
   #
   def update
-    application.unflattened_attributes = flat_params
+    application.unflattened_attributes = flat_params.permit(application_attributes)
     application.user_key = params[:user_key] if params[:user_key]
 
     application.save
@@ -282,11 +282,12 @@ class Admin::Api::BuyersApplicationsController < Admin::Api::BuyersBaseControlle
   end
 
   def application_params
-    flat_params.slice(*application_attributes)
+    flat_params.permit(application_attributes | %w[user_key application_id plan_id])
   end
 
   def application_attributes
-    current_account.fields.for(Cinstance) + %w|user_key application_id|
+    internal_attributes = %w[created_at updated_at accepted_at]
+    current_account.fields.for(Cinstance) - internal_attributes
   end
 
   def flat_params

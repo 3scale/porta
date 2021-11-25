@@ -52,9 +52,7 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   def update
     @required_fields = []
-    if field_definition.update_attributes(field_definition_params)
-      @required_fields = field_definition.target_class.required_fields
-    end
+    @required_fields = field_definition.target_class.required_fields if field_definition.update(field_definition_params_update)
 
     respond_with(field_definition, location: admin_fields_definitions_path)
   end
@@ -65,9 +63,10 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
   end
 
   def sort
-    fields = current_account.fields_definitions.find(field_definition_params).index_by(&:id)
+    sort_params = params.permit(fields_definition: [])[:fields_definition]
+    fields = current_account.fields_definitions.find(sort_params).index_by(&:id)
 
-    field_definition_params.each_with_index do |field_id, index|
+    sort_params.each_with_index do |field_id, index|
       fields.fetch(field_id.to_i).update_attribute(:pos, index + 1)
     end
 
@@ -76,8 +75,14 @@ class Admin::FieldsDefinitionsController < Sites::BaseController
 
   private
 
+  DEFAULT_PARAMS = %i[target label required hidden read_only choices_for_views].freeze
+
   def field_definition_params
-    params[:fields_definition] || {}
+    params.require(:fields_definition).permit(DEFAULT_PARAMS | %i[name])
+  end
+
+  def field_definition_params_update
+    params.require(:fields_definition).permit(DEFAULT_PARAMS)
   end
 
   def target
