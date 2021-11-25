@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ContractTest < ActiveSupport::TestCase
@@ -82,29 +84,24 @@ class ContractTest < ActiveSupport::TestCase
     assert_equal contract.provider_account_id, contract.provider_account.id
   end
 
-  context '#paid?' do
-    setup do
-      buyer = FactoryBot.create :buyer_account
-      service = buyer.provider_account.first_service!
-      #making the service subscribeable
-      service.publish!
-      @plan = service.service_plans.first
+  test '#paid? be delegated to plan' do
+    buyer = FactoryBot.create :buyer_account
+    service = buyer.provider_account.first_service!
+    #making the service subscribeable
+    service.publish!
+    @plan = service.service_plans.first
 
-      @contract = buyer.buy! @plan
-    end
+    @contract = buyer.buy! @plan
+    assert_not @plan.paid?
+    assert_not @contract.paid?
+    @plan.update_attribute :cost_per_month, 10.0
 
-    should 'be delegated to plan' do
-      assert !@plan.paid?
-      assert !@contract.paid?
-      @plan.update_attribute :cost_per_month, 10.0
+    @plan.reload
+    @contract.reload
 
-      @plan.reload
-      @contract.reload
-
-      assert @plan.paid?
-      assert @contract.paid?
-    end
-  end #paid?
+    assert @plan.paid?
+    assert @contract.paid?
+  end
 
   test '.permitted_for' do
     cinstances = FactoryBot.create_list(:simple_cinstance, 2)
@@ -121,7 +118,7 @@ class ContractTest < ActiveSupport::TestCase
 
   def test_bill_for
     invoice = FactoryBot.create(:invoice)
-    month = Month.new(Time.now)
+    month = Month.new(Time.zone.now)
 
     contract = FactoryBot.create(:simple_cinstance, paid_until: 1.day.ago)
 
@@ -186,7 +183,7 @@ class ContractTest < ActiveSupport::TestCase
       contract.resume!
       assert_equal true, contract.can_change_plan?
 
-      refute contract.can_change_plan?(nil)
+      assert_not contract.can_change_plan?(nil)
     end
   end
 
@@ -201,6 +198,6 @@ class ContractTest < ActiveSupport::TestCase
     [contract_async_deletion, contract_sync_deletion].each(&:destroy!)
 
     assert Plan.exists?(plan_async_deletion.id)
-    refute Plan.exists?(plan_sync_deletion.id)
+    assert_not Plan.exists?(plan_sync_deletion.id)
   end
 end
