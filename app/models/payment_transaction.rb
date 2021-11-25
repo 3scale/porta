@@ -20,7 +20,7 @@ class PaymentTransaction < ApplicationRecord
   scope :oldest_first, -> { order(:created_at) }
 
   def process!(credit_card_auth_code, gateway, options)
-    unless System::Application.config.three_scale.payments.enabled
+    unless ThreeScale::Settings.get('payments.enabled')
       logger.info "Skipping payment transaction #process! - not in production"
       return
     end

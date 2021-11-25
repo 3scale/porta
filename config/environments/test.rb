@@ -43,8 +43,6 @@ Rails.application.configure do
 
   config.active_support.test_order = :sorted # who has the balls can set it to :random
 
-  config.three_scale.payments.merge!(enabled: true, active_merchant_mode: :test, active_merchant_logging: false)
-
   config.three_scale.rolling_updates.raise_error_unknown_features = true
   config.three_scale.rolling_updates.enabled = false
   config.representer.default_url_options = { host: 'example.org' }

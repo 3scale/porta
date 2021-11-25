@@ -3,7 +3,7 @@ require 'test_helper'
 
 class StripeFixTest < ActiveSupport::TestCase
   def test_threescale_unstore
-    System::Application.config.three_scale.payments.stubs(enabled: true)
+    ThreeScale::Settings.stubs(:get).with('payments.enabled').returns(true)
     stripe = ActiveMerchant::Billing::StripeGateway.new login: 'apitoken'
 
     auth = Base64.strict_encode64('apitoken:')

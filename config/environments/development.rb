@@ -82,8 +82,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.three_scale.payments.enabled = ENV.fetch('THREESCALE_PAYMENTS_ENABLED', '0') == '1'
-
   config.three_scale.rolling_updates.raise_error_unknown_features = true
   config.three_scale.rolling_updates.enabled = ENV.fetch('THREESCALE_ROLLING_UPDATES', '0') == '0'
 

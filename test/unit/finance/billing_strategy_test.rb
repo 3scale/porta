@@ -65,7 +65,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   test 'all providers but canaries' do
     canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
-    ThreeScale.config.payments.expects(:billing_canaries).at_least_once.returns(canaries)
+    ThreeScale::Settings.expects(:get).with('payments.billing_canaries').at_least_once.returns(canaries)
 
     all_but_canaries = Finance::BillingStrategy.all.pluck(:account_id) - canaries
     Finance::BillingStrategy.expects(:daily_async).with { |scope| scope.pluck(:account_id) == all_but_canaries }.returns(true)
@@ -74,7 +74,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
   test 'canaries' do
     canaries = FactoryBot.create_list(:provider_with_billing, 4).map(&:id)
-    ThreeScale.config.payments.expects(:billing_canaries).at_least_once.returns(canaries)
+    ThreeScale::Settings.expects(:get).with('payments.billing_canaries').at_least_once.returns(canaries)
 
     Finance::BillingStrategy.expects(:daily_async).with { |scope| scope.pluck(:account_id) == canaries }.returns(true)
     assert Finance::BillingStrategy.daily_canaries
@@ -83,7 +83,8 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
   test 'empty canaries' do
     2.times { FactoryBot.create(:prepaid_billing, :account => FactoryBot.create(:simple_provider)) }
     2.times { FactoryBot.create(:postpaid_billing, :account => FactoryBot.create(:simple_provider)) }
-    ThreeScale.config.payments.stubs(billing_canaries: nil)
+
+    ThreeScale::Settings.stubs(:get).with('payments.billing_canaries').returns(nil)
 
     Finance::BillingStrategy.expects(:daily_async).never
     refute Finance::BillingStrategy.daily_canaries

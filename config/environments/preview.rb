@@ -29,8 +29,6 @@ System::Application.configure do
 
   config.liquid.resolver_caching = true
 
-  config.three_scale.payments.enabled = false
-
   config.three_scale.rolling_updates.raise_error_unknown_features = false
   config.three_scale.rolling_updates.enabled = ENV.fetch('THREESCALE_ROLLING_UPDATES', '0') == '0'
 end

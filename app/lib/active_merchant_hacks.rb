@@ -9,7 +9,7 @@ class ActiveMerchant::Billing::Gateway
   def threescale_unstore(identification, *args)
     return nil unless identification.present? && respond_to?(:unstore)
 
-    if System::Application.config.three_scale.payments.enabled
+    if ThreeScale::Settings.get('payments.enabled')
       unstore(identification, *args)
     else
       "Skipping card unstore: Not enabled on this environment"
