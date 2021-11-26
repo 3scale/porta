@@ -24,7 +24,7 @@ class PostObserver < ActiveRecord::Observer
     message.system_operation = SystemOperation.for('new_forum_post')
 
     (post.topic.subscribers - [user]).each do |subscriber|
-      TopicMailer.new_post(subscriber, post).deliver_now unless subscriber.email_unverified?
+      TopicMailer.new_post(subscriber, post).deliver_later unless subscriber.email_unverified?
     end
 
     url = admin_forum_topic_url(post.topic, host: post.forum.account.self_domain)
