@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Backend::ModelExtensions::ProviderTest < ActiveSupport::TestCase
@@ -6,21 +8,23 @@ class Backend::ModelExtensions::ProviderTest < ActiveSupport::TestCase
     @storage.flushdb
   end
 
-  context "provider account" do
-    subject { FactoryBot.create :provider_account }
+  class ProviderAccountTest < Backend::ModelExtensions::ProviderTest
+    def setup
+      super
+      @subject = FactoryBot.create(:provider_account)
+    end
 
-    should "update backend default_service when set and saved" do
+    attr_reader :subject
+
+    test "update backend default_service when set and saved" do
       service = subject.first_service!
-
       assert_nil subject.default_service_id
 
-      subject.default_service_id = service.id
-
       Service.any_instance.expects(:update_backend_service)
+      subject.default_service_id = service.id
       subject.save!
 
       assert_equal service, subject.default_service
     end
   end
-
 end
