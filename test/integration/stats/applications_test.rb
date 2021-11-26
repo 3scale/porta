@@ -4,9 +4,9 @@ require 'test_helper'
 
 class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
   def setup
-    @provider    = FactoryBot.create(:provider_account)
-    @service     = @provider.default_service
-    @plan        = FactoryBot.create(:simple_application_plan, issuer: @service)
+    @provider = FactoryBot.create(:provider_account)
+    @service = @provider.default_service
+    @plan = FactoryBot.create(:simple_application_plan, issuer: @service)
     @application = FactoryBot.create(:simple_cinstance, plan: @plan)
 
     host! @provider.admin_domain
