@@ -29,15 +29,6 @@ GIT
       addressable (>= 2.4)
 
 GIT
-  remote: https://github.com/3scale/prawn.git
-  revision: 88aead0d97e230d08e9f51a18711d01317965bfe
-  branch: 0.5.1-3scale
-  specs:
-    prawn-core (0.5.1.pre.3scale)
-      pdf-reader (~> 0.9.0)
-      ttfunk (~> 1.0, >= 1.5.1)
-
-GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
   revision: 58b19212afcf66540da729214287d85f586fa7cd
   branch: fix/rspec-3-with-xml-document
@@ -509,6 +500,7 @@ GEM
       ast (~> 2.4.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
+    pdf-core (0.9.0)
     pdf-inspector (1.0.2)
       pdf-reader (>= 0.9.0)
     pdf-reader (0.9.3)
@@ -519,9 +511,15 @@ GEM
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
       net-http-persistent
-    prawn-format (0.2.1)
-      prawn-core
-    prawn-layout (0.2.1)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
+    prawn-markup (0.3.7)
+      nokogiri
+      prawn
+      prawn-table
+    prawn-table (0.2.2)
+      prawn (>= 1.3.0, < 3.0.0)
     prometheus-client-mmap (0.11.0)
     protected_attributes_continued (1.8.2)
       activemodel (>= 5.0)
@@ -812,7 +810,7 @@ GEM
     tomlrb (2.0.3)
     ts-datetime-delta (2.0.2)
       thinking-sphinx (>= 1.3.8)
-    ttfunk (1.5.1)
+    ttfunk (1.7.0)
     tty-color (0.6.0)
     tty-cursor (0.7.1)
     tty-markdown (0.7.0)
@@ -981,9 +979,9 @@ DEPENDENCIES
   pdf-inspector
   pg (~> 0.21.0)
   pisoni (~> 1.29)
-  prawn-core!
-  prawn-format (= 0.2.1)
-  prawn-layout (= 0.2.1)
+  prawn
+  prawn-markup
+  prawn-table
   protected_attributes_continued (~> 1.8.2)
   pry-byebug (>= 3.7.0)
   pry-doc (>= 0.8)

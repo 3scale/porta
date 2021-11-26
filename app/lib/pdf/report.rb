@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require 'prawn/core'
-require 'prawn/format'
-require "prawn/measurement_extensions"
-require 'gruff'
-require 'pdf/format'
-require 'pdf/data'
-require 'pdf/styles/colored'
-
 # REFACTOR: extract abstract Report class, and DRY functionality with InvoiceReporter
 module Pdf
   class Report
@@ -15,11 +7,11 @@ module Pdf
 
     attr_accessor :account, :period, :pdf, :service, :report
 
-    METRIC_HEADINGS_DAY   = Format.prep_th ["Name", "Today's Total", "% Change"]
-    METRIC_HEADINGS_WEEK  = Format.prep_th ["Name", "Week's Total",  "% Change"]
-    SIGNUP_HEADINGS       = Format.prep_th ["Name", "Registered on", "Email", "Plan"]
-    TOP_USERS_HEADINGS    = Format.prep_th %w[Name Hits]
-    USERS_HEADINGS        = Format.prep_th %w[Plan Users]
+    METRIC_HEADINGS_DAY = Format.prep_th ["Name", "Today's Total", "% Change"]
+    METRIC_HEADINGS_WEEK = Format.prep_th ["Name", "Week's Total", "% Change"]
+    SIGNUP_HEADINGS = Format.prep_th ["Name", "Registered on", "Email", "Plan"]
+    TOP_USERS_HEADINGS = Format.prep_th %w[Name Hits]
+    USERS_HEADINGS = Format.prep_th %w[Plan Users]
 
     def initialize(account, service, options = {})
       @account = account
@@ -33,7 +25,7 @@ module Pdf
         page_size: 'A4',
         page_layout: :portrait)
 
-      @pdf.tags(@style.tags)
+      @pdf.markup_options = @style.tags
       @pdf.font(@style.font)
     end
 
@@ -100,8 +92,10 @@ module Pdf
 
     def header
       @pdf.text "<period>#{print_period}</period> (<domain>#{account.external_domain} - #{EscapeUtils.escape_html(@service.name)}</domain>)"
-      @pdf.header @pdf.margin_box.top_left do
-        @pdf.text header_text, align: :right
+      @pdf.repeat :all do
+        @pdf.bounding_box @pdf.margin_box.top_left, width: @pdf.bounds.width, height: @pdf.margin_box.height do
+          @pdf.text header_text, align: :right
+        end
       end
     end
 
@@ -158,8 +152,8 @@ module Pdf
 
     def print_table(data, width, headings)
       if data.present?
-        options = { headers: headings, width: width }
-        @pdf.table data, @style.table_style.merge(options)
+        options = { header: true, width: width }
+        @pdf.table [headings] + data, @style.table_style.deep_merge(options)
       else
         @pdf.text "<small>No current data</small>"
       end
