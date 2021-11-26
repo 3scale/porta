@@ -100,9 +100,9 @@ gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
-gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
-gem 'prawn-format', '0.2.1'
-gem 'prawn-layout', '0.2.1'
+gem 'prawn'
+gem 'prawn-format'
+gem 'prawn-table'
 gem 'rails_event_store', '~> 0.9.0'
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
@@ -229,7 +229,8 @@ group :test do
   gem 'database_cleaner', '~> 1.7', require: false
   gem 'thin', require: false
 
-  # performance tests
+  # performance test
+  gem 'memory_profiler'
   gem 'ruby-prof'
   gem 'with_env'
 end

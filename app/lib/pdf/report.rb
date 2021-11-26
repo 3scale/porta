@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'prawn/core'
+require 'prawn'
 require 'prawn/format'
 require "prawn/measurement_extensions"
 require 'gruff'

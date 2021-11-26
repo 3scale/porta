@@ -22,15 +22,6 @@ GIT
       addressable (>= 2.4)
 
 GIT
-  remote: https://github.com/3scale/prawn.git
-  revision: 88aead0d97e230d08e9f51a18711d01317965bfe
-  branch: 0.5.1-3scale
-  specs:
-    prawn-core (0.5.1.pre.3scale)
-      pdf-reader (~> 0.9.0)
-      ttfunk (~> 1.0, >= 1.5.1)
-
-GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
   revision: 58b19212afcf66540da729214287d85f586fa7cd
   branch: fix/rspec-3-with-xml-document
@@ -93,7 +84,6 @@ GEM
       nokogiri
     3scale_time_range (0.0.6)
       activesupport (>= 3.2.19)
-    Ascii85 (1.0.3)
     RedCloth (4.3.2)
     actioncable (5.0.7.2)
       actionpack (= 5.0.7.2)
@@ -1536,6 +1526,7 @@ GEM
       ntlm-http (~> 0.1, >= 0.1.1)
       webrick (~> 1.7)
       webrobots (>= 0.0.9, < 0.2)
+    memory_profiler (1.0.0)
     metaclass (0.0.4)
     method_source (1.0.0)
     middleware (0.1.0)
@@ -1595,8 +1586,7 @@ GEM
       ast (~> 2.4.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
-    pdf-reader (0.9.3)
-      Ascii85 (>= 0.9)
+    pdf-core (0.9.0)
     pg (0.21.0)
     pisoni (1.29.0)
       faraday (>= 0.9.1)
@@ -1605,9 +1595,14 @@ GEM
       net-http-persistent
     polyamorous (1.3.3)
       activerecord (>= 3.0)
-    prawn-format (0.2.1)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
+    prawn-core (0.8.4)
+    prawn-format (0.2.3)
       prawn-core
-    prawn-layout (0.2.1)
+    prawn-table (0.2.2)
+      prawn (>= 1.3.0, < 3.0.0)
     prometheus-client-mmap (0.11.0)
     protected_attributes_continued (1.3.0)
       activemodel (~> 5.0)
@@ -1892,7 +1887,7 @@ GEM
     tomlrb (2.0.1)
     ts-datetime-delta (2.0.2)
       thinking-sphinx (>= 1.3.8)
-    ttfunk (1.5.1)
+    ttfunk (1.7.0)
     tty-color (0.6.0)
     tty-cursor (0.7.1)
     tty-markdown (0.7.0)
@@ -2040,6 +2035,7 @@ DEPENDENCIES
   listen
   mail_view (~> 2.0.4)
   mechanize
+  memory_profiler
   mimemagic (~> 0.3.10)
   minitest (= 5.10.3)
   minitest-ci
@@ -2054,9 +2050,9 @@ DEPENDENCIES
   paperclip (~> 6.0)
   pg (~> 0.21.0)
   pisoni (~> 1.29)
-  prawn-core!
-  prawn-format (= 0.2.1)
-  prawn-layout (= 0.2.1)
+  prawn
+  prawn-format
+  prawn-table
   protected_attributes_continued (~> 1.3.0)
   pry-byebug (>= 3.7.0)
   pry-doc (>= 0.8)
