@@ -35,7 +35,9 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       session[:authentication_id] = 'A1234'
       session[:authentication_provider] = auth_provider.system_name
       # First check that the confirmation link is send
-      post :create, params: valid_buyer_params
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        post :create, params: valid_buyer_params
+      end
       assert_response :redirect
 
       mail = deliveries.last
@@ -49,7 +51,9 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
       session[:authentication_id] = 'A1234'
       session[:authentication_provider] = auth_provider.system_name
       session[:authentication_email] = valid_buyer_params.dig(:account, :user, :email)
-      post :create, params: valid_buyer_params
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        post :create, params: valid_buyer_params
+      end
       assert_response :redirect
 
       mail = deliveries.last
