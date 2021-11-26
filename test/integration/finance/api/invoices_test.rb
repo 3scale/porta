@@ -6,7 +6,7 @@ module Finance::Api
   class InvoicesTestCommonCases < ActionDispatch::IntegrationTest
     def setup
       @provider = FactoryBot.create(:provider_account)
-      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       @provider.create_billing_strategy
       @provider.save!
       @key = @provider.api_key
@@ -20,7 +20,7 @@ module Finance::Api
     end
 
     test 'deny access if finance module is disabled' do
-      without_finance = FactoryBot.create(:provider_account, :billing_strategy => nil)
+      without_finance = FactoryBot.create(:provider_account, billing_strategy: nil)
       host! without_finance.self_domain
       get "/api/#{@context}invoices.xml?provider_key=#{without_finance.api_key}"
       assert_response :forbidden
@@ -30,7 +30,7 @@ module Finance::Api
     test 'deny access if access token does not include finance scope' do
       @provider.settings.allow_finance!
       member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
-      token  = FactoryBot.create(:access_token, owner: member)
+      token = FactoryBot.create(:access_token, owner: member)
 
       get "/api/invoices.xml?access_token=#{token.value}"
 
@@ -40,7 +40,7 @@ module Finance::Api
     test 'allow access if access token include finance scope' do
       @provider.settings.allow_finance!
       member = FactoryBot.create(:member, account: @provider, admin_sections: [:finance])
-      token  = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
+      token = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
       get "/api/invoices.xml?access_token=#{token.value}"
 
@@ -50,7 +50,7 @@ module Finance::Api
     test 'deny access if member does not have finance permission' do
       @provider.settings.allow_finance!
       member = FactoryBot.create(:member, account: @provider, admin_sections: [])
-      token  = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
+      token = FactoryBot.create(:access_token, owner: member, scopes: ['finance'])
 
       get "/api/invoices.xml?access_token=#{token.value}"
 
@@ -68,14 +68,14 @@ module Finance::Api
 
       assert_response :success
       assert_select 'invoice' do
-        assert_select 'invoice > id', :text => @invoice.id.to_s
-        assert_select 'invoice > friendly_id', :text => @invoice.friendly_id.to_s
+        assert_select 'invoice > id', text: @invoice.id.to_s
+        assert_select 'invoice > friendly_id', text: @invoice.friendly_id.to_s
         assert_select 'invoice > buyer > id', @invoice.buyer_account.id.to_s
         assert_select 'line-items > line-item > cost', '10.0'
         assert_select 'invoice > cost', '20.0'
         # vat_rate and vat_amount do not show when vat_rate = 0
-        assert_select 'invoice > vat_rate', :text => "0", :count => 0
-        assert_select 'invoice > vat_amount', :text => "0", :count => 0
+        assert_select 'invoice > vat_rate', text: "0", count: 0
+        assert_select 'invoice > vat_amount', text: "0", count: 0
         assert_select 'invoice > cost_without_vat', '20.0'
         assert_select 'invoice > payment_transactions_count', "0"
       end
@@ -83,8 +83,8 @@ module Finance::Api
 
     test 'work fine with deleted account' do
       setup_existing_invoices_test
-      @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
-      @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
+      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
+      @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
       @buyer.delete # destroy
 
       get "/api/invoices/#{@invoice.id}.xml?provider_key=#{@key}"
@@ -105,9 +105,9 @@ module Finance::Api
 
       assert_response :success
       assert_select 'invoice' do
-        assert_select 'invoice > id', :text => @invoice.id.to_s
+        assert_select 'invoice > id', text: @invoice.id.to_s
         assert_select 'invoice > cost', '22.0'
-        assert_select 'invoice > vat_rate', :text => "10.0"
+        assert_select 'invoice > vat_rate', text: "10.0"
         assert_select 'invoice > vat_amount', '2.0'
         assert_select 'invoice > cost_without_vat', '20.0'
       end
@@ -115,10 +115,10 @@ module Finance::Api
 
     test 'provide list of invoices' do
       setup_existing_invoices_test
-      buyer = @buyer || FactoryBot.create(:buyer_account, :provider_account => @provider)
+      buyer = @buyer || FactoryBot.create(:buyer_account, provider_account: @provider)
 
       25.times do
-        FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => buyer)
+        FactoryBot.create(:invoice, provider_account: @provider, buyer_account: buyer)
       end
 
       get "/api/#{@context}invoices.xml?provider_key=#{@key}&page=1&per_page=21"
@@ -127,7 +127,7 @@ module Finance::Api
       assert_select 'invoices > pagination[total_pages=?]', '2'
       assert_select 'invoices > pagination[current_page=?]', '1'
       assert_select 'invoices > pagination[per_page=?]', '21'
-      assert_select 'invoices > invoice', :count => 21
+      assert_select 'invoices > invoice', count: 21
     end
 
     test 'redirect when asked for PDF' do
@@ -139,13 +139,13 @@ module Finance::Api
     test 'filter by month' do
       setup_existing_invoices_test
       setup_filter_tests
-      @invoice.update_attribute :period, Month.new(1022,5)
+      @invoice.update(period: Month.new(1022,5))
 
       get "/api/#{@context}invoices.xml?provider_key=#{@key}&month=1022-05"
 
       assert_response :success
 
-      assert_select 'invoices > invoice', :count => 1
+      assert_select 'invoices > invoice', count: 1
     end
 
     test 'filter by state' do
@@ -157,22 +157,22 @@ module Finance::Api
 
       assert_response :success
 
-      assert_select 'invoices > invoice', :count => 1
-      assert_select 'invoices > invoice > id', :text => @invoice.id.to_s
-      assert_select 'invoices > invoice > state', :text => 'cancelled'
+      assert_select 'invoices > invoice', count: 1
+      assert_select 'invoices > invoice > id', text: @invoice.id.to_s
+      assert_select 'invoices > invoice > state', text: 'cancelled'
     end
 
     def setup_existing_invoices_test
-      @buyer ||= FactoryBot.create(:buyer_account, :provider_account => @provider)
-      @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
-      2.times { FactoryBot.create(:line_item_plan_cost, :invoice => @invoice, :name => 'fake', :cost => 10.0) }
+      @buyer ||= FactoryBot.create(:buyer_account, provider_account: @provider)
+      @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
+      2.times { FactoryBot.create(:line_item_plan_cost, invoice: @invoice, name: 'fake', cost: 10.0) }
     end
 
     def setup_filter_tests
-      buyer = @buyer || FactoryBot.create(:buyer_account, :provider_account => @provider)
+      buyer = @buyer || FactoryBot.create(:buyer_account, provider_account: @provider)
 
       2.times do
-        FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => buyer)
+        FactoryBot.create(:invoice, provider_account: @provider, buyer_account: buyer)
       end
     end
   end
