@@ -70,47 +70,46 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
   end
 
+  test 'with simple plan and cinstance, retrieve data with account timezone' do
+    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    plan = FactoryBot.create(:application_plan, issuer: @service)
+    @cinstance = FactoryBot.create(:cinstance, plan: plan)
+    @provider_account.update(timezone: 'Madrid')
 
-  context 'with simple plan and cinstance' do
-    setup do
-      plan = FactoryBot.create(:application_plan, issuer: @service)
-      @cinstance = FactoryBot.create(:cinstance, plan: plan)
-      provider_login_with @provider_account.admins.first.username, 'supersecret'
-      Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
-    end
+    provider_login_with @provider_account.admins.first.username, 'supersecret'
+    opts = { period: 'day', metric_name: @metric.system_name }
+    get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
-    should 'retrieve data with account timezone' do
-      @provider_account.update(timezone: 'Madrid')
+    assert_response :success
+    assert_content_type 'application/json'
 
-      opts = { period: 'day', metric_name: @metric.system_name }
-      get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
-
-      assert_response :success
-      assert_content_type 'application/json'
-
-      assert_json_contains(
-       "period" => {"name"=>"day",
-       "granularity"=>"hour",
-       "since"=>Time.zone.parse("2009-12-10T20:00:00+01:00"),
-       "until"=>Time.zone.parse("2009-12-11T20:59:59+01:00"),
-       "timezone"=>"Europe/Madrid"}
-      )
-    end
-
-    should 'retrieve data with specified timezone' do
-      opts = { period: 'day', metric_name: @metric.system_name, timezone: 'Kamchatka' }
-      get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
-
-      assert_response :success
-      assert_content_type 'application/json'
-      assert_json_contains(
+    assert_json_contains(
       "period" => {"name"=>"day",
       "granularity"=>"hour",
-      "since"=>Time.zone.parse("2009-12-11T07:00:00+12:00"),
-      "until"=>Time.zone.parse("2009-12-12T07:59:59+12:00"),
-      "timezone"=>"Asia/Kamchatka"}
-      )
-    end
+      "since"=>Time.zone.parse("2009-12-10T20:00:00+01:00"),
+      "until"=>Time.zone.parse("2009-12-11T20:59:59+01:00"),
+      "timezone"=>"Europe/Madrid"}
+    )
+  end
+
+  test 'with simple plan and cinstance, retrieve data with specified timezone' do
+    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    plan = FactoryBot.create(:application_plan, issuer: @service)
+    @cinstance = FactoryBot.create(:cinstance, plan: plan)
+
+    provider_login_with @provider_account.admins.first.username, 'supersecret'
+    opts = { period: 'day', metric_name: @metric.system_name, timezone: 'Kamchatka' }
+    get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
+
+    assert_response :success
+    assert_content_type 'application/json'
+    assert_json_contains(
+    "period" => {"name"=>"day",
+    "granularity"=>"hour",
+    "since"=>Time.zone.parse("2009-12-11T07:00:00+12:00"),
+    "until"=>Time.zone.parse("2009-12-12T07:59:59+12:00"),
+    "timezone"=>"Asia/Kamchatka"}
+    )
   end
 
   test 'usage with some data as json' do
