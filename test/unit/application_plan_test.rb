@@ -29,7 +29,7 @@ class ApplicationPlanTest < ActiveSupport::TestCase
     custom_plan = @app_plan.customize
     custom_plan_metric = custom_plan.plan_metrics.first
 
-    assert_equal app_plan.plan_metrics.count, custom_plan.plan_metrics.count
+    assert_equal @app_plan.plan_metrics.count, custom_plan.plan_metrics.count
     assert_equal @original_plan_metric.visible, custom_plan_metric.visible
     assert_equal @original_plan_metric.limits_only_text, custom_plan_metric.limits_only_text
   end
