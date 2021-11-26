@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ExceptionReportingTest < ActiveSupport::TestCase
@@ -5,48 +7,52 @@ class ExceptionReportingTest < ActiveSupport::TestCase
     raise 'Booom!'
   end
 
-
-  context 'dev env' do
-    setup do
+  class DevEnvTest < ExceptionReportingTest
+    def setup
       Rails.env.stubs(:test?).returns(false)
       Rails.env.stubs(:development?).returns(true)
     end
 
-    should 'raise' do
+    test 'raise' do
       assert_raise(RuntimeError) do
         report_and_supress_exceptions { raise_exception }
       end
     end
   end
 
-  context 'test env' do
-    setup do
+  class TestEnvTest < ExceptionReportingTest
+    def setup
       Rails.env.stubs(:test?).returns(true)
       Rails.env.stubs(:development?).returns(false)
     end
 
-    should 'raise' do
+    test 'raise' do
       assert_raise(RuntimeError) do
         report_and_supress_exceptions { raise_exception }
       end
     end
   end
 
-  context 'other env' do
-    setup do
+  class OtherEnvTest < ExceptionReportingTest
+    def setup
       Rails.env.stubs(:test?).returns(false)
       Rails.env.stubs(:development?).returns(false)
     end
 
-    should 'log' do
+    test 'other env log' do
       Rails.logger.expects(:error)
       report_and_supress_exceptions { raise_exception }
     end
 
-    should 'report an error' do
+    test 'other env report an error' do
       System::ErrorReporting.expects(:report_error)
       report_and_supress_exceptions { raise_exception }
     end
   end
 
+  def self.runnable_methods
+    return [] if self == ExceptionReportingTest
+
+    super
+  end
 end
