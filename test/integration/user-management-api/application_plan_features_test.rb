@@ -114,16 +114,18 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
 
     test 'remove association of feature' do
       feat = FactoryBot.create(:feature, featurable: @provider.default_service)
+      @app_plan.features << feat
+      @app_plan.save!
 
       assert_difference @app_plan.features.method(:count), -1 do
-        post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+        delete admin_api_application_plan_feature_path(@app_plan, feat, format: :xml), params: params
         assert_response :success
-        assert_equal xml.xpath('.//feature/id').children.first.text, feat.id.to_s
+        assert_not_includes @app_plan.features.reload, feat
       end
     end
 
     test 'remove association of non-existing feature' do
-      post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: 'XXX' })
+      delete admin_api_application_plan_feature_path(@app_plan, id: 'XXX', format: :xml), params: params
       assert_xml_404
     end
 
