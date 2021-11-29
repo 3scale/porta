@@ -16,41 +16,32 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
       super
       user = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
       @token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+
+      User.any_instance.stubs(:has_access_to_all_services?).returns(false)
     end
 
-    context 'without access to all services' do
-      setup do
-        User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-      end
-
-      should 'index with no token' do
-        get admin_api_application_plan_features_path(@app_plan)
-        assert_response :forbidden
-      end
-
-      should 'index with access to no services' do
-        User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
-        get admin_api_application_plan_features_path(@app_plan), params: params
-        assert_response :not_found
-      end
-
-      should 'index with access to some service' do
-        User.any_instance.expects(:member_permission_service_ids).returns([@provider.default_service.id]).at_least_once
-        get admin_api_application_plan_features_path(@app_plan), params: params
-        assert_response :success
-      end
+    test 'index with no token' do
+      get admin_api_application_plan_features_path(@app_plan)
+      assert_response :forbidden
     end
 
-    context 'with access to all services' do
-      setup do
-        User.any_instance.stubs(:has_access_to_all_services?).returns(true)
-      end
+    test 'index with access to no services' do
+      User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
+      get admin_api_application_plan_features_path(@app_plan), params: params
+      assert_response :not_found
+    end
 
-      should 'index' do
-        User.any_instance.expects(:member_permission_service_ids).never
-        get admin_api_application_plan_features_path(@app_plan), params: params
-        assert_response :success
-      end
+    test 'index with access to some service' do
+      User.any_instance.expects(:member_permission_service_ids).returns([@provider.default_service.id]).at_least_once
+      get admin_api_application_plan_features_path(@app_plan), params: params
+      assert_response :success
+    end
+
+    test 'index' do
+      User.any_instance.stubs(:has_access_to_all_services?).returns(true)
+      User.any_instance.expects(:member_permission_service_ids).never
+      get admin_api_application_plan_features_path(@app_plan), params: params
+      assert_response :success
     end
 
     private
@@ -63,6 +54,10 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
   end
 
   class ProviderKeyTest < Admin::Api::ApplicationPlanFeaturesTest
+    def teardown
+      @xml = nil
+    end
+
     test 'index' do
       feat = FactoryBot.create(:feature, featurable: @provider.default_service)
       @app_plan.features << feat
@@ -71,7 +66,6 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
       get admin_api_application_plan_features_path(@app_plan, format: :xml), params: params
       assert_response :success
 
-      xml = Nokogiri::XML::Document.parse(@response.body)
       # TODO: optimize this assertions (check users_test e.g.)
       assert_all_features_of_plan xml, @app_plan
     end
@@ -84,24 +78,24 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     pending_test 'security test on buyer side domain'
     pending_test 'security test on another provider plans'
 
-    test 'enable new feature' do
+    test 'associate new feature' do
       feat = FactoryBot.create(:feature, featurable: @provider.default_service)
 
-      post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
-      assert_response :success
-
-      xml = Nokogiri::XML::Document.parse(@response.body)
-      assert_equal xml.xpath('.//feature/id').children.first.text, feat.id.to_s
+      assert_difference @app_plan.features.method(:count) do
+        post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+        assert_response :success
+        assert_equal xml.xpath('.//feature/id').children.first.text, feat.id.to_s
+      end
     end
 
-    test 'enabling feature not in service replies 404' do
+    test 'associating feature not in service replies 404' do
       feature_not_in_service = FactoryBot.create(:feature, featurable: @provider, scope: "AccountPlan")
 
       post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feature_not_in_service.id })
       assert_xml_404
     end
 
-    test 'enabling feature with wrong scope is denied' do
+    test 'associating feature with wrong scope is denied' do
       wrong_feature = FactoryBot.create(:feature, featurable: @provider.default_service, scope: "ServicePlan")
 
       post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: wrong_feature.id })
@@ -109,19 +103,26 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
       assert_xml_error @response.body, "Plan type mismatch"
     end
 
-    pending_test 'enable existing feature'
-
-    test 'disable feature' do
+    test 'associate existing feature' do
       feat = FactoryBot.create(:feature, featurable: @provider.default_service)
 
-      post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
-      assert_response :success
-
-      xml = Nokogiri::XML::Document.parse(@response.body)
-      assert_equal xml.xpath('.//feature/id').children.first.text, feat.id.to_s
+      assert_difference @app_plan.features.method(:count), 2 do
+        post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+        post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+      end
     end
 
-    test 'disable non-existing feature' do
+    test 'remove association of feature' do
+      feat = FactoryBot.create(:feature, featurable: @provider.default_service)
+
+      assert_difference @app_plan.features.method(:count), -1 do
+        post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: feat.id })
+        assert_response :success
+        assert_equal xml.xpath('.//feature/id').children.first.text, feat.id.to_s
+      end
+    end
+
+    test 'remove association of non-existing feature' do
       post admin_api_application_plan_features_path(@app_plan, format: :xml), params: params.merge({ feature_id: 'XXX' })
       assert_xml_404
     end
@@ -133,5 +134,9 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     end
 
     alias params provider_key_params
+
+    def xml
+      @xml ||= Nokogiri::XML::Document.parse(@response.body)
+    end
   end
 end
