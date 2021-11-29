@@ -26,41 +26,42 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       assert_response :forbidden
     end
 
-    context 'admin' do
-      setup do
+    class AdminUserTest < AccessTokenTest
+      def setup
+        super
         admin = FactoryBot.create(:admin, account: @provider, admin_sections: [])
         @token = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
       end
 
-      should 'admin can update' do
+      test 'admin can update' do
         put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
         assert_response :success
       end
 
-      should '#destroy' do
+      test '#destroy' do
         delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
         assert_response :success
       end
 
-      should 'change plan' do
+      test 'change plan' do
         plan = FactoryBot.create(:account_plan, issuer: @provider)
         put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
         assert_response :success
       end
 
-      should '#approve' do
+      test '#approve' do
         Account.any_instance.expects(:approve).returns(true)
         put approve_admin_api_account_path(@buyer, format: :xml), params: params
         assert_response :success
       end
 
-      should '#reject' do
+      test '#reject' do
         Account.any_instance.expects(:reject).returns(true)
         put reject_admin_api_account_path(@buyer, format: :xml), params: params
         assert_response :success
       end
 
-      should 'update billing_address' do
+      test 'update billing_address' do
         put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska', billing_address: 'Calle Napoles 187, Barcelona. Spain' })
         assert_response :unprocessable_entity
 
@@ -69,13 +70,13 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
         assert_response :success
       end
 
-      should '#update' do
+      test '#update' do
         rolling_updates_off
         put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
         assert_response :success
       end
 
-      should '#change_plan' do
+      test '#change_plan' do
         rolling_updates_off
         plan = FactoryBot.create(:account_plan, issuer: @provider)
         put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
@@ -83,102 +84,99 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
       end
     end
 
-    context 'member' do
-      context 'without admin sections' do
-        setup do
+    class MemberUserTest < AccessTokenTest
+      class WithoutAdminSectionsTest < MemberUserTest
+        def setup
+          super
           member = FactoryBot.create(:member, account: @provider, admin_sections: [])
           @token = FactoryBot.create(:access_token, owner: member, scopes: 'account_management')
         end
 
-        should '#index' do
+        test '#index' do
           get admin_api_accounts_path(format: :xml), params: params
           assert_response :forbidden
         end
 
-        should '#show' do
+        test '#show' do
           get admin_api_account_path(@buyer, format: :xml), params: params
           assert_response :forbidden
         end
 
-        should '#find without id' do
+        test '#find without id' do
           get find_admin_api_accounts_path(format: :xml), params: params
           assert_response :forbidden
         end
 
-        should '#find' do
+        test '#find' do
           get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: @buyer.users.first.username })
           assert_response :forbidden
         end
 
-        should 'changing billing status' do
-          put admin_api_account_path(@buyer, format: :xml), params: {
-            access_token: token.value,
-            monthly_billing_enabled: true,
-            monthly_charging_enabled: true,
-            org_name: 'ooooooooo'
-          }
+        test 'changing billing status' do
+          put admin_api_account_path(@buyer, format: :xml), params: params.merge({ monthly_billing_enabled: true,
+                                                                                   monthly_charging_enabled: true,
+                                                                                   org_name: 'ooooooooo' })
           assert_response :forbidden
         end
 
-        should '#destroy' do
+        test '#destroy' do
           delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
           assert_response :forbidden
         end
 
-        should '#reject' do
+        test '#reject' do
           put reject_admin_api_account_path(@buyer, format: :xml), params: params
           assert_response :forbidden
         end
 
-        should '#approve' do
+        test '#approve' do
           put approve_admin_api_account_path(@buyer, format: :xml), params: params
           assert_response :forbidden
         end
 
-        should '#update' do
+        test '#update' do
           rolling_updates_on
           put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
           assert_response :forbidden
         end
 
-        should '#change_plan' do
+        test '#change_plan' do
           plan = FactoryBot.create(:account_plan, issuer: @provider)
           put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
           assert_response :forbidden
         end
-
-        # pending_test 'change plan'
       end
 
-      context 'with admin sections' do
-        setup do
+      class WithAdminSectionsTest < MemberUserTest
+        def setup
+          super
           member = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners])
           @token = FactoryBot.create(:access_token, owner: member, scopes: 'account_management')
         end
 
         attr_reader :token
 
-        should '#index' do
+        test '#index' do
           get admin_api_accounts_path(format: :xml), params: params
           assert_response :success
         end
 
-        should '#show' do
+        test '#show' do
           get admin_api_account_path(@buyer, format: :xml), params: params
           assert_response :success
         end
 
-        should '#find without id' do
+        test '#find without id' do
           get find_admin_api_accounts_path(format: :xml), params: params
           assert_response :not_found
         end
 
-        should '#find' do
+        test '#find' do
           get find_admin_api_accounts_path(format: :xml), params: params.merge({ username: @buyer.users.first.username })
           assert_response :success
         end
 
-        should 'changing billing status' do
+        test 'changing billing status' do
           settings = @buyer.settings
           settings.update!(monthly_charging_enabled: false, monthly_billing_enabled: false)
           assert_not settings.monthly_charging_enabled
@@ -197,60 +195,47 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
           assert settings.monthly_billing_enabled
         end
 
-        should '#destroy' do
+        test '#destroy' do
           delete admin_api_account_path(format: :xml, id: @buyer.id), params: params
           assert_response :forbidden
         end
 
-        should '#reject' do
+        test '#reject' do
           put reject_admin_api_account_path(@buyer, format: :xml), params: params
           assert_response :forbidden
         end
 
-        should '#approve' do
+        test '#approve' do
           put approve_admin_api_account_path(@buyer, format: :xml), params: params
           assert_response :forbidden
         end
 
-        context 'when service_permissions rolling update is disabled' do
-          setup do
-            rolling_updates_off
-          end
-
-          should '#update' do
-            put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
-            assert_response :forbidden
-          end
-
-          should '#change_plan' do
-            plan = FactoryBot.create(:account_plan, issuer: @provider)
-            put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
-            assert_response :forbidden
-          end
+        test '#update when service_permissions rolling update is disabled' do
+          rolling_updates_off
+          put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+          assert_response :forbidden
         end
 
-        context 'when service_permissions rolling update is enabled' do
-          setup do
-            rolling_updates_off
-            rolling_update(:service_permissions, enabled: true)
-          end
-
-          should '#update' do
-            put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
-            assert_response :success
-          end
-
-          should '#change_plan' do
-            plan = FactoryBot.create(:account_plan, issuer: @provider)
-            put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
-            assert_response :success
-          end
+        test '#change_plan when service_permissions rolling update is disabled' do
+          rolling_updates_off
+          plan = FactoryBot.create(:account_plan, issuer: @provider)
+          put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+          assert_response :forbidden
         end
 
-        private
+        test '#update when service_permissions rolling update is enabled' do
+          rolling_updates_off
+          rolling_update(:service_permissions, enabled: true)
+          put admin_api_account_path(@buyer, format: :xml), params: params.merge({ org_name: 'alaska' })
+          assert_response :success
+        end
 
-        def params(token = @token)
-          params
+        test '#change_plan when service_permissions rolling update is enabled' do
+          rolling_updates_off
+          rolling_update(:service_permissions, enabled: true)
+          plan = FactoryBot.create(:account_plan, issuer: @provider)
+          put change_plan_admin_api_account_path(@buyer, format: :xml), params: params.merge({ plan_id: plan.id })
+          assert_response :success
         end
       end
     end
@@ -344,7 +329,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     end
 
     test 'index returns extra fields escaped' do
-      field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
+      field_defined(@provider, { target: "Account", name: "some_extra_field" })
 
       @buyer.reload
       @buyer.extra_fields = { some_extra_field: "< > &" }
@@ -529,7 +514,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     end
 
     test 'update with extra fields' do
-      field_defined(@provider, { target: "Account", "name" => "some_extra_field" })
+      field_defined(@provider, { target: "Account", name: "some_extra_field" })
 
       put admin_api_account_path(@buyer, format: :xml), params: params.merge({ some_extra_field: "stuff", vat_rate: 33 })
 
