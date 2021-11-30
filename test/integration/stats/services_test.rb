@@ -11,6 +11,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     Stats::Base.storage.flushdb
 
     host! @provider_account.admin_domain
+    provider_login_with @provider_account.admins.first.username, 'supersecret'
   end
 
   def teardown
@@ -22,24 +23,21 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_response_code_stats_api_services_path(@cinstance.service_id, format: :json), params: { period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
 
-    assert_json  "period"=> { "name" => "day",
+    assert_json "period" => { "name" => "day",
                               "granularity" => "hour",
                               "since" => Time.zone.parse("2009-12-03T12:00:00+01:00"),
                               "until" => Time.zone.parse("2009-12-04T12:59:59+01:00"),
-                              "timezone"=>"Europe/Madrid"},
-                  "total" => 0,
-                  "values" => [0] * 25,
-                  "previous_total" => 0,
-                  "change"=>0.0,
-                  "response_code" => {'code' => '200'}
-
-
+                              "timezone" => "Europe/Madrid" },
+                "total" => 0,
+                "values" => [0] * 25,
+                "previous_total" => 0,
+                "change" =>0.0,
+                "response_code" => { 'code' => '200' }
   end
 
   test 'usage with no data as json' do
@@ -47,70 +45,62 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'Madrid', skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
 
-    assert_json  "period"=> { "name" => "day",
+    assert_json "period" => { "name" => "day",
                               "granularity" => "hour",
                               "since" => Time.zone.parse("2009-12-03T12:00:00+01:00"),
                               "until" => Time.zone.parse("2009-12-04T12:59:59+01:00"),
-                              "timezone"=>"Europe/Madrid"},
-                  "total" => 0,
-                  "values" => [0] * 25,
-                  "previous_total" => 0,
-                  "change"=>0.0,
-                  "metric" => { "name" => @metric.friendly_name,
-                                "id" => @metric.id,
-                                "unit" => @metric.unit,
-                                "system_name" => @metric.system_name }
+                              "timezone" => "Europe/Madrid" },
+                "total" => 0,
+                "values" => [0] * 25,
+                "previous_total" => 0,
+                "change" =>0.0,
+                "metric" => { "name" => @metric.friendly_name,
+                               "id" => @metric.id,
+                               "unit" => @metric.unit,
+                               "system_name" => @metric.system_name }
 
 
   end
 
+  test 'with simple plan and cinstance, retrieve data with account timezone' do
+    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    plan = FactoryBot.create(:application_plan, issuer: @service)
+    @cinstance = FactoryBot.create(:cinstance, plan: plan)
+    @provider_account.update(timezone: 'Madrid')
 
-  context 'with simple plan and cinstance' do
-    setup do
-      plan = FactoryBot.create(:application_plan, issuer: @service)
-      @cinstance = FactoryBot.create(:cinstance, plan: plan)
-      provider_login_with @provider_account.admins.first.username, 'supersecret'
-      Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
-    end
+    opts = { period: 'day', metric_name: @metric.system_name }
+    get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
-    should 'retrieve data with account timezone' do
-      @provider_account.update(timezone: 'Madrid')
+    assert_response :success
+    assert_content_type 'application/json'
 
-      opts = { period: 'day', metric_name: @metric.system_name }
-      get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
+    assert_json_contains "period" => { "name" => "day",
+                                       "granularity" => "hour",
+                                       "since" => Time.zone.parse("2009-12-10T20:00:00+01:00"),
+                                       "until" => Time.zone.parse("2009-12-11T20:59:59+01:00"),
+                                       "timezone" => "Europe/Madrid" }
+  end
 
-      assert_response :success
-      assert_content_type 'application/json'
+  test 'with simple plan and cinstance, retrieve data with specified timezone' do
+    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    plan = FactoryBot.create(:application_plan, issuer: @service)
+    @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
-      assert_json_contains(
-       "period" => {"name"=>"day",
-       "granularity"=>"hour",
-       "since"=>Time.zone.parse("2009-12-10T20:00:00+01:00"),
-       "until"=>Time.zone.parse("2009-12-11T20:59:59+01:00"),
-       "timezone"=>"Europe/Madrid"}
-      )
-    end
+    opts = { period: 'day', metric_name: @metric.system_name, timezone: 'Kamchatka' }
+    get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
-    should 'retrieve data with specified timezone' do
-      opts = { period: 'day', metric_name: @metric.system_name, timezone: 'Kamchatka' }
-      get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
-
-      assert_response :success
-      assert_content_type 'application/json'
-      assert_json_contains(
-      "period" => {"name"=>"day",
-      "granularity"=>"hour",
-      "since"=>Time.zone.parse("2009-12-11T07:00:00+12:00"),
-      "until"=>Time.zone.parse("2009-12-12T07:59:59+12:00"),
-      "timezone"=>"Asia/Kamchatka"}
-      )
-    end
+    assert_response :success
+    assert_content_type 'application/json'
+    assert_json_contains "period" => { "name" => "day",
+                                       "granularity" => "hour",
+                                       "since" => Time.zone.parse("2009-12-11T07:00:00+12:00"),
+                                       "until" => Time.zone.parse("2009-12-12T07:59:59+12:00"),
+                                       "timezone" => "Asia/Kamchatka" }
   end
 
   test 'usage with some data as json' do
@@ -126,24 +116,24 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12, 11, 18, 45), cinstance_id: cinstance.id)
 
     Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'UTC', skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
 
-
-    assert_json "period"=>
-      {"name"=>"day",
-       "granularity"=>"hour",
-       "since"=>Time.zone.parse("2009-12-10T19:00:00Z"),
-       "until"=>Time.zone.parse("2009-12-11T19:59:59Z"),
-       "timezone"=>"Etc/UTC"},
-     "total"=>4,
-     "previous_total" => 0,
-     "change"=>100.0,
-     "values"=> [0] * 15 + [1] + [0] * 7 + [3] + [0],
-     "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
+    assert_json "period" => { "name" => "day",
+                              "granularity" => "hour",
+                              "since" => Time.zone.parse("2009-12-10T19:00:00Z"),
+                              "until" => Time.zone.parse("2009-12-11T19:59:59Z"),
+                              "timezone" => "Etc/UTC" },
+                "total" => 4,
+                "previous_total" => 0,
+                "change" => 100.0,
+                "values" => [0] * 15 + [1] + [0] * 7 + [3] + [0],
+                "metric" => { "name" => @metric.friendly_name,
+                              "id" => @metric.id,
+                              "unit" => @metric.unit,
+                              "system_name" => @metric.system_name }
 
   end
 
@@ -162,24 +152,24 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     # This is out
     make_transaction_at(Time.utc(2011, 1, 1, 23, 21), cinstance_id: cinstance.id)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Madrid', since: "2010-01-01", skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
 
-    assert_json "period"=>
-                  { "name"=>"year",
-                    "granularity"=>"month",
-                    "since"=>Time.zone.parse("2010-01-01T00:00:00+01:00"),
-                    "until"=>Time.zone.parse("2010-12-31T23:59:59+01:00"),
-                    "timezone"=>"Europe/Madrid"},
-                  "total"=>3,
-                  "previous_total" => 1,
-                  "change"=>200.0,
-                  "values"=>[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                  "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
-
+    assert_json "period" => { "name" => "year",
+                              "granularity" => "month",
+                              "since" => Time.zone.parse("2010-01-01T00:00:00+01:00"),
+                              "until" => Time.zone.parse("2010-12-31T23:59:59+01:00"),
+                              "timezone" => "Europe/Madrid" },
+                "total" => 3,
+                "previous_total" => 1,
+                "change" => 200.0,
+                "values" => [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                "metric" => { "name" => @metric.friendly_name,
+                              "id" => @metric.id,
+                              "unit" => @metric.unit,
+                              "system_name" => @metric.system_name }
   end
 
   test 'negative timezone shifting' do
@@ -197,24 +187,24 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     # This is out
     make_transaction_at(Time.utc(2011, 1, 1, 1, 21), cinstance_id: cinstance.id)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Azores', since: "2010-01-01", skip_change: false }
 
     assert_response :success
     assert_content_type 'application/json'
 
-    assert_json "period"=>
-      {"name"=>"year",
-       "granularity"=>"month",
-       "since"=>Time.zone.parse("2010-01-01T00:00:00-01:00"),
-       "until"=>Time.zone.parse("2010-12-31T23:59:59-01:00"),
-       "timezone"=>"Atlantic/Azores"},
-     "total"=>3,
-     "previous_total" => 1,
-     "change"=>200.0,
-     "values"=>[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-     "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
-
+    assert_json "period" => { "name" => "year",
+                              "granularity" => "month",
+                              "since" => Time.zone.parse("2010-01-01T00:00:00-01:00"),
+                              "until" => Time.zone.parse("2010-12-31T23:59:59-01:00"),
+                              "timezone" => "Atlantic/Azores" },
+                "total" => 3,
+                "previous_total" => 1,
+                "change" => 200.0,
+                "values" => [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                "metric" => { "name" => @metric.friendly_name,
+                              "id" => @metric.id,
+                              "unit" => @metric.unit,
+                              "system_name" => @metric.system_name }
   end
 
   test 'top_clients as json' do
@@ -224,33 +214,26 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
 
     make_transaction_at(Time.utc(2009, 12,  2), cinstance_id: cinstance1.id)
     make_transaction_at(Time.utc(2009, 12,  3), cinstance_id: cinstance2.id)
-
     make_transaction_at(Time.utc(2009, 12, 15), cinstance_id: cinstance1.id)
 
     Timecop.freeze(Time.utc(2009, 12, 22))
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get top_applications_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: :month, metric_name: @metric.system_name }
 
     assert_response :success
     assert_content_type 'application/json'
-    assert_json "period"=>
-      {"name"=>"month",
-       "since"=>"2009-12-01T00:00:00Z",
-       "until"=>"2009-12-31T23:59:59Z"},
-     "applications"=>
-      [{"name"=>nil,
-        "plan"=>{"name"=>plan.name, "id"=>plan.id},
-        "id"=>cinstance1.id,
-        "value"=>"2",
-        "account"=>{"name"=>cinstance1.user_account.org_name, "id"=>cinstance1.user_account.id},
-        "service"=>{"id"=>cinstance1.service_id}},
-       {"name"=>nil,
-        "plan"=>{"name"=>plan.name, "id"=>plan.id},
-        "id"=>cinstance2.id,
-        "value"=>"1",
-        "account"=>{"name"=>cinstance2.user_account.org_name, "id"=>cinstance2.user_account.id},
-        "service"=>{"id"=>cinstance2.service_id}}],
-     "metric"=>{"name"=>@metric.friendly_name, "id"=>@metric.id, "unit"=>@metric.unit, "system_name"=>@metric.system_name}
-
+    assert_json "period" => { "name" => "month", "since" => "2009-12-01T00:00:00Z", "until" => "2009-12-31T23:59:59Z" },
+                "applications" => [{ "name" =>nil,
+                                     "plan" => { "name" => plan.name, "id" => plan.id },
+                                     "id" => cinstance1.id,
+                                     "value" => "2",
+                                     "account" => { "name" => cinstance1.user_account.org_name, "id" => cinstance1.user_account.id },
+                                     "service" => { "id" => cinstance1.service_id } },
+                                   { "name" => nil,
+                                     "plan" => { "name" => plan.name, "id" => plan.id },
+                                     "id" => cinstance2.id,
+                                     "value" => "1",
+                                     "account" => { "name" => cinstance2.user_account.org_name, "id" => cinstance2.user_account.id },
+                                     "service" => { "id" => cinstance2.service_id } }],
+                "metric" => { "name" => @metric.friendly_name, "id" => @metric.id, "unit" => @metric.unit, "system_name" => @metric.system_name }
   end
 end
