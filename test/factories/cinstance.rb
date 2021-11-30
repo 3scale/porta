@@ -30,6 +30,9 @@ FactoryBot.define do
 # Alias for future renaming
   factory(:application, :parent => :cinstance)
 
+  factory(:pending_application, parent: :application) do
+    plan { FactoryBot.create(:application_plan, approval_required: true) }
+  end
 
   factory(:account_contract, :parent => :contract, :class => AccountContract) do
     association :plan, :factory => :account_plan

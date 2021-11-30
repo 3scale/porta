@@ -6,8 +6,6 @@ require 'test_helper'
 # Finished in 170.63189s
 # 87 tests, 160 assertions, 0 failures, 0 errors, 0 skips
 class CinstanceTest < ActiveSupport::TestCase
-  include TestHelpers::Cinstance
-
   def teardown
     Timecop.return
   end
@@ -119,7 +117,7 @@ class CinstanceTest < ActiveSupport::TestCase
     service = FactoryBot.create(:service)
     plan = FactoryBot.create(:application_plan, issuer: service, approval_required: true)
 
-    pending_cinstance = create_pending_cinstance
+    pending_cinstance = FactoryBot.create(:pending_application)
 
     destroyed_pending_cinstance = FactoryBot.create(:cinstance, plan: plan)
     Timecop.freeze(1.hour.ago) { destroyed_pending_cinstance.destroy }
@@ -133,7 +131,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'Cinstance.by_state(:live) returns only live cinstances' do
     live_cinstance = FactoryBot.create(:cinstance)
-    pending_cinstance = create_pending_cinstance
+    pending_cinstance = FactoryBot.create(:pending_application)
 
     destroyed_live_cinstance = FactoryBot.create(:cinstance)
     Timecop.freeze(1.hour.ago) { destroyed_live_cinstance.destroy }
@@ -248,26 +246,26 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance#live? returns false when cinstance is pending' do
-    cinstance = create_pending_cinstance
+    cinstance = FactoryBot.create(:pending_application)
     assert_not cinstance.live?
   end
 
   test 'Cinstance#accept! transitions from pending to live state' do
-    cinstance = create_pending_cinstance
+    cinstance = FactoryBot.create(:pending_application)
 
     cinstance.accept!
     assert cinstance.live?
   end
 
   test 'Cinstance#reject! destroys pending cinstance' do
-    cinstance = create_pending_cinstance
+    cinstance = FactoryBot.create(:pending_application)
 
     cinstance.reject!('because whatever reason')
     assert_does_not_contain Cinstance.all, cinstance
   end
 
   test 'Cinstance#reject! sets rejection reason' do
-    cinstance = create_pending_cinstance
+    cinstance = FactoryBot.create(:pending_application)
     cinstance.reject!('because whatever reason')
 
     assert_equal 'because whatever reason', cinstance.rejection_reason
