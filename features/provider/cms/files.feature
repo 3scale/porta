@@ -32,3 +32,9 @@ Feature: CMS files
     When I update the file with different image
     Then the file should be updated
       And the original file should be gone
+
+  Scenario: Adding a comma separated tag list
+    Given there is a cms file
+    When I fill in the tags list with "pasta, tomato"
+    And I press "Save"
+    Then I should see the tags "pasta, tomato"
