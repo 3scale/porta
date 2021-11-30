@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ReferrerFiltersTest < ActiveSupport::TestCase
-
-  subject { @referrer_filter ||= FactoryBot.create(:referrer_filter) }
-
   def setup
     ReferrerFilter.disable_backend!
+
+    @application = FactoryBot.create(:cinstance)
+    @referrer_filters = @application.referrer_filters
   end
 
-  should 'have immutable value' do
+  test 'have immutable value' do
     assert_raise(ActiveRecord::ActiveRecordError) do
-      subject.update_attribute :value, 'another'
+      FactoryBot.create(:referrer_filter).update_attribute(:value, 'another') # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
@@ -26,80 +28,67 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
     assert_equal referrer_filter.id, DeletedObject.referrer_filters.last!.object_id
   end
 
-  context 'referrer_filters' do
+  test 'add filters' do
+    assert_equal 0, @referrer_filters.size
 
-    setup do
-      @application = FactoryBot.create(:cinstance)
-      @referrer_filters = @application.referrer_filters
+    assert @referrer_filters.add('whatever').persisted?
+    assert_not @referrer_filters.add('whatever').persisted?
+
+    assert_equal 1, @referrer_filters.size
+  end
+
+  test 'validate format of value' do
+    ReferrerFilter.any_instance.stubs(:keys_limit_reached).returns({})
+
+    valid = ['example.net', '73.170.78.2', 'foo-bar.example.net', 'example.*', '*.example.com', 'west-is-123.the.best', 'example.example.org']
+    valid.each do |value|
+      assert @referrer_filters.add(value).persisted?, "'#{value}' is valid"
     end
 
-    should 'add filters' do
-      assert_equal 0, @referrer_filters.size
+    invalid = ['@example.net', 'example.net:80', '+73.170.78.2', ' 73.170.78.2', 'example.net?query=s', 'http://example.org', '73.170.78.2 ']
+    invalid.each do |value|
+      assert_not @referrer_filters.add(value).persisted?, "'#{value}' is invalid"
+    end
+  end
 
-      assert @referrer_filters.add('whatever').persisted?
-      # should validate uniqueness
-      refute @referrer_filters.add('whatever').persisted?
+  test 'return list of values' do
+    assert @referrer_filters.add('some-key')
+    assert_equal ['some-key'], @referrer_filters.pluck_values
+  end
 
-      assert_equal 1, @referrer_filters.size
+  test 'raise when removing unknown value' do
+    assert_raise(ActiveRecord::RecordNotFound) do
+      @referrer_filters.remove('unknown')
+    end
+  end
+
+  test 'remove key' do
+    key = FactoryBot.create(:referrer_filter, application: @application)
+    assert_equal [key], @application.referrer_filters.reload
+    assert @application.referrer_filters.remove(key.value)
+    assert_equal [], @application.referrer_filters
+  end
+
+  test 'limit number of keys' do
+    ReferrerFilter::REFERRER_FILTERS_LIMIT.times do |n|
+      assert @referrer_filters.add("filter-#{n+1}").persisted?
     end
 
-    should 'validate format of value' do
-      ReferrerFilter.any_instance.stubs(:keys_limit_reached).returns({})
+    # REFERRER_FILTERS_LIMIT + 1 is over the limit
+    # TODO: maybe check for raise?
+    referrer_filter = @referrer_filters.add('limit-reached')
+    assert_not referrer_filter.persisted?
 
-      # valid
-      ['example.net', '73.170.78.2', 'foo-bar.example.net', 'example.*',
-       '*.example.com', 'west-is-123.the.best', 'example.example.org'].each do |value|
+    assert_no_match(/translation missing/, referrer_filter.errors[:base].to_sentence)
+  end
 
-        assert @referrer_filters.add(value).persisted?, "'#{value}' is valid"
-      end
+  test 'update backend' do
+    ReferrerFilter.enable_backend!
 
-      # invalid
-      ['@example.net', 'example.net:80', '+73.170.78.2', ' 73.170.78.2',
-       'example.net?query=s', 'http://example.org', '73.170.78.2 '].each do |value|
+    expect_backend_create_referrer_filter(@application, 'some-key')
+    @referrer_filters.add('some-key')
 
-        refute @referrer_filters.add(value).persisted?, "'#{value}' is invalid"
-      end
-    end
-
-    should 'return list of values' do
-      assert @referrer_filters.add('some-key')
-      assert_equal ['some-key'], @referrer_filters.pluck_values
-    end
-
-    should 'raise when removing unknown value' do
-      assert_raise(ActiveRecord::RecordNotFound) do
-        @referrer_filters.remove('unknown')
-      end
-    end
-
-    should 'remove key' do
-      key = FactoryBot.create(:referrer_filter, :application => @application)
-      assert_equal [key], @application.referrer_filters.reload
-      assert @application.referrer_filters.remove(key.value)
-      assert_equal [], @application.referrer_filters
-    end
-
-    should 'limit number of keys' do
-      ReferrerFilter::REFERRER_FILTERS_LIMIT.times do |n|
-        assert @referrer_filters.add("filter-#{n+1}").persisted?
-      end
-
-      # REFERRER_FILTERS_LIMIT + 1 is over the limit
-      # TODO: maybe check for raise?
-      referrer_filter = @referrer_filters.add('limit-reached')
-      refute referrer_filter.persisted?
-
-      refute_match(/translation missing/, referrer_filter.errors[:base].to_sentence)
-    end
-
-    should 'update backend' do
-      ReferrerFilter.enable_backend!
-
-      expect_backend_create_referrer_filter(@application, 'some-key')
-      @referrer_filters.add('some-key')
-
-      expect_backend_delete_referrer_filter(@application, 'some-key')
-      @referrer_filters.remove('some-key')
-    end
+    expect_backend_delete_referrer_filter(@application, 'some-key')
+    @referrer_filters.remove('some-key')
   end
 end

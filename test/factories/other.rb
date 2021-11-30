@@ -6,6 +6,21 @@ FactoryBot.define do
   factory(:forum) do
     name { 'Forum' }
     account {|a| a.association(:provider_account)}
+
+    trait :public do
+      after :create do |forum|
+        forum.account.settings.update(forum_public: true)
+      end
+    end
+
+    trait :private do
+      after :create do |forum|
+        forum.account.settings.update(forum_public: false)
+      end
+    end
+
+    factory :public_forum, traits: [:public]
+    factory :private_forum, traits: [:private]
   end
 
   factory(:topic_category) do
