@@ -18,7 +18,7 @@ module Master
       end
 
       def find_provider
-        @provider = Provider.find(params[:provider_id])
+        @provider = Provider.find(params.permit!.to_h[:provider_id])
       end
     end
   end
