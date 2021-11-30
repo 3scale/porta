@@ -21,41 +21,32 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
       super
       user = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners plans])
       @token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
+
+      User.any_instance.stubs(:has_access_to_all_services?).returns(false)
     end
 
-    context 'without access to all services' do
-      setup do
-        User.any_instance.stubs(:has_access_to_all_services?).returns(false)
-      end
-
-      should 'index with no token' do
-        get admin_api_service_application_plans_path(@service)
-        assert_response :forbidden
-      end
-
-      should 'index with access to no services' do
-        User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
-        get admin_api_service_application_plans_path(@service), params: params
-        assert_response :not_found
-      end
-
-      should 'index with access to some service' do
-        User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
-        get admin_api_service_application_plans_path(@service), params: params
-        assert_response :success
-      end
+    test 'index with no token' do
+      get admin_api_service_application_plans_path(@service)
+      assert_response :forbidden
     end
 
-    context 'with access to all services' do
-      setup do
-        User.any_instance.stubs(:has_access_to_all_services?).returns(true)
-      end
+    test 'index with access to no services' do
+      User.any_instance.expects(:member_permission_service_ids).returns([]).at_least_once
+      get admin_api_service_application_plans_path(@service), params: params
+      assert_response :not_found
+    end
 
-      should 'index' do
-        User.any_instance.expects(:member_permission_service_ids).never
-        get admin_api_service_application_plans_path(@service), params: params
-        assert_response :success
-      end
+    test 'index with access to some service' do
+      User.any_instance.expects(:member_permission_service_ids).returns([@service.id]).at_least_once
+      get admin_api_service_application_plans_path(@service), params: params
+      assert_response :success
+    end
+
+    test 'index' do
+      User.any_instance.stubs(:has_access_to_all_services?).returns(true)
+      User.any_instance.expects(:member_permission_service_ids).never
+      get admin_api_service_application_plans_path(@service), params: params
+      assert_response :success
     end
 
     private
@@ -98,16 +89,12 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
     test 'show' do
       get admin_api_service_application_plan_path(@service, @service.application_plans.first, provider_key: @provider.api_key, format: :xml)
       assert_response :success
-
-      #TODO: move this to application_plan_test#to_xml
       assert_an_application_plan xml, @service
     end
 
     test 'create' do
-      post admin_api_service_application_plans_path(@service, format: :xml), params: params.merge({
-        name: 'awesome application plan',
-        state_event: 'publish'
-      })
+      post admin_api_service_application_plans_path(@service, format: :xml), params: params.merge({ name: 'awesome application plan',
+                                                                                                    state_event: 'publish' })
       assert_response :success
 
       assert_an_application_plan xml, @service
@@ -123,15 +110,13 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
     test 'update' do
       plan = FactoryBot.create(:application_plan, issuer: @service, name: 'namy')
 
-      put admin_api_service_application_plan_path(@service, plan, format: :xml), params: params.merge({
-        state_event: 'publish',
-        name: 'new name'
-      })
+      put admin_api_service_application_plan_path(@service, plan, format: :xml), params: params.merge({ name: 'new name',
+                                                                                                        state_event: 'publish' })
       assert_response :success
 
       assert_an_application_plan xml, @service
-      assert_equal xml.xpath('.//plan/name').children.first.to_s, 'new name'
-      assert_equal xml.xpath('.//plan/state').children.first.to_s, 'published'
+      assert_equal 'new name', xml.xpath('.//plan/name').children.first.to_s
+      assert_equal 'published', xml.xpath('.//plan/state').children.first.to_s
       assert_equal 'false', xml.xpath('.//plan/@default').first.value
     end
 
