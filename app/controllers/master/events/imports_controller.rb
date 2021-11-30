@@ -13,6 +13,7 @@ class Master::Events::ImportsController < Master::BaseController
   private
 
   def check_shared_secret
-    head(403) unless params[:secret] == Events.shared_secret
+    permitted_params = params.permit(%i[secret]).to_h
+    head(403) unless permitted_params[:secret] == Events.shared_secret
   end
 end
