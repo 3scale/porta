@@ -48,7 +48,7 @@ class Account::BuyerTest < ActiveSupport::TestCase
     buyer.save!
 
     assert buyer.buyer?
-    assert buyer.services.empty?
+    assert_empty buyer.services
     assert_nil buyer.s3_prefix
   end
 
