@@ -11,6 +11,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     Stats::Base.storage.flushdb
 
     host! @provider_account.admin_domain
+    provider_login_with @provider_account.admins.first.username, 'supersecret'
   end
 
   def teardown
@@ -22,7 +23,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_response_code_stats_api_services_path(@cinstance.service_id, format: :json), params: { period: 'day', response_code: 200, timezone: 'Madrid', skip_change: false }
 
     assert_response :success
@@ -45,7 +45,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'Madrid', skip_change: false }
 
     assert_response :success
@@ -74,7 +73,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
     @provider_account.update(timezone: 'Madrid')
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     opts = { period: 'day', metric_name: @metric.system_name }
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
@@ -93,7 +91,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     plan = FactoryBot.create(:application_plan, issuer: @service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     opts = { period: 'day', metric_name: @metric.system_name, timezone: 'Kamchatka' }
     get usage_stats_api_services_path(@cinstance.service_id, format: :json), params: opts
 
@@ -119,7 +116,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12, 11, 18, 45), cinstance_id: cinstance.id)
 
     Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'UTC', skip_change: false }
 
     assert_response :success
@@ -156,7 +152,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     # This is out
     make_transaction_at(Time.utc(2011, 1, 1, 23, 21), cinstance_id: cinstance.id)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Madrid', since: "2010-01-01", skip_change: false }
 
     assert_response :success
@@ -192,7 +187,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     # This is out
     make_transaction_at(Time.utc(2011, 1, 1, 1, 21), cinstance_id: cinstance.id)
 
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'year', metric_name: @metric.system_name, timezone: 'Azores', since: "2010-01-01", skip_change: false }
 
     assert_response :success
@@ -223,7 +217,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12, 15), cinstance_id: cinstance1.id)
 
     Timecop.freeze(Time.utc(2009, 12, 22))
-    provider_login_with @provider_account.admins.first.username, 'supersecret'
     get top_applications_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: :month, metric_name: @metric.system_name }
 
     assert_response :success
