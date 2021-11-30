@@ -114,12 +114,9 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance.by_state(:pending) returns only pending cinstances' do
-    service = FactoryBot.create(:service)
-    plan = FactoryBot.create(:application_plan, issuer: service, approval_required: true)
-
     pending_cinstance = FactoryBot.create(:pending_application)
 
-    destroyed_pending_cinstance = FactoryBot.create(:cinstance, plan: plan)
+    destroyed_pending_cinstance = FactoryBot.create(:pending_application)
     Timecop.freeze(1.hour.ago) { destroyed_pending_cinstance.destroy }
 
     live_cinstance = FactoryBot.create(:cinstance)
