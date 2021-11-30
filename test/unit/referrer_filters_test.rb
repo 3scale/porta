@@ -12,7 +12,7 @@ class ReferrerFiltersTest < ActiveSupport::TestCase
 
   test 'have immutable value' do
     assert_raise(ActiveRecord::ActiveRecordError) do
-      @referrer_filters.update(value: 'another')
+      FactoryBot.create(:referrer_filter).update_attribute(:value, 'another') # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
