@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Finance::Api
-  class InvoicesTestCommonCases < ActionDispatch::IntegrationTest
+  class InvoicesUnscopedTest < ActionDispatch::IntegrationTest
     def setup
       @provider = FactoryBot.create(:provider_account)
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
@@ -12,9 +12,10 @@ module Finance::Api
       @key = @provider.api_key
 
       host! @provider.admin_domain
+      @context = ''
     end
 
-    class WithoutExistingInvoices < InvoicesTestCommonCases
+    class WithoutExistingInvoices < InvoicesUnscopedTest
       test 'deny access without provider key' do
         get "/api/#{@context}invoices.xml"
         assert_response :forbidden
@@ -64,7 +65,7 @@ module Finance::Api
       end
     end
 
-    class WithExistingInvoices < InvoicesTestCommonCases
+    class WithExistingInvoices < InvoicesUnscopedTest
       def setup
         super
         @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
@@ -164,23 +165,10 @@ module Finance::Api
     end
   end
 
-  class InvoicesNoScopeTest < InvoicesTestCommonCases
-    def setup
-      super
-      @context = ''
-    end
-  end
-
-  class InvoicesBuyersScopeTest < InvoicesTestCommonCases
+  class InvoicesBuyersScopedTest < InvoicesUnscopedTest
     def setup
       super
       @context = "accounts/#{@buyer.id}/"
     end
-  end
-
-  def self.runnable_methods
-    return [] if self == InvoicesTestCommonCases
-
-    super
   end
 end
