@@ -1,57 +1,56 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class MonthTest < ActiveSupport::TestCase
+  def setup
+    @first_of_february_2004 = Time.zone.local(2004, 2, 1).to_date # rubocop:disable Naming/VariableNumber
+  end
 
-  context 'Month' do
-    setup do
-      @first_of_february_2004 = Time.zone.local(2004,2,1).to_date
-    end
+  test 'initialize by first day' do
+    month = Month.new(@first_of_february_2004)
+    assert_equal Time.zone.local(2004, 2, 1).to_date, month.begin
+    assert_equal Time.zone.local(2004, 2, 29).to_date, month.end
+  end
 
-    should 'initialize by first day' do
-      month = Month.new(@first_of_february_2004)
-      assert_equal Time.zone.local(2004, 2, 1).to_date, month.begin
-      assert_equal Time.zone.local(2004, 2, 29).to_date, month.end
-    end
+  test 'initialize by year and day' do
+    month = Month.new(2009,3)
+    assert_equal Time.zone.local(2009, 3, 1).to_date, month.begin
+    assert_equal Time.zone.local(2009, 3, 31).to_date, month.end
+  end
 
-    should 'initialize by year and day' do
-      month = Month.new(2009,3)
-      assert_equal Time.zone.local(2009, 3, 1).to_date, month.begin
-      assert_equal Time.zone.local(2009, 3, 31).to_date, month.end
-    end
+  test 'initialize by first day and date arguments equally' do
+    assert_equal Month.new(@first_of_february_2004), Month.new(2004, 2)
+  end
 
-    should 'initialize by first day and date arguments equally' do
-      assert_equal Month.new(@first_of_february_2004), Month.new(2004,2)
-    end
+  test 'parse string' do
+    m = Month.parse_month '2001-11'
+    assert m.is_a?(Month)
+    assert_equal 11, m.begin.month
+    assert_equal 2001, m.begin.year
+  end
 
-    should 'parse string' do
-      m = Month.parse_month '2001-11'
-      assert m.is_a?(Month)
-      assert_equal m.begin.month, 11
-      assert_equal m.begin.year, 2001
-    end
+  test 'parse not exactly right string' do
+    assert_equal Month.new(2011, 1), Month.parse_month('2011-01-05')
+  end
 
-    should 'parse not exactly right string' do
-      assert_equal Month.new(2011, 01), Month.parse_month('2011-01-05')
-    end
+  test 'parse robustly' do
+    assert_nil Month.parse_month nil
+  end
 
-    should 'parse robustly' do
-      assert_nil Month.parse_month nil
-    end
+  test 'return nil when parsing invalid date' do
+    assert_nil Month.parse_month 'not-a-date'
+    assert_nil Month.parse_month 'giberish'
+  end
 
-    should 'return nil when parsing invalid date' do
-      assert_nil Month.parse_month 'not-a-date'
-      assert_nil Month.parse_month 'giberish'
-    end
+  test 'raise with wrong params' do
+    assert_raises(ArgumentError) { Month.new('abcd') }
+    assert_raises(ArgumentError) { Month.new(2001, 2, 1) }
+  end
 
-    should 'raise with wrong params' do
-      assert_raises(ArgumentError) { Month.new('abcd') }
-      assert_raises(ArgumentError) { Month.new(2001,2,1) }
-    end
-
-    should 'return correct next month' do
-      assert_equal Month.new(2004,6), Month.new(2004,5).next
-      assert_equal Month.new(2002,1), Month.new(2001,12).next
-    end
+  test 'return correct next month' do
+    assert_equal Month.new(2004, 6), Month.new(2004, 5).next
+    assert_equal Month.new(2002, 1), Month.new(2001, 12).next
   end
 
   test '#to_time_range returns a TimeRange' do
@@ -61,15 +60,14 @@ class MonthTest < ActiveSupport::TestCase
     assert_equal Time.zone.local(2010, 11, 30).end_of_day, range.end
   end
 
-
   def test_i18_localize
-    month = Month.new(2015, 06)
+    month = Month.new(2015, 6)
 
-    assert_equal 'June 2015', I18n.localize(month, format: :month)
+    assert_equal 'June 2015', I18n.l(month, format: :month)
   end
 
   test '#to_s' do
-    month = Month.new(2015, 06)
+    month = Month.new(2015, 6)
     assert_equal 'June 01, 2015 - June 30, 2015', month.to_s
     assert_equal '2015-06-01', month.to_s(:db)
   end
