@@ -161,7 +161,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
     cinstance_two = buyer_account.buy(plan) # no bang!
     cinstance_two.validate_plan_is_unique!
-    assert_not cinstance_two.valid?
+    assert cinstance_two.invalid?
   end
 
   test 'there can be more cinstances per plan if they have different user_accounts' do
@@ -338,7 +338,7 @@ class CinstanceTest < ActiveSupport::TestCase
     FactoryBot.create(:cinstance, plan: plan, user_key: 'foo')
     cinstance_two = FactoryBot.build(:cinstance, plan: plan, user_key: 'foo')
 
-    assert_not cinstance_two.valid?
+    assert cinstance_two.invalid?
     assert_match /has already been taken/, cinstance_two.errors[:user_key].to_s
 
     cinstance_two.user_key = 'bar'
@@ -354,7 +354,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
     Rails.configuration.three_scale.rolling_updates.stubs(features: {duplicate_user_key: []})
     assert FactoryBot.create(:cinstance, plan: plan1, user_key: 'foo')
-    assert_not FactoryBot.build(:cinstance, plan: plan2, user_key: 'foo').valid?
+    assert FactoryBot.build(:cinstance, plan: plan2, user_key: 'foo').invalid?
 
     Rails.configuration.three_scale.rolling_updates.stubs(features: {duplicate_user_key: [provider.id]})
     assert FactoryBot.build(:cinstance, plan: plan2, user_key: 'foo').valid?
@@ -447,7 +447,7 @@ class CinstanceTest < ActiveSupport::TestCase
     other_service = FactoryBot.create(:service, account: cinstance.provider_account)
     other_plan_diff_service = FactoryBot.create(:application_plan, service: other_service, name: "other plan of different service")
     cinstance.plan = other_plan_diff_service
-    assert_not cinstance.valid?
+    assert cinstance.invalid?
     assert_includes cinstance.errors['plan'], 'not allowed in this context'
 
     other_plan_same_service = FactoryBot.build_stubbed(:application_plan, service: cinstance.service, name: "other plan of same service")
@@ -470,7 +470,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
     cinstance.user_key = "you-&$#!!!"
 
-    assert_not cinstance.valid?
+    assert cinstance.invalid?
     assert cinstance.errors[:user_key].present?
 
     cinstance.user_key = "you-awesome-man"
@@ -480,7 +480,7 @@ class CinstanceTest < ActiveSupport::TestCase
     assert cinstance.valid?
 
     cinstance.user_key << "k"
-    assert_not cinstance.valid?
+    assert cinstance.invalid?
     assert cinstance.errors[:user_key].present?
   end
 
@@ -608,10 +608,10 @@ class CinstanceTest < ActiveSupport::TestCase
     cinstance = FactoryBot.build(:cinstance)
 
     cinstance.application_id = ''
-    assert_not cinstance.valid?
+    assert cinstance.invalid?
 
     cinstance.application_id = 'a' * 3
-    assert_not cinstance.valid?
+    assert cinstance.invalid?
 
     cinstance.application_id = 'a' * 4
     assert cinstance.valid?
@@ -682,7 +682,7 @@ class ValidationsTest < ActiveSupport::TestCase
       @provider.settings.show_multiple_applications!
       @cinstance.validate_human_edition!
 
-      assert_not @cinstance.valid?
+      assert @cinstance.invalid?
       assert @cinstance.errors[:name].presence
     end
   end
@@ -703,7 +703,7 @@ class ValidationsTest < ActiveSupport::TestCase
       @provider.settings.show_multiple_applications!
       @cinstance.validate_human_edition!
 
-      assert_not @cinstance.valid?
+      assert @cinstance.invalid?
       assert @cinstance.errors[:description].presence
     end
 
@@ -716,7 +716,7 @@ class ValidationsTest < ActiveSupport::TestCase
       @service.update(intentions_required: true)
       @cinstance.validate_human_edition!
 
-      assert_not @cinstance.valid?
+      assert @cinstance.invalid?
       assert @cinstance.errors[:description].presence
     end
   end
