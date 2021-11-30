@@ -6,51 +6,72 @@ module Abilities
   class ForumsTest < ActiveSupport::TestCase
     def setup
       @provider = FactoryBot.create(:provider_account)
-      @admin_user = @provider.admins.first
-      # admin = FactoryBot.create(:admin, account: @provider)
-      @provider_user = FactoryBot.create(:user, account: @provider)
-
-      @forum = @provider.forum
-      @topic = FactoryBot.create(:topic, forum: @forum)
-
-      @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-      @buyer_user = FactoryBot.create(:user, account: @buyer)
     end
 
-    def test_posts
+    class PublicForumTest < ForumsTest
+      def setup
+        super
+        @forum = FactoryBot.create(:public_forum, account: @provider)
+      end
+
+      test 'anyone can read a topic' do
+        topic = FactoryBot.create(:topic, forum: @forum)
+        assert Ability.new(provider_user).can?(:read, topic)
+        assert Ability.new(nil).can?(:read, topic)
+      end
+
+      test 'anyone can read a category' do
+        category = @forum.categories.create!(name: 'Junk')
+
+        assert Ability.new(buyer_user).can?(:read, category)
+        assert Ability.new(provider_user).can?(:read, category)
+        assert Ability.new(nil).can?(:read, category)
+      end
+    end
+
+    class PrivateForumTest < ForumsTest
+      def setup
+        super
+        @forum = FactoryBot.create(:private_forum, account: @provider)
+      end
+
+      test 'logged in users can read topic' do
+        topic = FactoryBot.create(:topic, forum: @forum)
+
+        assert Ability.new(provider_user).can?(:read, topic)
+        assert Ability.new(buyer_user).can?(:read, topic)
+        assert_not Ability.new(nil).can?(:read, topic)
+      end
+
+      test 'buyer and provider user can read category' do
+        category = @forum.categories.create!(name: 'Junk')
+
+        assert Ability.new(buyer_user).can?(:read, category)
+        assert Ability.new(provider_user).can?(:read, category)
+      end
+    end
+
+    test 'posts' do
       forum = FactoryBot.create(:provider_account).forum
       assert_equal [], forum.posts.to_a
       assert_equal 0, forum.posts.size
     end
 
-    test 'anyone can read topic when forum is public' do
-      @forum.account.settings.update(forum_public: true)
-
-      assert Ability.new(@provider_user).can?(:read, @topic)
-      assert Ability.new(nil).can?(:read, @topic)
-    end
-
-    test 'just logged in users can read topic when forum is not public' do
-      @forum.account.settings.update(forum_public: false)
-
-      assert Ability.new(@provider_user).can?(:read, @topic)
-      assert Ability.new(@buyer_user).can?(:read, @topic)
-      assert_not Ability.new(nil).can?(:read, @topic)
-    end
-
     test "topic owner can update and destroy topic if it is less than one day old" do
-      owner = Ability.new(@topic.user)
+      topic = FactoryBot.create(:topic, forum: @forum)
+      owner = Ability.new(topic.user)
 
-      assert owner.can?(:update, @topic)
-      assert owner.can?(:destroy, @topic)
+      assert owner.can?(:update, topic)
+      assert owner.can?(:destroy, topic)
     end
 
     test "topic owner can't update nor destroy topic if it is more than one day old" do
-      owner = Ability.new(@topic.user)
+      topic = FactoryBot.create(:topic, forum: @forum)
+      owner = Ability.new(topic.user)
 
       Timecop.travel(2.days.from_now) do
-        assert_not owner.can?(:update, @topic)
-        assert_not owner.can?(:destroy, @topic)
+        assert_not owner.can?(:update, topic)
+        assert_not owner.can?(:destroy, topic)
       end
     end
 
@@ -63,26 +84,28 @@ module Abilities
     end
 
     test "admin can manage any topic of his forum" do
-      admin = Ability.new(@admin_user)
+      admin = Ability.new(admin_user)
 
-      topic_one = FactoryBot.create(:topic, forum: @forum, user: @admin_user)
+      topic_one = FactoryBot.create(:topic, forum: @forum, user: admin_user)
       assert admin.can?(:manage, topic_one)
 
-      topic_two = FactoryBot.create(:topic, forum: @forum, user: @provider_user)
+      topic_two = FactoryBot.create(:topic, forum: @forum, user: provider_user)
       assert admin.can?(:manage, topic_two)
 
-      topic_three = FactoryBot.create(:topic, forum: @forum, user: @provider_user)
+      topic_three = FactoryBot.create(:topic, forum: @forum, user: provider_user)
       Timecop.travel(2.days.from_now) do
         assert admin.can?(:manage, topic_three)
       end
     end
 
     test "admin can stick a topic" do
-      assert Ability.new(@admin_user).can?(:stick, @topic)
+      topic = FactoryBot.create(:topic, forum: @forum)
+      assert Ability.new(admin_user).can?(:stick, topic)
     end
 
     test "user can't stick a topic" do
-      assert_not Ability.new(@provider_user).can?(:stick, @topic)
+      topic = FactoryBot.create(:topic, forum: @forum)
+      assert_not Ability.new(provider_user).can?(:stick, topic)
     end
 
     test "post author can update and destroy post if it is less than one day old" do
@@ -127,41 +150,25 @@ module Abilities
     end
 
     test "admin can manage any post of his forum" do
-      admin = Ability.new(@admin_user)
+      topic = FactoryBot.create(:topic, forum: @forum)
+      admin = Ability.new(admin_user)
 
-      post_one = FactoryBot.create(:post, topic: @topic, user: @admin_user)
+      post_one = FactoryBot.create(:post, topic: topic, user: admin_user)
       assert admin.can?(:manage, post_one)
 
-      post_two = FactoryBot.create(:post, topic: @topic, user: @provider_user)
+      post_two = FactoryBot.create(:post, topic: topic, user: provider_user)
       assert admin.can?(:manage, post_two)
 
-      post_three = FactoryBot.create(:post, topic: @topic, user: @provider_user)
+      post_three = FactoryBot.create(:post, topic: topic, user: provider_user)
       Timecop.travel(2.days.from_now) do
         assert admin.can?(:manage, post_three)
       end
     end
 
-    test 'anyone can read category in public forum' do
-      @forum.account.settings.update(forum_public: true)
-      category = @forum.categories.create!(name: 'Junk')
-
-      assert Ability.new(@buyer_user).can?(:read, category)
-      assert Ability.new(@provider_user).can?(:read, category)
-      assert Ability.new(nil).can?(:read, category)
-    end
-
-    test 'buyer and provider user can read category in private forum' do
-      @forum.account.settings.update(forum_public: false)
-      category = @forum.categories.create!(name: 'Junk')
-
-      assert Ability.new(@buyer_user).can?(:read, category)
-      assert Ability.new(@provider_user).can?(:read, category)
-    end
-
     test "user can't manage category" do
       category = @forum.categories.create!(name: 'Stuff')
 
-      user = Ability.new(@provider_user)
+      user = Ability.new(provider_user)
       assert_not user.can?(:create, TopicCategory)
       assert_not user.can?(:update, category)
       assert_not user.can?(:destroy, category)
@@ -170,7 +177,7 @@ module Abilities
     test "buyer admin can't manage category" do
       category = @forum.categories.create!(name: 'Stuff')
 
-      admin = Ability.new(@buyer.admins.first)
+      admin = Ability.new(buyer.admins.first)
       assert_not admin.can?(:create, TopicCategory)
       assert_not admin.can?(:update, category)
       assert_not admin.can?(:destroy, category)
@@ -179,7 +186,7 @@ module Abilities
     test "admin can manage category of his forum" do
       category = @forum.categories.create!(name: 'Stuff')
 
-      ability = Ability.new(@admin_user)
+      ability = Ability.new(admin_user)
 
       assert ability.can?(:create, TopicCategory)
       assert ability.can?(:update, category)
@@ -188,27 +195,29 @@ module Abilities
 
     test "user can create anonymous post if anonymous posting is enabled" do
       @forum.account.settings.update(anonymous_posts_enabled: true)
-      post = @topic.posts.build
+      topic = FactoryBot.create(:topic, forum: @forum)
+      post = topic.posts.build
 
-      logged_in_user = Ability.new(@provider_user)
-      assert logged_in_user.can?(:reply, @topic)
+      logged_in_user = Ability.new(provider_user)
+      assert logged_in_user.can?(:reply, topic)
       assert logged_in_user.can?(:reply, post)
 
       anonymous_user = Ability.new(nil)
-      assert anonymous_user.can?(:reply, @topic)
+      assert anonymous_user.can?(:reply, topic)
       assert anonymous_user.can?(:reply, post)
     end
 
     test "user can't create anonymous post if anonymous posting is disabled" do
       @forum.account.settings.update(anonymous_posts_enabled: false)
-      post = @topic.posts.build
+      topic = FactoryBot.create(:topic, forum: @forum)
+      post = topic.posts.build
 
-      logged_in_user = Ability.new(@provider_user)
-      assert logged_in_user.can?(:reply, @topic)
+      logged_in_user = Ability.new(provider_user)
+      assert logged_in_user.can?(:reply, topic)
       assert logged_in_user.can?(:reply, post)
 
       anonymous_user = Ability.new(nil)
-      assert_not anonymous_user.can?(:reply, @topic)
+      assert_not anonymous_user.can?(:reply, topic)
       assert_not anonymous_user.can?(:reply, post)
     end
 
@@ -217,8 +226,8 @@ module Abilities
       category = FactoryBot.create(:topic_category, forum: @forum)
       topic = category.topics.build
 
-      assert Ability.new(@provider_user).can?(:reply, topic)
-      assert Ability.new(@buyer_user).can?(:reply, topic)
+      assert Ability.new(provider_user).can?(:reply, topic)
+      assert Ability.new(buyer_user).can?(:reply, topic)
 
       anonymous_user = Ability.new(nil)
       assert_not anonymous_user.can?(:reply, topic)
@@ -231,9 +240,33 @@ module Abilities
     test "Topic with category should be manageable by admin" do
       category = FactoryBot.create(:topic_category, forum: @forum)
 
-      admin = Ability.new(@admin_user)
+      admin = Ability.new(admin_user)
       assert admin.can?(:manage, category.topics.build)
       assert admin.can?(:manage, @forum.topics.build)
+    end
+
+    def self.runnable_methods
+      return [] if self == ForumsTest
+
+      super
+    end
+
+    protected
+
+    def admin_user
+      @admin_user ||= @provider.admins.first
+    end
+
+    def provider_user
+      @provider_user ||= FactoryBot.create(:user, account: @provider)
+    end
+
+    def buyer
+      @buyer ||= FactoryBot.create(:buyer_account, provider_account: @provider)
+    end
+
+    def buyer_user
+      @buyer_user ||= FactoryBot.create(:user, account: buyer)
     end
   end
 end
