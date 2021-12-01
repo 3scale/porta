@@ -72,19 +72,19 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
   end
 
   %i[cancel pay generate_pdf charge].each do |action|
-    should "respond to AJAX action #{action}" do
+    test "respond to AJAX action #{action}" do
       Invoice.any_instance.stubs("transition_allowed?").returns(true)
       Invoice.any_instance.stubs("#{action}!").returns(true)
 
-      put url_for([action, :admin, :finance, @invoice]), format: 'js'
+      put url_for([action, :admin, :finance, @invoice, format: 'js'])
       assert_response :success
     end
 
-    should "handle '#{action}' action failure" do
+    test "handle '#{action}' action failure" do
       Invoice.any_instance.stubs("transition_allowed?").returns(true)
       Invoice.any_instance.stubs("#{action}!").returns(false)
 
-      put url_for([action, :admin, :finance, @invoice]), format: 'js'
+      put url_for([action, :admin, :finance, @invoice, format: 'js'])
       assert_response :success
       # TODO: update error messages
     end
