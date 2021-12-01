@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory(:contract) do
     association :user_account, :factory => :pending_buyer_account
@@ -17,21 +19,14 @@ FactoryBot.define do
         contract.plan.provider_account.buyer_accounts << contract.user_account
       end
     end
-
   end
 
-  factory(:cinstance, :parent => :contract, :class => Cinstance) do
+  factory(:cinstance, :aliases => %i[application application_contract], :parent => :contract, :class => Cinstance) do
     association :plan, :factory => :application_plan
-  end
 
-# Alias for future renaming
-  factory(:application_contract, :parent => :cinstance)
-
-# Alias for future renaming
-  factory(:application, :parent => :cinstance)
-
-  factory(:pending_application, parent: :application) do
-    plan { FactoryBot.create(:application_plan, approval_required: true) }
+    factory(:pending_application) do
+      plan { FactoryBot.create(:application_plan, approval_required: true) }
+    end
   end
 
   factory(:account_contract, :parent => :contract, :class => AccountContract) do
