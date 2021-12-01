@@ -31,10 +31,10 @@ class Master::Api::ServicesController < Master::Api::BaseController
   private
 
   def service
-    @service ||= provider.accessible_services.find(params[:id])
+    @service ||= provider.accessible_services.find(params.permit!.to_h[:id])
   end
 
   def provider
-    @provider ||= Account.providers.find(params[:provider_id])
+    @provider ||= Account.providers.find(params.permit!.to_h[:provider_id])
   end
 end
