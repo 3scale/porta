@@ -29,7 +29,7 @@ FactoryBot.define do
     end
   end
 
-  factory(:published_plan, :parent => :application_plan) do
+  factory(:published_plan, parent: :application_plan, aliases: [:published_application_plan]) do
     after(:create) do |plan|
       plan.publish!
     end
