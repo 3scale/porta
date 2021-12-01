@@ -1,12 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
-#require 'three_scale/spam_protection'
 
 class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
-  class Model
-    include ThreeScale::SpamProtection::Integration::Model
-    has_spam_protection :honeypot, :timestamp
-  end
-
   class Javascript
     include ThreeScale::SpamProtection::Integration::Model
     has_spam_protection :javascript
@@ -22,101 +18,119 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     has_spam_protection :timestamp
   end
 
-  class Empty
-    include ThreeScale::SpamProtection::Integration::Model
-  end
+  class EmptyTest < ActiveSupport::TestCase
+    class Empty
+      include ThreeScale::SpamProtection::Integration::Model
+    end
 
-  context "empty Model" do
-    subject { Empty }
-    should "have none spam protection" do
-      assert subject.spam_protection.nil?
+    test "empty Model should have no spam protection" do
+      assert_nil Empty.spam_protection
     end
   end
 
-  context "SpamProtection::Integration" do
-    context "Model" do
-      subject { ThreeScale::SpamProtection::Integration::Model }
-      should "not be included in ActiveRecord::Base" do
-        assert !ActiveRecord::Base.ancestors.include?(subject)
-      end
-
-      should "be included in Account" do
-        assert Account.ancestors.include?(subject)
-      end
-
-      should "be included in Post" do
-        assert Account.ancestors.include?(subject)
-      end
-
-      should "be included in Topic" do
-        assert Account.ancestors.include?(subject)
-      end
+  class ModelTest < ActiveSupport::TestCase
+    def subject
+      @subject ||= ThreeScale::SpamProtection::Integration::Model
     end
 
-    context "Controller" do
-      subject { ThreeScale::SpamProtection::Integration::Controller }
-
-      should "not be included in ActionController::Base" do
-        assert !ActionController::Base.ancestors.include?(subject)
-      end
-
-      should "be included in NewSignupsController" do
-        assert DeveloperPortal::SignupController.ancestors.include?(subject)
-      end
+    test "not be included in ActiveRecord::Base" do
+      assert_not ActiveRecord::Base <= subject
     end
 
-    context "FormBuilder" do
-      subject { ThreeScale::SpamProtection::Integration::FormBuilder }
+    test "be included in Account" do
+      assert Account <= subject
+    end
 
-      should "not be included in Formtastic::SemanticFormBuilder" do
-        assert !Formtastic::SemanticFormBuilder.ancestors.include?(subject)
-      end
+    test "be included in Post" do
+      assert Account <= subject
+    end
 
-      should "be included in ThreeScale::SemanticFormBuilder" do
-        assert ThreeScale::SemanticFormBuilder.ancestors.include?(subject)
-      end
+    test "be included in Topic" do
+      assert Account <= subject
     end
   end
 
-  context "fake Model" do
-    subject { Model }
-    should "have right methods" do
-      assert subject.respond_to?(:spam_protection)
-      assert !subject.respond_to?(:spam_protection=)
+  class ControllerTest < ActiveSupport::TestCase
+    def subject
+      @subject ||= ThreeScale::SpamProtection::Integration::Controller
     end
 
-    context "configuration" do
-      subject { Model.spam_protection }
+    test "should not be included in ActionController::Base" do
+      assert_not ActionController::Base <= subject
+    end
 
-      should "have have right allowed checks" do
-        assert_equal [:honeypot, :timestamp], subject.enabled_checks
+    test "should be included in NewSignupsController" do
+      assert DeveloperPortal::SignupController <= subject
+    end
+  end
+
+  class FormBuildTest < ActiveSupport::TestCase
+    def subject
+      @subject ||= ThreeScale::SpamProtection::Integration::FormBuilder
+    end
+
+    test "should not be included in Formtastic::SemanticFormBuilder" do
+      assert_not Formtastic::SemanticFormBuilder <= subject
+    end
+
+    test "should be included in ThreeScale::SemanticFormBuilder" do
+      assert ThreeScale::SemanticFormBuilder <= subject
+    end
+  end
+
+  class FakeModelTest < ActiveSupport::TestCase
+    class Model
+      include ThreeScale::SpamProtection::Integration::Model
+      has_spam_protection :honeypot, :timestamp
+    end
+
+    class ClassTest < FakeModelTest
+      test "should have right methods" do
+        subject = Model
+        assert subject.respond_to?(:spam_protection)
+        assert_not subject.respond_to?(:spam_protection=)
+      end
+    end
+
+    class ConfigurationTest < FakeModelTest
+      setup do
+        @subject = Model.spam_protection
       end
 
-      should "have #enabled? check" do
+      attr_reader :subject
+
+      test "should have have right allowed checks" do
+        assert_equal %i[honeypot timestamp], subject.enabled_checks
+      end
+
+      test "should have #enabled? check" do
         assert subject.enabled?(:honeypot)
         assert subject.enabled?(:timestamp)
-        assert !subject.enabled?(:javascript)
+        assert_not subject.enabled?(:javascript)
       end
-
     end
 
-    context "instance" do
-      subject { Model.new }
-      should "have right methods" do
+    class InstanceTest < FakeModelTest
+      setup do
+        @subject = Model.new
+      end
+
+      attr_reader :subject
+
+      test "should have right methods" do
         method = subject.method(:spam_protection)
         assert method
         assert_equal 0, method.arity
       end
 
-      should "have spam level" do
+      test "should have spam level" do
         assert_equal 0.4, subject.spam_protection.spam_level
       end
     end
 
-    context "timestamp" do
-      subject { Timestamp.new }
-
-      should "validate" do
+    class TimestampTest < FakeModelTest
+      test "validate" do
+        subject = Timestamp.new
         subject.timestamp = 1.second.ago
         assert subject.spam?
 
@@ -133,9 +147,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       end
     end
 
-    context "form protector" do
-      subject { @object.spam_protection.form(@form) }
-
+    class FormProtectionTest < FakeModelTest
       setup do
         # We do not want to skip Recaptcha in these tests
         Recaptcha::Verify.stubs(skip?: false)
@@ -146,48 +158,51 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
         @template.stubs(:logged_in?).returns(false)
         @output = @template.output_buffer = ActiveSupport::SafeBuffer.new
         @block = proc do |form|
-          @template.safe_concat subject
+          @template.safe_concat subject # rubocop:disable Rails/OutputSafety
         end
         @form = ThreeScale::SemanticFormBuilder.new(:model, @object, @template, {})
+        @subject = @object.spam_protection.form(@form)
         subject.stubs(:enabled?).returns(true)
         http_method = Struct.new(:get?)
         subject.stubs(:http_method).returns(http_method.new(get?: false))
       end
 
-      should "not render captcha" do
+      attr_reader :subject
+
+      test "should not render captcha" do
         subject.stubs(:captcha_needed?).returns(false)
         @block.call(@form)
-        assert_match %r{<li .+? id="model_confirmation_input" class="boolean required"}, @output
-        assert_match %r{If you're human, leave this field empty.}, @output
-        assert_match %r{type="hidden" name="model\[timestamp\]"}, @output
-        assert_match %r{noscript}, @output
+        assert_match /<li .+? id="model_confirmation_input" class="boolean required"/, @output
+        assert_match /If you're human, leave this field empty./, @output
+        assert_match /type="hidden" name="model\[timestamp\]"/, @output
+        assert_match /noscript/, @output
       end
 
-      should 'not render captcha because of missing configuration' do
+      test 'should not render captcha because of missing configuration' do
         subject.stubs(:level).returns(:captcha)
         subject.stubs(:captcha_configured?).returns(false)
         @block.call(@form)
-        assert_match %r{<li .+? id="model_confirmation_input" class="boolean required"}, @output
-        assert_match %r{If you're human, leave this field empty.}, @output
-        assert_match %r{type="hidden" name="model\[timestamp\]"}, @output
-        assert_match %r{noscript}, @output
+        assert_match /<li .+? id="model_confirmation_input" class="boolean required"/, @output
+        assert_match /If you're human, leave this field empty./, @output
+        assert_match /type="hidden" name="model\[timestamp\]"/, @output
+        assert_match /noscript/, @output
       end
 
-      should 'render captcha - configuration has been added' do 
+      test 'should render captcha - configuration has been added' do
         subject.stubs(:level).returns(:captcha)
         subject.stubs(:captcha_configured?).returns(true)
         @block.call(@form)
         assert_match %r{src="https://www.google.com/recaptcha/api.js}, @output
         assert_match %r{src="https://www.google.com/recaptcha/api/fallback}, @output
-        assert_match %r{name="g-recaptcha-response\"}, @output
+        assert_match /name="g-recaptcha-response"/, @output
       end
 
-      should "render captcha" do
+      test "should render captcha" do
         subject.stubs(:captcha_needed?).returns(true)
         @block.call(@form)
         assert_match %r{src="https://www.google.com/recaptcha/api.js}, @output
         assert_match %r{src="https://www.google.com/recaptcha/api/fallback}, @output
-        assert_match %r{name="g-recaptcha-response\"}, @output
+        assert_match /name="g-recaptcha-response"/, @output
       end
     end
   end
