@@ -8,7 +8,7 @@ class Partners::ProvidersController < Partners::BaseController
     signup_result = Signup::ProviderAccountManager.new(Account.master).create(signup_params) do |result|
       account = result.account
       account.signup_mode!
-      account.subdomain = "#{params[:subdomain]}-#{partner_system_name}"
+      account.subdomain = "#{permitted_params[:subdomain]}-#{partner_system_name}"
       account.generate_domains!
       account.partner = partner
       account.extra_fields['partner'] = partner_system_name
@@ -46,7 +46,7 @@ class Partners::ProvidersController < Partners::BaseController
 
   def account_params
     {
-      org_name: "#{partner.system_name}-#{params[:org_name]}",
+      org_name: "#{partner.system_name}-#{permitted_params[:org_name]}",
       sample_data: true,
       partner: partner,
       provider: true
@@ -56,10 +56,10 @@ class Partners::ProvidersController < Partners::BaseController
   def user_params
     {
       signup_type: partner.signup_type,
-      password: params[:password].presence || SecureRandom.hex,
-      email: params[:email],
-      first_name: params[:first_name],
-      last_name: params[:last_name],
+      password: permitted_params[:password].presence || SecureRandom.hex,
+      email: permitted_params[:email],
+      first_name: permitted_params[:first_name],
+      last_name: permitted_params[:last_name],
       username: 'admin'
     }.tap do |parameters|
       open_id = params[:open_id]
@@ -68,7 +68,7 @@ class Partners::ProvidersController < Partners::BaseController
   end
 
   def find_account
-    @account = @partner.providers.find(params[:id])
+    @account = @partner.providers.find(permitted_params[:id])
   end
 
   def application_plans
@@ -76,11 +76,14 @@ class Partners::ProvidersController < Partners::BaseController
   end
 
   def selected_plan
-    if @selected_plan = application_plans.find_by_system_name(params[:application_plan])
+    if @selected_plan = application_plans.find_by(system_name: permitted_params[:application_plan])
       @selected_plan
     else
       application_plans.first
     end
   end
 
+  def permitted_params
+    params.permit!.to_h
+  end
 end
