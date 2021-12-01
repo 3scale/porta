@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class CinstanceObserverTest < ActiveSupport::TestCase
@@ -14,137 +16,170 @@ class CinstanceObserverTest < ActiveSupport::TestCase
     Logic::RollingUpdates.stubs(skipped?: true)
   end
 
-  context 'When new cinstance is created' do
-    setup do
+  class NewCinstanceCreatedTest < CinstanceObserverTest
+    def setup
+      super
+      @cinstance = @buyer.buy!(@plan)
+      @message = Message.last
+    end
+
+    test 'a message should be sent' do
+      assert_not_nil @message
+      assert @message.sent?
+    end
+
+    test 'a message should have the provider as a recipient' do
+      assert_equal [@provider], @message.to
+    end
+
+    test 'a message should have the buyer as a sender' do
+      assert_equal @buyer, @message.sender
+    end
+
+    test 'a message should have meaningful subject' do
+      assert_match(/New Application submission/i, @message.subject)
+    end
+
+    test 'a message should contain service name' do
+      assert_match(@service.name, @message.body)
+    end
+
+    test 'a message should contain plan name' do
+      assert_match(@plan.name, @message.body)
+    end
+
+    test 'a message should contain buyer name' do
+      assert_match(@buyer.org_name, @message.body)
+    end
+
+    test 'a message should contain buyer email' do
+      assert_match(@buyer.admins.first.email, @message.body)
+    end
+  end
+
+  class NewCinstanceApprovalRequired < CinstanceObserverTest
+    def setup
+      super
+      @plan.update(approval_required: true)
       @cinstance = @buyer.buy!(@plan)
     end
 
-    context 'a message' do
-      setup { @message = Message.last }
+    class PendingCinstanceTest < NewCinstanceApprovalRequired
+      test 'a message should say that the cinstance needs approval' do
+        assert_match(/requires you to approve/i, Message.last.body)
+      end
+    end
 
-      should 'be sent' do
+    class AcceptedCinstanceTest < NewCinstanceApprovalRequired
+      def setup
+        super
+        @cinstance.accept!
+        @message = Message.last
+      end
+
+      test 'a message should be sent' do
         assert_not_nil @message
         assert @message.sent?
       end
 
-      should 'have the provider as a recipient' do
-        assert_equal [@provider], @message.to
+      test 'a message should have the buyer as a recipient' do
+        assert_equal [@buyer], @message.to
       end
 
-      should 'have the buyer as a sender' do
-        assert_equal @buyer, @message.sender
+      test 'a message should have meaningful subject' do
+        assert_not_nil @message.subject
       end
 
-      should 'have meaningful subject' do
-        assert_match(/New Application submission/i, @message.subject)
+      test 'a message should contain provider name' do
+        assert_match(@provider.org_name, @message.body)
       end
 
-      should 'contain service name' do
-        assert_match(@service.name, @message.body)
+      test 'a message should contain service name' do
+        assert_match(@cinstance.service.name, @message.body)
       end
 
-      should 'contain plan name' do
-        assert_match(@plan.name, @message.body)
+      test 'a message should contain plan name' do
+        assert_match(@cinstance.plan.name, @message.body)
       end
 
-      should 'contain buyer name' do
-        assert_match(@buyer.org_name, @message.body)
+      pending_test 'a message should contain link to cinstance details'
+    end
+
+    class RejectedCinstanceTest < NewCinstanceApprovalRequired
+      def setup
+        super
+        @cinstance.reject!('any reason')
+        @message = Message.last
       end
 
-      should 'contain buyer email' do
-        assert_match(@buyer.admins.first.email, @message.body)
-      end
-
-      should_eventually 'contain link to cinstance' do
-
+      test 'a message should be sent' do
+        assert_not_nil @message
+        assert @message.sent?
       end
     end
   end
 
-  context 'When new cinstance of service that requires approval is created' do
-    setup do
-      @plan.update_attribute(:approval_required, true)
+  class NewCinstanceApprovalNotRequired < CinstanceObserverTest
+    def setup
+      super
+      @plan.update(approval_required: false)
       @cinstance = @buyer.buy!(@plan)
     end
 
-    context 'a message' do
-      setup { @message = Message.last }
+    test 'a message should not say that the cinstance needs approval' do
+      assert_no_match(/requires your approval/i, Message.last.body)
+    end
 
-      should 'say that the cinstance needs approval' do
-        assert_match(/requires you to approve/i, @message.body)
+    test 'does not send accept message to buyer if plan does not require approval' do
+      assert_no_difference '@buyer.received_messages.count' do
+        @buyer.buy!(@plan)
       end
     end
   end
 
-  context 'When new cinstance of service that does not require approval is created' do
-    setup do
-      @plan.update_attribute(:approval_required, false)
-      @cinstance = @buyer.buy!(@plan)
-    end
-
-    context 'a message' do
-      setup { @message = Message.last }
-
-      should 'not say that the cinstance needs approval' do
-        refute_match(/requires your approval/i, @message.body)
-      end
-    end
-  end
-
-  test 'does not send accept message to buyer if plan does not require approval' do
-    @plan.update_attribute(:approval_required, false)
-
-    assert_no_difference '@buyer.received_messages.count' do
-      @buyer.buy!(@plan)
-    end
-  end
-
-  context 'When cinstance is cancelled' do
-    setup do
+  class CinstanceCancelledTest < CinstanceObserverTest
+    def setup
+      super
       @cinstance = @buyer.buy!(@plan)
       Message.destroy_all
 
       @cinstance.destroy
+      assert @message = Message.last
     end
 
-    context 'a message' do
-      setup do
-        assert @message = Message.last
-      end
+    test 'a message should be sent' do
+      assert_not_nil @message
+      assert @message.sent?
+    end
 
-      should 'be sent' do
-        assert_not_nil @message
-        assert @message.sent?
-      end
+    test 'a message should have the provider as a recipient' do
+      assert_equal [@provider], @message.to
+    end
 
-      should 'have the provider as a recipient' do
-        assert_equal [@provider], @message.to
-      end
+    test 'a message should have the buyer as a sender' do
+      assert_equal @buyer, @message.sender
+    end
 
-      should 'have the buyer as a sender' do
-        assert_equal @buyer, @message.sender
-      end
+    test 'a message should have meaningful subject' do
+      assert_not_nil @message.subject
+    end
 
-      should 'have meaningful subject' do
-        assert_not_nil @message.subject
-      end
+    test 'a message should contain service name' do
+      assert_match(@service.name, @message.body)
+    end
 
-      should 'contain service name' do
-        assert_match(@service.name, @message.body)
-      end
+    test 'a message should contain plan name' do
+      assert_match(@plan.name, @message.body)
+    end
 
-      should 'contain plan name' do
-        assert_match(@plan.name, @message.body)
-      end
-
-      should 'contain buyer name' do
-        assert_match(@buyer.org_name, @message.body)
-      end
+    test 'a message should contain buyer name' do
+      assert_match(@buyer.org_name, @message.body)
     end
   end
 
-  context 'When cinstance changes a plan' do
-    setup do
+  class CinstanceChangesPlanTest < CinstanceObserverTest
+    def setup
+      super
       @cinstance = @buyer.buy!(@plan)
       @new_plan = FactoryBot.create( :application_plan, :issuer => @service)
 
@@ -152,102 +187,53 @@ class CinstanceObserverTest < ActiveSupport::TestCase
       @cinstance.save!
     end
 
-    context 'a message to provider' do
-      setup { @message = @buyer.messages.last }
+    class MessageToProviderTest < CinstanceChangesPlanTest
+      def setup
+        super
+        @message = @buyer.messages.last
+      end
 
-      should 'be sent' do
+      test 'a message to provider should be sent' do
         assert_not_nil @message
         assert @message.sent?
       end
 
-      should 'have the provider as a recipient' do
+      test 'a message to provider should have the provider as a recipient' do
         assert_equal [@provider], @message.to
       end
 
-      should 'contain service name' do
+      test 'a message to provider should contain service name' do
         assert_match(@service.name, @message.body)
       end
 
-      should 'contain buyer name' do
+      test 'a message to provider should contain buyer name' do
         assert_match(@buyer.org_name, @message.body)
       end
 
-      should 'contain old plan name'
+      pending_test 'a message to provider should contain old plan name'
 
-      should 'contain new plan name' do
+      test 'a message to provider should contain new plan name' do
         assert_match(@new_plan.name, @message.body)
       end
     end
 
-    context 'a message to buyer' do
-      setup { @message = @provider.messages.last }
+    class MessageToBuyerTest < CinstanceChangesPlanTest
+      def setup
+        super
+        @message = @provider.messages.last
+      end
 
-      should 'be sent' do
+      test 'a message to buyer should be sent' do
         assert_not_nil @message
         assert @message.sent?
       end
 
-      should 'have the buyer as a recipient' do
+      test 'a message to buyer should have the buyer as a recipient' do
         assert_equal [@buyer], @message.to
       end
 
-      should 'contain new plan name' do
+      test 'a message to buyer should contain new plan name' do
         assert_match(@new_plan.name, @message.body)
-      end
-    end
-  end
-
-  context 'When pending cinstance' do
-    setup do
-      @plan.update_attribute(:approval_required, true)
-      @cinstance = @buyer.buy!(@plan)
-    end
-
-    context 'is accepted' do
-      setup { @cinstance.accept! }
-
-      context 'a message' do
-        setup { @message = Message.last }
-
-        should 'be sent' do
-          assert_not_nil @message
-          assert @message.sent?
-        end
-
-        should 'have the buyer as a recipient' do
-          assert_equal [@buyer], @message.to
-        end
-
-        should 'have meaningful subject' do
-          assert_not_nil @message.subject
-        end
-
-        should 'contain provider name' do
-          assert_match(@provider.org_name, @message.body)
-        end
-
-        should 'contain service name' do
-          assert_match(@cinstance.service.name, @message.body)
-        end
-
-        should 'contain plan name' do
-          assert_match(@cinstance.plan.name, @message.body)
-        end
-
-        should 'contain link to cinstance details'
-      end
-    end
-
-    context 'is rejected' do
-      setup { @cinstance.reject!('any reason') }
-
-      context 'a message' do
-        setup { @message = Message.last }
-
-        should 'be sent' do
-          assert_not_nil @message
-          assert @message.sent?
-        end
       end
     end
   end
