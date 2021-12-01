@@ -154,7 +154,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   private
 
   def provider_account
-    @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params.require(id))
+    @provider_account ||= current_account.providers.without_deleted(!action_includes_deleted_providers?).find(params.require(:id))
   end
 
   def action_includes_deleted_providers?
@@ -187,12 +187,12 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   end
 
   def get_partner
-    @partner = Partner.find_by_system_name(params.permit!.to_h[:partner])
+    @partner = Partner.find_by(system_name: params.permit!.to_h[:partner])
   end
 
   def get_application_plan
     application_plans = Account.master.application_plans.where(partner_id: @partner.try!(:id))
-    @application_plan = application_plans.find_by_system_name(params.permit!.to_h[:application_plan])
+    @application_plan = application_plans.find_by(system_name: params.permit!.to_h[:application_plan])
     raise ActiveRecord::RecordNotFound if @application_plan.blank?
   end
 
