@@ -4,7 +4,8 @@ class Partners::UsersController < Partners::BaseController
 
   def index
     @users = @account.users.page(permitted_params[:page])
-    @users = @users.where(open_id: permitted_params[:open_id]) if permitted_params[:open_id]
+    open_id_param = permitted_params[:open_id]
+    @users = @users.where(open_id: open_id_param) if open_id_param
     render json: @users
   end
 
