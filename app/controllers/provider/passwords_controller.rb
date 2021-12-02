@@ -28,7 +28,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def show
-    if params[:password_reset_token].present? && session[:password_reset_token].blank?
+    if params.permit!.to_h[:password_reset_token].present? && session[:password_reset_token].blank?
       new_token = @user.generate_lost_password_token
       session[:password_reset_token] = new_token
       redirect_to provider_password_path
@@ -36,7 +36,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def update
-    user = params[:user]
+    user = params.permit!.to_h[:user]
     if @user.update_password(user[:password], user[:password_confirmation] )
       reset_session_password_token
       flash[:notice] = "The password has been changed."
