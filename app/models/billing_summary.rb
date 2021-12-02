@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class BillingSummary
+  TTL = 1.day.to_i
 
   delegate :redis, to: :System
 
@@ -11,7 +12,9 @@ class BillingSummary
   attr_reader :id
 
   def store(account_id, billing_result)
-    redis.zadd(summary_key, score_from_result(billing_result), account_id.to_s)
+    key = summary_key
+    redis.zadd(key, score_from_result(billing_result), account_id.to_s)
+    redis.expire(key, TTL)
   end
 
   def unstore
