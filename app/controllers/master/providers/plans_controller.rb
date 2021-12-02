@@ -18,7 +18,7 @@ class Master::Providers::PlansController < Master::Providers::BaseController
 
 
   def find_new_plan
-    @new_plan = Account.master.application_plans.stock.find(params.permit!.to_h[:plan_id])
+    @new_plan = Account.master.application_plans.stock.find(params.permit(:plan_id)[:plan_id])
     @new_switches = @provider.available_plans[@new_plan.system_name]
     render_error "Plan #{@new_plan.name} is not one of the 3scale stock plans. Cannot automatically change to it." unless @new_switches
   end
