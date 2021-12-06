@@ -45,7 +45,7 @@ describe WebHook::Event do
   before { WebHook.stubs(:sanitized_url).returns('http://127.0.0.1/') }
 
   describe "valid event" do
-    let(:resource) { ResourceModel.new(:id => 16, :created => Time.zone.now) }
+    let(:resource) { ResourceModel.new(:id => 16, :created => Time.now) }
 
     it { event.must_be :valid? }
 
@@ -128,7 +128,7 @@ describe WebHook::Event do
   end
 
   describe "created resource" do
-    let(:now) { Time.zone.now }
+    let(:now) { Time.now }
     let(:resource) { mock_resource(:created_at => now, :updated_at => now) }
 
     it { event.event.must_equal 'created' }
