@@ -22,10 +22,6 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
   end
 
-  # def teardown
-  #   Timecop.return
-  # end
-
   test 'archive_as_deleted' do
     Features::SegmentDeletionConfig.stubs(enabled?: false) do
       user = FactoryBot.create(:simple_user)
@@ -312,10 +308,6 @@ class UserTest < ActiveSupport::TestCase
                                               email: 'person@example.org',
                                               password: 'redpanda')
       @user.activate!
-    end
-
-    def teardown
-      Timecop.return
     end
 
     test 'not rehash password' do
@@ -786,15 +778,13 @@ class UserTest < ActiveSupport::TestCase
     end
 
     class StrongPasswordsTest < PasswordStrengthTest
-      def setup
-        super
+      setup do
         @buyer.provider_account.settings
               .update_attribute(:strong_passwords_enabled, true) # rubocop:disable Rails/SkipsModelValidations
       end
 
       class ExistingUsersTest < StrongPasswordsTest
-        def setup
-          super
+        setup do
           @user = @buyer.users.first
           @user.reload
         end
