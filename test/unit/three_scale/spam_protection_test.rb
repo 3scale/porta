@@ -18,7 +18,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     has_spam_protection :timestamp
   end
 
-  class EmptyTest < ActiveSupport::TestCase
+  class EmptyModelTest < ActiveSupport::TestCase
     class Empty
       include ThreeScale::SpamProtection::Integration::Model
     end
@@ -28,7 +28,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     end
   end
 
-  class ModelTest < ActiveSupport::TestCase
+  class ModelsTest < ActiveSupport::TestCase
     def subject
       @subject ||= ThreeScale::SpamProtection::Integration::Model
     end
@@ -50,7 +50,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     end
   end
 
-  class ControllerTest < ActiveSupport::TestCase
+  class ControllersTest < ActiveSupport::TestCase
     def subject
       @subject ||= ThreeScale::SpamProtection::Integration::Controller
     end
@@ -78,13 +78,13 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     end
   end
 
-  class FakeModelTest < ActiveSupport::TestCase
+  class ModelIntegrationTest < ActiveSupport::TestCase
     class Model
       include ThreeScale::SpamProtection::Integration::Model
       has_spam_protection :honeypot, :timestamp
     end
 
-    class ClassTest < FakeModelTest
+    class ClassTest < ModelIntegrationTest
       test "should have right methods" do
         subject = Model
         assert subject.respond_to?(:spam_protection)
@@ -92,7 +92,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       end
     end
 
-    class ConfigurationTest < FakeModelTest
+    class ConfigurationTest < ModelIntegrationTest
       setup do
         @subject = Model.spam_protection
       end
@@ -110,7 +110,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       end
     end
 
-    class InstanceTest < FakeModelTest
+    class InstanceTest < ModelIntegrationTest
       setup do
         @subject = Model.new
       end
@@ -128,7 +128,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       end
     end
 
-    class TimestampTest < FakeModelTest
+    class TimestampTest < ModelIntegrationTest
       test "validate" do
         subject = Timestamp.new
         subject.timestamp = 1.second.ago
@@ -147,7 +147,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       end
     end
 
-    class FormProtectionTest < FakeModelTest
+    class FormProtectionTest < ModelIntegrationTest
       setup do
         # We do not want to skip Recaptcha in these tests
         Recaptcha::Verify.stubs(skip?: false)
