@@ -5,7 +5,7 @@ require 'test_helper'
 class MessageObserverTest < ActiveSupport::TestCase
   fixtures :countries
 
-  def setup
+  setup do
     @observer = MessageObserver.instance
     @buyer = FactoryBot.create(:buyer_account)
     @provider = @buyer.provider_account
@@ -103,8 +103,7 @@ class MessageObserverTest < ActiveSupport::TestCase
   end
 
   class PlanRequiresApproval < MessageObserverTest
-    def setup
-      super
+    setup do
       @plan.update(approval_required: true)
       @contract = contract(@plan)
       @contract.save!
@@ -126,8 +125,7 @@ class MessageObserverTest < ActiveSupport::TestCase
   end
 
   class PlanDoesNotRequireApproval < MessageObserverTest
-    def setup
-      super
+    setup do
       @plan.update(approval_required: false)
       @contract = contract(@plan)
     end

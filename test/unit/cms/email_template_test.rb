@@ -98,7 +98,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
                                                                                                                         })
     message = AccountMessenger.expired_credit_card_notification_for_buyer(@buyer) && Message.last
 
-    assert_match("more awesome content", message.body)
+    assert_equal("more awesome content", message.body)
     assert_equal({"cc"=>@cc, "bcc"=>@bcc, "custom"=>@custom}, message.headers)
     assert_equal(@subject, message.subject)
   end
@@ -120,7 +120,7 @@ class EmailTemplateTest < ActiveSupport::TestCase
     message = AccountMessenger.expired_credit_card_notification_for_buyer(@buyer) && Message.last
 
     assert_equal("Subject!", message.subject)
-    assert_match("more awesome content", message.body)
+    assert_equal("more awesome content", message.body)
     assert_equal({ "cc"=>@cc,
                    "bcc"=>["alias <bcc@mail.example.com>", "another <alias@mail.example.com>"],
                    "custom"=>@custom,

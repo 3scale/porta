@@ -5,7 +5,7 @@ require 'test_helper'
 class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
   include Liquid
 
-  def setup
+  setup do
     @buyer = FactoryBot.create(:buyer_account)
     @user = @buyer.users.first
     @drop = Drops::User.new(@user)
@@ -52,8 +52,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
   end
 
   class BuyerUserTest < Liquid::Drops::UserDropTest
-    def setup
-      super
+    setup do
       ::User.current = @user
 
       @drop2 = Drops::User.new(FactoryBot.create(:user, account: @buyer))
@@ -73,8 +72,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
   end
 
   class NormalUserTest < Liquid::Drops::UserDropTest
-    def setup
-      super
+    setup do
       ::User.current = FactoryBot.create(:user, account: @buyer)
     end
 
@@ -109,8 +107,7 @@ class Liquid::Drops::UserDropTest < ActiveSupport::TestCase
   end
 
   class FieldDefinitionsTest < Liquid::Drops::UserDropTest
-    def setup
-      super
+    setup do
       [{ target: "User", name: "first_name",    label: "first_name", hidden: true },
        { target: "User", name: "visible_extra", label: "visible_extra" },
        { target: "User", name: "hidden_extra",  label: "hidden_extra", hidden: true }]

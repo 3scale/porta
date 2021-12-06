@@ -15,8 +15,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
   end
 
   class BuyerNotPayingMonthlyTest < Finance::ChargingTest
-    def setup
-      super
+    setup do
       @buyer_account.not_paying_monthly!
       @invoice = @provider_account.billing_strategy.create_invoice!(buyer_account: @buyer_account)
       @invoice.line_items << LineItem.new(cost: 100)
@@ -46,8 +45,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
   end
 
   class BuyerChargedMonthlyTest < Finance::ChargingTest
-    def setup
-      super
+    setup do
       @buyer_account.paying_monthly!
 
       @invoice = Invoice.new(provider_account: @provider_account, buyer_account: @buyer_account,
@@ -108,8 +106,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
     end
 
     class PaymentGatewayRespondsFailureTest < BuyerChargedMonthlyTest
-      def setup
-        super
+      setup do
         @buyer_account.credit_card_expires_on_year = 2.years.from_now.year
         @buyer_account.credit_card_expires_on_month = 2.years.from_now.month
         @buyer_account.credit_card_auth_code = 'pg responds failure if code ends in 2'
@@ -158,8 +155,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
     end
 
     class PaymentGatewayRisesExceptionTest < BuyerChargedMonthlyTest
-      def setup
-        super
+      setup do
         @buyer_account.credit_card_expires_on_year = 2.years.from_now.year
         @buyer_account.credit_card_expires_on_month = 2.years.from_now.month
         @buyer_account.credit_card_auth_code = 'pg responds failure if code ends in 3'
@@ -193,8 +189,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
     end
 
     class PaymentGatewayRespondsSuccessTest < BuyerChargedMonthlyTest
-      def setup
-        super
+      setup do
         @buyer_account.credit_card_expires_on_year = 2.years.from_now.year
         @buyer_account.credit_card_expires_on_month = 2.years.from_now.month
         @buyer_account.credit_card_auth_code = 'pg responds failure if code ends in 1'
