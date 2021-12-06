@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ThreeScale::SearchTest < ActiveSupport::TestCase
-  class FakeModelTest < ActiveSupport::TestCase
+  class ScopesTest < ActiveSupport::TestCase
     class Model < ApplicationRecord
       self.table_name = 'accounts'
 
@@ -143,7 +143,7 @@ class ThreeScale::SearchTest < ActiveSupport::TestCase
     assert_equal [buyer_it, buyer_zb], provider.buyer_accounts.order_by('countries.name', :asc)
   end
 
-  class FooClass < ApplicationController
+  class FooClass < ActionController::Base
     include ThreeScale::Search::Helpers
     def params
       {per_page: 100}

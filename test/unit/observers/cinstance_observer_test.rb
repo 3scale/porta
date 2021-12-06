@@ -5,7 +5,7 @@ require 'test_helper'
 class CinstanceObserverTest < ActiveSupport::TestCase
   fixtures :countries
 
-  def setup
+  setup do
     @plan = FactoryBot.create(:application_plan)
     @service = @plan.service
 
@@ -17,8 +17,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   end
 
   class NewCinstanceCreatedTest < CinstanceObserverTest
-    def setup
-      super
+    setup do
       @cinstance = @buyer.buy!(@plan)
       @message = Message.last
     end
@@ -58,8 +57,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   end
 
   class NewCinstanceApprovalRequired < CinstanceObserverTest
-    def setup
-      super
+    setup do
       @plan.update(approval_required: true)
       @cinstance = @buyer.buy!(@plan)
     end
@@ -71,8 +69,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
     end
 
     class AcceptedCinstanceTest < NewCinstanceApprovalRequired
-      def setup
-        super
+      setup do
         @cinstance.accept!
         @message = Message.last
       end
@@ -106,8 +103,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
     end
 
     class RejectedCinstanceTest < NewCinstanceApprovalRequired
-      def setup
-        super
+      setup do
         @cinstance.reject!('any reason')
         @message = Message.last
       end
@@ -120,8 +116,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   end
 
   class NewCinstanceApprovalNotRequired < CinstanceObserverTest
-    def setup
-      super
+    setup do
       @plan.update(approval_required: false)
       @cinstance = @buyer.buy!(@plan)
     end
@@ -138,8 +133,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   end
 
   class CinstanceCancelledTest < CinstanceObserverTest
-    def setup
-      super
+    setup do
       @cinstance = @buyer.buy!(@plan)
       Message.destroy_all
 
@@ -178,8 +172,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
   end
 
   class CinstanceChangesPlanTest < CinstanceObserverTest
-    def setup
-      super
+    setup do
       @cinstance = @buyer.buy!(@plan)
       @new_plan = FactoryBot.create( :application_plan, :issuer => @service)
 
@@ -188,8 +181,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
     end
 
     class MessageToProviderTest < CinstanceChangesPlanTest
-      def setup
-        super
+      setup do
         @message = @buyer.messages.last
       end
 
@@ -218,8 +210,7 @@ class CinstanceObserverTest < ActiveSupport::TestCase
     end
 
     class MessageToBuyerTest < CinstanceChangesPlanTest
-      def setup
-        super
+      setup do
         @message = @provider.messages.last
       end
 

@@ -21,8 +21,7 @@ class Cinstance::BillingTest < ActiveSupport::TestCase
   pending_test '#refund_fixed_cost bill if something is paid'
 
   class NothingToBillTest < Cinstance::BillingTest
-    def setup
-      super
+    setup do
       @invoice = FactoryBot.create(:invoice)
     end
 
@@ -47,8 +46,7 @@ class Cinstance::BillingTest < ActiveSupport::TestCase
   end
 
   class StuffToBillTest < Cinstance::BillingTest
-    def setup
-      super
+    setup do
       Timecop.freeze(2010,1,1)
       @invoice = FactoryBot.create(:invoice)
     end

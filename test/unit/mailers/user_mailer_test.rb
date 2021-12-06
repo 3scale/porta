@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class UserMailerTest < ActionMailer::TestCase
-  def setup
+  setup do
     ActionMailer::Base.deliveries = []
   end
 
@@ -18,8 +18,7 @@ class UserMailerTest < ActionMailer::TestCase
   end
 
   class AdminTest < UserMailerTest
-    def setup
-      super
+    setup do
       @provider_account = FactoryBot.create(:provider_account, domain: 'api.monkey.com',
                                                                org_name: "Monkey",
                                                                from_email: 'api@monkey.com')
@@ -27,8 +26,7 @@ class UserMailerTest < ActionMailer::TestCase
     end
 
     class LostPasswordTest < AdminTest
-      def setup
-        super
+      setup do
         @user.lost_password_token = 'abc123'
         @noreply_email_address = Mail::Address.new(ThreeScale.config.noreply_email).address
       end
@@ -74,8 +72,7 @@ class UserMailerTest < ActionMailer::TestCase
   end
 
   class BuyerTest < UserMailerTest
-    def setup
-      super
+    setup do
       @provider_account = FactoryBot.create(:provider_account, domain: 'api.monkey.com',
                                                                org_name: "Monkey",
                                                                from_email: 'api@monkey.com')
@@ -138,8 +135,7 @@ class UserMailerTest < ActionMailer::TestCase
     end
 
     class LostPasswordTest < BuyerTest
-      def setup
-        super
+      setup do
         @user.lost_password_token = 'abc123'
       end
 
