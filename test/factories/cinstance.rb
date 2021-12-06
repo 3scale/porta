@@ -24,7 +24,7 @@ FactoryBot.define do
   factory(:cinstance, :aliases => %i[application application_contract], :parent => :contract, :class => Cinstance) do
     association :plan, :factory => :application_plan
 
-    factory(:pending_application) do
+    trait :as_pending do
       plan { FactoryBot.create(:application_plan, approval_required: true) }
     end
   end

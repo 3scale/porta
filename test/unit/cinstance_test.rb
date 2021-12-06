@@ -114,9 +114,9 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance.by_state(:pending) returns only pending cinstances' do
-    pending_cinstance = FactoryBot.create(:pending_application)
+    pending_cinstance = FactoryBot.create(:application, :as_pending)
 
-    destroyed_pending_cinstance = FactoryBot.create(:pending_application)
+    destroyed_pending_cinstance = FactoryBot.create(:application, :as_pending)
     Timecop.freeze(1.hour.ago) { destroyed_pending_cinstance.destroy }
 
     live_cinstance = FactoryBot.create(:cinstance)
@@ -128,7 +128,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'Cinstance.by_state(:live) returns only live cinstances' do
     live_cinstance = FactoryBot.create(:cinstance)
-    pending_cinstance = FactoryBot.create(:pending_application)
+    pending_cinstance = FactoryBot.create(:application, :as_pending)
 
     destroyed_live_cinstance = FactoryBot.create(:cinstance)
     Timecop.freeze(1.hour.ago) { destroyed_live_cinstance.destroy }
@@ -243,26 +243,26 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance#live? returns false when cinstance is pending' do
-    cinstance = FactoryBot.create(:pending_application)
+    cinstance = FactoryBot.create(:application, :as_pending)
     assert_not cinstance.live?
   end
 
   test 'Cinstance#accept! transitions from pending to live state' do
-    cinstance = FactoryBot.create(:pending_application)
+    cinstance = FactoryBot.create(:application, :as_pending)
 
     cinstance.accept!
     assert cinstance.live?
   end
 
   test 'Cinstance#reject! destroys pending cinstance' do
-    cinstance = FactoryBot.create(:pending_application)
+    cinstance = FactoryBot.create(:application, :as_pending)
 
     cinstance.reject!('because whatever reason')
     assert_does_not_contain Cinstance.all, cinstance
   end
 
   test 'Cinstance#reject! sets rejection reason' do
-    cinstance = FactoryBot.create(:pending_application)
+    cinstance = FactoryBot.create(:application, :as_pending)
     cinstance.reject!('because whatever reason')
 
     assert_equal 'because whatever reason', cinstance.rejection_reason
