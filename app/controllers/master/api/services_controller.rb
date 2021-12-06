@@ -35,6 +35,6 @@ class Master::Api::ServicesController < Master::Api::BaseController
   end
 
   def provider
-    @provider ||= Account.providers.find(params.permit!.to_h[:provider_id])
+    @provider ||= Account.providers.find(params.require(:provider_id))
   end
 end
