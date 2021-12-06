@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-
   include ActiveJob::TestHelper
 
   subject { @user || FactoryBot.create(:user) }
@@ -19,15 +20,6 @@ class UserTest < ActiveSupport::TestCase
 
   setup do
     ActionMailer::Base.deliveries = []
-    # This is needed, database will not save fractions of seconds
-    # so something like:
-    # Time.now.to_f #=> 1512012308.293877
-    # will be saved in DB as 1512012308
-    Timecop.freeze(Time.parse('2017-11-23 03:25:08 UTC +00:00'))
-  end
-
-  def teardown
-    Timecop.return
   end
 
   test 'archive_as_deleted' do
@@ -56,8 +48,8 @@ class UserTest < ActiveSupport::TestCase
 
     user.suspend!
     user.reload
-    refute user.user_sessions.present?
-    refute user.can_login?
+    assert_not user.user_sessions.present?
+    assert_not user.can_login?
   end
 
   def test_find_with_valid_password_token
@@ -139,7 +131,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#find_by_username_or_email returns nil for TypeError' do
-    assert_nil User.find_by_username_or_email({ "＄foo" => "bar1" })
+    assert_nil User.find_by_username_or_email({ "＄foo" => "bar1" }) # rubocop:disable Rails/DynamicFindBy
   end
 
   test '#multiple_accessible_services?' do
@@ -148,49 +140,49 @@ class UserTest < ActiveSupport::TestCase
     FactoryBot.create_list(:simple_service, 2, account: provider)
 
     Service.stubs(permitted_for: [provider.services.last!.id])
-    refute user.multiple_accessible_services?
+    assert_not user.multiple_accessible_services?
 
     Service.stubs(permitted_for: Service.all)
     assert user.multiple_accessible_services?
 
     provider.services.first!.mark_as_deleted!
-    refute user.multiple_accessible_services?
+    assert_not user.multiple_accessible_services?
   end
 
   test 'validate emails of providers users' do
     provider = FactoryBot.create(:simple_provider)
     other_provider = FactoryBot.create(:simple_provider)
 
-    provider_user = FactoryBot.create(:simple_user, :account => provider)
-    other_provider_user = FactoryBot.create(:simple_user, :account => other_provider)
+    provider_user = FactoryBot.create(:simple_user, account: provider)
+    other_provider_user = FactoryBot.create(:simple_user, account: other_provider)
 
-    buyer = FactoryBot.create(:simple_buyer, :provider_account => provider)
-    other_buyer = FactoryBot.create(:buyer_account, :provider_account => other_provider)
+    buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+    other_buyer = FactoryBot.create(:buyer_account, provider_account: other_provider)
 
-    user = FactoryBot.create(:simple_user, :account => buyer)
-    other_user = FactoryBot.create(:simple_user, :account => buyer)
-    other_buyer_user = FactoryBot.create(:simple_user, :account => other_buyer)
+    user = FactoryBot.create(:simple_user, account: buyer)
+    other_user = FactoryBot.create(:simple_user, account: buyer)
+    other_buyer_user = FactoryBot.create(:simple_user, account: other_buyer)
 
     assert user.unique?(:email)
     assert other_user.unique?(:email)
     assert other_provider_user.unique?(:email)
 
-    other_provider_user.update_attribute :email, user.email
+    other_provider_user.update(email: user.email)
     assert other_provider_user.unique?(:email)
 
-    other_user.update_attribute :email, user.email
-    assert !other_user.unique?(:email)
+    other_user.update(email: user.email)
+    assert_not other_user.unique?(:email)
 
-    other_provider_user.update_attribute :email, user.email
+    other_provider_user.update(email: user.email)
     assert other_provider_user.unique?(:email)
 
-    other_provider_user.update_attribute :email, provider_user.email
+    other_provider_user.update(email: provider_user.email)
     assert other_provider_user.unique?(:email)
 
-    provider.update_attribute :self_domain, 'some.example.com'
+    provider.update(self_domain: 'some.example.com')
     assert other_provider_user.unique?(:email)
 
-    other_user.update_attribute :email, other_buyer_user.email
+    other_user.update(email: other_buyer_user.email)
     assert other_user.unique?(:email)
   end
 
@@ -201,10 +193,10 @@ class UserTest < ActiveSupport::TestCase
     assert user.signup.oauth2?
 
     user.authentication_id = nil
-    refute user.signup.oauth2?
+    assert_not user.signup.oauth2?
 
     user.expects(:sso_authorizations).returns([]).once
-    refute user.signup.oauth2?
+    assert_not user.signup.oauth2?
 
     user.expects(:sso_authorizations).returns([SSOAuthorization.new]).once
     assert user.signup.oauth2?
@@ -213,184 +205,172 @@ class UserTest < ActiveSupport::TestCase
   test 'should validate uniqueness of username and email' do
     provider = FactoryBot.create(:simple_provider)
 
-    user = FactoryBot.create(:simple_user, :account => provider)
-    other_user = FactoryBot.create(:simple_user, :account => provider)
+    user = FactoryBot.create(:simple_user, account: provider)
+    other_user = FactoryBot.create(:simple_user, account: provider)
 
     assert user.valid?
     assert other_user.valid?
 
     other_user.attributes = {
-      :email => user.email,
-      :username => user.username
+      email: user.email,
+      username: user.username
     }
-    assert !other_user.valid?
+    assert_not other_user.valid?
 
-    assert !other_user.errors[:email].blank?
-    assert !other_user.errors[:username].blank?
+    assert_not other_user.errors[:email].blank?
+    assert_not other_user.errors[:username].blank?
   end
 
-  context 'destroyed user' do
-    setup do
-      @user = FactoryBot.create(:simple_user)
-      @user.destroy
-    end
-
-    should 'have to_xml working' do
-      assert @user.to_xml
-    end
+  test 'destroyed user should have to_xml working' do
+    user = FactoryBot.create(:simple_user)
+    user.destroy
+    assert user.to_xml
   end
 
-  context 'New User' do
-    setup do
-      @user = User.new(:username => 'foo', :password => 'monkey')
-    end
-
-    should validate_acceptance_of :conditions
-
-    # Allow emails with dot before @
-    should allow_value('foo.bar@monkey.ao').for(:email)
-
-    should allow_value('foo+bar@monkey.ao').for(:username)
+  test 'New User allow emails with dot before @' do
+    @user = User.new(username: 'foo', password: 'monkey')
+    assert validate_acceptance_of :conditions
+    assert allow_value('foo.bar@monkey.ao').for(:email)
+    assert allow_value('foo+bar@monkey.ao').for(:username)
   end
 
-  context 'minimal signup' do
-    setup do
-      @user = User.new
-      @user.signup_type = :minimal
-    end
+  test 'minimal signup should not validate anything except username' do
+    user = User.new
+    user.signup_type = :minimal
+    user.username = 'liz'
 
-    should 'not validate anything except username' do
-      @user.username = 'liz'
+    user.valid?
+    assert user.valid?
+  end
 
-      @user.valid?
-      assert @user.valid?
-    end
+  test 'minimal signup should not be created in active state if it has no password' do
+    user = User.new
+    user.signup_type = :minimal
+    user.username = 'liz'
+    user.save!
 
-    should 'not be created in active state if it has no password' do
-      @user.username = 'liz'
-      @user.save!
+    assert_not_equal "active", user.state
+  end
 
-      assert_not_equal "active", @user.state
-    end
+  test 'minimal signup should not send notifications when created' do
+    user = User.new
+    user.signup_type = :minimal
+    UserMailer.expects(:deliver_signup_notification).never
+    UserMailer.expects(:deliver_activation_notification).never
 
-    should 'not send notifications when created' do
-      UserMailer.expects(:deliver_signup_notification).never
-      UserMailer.expects(:deliver_activation_notification).never
+    user.username = 'liz'
+    user.password = 'foobar'
+    user.save!
+  end
 
-      @user.username = 'liz'
-      @user.password = 'foobar'
-      @user.save!
-    end
+  test 'api signup should not validate password' do
+    api_user = User.new
+    api_user.signup_type = :api
 
-  end # minimal signup
+    api_user.valid?
+    assert api_user.errors[:password].blank?
+  end
 
-  context 'api signup' do
+  test 'created_by_provider signup should not validate password' do
+    created_by_provider_user = User.new
+    created_by_provider_user.signup_type = :created_by_provider
 
-    should 'not validate password' do
-      api_user = User.new
-      api_user.signup_type = :api
-
-      api_user.valid?
-      assert api_user.errors[:password].blank?
-    end
-
-  end # api signup
-
-  context 'created_by_provider signup' do
-
-    should 'not validate password' do
-      created_by_provider_user = User.new
-      created_by_provider_user.signup_type = :created_by_provider
-
-      created_by_provider_user.valid?
-      assert created_by_provider_user.errors[:password].blank?
-    end
-
-  end # created_by_provider signup
+    created_by_provider_user.valid?
+    assert created_by_provider_user.errors[:password].blank?
+  end
 
   test 'reset password' do
-    user = FactoryBot.create(:simple_user, :username => 'person', :password => 'foobar')
+    user = FactoryBot.create(:simple_user, username: 'person', password: 'foobar')
     user.activate!
 
-    user.update_attributes(:password => 'new password',
-                           :password_confirmation => 'new password')
+    user.update(password: 'new password', password_confirmation: 'new password')
 
     assert user.authenticated?('new password')
   end
 
-  # TODO: get rid of this context
-  context 'Existing Provider user' do
+  class ExistingProviderUserTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     setup do
+      ActionMailer::Base.deliveries = []
+      # This is needed, database will not save fractions of seconds
+      # so something like:
+      # Time.now.to_f #=> 1512012308.293877
+      # will be saved in DB as 1512012308
+      Timecop.freeze(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00'))
+
       provider_account = FactoryBot.create(:simple_provider)
 
-      account = FactoryBot.create(:simple_account, :provider_account => provider_account, state: 'approved')
+      account = FactoryBot.create(:simple_account, provider_account: provider_account, state: 'approved')
 
-      @user = FactoryBot.create(:simple_user, :account => account,
-                                :username => 'person',
-                                :email => 'person@example.org',
-                                :password => 'redpanda')
+      @user = FactoryBot.create(:simple_user, account: account,
+                                              username: 'person',
+                                              email: 'person@example.org',
+                                              password: 'redpanda')
       @user.activate!
     end
 
-    should 'not rehash password' do
-      @user.update_attributes(:username => 'person2')
+    test 'not rehash password' do
+      @user.update(username: 'person2')
       @user.reload
 
       assert @user.authenticated?('redpanda')
     end
 
-    should 'set remember_token' do
+    test 'set remember_token' do
       @user.remember_me
       assert_not_nil @user.remember_token
       assert_not_nil @user.remember_token_expires_at
     end
 
-    should 'unset remember_token' do
+    test 'unset remember_token' do
       @user.remember_me
       assert_not_nil @user.remember_token
       @user.forget_me
       assert_nil @user.remember_token
     end
 
-    should 'remember_me default two weeks' do
-      before = 2.weeks.from_now.utc
+    test 'remember_me default two weeks' do
+      before = 2.weeks.from_now
       @user.remember_me
-      after = 2.weeks.from_now.utc
+      after = 2.weeks.from_now
       assert_not_nil @user.remember_token
       assert_not_nil @user.remember_token_expires_at
       assert @user.remember_token_expires_at.between?(before, after)
     end
 
-    should 'remember_me_until one week' do
-      time = 1.week.from_now.utc
+    test 'remember_me_until one week' do
+      time = 1.week.from_now
       @user.remember_me_until time
       assert_not_nil @user.remember_token
       assert_not_nil @user.remember_token_expires_at
       assert_equal @user.remember_token_expires_at, time
     end
 
-    should 'remember_me_for one week' do
+    test 'remember_me_for one week' do
       before = 1.week.from_now
       @user.remember_me_for 1.week
-      after = 1.week.from_now.utc
+      after = 1.week.from_now
       assert_not_nil @user.remember_token
       assert_not_nil @user.remember_token_expires_at
       assert @user.remember_token_expires_at.between?(before, after)
     end
 
-    should 'not require acceptance of conditions' do
+    test 'not require acceptance of conditions' do
       assert_accepts allow_value(nil).for(:conditions), @user
       assert_accepts allow_value(false).for(:conditions), @user
       assert_accepts allow_value('0').for(:conditions), @user
     end
 
-    should have_db_column :lost_password_token
+    test 'should have db column' do
+      assert have_db_column :lost_password_token
+    end
 
-    should 'respond to :generate_lost_password_token!' do
+    test 'respond to :generate_lost_password_token!' do
       assert @user.respond_to? :generate_lost_password_token!
     end
 
-    should 'generate lost password token on :generate_lost_password_token!' do
+    test 'generate lost password token on :generate_lost_password_token!' do
       @user.lost_password_token = nil
 
       @user.generate_lost_password_token!
@@ -399,8 +379,8 @@ class UserTest < ActiveSupport::TestCase
       assert_not_nil @user.lost_password_token_generated_at
     end
 
-    should 'send lost password email on :generate_lost_password_token!' do
-      @user.account.update_column(:provider, true)
+    test 'send lost password email on :generate_lost_password_token!' do
+      @user.account.update_column(:provider, true) # rubocop:disable Rails/SkipsModelValidations
 
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
         @user.generate_lost_password_token!
@@ -412,8 +392,8 @@ class UserTest < ActiveSupport::TestCase
       assert_equal [@user.email], message.to
     end
 
-    should 'send buyer lost password email on :generate_lost_password_token!' do
-      @user.account.update_column(:provider, false)
+    test 'send buyer lost password email on :generate_lost_password_token!' do
+      @user.account.update_column(:provider, false) # rubocop:disable Rails/SkipsModelValidations
 
       perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
         @user.generate_lost_password_token!
@@ -426,52 +406,51 @@ class UserTest < ActiveSupport::TestCase
       assert_equal [@user.email], message.to
     end
 
-    context 'with lost_password_token' do
-      setup do
-        @user.generate_lost_password_token!
-        @user = User.find(@user.id) # HACK: to reset stored passwords
-      end
+    test 'with lost_password_token should reset lost_password_token when password is changed' do
+      @user.generate_lost_password_token!
+      @user = User.find(@user.id) # HACK: to reset stored passwords
+      @user.update_password('new_password', 'new_password')
+      @user.save!
 
-      should 'reset lost_password_token when password is changed' do
-        @user.update_password('new_password', 'new_password')
-        @user.save!
+      assert_nil @user.lost_password_token
+    end
 
-        assert_nil @user.lost_password_token
-      end
+    test 'with lost_password_token should not reset lost_password_token when user is updated without password change' do
+      @user.generate_lost_password_token!
+      @user = User.find(@user.id) # HACK: to reset stored passwords
+      @user.username = 'bob'
+      @user.save!
 
-      should 'not reset lost_password_token when user is updated without password change' do
-        @user.username = 'bob'
-        @user.save!
+      assert_not_nil @user.lost_password_token
+    end
 
-        assert_not_nil @user.lost_password_token
-      end
-
-      should 'not reset lost_password_token when user incorrectly confirms new password' do
-        @user.update_password('new_password', 'not_new_password')
-        assert_not_nil @user.lost_password_token
-      end
+    test 'with lost_password_token should not reset lost_password_token when user incorrectly confirms new password' do
+      @user.generate_lost_password_token!
+      @user = User.find(@user.id) # HACK: to reset stored passwords
+      @user.update_password('new_password', 'not_new_password')
+      assert_not_nil @user.lost_password_token
     end
   end
 
   test 'two users of two buyer accounts of the same provider accounts need unique email' do
     provider_account = FactoryBot.create(:simple_provider)
-    buyer_account_one = FactoryBot.create(:simple_buyer, :provider_account => provider_account)
-    buyer_account_two = FactoryBot.create(:simple_buyer, :provider_account => provider_account)
-    FactoryBot.create(:simple_user, :account => buyer_account_one, :email => 'foo@example.org')
+    buyer_account_one = FactoryBot.create(:simple_buyer, provider_account: provider_account)
+    buyer_account_two = FactoryBot.create(:simple_buyer, provider_account: provider_account)
+    FactoryBot.create(:simple_user, account: buyer_account_one, email: 'foo@example.org')
 
-    user_two = FactoryBot.build(:simple_user, :account => buyer_account_two, :email => 'foo@example.org')
-    assert !user_two.valid?
-    assert !user_two.errors[:email].blank?
+    user_two = FactoryBot.build(:simple_user, account: buyer_account_two, email: 'foo@example.org')
+    assert_not user_two.valid?
+    assert_not user_two.errors[:email].blank?
   end
 
   test 'two users of two buyer accounts of two different provider accounts can have the same email' do
     provider_account_one = FactoryBot.create(:simple_provider)
     provider_account_two = FactoryBot.create(:simple_provider)
-    buyer_account_one = FactoryBot.create(:simple_buyer, :provider_account => provider_account_one)
-    buyer_account_two = FactoryBot.create(:simple_buyer, :provider_account => provider_account_two)
-    FactoryBot.create(:simple_user, :account => buyer_account_one, :email => 'foo@example.org')
+    buyer_account_one = FactoryBot.create(:simple_buyer, provider_account: provider_account_one)
+    buyer_account_two = FactoryBot.create(:simple_buyer, provider_account: provider_account_two)
+    FactoryBot.create(:simple_user, account: buyer_account_one, email: 'foo@example.org')
 
-    user_two = FactoryBot.build(:simple_user, :account => buyer_account_two, :email => 'foo@example.org')
+    user_two = FactoryBot.build(:simple_user, account: buyer_account_two, email: 'foo@example.org')
     assert user_two.valid?
   end
 
@@ -479,10 +458,10 @@ class UserTest < ActiveSupport::TestCase
   pending_test 'two users of two provider accounts need unique emails when provider has no self domain' do
     account_one = FactoryBot.create(:provider_account, :self_domain => nil)
     account_two = FactoryBot.create(:provider_account, :self_domain => nil)
-    FactoryBot.create(:user, :account => account_one, :email => 'foo@example.org')
+    FactoryBot.create(:user, account: account_one, email: 'foo@example.org')
 
-    user_two = FactoryBot.build(:user, :account => account_two, :email => 'foo@example.org')
-    assert !user_two.valid?
+    user_two = FactoryBot.build(:user, account: account_two, email: 'foo@example.org')
+    assert_not user_two.valid?
     assert_not_nil user_two.errors[:email].presence
   end
 
@@ -566,7 +545,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#update_last_login! updates last_login_at and last_login_ip' do
     user = FactoryBot.create(:simple_user)
-    user.update_last_login!(:time => Time.utc(2010, 6, 30, 12, 36), :ip => '2.3.4.5')
+    user.update_last_login!(time: Time.utc(2010, 6, 30, 12, 36), ip: '2.3.4.5')
 
     assert_equal Time.utc(2010, 6, 30, 12, 36), user.last_login_at
     assert_equal '2.3.4.5', user.last_login_ip
@@ -574,7 +553,7 @@ class UserTest < ActiveSupport::TestCase
 
   test '#can_login? returns false if user is not active' do
     user = FactoryBot.create(:pending_user)
-    assert !user.can_login?
+    assert_not user.can_login?
   end
 
   test 'admin sections' do
@@ -592,70 +571,70 @@ class UserTest < ActiveSupport::TestCase
     user.activate!
     user.suspend!
 
-    assert !user.can_login?
+    assert_not user.can_login?
   end
 
   test '#can_login? returns false if the account is pending' do
     account = FactoryBot.create(:account_without_users)
-    user = FactoryBot.create(:user, :account => account)
+    user = FactoryBot.create(:user, account: account)
 
     user.activate!
     account.make_pending!
 
-    assert !user.can_login?
+    assert_not user.can_login?
   end
 
   test '#can_login? returns false if the account is rejected' do
     account = FactoryBot.create(:account_without_users)
-    user = FactoryBot.create(:user, :account => account)
+    user = FactoryBot.create(:user, account: account)
 
     user.activate!
     account.reject!
 
-    assert !user.can_login?
+    assert_not user.can_login?
   end
 
   test '#can_login? returns true if the user is active and the account is approved' do
     account = FactoryBot.create(:account_without_users)
-    user = FactoryBot.create(:user, :account => account)
+    user = FactoryBot.create(:user, account: account)
 
     user.activate!
 
     assert user.can_login?
   end
 
-  context 'deletion of users' do
+  class DeletionOfUsersTest < ActiveSupport::TestCase
     setup do
-      @account = FactoryBot.create(:account, :org_name => "Alice's web empire")
+      @account = FactoryBot.create(:account, org_name: "Alice's web empire")
     end
 
-    context 'with role not admin' do
+    class RoleMemberTest < self
       setup do
-        @not_admin = FactoryBot.create(:simple_user, :account => @account, :role => :member)
+        @not_admin = FactoryBot.create(:simple_user, account: @account, role: :member)
       end
 
-      should 'be allowed' do
+      test 'should be allowed' do
         assert_raise ActiveRecord::RecordNotFound do
           @not_admin.destroy.reload
         end
       end
 
-      should 'return true on call to can_be_destroyed?' do
+      test 'should return true on call to can_be_destroyed?' do
         assert @not_admin.can_be_destroyed?
       end
     end
 
-    context 'with role admin' do
+    class RoleAdminTest < self
       setup do
         @admin = @account.admins.first
       end
 
-      context 'not being the unique admin' do
+      class NotBeingTheUniqueAdminTest < self
         setup do
-          @admin = FactoryBot.create(:user, :account => @account, :role => :admin)
+          @admin = FactoryBot.create(:user, account: @account, role: :admin)
         end
 
-        should 'be allowed' do
+        test 'should be allowed' do
           assert @account.admins.length > 1
 
           assert_raise ActiveRecord::RecordNotFound do
@@ -663,43 +642,42 @@ class UserTest < ActiveSupport::TestCase
           end
         end
 
-        should 'return true on call to can_be_destroyed?' do
+        test 'should return true on call to can_be_destroyed?' do
           assert @account.admins.length > 1
 
           assert @admin.can_be_destroyed?
         end
       end
 
-      context 'being the unique admin' do
-        should 'not be allowed' do
-          assert @account.admins.length == 1
+      class BeingTheUniqueAdminTest < self
+        test 'should not be allowed' do
+          assert_equal 1, @account.admins.length
 
           @account.admins.first.destroy
 
-          assert @account.admins.length == 1
+          assert_equal 1, @account.admins.length
         end
 
-        should 'return true on call to can_be_destroyed?' do
-          assert @account.admins.length == 1
+        test 'should return true on call to can_be_destroyed?' do
+          assert_equal 1, @account.admins.length
 
-          assert !@account.admins.first.can_be_destroyed?
+          assert_not @account.admins.first.can_be_destroyed?
         end
       end
-
     end
   end
 
-  context 'webhooks' do
+  class WebhookTest < ActiveSupport::TestCase
     include WebHookTestHelpers
 
     setup do
-      @buyer = FactoryBot.create :buyer_account
+      @buyer = FactoryBot.create(:buyer_account)
       @provider = @buyer.provider_account
       @user = @provider.admins.first
     end
 
-    should 'be pushed if the user is created by user' do
-      new_user = FactoryBot.build :simple_user, :account => @buyer
+    test 'should be pushed if the user is created by user' do
+      new_user = FactoryBot.build(:simple_user, account: @buyer)
       User.current = @user
 
       fires_webhook(new_user)
@@ -707,16 +685,16 @@ class UserTest < ActiveSupport::TestCase
       new_user.save!
     end
 
-    should 'not be pushed if the user is not created by user' do
-      new_user = FactoryBot.build :simple_user, :account => @buyer
+    test 'should not be pushed if the user is not created by user' do
+      new_user = FactoryBot.build(:simple_user, account: @buyer)
       User.current = nil
 
       fires_webhook.never
       new_user.save!
     end
 
-    should 'be pushed if the user is updated by user' do
-      updated_user = FactoryBot.create :simple_user, :account => @buyer
+    test 'should be pushed if the user is updated by user' do
+      updated_user = FactoryBot.create(:simple_user, account: @buyer)
       User.current = @user
 
       fires_webhook(updated_user)
@@ -725,8 +703,8 @@ class UserTest < ActiveSupport::TestCase
       updated_user.save!
     end
 
-    should 'not be pushed if the user is not updated by user' do
-      updated_user = FactoryBot.create :simple_user, :account => @buyer
+    test 'should not be pushed if the user is not updated by user' do
+      updated_user = FactoryBot.create(:simple_user, account: @buyer)
       User.current = nil
 
       fires_webhook.never
@@ -735,8 +713,8 @@ class UserTest < ActiveSupport::TestCase
       updated_user.save!
     end
 
-    should 'be pushed asynchronously if the user is destroyed by user' do
-      destroyed_user = FactoryBot.create :simple_user, :account => @buyer
+    test 'should be pushed asynchronously if the user is destroyed by user' do
+      destroyed_user = FactoryBot.create(:simple_user, account: @buyer)
       User.current = @user
 
       fires_webhook(destroyed_user, 'deleted')
@@ -744,177 +722,143 @@ class UserTest < ActiveSupport::TestCase
       destroyed_user.destroy
     end
 
-    should 'not be pushed if the user is not destroyed by user' do
-      destroyed_user = FactoryBot.create :simple_user, :account => @buyer
+    test 'should not be pushed if the user is not destroyed by user' do
+      destroyed_user = FactoryBot.create(:simple_user, account: @buyer)
       User.current = nil
 
       fires_webhook.never
 
       destroyed_user.destroy
     end
-
   end
 
-  context 'fields and extra fields' do
-
-    should 'be' do
-      assert FieldsDefinition.targets.include?("User")
-    end
-
-  end # fields and extra fields
+  test 'fields and extra fields should be' do
+    assert FieldsDefinition.targets.include?("User")
+  end
 
   test '.model_name.human is User' do
-    assert User.model_name.human == "User"
+    assert_equal 'User', User.model_name.human
   end
 
-  context '#sections' do
+  test '#sections users with no sections should be empty' do
+    @buyer = FactoryBot.create(:buyer_account)
+    @user = @buyer.users.first
+    assert @user.sections.empty?
+  end
 
-    setup do
-      @buyer = FactoryBot.create(:buyer_account)
-      @user = @buyer.users.first
-    end
+  test '#sections users with sections should contain account sections' do
+    @buyer = FactoryBot.create(:buyer_account)
+    @user = @buyer.users.first
+    @section = FactoryBot.create(:cms_section, public: false, title: "protected-section", parent: @buyer.provider_account.sections.root)
 
-    context 'users with no sections' do
+    grant_buyer_access_to_section @buyer, @section
+    assert_equal @user.sections, [@section]
+  end
 
-      should 'be empty' do
-        assert @user.sections.empty?
-      end
-
-    end # users with no sections
-
-    context 'users with sections' do
-      setup do
-        @section = FactoryBot.create(:cms_section, :public => false,
-                                     :title => "protected-section",
-                                     :parent => @buyer.provider_account.sections.root)
-
-        grant_buyer_access_to_section @buyer, @section
-
-      end
-
-      should 'contain account sections' do
-        assert @user.sections == [@section]
-      end
-
-    end # users with sections
-  end # sections
-
-  context 'password strength' do
-
+  class PasswordStrengthTest < ActiveSupport::TestCase
     setup do
       provider = FactoryBot.create(:simple_provider)
       @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
     end
 
-    should 'by default allow weak ones' do
-      user = @buyer.users.new :password => "weakpassword", :password_confirmation => "weakpassword"
-      user.valid?
+    class WeakPasswordTest < PasswordStrengthTest
+      test 'should by default allow weak ones' do
+        user = @buyer.users.new password: "weakpassword", password_confirmation: "weakpassword"
+        user.valid?
 
-      assert user.errors[:password].blank?
-    end
-
-    should 'weak password must be 6 chars at least' do
-      user = @buyer.users.new :password => "weak", :password_confirmation => "weak"
-      user.valid?
-
-      assert !user.errors[:password].blank?
-    end
-
-    context 'strong passwords' do
-      setup do
-        @buyer.provider_account.settings
-              .update_attribute :strong_passwords_enabled, true
+        assert user.errors[:password].blank?
       end
 
-      context 'existing users' do
+      test 'should weak password must be 6 chars at least' do
+        user = @buyer.users.new password: "weak", password_confirmation: "weak"
+        user.valid?
 
+        assert_not user.errors[:password].blank?
+      end
+    end
+
+    class StrongPasswordsTest < PasswordStrengthTest
+      setup do
+        @buyer.provider_account.settings
+              .update_attribute(:strong_passwords_enabled, true) # rubocop:disable Rails/SkipsModelValidations
+      end
+
+      class ExistingUsersTest < StrongPasswordsTest
         setup do
           @user = @buyer.users.first
           @user.reload
         end
 
-        should 'be valid if not updating the password' do
+        test 'should be valid if not updating the password' do
           @user.last_name = "not updating password"
 
           @user.valid?
           assert @user.errors[:password].blank?
         end
 
-        should 'be invalid if updating the password' do
+        test 'should be invalid if updating the password' do
           @user.password = "nononono"
           @user.valid?
 
-          assert @user.errors[:password].first == User::STRONG_PASSWORD_FAIL_MSG
+          assert_equal User::STRONG_PASSWORD_FAIL_MSG, @user.errors[:password].first
         end
       end
 
-      context 'validations' do
-
-        should 'be valid with Uppercases, lowercases, digits and weird characters -+_!$#.@ and longer than 8 characters' do
-          user = @buyer.users.new :password => "StrongPass123-+_!$#.@", :password_confirmation => "StrongPass123-+_!$#.@"
+      class ValidationsTest < StrongPasswordsTest
+        test 'should be valid with Uppercases, lowercases, digits and weird characters -+_!$#.@ and longer than 8 characters' do
+          user = @buyer.users.new password: "StrongPass123-+_!$#.@", password_confirmation: "StrongPass123-+_!$#.@"
           user.valid?
 
           assert user.errors[:password].blank?
         end
 
-        context 'invalid' do
+        test 'should be invalid if shorter than 8 characters' do
+          user = @buyer.users.new password: "Pas$123", password_confirmation: "Pas$123"
+          user.valid?
 
-          should 'be invalid if shorter than 8 characters' do
-            user = @buyer.users.new :password => "Pas$123", :password_confirmation => "Pas$123"
-            user.valid?
+          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+        end
 
-            assert user.errors[:password].first == User::STRONG_PASSWORD_FAIL_MSG
-          end
+        test 'should be invalid if without digits' do
+          user = @buyer.users.new password: "StrongPass-+_!$#.@", password_confirmation: "StrongPass-+_!$#.@"
+          user.valid?
 
-          should 'be invalid if without digits' do
-            user = @buyer.users.new :password => "StrongPass-+_!$#.@", :password_confirmation => "StrongPass-+_!$#.@"
-            user.valid?
+          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+        end
 
-            assert user.errors[:password].first == User::STRONG_PASSWORD_FAIL_MSG
-          end
+        test 'should be invalid if without uppercases' do
+          user = @buyer.users.new password: "strongpass123-+_!$#.@", password_confirmation: "strongpass123-+_!$#.@"
+          user.valid?
 
-          should 'be invalid if without uppercases' do
-            user = @buyer.users.new :password => "strongpass123-+_!$#.@", :password_confirmation => "strongpass123-+_!$#.@"
-            user.valid?
+          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+        end
 
-            assert user.errors[:password].first == User::STRONG_PASSWORD_FAIL_MSG
-          end
+        test 'should be invalid if without lowercases' do
+          user = @buyer.users.new password: "STRONGPASS-+_!$#.@", password_confirmation: "STRONGPASS-+_!$#.@"
+          user.valid?
 
-          should 'be invalid if without lowercases' do
-            user = @buyer.users.new :password => "STRONGPASS-+_!$#.@", :password_confirmation => "STRONGPASS-+_!$#.@"
-            user.valid?
+          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+        end
 
-            assert user.errors[:password].first == User::STRONG_PASSWORD_FAIL_MSG
-          end
+        test 'should be invalid if has strange characters' do
+          user = @buyer.users.new password: "StrongPass|", password_confirmation: "StrongPass|"
+          user.valid?
 
-          should 'be invalid if has strange characters' do
-            user = @buyer.users.new :password => "StrongPass|", :password_confirmation => "StrongPass|"
-            user.valid?
+          assert_equal User::STRONG_PASSWORD_FAIL_MSG, user.errors[:password].first
+        end
 
-            assert user.errors[:password].first == User::STRONG_PASSWORD_FAIL_MSG
-          end
-
-          context 'when created from provider' do
-            setup do
-              @user = @buyer.users.first
-              @user.stubs(:password_required?).returns(false) #simulate created by provider
-            end
-
-            should 'be invalid if password and password confirmation do not match' do
-              refute @buyer.users.first.update_attributes :password => "hola12", :password_confirmation => "hola123"
-            end
-          end
-
-        end # invalid
-
-      end # validations
-    end # strong passwords
-
-  end # passwords
+        test 'when created from provider should be invalid if password and password confirmation do not match' do
+          @user = @buyer.users.first
+          @user.stubs(:password_required?).returns(false) #simulate created by provider
+          assert_not @buyer.users.first.update password: "hola12", password_confirmation: "hola123"
+        end
+      end
+    end
+  end
 
   test 'destroys its invitation' do
-    invitation = FactoryBot.create :invitation, :email => "invited@example.com", :account => FactoryBot.create(:provider_account)
-    user = invitation.make_user :username => "username", :password => "password"
+    invitation = FactoryBot.create(:invitation, email: "invited@example.com", account: FactoryBot.create(:provider_account))
+    user = invitation.make_user username: "username", password: "password"
     user.save!
 
     user.destroy
@@ -926,23 +870,22 @@ class UserTest < ActiveSupport::TestCase
   test "won't destroy user if invitation can't be destroyed" do
     Invitation.any_instance.stubs(:destroy).returns(false)
 
-    invitation = FactoryBot.create :invitation
-    user = invitation.make_user :username => "username", :password => "password"
+    invitation = FactoryBot.create(:invitation)
+    user = invitation.make_user username: "username", password: "password"
     user.save!
 
-    refute user.destroy
+    assert_not user.destroy
     assert Invitation.exists?(invitation[:id])
   end
 
   test "kill user sessions but current one" do
     user = FactoryBot.create :user
     session1 = user.user_sessions.create
-    session2 = user.user_sessions.create
+    user.user_sessions.create
 
     user.kill_user_sessions(session1)
 
     assert_equal session1, user.user_sessions.reload.first
     assert_equal 1, user.user_sessions.reload.length
   end
-
 end
