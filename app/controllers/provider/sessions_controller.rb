@@ -87,12 +87,13 @@ class Provider::SessionsController < FrontendController
   end
 
   def sso_params
-    params.permit(:token, :expires_at, :redirect_url, :system_name, :code).merge(request: request)
+    params.permit(%i[token expires_at redirect_url system_name code]).merge(request: request)
   end
 
   def session_return_to
-    if params[:return_to]
-      return_to = safe_return_to(params[:return_to])
+    return_to_params = params.permit(:return_to)[:return_to]
+    if return_to_params
+      return_to = safe_return_to(return_to_params)
       session[:return_to] = return_to if return_to.present?
     end
   end
