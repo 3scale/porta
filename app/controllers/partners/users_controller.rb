@@ -45,6 +45,6 @@ class Partners::UsersController < Partners::BaseController
   end
 
   def permitted_params
-    params.permit!.to_h
+    params.permit(%i[api_key email first_name last_name open_id username provider_id id])
   end
 end
