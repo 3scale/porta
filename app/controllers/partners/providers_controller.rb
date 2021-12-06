@@ -84,6 +84,6 @@ class Partners::ProvidersController < Partners::BaseController
   end
 
   def permitted_params
-    params.permit!.to_h
+    params.permit(%i[application_plan open_id last_name first_name email password id subdomain org_name])
   end
 end
