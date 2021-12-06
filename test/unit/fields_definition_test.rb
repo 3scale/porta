@@ -149,17 +149,17 @@ class FieldsDefinitionTest < ActiveSupport::TestCase
       assert fd.valid?
     end
 
-    test "builtin, modifiable fields fields not allow hidden AND required" do
+    test "builtin, modifiable fields not allow hidden AND required" do
       a = new_field_definition(hidden: true, required: true)
       assert_not a.valid?
     end
 
-    test "builtin, modifiable fields fields not allow readonly AND required" do
+    test "builtin, modifiable fields not allow readonly AND required" do
       a = new_field_definition(read_only: true, required: true)
       assert_not a.valid?
     end
 
-    test "builtin, modifiable fields fields allow choices property only on string fields" do
+    test "builtin, modifiable fields allow choices property only on string fields" do
       a = new_field_definition(label: 'lal', target: 'User', name: 'first_name', choices: %w[a b])
       assert a.valid?
 
