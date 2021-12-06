@@ -148,11 +148,15 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
     end
 
     class FormProtectionTest < ModelIntegrationTest
+      class ModelJS < Model
+        include ThreeScale::SpamProtection::Integration::Model
+        has_spam_protection :honeypot, :timestamp, :javascript
+      end
+
       setup do
         # We do not want to skip Recaptcha in these tests
         Recaptcha::Verify.stubs(skip?: false)
-        Model.spam_protection.enable_checks!(:javascript, :honeypot, :timestamp)
-        @object = Model.new
+        @object = ModelJS.new
         @object.stubs(:errors).returns({})
         @template = ActionView::Base.new
         @template.stubs(:logged_in?).returns(false)
