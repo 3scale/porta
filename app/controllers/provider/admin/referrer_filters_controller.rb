@@ -4,7 +4,7 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
   # TODO: this controller responds only with js, so redirect part doesn't make much sense.
 
   def create
-    @referrer_filter = @cinstance.referrer_filters.add(params[:referrer_filter])
+    @referrer_filter = @cinstance.referrer_filters.add(permitted_params[:referrer_filter])
 
     if @referrer_filter.persisted?
       if request.xhr?
@@ -25,7 +25,7 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
   end
 
   def destroy
-    @referrer_filter = @cinstance.referrer_filters.find params[:id]
+    @referrer_filter = @cinstance.referrer_filters.find permitted_params[:id]
     @referrer_filter.destroy
 
     if request.xhr?
@@ -38,10 +38,14 @@ class Provider::Admin::ReferrerFiltersController < Provider::Admin::BaseControll
   private
 
   def find_cinstance
-    @cinstance = current_account.provided_cinstances.by_service(@service).find(params[:application_id])
+    @cinstance = current_account.provided_cinstances.by_service(@service).find(permitted_params[:application_id])
   end
 
   def return_url
     provider_admin_application_path(@cinstance)
+  end
+
+  def permitted_params
+    params.permit(:id, :application_id, :referrer_filter)
   end
 end

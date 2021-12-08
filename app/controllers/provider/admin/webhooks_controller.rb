@@ -31,7 +31,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   end
 
   def create
-    @webhook ||= current_account.build_web_hook(params[:web_hook])
+    @webhook ||= current_account.build_web_hook(params.permit(:web_hook)[:web_hook])
 
     if @webhook.save
       flash[:notice] = 'Webhooks settings were successfully updated.'
@@ -42,7 +42,7 @@ class Provider::Admin::WebhooksController < Sites::BaseController
   end
 
   def update
-    if @webhook.update_attributes(params[:web_hook])
+    if @webhook.update_attributes(params.permit(:web_hook)[:web_hook])
       flash[:notice] = 'Webhooks settings were successfully updated.'
       redirect_to :action => :edit
     else

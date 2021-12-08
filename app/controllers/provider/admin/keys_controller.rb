@@ -12,7 +12,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
 
   # user key
   def update
-    @cinstance.user_key = params[:cinstance][:user_key]
+    @cinstance.user_key = permitted_params[:cinstance][:user_key]
     unless @cinstance.save
       flash.now[:error] = "Invalid key. Please review and try submitting again."
     end
@@ -20,7 +20,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   end
 
   def create
-    @key = @cinstance.application_keys.add(params[:key])
+    @key = @cinstance.application_keys.add(permitted_params[:key])
 
     if @key.persisted?
       @keys = @cinstance.application_keys.pluck_values
@@ -32,7 +32,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   end
 
   def destroy
-    @key = params[:id]
+    @key = permitted_params.require(:id)
     @remove = @cinstance.application_keys.remove(@key)
 
     unless @remove
@@ -43,7 +43,7 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   end
 
   def regenerate
-    @key = params[:id]
+    @key = permitted_params.require(:id)
 
     @new_key = @cinstance.application_keys.regenerate(@key).value
 
@@ -57,6 +57,10 @@ class Provider::Admin::KeysController < Provider::Admin::BaseController
   end
 
   def find_cinstance
-    @cinstance = current_account.provided_cinstances.find(params[:application_id])
+    @cinstance = current_account.provided_cinstances.find(permitted_params.require(:application_id))
+  end
+
+  def permitted_params
+    params.permit(:id, :application_id, :key, cinstance: %i[user_key])
   end
 end
