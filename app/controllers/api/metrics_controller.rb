@@ -31,9 +31,8 @@ class Api::MetricsController < Api::BaseController
       if @metric.save
         flash.now[:notice] = 'Metric has been created.'
         format.html do
-          method = @metric.child?
-          flash[:notice] = "The #{method ? 'method' : 'metric'} was created"
-          redirect_to admin_service_metrics_path(@service, tab: method ? 'methods' : 'metrics')
+          flash[:notice] = "The #{method_or_metric} was created"
+          redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
         end
       else
         format.html { render :new }
@@ -51,8 +50,8 @@ class Api::MetricsController < Api::BaseController
     if @metric.update_attributes(update_params)
       respond_to do |format|
         format.html do
-          flash[:notice] = "The #{@metric.child? ? 'method' : 'metric'} was updated"
-          return redirect_to action: :index
+          flash[:notice] = "The #{method_or_metric} was updated"
+          redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
         end
       end
     else
@@ -64,14 +63,14 @@ class Api::MetricsController < Api::BaseController
 
   def destroy
     if @metric.destroy
-      flash[:notice] = "The #{@metric.child? ? 'method' : 'metric'} was deleted"
+      flash[:notice] = "The #{method_or_metric} was deleted"
     else
       flash[:error] = 'The Hits metric cannot be deleted'
     end
 
     respond_to do |format|
       format.html do
-        redirect_to action: :index
+        redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
       end
     end
   end
@@ -94,5 +93,9 @@ class Api::MetricsController < Api::BaseController
 
   def presenter
     @presenter ||= Api::MetricsIndexPresenter.new(service: @service, params: params)
+  end
+
+  def method_or_metric
+    @metric.child? ? 'method' : 'metric'
   end
 end

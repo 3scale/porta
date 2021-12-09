@@ -1,3 +1,4 @@
+@javascript
 Feature: Metric creation
   In order to track various metrics of my API
   As a provider
@@ -11,7 +12,7 @@ Feature: Metric creation
 
   Scenario: Create a metric from the service definition page
     When I go to the service definition page
-    And I follow "New metric"
+    And I follow "Add a metric"
     And I fill in "Friendly name" with "Number of zombies killed"
     And I fill in "System name" with "zombie_kills"
     And I fill in "Unit" with "corpses"
