@@ -76,7 +76,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
       Invoice.any_instance.stubs("transition_allowed?").returns(true)
       Invoice.any_instance.stubs("#{action}!").returns(true)
 
-      put url_for([action, :admin, :finance, @invoice]), format: 'js'
+      put url_for([action, :admin, :finance, @invoice, { format: 'js' }])
       assert_response :success
     end
 
@@ -84,7 +84,7 @@ class Finance::Provider::InvoicesControllerTest < ActionDispatch::IntegrationTes
       Invoice.any_instance.stubs("transition_allowed?").returns(true)
       Invoice.any_instance.stubs("#{action}!").returns(false)
 
-      put url_for([action, :admin, :finance, @invoice]), format: 'js'
+      put url_for([action, :admin, :finance, @invoice, { format: 'js' }])
       assert_response :success
       # TODO: update error messages
     end
