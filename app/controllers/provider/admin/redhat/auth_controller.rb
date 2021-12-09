@@ -7,7 +7,7 @@ class Provider::Admin::Redhat::AuthController < Provider::AdminController
   layout 'provider'
 
   def show
-    user_data = oauth_client.authenticate!(params[:code], request)
+    user_data = oauth_client.authenticate!(params.permit(:code)[:code], request)
 
     if update_redhat_login(user_data)
       flash[:notice] = 'The Red Hat Login was linked to the account'
@@ -29,7 +29,7 @@ class Provider::Admin::Redhat::AuthController < Provider::AdminController
   end
 
   def referrer_url
-    url = params[:referrer]
+    url = params.permit(:referrer)[:referrer]
     if url
       URI.decode(url)
     else
