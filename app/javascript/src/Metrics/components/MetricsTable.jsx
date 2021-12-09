@@ -101,7 +101,7 @@ const MetricsTable = ({
               <input name="tab" type="hidden" value={activeTabKey} />
             </ToolbarSearch>
           </ToolbarItem>
-          <ToolbarItem align={{ default: 'alignLeft' }}>
+          <ToolbarItem>
             {createButton}
           </ToolbarItem>
         </ToolbarGroup>
@@ -112,7 +112,7 @@ const MetricsTable = ({
         </ToolbarGroup>
       </Toolbar>
       <Divider />
-      <Table aria-label="Plans Table" cells={tableColumns} rows={tableRows}>
+      <Table aria-label={`${isActiveTabMetrics ? 'Metrics' : 'Methods'} table`} cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
