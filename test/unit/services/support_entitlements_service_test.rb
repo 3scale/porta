@@ -2,6 +2,7 @@ require 'test_helper'
 
 class SupportEntitlementsServiceTest < ActiveSupport::TestCase
   include FieldsDefinitionsHelpers
+  include ActiveJob::TestHelper
 
   setup do
     @service = FactoryBot.create(:service, account: master_account)
@@ -36,7 +37,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
     invoice = FactoryBot.create(:invoice, buyer_account: @provider_account, issued_on: Time.parse('2017-11-05'))
     FactoryBot.create(:line_item_plan_cost, invoice: invoice, contract: @provider_account.bought_cinstance, cinstance_id: @provider_account.bought_cinstance.id)
 
-    AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: invoice.issued_on, invoice_id: invoice.id).returns(mock(deliver_now: true))
+    AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: invoice.issued_on, invoice_id: invoice.id).returns(mock(deliver_later: true))
     AccountMailer.expects(:support_entitlements_revoked).never
 
     assert SupportEntitlementsService.notify_entitlements(@provider_account)
@@ -55,7 +56,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
     @provider_account.buy! @trial_plan
 
     Timecop.freeze do
-      AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_now: true))
+      AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
       AccountMailer.expects(:support_entitlements_revoked).never
 
       assert SupportEntitlementsService.notify_entitlements(@provider_account)
@@ -67,7 +68,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
 
     Timecop.freeze do
       AccountMailer.expects(:support_entitlements_assigned).never
-      AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_now: true))
+      AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
 
       entitlements_options = { previous_plan: @paid_plan }
       assert SupportEntitlementsService.notify_entitlements(@provider_account, entitlements_options)
@@ -78,7 +79,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
     @provider_account.buy! @trial_plan
 
     Timecop.freeze do
-      AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_now: true))
+      AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
       AccountMailer.expects(:support_entitlements_revoked).never
 
       entitlements_options = { previous_plan: @free_plan }
@@ -103,7 +104,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
 
     invoice = FactoryBot.create(:invoice, buyer_account: @provider_account, issued_on: Time.parse('2017-11-05'))
 
-    AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: invoice.issued_on, invoice_id: invoice.id).returns(mock(deliver_now: true))
+    AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: invoice.issued_on, invoice_id: invoice.id).returns(mock(deliver_later: true))
     AccountMailer.expects(:support_entitlements_revoked).never
 
     entitlements_options = { previous_plan: @free_plan, invoice: invoice }
@@ -115,7 +116,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
 
     Timecop.freeze do
       AccountMailer.expects(:support_entitlements_assigned).never
-      AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_now: true))
+      AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
 
       entitlements_options = { previous_plan: @paid_plan }
       assert SupportEntitlementsService.notify_entitlements(@provider_account, entitlements_options)
@@ -142,7 +143,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
     FactoryBot.create(:line_item_plan_cost, invoice: invoice, contract: @provider_account.bought_cinstance, cinstance_id: @provider_account.bought_cinstance.id)
 
     AccountMailer.expects(:support_entitlements_assigned).never
-    AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: invoice.issued_on, invoice_id: invoice.id).returns(mock(deliver_now: true))
+    AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: invoice.issued_on, invoice_id: invoice.id).returns(mock(deliver_later: true))
 
     assert SupportEntitlementsService.notify_entitlements(@provider_account)
   end
@@ -172,7 +173,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
     @provider_account.buy! @paid_plan
 
     Timecop.freeze do
-      AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_now: true))
+      AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
       AccountMailer.expects(:support_entitlements_revoked).never
 
       assert SupportEntitlementsService.notify_entitlements(@provider_account)
