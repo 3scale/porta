@@ -93,7 +93,7 @@ class PageTest < ActiveSupport::TestCase
   end
 
   test "as_json returns tag_list when requested" do
-    page = FactoryBot.create(:cms_file)
+    page = FactoryBot.create(:cms_page)
     page.expects(:tag_list).returns([]).once
     page.as_json(include: [:tag_list])
   end
