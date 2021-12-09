@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Finance::NoVariableCostTest < ActiveSupport::TestCase
+class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
   attr_reader :contract, :app_plan
 
   setup do
@@ -11,13 +11,16 @@ class Finance::NoVariableCostTest < ActiveSupport::TestCase
     @app_plan = FactoryBot.build_stubbed(:application_plan)
 
     contract.stubs(:provider_account).returns(account)
-    account.stubs(:provider_can_use?).returns(true)
+    account.stubs(:provider_can_use?).with(:instant_bill_plan_change).returns(true)
 
-    @org_tz = ENV["TZ"]
+    ENV["TZ"] = "UTC"
   end
 
-  teardown do
-    ENV["TZ"] = @org_tz
+  test "no variable billing on 1st day utc" do
+    Timecop.travel(Time.now.utc.beginning_of_month + 1.day - 1.second)
+
+    contract.expects(:save).never
+    contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
   end
 
   test "variable billing after 1st day utc" do
@@ -35,6 +38,13 @@ class Finance::NoVariableCostTest < ActiveSupport::TestCase
     Timecop.travel(Time.zone.now.beginning_of_month - 4.hours)
 
     contract.expects(:save).never
+    contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
+  end
+
+  test "variable billing if last billed until is yesterday" do
+    contract.stubs(:variable_cost_paid_until).returns(Time.zone.now.to_date - 1.day)
+
+    contract.expects(:save).returns(true)
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
   end
 
