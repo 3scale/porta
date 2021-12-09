@@ -18,6 +18,7 @@ import './ToolbarSearch.scss'
 
 type Props = {
   placeholder: string,
+  name?: string,
   children?: React.Node
 }
 
@@ -25,8 +26,8 @@ const FORM_ID = 'toolbar-search-form'
 const INPUT_NAME_QUERY = 'search[query]'
 const INPUT_NAME_UTF8 = 'utf8'
 
-const ToolbarSearch = ({ placeholder, children }: Props): React.Node => {
-  const query = new URL(window.location).searchParams.get(INPUT_NAME_QUERY)
+const ToolbarSearch = ({ placeholder, name = INPUT_NAME_QUERY, children }: Props): React.Node => {
+  const query = new URL(window.location).searchParams.get(name)
   const [searchText, setSearchText] = React.useState<string>(query || '')
   const [showPopover, setShowPopover] = React.useState<boolean>(false)
 
@@ -66,7 +67,7 @@ const ToolbarSearch = ({ placeholder, children }: Props): React.Node => {
   }
 
   const removeEmptySearchQueryFromURL = (form: HTMLFormElement) => {
-    form.elements[INPUT_NAME_QUERY].removeAttribute('name')
+    form.elements[name].removeAttribute('name')
     form.elements[INPUT_NAME_UTF8].removeAttribute('name')
   }
 
@@ -90,7 +91,7 @@ const ToolbarSearch = ({ placeholder, children }: Props): React.Node => {
           // $FlowIgnore[incompatible-type] it's fine, really
           ref={inputRef}
           placeholder={placeholder}
-          name={INPUT_NAME_QUERY}
+          name={name}
           type="search"
           aria-label="Search"
           value={searchText}

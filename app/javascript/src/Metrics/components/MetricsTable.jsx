@@ -91,13 +91,13 @@ const MetricsTable = ({
     )
   }
 
-  // TODO: wrap toolbar items in a ToolbarContent
+  // TODO: wrap toolbar items in a ToolbarContent once PF upgraded
   return (
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarGroup variant='filter-group'>
           <ToolbarItem>
-            <ToolbarSearch placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`}>
+            <ToolbarSearch placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`} name="query">
               <input name="tab" type="hidden" value={activeTabKey} />
             </ToolbarSearch>
           </ToolbarItem>
