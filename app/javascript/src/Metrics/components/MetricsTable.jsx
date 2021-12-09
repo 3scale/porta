@@ -8,6 +8,7 @@ import {
   Pagination as PFPagination,
   PaginationVariant,
   Toolbar,
+  ToolbarGroup,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
@@ -90,20 +91,25 @@ const MetricsTable = ({
     )
   }
 
+  // TODO: wrap toolbar items in a ToolbarContent
   return (
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarItem>
-          <ToolbarSearch placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`}>
-            <input name="tab" type="hidden" value={activeTabKey} />
-          </ToolbarSearch>
-        </ToolbarItem>
-        <ToolbarItem className="pf-l-toolbar__item-left-align">
-          {createButton}
-        </ToolbarItem>
-        <ToolbarItem align={{ default: 'alignRight' }}>
-          <Pagination />
-        </ToolbarItem>
+        <ToolbarGroup variant='filter-group'>
+          <ToolbarItem>
+            <ToolbarSearch placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`}>
+              <input name="tab" type="hidden" value={activeTabKey} />
+            </ToolbarSearch>
+          </ToolbarItem>
+          <ToolbarItem align={{ default: 'alignLeft' }}>
+            {createButton}
+          </ToolbarItem>
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <ToolbarItem align={{ default: 'alignRight' }}>
+            <Pagination />
+          </ToolbarItem>
+        </ToolbarGroup>
       </Toolbar>
       <Divider />
       <Table aria-label="Plans Table" cells={tableColumns} rows={tableRows}>

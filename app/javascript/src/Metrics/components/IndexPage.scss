@@ -20,8 +20,24 @@
     padding-left: var(--pf-c-page__main-section--PaddingLeft);
   }
 
+  // HACK: tabs item styles should be provided by PF once upgraded
   .pf-c-tabs__item {
-    padding-right: var(--pf-c-tabs__link--PaddingRight);
+    display: flex;
+    flex: none;
+    scroll-snap-align: end; // var(--pf-c-tabs__item--ScrollSnapAlign);
+
+    &.pf-m-current .pf-c-tabs__button::after {
+      border-bottom: var(--pf-c-tabs__item--m-current--BorderTopWidth) solid #06c; // var(--pf-c-tabs__item--m-current__link--after--BorderColor);
+    }
+
+    .pf-c-tabs__button::before {
+      border-width: 0 !important;
+    }
+
+    .pf-c-tabs__button::after {
+      border-top: none;
+      border-bottom: var(--pf-c-tabs__item--m-current--BorderTopWidth) solid #b8bbbe; // var(--pf-c-tabs__link--after--BorderColor);
+    }
   }
 
   .pf-c-tabs__link {
@@ -29,7 +45,7 @@
     padding-right: 0;
   }
 
-  // HACK? Adds a margin between both cards.
+  // HACK: Adds a margin between both cards.
   .pf-c-card:first-of-type {
     margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
   }
@@ -37,5 +53,16 @@
   // HACK: force pagination in bottom toolbar to stick to the right
   #bottom-toolbar .pf-l-toolbar__item {
     flex: auto;
+  }
+
+  // HACK: variant='filter-group' should already provide the necessary styles once PF is upgraded
+  .pf-l-toolbar {
+    [variant="filter-group"] {
+      display: flex;
+
+      .pf-l-toolbar__item {
+        margin-right: 1rem;
+      }
+    }
   }
 }
