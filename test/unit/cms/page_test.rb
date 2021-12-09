@@ -87,7 +87,7 @@ class PageTest < ActiveSupport::TestCase
   end
 
   test "tags N+1 queries for tags" do
-    page = FactoryBot.create(:cms_file)
+    page = FactoryBot.create(:cms_page)
     page.expects(:tag_list).never
     page.as_json
   end
