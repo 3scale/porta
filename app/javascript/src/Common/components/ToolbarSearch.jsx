@@ -25,7 +25,7 @@ const FORM_ID = 'toolbar-search-form'
 const INPUT_NAME_QUERY = 'search[query]'
 const INPUT_NAME_UTF8 = 'utf8'
 
-const ToolbarSearch = ({ placeholder }: Props): React.Node => {
+const ToolbarSearch = ({ placeholder, children }: Props): React.Node => {
   const query = new URL(window.location).searchParams.get(INPUT_NAME_QUERY)
   const [searchText, setSearchText] = React.useState<string>(query || '')
   const [showPopover, setShowPopover] = React.useState<boolean>(false)
