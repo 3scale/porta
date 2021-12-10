@@ -25,10 +25,6 @@ class Api::MetricsIndexPresenter
     }
   end
 
-  def raw_collection
-    @raw_collection ||= metrics? ? top_level_metrics : method_metrics
-  end
-
   def collection
     @collection ||= raw_collection.scope_search(search)
                                   .paginate(pagination_params)
@@ -39,6 +35,10 @@ class Api::MetricsIndexPresenter
   end
 
   protected
+
+  def raw_collection
+    @raw_collection ||= metrics? ? top_level_metrics : method_metrics
+  end
 
   def metrics?
     tab == 'metrics'
