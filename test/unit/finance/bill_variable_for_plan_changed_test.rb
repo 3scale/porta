@@ -32,10 +32,11 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
     ENV["TZ"] = "Asia/Shanghai"
 
     # this is 4 hours before beginning of month in UTC and 4 after local
-    Timecop.travel(Time.zone.now.beginning_of_month - 4.hours)
+    Timecop.travel(Time.now.utc.beginning_of_month - 4.hours)
 
     contract.stubs(:provider_account).returns(account)
     account.stubs(:provider_can_use?).returns(true)
+    contract.stubs(:variable_cost_paid_until).returns(Time.now.to_date - 7.days)
 
     contract.expects(:save).never
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
