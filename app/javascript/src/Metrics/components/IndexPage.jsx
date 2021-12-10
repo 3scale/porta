@@ -77,7 +77,6 @@ const IndexPage = ({
           />
         </Card>
       </PageSection>
-
     </div>
   )
 }
