@@ -3,6 +3,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
+import { CheckIcon } from '@patternfly/react-icons'
 import { MetricsTable } from 'Metrics'
 import { mockLocation } from 'utilities/test-utils'
 
@@ -20,6 +21,8 @@ const metricsCount = metrics.length * 2
 
 const defaultProps = {
   activeTabKey: 'methods',
+  mappingRulesPath: '',
+  addMappingRulePath: '',
   metrics,
   metricsCount,
   createButton: <button>Add a metric</button>
@@ -56,4 +59,36 @@ it('should have a paginated table', () => {
   expect(window.location.replace).toHaveBeenCalledWith(expect.stringContaining('page=3'))
 
   expect(pagination.find('.pf-c-options-menu__toggle-text').text()).toMatch(`3 - 4 of ${metricsCount}`)
+})
+
+describe('for metrics without mapping rule', () => {
+  const metric = { ...metrics[0], mapped: false }
+
+  it('should render a link to the add mapping rule page', () => {
+    const addMappingRulePath = '/mapping_rules/new'
+    const wrapper = mountWrapper({ metrics: [metric], addMappingRulePath })
+
+    const mapped = wrapper.find('tr').find('td[data-label="Mapped"]')
+    expect(mapped.containsMatchingElement(
+      <a href={`${addMappingRulePath}?metric_id=${metric.id}`}>
+        Add a mapping rule
+      </a>
+    )).toBe(true)
+  })
+})
+
+describe('for metrics with a mapping rule', () => {
+  const metric = { ...metrics[0], mapped: true }
+
+  it('should render a checkmark that link to the mapping rules page', () => {
+    const mappingRulesPath = '/mapping_rules/'
+    const wrapper = mountWrapper({ metrics: [metric], mappingRulesPath })
+
+    const mapped = wrapper.find('tr').find('td[data-label="Mapped"]')
+    expect(mapped.containsMatchingElement(
+      <a href={mappingRulesPath}>
+        <CheckIcon />
+      </a>
+    )).toBe(true)
+  })
 })

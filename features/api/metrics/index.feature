@@ -24,7 +24,7 @@ Feature: Product > Metrics index
       | Amatriciana |
 
   Scenario: Change tab to metrics
-    And I press "Metrics"
+    When I change to tab "Metrics"
     Then I should see the following metrics:
       | Hits  |
       | Pizza |
@@ -34,5 +34,19 @@ Feature: Product > Metrics index
     Then I should see "Add a method"
 
   Scenario: New metrics button
-    And press "Metrics"
+    When I change to tab "Metrics"
     Then I should see "Add a metric"
+
+  Scenario: Methods and mapping rules
+    Given method "Diavola" is not mapped
+    And method "Carbonara" is mapped
+    When I change to tab "Methods"
+    Then I should be able to add a mapping rule to "Diavola"
+    But I should not be able to add a mapping rule to "Carbonara"
+
+  Scenario: Metrics and mapping rules
+    Given metric "Pizza" is not mapped
+    And metric "Pasta" is mapped
+    When I change to tab "Metrics"
+    Then I should be able to add a mapping rule to "Pizza"
+    But I should not be able to add a mapping rule to "Pasta"

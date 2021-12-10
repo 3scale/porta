@@ -198,8 +198,8 @@ ParameterType(
 
 ParameterType(
   name: 'method',
-  regexp: /^method "([^"]*)"$/,
-  transformer: ->(name) { current_account.first_service!.metrics.hits.children.find_by!(system_name: name) }
+  regexp: /method "([^"]*)"/,
+  transformer: ->(name) { current_account.first_service!.metrics.hits.children.find_by!(friendly_name: name) }
 )
 
 ParameterType(
@@ -311,6 +311,12 @@ ParameterType(
   name: 'is',
   regexp: /is|is not/,
   transformer: ->(value) { value == 'is' }
+)
+
+ParameterType(
+  name: 'should',
+  regexp: /should|should not|shouldn't/,
+  transformer: ->(value) { value == 'should' }
 )
 
 ParameterType(

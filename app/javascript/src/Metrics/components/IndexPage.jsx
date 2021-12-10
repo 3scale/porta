@@ -22,6 +22,8 @@ type Props = {
   metrics: Array<Metric>,
   metricsCount: number,
   infoCard: React.Node,
+  mappingRulesPath: string,
+  addMappingRulePath: string,
   createMetricPath: string
 }
 
@@ -29,6 +31,8 @@ const IndexPage = ({
   metrics,
   metricsCount,
   infoCard,
+  mappingRulesPath,
+  addMappingRulePath,
   createMetricPath
 }: Props): React.Node => {
   const url = new URL(window.location.href)
@@ -64,6 +68,8 @@ const IndexPage = ({
         <Card>
           <MetricsTable
             activeTabKey={activeTabKey}
+            mappingRulesPath={mappingRulesPath}
+            addMappingRulePath={addMappingRulePath}
             metrics={metrics}
             metricsCount={metricsCount}
             createButton={(

@@ -23,6 +23,8 @@ const defaultProps = {
   metrics,
   metricsCount: metrics.length * 2,
   infoCard: <div>info</div>,
+  addMappingRulePath: '',
+  mappingRulesPath: '',
   createMetricPath
 }
 

@@ -13,6 +13,7 @@ import type { Metric } from 'Types'
 
 type Props = {
   applicationPlansPath: string,
+  addMappingRulePath: string,
   createMetricPath: string,
   mappingRulesPath: string,
   metrics: Array<Metric>,
@@ -21,6 +22,7 @@ type Props = {
 
 const ProductIndexPage = ({
   applicationPlansPath,
+  addMappingRulePath,
   createMetricPath,
   mappingRulesPath,
   metrics,
@@ -50,6 +52,8 @@ const ProductIndexPage = ({
           </List>
         </>
       )}
+      mappingRulesPath={mappingRulesPath}
+      addMappingRulePath={addMappingRulePath}
       createMetricPath={createMetricPath}
     />
   )

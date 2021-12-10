@@ -26,6 +26,8 @@ import './MetricsTable.scss'
 
 type Props = {
   activeTabKey: TabKey,
+  mappingRulesPath: string,
+  addMappingRulePath: string,
   metrics: Metric[],
   metricsCount: number,
   createButton: React.Node
@@ -33,6 +35,8 @@ type Props = {
 
 const MetricsTable = ({
   activeTabKey,
+  mappingRulesPath,
+  addMappingRulePath,
   metrics,
   metricsCount,
   createButton
@@ -56,7 +60,14 @@ const MetricsTable = ({
       m.systemName,
       m.unit,
       m.description,
-      { title: m.mapped ? <CheckIcon color="var(--pf-global--primary-color--100)" /> : '' }
+      { title: m.mapped ? (
+        <a href={mappingRulesPath}>
+          <CheckIcon />
+        </a>
+      ) : (
+        // TODO: It would be nice to have the metric preselected in the Add mapping rule form
+        <a href={`${addMappingRulePath}?metric_id=${m.id}`}>Add a mapping rule</a>
+      )}
     ]
   }))
 

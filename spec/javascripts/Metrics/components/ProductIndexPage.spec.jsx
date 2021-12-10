@@ -7,6 +7,7 @@ import { ProductIndexPage } from 'Metrics'
 
 const defaultProps = {
   applicationPlansPath: '/plans',
+  addMappingRulePath: '/mapping-rule/new',
   createMetricPath: '/metrics/new',
   mappingRulesPath: '/mapping-rules',
   metrics: [],

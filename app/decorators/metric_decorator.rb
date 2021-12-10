@@ -12,4 +12,8 @@ class MetricDecorator < ApplicationDecorator
       updatedAt: updated_at
     }
   end
+
+  def mapped?
+    owner.proxy.proxy_rules.map(&:metric).include?(self)
+  end
 end

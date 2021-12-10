@@ -17,6 +17,7 @@ class Api::MetricsIndexPresenter
   def index_data
     {
       'application-plans-path': admin_service_application_plans_path(service),
+      'add-mapping-rule-path': new_admin_service_proxy_rule_path(service),
       'create-metric-path': create_path,
       'mapping-rules-path': admin_service_proxy_rules_path(service),
       'metrics': page_metrics.to_json,
@@ -56,7 +57,7 @@ class Api::MetricsIndexPresenter
       path: edit_admin_service_metric_path(metric.owner, metric),
       unit: metric.unit,
       description: metric.description,
-      mapped: metric.owner.proxy.proxy_rules.map(&:metric).include?(metric)
+      mapped: metric.decorate.mapped?
     }
   end
 end
