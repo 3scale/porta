@@ -2,13 +2,13 @@
 
 Given('the following metrics:') do |table|
   table.raw.flatten.each do |name|
-    FactoryBot.create(:metric, service: service, system_name: name, friendly_name: name)
+    FactoryBot.create(:metric, service: @provider.default_service, system_name: name, friendly_name: name)
   end
 end
 
 Given('the following methods:') do |table|
   table.raw.flatten.each do |name|
-    FactoryBot.create(:method, owner: service, friendly_name: name)
+    FactoryBot.create(:method, owner: @provider.default_service, friendly_name: name)
   end
 end
 
@@ -18,10 +18,6 @@ end
 
 Then('I should see the following metrics:') do |table|
   find_rows table.raw.flatten, within: metrics_table
-end
-
-def service
-  @service ||= @provider.default_service
 end
 
 def find_rows(metrics, within: scope)
