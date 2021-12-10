@@ -7,7 +7,7 @@ class Provider::Admin::ServiceDiscovery::ClusterServicesController < Provider::A
   end
 
   def show
-    cluster_service = cluster.find_discoverable_service_by(namespace: namespace_id, name: params[:id])
+    cluster_service = cluster.find_discoverable_service_by(namespace: namespace_id, name: params.require(:id))
     render json: cluster_service.to_json
   rescue ::ServiceDiscovery::ClusterClient::ResourceNotFound => exception
     render_error exception.message, status: :not_found

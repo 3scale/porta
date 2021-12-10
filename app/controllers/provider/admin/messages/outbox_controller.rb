@@ -8,7 +8,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def destroy
-    @message = current_account.messages.find(params[:id])
+    @message = current_account.messages.find(params.require(:id))
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'
@@ -36,7 +36,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def show
-    @message = current_account.messages.find(params[:id]).decorate
+    @message = current_account.messages.find(params.require(:id)).decorate
   end
 
   private
@@ -49,7 +49,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
     if mass_message?
       current_account.buyer_account_ids
     elsif current_account.provider?
-      current_account.buyer_accounts.find(params[:to])
+      current_account.buyer_accounts.find(params.require(:to))
     else
       current_account.provider_account
     end
