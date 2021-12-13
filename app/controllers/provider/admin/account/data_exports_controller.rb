@@ -21,8 +21,8 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
     recipient = current_user
     DataExportsWorker.perform_async(current_account.id,
                                     recipient.id,
-                                    params[:data],
-                                    params[:period])
+                                    permitted_params[:data],
+                                    permitted_params[:period])
     flash[:notice] = "Report will be mailed to #{recipient.email}."
     redirect_to action: :new
   end
@@ -35,7 +35,7 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
 
   def redirect_to_new_on_invalid_data
     #TODO: test this behaviour
-    redirect_to :action => :new unless EXPORTS_TARGETS.include?(params[:data])
+    redirect_to :action => :new unless EXPORTS_TARGETS.include?(permitted_params[:data])
   end
 
   def set_selects_collections
@@ -44,6 +44,10 @@ class Provider::Admin::Account::DataExportsController < Provider::Admin::Account
     @periods = [['All', ''], ['Today', 'today'], ['This Week', 'this_week'],
                 ['This Month', 'this_month'], ['This Year', 'this_year'],
                 ['Previous Year', 'last_year']]
+  end
+
+  def permitted_params
+    params.permit(:data, :period)
   end
 
 end

@@ -26,7 +26,7 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueController < Provi
 
   def update
     current_account.updating_payment_detail = true
-    if current_account.update_attributes params[:account]
+    if current_account.update_attributes params.permit(:account)[:account]
       redirect_to provider_admin_account_braintree_blue_url, notice: 'Credit card details were successfully stored.'
     else
       hack_errors
