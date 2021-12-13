@@ -16,7 +16,8 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     get :new
 
     assert_response 200
-    assert !@response.body.include?("CAS")
+    # CAS visible outside a tag to avoid rare authenticity_token match
+    assert_not_match />[^<>]*?CAS/, @response.body
   end
 
   test 'cas is displayed on login page' do
@@ -31,7 +32,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     get :new
 
     assert_response 200
-    assert @response.body.include?("CAS")
+    assert_match />[^<>]*?CAS/, @response.body
   end
 
   test 'cas successful auth' do
