@@ -71,12 +71,12 @@ class Buyers::AccountsController < Buyers::BaseController
 
   def toggle_monthly_charging
     account.settings.toggle!(:monthly_charging_enabled)
-    redirect_to(:back)
+    redirect_back(fallback_location: redirection_path)
   end
 
   def toggle_monthly_billing
     account.settings.toggle!(:monthly_billing_enabled)
-    redirect_to(:back)
+    redirect_back(fallback_location: redirection_path)
   end
 
   def show
