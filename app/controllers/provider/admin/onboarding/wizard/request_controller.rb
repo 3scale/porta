@@ -39,7 +39,7 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
 
   # success (also shows response)
   def show
-    @response = Encoder.decode_param(params[:response].to_s)
+    @response = Encoder.decode_param(response_params[:response].to_s)
     track_step('show request')
   end
 
@@ -51,6 +51,10 @@ class  Provider::Admin::Onboarding::Wizard::RequestController < Provider::Admin:
 
   def request_params
     params.require(:request)
+  end
+
+  def response_params
+    params.permit(:response)
   end
 
   def build_request_form

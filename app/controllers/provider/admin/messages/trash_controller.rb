@@ -32,6 +32,6 @@ class Provider::Admin::Messages::TrashController < FrontendController
   private
 
   def find_message
-    @message = current_account.trashed_messages.not_system.find(params[:id]).decorate
+    @message = current_account.trashed_messages.not_system.find(params.require(:id)).decorate
   end
 end
