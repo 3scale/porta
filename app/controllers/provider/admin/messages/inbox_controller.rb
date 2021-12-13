@@ -36,6 +36,6 @@ class Provider::Admin::Messages::InboxController < FrontendController
   end
 
   def find_message
-    @message = current_account.received_messages.find(params[:id]).decorate
+    @message = current_account.received_messages.find(params.require(:id)).decorate
   end
 end
