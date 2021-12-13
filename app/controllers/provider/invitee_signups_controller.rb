@@ -50,7 +50,7 @@ class Provider::InviteeSignupsController < FrontendController
 
   def build_user
     permitted_params = params.permit(user: %i[password username])
-    @user = @invitation.make_user(permitted_params[:user] || {})
+    @user = @invitation.make_user(permitted_params[:user])
 
     # This is just a sanity guard added when splitting invitation
     # controllers. Remove when SURE.
