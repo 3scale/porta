@@ -56,7 +56,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
   end
 
   def authentication_provider
-    self_authentication_providers.find(params[:id])
+    self_authentication_providers.find(params.require(:id))
   end
 
   def authorize_rolling_update!
