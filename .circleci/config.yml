@@ -1121,22 +1121,32 @@ workflows:
 
       - unit-oracle:
           executor: builder-with-oracle-ruby26
+          context:
+            - quay
           requires:
             - deps_bundler_oracle
       - functional-oracle:
           executor: builder-with-oracle-ruby26
+          context:
+            - quay
           requires:
             - assets_precompile
       - integration-oracle:
           executor: builder-with-oracle-ruby26
+          context:
+            - quay
           requires:
             - assets_precompile
       - rspec-oracle:
           executor: builder-with-oracle-ruby26
+          context:
+            - quay
           requires:
             - deps_bundler_oracle
       - cucumber-oracle:
           executor: cucumber-with-oracle-ruby26
+          context:
+            - quay
           requires:
             - assets_precompile
       - notify_success:
