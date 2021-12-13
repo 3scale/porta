@@ -20,8 +20,22 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
     ENV["TZ"] = @org_tz
   end
 
-  test "bill for variable" do
-    Timecop.travel(15.days.ago) if Time.now.mday == 1 # rubocop:disable Rails/TimeZone we don't use timezones in billing
+  test "bill for variable on first day" do
+    Timecop.travel(Time.now.beginning_of_month) # rubocop:disable Rails/TimeZone we don't use timezones in billing
+
+    contract.expects(:save).never
+    contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
+  end
+
+  test "bill for variable before first day" do
+    Timecop.travel(Time.now.beginning_of_month - 15.days) # rubocop:disable Rails/TimeZone we don't use timezones in billing
+
+    contract.expects(:save).returns(true)
+    contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
+  end
+
+  test "bill for variable after first day" do
+    Timecop.travel(Time.now.beginning_of_month + 15.days) # rubocop:disable Rails/TimeZone we don't use timezones in billing
 
     contract.expects(:save).returns(true)
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
