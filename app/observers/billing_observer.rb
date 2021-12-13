@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BillingObserver < ActiveRecord::Observer
 
   class RangeForVariableCost < Range
@@ -16,17 +17,17 @@ class BillingObserver < ActiveRecord::Observer
   # It is called 'manually' from Contract#notify_plan_changed
 
   def bill_variable_for_plan_changed(contract, plan)
-    if contract.provider_account.provider_can_use?(:instant_bill_plan_change)
-      invoice_period = Month.new(Time.now)
-      current_invoice = Finance::InvoiceProxy.new(contract.account, invoice_period)
-      current_invoice.mark_as_used
+    return unless contract.provider_account.provider_can_use?(:instant_bill_plan_change)
 
-      period_from = [contract.variable_cost_paid_until, invoice_period.begin].max
-      last_midnight = Date.today.beginning_of_day
-      period = RangeForVariableCost.new(period_from, last_midnight)
+    invoice_period = Month.new(Time.now) # rubocop:disable Rails/TimeZone We do not bill with timezone
+    current_invoice = Finance::InvoiceProxy.new(contract.account, invoice_period)
+    current_invoice.mark_as_used
 
-      contract.bill_for_variable(period, current_invoice, plan) unless period.try(:empty?)
-    end
+    period_from = [contract.variable_cost_paid_until, invoice_period.begin].max
+    last_midnight = Date.today.beginning_of_day # rubocop:disable Rails/Date We do not bill with timezone
+    period = RangeForVariableCost.new(period_from, last_midnight)
+
+    contract.bill_for_variable(period, current_invoice, plan) unless period.try(:empty?)
   end
 
   def plan_changed(contract)
@@ -39,7 +40,7 @@ class BillingObserver < ActiveRecord::Observer
     if !contract.trial?(now) && strategy
       period = TimeRange.new(now, now.end_of_month)
       entitlements_options[:invoice] = strategy.bill_plan_change(contract, period).try(:invoice)
-      contract.update_attribute :paid_until, now.end_of_month # TODO: move this line inside the billing strategy
+      contract.update(paid_until: now.end_of_month) # TODO: move this line inside the billing strategy
     end
 
     SupportEntitlementsService.notify_entitlements(contract.account, entitlements_options)
