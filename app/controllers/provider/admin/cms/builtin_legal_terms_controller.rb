@@ -11,7 +11,7 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
   end
 
   def update
-    if @page.update_attributes(params[:cms_template])
+    if @page.update_attributes(permitted_params[:cms_template])
       flash[:info] = 'Legal terms saved.'
       redirect_back(fallback_location: { action: "edit", id: @page.id})
     else
@@ -29,21 +29,29 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
   end
 
   def activate_menu_for_legal
-    system_name = if params[:id].present?
-                    templates.find(params[:id])[:system_name]
-                  else 
-                    params[:system_name] || params[:cms_template].try!(:fetch,:system_name)
+    system_name = if permitted_params[:id].present?
+                    templates.find(permitted_params[:id])[:system_name]
+                  else
+                    system_name_param
                   end
     self.activate_menu :audience, :cms, system_name
   end
 
   private
 
+  def permitted_params
+    params.permit(:id, :system_name, cms_template: %i[system_name draft])
+  end
+
+  def system_name_param
+    permitted_params.dig(:cms_template, :system_name)
+  end
+
   def find_legal_term
-    @page = if params[:id].present?
-              templates.find(params[:id])
-            elsif system_name = params[:system_name] || params[:cms_template].try!(:fetch,:system_name)
-              templates.find_or_build_by_system_name(system_name, params[:cms_template])
+    @page = if permitted_params[:id].present?
+              templates.find(permitted_params[:id])
+            elsif (system_name = system_name_param)
+              templates.find_or_build_by_system_name(system_name, permitted_params[:cms_template])
             else
               raise ActiveRecord::RecordNotFound
             end
