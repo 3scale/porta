@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
     mount Sidekiq::Prometheus::Exporter, at: '/metrics'
     mount Yabeda::Prometheus::Exporter, at: '/yabeda-metrics'
+    mount ::System::Deploy, at: 'deploy'
   end
 
   mount CdnAssets.new => '/_cdn_assets_' unless Rails.configuration.three_scale.assets_cdn_host
