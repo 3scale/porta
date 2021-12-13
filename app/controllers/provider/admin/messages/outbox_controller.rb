@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Messages::OutboxController < FrontendController
-  before_action :build_message, :only => [:new, :create]
+  before_action :build_message, :only => %i[new create]
   activate_menu :buyers, :messages, :sent_messages
 
   def new
@@ -8,13 +10,12 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def destroy
-    @message = current_account.messages.find(params.require(:id))
+    @message = current_account.messages.find(permitted_params[:id])
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'
     redirect_to action: :index
   end
-
 
   def create
     @message.enqueue! :to => recipient_ids
@@ -32,14 +33,16 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def index
-    @messages = current_account.messages.not_system_for_provider.latest_first.paginate(page: params[:page]).decorate
+    @messages = current_account.messages.not_system_for_provider.latest_first.paginate(page: permitted_params[:page]).decorate
   end
 
   def show
-    @message = current_account.messages.find(params.require(:id)).decorate
+    @message = current_account.messages.find(permitted_params[:id]).decorate
   end
 
   private
+
+  PERMITTED_PARAMS = %i[id page to subject body origin].freeze
 
   def build_message
     @message = current_account.messages.build(message_params)
@@ -49,7 +52,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
     if mass_message?
       current_account.buyer_account_ids
     elsif current_account.provider?
-      current_account.buyer_accounts.find(params.require(:to))
+      current_account.buyer_accounts.find(permitted_params[:to])
     else
       current_account.provider_account
     end
@@ -64,10 +67,14 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def mass_message?
-    current_account.provider? && params[:to].blank?
+    current_account.provider? && permitted_params[:to].blank?
   end
 
   def message_params
-    params.fetch(:message, {}).merge(:origin => "web")
+    params.fetch(:message, {}).merge(:origin => "web").permit(PERMITTED_PARAMS)
+  end
+
+  def permitted_params
+    params.permit(PERMITTED_PARAMS)
   end
 end
