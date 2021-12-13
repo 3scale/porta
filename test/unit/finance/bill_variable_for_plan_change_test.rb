@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
-class Finance::NoVariableCostClass < ActiveSupport::TestCase
+class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
   attr_reader :contract, :account, :app_plan
 
   setup do
@@ -16,7 +18,7 @@ class Finance::NoVariableCostClass < ActiveSupport::TestCase
   end
 
   test "bill for variable" do
-    Timecop.travel(15.days.ago) if Time.now.mday == 1
+    Timecop.travel(15.days.ago) if Time.now.mday == 1 # rubocop:disable Rails/TimeZone we don't use timezones in billing
 
     contract.stubs(:provider_account).returns(account)
     account.stubs(:provider_can_use?).returns(true)
@@ -42,7 +44,7 @@ class Finance::NoVariableCostClass < ActiveSupport::TestCase
   test "no variable billing if last billed until is today" do
     contract.stubs(:provider_account).returns(account)
     Timecop.freeze
-    contract.stubs(:variable_cost_paid_until).returns(Time.now.to_date)
+    contract.stubs(:variable_cost_paid_until).returns(Time.now.to_date) # rubocop:disable Rails/TimeZone we don't use timezones in billing
     account.stubs(:provider_can_use?).returns(true)
 
     contract.expects(:save).never
