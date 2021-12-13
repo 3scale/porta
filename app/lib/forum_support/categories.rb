@@ -10,7 +10,7 @@ module ForumSupport
     end
 
     def index
-      @categories = @forum.categories :include => :topics
+      @categories = @forum.categories.includes(:topics)
     end
 
     def show
