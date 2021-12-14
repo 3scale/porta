@@ -1,12 +1,12 @@
-class Buyers::Accounts::Bulk::BaseController < FrontendController
+# frozen_string_literal: true
 
-  before_action :authorize_bulk_operations
+class Buyers::Accounts::Bulk::BaseController < Buyers::BulkBaseController
   before_action :find_accounts
 
   protected
 
-  def authorize_bulk_operations
-    authorize! :manage, :partners
+  def scope
+    :partners
   end
 
   def find_accounts
@@ -14,12 +14,10 @@ class Buyers::Accounts::Bulk::BaseController < FrontendController
   end
 
   def collection
-    current_account.buyers.where(id: params[:selected])
+    current_account.buyers.where(id: permitted_params[:selected])
   end
 
-  def handle_errors
-    if @errors.present?
-      render 'buyers/accounts/bulk/shared/errors', :status => :unprocessable_entity, formats: [:html]
-    end
+  def errors_template
+    'buyers/accounts/bulk/shared/errors'
   end
 end

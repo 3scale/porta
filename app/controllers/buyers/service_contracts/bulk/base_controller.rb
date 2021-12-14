@@ -1,11 +1,12 @@
-class Buyers::ServiceContracts::Bulk::BaseController < FrontendController
-  before_action :authorize_bulk_operations
+# frozen_string_literal: true
+
+class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseController
   before_action :find_service_contracts
 
   protected
 
-  def authorize_bulk_operations
-    authorize! :manage, :service_contracts
+  def scope
+    :service_contracts
   end
 
   def find_service_contracts
@@ -13,12 +14,10 @@ class Buyers::ServiceContracts::Bulk::BaseController < FrontendController
   end
 
   def collection
-    current_account.provided_service_contracts.where(id: params[:selected])
+    current_account.provided_service_contracts.where(id: permitted_params[:selected])
   end
 
-  def handle_errors
-    if @errors.present?
-      render 'buyers/applications/bulk/shared/errors.html', :status => :unprocessable_entity
-    end
+  def errors_template
+    'buyers/applications/bulk/shared/errors.html'
   end
 end
