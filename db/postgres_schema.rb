@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211109141544) do
+ActiveRecord::Schema.define(version: 20211117094502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1302,7 +1302,7 @@ ActiveRecord::Schema.define(version: 20211109141544) do
     t.string   "tagger_type",   limit: 255
     t.string   "context",       limit: 255
     t.index ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+    t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx", using: :btree
   end
 
   create_table "tags", force: :cascade do |t|
@@ -1313,6 +1313,7 @@ ActiveRecord::Schema.define(version: 20211109141544) do
     t.bigint   "tenant_id"
     t.integer  "taggings_count",             default: 0
     t.index ["account_id"], name: "index_tags_on_account_id", using: :btree
+    t.index ["name", "tenant_id"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
   create_table "topic_categories", force: :cascade do |t|
