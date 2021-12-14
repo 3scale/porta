@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTest
-
   # hardcoding default policy hash to make sure changes to Proxy::PolicyConfig are being tested
   DEFAULT_POLICY = {"name"=>"apicast", "version"=>"builtin", "configuration"=>{}, "enabled"=>true}.freeze
 
@@ -40,14 +41,14 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
 
   def test_update_json
     put admin_api_service_proxy_policies_path(valid_params.merge(
-      { proxy: { policies_config: [{'name' => 'alaska', 'version' => '1', 'configuration' => { 'schema' => '1' }}] }}))
+                                                { proxy: { policies_config: [{'name' => 'alaska', 'version' => '1', 'configuration' => { 'schema' => '1' }}] }}))
     assert_match "{\"name\":\"alaska\",\"version\":\"1\",\"configuration\":{\"schema\":\"1\"}}", response.body
     assert_response :success
   end
 
   def test_update_with_errors
     put admin_api_service_proxy_policies_path(valid_params.merge(
-        { proxy: { policies_config: [{'name' => 'alaska'}].to_json }}))
+                                                { proxy: { policies_config: [{'name' => 'alaska'}].to_json }}))
     assert_response :unprocessable_entity
     json_response = JSON.parse(response.body)
     assert_equal ['can\'t be blank'], json_response.dig('policies_config', 0, 'errors', 'version')
@@ -79,5 +80,6 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
   end
 
   attr_reader :service
+
   delegate :proxy, to: :service
 end

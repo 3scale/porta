@@ -45,11 +45,11 @@ const ProductSelect = ({
       cells={cells}
       onSelect={onSelectProduct}
       fetchItems={(params) => fetchPaginatedProducts(productsPath, params)}
-      header="Most recently updated Products"
+      header="Recently updated products"
       isDisabled={isDisabled}
-      title="Select a Product"
-      placeholder="Select a Product"
-      footerLabel="View all Products"
+      title="Select a product"
+      placeholder="Select a product"
+      footerLabel="View all products"
     />
   )
 }

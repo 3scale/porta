@@ -29,13 +29,13 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
     get admin_alerts_path
     assert_equal 2, assigns(:alerts).count
 
-    get admin_alerts_path, account_id: buyer1.id
+    get admin_alerts_path, params: { account_id: buyer1.id }
 
     alerts = assigns(:alerts)
     assert_equal 1, alerts.count
     assert_equal buyer1, alerts.first.cinstance.buyer_account
 
-    get admin_alerts_path, cinstance_id: cinstance2.id
+    get admin_alerts_path, params: { cinstance_id: cinstance2.id }
 
     alerts = assigns(:alerts)
     assert_equal 1, alerts.count
@@ -43,7 +43,7 @@ class Api::AlertsControllerTest < ActionDispatch::IntegrationTest
 
     Account.expects(:search_ids).with(buyer1.name).returns([buyer1.id])
 
-    get admin_alerts_path, search: {account: { query: buyer1.name} }
+    get admin_alerts_path, params: { search: {account: { query: buyer1.name} } }
 
     alerts = assigns(:alerts)
     assert_equal 1, alerts.count

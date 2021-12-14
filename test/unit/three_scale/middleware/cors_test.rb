@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
+  include Rails.application.routes.url_helpers
+
   setup do
     provider = FactoryBot.create(:simple_provider)
     @provider_domain = provider.external_self_domain
@@ -11,20 +13,13 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
 
   attr_reader :provider_domain, :app
 
-  test 'cors disabled' do
-    Rails.configuration.three_scale.cors.stubs(enabled: false)
-
-    middleware = ThreeScale::Middleware::Cors.new(app)
-    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
-    assert_equal 403, status
-  end
-
   test 'allowed origin and resource' do
     Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: '*', resources: '*'}])
 
     middleware = ThreeScale::Middleware::Cors.new(app)
-    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
     assert_equal 200, status
+    assert headers['Access-Control-Allow-Origin']
 
     middleware = ThreeScale::Middleware::Cors.new(app)
     status, headers, = middleware.call(env.merge('REQUEST_METHOD' => 'GET'))
@@ -36,26 +31,35 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
     Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: 'http://ui.other', resources: '/foo/*'}])
 
     middleware = ThreeScale::Middleware::Cors.new(app)
-    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
     assert_equal 200, status
+    assert_not headers['Access-Control-Allow-Origin']
 
-    middleware = ThreeScale::Middleware::Cors.new(app)
     status, headers, = middleware.call(env.merge('REQUEST_METHOD' => 'GET'))
     assert_equal 403, status
-    refute headers['Access-Control-Allow-Origin']
+    assert_not headers['Access-Control-Allow-Origin']
   end
 
   test 'disallowed resource' do
     Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: '*', resources: '/foo/*'}])
 
     middleware = ThreeScale::Middleware::Cors.new(app)
-    status, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
     assert_equal 200, status
+    assert_not headers['Access-Control-Allow-Origin']
 
-    middleware = ThreeScale::Middleware::Cors.new(app)
     status, headers, = middleware.call(env.merge('REQUEST_METHOD' => 'GET'))
     assert_equal 403, status
-    refute headers['Access-Control-Allow-Origin']
+    assert_not headers['Access-Control-Allow-Origin']
+  end
+
+  test 'disallowed method' do
+    Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: '*', resources: '*'}])
+
+    middleware = ThreeScale::Middleware::Cors.new(app)
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'PUT'))
+    assert_equal 200, status
+    assert_not headers['Access-Control-Allow-Origin']
   end
 
   test 'regexp resource' do
@@ -63,6 +67,67 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
 
     middleware = ThreeScale::Middleware::Cors.new(app)
     status, headers, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
+    assert_equal 200, status
+    assert headers['Access-Control-Allow-Origin']
+
+    status, headers, = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => "/non-json"))
+    assert_equal 200, status
+    assert_not headers['Access-Control-Allow-Origin']
+  end
+
+  test 'provider signup path excluded in example configs' do
+    ["config/docker", "config/examples"].each do |config_dir|
+      stub_config = YAML.load_file(Rails.root.join(config_dir, "cors.yml"))["cors"].merge({"enabled" => true})
+      assert_not_empty stub_config["exclude"]
+
+      Rails.configuration.three_scale.cors.stubs(stub_config)
+
+      middleware = ThreeScale::Middleware::Cors.new(app)
+      status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => provider_signup_path))
+      assert_equal 403, status
+      assert_not headers['Access-Control-Allow-Origin']
+    end
+  end
+
+  test 'exclude path prefix with slash' do
+    Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: '*', resources: '*'}], exclude: [{path_prefix: "/admin/api/"}])
+
+    middleware = ThreeScale::Middleware::Cors.new(app)
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
+    assert_equal 403, status
+    assert_not headers['Access-Control-Allow-Origin']
+
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => "/admin/api"))
+    assert_equal 200, status
+    assert headers['Access-Control-Allow-Origin']
+  end
+
+  test 'exclude path prefix without slash' do
+    Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: '*', resources: '*'}], exclude: [{path_prefix: "/admin/api"}])
+
+    middleware = ThreeScale::Middleware::Cors.new(app)
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => "/admin/api"))
+    assert_equal 403, status
+    assert_not headers['Access-Control-Allow-Origin']
+
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => "/admin/apixx"))
+    assert_equal 200, status
+    assert headers['Access-Control-Allow-Origin']
+
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => "/p/admin/api"))
+    assert_equal 200, status
+    assert headers['Access-Control-Allow-Origin']
+  end
+
+  test 'exclude path prefix with regexp' do
+    Rails.configuration.three_scale.cors.stubs(enabled: true, allow: [{origins: '*', resources: '*'}], exclude: [{path_regexp: "^/admin/api"}])
+
+    middleware = ThreeScale::Middleware::Cors.new(app)
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET'))
+    assert_equal 403, status
+    assert_not headers['Access-Control-Allow-Origin']
+
+    status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => "/provider"))
     assert_equal 200, status
     assert headers['Access-Control-Allow-Origin']
   end

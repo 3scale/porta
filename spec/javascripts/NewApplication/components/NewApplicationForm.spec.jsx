@@ -11,8 +11,8 @@ const errorSpy = jest.spyOn(alert, 'error')
 
 const appPlans = [{ id: 0, name: 'Basic Plan', issuer_id: 0, default: false }]
 const products = [
-  { id: 0, name: 'API 0', systemName: 'api-0', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null, defaultAppPlan: null, buyerCanSelectPlan: true },
-  { id: 1, name: 'API 1', systemName: 'api-1', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null, defaultAppPlan: null, buyerCanSelectPlan: true }
+  { id: 0, name: 'API 0', systemName: 'api-0', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null, defaultAppPlan: null },
+  { id: 1, name: 'API 1', systemName: 'api-1', description: '', updatedAt: '', appPlans, servicePlans: [], defaultServicePlan: null, defaultAppPlan: null }
 ]
 const buyers = [
   { id: 0, name: 'Buyer 0', admin: '', createdAt: '', contractedProducts: [], createApplicationPath: '/buyers/0/applications/new' },
@@ -68,7 +68,6 @@ describe('when in Service context', () => {
     updatedAt: '',
     appPlans,
     servicePlans: [servicePlan],
-    buyerCanSelectPlan: true,
     defaultServicePlan: null,
     defaultAppPlan: null,
     systemName: 'current_api'
@@ -90,48 +89,18 @@ describe('when in Service context', () => {
       expect(wrapper.find(`ApplicationPlanSelect .hint a[href="${props.createApplicationPlanPath}"]`).exists()).toBe(true)
     })
 
-    describe('when buyer can select plan', () => {
-      const productCanChangePlan = { ...productWithNoAppPlans, buyerCanSelectPlan: true }
-
-      beforeEach(() => {
-        props.product = productCanChangePlan
-      })
-
-      it('should disable the application plan select', () => {
-        const wrapper = mountWrapper(props)
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-        expect(isDisabled()).toBe(true)
-      })
-
-      it('should not be able to submit', () => {
-        const wrapper = mountWrapper(props)
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-      })
+    it('should disable the application plan select', () => {
+      const wrapper = mountWrapper(props)
+      const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
+      expect(isDisabled()).toBe(true)
     })
 
-    describe('when buyer cannot select plan', () => {
-      const productCannotChangePlan = { ...productWithNoAppPlans, buyerCanSelectPlan: false }
+    it('should not be able to submit', () => {
+      const wrapper = mountWrapper(props)
+      expect(isSubmitDisabled(wrapper)).toBe(true)
 
-      beforeEach(() => {
-        props.product = productCannotChangePlan
-      })
-
-      it('should disable the application plan select', () => {
-        const wrapper = mountWrapper(props)
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-        expect(isDisabled()).toBe(true)
-      })
-
-      it('should not be able to submit', () => {
-        const wrapper = mountWrapper(props)
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-      })
+      expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
+      expect(isSubmitDisabled(wrapper)).toBe(true)
     })
   })
 
@@ -147,72 +116,58 @@ describe('when in Service context', () => {
       expect(wrapper.find(`ApplicationPlanSelect .hint a[href="${defaultProps.createApplicationPlanPath}"]`).exists()).toBe(false)
     })
 
-    describe('when buyer can select plan', () => {
-      const productCanChangePlan = { ...productWithAppPlans, buyerCanSelectPlan: true }
+    it('should enable the application plan select', () => {
+      const wrapper = mountWrapper(props)
+      const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
+      expect(isDisabled()).toBe(false)
+    })
+
+    it('should be able to submit only when form is complete', () => {
+      const wrapper = mountWrapper(props)
+      expect(isSubmitDisabled(wrapper)).toBe(true)
+
+      selectBuyer(wrapper, buyers[0])
+      expect(isSubmitDisabled(wrapper)).toBe(true)
+
+      selectApplicationPlan(wrapper, productWithAppPlans.appPlans[0])
+      expect(isSubmitDisabled(wrapper)).toBe(false)
+    })
+
+    describe('and it has a default application plan', () => {
+      const defaultAppPlan = productWithAppPlans.appPlans[0]
+      const productWithDefaultAppPlan = { ...productWithAppPlans, defaultAppPlan }
 
       beforeEach(() => {
-        props.product = productCanChangePlan
+        props.product = productWithDefaultAppPlan
       })
 
-      it('should enable the application plan select', () => {
+      it('should have the default plan selected', () => {
         const wrapper = mountWrapper(props)
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-        expect(isDisabled()).toBe(false)
+        selectBuyer(wrapper, buyers[0])
+
+        expect(wrapper.find('ApplicationPlanSelect').props().appPlan).toBe(defaultAppPlan)
       })
 
-      it('should be able to submit only when form is complete', () => {
+      it('should not need to select a plan to submit', () => {
         const wrapper = mountWrapper(props)
         expect(isSubmitDisabled(wrapper)).toBe(true)
 
         selectBuyer(wrapper, buyers[0])
-        expect(isSubmitDisabled(wrapper)).toBe(true)
 
-        selectApplicationPlan(wrapper, productCanChangePlan.appPlans[0])
         expect(isSubmitDisabled(wrapper)).toBe(false)
       })
     })
 
-    describe('when buyer cannot select plan', () => {
-      const productCannotChangePlan = { ...productWithAppPlans, buyerCanSelectPlan: false }
+    describe('but it has no default application plan', () => {
+      const productWithNoDefaultAppPlan = { ...productWithAppPlans, defaultAppPlan: null }
 
       beforeEach(() => {
-        props.product = productCannotChangePlan
+        props.product = productWithNoDefaultAppPlan
       })
 
-      it('should disable the application plan select', () => {
+      it('should have no default plan selected', () => {
         const wrapper = mountWrapper(props)
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-        expect(isDisabled()).toBe(true)
-      })
-
-      describe('and it has a default application plan', () => {
-        const productWithDefaultAppPlan = { ...productCannotChangePlan, defaultAppPlan: productWithAppPlans.appPlans[0] }
-
-        beforeEach(() => {
-          props.product = productWithDefaultAppPlan
-        })
-
-        it('should be able to submit without selecting a plan', () => {
-          const wrapper = mountWrapper(props)
-          expect(isSubmitDisabled(wrapper)).toBe(true)
-
-          expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('select is disabled')
-        })
-      })
-
-      describe('but it has no default application plan', () => {
-        const productWithNoDefaultAppPlan = { ...productCannotChangePlan, defaultAppPlan: null }
-
-        beforeEach(() => {
-          props.product = productWithNoDefaultAppPlan
-        })
-
-        it('should not be able to submit', () => {
-          const wrapper = mountWrapper(props)
-          expect(isSubmitDisabled(wrapper)).toBe(true)
-
-          expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('select is disabled')
-        })
+        expect(wrapper.find('ApplicationPlanSelect').props().appPlan).toBe(null)
       })
     })
   })
@@ -238,7 +193,7 @@ describe('when in Service context', () => {
       const html = renderWrapper(props).find('.pf-c-form__group').toString()
 
       inputs.forEach(name => expect(html).toMatch(name))
-      expect(html).not.toMatch('product')
+      expect(html).not.toMatch('>Product</span>')
     })
 
     describe('when the selected buyer is subscribed to the current product', () => {
@@ -278,7 +233,7 @@ describe('when in Service context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This Account already subscribes to the selected Product’s Service plan')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -303,7 +258,7 @@ describe('when in Service context', () => {
 
         const hints = wrapper.find('ServicePlanSelect .hint')
         expect(hints.length).toBe(1)
-        expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+        expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
       })
 
       describe('when the current product has no service plans', () => {
@@ -326,7 +281,7 @@ describe('when in Service context', () => {
 
           const hints = wrapper.find('.hint')
           expect(hints.length).toBe(2)
-          expect(hints.at(1).text()).toMatch('No Service plans exist for the selected Product.')
+          expect(hints.at(1).text()).toMatch('No service plans exist for the selected product. Create a new service plan')
           expect(hints.find('a').prop('href')).toEqual(props.createServicePlanPath)
         })
       })
@@ -435,50 +390,23 @@ describe('when in Account context', () => {
       expect(findHint()).toBe(true)
     })
 
-    describe('when buyer can select plan', () => {
-      const productCanChangePlan = { ...productWithNoAppPlans, buyerCanSelectPlan: true }
+    it('should disable the application plan select', () => {
+      const wrapper = mountWrapper({ ...props, products: [productWithNoAppPlans] })
+      const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
 
-      it('should disable the application plan select', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCanChangePlan] })
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-
-        selectProduct(wrapper, productCanChangePlan)
-        expect(isDisabled()).toBe(true)
-      })
-
-      it('should not be able to submit', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCanChangePlan] })
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        selectProduct(wrapper, productCanChangePlan)
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-      })
+      selectProduct(wrapper, productWithNoAppPlans)
+      expect(isDisabled()).toBe(true)
     })
 
-    describe('when buyer cannot select plan', () => {
-      const productCannotChangePlan = { ...productWithNoAppPlans, buyerCanSelectPlan: false }
+    it('should not be able to submit', () => {
+      const wrapper = mountWrapper({ ...props, products: [productWithNoAppPlans] })
+      expect(isSubmitDisabled(wrapper)).toBe(true)
 
-      it('should disable the application plan select', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCannotChangePlan] })
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
+      selectProduct(wrapper, productWithNoAppPlans)
+      expect(isSubmitDisabled(wrapper)).toBe(true)
 
-        selectProduct(wrapper, productCannotChangePlan)
-        expect(isDisabled()).toBe(true)
-      })
-
-      it('should not be able to submit', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCannotChangePlan] })
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        selectProduct(wrapper, productCannotChangePlan)
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-      })
+      expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('the select is disabled')
+      expect(isSubmitDisabled(wrapper)).toBe(true)
     })
   })
 
@@ -493,66 +421,53 @@ describe('when in Account context', () => {
       expect(findHint()).toBe(false)
     })
 
-    describe('when buyer can select plan', () => {
-      const productCanChangePlan = { ...productWithAppPlans, buyerCanSelectPlan: true }
+    it('should enable the application plan select', () => {
+      const wrapper = mountWrapper({ ...props, products: [productWithAppPlans] })
+      const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
 
-      it('should enable the application plan select', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCanChangePlan] })
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
+      selectProduct(wrapper, productWithAppPlans)
+      expect(isDisabled()).toBe(false)
+    })
 
-        selectProduct(wrapper, productCanChangePlan)
-        expect(isDisabled()).toBe(false)
+    it('should be able to submit only when form is complete', () => {
+      const wrapper = mountWrapper({ ...props, products: [productWithAppPlans] })
+      expect(isSubmitDisabled(wrapper)).toBe(true)
+
+      selectProduct(wrapper, productWithAppPlans)
+      expect(isSubmitDisabled(wrapper)).toBe(true)
+
+      selectApplicationPlan(wrapper, productWithAppPlans.appPlans[0])
+      expect(isSubmitDisabled(wrapper)).toBe(false)
+    })
+
+    describe('and it has a default application plan', () => {
+      const defaultAppPlan = appPlans[0]
+      const productWithDefaultAppPlan = { ...productWithAppPlans, defaultAppPlan }
+
+      it('should have the default plan selected', () => {
+        const wrapper = mountWrapper({ ...props, products: [productWithDefaultAppPlan] })
+        selectProduct(wrapper, productWithAppPlans)
+
+        expect(wrapper.find('ApplicationPlanSelect').props().appPlan).toEqual(defaultAppPlan)
       })
 
-      it('should be able to submit only when form is complete', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCanChangePlan] })
+      it('should not need to select a plan to submit', () => {
+        const wrapper = mountWrapper({ ...props, products: [productWithDefaultAppPlan] })
         expect(isSubmitDisabled(wrapper)).toBe(true)
 
-        selectProduct(wrapper, productCanChangePlan)
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        selectApplicationPlan(wrapper, productCanChangePlan.appPlans[0])
+        selectProduct(wrapper, productWithAppPlans)
         expect(isSubmitDisabled(wrapper)).toBe(false)
       })
     })
 
-    describe('when buyer cannot select plan', () => {
-      const productCannotChangePlan = { ...productWithAppPlans, buyerCanSelectPlan: false }
+    describe('but it has no default application plan', () => {
+      const productWithNoDefaultAppPlan = { ...productWithAppPlans, defaultAppPlan: null }
 
-      it('should disable the application plan select', () => {
-        const wrapper = mountWrapper({ ...props, products: [productCannotChangePlan] })
-        const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
+      it('should have no plan selected by default', () => {
+        const wrapper = mountWrapper({ ...props, products: [productWithNoDefaultAppPlan] })
+        selectProduct(wrapper, productWithAppPlans)
 
-        selectProduct(wrapper, productCannotChangePlan)
-        expect(isDisabled()).toBe(true)
-      })
-
-      describe('and it has a default application plan', () => {
-        const productWithDefaultAppPlan = { ...productCannotChangePlan, defaultAppPlan: appPlans[0] }
-
-        it('should be able to submit without selecting a plan', () => {
-          const wrapper = mountWrapper({ ...props, products: [productWithDefaultAppPlan] })
-          expect(isSubmitDisabled(wrapper)).toBe(true)
-
-          selectProduct(wrapper, productWithDefaultAppPlan)
-          expect(isSubmitDisabled(wrapper)).toBe(false)
-
-          expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('select is disabled')
-        })
-      })
-
-      describe('but it has no default application plan', () => {
-        const productWithNoDefaultAppPlan = { ...productCannotChangePlan, defaultAppPlan: null }
-
-        it('should not be able to submit', () => {
-          const wrapper = mountWrapper({ ...props, products: [productWithNoDefaultAppPlan] })
-          expect(isSubmitDisabled(wrapper)).toBe(true)
-
-          selectProduct(wrapper, productWithNoDefaultAppPlan)
-          expect(isSubmitDisabled(wrapper)).toBe(true)
-
-          expect(() => selectApplicationPlan(wrapper, appPlans[0])).toThrowError('select is disabled')
-        })
+        expect(wrapper.find('ApplicationPlanSelect').props().appPlan).toEqual(null)
       })
     })
   })
@@ -648,7 +563,7 @@ describe('when in Account context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This Account already subscribes to the selected Product’s Service plan')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -662,7 +577,7 @@ describe('when in Account context', () => {
         const wrapper = mountWrapper(props)
         const hints = wrapper.find('ServicePlanSelect .hint')
         expect(hints.length).toBe(1)
-        expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+        expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
       })
 
       describe('when it has no service plans', () => {
@@ -687,7 +602,7 @@ describe('when in Account context', () => {
 
           const hints = wrapper.find('.hint')
           expect(hints.length).toBe(2)
-          expect(hints.at(1).text()).toMatch('No Service plans exist for the selected Product.')
+          expect(hints.at(1).text()).toMatch('No service plans exist for the selected product. Create a new service plan')
           expect(hints.find('a').prop('href')).toEqual(props.createServicePlanPath)
         })
       })
@@ -810,21 +725,21 @@ describe('when in Audience context', () => {
     expect(isSubmitDisabled(wrapper)).toBe(false)
   })
 
-  describe('when selected product allows changing the Application plan', () => {
-    const productCanChangePlan = { ...products[0], buyerCanSelectPlan: true }
+  describe('when selected product has application plans', () => {
+    const productWithAppPlans = { ...products[0], appPlans }
 
     beforeEach(() => {
-      props.products = [productCanChangePlan]
+      props.products = [productWithAppPlans]
     })
 
     it('should enable the Application plan select', () => {
-      const wrapper = mountWrapper({ ...props, products: [productCanChangePlan] })
+      const wrapper = mountWrapper({ ...props, products: [productWithAppPlans] })
       const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
 
       selectBuyer(wrapper, buyers[0])
       expect(isDisabled()).toBe(true)
 
-      selectProduct(wrapper, productCanChangePlan)
+      selectProduct(wrapper, productWithAppPlans)
       expect(isDisabled()).toBe(false)
     })
 
@@ -841,54 +756,56 @@ describe('when in Audience context', () => {
       selectApplicationPlan(wrapper, appPlans[0])
       expect(isSubmitDisabled(wrapper)).toBe(false)
     })
-  })
-
-  describe('when selected product disallows changing the Application plan', () => {
-    const productCannotSelectPlan = { ...products[0], buyerCanSelectPlan: false }
-
-    beforeEach(() => {
-      props.products = [productCannotSelectPlan]
-    })
-
-    it('should disable the Application plan select', () => {
-      const wrapper = mountWrapper({ ...props, products: [productCannotSelectPlan] })
-      const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
-
-      selectBuyer(wrapper, buyers[0])
-      expect(isDisabled()).toBe(true)
-
-      selectProduct(wrapper, productCannotSelectPlan)
-      expect(isDisabled()).toBe(true)
-    })
 
     describe('and it has a default application plan', () => {
-      const productWithDefaultPlan = { ...productCannotSelectPlan, defaultAppPlan: appPlans[0] }
+      const defaultAppPlan = appPlans[0]
+      const productWithDefaultPlan = { ...productWithAppPlans, defaultAppPlan }
 
-      it('should be able to submit only when form is complete', () => {
+      it('should have the default plan selected', () => {
+        const wrapper = mountWrapper({ ...props, products: [productWithDefaultPlan] })
+        selectBuyer(wrapper, buyers[0])
+        selectProduct(wrapper, productWithDefaultPlan)
+
+        expect(wrapper.find('ApplicationPlanSelect').props().appPlan).toBe(defaultAppPlan)
+      })
+
+      it('should not need to select a plan to submit', () => {
         const wrapper = mountWrapper({ ...props, products: [productWithDefaultPlan] })
         expect(isSubmitDisabled(wrapper)).toBe(true)
 
         selectBuyer(wrapper, buyers[0])
-        expect(isSubmitDisabled(wrapper)).toBe(true)
+        selectProduct(wrapper, productWithDefaultPlan)
 
-        selectProduct(wrapper, productCannotSelectPlan)
         expect(isSubmitDisabled(wrapper)).toBe(false)
       })
     })
 
     describe('but it does not have a default application plan', () => {
-      const productNoDefaultPlan = { ...productCannotSelectPlan, defaultAppPlan: null }
+      const productNoDefaultPlan = { ...productWithAppPlans, defaultAppPlan: null }
 
-      it('should not be able to submit only when form is complete', () => {
+      it('should have no plan selected', () => {
         const wrapper = mountWrapper({ ...props, products: [productNoDefaultPlan] })
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        selectBuyer(wrapper, buyers[0])
-        expect(isSubmitDisabled(wrapper)).toBe(true)
-
-        selectProduct(wrapper, productCannotSelectPlan)
-        expect(isSubmitDisabled(wrapper)).toBe(true)
+        expect(wrapper.find('ApplicationPlanSelect').props().appPlan).toBe(null)
       })
+    })
+  })
+
+  describe('when selected product has no application plans', () => {
+    const productWithNoAppPlans = { ...products[0], appPlans: [] }
+
+    beforeEach(() => {
+      props.products = [productWithNoAppPlans]
+    })
+
+    it('should disable the Application plan select', () => {
+      const wrapper = mountWrapper({ ...props, products: [productWithNoAppPlans] })
+      const isDisabled = () => wrapper.find('ApplicationPlanSelect .pf-c-select .pf-m-disabled').exists()
+
+      selectBuyer(wrapper, buyers[0])
+      expect(isDisabled()).toBe(true)
+
+      selectProduct(wrapper, productWithNoAppPlans)
+      expect(isDisabled()).toBe(true)
     })
   })
 
@@ -964,7 +881,7 @@ describe('when in Audience context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This Account already subscribes to the selected Product’s Service plan')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -1000,7 +917,7 @@ describe('when in Audience context', () => {
 
           const hints = wrapper.find('.hint')
           expect(hints.length).toBe(2)
-          expect(hints.at(1).text()).toMatch('No Service plans exist for the selected Product.')
+          expect(hints.at(1).text()).toMatch('No service plans exist for the selected product. Create a new service plan')
           expect(hints.find('a').prop('href')).toEqual(props.createServicePlanPath)
         })
       })
@@ -1047,7 +964,7 @@ describe('when in Audience context', () => {
 
           const hints = wrapper.find('ServicePlanSelect .hint')
           expect(hints.length).toBe(1)
-          expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+          expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
         })
       })
 
@@ -1082,7 +999,7 @@ describe('when in Audience context', () => {
 
           const hints = wrapper.find('ServicePlanSelect .hint')
           expect(hints.length).toBe(1)
-          expect(hints.text()).toMatch('In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan')
+          expect(hints.text()).toMatch('To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product.')
         })
       })
     })

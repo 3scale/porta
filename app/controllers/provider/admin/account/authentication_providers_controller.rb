@@ -14,7 +14,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
 
   def create
     attributes = authentication_provider_params
-    @authentication_provider = self_authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.symbolize_keys)
+    @authentication_provider = self_authentication_providers.build_kind(kind: attributes.require(:kind), **attributes.to_h.symbolize_keys)
 
     if @authentication_provider.save
       redirect_to provider_admin_account_authentication_provider_path(@authentication_provider), notice: 'SSO integration created'
@@ -56,7 +56,7 @@ class Provider::Admin::Account::AuthenticationProvidersController < Provider::Ad
   end
 
   def authentication_provider
-    self_authentication_providers.find(params[:id])
+    self_authentication_providers.find(params.require(:id))
   end
 
   def authorize_rolling_update!

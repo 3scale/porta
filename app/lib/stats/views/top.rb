@@ -8,7 +8,7 @@ module Stats
       def top(name, options)
         options = options.to_h.symbolize_keys
         options.assert_valid_keys(:period, :since, :metric, :metric_name, :limit, :timezone, :skip_change)
-        options.assert_required_keys(:period)
+        raise InvalidParameterError, "Missing parameter :period" unless options.key?(:period)
 
         period = options[:period]
         since = extract_since(options)

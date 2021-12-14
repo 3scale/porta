@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Master::Api::ProvidersControllerTest < ActionController::TestCase
@@ -7,19 +9,19 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'required master api_key' do
-    post :change_partner, api_key: 'invalid-api-key', id: 'foo'
+    post :change_partner, params: { api_key: 'invalid-api-key', id: 'foo' }
     assert_response 401
   end
 
- test "without application_plan" do
+  test "without application_plan" do
     provider = FactoryBot.create(:provider_account)
-    post :change_partner, id: provider.id, api_key: master_account.api_key
+    post :change_partner, params: { id: provider.id, api_key: master_account.api_key }
     assert_response 404
- end
+  end
 
   test "application_plan invalid" do
     provider = FactoryBot.create(:provider_account)
-    post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: "lala"
+    post :change_partner, params: { id: provider.id, api_key: master_account.api_key, application_plan: "lala" }
     assert_response 404
   end
 
@@ -27,7 +29,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
     provider = FactoryBot.create(:provider_account)
     application_plan = master_account.default_service.application_plans.create(name: "last plan")
 
-    post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: application_plan.system_name
+    post :change_partner, params: { id: provider.id, api_key: master_account.api_key, application_plan: application_plan.system_name }
     assert_response 200
     provider.reload
     assert_equal application_plan, provider.bought_cinstance.application_plan
@@ -39,7 +41,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
     provider = FactoryBot.create(:provider_account)
 
     partner_application_plan = create_partner_application_plan
-    post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name
+    post :change_partner, params: { id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name }
 
     assert_response 404
   end
@@ -47,7 +49,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
   test 'valid partner application_plan for a valid partner' do
     provider = FactoryBot.create(:provider_account)
     partner_application_plan = create_partner_application_plan
-    post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name, partner: partner_application_plan.partner.system_name
+    post :change_partner, params: { id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name, partner: partner_application_plan.partner.system_name }
 
     assert_response 200
     provider.reload
@@ -59,7 +61,7 @@ class Master::Api::ProvidersControllerTest < ActionController::TestCase
 
     partner_application_plan = create_partner_application_plan
     partner2 = FactoryBot.create(:partner)
-    post :change_partner, id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name, partner: partner2.system_name
+    post :change_partner, params: { id: provider.id, api_key: master_account.api_key, application_plan: partner_application_plan.system_name, partner: partner2.system_name }
 
     assert_response 404
   end

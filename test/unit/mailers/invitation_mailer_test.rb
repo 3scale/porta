@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class InvitationMailerTest < ActionMailer::TestCase
@@ -14,19 +16,17 @@ class InvitationMailerTest < ActionMailer::TestCase
     assert_equal [@invitation.email], @email.to
   end
 
-  context 'provider invitation' do
-    should 'body contains signup link to admin domain of the inviting provider' do
-      account = @invitation.account
+  test 'body contains signup link to admin domain of the inviting provider' do
+    account = @invitation.account
 
-      assert_match("https://#{account.external_admin_domain}/signup/#{@invitation.token}", @email.body.to_s)
-      assert_match(@invitation.account.org_name, @email.body.to_s)
-    end
+    assert_match("https://#{account.external_admin_domain}/signup/#{@invitation.token}", @email.body.to_s)
+    assert_match(@invitation.account.org_name, @email.body.to_s)
   end
 
   test 'buyer invitation contains signup link to public domain of the provider' do
     buyer = FactoryBot.create :buyer_account
-    buyer_invitation = FactoryBot.create(:invitation, :account => buyer)
-    buyer_email      = InvitationMailer.invitation(buyer_invitation)
+    buyer_invitation = FactoryBot.create(:invitation, account: buyer)
+    buyer_email = InvitationMailer.invitation(buyer_invitation)
 
     assert_match("https://#{buyer.provider_account.external_domain}/signup/#{buyer_invitation.token}", buyer_email.body.to_s)
   end

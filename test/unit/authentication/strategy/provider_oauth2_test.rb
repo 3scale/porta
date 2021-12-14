@@ -166,6 +166,8 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
 
   class SsoSignupTest < ActiveSupport::TestCase
 
+    include ActiveJob::TestHelper
+
     test 'create an active user through sso' do
       authentication_provider = FactoryBot.create(:self_authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build_provider(oauth2_provider)
@@ -207,20 +209,22 @@ class Authentication::Strategy::ProviderOauth2Test < ActiveSupport::TestCase
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
       deliveries = ActionMailer::Base.deliveries
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
 
-      assert_difference(User.method(:count), +1) do
+        assert_difference(User.method(:count), +1) do
 
-        assert_difference deliveries.method(:size) do
-          refute authentication_strategy.authenticate({
+          assert_difference deliveries.method(:size) do
+            refute authentication_strategy.authenticate({
                                                           system_name: authentication_provider.system_name,
-                                                          code:        '1234',
-                                                          request:     mock_request
+                                                          code: '1234',
+                                                          request: mock_request
                                                         })
+          end
+
+          assert authentication_strategy.error_message.present?
+          assert authentication_strategy.new_user_created?
+
         end
-
-        assert authentication_strategy.error_message.present?
-        assert authentication_strategy.new_user_created?
-
       end
 
       last_email = deliveries.last

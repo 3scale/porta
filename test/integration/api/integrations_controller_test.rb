@@ -62,7 +62,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
         proxy_rule_1.id => { id: proxy_rule_1.id, last: true }
       }
     }
-    put admin_service_integration_path(service_id: service.id), proxy: proxy_rules_attributes
+    put admin_service_integration_path(service_id: service.id), params: { proxy: proxy_rules_attributes }
     assert_response :redirect
     assert proxy_rule_1.reload.last
   end
@@ -75,7 +75,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
 
     Service.any_instance.expects(:using_proxy_pro?).returns(true).at_least_once
     # call update as proxy_pro updates endpoint through staging section
-    put admin_service_integration_path(service_id: service.id), proxy: {endpoint: 'http://example.com:80'}
+    put admin_service_integration_path(service_id: service.id), params: { proxy: {endpoint: 'http://example.com:80'} }
     assert_equal 'http://example.com:80', proxy.reload.endpoint
   end
 
@@ -87,7 +87,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     ProxyTestService.any_instance.stubs(:disabled?).returns(true)
 
     assert_difference proxy.proxy_configs.method(:count) do
-      put admin_service_integration_path(service_id: service.id), proxy: {endpoint: 'http://example.com'}
+      put admin_service_integration_path(service_id: service.id), params: { proxy: {endpoint: 'http://example.com'} }
       assert_response :redirect
     end
   end
@@ -106,7 +106,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
         proxy_rule_2.id => { id: proxy_rule_2.id, position: 1 }
       }
     }
-    put admin_service_integration_path(service_id: service.id), proxy: proxy_rules_attributes
+    put admin_service_integration_path(service_id: service.id), params: { proxy: proxy_rules_attributes }
     assert_response :redirect
 
     proxy_rule_1.reload
@@ -120,7 +120,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
         proxy_rule_1.id => { id: proxy_rule_1.id, position: 1 }
       }
     }
-    put admin_service_integration_path(service_id: service.id), proxy: proxy_rules_attributes
+    put admin_service_integration_path(service_id: service.id), params: { proxy: proxy_rules_attributes }
     assert_response :redirect
 
     proxy_rule_1.reload
@@ -137,7 +137,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
         proxy_rule_1.id => { id: proxy_rule_1.id, position: 4 }
       }
     }
-    put admin_service_integration_path(service_id: service.id), proxy: proxy_rules_attributes
+    put admin_service_integration_path(service_id: service.id), params: { proxy: proxy_rules_attributes }
     assert_response :redirect
 
     proxy_rule_1.reload
@@ -151,7 +151,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
   test 'deploy is called when saving proxy info' do
     Proxy.any_instance.expects(:save_and_deploy).once
 
-    put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
+    put admin_service_integration_path(service_id: service.id), params: { proxy: {api_backend: '1'} }
   end
 
   test 'deploy is never called when saving proxy info for proxy pro users' do
@@ -167,7 +167,7 @@ class IntegrationsControllerTest < ActionDispatch::IntegrationTest
     service.update_column(:deployment_option, 'self_managed')
     proxy.update_column(:apicast_configuration_driven, false)
 
-    put admin_service_integration_path(service_id: service.id), proxy: {api_backend: '1'}
+    put admin_service_integration_path(service_id: service.id), params: { proxy: {api_backend: '1'} }
   end
 
   test 'updating proxy' do

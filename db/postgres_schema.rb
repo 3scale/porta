@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210917163154) do
+ActiveRecord::Schema.define(version: 20211109141544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -877,15 +877,13 @@ ActiveRecord::Schema.define(version: 20210917163154) do
   end
 
   create_table "payment_intents", force: :cascade do |t|
-    t.integer  "invoice_id",        null: false
-    t.string   "payment_intent_id"
+    t.integer  "invoice_id", null: false
     t.string   "state"
     t.bigint   "tenant_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "reference"
     t.index ["invoice_id"], name: "index_payment_intents_on_invoice_id", using: :btree
-    t.index ["payment_intent_id"], name: "index_payment_intents_on_payment_intent_id", using: :btree
     t.index ["reference"], name: "index_payment_intents_on_reference", unique: true, using: :btree
     t.index ["state"], name: "index_payment_intents_on_state", using: :btree
   end

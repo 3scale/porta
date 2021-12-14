@@ -103,7 +103,8 @@ schema:
 
 oracle-database: ## Starts Oracle database container
 oracle-database:
-	[ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" = "true" ] || docker start oracle-database || docker run \
+	[ "$(shell docker inspect -f '{{.State.Running}}' oracle-database 2>/dev/null)" = "true" ] || docker start oracle-database &>/dev/null || docker run \
+	    -d \
 		--shm-size=6gb \
 		-p 1521:1521 -p 5500:5500 \
 		--name oracle-database \

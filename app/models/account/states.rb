@@ -170,7 +170,7 @@ module Account::States
     if admins.present? && provider_account
       run_after_commit do
         AccountMessenger.new_signup(self).deliver_now
-        AccountMailer.confirmed(self).deliver_now
+        AccountMailer.confirmed(self).deliver_later
       end
     end
   end
@@ -179,7 +179,7 @@ module Account::States
     if buyer? && approval_required?
       unless admins.empty? || admins.first.created_by_provider_signup?
         run_after_commit do
-          AccountMailer.approved(self).deliver_now
+          AccountMailer.approved(self).deliver_later
         end
       end
     end
@@ -188,7 +188,7 @@ module Account::States
   def deliver_rejected_notification
     unless admins.empty? || self.provider_account.nil?
       run_after_commit do
-        AccountMailer.rejected(self).deliver_now
+        AccountMailer.rejected(self).deliver_later
       end
     end
   end

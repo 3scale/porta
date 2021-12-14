@@ -195,7 +195,7 @@ const NewApplicationForm = ({
             type='submit'
             isDisabled={!isFormComplete || loading}
           >
-              Create Application
+              Create application
           </Button>
         </ActionGroup>
       </Form>

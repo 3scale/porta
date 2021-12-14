@@ -28,17 +28,4 @@ namespace :finance do
       puts '[month] param has to be supplied'
     end
   end
-
-  namespace :payment_intents do
-    desc 'Copies all data from payment_intents.payment_intent_id to new column reference'
-    task backfill_reference: :environment do
-      progress = ProgressCounter.new(PaymentIntent.count)
-      PaymentIntent.find_in_batches(batch_size: 1000) do |batch|
-        batch.each do |payment_intent|
-          payment_intent.update!(reference: payment_intent.attributes['payment_intent_id'])
-        end
-        progress.call(increment: batch.size)
-      end
-    end
-  end
 end

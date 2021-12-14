@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   include FieldsDefinitionsHelpers
 
   def setup
-    @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
+    @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = @provider.services.first
 
     @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @buyer.buy! @provider.default_account_plan
 
-    @app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
+    @app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     @buyer.buy! @app_plan
     @buyer.reload
 
@@ -40,8 +42,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'index' do
-    get admin_api_account_application_plans_path(@buyer, :format => :xml,
-                                                  :provider_key => @provider.api_key)
+    get admin_api_account_application_plans_path(@buyer, format: :xml, provider_key: @provider.api_key)
 
     assert_response :success
 
@@ -49,37 +50,34 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
     #testing xml response
     xml = Nokogiri::XML::Document.parse(@response.body)
 
-    assert !xml.xpath('.//plans').empty?
-    assert  xml.xpath('.//plans/plan/id').children.first.to_s == @app_plan.id.to_s
-    assert  xml.xpath('.//plans/plan/name').children.first.to_s == @app_plan.name.to_s
-    assert  xml.xpath('.//plans/plan/type').children.first.to_s == @app_plan.class.to_s.underscore
+    assert_not xml.xpath('.//plans').empty?
+    assert_equal @app_plan.id.to_s, xml.xpath('.//plans/plan/id').children.first.to_s
+    assert_equal @app_plan.name.to_s, xml.xpath('.//plans/plan/name').children.first.to_s
+    assert_equal @app_plan.class.to_s.underscore, xml.xpath('.//plans/plan/type').children.first.to_s
 
-    assert  xml.xpath(".//plans/plan[@id='#{@buyer.bought_account_plan.id}']").empty?
+    assert xml.xpath(".//plans/plan[@id='#{@buyer.bought_account_plan.id}']").empty?
   end
 
   test 'index for an inexistent account replies 404' do
-    get admin_api_account_application_plans_path(0, :format => :xml), :provider_key => @provider.api_key
+    get admin_api_account_application_plans_path(0, format: :xml), params: { provider_key: @provider.api_key }
 
     assert_xml_404
   end
 
   test 'security wise: index is access denied in buyer side' do
     host! @provider.domain
-    get admin_api_account_application_plans_path(@buyer, :format => :xml,
-                                                  :provider_key => @provider.api_key)
+    get admin_api_account_application_plans_path(@buyer, format: :xml, provider_key: @provider.api_key)
 
     assert_response :forbidden
   end
 
   test 'buy' do
-    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
 
-    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml, :name => "name", :description => "description")
+    post buy_admin_api_account_application_plan_path(@buyer, app_plan), params: { provider_key: @provider.api_key, format: :xml, name: "name", description: "description" }
 
     assert_response :success
-    assert @buyer.reload.bought_cinstances.detect{|c| c.plan_id == app_plan.id}
+    assert(@buyer.reload.bought_cinstances.detect {|c| c.plan_id == app_plan.id})
 
     #TODO: dry plan xml assertion into a helper
     #testing xml response
@@ -90,17 +88,15 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy an already bought plan' do
-    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     app_plan.publish!
 
-    @buyer.buy! app_plan, {:name => "name1", :description => "description1"}
+    @buyer.buy! app_plan, { name: "name1", description: "description1" }
 
-    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{app_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml, :name => "name2", :description => "description2")
+    post buy_admin_api_account_application_plan_path(@buyer, app_plan), params: { provider_key: @provider.api_key, format: :xml, name: "name2", description: "description2" }
 
     assert_response :success
-    assert_equal 2, @buyer.reload.bought_cinstances.select{|c| c.plan_id == app_plan.id}.size
+    assert_equal 2, @buyer.reload.bought_cinstances.where(plan_id: app_plan.id).size
 
     #TODO: dry plan xml assertion into a helper
     #testing xml response
@@ -111,14 +107,11 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'buy a custom plan is not allowed' do
-    app_plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
+    app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     custom_plan = app_plan.customize
 
-    post("/admin/api/accounts/#{@buyer.id}/application_plans/#{custom_plan.id}/buy",
-              :provider_key => @provider.api_key,
-              :format => :xml, :name => "name", :description => "desc")
+    post buy_admin_api_account_application_plan_path(@buyer, custom_plan), params: { provider_key: @provider.api_key, format: :xml, name: "name", description: "desc" }
 
     assert_xml_404
   end
-
 end

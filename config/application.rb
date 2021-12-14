@@ -156,7 +156,6 @@ module System
     config.three_scale = ActiveSupport::OrderedOptions.new
     config.three_scale.core = ActiveSupport::OrderedOptions.new
 
-    config.three_scale.payments = ActiveSupport::OrderedOptions.new
     config.three_scale.rolling_updates = ActiveSupport::OrderedOptions.new
     config.three_scale.email_sanitizer = ActiveSupport::OrderedOptions.new
     config.three_scale.sandbox_proxy = ActiveSupport::OrderedOptions.new
@@ -175,9 +174,6 @@ module System
     config.three_scale.redhat_customer_portal = ActiveSupport::OrderedOptions.new
     config.three_scale.redhat_customer_portal.enabled = false
     config.three_scale.redhat_customer_portal.merge!(try_config_for(:redhat_customer_portal) || {})
-
-    config.three_scale.payments.enabled = false
-    config.three_scale.active_merchant_mode ||= Rails.env.production? ? :production : :test
 
     config.three_scale.rolling_updates.features = try_config_for(:rolling_updates).deep_merge(try_config_for(:"extra-rolling_updates") || {})
 
@@ -204,6 +200,13 @@ module System
     three_scale = config_for(:settings).symbolize_keys
     three_scale[:error_reporting_stages] = three_scale[:error_reporting_stages].to_s.split(/\W+/)
 
+    payment_settings = three_scale.extract!(:active_merchant_mode, :active_merchant_logging, :billing_canaries)
+    config.three_scale.payments = ActiveSupport::OrderedOptions.new
+    config.three_scale.payments.enabled = false
+    config.three_scale.payments.merge!(payment_settings)
+    config.three_scale.payments.merge!(try_config_for(:payments) || {})
+    config.three_scale.payments.active_merchant_mode ||= Rails.env.production? ? :production : :test
+
     email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {}).symbolize_keys
     config.three_scale.email_sanitizer.merge!(email_sanitizer_configs)
 
@@ -227,7 +230,7 @@ module System
     config.middleware.use ThreeScale::Middleware::Multitenant, :tenant_id
     config.middleware.insert_before Rack::Runtime, Rack::UTF8Sanitizer
     config.middleware.insert_before Rack::Runtime, Rack::XServedBy # we can pass hashed hostname as parameter
-    config.middleware.insert_before 0, ThreeScale::Middleware::Cors
+    config.middleware.insert_before 0, ThreeScale::Middleware::Cors if config.three_scale.cors.enabled
 
     config.unicorn = ActiveSupport::OrderedOptions[after_fork: []]
 

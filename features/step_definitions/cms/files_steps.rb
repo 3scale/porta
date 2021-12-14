@@ -93,3 +93,11 @@ Given(/^there is a (downloadable )?cms file$/) do |downloadable|
     }
   end
 end
+
+When "I fill in the tags list with {string}" do |text|
+  fill_in("Tag list", :with => text)
+end
+
+Then "I should see the tags {string}" do |text|
+  page.should have_field('Tag list', with: text)
+end

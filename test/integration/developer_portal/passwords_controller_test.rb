@@ -93,7 +93,7 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
     ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
     Recaptcha::Verify.stubs(skip?: true)
 
-    UserMailer.expects(:lost_password).returns(mock('mail', deliver_now: true)).once
+    UserMailer.expects(:lost_password).returns(mock('mail', deliver_later: true)).once
 
     assert_change of: lambda { user.reload.lost_password_token.present? }, from: false, to: true do
       post developer_portal.admin_account_password_path(email: user.email)

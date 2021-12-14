@@ -1,45 +1,38 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class User::RolesTest < ActiveSupport::TestCase
   test 'default role is :member' do
-    user = User.create!(:username => 'bob', :email => 'bob@example.com', :password => 'monkey')
+    user = User.create!(username: 'bob', email: 'bob@example.com', password: 'monkey')
     assert_equal :member, user.role
   end
 
-  context 'different roles according to account type' do
-    context 'class methods' do
-      should 'buyers roles are the default ones' do
-        assert_equal User.buyer_roles, User::DEFAULT_ROLES
-      end
+  test 'buyers roles are the default ones' do
+    assert_equal User::DEFAULT_ROLES, User.buyer_roles
+  end
 
-      should 'providers roles are the default ones plus more roles' do
-        assert_equal User.provider_roles, User::DEFAULT_ROLES + User::MORE_ROLES
-      end
-    end
+  test 'providers roles are the default ones plus more roles' do
+    assert_equal User::DEFAULT_ROLES + User::MORE_ROLES, User.provider_roles
+  end
 
-    context 'instance methods' do
-      setup do
-        @buyer_user = FactoryBot.create(:buyer_account).users.first
-        @provider_user = FactoryBot.create(:provider_account).users.first
-      end
+  test 'buyer users have buyers possible roles' do
+    buyer_user = FactoryBot.create(:buyer_account).users.first
+    assert_equal User.buyer_roles, buyer_user.account_roles
+  end
 
-      should 'buyer users have buyers possible roles' do
-        assert_equal @buyer_user.account_roles, User.buyer_roles
-      end
+  test 'provider users have providers possible roles' do
+    provider_user = FactoryBot.create(:provider_account).users.first
+    assert_equal User.provider_roles, provider_user.account_roles
+  end
 
-      should 'provider users have providers possible roles' do
-        assert_equal @provider_user.account_roles, User.provider_roles
-      end
-
-      should 'users with no account have default roles' do
-        assert_equal User.new.account_roles, User::DEFAULT_ROLES
-      end
-    end
+  test 'users with no account have default roles' do
+    assert_equal User::DEFAULT_ROLES, User.new.account_roles
   end
 
   test 'user has admin flag' do
     user = User.new
-    refute user.admin?
+    assert_not user.admin?
 
     user.role = :admin
     assert user.admin?
@@ -73,14 +66,14 @@ class User::RolesTest < ActiveSupport::TestCase
 
   test 'User#superadmin? return true only if user is admin of the master account' do
     regular_account = FactoryBot.create(:account)
-    member = FactoryBot.create(:user, :account => regular_account)
+    member = FactoryBot.create(:user, account: regular_account)
     admin = regular_account.admins.first
 
     master_account.delete
     superadmin = master_account.admins.first
 
-    refute member.superadmin?
-    refute admin.superadmin?
+    assert_not member.superadmin?
+    assert_not admin.superadmin?
     assert superadmin.superadmin?
   end
 
@@ -91,22 +84,22 @@ class User::RolesTest < ActiveSupport::TestCase
 
   test 'User#provider_admin? returns false if user is non admin of provider account' do
     account = FactoryBot.create(:provider_account)
-    user    = FactoryBot.create(:user, :account => account)
+    user    = FactoryBot.create(:user, account: account)
 
-    refute user.provider_admin?
+    assert_not user.provider_admin?
   end
 
   test 'User#provider_admin? return false if user is of non provider account' do
-    account = FactoryBot.create(:account, :provider => false)
+    account = FactoryBot.create(:account, provider: false)
 
-    refute account.admins.first.provider_admin?
+    assert_not account.admins.first.provider_admin?
   end
 
   test 'role is not mass assignable' do
     user = FactoryBot.create(:user)
 
     assert_no_change :of => -> { user.role } do
-      user.update_attributes(:role => :admin)
+      user.update(role: :admin)
     end
   end
 
@@ -118,28 +111,21 @@ class User::RolesTest < ActiveSupport::TestCase
     assert_equal :admin, user.role
   end
 
-  context 'user roles metaprogrammed methods' do
-    setup do
-      @user = FactoryBot.create(:user)
+  User::ROLES.each do |user_role|
+    test "#{user_role}! changes role to #{user_role}" do
+      user = FactoryBot.create(:user)
+      user.send "make_#{user_role}".to_sym
+      user.reload
+
+      assert_equal user.role, user_role.to_sym
     end
 
-    User::ROLES.each do |user_role|
+    test "#{user_role}? returns true if role is #{user_role}" do
+      user = FactoryBot.create(:user)
+      user.role = user_role
+      user.save!
 
-      should "#{user_role}! changes role to #{user_role}" do
-        @user.send "make_#{user_role}".to_sym
-        @user.reload
-
-        assert_equal @user.role, user_role.to_sym
-      end
-
-      should "#{user_role}? returns true if role is #{user_role}" do
-        @user.role = user_role
-        @user.save!
-
-        assert @user.send "#{user_role}?".to_sym
-      end
-
+      assert user.send "#{user_role}?".to_sym
     end
   end
-
 end

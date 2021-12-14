@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Buyers::ImpersonationsControllerTest < ActionController::TestCase
 
   def setup
-    master_account.try!(:delete)
+    master_account&.delete
     @provider = FactoryBot.create :provider_account
   end
 
   test "it needs master admin" do
     login_provider @provider
 
-    post :create, :account_id => @provider.id
+    post :create, params: { account_id: @provider.id }
 
     assert_response :not_found
   end
@@ -18,7 +20,7 @@ class Buyers::ImpersonationsControllerTest < ActionController::TestCase
   test "should be forbidden to impersonate providers without impersonation_admin account" do
     login_provider master_account
 
-    post :create, :account_id => @provider.id
+    post :create, params: { account_id: @provider.id }
 
     assert_response :forbidden
   end
@@ -29,7 +31,7 @@ class Buyers::ImpersonationsControllerTest < ActionController::TestCase
 
     login_provider master_account
 
-    post :create, :account_id => @provider.id
+    post :create, params: { account_id: @provider.id }
 
     assert_response :redirect
   end
@@ -40,7 +42,7 @@ class Buyers::ImpersonationsControllerTest < ActionController::TestCase
 
     login_provider master_account
 
-    post :create, :account_id => @provider.id, :format => :json
+    post :create, params: { account_id: @provider.id, format: :json }
 
     assert_not_nil JSON.parse(response.body)["url"]
     assert_response :created

@@ -9,7 +9,7 @@ class Stats::Api::ApplicationsControllerTest < ActionController::TestCase
   def test_summary
     setup_data(login_as: :buyer)
 
-    get :summary, format: :json, application_id: @app.id
+    get :summary, params: { format: :json, application_id: @app.id }
 
     assert_equal 200, response.status
   end
@@ -17,11 +17,11 @@ class Stats::Api::ApplicationsControllerTest < ActionController::TestCase
   test 'csv format for errors' do
     setup_data
 
-    get :usage, format: :csv, application_id: @app.id, period: 'troloro'
+    get :usage, params: { format: :csv, application_id: @app.id, period: 'troloro' }
     assert_match /text\/plain/, response.header['Content-Type']
     assert_equal 400, response.status
 
-    get :usage_response_code, format: :csv, application_id: @app.id, period: 'troloro'
+    get :usage_response_code, params: { format: :csv, application_id: @app.id, period: 'troloro' }
     assert_match /text\/plain/, response.header['Content-Type']
     assert_equal 400, response.status
   end

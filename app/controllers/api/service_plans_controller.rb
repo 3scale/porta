@@ -24,11 +24,11 @@ class Api::ServicePlansController < Api::PlansBaseController
   # to create plan same way as all plans
   #
   def create
-    super params[:service_plan]
+    super create_service_plan_params
   end
 
   def update
-    super params[:service_plan] do
+    super update_service_plan_params do
       redirect_to plans_index_path, :notice => "Service plan updated."
     end
   end
@@ -42,6 +42,8 @@ class Api::ServicePlansController < Api::PlansBaseController
   end
 
   protected
+
+  DEFAULT_PARAMS = %i[name state setup_fee cost_per_month trial_period_days cancellation_period approval_required].freeze
 
   def activate_sidebar_menu
     activate_menu :sidebar => :service_plans
@@ -58,5 +60,13 @@ class Api::ServicePlansController < Api::PlansBaseController
 
   def authorize_service_plans!
     authorize! :manage, :service_plans
+  end
+
+  def create_service_plan_params
+    params.require(:service_plan).permit(DEFAULT_PARAMS | %i[system_name])
+  end
+
+  def update_service_plan_params
+    params.require(:service_plan).permit(DEFAULT_PARAMS)
   end
 end

@@ -39,7 +39,7 @@ Feature: CMS Pages
         | Path           | /potato       |
         | Content type   | text/css      |
         | Handler        | markdown      |
-        | Tag list       | potato salad |
+        | Tag list       | potato, salad |
 
        And I press "Publish"
       Then I should see "Page saved and published"

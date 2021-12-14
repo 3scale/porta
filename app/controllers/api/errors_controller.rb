@@ -25,7 +25,7 @@ class Api::ErrorsController < Api::BaseController
   private
 
   def pagination_params
-    params.permit(:page, :per_page).symbolize_keys
+    params.permit(:page, :per_page).to_h.symbolize_keys
   end
 
   def errors_service
