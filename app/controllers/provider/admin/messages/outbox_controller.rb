@@ -42,7 +42,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
 
   private
 
-  PERMITTED_PARAMS = %i[id page to subject body origin].freeze
+  PERMITTED_PARAMS = [:id, :to, :page, { message: %i[subject body origin] }].freeze
 
   def build_message
     @message = current_account.messages.build(message_params)
@@ -71,7 +71,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def message_params
-    params.fetch(:message, {}).merge(:origin => "web").permit(PERMITTED_PARAMS)
+    permitted_params.fetch(:message, {}).merge(:origin => "web")
   end
 
   def permitted_params
