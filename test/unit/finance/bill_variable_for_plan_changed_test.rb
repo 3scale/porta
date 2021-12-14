@@ -20,7 +20,8 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
     ENV["TZ"] = @org_tz
   end
 
-  test "bill for variable on first day" do
+  test "bill for variable on 1st day of month UTC" do
+    ENV["TZ"] = "UTC"
     Timecop.travel(Time.now.beginning_of_month) # rubocop:disable Rails/TimeZone we don't use timezones in billing
 
     contract.expects(:save).never
