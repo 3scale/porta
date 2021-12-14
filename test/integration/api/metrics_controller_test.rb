@@ -4,9 +4,9 @@ require 'test_helper'
 
 class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    provider  = FactoryBot.create(:provider_account)
-    @service   = FactoryBot.create(:service, account: provider)
-    @metric   = FactoryBot.create(:metric, service: @service, friendly_name: 'super metric')
+    provider = FactoryBot.create(:provider_account)
+    @service = FactoryBot.create(:service, account: provider)
+    @metric = FactoryBot.create(:metric, service: @service, friendly_name: 'super metric')
 
     login! provider
   end
@@ -15,7 +15,7 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
     get admin_service_metrics_path(service_id: @service.id)
     assert_response :success
     assert_select 'title', "Metrics - Index | Red Hat 3scale API Management"
-    assert_select '#metrics a', 'Hits'
+    assert_select '#product-metrics-index-container'
   end
 
   test 'new metric' do

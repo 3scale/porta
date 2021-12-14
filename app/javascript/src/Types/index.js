@@ -46,6 +46,10 @@ export type Metric = {
   id: number,
   name: string,
   systemName: string,
+  path?: string,
+  unit?: string,
+  description?: string,
+  mapped?: boolean,
   updatedAt: string
 }
 

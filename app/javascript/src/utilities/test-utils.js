@@ -1,5 +1,11 @@
 // @flow
 
+/**
+ * Include here any methods used in the test suite
+ *
+ * This is deliberately not included in utilities/index because it shouldn't be exported 'publicly' as a utility
+ */
+
 import type { ReactWrapper } from 'enzyme'
 
 function openSelectWithModal <T> (wrapper: ReactWrapper<T>) {

@@ -1,0 +1,6 @@
+// HACK: we're using inconsistent PF versions and therefore missing the correct color. Remove this patch once we upgrade everything to PF4.
+#metrics-index-page .pf-c-table {
+  td[data-label="Mapped"] svg {
+    fill: var(--pf-global--primary-color--100);
+  }
+}

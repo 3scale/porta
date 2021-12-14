@@ -12,4 +12,8 @@ class MetricDecorator < ApplicationDecorator
       updatedAt: updated_at
     }
   end
+
+  def mapped?
+    proxy_rules.any?
+  end
 end

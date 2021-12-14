@@ -58,6 +58,11 @@ FactoryBot.define do
     association :service
     sequence(:friendly_name) { |n| "Metric #{n}" }
     sequence(:unit) { |m| "metric_#{m}" }
+
+    # TODO: use this factory throughout the codebase
+    factory(:method) do
+      parent { owner.metrics.hits }
+    end
   end
 
   factory(:feature) do

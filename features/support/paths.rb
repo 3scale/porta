@@ -628,7 +628,9 @@ World(Module.new do
 
     # Proxy
     when 'the service definition page'
-      admin_service_metrics_path(provider_first_service!)
+      admin_service_metrics_path(provider_first_service!, tab: 'metrics')
+    when 'the metrics and methods page'
+      admin_service_metrics_path(@provider.default_service)
     when /^the integration show page for service "(.+?)"/
       service = Service.find_by!(name: $1)
       admin_service_integration_path(service)
