@@ -5,7 +5,7 @@ class Provider::Admin::Account::ChangePlansController < Provider::Admin::Account
   end
 
   def update
-    plan = plans.find(params.permit(:change_plan)[:plan_id])
+    plan = plans.find(permitted_params[:plan_id])
 
     current_account.upgrade_to_provider_plan!(plan)
 
@@ -23,5 +23,9 @@ class Provider::Admin::Account::ChangePlansController < Provider::Admin::Account
 
   def plans
     application.service.application_plans.published
+  end
+
+  def permitted_params
+    params.require(:change_plan).permit(:plan_id)
   end
 end
