@@ -12,6 +12,12 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
 
     contract.stubs(:provider_account).returns(account)
     account.stubs(:provider_can_use?).with(:instant_bill_plan_change).returns(true)
+
+    @org_tz = ENV["TZ"]
+  end
+
+  teardown do
+    ENV["TZ"] = @org_tz
   end
 
   test "bill for variable on first day" do
@@ -21,23 +27,14 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
   end
 
-  test "bill for variable before first day" do
+  test "bill for variable not on first day" do
     Timecop.travel(Time.now.beginning_of_month - 15.days) # rubocop:disable Rails/TimeZone we don't use timezones in billing
 
     contract.expects(:save).returns(true)
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
   end
 
-  test "bill for variable after first day" do
-    Timecop.travel(Time.now.beginning_of_month + 15.days) # rubocop:disable Rails/TimeZone we don't use timezones in billing
-
-    contract.expects(:save).returns(true)
-    contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
-  end
-
   test "no variable billing on 1st day of month local time" do
-    org_tz = ENV["TZ"]
-
     # this changes server and client local time to China Standard Time (+8)
     ENV["TZ"] = "Asia/Shanghai"
 
@@ -46,8 +43,6 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
 
     contract.expects(:save).never
     contract.notify_observers(:bill_variable_for_plan_changed, app_plan)
-
-    ENV["TZ"] = org_tz
   end
 
   test "no variable billing if last billed until is today" do
