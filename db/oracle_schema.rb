@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211109141544) do
+ActiveRecord::Schema.define(version: 20211117094502) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -1364,7 +1364,7 @@ ActiveRecord::Schema.define(version: 20211109141544) do
   end
 
   add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id"
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
 
   create_table "tags", force: :cascade do |t|
     t.string   "name"
@@ -1376,6 +1376,7 @@ ActiveRecord::Schema.define(version: 20211109141544) do
   end
 
   add_index "tags", ["account_id"], name: "index_tags_on_account_id"
+  add_index "tags", ["name", "tenant_id"], name: "index_tags_on_name", unique: true
 
   create_table "topic_categories", force: :cascade do |t|
     t.string   "name"

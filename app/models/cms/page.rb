@@ -8,6 +8,7 @@ class CMS::Page < CMS::BasePage
 
   include NormalizePathAttribute
   acts_as_taggable
+  include Tagging
 
   include CMSPageIndex
 

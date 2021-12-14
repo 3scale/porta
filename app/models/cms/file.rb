@@ -2,6 +2,7 @@ class CMS::File < ApplicationRecord
   include CMS::Filtering
   include NormalizePathAttribute
   acts_as_taggable
+  include Tagging
 
   attr_accessible :provider, :section, :path, :attachment, :downloadable, :tag_list
 
