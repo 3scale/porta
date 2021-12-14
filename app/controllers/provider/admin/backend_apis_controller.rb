@@ -20,6 +20,7 @@ class Provider::Admin::BackendApisController < Provider::Admin::BaseController
   end
 
   def create
+    activate_menu :backend_apis
     respond_to do |format|
       if @backend_api.save
         format.json { render json: @backend_api.decorate.add_backend_usage_backends_data, status: :created }

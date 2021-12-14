@@ -14,7 +14,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     stub_request(:post, "http://example.com/oauth/token")
 
     # No raise error
-    result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    result = @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
     refute result
 
     # No redirect to signup
@@ -26,7 +26,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     user = FactoryBot.create(:active_user, account: buyer, authentication_id: 'foobar')
 
     mock_client(@authentication_provider, uid: user.authentication_id)
-    result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    result = @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
     assert_equal user, result
     refute @strategy.error_message.present?
     refute @strategy.redirects_to_signup?
@@ -37,7 +37,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     user = FactoryBot.create(:pending_user, account: buyer, authentication_id: 'foobar')
 
     mock_client(@authentication_provider, uid: user.authentication_id)
-    result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    result = @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
 
     refute result
     assert @strategy.error_message.present?
@@ -48,7 +48,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     system_name = @authentication_provider.system_name
 
     mock_client(@authentication_provider, uid: 'lol')
-    result = @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    result = @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
 
     refute result
     assert @strategy.redirects_to_signup?
@@ -58,7 +58,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     system_name = @authentication_provider.system_name
 
     mock_client(@authentication_provider, uid: 'foobar', username: nil)
-    @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
 
     session = {}
     @strategy.on_signup(session)
@@ -70,7 +70,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     system_name = @authentication_provider.system_name
 
     mock_client(@authentication_provider, uid: 'foobar', email_verified: false)
-    @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
 
     session = {}
     @strategy.on_signup(session)
@@ -81,7 +81,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     system_name = @authentication_provider.system_name
 
     mock_client(@authentication_provider, uid: 'foobar', email: nil)
-    @strategy.authenticate({system_name: system_name, code: '1234', request: mock_request})
+    @strategy.authenticate({ system_name: system_name, code: '1234', request: mock_request })
 
     session = {}
     @strategy.on_signup(session)
@@ -103,7 +103,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#on_signup_complete when user email is the same as session authentication_email' do
-    user    = FactoryBot.build(:user)
+    user = FactoryBot.build(:user)
     session = {
       authentication_id: 'B5678',
       authentication_email: user.email,
@@ -136,8 +136,8 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
     }
     @strategy.on_new_user(user, session)
 
-    expected_options = {kind: 'github', strategy: 'oauth2'}
-    assert_equal(expected_options, @strategy.track_signup_options({session: session}))
+    expected_options = { kind: 'github', strategy: 'oauth2' }
+    assert_equal(expected_options, @strategy.track_signup_options({ session: session }))
   end
 
   test '#on_new_user' do
@@ -209,33 +209,36 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   class SsoSignupTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
     test 'create an active user through sso' do
       authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
-      client    = mock('client')
+      client = mock('client')
       user_data = valid_user_data
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        assert_difference(User.method(:count), +1) do
+          result = authentication_strategy.authenticate({
+                                                          system_name: authentication_provider.system_name,
+                                                          code: '1234',
+                                                          request: mock_request
+                                                        })
 
-      assert_difference(User.method(:count), +1) do
-        result = authentication_strategy.authenticate({
-          system_name: authentication_provider.system_name,
-          code:        '1234',
-          request:     mock_request
-        })
-
-        assert_instance_of User, result
-        assert_equal result.email, user_data[:email]
-        assert_equal result.username, user_data[:username]
-        assert_equal result.account.org_name, user_data[:org_name]
-        assert_equal result.sso_authorizations.last.id_token, user_data[:id_token]
-        assert result.active?
-        assert authentication_strategy.error_message.blank?
-        assert authentication_strategy.new_user_created?
-        last_email = ActionMailer::Base.deliveries.last
-        assert_match 'confirmation', last_email.subject
-        assert_not_match 'activate', last_email.body.to_s
+          assert_instance_of User, result
+          assert_equal result.email, user_data[:email]
+          assert_equal result.username, user_data[:username]
+          assert_equal result.account.org_name, user_data[:org_name]
+          assert_equal result.sso_authorizations.last.id_token, user_data[:id_token]
+          assert result.active?
+          assert authentication_strategy.error_message.blank?
+          assert authentication_strategy.new_user_created?
+          last_email = ActionMailer::Base.deliveries.last
+          assert_match 'confirmation', last_email.subject
+          assert_not_match 'activate', last_email.body.to_s
+        end
       end
     end
 
@@ -243,24 +246,26 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
-      client    = mock('client')
+      client = mock('client')
       user_data = valid_user_data(email_verified: false)
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
-      assert_difference(User.method(:count), +1) do
-        result = authentication_strategy.authenticate({
-          system_name: authentication_provider.system_name,
-          code:        '1234',
-          request:     mock_request
-        })
+      perform_enqueued_jobs(only: ActionMailer::DeliveryJob) do
+        assert_difference(User.method(:count), +1) do
+          result = authentication_strategy.authenticate({
+                                                          system_name: authentication_provider.system_name,
+                                                          code: '1234',
+                                                          request: mock_request
+                                                        })
 
-        refute result
-        assert authentication_strategy.error_message.present?
-        assert authentication_strategy.new_user_created?
-        last_email = ActionMailer::Base.deliveries.last
-        assert_match 'confirmation', last_email.subject
-        assert_match 'activate', last_email.body.to_s
+          refute result
+          assert authentication_strategy.error_message.present?
+          assert authentication_strategy.new_user_created?
+          last_email = ActionMailer::Base.deliveries.last
+          assert_match 'confirmation', last_email.subject
+          assert_match 'activate', last_email.body.to_s
+        end
       end
     end
 
@@ -268,17 +273,17 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
-      client    = mock('client')
+      client = mock('client')
       user_data = valid_user_data(email_verified: false, org_name: nil)
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
       assert_difference(User.method(:count), 0) do
         result = authentication_strategy.authenticate({
-          system_name: authentication_provider.system_name,
-          code:        '1234',
-          request:     mock_request
-        })
+                                                        system_name: authentication_provider.system_name,
+                                                        code: '1234',
+                                                        request: mock_request
+                                                      })
 
         refute result
         assert authentication_strategy.error_message.blank?
@@ -290,36 +295,36 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
       authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base', automatically_approve_accounts: true)
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
-      client    = mock('client')
+      client = mock('client')
       user_data = valid_user_data(org_name: nil)
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
       authentication_strategy.authenticate({
-        system_name: authentication_provider.system_name,
-        code:        '1234',
-        request:     mock_request
-      })
+                                             system_name: authentication_provider.system_name,
+                                             code: '1234',
+                                             request: mock_request
+                                           })
     end
 
     test 'CreateInvitedUser' do
       authentication_provider = FactoryBot.create(:authentication_provider, account: oauth2_provider, kind: 'base')
       authentication_strategy = Authentication::Strategy.build(oauth2_provider)
 
-      buyer      = FactoryBot.create(:simple_buyer, provider_account: FactoryBot.create(:simple_provider))
+      buyer = FactoryBot.create(:simple_buyer, provider_account: FactoryBot.create(:simple_provider))
       invitation = FactoryBot.create(:invitation, account: buyer)
-      client     = mock('client')
-      user_data  = valid_user_data
+      client = mock('client')
+      user_data = valid_user_data
       client.stubs(authenticate!: user_data)
       ThreeScale::OAuth2::Client.expects(:build).with(authentication_provider).returns(client).once
 
       assert_difference(User.method(:count), +1) do
         result = authentication_strategy.authenticate({
-          system_name: authentication_provider.system_name,
-          code:        '1234',
-          request:     mock_request,
-          invitation:  invitation
-        }, procedure:  Authentication::Strategy::Oauth2::CreateInvitedUser)
+                                                        system_name: authentication_provider.system_name,
+                                                        code: '1234',
+                                                        request: mock_request,
+                                                        invitation: invitation
+                                                      }, procedure: Authentication::Strategy::Oauth2::CreateInvitedUser)
 
         assert_instance_of User, result
         assert_equal result.email, user_data[:email]
@@ -334,12 +339,12 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
 
     def oauth2_provider
       @oauth2_provider ||= begin
-        provider = FactoryBot.create(:provider_account)
+                             provider = FactoryBot.create(:provider_account)
 
-        provider.settings.update_column(:authentication_strategy, 'oauth2')
+                             provider.settings.update_column(:authentication_strategy, 'oauth2')
 
-        provider
-      end
+                             provider
+                           end
     end
 
     def valid_user_data(email_verified: true, **attributes)

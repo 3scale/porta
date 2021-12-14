@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::PlansWidgetControllerNotRequiringCreditCardTest < DeveloperPortal::ActionController::TestCase
@@ -28,7 +30,7 @@ class DeveloperPortal::Admin::PlansWidgetControllerNotRequiringCreditCardTest < 
   end
 
   test 'show allow direct plan change for paid plans' do
-    get :index, :service_id => @service.id, :application_id => @application.id
+    get :index, params: { :service_id => @service.id, :application_id => @application.id }
 
     assert_select('input[id=?]', "change-plan-#{@paid_plan.id}", :value => 'Change Plan')
     assert_select('input[id=?]', "change-plan-#{@free_plan.id}", :value => 'Change Plan')

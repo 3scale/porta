@@ -11,6 +11,7 @@ development:
 
 test:
   <<: *base
+  endpoint:
 
 production:
   <<: *base

@@ -8,10 +8,10 @@ class UserObserver < ActiveRecord::Observer
 
       if user.new_signup?
         if user.account.provider?
-          ProviderUserMailer.activation(user).deliver_now
+          ProviderUserMailer.activation(user).deliver_later
           ActivationReminderWorker.enqueue(user)
         else
-          UserMailer.signup_notification(user).deliver_now
+          UserMailer.signup_notification(user).deliver_later
         end
       end
     end

@@ -65,7 +65,7 @@ class ProviderClicking
   private
 
   def new_application(account = show_account)
-    account.link_with(text: 'Create Application').click
+    account.link_with(text: 'Create application').click
   end
 
   def generate

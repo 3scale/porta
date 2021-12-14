@@ -104,14 +104,14 @@ class Provider::Admin::KeysControllerTest < ActionDispatch::IntegrationTest
 
   def assert_only_qualified_members_have_access(verb, path, format)
     login! @member_user.account, user: @member_user
-    public_send(verb, path, format)
+    public_send(verb, path, params: format)
     assert_response(
       :forbidden,
       "#{verb} #{path} should be forbidden for regular members"
     )
 
     login! @member_user_with_app_access.account, user: @member_user_with_app_access
-    public_send(verb, path, format)
+    public_send(verb, path, params: format)
     assert_response(
       :success,
       "#{verb} #{path} should be authorized for members with permission"

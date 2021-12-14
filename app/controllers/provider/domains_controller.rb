@@ -6,8 +6,9 @@ class Provider::DomainsController < Provider::BaseController
   layout 'provider/iframe'
 
   def recover
-    domains = site_account.managed_users.where(email: params[:email]).map{|p| p.account.self_domain}.uniq
+    email_param = params.require(:email)
+    domains = site_account.managed_users.where(email: email_param).map{|p| p.account.self_domain}.uniq
 
-    ProviderUserMailer.lost_domain(params[:email], domains).deliver_now unless domains.empty?
+    ProviderUserMailer.lost_domain(email_param, domains).deliver_later unless domains.empty?
   end
 end

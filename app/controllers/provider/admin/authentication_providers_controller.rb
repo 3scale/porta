@@ -84,7 +84,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   end
 
   def build_authentication_provider
-    @authentication_provider = authentication_providers.build_kind(kind: create_params.require(:kind), **create_params.symbolize_keys)
+    @authentication_provider = authentication_providers.build_kind(kind: create_params.require(:kind), **create_params.to_h.symbolize_keys)
   end
 
   def authorize_authentication_provider(action = action_name)

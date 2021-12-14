@@ -45,11 +45,11 @@ const BuyerSelect = ({
       cells={cells}
       onSelect={onSelectBuyer}
       fetchItems={(params) => fetchPaginatedBuyers(buyersPath, params)}
-      header="Most recently created Accounts"
+      header="Recently created accounts"
       isDisabled={isDisabled}
-      title="Select an Account"
-      placeholder="Select an Account"
-      footerLabel="View all Accounts"
+      title="Select an account"
+      placeholder="Select an account"
+      footerLabel="View all accounts"
     />
   )
 }

@@ -45,7 +45,7 @@ class Provider::Admin::Dashboard::WidgetController < Provider::Admin::BaseContro
 
   # @return DashboardWidgetPresenter
   def widget
-    @widget ||= DashboardWidgetPresenter.new(widget_name, params.except(:action, :controller, :format))
+    @widget ||= DashboardWidgetPresenter.new(widget_name, widget_params.to_h)
   end
 
   def widget_name
@@ -56,5 +56,9 @@ class Provider::Admin::Dashboard::WidgetController < Provider::Admin::BaseContro
 
   def get_sum_from_values(values)
     values.sum{ |value| value[:value] }
+  end
+
+  def widget_params
+    params.permit(:service_id)
   end
 end

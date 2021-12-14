@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Provider::PasswordsControllerTest < ActionController::TestCase
@@ -15,7 +17,7 @@ class Provider::PasswordsControllerTest < ActionController::TestCase
     @user.lost_password_token_generated_at = nil
     @user.save
 
-    get :show, password_reset_token: 123
+    get :show, params: { password_reset_token: 123 }
     assert_response 302
     assert flash[:error].present?
   end

@@ -43,4 +43,38 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
 
     get admin_buyers_accounts_path
   end
+
+  test "allowed forgery protection will cause redirect to login page and revocation of the session" do
+    provider = FactoryBot.create(:provider_account)
+    user = provider.admins.first
+    login! provider, user: user
+
+    with_forgery_protection do
+      post admin_buyers_accounts_path, params: {
+        account: {
+          org_name: 'Alaska',
+          user: { email: 'foo@example.com', password: '123456', username: 'hello' }
+        }
+      }
+    end
+    assert_redirected_to '/p/login'
+    # Check that user session was revoked (because of token authenticity)
+    assert_not_nil user.user_sessions.reload[0][:revoked_at]
+  end
+
+  test "allowed forgery protection won't destroy session when using API controller" do
+    provider = FactoryBot.create(:provider_account)
+    user = provider.admins.first
+    token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
+
+    host! provider.admin_domain
+
+    with_forgery_protection do
+      post admin_api_signup_path(format: :json), params: {
+        access_token: token, org_name: 'Alaska',
+        username: 'hello', email: 'foo@example.com', password: '123456'
+      }
+    end
+    assert_response :created
+  end
 end

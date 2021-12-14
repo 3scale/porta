@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ProfileTest < ActiveSupport::TestCase
-
   should have_db_column :logo_file_name
   should have_db_column :logo_content_type
   should have_db_column :logo_file_size
@@ -12,131 +13,94 @@ class ProfileTest < ActiveSupport::TestCase
              .allowing('image/png', 'image/gif', 'image/jpeg')
              .rejecting('image/svg', 'text/plain', 'text/xml', 'image/abc', 'some_image/png')
 
-  context '#account attribute validation' do
-    setup do
-      @invalid_profile = FactoryBot.build(:profile, :account_id => nil)
-    end
-
-    should 'not be saved without account' do
-      #this complex tests are used because if we try to save with account_id == nil
-      # a mysql ActiveRecord::StatementInvalid exception is raised
-      assert_nothing_raised { @invalid_profile.save }
-      assert_equal false, @invalid_profile.save
-    end
+  test '#account attribute validation: not be saved without account' do
+    invalid_profile = FactoryBot.build(:profile, :account_id => nil)
+    #this complex tests are used because if we try to save with account_id == nil
+    # a mysql ActiveRecord::StatementInvalid exception is raised
+    assert_nothing_raised { invalid_profile.save }
+    assert_equal false, invalid_profile.save
   end
 
-  context 'initialization' do
-    setup do
-      @profile = FactoryBot.create(:profile)
-    end
-
-    should 'create profile in private state' do
-      assert_equal 'private', @profile.state
-    end
+  test 'initialization: create profile in private state' do
+    profile = FactoryBot.create(:profile)
+    assert_equal 'private', profile.state
   end
 
   test '.model_name.human is Profile' do
-    assert Profile.model_name.human == "Account profile"
+    assert_equal 'Account profile', Profile.model_name.human
   end
 
-  context 'customers_type field' do
-    setup do
-      @profile = FactoryBot.create(:profile, :customers_type => ["item"])
-    end
-
-    should 'be serialized as an array' do
-      assert_equal @profile.customers_type, ["item"]
-    end
+  test 'customers_type field: be serialized as an array' do
+    profile = FactoryBot.create(:profile, customers_type: ["item"])
+    assert_equal ["item"], profile.customers_type
   end
 
-  context '.published class method' do
-    setup do
-      @profile = FactoryBot.create(:profile)
-      @profile.update_attribute(:state, 'published')
+  test '.published class method: return only published profiles' do
+    profile = FactoryBot.create(:profile)
+    profile.update(state: 'published')
 
-      @profile_unpublished = FactoryBot.create(:profile)
-      @profile_unpublished.update_attribute(:state, 'private')
-    end
+    profile_unpublished = FactoryBot.create(:profile)
+    profile_unpublished.update(state: 'private')
+    published_profiles = Profile.published
 
-    should 'return only published profiles' do
-      published_profiles = Profile.published
-
-      assert  published_profiles.include?(@profile)
-      assert !published_profiles.include?(@profile_unpublished)
-    end
+    assert_includes published_profiles, profile
+    assert_not_includes published_profiles, profile_unpublished
   end
 
-  context 'with individual or company profiles' do
-    setup do
-      @individual_profile = FactoryBot
-        .build(:profile, :company_size => Profile::IndividualNotCompany)
-      @company_profile = FactoryBot
-        .build(:profile, :company_size => Profile::CompanySizes.last)
-    end
+  test 'a profile of an individual should be valid without company_type' do
+    individual_profile = FactoryBot.create(:profile, company_size: Profile::IndividualNotCompany, company_type: nil)
+    assert_valid individual_profile
+  end
 
-    context '#company_type validation' do
+  test 'a profile of a company should not be valid without company_type' do
+    company_profile = FactoryBot.build(:profile, company_size: Profile::CompanySizes.last, company_type: nil)
+    assert_not company_profile.valid?
+    assert_not_empty company_profile.errors[:company_type]
+  end
 
-      context 'a profile of an individual' do
-        setup { @individual_profile.company_type = nil }
+  test '#individual_profile? method should return true for individual profiles' do
+    individual_profile = FactoryBot.create(:profile, company_size: Profile::IndividualNotCompany)
+    assert individual_profile.individual_profile?
+  end
 
-        should 'be valid without company_type' do
-          assert @individual_profile.valid?
-        end
-      end
+  test '#individual_profile? method should return false for company profiles' do
+    company_profile = FactoryBot.build(:profile, company_size: Profile::CompanySizes.last)
+    assert_not company_profile.individual_profile?
+  end
 
-      context 'a profile of a company' do
-        setup { @company_profile.company_type = nil }
+  test '#individual_profile? method should return false for profiles with company_size set to nil' do
+    # TODO: validation says company_size can't be blank, so is this test necessary/valid?
+    profile = Profile.new
+    profile.company_size = nil
 
-        should 'not be valid without company_type' do
-          assert_equal false, @company_profile.valid?
-          assert_equal false, @company_profile.errors[:company_type].empty?
-        end
-      end
+    assert_not profile.individual_profile?
+    # assert_not Profile.new(company_size: nil).individual_profile?
+  end
 
-    end
+  test '#individual_profile? method should return false for profiles with company_size set to blank' do
+    # TODO: validation says company_size can't be blank, so is this test necessary/valid?
+    assert_not Profile.new(company_size: '').individual_profile?
+  end
 
-    context '#individual_profile? method' do
-      should 'return true for individual profiles' do
-        assert @individual_profile.individual_profile?
-      end
+  test '#company_profile? method should return true for company profiles' do
+    company_profile = FactoryBot.build(:profile, company_size: Profile::CompanySizes.last)
+    assert company_profile.company_profile?
+  end
 
-      should 'return false for company profiles' do
-        assert_equal false, @company_profile.individual_profile?
-      end
+  test '#company_profile? method should return false for individual profiles' do
+    individual_profile = FactoryBot.create(:profile, company_size: Profile::IndividualNotCompany)
+    assert_not individual_profile.company_profile?
+  end
 
-      should 'return false for profiles with company_size set to nil' do
-        profile = Profile.new
-        profile.company_size = nil
+  test '#company_profile? method should return false for profiles with company_size set to nil' do
+    assert_not Profile.new.company_profile?
+  end
 
-        assert_equal false, profile.individual_profile?
-      end
-
-      should 'return false for profiles with company_size set to blank' do
-        assert_equal false, Profile.new(:company_size => "").individual_profile?
-      end
-    end
-
-    context '#company_profile? method' do
-      should 'return true for company profiles' do
-        assert @company_profile.company_profile?
-      end
-
-      should 'return false for individual profiles' do
-        assert_equal false, @individual_profile.company_profile?
-      end
-
-      should 'return false for profiles with company_size set to nil' do
-        assert_equal false, Profile.new.company_profile?
-      end
-
-      should 'return false for profiles with company_size set to blank' do
-        assert_equal false, Profile.new(:company_size => "").company_profile?
-      end
-    end
+  test '#company_profile? method: return false for profiles with company_size set to blank' do
+    assert_not Profile.new(company_size: '').company_profile?
   end
 
   class LogoTest < ActiveSupport::TestCase
-
     def setup
       default_options = Paperclip::Attachment.default_options
       Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
@@ -144,7 +108,7 @@ class ProfileTest < ActiveSupport::TestCase
 
     def test_logo_upload
       profile = FactoryBot.create(:profile)
-      hypnotoad = Rails.root.join('test', 'fixtures', 'hypnotoad.jpg').open
+      hypnotoad = Rails.root.join('test/fixtures/hypnotoad.jpg').open
 
       profile.logo = hypnotoad
       profile.logo.s3_interface.client.stub_responses(:put_object, ->(request) {
@@ -158,9 +122,9 @@ class ProfileTest < ActiveSupport::TestCase
     test 'does not accept a fake image' do
       profile = FactoryBot.build(:profile)
 
-      profile.logo = Rails.root.join('test', 'fixtures', 'fake_image.jpg').open
+      profile.logo = Rails.root.join('test/fixtures/fake_image.jpg').open
 
-      refute profile.valid?
+      assert_not profile.valid?
       assert_includes profile.errors[:logo], 'has contents that are not what they are reported to be'
     end
   end

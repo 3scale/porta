@@ -35,7 +35,7 @@ class Provider::Admin::CMS::SwitchesControllerTest < ActionDispatch::Integration
   test "show a  switch" do
     @provider.settings.update_attribute(:account_plans_switch,'hidden')
 
-    xhr :put, provider_admin_cms_switch_path('account_plans', format: :js)
+    put provider_admin_cms_switch_path('account_plans', format: :js), xhr: true
     assert_response :success
 
     assert @provider.settings.reload.switches[:account_plans].visible?, 'not visible'

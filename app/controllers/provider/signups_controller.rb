@@ -21,15 +21,15 @@ class Provider::SignupsController < Provider::BaseController
     @provider = master.providers.build
     @user     = @provider.users.build_with_fields
     @plan     = plan
-    @signup_origin = params[:origin] || params[:signup_origin]
-    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
+    @signup_origin = default_params[:origin] || default_params[:signup_origin]
+    @fields = Fields::SignupForm.new(@provider, @user, default_params[:fields])
   end
 
   def create
     @plan = plan
     provider_account_manager = Signup::ProviderAccountManager.new(master)
     signup_result = provider_account_manager.create(signup_params, &method(:build_signup_result_custom_fields))
-    @fields = Fields::SignupForm.new(@provider, @user, params[:fields])
+    @fields = Fields::SignupForm.new(@provider, @user, default_params[:fields])
 
     return render :show unless signup_result.persisted?
 
@@ -63,7 +63,7 @@ class Provider::SignupsController < Provider::BaseController
 
   def handle_cache_response
     expires_in 1.hour, public: true
-    fresh_when etag: params, last_modified: System::Application.config.boot_time
+    fresh_when etag: default_params, last_modified: System::Application.config.boot_time
   end
 
   def set_analytics_page
@@ -99,7 +99,12 @@ class Provider::SignupsController < Provider::BaseController
   end
 
   def plan
-    plan_ids = params[:plan_id].presence
+    plan_ids = default_params[:plan_id].presence
     master.accessible_services.default.application_plans.published.find(plan_ids) if plan_ids
+  end
+
+  def default_params
+    # permit all since it can have multiple different and dynamic data
+    params.permit!.to_h
   end
 end

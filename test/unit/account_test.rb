@@ -1,7 +1,13 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AccountTest < ActiveSupport::TestCase
   fixtures :countries
+
+  def setup
+    @account = FactoryBot.build(:simple_account, org_name: 'Panda Research Base')
+  end
 
   subject { @account || Account.new }
 
@@ -21,15 +27,15 @@ class AccountTest < ActiveSupport::TestCase
   should have_many :invoices
   should have_many :payment_transactions
 
-  def test_removed_columns
-    %W[payment_gateway_type payment_gateway_options deleted_at].each do |column|
-      refute_includes Account.column_names, column
+  test 'removed columns' do
+    %w[payment_gateway_type payment_gateway_options deleted_at].each do |column|
+      assert_not_includes Account.column_names, column
     end
   end
 
-  def test_class_method_free
+  test 'class method free' do
     recent_date = 4.days.ago
-    old_date    = 6.days.ago
+    old_date = 6.days.ago
 
     paid_tenant = FactoryBot.create(:simple_provider)
     FactoryBot.create(:application, user_account: paid_tenant, paid_until: recent_date)
@@ -48,7 +54,7 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_includes free_tenant_ids, paid_tenant.id
   end
 
-  def test_class_method_lacks_cinstance_with_plan_system_name
+  test 'class method lacks cinstance with plan system_name' do
     enterprise_tenant = FactoryBot.create(:simple_provider)
     FactoryBot.create(:cinstance, user_account: enterprise_tenant, plan: FactoryBot.create(:application_plan, system_name: '2014_enterprise_3M', issuer: master_account.default_service))
 
@@ -62,32 +68,32 @@ class AccountTest < ActiveSupport::TestCase
     assert_not_includes Account.lacks_cinstance_with_plan_system_name(['2014_enterprise_3M']).pluck(:id), enterprise_tenant.id
   end
 
-  def test_not_master
+  test 'not master' do
     master = master_account
     buyer = FactoryBot.create(:simple_buyer, provider_account: master)
 
-    assert master.buyer_account_ids.include?(buyer.id)
-    assert master.buyer_account_ids.include?(master.id)
+    assert_includes master.buyer_account_ids, buyer.id
+    assert_includes master.buyer_account_ids, master.id
 
-    assert master.buyer_accounts.not_master.ids.include?(buyer.id)
-    refute master.buyer_accounts.not_master.ids.include?(master.id)
+    assert_includes master.buyer_accounts.not_master.ids, buyer.id
+    assert_not_includes master.buyer_accounts.not_master.ids, master.id
   end
 
-  def test_provider_but_not_master
+  test 'provider but not master' do
     account = FactoryBot.build_stubbed(:simple_account, provider: false, master: false)
-    refute account.tenant?
+    assert_not account.tenant?
 
     account.provider = true
     assert account.tenant?
 
     account.master = true
-    refute account.tenant?
+    assert_not account.tenant?
   end
 
-  def test_destroy_association
+  test 'destroy association' do
     account = FactoryBot.create(:simple_account)
     service = FactoryBot.create(:simple_service, account: account)
-    account.update_column(:default_service_id, service.id)
+    account.update_column(:default_service_id, service.id) # rubocop:disable Rails/SkipsModelValidations
     metric  = service.metrics.hits
 
     assert service.default?
@@ -100,8 +106,8 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test '#trashed_messages' do
-    account  = FactoryBot.build_stubbed(:simple_account)
-    other    = FactoryBot.build_stubbed(:simple_account)
+    account = FactoryBot.build_stubbed(:simple_account)
+    other = FactoryBot.build_stubbed(:simple_account)
     message1 = FactoryBot.create(:message, sender: account, to: other, state: 'sent')
     message2 = FactoryBot.create(:message, sender: other, to: account, state: 'sent')
 
@@ -115,10 +121,10 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'avoid deletion of master account' do
-    refute master_account.destroy, "Should not destroy master account"
+    assert_not master_account.destroy, "Should not destroy master account"
 
     provider = FactoryBot.create(:simple_provider)
-    buyer    = FactoryBot.create(:simple_buyer)
+    buyer = FactoryBot.create(:simple_buyer)
 
     assert provider.destroy, "Should destroy provider account"
     assert buyer.destroy, "Should destroy buyer account"
@@ -127,19 +133,19 @@ class AccountTest < ActiveSupport::TestCase
   # regression test: https://github.com/3scale/system/pull/3406
   test 'update_attributes with nil as param should not raise error' do
     buyer = FactoryBot.create(:simple_buyer)
-    buyer.update_attributes(nil)
+    buyer.update(nil)
   end
 
   test 'should validate self_domain uniqueness' do
     account = FactoryBot.build_stubbed(:simple_provider)
-    other   = FactoryBot.build_stubbed(:simple_provider)
+    other = FactoryBot.build_stubbed(:simple_provider)
 
     assert account.valid?
     assert other.valid?
 
     other.self_domain = account.self_domain.upcase
 
-    refute other.valid?
+    assert_not other.valid?
     assert other.errors[:self_domain]
   end
 
@@ -171,57 +177,19 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal [], account.received_messages
   end
 
-  context 'providers named_scope' do
-    setup do
-      provider = FactoryBot.create(:simple_provider)
+  test 'providers named_scope return non-readonly objects' do
+    provider = FactoryBot.create(:simple_provider)
+    @named_scoped_provider = provider
 
-      @named_scoped_provider = provider
-    end
-
-    should 'return non-readonly objects' do
-      @named_scoped_provider.update_attribute :org_name, 'account is not readonly'
-    end
+    @named_scoped_provider.update(org_name: 'account is not readonly')
   end
 
-  context 'deleted buyer account' do
-    should 'have working #to_xml' do
-      buyer = FactoryBot.create(:simple_buyer)
+  test 'deleted buyer account have working #to_xml' do
+    buyer = FactoryBot.create(:simple_buyer)
 
-      buyer.destroy
+    buyer.destroy
 
-      assert buyer.to_xml
-    end
-  end
-
-  #TODO: test scopes chained, and with nil params
-  context 'searching between dates' do
-    setup do
-      @january = Date.parse '1 - Jan - 2010'
-      @april   = Date.parse '1 - Apr - 2010'
-
-      @created_in_january = FactoryBot.create(:simple_provider, created_at: @january + 1)
-      @created_in_april   = FactoryBot.create(:simple_provider, created_at: @april + 1)
-    end
-
-    context '.created_after named_scope' do
-      should 'return accounts created after passed date' do
-        assert Account.created_after(@april).include?(@created_in_april)
-      end
-
-      should 'not return accounts created before passed date' do
-        assert_equal false, Account.created_after(@april).include?(@created_in_january)
-      end
-    end
-
-    context '.created_before named_scope' do
-      should 'return accounts created before passed date' do
-        assert Account.created_before(@april).include?(@created_in_january)
-      end
-
-      should 'not return accounts created before passed date' do
-        assert_equal false, Account.created_before(@april).include?(@created_in_april)
-      end
-    end
+    assert buyer.to_xml
   end
 
   test 'Account#admins returns users with admin role' do
@@ -232,74 +200,53 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal [admin], account.admins
   end
 
-  context 'An Account' do
-    setup do
-      @account = FactoryBot.build(:simple_account, org_name: 'Panda Research Base')
-    end
+  test 'have nil VAT rate' do
+    assert_nil @account.vat_rate
 
-    should 'have nil VAT rate' do
-      assert_nil @account.vat_rate
+    @account.update_attribute(:vat_rate, 0) # rubocop:disable Rails/SkipsModelValidations
+    assert_equal 0.0, @account.reload.vat_rate
 
-      @account.update_attribute(:vat_rate, 0)
-      assert_equal 0.0, @account.reload.vat_rate
+    @account.update_attribute(:vat_rate, 2.34) # rubocop:disable Rails/SkipsModelValidations
+    assert_equal 2.34, @account.reload.vat_rate
+  end
 
-      @account.update_attribute(:vat_rate, 2.34)
-      assert_equal 2.34, @account.reload.vat_rate
-    end
+  test 'without :timezone set return UTC as default :timezone' do
+    assert_equal 'UTC', @account.timezone
+  end
 
-    context "without :timezone set" do
-      should 'return UTC as default :timezone' do
-        assert_equal 'UTC', @account.timezone
-      end
+  ['Chennai', 'Kolkata', 'Mumbai', 'New Delhi', 'Sri Jayawardenepura',
+   'Adelaide', 'Darwin', 'Rangoon', 'Kathmandu','Kabul', 'Tehran'].each do |shift|
+    should_not allow_value(shift).for(:timezone)
+  end
+  should_not allow_value("XXX").for(:timezone)
+  should_not allow_value("").for(:timezone)
+  should allow_value("Prague").for(:timezone)
+  should allow_value("Jerusalem").for(:timezone)
+  should allow_value("Madrid").for(:timezone)
 
-      ['Chennai', 'Kolkata', 'Mumbai', 'New Delhi', 'Sri Jayawardenepura',
-       'Adelaide', 'Darwin', 'Rangoon', 'Kathmandu','Kabul', 'Tehran' ].each do |shift|
-        should_not allow_value(shift).for(:timezone)
-      end
-      should_not allow_value("XXX").for(:timezone)
-      should_not allow_value("").for(:timezone)
-      should allow_value("Prague").for(:timezone)
-      should allow_value("Jerusalem").for(:timezone)
-      should allow_value("Madrid").for(:timezone)
-    end
+  test 'without country return EUR on :currency' do
+    @account.country = nil
+    assert_equal 'EUR', @account.currency
+  end
 
-    context 'without country' do
-      setup do
-        @account.country = nil
-      end
+  test 'without country return zero on :tax_tate' do
+    @account.country = nil
+    assert_equal 0.0, @account.tax_rate
+  end
 
-      should 'return EUR on :currency' do
-        assert_equal 'EUR', @account.currency
-      end
+  test 'with country that has no currency return EUR on :currency' do
+    @account.country = FactoryBot.create(:country, currency: nil)
+    assert_equal 'EUR', @account.currency
+  end
 
-      should 'return zero on :tax_tate' do
-        assert_equal 0.0, @account.tax_rate
-      end
-    end
+  test 'with country return currency of country on :currency' do
+    @account.country = countries(:es)
+    assert_equal 'EUR', @account.currency
+  end
 
-    context 'with country that has no currency' do
-      setup do
-        @account.country = FactoryBot.create(:country, :currency => nil)
-      end
-
-      should 'return EUR on :currency' do
-        assert_equal 'EUR', @account.currency
-      end
-    end
-
-    context 'with country' do
-      setup do
-        @account.country = countries(:es)
-      end
-
-      should 'return currency of country on :currency' do
-        assert_equal 'EUR', @account.currency
-      end
-
-      should 'return tax_rate of country on :tax_rate' do
-        assert_equal 16, @account.tax_rate
-      end
-    end
+  test 'with country return tax_rate of country on :tax_rate' do
+    @account.country = countries(:es)
+    assert_equal 16, @account.tax_rate
   end
 
   test 'Account.buyer_users returns all users of all buyer accounts' do
@@ -320,16 +267,16 @@ class AccountTest < ActiveSupport::TestCase
 
   test "Account.managed_users returns users of the account and users of it's buyer accounts" do
     provider_account = FactoryBot.create(:simple_provider)
-    provider_user    = FactoryBot.create(:simple_user, account: provider_account)
+    provider_user = FactoryBot.create(:simple_user, account: provider_account)
 
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
-    buyer_user    = FactoryBot.create(:simple_user, account: buyer_account)
+    buyer_user = FactoryBot.create(:simple_user, account: buyer_account)
 
     other_provider_account = FactoryBot.create(:simple_provider)
-    other_provider_user    = FactoryBot.create(:simple_user, account: other_provider_account)
+    other_provider_user = FactoryBot.create(:simple_user, account: other_provider_account)
 
     other_buyer_account = FactoryBot.create(:simple_buyer, provider_account: other_provider_account)
-    other_buyer_user    = FactoryBot.create(:simple_user, account: other_buyer_account)
+    other_buyer_user = FactoryBot.create(:simple_user, account: other_buyer_account)
 
     assert_contains provider_account.managed_users, provider_user
     assert_contains provider_account.managed_users, buyer_user
@@ -343,26 +290,24 @@ class AccountTest < ActiveSupport::TestCase
 
     FactoryBot.create(:simple_user, account: provider_account)
 
-    assert !provider_account.managed_users.first.readonly?
+    assert_not provider_account.managed_users.first.readonly?
   end
 
-  context 'settings' do
-    should 'be created lazily for existing account' do
-      assert_no_difference 'Settings.count' do
-        @account = Account.create!(org_name: 'Organization')
-      end
-
-      assert_difference 'Settings.count', 1 do
-        @account.settings
-      end
+  test 'settings be created lazily for existing account' do
+    assert_no_difference 'Settings.count' do
+      @account = Account.create!(org_name: 'Organization')
     end
 
-    should 'be build lazily for new account' do
-      account = Account.new
-
-      assert_not_nil account.settings
-      assert account.settings.new_record?
+    assert_difference 'Settings.count', 1 do
+      @account.settings
     end
+  end
+
+  test 'settings be build lazily for new account' do
+    account = Account.new
+
+    assert_not_nil account.settings
+    assert account.settings.new_record?
   end
 
   test 'profile is lazily created' do
@@ -423,7 +368,6 @@ class AccountTest < ActiveSupport::TestCase
     assert_nil account.domain
   end
 
-
   test 'does not generate site_access_code if the account is not a provider' do
     account = Account.create!(org_name: 'Bar')
     assert_nil account.site_access_code
@@ -471,7 +415,7 @@ class AccountTest < ActiveSupport::TestCase
     account = Account.new(org_name: 'more master, yeah!')
     account.master = true
 
-    refute account.valid?, 'other master should be invalid'
+    assert_not account.valid?, 'other master should be invalid'
     assert_not_nil account.errors[:master]
   end
 
@@ -497,7 +441,7 @@ class AccountTest < ActiveSupport::TestCase
 
     # account is master but it's not onprem
     ThreeScale.config.stubs(onpremises: false)
-    refute account.master_on_premises?
+    assert_not account.master_on_premises?
 
     # account is master and it's onprem
     ThreeScale.config.stubs(onpremises: true)
@@ -506,12 +450,11 @@ class AccountTest < ActiveSupport::TestCase
     # it's onpprem but account is not master
     account.master = false
     ThreeScale.config.stubs(onpremises: true)
-    refute account.master_on_premises?
+    assert_not account.master_on_premises?
   end
 
   test "Account#feature_allowed? returns true only if it's plan includes that feature" do
     feature_one = master_account.default_service.features.create!(name: 'free t-shirt')
-    feature_two = master_account.default_service.features.create!(name: 'free pizza')
 
     plan = master_account.default_service.plans.published.first
     plan.enable_feature!(feature_one.system_name)
@@ -521,8 +464,8 @@ class AccountTest < ActiveSupport::TestCase
     assert account.feature_allowed?(:free_t_shirt)  # works with symbols
     assert account.feature_allowed?('free_t_shirt') # and strings
 
-    refute account.feature_allowed?(:free_pizza)
-    refute account.feature_allowed?(:instant_success)
+    assert_not account.feature_allowed?(:free_pizza)
+    assert_not account.feature_allowed?(:instant_success)
   end
 
   test "Account#feature_allowed? returns true by default for master account" do
@@ -531,14 +474,14 @@ class AccountTest < ActiveSupport::TestCase
     assert master_account.feature_allowed?(:domination_over_universe)
 
     # returns false for some features for master account
-    assert !master_account.feature_allowed?(:anonymous_clients)
+    assert_not master_account.feature_allowed?(:anonymous_clients)
   end
 
   test "deleted billing strategy on destroy" do
     provider = FactoryBot.create(:simple_provider)
     id = provider.create_billing_strategy.id
     provider.destroy
-    assert_nil Finance::BillingStrategy.find_by_id(id), 'BillingStrategy not deleted'
+    assert_nil Finance::BillingStrategy.find_by(id: id), 'BillingStrategy not deleted'
   end
 
   test 'Account.id_from_api_key reads data from cache on cache hit' do
@@ -568,20 +511,20 @@ class AccountTest < ActiveSupport::TestCase
 
     account.destroy
 
-    assert_nil Service.find_by_id(service.id)
+    assert_nil Service.find_by(id: service.id)
   end
 
   test "destroying account destroys the default service firing services destroy callbacks" do
     account = FactoryBot.create(:provider_account)
     service = account.default_service
-    metric  = FactoryBot.create(:metric, service: service)
+    metric = FactoryBot.create(:metric, service: service)
     feature = FactoryBot.create(:feature, featurable: service)
 
     account.destroy
 
-    assert_nil Service.find_by_id(service.id)
-    assert_nil Metric.find_by_id(metric.id)
-    assert_nil Feature.find_by_id(feature.id)
+    assert_nil Service.find_by(id: service.id)
+    assert_nil Metric.find_by(id: metric.id)
+    assert_nil Feature.find_by(id: feature.id)
   end
 
   test "destroying account will stop if features deletion fails" do
@@ -589,14 +532,14 @@ class AccountTest < ActiveSupport::TestCase
 
     account = FactoryBot.create(:provider_account)
     service = account.default_service
-    metric  = FactoryBot.create(:metric, service: service)
+    metric = FactoryBot.create(:metric, service: service)
     feature = FactoryBot.create(:feature, featurable: service)
 
-    refute account.destroy
+    assert_not account.destroy
 
-    assert_not_nil Service.find_by_id(service.id)
-    assert_not_nil Metric.find_by_id(metric.id)
-    assert_not_nil Feature.find_by_id(feature.id)
+    assert_not_nil Service.find_by(id: service.id)
+    assert_not_nil Metric.find_by(id: metric.id)
+    assert_not_nil Feature.find_by(id: feature.id)
   end
 
   test 'destroying provider account with buyer accounts' do
@@ -615,122 +558,19 @@ class AccountTest < ActiveSupport::TestCase
     assert Account.model_name.human == "Account"
   end
 
-  context '#can_create_application?' do
-    setup do
-      provider = FactoryBot.create(:provider_account)
-      @buyer   = FactoryBot.create(:simple_buyer, provider_account: provider)
-
-      @service = @buyer.provider_account.default_service
-      #making the service subscribeable
-      @service.publish!
-      @plan = FactoryBot.create(:simple_application_plan, service: @service)
-      @plan.publish!
-
-      #another subscribeable service
-      @service_denied = FactoryBot.create(:service, account: @buyer.provider_account)
-      @service_denied.publish!
-      @plan2 = FactoryBot.create(:simple_application_plan, service: @service_denied)
-      @plan2.publish!
-
-      #subscribing to services
-      @buyer.buy! @service.service_plans.first
-      @buyer.buy! @service_denied.service_plans.first
-
-      @service.update_attribute        :buyers_manage_apps, true
-      @service_denied.update_attribute :buyers_manage_apps, false
-    end
-
-    should 'deny or allow depending of the service' do
-      assert  @buyer.can_create_application?(@service)
-      assert !@buyer.can_create_application?(@service_denied)
-    end
-
-    context 'any service allows buyers_manage_apps' do
-      should 'return true when no service passed' do
-        assert @buyer.can_create_application?
-      end
-    end # any service allows buyers_manage_apps
-
-    context 'all services deny buyers_manage_apps' do
-      setup do
-        @service.update_attribute :buyers_manage_apps, false
-      end
-
-      should 'return false' do
-        assert !@buyer.can_create_application?
-      end
-    end # all services deny buyers_manage_apps
-
-  end # #can_create_application?
-
-  context '#paid?' do
-    setup do
-      @buyer = FactoryBot.create(:buyer_account)
-
-      @service = @buyer.provider_account.default_service
-      #making the service subscribeable
-      @service.publish!
-
-      @paid_plan = FactoryBot.create(:simple_application_plan, service: @service, cost_per_month: 10.0)
-      @paid_plan.publish!
-
-      @free_plan = FactoryBot.create(:simple_application_plan, service: @service)
-      @free_plan.publish!
-
-      #subscribing to services
-      @buyer.buy! @service.service_plans.first
-      @buyer.buy! @free_plan
-    end
-
-    should 'be false when account has no paid contract' do
-      assert !@buyer.paid?
-    end
-
-    should 'be true when account has at least one paid contract' do
-      @buyer.buy! @paid_plan
-      assert @buyer.paid?
-    end
-  end #paid?
-
-  context '#on_trial?' do
-    setup do
-      @buyer = FactoryBot.create(:buyer_account)
-      @service = @buyer.provider_account.default_service
-      #making the service subscribeable
-      @service.publish!
-
-      @paid_15days = @service.service_plans.first
-      @paid_15days.update_attributes(cost_per_month: 10.0, trial_period_days: 15, state: 'published')
-
-      @paid_notrial = FactoryBot.create(:simple_application_plan, service: @service, cost_per_month: 10.0, state: 'published')
-
-      @buyer.buy! @paid_15days
-    end
-
-    should 'be true when account has all contracts on trial' do
-      @buyer.reload
-      assert @buyer.on_trial?
-    end
-
-    should 'be false when account has at least a contract is not on trial' do
-      @buyer.buy! @paid_notrial
-      assert !@buyer.on_trial?
-    end
-  end #on_trial?
-
   test "support email should have a valid email format for providers" do
-    provider = FactoryBot.build(:simple_provider, :support_email         => "support-email-acc.example.net",
-                                                :finance_support_email => "finance-support-acc.example.net")
+    provider = FactoryBot.build(:simple_provider, support_email: "support-email-acc.example.net",
+                                                  finance_support_email: "finance-support-acc.example.net")
     provider.valid?
 
     assert provider.errors[:support_email].present?
     assert provider.errors[:finance_support_email].present?
   end
 
-  #regression test
+  # regression test
   test "support email should not be validated for buyers" do
-    buyer = FactoryBot.build(:simple_buyer, :support_email         => "support-email-acc.example.net",
-                                          :finance_support_email => "finance-support-acc.example.net")
+    buyer = FactoryBot.build(:simple_buyer, support_email: "support-email-acc.example.net",
+                                            finance_support_email: "finance-support-acc.example.net")
 
     assert buyer.valid?
     assert buyer.errors[:support_email].empty?
@@ -746,7 +586,7 @@ class AccountTest < ActiveSupport::TestCase
     provider = FactoryBot.build(:simple_provider, support_email: "support-email@acc.example.net")
     assert_equal provider.finance_support_email, provider.support_email
 
-    provider.update_attribute :finance_support_email, "finance-support@acc.example.net"
+    provider.update(finance_support_email: "finance-support@acc.example.net")
     assert_equal provider.finance_support_email, "finance-support@acc.example.net"
   end
 
@@ -755,12 +595,12 @@ class AccountTest < ActiveSupport::TestCase
     master_plan = master_account.default_application_plans.first!
 
     provider = FactoryBot.create(:simple_provider, provider_account: master_account)
-    cinstance_tenant = FactoryBot.create(:cinstance, plan: master_plan, user_account: provider)
+    FactoryBot.create(:cinstance, plan: master_plan, user_account: provider)
 
     service = FactoryBot.create(:simple_service, account: provider)
     buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
     tenant_plan = FactoryBot.create(:application_plan, issuer: service)
-    cinstance_buyer = FactoryBot.create(:cinstance, plan: tenant_plan, user_account: buyer)
+    FactoryBot.create(:cinstance, plan: tenant_plan, user_account: buyer)
 
     assert_not_equal 0, provider.provided_cinstances.reload.count
     assert_not_equal 0, provider.provided_plans.reload.count
@@ -783,10 +623,12 @@ class AccountTest < ActiveSupport::TestCase
     account = Account.new
 
     # just to make the serialization work
-    def account.fields_definitions_source_root!; self; end
+    def account.fields_definitions_source_root!
+      self
+    end
 
     domain = 'some.example.com'
-    admin_domain = 'admin.#{ThreeScale.config.superdomain}'
+    admin_domain = "admin.#{ThreeScale.config.superdomain}"
 
     account.domain = domain
     account.self_domain = admin_domain
@@ -798,10 +640,10 @@ class AccountTest < ActiveSupport::TestCase
 
     xml = account.to_xml
 
-    refute_match domain_xml, xml
-    refute_match admin_domain_xml, xml
-    refute_match base_url_xml, xml
-    refute_match admin_base_url_xml, xml
+    assert_no_match domain_xml, xml
+    assert_no_match admin_domain_xml, xml
+    assert_no_match base_url_xml, xml
+    assert_no_match admin_base_url_xml, xml
 
     account.provider = true
 
@@ -814,7 +656,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'settings' do
-    account  = Account.new
+    account = Account.new
     settings = account.settings
 
     assert_equal account, settings.account
@@ -823,7 +665,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test 'multiple_applications_allowed? does not crash when the account does not have settings (already deleted)' do
-    refute Account.new.multiple_applications_allowed?
+    assert_not Account.new.multiple_applications_allowed?
   end
 
   test 'fetch_dispatch_rule' do
@@ -833,12 +675,12 @@ class AccountTest < ActiveSupport::TestCase
     daily_reports = SystemOperation.for(:daily_reports)
 
     assert account.fetch_dispatch_rule(user_signup).dispatch
-    refute account.fetch_dispatch_rule(daily_reports).dispatch
+    assert_not account.fetch_dispatch_rule(daily_reports).dispatch
   end
 
   test 'dispatch_rule_for' do
-    account       = FactoryBot.build_stubbed(:simple_provider)
-    user_signup   = SystemOperation.for(:user_signup)
+    account = FactoryBot.build_stubbed(:simple_provider)
+    user_signup = SystemOperation.for(:user_signup)
     daily_reports = SystemOperation.for(:daily_reports)
 
     FactoryBot.create(:mail_dispatch_rule, system_operation: daily_reports, account: account)
@@ -846,8 +688,8 @@ class AccountTest < ActiveSupport::TestCase
     # When the migration is enabled, we disable the dispatch rules
     # because notifications are delivered and we don't want to deliver the info twice.
     account.expects(:provider_can_use?).with(:new_notification_system).returns(true).twice
-    refute account.dispatch_rule_for(user_signup).dispatch
-    refute account.dispatch_rule_for(daily_reports).dispatch
+    assert_not account.dispatch_rule_for(user_signup).dispatch
+    assert_not account.dispatch_rule_for(daily_reports).dispatch
 
     account.expects(:provider_can_use?).with(:new_notification_system).returns(false).twice
     assert account.dispatch_rule_for(user_signup).dispatch
@@ -860,8 +702,8 @@ class AccountTest < ActiveSupport::TestCase
 
     assert_equal [service], account.accessible_services
 
-    service.update_column(:state, 'deleted')
-    refute account.accessible_services.exists?
+    service.update(state: 'deleted')
+    assert_not account.accessible_services.exists?
   end
 
   def test_smart_destroy_buyer
@@ -881,6 +723,128 @@ class AccountTest < ActiveSupport::TestCase
   def test_smart_destroy_master
     master_account.smart_destroy
     assert master_account.reload
-    refute master_account.reload.scheduled_for_deletion?
+    assert_not master_account.reload.scheduled_for_deletion?
+  end
+end
+
+#TODO: test scopes chained, and with nil params
+class SearchingBetweenDatesTest < ActiveSupport::TestCase
+  def setup
+    @january = Date.parse '1 - Jan - 2010'
+    @april = Date.parse '1 - Apr - 2010'
+
+    @created_in_january = FactoryBot.create(:simple_provider, created_at: @january + 1)
+    @created_in_april = FactoryBot.create(:simple_provider, created_at: @april + 1)
+  end
+
+  test '.created_after named_scope return accounts created after passed date' do
+    assert_includes Account.created_after(@april), @created_in_april
+  end
+
+  test '.created_after named_scope not return accounts created before passed date' do
+    assert_not_includes Account.created_after(@april), @created_in_january
+  end
+
+  test '.created_before named_scope return accounts created before passed date' do
+    assert_includes Account.created_before(@april), @created_in_january
+  end
+
+  test '.created_before named_scope not return accounts created before passed date' do
+    assert_not_includes Account.created_before(@april), @created_in_april
+  end
+end
+
+class CanCreateApplicationTest < ActiveSupport::TestCase
+  def setup
+    provider = FactoryBot.create(:provider_account)
+    @buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
+
+    @service = @buyer.provider_account.default_service
+    #making the service subscribeable
+    @service.publish!
+    @plan = FactoryBot.create(:simple_application_plan, service: @service)
+    @plan.publish!
+
+    #another subscribeable service
+    @service_denied = FactoryBot.create(:service, account: @buyer.provider_account)
+    @service_denied.publish!
+    @plan2 = FactoryBot.create(:simple_application_plan, service: @service_denied)
+    @plan2.publish!
+
+    #subscribing to services
+    @buyer.buy! @service.service_plans.first
+    @buyer.buy! @service_denied.service_plans.first
+
+    @service.update(buyers_manage_apps: true)
+    @service_denied.update(buyers_manage_apps: false)
+  end
+
+  test 'deny or allow depending of the service' do
+    assert @buyer.can_create_application?(@service)
+    assert_not @buyer.can_create_application?(@service_denied)
+  end
+
+  test 'any service allows buyers_manage_apps return true when no service passed' do
+    assert @buyer.can_create_application?
+  end
+
+  test 'all services deny buyers_manage_apps return false' do
+    @service.update(buyers_manage_apps: false)
+    assert_not @buyer.can_create_application?
+  end
+end
+
+class PaidTest < ActiveSupport::TestCase
+  def setup
+    @buyer = FactoryBot.create(:buyer_account)
+
+    @service = @buyer.provider_account.default_service
+    #making the service subscribeable
+    @service.publish!
+
+    @paid_plan = FactoryBot.create(:simple_application_plan, service: @service, cost_per_month: 10.0)
+    @paid_plan.publish!
+
+    @free_plan = FactoryBot.create(:simple_application_plan, service: @service)
+    @free_plan.publish!
+
+    #subscribing to services
+    @buyer.buy! @service.service_plans.first
+    @buyer.buy! @free_plan
+  end
+
+  test 'be false when account has no paid contract' do
+    assert_not @buyer.paid?
+  end
+
+  test 'be true when account has at least one paid contract' do
+    @buyer.buy! @paid_plan
+    assert @buyer.paid?
+  end
+end
+
+class OnTrialTest < ActiveSupport::TestCase
+  def setup
+    @buyer = FactoryBot.create(:buyer_account)
+    @service = @buyer.provider_account.default_service
+    #making the service subscribeable
+    @service.publish!
+
+    @paid_15days = @service.service_plans.first
+    @paid_15days.update(cost_per_month: 10.0, trial_period_days: 15, state: 'published')
+
+    @paid_notrial = FactoryBot.create(:simple_application_plan, service: @service, cost_per_month: 10.0, state: 'published')
+
+    @buyer.buy! @paid_15days
+  end
+
+  test 'be true when account has all contracts on trial' do
+    @buyer.reload
+    assert @buyer.on_trial?
+  end
+
+  test 'be false when account has at least a contract is not on trial' do
+    @buyer.buy! @paid_notrial
+    assert_not @buyer.on_trial?
   end
 end

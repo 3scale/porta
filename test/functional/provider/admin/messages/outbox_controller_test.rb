@@ -22,7 +22,7 @@ class Provider::Admin::Messages::OutboxControllerTest < ActionController::TestCa
     login_as provider.first_admin
     host! provider.admin_domain
 
-    get 'index', :page => 'xoforvfmy'
+    get 'index', params: { page: 'xoforvfmy' }
     assert_response :not_found
   end
 end

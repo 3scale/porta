@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 
@@ -12,7 +14,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
     assert_recognizes({controller: 'developer_portal/admin/account/account_plans',
                        action: 'change',
                        format: 'xml', id: 'pro'},
-                       method: :post, path: '/buyer/plans/pro/change.xml')
+                      method: :post, path: '/buyer/plans/pro/change.xml')
   end
 
   def setup
@@ -61,8 +63,8 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
       .raises(Backend::ProviderKeyInvalid)
 
     @request.host = @provider.admin_domain
-    post :change, :format => 'xml', :id => '42',
-         :provider_key => 'fake', :username => 'bob'
+    post :change, params: { format: 'xml', id: '42',
+         provider_key: 'fake', username: 'bob' }
 
     assert_response :forbidden
     assert_equal 'application/xml', @response.content_type
@@ -78,9 +80,9 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
       .with(username: 'fake').returns(nil).at_least_once
 
     @request.host = @provider.admin_domain
-    post :change, :format => 'xml', :id => '42',
-         :provider_key => @provider.api_key,
-         :username => 'fake'
+    post :change, params: { format: 'xml', id: '42',
+         provider_key: @provider.api_key,
+         username: 'fake' }
 
     assert_response :forbidden
     assert_equal 'application/xml', @response.content_type

@@ -1,42 +1,53 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class MandatoryKeysTest < ActionDispatch::IntegrationTest
-  context 'Mandatory keys: ' do
+  setup do
+    provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
+    @service = FactoryBot.create(:simple_service, account: provider, backend_version: 2)
+    @plan = FactoryBot.create(:application_plan, issuer: @service)
+    @buyer = FactoryBot.create(:buyer_account, provider_account: provider)
 
-    setup do
-      @provider = FactoryBot.create :provider_account, :domain => 'provider.example.com'
-      @plan = FactoryBot.create :application_plan, :issuer => @provider.default_service
-      @service = @provider.first_service!
-      @service.update_attribute(:backend_version, '2')
-      @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+    ApplicationKey.disable_backend!
+  end
 
-      ApplicationKey.disable_backend!
+  class ServiceWithMandatoryAppKeyTest < self
+    def setup
+      super
+      @service.update(mandatory_app_key: true)
     end
 
-    context 'service has mandatory_app_key' do
-      setup do
-        @service.update_attribute(:mandatory_app_key, true)
-      end
+    test 'create a key on app creation' do
+      app = @buyer.buy! @plan
 
-      should 'create a key on app creation' do
-        app = @buyer.buy! @plan
-
-        assert_equal 1, app.application_keys.size
-      end
-
-      should 'create not be able to delete the last key'
+      assert_equal 1, app.application_keys.size
     end
 
-    context "service hasn't mandatory_app_key" do
-      setup do
-        @service.update_attribute(:mandatory_app_key, false)
-      end
+    test 'not be able to delete the last key' do
+      app = @buyer.buy! @plan
+      assert_not app.can_delete_key?
 
-      should 'not create a key on app creation' do
-        app = @buyer.buy! @plan
+      app.application_keys.new
+      assert app.can_delete_key?
+    end
+  end
 
-        assert_equal 0, app.application_keys.size
-      end
+  class ServiceWithoutMandatoryAppKeyTest < self
+    def setup
+      super
+      @service.update(mandatory_app_key: false)
+    end
+
+    test 'not create a key on app creation' do
+      app = @buyer.buy! @plan
+
+      assert_equal 0, app.application_keys.size
+    end
+
+    test 'be able to delete keys' do
+      app = @buyer.buy! @plan
+      assert app.can_delete_key?
     end
   end
 end

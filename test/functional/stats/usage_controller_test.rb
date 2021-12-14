@@ -9,14 +9,14 @@ class Stats::UsageControllerTest < ActionController::TestCase
   end
 
   test 'index requires login' do
-    get :index, :service_id => @service.id
+    get :index, params: { service_id: @service.id }
     assert_redirected_to '/login'
   end
 
   test 'index' do
     login_as(@provider.admins.first)
     Logic::RollingUpdates.stubs(skipped?: true)
-    get :index, :service_id => @service.id
+    get :index, params: { service_id: @service.id }
 
     assert_response :success
     assert_template 'stats/usage/index'
@@ -27,7 +27,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
     metric = FactoryBot.create(:metric, :service => @service,
                      :parent_id => @service.metrics.hits.id)
     login_as(@provider.admins.first)
-    get :top_applications, :service_id => @service.id
+    get :top_applications, params: { service_id: @service.id }
     assert_response :success
     assert assigns(:metrics)
     # assert assigns(:method_metrics)
@@ -46,7 +46,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
       .returns(metric => data)
 
     login_as(@provider.admins.first)
-    get :hours, :service_id => @service.id
+    get :hours, params: { service_id: @service.id }
 
     assert_response :success
   end

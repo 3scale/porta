@@ -32,6 +32,6 @@ class Provider::Admin::Account::AuthenticationProviderFlowTestingController < Pr
   end
 
   def authentication_provider
-    authentication_providers.find(params[:id])
+    authentication_providers.find(params.require(:id))
   end
 end

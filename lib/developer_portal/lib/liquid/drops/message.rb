@@ -12,7 +12,7 @@ module Liquid
 
       desc "If subject is not present then either a truncated body or `(no subject)` string is returned."
       def subject
-        @model.subject.presence || @model.body.truncate(15).presence || '(no subject)'
+        @model.subject.presence || @model.body.presence&.truncate(15) || '(no subject)'
       end
 
       desc "Returns body of the message."

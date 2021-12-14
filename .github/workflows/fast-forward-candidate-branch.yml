@@ -1,4 +1,4 @@
-name: Fast-forward candidate branch to HEAD of default branch
+name: Fast-forward candidate or stable branch to a SHA1
 on:
   workflow_dispatch:
     inputs:
@@ -6,9 +6,13 @@ on:
         description: 'The release version number (e.g, 2.11)'
         required: true
       ref:
-        description: 'The SHA1 or branch name the candidate branch will point to'
+        description: 'The SHA1 or branch name the candidate or stable branch will point to. The output branch will be 3scale-{release}-{branch_suffix}'
         required: true
-        default: origin/master
+        default: master
+      branch_suffix:
+        description: 'The branch suffix can be `candidate|stable`. The output branch will be 3scale-{release}-{branch_suffix}'
+        required: true
+        default: candidate
 
 jobs:
   fast-forward:
@@ -16,13 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: 3scale-${{ github.event.inputs.release }}-candidate
+          ref: ${{ github.event.inputs.ref }}
           fetch-depth: 0
           token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
       - run: |
-            export candidate_branch="3scale-${{ github.event.inputs.release }}-candidate"
-            git checkout ${candidate_branch} && git pull ||  git checkout -b ${candidate_branch}
-            git merge ${{ github.event.inputs.ref }} --ff-only
-            git push origin ${candidate_branch}
-
-        name: Push to candidate branch
+          export branch="3scale-${{ github.event.inputs.release }}-${{ github.event.inputs.branch_suffix }}"
+          git checkout ${branch} && git pull ||  git checkout -b ${branch}
+          git merge ${{ github.event.inputs.ref }} --ff-only
+          git push origin ${branch}

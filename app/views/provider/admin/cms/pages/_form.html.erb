@@ -24,5 +24,5 @@
   <%= f.input :liquid_enabled, :hint => true %>
   <%= f.input :handler, :as => :handler, :hint => true %>
 
-  <%= f.input :tag_list %>
+  <%= f.input :tag_list, :hint => 'List of tags separated with comma (","), example: tag1, tag2, tag3', :input_html => { :value => @page.tag_list.join(", ") } %>
 <% end %>

@@ -37,18 +37,22 @@ base: &default
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
   onpremises: false
-  active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
   error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
-  billing_canaries:
   apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
   zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
+
+  # deprecated: use payments.yaml to configure payments instead
+  active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
+  billing_canaries:
 
 development:
   <<: *default
   secure_cookie: false
   force_ssl: false
   report_traffic: false
+
+  # deprecated: use payments.yaml to configure payments instead
   active_merchant_logging: true
 
 test:

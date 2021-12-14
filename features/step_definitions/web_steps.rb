@@ -107,6 +107,14 @@ def pf4_select(value, from:)
   end
 end
 
+def pf4_select_first(from:)
+  select = find('.pf-c-form__label', text: from).sibling('.pf-c-select')
+  within select do
+    find('.pf-c-select__toggle').click unless select['class'].include?('pf-m-expanded')
+    find('ul.pf-c-select__menu li button:not(.pf-m-disabled)').click
+  end
+end
+
 # Overrides Node::Actions#fill_in
 def fill_in
   if page.has_css?('.pf-c-form__label', text: field)

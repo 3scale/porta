@@ -28,7 +28,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def show
-    if params[:password_reset_token].present? && session[:password_reset_token].blank?
+    if password_params[:password_reset_token].present? && session[:password_reset_token].blank?
       new_token = @user.generate_lost_password_token
       session[:password_reset_token] = new_token
       redirect_to provider_password_path
@@ -36,7 +36,7 @@ class Provider::PasswordsController < FrontendController
   end
 
   def update
-    user = params[:user]
+    user = password_params[:user]
     if @user.update_password(user[:password], user[:password_confirmation] )
       reset_session_password_token
       flash[:notice] = "The password has been changed."
@@ -95,5 +95,9 @@ class Provider::PasswordsController < FrontendController
   def passwords_allowed?
     return unless @provider.settings.enforce_sso?
     redirect_to provider_login_path, flash: {error: 'Password login has been disabled.'}
+  end
+
+  def password_params
+    params.permit(:password_reset_token, user: %i[password password_confirmation])
   end
 end

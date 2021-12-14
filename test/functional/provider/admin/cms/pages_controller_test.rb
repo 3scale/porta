@@ -13,7 +13,7 @@ class Provider::Admin::CMS::PagesControllerTest < ActionController::TestCase
     root = FactoryBot.create(:root_cms_section, :provider => @provider)
     page = FactoryBot.create(:cms_builtin_page, :provider => @provider, :section => root)
 
-    delete :destroy, :id => page.id
+    delete :destroy, params: { id: page.id }
 
     assert_response :not_found
   end

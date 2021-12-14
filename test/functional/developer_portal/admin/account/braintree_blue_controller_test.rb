@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPortal::AbstractPaymentGatewaysControllerTest
@@ -18,7 +20,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
 
     @controller.stubs(current_account: @account)
 
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
@@ -35,7 +37,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     assert_nil @account.credit_card_auth_code
 
     @controller.stubs(current_account: @account)
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
@@ -53,7 +55,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     @controller.stubs(current_account: @account)
     session[:plan_changes] = {1 => 2}
 
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
@@ -72,7 +74,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     @controller.stubs(current_account: @account)
     session[:plan_changes] = {1 => 2}
 
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
@@ -91,7 +93,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     @controller.stubs(current_account: @account)
     session[:plan_changes] = {1 => 2}
 
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
@@ -104,7 +106,7 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
     PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
     ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
@@ -114,11 +116,11 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   test '#hosted_success does not suspend account when failure count is below the threshold' do
     PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
 
-    post :hosted_success, form_params
+    post :hosted_success, params: form_params
 
     @account.reload
 
-    refute @account.suspended?
+    assert_not @account.suspended?
   end
 
   protected

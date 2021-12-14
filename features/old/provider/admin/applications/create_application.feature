@@ -34,7 +34,6 @@ Feature: Create application from Audience
     And buyer "bob" should have 1 cinstance
 
   Scenario: Create an application for a service that doesn't allow choosing the plan
-    Given service "API" does not allow to change application plan
     When I create an application "My App" from the audience context
     Then I should be on the provider side "My App" application page
     And should see "Application was successfully created"
@@ -43,22 +42,15 @@ Feature: Create application from Audience
   Scenario: Create an application with no application plans
     Given a service "No plans API" of provider "foo.3scale.localhost"
     When I go to the provider new application page
-    And I fill in the new application form
-    Then I won't be able to select an application plan
-
-  Scenario: Create an application for a service that doesn't allow choosing the plan and no default plan
-    Given a service "Broken API" of provider "foo.3scale.localhost"
-    And an application plan "Not a default plan" of service "Broken API"
-    When I go to the provider new application page
-    And I fill in the new application form
+    And I fill in the new application form for product "No plans API"
     Then I won't be able to select an application plan
 
   Scenario: Create an application when the service doesn't have a service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
     And a service "Unsubscribed API" of provider "foo.3scale.localhost" with no service plans
     When I go to the provider new application page
-    And I fill in the new application form
-    Then I should see "In order to subscribe the Application to a Product’s Application plan, this Account needs to subscribe to a Product’s Service plan."
+    And I fill in the new application form for product "Unsubscribed API"
+    Then I should see "To subscribe the application to an application plan of this product, you must subscribe this account to a service plan linked to this product."
 
   Scenario: Create an application with a required extra field
     Given provider "foo.3scale.localhost" has the following fields defined for "Cinstance":
@@ -68,24 +60,23 @@ Feature: Create application from Audience
     And I fill in the new application form with extra fields:
       | field   | value   |
       | Wololo  | wololo  |
-    And I press "Create Application"
+    And I press "Create application"
     Then I should see "Application was successfully created"
     And buyer "bob" should have 1 cinstance
 
   Scenario: Submit button should be disabled until form is filled
-    Given service "API" allows to choose plan on app creation
     When I go to the provider new application page
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I select "bob" from "Account"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I select "API" from "Product"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I select "Basic" from "Application plan"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I fill in "Name" with "Name"
-    And I should see button "Create Application" disabled
+    And I should see button "Create application" disabled
     And I fill in "Description" with "Description"
-    Then I should see button "Create Application"
+    Then I should see button "Create application"
 
   Scenario: Create an application with a pending contract
     Given buyer "bob" is subscribed with state "pending" to the default service of provider "foo.3scale.localhost"

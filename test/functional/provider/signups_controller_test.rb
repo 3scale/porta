@@ -68,7 +68,7 @@ class Provider::SignupsControllerTest < ActionController::TestCase
       end
     end
 
-    get :show, fields: requested_fields
+    get :show, params: { fields: requested_fields }
     assert_response :success
     required_inputs = REQUIRED_FIELDS + parsed_requested_fields
 
@@ -83,16 +83,16 @@ class Provider::SignupsControllerTest < ActionController::TestCase
   test 'visit signups page, same parameters should set the same ETag header' do
     params = {origin_signup: 'test'}
 
-    first_response_etag =  get(:show, params).etag
-    second_response_etag =  get(:show, params).etag
+    first_response_etag =  get(:show, params: params).etag
+    second_response_etag =  get(:show, params: params).etag
 
     assert_equal first_response_etag, second_response_etag
   end
 
   test 'visit signups page, different parameters should not set the same ETag header' do
-    first_response_etag =  get(:show, {origin_signup: 'test'}).etag
-    second_response_etag =  get(:show, {fields: DEFAULT_FIELDS, origin_signup: 'test'}).etag
-    third_response_etag =  get(:show, {fields: DEFAULT_FIELDS, origin_signup: 'another-test'}).etag
+    first_response_etag =  get(:show, params: { origin_signup: 'test' }).etag
+    second_response_etag =  get(:show, params: { fields: DEFAULT_FIELDS, origin_signup: 'test' }).etag
+    third_response_etag =  get(:show, params: { fields: DEFAULT_FIELDS, origin_signup: 'another-test' }).etag
 
     assert_not_equal first_response_etag, second_response_etag
     assert_not_equal first_response_etag, third_response_etag
@@ -117,11 +117,11 @@ class Provider::SignupsControllerTest < ActionController::TestCase
 
   test 'options should not execute the action' do
     @controller.expects(:show).never
-    process :show, 'OPTIONS'
+    process :show, method: 'OPTIONS'
   end
 
   test 'options should execute the action cors' do
     @controller.expects(:cors).once
-    process :show, 'OPTIONS'
+    process :show, method: 'OPTIONS'
   end
 end

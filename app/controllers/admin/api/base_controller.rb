@@ -71,6 +71,10 @@ class Admin::Api::BaseController < ApplicationController
                  represent_with: AccountBillingAddressErrorRepresenter
   end
 
+  def api_controller?
+    true
+  end
+
   private
 
   def accessible_services
