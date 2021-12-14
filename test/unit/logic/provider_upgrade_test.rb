@@ -154,7 +154,7 @@ class Logic::ProviderUpgradeTest < ActiveSupport::TestCase
     constraints = @provider.create_provider_constraints!
 
     assert_difference(Audited.audit_class.method(:count), +2) do
-      ProviderConstraints.with_auditing do
+      ProviderConstraints.with_synchronous_auditing do
         assert constraints.auditing_enabled?, 'auditing should be enabled'
         @provider.force_upgrade_to_provider_plan!(@pro)
       end
