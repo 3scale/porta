@@ -1,3 +1,4 @@
+@javascript
 Feature: Metric update
   In order to change my metrics for whatever reason
   As a provider
@@ -14,6 +15,7 @@ Feature: Metric update
     And I follow "Hits"
     Then I should not see field "metric[system_name]"
 
+  # TODO: redirect update/new/delete metric to tab metrics
   Scenario: Change some fields from the service definition page
     When I log in as provider "foo.3scale.localhost"
     And I go to the service definition page

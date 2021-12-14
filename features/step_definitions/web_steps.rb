@@ -262,3 +262,7 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+When 'I change to tab {string}' do |tab|
+  find('.pf-c-tabs .pf-c-tabs__item .pf-c-tabs__button', text: tab).click
+end

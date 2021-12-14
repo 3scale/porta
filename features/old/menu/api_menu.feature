@@ -45,7 +45,7 @@ Feature: API menu
     And I follow "Integration" within the main menu
     Then I should see menu items
     | Configuration             |
-    | Methods & Metrics         |
+    | Methods and Metrics         |
     | Mapping Rules             |
     | Policies                  |
     | Backends                  |

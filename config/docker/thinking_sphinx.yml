@@ -16,6 +16,7 @@ common: &sphinx
   # expand_keywords: true
   charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
   indexed_models:
+    - Metric
     - Account
     - CMS::Page
   query_log: /dev/stdout

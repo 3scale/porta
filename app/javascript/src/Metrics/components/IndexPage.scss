@@ -1,0 +1,73 @@
+@import "~@patternfly/patternfly/sass-utilities/mixins.scss"; // Required by tabs.scss
+@import "~@patternfly/patternfly/components/Tabs/tabs.scss";
+@import "~@patternfly/patternfly/components/Card/card.scss";
+@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/patternfly/components/Pagination/pagination.css';
+@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+@import "~@patternfly/patternfly/components/List/list.scss";
+
+#metrics-index-page {
+  // HACK: removes Main 1.5 rem padding
+  margin: -1.5rem;
+
+  // This rules modify PF-React Tabs so they match the ones in our Mockup
+  .pf-c-tabs {
+    background-color: #fff;
+  }
+
+  .pf-c-tabs__list {
+    padding-left: var(--pf-c-page__main-section--PaddingLeft);
+  }
+
+  // HACK: tabs item styles should be provided by PF once upgraded
+  .pf-c-tabs__item {
+    display: flex;
+    flex: none;
+    scroll-snap-align: end; // var(--pf-c-tabs__item--ScrollSnapAlign);
+
+    &.pf-m-current .pf-c-tabs__button::after {
+      border-bottom: var(--pf-c-tabs__item--m-current--BorderTopWidth) solid #06c; // var(--pf-c-tabs__item--m-current__link--after--BorderColor);
+    }
+
+    .pf-c-tabs__button::before {
+      border-width: 0 !important;
+    }
+
+    .pf-c-tabs__button::after {
+      border-top: none;
+      border-bottom: var(--pf-c-tabs__item--m-current--BorderTopWidth) solid #b8bbbe; // var(--pf-c-tabs__link--after--BorderColor);
+    }
+  }
+
+  .pf-c-tabs__link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // HACK: Adds a margin between both cards.
+  .pf-c-card:first-of-type {
+    margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
+  }
+
+  // HACK: force pagination in bottom toolbar to stick to the right
+  #bottom-toolbar .pf-l-toolbar__item {
+    flex: auto;
+  }
+
+  // HACK: variant='filter-group' should already provide the necessary styles once PF is upgraded
+  .pf-l-toolbar {
+    [variant="filter-group"] {
+      display: flex;
+
+      .pf-l-toolbar__item {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  // HACK: we're using inconsistent PF versions and therefore missing the correct color. Remove this patch once we upgrade everything to PF4.
+  .pf-c-button.pf-m-control:disabled {
+    background-color: var(--pf-c-button--disabled--BackgroundColor);
+  }
+}
