@@ -161,7 +161,7 @@ gem 'slim-rails', '~> 3.2'
 gem 'draper', '~> 3.0'
 
 group :development do
-  gem 'bullet', '~> 5.6'
+  gem 'bullet', '~> 6.1.5'
   gem 'listen'
 
   gem 'letter_opener', require: ENV.fetch('LETTER_OPENER', '0') == '1'
