@@ -4,7 +4,7 @@ Then "{cms_partial} should have:" do |page, table|
   table = table.transpose
   actual = table.headers.map do |header|
 
-    header = header.parameterize('_').to_sym
+    header = header.parameterize(separator: '_').to_sym
     value = page.send(header)
     value.to_s
   end
