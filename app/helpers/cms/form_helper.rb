@@ -16,7 +16,7 @@ module CMS
     end
 
     def cms_fields_for(template, options = {}, &block)
-      base_name = template.class.base_class.model_name.to_s.parameterize('_').to_sym
+      base_name = template.class.base_class.model_name.to_s.parameterize(separator: '_').to_sym
 
       options[:builder] ||= CMS::SemanticFormBuilder
       options[:as] ||= base_name
