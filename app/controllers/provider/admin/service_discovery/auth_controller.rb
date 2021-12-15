@@ -5,7 +5,7 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
   layout 'provider'
 
   def show
-    data = oauth_client.authenticate!(params[:code], request)
+    data = oauth_client.authenticate!(permitted_params[:code], request)
 
     # This should save token in the database for future use:
     # - backround job
@@ -24,7 +24,7 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
   protected
 
   def referrer_url
-    url = params[:referrer]
+    url = permitted_params[:referrer]
     if url
       URI.decode(url)
     else
@@ -38,5 +38,9 @@ class Provider::Admin::ServiceDiscovery::AuthController < Provider::AdminControl
 
   def authentication_provider
     @authentication_provider ||= current_account.service_discovery_authentication_provider
+  end
+
+  def permitted_params
+    params.permit(%i[code referrer])
   end
 end

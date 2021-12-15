@@ -26,7 +26,7 @@ class Provider::Admin::BackendApis::Stats::BaseController < Stats::BaseControlle
   end
 
   def find_backend_api
-    @backend_api = collection.find(params[:backend_api_id])
+    @backend_api = collection.find(params.require(:backend_api_id))
     authorize! :show, @backend_api
   end
 

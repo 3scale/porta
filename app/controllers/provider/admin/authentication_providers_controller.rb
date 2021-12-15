@@ -75,7 +75,7 @@ class Provider::Admin::AuthenticationProvidersController < FrontendController
   end
 
   def find_authentication_provider
-    @authentication_provider ||= authentication_providers.find(params[:id])
+    @authentication_provider ||= authentication_providers.find(params.require(:id)
   end
 
   def find_or_build_authentication_provider
