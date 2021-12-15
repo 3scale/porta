@@ -54,13 +54,13 @@ to stop the application, run:
 make dev-stop
 ```
 
-## Manual setup on Mac OS X (10.13 - 11.0)
+## Manual setup on Mac OS X (10.13 - 11.6)
 
 ### Prerequisites
 
 #### Ruby version
 
-The project supports **2.5.x**.
+The project supports **2.6.x**.
 
 Verify you have a proper version by running on your terminal:
 
@@ -74,8 +74,12 @@ Example with RVM:
 ```bash
 gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable
-rvm install 2.5
+rvm install 2.6
 ```
+
+> On a Mac with the M1 chip, you might see errors when compiling ruby like `Error running '__rvm_make -j8'`, you can try this command:
+
+> CFLAGS="-Wno-error=implicit-function-declaration" rvm install 2.6
 
 #### Node version
 
@@ -111,7 +115,7 @@ Make sure you have [Homebrew](https://brew.sh/) in your machine to install the f
 ```shell
 brew tap homebrew/cask
 brew cask install chromedriver
-brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql memcached
+brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql memcached shared-mime-info
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 brew services start mysql@5.7
@@ -178,6 +182,8 @@ bundle config --local build.thin --with-cflags="-Wno-error=implicit-function-dec
 Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 
 ```shell
+gem install bundler:2.2.25
+bundle update --bundler 
 bundle install
 ```
 
@@ -229,6 +235,7 @@ ruby -v
 #### Node version
 
 The project supports **Version: 10.X.X**.
+It has also been successfully run with **Version: 12.X.X**.
 
 ```bash
 dnf module install nodejs:10

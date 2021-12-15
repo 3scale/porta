@@ -42,6 +42,9 @@ const ActiveMenuTitle = ({ activeMenu }: Props): React.Node => {
       case 'backend_apis':
         return ['fa-cube', 'Backends']
 
+      case 'resources':
+        return ['fa-cubes', 'Resources']
+
       default:
         return ['', '']
     }

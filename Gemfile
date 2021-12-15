@@ -244,7 +244,7 @@ group :development, :test do
   gem 'pry-doc', '>= 0.8', require: false
   gem 'pry-rails'
   gem 'pry-shell'
-  gem 'pry-stack_explorer'
+  gem 'pry-stack_explorer', '~> 0.4'
   # to generate the swagger JSONs
   gem 'sour', github: 'HakubJozak/sour', require: false
 

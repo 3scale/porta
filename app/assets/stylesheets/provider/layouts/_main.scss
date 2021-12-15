@@ -2,7 +2,7 @@ body {
   min-width: $layout-wrapper-min-width;
 }
 
-.wrapper, #layout-header, #wrapper {
+.wrapper, #layout-header {
   margin: 0 auto;
   position: relative;
   overflow: hidden;

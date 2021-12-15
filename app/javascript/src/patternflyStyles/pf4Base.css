@@ -1,4 +1,4 @@
-@import '~@patternfly/patternfly/patternfly-variables.css';
+/* @import '~@patternfly/patternfly/patternfly-variables.css';
 @import '~@patternfly/patternfly/patternfly-shield-noninheritable.css';
 @import '~@patternfly/patternfly/patternfly-shield-inheritable.css';
 @import '~@patternfly/patternfly/patternfly-common.css';
@@ -7,9 +7,30 @@
 
 @import '~@patternfly/patternfly/components/Page/page.css';
 @import '~@patternfly/patternfly/components/Nav/nav.css';
+@import './drawer.css';
 @import '~@patternfly/patternfly/components/ContextSelector/context-selector.css';
 @import '~@patternfly/patternfly/layouts/Level/level.css';
-@import '~@patternfly/patternfly/patternfly-fonts.css';
+@import '~@patternfly/patternfly/patternfly-fonts.css'; */
+
+@import '~@patternfly/patternfly/patternfly.css';
+@import './drawer.css';
+
+/*
+@import '~@patternfly/patternfly/base/patternfly-variables.css';
+@import '~@patternfly/patternfly/base/patternfly-shield-noninheritable.css';
+@import '~@patternfly/patternfly/base/patternfly-shield-inheritable.css';
+@import '~@patternfly/patternfly/base/patternfly-common.css';
+@import '~@patternfly/patternfly/base/patternfly-globals.css';
+@import '~@patternfly/patternfly/base/patternfly-addons.css';
+
+@import '~@patternfly/patternfly/components/Page/page.css';
+@import '~@patternfly/patternfly/components/Nav/nav.css';
+@import '~@patternfly/patternfly/components/ContextSelector/context-selector.css';
+@import '~@patternfly/patternfly/layouts/Level/level.css';
+@import '~@patternfly/patternfly/base/patternfly-fonts.css';
+
+@import '~@patternfly/patternfly/patternfly.css';
+*/
 
 /****** HACK ******/
 

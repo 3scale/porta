@@ -2062,7 +2062,7 @@ DEPENDENCIES
   pry-doc (>= 0.8)
   pry-rails
   pry-shell
-  pry-stack_explorer
+  pry-stack_explorer (~> 0.4)
   rack (~> 2.1.4)
   rack-cors
   rack-no_animations (~> 1.0.3)

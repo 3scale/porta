@@ -136,6 +136,9 @@ World(Module.new do
     when 'the provider dashboard'
       provider_admin_dashboard_path
 
+    when 'the resources page'
+      provider_admin_resources_path
+
     when 'search'
       search_path
     when 'the search page'

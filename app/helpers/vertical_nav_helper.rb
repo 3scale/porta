@@ -41,6 +41,7 @@ module VerticalNavHelper
 
     sections << {id: :integrate, title: 'Integrate', items: account_itegrate_items}
     sections << {id: :export,    title: 'Export',    path: new_provider_admin_account_data_exports_path} if can? :export, :data
+    sections << {id: :resources, title: 'Resources', path: provider_admin_resources_path}
     sections
   end
 

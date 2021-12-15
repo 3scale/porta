@@ -14,12 +14,20 @@ type Props = {
   audienceLink: string,
   settingsLink: string,
   productsLink: string,
-  backendsLink: string
+  backendsLink: string,
+  resourcesLink: string
 }
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink }: Props): React.Node => {
+const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink, resourcesLink }: Props): React.Node => {
+  /*
+  activeMenu: "backend_apis"
+  audienceLink: "/buyers/accounts"
+  backendsLink: "/p/admin/backend_apis"
+  productsLink: "/apiconfig/services"
+  settingsLink: "/p/admin/account"
+  */
   const [isOpen, setIsOpen] = React.useState(false)
   const ref = React.useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
@@ -30,8 +38,9 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
     const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].indexOf(activeMenu) !== -1)
     const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].indexOf(activeMenu) !== -1)
     const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].indexOf(activeMenu) !== -1)
+    const isResourcesSelected = menu === 'resources' && activeMenu === 'resources'
 
-    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
+    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected || isResourcesSelected) {
       return 'pf-c-context-selector__menu-list-item current-context'
     }
 
@@ -45,7 +54,9 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
       </a>
       {isOpen && (
         <div className="pf-c-context-selector__menu">
-          <ul id="context-menu" className="pf-c-context-selector__menu-list">
+          <ul id="context-menu" className="pf-c-context-selector__menu-list" style={{
+            '--pf-c-context-selector__menu-list--MaxHeight': '15rem'
+          }}>
             <li>
               <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
                 <i className='fa fa-home header-context-selector__item-icon' />Dashboard
@@ -71,6 +82,11 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
             <li>
               <a className={getClassNamesForMenu('account')} href={settingsLink}>
                 <i className='fa fa-cog header-context-selector__item-icon' />Account Settings
+              </a>
+            </li>
+            <li>
+              <a className={getClassNamesForMenu('resources')} href={resourcesLink}>
+                <i className='fa fa-cog header-context-selector__item-icon' />Resources
               </a>
             </li>
           </ul>
