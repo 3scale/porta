@@ -7,9 +7,6 @@ section.Configuration class=('Configuration--is-promoted' unless deployment_opti
         h4
           => icon('cubes')
           = @service.name
-      dd.u-dl-definition
-      / TODO: THREESCALE-3759 remove this and associated stuff
-      / - elsif !deployment_option_is_service_mesh?(@service)
 
       dt.u-dl-term Mapping rules
       dd.u-dl-definition = proxy_rules_preview(@proxy)
