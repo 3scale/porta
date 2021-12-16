@@ -23,16 +23,20 @@ resource 'FieldsDefinition' do
       parameter :name, 'Fields definition name'
       parameter :label, 'Fields definition title that developers will see'
       parameter :target, 'Target entity of fields definition.'
+      parameter :choices, 'Predefined options for the fields definition.'
       let(:name) { 'myname' }
       let(:label) { 'mylabel' }
       let(:target) { 'User' }
+      let(:choices) { %w[one two] }
     end
 
     put "/admin/api/fields_definitions/:id.:format", action: :update do
       parameter :label, 'Fields definition title that developers will see'
       parameter :target, 'Target entity of fields definition.'
+      parameter :choices, 'Predefined options for the fields definition.'
       let(:label) { 'another label' }
       let(:target) { 'Account' }
+      let(:choices) { %w[one two] }
     end
 
     get '/admin/api/fields_definitions.:format', action: :index do
