@@ -3,13 +3,11 @@ $master-ribbon-height: line-height-times(1);
 .Header {
 
   &--master {
-    border-top: $master-ribbon-height solid $header-border-color;
-
     &:before {
       content: 'Master';
-      position: absolute;
-      top: 0;
-      left: 50%;
+      grid-column: 1/-1;
+      height: $master-ribbon-height;
+      background-color: $header-border-color;
     }
   }
 
