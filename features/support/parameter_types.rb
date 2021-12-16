@@ -107,7 +107,7 @@ ParameterType(
 ParameterType(
   name: 'provider',
   type: Account,
-  regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
+  regexp: /provider "([^"]*)"|(master) provider|provider (master)|the provider/,
   # TODO check this .present? condition
   transformer: ->(*args) do
     name = args.map(&:presence).compact.first
@@ -184,7 +184,7 @@ ParameterType(
 ParameterType(
   name: 'metric',
   regexp: /metric "([^"]*)"/,
-  transformer: ->(name) { Metric.find_by!(system_name: name) }
+  transformer: ->(name) { Metric.where(parent_id: nil).find_by!(friendly_name: name) }
 )
 
 ParameterType(
@@ -199,7 +199,7 @@ ParameterType(
 ParameterType(
   name: 'method',
   regexp: /method "([^"]*)"/,
-  transformer: ->(name) { current_account.first_service!.metrics.hits.children.find_by!(friendly_name: name) }
+  transformer: ->(name) { Metric.where.not(parent_id: nil).find_by!(friendly_name: name) }
 )
 
 ParameterType(
