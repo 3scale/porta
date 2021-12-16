@@ -4975,7 +4975,7 @@
             {
               "name": "choices",
               "defaultName": "choices[]",
-              "description": "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].",
+              "description": "The list of predefined options for this field, URL-encoded array.",
               "dataType": "custom",
               "allowMultiple": true,
               "required": false,
@@ -5087,7 +5087,7 @@
             {
               "name": "choices",
               "defaultName": "choices[]",
-              "description": "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].",
+              "description": "The list of predefined options for this field, URL-encoded array.",
               "dataType": "custom",
               "allowMultiple": true,
               "required": false,
