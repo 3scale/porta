@@ -9,16 +9,6 @@ body {
   //@include debug-vertical-rhythm;
 }
 
-.pfext-quick-start-panel-content {
-  text-align: left;
-}
-#quick-starts-resources-inner {
-  margin: -24px;
-}
-.pfext-page-layout__header {
-  padding-top: 1px;
-}
-
 main > h1,
 main >  h2,
 #tab-content > h1,
@@ -257,4 +247,18 @@ hr, {
     @include white-box-shadow;
     padding: line-height-times(1);
   }
+}
+
+// #quick-starts-entry {
+//   display: none;
+// }
+
+.pfext-quick-start-panel-content {
+  text-align: left;
+}
+#quick-starts-resources-inner {
+  margin: -24px;
+}
+.pfext-page-layout__header {
+  padding-top: 1px;
 }

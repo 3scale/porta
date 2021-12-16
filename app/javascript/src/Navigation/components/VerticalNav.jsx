@@ -35,7 +35,6 @@ const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props)
 
   return (
     <div className="pf-c-page__sidebar-body">
-      <div>Hello world</div>
       <Nav id="mainmenu" theme="dark">
         { currentApi ? (
           <NavGroup title={currentApi.name}>

@@ -3,7 +3,7 @@
 import { QuickStartsContextWrapper as QuickStartsContext } from 'QuickStarts/QuickStartsContext'
 import '@patternfly/quickstarts/dist/quickstarts.min.css'
 
-const containerId = 'qs-entry'
+const containerId = 'quick-starts-entry'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) {
     return
   }
-
-  console.log('rendering qs context')
 
   QuickStartsContext({}, containerId)
 })

@@ -21,13 +21,6 @@ type Props = {
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
 const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink, resourcesLink }: Props): React.Node => {
-  /*
-  activeMenu: "backend_apis"
-  audienceLink: "/buyers/accounts"
-  backendsLink: "/p/admin/backend_apis"
-  productsLink: "/apiconfig/services"
-  settingsLink: "/p/admin/account"
-  */
   const [isOpen, setIsOpen] = React.useState(false)
   const ref = React.useRef(null)
   useClickOutside(ref, () => setIsOpen(false))

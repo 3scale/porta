@@ -2,12 +2,13 @@ doctype html
 html[lang="en" class="pf-m-redhat-font"]
   head
     meta[charset="utf-8"]
-    link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.164.3/patternfly.css"/
+    / link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.164.3/patternfly.css"/
+    / link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.164.3/patternfly-addons.css"/
     title
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
-    / = javascript_pack_tag 'PF4Styles/base'
+    = javascript_pack_tag 'PF4Styles/base'
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_pack_tag 'settingsPageStyles'
@@ -15,8 +16,8 @@ html[lang="en" class="pf-m-redhat-font"]
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
 
-  body#root
-    #wrapper.pf-c-page.test
+  body
+    #wrapper.pf-c-page
       = render partial: '/shared/provider/header'
       = render partial: 'shared/provider/navigation/vertical_nav' unless %i[dashboard products backend_apis resources].include? active_menu
       #border.pf-c-page__main class="self_clear" role="main"
@@ -29,4 +30,4 @@ html[lang="en" class="pf-m-redhat-font"]
             = yield
         = render partial: "/provider/footer"
     = render partial: '/shared/provider/call_to_action' if call_to_action?
-    #qs-entry
+    #quick-starts-entry

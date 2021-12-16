@@ -5,14 +5,9 @@ import { createReactWrapper } from 'utilities'
 import {
   QuickStartContainer,
   useLocalStorage,
-  QuickStartPanelContent,
-  QuickStartContextProvider,
   QuickStartCatalogPage
   // } from "@patternfly/quickstarts";
 } from '@patternfly/quickstarts/dist/quickstarts-full.es'
-import { DrawerContext } from '@patternfly/react-core'
-import { QuickStartsResources } from './QuickStartsResources'
-import { QuickStartsDrawer } from './QuickStartsDrawer'
 
 const explorePipelinesQuickStart = {
   metadata: {
@@ -74,7 +69,7 @@ const QuickStartsContext = ({ children, ...props }) => {
     if (onResourcesPage) {
       // move the #quick-starts-resources-inner element (which contains the resource page elements)
       // into the #quick-starts-resources element which is part of the route layout (app/views/provider/admin/resources/show.html.slim)
-      const innerResourcesContainer = document.getElementById('quick-starts-resources-inner');
+      const innerResourcesContainer = document.getElementById('quick-starts-resources-inner')
       resourcesContainer.after(innerResourcesContainer)
       // then move the whole #wrapper into the quick starts container
       qsContainer.after(wrapperContainer)
@@ -96,18 +91,6 @@ const QuickStartsContext = ({ children, ...props }) => {
     'quickstarts',
     {}
   )
-
-  const valuesForQuickstartContext = {
-    allQuickStarts: quickStarts,
-    activeQuickStartID,
-    setActiveQuickStartID,
-    allQuickStartStates,
-    setAllQuickStartStates,
-    footer: {
-      show: true
-    },
-    language: 'en'
-  }
 
   const drawerProps = {
     quickStarts,
@@ -133,28 +116,6 @@ const QuickStartsContext = ({ children, ...props }) => {
       )}
     </QuickStartContainer>
   )
-
-  //   return (
-  //     <DrawerContext.Provider value={{ isExpanded: true/*, isStatic, onExpand, position, drawerRef*/ }}>
-  //     <QuickStartContextProvider value={valuesForQuickstartContext}>
-  //       <QuickStartsResources />
-  //       <QuickStartsDrawer />
-  //     </QuickStartContextProvider>
-  //     </DrawerContext.Provider>
-  //   );
-
-  //   const drawerProps = {
-  //     quickStarts,
-  //     activeQuickStartID,
-  //     allQuickStartStates,
-  //     setActiveQuickStartID,
-  //     setAllQuickStartStates,
-  //     showCardFooters: false,
-  //     loading: false,
-  //     fullWidth: true
-  //   }
-
-  //   return <QuickStartContainer {...drawerProps} />
 }
 
 const QuickStartsContextWrapper = (props, containerId: string): void =>
