@@ -12,8 +12,7 @@ class SetTenantIdWorker < ApplicationJob
         LogEntry => :provider_id,
         Alert => :account_id,
       }.each do |model, relation|
-        q = {}
-        q[relation] = provider.id
+        q = {relation => provider.id}
         
         model.where(q).each do |instance|
           instance.update!(tenant_id: provider.tenant_id)
