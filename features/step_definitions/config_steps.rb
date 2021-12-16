@@ -17,10 +17,6 @@ Given "{provider} has multiple applications {enabled}" do |provider, enabled|
   end
 end
 
-Given /^the provider has multiple applications (enabled|disabled)$/ do |value|
-  step %(provider "#{provider_or_master_name}" has multiple applications #{value})
-end
-
 Given /^provider "([^"]*)" has Browser CMS (activated|deactivated)$/ do |provider, value|
   if value == 'deactivated'
     raise 'BCMS cannot be deactivated!'

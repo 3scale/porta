@@ -65,12 +65,6 @@ Given "{provider} has {prepaid_or_postpaid}( )billing {enabled}" do |provider, m
   end
 end
 
-# FIXME: "the provider" should be inside ParameterType 'provider' but @provider is not accesible from there
-Given /^the provider has (prepaid|postpaid) billing enabled/ do |mode|
-  step %(provider "#{@provider.name}" has #{mode} billing enabled)
-end
-
-
 Given "{provider} doesn't have billing address" do |provider|
   %w[zip name city state country phone address1].each do |attr|
     provider.send("billing_address_#{attr}=", nil)
