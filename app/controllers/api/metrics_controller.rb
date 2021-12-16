@@ -20,44 +20,28 @@ class Api::MetricsController < Api::BaseController
 
   def new
     @metric = collection.build
-    respond_to do |format|
-      format.html
-    end
   end
 
+  # TODO: DRY this, similar to app/controllers/provider/admin/backend_apis/metrics_controller.rb#create
   def create
     @metric = collection.build(create_params)
-    respond_to do |format|
-      if @metric.save
-        flash.now[:notice] = 'Metric has been created.'
-        format.html do
-          flash[:notice] = "The #{method_or_metric} was created"
-          redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
-        end
-      else
-        format.html { render :new }
-      end
+    if @metric.save
+      flash[:notice] = "The #{method_or_metric} was created"
+      redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
+    else
+      flash[:error] = "#{method_or_metric.capitalize} could not be created"
+      render :new
     end
   end
 
-  def edit
-    respond_to do |format|
-      format.html
-    end
-  end
+  def edit; end
 
   def update
     if @metric.update_attributes(update_params)
-      respond_to do |format|
-        format.html do
-          flash[:notice] = "The #{method_or_metric} was updated"
-          redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
-        end
-      end
+      flash[:notice] = "The #{method_or_metric} was updated"
+      redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
     else
-      respond_to do |format|
-        format.html { render :edit }
-      end
+      render :edit
     end
   end
 
@@ -68,11 +52,7 @@ class Api::MetricsController < Api::BaseController
       flash[:error] = 'The Hits metric cannot be deleted'
     end
 
-    respond_to do |format|
-      format.html do
-        redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
-      end
-    end
+    redirect_to admin_service_metrics_path(@service, tab: "#{method_or_metric}s")
   end
 
   protected

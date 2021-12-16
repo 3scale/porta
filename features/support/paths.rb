@@ -631,6 +631,8 @@ World(Module.new do
       admin_service_metrics_path(provider_first_service!, tab: 'metrics')
     when 'the metrics and methods page'
       admin_service_metrics_path(@provider.default_service)
+    when 'the metrics and methods page of my backend api'
+      provider_admin_backend_api_metrics_path(@provider.default_service.backend_api)
     when /^the integration show page for service "(.+?)"/
       service = Service.find_by!(name: $1)
       admin_service_integration_path(service)
