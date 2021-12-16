@@ -19,11 +19,11 @@ class VerticalNavHelperTest < ActionView::TestCase
     @backend_api = FactoryBot.create(:backend_api)
 
     # if permitted
-    assert_equal(["Overview", "Analytics", "Methods & Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
+    assert_equal(["Overview", "Analytics", "Methods and Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
 
     # if not permitted
     stubs(can?: false)
-    assert_equal(["Overview", "Methods & Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
+    assert_equal(["Overview", "Methods and Metrics", "Mapping Rules"], backend_api_nav_sections.pluck(:title))
 
     # When backend_api is not persisted
     @backend_api = BackendApi.new
