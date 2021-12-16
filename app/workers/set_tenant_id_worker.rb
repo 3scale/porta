@@ -7,8 +7,6 @@ class SetTenantIdWorker < ApplicationJob
       provider.master = false
       provider.save!
 
-      # Update the backend_apis, log_entries and alerts to propagate the tenant_id from the updated
-      # provider
       {
         BackendApi => :account_id,
         LogEntry => :provider_id,
