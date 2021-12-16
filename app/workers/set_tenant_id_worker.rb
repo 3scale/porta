@@ -4,7 +4,6 @@ class SetTenantIdWorker < ApplicationJob
 
   def perform(provider_batch)
     provider_batch.each do |provider|
-      # Set the master field to false
       provider.master = false
       provider.save!
 
