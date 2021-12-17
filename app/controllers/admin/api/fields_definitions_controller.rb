@@ -44,7 +44,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "required", :description => "If 'true' the field will be required for developers.", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "hidden", :description => "If 'true' the developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "read_only", :description => "If 'true' the developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "The list of predefined options for this field, URL-encoded array.", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def create
     field_def = fields_definitions.build(create_params)
@@ -86,7 +86,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
   ##~ op.parameters.add :name => "hidden", :description => "If 'true' the developers won't be able to see this field.", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "read_only", :description => "If 'true' the developers won't be able to change this field.", :dataType => "boolean", :required => false, :paramType => "query"
   ##~ op.parameters.add :name => "position", :description => "Position of the fields definition.", :dataType => "integer", :required => false, :paramType => "query"
-  ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "Predefined options for this field. URL-encoded array containing one or more options. For example [\"one\", \"two\"].", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
+  ##~ op.parameters.add :name => "choices", :defaultName => "choices[]", :description => "The list of predefined options for this field, URL-encoded array.", :dataType => "custom", :allowMultiple => true, :required => false, :paramType => "query"
   #
   def update
     fields_definition.update(update_params)
@@ -109,7 +109,7 @@ class Admin::Api::FieldsDefinitionsController < Admin::Api::BaseController
 
   private
 
-  DEFAULT_PARAMS = %i[target label choices required hidden read_only].freeze
+  DEFAULT_PARAMS = [:target, :label, :required, :hidden, :read_only, {choices: []}].freeze
   private_constant :DEFAULT_PARAMS
 
   def fields_definitions
