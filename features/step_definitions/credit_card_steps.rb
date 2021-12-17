@@ -63,9 +63,6 @@ Given "{provider} has testing credentials for braintree" do |provider|
   provider.save!
 end
 
-Given(/^the provider has testing credentials for braintree$/) do
-  step %(provider "#{@provider.domain}" has testing credentials for braintree)
-end
 Given /^Braintree is stubbed for wizard$/ do
   PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:form_url).returns(hosted_success_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan'))
 end
