@@ -25,7 +25,7 @@ class SetTenantIdWorker < ApplicationJob
     unique :until_executed
 
     def perform(*)
-      Account.providers.not_master.find_in_batches(batch_size: 100).each do |provider_batch|
+      Account.providers.not_master.find_each do |provider_batch|
         SetTenantIdWorker.perform_later(provider_batch)
       end
     end
