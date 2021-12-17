@@ -184,7 +184,14 @@ ParameterType(
 ParameterType(
   name: 'metric',
   regexp: /metric "([^"]*)"/,
-  transformer: ->(name) { Metric.where(parent_id: nil).find_by!(friendly_name: name) }
+  transformer: ->(name) {
+    metrics = Metric.where(parent_id: nil)
+    metric = metrics.find_by(friendly_name: name) || metrics.find_by(system_name: name)
+
+    raise ActiveRecord::RecordNotFound, "Couldn't find metric '#{name}'" unless metric
+
+    metric
+  }
 )
 
 ParameterType(
@@ -199,7 +206,14 @@ ParameterType(
 ParameterType(
   name: 'method',
   regexp: /method "([^"]*)"/,
-  transformer: ->(name) { Metric.where.not(parent_id: nil).find_by!(friendly_name: name) }
+  transformer: ->(name) {
+    methods = Metric.where.not(parent_id: nil)
+    method = methods.find_by(friendly_name: name) || methods.find_by(system_name: name)
+
+    raise ActiveRecord::RecordNotFound, "Couldn't find method '#{name}'" unless method
+
+    method
+  }
 )
 
 ParameterType(
