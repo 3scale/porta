@@ -187,7 +187,7 @@ class Master::Api::ProvidersController < Master::Api::BaseController
   end
 
   def get_partner
-    @partner = Partner.find_by(system_name: params.require(:partner))
+    @partner = Partner.find_by(system_name: params.permit(:partner)[:partner])
   end
 
   def get_application_plan
