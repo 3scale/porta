@@ -14,7 +14,7 @@ class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseControlle
   end
 
   def collection
-    current_account.provided_service_contracts.where(id: permitted_params[:selected])
+    current_account.provided_service_contracts.where(id: selected_ids_param)
   end
 
   def errors_template

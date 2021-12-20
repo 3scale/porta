@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Buyers::ServiceContracts::Bulk::ChangeStatesController < Buyers::ServiceContracts::Bulk::BaseController
   ACTIONS = %w{ accept suspend resume }
 
@@ -6,11 +8,10 @@ class Buyers::ServiceContracts::Bulk::ChangeStatesController < Buyers::ServiceCo
   end
 
   def create
-    @action = ( ACTIONS & [params[:change_states][:action]] ).first
+    @action = ( ACTIONS & [change_state_action_param] ).first
 
     return unless @action.present?
 
-    @errors = []
     @service_contracts = @service_contracts.to_a.reject do |contract|
       !contract.public_send("can_#{@action}?")
     end
@@ -22,4 +23,9 @@ class Buyers::ServiceContracts::Bulk::ChangeStatesController < Buyers::ServiceCo
     handle_errors
   end
 
+  private
+
+  def change_state_action_param
+    params.require(:change_states).require(:action)
+  end
 end

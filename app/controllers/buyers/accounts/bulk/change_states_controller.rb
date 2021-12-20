@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Buyers::Accounts::Bulk::ChangeStatesController < Buyers::Accounts::Bulk::BaseController
   ACTIONS = %w{ approve make_pending reject }
 
@@ -6,10 +8,9 @@ class Buyers::Accounts::Bulk::ChangeStatesController < Buyers::Accounts::Bulk::B
   end
 
   def create
-    @action = ( ACTIONS & [params[:change_states][:action]] ).first
+    @action = ( ACTIONS & [change_state_action_param] ).first
     return unless @action.present?
 
-    @errors = []
     @accounts = @accounts.to_a.reject do |account|
       !account.public_send("can_#{@action}?")
     end
@@ -21,4 +22,9 @@ class Buyers::Accounts::Bulk::ChangeStatesController < Buyers::Accounts::Bulk::B
     handle_errors
   end
 
+  private
+
+  def change_state_action_param
+    params.require(:change_states).require(:action)
+  end
 end

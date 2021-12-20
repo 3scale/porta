@@ -14,7 +14,7 @@ class Buyers::Accounts::Bulk::BaseController < Buyers::BulkBaseController
   end
 
   def collection
-    current_account.buyers.where(id: permitted_params[:selected])
+    current_account.buyers.where(id: selected_ids_param)
   end
 
   def errors_template

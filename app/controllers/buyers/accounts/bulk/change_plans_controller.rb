@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::BaseController
 
   before_action :authorize_account_plans
@@ -7,10 +9,8 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
   end
 
   def create
-    @plan = current_account.account_plans.find_by_id params[:change_plans][:plan_id]
+    @plan = current_account.account_plans.find_by(id: plan_id_param)
     return unless @plan
-
-    @errors = []
 
     @accounts.each do |account|
       contract = account.bought_account_contract
@@ -27,4 +27,9 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
     authorize! :manage, :account_plans
   end
 
+  private
+
+  def plan_id_param
+    params.require(:change_plan).require(:plan_id)
+  end
 end

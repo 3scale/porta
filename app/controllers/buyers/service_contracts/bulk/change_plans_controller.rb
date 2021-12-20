@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceContracts::Bulk::BaseController
 
   before_action :find_services
@@ -8,10 +10,9 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
 
   def create
     # TODO: really change plan
-    @plan = @service.service_plans.find_by_id params[:change_plans][:plan_id]
+    @plan = @service.service_plans.find_by(id: plan_id_param)
     return unless @plan
 
-    @errors = []
     @service_contracts.each do |contract|
       unless contract.change_plan(@plan)
         @errors << contract
@@ -22,6 +23,10 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
   end
 
   private
+
+  def plan_id_param
+    params.require(:change_plans).require(:plan_id)
+  end
 
   def find_services
     # probably should preload :service and :user_account

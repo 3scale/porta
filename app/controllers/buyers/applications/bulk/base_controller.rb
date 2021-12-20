@@ -14,7 +14,7 @@ class Buyers::Applications::Bulk::BaseController < Buyers::BulkBaseController
   end
 
   def collection
-    current_account.provided_cinstances.where(id: permitted_params[:selected]).includes(:user_account)
+    current_account.provided_cinstances.where(id: selected_ids_param).includes(:user_account)
   end
 
   def errors_template

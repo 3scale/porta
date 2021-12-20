@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Buyers::Applications::Bulk::ChangeStatesController < Buyers::Applications::Bulk::BaseController
   ACTIONS = %w{ accept suspend resume }
 
@@ -6,11 +8,10 @@ class Buyers::Applications::Bulk::ChangeStatesController < Buyers::Applications:
   end
 
   def create
-    @action = ( ACTIONS & [params[:change_states][:action]] ).first
+    @action = ( ACTIONS & [change_state_action_param] ).first
 
     return unless @action.present?
 
-    @errors = []
     @applications = @applications.to_a.reject do |application|
       !application.public_send("can_#{@action}?")
     end
@@ -20,6 +21,12 @@ class Buyers::Applications::Bulk::ChangeStatesController < Buyers::Applications:
     end
 
     handle_errors
+  end
+
+  private
+
+  def change_state_action_param
+    params.require(:change_states).require(:action)
   end
 
 end
