@@ -10,7 +10,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def destroy
-    @message = current_account.messages.find(permitted_params[:id])
+    @message = current_account.messages.find(message_id_param)
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'
@@ -33,16 +33,18 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def index
-    @messages = current_account.messages.not_system_for_provider.latest_first.paginate(page: permitted_params[:page]).decorate
+    @messages = current_account.messages
+                               .not_system_for_provider
+                               .latest_first
+                               .paginate(pagination_params)
+                               .decorate
   end
 
   def show
-    @message = current_account.messages.find(permitted_params[:id]).decorate
+    @message = current_account.messages.find(message_id_param).decorate
   end
 
   private
-
-  PERMITTED_PARAMS = [:id, :to, :page, { message: %i[subject body origin] }].freeze
 
   def build_message
     @message = current_account.messages.build(message_params)
@@ -52,7 +54,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
     if mass_message?
       current_account.buyer_account_ids
     elsif current_account.provider?
-      current_account.buyer_accounts.find(permitted_params[:to])
+      current_account.buyer_accounts.find(to_param)
     else
       current_account.provider_account
     end
@@ -67,14 +69,22 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def mass_message?
-    current_account.provider? && permitted_params[:to].blank?
+    current_account.provider? && to_param.blank?
   end
 
   def message_params
-    permitted_params.fetch(:message, {}).merge(:origin => "web")
+    params.require(:message).permit(:subject, :body).merge(:origin => "web")
   end
 
-  def permitted_params
-    params.permit(PERMITTED_PARAMS)
+  def message_id_param
+    params.require(:id)
+  end
+
+  def pagination_params
+    params.permit(:page, :per_page).to_h.symbolize_keys
+  end
+
+  def to_param
+    params.permit(:to).fetch(:to)
   end
 end
