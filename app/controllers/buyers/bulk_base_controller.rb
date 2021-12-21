@@ -16,8 +16,6 @@ class Buyers::BulkBaseController < FrontendController
 
   attr_reader :subjects
 
-  alias action change_state_action_param
-
   def humanized_actions
     @humanized_actions ||= actions.map {|a| [a.humanize, a] }
   end
@@ -65,6 +63,8 @@ class Buyers::BulkBaseController < FrontendController
   def change_state_action_param
     params.require(:change_states).require(:action)
   end
+
+  alias action change_state_action_param
 
   def plan_id_param
     params.require(:change_plans).require(:plan_id)
