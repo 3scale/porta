@@ -20,6 +20,14 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given I am logged in as provider "foo.3scale.localhost"
 
+  Scenario: Do nothing
+    And I am on the service contracts admin page
+    And I check select for "bob" and "mike"
+    And I press "Change state"
+    Then I should see "Accept, suspend or resume selected applications"
+    And I press "Change state" and I confirm dialog box within fancybox
+    Then I should see "Action completed successfully"
+
   Scenario: Accept subscription
       And I am on the service contracts admin page
 
