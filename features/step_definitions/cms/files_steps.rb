@@ -99,5 +99,8 @@ When "I fill in the tags list with {string}" do |text|
 end
 
 Then "I should see the tags {string}" do |text|
-  page.should have_field('Tag list', with: text)
+  page.should have_field('Tag list')
+  expected_tags = text.split(",").map(&:strip)
+  actual_tags = page.find_field("Tag list").value.split(",").map(&:strip)
+  assert_equal Set.new(expected_tags), Set.new(actual_tags)
 end
