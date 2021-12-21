@@ -7,11 +7,11 @@ module Pdf
 
     attr_accessor :account, :period, :pdf, :service, :report
 
-    METRIC_HEADINGS_DAY   = Format.prep_th ["Name", "Today's Total", "% Change"]
-    METRIC_HEADINGS_WEEK  = Format.prep_th ["Name", "Week's Total",  "% Change"]
-    SIGNUP_HEADINGS       = Format.prep_th ["Name", "Registered on", "Email", "Plan"]
-    TOP_USERS_HEADINGS    = Format.prep_th %w[Name Hits]
-    USERS_HEADINGS        = Format.prep_th %w[Plan Users]
+    METRIC_HEADINGS_DAY = Format.prep_th ["Name", "Today's Total", "% Change"]
+    METRIC_HEADINGS_WEEK = Format.prep_th ["Name", "Week's Total", "% Change"]
+    SIGNUP_HEADINGS = Format.prep_th ["Name", "Registered on", "Email", "Plan"]
+    TOP_USERS_HEADINGS = Format.prep_th %w[Name Hits]
+    USERS_HEADINGS = Format.prep_th %w[Plan Users]
 
     def initialize(account, service, options = {})
       @account = account
@@ -25,7 +25,7 @@ module Pdf
         page_size: 'A4',
         page_layout: :portrait)
 
-      @pdf.tags(@style.tags)
+      @pdf.markup_options = @style.tags
       @pdf.font(@style.font)
     end
 
@@ -92,8 +92,10 @@ module Pdf
 
     def header
       @pdf.text "<period>#{print_period}</period> (<domain>#{account.external_domain} - #{EscapeUtils.escape_html(@service.name)}</domain>)"
-      @pdf.header @pdf.margin_box.top_left do
-        @pdf.text header_text, align: :right
+      @pdf.repeat :all do
+        @pdf.bounding_box @pdf.margin_box.top_left, width: @pdf.bounds.width, height: @pdf.margin_box.height do
+          @pdf.text header_text, align: :right
+        end
       end
     end
 

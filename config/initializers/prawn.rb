@@ -10,6 +10,10 @@ module Prawn
       row(0).background_color = color
     end
 
+    def header_text_color=(color)
+      row(0).color = color
+    end
+
     class Cell
       class << self
         prepend(Module.new do

@@ -182,8 +182,7 @@ class PostOfficeTest < ActionMailer::TestCase
 
     file = Rails.root.join("tmp", "report-#{account.id}-#{service_id}-internal.pdf")
     report = Pdf::Report.new account, service
-    file.stubs(:path).returns(file)
-    report.stubs(:report).returns(file)
+    report.stubs(:pdf_file_path).returns(file)
 
     `touch #{file}`
 
