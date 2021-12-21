@@ -1,3 +1,4 @@
+@javascript
 Feature: Default plan
   In order to simplify the signup process of my clients
   As a provider
@@ -10,7 +11,6 @@ Feature: Default plan
     And a published application plan "Pro" of provider "foo.3scale.localhost"
     And current domain is the admin domain of provider "foo.3scale.localhost"
 
-  @javascript
   Scenario: Marking plan as default
     When I log in as provider "foo.3scale.localhost"
     And I go to the application plans admin page
@@ -18,7 +18,6 @@ Feature: Default plan
     Then I should see "Default plan was updated"
     And plan "Basic" should be the default
 
-  @javascript
   Scenario: Changing default plan
     Given plan "Basic" is default
     When I log in as provider "foo.3scale.localhost"
@@ -27,7 +26,6 @@ Feature: Default plan
     Then I should see "Default plan was updated"
     And plan "Pro" should be the default
 
-  @javascript
   Scenario: Hidden plan can be made default
     Given plan "Basic" is default
     And plan "Pro" is hidden
@@ -38,7 +36,6 @@ Feature: Default plan
     Then I should see "Default plan was updated"
     And plan "Pro" should be the default
 
-  @javascript
   Scenario: Selected plan doesn't exist
     Given a published application plan "Deleteme" of provider "foo.3scale.localhost"
     And plan "Basic" is default
