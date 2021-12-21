@@ -21,6 +21,7 @@ class Buyers::BulkBaseController < FrontendController
   end
 
   def change_states
+    action = change_state_action_params[:action]
     return unless actions.include?(action)
 
     collection.select { |item| item.public_send("can_#{action}?") }
@@ -60,13 +61,15 @@ class Buyers::BulkBaseController < FrontendController
     params.require(:send_emails).permit(:subject, :body)
   end
 
-  def change_state_action_param
-    params.require(:change_states).require(:action)
+  def change_state_action_params
+    params.require(:change_states).permit(:action)
   end
-
-  alias action change_state_action_param
 
   def plan_id_param
     params.require(:change_plans).require(:plan_id)
+  end
+
+  def handle_errors
+    render errors_template, status: :unprocessable_entity, formats: [:html] if @errors.present?
   end
 end
