@@ -1,4 +1,4 @@
-<%- @applications.each do |cinstance| %>
+<%- applications.each do |cinstance| %>
   $("#<%=dom_id(cinstance)%>").
     find(".plan").html("<%= escape_javascript link_to_plan_edit(cinstance.plan) %>").end().
     find(".free_or_paid").html("<%= escape_javascript plan_free_or_paid(cinstance.plan) %>");

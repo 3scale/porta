@@ -1,7 +1,7 @@
 <li>
   <label>Selected Applications</label>
   <ul class="bulk_operation_items">
-    <% @applications.each do |cinstance| %>
+    <% applications.each do |cinstance| %>
       <%= content_tag :li, title: "#{cinstance.user_account.org_name} - #{cinstance.account_admin_user_display_name}" do %>
         <span class="name"><%= h cinstance.name %></span>
         (<span class="account"><%= h cinstance.user_account.org_name %></span>)

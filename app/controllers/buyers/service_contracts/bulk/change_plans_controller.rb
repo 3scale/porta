@@ -1,22 +1,18 @@
 # frozen_string_literal: true
 
 class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceContracts::Bulk::BaseController
+  before_action :find_services, only: %i[new create]
 
-  before_action :find_services
+  helper_method :services, :plans
 
-  def new
-    @plans = @service.service_plans
-  end
+  def new; end
 
   def create
     # TODO: really change plan
-    @plan = @service.service_plans.find_by(id: plan_id_param)
-    return unless @plan
+    return unless (plan = service.service_plans.find_by(id: plan_id_param))
 
-    @service_contracts.each do |contract|
-      unless contract.change_plan(@plan)
-        @errors << contract
-      end
+    service_contracts.each do |contract|
+      @errors << contract unless contract.change_plan(plan)
     end
 
     handle_errors
@@ -24,17 +20,21 @@ class Buyers::ServiceContracts::Bulk::ChangePlansController < Buyers::ServiceCon
 
   private
 
-  def plan_id_param
-    params.require(:change_plans).require(:plan_id)
+  attr_reader :service
+
+  def services
+    @services ||= find_services
   end
 
   def find_services
     # probably should preload :service and :user_account
-    services = @service_contracts.map(&:service).uniq
-    unless services.size == 1
-      return render(:multiple_services)
-    end
+    services = service_contracts.map(&:service).uniq
+    return render(:multiple_services) unless services.size == 1
+
     @service = services.first
   end
 
+  def plans
+    @plans ||= service.service_plans
+  end
 end

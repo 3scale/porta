@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class Buyers::Accounts::Bulk::BaseController < Buyers::BulkBaseController
-  before_action :find_accounts
+  before_action :accounts, only: :create
+
+  helper_method :accounts
+
+  def create; end
 
   protected
 
@@ -9,12 +13,12 @@ class Buyers::Accounts::Bulk::BaseController < Buyers::BulkBaseController
     :partners
   end
 
-  def find_accounts
-    @accounts = collection.decorate
+  def accounts
+    @accounts ||= collection.decorate
   end
 
   def collection
-    current_account.buyers.where(id: selected_ids_param)
+    @collection ||= current_account.buyers.where(id: selected_ids_param)
   end
 
   def errors_template

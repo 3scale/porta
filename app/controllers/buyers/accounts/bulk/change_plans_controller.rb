@@ -4,20 +4,17 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
 
   before_action :authorize_account_plans
 
-  def new
-    @plans = current_account.account_plans.not_custom.alphabetically
-  end
+  helper_method :plans
+
+  def new; end
 
   def create
-    @plan = current_account.account_plans.find_by(id: plan_id_param)
-    return unless @plan
+    return unless (plan = current_account.account_plans.find_by(id: plan_id_param))
 
-    @accounts.each do |account|
+    accounts.each do |account|
       contract = account.bought_account_contract
 
-      unless contract.change_plan(@plan)
-        @errors << account
-      end
+      @errors << account unless contract.change_plan(plan)
     end
 
     handle_errors
@@ -29,7 +26,7 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
 
   private
 
-  def plan_id_param
-    params.require(:change_plan).require(:plan_id)
+  def plans
+    @plans ||= current_account.account_plans.not_custom.alphabetically
   end
 end

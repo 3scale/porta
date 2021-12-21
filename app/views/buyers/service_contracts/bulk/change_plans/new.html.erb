@@ -2,11 +2,11 @@
   :html => {
     :class => 'bulk_operations',
     :'data-remote' => true,
-    :'data-confirm' => "Are you sure to change plan of these #{@service_contracts.count} service subscriptions?"
+    :'data-confirm' => "Are you sure to change plan of these #{service_contracts.count} service subscriptions?"
   } do |form| %>
   <%= form.inputs do %>
     <%= render 'buyers/service_contracts/bulk/selected_contracts' %>
-    <%= form.input :plan_id, :as => :select, :collection => @plans %>
+    <%= form.input :plan_id, :as => :select, :collection => plans %>
     <%= form.buttons do %>
       <%= form.commit_button 'Change plan', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <% end %>
