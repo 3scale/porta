@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require 'prawn'
-require 'prawn/format'
-require "prawn/measurement_extensions"
-require 'gruff'
-require "open-uri"
 
 module Pdf
   module Finance
@@ -25,7 +20,7 @@ module Pdf
         @pdf = Prawn::Document.new(page_size: 'A4',
                                    page_layout: :portrait)
 
-        @pdf.tags(@style.tags)
+        @pdf.markup_options = @style.tags
         @pdf.font(@style.font)
       end
 
@@ -88,7 +83,7 @@ module Pdf
 
       def print_address(person, name = nil)
         subtitle("<b>#{name}</b>") if name
-        @pdf.table(person, @style.table_style.merge(width: TABLE_HALF_WIDTH))
+        @pdf.table(person, @style.table_style.deep_merge(width: TABLE_HALF_WIDTH))
       end
 
       def print_details
@@ -103,8 +98,8 @@ module Pdf
 
       def print_line_items
         subtitle('<b>Line items</b>')
-        opts = { width: TABLE_FULL_WIDTH, headers: InvoiceReportData::LINE_ITEMS_HEADING }
-        @pdf.table(@data.line_items, @style.table_style.merge(opts))
+        opts = { width: TABLE_FULL_WIDTH, header: true }
+        @pdf.table([InvoiceReportData::LINE_ITEMS_HEADING] + @data.line_items, @style.table_style.deep_merge(opts))
         move_down
         @pdf.text(@data.vat_zero_text) if @data.vat_rate&.zero?
       end

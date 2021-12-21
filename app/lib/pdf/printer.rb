@@ -14,11 +14,11 @@ module Pdf::Printer
   #
   def two_columns(at = [0.mm, @pdf.cursor], options = {}, &block)
     @pdf.bounding_box(at, { :width => PAGE_WIDTH }.merge(options)) do
-      @pdf.column_box [0.mm, @pdf.bounds.top], :width => TABLE_HALF_WIDTH  do
+      @pdf.column_box [0.mm, @pdf.bounds.top], :width => TABLE_HALF_WIDTH, columns: 1  do
         yield(:left)
       end
 
-      @pdf.column_box [97.mm, @pdf.bounds.top], :width => TABLE_HALF_WIDTH do
+      @pdf.column_box [97.mm, @pdf.bounds.top], :width => TABLE_HALF_WIDTH, columns: 1 do
         yield(:right)
       end
     end

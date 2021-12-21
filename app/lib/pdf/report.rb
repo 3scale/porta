@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require 'prawn'
-require 'prawn/format'
-require "prawn/measurement_extensions"
-require 'gruff'
-require 'pdf/format'
-require 'pdf/data'
-require 'pdf/styles/colored'
-
 # REFACTOR: extract abstract Report class, and DRY functionality with InvoiceReporter
 module Pdf
   class Report
@@ -158,8 +150,8 @@ module Pdf
 
     def print_table(data, width, headings)
       if data.present?
-        options = { headers: headings, width: width }
-        @pdf.table data, @style.table_style.merge(options)
+        options = { header: true, width: width }
+        @pdf.table [headings] + data, @style.table_style.deep_merge(options)
       else
         @pdf.text "<small>No current data</small>"
       end

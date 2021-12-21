@@ -1598,9 +1598,10 @@ GEM
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
-    prawn-core (0.8.4)
-    prawn-format (0.2.3)
-      prawn-core
+    prawn-markup (0.3.3)
+      nokogiri
+      prawn
+      prawn-table
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
     prometheus-client-mmap (0.11.0)
@@ -2051,7 +2052,7 @@ DEPENDENCIES
   pg (~> 0.21.0)
   pisoni (~> 1.29)
   prawn
-  prawn-format
+  prawn-markup
   prawn-table
   protected_attributes_continued (~> 1.3.0)
   pry-byebug (>= 3.7.0)
