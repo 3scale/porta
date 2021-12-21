@@ -15,6 +15,7 @@ Feature: Default plan
     When I log in as provider "foo.3scale.localhost"
     And I go to the application plans admin page
     And I select "Basic" as default plan
+    # TODO: make this assertion time-insensitive, sometimes the flash is not there yet or it has disappeared already
     Then I should see "Default plan was updated"
     And plan "Basic" should be the default
 

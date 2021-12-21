@@ -25,7 +25,7 @@ Feature: CMS Pages
       Then I should see "Page created"
       When I check "Liquid enabled"
        And I select "Markdown" from "Handler"
-       And I fill in draft with:
+       And I fill in the draft with:
         """
         # Potato is public!
         """
@@ -60,7 +60,7 @@ Feature: CMS Pages
 
     When I go to the CMS page
      And I choose builtin page "dashboards/show" in the CMS sidebar
-     And I fill in draft with:
+     And I fill in the draft with:
       """
         awesomeness builtin
       """
