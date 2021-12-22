@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Messages::OutboxController < FrontendController
-  before_action :build_message, :only => %i[new create]
   activate_menu :buyers, :messages, :sent_messages
+
+  delegate :messages, to: :current_account
 
   def new
     activate_menu :buyers, :messages, :inbox
+    @message = messages.build({})
     @message.to recipients
   end
 
   def destroy
-    @message = current_account.messages.find(message_id_param)
+    @message = messages.find(message_id_param)
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'
@@ -18,6 +20,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def create
+    @message = messages.build(message_params)
     @message.enqueue! :to => recipient_ids
 
     @notice = 'Message was sent.'
@@ -45,10 +48,6 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   private
-
-  def build_message
-    @message = current_account.messages.build(message_params)
-  end
 
   def recipients
     if mass_message?
@@ -81,7 +80,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def pagination_params
-    params.permit(:page, :per_page).to_h.symbolize_keys
+    { page: params.permit(:page)[:page] }
   end
 
   def to_param
