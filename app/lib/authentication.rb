@@ -16,6 +16,7 @@ module Authentication
   #RE_EMAIL_NAME   = '0-9A-Z!#\$%\&\'\*\+_/=\?^\-`\{|\}~\.' # technically allowed by RFC-2822
   RE_DOMAIN_HEAD  = '(?:[A-Z0-9\-]+\.)+'.freeze
   RE_DOMAIN_TLD   = '(?:[A-Za-z]{2,63})'.freeze
+  RE_DOMAIN_OK    = /\A#{RE_DOMAIN_HEAD}#{RE_DOMAIN_TLD}\z/i
   RE_EMAIL_OK     = /\A#{RE_EMAIL_NAME}@#{RE_DOMAIN_HEAD}#{RE_DOMAIN_TLD}\z/i
   MSG_EMAIL_BAD   = 'should look like an email address'.freeze
 
