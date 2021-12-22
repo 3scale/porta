@@ -37,8 +37,7 @@ class Api::MetricsIndexPresenter
   protected
 
   def raw_collection
-    collection = metrics? ? top_level_metrics : method_metrics
-    @raw_collection ||= collection.includes(:proxy_rules)
+    @raw_collection ||= (metrics? ? top_level_metrics : method_metrics).includes(:proxy_rules)
   end
 
   def metrics?
