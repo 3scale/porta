@@ -22,9 +22,10 @@ Feature: Bulk operations
 
   Scenario: Do nothing
     And I am on the service contracts admin page
+    When I follow "Account" within table
     And I check select for "bob" and "mike"
     And I press "Change state"
-    Then I should see "Accept, suspend or resume selected applications"
+    Then I should see "Accept, suspend or resume selected subscriptions"
     And I press "Change state" and I confirm dialog box within fancybox
     Then I should see "Required parameter missing: action"
 

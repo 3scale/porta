@@ -21,7 +21,6 @@ class Buyers::BulkBaseController < FrontendController
   end
 
   def change_states
-    action = change_state_action_params[:action]
     return unless actions.include?(action)
 
     collection.select { |item| item.public_send("can_#{action}?") }
@@ -64,6 +63,8 @@ class Buyers::BulkBaseController < FrontendController
   def change_state_action_params
     params.require(:change_states).require(:action)
   end
+
+  alias action change_state_action_params
 
   def plan_id_param
     params.require(:change_plans).require(:plan_id)
