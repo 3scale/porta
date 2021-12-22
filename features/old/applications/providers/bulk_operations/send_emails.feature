@@ -22,6 +22,19 @@ Feature: Mass email bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
+  Scenario: No subject and no body
+    Given I am logged in as provider "foo.3scale.localhost"
+    And I am on the applications admin page
+    And a clear email queue
+    When I check select for "BobApp"
+    And I press "Send email"
+    And I press "Send" and I confirm dialog box within colorbox
+    Then I should see "Action completed successfully"
+    And "jane@me.us" should receive 1 email with subject ""
+    And "jane@me.us" should receive an email with the following body:
+    """
+    """
+
   Scenario: Send mass email to application owners
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
