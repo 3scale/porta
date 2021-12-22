@@ -62,7 +62,7 @@ class Buyers::BulkBaseController < FrontendController
   end
 
   def change_state_action_params
-    params.require(:change_states).permit(:action)
+    params.require(:change_states).require(:action)
   end
 
   def plan_id_param

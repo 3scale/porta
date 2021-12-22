@@ -26,7 +26,7 @@ Feature: Bulk operations
     And I press "Change state"
     Then I should see "Accept, suspend or resume selected applications"
     And I press "Change state" and I confirm dialog box within fancybox
-    Then I should see "Action completed successfully"
+    Then I should see "Required parameter missing: action"
 
   Scenario: Accept subscription
       And I am on the service contracts admin page
