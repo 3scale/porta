@@ -49,7 +49,7 @@ Feature: Product > Integration > Metrics > New
     Scenario: Create a metrics with an existing system name
       Given a metric "Carni" of the provider
       When I fill in "Friendly name" with "Carni 2"
-      And I fill in "System name" with "Carnipoexit"
+      And I fill in "System name" with "Carni"
       And I fill in "Unit" with "servings"
       And I press "Create Metric"
       Then I should see "Has already been taken"
