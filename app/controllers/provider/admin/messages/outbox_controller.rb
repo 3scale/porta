@@ -1,22 +1,26 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Messages::OutboxController < FrontendController
-  before_action :build_message, :only => [:new, :create]
   activate_menu :buyers, :messages, :sent_messages
+
+  delegate :messages, to: :current_account
 
   def new
     activate_menu :buyers, :messages, :inbox
+    @message = messages.build({})
     @message.to recipients
   end
 
   def destroy
-    @message = current_account.messages.find(params.require(:id))
+    @message = messages.find(message_id_param)
     @message.hide!
 
     flash[:notice] = 'Message was deleted.'
     redirect_to action: :index
   end
 
-
   def create
+    @message = messages.build(message_params)
     @message.enqueue! :to => recipient_ids
 
     @notice = 'Message was sent.'
@@ -32,18 +36,18 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def index
-    @messages = current_account.messages.not_system_for_provider.latest_first.paginate(page: params[:page]).decorate
+    @messages = current_account.messages
+                               .not_system_for_provider
+                               .latest_first
+                               .paginate(pagination_params)
+                               .decorate
   end
 
   def show
-    @message = current_account.messages.find(params.require(:id)).decorate
+    @message = current_account.messages.find(message_id_param).decorate
   end
 
   private
-
-  def build_message
-    @message = current_account.messages.build(message_params)
-  end
 
   def recipients
     if mass_message?
@@ -68,6 +72,14 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def message_params
-    params.fetch(:message, {}).merge(:origin => "web")
+    params.require(:message).permit(:subject, :body).merge(:origin => "web")
+  end
+
+  def message_id_param
+    params.require(:id)
+  end
+
+  def pagination_params
+    { page: params.permit(:page)[:page] }
   end
 end
