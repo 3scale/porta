@@ -1,7 +1,7 @@
 <li>
   <label>Selected Service Subscriptions</label>
   <ul class="bulk_operation_items">
-    <% @service_contracts.each do |contract| %>
+    <% service_contracts.each do |contract| %>
       <%= content_tag :li, title: "#{contract.account.org_name} - #{contract.account_admin_user_display_name}" do %>
         <span class="account"><%= contract.account.org_name %></span>
         <span class="plan"><%= contract.plan.name %></span>

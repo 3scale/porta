@@ -1,16 +1,8 @@
+# frozen_string_literal: true
+
 class Buyers::Applications::Bulk::DeletesController < Buyers::Applications::Bulk::BaseController
-
-  def new
-
-  end
-
   def create
-
-    @errors = @applications.map do |app|
-      app unless app.destroy
-    end.compact
-
+    delete_stuff
     handle_errors
   end
-
 end

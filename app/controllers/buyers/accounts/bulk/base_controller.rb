@@ -1,25 +1,27 @@
-class Buyers::Accounts::Bulk::BaseController < FrontendController
+# frozen_string_literal: true
 
-  before_action :authorize_bulk_operations
-  before_action :find_accounts
+class Buyers::Accounts::Bulk::BaseController < Buyers::BulkBaseController
+  before_action :accounts, only: :create
+
+  helper_method :accounts
+
+  def create; end
 
   protected
 
-  def authorize_bulk_operations
-    authorize! :manage, :partners
+  def scope
+    :partners
   end
 
-  def find_accounts
-    @accounts = collection.decorate
+  def accounts
+    @accounts ||= collection.decorate
   end
 
   def collection
-    current_account.buyers.where(id: params[:selected])
+    @collection ||= current_account.buyers.where(id: selected_ids_param)
   end
 
-  def handle_errors
-    if @errors.present?
-      render 'buyers/accounts/bulk/shared/errors', :status => :unprocessable_entity, formats: [:html]
-    end
+  def errors_template
+    'buyers/accounts/bulk/shared/errors'
   end
 end

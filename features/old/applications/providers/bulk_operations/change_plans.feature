@@ -19,6 +19,15 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
+  Scenario: No plan is selected
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
+    And I am on the applications admin page
+    When I check select for "BobApp", "JaneApp"
+    And I press "Change application plan"
+    And I press "Change plan" and I confirm dialog box
+    Then I should see "Required parameter missing: plan_id"
+
   Scenario: Mass change of application plans
     Given an application plan "Advanced" of provider "foo.3scale.localhost"
       And I am logged in as provider "foo.3scale.localhost"

@@ -1,24 +1,27 @@
-class Buyers::Applications::Bulk::BaseController < FrontendController
-  before_action :authorize_bulk_operations
-  before_action :find_applications
+# frozen_string_literal: true
+
+class Buyers::Applications::Bulk::BaseController < Buyers::BulkBaseController
+  before_action :applications, only: :create
+
+  helper_method :applications
+
+  def create; end
 
   protected
 
-  def authorize_bulk_operations
-    authorize! :manage, :applications
+  def scope
+    :applications
   end
 
-  def find_applications
-    @applications = collection.decorate
+  def applications
+    @applications ||= collection.decorate
   end
 
   def collection
-    current_account.provided_cinstances.where(id: params[:selected]).includes(:user_account)
+    @collection ||= current_account.provided_cinstances.where(id: selected_ids_param).includes(:user_account)
   end
 
-  def handle_errors
-    if @errors.present?
-      render 'buyers/applications/bulk/shared/errors.html', :status => :unprocessable_entity
-    end
+  def errors_template
+    'buyers/applications/bulk/shared/errors.html'
   end
 end

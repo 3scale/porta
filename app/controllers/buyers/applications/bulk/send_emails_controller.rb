@@ -1,20 +1,14 @@
+# frozen_string_literal: true
+
 class Buyers::Applications::Bulk::SendEmailsController < Buyers::Applications::Bulk::BaseController
-
-  def new
-  end
-
   def create
-    @recipients = @applications.map(&:user_account)
-
-    @errors = []
-    @recipients.each do |recipient|
-      message = current_account.messages.build params[:send_emails]
-      message.to = recipient
-
-      @errors << message unless message.save && message.deliver!
-    end
-
+    send_emails
     handle_errors
   end
 
+  private
+
+  def recipients
+    @recipients ||= collection.map(&:user_account)
+  end
 end

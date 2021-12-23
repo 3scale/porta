@@ -1,19 +1,17 @@
+# frozen_string_literal: true
+
 class Buyers::Applications::Bulk::ChangePlansController < Buyers::Applications::Bulk::BaseController
 
   before_action :find_services
 
-  def new
-    @plans = @service.application_plans.not_custom.alphabetically
-  end
+  helper_method :plans
 
   def create
     # TODO: really change plan
-    @plan = @service.application_plans.find_by_id params[:change_plans][:plan_id]
-    return unless @plan
+    return unless (plan = service.application_plans.find_by(id: plan_id_param))
 
-    @errors = []
-    @applications.each do |application|
-      unless application.change_plan(@plan)
+    applications.each do |application|
+      unless application.change_plan(plan)
         @errors << application
       end
     end
@@ -23,12 +21,17 @@ class Buyers::Applications::Bulk::ChangePlansController < Buyers::Applications::
 
   private
 
+  attr_reader :service
+
   def find_services
     # probably should preload :service and :user_account
-    services = @applications.map(&:service).uniq
-    unless services.size == 1
-      return render(:multiple_services)
-    end
+    services = applications.map(&:service).uniq
+    return render(:multiple_services) unless services.size == 1
+
     @service = services.first
+  end
+
+  def plans
+    @plans ||= service.application_plans.not_custom.alphabetically
   end
 end
