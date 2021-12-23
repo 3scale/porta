@@ -1,7 +1,7 @@
 <li>
   <label>Selected Accounts</label>
   <ul class="bulk_operation_items">
-    <% @accounts.each do |account| %>
+    <% accounts.each do |account| %>
       <%= content_tag :li, title: "#{account.org_name} - #{account.admin_user_display_name}" do %>
         <span class="name"><%= account.org_name %></span>
         (<%= h account.admin_user_display_name %>)

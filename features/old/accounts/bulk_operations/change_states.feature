@@ -16,6 +16,14 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I am logged in as provider "foo.3scale.localhost"
 
+  Scenario: No state selected
+    And I am on the accounts admin page
+    And I check select for "pending" and "rejected"
+    And I press "Change state"
+    Then I should see "Approve, reject or make pending selected accounts"
+    And I press "Change state" and I confirm dialog box within fancybox
+    Then I should see "Required parameter missing: action"
+
   Scenario: Approve accounts
       And I am on the accounts admin page
     When I follow "Group/Org."

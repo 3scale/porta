@@ -1,23 +1,20 @@
+# frozen_string_literal: true
+
 class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::BaseController
 
   before_action :authorize_account_plans
 
-  def new
-    @plans = current_account.account_plans.not_custom.alphabetically
-  end
+  helper_method :plans
+
+  def new; end
 
   def create
-    @plan = current_account.account_plans.find_by_id params[:change_plans][:plan_id]
-    return unless @plan
+    return unless (plan = current_account.account_plans.find_by(id: plan_id_param))
 
-    @errors = []
-
-    @accounts.each do |account|
+    accounts.each do |account|
       contract = account.bought_account_contract
 
-      unless contract.change_plan(@plan)
-        @errors << account
-      end
+      @errors << account unless contract.change_plan(plan)
     end
 
     handle_errors
@@ -27,4 +24,9 @@ class Buyers::Accounts::Bulk::ChangePlansController < Buyers::Accounts::Bulk::Ba
     authorize! :manage, :account_plans
   end
 
+  private
+
+  def plans
+    @plans ||= current_account.account_plans.not_custom.alphabetically
+  end
 end

@@ -21,6 +21,14 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I am logged in as provider "foo.3scale.localhost"
 
+  Scenario: No plan is selected
+    Given a service plan "Awesome" of service "New Service"
+    And I am on the service contracts admin page
+    When I check select for "mike"
+    And I press "Change service plan"
+    And I press "Change plan" and I confirm dialog box
+    Then I should see "Required parameter missing: plan_id"
+
   Scenario: Mass change of service contracts' plans
     Given a service plan "Awesome" of service "New Service"
       And I am on the service contracts admin page

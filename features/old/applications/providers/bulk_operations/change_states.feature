@@ -19,6 +19,15 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
+  Scenario: Do nothing
+    Given I am logged in as provider "foo.3scale.localhost"
+    And I am on the applications admin page
+    And I check select for "PendingApp" and "SuspendedApp"
+    And I press "Change state"
+    Then I should see "Accept, suspend or resume selected applications"
+    And I press "Change state" and I confirm dialog box within fancybox
+    Then I should see "Required parameter missing: action"
+
   Scenario: Accept applications
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page

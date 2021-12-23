@@ -1,7 +1,7 @@
 <% semantic_form_for :delete, :url => admin_buyers_service_contracts_bulk_delete_path,
   :html => {
     :'data-remote' => true,
-    :'data-confirm' => "Are you sure to delete these #{@service_contracts.count} service subscriptions?"
+    :'data-confirm' => "Are you sure to delete these #{service_contracts.count} service subscriptions?"
   } do |form| %>
   <%- form.inputs do -%>
     <%= render 'buyers/service_contracts/bulk/selected_contracts' %>

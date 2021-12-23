@@ -1,24 +1,27 @@
-class Buyers::ServiceContracts::Bulk::BaseController < FrontendController
-  before_action :authorize_bulk_operations
-  before_action :find_service_contracts
+# frozen_string_literal: true
+
+class Buyers::ServiceContracts::Bulk::BaseController < Buyers::BulkBaseController
+  before_action :service_contracts, only: :create
+
+  helper_method :service_contracts
+
+  def create; end
 
   protected
 
-  def authorize_bulk_operations
-    authorize! :manage, :service_contracts
+  def scope
+    :service_contracts
   end
 
-  def find_service_contracts
-    @service_contracts = collection.decorate
+  def service_contracts
+    @service_contracts ||= collection.decorate
   end
 
   def collection
-    current_account.provided_service_contracts.where(id: params[:selected])
+    @collection ||= current_account.provided_service_contracts.where(id: selected_ids_param)
   end
 
-  def handle_errors
-    if @errors.present?
-      render 'buyers/applications/bulk/shared/errors.html', :status => :unprocessable_entity
-    end
+  def errors_template
+    'buyers/applications/bulk/shared/errors.html'
   end
 end

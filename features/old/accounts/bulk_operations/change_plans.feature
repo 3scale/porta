@@ -22,6 +22,14 @@ Feature: Bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I am logged in as provider "foo.3scale.localhost"
 
+  Scenario: No plan is selected
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
+    And I am on the accounts admin page
+    When I check select for "bob"
+    And I press "Change account plan"
+    And I press "Change plan" and I confirm dialog box
+    Then I should see "Required parameter missing: plan_id"
+
   Scenario: Unable to change plans unless account_plans switch allowed
     Given an application plan "Advanced" of provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has "account_plans" switch denied
