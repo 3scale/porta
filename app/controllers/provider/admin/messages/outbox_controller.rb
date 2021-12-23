@@ -53,7 +53,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
     if mass_message?
       current_account.buyer_account_ids
     elsif current_account.provider?
-      current_account.buyer_accounts.find(to_param)
+      current_account.buyer_accounts.find(params.require(:to))
     else
       current_account.provider_account
     end
@@ -68,7 +68,7 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   def mass_message?
-    current_account.provider? && to_param.blank?
+    current_account.provider? && params[:to].blank?
   end
 
   def message_params
@@ -81,9 +81,5 @@ class Provider::Admin::Messages::OutboxController < FrontendController
 
   def pagination_params
     { page: params.permit(:page)[:page] }
-  end
-
-  def to_param
-    params.permit(:to).fetch(:to)
   end
 end
