@@ -33,7 +33,7 @@ Then "{provider} should have strong passwords {enabled}" do |provider, enabled|
 end
 
 Then "{provider} should have a strong password disabled" do |provider|
-  assert false == provider.settings.strong_passwords_enabled
+  assert_not provider.settings.strong_passwords_enabled
 end
 
 When /^I select backend version "([^"]*)"$/ do |version|
@@ -44,9 +44,5 @@ Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
   label = find('label', text: field)
   input = label.sibling('input')
 
-  if enabled == 'enabled'
-    assert_not input.readonly?
-  else
-    assert input.readonly?
-  end
+  assert_not_equal enabled, input.disabled?
 end

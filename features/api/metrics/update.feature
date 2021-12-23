@@ -25,7 +25,7 @@ Feature: Product > Integration > Metrics > Edit
   Scenario: Can't change system name of default metric
     Given I change to tab "Metrics"
     When I follow "Hits"
-    Then I should see field "metric[system_name]" disabled
+    Then I should see field "System name" disabled
 
   Scenario: Edit a metric from the index page
     Given I change to tab "Metrics"
