@@ -73,15 +73,19 @@ Then "I should see( the) {metric} is {visible_or_hidden}" do |metric, visible|
   assert find(:xpath, "//span[@id='metric_#{metric.id}_visible']")[:class] == visible
 end
 
-Then "{provider} {should} have metric {string}" do |provider, should, metric_name|
+Then "{provider} {should} have (a )metric {string}" do |provider, should, metric_name|
   assert_equal should, provider.metrics.find_by(friendly_name: metric_name).present?
 end
 
-Then "{metric} should have the following:" do |metric, table|
+Then "{provider} {should} have (a )metric with system name {string}" do |provider, should, system_name|
+  assert_equal should, provider.metrics.find_by(system_name: system_name).present?
+end
+
+Then "{metric} should have the following attributes:" do |metric, table|
   check_metric_attributes(metric, table)
 end
 
-Then "{method} should have the following:" do |method, table|
+Then "{method} should have the following attributes:" do |method, table|
   check_metric_attributes(method, table)
 end
 

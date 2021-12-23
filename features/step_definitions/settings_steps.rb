@@ -41,6 +41,7 @@ When /^I select backend version "([^"]*)"$/ do |version|
 end
 
 Then(/^I should see field "([^"]*)" (enabled|disabled)$/) do |field, enabled|
+  binding.pry
   label = find('label', text: field)
   input = label.sibling('input')
 

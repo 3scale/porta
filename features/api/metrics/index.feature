@@ -1,5 +1,5 @@
 @javascript
-Feature: Product > Integration > Metrics index
+Feature: Product > Integration > Metrics
   In order to control the way my buyers are using my API
   As a provider
   I want to see their methods and metrics
@@ -32,7 +32,7 @@ Feature: Product > Integration > Metrics index
       And method "Carbonara" is mapped
       When I change to tab "Methods"
       Then I should be able to add a mapping rule to "Diavola"
-      But I should not be able to add a mapping rule to "Carbonara"
+      But I should see "Carbonara" already mapped
 
   Rule: Tab metrics
     Background:
@@ -52,4 +52,4 @@ Feature: Product > Integration > Metrics index
       And metric "Pasta" is mapped
       When I change to tab "Metrics"
       Then I should be able to add a mapping rule to "Pizza"
-      But I should not be able to add a mapping rule to "Pasta"
+      But I should see "Pasta" already mapped

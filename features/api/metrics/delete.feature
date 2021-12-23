@@ -1,5 +1,5 @@
 @javascript
-Feature: Product > Integration > Metrics index > Metric
+Feature: Product > Integration > Metrics > Edit
   In Order to change a plan
   As a provider
   I should be able to delete a metric
