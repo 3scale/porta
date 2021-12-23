@@ -77,8 +77,16 @@ Then "{provider} {should} have (a )metric {string}" do |provider, should, metric
   assert_equal should, provider.metrics.find_by(friendly_name: metric_name).present?
 end
 
+Then "{provider} {should} have (a )method {string}" do |provider, should, metric_name|
+  assert_equal should, provider.metrics.hits.children.find_by(friendly_name: metric_name).present?
+end
+
 Then "{provider} {should} have (a )metric with system name {string}" do |provider, should, system_name|
   assert_equal should, provider.metrics.find_by(system_name: system_name).present?
+end
+
+Then "{provider} {should} have (a )method with system name {string}" do |provider, should, system_name|
+  assert_equal should, provider.metrics.hits.children.find_by(system_name: system_name).present?
 end
 
 Then "{metric} should have the following attributes:" do |metric, table|
