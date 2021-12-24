@@ -38,6 +38,7 @@ class Buyers::BulkBaseController < FrontendController
     end
   end
 
+  # TODO: THREESCALE-8013 remove this
   def delete_stuff
     collection.each do |item|
       @errors << item unless items.destroy
