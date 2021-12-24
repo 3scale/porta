@@ -107,7 +107,7 @@ ParameterType(
 ParameterType(
   name: 'provider',
   type: Account,
-  regexp: /provider "([^"]*)"|(master) provider|provider (master)/,
+  regexp: /provider "([^"]*)"|(master) provider|provider (master)|the provider/,
   # TODO check this .present? condition
   transformer: ->(*args) do
     name = args.map(&:presence).compact.first
@@ -184,7 +184,7 @@ ParameterType(
 ParameterType(
   name: 'metric',
   regexp: /metric "([^"]*)"/,
-  transformer: ->(name) { Metric.find_by!(system_name: name) }
+  transformer: ->(name) { find_metric(Metric.where(parent_id: nil), name) }
 )
 
 ParameterType(
@@ -199,8 +199,14 @@ ParameterType(
 ParameterType(
   name: 'method',
   regexp: /method "([^"]*)"/,
-  transformer: ->(name) { current_account.first_service!.metrics.hits.children.find_by!(friendly_name: name) }
+  transformer: ->(name) { find_metric(Metric.where.not(parent_id: nil), name) }
 )
+
+def find_metric(metrics, name)
+  metric = metrics.find_by(friendly_name: name) || metrics.find_by(system_name: name)
+
+  metric or raise ActiveRecord::RecordNotFound, "Couldn't find metric '#{name}'"
+end
 
 ParameterType(
   name: 'plan_permission',

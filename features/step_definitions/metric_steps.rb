@@ -73,15 +73,31 @@ Then "I should see( the) {metric} is {visible_or_hidden}" do |metric, visible|
   assert find(:xpath, "//span[@id='metric_#{metric.id}_visible']")[:class] == visible
 end
 
-Then "{provider} should have metric {string}" do |provider, metric_name|
-  assert_not_nil provider.default_service.metrics.find_by_system_name(metric_name)
+Then "{provider} {should} have (a )metric {string}" do |provider, should, metric_name|
+  assert_equal should, provider.metrics.find_by(friendly_name: metric_name).present?
 end
 
-Then "{provider} should not have metric {string}" do |provider, metric_name|
-  assert_nil provider.default_service.metrics.find_by_system_name(metric_name)
+Then "{provider} {should} have (a )method {string}" do |provider, should, metric_name|
+  assert_equal should, provider.metrics.hits.children.find_by(friendly_name: metric_name).present?
 end
 
-Then "{metric} should have the following:" do |metric, table|
+Then "{provider} {should} have (a )metric with system name {string}" do |provider, should, system_name|
+  assert_equal should, provider.metrics.find_by(system_name: system_name).present?
+end
+
+Then "{provider} {should} have (a )method with system name {string}" do |provider, should, system_name|
+  assert_equal should, provider.metrics.hits.children.find_by(system_name: system_name).present?
+end
+
+Then "{metric} should have the following attributes:" do |metric, table|
+  check_metric_attributes(metric, table)
+end
+
+Then "{method} should have the following attributes:" do |method, table|
+  check_metric_attributes(method, table)
+end
+
+def check_metric_attributes(metric, table)
   table.raw.each do |row|
     attribute = row[0].downcase.gsub(/\s+/, '_').to_sym
     assert_equal row[1], metric.send(attribute)
