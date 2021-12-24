@@ -24,9 +24,6 @@ div id="bulk-operations" style="display: none;"
     = bulk_action 'Change state',
                   new_admin_buyers_service_contracts_bulk_change_state_path,
                   'Accept, suspend or resume selected subscriptions'
-    //= bulk_action 'Delete',
-                    new_admin_buyers_service_contracts_bulk_delete_path,
-                    'Delete selected applications'
 
   - content_for :javascripts do
     = javascript_include_tag 'bulk_operations.js'
