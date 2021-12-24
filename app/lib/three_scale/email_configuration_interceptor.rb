@@ -2,7 +2,10 @@
 
 class ThreeScale::EmailConfigurationInterceptor
   def self.delivering_email(message)
+    return unless Features::EmailConfigurationConfig.enabled?
+
     found_mapping = find_mapping(message)
+
     return unless found_mapping
 
     message.delivery_method.settings = found_mapping.smtp_settings
