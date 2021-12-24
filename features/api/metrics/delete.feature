@@ -9,15 +9,15 @@ Feature: Product > Integration > Metrics > Edit
     And the following metrics:
       | Pasta |
     And the following methods:
-      | Carbonnara |
+      | Carbonara |
     And I go to the metrics and methods page
 
   Scenario: Delete a method from the index page
     Given I change to tab "Methods"
-    When I follow "Carbonnara"
+    When I follow "Carbonara"
     And I press "Delete" and I confirm dialog box
-    Then I should not see metric "Carbonnara"
-    And the provider should not have metric "Cabonnara"
+    Then I should not see metric "Carbonara"
+    And the provider should not have metric "Carbonara"
 
   Scenario: Delete a metric from the index page
     Given I change to tab "Metrics"
