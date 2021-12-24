@@ -23,15 +23,10 @@ When "I follow {string} for {plan}" do |label, plan|
   step %(I follow "#{label}" within "##{dom_id(plan)}")
 end
 
-When /^I select "(.*?)" as default plan$/ do | plan |
-  # if React default plan select
-  if page.has_css?('#default_plan_card .pf-c-select')
-    select = find(:css, '#default_plan_card .pf-c-select')
-    select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
-    select.find('.pf-c-select__menu-item', text: plan).click
-  else
-    select plan
-  end
+When "I select {string} as default plan" do | plan |
+  select = find(:css, '#default_plan_card .pf-c-select')
+  select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
+  select.find('.pf-c-select__menu-item', text: plan).click(wait: 5)
 end
 
 Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |

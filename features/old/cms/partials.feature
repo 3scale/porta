@@ -12,7 +12,7 @@ Feature: CMS Partials
     When I follow "New Partial" from the CMS dropdown
     And I fill in the following:
       | System name | potato       |
-    And I fill in draft with:
+    And I fill in the draft with:
         """
         awesomeness builtin
         """
@@ -32,7 +32,7 @@ Feature: CMS Partials
 
     When I go to the CMS page
     And I choose builtin page "submenu" in the CMS sidebar
-    And I fill in draft with:
+    And I fill in the draft with:
       """
         awesomeness builtin
       """
