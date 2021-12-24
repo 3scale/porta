@@ -65,3 +65,13 @@ Feature: Mass email bulk operations
       I just wanted to say hello!
       """
 
+  Scenario: Error template shows correctly
+    And I am on the accounts admin page
+    And a clear email queue
+    When I check select for "jane"
+    And I press "Send email"
+    And I fill in "Subject" with "Error"
+    And I fill in "Body" with "This will fail"
+    Given the email will fail when sent
+    And I press "Send" and I confirm dialog box within colorbox
+    Then I should see the bulk action failed with account "jane"
