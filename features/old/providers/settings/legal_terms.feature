@@ -11,7 +11,7 @@ Feature: Legal terms settings
 
   Scenario: Signup Licence
     When I go to the legal terms settings page
-    And I fill in draft with:
+    And I fill in the draft with:
       """
       <b>Ich war hier, Fantomas.</b>
       """
@@ -24,7 +24,7 @@ Feature: Legal terms settings
   Scenario: Legal Terms settings
     Given provider "foo.3scale.localhost" has "multiple_services" switch allowed
     And I go to the legal terms settings page
-    And I fill in draft with:
+    And I fill in the draft with:
       """
       <b>Ich war hier, Fantomas.</b>
       """

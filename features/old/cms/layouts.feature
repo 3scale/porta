@@ -13,7 +13,7 @@ Feature: Creating layout for CMS pages
     And I fill in the following:
       | System name | potato |
 
-    And I fill in draft with:
+    And I fill in the draft with:
         """
           {% content %}
         """
