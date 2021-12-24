@@ -16,11 +16,6 @@ Given "{provider} has {switch} visible" do |provider, switch|
   settings.send("show_#{switch}!")  unless settings.send(switch).visible?
 end
 
-# FIXME: "the provider" should be included in the ParameterType {provider}, but @provider is not accessible from there
-Given /^the provider has ("(?:.+?)"(?: switch)? (?:visible|allowed))$/ do |sentence|
-  step %(provider "#{@provider.domain}" has #{sentence})
-end
-
 Then /^I should see the invitation to upgrade my plan$/ do
   assert find('a#change-plan.important-button', text: 'Upgrade to')
 end

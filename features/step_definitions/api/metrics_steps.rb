@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-Given('the following metrics:') do |table|
+Given('the following metric(s):') do |table|
   table.raw.flatten.each do |name|
     FactoryBot.create(:metric, service: @provider.default_service, system_name: name, friendly_name: name)
   end
 end
 
-Given('the following methods:') do |table|
+Given('the following method(s):') do |table|
   table.raw.flatten.each do |name|
     FactoryBot.create(:method, owner: @provider.default_service, friendly_name: name)
   end
@@ -38,9 +38,16 @@ def map_or_unmap_metric(metric, mapped)
   end
 end
 
-Then('I {should} be able to add a mapping rule to {string}') do |not_mapped, name|
-  td = find('table tbody tr', text: name).find('[data-label="Mapped"]')
-  assert_equal not_mapped ? 'Add a mapping rule' : '', td.text
+Then('I should be able to add a mapping rule to {string}') do |name|
+  assert_equal 'Add a mapping rule', find_mapped_cell_in_table(name).text
+end
+
+Then('I should see {string} (already )mapped') do |name|
+  assert_equal '', find_mapped_cell_in_table(name).text
+end
+
+def find_mapped_cell_in_table(text)
+  find('.pf-c-table tbody tr', text: text).find('[data-label="Mapped"]')
 end
 
 def find_rows(metrics, within:)
@@ -52,9 +59,9 @@ def find_rows(metrics, within:)
 end
 
 def methods_table
-  find 'table[aria-label="Methods table"]'
+  find '.pf-c-table[aria-label="Methods table"]'
 end
 
 def metrics_table
-  find 'table[aria-label="Metrics table"]'
+  find '.pf-c-table[aria-label="Metrics table"]'
 end

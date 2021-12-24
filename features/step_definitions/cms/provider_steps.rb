@@ -6,10 +6,6 @@ Given "{provider} has all the templates setup" do |provider|
   SimpleLayout.new(provider).import!
 end
 
-Given(/^the provider (has all the templates setup)$/) do |sentence|
-  step %(provider "#{@provider.domain}" #{sentence})
-end
-
 Given('provider has opt-out for credit card workflow on plan changes') do
   search = '{% plan_widget application, wizard: true %}'
   replacement = '{% plan_widget application, wizard: false %}'

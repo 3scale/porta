@@ -29,10 +29,6 @@ Given "{provider} {is} charging" do |provider, charging_enabled|
   provider.save!
 end
 
-Given(/^the provider is (not )?charging$/) do |not_charging|
-  step %(provider "#{@provider.domain}" is #{not_charging}charging)
-end
-
 Given "{provider} is fake charging" do |provider|
   provider.settings.allow_finance! unless provider.settings.finance.allowed?
 
@@ -64,12 +60,6 @@ Given "{provider} has {prepaid_or_postpaid}( )billing {enabled}" do |provider, m
     provider.settings.deny_finance! unless provider.settings.finance.denied?
   end
 end
-
-# FIXME: "the provider" should be inside ParameterType 'provider' but @provider is not accesible from there
-Given /^the provider has (prepaid|postpaid) billing enabled/ do |mode|
-  step %(provider "#{@provider.name}" has #{mode} billing enabled)
-end
-
 
 Given "{provider} doesn't have billing address" do |provider|
   %w[zip name city state country phone address1].each do |attr|
