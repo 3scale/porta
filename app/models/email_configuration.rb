@@ -56,7 +56,7 @@ class EmailConfiguration < ApplicationRecord
   protected
 
   def set_tenant_id
-    self.tenant_id ||= account&.id if account&.provider?
+    self.tenant_id ||= account&.id if account&.provider? && !account&.master?
   end
 
   private
