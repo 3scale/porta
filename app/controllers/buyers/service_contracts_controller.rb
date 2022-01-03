@@ -68,7 +68,7 @@ class Buyers::ServiceContractsController < Buyers::BaseController
 
   def update
     service = @service_contract.issuer
-    new_plan = service.service_plans.find(params[:service_contract][:plan_id])
+    new_plan = service.service_plans.find(service_contract_plan_id)
 
     if @service_contract.change_plan!(new_plan)
       flash[:success] = "Plan of the contract was changed."
@@ -137,8 +137,12 @@ class Buyers::ServiceContractsController < Buyers::BaseController
     @service ||= accessible_services.find(params[:service_id])
   end
 
-  def service_plan(plan_id = params[:service_contract][:plan_id])
+  def service_plan(plan_id = service_contract_plan_id)
     @service_plan ||= service.service_plans.find_by(id: plan_id)
+  end
+
+  def service_contract_plan_id
+    params[:service_contract][:plan_id]
   end
 
   def accessible_services
