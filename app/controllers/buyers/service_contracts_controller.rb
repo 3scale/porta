@@ -113,7 +113,8 @@ class Buyers::ServiceContractsController < Buyers::BaseController
   end
 
   def service_contract_params
-    params.fetch(:service_contract).merge(plan: service_plan)
+    params.permit(service_contract: [:plan_id])
+          .fetch(:service_contract).merge(plan: service_plan)
   end
 
   def find_service_contract
