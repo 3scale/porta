@@ -24,7 +24,7 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
     end
 
     if @billing_strategy.update_attributes(finance_billing_strategy_params.to_h)
-      flash[:message] = "Finance settings updated. #{ok_message}"
+      flash[:message] = "Finance settings updated" << ok_message.to_s
       redirect_to :action => 'show'
     else
       flash[:message] = 'Invalid finance settings'
