@@ -21,7 +21,7 @@ gem 'rails', '~> 5.0.7'
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
 gem 'activemodel-serializers-xml'
 
-gem 'protected_attributes_continued', '~> 1.3.0'
+gem 'protected_attributes_continued', '~> 1.8.2'
 
 gem 'rails-observers'
 
