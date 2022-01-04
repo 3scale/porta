@@ -39,6 +39,6 @@ class Finance::Provider::SettingsController < Finance::Provider::BaseController
   end
 
   def finance_billing_strategy_params
-    params.require(:finance_billing_strategy).permit(:charging_enabled, :currency, :numbering_period, account_attributes: %i[invoice_footnote vat_zero_text id])
+    @finance_billing_strategy_params ||= params.require(:finance_billing_strategy).permit(:charging_enabled, :currency, :numbering_period, account_attributes: %i[invoice_footnote vat_zero_text id])
   end
 end
