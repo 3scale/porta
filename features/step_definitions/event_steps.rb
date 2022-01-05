@@ -5,33 +5,33 @@ And(/^there are no events$/) do
 end
 
 And(/^there should be (\d+) application cancelled event$/) do |n|
-  cancelled = EventStore::Repository.adapter.where(event_type: Cinstances::CinstanceCancellationEvent)
+  cancelled = EventStore::Repository.adapter.where(event_type: Cinstances::CinstanceCancellationEvent.to_s)
 
   assert_equal n.to_i, cancelled.count
 end
 
 And(/^there should be (\d+) valid service contract cancelled event$/) do |count|
-  check_events_validity!(type: ServiceContracts::ServiceContractCancellationEvent, count: count)
+  check_events_validity!(type: ServiceContracts::ServiceContractCancellationEvent.to_s, count: count)
 end
 
 And(/^there should be (\d+) valid service contract created event$/) do |count|
-  check_events_validity!(type: ServiceContracts::ServiceContractCreatedEvent, count: count)
+  check_events_validity!(type: ServiceContracts::ServiceContractCreatedEvent.to_s, count: count)
 end
 
 And(/^there should be (\d+) valid account created event$/) do |count|
-  check_events_validity!(type: Accounts::AccountCreatedEvent, count: count)
+  check_events_validity!(type: Accounts::AccountCreatedEvent.to_s, count: count)
 end
 
 And(/^there should be (\d+) valid account deleted event$/) do |count|
-  check_events_validity!(type: Accounts::AccountDeletedEvent, count: count)
+  check_events_validity!(type: Accounts::AccountDeletedEvent.to_s, count: count)
 end
 
 And(/^there should be (\d+) valid application created event$/) do |count|
-  check_events_validity!(type: Applications::ApplicationCreatedEvent, count: count)
+  check_events_validity!(type: Applications::ApplicationCreatedEvent.to_s, count: count)
 end
 
 And(/^there should be (\d+) valid cinstance cancellation event$/) do |count|
-  check_events_validity!(type: Cinstances::CinstanceCancellationEvent, count: count)
+  check_events_validity!(type: Cinstances::CinstanceCancellationEvent.to_s, count: count)
 end
 
 And(/^all the events should be valid$/) do
