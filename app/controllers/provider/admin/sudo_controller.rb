@@ -2,8 +2,7 @@ class Provider::Admin::SudoController < FrontendController
 
   helper_method :sudo
 
-  def show
-  end
+  def show; end
 
   def create
     if sudo.correct_password?(current_password)
@@ -30,7 +29,7 @@ class Provider::Admin::SudoController < FrontendController
   end
 
   def sudo
-    @_sudo ||= ::Sudo.new(sudo_params.symbolize_keys)
+    @sudo ||= ::Sudo.new(sudo_params.to_h.symbolize_keys)
   end
 
 end
