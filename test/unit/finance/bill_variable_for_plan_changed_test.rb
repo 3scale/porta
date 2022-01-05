@@ -6,7 +6,7 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
   attr_reader :contract, :account, :app_plan
 
   setup do
-    @contract = FactoryBot.build_stubbed(:contract)
+    @contract = FactoryBot.build_stubbed(:application_contract)
     @account  = FactoryBot.build_stubbed(:simple_account)
     @app_plan = FactoryBot.build_stubbed(:application_plan)
 
