@@ -67,7 +67,7 @@ module Signup
         refute signup_result.account_approved?
 
         # publish account created event
-        check_events_validity!(type: Accounts::AccountCreatedEvent, count: 1)
+        check_events_validity!(type: Accounts::AccountCreatedEvent.to_s, count: 1)
       end
 
       test 'enqueues signup job' do
@@ -219,9 +219,9 @@ module Signup
         #   This needs to be tested because the AccountCreatedEvent is done by calling to AccountManager#publish_related_event,
         #   but the other 2 are done by observers when the contract_plan is done, and for that these needs to be done after saving the user,
         #   otherwise this will not work because MessageObserver#after_create will receive a contract with an empty user
-        check_events_validity!(type: Accounts::AccountCreatedEvent, count: 1)
-        check_events_validity!(type: Applications::ApplicationCreatedEvent, count: 1, opts: {provider_id: manager_account.id})
-        check_events_validity!(type: ServiceContracts::ServiceContractCreatedEvent, count: 1, opts: {provider_id: manager_account.id})
+        check_events_validity!(type: Accounts::AccountCreatedEvent.to_s, count: 1)
+        check_events_validity!(type: Applications::ApplicationCreatedEvent.to_s, count: 1, opts: {provider_id: manager_account.id})
+        check_events_validity!(type: ServiceContracts::ServiceContractCreatedEvent.to_s, count: 1, opts: {provider_id: manager_account.id})
       end
 
       test 'create developer without account plan approval required and minimal signup' do
