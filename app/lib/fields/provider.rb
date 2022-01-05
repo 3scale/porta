@@ -11,7 +11,7 @@ module Fields
       def for(klass)
         columns = klass.column_names
         defined = fields_definitions.by_target(klass.name.underscore).map(&:name)
-        protected =  Cinstance.protected_attributes.to_a
+        protected =  klass.protected_attributes.to_a
 
         ((columns + defined) - protected).uniq
       end
