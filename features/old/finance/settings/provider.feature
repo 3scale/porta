@@ -27,3 +27,12 @@ Scenario: Setting a currency
    And an invoice of buyer "zoidberg" for February, 1984
    And I go to the invoices by months page
   Then I should see "USD"
+
+Scenario: Already existent invoices won't change their id
+  Given provider "foo.3scale.localhost" has "finance" switch allowed
+  When I go to the finance settings page
+  And I check "Charging enabled"
+  And I select "yearly" from "Billing periods for invoice ids"
+  And I press "Save"
+  Then I should see "Finance settings updated. Already existent invoices won't change their id."
+  And the "Charging enabled" checkbox should be checked
