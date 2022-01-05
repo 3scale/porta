@@ -201,7 +201,7 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     FactoryBot.create(:admin, account: application.provider_account)
     application.service.proxy.delete
     application.reload.destroy!
-    event_store_event = EventStore::Event.where(event_type: Applications::ApplicationDeletedEvent).last!
+    event_store_event = EventStore::Event.where(event_type: Applications::ApplicationDeletedEvent.to_s).last!
     application_event = EventStore::Repository.find_event!(event_store_event.event_id)
     ZyncEvent.create_and_publish!(application_event, application_event.application)
 
@@ -210,14 +210,14 @@ class ZyncWorkerTest < ActiveSupport::TestCase
     stub_request(:put, 'http://example.com/tenant').to_return(status: 200)
     stub_request(:put, 'http://example.com/notification').to_return(status: 422)
 
-    zync_event = EventStore::Event.where(event_type: ZyncEvent).last!
-    assert_difference(EventStore::Event.where(event_type: ZyncEvent).method(:count), +1) do
+    zync_event = EventStore::Event.where(event_type: ZyncEvent.to_s).last!
+    assert_difference(EventStore::Event.where(event_type: ZyncEvent.to_s).method(:count), +1) do
       Sidekiq::Testing.inline! { ZyncWorker.perform_async(zync_event.event_id, zync_event.data) }
     end
 
     stub_request(:put, 'http://example.com/notification').to_return(status: 200)
 
-    dependency_event_service = EventStore::Event.where(event_type: ZyncEvent).last!
+    dependency_event_service = EventStore::Event.where(event_type: ZyncEvent.to_s).last!
     assert_equal 'Service', dependency_event_service.data[:type]
     assert_equal zync_event.data[:service_id], dependency_event_service.data[:id]
     Sidekiq::Testing.inline! { ZyncWorker.perform_async( dependency_event_service.event_id,  dependency_event_service.data) }

@@ -20,8 +20,7 @@ module Tasks
       default_service.reload
 
       ThreeScale::Core::Service.expects(:make_default).with(another_service.backend_id)
-
-      assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent).method(:count)) do
+      assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent.to_s).method(:count)) do
         perform_enqueued_jobs(except: SphinxIndexationWorker) do
           execute_rake_task 'services.rake', 'services:destroy_service', account.id, default_service.id
         end
@@ -30,7 +29,7 @@ module Tasks
       refute Service.where(id: default_service.id).exists?
       assert_equal another_service.id, account.reload.default_service_id
 
-      event = EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent).last!
+      event = EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent.to_s).last!
       assert_equal event.data[:service_id], default_service.id
     end
 
@@ -69,7 +68,7 @@ module Tasks
       ThreeScale::Core::Service.expects(:make_default).never
       ThreeScale::Core::Service.expects(:save!).never
 
-      assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent).method(:count)) do
+      assert_difference(EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent.to_s).method(:count)) do
         perform_enqueued_jobs(except: SphinxIndexationWorker) do
           execute_rake_task 'services.rake', 'services:destroy_service', account.id, non_default_service.id
         end
@@ -78,7 +77,7 @@ module Tasks
       refute Service.where(id: non_default_service.id).exists?
       assert_equal default_service.id, account.reload.default_service_id
 
-      event = EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent).last!
+      event = EventStore::Repository.adapter.where(event_type: Services::ServiceDeletedEvent.to_s).last!
       assert_equal event.data[:service_id], non_default_service.id
     end
   end

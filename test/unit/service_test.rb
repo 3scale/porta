@@ -353,10 +353,10 @@ class ServiceTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service)
       service.stubs(destroyed_by_association: true)
       service_id = service.id
-      assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).method(:count)) do
+      assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent.to_s).method(:count)) do
         service.destroy!
       end
-      event = RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent).last!
+      event = RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent.to_s).last!
       assert_equal service_id, event.data['service_id']
     end
   end
@@ -366,7 +366,7 @@ class ServiceTest < ActiveSupport::TestCase
 
     test 'creating service creates a related event' do
       User.stubs(current: FactoryBot.create(:simple_user))
-      assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceCreatedEvent).method(:count)) do
+      assert_difference(RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceCreatedEvent.to_s).method(:count)) do
         FactoryBot.create(:simple_service)
       end
     end
@@ -380,8 +380,8 @@ class ServiceTest < ActiveSupport::TestCase
       service = FactoryBot.create(:simple_service, account: account)
       FactoryBot.create(:simple_service, account: account) # To be able to destroy the other service
 
-      assert_difference(DeletedObject.where(object_type: Service).method(:count), +1) { service.destroy! }
-      deleted_object_entry = DeletedObject.where(object_type: Service).last!
+      assert_difference(DeletedObject.where(object_type: Service.to_s).method(:count), +1) { service.destroy! }
+      deleted_object_entry = DeletedObject.where(object_type: Service.to_s).last!
       assert_equal service.id, deleted_object_entry.object_id
       assert_equal 'Service', deleted_object_entry.object_type
       assert_equal account.id, deleted_object_entry.owner_id
