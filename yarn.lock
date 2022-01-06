@@ -1439,10 +1439,10 @@
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.122.2.tgz#3e774d78996c7027b8c528edb2e90990676458a5"
   integrity sha512-kSoW8mt9eEJcAZX2lX4r/SYvFd44GGb8PUSDjMrpKDZqgn9/9VFh1rSChG4v5kCK6cpS99/gdTapZc3ylf8Rpw==
 
-"@patternfly/quickstarts@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@patternfly/quickstarts/-/quickstarts-1.3.0.tgz#3ae19e79148892dc01c7e928ebb276987927d9fd"
-  integrity sha512-cB2PwlrF8f2Emfp0Sytr9LG28tsXjEbydi/gIOSe1/YcvJW4rfqEgzdML/01fCdCf1zIQs4bAhbeqASEh+RksQ==
+"@patternfly/quickstarts@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@patternfly/quickstarts/-/quickstarts-1.4.0.tgz#d5b5040f87dd7b83c403bd7b918d505ad3bf0e14"
+  integrity sha512-LIHsM7TfyTEkx4HyzV9tlNCD0ZCZ3l+llED7tEgvCD/AO8CRi4BwJUvlLHTUvzO4pmTi7Z9p2fLulm5I20IfWA==
   dependencies:
     "@patternfly/react-catalog-view-extension" "4.12.15"
     dompurify "^2.2.6"

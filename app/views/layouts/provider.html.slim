@@ -6,15 +6,7 @@ html[lang="en" class="pf-m-redhat-font"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
-    / Quick starts has a peer dependency on "@patternfly/react-core": ">=4.115.2",
-    / which uses "@patternfly/patternfly": "4.102.2"
-    / Adding these two stylesheets for this POC, and commenting out the PF4Styles/base
-    / but of course it causes other styling issues, since 3scale uses older versions of PatternFly.
-    / Either 3scale will have to update their version of PatternFly, or we need to figure out a way
-    / to bundle a subset of PF classes/styles (namespaced to the quick start components) with the library
-    link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.102.2/patternfly.css"/
-    link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.102.2/patternfly-addons.css"/
-    / = javascript_pack_tag 'PF4Styles/base'
+    = javascript_pack_tag 'PF4Styles/base'
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_pack_tag 'settingsPageStyles'

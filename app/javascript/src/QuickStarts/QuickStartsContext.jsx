@@ -63,7 +63,8 @@ const QuickStartsContext = ({ children, ...props }) => {
     setActiveQuickStartID,
     setAllQuickStartStates,
     showCardFooters: false,
-    loading: false
+    loading: false,
+    language: 'en'
   }
 
   return (
