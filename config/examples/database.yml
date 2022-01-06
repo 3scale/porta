@@ -4,6 +4,7 @@ default: &DEFAULT
   adapter: oracle_enhanced
   url: <%= ENV['DATABASE_URL'] %>
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
+  statement_limit: <%= ENV.fetch('ORACLE_STATEMENT_LIMIT', 250) %>
 
 production:
   <<: *DEFAULT
