@@ -471,16 +471,21 @@ ActiveRecord::Schema.define(version: 20211215120415) do
   end
 
   create_table "email_configurations", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
-    t.string   "email"
-    t.string   "username"
-    t.string   "password"
-    t.string   "smtp_address_and_port"
-    t.bigint   "tenant_id"
     t.integer  "account_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.index ["account_id", "email"], name: "index_email_configurations_on_account_id_and_email", unique: true, using: :btree
+    t.string   "email",                         null: false, collation: "utf8_general_ci"
+    t.string   "domain",                                     collation: "utf8_general_ci"
+    t.string   "user_name"
+    t.string   "password"
+    t.string   "authentication"
+    t.string   "tls"
+    t.string   "openssl_verify_mode"
+    t.string   "address",                                    collation: "utf8_general_ci"
+    t.integer  "port",                limit: 2,                                            unsigned: true
+    t.bigint   "tenant_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.index ["account_id"], name: "index_email_configurations_on_account_id", using: :btree
+    t.index ["email"], name: "index_email_configurations_on_email", unique: true, using: :btree
   end
 
   create_table "event_store_events", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
