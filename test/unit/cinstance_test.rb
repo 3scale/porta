@@ -949,27 +949,27 @@ class ApplicationUpdatedSavedEventTest < ActiveSupport::TestCase
   attr_reader :cinstance
 
   test 'ApplicationUpdatedEvent is created after an update' do
-    assert_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent).method(:count)) do
+    assert_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
       cinstance.update!({ description: 'example description to update cinstance' })
     end
   end
 
   test 'ApplicationUpdatedEvent is not created after an update if the only changes are for first_traffic_at or first_daily_traffic_at' do
-    assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent).method(:count)) do
+    assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
       cinstance.update(first_traffic_at: 2.days.ago.round)
     end
 
-    assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent).method(:count)) do
+    assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
       cinstance.update(first_daily_traffic_at: 2.days.ago.round)
     end
 
-    assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent).method(:count)) do
+    assert_no_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
       cinstance.update!({ first_traffic_at: 1.day.ago.round, first_daily_traffic_at: 1.day.ago.round }, without_protection: true)
     end
   end
 
   test 'ApplicationUpdatedEvent is created after an update when there are updated traffic and non-traffic attributes' do
-    assert_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent).method(:count)) do
+    assert_difference(EventStore::Event.where(event_type: Applications::ApplicationUpdatedEvent.to_s).method(:count)) do
       cinstance.update!({ name: 'mycinstance', first_traffic_at: 1.day.ago.round, first_daily_traffic_at: 1.day.ago.round }, without_protection: true)
     end
   end
