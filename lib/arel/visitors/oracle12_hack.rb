@@ -2,6 +2,7 @@
 
 module Arel
   module Visitors
+    # if we stop using use_old_oracle_visitor = true, then change to Oracle12
     Oracle.class_eval do
       # we need to strip ORDER from subqueries because Oracle does not support it
       def strip_order_from_select(o)
@@ -30,7 +31,12 @@ module Arel
       def visit_Arel_Nodes_Equality(o, collector)
         case (left = o.left)
         when Arel::Attributes::Attribute
-          column = column_for(left)
+          table = left.relation.table_name
+          schema_cache = @connection.schema_cache
+
+          return super unless schema_cache.data_source_exists?(table)
+
+          column = schema_cache.columns_hash(table)[left.name.to_s]
 
           case column.type
           when :text, :binary
