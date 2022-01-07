@@ -2,6 +2,11 @@
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
+      # see https://github.com/rails/rails/issues/44114
+      self.use_old_oracle_visitor = true
+    end
+
     ENV['SCHEMA'] = 'db/oracle_schema.rb'
     Rails.configuration.active_record.schema_format = ActiveRecord::Base.schema_format = :ruby
 
