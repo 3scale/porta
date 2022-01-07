@@ -4,6 +4,7 @@ base: &default
    when /^oracle/ %>
   adapter: oracle_enhanced
   time_zone: 'UTC'
+  statement_limit: <%= ENV.fetch('ORACLE_STATEMENT_LIMIT', 250) %>
 <% when /^postgresql/ %>
   adapter: postgresql
   variables:
