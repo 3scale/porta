@@ -3,6 +3,7 @@ base: &default
 <% case ENV['DATABASE_URL'].to_s
    when /^oracle/ %>
   adapter: oracle_enhanced
+  statement_limit: <%= ENV.fetch('ORACLE_STATEMENT_LIMIT', 250) %>
 <% when /^postgresql/ %>
   adapter: postgresql
   variables:
