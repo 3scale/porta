@@ -36,6 +36,7 @@ const defaultProps = {
   isDisabled: undefined,
   title,
   placeholder: 'Placeholder',
+  searchPlaceholder: undefined,
   footerLabel: 'Footer Label',
   fetchItems
 }

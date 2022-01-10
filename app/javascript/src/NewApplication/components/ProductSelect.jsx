@@ -49,6 +49,7 @@ const ProductSelect = ({
       isDisabled={isDisabled}
       title="Select a product"
       placeholder="Select a product"
+      searchPlaceholder="Find a product"
       footerLabel="View all products"
     />
   )
