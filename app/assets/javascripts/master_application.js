@@ -1,5 +1,14 @@
 // For parsing code blocks with highlighter.
-hljs.initHighlightingOnLoad();
+// https://www.npmjs.com/package/highlight.js/v/10.0.1#custom-initialization
+// don't want to use the default hljs.initHighlightingOnLoad() since that will also
+// target 'pre code' elements in the quick starts drawer
+(function($) {
+  $(document).ready(function() {
+    document.querySelectorAll('.pf-c-drawer__content pre code').forEach((block) => {
+      hljs.highlightBlock(block)
+    })
+  }); // document ready
+})(jQuery); // close anonymous function
 
 (function($) {
   // Object for holding various timers users in proceeding code.

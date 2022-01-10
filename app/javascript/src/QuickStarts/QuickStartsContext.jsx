@@ -16,10 +16,7 @@ import {
   QuickStartCatalogPage
   // } from '@patternfly/quickstarts'
 } from '@patternfly/quickstarts/dist/quickstarts-full.es'
-// You would probably load the quick start resources from somewhere else
-// (database, over the network, or serve them up as yaml files from assets directory)
-import { exploreServerlessQuickStart } from './resources/explore-serverless'
-import { monitorSampleAppQuickStart } from './resources/monitor-sampleapp'
+import resources from 'quickstarts'
 
 const QuickStartsContext = ({ children, ...props }) => {
   const resourcesContainer = document.getElementById('quick-starts-resources')
@@ -44,9 +41,7 @@ const QuickStartsContext = ({ children, ...props }) => {
     }
   }, [])
 
-  const [quickStarts, setQuickStarts] = React.useState([
-    exploreServerlessQuickStart, monitorSampleAppQuickStart
-  ])
+  const [quickStarts] = React.useState(resources)
   const [activeQuickStartID, setActiveQuickStartID] = useLocalStorage(
     'quickstartId',
     ''
@@ -64,7 +59,8 @@ const QuickStartsContext = ({ children, ...props }) => {
     setAllQuickStartStates,
     showCardFooters: false,
     loading: false,
-    language: 'en'
+    language: 'en',
+    useLegacyHeaderColors: true
   }
 
   return (

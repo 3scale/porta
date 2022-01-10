@@ -1,0 +1,56 @@
+metadata:
+  name: demo
+spec:
+  displayName: Quick starts demo
+  durationMinutes: 5
+  icon: ''
+  description: This demo will walk you through some of the quick start features
+  introduction: |-
+    ### This demo will walk you through some of the quick start features
+  tasks:
+    - title: Highlighting elements
+      description: |-
+        1. You can highlight elements by assigning a `data-quickstart-id` attribute. 
+          
+          **Example**
+
+          ```data-quickstart-id="context-selector"```
+        1. From within the quick start, you can trigger that by by writing markdown such as:
+          
+          **Example**
+
+          ``
+          Highlight the [context selector] {{highlight context-selector}}
+          ``
+        1. Examples:
+          - Highlight the [context selector]{{highlight context-selector}}
+          - Navigate to the dashboard and highlight the [Create Product button]{{highlight dashboardCreateProduct-buttonLink}}
+      review:
+        instructions: |-
+          #### To verify:
+          Did you see the elements highlighted?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      summary:
+        success: You have learned about highlighting elements!
+        failed: Try the steps again.
+    - title: Create Ruby App (copy feature example)
+      description: >
+        ### Create a Project
+
+        In next step we will create a resource using
+        `https://github.com/sclorg/ruby-ex.git`{{copy}}
+
+        Create and deploy a ruby app
+
+        ```
+
+        oc new-app ruby~https://github.com/sclorg/ruby-ex.git
+
+
+        echo "Expose route using oc expose svc/ruby-ex"
+
+        oc expose svc/ruby-ex
+
+        ```{{copy}}
+  conclusion: You have finished the quick starts features overview
+  nextQuickStart: []

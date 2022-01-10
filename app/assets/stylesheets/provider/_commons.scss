@@ -249,9 +249,15 @@ hr, {
   }
 }
 
+#quick-starts-entry {
+  height: 100%;
+}
 #quick-starts-resources-inner {
   margin: -24px;
 }
 .pfext-page-layout__header {
   padding-top: 1px;
+}
+.pfext-quick-start-catalog-filter__flex .pf-c-toolbar__item:nth-child(2) {
+  min-width: 95px;
 }
