@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin::Account::BaseController
+
   # We only enable it for master for now, feel free to roll it out for any provider
-  before_action :ensure_master_domain
+  before_action :ensure_master_domain, :email_configurations_enabled?
 
   def index
   end
@@ -47,6 +48,13 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
   protected
 
   def configuration_params
-    params.permit(email_configuration: %i[email username password smtp_address_and_port])
+    # For the time being we only want to support user name and password override
+    params.permit(email_configuration: %i[email user_name password])
+  end
+
+  def email_configurations_enabled?
+    return if Features::EmailConfigurationConfig.enabled?
+
+    render_error "Email Configurations are not enabled.", :status => :not_found
   end
 end
