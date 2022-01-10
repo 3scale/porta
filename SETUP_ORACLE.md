@@ -1,6 +1,26 @@
-# Setup Oracle
+## Prerequisites on Fedora 35+
 
-## Install Oracle dependencies using the script
+### Install Oracle Instant Client
+
+Go to [the official Oracle Instant Client Downloads site](https://www.oracle.com/database/technologies/instant-client/downloads.html) and install basic and SDK RPMs like this:
+
+```
+sudo dnf install https://download.oracle.com/otn_software/linux/instantclient/214000/oracle-instantclient-basic-21.4.0.0.0-1.el8.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/214000/oracle-instantclient-devel-21.4.0.0.0-1.el8.x86_64.rpm
+```
+
+If you wish, you can also install SQLPLus client from same location as well.
+
+### Setup Podman with user namespaces
+
+```sh
+dnf install -y podman-docker
+sudoedit /etc/subuid # add line: myusername:10000:54321
+sudoedit /etc/subgid # add line: myusername:10000:54330
+```
+
+## Prerequisites on other Linux and probably MAC
+
+### Install Oracle dependencies using the script
 
 1. Run the script with sudo
 ```shell
@@ -14,7 +34,7 @@ LD_LIBRARY_PATH="/opt/oracle/instantclient/:$LD_LIBRARY_PATH"
 ORACLE_HOME=/opt/oracle/instantclient/
 ```
 
-## Install Oracle Instant Client
+### Install Oracle Instant Client
 
 1. Go to [the official Oracle Instant Client Downloads site](https://www.oracle.com/database/technologies/instant-client/downloads.html) and download the following **.rpm** packages for your operative system:
 
@@ -40,18 +60,15 @@ export OCI_LIB_DIR=$ORACLE_HOME/lib
 export OCI_INC_DIR=/usr/include/oracle/X/client64
 ```
 
-## Run Oracle Server from Docker
-
-### Prerequisites
+### Setup Docker
 
 You need to have Docker installed and running. You also need to be able to [run containers as a non-root user](https://docs.docker.com/install/linux/linux-postinstall/).
 
-### Steps
+## Run Oracle server
 
 1. From this repository, do `make oracle-database` and wait to see *DATABASE IS READY TO USE!*.
 
 2. Finally initialize the database with some seed data by running: `DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG=AMERICAN_AMERICA.UTF8 USER_PASSWORD=123456 MASTER_PASSWORD=123456 MASTER_ACCESS_TOKEN=token bundle exec rake db:drop db:create db:setup`
-
 
 ## Troubleshooting
 
@@ -62,3 +79,5 @@ Add `DISABLE_OOB=ON` to `sqlnet.ora` ([github issue](https://github.com/oracle/d
 ```shell
 echo "DISABLE_OOB=ON" >> /opt/oracle/instantclient/network/admin/sqlnet.ora
 ```
+
+For IntelliJ/RubyMine, go to Database -> Database Source properties -> Drivers -> Oracle -> Advanced -> oracle.net.disableOob -> true
