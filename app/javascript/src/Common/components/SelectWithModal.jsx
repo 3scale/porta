@@ -27,6 +27,7 @@ type Props<T: Record> = {
   isDisabled?: boolean,
   title: string,
   placeholder: string,
+  searchPlaceholder?: string,
   footerLabel: string,
   helperTextInvalid?: string,
   fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
@@ -49,6 +50,7 @@ const SelectWithModal = <T: Record>({
   isDisabled,
   title,
   placeholder,
+  searchPlaceholder,
   footerLabel,
   helperTextInvalid,
   fetchItems
@@ -163,6 +165,7 @@ const SelectWithModal = <T: Record>({
           page={page}
           setPage={handleModalOnSetPage}
           onSearch={fetchItems ? setQuery : onLocalSearch}
+          searchPlaceholder={searchPlaceholder}
           sortBy={sortBy}
         />
       )}
