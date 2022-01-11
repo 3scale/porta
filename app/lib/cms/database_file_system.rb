@@ -6,20 +6,20 @@
 class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
   EMPTY_STRING = ''
 
-  attr_reader :provider, :history
+  attr_reader :provider, :history, :draft
 
-  def initialize(provider, lookup_context)
+  def initialize(provider, lookup_context, draft)
     @provider = provider
     @lookup_context = lookup_context
     @history = []
+    @draft = draft
   end
 
-  def read_template_file(template_path, context)
+  def read_template_file(template_path)
     raise ArgumentError, "Cannot find partial without name." unless template_path
 
-    draft = context.registers[:draft]
     partial = find_partial(template_path)
-    partial ? partial.content(draft) : partial_from_filesystem(template_path, context)
+    partial ? partial.content(draft) : partial_from_filesystem(template_path)
   end
 
   def find_portlet(path)
@@ -30,7 +30,7 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
     record @provider.all_partials.find_by(system_name: path)
   end
 
-  def partial_from_filesystem(path, context)
+  def partial_from_filesystem(path)
     renderer = LiquidPartialRenderer.new(@lookup_context)
     template = renderer.find_template(path)
     template.source

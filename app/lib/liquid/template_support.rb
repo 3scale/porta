@@ -132,7 +132,7 @@ module Liquid
 
       template.registers[:content_for] ||= cms.content_for_store
 
-      template.registers[:file_system] ||= CMS::DatabaseFileSystem.new(site_account, lookup_context)
+      template.registers[:file_system] ||= CMS::DatabaseFileSystem.new(site_account, lookup_context, template.registers[:draft])
 
       template_assigns template,
         :site    => Liquid::Drops::Site.new(site_account),
