@@ -65,6 +65,6 @@ class Admin::Api::BuyersApplicationPlansController < Admin::Api::BuyersBaseContr
 
   def application_plan_params
     attributes = current_account.fields.for(Cinstance)
-    params.permit(*attributes)
+    params.slice(*attributes)
   end
 end
