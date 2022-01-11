@@ -29,6 +29,7 @@ const defaultProps = {
   setPage,
   perPage: undefined,
   onSearch,
+  searchPlaceholder: undefined,
   sortBy: { index: 1, direction: 'desc' }
 }
 
@@ -75,6 +76,14 @@ describe('when is open', () => {
     searchButton.simulate('click')
 
     expect(onSearch).toHaveBeenCalledWith('foo')
+  })
+
+  it('should have a search placeholder', () => {
+    const searchPlaceholder = 'Find Waldo'
+    const wrapper = mountWrapper({ ...props, searchPlaceholder })
+
+    const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[type="search"]')
+    expect(searchInput.props().placeholder).toEqual(searchPlaceholder)
   })
 
   describe('when collection empty', () => {

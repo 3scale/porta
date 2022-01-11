@@ -39,6 +39,7 @@ type Props<T: Record> = {
   page: number,
   setPage: (number) => void,
   onSearch: (term: string) => void,
+  searchPlaceholder?: string,
   perPage?: number,
   sortBy: { index: number, direction: $Keys<typeof SortByDirection> }
 }
@@ -59,6 +60,7 @@ const TableModal = <T: Record>({
   page,
   setPage,
   onSearch,
+  searchPlaceholder,
   sortBy
 }: Props<T>): React.Node => {
   const [selected, setSelected] = useState<T | null>(selectedItem)
@@ -160,6 +162,7 @@ const TableModal = <T: Record>({
               aria-label="search for an item"
               ref={searchInputRef}
               isDisabled={isLoading || !onSearch}
+              placeholder={searchPlaceholder}
             />
             <Button
               variant="control"
