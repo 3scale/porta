@@ -1,9 +1,7 @@
 // @flow
 
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
-
 export function fetchData<T> (url: string): Promise<T> {
-  return fetchPolyfill(url)
+  return fetch(url)
     .then(response => {
       if (!response.ok) {
         throw new Error(response.statusText)
