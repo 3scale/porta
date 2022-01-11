@@ -136,7 +136,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     set_layout_by(:layout_name, :find_by_system_name, attrs)
     set_layout_by(:layout_id, :find_by_id, attrs)
 
-    attrs.to_h
+    attrs
   end
 
   private
