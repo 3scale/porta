@@ -76,8 +76,8 @@ GIT
 PATH
   remote: lib/developer_portal
   specs:
-    developer_portal (1.0.0)
-      liquid (~> 3.0.6)
+    developer_portal (1.0.1)
+      liquid (= 4.0.0)
       railties (>= 3.2)
 
 PATH
@@ -1515,11 +1515,11 @@ GEM
       tomlrb (>= 1.3, < 2.1)
       with_env (= 1.1.0)
       xml-simple (~> 1.1.5)
-    liquid (3.0.6)
+    liquid (4.0.0)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.12.0)
+    loofah (2.13.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)

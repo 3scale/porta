@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "developer_portal"
-  s.version     = '1.0.0'
+  s.version     = '1.0.1'
   s.authors     = ["Jakub Hozak", "Jose Galisteo", "Aurelian Oancea"]
   s.email       = ["3scale-info@redhat.com"]
   s.homepage    = ""
@@ -11,10 +13,6 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"]
   s.test_files = Dir["test/**/*"]
 
+  s.add_dependency 'liquid', '4.0.0'
   s.add_dependency "railties", ">= 3.2"
-  s.add_dependency 'liquid', '~>3.0.6'
-
-
-  # s.add_dependency "jquery-rails"
-
 end
