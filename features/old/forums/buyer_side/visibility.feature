@@ -14,7 +14,7 @@ Feature: Forum visibility
     Given provider "foo.3scale.localhost" has "forum" disabled
     When I log in as "buyer" on "foo.3scale.localhost"
       And I go to the forum page
-    Then I should see "Forum not found"
+    Then I should see "Page not found"
 
   Scenario: Buyer has to be logged to see the subscriptions page
     Given the current domain is "foo.3scale.localhost"
