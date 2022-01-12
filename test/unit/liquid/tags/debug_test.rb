@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Tags::DebugTest < ActiveSupport::TestCase
 
   def setup
-    @debug = Liquid::Tags::Debug.parse('debug', ':help', [], {})
+    @debug = Liquid::Tags::Debug.parse('debug', ':help', '', Liquid::ParseContext.new)
   end
 
   test "render help" do

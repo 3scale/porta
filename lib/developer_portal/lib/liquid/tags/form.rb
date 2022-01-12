@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Liquid
   module Tags
     class Form < Liquid::Block
@@ -7,11 +9,11 @@ module Liquid
       include System::UrlHelpers.system_url_helpers
 
       # list of allowed html attributes
-      HTML_FORM_ATTRIBUTES = ["class", "id"]
+      HTML_FORM_ATTRIBUTES = %w[class id].freeze
 
-      Syntax = /(#{Liquid::QuotedFragment}+)\s*(?:,\s*(#{Liquid::QuotedFragment}*))?(.+)?/o
+      Syntax = /(#{Liquid::QuotedFragment}+)\s*(?:,\s*(#{Liquid::QuotedFragment}*))?(.+)?/o.freeze
 
-      info %{
+      info %(
        Renders a form tag with an action and class attribute specified, depending on the name
        of the form. The supported forms are:
 
@@ -77,9 +79,9 @@ module Liquid
             </td>
           </tr>
         </table>
-      }
+      )
 
-      example "A form to create an application", %{
+      example "A form to create an application", %(
         {% form 'application.create', application %}
            <input type='text' name='application[name]'
                   value='{{ application.name }}'
@@ -89,7 +91,7 @@ module Liquid
 
            <input name='commit'  value='Create!'>
         {% endform %}
-      }
+      )
 
       def initialize(tag_name, params, tokens)
         super
@@ -97,16 +99,14 @@ module Liquid
         @html_attributes = {}
 
         if params =~ Syntax
-          @form_name = $1[1..-2]
-          @object_name = $2
-          html_options = $3
+          @form_name = Regexp.last_match(1)[1..-2]
+          @object_name = Regexp.last_match(2)
+          html_options = Regexp.last_match(3)
 
-          if html_options
-            html_options.scan(TagAttributes) do | key, value |
-              next unless HTML_FORM_ATTRIBUTES.include?(key)
+          html_options&.scan(TagAttributes) do | key, value |
+            next unless HTML_FORM_ATTRIBUTES.include?(key)
 
-              @html_attributes[key] = Variable.new(value, ParseContext.new({}))
-            end
+            @html_attributes[key] = Variable.new(value, ParseContext.new)
           end
 
         else
@@ -120,7 +120,7 @@ module Liquid
 
       def render(context)
 
-        form = form_class.new(context, @object_name,  @html_attributes.inject({}){|result, (k,v)| result[k] = v.render(context); result} )
+        form = form_class.new(context, @object_name,  @html_attributes.transform_values {|v| v.render(context); } )
 
         context.stack do
           context.registers[:form] = form
@@ -128,7 +128,7 @@ module Liquid
           form.render(content)
         end
       rescue Liquid::Forms::Error
-        render_error $!.message
+        render_error $ERROR_INFO.message
       end
 
       private

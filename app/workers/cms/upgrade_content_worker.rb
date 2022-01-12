@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CMS::UpgradeContentWorker
   include Sidekiq::Worker
 
@@ -10,11 +12,13 @@ class CMS::UpgradeContentWorker
     def perform(provider_id, kind)
       provider = Provider.find(provider_id)
 
-      batch.jobs do
-        provider.templates.select(:id).find_each do |template|
-          CMS::UpgradeContentWorker.perform_async(template.id, kind)
+      if valid_within_batch?
+        batch.jobs do
+          provider.templates.select(:id).find_each do |template|
+            CMS::UpgradeContentWorker.perform_async(template.id, kind)
+          end
         end
-      end if valid_within_batch?
+      end
     end
   end
 
@@ -45,8 +49,8 @@ class CMS::UpgradeContentWorker
   end
 
   def upgrade_include(template)
-    published = replace_include_with(template.published || ''.freeze).presence
-    draft = replace_include_with(template.draft || ''.freeze).presence
+    published = replace_include_with(template.published || '').presence
+    draft = replace_include_with(template.draft || '').presence
 
     template.draft = draft if template.draft != draft
     template.upgrade_content!(published, validate: false)
@@ -55,20 +59,20 @@ class CMS::UpgradeContentWorker
   protected
 
   def replace_include_with(content)
-    templates = %w(login/cas signup/cas shared/pagination)
+    templates = %w[login/cas signup/cas shared/pagination]
 
-    matches = content.gsub(/{%\s+include\s+#{Liquid::Include::Syntax}\s+%}/)
+    matches = content.gsub(/{%\s+include\s+#{Liquid::Include::Syntax}\s+%}/o)
 
     return content if matches.count.zero?
 
     matches.each do |block|
-      match = block.match(Liquid::Block::FullToken) or raise 'invalid liquid block'
+      match = block.match(Liquid::BlockBody::FullToken) or raise 'invalid liquid block'
       params = match[2]
 
       include = params.match(Liquid::Include::Syntax) or raise 'invalid include syntax'
 
       template = include[1]
-      name = template.delete(%q('").freeze)
+      name = template.delete(%q('"))
 
       case name
       when *templates

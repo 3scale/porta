@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Tags::MenuTest < ActiveSupport::TestCase
   def setup
-    @menu = Liquid::Tags::Menu.parse('menu', '', [], {})
+    @menu = Liquid::Tags::Menu.parse('menu', '', Liquid::Tokenizer.new(''), Liquid::ParseContext.new)
   end
 
   class FileSystem < Liquid::BlankFileSystem
@@ -20,4 +22,3 @@ class Liquid::Tags::MenuTest < ActiveSupport::TestCase
     @menu.render(context)
   end
 end
-

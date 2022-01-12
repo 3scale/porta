@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
 
   test "syntax regexp" do
     {
-      'column: "tracks"'                          => ['tracks'],
-      'column: "tracks" label: "Songs"'           => ['tracks', 'Songs']
+      'column: "tracks"'                          => %w[tracks],
+      'column: "tracks" label: "Songs"'           => %w[tracks Songs]
     }.each do | params, expected |
       match = params.match Liquid::Tags::SortLink::SYNTAX
       assert match
@@ -25,7 +27,7 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
 
     context = Liquid::Context.new
     context.registers[:controller] = controller
-    tag = Liquid::Tags::SortLink.parse('th', '{% sort_link column: "foo" label: "Foo"  %}', [], {})
+    tag = create_th('{% sort_link column: "foo" label: "Foo"  %}')
 
     rendered = tag.render(context)
     assert_match 'direction=asc', rendered
@@ -42,10 +44,17 @@ class Liquid::Tags::SortLinkTest < ActiveSupport::TestCase
 
     context = Liquid::Context.new
     context.registers[:controller] = controller
-    tag = Liquid::Tags::SortLink.parse('th', '{% sort_link column: "foo" label: "Foo"  %}', [], {})
+    tag = create_th('{% sort_link column: "foo" label: "Foo"  %}')
 
     rendered = tag.render(context)
     assert_nil rendered
   end
-end
 
+  private
+
+  def create_th(markup, tokens = '', options = {})
+    tokenizer = Liquid::Tokenizer.new(tokens)
+    parse_context = Liquid::ParseContext.new(options)
+    Liquid::Tags::SortLink.parse('th', markup, tokenizer, parse_context)
+  end
+end

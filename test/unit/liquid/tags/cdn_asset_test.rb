@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Tags::CdnAssetTest < ActiveSupport::TestCase
@@ -10,7 +11,7 @@ class Liquid::Tags::CdnAssetTest < ActiveSupport::TestCase
       '/swagger-ui/2.2.10/swagger-ui.min.js' => 'https://cdn.3scale.net/swagger-ui/2.2.10/swagger-ui.min.js',
       '/swagger-ui/2.2.10/swagger-ui.css' => 'https://cdn.3scale.net/swagger-ui/2.2.10/swagger-ui.css',
     }.each do |params, expected|
-      assert_equal expected, Liquid::Tags::CdnAsset.parse('cdn_asset', params, [], {}).file
+      assert_equal expected, create_cdn_asset_file(params)
     end
   end
 
@@ -20,7 +21,11 @@ class Liquid::Tags::CdnAssetTest < ActiveSupport::TestCase
       '/swagger-ui/2.2.10/swagger-ui.js' => '/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.js',
       '/swagger-ui/2.2.10/swagger-ui.min.js' => '/_cdn_assets_/swagger-ui/2.2.10/swagger-ui.min.js',
     }.each do |params, expected|
-      assert_equal expected, Liquid::Tags::CdnAsset.parse('cdn_asset', params, [], {}).file
+      assert_equal expected, create_cdn_asset_file(params)
     end
+  end
+
+  def create_cdn_asset_file(params)
+    Liquid::Tags::CdnAsset.parse('cdn_asset', params, '', Liquid::ParseContext.new).file
   end
 end

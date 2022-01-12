@@ -1,9 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Tags::EmailTest < ActiveSupport::TestCase
-
-  subject { Liquid::Tags::Email }
-
   def setup
     @subject = "{% subject = 'my fancy subject' %}"
     @header = "{% header 'MyHeader' = 'Value' %}"
@@ -12,11 +11,11 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
     @reply_to = "{% reply_to 'over@lord.com' %}"
     @from = "{% from 'secret@mail.com' %}"
     @end = "{% endemail %}"
-    @email = subject.parse('email', '', [@subject, @header, @bcc, @cc, @reply_to, @from, @end], {})
+    @email = create_email('', [@subject, @header, @bcc, @cc, @reply_to, @from, @end])
   end
 
   test "email without liquid tags" do
-    email = subject.parse('email', 'some params', ["some content", @end], {})
+    email = create_email('some params', ["some content", @end])
     context = stub(:registers => {})
     assert_equal '', email.render(context)
   end
@@ -28,7 +27,7 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
 
   test "do_not_send" do
     context = stub(:registers => {})
-    subject.parse('email', '', ['{% do_not_send %}', @end], {})
+    create_email('', ['{% do_not_send %}', @end])
     assert_equal '', @email.render(context)
   end
 
@@ -69,10 +68,18 @@ class Liquid::Tags::EmailTest < ActiveSupport::TestCase
   end
 
   test "assign do_not_send header to mailer" do
-    mail = subject.parse('email', '', ['{% do_not_send %}', @end], {})
+    mail = create_email('', ['{% do_not_send %}', @end])
     mail.expects(:headers).with(::Message::DO_NOT_SEND_HEADER => true)
 
     context = stub(:registers => {mail: mail})
     mail.render(context)
+  end
+
+  private
+
+  def create_email(markup, tokens = [], options = {})
+    tokenizer = Liquid::Tokenizer.new(tokens.join)
+    parse_context = Liquid::ParseContext.new(options)
+    Liquid::Tags::Email.parse('email', '', tokenizer, parse_context)
   end
 end
