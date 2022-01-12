@@ -123,7 +123,7 @@ module Liquid
 
         context.stack do
           context.registers[:form] = form
-          content = render_all(@nodelist, context).html_safe
+          content = super(context).html_safe
           form.render(content)
         end
       rescue Liquid::Forms::Error
