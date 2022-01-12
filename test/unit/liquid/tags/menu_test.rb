@@ -6,8 +6,8 @@ class Liquid::Tags::MenuTest < ActiveSupport::TestCase
   end
 
   class FileSystem < Liquid::BlankFileSystem
-    def read_template_file(file, context)
-      read_file(file, context)
+    def read_template_file(file)
+      read_file(file)
     end
   end
 
@@ -15,7 +15,7 @@ class Liquid::Tags::MenuTest < ActiveSupport::TestCase
     context = Liquid::Context.new
     file_system = FileSystem.new
     Liquid::Template.stubs(file_system: file_system)
-    file_system.expects(:read_file).with('menu', context)
+    file_system.expects(:read_file).with('menu')
 
     @menu.render(context)
   end
