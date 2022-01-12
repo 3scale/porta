@@ -2,21 +2,16 @@
 
 class SetTenantIdWorker < ApplicationJob
 
-  def perform(provider_batch)
-    provider_batch.each do |provider|
-      provider.master = false
-      provider.save!
+  def perform(provider)
+    provider.update_column(:master, false)
 
-      {
-        BackendApi => :account_id,
-        LogEntry => :provider_id,
-        Alert => :account_id,
-      }.each do |model, relation|
-        q = {relation => provider.id}
-        
-        model.where(relation => provider.id).find_each do |instance|
-          instance.update!(tenant_id: provider.tenant_id)
-        end
+    {
+      BackendApi => :account_id,
+      LogEntry => :provider_id,
+      Alert => :account_id,
+    }.each do |model, relation|
+      model.where(relation => provider.id).find_each do |instance|
+        ModelTenantIdWorker.perform_later(instance, :tenant_id, provider)
       end
     end
   end
@@ -29,6 +24,14 @@ class SetTenantIdWorker < ApplicationJob
         SetTenantIdWorker.perform_later(provider_batch)
       end
     end
+  end
+
+  class ModelTenantIdWorker < ApplicationJob
+
+    def perform(object, attribute, provider)
+      object.update_column(attribute, provider.tenant_id)
+    end
+
   end
 
 end
