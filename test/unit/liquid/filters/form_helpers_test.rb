@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::Filters::FormHelpersTest < ActiveSupport::TestCase
@@ -19,7 +21,7 @@ class Liquid::Filters::FormHelpersTest < ActiveSupport::TestCase
     errors.add(:teardown, 'tore down')
 
     assert_equal '<p class="inline-errors">set up and tore down</p>', inline_errors(model.errors)
-    assert_equal '<p class="inline-errors">set up</p>', inline_errors(model.errors.before_method(:setup))
+    assert_equal '<p class="inline-errors">set up</p>', inline_errors(model.errors.liquid_method_missing(:setup))
 
     assert_equal '<p class="inline-errors">what an error</p>',
                  inline_errors(['what an error'])
