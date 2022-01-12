@@ -104,7 +104,8 @@ module Liquid
           if html_options
             html_options.scan(TagAttributes) do | key, value |
               next unless HTML_FORM_ATTRIBUTES.include?(key)
-              @html_attributes[key] = Variable.new(value)
+
+              @html_attributes[key] = Variable.new(value, ParseContext.new({}))
             end
           end
 
