@@ -20,11 +20,11 @@
           {% for message in messages %}
              <tr class="{{ message.state }}">
                <td>
-                {% if message.sender == present %}
+                {% unless message.sender == blank %}
                   {{ message.sender }}
                 {% else %}
                   <span class="deleted">(user deleted)</span>
-                {% endif %}
+                {% endunless %}
               </td>
               <td>{{ message.subject | link_to: message.url }}</td>
               <td>{{ message.created_at }}</td>

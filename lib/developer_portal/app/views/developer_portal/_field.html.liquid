@@ -7,7 +7,7 @@
   {% continue %}
 {% endif %}
 
-{% if field.choices == present %}
+{% unless field.choices == blank %}
   <div class="form-group {% if field.required %} required {% else %} optional {% endif %}"
       id="{{ field.html_id }}_input">
       <label class="col-md-4 control-label" for="{{ field.html_id }}_id" >

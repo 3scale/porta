@@ -20,7 +20,7 @@ table#line-items {
           {% if invoice.pay_now? %}
             <a href="{{invoice.url}}/payment" class="pull-right btn btn-success pay-invoice-btn">Pay invoice</a>
           {% endif %}
-        </div> 
+        </div>
       </div>
       <div class="panel-body panel-footer">
 
@@ -67,14 +67,14 @@ table#line-items {
               <dd>{{ developer.full_address }}</dd>
               <dt>Country</dt>
               <dd>{{ developer.country_name }}</dd>
-              {% if invoice.vat_code == present %}
+              {% unless invoice.vat_code == blank %}
                 <dt>VAT Code</dt>
                 <dd>{{ invoice.vat_code }}</dd>
-              {% endif %}
-              {% if invoice.fiscal_code == present %}
+              {% endunless %}
+              {% unless invoice.fiscal_code == blank %}
                 <dt>Fiscal Code</dt>
                 <dd>{{ invoice.fiscal_code }}</dd>
-              {% endif %}
+              {% endunless %}
             </dl>
           </div>
         </div>

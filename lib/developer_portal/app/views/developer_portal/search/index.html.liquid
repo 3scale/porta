@@ -54,7 +54,7 @@
     <div class="col-md-9">
 
       <dl class="searchResultsList">
-        {% if search.query == present %}
+        {% if search.query != '' %}
           <h4 class="help-block">{{ search.total_found }} documents matched '{{ search.query }}'.</h4>
         {% endif %}
 

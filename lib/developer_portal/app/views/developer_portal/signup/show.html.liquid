@@ -22,9 +22,9 @@
         {% form 'signup', account, class: "form-horizontal" %}
 
           <fieldset>
-            {% if account.errors.plans == present %}
+            {% unless account.errors.plans == blank %}
               <div class="alert alert-danger">{{ account.errors.plans | inline_errors: 'inline-errors' }}</div>
-            {% endif %}
+            {% endunless %}
 
             {% for field in account.fields %}
               {% include 'field' with field %}
@@ -94,7 +94,7 @@
 {{ 'validateSignup.js' | javascript_include_tag }}
 <script type="text/javascript">
   document.querySelector('input:not([type="hidden"])').focus()
-  
+
   const inputCaptcha = document.querySelector('#captchaChecked')
   function onCaptchaSuccess () {
     inputCaptcha.value = 'ok'

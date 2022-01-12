@@ -130,7 +130,7 @@
               <div class="panel-body">
                 <div class="row">
 
-                  {% if plan.features == present %}
+                  {% unless plan.features == blank %}
                     <div class="col-md-6">
                       <h5>Features</h5>
                       <ul class="features list-unstyled">
@@ -142,12 +142,12 @@
                         {% endfor %}
                       </ul>
                     </div>
-                  {% endif %}
+                  {% endunless %}
 
                   <div class="col-md-6">
                     <h5>Limits</h5>
                     <ul class="limits list-unstyled">
-                      {% if plan.usage_limits == present %}
+                      {% unless plan.usage_limits == blank %}
                         {% for limit in plan.usage_limits %}
                           <li>
                             <i class="fa fa-signal"></i>
@@ -159,7 +159,7 @@
                           <i class="fa fa-signal"></i>
                           No limits
                         </li>
-                      {% endif %}
+                      {% endunless %}
                     </ul>
                   </div>
 

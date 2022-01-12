@@ -32,9 +32,9 @@ module Liquid
 
       desc "Returns true if there are errors."
       example '''
-        {% if form.errors == present %}
+        {% unless form.errors == blank %}
           Sorry, there were errors.
-        {% endfor %}
+        {% endunless %}
       '''
       def present?
         not empty?

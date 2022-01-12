@@ -8,7 +8,7 @@
           <li class="{% if urls.applications.active? %}active{% endif %}">
             <a href="{{ urls.applications }}">{{ urls.applications.title }}</a>
           </li>
-          {% elsif current_account.applications.first == present%}
+          {% elsif current_account.applications.first != blank%}
           {% assign app = current_account.applications.first %}
           <li class="{% if app.url.active? %}active{% endif %}">
             <a href="{{ app.url }}">API Credentials</a>
