@@ -8,7 +8,7 @@ Feature: XSS Protection
     And the provider has cms page "/some-page" with:
     """
       Hello {{ current_account.name }}
-      Value {{ current_account.fields.org_name }}
+      Value {{ current_account.fields.org_name.value }}
     """
     And I'm logged in as a malicious buyer
 

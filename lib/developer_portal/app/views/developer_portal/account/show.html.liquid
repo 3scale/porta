@@ -16,7 +16,7 @@
           {% for field in current_account.fields %}
             {% if field.value != "" and field.visible? %}
               <dt>{{ field.label }}</dt>
-              <dd>{{ field }}</dd>
+              <dd>{{ field.value }}</dd>
             {% endif %}
           {% endfor %}
           <!-- add one field bound to 'user' -->
