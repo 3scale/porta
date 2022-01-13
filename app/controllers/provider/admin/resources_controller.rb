@@ -6,6 +6,6 @@ class Provider::Admin::ResourcesController < FrontendController
   layout 'provider'
 
   def index; end
-  
+
   def show; end
 end
