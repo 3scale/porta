@@ -30,7 +30,6 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
     const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].indexOf(activeMenu) !== -1)
     const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].indexOf(activeMenu) !== -1)
     const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].indexOf(activeMenu) !== -1)
-    const isResourcesSelected = menu === 'resources' && activeMenu === 'resources'
 
     if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
       return 'pf-c-context-selector__menu-list-item current-context'
