@@ -24,7 +24,7 @@ class DeveloperPortal::Admin::ServiceContractsController < DeveloperPortal::Base
   end
 
   def create
-    @service_contract = current_account.bought_service_contracts.build params[:service_contract]
+    @service_contract = current_account.bought_service_contracts.build service_contract_params
     @service_contract.plan = site_account.service_plans.find params[:service_contract][:plan_id]
 
     if @service_contract.save
@@ -82,4 +82,7 @@ class DeveloperPortal::Admin::ServiceContractsController < DeveloperPortal::Base
     end
   end
 
+  def service_contract_params
+    params[:service_contract]&.permit(%i[description name redirect_url extra_fields])
+  end
 end
