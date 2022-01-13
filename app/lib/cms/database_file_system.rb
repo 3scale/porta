@@ -8,7 +8,7 @@ class CMS::DatabaseFileSystem < Liquid::BlankFileSystem
 
   attr_reader :provider, :history, :draft
 
-  def initialize(provider, lookup_context, draft)
+  def initialize(provider, lookup_context, draft) # rubocop:disable Lint/MissingSuper no parent constructor
     @provider = provider
     @lookup_context = lookup_context
     @history = []

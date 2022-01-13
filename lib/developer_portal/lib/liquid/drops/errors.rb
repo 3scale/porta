@@ -31,11 +31,11 @@ module Liquid
       end
 
       desc "Returns true if there are errors."
-      example '''
+      example %(
         {% unless form.errors == blank %}
           Sorry, there were errors.
         {% endunless %}
-      '''
+      )
       def present?
         not empty?
       end

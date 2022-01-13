@@ -10,13 +10,13 @@ class CMS::UpgradeContentWorker
     sidekiq_options queue: :low
 
     def perform(provider_id, kind)
+      return unless valid_within_batch?
+
       provider = Provider.find(provider_id)
 
-      if valid_within_batch?
-        batch.jobs do
-          provider.templates.select(:id).find_each do |template|
-            CMS::UpgradeContentWorker.perform_async(template.id, kind)
-          end
+      batch.jobs do
+        provider.templates.select(:id).find_each do |template|
+          CMS::UpgradeContentWorker.perform_async(template.id, kind)
         end
       end
     end
