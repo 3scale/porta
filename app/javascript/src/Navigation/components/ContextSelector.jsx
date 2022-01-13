@@ -14,13 +14,12 @@ type Props = {
   audienceLink: string,
   settingsLink: string,
   productsLink: string,
-  backendsLink: string,
-  resourcesLink: string
+  backendsLink: string
 }
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink, resourcesLink }: Props): React.Node => {
+const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink, backendsLink }: Props): React.Node => {
   const [isOpen, setIsOpen] = React.useState(false)
   const ref = React.useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
@@ -33,7 +32,7 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
     const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].indexOf(activeMenu) !== -1)
     const isResourcesSelected = menu === 'resources' && activeMenu === 'resources'
 
-    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected || isResourcesSelected) {
+    if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
       return 'pf-c-context-selector__menu-list-item current-context'
     }
 
@@ -47,9 +46,7 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
       </a>
       {isOpen && (
         <div className="pf-c-context-selector__menu">
-          <ul id="context-menu" className="pf-c-context-selector__menu-list" style={{
-            '--pf-c-context-selector__menu-list--MaxHeight': '15rem'
-          }}>
+          <ul id="context-menu" className="pf-c-context-selector__menu-list">
             <li>
               <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
                 <i className='fa fa-home header-context-selector__item-icon' />Dashboard
@@ -75,11 +72,6 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
             <li>
               <a className={getClassNamesForMenu('account')} href={settingsLink}>
                 <i className='fa fa-cog header-context-selector__item-icon' />Account Settings
-              </a>
-            </li>
-            <li>
-              <a className={getClassNamesForMenu('resources')} href={resourcesLink}>
-                <i className='fa fa-cog header-context-selector__item-icon' />Resources
               </a>
             </li>
           </ul>

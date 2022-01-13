@@ -4,10 +4,10 @@ $master-ribbon-height: line-height-times(1);
 
   &--master {
     &:before {
+      background-color: $header-border-color;
       content: 'Master';
       grid-column: 1/-1;
       height: $master-ribbon-height;
-      background-color: $header-border-color;
     }
   }
 
