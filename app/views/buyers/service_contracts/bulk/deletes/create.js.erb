@@ -1,4 +1,0 @@
-<%- service_contracts.each do |contract| %>
-  $("#<%=dom_id(contract)%>").fadeOut(function(){$(this).remove()});
-<%-end-%>
-$("#bulk-operations").trigger("bulk:success");

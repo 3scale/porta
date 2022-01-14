@@ -29,7 +29,6 @@ Feature: Bulk operations
       And I should see "Send email"
       And I should see "Change application plan"
       And I should see "Change state"
-      #And I should see "Delete"
     When I uncheck select for "BobApp"
     Then "Bulk operations" should not be visible
 
