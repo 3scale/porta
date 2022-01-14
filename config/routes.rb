@@ -944,7 +944,6 @@ without fake Core server your after commit callbacks will crash and you might ge
             resource :send_email, :only => [:new, :create]
             resource :change_plan, :only => [:new, :create]
             resource :change_state, :only => [:new, :create]
-            resource :delete, :only => [:new, :create]
           end
         end
         resources :account_contracts, :only => :update
