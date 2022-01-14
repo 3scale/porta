@@ -15,7 +15,7 @@ resource "Message" do
 
       after do
         serializable.body.should == body
-        serializable.subject.should_not == subject
+        serializable.subject.should == subject
       end
     end
   end
