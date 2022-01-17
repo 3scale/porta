@@ -58,7 +58,20 @@ module System
       end
     end
 
+    def self.deploy_info_env
+      ENV.keys.filter { |key| key.start_with?("DEPLOY_INFO") }.each_with_object({}) do |key, deploy_info|
+        deploy_info[key.delete_prefix("DEPLOY_INFO_").downcase] = ENV[key]
+      end
+    end
+
     def self.parse_deploy_info
+      from_env = deploy_info_env
+      return read_deploy_info if from_env.empty?
+
+      from_env
+    end
+
+    def self.read_deploy_info
       path = Rails.root.join('.deploy_info').expand_path
       return { error: { path: path.to_s, message: 'not found' } } unless path.exist?
 
