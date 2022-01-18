@@ -13,7 +13,15 @@ class SphinxIndexationWorker < ApplicationJob
   end
 
   def perform(model)
-    callback = ThinkingSphinx::RealTime.callback_for(model.class.name.underscore)
-    callback&.after_commit model
+    rt_callback = ThinkingSphinx::RealTime.callback_for(model.class.name.underscore)
+
+    # use delete callback only if real time callbacks are also enabled
+    if rt_callback.send(:callbacks_enabled?) && model.try(:will_be_deleted?)
+      ThinkingSphinx::Callbacks.resume do
+        ThinkingSphinx::ActiveRecord::Callbacks::DeleteCallbacks.after_destroy(model)
+      end
+    else
+      rt_callback&.after_commit(model)
+    end
   end
 end

@@ -61,7 +61,10 @@ module AccountIndex
     protected
 
     def index_account
-      SphinxIndexationWorker.perform_later(self) unless master?
+      return if master?
+
+      SphinxIndexationWorker.perform_later(self)
+      buyers.find_each { |buyer| SphinxIndexationWorker.perform_later(buyer) } if provider? && will_be_deleted?
     end
   end
 
