@@ -13,12 +13,12 @@ ThinkingSphinx::Index.define(:account, with: :real_time) do
 
   set_property field_weights: { name: 2 }
   set_property charset_table: "0..9, A..Z->a..z, a..z, U+23, U+25, U+27, U+2A..U+2C, U+2E, U+3A, U+3B, U+3F, U+5F, U+60, U+7B, U+7D"
-  
+
   has :provider_account_id, type: :bigint
   has :tenant_id, type: :bigint
   has :state, type: :string
 
-  scope { Account.not_master.includes(:users, :bought_cinstances) }
+  scope { Account.not_master.without_to_be_deleted.includes(:users, :bought_cinstances) }
 end
 
 module AccountIndex
