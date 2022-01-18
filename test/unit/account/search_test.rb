@@ -77,6 +77,12 @@ class Account::SearchTest < ActiveSupport::TestCase
         buyers = provider.buyer_accounts.scope_search(:query => 'foo@bar.co.example.com')
         expected_buyer = User.find_by!(email: 'foo@bar.co.example.com').account
         assert_equal [expected_buyer], buyers
+
+        # incrementally delete accounts from index even if soft-deleted
+        provider.smart_destroy
+        assert Account.exists?(provider.id)
+        assert_equal 2, provider.buyer_accounts.size
+        assert_equal [], provider.buyer_accounts.scope_search(:query => 'foo@bar.co.example.com')
       end
     end
   end

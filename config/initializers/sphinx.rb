@@ -17,4 +17,19 @@ ThinkingSphinx::Configuration::MinimumFields.prepend(Module.new do
   end
 end)
 
+class ThinkingSphinx::Callbacks
+  def self.resume
+    return unless ThinkingSphinx::Callbacks.suspended?
+
+    begin
+      ThinkingSphinx::Callbacks.resume!
+      yield
+    ensure
+      ThinkingSphinx::Callbacks.suspend!
+    end
+  end
+end
+
+# TODO: handle destroy for models we want incrementally deleted
+# ThinkingSphinx::ActiveRecord::Callbacks::DeleteCallbacks.after_destroy(model)
 ThinkingSphinx::Callbacks.suspend!
