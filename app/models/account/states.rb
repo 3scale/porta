@@ -94,6 +94,7 @@ module Account::States
 
     scope :without_suspended, -> { where.not(state: :suspended) }
     scope :without_deleted, ->(without = true) { where.has { state != :scheduled_for_deletion } if without }
+    scope :without_to_be_deleted, ->(without = true) { without_deleted.where.not(provider_account: unscoped.scheduled_for_deletion) if without }
 
     scope :by_state, ->(state) do
       where(:state => state.to_s) if state.to_s != "all"
