@@ -17,19 +17,7 @@ ThinkingSphinx::Configuration::MinimumFields.prepend(Module.new do
   end
 end)
 
-class ThinkingSphinx::Callbacks
-  def self.resume
-    return unless ThinkingSphinx::Callbacks.suspended?
-
-    begin
-      ThinkingSphinx::Callbacks.resume!
-      yield
-    ensure
-      ThinkingSphinx::Callbacks.suspend!
-    end
-  end
-end
-
-# TODO: handle destroy for models we want incrementally deleted
+# TODO: in ts v5.3 it probably shouldn't hurt to allow callbacks so we have
+#       destroy for models automatically, see
 # ThinkingSphinx::ActiveRecord::Callbacks::DeleteCallbacks.after_destroy(model)
 ThinkingSphinx::Callbacks.suspend!
