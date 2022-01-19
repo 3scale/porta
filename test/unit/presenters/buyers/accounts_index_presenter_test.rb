@@ -20,7 +20,7 @@ class Buyers::AccountsIndexPresenterTest < ActiveSupport::TestCase
 
   test "filter buyers by query" do
     ThinkingSphinx::Test.rt_run do
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+      perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
         FactoryBot.create(:simple_buyer, name: 'Pepe Account', provider_account: provider)
         FactoryBot.create(:simple_buyer, name: 'Pepa Account', provider_account: provider)
       end

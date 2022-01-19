@@ -14,9 +14,14 @@ class SphinxIndexationWorkerTest < ActiveSupport::TestCase
     callback.expects(:after_commit).with(account)
 
     ThinkingSphinx::Test.rt_run do
-      perform_enqueued_jobs only: SphinxIndexationWorker do
-        SphinxIndexationWorker.perform_later(account)
+      perform_enqueued_jobs only: indexation_class do
+        indexation_class.perform_later(account)
       end
     end
+  end
+
+  private
+  def indexation_class
+    Object.const_get(self.class.name.sub(/Test$/, ""))
   end
 end
