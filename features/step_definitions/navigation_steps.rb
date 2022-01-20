@@ -15,9 +15,10 @@ When 'I navigate to the accounts page' do
   click_link href: admin_buyers_accounts_path
 end
 
-When "I navigate to a topic in the forum of {forum}" do |forum|
+# TODO: THREESCALE-8033 Remove this step as it's no longer in use.
+When "I should not see forum" do
   visit forum_path
-  click_link forum.topics.first.title
+  step 'I should see "Page not found"'
 end
 
 When /^I navigate to the forum admin page$/ do
