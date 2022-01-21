@@ -10,7 +10,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
   end
 
   def test_perform
-    perform_enqueued_jobs(except: SphinxIndexationWorker) do
+    ThinkingSphinx::Test.disable_real_time_callbacks!
+    perform_enqueued_jobs do
       perform_expectations
 
       hierarchy_worker.perform_now(object)
@@ -173,7 +174,8 @@ class DeleteObjectHierarchyWorkerTest < ActiveSupport::TestCase
     attr_reader :member, :member_permission
 
     def test_perform
-      perform_enqueued_jobs(except: SphinxIndexationWorker) { DeleteObjectHierarchyWorker.perform_now(member) }
+      ThinkingSphinx::Test.disable_real_time_callbacks!
+      perform_enqueued_jobs { DeleteObjectHierarchyWorker.perform_now(member) }
 
       assert_raises(ActiveRecord::RecordNotFound) { member_permission.reload }
       assert_raises(ActiveRecord::RecordNotFound) { member.reload }

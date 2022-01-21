@@ -65,22 +65,6 @@ class Account::SearchTest < ActiveSupport::TestCase
     assert_equal 'fo\/o', Account.search_ids('fo/o').query
   end
 
-  test 'search with query by email' do
-    ThinkingSphinx::Test.rt_run do
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        provider = FactoryBot.create(:simple_provider)
-        buyers = FactoryBot.create_list(:simple_buyer, 2, provider_account: provider)
-        ['foo@bar.co.example.com', 'foo@example.org'].each_with_index do |email, buyer_index|
-          FactoryBot.create(:admin, account: buyers[buyer_index], email: email)
-        end
-
-        buyers = provider.buyer_accounts.scope_search(:query => 'foo@bar.co.example.com')
-        expected_buyer = User.find_by!(email: 'foo@bar.co.example.com').account
-        assert_equal [expected_buyer], buyers
-      end
-    end
-  end
-
   test 'search_ids options' do
     ThinkingSphinx::Test.rt_run do
       assert Account.buyers.search_ids('foo').populate
@@ -131,7 +115,7 @@ class Account::SearchTest < ActiveSupport::TestCase
 
   test 'search user_key without keyword with many records is always indexed and found' do
     ThinkingSphinx::Test.rt_run do
-      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+      perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
         service = FactoryBot.create(:simple_service)
         buyer = FactoryBot.create(:simple_buyer)
         FactoryBot.create_list(:application_plan, 5, issuer: service).each_with_index do |plan, index|
@@ -166,5 +150,64 @@ class Account::SearchTest < ActiveSupport::TestCase
     buyers.first.update_attribute(:created_at, '2019-02-10'.to_time)
     result = provider.buyers.scope_search(created_within: ['2019-01-01', '2019-01-31'])
     assert_equal 2, result.size
+  end
+
+  class IncrementalIndexingTest < ActiveSupport::TestCase
+    include ActiveJob::TestHelper
+
+    attr_reader :provider, :buyers
+
+    setup do
+      ThinkingSphinx::Test.clear
+      ThinkingSphinx::Test.init
+      ThinkingSphinx::Test.start index: false
+      perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
+        @provider = FactoryBot.create(:simple_provider)
+        @buyers = FactoryBot.create_list(:simple_buyer, 2, provider_account: provider)
+        ['foo@bar.co.example.com', 'foo@example.org'].each_with_index do |email, buyer_index|
+          FactoryBot.create(:admin, account: buyers[buyer_index], email: email)
+        end
+      end
+    end
+
+    teardown do
+      ThinkingSphinx::Test.stop
+    end
+
+    test 'search with query by email' do
+      buyers = provider.buyer_accounts.scope_search(:query => 'foo@bar.co.example.com')
+      expected_buyer = User.find_by!(email: 'foo@bar.co.example.com').account
+      assert_equal [expected_buyer], buyers
+    end
+
+    test 'soft-deleting accounts removed from index' do
+      assert_not_empty Account.search(Riddle.escape('foo@bar.co.example.com'), middleware: ThinkingSphinx::Middlewares::IDS_ONLY).to_a
+
+      perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
+        FactoryBot.create(:simple_provider) # second provider
+        provider.smart_destroy
+      end
+      indexed_ids = Account.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY).to_a
+
+      assert Account.exists?(provider.id)
+      assert_equal 2, provider.buyer_accounts.size
+      assert_empty Account.search(Riddle.escape('foo@bar.co.example.com'), middleware: ThinkingSphinx::Middlewares::IDS_ONLY).to_a
+      assert_not_empty indexed_ids
+      assert_not_includes indexed_ids, provider.id
+      provider.buyers.pluck(:id).each { |id| assert_not_includes indexed_ids, id }
+    end
+
+    test 'hard deleting account removes from index' do
+      buyer = User.find_by!(email: 'foo@bar.co.example.com').account
+      perform_enqueued_jobs(only: SphinxAccountIndexationWorker) do
+        buyer.smart_destroy
+      end
+      assert_not Account.exists?(buyer.id)
+
+      # because we suspend callbacks, index stays even after object is destroyed, see config/initializers/sphinx.rb
+      # we need to fix this and remove from index deleted objects
+      # TODO: after we fix, change this to assert_not_includes
+      assert_includes Account.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY), buyer.id
+    end
   end
 end
