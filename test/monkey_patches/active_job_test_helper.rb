@@ -1,7 +1,7 @@
 require 'active_job/test_helper'
 require 'active_job/queue_adapters/test_adapter'
 
-# TODO: Remove this Monkey patch after we move to Rails 5.
+# TODO: Remove this Monkey patch after we move to Rails 5.2
 # This is used to ensure that we run only a specific job in a Test.
 # It was extracted from
 # https://github.com/rails/rails/blob/fc5dd0b85189811062c85520fd70de8389b55aeb/activejob/lib/active_job/test_helper.rb#L368
