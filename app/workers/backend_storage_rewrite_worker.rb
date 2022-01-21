@@ -20,7 +20,6 @@ class BackendStorageRewriteWorker
   end
 
   def perform(provider_id)
-    provider = Provider.find(provider_id)
-    Backend::StorageRewrite.rewrite_provider(provider)
+    Backend::StorageRewrite.rewrite_provider(provider_id)
   end
 end
