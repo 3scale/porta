@@ -5,7 +5,7 @@ require 'test_helper'
 class SphinxIndexationWorkerTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  def test_indexing
+  test "callback" do
     account = FactoryBot.create(:simple_account)
     callback = ThinkingSphinx::RealTime.callback_for(:account)
     assert callback

@@ -4,7 +4,8 @@ module CMSPageIndex
   extend ActiveSupport::Concern
 
   included do
-    after_save :sphinx_index
+    after_commit :sphinx_index, on: [:create, :update]
+    ThinkingSphinx::Callbacks.append(self, {}) # only destroy
   end
 
   protected

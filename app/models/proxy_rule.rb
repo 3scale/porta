@@ -18,7 +18,12 @@ class ProxyRule < ApplicationRecord
 
   before_validation :fill_owner
 
-  after_commit { IndexProxyRuleWorker.perform_later(id) }
+  after_commit on: [:create, :update] do
+    IndexProxyRuleWorker.perform_later(id)
+  end
+
+  # add only on_destroy callback
+  ThinkingSphinx::Callbacks.append(self, {})
 
   include ThreeScale::Search::Scopes
 

@@ -6,8 +6,10 @@ module Searchable
   included do
     include ThreeScale::Search::Scopes
 
-    after_save :index_object
-    after_destroy :index_object
+    after_commit :index_object, on: [:create, :update]
+
+    # add only on_destroy callback
+    ThinkingSphinx::Callbacks.append(self, {})
 
     self.allowed_search_scopes = %i[query]
 

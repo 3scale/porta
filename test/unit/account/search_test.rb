@@ -204,10 +204,7 @@ class Account::SearchTest < ActiveSupport::TestCase
       end
       assert_not Account.exists?(buyer.id)
 
-      # because we suspend callbacks, index stays even after object is destroyed, see config/initializers/sphinx.rb
-      # we need to fix this and remove from index deleted objects
-      # TODO: after we fix, change this to assert_not_includes
-      assert_includes Account.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY), buyer.id
+      assert_not_includes Account.search(middleware: ThinkingSphinx::Middlewares::IDS_ONLY), buyer.id
     end
   end
 end
