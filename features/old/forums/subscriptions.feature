@@ -8,7 +8,7 @@ Feature: Users can subscribe to forum topics
     Given a published plan "Basic" of provider "Master account"
       And plan "Basic" has "Forum" enabled
     Given a provider "foo.3scale.localhost" signed up to plan "Basic"
-    And all the rolling updates features are off
+    And all the rolling updates features are on
       And provider "foo.3scale.localhost" has "forum" enabled
       And the forum of "foo.3scale.localhost" have topics
       And a buyer "buyer" signed up to provider "foo.3scale.localhost"
@@ -86,3 +86,11 @@ Feature: Users can subscribe to forum topics
     But I should not see the topics I do not follow:
       | topic                    |
       | no subscribed to topic   |
+
+  Rule: Forum disabled
+    Background:
+      Given I have rolling updates "forum" disabled
+      And provider "foo.3scale.localhost" has "forum" enabled
+
+    Scenario: Buyer cannot access Forum
+      When I should not see forum
