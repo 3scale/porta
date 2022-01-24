@@ -16,8 +16,3 @@ ThinkingSphinx::Configuration::MinimumFields.prepend(Module.new do
     true
   end
 end)
-
-# TODO: in ts v5.3 it probably shouldn't hurt to allow callbacks so we have
-#       destroy for models automatically, see
-# ThinkingSphinx::ActiveRecord::Callbacks::DeleteCallbacks.after_destroy(model)
-ThinkingSphinx::Callbacks.suspend!

@@ -4,7 +4,8 @@ module TopicIndex
   extend ActiveSupport::Concern
 
   included do
-    after_save :sphinx_index
+    after_commit :sphinx_index, on: [:create, :update]
+    ThinkingSphinx::Callbacks.append(self, {}) # only destroy
   end
 
   def sphinx_post_bodies
@@ -15,8 +16,8 @@ module TopicIndex
     extend ActiveSupport::Concern
 
     included do
-      after_save :index_topic
-      after_destroy :index_topic
+      # for all changes including destroy
+      after_commit :index_topic
     end
 
     protected
@@ -28,8 +29,7 @@ module TopicIndex
     end
 
     def allow_system_indexation?
-      !System::Database.oracle? &&
-        ThinkingSphinx::Configuration.new.settings['indexed_models'].include?('Topic')
+      !System::Database.oracle?
     end
   end
 
@@ -42,8 +42,7 @@ module TopicIndex
   end
 
   def allow_system_indexation?
-    !System::Database.oracle? &&
-      ThinkingSphinx::Configuration.new.settings['indexed_models'].include?('Topic')
+    !System::Database.oracle?
   end
 end
 

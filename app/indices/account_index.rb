@@ -27,7 +27,8 @@ module AccountIndex
     extend ActiveSupport::Concern
 
     included do
-      after_save :index_account
+      after_commit :index_account, on: [:create, :update]
+      ThinkingSphinx::Callbacks.append(self, {}) # only destroy
     end
 
     def sphinx_usernames
@@ -69,8 +70,8 @@ module AccountIndex
     extend ActiveSupport::Concern
 
     included do
-      after_save :index_account
-      after_destroy :index_account
+      # index account even when dep is destroyed
+      after_commit :index_account
     end
 
     protected
