@@ -45,18 +45,16 @@ Feature: Users can subscribe to forum topics
       And I unsubscribe the topic
       Then I should see the link to subscribe to topic
 
-  @emails
+  @emails @wip
   Scenario: Active user subscribed to topic receives email on new posts in topic
     Given user "buyer" is subscribed to the topic in the forum of "foo.3scale.localhost"
     When the user "member_on_foo" post in the topic in the forum of "foo.3scale.localhost"
     Then the user "buyer" should receive an email notifying of the new post
 
-
   Scenario: Active user subscribed to topic does not receive email when he creates a new post in topic
     Given user "foo.3scale.localhost" is subscribed to the topic in the forum of "foo.3scale.localhost"
     When the user "foo.3scale.localhost" post in the topic in the forum of "foo.3scale.localhost"
     Then the user "foo.3scale.localhost" should not receive an email notifying of the new post
-
 
   Scenario: Email unverified user subscribed to topic does not receives email on new posts in topic
     Given user "foo.3scale.localhost" is subscribed to the topic in the forum of "foo.3scale.localhost"
