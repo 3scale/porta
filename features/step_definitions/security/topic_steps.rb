@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: THREESCALE-8033 Remove these steps as it's no longer in use.
+
 When "I request the url to edit the first topic on the forum of {forum}" do |forum|
   visit edit_admin_forum_topic_path(forum.topics.first)
 end
