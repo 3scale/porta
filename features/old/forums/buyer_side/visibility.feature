@@ -14,7 +14,7 @@ Feature: Forum visibility
     Given provider "foo.3scale.localhost" has "forum" disabled
     When I log in as "buyer" on "foo.3scale.localhost"
       And I go to the forum page
-    Then I should see "Forum not found"
+    Then I should see "Page not found"
 
   Scenario: Buyer has to be logged to see the subscriptions page
     Given the current domain is "foo.3scale.localhost"
@@ -24,3 +24,14 @@ Feature: Forum visibility
       And I should be on the login page
       And I fill in the "buyer" login data
     Then I should be on the forum subscriptions page
+
+  Rule: Forum disabled
+    Background:
+      Given I have rolling updates "forum" disabled
+      And I am not logged in
+      And provider "foo.3scale.localhost" has "forum" enabled
+
+    Scenario: Buyer cannot access Forum
+      When I request the url of the forum subscriptions page
+      Then I should be on the forum subscriptions page
+      Then I should see "Page not found"

@@ -1,4 +1,4 @@
-class Forums::Admin::UserTopicsController < FrontendController
+class Forums::Admin::UserTopicsController < Forums::Admin::HidenForumController
   include ForumSupport::Admin
   include ForumSupport::UserTopics
 

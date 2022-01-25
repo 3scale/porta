@@ -15,9 +15,7 @@ module ForumSupport
     private
 
     def render_not_found_if_forum_disabled
-      unless site_account.settings.forum_enabled?
-        render_error("Forum not found", :status => :not_found)
-      end
+      render_error('Page not found', status: :not_found) unless site_account.forum_enabled?
     end
 
     def login_required_unless_public
