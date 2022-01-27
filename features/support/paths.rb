@@ -209,6 +209,10 @@ World(Module.new do
       provider_admin_account_invitations_path
     when 'the edit provider logo page'
       edit_provider_admin_account_logo_path
+    when 'the email configurations page'
+      provider_admin_account_email_configurations_path
+    when 'the new email configurations page'
+      new_provider_admin_account_email_configurations_path
 
     #
     # API Management

@@ -39,8 +39,9 @@ module VerticalNavHelper
       sections << {id: :billing,       title: 'Billing',       items: account_billing_items} if ThreeScale.master_billing_enabled? && !current_account.master?
     end
 
-    sections << {id: :integrate, title: 'Integrate', items: account_itegrate_items}
-    sections << {id: :export,    title: 'Export',    path: new_provider_admin_account_data_exports_path} if can? :export, :data
+    sections << {id: :integrate,            title: 'Integrate',            items: account_itegrate_items}
+    sections << {id: :email_configurations, title: 'Email configurations', path: provider_admin_account_email_configurations_path} if current_account.master? && Features::EmailConfigurationConfig.enabled?
+    sections << {id: :export,               title: 'Export',               path: new_provider_admin_account_data_exports_path} if can? :export, :data
     sections
   end
 

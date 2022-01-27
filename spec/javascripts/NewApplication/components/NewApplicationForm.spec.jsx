@@ -5,6 +5,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { render, mount } from 'enzyme'
 import { NewApplicationForm } from 'NewApplication/components/NewApplicationForm'
+import { isSubmitDisabled } from 'utilities/test-utils'
 
 import * as alert from 'utilities/alert'
 const errorSpy = jest.spyOn(alert, 'error')
@@ -37,8 +38,6 @@ const defaultProps = {
 
 const mountWrapper = (props) => mount(<NewApplicationForm {...{...defaultProps, ...props}}/>)
 const renderWrapper = (props) => render(<NewApplicationForm {...{...defaultProps, ...props}}/>)
-
-const isSubmitDisabled = (wrapper) => wrapper.update().find('button[type="submit"]').prop('disabled')
 
 const select = (wrapper, from: string, obj: { name: string }) => {
   const toggle = wrapper.find(`${from} .pf-c-select__toggle-button`)
