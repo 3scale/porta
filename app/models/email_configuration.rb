@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class EmailConfiguration < ApplicationRecord
+  include Searchable
 
   validates :email, :password, :user_name, :authentication, :domain, :tls, :address, length: { maximum: 255 }
 
