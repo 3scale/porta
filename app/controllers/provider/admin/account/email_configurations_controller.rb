@@ -5,8 +5,11 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
   # We only enable it for master for now, feel free to roll it out for any provider
   before_action :ensure_master_domain, :email_configurations_enabled?
 
-  def index
-  end
+  activate_menu :account, :email_configurations
+
+  helper_method :presenter
+
+  def index; end
 
   def new
     @email_configuration = EmailConfiguration.new
@@ -47,14 +50,22 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
 
   protected
 
+  alias account current_account
+
   def configuration_params
     # For the time being we only want to support user name and password override
-    params.permit(email_configuration: %i[email user_name password])
+    params.permit(email_configuration: %i[email user_name password]).fetch(:email_configuration)
   end
 
   def email_configurations_enabled?
     return if Features::EmailConfigurationConfig.enabled?
 
-    render_error "Email Configurations are not enabled.", :status => :not_found
+    render_error "Email Configurations are not enabled.", status: :not_found
+  end
+
+  def presenter
+    @presenter ||= Provider::Admin::Account::EmailConfigurationsPresenter.new(provider: current_account,
+                                                                              email_configuration: @email_configuration,
+                                                                              params: params)
   end
 end
