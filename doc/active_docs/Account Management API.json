@@ -5230,6 +5230,14 @@
               "required": true,
               "paramType": "query",
               "allowMultiple": false
+            },
+            {
+              "name": "subject",
+              "description": "Subject of the message",
+              "dataType": "string",
+              "required": true,
+              "paramType": "query",
+              "allowMultiple": false
             }
           ]
         }
