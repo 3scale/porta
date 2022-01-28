@@ -7,12 +7,13 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 type Props = {
   userName: string,
   setUserName: string => void,
+  isRequired?: boolean,
   errors: string[]
 }
 
-const UserNameInput = ({ userName, setUserName, errors }: Props): React.Node => (
+const UserNameInput = ({ userName, setUserName, isRequired, errors }: Props): React.Node => (
   <FormGroup
-    isRequired
+    isRequired={isRequired}
     label="Username"
     validated="default"
     fieldId="email_configuration_user_name"

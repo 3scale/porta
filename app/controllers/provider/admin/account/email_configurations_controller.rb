@@ -44,6 +44,7 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
     @email_configuration = account.email_configurations.find(params[:id])
 
     if @email_configuration.destroy
+      flash[:notice] = 'Email configuration deleted'
       redirect_to action: :index
     else
       redirect_to action: :edit

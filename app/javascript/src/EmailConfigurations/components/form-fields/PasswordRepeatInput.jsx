@@ -8,12 +8,13 @@ type Props = {
   password: string,
   setPassword: string => void,
   errors: string[],
+  isRequired?: boolean,
   isDisabled?: boolean
 }
 
-const PasswordRepeatInput = ({ password, setPassword, errors, isDisabled }: Props): React.Node => (
+const PasswordRepeatInput = ({ password, setPassword, errors, isRequired, isDisabled }: Props): React.Node => (
   <FormGroup
-    isRequired
+    isRequired={isRequired}
     label="Confirm password"
     validated="default"
     fieldId="email_configuration_password_repeat"

@@ -28,6 +28,7 @@ type Props = {
 }
 
 const EmailConfigurationForm = ({ url, emailConfiguration, isUpdate = false, errors = {} }: Props): React.Node => {
+  const FORM_ID = 'email-configuration-form'
   const [email, setEmail] = useState<string>(emailConfiguration.email || '')
   const [userName, setUserName] = useState<string>(emailConfiguration.userName || '')
   const [password, setPassword] = useState<string>(emailConfiguration.password || '')
@@ -52,52 +53,52 @@ const EmailConfigurationForm = ({ url, emailConfiguration, isUpdate = false, err
     isFormValid = password.length && passwordRepeat === password
   }
 
+  const handleOnDelete = (e: SyntheticEvent<HTMLInputElement>) => {
+    if (window.confirm('Are you sure?')) {
+      const form: HTMLFormElement = document.forms[FORM_ID]
+      // $FlowIgnore[prop-missing]
+      // $FlowIgnore[incompatible-use] Input is rendered when isUpdate
+      form.elements.namedItem('_method').value = 'delete'
+
+      form.submit()
+    }
+  }
+
+  const handleOnUpdate = (e: SyntheticEvent<HTMLInputElement>) => {
+    const form: HTMLFormElement = document.forms[FORM_ID]
+    form.submit()
+  }
+
   const buttons = isUpdate ? (
     <>
-      <Button
-        variant="primary"
-        type="submit"
-        isDisabled={!isFormValid}
-      >
-        Update email configuration
-      </Button>
-      <Button
-        variant="danger"
-        // type="submit"
-      >
-        Delete
-      </Button>
+      <Button variant="primary" type="submit" onClick={handleOnUpdate} isDisabled={!isFormValid}>Update email configuration</Button>
+      <Button variant="danger" type="submit" onClick={handleOnDelete}>Delete</Button>
     </>
   ) : (
-    <Button
-      variant="primary"
-      type="submit"
-      isDisabled={!isFormValid}
-    >
-      Create email configuration
-    </Button>
+    <Button variant="primary" type="submit" isDisabled={!isFormValid}>Create email configuration</Button>
   )
 
   return (
     <Form
-      id="email-configuration-form"
+      id={FORM_ID}
       acceptCharset="UTF-8"
-      // id={emailConfiguration.id}
       method="post"
       action={url}
+      onSubmit={isUpdate ? e => e.preventDefault() : undefined}
     >
       <CSRFToken />
       <input name="utf8" type="hidden" value="✓" />
       {isUpdate && <input type="hidden" name="_method" value="put" />}
 
-      <EmailInput email={email} setEmail={setEmail} errors={emailErrors} />
-      <UserNameInput userName={userName} setUserName={setUserName} errors={userNameErrors} />
-      <PasswordInput password={password} setPassword={setPassword} errors={passwordErrors} />
+      <EmailInput email={email} setEmail={setEmail} errors={emailErrors} isRequired={!isUpdate} />
+      <UserNameInput userName={userName} setUserName={setUserName} errors={userNameErrors} isRequired={!isUpdate} />
+      <PasswordInput password={password} setPassword={setPassword} errors={passwordErrors} isRequired={!isUpdate} />
       <PasswordRepeatInput
         password={passwordRepeat}
         setPassword={setPasswordRepeat}
         errors={passwordRepeatErrors}
         isDisabled={isUpdate && password === emailConfiguration.password}
+        isRequired={!isUpdate}
       />
 
       <ActionGroup>
