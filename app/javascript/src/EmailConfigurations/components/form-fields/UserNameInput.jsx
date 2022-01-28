@@ -13,7 +13,7 @@ type Props = {
 const UserNameInput = ({ userName, setUserName, errors }: Props): React.Node => (
   <FormGroup
     isRequired
-    label="UserName"
+    label="Username"
     validated="default"
     fieldId="email_configuration_user_name"
     isValid={!errors.length}

@@ -8,7 +8,7 @@ import {
   PageSectionVariants
 } from '@patternfly/react-core'
 import { EmailConfigurationsTable } from './EmailConfigurationsTable'
-import { createReactWrapper } from 'utilities'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { EmailConfiguration } from 'EmailConfigurations/types'
 

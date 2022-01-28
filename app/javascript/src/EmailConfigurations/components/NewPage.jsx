@@ -9,7 +9,7 @@ import {
   PageSectionVariants
 } from '@patternfly/react-core'
 import { EmailConfigurationForm } from './EmailConfigurationForm'
-import { createReactWrapper } from 'utilities'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 // import * as flash from 'utilities/alert'
 
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'

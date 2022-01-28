@@ -14,9 +14,11 @@ import {
   PasswordInput,
   PasswordRepeatInput
 } from './form-fields'
-import { CSRFToken } from 'utilities'
+import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
+
+import './EmailConfigurationForm.scss'
 
 type Props = {
   url: string,
@@ -41,28 +43,29 @@ const EmailConfigurationForm = ({ url, emailConfiguration, errors = {} }: Props)
 
   return (
     <Form
-        acceptCharset='UTF-8'
-        method='post'
-        action={url}
-      >
-        <CSRFToken />
-        <input name='utf8' type='hidden' value='✓' />
+      id="email-configuration-form"
+      acceptCharset='UTF-8'
+      method='post'
+      action={url}
+    >
+      <CSRFToken />
+      <input name='utf8' type='hidden' value='✓' />
 
-        <EmailInput email={email} setEmail={setEmail} errors={emailErrors} />
-        <UserNameInput userName={userName} setUserName={setUserName} errors={userNameErrors} />
-        <PasswordInput password={password} setPassword={setPassword} errors={passwordErrors} />
-        <PasswordRepeatInput password={passwordRepeat} setPassword={setPasswordRepeat} errors={passwordRepeatErrors} />
+      <EmailInput email={email} setEmail={setEmail} errors={emailErrors} />
+      <UserNameInput userName={userName} setUserName={setUserName} errors={userNameErrors} />
+      <PasswordInput password={password} setPassword={setPassword} errors={passwordErrors} />
+      <PasswordRepeatInput password={passwordRepeat} setPassword={setPasswordRepeat} errors={passwordRepeatErrors} />
 
-        <ActionGroup>
-          <Button
-            variant='primary'
-            type='submit'
-            isDisabled={!isFormValid}
-          >
-            Create Email configuration
-          </Button>
-        </ActionGroup>
-      </Form>
+      <ActionGroup>
+        <Button
+          variant='primary'
+          type='submit'
+          isDisabled={!isFormValid}
+        >
+          Create Email configuration
+        </Button>
+      </ActionGroup>
+    </Form>
   )
 }
 

@@ -16,11 +16,11 @@ import {
   TableHeader,
   TableBody
 } from '@patternfly/react-table'
-import { ToolbarSearch } from 'Common'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
 import type { EmailConfiguration } from 'EmailConfigurations/types'
 
-// import './Table.scss'
+import './EmailConfigurationsTable.scss'
 
 type Props = {
   emailConfigurations: EmailConfiguration[],
@@ -101,6 +101,7 @@ const EmailConfigurationsTable = ({ emailConfigurations, emailConfigurationsCoun
         </ToolbarGroup>
       </Toolbar>
       <Divider />
+      {/* TODO: add NoMatchFound when no search results and a NoItemsCreateFirstOne when collection empty */}
       <Table aria-label="Email configurations table" cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />

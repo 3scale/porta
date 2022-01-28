@@ -6,14 +6,12 @@ import { mount } from 'enzyme'
 import { EmailConfigurationsTable } from 'EmailConfigurations/components/EmailConfigurationsTable'
 
 const defaultProps = {
-  // props here
+  emailConfigurations: [],
+  emailConfigurationsCount: 0,
+  newEmailConfigurationPath: 'p/admin/email_configurations/new'
 }
 
 const mountWrapper = (props) => mount(<EmailConfigurationsTable {...{ ...defaultProps, ...props }} />)
-
-afterEach(() => {
-  jest.resetAllMocks()
-})
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

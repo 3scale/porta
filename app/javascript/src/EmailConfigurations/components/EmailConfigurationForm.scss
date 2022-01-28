@@ -1,0 +1,19 @@
+
+// FIXME: This styles collide with PF4. They are added in app/assets/stylesheets/provider/_forms.scss:7
+// They should target only non-PF inputs. e.g. :not(.pf-c-input)
+#email-configuration-form {
+  input[type="text"] {
+    // -moz-appearance: unset;
+    // -webkit-appearance: unset;
+    // appearance: unset;
+    // font-size: unset;
+    // border: unset;
+    // color: unset;
+    // background-color: unset;
+    // width: unset;
+    // padding: unset;
+    // height: unset;
+    // border-radius: unset;
+    // line-height: unset;
+  }
+}

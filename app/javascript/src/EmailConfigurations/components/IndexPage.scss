@@ -2,6 +2,8 @@
 @import "~@patternfly/patternfly/components/Card/card.scss";
 @import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css'; // Used by Pagination perPage menu
 @import '~@patternfly/patternfly/components/Dropdown/dropdown.css'; // Used by table row options menu
+@import '~@patternfly/patternfly/components/Pagination/pagination.css';
+@import '~@patternfly/patternfly/components/Table/table.css';
 
 #email-configurations-index-page {
   // HACK: removes Main 1.5 rem padding

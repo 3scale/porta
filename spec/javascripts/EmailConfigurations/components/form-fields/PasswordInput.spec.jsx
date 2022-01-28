@@ -5,8 +5,11 @@ import { mount } from 'enzyme'
 
 import { PasswordInput } from 'EmailConfigurations/components/form-fields/PasswordInput'
 
+const setPassword = jest.fn()
 const defaultProps = {
-  // props here
+  password: '',
+  setPassword,
+  errors: []
 }
 
 const mountWrapper = (props) => mount(<PasswordInput {...{ ...defaultProps, ...props }} />)
@@ -15,7 +18,19 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-it('should render itself', () => {
+it('should work', () => {
+  const value = '$DragonHeartsstring1909'
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+
+  const input = wrapper.find('input[name="email_configuration[password]"]')
+  input.simulate('change', { currentTarget: { value } })
+
+  expect(setPassword).toHaveBeenCalledTimes(1)
+})
+
+it('should render errors', () => {
+  const errors = ['Wrong this', 'Wrong that']
+  const wrapper = mountWrapper({ errors })
+
+  expect(wrapper.find('.pf-m-error').text()).toEqual('Wrong this,Wrong that')
 })

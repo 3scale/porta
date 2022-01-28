@@ -1,5 +1,9 @@
 @import "~@patternfly/patternfly/sass-utilities/mixins.scss";
+@import "~@patternfly/patternfly/components/Button/button.scss";
 @import "~@patternfly/patternfly/components/Card/card.scss";
+@import '~@patternfly/patternfly/components/Form/form.css';
+@import '~@patternfly/patternfly/components/FormControl/form-control.css';
+@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
 
 #email-configurations-new-container {
   // HACK: removes Main 1.5 rem padding

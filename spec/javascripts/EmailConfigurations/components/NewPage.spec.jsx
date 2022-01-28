@@ -6,16 +6,17 @@ import { mount } from 'enzyme'
 import { NewPage } from 'EmailConfigurations/components/NewPage'
 
 const defaultProps = {
-  // props here
+  emailConfiguration: {
+    email: '',
+    userName: '',
+    password: ''
+  },
+  url: 'p/admin/email_configurations'
 }
 
 const mountWrapper = (props) => mount(<NewPage {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
-it('should render itself', () => {
+it('should render a form', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.find('EmailConfigurationForm').exists()).toEqual(true)
 })
