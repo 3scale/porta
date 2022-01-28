@@ -19,7 +19,7 @@ afterEach(() => {
 })
 
 it('should work', () => {
-  const value = 'ollivander_wands'
+  const value = 'ollivanders_wands'
   const wrapper = mountWrapper()
 
   const input = wrapper.find('input[name="email_configuration[user_name]"]')

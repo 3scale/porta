@@ -13,6 +13,7 @@ const defaultProps = {
     password: ''
   },
   errors: undefined,
+  isUpdate: undefined,
   url: 'p/admin/email_configurations'
 }
 
@@ -35,17 +36,6 @@ it('should render all fields', () => {
   const html = renderWrapper().find('.pf-c-form__group').toString()
 
   inputs.forEach(name => expect(html).toMatch(name))
-})
-
-it('should enable submit the form only when password is confirmed', () => {
-  const wrapper = mountWrapper()
-  expect(isSubmitDisabled(wrapper)).toBe(true)
-
-  updateInput(wrapper, '$DragonHeartsstring1909', 'input[name="email_configuration[password]"]')
-  expect(isSubmitDisabled(wrapper)).toEqual(true)
-
-  updateInput(wrapper, '$DragonHeartsstring1909', 'input#email_configuration_password_repeat')
-  expect(isSubmitDisabled(wrapper)).toEqual(false)
 })
 
 describe('when the server returns some errors', () => {
@@ -73,7 +63,7 @@ describe('when some fields are returned by the server', () => {
   const emailConfiguration = {
     id: 0,
     email: 'hello@ollivanders.co.uk',
-    userName: 'ollivander_wands',
+    userName: 'ollivanders_wands',
     password: '123456'
   }
 
@@ -84,6 +74,61 @@ describe('when some fields are returned by the server', () => {
     expect(wrapper.find('input#email_configuration_user_name').prop('value')).toEqual(emailConfiguration.userName)
     expect(wrapper.find('input#email_configuration_password').prop('value')).toEqual(emailConfiguration.password)
   })
+})
 
-  it.todo('should disable certain fields when editting')
+describe('when it is new page form', () => {
+  it('should enable submit the form only when password is confirmed', () => {
+    const wrapper = mountWrapper()
+    expect(isSubmitDisabled(wrapper)).toBe(true)
+
+    updateInput(wrapper, '$DragonHeartsstring1909', 'input[name="email_configuration[password]"]')
+    expect(isSubmitDisabled(wrapper)).toEqual(true)
+
+    updateInput(wrapper, '$DragonHeartsstring1909', 'input#email_configuration_password_repeat')
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
+  })
+})
+
+describe('when it is edit page form', () => {
+  const emailConfiguration = {
+    email: 'hello@ollivanders.co.uk',
+    userName: 'ollivanders_wands',
+    password: '$DragonHeartsstring1909'
+  }
+  const props = { isUpdate: true, emailConfiguration }
+
+  it('should disable the button as long as no field is changed', () => {
+    const wrapper = mountWrapper(props)
+    expect(isSubmitDisabled(wrapper)).toEqual(true)
+  })
+
+  it('should enable the button when email changes', () => {
+    const wrapper = mountWrapper(props)
+
+    updateInput(wrapper, 'hello@ollivanders.io', 'input[name="email_configuration[email]"]')
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
+
+    updateInput(wrapper, 'hello@ollivanders.co.uk', 'input[name="email_configuration[email]"]')
+    expect(isSubmitDisabled(wrapper)).toEqual(true)
+  })
+
+  it('should enable the button when userNamne changes', () => {
+    const wrapper = mountWrapper(props)
+
+    updateInput(wrapper, 'wandcraft_ollivanders', 'input[name="email_configuration[user_name]"]')
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
+
+    updateInput(wrapper, 'ollivanders_wands', 'input[name="email_configuration[user_name]"]')
+    expect(isSubmitDisabled(wrapper)).toEqual(true)
+  })
+
+  it('should disable the button if password updated but not confirmed', () => {
+    const wrapper = mountWrapper(props)
+
+    updateInput(wrapper, 'new_password', 'input[name="email_configuration[password]"]')
+    expect(isSubmitDisabled(wrapper)).toEqual(true)
+
+    updateInput(wrapper, 'new_password', 'input#email_configuration_password_repeat')
+    expect(isSubmitDisabled(wrapper)).toEqual(false)
+  })
 })

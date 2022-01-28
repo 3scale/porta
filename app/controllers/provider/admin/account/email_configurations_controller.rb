@@ -20,7 +20,6 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
   end
 
   def update
-    binding.pry
     @email_configuration = account.email_configurations.find(params[:id])
 
     if @email_configuration.update(configuration_params)

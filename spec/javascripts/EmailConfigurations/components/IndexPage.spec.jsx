@@ -29,7 +29,7 @@ describe('when there are no email configurations', () => {
 })
 
 describe('when there are email configurations', () => {
-  const emailConfigurations = [{ id: 0, userName: 'ollivander_wands', email: 'hello@ollivanders.co.uk', links: { edit: '/edit' } }]
+  const emailConfigurations = [{ id: 0, userName: 'ollivanders_wands', email: 'hello@ollivanders.co.uk', links: { edit: '/edit' } }]
   const props = { emailConfigurations, emailConfigurationsCount: emailConfigurations.length }
 
   it('should show a table with Email and Username', () => {
