@@ -23,10 +23,11 @@ import './EmailConfigurationForm.scss'
 type Props = {
   url: string,
   emailConfiguration: FormEmailConfiguration,
+  isUpdate?: boolean,
   errors?: FormErrors
 }
 
-const EmailConfigurationForm = ({ url, emailConfiguration, errors = {} }: Props): React.Node => {
+const EmailConfigurationForm = ({ url, emailConfiguration, isUpdate = false, errors = {} }: Props): React.Node => {
   const [email, setEmail] = useState<string>(emailConfiguration.email || '')
   const [userName, setUserName] = useState<string>(emailConfiguration.userName || '')
   const [password, setPassword] = useState<string>(emailConfiguration.password || '')
@@ -39,31 +40,68 @@ const EmailConfigurationForm = ({ url, emailConfiguration, errors = {} }: Props)
 
   // TODO: Implement more validations but let the server do the job when possible
 
-  const isFormValid = passwordRepeat.length && passwordRepeat === password
+  let isFormValid = false
+
+  if (isUpdate) {
+    const isAnyFieldChanged = (email !== emailConfiguration.email) ||
+                              (userName !== emailConfiguration.userName) ||
+                              (password !== emailConfiguration.password)
+
+    isFormValid = isAnyFieldChanged && (password === emailConfiguration.password || (password !== emailConfiguration.password && passwordRepeat === password))
+  } else {
+    isFormValid = password.length && passwordRepeat === password
+  }
+
+  const buttons = isUpdate ? (
+    <>
+      <Button
+        variant="primary"
+        type="submit"
+        isDisabled={!isFormValid}
+      >
+        Update email configuration
+      </Button>
+      <Button
+        variant="danger"
+        // type="submit"
+      >
+        Delete
+      </Button>
+    </>
+  ) : (
+    <Button
+      variant="primary"
+      type="submit"
+      isDisabled={!isFormValid}
+    >
+      Create email configuration
+    </Button>
+  )
 
   return (
     <Form
       id="email-configuration-form"
-      acceptCharset='UTF-8'
-      method='post'
+      acceptCharset="UTF-8"
+      // id={emailConfiguration.id}
+      method="post"
       action={url}
     >
       <CSRFToken />
-      <input name='utf8' type='hidden' value='✓' />
+      <input name="utf8" type="hidden" value="✓" />
+      {isUpdate && <input type="hidden" name="_method" value="put" />}
 
       <EmailInput email={email} setEmail={setEmail} errors={emailErrors} />
       <UserNameInput userName={userName} setUserName={setUserName} errors={userNameErrors} />
       <PasswordInput password={password} setPassword={setPassword} errors={passwordErrors} />
-      <PasswordRepeatInput password={passwordRepeat} setPassword={setPasswordRepeat} errors={passwordRepeatErrors} />
+      <PasswordRepeatInput
+        password={passwordRepeat}
+        setPassword={setPasswordRepeat}
+        errors={passwordRepeatErrors}
+        isDisabled={isUpdate && password === emailConfiguration.password}
+      />
 
       <ActionGroup>
-        <Button
-          variant='primary'
-          type='submit'
-          isDisabled={!isFormValid}
-        >
-          Create Email configuration
-        </Button>
+        {buttons}
       </ActionGroup>
     </Form>
   )

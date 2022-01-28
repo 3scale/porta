@@ -13,7 +13,7 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
 
-import './NewPage.scss'
+import './EditPage.scss'
 
 type Props = {
   url: string,
@@ -21,11 +21,11 @@ type Props = {
   errors?: FormErrors
 }
 
-const NewPage = ({ url, emailConfiguration, errors }: Props): React.Node => {
+const EditPage = ({ url, emailConfiguration, errors }: Props): React.Node => {
   return (
     <>
       <PageSection variant={PageSectionVariants.light}>
-        <h1>New email configuration</h1>
+        <h1>Edit email configuration</h1>
       </PageSection>
 
       <PageSection>
@@ -35,6 +35,7 @@ const NewPage = ({ url, emailConfiguration, errors }: Props): React.Node => {
               url={url}
               emailConfiguration={emailConfiguration}
               errors={errors}
+              isUpdate
             />
           </CardBody>
         </Card>
@@ -43,6 +44,6 @@ const NewPage = ({ url, emailConfiguration, errors }: Props): React.Node => {
   )
 }
 
-const NewPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewPage {...props} />, containerId)
+const EditPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<EditPage {...props} />, containerId)
 
-export { NewPage, NewPageWrapper }
+export { EditPage, EditPageWrapper }

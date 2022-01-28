@@ -2,7 +2,7 @@
 @import "~@patternfly/patternfly/components/Button/button.scss";
 @import "~@patternfly/patternfly/components/Card/card.scss";
 
-#email-configurations-new-container {
+#email-configurations-edit-container {
   // HACK: removes Main 1.5 rem padding
   margin: -1.5rem;
 
@@ -11,5 +11,9 @@
       // isWidthLimited isn't available in current version. See: https://github.com/patternfly/patternfly-react/blob/master/packages/react-core/src/components/Form/Form.tsx#L12
       max-width: 500px;
     }
+  }
+
+  .pf-c-form__actions .pf-c-button .pf-m-danger {
+    margin-left: auto;
   }
 }

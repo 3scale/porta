@@ -10,6 +10,7 @@ export type EmailConfiguration = {
 }
 
 export type FormEmailConfiguration = {
+  id?: number, // Means it's updating not creating
   email: string | null,
   userName: string | null,
   password: string | null

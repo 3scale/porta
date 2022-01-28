@@ -25,4 +25,8 @@ class EmailConfigurationPresenter < SimpleDelegator
       password: password
     }
   end
+
+  def edit_form_data
+    form_data.merge({ id: id })
+  end
 end

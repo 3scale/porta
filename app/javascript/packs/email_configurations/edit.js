@@ -1,12 +1,12 @@
 // @flow
 
-import { NewPageWrapper } from 'EmailConfigurations/components/NewPage'
+import { EditPageWrapper } from 'EmailConfigurations/components/EditPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const containerId = 'email-configurations-new-container'
+  const containerId = 'email-configurations-edit-container'
   const container = document.getElementById(containerId)
 
   if (!container) {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const errors = safeFromJsonString<FormErrors>(dataset.errors)
 
-  NewPageWrapper({
+  EditPageWrapper({
     url,
     emailConfiguration,
     errors

@@ -31,6 +31,14 @@ class Provider::Admin::Account::EmailConfigurationsPresenter
     }
   end
 
+  def edit_data
+    {
+      url: provider_admin_account_email_configuration_path(email_configuration),
+      'email-configuration': EmailConfigurationPresenter.new(email_configuration).edit_form_data.to_json,
+      errors: errors.to_json
+    }
+  end
+
   # TODO: sort by last created/updated
   def collection
     @collection ||= email_configurations.scope_search(search)

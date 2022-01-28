@@ -7,10 +7,11 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 type Props = {
   password: string,
   setPassword: string => void,
-  errors: string[]
+  errors: string[],
+  isDisabled?: boolean
 }
 
-const PasswordRepeatInput = ({ password, setPassword, errors }: Props): React.Node => (
+const PasswordRepeatInput = ({ password, setPassword, errors, isDisabled }: Props): React.Node => (
   <FormGroup
     isRequired
     label="Confirm password"
@@ -25,6 +26,7 @@ const PasswordRepeatInput = ({ password, setPassword, errors }: Props): React.No
       value={password}
       onChange={setPassword}
       isValid={!errors.length}
+      isDisabled={isDisabled}
     />
   </FormGroup>
 )

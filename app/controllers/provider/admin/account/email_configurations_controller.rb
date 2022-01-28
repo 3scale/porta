@@ -20,10 +20,12 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
   end
 
   def update
+    binding.pry
     @email_configuration = account.email_configurations.find(params[:id])
 
     if @email_configuration.update(configuration_params)
       redirect_to action: :index
+      flash[:notice] = 'Email configuration updated'
     else
       render :edit
     end
@@ -32,6 +34,7 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
   def create
     @email_configuration = account.email_configurations.create(configuration_params)
     if @email_configuration.persisted?
+      flash[:notice] = 'Email configuration created'
       redirect_to action: :index
     else
       render :new
