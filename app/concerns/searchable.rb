@@ -6,10 +6,7 @@ module Searchable
   included do
     include ThreeScale::Search::Scopes
 
-    after_commit :index_object, on: [:create, :update]
-
-    # add only on_destroy callback
-    ThinkingSphinx::Callbacks.append(self, {})
+    after_commit :index_object
 
     self.allowed_search_scopes = %i[query]
 
@@ -21,7 +18,7 @@ module Searchable
     private
 
     def index_object
-      SphinxIndexationWorker.perform_later(self)
+      SphinxIndexationWorker.perform_later(self.class, id)
     end
   end
 end

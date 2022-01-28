@@ -18,14 +18,7 @@ class ProxyRule < ApplicationRecord
 
   before_validation :fill_owner
 
-  after_commit on: [:create, :update] do
-    IndexProxyRuleWorker.perform_later(id)
-  end
-
-  # add only on_destroy callback
-  ThinkingSphinx::Callbacks.append(self, {})
-
-  include ThreeScale::Search::Scopes
+  include Searchable
 
   self.allowed_sort_columns = %w[proxy_rules.http_method proxy_rules.pattern proxy_rules.last proxy_rules.position metrics.friendly_name]
   self.default_sort_column = :position

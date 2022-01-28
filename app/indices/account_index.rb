@@ -27,8 +27,7 @@ module AccountIndex
     extend ActiveSupport::Concern
 
     included do
-      after_commit :index_account, on: [:create, :update]
-      ThinkingSphinx::Callbacks.append(self, {}) # only destroy
+      after_commit :index_account
     end
 
     def sphinx_usernames
@@ -62,7 +61,7 @@ module AccountIndex
     protected
 
     def index_account
-      SphinxAccountIndexationWorker.perform_later(self) unless master?
+      SphinxAccountIndexationWorker.perform_later(self.class, id) unless master?
     end
   end
 
@@ -81,9 +80,7 @@ module AccountIndex
     end
 
     def index_account
-      return unless account_for_sphinx&.persisted?
-
-      SphinxAccountIndexationWorker.perform_later(account_for_sphinx)
+      SphinxAccountIndexationWorker.perform_later(Account, account_for_sphinx)
     end
   end
 end
