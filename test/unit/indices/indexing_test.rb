@@ -14,12 +14,12 @@ class IndexingTest < ActiveSupport::TestCase
   end
 
   test "create and update indices sync callbacks are disabled" do
-    indices.each do |model|
+    indexed_models.each do |model|
       instance = FactoryBot.create(factory_for model)
       result = indexed_ids(model)
       assert_empty result, "Expected #{model} index #{result} to be empty after create"
 
-      instance.update!(update_for(model))
+      instance.update!(update_attr_for(model) => update_value_for(model))
       result = indexed_ids(model)
       assert_empty result, "Expected #{model} index #{result} to be empty after create"
     end
@@ -27,7 +27,7 @@ class IndexingTest < ActiveSupport::TestCase
 
   test "create, update and destroy updates indices" do
     perform_enqueued_jobs do
-      indices.each do |model|
+      indexed_models.each do |model|
         instance = FactoryBot.create(factory_for model)
         assert_includes indexed_ids(model), instance.id
         assert_empty find_matching(model)
@@ -36,16 +36,40 @@ class IndexingTest < ActiveSupport::TestCase
         assert_equal [instance], find_matching(model)
 
         instance.destroy!
-        result = indexed_ids(model)
         assert_not_includes indexed_ids(model), instance.id
       end
     end
   end
 
+  test "there is no sync callback on destroy" do
+    indexed_models.each do |model|
+      instance = nil
+      perform_enqueued_jobs do
+        instance = FactoryBot.create(factory_for model)
+        assert_includes indexed_ids(model), instance.id
+      end
+
+      instance.destroy!
+      assert_includes indexed_ids(model), instance.id
+    end
+  end
+
+  # the idea is to double check #indexed_models lists all models, assuring we cover them all in tests
+  test "all models with index methods are indexed" do
+    exclusions = [ApplicationRecord, Plan, Cinstance, User]
+    index_modules = [Searchable, AccountIndex::ForAccount, TopicIndex]
+
+    models = ActiveRecord::Base.descendants.select do |model|
+      index_modules.any? { |mod| mod === model.new } unless exclusions.include?(model)
+    end
+
+    assert_equal Set.new(models.map(&:name)), Set.new(ThinkingSphinx::Test.indexed_models.map(&:name))
+  end
+
   private
 
-  def indices
-    ThinkingSphinx::Configuration.instance.index_set_class.new.map(&:model).map { |m| m.descendants.presence || m }.flatten
+  def indexed_models
+    ThinkingSphinx::Test.indexed_models
   end
 
   def indexed_ids(model)

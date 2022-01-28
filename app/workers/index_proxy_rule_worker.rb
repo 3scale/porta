@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# TODO: we can probably just use SphinxIndexationWorker or subclass it in the worst case
+# TODO: remove this class after one version as we don't use it anymore
 class IndexProxyRuleWorker < ApplicationJob
   # TODO: Rails 5.1 -> discard_on ActiveRecord::RecordNotFound
   rescue_from(ActiveRecord::RecordNotFound) do |exception|
