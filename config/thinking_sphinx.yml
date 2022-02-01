@@ -11,9 +11,8 @@ common: &sphinx
   # This is from TS FAQ - makes reindex MUCH faster.
   sql_range_step: 2000000000
 
-  # # temporarily disabled untill we upgrade sphinx
-  # index_exact_words: true
-  # expand_keywords: true
+  index_exact_words: true
+  expand_keywords: true
   charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
 
 development:

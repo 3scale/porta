@@ -5,15 +5,13 @@ common: &sphinx
   html_remove_elements: "style, script"
   html_index_attrs: "img=alt,title; a=title"
   min_infix_len: 3
-  enable_star: 1
   pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
 
   # This is from TS FAQ - makes reindex MUCH faster.
   sql_range_step: 2000000000
 
-  # # temporarily disabled untill we upgrade sphinx
-  # index_exact_words: true
-  # expand_keywords: true
+  index_exact_words: true
+  expand_keywords: true
   charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
   indexed_models:
     - Metric
