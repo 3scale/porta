@@ -56,7 +56,7 @@ test: setup
 test: ## Test the built image
 	$(MAKE) run CMD='rails server --daemon'
 	$(MAKE) run CMD='unicorn --config-file config/unicorn.rb --daemonize'
-	$(MAKE) run CMD='rake ts:configure ts:rebuild THINKING_SPHINX_CONFIGURATION_FILE=/tmp/sphinx.conf'
+	$(MAKE) run CMD='rake ts:rebuild THINKING_SPHINX_CONFIGURATION_FILE=/tmp/sphinx.conf'
 
 	# I would like to use `rake assets:clean` but it seems that non-stupid-digest gem does not reference
 	# them in `manifest.assets` so they stay in the public/assets directory
