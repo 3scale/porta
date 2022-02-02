@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ThreeScale::Search < HashWithIndifferentAccess
 
   class FormBuilder < ActionView::Helpers::FormBuilder
@@ -99,11 +101,10 @@ class ThreeScale::Search < HashWithIndifferentAccess
       end
 
       def sphinx_search(params)
-        return default_search_scope unless allowed_scopes || default_search_scopes.present?
-        return default_search_scope unless params
+        return default_search_scope unless allowed_scopes || default_search_scopes.present? || params
 
         params = params.dup
-        params[:query] = ThinkingSphinx::Query.escape(params[:query]) if params[:query]
+        params[:query] = escape_query(params)
 
         selected_scopes = params.stringify_keys.slice(*allowed_scopes)
 
@@ -116,6 +117,12 @@ class ThreeScale::Search < HashWithIndifferentAccess
       alias scope_search sphinx_search
 
       private
+
+      def escape_query(params)
+        return unless (query = params[:query])
+
+        ThinkingSphinx::Query.escape(query)
+      end
 
       def default_search_scope
         all
