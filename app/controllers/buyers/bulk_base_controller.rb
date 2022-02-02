@@ -34,10 +34,11 @@ class Buyers::BulkBaseController < FrontendController
       message = current_account.messages.build send_email_params
       message.to = recipient
 
-      @errors << message unless message.save && message.deliver!
+      @errors << recipient unless message.save && message.deliver!
     end
   end
 
+  # TODO: THREESCALE-8013 remove this
   def delete_stuff
     collection.each do |item|
       @errors << item unless items.destroy

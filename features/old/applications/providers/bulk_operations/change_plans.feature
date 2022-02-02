@@ -56,3 +56,15 @@ Feature: Bulk operations
   @wip
   Scenario: Try to mass change applications from different services
     # TODO: !
+
+  Scenario: Error template shows correctly
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
+    And I am on the applications admin page
+    When I check select for "BobApp"
+    And I press "Change application plan"
+    Then I should see "Transfer these applications to different application plan"
+    When I select "Advanced" from "Plan"
+    Given the application will return an error when plan changed
+    And I press "Change plan" and I confirm dialog box
+    Then I should see the bulk action failed with application "BobApp"

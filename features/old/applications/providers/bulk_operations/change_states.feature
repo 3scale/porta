@@ -102,3 +102,15 @@ Feature: Bulk operations
      | LiveApp      | live    |
      | PendingApp   | pending |
      | SuspendedApp | live    |
+
+  Scenario: Error template shows correctly
+    Given I am logged in as provider "foo.3scale.localhost"
+    And I am on the applications admin page
+    When I follow "Name"
+    And I check select for "LiveApp"
+    And I press "Change state"
+    Then I should see "Accept, suspend or resume selected applications"
+    When I select "Suspend" from "Action"
+    Given the application will return an error when suspended
+    And I press "Change state" and I confirm dialog box within fancybox
+    Then I should see the bulk action failed with application "LiveApp"
