@@ -12,6 +12,8 @@ import {
   ToolbarItem
 } from '@patternfly/react-core'
 import {
+  sortable,
+  SortByDirection,
   Table,
   TableHeader,
   TableBody
@@ -33,16 +35,28 @@ const EmailConfigurationsTable = ({ emailConfigurations, emailConfigurationsCoun
 
   const tableColumns = [
     { title: 'Email' },
-    { title: 'UserName' }
+    { title: 'Username' },
+    { title: 'Last updated', transforms: [sortable] }
   ]
 
   const tableRows = emailConfigurations.map(c => ({
     disableActions: false,
     cells: [
       { title: <Button href={c.links.edit} component="a" variant="link" isInline>{c.email}</Button> },
-      c.userName
+      c.userName,
+      c.updatedAt
     ]
   }))
+
+  const sortBy = {
+    index: 2, // updated_at by default
+    direction: url.searchParams.get('direction') || SortByDirection.desc
+  }
+
+  const onSort = (_event, _index, direction) => {
+    url.searchParams.set('direction', direction)
+    window.location.replace(url.toString())
+  }
 
   const selectPerPage = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', selectedPerPage)
@@ -102,7 +116,7 @@ const EmailConfigurationsTable = ({ emailConfigurations, emailConfigurationsCoun
       </Toolbar>
       <Divider />
       {/* TODO: add NoMatchFound when no search results and a NoItemsCreateFirstOne when collection empty */}
-      <Table aria-label="Email configurations table" cells={tableColumns} rows={tableRows}>
+      <Table aria-label="Email configurations table" cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
         <TableHeader />
         <TableBody />
       </Table>

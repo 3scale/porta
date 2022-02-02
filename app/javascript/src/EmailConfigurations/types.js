@@ -4,6 +4,7 @@ export type EmailConfiguration = {
   id: number,
   email: string,
   userName: string,
+  updatedAt: string,
   links: {
     edit: string,
   }

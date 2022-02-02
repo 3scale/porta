@@ -8,6 +8,7 @@ class EmailConfigurationPresenter < SimpleDelegator
       id: id,
       email: email,
       userName: user_name,
+      updatedAt: updated_at.to_s(:long),
       links: links
     }
   end
