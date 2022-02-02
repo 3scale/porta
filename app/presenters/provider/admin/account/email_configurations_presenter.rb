@@ -10,10 +10,11 @@ class Provider::Admin::Account::EmailConfigurationsPresenter
     @provider = provider
     @email_configuration = email_configuration
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
+    @sorting_params = "#{params[:sort] || 'updated_at'} #{params[:direction] || 'desc'}"
     @search = ThreeScale::Search.new(params[:search] || params)
   end
 
-  attr_reader :provider, :email_configuration, :pagination_params, :search
+  attr_reader :provider, :email_configuration, :pagination_params, :sorting_params, :search
 
   def index_data
     {
@@ -39,9 +40,9 @@ class Provider::Admin::Account::EmailConfigurationsPresenter
     }
   end
 
-  # TODO: sort by last created/updated
   def collection
     @collection ||= email_configurations.scope_search(search)
+                                        .order(sorting_params)
   end
 
   protected
