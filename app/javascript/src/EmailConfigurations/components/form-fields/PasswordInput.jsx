@@ -27,7 +27,7 @@ const PasswordInput = ({ password, setPassword, isRequired, errors }: Props): Re
       value={password}
       onChange={setPassword}
       isValid={!errors.length}
-      autocomplete="new-password"
+      autoComplete="new-password"
     />
   </FormGroup>
 )

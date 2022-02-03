@@ -112,7 +112,7 @@ describe('when it is edit page form', () => {
     expect(isSubmitDisabled(wrapper)).toEqual(true)
   })
 
-  it('should enable the button when userNamne changes', () => {
+  it('should enable the button when username changes', () => {
     const wrapper = mountWrapper(props)
 
     updateInput(wrapper, 'wandcraft_ollivanders', 'input[name="email_configuration[user_name]"]')
@@ -130,5 +130,11 @@ describe('when it is edit page form', () => {
 
     updateInput(wrapper, 'new_password', 'input#email_configuration_password_repeat')
     expect(isSubmitDisabled(wrapper)).toEqual(false)
+  })
+
+  it.only('should be able to delete it', () => {
+    const wrapper = mountWrapper(props)
+
+    expect(wrapper.update().find('button.pf-m-danger[type="submit"]').exists()).toBe(true)
   })
 })

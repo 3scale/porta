@@ -46,7 +46,7 @@ function mockLocation (href: string) {
  * @return {boolean}
  */
 function isSubmitDisabled <T> (wrapper: ReactWrapper<T>): boolean {
-  return wrapper.update().find('button[type="submit"]').prop('disabled')
+  return wrapper.update().find('button.pf-m-primary[type="submit"]').prop('disabled')
 }
 
 /**

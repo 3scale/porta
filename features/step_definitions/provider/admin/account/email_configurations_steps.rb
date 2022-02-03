@@ -9,17 +9,11 @@ Given "I have enough email configs to fill many pages" do
   end
 end
 
-Then "I see my email configurations sorted alphabetically" do
+Then "I see my email configurations sorted by last updated date" do
   with_scope email_configurations_table do
-    master_account.email_configurations.first(5).each do |ec|
-      find('tbody td', text: ec.email)
-    end
-    pending # TODO: Implement and check sorting
+    rows_emails = find_all('tbody tr td:first-child').first(5).map(&:text)
+    assert_same_elements rows_emails, master_account.email_configurations.order(updated_at: :desc).first(5).pluck(:email)
   end
-end
-
-Then "I can filter them by user name" do
-
 end
 
 Then "I should not see all my email configurations" do
@@ -34,15 +28,43 @@ Then "I should be able to go to the next page" do
   find('.pf-c-button[data-action="next"]').click
 end
 
-Then "I should be able to filter them by email" do
-  find('input[type="search"]')
-  pending # TODO: implement and check filtering
+Then "I should be able to filter them by email and user name" do
+  FactoryBot.create(:email_configuration, account: master_account, email: "griphook@gringots.co.uk", user_name: "Hookgrip")
+  FactoryBot.create(:email_configuration, account: master_account, email: "ragnok@gringots.co.uk", user_name: "Nokrag")
+
+  filter_email_config('griphook')
+  with_scope(email_configurations_table) { assert_equal 1, find_all('tbody tr').length }
+
+  filter_email_config('hookgrip')
+  with_scope(email_configurations_table) { assert_equal 1, find_all('tbody tr').length }
+
+  filter_email_config('ragnok')
+  with_scope(email_configurations_table) { assert_equal 1, find_all('tbody tr').length }
+
+  filter_email_config('nokrag')
+  with_scope(email_configurations_table) { assert_equal 1, find_all('tbody tr').length }
+
+  filter_email_config('gringots')
+  with_scope(email_configurations_table) { assert_equal 2, find_all('tbody tr').length }
 end
 
 Then "I should be able to create an email configuration" do
-  pending # Fill form and click on create. Check new email config in index/DB.
+  fill_in('Email', with: 'griphook@gringots.co.uk')
+  fill_in('Username', with: 'Griphook')
+  fill_in('Password', with: 'NeverMessWithGoblins')
+  fill_in('Confirm password', with: 'NeverMessWithGoblins')
+
+  click_on 'Create email configuration'
 end
+
+private
 
 def email_configurations_table
   find '.pf-c-table[aria-label="Email configurations table"]'
+end
+
+def filter_email_config(value)
+  input = find('input[type="search"]')
+  input.set(value)
+  input.sibling('button').click
 end

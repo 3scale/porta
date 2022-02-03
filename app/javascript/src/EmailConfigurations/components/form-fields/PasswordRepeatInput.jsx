@@ -28,6 +28,7 @@ const PasswordRepeatInput = ({ password, setPassword, errors, isRequired, isDisa
       onChange={setPassword}
       isValid={!errors.length}
       isDisabled={isDisabled}
+      autoComplete="new-password"
     />
   </FormGroup>
 )
