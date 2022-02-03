@@ -11,10 +11,6 @@ common: &sphinx
   sql_range_step: 2000000000
 
   charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
-  indexed_models:
-    - Metric
-    - Account
-    - CMS::Page
   query_log: /dev/stdout
   log: /dev/stdout
 
