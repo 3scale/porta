@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
 Given "I have enough email configs to fill many pages" do
-  25.times do |i|
-    FactoryBot.create(:email_configuration, account: master_account,
-                                            email: "foo#{i}@example.com",
-                                            user_name: "user_#{i}",
-                                            password: "password#{i}")
-  end
+  25.times { FactoryBot.create(:email_configuration, account: master_account) }
 end
 
 Then "I see my email configurations sorted by last updated date" do
