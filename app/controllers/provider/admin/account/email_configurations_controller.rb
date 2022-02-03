@@ -20,15 +20,15 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
 
   def update
     if @email_configuration.update(email_configuration_params)
-      redirect_to action: :index
       flash[:notice] = 'Email configuration updated'
+      redirect_to action: :index
     else
       render :edit
     end
   end
 
   def create
-    @email_configuration = account.email_configurations.create(email_configuration_params)
+    @email_configuration = email_configurations.create(email_configuration_params)
     if @email_configuration.persisted?
       flash[:notice] = 'Email configuration created'
       redirect_to action: :index
@@ -48,10 +48,10 @@ class Provider::Admin::Account::EmailConfigurationsController < Provider::Admin:
 
   protected
 
-  alias account current_account
+  delegate :email_configurations, to: :current_account
 
   def find_email_configuration
-    @email_configuration = account.email_configurations.find(params[:id])
+    @email_configuration = email_configurations.find(params[:id])
   end
 
   def email_configuration_params
