@@ -67,7 +67,7 @@ describe('when some fields are returned by the server', () => {
     password: '123456'
   }
 
-  it('should fill the fields already', () => {
+  it('should populate the fields with the values', () => {
     const wrapper = mountWrapper({ emailConfiguration })
 
     expect(wrapper.find('input#email_configuration_email').prop('value')).toEqual(emailConfiguration.email)
