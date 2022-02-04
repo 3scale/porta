@@ -132,9 +132,10 @@ describe('when it is edit page form', () => {
     expect(isSubmitDisabled(wrapper)).toEqual(false)
   })
 
-  it.only('should be able to delete it', () => {
+  it('should be able to delete it', () => {
     const wrapper = mountWrapper(props)
 
-    expect(wrapper.update().find('button.pf-m-danger[type="submit"]').exists()).toBe(true)
+    const deleteButton = wrapper.find('button.pf-m-danger[type="submit"]')
+    expect(deleteButton.prop('disabled')).toBe(false)
   })
 })
