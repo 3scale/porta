@@ -1,4 +1,4 @@
-@javascript
+@javascript @email-configurations
 Feature: Email configurations
   Custom email domain can be configured by the user without any interaction on the 3scale side required.
   For all emails delivered to non-custom domains the SendGrid integration works well and does not need to be changed.

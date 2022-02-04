@@ -5,10 +5,14 @@ require 'test_helper'
 class Provider::Admin::Account::EmailConfigurationsControllerTest < ActionDispatch::IntegrationTest
   attr_reader :current_account
 
-  class MasterLoggedInTest < self
-    def setup
-      @current_account = master_account
-      login! current_account
+  class FeatureAvailableTest < self
+    class MasterLoggedInTest < FeatureAvailableTest
+      def setup
+        super
+        Features::EmailConfigurationConfig.stubs(enabled?: true)
+        @current_account = master_account
+        login! current_account
+      end
     end
 
     test '#index' do
@@ -53,10 +57,23 @@ class Provider::Admin::Account::EmailConfigurationsControllerTest < ActionDispat
     end
   end
 
-  class ProviderLoggedInTest < self
-    def setup
-      @current_account = FactoryBot.create(:provider_account)
-      login! current_account
+  class FeatureUnavailableTest < self
+    class MasterLoggedInFeatureOffTest < FeatureUnavailableTest
+      def setup
+        super
+        Features::EmailConfigurationConfig.stubs(enabled?: false)
+        @current_account = master_account
+        login! current_account
+      end
+    end
+
+    class ProviderLoggedInTest < FeatureUnavailableTest
+      def setup
+        super
+        Features::EmailConfigurationConfig.stubs(enabled?: true)
+        @current_account = FactoryBot.create(:provider_account)
+        login! current_account
+      end
     end
 
     test '#index' do
@@ -93,6 +110,10 @@ class Provider::Admin::Account::EmailConfigurationsControllerTest < ActionDispat
 
       assert email_configuration.reload
     end
+  end
+
+  def self.runnable_methods
+    [FeatureUnavailableTest, FeatureAvailableTest].include?(self) ? [] : super
   end
 
   def email_configurations_params
