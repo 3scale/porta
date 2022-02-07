@@ -18,7 +18,7 @@ class PaymentGatewaySetting < ApplicationRecord
   # In our DB :test is stored for some providers
 
   def symbolized_settings
-    (gateway_settings || {}).symbolize_keys.except(:test)
+    gateway_settings.to_h.symbolize_keys.except(:test)
   end
 
   # FIXME: Put this validation later in AR validations
@@ -67,6 +67,7 @@ class PaymentGatewaySetting < ApplicationRecord
   #   end
   #
   def gateway_settings=(hash)
+    binding.pry
     gateway = PaymentGateway.find(gateway_type)
 
     return super unless gateway
