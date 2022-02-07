@@ -390,10 +390,11 @@ class Cinstance < Contract
     service.plan_change_permission(ApplicationPlan) == :request_credit_card
   end
 
-  alias account_for_sphinx user_account
-  protected :account_for_sphinx
-
   protected
+
+  def account_for_sphinx
+    user_account_id
+  end
 
   def correct_plan_subclass?
     unless self.plan.is_a? ApplicationPlan

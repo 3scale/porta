@@ -1,4 +1,6 @@
-class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
+# frozen_string_literal: true
+
+class ThreeScale::Search < HashWithIndifferentAccess
 
   class FormBuilder < ActionView::Helpers::FormBuilder
     def fields_for(record_name, record_object = nil, fields_options = {}, &block)
@@ -98,14 +100,11 @@ class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
         end
       end
 
-      # scope_search is a bad name name, but #search is already taken by thinking-sphinx
-      def scope_search(params, reduce = true)
-        return default_search_scope unless allowed_scopes || default_search_scopes.present?
-        return default_search_scope unless params
+      def sphinx_search(params)
+        return default_search_scope unless allowed_scopes || default_search_scopes.present? || params
 
         params = params.dup
-        # this escapes sphinx special characters like $
-        params[:query] = Riddle.escape(params[:query]) if params[:query]
+        params[:query] = escape_query(params)
 
         selected_scopes = params.stringify_keys.slice(*allowed_scopes)
 
@@ -115,7 +114,15 @@ class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
         join_scopes(selected_scopes)
       end
 
+      alias scope_search sphinx_search
+
       private
+
+      def escape_query(params)
+        return unless (query = params[:query])
+
+        ThinkingSphinx::Query.escape(query)
+      end
 
       def default_search_scope
         all

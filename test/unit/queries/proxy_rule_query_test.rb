@@ -8,7 +8,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   test '#search_for uses sphinx if query given' do
     ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
-      perform_enqueued_jobs(only: IndexProxyRuleWorker) do
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
         proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test')
         query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
 
@@ -20,7 +20,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   test '#search_for reuses the scope if given' do
     ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
-      perform_enqueued_jobs(only: IndexProxyRuleWorker) do
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
         proxy_rule   = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
         proxy_rule2  = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test2', position: 2)
         query        = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
@@ -34,7 +34,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
   test '#search_for order result if sort/direction parameters given' do
     ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
-      perform_enqueued_jobs(only: IndexProxyRuleWorker) do
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
         proxy_rule   = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
         proxy_rule2  = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test2', position: 2)
         query        = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id,
