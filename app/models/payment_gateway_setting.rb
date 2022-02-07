@@ -67,7 +67,6 @@ class PaymentGatewaySetting < ApplicationRecord
   #   end
   #
   def gateway_settings=(hash)
-    binding.pry
     gateway = PaymentGateway.find(gateway_type)
 
     return super unless gateway
