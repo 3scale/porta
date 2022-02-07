@@ -10,6 +10,7 @@ html[lang="en" class="pf-m-redhat-font"]
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_pack_tag 'settingsPageStyles'
+    = javascript_pack_tag 'quick_starts_context'
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
 
@@ -28,3 +29,4 @@ html[lang="en" class="pf-m-redhat-font"]
             = yield
         = render partial: "/provider/footer"
     = render partial: '/shared/provider/call_to_action' if call_to_action?
+    #quick-starts-entry
