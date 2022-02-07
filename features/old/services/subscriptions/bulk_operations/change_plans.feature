@@ -58,3 +58,13 @@ Feature: Bulk operations
   @wip
   Scenario: Try to mass change contracts from different services
     # TODO: !
+
+  Scenario: Error template shows correctly
+    And I am on the service contracts admin page
+    When I follow "Account" within table
+    When I check select for "jane"
+    And I press "Change service plan"
+    When I select "Default" from "Plan"
+    Given the subscription will return an error when plan changed
+    And I press "Change plan" and I confirm dialog box
+    Then I should see the bulk action failed with service subscription of account "jane"

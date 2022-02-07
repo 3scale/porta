@@ -256,3 +256,7 @@ AfterStep do |scenario|
   # print_banner.('Finished', current)
   # print_banner.('Starting', next_step) if next_step
 end
+
+Before '@email-configurations' do
+  Features::EmailConfigurationConfig.stubs(enabled?: true)
+end

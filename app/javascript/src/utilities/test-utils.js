@@ -41,6 +41,15 @@ function mockLocation (href: string) {
 }
 
 /**
+ * In a form, checks if the submit button is disabled
+ * @param {ReactWrapper} wrapper - The enzyme react wrapper, must target a form
+ * @return {boolean}
+ */
+function isSubmitDisabled <T> (wrapper: ReactWrapper<T>): boolean {
+  return wrapper.update().find('button.pf-m-primary[type="submit"]').prop('disabled')
+}
+
+/**
  * Updates the value of an HTML input.
  * @param {ReactWrapper} wrapper - The enzyme react wrapper
  * @param {string} value - The text value to put in the input
@@ -56,4 +65,10 @@ function updateInput <T> (wrapper: ReactWrapper<T>, value: string, input?: strin
   _input.simulate('change')
 }
 
-export { openSelectWithModal, closeSelectWithModal, mockLocation, updateInput }
+export {
+  openSelectWithModal,
+  closeSelectWithModal,
+  mockLocation,
+  isSubmitDisabled,
+  updateInput
+}

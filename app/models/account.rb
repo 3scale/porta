@@ -99,7 +99,7 @@ class Account < ApplicationRecord
 
   before_validation(on: :create, if: :provider?) { generate_s3_prefix }
   before_validation(on: :create, if: :provider?) { generate_domains }
-  before_create :generate_site_access_code
+  before_create :generate_site_access_code, :set_default_master
 
   attr_protected :master, :provider, :buyer, :from_email, :vat_rate, :sample_data, :default_service_id, :s3_prefix,
                  :provider_account_id, :paid_at, :paid, :signs_legal_terms, :tenant_id, :default_account_plan_id,
@@ -113,6 +113,7 @@ class Account < ApplicationRecord
   has_one :admin_user, -> { admins.but_impersonation_admin }, class_name: 'User', inverse_of: :account
 
   has_many :features, as: :featurable
+  has_many :email_configurations
 
   composed_of :address,
               mapping: ThreeScale::Address.account_mapping,
@@ -578,6 +579,12 @@ class Account < ApplicationRecord
 
   def generate_site_access_code
     self.site_access_code ||= SecureRandom.hex(5) if provider?
+  end
+
+  def set_default_master
+    # prevent null values that confuse some SQL hooks
+    self.master = provider? && master?
+    true
   end
 
   def destroy_all_users

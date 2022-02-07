@@ -1,4 +1,4 @@
-class Forums::Admin::CategoriesController < FrontendController
+class Forums::Admin::CategoriesController < Forums::Admin::HidenForumController
   include ForumSupport::Admin
   include ForumSupport::Categories
 

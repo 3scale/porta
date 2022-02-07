@@ -128,3 +128,7 @@ end
 Then /^I should not see a message from "([^"]*)" with subject "([^"]*)"$/ do |from, subject|
   assert has_no_table_row_with_cells?(from, subject)
 end
+
+When "the email will fail when sent" do
+  Message.any_instance.stubs(:save).returns(false).once
+end

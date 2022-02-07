@@ -563,6 +563,14 @@ System::Database::Postgres.define do
     SQL
   end
 
+  trigger 'email_configurations' do
+    <<~SQL
+      IF NEW.account_id <> master_id THEN
+          NEW.tenant_id := NEW.account_id;
+      END IF;
+    SQL
+  end
+
   procedure 'sp_invoices_friendly_id', invoice_id: 'numeric' do
     <<~SQL
       DECLARE

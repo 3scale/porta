@@ -11,4 +11,8 @@ class Buyers::ServiceContracts::Bulk::SendEmailsController < Buyers::ServiceCont
   def recipients
     @recipients ||= service_contracts.map(&:user_account)
   end
+
+  def errors_template
+    'buyers/accounts/bulk/shared/errors.html'
+  end
 end
