@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency 'liquid', '4.0.0'
+  s.add_dependency 'liquid', '4.0.1'
   s.add_dependency "railties", ">= 3.2"
 end
