@@ -200,6 +200,11 @@ without fake Core server your after commit callbacks will crash and you might ge
     get 'admin', to: 'admin#show'
 
     namespace :admin do
+      # provider/admin/resources
+      resource :resources, :only => [:index, :show]
+      resource :resources do
+        get "resources"
+      end
       # provider/admin/applications
       resources :applications do
         member do

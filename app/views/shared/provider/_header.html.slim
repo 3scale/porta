@@ -28,6 +28,8 @@ header.pf-c-page__header id="user_widget" class='Header' class=('Header--master'
         - if saas?
           li.PopNavigation-listItem
             = fixed_width_icon_link_to "What's new?", 'leaf', '//access.redhat.com/articles/3107441#newfeaturesenhancements', class: 'PopNavigation-link', target: '_blank'
+        li.PopNavigation-listItem
+          = fixed_width_icon_link_to 'Quick starts', 'book', provider_admin_resources_path, class: 'PopNavigation-link'
 
     .PopNavigation.PopNavigation--session
       a.PopNavigation-trigger.u-toggler class=('is-current' if active_menu?(:topmenu, :help)) href="#session-menu" title="Session"
