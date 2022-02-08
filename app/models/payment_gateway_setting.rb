@@ -19,7 +19,7 @@ class PaymentGatewaySetting < ApplicationRecord
 
   def symbolized_settings
     settings = gateway_settings
-    return settings.symbolize_keys if settings.is_a? Hash
+    return settings.symbolize_keys if settings.respond_to? :symbolize_keys
 
     keys = PaymentGateway.all.map(&:fields).map(&:keys).flatten.uniq
     settings.permit(keys).to_h.symbolize_keys.except(:test)
