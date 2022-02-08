@@ -21,7 +21,7 @@ System::Database::MySQL.define do
 
   trigger 'alerts' do
     <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND NOT master);
+      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND (NOT master OR master is NULL));
     SQL
   end
 
@@ -415,7 +415,7 @@ System::Database::MySQL.define do
 
   trigger 'log_entries' do
     <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.provider_id AND NOT master);
+      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.provider_id AND (NOT master OR master is NULL));
     SQL
   end
 
@@ -435,7 +435,7 @@ System::Database::MySQL.define do
 
   trigger 'backend_apis' do
     <<~SQL
-      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND NOT master);
+      SET NEW.tenant_id = (SELECT tenant_id FROM accounts WHERE id = NEW.account_id AND (NOT master OR master is NULL));
     SQL
   end
 

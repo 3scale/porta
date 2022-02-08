@@ -21,7 +21,7 @@ System::Database::Oracle.define do
 
   trigger 'alerts' do
     <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND master <> 1;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND (master <> 1 OR master is NULL);
     SQL
   end
 
@@ -425,7 +425,7 @@ System::Database::Oracle.define do
 
   trigger 'log_entries' do
     <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.provider_id AND master <> 1;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.provider_id AND (master <> 1 OR master is NULL);
     SQL
   end
 
@@ -445,7 +445,7 @@ System::Database::Oracle.define do
 
   trigger 'backend_apis' do
     <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND master <> 1;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND (master <> 1 OR master is NULL);
     SQL
   end
 

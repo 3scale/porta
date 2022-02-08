@@ -21,7 +21,7 @@ System::Database::Postgres.define do
 
   trigger 'alerts' do
     <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND master <> TRUE;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND (master <> TRUE OR master is NULL);
     SQL
   end
 
@@ -425,7 +425,7 @@ System::Database::Postgres.define do
 
   trigger 'log_entries' do
     <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.provider_id AND master <> TRUE;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.provider_id AND (master <> TRUE OR master is NULL);
     SQL
   end
 
@@ -445,7 +445,7 @@ System::Database::Postgres.define do
 
   trigger 'backend_apis' do
     <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND master <> TRUE;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND (master <> TRUE OR master is NULL);
     SQL
   end
 
