@@ -90,6 +90,14 @@ class BackendApiTest < ActiveSupport::TestCase
     refute BackendApi.exists? backend_api.id
   end
 
+  test "tenant_id trigger" do
+    @account.save!
+    @account.tenant_id = @account.id
+    @account.save!
+    backend_api = FactoryBot.create(:backend_api, account: @account)
+    assert_equal @account.id, backend_api.reload.tenant_id
+  end
+
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
