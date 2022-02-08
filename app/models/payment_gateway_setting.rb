@@ -18,9 +18,11 @@ class PaymentGatewaySetting < ApplicationRecord
   # In our DB :test is stored for some providers
 
   def symbolized_settings
-    keys = PaymentGateway::GATEWAYS.map(&:fields).map(&:keys).flatten.uniq
+    settings = gateway_settings
+    return settings.symbolize_keys if settings.is_a? Hash
 
-    gateway_settings.permit(keys).to_h.symbolize_keys.except(:test)
+    keys = PaymentGateway.all.map(&:fields).map(&:keys).flatten.uniq
+    settings.permit(keys).to_h.symbolize_keys.except(:test)
   end
 
   # FIXME: Put this validation later in AR validations

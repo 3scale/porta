@@ -8,11 +8,36 @@ Feature: Provider's payment gateway
 
   Scenario: Credit card gateway shown for admins with finance and charging
     Given provider "foo.3scale.localhost" is charging
-      And provider "foo.3scale.localhost" has "finance" switch allowed
+    And provider "foo.3scale.localhost" has "finance" switch allowed
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"
     And I go to the finance settings page
     Then I should see "Credit card gateway"
+
+  Scenario: Save payment gateway changes
+    Given provider "foo.3scale.localhost" is charging
+    And provider "foo.3scale.localhost" has "finance" switch allowed
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
+    And I go to the finance settings page
+    And I fill in "Foo" with "whatever"
+    And I press "Save changes"
+    Then I should see "Payment gateway details were successfully saved."
+    And the "Foo" field should contain "whatever"
+
+  @javascript
+  Scenario: Use Stripe as payment gateway
+    Given provider "foo.3scale.localhost" is charging
+    And provider "foo.3scale.localhost" has "finance" switch allowed
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I am logged in as provider "foo.3scale.localhost"
+    And I go to the finance settings page
+    And I select "Stripe" from "Gateway"
+    And I fill in "Secret Key" with "secret"
+    And I fill in "Publishable Key" with "publishable"
+    And I fill in "Webhook Signing Secret" with "webhook"
+    And I press "Save changes" and I confirm dialog box twice
+    Then I should see "Payment gateway details were successfully saved."
 
   Scenario: Credit card gateway not shown for admins with finance without charging
     Given provider "foo.3scale.localhost" is not charging
@@ -84,13 +109,3 @@ Feature: Provider's payment gateway
       And user "member" does not belong to the admin group "finance" of provider "foo.3scale.localhost"
     When I log in as provider "member"
      And I request the url of the 'finance settings' page then I should see an exception
-
-    # All these depend on javascript being enabled. Don't know how to simulate that...
-    #
-    # When I select "Authorize.Net" from "Gateway"
-    # And I fill in "LoginID" with "foo"
-    # And I fill in "Transaction Key" with "1234"
-    # And I press "Save changes"
-    # Then I should see "Credit card gateway details were successfully saved"
-    # And the "LoginID" field should contain "foo"
-    # And the "Transaction Key" field should contain "1234"
