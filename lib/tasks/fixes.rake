@@ -305,4 +305,9 @@ namespace :fixes do
     exec_batch.call(:providers, Account.providers, provider_states_transitions)
     exec_batch.call(:developers, Account.buyers, buyer_states_transitions)
   end
+
+  desc 'Fix tenant_id missing in some tables'
+  task :tenant_id => :environment do
+    SetTenantIdWorker::BatchEnqueueWorker.perform_later
+  end
 end
