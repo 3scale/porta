@@ -5,6 +5,7 @@ class Api::MetricsIndexPresenter
 
   delegate :top_level_metrics, :method_metrics, :metrics, to: :service
 
+  # TODO: DRY this? Similar to app/presenters/provider/admin/backend_apis/metrics_index_presenter.rb#initialize
   def initialize(service:, params: {})
     @service = service
     @tab = params[:tab]

@@ -21,7 +21,7 @@ System::Database::Oracle.define do
 
   trigger 'alerts' do
     <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND master <> 1;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND (master <> 1 OR master is NULL);
     SQL
   end
 
@@ -425,7 +425,7 @@ System::Database::Oracle.define do
 
   trigger 'log_entries' do
     <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.provider_id AND master <> 1;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.provider_id AND (master <> 1 OR master is NULL);
     SQL
   end
 
@@ -445,7 +445,7 @@ System::Database::Oracle.define do
 
   trigger 'backend_apis' do
     <<~SQL
-      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND master <> 1;
+      SELECT tenant_id INTO :new.tenant_id FROM accounts WHERE id = :new.account_id AND (master <> 1 OR master is NULL);
     SQL
   end
 
@@ -561,6 +561,14 @@ System::Database::Oracle.define do
   trigger 'gateway_configurations' do
     <<~SQL
       SELECT tenant_id INTO :new.tenant_id FROM proxies WHERE id = :new.proxy_id AND tenant_id <> master_id;
+    SQL
+  end
+
+  trigger 'email_configurations' do
+    <<~SQL
+      IF :new.account_id <> master_id THEN
+          :new.tenant_id := :new.account_id;
+      END IF;
     SQL
   end
 

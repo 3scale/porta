@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 ActiveSupport.on_load(:action_mailer) do
 
+ActionMailer::Base.register_interceptor ThreeScale::EmailConfigurationInterceptor
 ActionMailer::Base.register_interceptor ThreeScale::EmailEngagementFooter
 ActionMailer::Base.register_interceptor ThreeScale::EmailDoNotSendInterceptor
 ActionMailer::Base.register_interceptor ThreeScale::ValidateEmailInterceptor

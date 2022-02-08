@@ -18,6 +18,6 @@ Feature: Backend menu
 
   Scenario: API menu structure
     Then I should see menu items
-    | Overview                  |
-    | Methods & Metrics         |
-    | Mapping Rules             |
+    | Overview                    |
+    | Methods and Metrics         |
+    | Mapping Rules               |

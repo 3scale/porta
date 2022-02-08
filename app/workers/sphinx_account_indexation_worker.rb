@@ -4,22 +4,22 @@ require_relative 'sphinx_indexation_worker'
 
 # SphinxAccountIndexationWorker updates sphinx index for the Account model.
 # It is enqueued when:
-# - Account gets created and updated (deletion is handled only when scheduled for deletion)
+# - Account gets created, updated or deleted
 # - User gets created, updated, deleted
 # - Cinstance gets created, updated, deleted
-# fixme: destroy doesn't remove indexes due to disabled callbacks in config/initializers/sphinx.rb
 class SphinxAccountIndexationWorker < SphinxIndexationWorker
-  def perform(account)
-    if account.will_be_deleted?
-      to_delete = account.buyers.pluck(:id) << account.id
-      # This is how deletion is performed by ThinkingSphinx::ActiveRecord::Callbacks::DeleteCallbacks#delete_from_sphinx
-      # If callbacks were enabled, we could delete individual records one by one with:
-      # ThinkingSphinx::ActiveRecord::Callbacks::DeleteCallbacks.after_destroy(instance)
-      indices(account).each do |index|
-        ThinkingSphinx::Deletion.perform index, to_delete
+  def perform(model, id)
+    pk = model.primary_key
+    account = model.find_by(pk => id)
+
+    indices_for_model(model).each do |index|
+      if account && index.scope.find_by(pk => id)
+        reindex(index, account)
+      elsif account && !account.master?
+        delete_from_index(index, id, *account.buyers.pluck(:id))
+      else
+        delete_from_index(index, id)
       end
-    else
-      super
     end
   end
 end
