@@ -103,3 +103,12 @@ Feature: Bulk operations
       | bob       | pending |
       | jane      | live    |
       | mike      | live    |
+
+  Scenario: Error template shows correctly
+    And I am on the service contracts admin page
+    And I check select for "jane"
+    And I press "Change state"
+    When I select "Suspend" from "Action"
+    Given the subscription will return an error when suspended
+    And I press "Change state" and I confirm dialog box within fancybox
+    Then I should see the bulk action failed with service subscription of account "jane"

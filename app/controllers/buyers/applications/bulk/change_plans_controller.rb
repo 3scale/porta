@@ -11,9 +11,7 @@ class Buyers::Applications::Bulk::ChangePlansController < Buyers::Applications::
     return unless (plan = service.application_plans.find_by(id: plan_id_param))
 
     applications.each do |application|
-      unless application.change_plan(plan)
-        @errors << application
-      end
+      @errors << application unless application.change_plan(plan)
     end
 
     handle_errors

@@ -81,4 +81,11 @@ Feature: Bulk operations
       | pending      | Pending |
       | rejected     | Pending |
 
-
+  Scenario: Error template shows correctly
+    And I am on the accounts admin page
+    And I check select for "pending"
+    And I press "Change state"
+    When I select "Approve" from "Action"
+    Given the account will return an error when approved
+    And I press "Change state" and I confirm dialog box within fancybox
+    Then I should see the bulk action failed with account "pending"
