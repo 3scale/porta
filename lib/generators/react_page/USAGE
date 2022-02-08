@@ -1,0 +1,13 @@
+Description:
+    Generate all necessary boilerplate to render a page using React.
+    NOTE: for a new module, it will be necessary to add it to name_mapper in .flowconfig otherwise types won't work.
+
+Example:
+    rails generate react_page Index --module Users
+
+    This will create:
+        app/views/index.html.slim
+        app/javascript/packs/Users/index.js
+        app/javascript/src/Users/components/IndexPage.jsx
+        app/javascript/src/Users/components/IndexPage.scss
+        spec/javascripts/Users/components/IndexPage.spec.scss
