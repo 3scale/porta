@@ -23,8 +23,3 @@ Then /^(.+) and I confirm dialog box twice$/ do |original|
     wait_for_requests
   end
 end
-
-# should not work if it relies on some JS
-def rack_test?
-  %I[webkit selenium webkit_debug headless_chrome chrome headless_firefox firefox].exclude? Capybara.current_driver
-end
