@@ -1,3 +1,5 @@
+// @flow
+
 import template from './template.yaml'
 
 const resources = [

@@ -10,14 +10,14 @@ html[lang="en" class="pf-m-redhat-font"]
     = render 'provider/theme'
     = render 'provider/analytics'
     = javascript_pack_tag 'settingsPageStyles'
-    = javascript_pack_tag 'quick_starts_context'
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
 
   body
+    = render partial: 'shared/provider/quick_starts_container'
     #wrapper.pf-c-page
       = render partial: '/shared/provider/header'
-      = render partial: 'shared/provider/navigation/vertical_nav' unless %i[dashboard products backend_apis resources].include? active_menu
+      = render partial: 'shared/provider/navigation/vertical_nav' unless vertical_nav_hidden?
       #border.pf-c-page__main class="self_clear" role="main"
         = render 'shared/provider/flash', flash: flash
         main.Main#content class=('Main--callToAction' if call_to_action?)
@@ -28,4 +28,3 @@ html[lang="en" class="pf-m-redhat-font"]
             = yield
         = render partial: "/provider/footer"
     = render partial: '/shared/provider/call_to_action' if call_to_action?
-    #quick-starts-entry

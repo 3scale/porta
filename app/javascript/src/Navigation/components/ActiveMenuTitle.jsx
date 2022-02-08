@@ -42,7 +42,7 @@ const ActiveMenuTitle = ({ activeMenu }: Props): React.Node => {
       case 'backend_apis':
         return ['fa-cube', 'Backends']
 
-      case 'resources':
+      case 'quick_starts': // FIXME: ContextSelector should probably hide or something
         return ['', '--']
 
       default:
