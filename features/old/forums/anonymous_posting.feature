@@ -61,3 +61,11 @@ Feature: Anonymous posting
      And provider "foo.3scale.localhost" has "anonymous posts" disabled
      And I press "Post reply"
     Then I should be on the login page
+
+  Rule: Forum disabled
+    Background:
+      Given I have rolling updates "forum" disabled
+      And provider "foo.3scale.localhost" has "forum" enabled
+
+    Scenario: Buyer cannot access Forum
+      When I should not see forum

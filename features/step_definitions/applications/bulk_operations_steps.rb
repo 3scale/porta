@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given /^a following buyers with applications exists:$/ do |buyers|
   buyers.hashes.each do |buyer|
     step %{a buyer "#{buyer['name']}" signed up to provider "#{buyer['provider']}"}
@@ -49,4 +51,16 @@ end
 
 And(/^close the colorbox$/) do
   find('#cboxClose').click
+end
+
+When "the application will return an error when suspended" do
+  Cinstance.any_instance.stubs(:suspend).returns(false).once
+end
+
+When "the application will return an error when plan changed" do
+  Cinstance.any_instance.stubs(:change_plan).returns(false).once
+end
+
+When "I should see the bulk action failed with {application}" do |application|
+  assert_match "There were some errors:\n#{application.name} (#{application.user_account.org_name})", bulk_errors_container.text
 end

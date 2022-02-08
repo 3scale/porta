@@ -76,3 +76,13 @@ Feature: Bulk operations
      | bob          | Gold   |
      | jane         | Bronze |
      | mike         | Gold   |
+
+  Scenario: Error template shows correctly
+    Given an application plan "Advanced" of provider "foo.3scale.localhost"
+    And I am on the accounts admin page
+    When I check select for "bob"
+    And I press "Change account plan"
+    When I select "Gold" from "Plan"
+    Given the account will return an error when plan changed
+    And I press "Change plan" and I confirm dialog box
+    Then I should see the bulk action failed with account "bob"
