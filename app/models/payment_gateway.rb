@@ -29,7 +29,7 @@ class PaymentGateway
   def self.all
     gateways = GATEWAYS.dup
 
-    gateways << new(:bogus, foo: 'Foo') if bogus_enabled?
+    gateways << new(:bogus) if bogus_enabled?
 
     gateways
   end
