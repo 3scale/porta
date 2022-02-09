@@ -22,7 +22,6 @@ class BaseEventStoreEvent < RailsEventStore::Event
       return unless valid?(*args)
 
       event = create(*args)
-
       PUBLISHER.call(event) && event
     end
 

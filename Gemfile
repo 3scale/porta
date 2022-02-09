@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # on servers we don't have proper LANG
 Encoding.default_external = Encoding::UTF_8
 
@@ -15,7 +13,7 @@ gem 'aws-sdk-rails', '~> 2'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.0.7'
+gem 'rails', '~> 5.1.7'
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
@@ -103,7 +101,7 @@ gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
 gem 'prawn-layout', '0.2.1'
-gem 'rails_event_store', '~> 0.9.0'
+gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
@@ -114,7 +112,7 @@ gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
-gem 'thinking-sphinx', '~> 3.0'
+gem 'thinking-sphinx', '~> 5.4.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.1.6'
 gem 'zip-zip', require: false
@@ -260,7 +258,7 @@ gem 'unicorn', require: false, group: %i[production preview]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 1.7.0', install_if: oracle
+gem 'activerecord-oracle_enhanced-adapter', '~> 1.8.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
 
 gem 'kubeclient'

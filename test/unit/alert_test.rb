@@ -24,6 +24,13 @@ class AlertTest < ActiveSupport::TestCase
     assert_equal :alert, Alert.new(level: 0).kind
   end
 
+  test "tenant_id trigger" do
+    account = FactoryBot.create(:buyer_account)
+    alert = FactoryBot.create(:limit_alert, level: 80, account: account)
+    assert alert.reload.tenant_id
+    assert_equal account.reload.tenant_id, alert.tenant_id
+  end
+
   test 'Alert#kind should return :violation if its violation' do
     assert_equal :violation, Alert.new(level: 100).kind
     assert_equal :violation, Alert.new(level: 300).kind

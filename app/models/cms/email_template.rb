@@ -57,18 +57,17 @@ class CMS::EmailTemplate < CMS::Template
     end
 
     def dump(object)
-      return object if object.is_a?(String) && assert_valid_value(load(object))
+      return object if object.is_a?(String) && assert_valid_value(load(object), action: "dump")
       obj = object.respond_to?(:to_unsafe_h) ? object.to_unsafe_h : object.to_h if object
       super(obj)
     end
 
-    def assert_valid_value(obj)
+    def assert_valid_value(obj, action:)
       obj.is_a?(Hash) || obj.is_a?(ActionController::Parameters) || super
     end
   end
 
-  # TODO: On Rails 5.1+, change in argument contructor ::ActiveRecord::Coders::YAMLColumn.new(attr_name, class_or_coder)
-  serialize :options, HashOrParameters.new(Hash)
+  serialize :options, HashOrParameters.new(:options, Hash)
 
   attr_accessor :file
 
