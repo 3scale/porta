@@ -10,7 +10,7 @@ class CMS::Page < CMS::BasePage
   acts_as_taggable
   include Tagging
 
-  include CMSPageIndex
+  include Searchable
 
   attr_accessible :title, :section, :path, :content_type, :tag_list, :system_name
 

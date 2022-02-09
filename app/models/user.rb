@@ -130,9 +130,6 @@ class User < ApplicationRecord
   after_save :nullify_authentication_id, if: :any_sso_authorizations?
   after_destroy :archive_as_deleted
 
-  alias account_for_sphinx account
-  protected :account_for_sphinx
-
   def self.search_states
     %w(pending active)
   end
@@ -412,6 +409,12 @@ class User < ApplicationRecord
 
   def provider_id_for_audits
     account.try!(:provider_id_for_audits) || provider_account.try!(:provider_id_for_audits)
+  end
+
+  protected
+
+  def account_for_sphinx
+    account_id
   end
 
   private

@@ -39,8 +39,9 @@ module VerticalNavHelper
       sections << {id: :billing,       title: 'Billing',       items: account_billing_items} if ThreeScale.master_billing_enabled? && !current_account.master?
     end
 
-    sections << {id: :integrate, title: 'Integrate', items: account_itegrate_items}
-    sections << {id: :export,    title: 'Export',    path: new_provider_admin_account_data_exports_path} if can? :export, :data
+    sections << {id: :integrate,            title: 'Integrate',            items: account_itegrate_items}
+    sections << {id: :email_configurations, title: 'Email configurations', path: provider_admin_account_email_configurations_path} if current_account.master? && Features::EmailConfigurationConfig.enabled?
+    sections << {id: :export,               title: 'Export',               path: new_provider_admin_account_data_exports_path} if can? :export, :data
     sections
   end
 
@@ -260,10 +261,10 @@ module VerticalNavHelper
     sections = []
     return sections unless @backend_api&.persisted?
 
-    sections << {id: :overview,         title: 'Overview',           path: provider_admin_backend_api_path(@backend_api)}
-    sections << {id: :monitoring,       title: 'Analytics',          path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
-    sections << {id: :methods_metrics,  title: 'Methods & Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
-    sections << {id: :mapping_rules,    title: 'Mapping Rules',      path: provider_admin_backend_api_mapping_rules_path(@backend_api)}
+    sections << {id: :overview,         title: 'Overview',             path: provider_admin_backend_api_path(@backend_api)}
+    sections << {id: :monitoring,       title: 'Analytics',            path: provider_admin_backend_api_stats_usage_path(@backend_api)} if can? :manage, :monitoring
+    sections << {id: :methods_metrics,  title: 'Methods and Metrics',  path: provider_admin_backend_api_metrics_path(@backend_api)}
+    sections << {id: :mapping_rules,    title: 'Mapping Rules',        path: provider_admin_backend_api_mapping_rules_path(@backend_api)}
   end
 
   # Others

@@ -2,23 +2,26 @@ require 'test_helper'
 
 class ProviderConstraintsTest < ActiveSupport::TestCase
 
-  class FakeProvider < Account
-    %I[user_count service_count].each do |count|
-      raise "#{superclass} does not define #{count}" unless method_defined?(count)
-    end
+  setup do
+    @provider = Account.new
 
-    attr_accessor :user_count, :service_count
+    class << @provider
+      %i(user_count service_count).each do |count|
+        raise "#{superclass} does not define #{count}" unless method_defined?(count)
+      end
+
+      attr_accessor :user_count, :service_count
+    end
   end
 
   def test_can_create_user?
-    provider = FakeProvider.new
-    constraint = ProviderConstraints.new(provider: provider)
+    constraint = ProviderConstraints.new(provider: @provider)
 
-    provider.user_count = nil
+    @provider.user_count = nil
     constraint.max_users = nil
     refute constraint.can_create_user?
 
-    provider.user_count = 1
+    @provider.user_count = 1
     assert constraint.can_create_user?
 
     constraint.max_users  = 1
@@ -29,14 +32,13 @@ class ProviderConstraintsTest < ActiveSupport::TestCase
   end
 
   def test_can_create_service?
-    provider = FakeProvider.new
-    constraint = ProviderConstraints.new(provider: provider)
+    constraint = ProviderConstraints.new(provider: @provider)
 
-    provider.service_count = nil
+    @provider.service_count = nil
     constraint.max_services = nil
     refute constraint.can_create_service?
 
-    provider.service_count = 1
+    @provider.service_count = 1
     assert constraint.can_create_service?
 
     constraint.max_services = 1
