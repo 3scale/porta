@@ -11,7 +11,7 @@ ENV BUNDLER_ENV="${BUNDLER_ENV}" \
 
 WORKDIR /opt/system
 
-ARG SPHINX_VERSION=2.2.11-1
+ARG SPHINX_VERSION=3.4.1
 
 ADD openshift/system/sphinx-${SPHINX_VERSION}.rhel7.x86_64.rpm /tmp/sphinxsearch.rpm
 

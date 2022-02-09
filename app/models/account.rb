@@ -113,6 +113,7 @@ class Account < ApplicationRecord
   has_one :admin_user, -> { admins.but_impersonation_admin }, class_name: 'User', inverse_of: :account
 
   has_many :features, as: :featurable
+  has_many :email_configurations
 
   composed_of :address,
               mapping: ThreeScale::Address.account_mapping,

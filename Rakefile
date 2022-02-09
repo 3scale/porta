@@ -8,12 +8,6 @@ end
 
 System::Application.load_tasks
 
-
-begin
-  require 'thinking_sphinx/deltas/datetime_delta/tasks'
-rescue LoadError
-end
-
 require 'rails/test_unit/runner'
 class Rails::TestUnit::Runner
   class << self

@@ -4,7 +4,7 @@ module TopicIndex
   extend ActiveSupport::Concern
 
   included do
-    after_save :sphinx_index
+    after_commit :index_object
   end
 
   def sphinx_post_bodies
@@ -15,8 +15,8 @@ module TopicIndex
     extend ActiveSupport::Concern
 
     included do
-      after_save :index_topic
-      after_destroy :index_topic
+      # for all changes including destroy
+      after_commit :index_topic
     end
 
     protected
@@ -24,26 +24,24 @@ module TopicIndex
     def index_topic
       return unless allow_system_indexation?
 
-      SphinxIndexationWorker.perform_later(topic)
+      SphinxIndexationWorker.perform_later(topic.class, topic.id)
     end
 
     def allow_system_indexation?
-      !System::Database.oracle? &&
-        ThinkingSphinx::Configuration.new.settings['indexed_models'].include?('Topic')
+      !System::Database.oracle?
     end
   end
 
   protected
 
-  def sphinx_index
+  def index_object
     return unless allow_system_indexation?
 
-    SphinxIndexationWorker.perform_later(self)
+    SphinxIndexationWorker.perform_later(self.class, id)
   end
 
   def allow_system_indexation?
-    !System::Database.oracle? &&
-      ThinkingSphinx::Configuration.new.settings['indexed_models'].include?('Topic')
+    !System::Database.oracle?
   end
 end
 

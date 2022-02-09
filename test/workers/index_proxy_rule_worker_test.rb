@@ -9,7 +9,7 @@ class IndexProxyRuleWorkerTest < ActiveSupport::TestCase
   test 'indexes the proxy rule in Sphinx if record exists' do
     proxy_rule = FactoryBot.create(:proxy_rule)
     ThinkingSphinx::RealTime::Callbacks::RealTimeCallbacks.any_instance
-      .expects(:after_save)
+      .expects(:after_commit)
 
     IndexProxyRuleWorker.perform_now(proxy_rule.id)
   end
