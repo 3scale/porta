@@ -50,8 +50,13 @@ Then /^I choose "(.*?)" in the sidebar$/ do |item|
   end
 end
 
-Then "I should see the following help menu items:" do |table|
+Then "the help menu should have the following items:" do |table|
   assert_same_elements table.raw.flatten, find_all('.PopNavigation--docs ul.PopNavigation-list li').map(&:text)
+end
+
+Then "the help menu {should} have an item {string}" do |visible, item|
+  options = find_all('.PopNavigation--docs ul.PopNavigation-list li', visible: :all).map { |li| li.text(:all) }
+  assert_equal visible, options.include?(item)
 end
 
 # TODO: replace this with with more generic step?!

@@ -4,7 +4,7 @@ Feature: Header buttons and menus
     Given a provider is logged in
 
   Scenario: Help menu dropdown
-    Then I should see the following help menu items:
+    Then the help menu should have the following items:
       | Customer Portal  |
       | 3scale API Docs  |
       | Liquid Reference |
