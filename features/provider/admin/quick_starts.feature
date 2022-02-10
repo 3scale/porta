@@ -1,8 +1,11 @@
 @javascript
 Feature: Quick Starts
 
+  Rule: Quick starts are enabled
   Background:
-    Given a provider is logged in
+      Given I have rolling updates "quick_starts" enabled
+      And a provider is logged in
+
 
   Scenario: Quick Start catalog
     Given I go to the quick start catalog page
