@@ -670,6 +670,12 @@ World(Module.new do
     when /^the upgrade notice page for "(.+?)"$/
       admin_upgrade_notice_path($1)
 
+    #
+    # Quick starts
+    #
+    when /^the quick start catalog page$/
+      provider_admin_quick_starts_path
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
