@@ -57,7 +57,8 @@ class IndexingTest < ActiveSupport::TestCase
   # the idea is to double check #indexed_models lists all models, assuring we cover them all in tests
   test "all models with index methods are indexed" do
     exclusions = [ApplicationRecord, Plan, Cinstance, User]
-    index_modules = [Searchable, AccountIndex::ForAccount, TopicIndex]
+    index_modules = [Searchable, AccountIndex::ForAccount]
+    index_modules << TopicIndex unless System::Database.oracle?
 
     models = ActiveRecord::Base.descendants.select do |model|
       index_modules.any? { |mod| mod === model.new } unless exclusions.include?(model)
@@ -91,6 +92,7 @@ class IndexingTest < ActiveSupport::TestCase
       ProxyRule => :pattern,
       CMS::Page => :title,
       Topic => :title,
+      EmailConfiguration => :email,
     }
 
     updates[model] || :name
@@ -101,6 +103,7 @@ class IndexingTest < ActiveSupport::TestCase
 
     overrides = {
       ProxyRule => "/#{default}",
+      EmailConfiguration => "#{default}@example.redhat.com",
     }
 
     overrides[model] || default

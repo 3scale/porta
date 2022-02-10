@@ -14,17 +14,6 @@ Feature: Provider's payment gateway
     And I go to the finance settings page
     Then I should see "Credit card gateway"
 
-  Scenario: Save payment gateway changes
-    Given provider "foo.3scale.localhost" is charging
-    And provider "foo.3scale.localhost" has "finance" switch allowed
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I am logged in as provider "foo.3scale.localhost"
-    And I go to the finance settings page
-    And I fill in "Foo" with "whatever"
-    And I press "Save changes"
-    Then I should see "Payment gateway details were successfully saved."
-    And the "Foo" field should contain "whatever"
-
   @javascript
   Scenario: Use Stripe as payment gateway
     Given provider "foo.3scale.localhost" is charging
