@@ -254,7 +254,9 @@ commands: # reusable commands with parameters
       - run:
           name: Run cucumber tests
           command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            # saved test cases metadata can be read here:
+            # ${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json
+            TESTS=$(bundle exec ruby .circleci/features.rb | circleci tests split --split-by=timings)
             echo "bundle exec cucumber --profile ci ${TESTS}"
             bundle exec cucumber --profile ci ${TESTS}
       - *enable-internet-access
