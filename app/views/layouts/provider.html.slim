@@ -14,7 +14,7 @@ html[lang="en" class="pf-m-redhat-font"]
     = yield :javascripts
 
   body
-    = render partial: 'shared/provider/quick_starts_container'
+    = render partial: 'shared/provider/quick_starts_container' if provider_can_use?(:quick_starts)
     #wrapper.pf-c-page
       = render partial: '/shared/provider/header'
       = render partial: 'shared/provider/navigation/vertical_nav' unless vertical_nav_hidden?
