@@ -47,6 +47,11 @@ Then "the help menu should have the following items:" do |table|
   assert_same_elements table.raw.flatten, find_all('.PopNavigation--docs ul.PopNavigation-list li').map(&:text)
 end
 
+Then "the help menu {should} have an item {string}" do |visible, item|
+  options = find_all('.PopNavigation--docs ul.PopNavigation-list li', visible: :all).map { |li| li.text(:all) }
+  assert_equal visible, options.include?(item)
+end
+
 # TODO: replace this with with more generic step?!
 Then %r{^I should still be in the "(.+?)"$} do |menu_item|
   assert has_css?('li.pf-m-current a', :text => menu_item)
