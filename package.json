@@ -86,7 +86,7 @@
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "moment-timezone": "^0.5.5",
-    "node-sass": "^4.9.4",
+    "node-sass": "^7.0.0",
     "null-loader": "^3.0.0",
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
