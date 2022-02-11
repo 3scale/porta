@@ -6,8 +6,8 @@ Feature: Quick Starts
       Given I have rolling updates "quick_starts" enabled
       And a provider is logged in
 
-    Scenario: Quick starts is accessible
-      Then the help menu should have an item "Quick starts"
+    Scenario: Header help menu have the option
+      Then I should be able to go to the quick start catalog from the help menu
 
     Scenario: Quick Start catalog
       Given I go to the quick start catalog page
@@ -31,5 +31,10 @@ Feature: Quick Starts
       Given I have rolling updates "quick_starts" disabled
       And a provider is logged in
 
-    Scenario: Help menu dropdown
-      Then the help menu should not have an item "Quick starts"
+    Scenario: Header help menu does not have the option
+      Then I should not be able to go to the quick start catalog from the help menu
+
+    Scenario: Following a Quick Start does not show it
+      Given I am following a quick start
+      When I go anywhere else
+      Then I won't be able to see the quick start

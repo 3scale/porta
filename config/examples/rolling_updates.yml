@@ -19,7 +19,6 @@ base: &default
   quick_starts: false
 
 development:
-  quick_starts: true
   <<: *default
 
 test:

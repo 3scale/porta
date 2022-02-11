@@ -54,11 +54,6 @@ Then "the help menu should have the following items:" do |table|
   assert_same_elements table.raw.flatten, find_all('.PopNavigation--docs ul.PopNavigation-list li').map(&:text)
 end
 
-Then "the help menu {should} have an item {string}" do |visible, item|
-  options = find_all('.PopNavigation--docs ul.PopNavigation-list li', visible: :all).map { |li| li.text(:all) }
-  assert_equal visible, options.include?(item)
-end
-
 # TODO: replace this with with more generic step?!
 Then %r{^I should still be in the "(.+?)"$} do |menu_item|
   assert has_css?('li.pf-m-current a', :text => menu_item)
@@ -75,4 +70,12 @@ Given(/^provider "(.*?)" has xss protection options disabled$/) do |arg1|
   settings.cms_escape_draft_html = false
   settings.cms_escape_published_html = false
   settings.save
+end
+
+def help_menu_selector
+  'header .PopNavigation.PopNavigation--docs'
+end
+
+def open_help_menu
+  find(help_menu_selector, wait: false).click_link
 end
