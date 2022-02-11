@@ -101,6 +101,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-popup-blocking')
   options.add_argument('--window-size=1280,2048')
+  options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *.localhost')
 
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
   options.add_option(:w3c, false)
