@@ -29,7 +29,7 @@ Feature: Mass email bulk operations
     When I check select for "BobApp"
     And I press "Send email"
     And I fill in "Subject" with "There is no body to this email"
-    And I press "Send" No email is sent
+    And I press "Send"
     Then I should see "Selected Applications" and message please fill this field
     And "bob@me.us" shouldn't receive any email
 
@@ -40,7 +40,7 @@ Feature: Mass email bulk operations
     When I check select for "BobApp"
     And I press "Send email"
     And I fill in "Body" with "There is no Subject to this email"
-    And I press "Send" No email is sent
+    And I press "Send"
     Then I should see "Selected Applications" and message please fill this field
     And "bob@me.us" shouldn't receive any email
 
