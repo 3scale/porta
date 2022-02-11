@@ -4,19 +4,17 @@ Then "I should be able to start following a quick start from a gallery" do
   within '#quick-start-catalog-page-wrapper .pfext-quick-start-catalog__gallery' do
     quick_starts = find_all('.pfext-quick-start-catalog__gallery-item')
     assert_not quick_starts.empty?
-    expect(page).not_to have_selector(quick_start_panel)
+    assert_no_selector(quick_start_panel)
 
     quick_starts.first.click
   end
 
-  assert find(quick_start_panel)
+  assert_selector(quick_start_panel)
 end
 
 Given "I am following a quick start" do
-  # This depends on the actual quick starts stored in app/javascript/src/QuickStarts/templates
-  @quickstart_id = 'getting-started-with-quick-starts'
-  page.execute_script "window.localStorage.setItem('quickstartId', '\"#{@quickstart_id}\"')"
-  page.execute_script "window.localStorage.setItem('quickstarts', '{\"#{@quickstart_id}\":{\"status\":\"In Progress\",\"taskNumber\":0,\"taskStatus0\":\"Visited\",\"taskStatus1\":\"Initial\"}}')"
+  page.execute_script "window.localStorage.setItem('quickstartId', '\"#{test_quickstart_id}\"')"
+  page.execute_script "window.localStorage.setItem('quickstarts', '{\"#{test_quickstart_id}\":{\"status\":\"In Progress\",\"taskNumber\":0,\"taskStatus0\":\"Visited\",\"taskStatus1\":\"Initial\"}}')"
   Capybara.refresh
 end
 
@@ -25,8 +23,13 @@ When "I go anywhere else" do
 end
 
 Then "I will still be able to see the quick start" do
-  assert find('.pf-c-drawer.pf-m-expanded')
-  assert find(quick_start_panel)
+  assert_selector('.pf-c-drawer.pf-m-expanded')
+  assert_selector(quick_start_panel)
+end
+
+Then "I won't be able to see the quick start" do
+  assert_no_selector('.pf-c-drawer.pf-m-expanded')
+  assert_no_selector(quick_start_panel)
 end
 
 Then "I should be able to close it without losing any progress" do
@@ -38,7 +41,7 @@ Then "I should be able to close it without losing any progress" do
   end
 
   within '.pfext-quick-start-drawer__modal' do
-    assert find('header', text: 'Leave quick start?')
+    assert_selector('header', text: 'Leave quick start?')
     click_on 'Leave'
   end
 
@@ -47,20 +50,35 @@ Then "I should be able to close it without losing any progress" do
 end
 
 Given "I have finished a quick start" do
-  # This depends on the actual quick starts stored in app/javascript/src/QuickStarts/templates
-  @quickstart_id = 'getting-started-with-quick-starts'
   page.execute_script "window.localStorage.setItem('quickstartId', '\"\"')"
-  page.execute_script "window.localStorage.setItem('quickstarts', '{\"#{@quickstart_id}\":{\"status\":\"Complete\",\"taskNumber\":2,\"taskStatus0\":\"Review\",\"taskStatus1\":\"Review\"}}')"
+  page.execute_script "window.localStorage.setItem('quickstarts', '{\"#{test_quickstart_id}\":{\"status\":\"Complete\",\"taskNumber\":2,\"taskStatus0\":\"Review\",\"taskStatus1\":\"Review\"}}')"
   Capybara.refresh
 end
 
 Then "I should be able to restart its progress" do
   visit provider_admin_quick_starts_path
 
-  find("[data-test='tile #{@quickstart_id}']").click
+  find("[data-test='tile #{test_quickstart_id}']").click
 
-  find "[data-testid='qs-drawer-#{@quickstart_id.underscore.camelize(:lower)}']"
-  assert_equal 'Restart', find('[data-testid="qs-drawer-side-note-action"]').text
+  assert_selector "[data-testid='qs-drawer-#{test_quickstart_id.underscore.camelize(:lower)}']"
+  assert_selector('[data-testid="qs-drawer-side-note-action"]', text: 'Restart')
+end
+
+Then "I {should} be able to go to the quick start catalog from the help menu" do |available|
+  open_help_menu
+  within help_menu_selector do
+    if available
+      click_link('Quick starts', visible: true)
+      assert_equal provider_admin_quick_starts_path, current_path
+    else
+      has_no_link?('Quick starts', visible: :all)
+    end
+  end
+end
+
+def test_quickstart_id
+  # This depends on the actual quick starts stored in app/javascript/src/QuickStarts/templates
+  'getting-started-with-quick-starts'
 end
 
 def quick_start_panel
