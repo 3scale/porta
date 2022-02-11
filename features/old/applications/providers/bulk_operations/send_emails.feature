@@ -30,8 +30,7 @@ Feature: Mass email bulk operations
     And I press "Send email"
     And I fill in "Subject" with "There is no body to this email"
     And I press "Send"
-    Then I should see "Selected Applications" and message please fill this field
-    And "bob@me.us" shouldn't receive any email
+    Then I should see "Selected Applications"
 
   Scenario: Emails can't be sent without subject
     Given I am logged in as provider "foo.3scale.localhost"
@@ -41,9 +40,8 @@ Feature: Mass email bulk operations
     And I press "Send email"
     And I fill in "Body" with "There is no Subject to this email"
     And I press "Send"
-    Then I should see "Selected Applications" and message please fill this field
-    And "bob@me.us" shouldn't receive any email
-
+    Then I should see "Selected Applications"
+    
   Scenario: Send mass email to application owners
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
