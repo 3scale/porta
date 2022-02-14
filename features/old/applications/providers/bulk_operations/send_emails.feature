@@ -28,7 +28,7 @@ Feature: Mass email bulk operations
     And a clear email queue
     When I check select for "BobApp"
     And I press "Send email"
-    And I fill in "Subject" with "There is no body to this email"
+    And I fill in "Subject" with "Nothing to say"
     And I press "Send"
     Then I should see "Selected Applications"
 
