@@ -269,7 +269,6 @@ class Proxy < ApplicationRecord
   end
 
   def set_correct_endpoints?
-    # Verified
     will_save_change_to_apicast_configuration_driven? || new_record?
   end
 
