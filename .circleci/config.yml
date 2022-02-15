@@ -149,6 +149,7 @@ dnsmasq-container: &dnsmasq-container
     - --log-facility=-
     - --log-queries
     - --no-poll
+    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/127.0.0.11
     - --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
@@ -256,12 +257,12 @@ commands: # reusable commands with parameters
       - *attach-to-workspace
       - steps: << parameters.extra-deps >>
       - prepare-db-for-tests
+      - *disable-internet-access
       - run:
           name: Check internet access is disabled
           command: |
             echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
             bundle exec cucumber --profile ci .circleci/no_internet.feature
-      - *disable-internet-access
       - run:
           name: Run cucumber tests
           command: |
