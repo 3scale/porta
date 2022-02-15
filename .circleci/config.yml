@@ -139,9 +139,15 @@ memcached-container: &memcached-container
 redis-container: &redis-container
   image: redis:4.0-alpine
 
+# https://github.com/poseidon/dnsmasq
+# TODO: create our own image like https://www.redhat.com/en/blog/build-ubi-containers-github-actions-buildah-and-podman
 dnsmasq-container: &dnsmasq-container
-  image: quay.io/mikz/dnsmasq
+  image: quay.io/poseidon/dnsmasq
   command:
+    - --user=root
+    - --keep-in-foreground
+    - --log-facility=-
+    - --log-queries
     - --no-poll
     - --address=/#/127.0.0.1
 
