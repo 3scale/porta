@@ -16,7 +16,6 @@ base: &default
   proxy_private_base_path: true
   service_mesh_integration: false
   api_as_product: false
-  quick_starts: false
 
 development:
   <<: *default

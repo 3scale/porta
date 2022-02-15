@@ -1,10 +1,12 @@
 @javascript
 Feature: Quick Starts
 
-  Rule: Quick starts are enabled
+  Background:
+    And a provider is logged in
+
+  Rule: Feature is enabled
     Background:
-      Given I have rolling updates "quick_starts" enabled
-      And a provider is logged in
+      Given quickstarts is enabled
 
     Scenario: Header help menu have the option
       Then I should be able to go to the quick start catalog from the help menu
@@ -26,10 +28,9 @@ Feature: Quick Starts
       Given I have finished a quick start
       Then I should be able to restart its progress
 
-  Rule: Quick starts are disabled
+  Rule: Quickstarts disabled
     Background:
-      Given I have rolling updates "quick_starts" disabled
-      And a provider is logged in
+      Given quickstarts is disabled
 
     Scenario: Header help menu does not have the option
       Then I should not be able to go to the quick start catalog from the help menu

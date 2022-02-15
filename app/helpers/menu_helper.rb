@@ -105,6 +105,6 @@ module MenuHelper
   end
 
   def vertical_nav_hidden?(menu = active_menu)
-    %i[dashboard products backend_apis quick_starts].include?(menu)
+    %i[dashboard products backend_apis quickstarts].include?(menu)
   end
 end

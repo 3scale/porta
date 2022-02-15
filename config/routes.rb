@@ -201,7 +201,7 @@ without fake Core server your after commit callbacks will crash and you might ge
 
     # provider/admin
     namespace :admin do
-      resource :quick_starts, only: :show
+      resource :quickstarts, only: :show
       resources :applications do
         member do
           put :accept

@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
+Given "quickstarts is {enabled}" do |enabled|
+  Features::QuickstartsConfig.stubs(enabled?: enabled)
+end
+
 Then "I should be able to start following a quick start from a gallery" do
   within '#quick-start-catalog-page-wrapper .pfext-quick-start-catalog__gallery' do
-    quick_starts = find_all('.pfext-quick-start-catalog__gallery-item')
-    assert_not quick_starts.empty?
-    assert_no_selector(quick_start_panel)
+    quickstarts = find_all('.pfext-quick-start-catalog__gallery-item')
+    assert_not quickstarts.empty?
+    assert_no_selector(quickstarts_panel)
 
-    quick_starts.first.click
+    quickstarts.first.click
   end
 
-  assert_selector(quick_start_panel)
+  assert_selector(quickstarts_panel)
 end
 
 Given "I am following a quick start" do
@@ -24,19 +28,19 @@ end
 
 Then "I will still be able to see the quick start" do
   assert_selector('.pf-c-drawer.pf-m-expanded')
-  assert_selector(quick_start_panel)
+  assert_selector(quickstarts_panel)
 end
 
 Then "I won't be able to see the quick start" do
   assert_no_selector('.pf-c-drawer.pf-m-expanded')
-  assert_no_selector(quick_start_panel)
+  assert_no_selector(quickstarts_panel)
 end
 
 Then "I should be able to close it without losing any progress" do
   assert_not_empty JSON.parse(local_storage('quickstartId'))
   progress = local_storage('quickstarts')
 
-  within quick_start_panel do
+  within quickstarts_panel do
     find('[data-testid="qs-drawer-close"] button').click
   end
 
@@ -56,7 +60,7 @@ Given "I have finished a quick start" do
 end
 
 Then "I should be able to restart its progress" do
-  visit provider_admin_quick_starts_path
+  visit provider_admin_quickstarts_path
 
   find("[data-test='tile #{test_quickstart_id}']").click
 
@@ -69,7 +73,7 @@ Then "I {should} be able to go to the quick start catalog from the help menu" do
   within help_menu_selector do
     if available
       click_link('Quick starts', visible: true)
-      assert_equal provider_admin_quick_starts_path, current_path
+      assert_equal provider_admin_quickstarts_path, current_path
     else
       has_no_link?('Quick starts', visible: :all)
     end
@@ -81,6 +85,6 @@ def test_quickstart_id
   'getting-started-with-quick-starts'
 end
 
-def quick_start_panel
+def quickstarts_panel
   '.pf-c-drawer__panel[data-test="quickstart drawer"]'
 end

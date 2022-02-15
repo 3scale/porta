@@ -16,7 +16,6 @@ base: &default
   apicast_v2: true
   proxy_private_base_path: true
   api_as_product: false
-  quick_starts: false
 
 production:
   <<: *default

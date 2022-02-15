@@ -40,7 +40,7 @@ class MenuHelperTest < ActionView::TestCase
   end
 
   test '#vertical_nav_hidden?' do
-    %i[dashboard products backend_apis quick_starts].each do |menu|
+    %i[dashboard products backend_apis quickstarts].each do |menu|
       expects(:active_menu).returns(menu)
       assert vertical_nav_hidden?
     end

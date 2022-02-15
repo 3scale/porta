@@ -2,17 +2,16 @@
 
 require 'test_helper'
 
-class Provider::Admin::QuickStartsControllerTest < ActionController::TestCase
+class Provider::Admin::QuickstartsControllerTest < ActionController::TestCase
   def setup
     rolling_updates_on
     provider = FactoryBot.create(:provider_account)
     login_provider(provider)
   end
 
-  class RollingUpdateOnTest < self
-    def setup
-      super
-      rolling_update(:quick_starts, enabled: true)
+  class FeatureOnTest < self
+    setup do
+      Features::QuickstartsConfig.stubs(enabled?: true)
     end
 
     test '#show' do
@@ -21,10 +20,9 @@ class Provider::Admin::QuickStartsControllerTest < ActionController::TestCase
     end
   end
 
-  class RollingUpdateOffTest < self
-    def setup
-      super
-      rolling_update(:quick_starts, enabled: false)
+  class FeatureOffTest < self
+    setup do
+      Features::QuickstartsConfig.stubs(enabled?: false)
     end
 
     test 'raises not found' do

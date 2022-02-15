@@ -674,7 +674,7 @@ World(Module.new do
     # Quick starts
     #
     when /^the quick start catalog page$/
-      provider_admin_quick_starts_path
+      provider_admin_quickstarts_path
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

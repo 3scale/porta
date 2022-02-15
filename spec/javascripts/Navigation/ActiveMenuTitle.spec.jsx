@@ -27,7 +27,7 @@ it('should return the proper title depending on the current menu', () => {
   expect(getWrapper('serviceadmin', { name: 'Test' }).text()).toEqual('Products')
   expect(getWrapper('backend_api', { name: 'Test' }).text()).toEqual('Backends')
 
-  expect(getWrapper('quick_starts', { name: 'Test' }).text()).toEqual('--')
+  expect(getWrapper('quickstarts', { name: 'Test' }).text()).toEqual('--')
 })
 
 it('should not return a default title', () => {
