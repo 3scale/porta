@@ -106,7 +106,7 @@ class Proxy < ApplicationRecord
   after_save :publish_events
   before_destroy :publish_events
 
-  after_save :track_apicast_version_change, if: :apicast_configuration_driven_changed?
+  after_save :track_apicast_version_change, if: :saved_change_to_apicast_configuration_driven?
 
   alias_attribute :production_endpoint, :endpoint
   alias_attribute :staging_endpoint, :sandbox_endpoint
@@ -269,7 +269,8 @@ class Proxy < ApplicationRecord
   end
 
   def set_correct_endpoints?
-    apicast_configuration_driven_changed? || new_record?
+    # Verified
+    will_save_change_to_apicast_configuration_driven? || new_record?
   end
 
   def publish_events
