@@ -5,9 +5,9 @@
   } do |form| %>
   <%= form.inputs do %>
     <%= render 'buyers/accounts/bulk/selected_accounts', accounts: accounts %>
-    <%= form.input :to, :as => :string, :input_html => {:disabled => true, :value => "#{accounts.count} selected accounts"} %>
-    <%= form.input :subject, :as => :string %>
-    <%= form.input :body, :as => :text, :input_html => {:rows => 10} %>
+    <%= form.input :to, :as => :string, :input_html => { required: true , :disabled => true, :value => "#{accounts.count} selected accounts"} %>
+    <%= form.input :subject, :as => :string, input_html: { required: true } %>
+    <%= form.input :body, :as => :text, :input_html => { required: true , :rows => 10} %>
     <%= form.buttons do %>
       <%= form.commit_button 'Send', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <% end %>
