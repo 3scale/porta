@@ -79,6 +79,8 @@ class PaymentGatewaySetting < ApplicationRecord
   end
 
   def active_gateway_type
-    errors.add(:gateway_type, :invalid) if will_save_change_to_gateway_type? && PaymentGateway.find(gateway_type)&.deprecated?
+    if gateway_type_changed? && PaymentGateway.find(gateway_type)&.deprecated?
+      errors.add(:gateway_type, :invalid)
+    end
   end
 end
