@@ -36,7 +36,7 @@ class Admin::Api::WebHooksFailuresController < Admin::Api::BaseController
       render_error 'invalid time', status: :bad_request
     else
       failures.delete(params[:time])
-      respond_with(failures,  head :ok)
+      respond_with(failures, head: :ok)
     end
   end
 
