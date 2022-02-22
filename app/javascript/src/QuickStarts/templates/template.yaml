@@ -4,7 +4,7 @@ metadata:
   # you can add additional metadata here
   instructional: true
 spec:
-  displayName: Getting started with quick starts
+  displayName: Complete a basic API Integration
   durationMinutes: 10
   # Optional type section, will display as a tile on the card
   type: 
@@ -18,18 +18,12 @@ spec:
   # - If empty string (icon: ''), will use a default rocket icon
   # - If set to null (icon: ~) will not show an icon
   icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
-  prerequisites:
-    - You can optionally list prerequisites
-    - Another prerequisite
-    - These prerequisites are also displayed on the introduction step
   description: |-
-    This description appears on the card in the quick starts catalog.
+    Create the required objects to complete a basic integration with 3scale.
   introduction: |-
-    **This introduction is shown at the beginning of the quick start**
-    - It introduces the quick start and lists the tasks within it.
-    - You can view the [source for this quick start](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for additional help and information
+    This quick start guides you to create the required objects to complete a basic integration with 3scale as an API provider including 7 tasks. To learn more about API configuration, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#products-backends-for-threescale-apis_configuring-your-api).
   tasks:
-    - title: Task 1 title
+    - title: Create a new backend
       description: |-
         ## Text
 
@@ -80,7 +74,47 @@ spec:
       summary:
         success: Shows a success message in the task header
         failed: Shows a failed message in the task header
-    - title: Task 2 title
+    - title: Create a new product
+      description: |-
+        For more information, the folks at OpenShift wrote a nice guide here:
+        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+
+        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+
+        Happy writing!
+    - title: Specify the path to mount the backend to the product
+      description: |-
+        For more information, the folks at OpenShift wrote a nice guide here:
+        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+
+        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+
+        Happy writing!
+    - title: Create a new application plan
+      description: |-
+        For more information, the folks at OpenShift wrote a nice guide here:
+        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+
+        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+
+        Happy writing!
+    - title: Create a new application
+      description: |-
+        For more information, the folks at OpenShift wrote a nice guide here:
+        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+
+        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+
+        Happy writing!
+    - title: Promote configuration to staging
+      description: |-
+        For more information, the folks at OpenShift wrote a nice guide here:
+        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+
+        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+
+        Happy writing!
+    - title: Test example curl
       description: |-
         For more information, the folks at OpenShift wrote a nice guide here:
         [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
