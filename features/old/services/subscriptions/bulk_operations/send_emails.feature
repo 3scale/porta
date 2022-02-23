@@ -35,6 +35,10 @@ Feature: Mass email bulk operations
     And I fill in "Body" with ""
     And I press "Send"
     Then I should see "Selected Service Subscriptions"
+      And "jane@me.us" should not receive an email with the following subject:
+      """
+        Nothing to say
+      """
 
   Scenario: Emails can't be sent without subject
     Given provider "foo.3scale.localhost" has "service_plans" visible
@@ -46,6 +50,10 @@ Feature: Mass email bulk operations
     And I fill in "Body" with "Did I forget to add a subject?"
     And I press "Send"
     Then I should see "Selected Service Subscriptions"
+      And "jane@me.us" should not receive an email with the following body:
+      """
+        Did I forget to add a subject?
+      """
 
   Scenario: Send mass email to application owners
       And provider "foo.3scale.localhost" has "service_plans" visible
