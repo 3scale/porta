@@ -4,7 +4,7 @@ metadata:
   # you can add additional metadata here
   instructional: true
 spec:
-  displayName: Complete a basic API Integration
+  displayName: Complete a basic API integration
   durationMinutes: 10
   # Optional type section, will display as a tile on the card
   type: 
