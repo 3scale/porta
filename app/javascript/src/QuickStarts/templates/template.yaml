@@ -25,45 +25,19 @@ spec:
   tasks:
     - title: Create a new backend
       description: |-
-        ## Text
+        A backend is an internal API that is bundled to a product. In this quick start, you first create a backend and then a product.In practice, you can create either product or backend first.
 
-        1. The main body of the task. You can use markdown syntax here to create list items and more.
-
-          This is a paragraph.  
-          This is another paragraph. Add an empty line between paragraphs for line breaks or two spaces at the end.
-        1. For more information on markdown syntax you can visit [this resource](https://www.markdownguide.org/basic-syntax/).
-        1. A <small>limited set</small> of <strong>HTML tags</strong> [are also supported](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html#supported-tags-for-quick-starts_creating-quick-start-tutorials)
+        ### Note
+        Important fields:
+        - _System name_:  3scale needs this name to internally identify and refer to the backend.
+        - _Private Base URL_: It is the base URL endpoint of the private API.
         
-        ## Highlighting
+        ### Procedure
 
-        To enable highlighting, the markdown syntax should contain:
-        - Bracketed link text
-        - The highlight keyword, followed by the ID of the element that you want to animate
-        - The element to be highlighted, needs a `data-quickstart-id` attribute
-
-        **Example**
-        <pre>
-        [Quick starts nav item]{{highlight context-selector}}
-        </pre>
-        will highlight an element with the `data-quickstart-id="context-selector"` attribute
-        
-        ### Code snippets
-
-        The syntax for an inline code snippet contains:
-        - Text between back quotes, followed by `{{copy}}`
-
-        The following text demonstates an inline-copy element `https://github.com/sclorg/ruby-ex.git`{{copy}}
-
-        The syntax for multi-line code snippets:
-        - Text between triple back quotes, followed by `{{copy}}`
-
-        ```
-        oc new-app ruby~https://github.com/sclorg/ruby-ex.git
-        echo "Expose route using oc expose svc/ruby-ex"
-        oc expose svc/ruby-ex
-        ```{{copy}}  
-
-        - Clicking the _Next_ button will display the **Check your work** module.
+        1. Go to Backends page: click the context selector on the header and select <strong>Backends</strong>.
+        1. On the Backend page, click <strong>Create backend</strong>.
+        1. On the _New backend_ page, fill in the details to create the backend.
+        1. Click <strong>Create backend</strong>.        
 
       # optional - the task's Check your work module
       review:
