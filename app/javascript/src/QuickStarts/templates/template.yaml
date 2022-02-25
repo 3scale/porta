@@ -34,10 +34,10 @@ spec:
         
         ### Procedure
 
-        1. Go to Backends page: click the context selector on the header and select <strong>Backends</strong>.
-        1. On the Backend page, click <strong>Create backend</strong>.
+        1. Go to _Backends_ page: click the context selector on the header and select <strong>Backends</strong>.
+        1. On the _Backends_ page, click <strong>Create backend</strong>.
         1. On the _New backend_ page, fill in the details to create the backend.
-        1. Click <strong>Create backend</strong>.        
+        1. Click <strong>Create backend</strong>.
 
       # optional - the task's Check your work module
       review:
@@ -50,58 +50,152 @@ spec:
         failed: Shows a failed message in the task header
     - title: Create a new product
       description: |-
-        For more information, the folks at OpenShift wrote a nice guide here:
-        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+        An API product is a bundle of one or more API backends. For this quick start, first generate an API product and name it before bundling backends to this product.
 
-        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+        ### Note
+        Important fields:
+        - _System name_:  3scale needs this name to internally identify and refer to the backend.
+              - A product _system\_name_ is used to generate proxy endpoints and domain names. 
 
-        Happy writing!
-    - title: Specify the path to mount the backend to the product
-      description: |-
-        For more information, the folks at OpenShift wrote a nice guide here:
-        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
+        ### Procedure
 
-        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
+        1. Go to _Products_ page: click the context selector on the header and select <strong>Products</strong>.
+        1. On the _Products_ page, click <strong>Create product</strong>.
+        1. On the _New Product_ page, fill in the details to create the product.
+        1. Click <strong>Create product</strong>.
 
-        Happy writing!
-    - title: Create a new application plan
-      description: |-
-        For more information, the folks at OpenShift wrote a nice guide here:
-        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
-
-        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
-
-        Happy writing!
-    - title: Create a new application
-      description: |-
-        For more information, the folks at OpenShift wrote a nice guide here:
-        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
-
-        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
-
-        Happy writing!
-    - title: Promote configuration to staging
-      description: |-
-        For more information, the folks at OpenShift wrote a nice guide here:
-        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
-
-        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
-
-        Happy writing!
-    - title: Test example curl
-      description: |-
-        For more information, the folks at OpenShift wrote a nice guide here:
-        [Creating quick starts](https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html)
-
-        Also, don't forget to [check out the source](https://github.com/patternfly/patternfly-quickstarts/blob/main/packages/dev/src/quickstarts-data/yaml/template.yaml) for this quick start for more information!
-
-        Happy writing!
+      # optional - the task's Check your work module
       review:
         instructions: |-
-          - Thanks for checking out this quick start!
+          - Did you complete the task successfully?
         failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Specify the path to mount the backend to the product
+      description: |-
+        Add a backend to the product to facilitate API offerings.
+
+        ### Note
+        Important fields:
+        - _Path_: when you add a backend to a product, you define the path that the backend uses to communicate with the specified product. When defining the path for a backend:
+              - You can indicate / as the path of one of the backends.
+              - Paths must be unique inside the product.
+              - You can give the same backend the same path in different products.
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page, navigate to <strong>Integration > Backends</strong>.
+        1. Click <strong>Add backend</strong>.
+        1. On the _Add a backend_ page, fill in the details.
+        1. Click <strong>Add to product</strong>.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create a new application plan
+      description: |-
+        An application plan defines the rules such as limits, pricing, and features for using your API product.
+
+        ### Note
+        Important fields:
+        - _System name_: A system name must be unique in your 3scale installation.
+        - _Application plan approval_: select the check box to require applications getting approval before they can access your API.
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page.
+        1. Click <strong>Create application plan</strong>.
+        1. On the _New application plan_ page, fill in the details.
+        1. Click <strong>Create application plan</strong>.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create a new application
+      description: |-
+        Create applications that subscribe to an application plan.
+
+        ### Note
+        Important fields:
+        - Application plan: An application is always associated with an application plan.
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page: click the context selector on the header and select _Audience_.
+        1. On the _Publish application plans_ card, click the <strong>x live applications</strong> link.
+        1. On the Applications on your <strong>[Your\_product\_name]</strong> page, click <strong>Create application</strong>.
+        1. On the _New application page_, fill in the details.
+        1. Click <strong>Create application</strong>.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Promote configuration to staging
+      description: |-
+        Before you can send a test request to your API product, you must promote the APIcast configuration to staging and production. An APIcast configuration consists of the backends you have added to a product with the corresponding mapping rules, applications, and application plans.
+
+        ### Procedure
+
+        1. Go to <strong>[Your\_product\_name] > Integration > Configuration</strong> page.
+              - Click the context selector on the header and select _Product_.
+              - Click <strong>[Your\_product\_name]</strong> and go to the _Overview_ page.
+              - Click <strong>Integration > Configuration</strong>  on left navigation.
+        1. Under _APIcast Configuration_, click <strong>Promote v.[n] to Staging APIcast</strong>.
+        1. Under Staging APIcast, click <strong>Promote v.[n] to Production APIcast</strong>.
+
+        > <strong>Tip:</strong> Every time you modify the product configuration and before making calls to your API, you must promote the updated configuration to the staging and production environments.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Test example curl
+      description: |-
+        After promoting the API cast configuration, you can send a command line request to a product to test the integration of a backend based on the first mapping rule added to the product.
+
+        ### Procedure
+
+        - To test requests to your API product, copy the command provided in Example curl for testing and run it in a terminal. 
+        - The curl command example is based on the first mapping rule of the product. 
+        - After you run the command, you should get an HTML response containing results from the backend you are testing. 
+        - If you do not get a response, delete the catch-all mapping rule from your product, promote the new APIcast configuration to staging and then to production, and run the example curl command.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
   conclusion: |-
-    The conclusion appears in the last section of the quick start.
+    This concludes the set up of your basic API intergation with 3scale.
   # you can link to the next quick start(s) here
   nextQuickStart:
     - mas-alert-note-prereq
