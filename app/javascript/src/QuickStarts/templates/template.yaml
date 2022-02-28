@@ -8,7 +8,7 @@ spec:
   durationMinutes: 10
   # Optional type section, will display as a tile on the card
   type: 
-    text: Type
+    text: Quick start
     # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
     color: grey
   # - The icon defined as a base64 value. Example flow:
@@ -21,23 +21,22 @@ spec:
   description: |-
     Create the required objects to complete a basic integration with 3scale.
   introduction: |-
-    This quick start guides you to create the required objects to complete a basic integration with 3scale as an API provider including 7 tasks. To learn more about API configuration, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#products-backends-for-threescale-apis_configuring-your-api).
+    This quick start guides you to create the required objects to complete a basic integration with 3scale as an API provider including 7 tasks. 
+    
+    To learn more about API configuration, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#products-backends-for-threescale-apis_configuring-your-api).
   tasks:
     - title: Create a new backend
       description: |-
         A backend is an internal API that is bundled to a product. In this quick start, you first create a backend and then a product.In practice, you can create either product or backend first.
-
-        ### Note
-        Important fields:
-        - _System name_:  3scale needs this name to internally identify and refer to the backend.
-        - _Private Base URL_: It is the base URL endpoint of the private API.
         
         ### Procedure
 
         1. Go to _Backends_ page: click the context selector on the header and select <strong>Backends</strong>.
         1. On the _Backends_ page, click <strong>Create backend</strong>.
-        1. On the _New backend_ page, fill in the details to create the backend.
-        1. Click <strong>Create backend</strong>.
+        1. On the _New backend_ page, fill in the details to create the backend. Important fields:
+              - _System name_:  3scale needs this name to internally identify and refer to the backend.
+              - _Private Base URL_: It is the base URL endpoint of the private API.
+        1. Click <strong>Create backend</strong>
 
       # optional - the task's Check your work module
       review:
@@ -52,17 +51,14 @@ spec:
       description: |-
         An API product is a bundle of one or more API backends. For this quick start, first generate an API product and name it before bundling backends to this product.
 
-        ### Note
-        Important fields:
-        - _System name_:  3scale needs this name to internally identify and refer to the backend.
-              - A product _system\_name_ is used to generate proxy endpoints and domain names. 
-
         ### Procedure
 
         1. Go to _Products_ page: click the context selector on the header and select <strong>Products</strong>.
         1. On the _Products_ page, click <strong>Create product</strong>.
-        1. On the _New Product_ page, fill in the details to create the product.
-        1. Click <strong>Create product</strong>.
+        1. On the _New Product_ page, fill in the details to create the product. Important fields:
+              - _System name_:  3scale needs this name to internally identify and refer to the backend.
+                - A product _system\_name_ is used to generate proxy endpoints and domain names.
+        1. Click <strong>Create product</strong>
 
       # optional - the task's Check your work module
       review:
@@ -77,19 +73,16 @@ spec:
       description: |-
         Add a backend to the product to facilitate API offerings.
 
-        ### Note
-        Important fields:
-        - _Path_: when you add a backend to a product, you define the path that the backend uses to communicate with the specified product. When defining the path for a backend:
-              - You can indicate / as the path of one of the backends.
-              - Paths must be unique inside the product.
-              - You can give the same backend the same path in different products.
-
         ### Procedure
 
         1. On <strong>[Your\_product\_name]</strong> overview page, navigate to <strong>Integration > Backends</strong>.
         1. Click <strong>Add backend</strong>.
-        1. On the _Add a backend_ page, fill in the details.
-        1. Click <strong>Add to product</strong>.
+        1. On the _Add a backend_ page, fill in the details. Important fields:
+              - _Path_: when you add a backend to a product, you define the path that the backend uses to communicate with the specified product. When defining the path for a backend:
+                - You can indicate / as the path of one of the backends.
+                - Paths must be unique inside the product.
+                - You can give the same backend the same path in different products.
+        1. Click <strong>Add to product</strong>
 
       # optional - the task's Check your work module
       review:
@@ -104,17 +97,14 @@ spec:
       description: |-
         An application plan defines the rules such as limits, pricing, and features for using your API product.
 
-        ### Note
-        Important fields:
-        - _System name_: A system name must be unique in your 3scale installation.
-        - _Application plan approval_: select the check box to require applications getting approval before they can access your API.
-
         ### Procedure
 
         1. On <strong>[Your\_product\_name]</strong> overview page.
         1. Click <strong>Create application plan</strong>.
-        1. On the _New application plan_ page, fill in the details.
-        1. Click <strong>Create application plan</strong>.
+        1. On the _New application plan_ page, fill in the details. Important fields:
+              - _System name_: A system name must be unique in your 3scale installation.
+              - _Application plan approval_: select the check box to require applications getting approval before they can access your API.
+        1. Click <strong>Create application plan</strong>
 
       # optional - the task's Check your work module
       review:
@@ -129,17 +119,14 @@ spec:
       description: |-
         Create applications that subscribe to an application plan.
 
-        ### Note
-        Important fields:
-        - Application plan: An application is always associated with an application plan.
-
         ### Procedure
 
         1. On <strong>[Your\_product\_name]</strong> overview page: click the context selector on the header and select _Audience_.
         1. On the _Publish application plans_ card, click the <strong>x live applications</strong> link.
         1. On the Applications on your <strong>[Your\_product\_name]</strong> page, click <strong>Create application</strong>.
-        1. On the _New application page_, fill in the details.
-        1. Click <strong>Create application</strong>.
+        1. On the _New application page_, fill in the details. Important fields:
+              - Application plan: An application is always associated with an application plan.
+        1. Click <strong>Create application</strong>
 
       # optional - the task's Check your work module
       review:
@@ -180,15 +167,17 @@ spec:
 
         ### Procedure
 
-        - To test requests to your API product, copy the command provided in Example curl for testing and run it in a terminal. 
-        - The curl command example is based on the first mapping rule of the product. 
-        - After you run the command, you should get an HTML response containing results from the backend you are testing. 
+        - To test requests to your API product, copy the command provided in Example curl for testing and run it in a terminal.
+        - The curl command example is based on the first mapping rule of the product.
+        - After you run the command, you should get an HTML response containing results from the backend you are testing.
         - If you do not get a response, delete the catch-all mapping rule from your product, promote the new APIcast configuration to staging and then to production, and run the example curl command.
 
       # optional - the task's Check your work module
       review:
         instructions: |-
-          - Did you complete the task successfully?
+          - Did you create an application plan for your product?
+          - Did you create an application that subscribes to the application plan?
+          - Did you promote the APIcast configuration to staging and production?
         failedTaskHelp: This task isn’t verified yet. Try the task again.
       # optional - the task's success and failure messages
       summary:
