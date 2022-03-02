@@ -35,7 +35,7 @@ Feature: Mass email bulk operations
     And I fill in "Body" with ""
     And I press "Send"
     Then I should see "Selected Service Subscriptions"
-      And a clear email queue
+      And "jane@me.us" should receive no emails
 
   Scenario: Emails can't be sent without subject
     Given provider "foo.3scale.localhost" has "service_plans" visible
@@ -47,7 +47,7 @@ Feature: Mass email bulk operations
     And I fill in "Body" with "Did I forget to add a subject?"
     And I press "Send"
     Then I should see "Selected Service Subscriptions"
-      And a clear email queue
+      And "jane@me.us" should receive no emails
 
   Scenario: Send mass email to application owners
       And provider "foo.3scale.localhost" has "service_plans" visible
