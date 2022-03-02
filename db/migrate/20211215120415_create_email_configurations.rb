@@ -1,6 +1,5 @@
 class CreateEmailConfigurations < ActiveRecord::Migration[5.0]
-  def change
-
+  def up
     # Use case insensitive collation for emails although by spec local part is sensitive.
     # For practical purposes we don't want to support email with only case differences.
     # Oracle and Postgres don't have case insensitive collations, we will rely on app logic for it.
@@ -31,5 +30,19 @@ class CreateEmailConfigurations < ActiveRecord::Migration[5.0]
       t.bigint :tenant_id
       t.timestamps
     end
+
+    self.class.execute_trigger_action(:recreate)
+  end
+
+  def down
+    self.class.execute_trigger_action(:drop)
+    drop_table :email_configurations
+  end
+
+  def self.execute_trigger_action(action)
+    trigger = System::Database.triggers.detect { |trigger| trigger.name == "email_configurations_tenant_id" }
+
+    expressions = [trigger.public_send(action)].flatten
+    expressions.each(&ActiveRecord::Base.connection.method(:execute))
   end
 end
