@@ -1,6 +1,6 @@
 // @flow
 
-import template from './template.yaml'
+import template from './basicAPIintegraton.yaml'
 
 const resources = [
     template
