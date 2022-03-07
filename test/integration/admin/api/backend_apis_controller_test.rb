@@ -192,6 +192,7 @@ class Admin::Api::BackendApisControllerTest < ActionDispatch::IntegrationTest
     forbidden_params.each do |attribute_name, param_value|
       assert_not_equal param_value, backend_api.public_send(attribute_name)
     end
+    assert backend_api.tenant_id
   end
 
   def permitted_params
