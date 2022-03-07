@@ -21,6 +21,6 @@ class OIDC::ProxyChangedEvent < BaseEventStoreEvent
   def self.valid?(proxy)
     service = proxy.try(:service)
     return unless service
-    service.backend_version.oauth? || service.saved_changes&.include?('oauth')
+    service.backend_version.oauth? || service.saved_change_to_backend_version&.include?('oauth')
   end
 end
