@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-if System::Database.postgres?
-  ENV['SCHEMA'] = 'db/postgres_schema.rb'
+ActiveSupport.on_load(:active_record) do
+  if System::Database.postgres?
+    ENV['SCHEMA'] = 'db/postgres_schema.rb'
+  end
 end

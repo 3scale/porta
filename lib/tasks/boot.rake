@@ -32,4 +32,4 @@ end
 desc 'Tries to connect to external services like Backend, DB, Redis or crashes'
 task boot: 'boot:all'
 
-Rake::Task['db:seed'].enhance(['boot:database'])
+# Rake::Task['db:seed'].enhance(['boot:database'])

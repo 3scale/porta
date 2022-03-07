@@ -19,6 +19,12 @@ class LogEntryTest < ActiveSupport::TestCase
     assert_not_nil entry.buyer
   end
 
+  test "tenant_id trigger" do
+    assert @provider.tenant_id
+    entry = LogEntry.log :info, 'all your base are belong to us', @provider, @buyer
+    assert_equal @provider.id, entry.reload.tenant_id
+  end
+
   test 'filters by buyer shows buyer and globals' do
     @buyer2 = FactoryBot.create(:buyer_account, :provider_account => @provider)
     Account.stubs(:search_ids).returns([@buyer.id])
