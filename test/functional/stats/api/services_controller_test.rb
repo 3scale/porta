@@ -3,14 +3,12 @@
 require 'test_helper'
 
 class Stats::Api::ServicesControllerTest < ActionController::TestCase
-
-  should route(:get, '/stats/api/services/1/usage.json').to :service_id => '1', :action => 'usage', :format => 'json'
-  should route(:get, '/stats/api/services/1/usage.xml').to :service_id => '1', :action => 'usage', :format => 'xml'
-
-  should route(:get, '/stats/api/services/1/top_applications.json').to :service_id => '1', :action => 'top_applications', :format => 'json'
-  should route(:get, '/stats/api/services/1/top_applications.xml').to :service_id => '1', :action => 'top_applications', :format => 'xml'
-
-
+  test 'routes' do
+    assert_routing({ action: :get, path: '/stats/api/services/1/usage.json' },            { service_id: '1', controller: 'stats/api/services', action: 'usage', format: 'json' })
+    assert_routing({ action: :get, path: '/stats/api/services/1/usage.xml' },             { service_id: '1', controller: 'stats/api/services', action: 'usage', format: 'xml' })
+    assert_routing({ action: :get, path: '/stats/api/services/1/top_applications.json' }, { service_id: '1', controller: 'stats/api/services', action: 'top_applications', format: 'json' })
+    assert_routing({ action: :get, path: '/stats/api/services/1/top_applications.xml' },  { service_id: '1', controller: 'stats/api/services', action: 'top_applications', format: 'xml' })
+  end
 
   test 'csv format for errors' do
     setup_data
@@ -19,7 +17,6 @@ class Stats::Api::ServicesControllerTest < ActionController::TestCase
     assert_match %r{text/plain}, response.header['Content-Type']
     assert_equal 400, response.status
   end
-
 
   private
 
@@ -32,5 +29,4 @@ class Stats::Api::ServicesControllerTest < ActionController::TestCase
     @request.host = @provider.admin_domain
     login_provider @provider
   end
-
 end
