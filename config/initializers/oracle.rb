@@ -178,6 +178,6 @@ ActiveSupport.on_load(:active_record) do
         self.all_schema_indexes = nil
       end
     end
-  end
 
+  end
 end

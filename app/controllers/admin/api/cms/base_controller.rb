@@ -16,3 +16,9 @@ class Admin::Api::CMS::BaseController < Admin::Api::BaseController
     end
   end
 end
+
+## Defining common parameters
+
+##~ @parameter_access_token = { :name => "access_token", :description => "Your access token", :dataType => "string", :required => true, :paramType => "query", :allowMultiple => false}
+##~ @parameter_page = {:name => "page", :description => "Current page of the list", :dataType => "int", :paramType => "query", :default => 1}
+##~ @parameter_per_page = {:name => "per_page", :description => "Total number of records per one page (maximum 100)", :dataType => "int", :paramType => "query", :default => 20}

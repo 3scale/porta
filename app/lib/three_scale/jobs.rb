@@ -130,7 +130,5 @@ module ThreeScale
     HOUR = Task.map([
                       [Rails, :env]
                     ]).freeze # just a fake job to ensure cron works
-
-    SPHINX_INDEX_ALL = [RakeTask.new('sphinx:enqueue')].freeze
   end
 end

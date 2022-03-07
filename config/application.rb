@@ -1,8 +1,13 @@
-# frozen_string_literal: true
-
 require_relative 'boot'
 
 require 'rails/all'
+
+ActiveSupport.on_load(:active_record) do
+  unless $last_initializer_loaded
+    warning = "WARNING: ActiveRecord loading before initializers completed. Configuration set in initializers may not be effective:#{caller.map { |l| "\n  #{l}"}.join}"
+    STDERR.puts warning rescue nil # avoid failing if write fails
+  end
+end
 
 # If you precompile assets before deploying to production, use this line
 Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
@@ -12,16 +17,6 @@ Bundler.require(*Rails.groups(:assets => %w[development production preview test]
 ActiveSupport::XmlMini.backend = 'Nokogiri'
 
 module System
-
-  def self.rails4?
-    raise 'does not accept block' if block_given?
-
-    Rails::VERSION::MAJOR == 4
-  end
-
-  def self.rails4
-    block_given? ? (rails4? && yield) : rails4?
-  end
 
   module AssociationExtension
     def self.included(base)
@@ -34,6 +29,15 @@ module System
   mattr_accessor :redis
 
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    # we do here instead of using initializers because of a Rails 5.1 vs
+    # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
+    # before initializers and causes configuration not to be respected.
+    # This is fixed in Rails 5.2
+    config.load_defaults 5.1
+    config.active_record.belongs_to_required_by_default = false
+    config.active_record.include_root_in_json = true
+
     # The old config_for gem returns HashWithIndifferentAccess
     # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16
     def config_for(*args)
@@ -273,11 +277,6 @@ module System
       require 'system/redis_pool'
       redis_config = ThreeScale::RedisConfig.new(config.redis)
       System.redis = System::RedisPool.new(redis_config.config)
-
-      # Prevents concurrent threads (e.g. sidekiq, puma) to deadlock while racing to obtain access to the mutex block at https://github.com/pat/thinking-sphinx/blob/v3.4.2/lib/thinking_sphinx/configuration.rb#L78
-      # This is a ThinkingSphinx's known bug, fixed in v4.3.0+ - see: https://github.com/pat/thinking-sphinx/commit/814beb0aa3d9dd1227c0f41d630888a738f7c0d6
-      # See also https://github.com/pat/thinking-sphinx/issues/1051 and https://github.com/pat/thinking-sphinx/issues/1132
-      ThinkingSphinx::Configuration.instance.preload_indices if ActiveRecord::Base.connected?
     end
 
     config.assets.quiet = true
