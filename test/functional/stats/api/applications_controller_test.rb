@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Stats::Api::ApplicationsControllerTest < ActionController::TestCase
   test 'routes' do
-    assert_routing({ action: :get, path: '/stats/api/applications/42/usage.json' },
+    assert_routing({ method: :get, path: '/stats/api/applications/42/usage.json' },
                    { application_id: '42', action: 'usage', format: 'json', controller: 'stats/api/applications' })
   end
 

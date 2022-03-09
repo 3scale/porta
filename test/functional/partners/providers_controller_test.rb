@@ -23,7 +23,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'routes' do
-    assert_routing({ action: 'post', path: "http://#{master_account.domain}/partners/providers" }, { action: 'index', format: 'json', controller: 'partners/providers' })
+    assert_routing({ method: 'post', path: "http://#{master_account.domain}/partners/providers" }, { action: 'create', format: 'json', controller: 'partners/providers' })
   end
 
   test 'required api_key' do

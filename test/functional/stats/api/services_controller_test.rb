@@ -4,10 +4,10 @@ require 'test_helper'
 
 class Stats::Api::ServicesControllerTest < ActionController::TestCase
   test 'routes' do
-    assert_routing({ action: :get, path: '/stats/api/services/1/usage.json' },            { service_id: '1', controller: 'stats/api/services', action: 'usage', format: 'json' })
-    assert_routing({ action: :get, path: '/stats/api/services/1/usage.xml' },             { service_id: '1', controller: 'stats/api/services', action: 'usage', format: 'xml' })
-    assert_routing({ action: :get, path: '/stats/api/services/1/top_applications.json' }, { service_id: '1', controller: 'stats/api/services', action: 'top_applications', format: 'json' })
-    assert_routing({ action: :get, path: '/stats/api/services/1/top_applications.xml' },  { service_id: '1', controller: 'stats/api/services', action: 'top_applications', format: 'xml' })
+    assert_routing({ method: :get, path: '/stats/api/services/1/usage.json' },            { service_id: '1', controller: 'stats/api/services', action: 'usage', format: 'json' })
+    assert_routing({ method: :get, path: '/stats/api/services/1/usage.xml' },             { service_id: '1', controller: 'stats/api/services', action: 'usage', format: 'xml' })
+    assert_routing({ method: :get, path: '/stats/api/services/1/top_applications.json' }, { service_id: '1', controller: 'stats/api/services', action: 'top_applications', format: 'json' })
+    assert_routing({ method: :get, path: '/stats/api/services/1/top_applications.xml' },  { service_id: '1', controller: 'stats/api/services', action: 'top_applications', format: 'xml' })
   end
 
   test 'csv format for errors' do
