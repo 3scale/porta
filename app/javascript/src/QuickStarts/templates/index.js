@@ -1,9 +1,11 @@
 // @flow
 
-import template from './basicAPIintegration.yaml'
+import basicAPIintegration from './basicAPIintegration.yaml'
+import createBackend from './createBackend.yaml'
 
 const resources = [
-    template
+    basicAPIintegration,
+    createBackend
 ]
 
 export default resources

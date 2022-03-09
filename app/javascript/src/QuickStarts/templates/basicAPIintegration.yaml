@@ -5,7 +5,7 @@ metadata:
   instructional: true
 spec:
   displayName: Complete a basic API integration
-  durationMinutes: 10
+  durationMinutes: 20
   # Optional type section, will display as a tile on the card
   type: 
     text: Quick start
