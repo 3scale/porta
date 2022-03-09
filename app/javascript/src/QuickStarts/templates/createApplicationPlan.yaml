@@ -1,0 +1,59 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: getting-started-with-quick-starts
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Create an application plan
+  durationMinutes: 5
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Create rules to use your API product.
+  introduction: |-
+    This quick start guides you to create rules to use your API product.
+    
+    To learn more about application plans, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#creating-threescale-application-plans-for-products_configuring-your-api).
+  tasks:
+    - title: Create an application plan
+      description: |-
+        Application plans define the different sets of access rights you might want to allow for consumers of your API. These can determine anything from rate limits, which methods or resources are accessible and which features are enabled.
+
+        ### Prerequiaites
+        - A product. To create one, see Create new products. 
+        
+        ### Procedure
+        1. You have two ways to start the creating process:
+            - Go to _[Your\_product\_name]_ overview page: Click <strong>Create application plan</strong>.
+            - Navigate to <strong>[Your\_product\_name] > Applications > Application Plans</strong>: Click <strong>Create application plan</strong>.
+        1. On the _New application plan_ page, fill in the details.
+        
+          Important fields:
+            - _System name_:  A system name must be unique in your 3scale installation.
+            - _Applications require approval?_: Select the check box to require applications getting approval before they can access your API.
+        1. Click <strong>Create application plan</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you set a unique system name for your application plan?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+    This concludes the set up of application plan.
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - mas-alert-note-prereq
