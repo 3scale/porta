@@ -32,11 +32,11 @@ spec:
         ### Procedure
         1. You have two ways to start the creating process:
             - Go to the _Dashboard_: Under the APIs section, click <strong>Create product</strong> in the _Products_ card.
-            - Click the context selector on the header and select _Products_:  On the _Products_ page, click <strong>Create product</strong>.
+            - Click the context selector on the header and select _Products_: On the _Products_ page, click <strong>Create product</strong>.
         1. On the _New product_ page, fill in the details to create the product.
         
           Important fields:
-            - _System name_:  3scale needs this name to internally identify and refer to the product.
+            - _System name_: 3scale needs this name to internally identify and refer to the product.
             - A product system_name is used to generate proxy endpoints and domain names.
         1. Click <strong>Create product</strong>
 

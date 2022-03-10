@@ -39,7 +39,7 @@ spec:
         1. On the _New application plan_ page, fill in the details.
         
           Important fields:
-            - _System name_:  A system name must be unique in your 3scale installation.
+            - _System name_: A system name must be unique in your 3scale installation.
             - _Applications require approval?_: Select the check box to require applications getting approval before they can access your API.
         1. Click <strong>Create application plan</strong>
 

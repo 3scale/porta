@@ -37,7 +37,7 @@ spec:
         1. On the _New application_ page, fill in the details.
 
           Important fields:
-            - _Application plan_:  An application is always associated with an application plan. If there is no existing application plan, click <strong>Create a new application plan</strong>.
+            - _Application plan_: An application is always associated with an application plan. If there is no existing application plan, click <strong>Create a new application plan</strong>.
         1. Click <strong>Create application</strong>
 
       # optional - the task's Check your work module

@@ -36,7 +36,7 @@ spec:
         1. On the _New backend_ page, fill in the details to create the backend.
         
           Important fields:
-            - _System name_:  3scale needs this name to internally identify and refer to the backend.
+            - _System name_: 3scale needs this name to internally identify and refer to the backend.
             - _Private base URL_: It is the base URL endpoint of the private API.
         1. Click <strong>Create backend</strong>
 

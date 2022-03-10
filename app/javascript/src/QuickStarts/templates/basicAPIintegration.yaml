@@ -156,7 +156,7 @@ spec:
         1. Go to <strong>[Your\_product\_name] > Integration > Configuration</strong> page.
               - Click the context selector on the header and select _Product_.
               - Click <strong>[Your\_product\_name]</strong> and go to the _Overview_ page.
-              - Click <strong>Integration > Configuration</strong>  on left navigation.
+              - Click <strong>Integration > Configuration</strong> on left navigation.
         1. Under _APIcast Configuration_, click <strong>Promote v.[n] to Staging APIcast</strong>.
         1. Under Staging APIcast, click <strong>Promote v.[n] to Production APIcast</strong>.
 
