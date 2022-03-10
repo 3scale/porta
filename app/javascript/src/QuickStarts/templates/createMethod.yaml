@@ -40,7 +40,7 @@ spec:
         ### Procedure
 
         1. Navigate to <strong>[Your\_backend\_name] > Methods and Metrics</strong>.
-        1. Click <strong>Add new method</strong>.
+        1. Click <strong>New method</strong>.
         1. On the _New method_ page, fill in the details to create the method.
         
           Important fields:
@@ -95,7 +95,7 @@ spec:
         success: Shows a success message in the task header
         failed: Shows a failed message in the task header
   conclusion: |-
-    This concludes the set up of your basic API intergation with 3scale.
+    This concludes the set up for adding methods to a backend and a product.
   # you can link to the next quick start(s) here
   nextQuickStart:
     - mas-alert-note-prereq

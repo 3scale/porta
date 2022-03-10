@@ -1,0 +1,106 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: getting-started-with-quick-starts
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Create a metric
+  durationMinutes: 10
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Track usage of products and backends.
+  introduction: |-
+    This quick start guides you through how to control access to your API by defining metrics to track the usage of your API.
+    
+    To learn more about API metrics, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.10/html-single/admin_portal_guide/index#designating-methods-and-adding-metrics-for-capturing-usage-details_methods-and-metrics-for-products-and-backends).
+
+    _Hits_ is the built-in metric that exists for each API. It tracks the number of calls made to your API. To capture usage of your API apart from _Hits_, define a metric that reports the usage in different units. A unit should be quantifiable and apply a meaning for your business goals such as megabytes (MB), CPU time, or the number of elements returned by the API. Metrics other than _Hits_, such as CPU time or MB are not provided by default. Obtain these metrics by using an endpoint called by an external service configured by the user.
+
+    You can define metrics for products and backends.
+  tasks:
+    - title: Add metrics to backend
+      description: |-
+        Adding a metric specifies a usage unit that you want to capture for all calls to your API. An application plan provides the ability to set a limit for each metric that you add to a product or backend.
+
+        ### Prerequisites
+
+        - A backend. To create one, see Creating a backend.
+        
+        ### Procedure
+
+        1. Navigate to <strong>[Your\_backend\_name] > Methods and Metrics</strong>.
+        1. Click <strong>New metric</strong>.
+        1. On the _New metric_ page, fill in the details to create the metric.
+        
+          Important fields:
+              - _Friendly name_: A short description of the metric. This name is displayed in different sections of the 3scale Admin Portal.
+              - _System name_: The name of the metric in your API to use to report the usage through the 3scale Service Management API. The system name must be unique.
+              
+              > <strong>Tip:</strong> Be careful with changing the system name of the metrics or deleting them. These changes can break your already deployed 3scale integration if there are mapping rules pointing to the previous system name of the metric.
+              
+              - _Unit_: Use a singular noun, for example, _hit_. The singular will become plural in the analytics charts.
+        1. Click <strong>Create metric</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you create a unique system name for the metric?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Add metrics to product
+      description: |-
+        The procedure for adding a metric to a product is similar to adding a metric to a backend.
+
+        ### Prerequisites
+
+        - A Product. To create one, see Creating a product.
+        - An application plan. To create one, see Create an application plan.
+
+        The procedure for adding a method or metric to a product is similar to adding a method or metric to a backend. 
+
+        ### Procedure
+
+        1. Navigate to <strong>[Your\_product\_name] > Integration > Methods and Metrics</strong>.
+        1. Click <strong>Add a metric</strong>.
+        1. On the _New metric_ page, fill in the details to create the metric.
+        
+          Important fields:
+              - _Friendly name_: A short description of the metric. This name is displayed in different sections of the 3scale Admin Portal.
+              - _System name_: The name of the metric in your API to use to report the usage through the 3scale Service Management API. The system name must be unique.
+              - _Unit_: Use a singular noun, for example, _hit_. The singular will become plural in the analytics charts.
+        1. Click <strong>Create metric</strong>
+
+        ### Next step:
+        1. Verify whether the added metric is available in your application plans.
+        1. Edit limits and pricing rules for each method by going to <strong>[Your\_product\_name] > Applications > Application Plans > [plan_you_want_to_edit]</strong>.
+        1. Map your metrics to one or more URL patterns by going to <strong>[Your\_product\_name] > Integration > Mapping Rules</strong>. See Adding mapping rules to methods and metrics.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          Did you create a unique system name for the metric?
+          Did you verify the added metric is available in your application plans?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+    This concludes the set up for adding metrics to a backend and a product.
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - mas-alert-note-prereq

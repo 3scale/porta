@@ -50,7 +50,7 @@ spec:
         success: Shows a success message in the task header
         failed: Shows a failed message in the task header
   conclusion: |-
-    This concludes the set up of your backend for 3scale.
+    This concludes the creation of an application to subscribe to an application plan.
   # you can link to the next quick start(s) here
   nextQuickStart:
     - mas-alert-note-prereq

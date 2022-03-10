@@ -53,7 +53,7 @@ spec:
         success: Shows a success message in the task header
         failed: Shows a failed message in the task header
   conclusion: |-
-    This concludes the set up of application plan.
+    This concludes the set up of an application plan.
   # you can link to the next quick start(s) here
   nextQuickStart:
     - mas-alert-note-prereq
