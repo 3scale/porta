@@ -4,6 +4,6 @@ module PreviouslyChanged
   extend ActiveSupport::Concern
 
   def previously_changed?(attribute)
-    saved_change_to_attribute?(attribute)
+    Array(previous_changes[attribute.to_s]).any?
   end
 end
