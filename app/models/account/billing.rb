@@ -33,7 +33,7 @@ module Account::Billing
   protected
 
   def update_invoices_vat_rates
-    if previously_changed?(:vat_rate) || changes.key?(:vat_rate)
+    if saved_change_to_attribute?(:vat_rate) || will_save_change_to_attribute?(:vat_rate)
       self.invoices.not_frozen.reorder('').update_all(:vat_rate => self.vat_rate)
     end
   end
