@@ -25,7 +25,7 @@ Feature: Mass email bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given I am logged in as provider "foo.3scale.localhost"
 
-  Scenario: Emails can be sent without body
+  Scenario: Emails can't be sent without body
     Given provider "foo.3scale.localhost" has "service_plans" visible
     And I am on the service contracts admin page
     And a clear email queue
@@ -33,13 +33,11 @@ Feature: Mass email bulk operations
     And I press "Send email"
     And I fill in "Subject" with "Nothing to say"
     And I fill in "Body" with ""
-    And I press "Send" and I confirm dialog box within colorbox
-    Then I should see "Action completed successfully"
-    And "jane@me.us" should receive an email with the following body:
-    """
-    """
+    And I press "Send"
+    Then I should see "Selected Service Subscriptions"
+      And "jane@me.us" should receive no emails
 
-  Scenario: Emails can be sent without subject
+  Scenario: Emails can't be sent without subject
     Given provider "foo.3scale.localhost" has "service_plans" visible
     And I am on the service contracts admin page
     And a clear email queue
@@ -47,12 +45,9 @@ Feature: Mass email bulk operations
     And I press "Send email"
     And I fill in "Subject" with ""
     And I fill in "Body" with "Did I forget to add a subject?"
-    And I press "Send" and I confirm dialog box within colorbox
-    Then I should see "Action completed successfully"
-    And "jane@me.us" should receive an email with the following body:
-    """
-    Did I forget to add a subject?
-    """
+    And I press "Send"
+    Then I should see "Selected Service Subscriptions"
+      And "jane@me.us" should receive no emails
 
   Scenario: Send mass email to application owners
       And provider "foo.3scale.localhost" has "service_plans" visible
