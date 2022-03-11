@@ -18,4 +18,4 @@ max_header_tokens=1
 module.name_mapper='.*\(.s?css\)' -> 'empty/object'
 module.name_mapper='.*\(.ya?ml\)' -> 'empty/object'
 module.system=haste
-module.name_mapper='^\(ActiveDocs\|Applications\|BackendApis\|ChangePassword\|Common\|Settings\|Dashboard\|Logic\|LoginPage\|Metrics\|MappingRules\|Navigation\|NewApplication\|Onboarding\|PaymentGateways\|Plans\|Policies\|Products\|QuickStarts\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'
+module.name_mapper='^\(ActiveDocs\|Applications\|BackendApis\|ChangePassword\|Common\|EmailConfigurations\|Settings\|Dashboard\|Logic\|LoginPage\|Metrics\|MappingRules\|Navigation\|NewApplication\|Onboarding\|PaymentGateways\|Plans\|Policies\|Products\|QuickStarts\|services\|Stats\|Types\|Users\|utilities\|NewService\)\(.*\)$' -> '<PROJECT_ROOT>/app/javascript/src/\1/\2'

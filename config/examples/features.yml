@@ -18,6 +18,8 @@ features: &default
     audits_to_stdout: true
   quickstarts:
     enabled: false
+  email_configuration:
+    enabled: false
 
 development:
   <<: *default

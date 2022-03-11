@@ -44,48 +44,8 @@ module System
       ActiveRecord::Base.connection.execute("#{command} #{name}(#{params.join(',')})")
     end
 
-    # Just adding another connection to the pool so we do not mess up with the primary connection
-    # And just forget about it after
-    class ConnectionProbe < ActiveRecord::Base
-      extend System::Database
-      self.table_name = 'accounts'
-
-      class << self
-        def connection_config
-          spec = configuration_specification.config.dup
-          if oracle?
-            spec[:password] = ENV.fetch('ORACLE_SYSTEM_PASSWORD') {|key| raise KeyError, "Environment #{key} is mandatory"}
-            spec[:username] = 'SYSTEM'
-          end
-          spec
-        end
-
-        def ready?
-          pool = establish_connection connection_config
-          result = nil
-          pool.with_connection do |connection|
-            result = connection.select_value(sql_for_readiness).tap { pool.disconnect! }
-          end
-          result.to_s == '1'
-        end
-
-        def sql_for_readiness
-          if oracle?
-            <<~SQL
-              SELECT 1 FROM v$database WHERE cdb = 'NO' AND open_mode = 'READ WRITE'
-              UNION ALL
-              SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'
-            SQL
-          elsif mysql?
-            'SELECT 1'
-          else
-            'SELECT 1'
-          end
-        end
-      end
-    end
-
     def ready?
+      require_relative 'connection_probe'
       config = ConnectionProbe.connection_config
       connection_string = "#{config.fetch(:adapter)}://#{config.fetch(:username)}@#{config.fetch(:host) { 'localhost' }}/#{config.fetch(:database)}"
       if ConnectionProbe.ready?
@@ -204,6 +164,7 @@ ActiveRecord::ConnectionAdapters::ConnectionPool.prepend(Module.new do
   end
 end)
 
+ActiveSupport.on_load(:active_record) do
 if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
     prepend(Module.new do
@@ -221,4 +182,5 @@ if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::Oracle
       end
     end)
   end
+end
 end

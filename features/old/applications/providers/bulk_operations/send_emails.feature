@@ -22,33 +22,26 @@ Feature: Mass email bulk operations
     Given current domain is the admin domain of provider "foo.3scale.localhost"
       And I don't care about application keys
 
-  Scenario: Emails can be sent without body
+  Scenario: Emails can't be sent without body
     Given I am logged in as provider "foo.3scale.localhost"
     And I am on the applications admin page
     And a clear email queue
     When I check select for "BobApp"
     And I press "Send email"
     And I fill in "Subject" with "Nothing to say"
-    And I press "Send" and I confirm dialog box within colorbox
-    Then I should see "Action completed successfully"
-    And "bob@me.us" should receive an email with the following body:
-    """
-    """
+    And I press "Send"
+    Then I should see "Selected Applications"
 
-  Scenario: Emails can be sent without subject
+  Scenario: Emails can't be sent without subject
     Given I am logged in as provider "foo.3scale.localhost"
     And I am on the applications admin page
     And a clear email queue
     When I check select for "BobApp"
     And I press "Send email"
-    And I fill in "Body" with "Did I forget to add a subject?"
-    And I press "Send" and I confirm dialog box within colorbox
-    Then I should see "Action completed successfully"
-    And "bob@me.us" should receive an email with the following body:
-    """
-    Did I forget to add a subject?
-    """
-
+    And I fill in "Body" with "There is no Subject to this email"
+    And I press "Send"
+    Then I should see "Selected Applications"
+    
   Scenario: Send mass email to application owners
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the applications admin page
@@ -69,3 +62,15 @@ Feature: Mass email bulk operations
       """
       I just wanted to say hello!
       """
+
+  Scenario: Error template shows correctly
+    Given I am logged in as provider "foo.3scale.localhost"
+    And I am on the applications admin page
+    And a clear email queue
+    When I check select for "JaneApp"
+    And I press "Send email"
+    And I fill in "Subject" with "Error"
+    And I fill in "Body" with "This will fail"
+    Given the email will fail when sent
+    And I press "Send" and I confirm dialog box within colorbox
+    Then I should see the bulk action failed with account "jane"

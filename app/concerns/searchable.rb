@@ -6,8 +6,7 @@ module Searchable
   included do
     include ThreeScale::Search::Scopes
 
-    after_save :index_object
-    after_destroy :index_object
+    after_commit :index_object
 
     self.allowed_search_scopes = %i[query]
 
@@ -19,7 +18,7 @@ module Searchable
     private
 
     def index_object
-      SphinxIndexationWorker.perform_later(self)
+      SphinxIndexationWorker.perform_later(self.class, id)
     end
   end
 end
