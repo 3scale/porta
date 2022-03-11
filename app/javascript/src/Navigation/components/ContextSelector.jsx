@@ -39,7 +39,7 @@ const ContextSelector = ({ activeMenu, audienceLink, settingsLink, productsLink,
   }
 
   return (
-    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} ref={ref}>
+    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} ref={ref} data-quickstart-id="context-selector">
       <a className="pf-c-context-selector__toggle " title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
         <ActiveMenuTitle activeMenu={activeMenu} />
       </a>

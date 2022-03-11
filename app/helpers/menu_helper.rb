@@ -103,4 +103,8 @@ module MenuHelper
   def current_api
     @backend_api || @service
   end
+
+  def vertical_nav_hidden?(menu = active_menu)
+    %i[dashboard products backend_apis quickstarts].include?(menu)
+  end
 end

@@ -31,4 +31,9 @@ environment.loaders.append('style', {
   ]
 })
 
+environment.loaders.append(
+  'yaml',
+  { test: /\.ya?ml$/, use: 'yaml-loader', type: 'json' }
+)
+
 module.exports = environment

@@ -61,11 +61,13 @@
     "typescript": "^3.5.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "yaml-loader": "^0.6.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.5",
     "@patternfly/patternfly": "2.40.6",
+    "@patternfly/quickstarts": "^1.4.1-rc.1",
     "@patternfly/react-core": "^3.120.5",
     "@patternfly/react-icons": "^3.14.18",
     "@patternfly/react-styles": "^4.8.2",
