@@ -8,10 +8,6 @@ Given /^a service "([^"]*)"$/ do |name|
   @provider.services.create!(name: name, mandatory_app_key: false)
 end
 
-Given "{service} becomes inaccessible" do |service|
-  service.update!(state: 'deleted')
-end
-
 Given "(a )default service of {provider} has name {string}" do |provider, name|
   provider.first_service!.update_attribute(:name, name)
 end
