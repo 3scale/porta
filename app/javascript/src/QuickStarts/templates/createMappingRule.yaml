@@ -1,0 +1,126 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: getting-started-with-quick-starts
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Create a mapping rule
+  durationMinutes: 10
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Associate a call to an endpoint with the created methods and metrics.
+  introduction: |-
+    This quick start guides you through how to associate a call to an endpoint with the created methods and metrics.
+    
+    To learn more about mapping rules, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.10/html-single/admin_portal_guide/index#adding-mapping-rules-to-methods-and-metrics_methods-and-metrics-for-products-and-backends).
+
+    A mapping rule associates a call to an endpoint with designated methods and metrics for tracking and limiting access to your API. Based on the requests to your API, mapping rules define the metrics or designate the methods for which you want to capture API usage.
+
+    Mapping rules work at the API product and API backend levels.  You can define a new mapping rule at any time.  
+    
+    To learn more about mapping rules both at the product and backend levels, see [How APIcast applies mapping rules for capturing usage of 3scale APIs](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html-single/administering_the_api_gateway/index#how-apicast-applies-mapping-rules-for-capturing-usage-of-threescale-apis_api-gateway-apicast).
+  tasks:
+    - title: Define mapping rules at backend level
+      description: |-
+        The advantage of defining mapping rules at the backend level is that you can add a backend to multiple products.
+
+        Mapping rules at the backend level.
+        
+        - When you add mapping rules to a backend, these are added to all the products bundling this backend.
+        - The mapping rule is evaluated after the mapping rules defined at the product level.
+        - The mapping rule is evaluated only if the traffic is redirected to the same backend the mapping rule belongs to.
+        - The path of the backend for a product is automatically prepended to each mapping rule of the backend bundled to said product. 
+
+
+        ### Prerequisites
+
+        - A backend. To create one, see Create a backend.
+        - A method. Mapping rules are required in your previously created methods, however, they are optional for metrics, To create one, see Create a method.
+        
+        ### Procedure
+
+        1. Navigate to <strong>[Your\_backend\_name] > Mapping Rules</strong>.
+        1. Click <strong>Create mapping rule</strong>
+        1. On the _New maping rule_ page, fill in the details to create the mapping rule.
+
+        
+          Important fields:
+              - _Verb_: The HTTP request verb (GET, POST, DELETE, or PUT).
+              - _Pattern_: Add a valid URL that starts with a forward slash /. The URL can be from a wildcard you specified inside curly brackets {}.
+              - _Increment by_: The metric increment number. For example, 1.
+              - _Last?_: If this mapping rule should be considered as the last one, to stop processing other mapping rules.
+              - _Position_: Number that indicates the position of the execution of the mapping rule, to sort the mapping rules.
+
+        1. Click <strong>Create mapping rule</strong>
+
+        > Tip: After these steps, the mapping rule is added to _Backends_ under <strong>[Your\_API\_backend] > Mapping Rules</strong>.
+        The mapping rule is also available for each product currently using the backend.
+
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you add a verb for the mapping rule?
+          - Did you add a valid Pattern for the mapping rule?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Define mapping rules at product level
+      description: |-
+        Mapping rules at the product level.
+
+        - The mapping rule takes precedence. This means that the product mapping rule is the first one to be evaluated.
+        - The mapping rule is always evaluated, independent of which backend receives the redirected traffic.   
+
+        ### Prerequisites
+
+        - A Product.  To create one, see Create a product.
+        - A method. Mapping rules are required in your previously created methods, however, they are optional for metrics, To create one, see Create a method.
+
+        ### Procedure
+
+        1. Navigate to <strong>[Your\_product\_name] > Integration > Mapping Rules</strong>.
+        1. Click <strong>Create mapping rule</strong>
+        1. On the _New mapping rule_ page, fill in the details to create the mapping rule.
+        
+          Important fields:
+              - _Verb_: The HTTP request verb (GET, POST, DELETE, or PUT).
+              - _Pattern_: Add a valid URL that starts with a forward slash /. The URL can be from a wildcard you specified inside curly brackets {}.
+              - _Increment by_: The metric increment number. For example, 1.
+              - _Last?_: If this mapping rule should be considered as the last one, to stop processing other mapping rules.
+              - _Position_: Number that indicates the position of the execution of the mapping rule, to sort the mapping rules.
+        1. Click <strong>Create mapping rule</strong>
+
+        ### Next step:
+        1. To have the mapping rule active at the product level, promote the latest configuration under the _Products_ tab in <strong>[Your\_product\_name] > Integration > Configuration</strong>.
+        1. To verify your mapping rules, navigate to <strong>[Your\_product\_name] > Integration > Methods and Metrics</strong>. Each method and metric should have a check mark in the _Mapped_ column.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you know that the mapping rule takes precedence at product level?
+          - Did you promote the latest configuration to activate the mapping rule?
+          - Did you verify the mapping rules?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+    This concludes the process of defining mapping rules at a backend level and a product level.
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - mas-alert-note-prereq

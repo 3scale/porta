@@ -7,6 +7,7 @@ import createApplicationPlan from './createApplicationPlan.yaml'
 import createProduct from './createApplication.yaml'
 import createMethod from './createMethod.yaml'
 import createMetric from './createMetric.yaml'
+import createMappingRule from './createMappingRule.yaml'
 
 const resources = [
     basicAPIintegration,
@@ -15,7 +16,8 @@ const resources = [
     createApplicationPlan,
     createApplication,
     createMethod,
-    createMetric
+    createMetric,
+    createMappingRule
 ]
 
 export default resources
