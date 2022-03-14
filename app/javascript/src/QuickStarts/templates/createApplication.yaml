@@ -28,6 +28,10 @@ spec:
     - title: Create an application
       description: |-
         An application is always associated with an application plan.
+
+        ### Prerequisites
+
+        - An application plan. To create one, see Create an application plan. 
         
         ### Procedure
         1. Navigate to <strong>Audience > Accounts > Listing</strong>.

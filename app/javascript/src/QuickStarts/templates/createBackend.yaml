@@ -43,7 +43,7 @@ spec:
       # optional - the task's Check your work module
       review:
         instructions: |-
-          - Did you complete the task successfully?
+          - Did you set the system name for your backend?
         failedTaskHelp: This task isn’t verified yet. Try the task again.
       # optional - the task's success and failure messages
       summary:
