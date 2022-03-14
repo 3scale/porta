@@ -83,10 +83,24 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
 
   end
 
+  test '#hosted_success' do
+    gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
+    @provider.provider_account.update(payment_gateway_options: gateway_options)
+
+    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                      .with({'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789', 'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'street_address' => '123 Main Street', 'postal_code' => '12345', 'locality' => 'Anytown', 'region' => 'Nowhere', 'country_name' => 'US'}}}, 'a_nonce')
+                                                      .returns(failed_result)
+
+    post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
+    assert_response :redirect
+  end
+
   test '#hosted_success suspend account when failure count is higher than threshold' do
     gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
     @provider.provider_account.update(payment_gateway_options: gateway_options)
-    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                      .with({'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789', 'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'street_address' => '123 Main Street', 'postal_code' => '12345', 'locality' => 'Anytown', 'region' => 'Nowhere', 'country_name' => 'US'}}}, 'a_nonce')
+                                                      .returns(failed_result)
     ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
@@ -99,7 +113,9 @@ class Provider::Admin::Account::PaymentGateways::BraintreeBlueControllerTest < A
   test '#hosted_success does not suspend account when failure count is below the threshold' do
     gateway_options = { public_key: 'Public Key', merchant_id: 'Merchant ID', private_key: 'Private Key' }
     @provider.provider_account.update(payment_gateway_options: gateway_options)
-    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    ::PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                      .with({'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789', 'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'street_address' => '123 Main Street', 'postal_code' => '12345', 'locality' => 'Anytown', 'region' => 'Nowhere', 'country_name' => 'US'}}}, 'a_nonce')
+                                                      .returns(failed_result)
 
     post hosted_success_provider_admin_account_braintree_blue_path, params: form_params
 
