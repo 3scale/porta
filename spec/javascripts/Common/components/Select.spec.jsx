@@ -16,7 +16,8 @@ const defaultProps = {
   item: null,
   items,
   onSelect,
-  label: 'Toys',
+  label: <h1>Toys</h1>,
+  ariaLabel: 'Toys',
   fieldId: 'favorite_toy',
   name: 'toy[favorite]',
   isClearable: undefined,
@@ -74,7 +75,7 @@ it('should filter via typeahead', () => {
 
 it('should be aria-labelled', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find(`[aria-label="${defaultProps.label}"]`))
+  expect(wrapper.find(`[aria-label="${defaultProps.ariaLabel}"]`).exists()).toBe(true)
 })
 
 it('should show a spinner when loading', () => {
