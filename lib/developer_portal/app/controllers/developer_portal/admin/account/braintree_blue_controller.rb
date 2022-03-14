@@ -18,7 +18,7 @@ module DeveloperPortal::Admin::Account
     end
 
     def hosted_success
-      customer_info      = params.require(:customer)
+      customer_info      = params.require(:customer).permit!.to_h
       braintree_response = braintree_blue_crypt.confirm(customer_info, params.require(:braintree).require(:nonce))
       @payment_result    = braintree_response&.success?
       if @payment_result

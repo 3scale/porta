@@ -31,7 +31,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   end
 
   test '#hosted_success' do
-    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(successful_result)
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                    .with({'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'country_name' => 'US', 'locality' => 'Anytown', 'postal_code' => '12345', 'region' => 'Nowhere', 'street_address' => '123 Main Street'}}, 'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789'}, 'a_nonce')
+                                                    .returns(successful_result)
 
     # Account does not have a credit card auth code
     assert_nil @account.credit_card_auth_code
@@ -47,7 +49,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   end
 
   test '#hosted_success with plan changes' do
-    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(successful_result)
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                    .with({'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'country_name' => 'US', 'locality' => 'Anytown', 'postal_code' => '12345', 'region' => 'Nowhere', 'street_address' => '123 Main Street'}}, 'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789'}, 'a_nonce')
+                                                    .returns(successful_result)
 
     # Account does not have a credit card auth code
     assert_nil @account.credit_card_auth_code
@@ -65,7 +69,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   end
 
   test '#hosted_success with errors not storing credit card' do
-    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(successful_result)
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                    .with({'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'country_name' => 'US', 'locality' => 'Anytown', 'postal_code' => '12345', 'region' => 'Nowhere', 'street_address' => '123 Main Street'}}, 'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789'}, 'a_nonce')
+                                                    .returns(successful_result)
     PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:update_user).returns(false)
 
     # Account does not have a credit card auth code
@@ -84,7 +90,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   end
 
   test '#hosted_success with errors' do
-    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                    .with({'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'country_name' => 'US', 'locality' => 'Anytown', 'postal_code' => '12345', 'region' => 'Nowhere', 'street_address' => '123 Main Street'}}, 'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789'}, 'a_nonce')
+                                                    .returns(failed_result)
     PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:update_user).never
 
     # Account does not have a credit card auth code
@@ -103,7 +111,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   end
 
   test '#hosted_success suspend account when failure count is higher than threshold' do
-    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                    .with({'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'country_name' => 'US', 'locality' => 'Anytown', 'postal_code' => '12345', 'region' => 'Nowhere', 'street_address' => '123 Main Street'}}, 'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789'}, 'a_nonce')
+                                                    .returns(failed_result)
     ActionLimiter.any_instance.stubs(:perform!).raises(ActionLimiter::ActionLimitsExceededError)
 
     post :hosted_success, params: form_params
@@ -114,7 +124,9 @@ class DeveloperPortal::Admin::Account::BraintreeBlueControllerTest < DeveloperPo
   end
 
   test '#hosted_success does not suspend account when failure count is below the threshold' do
-    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm).returns(failed_result)
+    PaymentGateways::BrainTreeBlueCrypt.any_instance.expects(:confirm)
+                                                    .with({'credit_card' => {'billing_address' => {'company' => 'Invisible Inc.', 'country_name' => 'US', 'locality' => 'Anytown', 'postal_code' => '12345', 'region' => 'Nowhere', 'street_address' => '123 Main Street'}}, 'first_name' => 'John', 'last_name' => 'Doe', 'phone' => '123456789'}, 'a_nonce')
+                                                    .returns(failed_result)
 
     post :hosted_success, params: form_params
 
