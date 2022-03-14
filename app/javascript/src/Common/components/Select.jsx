@@ -20,6 +20,7 @@ type Props<T: Record> = {
   items: T[],
   onSelect: (T | null) => void,
   label: React.Node,
+  ariaLabel?: string,
   fieldId: string,
   name: string,
   isClearable?: boolean,
@@ -38,6 +39,7 @@ const Select = <T: Record>({
   items,
   onSelect,
   label,
+  ariaLabel,
   fieldId,
   name,
   isClearable = true,
@@ -86,7 +88,7 @@ const Select = <T: Record>({
         onSelect={handleSelect}
         isExpanded={expanded}
         onClear={handleOnClear}
-        aria-label={label}
+        aria-label={ariaLabel}
         isDisabled={isDisabled}
         // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
         onFilter={handleOnFilter(items)}
