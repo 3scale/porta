@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Liquid::LegacyTagsTest < ActionDispatch::IntegrationTest
@@ -25,6 +27,20 @@ class Liquid::LegacyTagsTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_match /No new messages/, response.body
+  end
+
+  # Bug in production https://app.bugsnag.com/3scale-networks-sl/system/errors/622f614862800a00091a1f9b
+  test 'buyer/1/analytics.js' do
+    override_dashboard_with %(
+      {% content_for javascripts %}
+        {{ 'buyer/1/analytics' | javascript_include_tag }}
+      {% endcontent_for %}
+      All is good
+    )
+
+    get '/admin'
+    assert_response :success
+    assert_match /All is good/, response.body
   end
 
   private
