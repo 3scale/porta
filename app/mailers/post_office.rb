@@ -3,12 +3,18 @@ class PostOffice < ActionMailer::Base
   helper ThreeScale::MoneyHelper
 
   def message_notification(message, recipient)
+    receiver = recipient.receiver
+    unless receiver
+      Rails.logger.error "Can't notify #{recipient.class} #{recipient.id} because it refers to a missing #{recipient.receiver_type}"
+      return
+    end
+
     custom = message.headers.symbolize_keys
 
     bcc = emails_for_message(message, recipient) + [custom.delete(:bcc)].flatten.compact
     cc = custom.delete(:cc)
 
-    from = custom.delete(:from) || from_address(recipient.receiver)
+    from = custom.delete(:from) || from_address(receiver)
     reply_to = custom.delete(:reply_to)
 
     headers({
@@ -21,10 +27,10 @@ class PostOffice < ActionMailer::Base
     if message.origin == "web"
       subject = "[msg] #{message.subject}"
 
-      msg_url = if recipient.receiver.buyer?
-        developer_portal.admin_messages_inbox_url(recipient, host: recipient.receiver.provider_account.external_domain)
+      msg_url = if receiver.buyer?
+        developer_portal.admin_messages_inbox_url(recipient, host: receiver.provider_account.external_domain)
                 else # provider or master
-        provider_admin_messages_inbox_url(recipient, host: recipient.receiver.external_self_domain)
+        provider_admin_messages_inbox_url(recipient, host: receiver.external_self_domain)
                 end
 
       @sender = message.sender.org_name
@@ -66,6 +72,7 @@ class PostOffice < ActionMailer::Base
   def emails_for_message(message, recipient)
     sender = message.sender
     receiver = recipient.receiver
+
     if (sender.master? || (sender.provider? && receiver.buyer?)) && sender.email_all_users
       receiver.users.map(&:email)
     else
