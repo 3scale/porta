@@ -564,6 +564,14 @@ System::Database::Oracle.define do
     SQL
   end
 
+  trigger 'email_configurations' do
+    <<~SQL
+      IF :new.account_id <> master_id THEN
+          :new.tenant_id := :new.account_id;
+      END IF;
+    SQL
+  end
+
   procedure 'sp_invoices_friendly_id', invoice_id: 'NUMBER' do
     <<~SQL
         v_provider_account_id NUMBER;

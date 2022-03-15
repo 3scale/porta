@@ -4,8 +4,8 @@ form.formtastic ol, form.formtastic ul {
   list-style: none;
 }
 
-input[type='text'],
-input[type='search'],
+input[type='text']:not(.pf-c-form-control),
+input[type='search']:not(.pf-c-form-control),
 input[type='number'],
 textarea,
 select,

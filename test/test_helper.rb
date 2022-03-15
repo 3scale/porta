@@ -26,7 +26,6 @@ require 'minitest/unit'
 
 require 'rails/test_help'
 require "paperclip/matchers"
-require 'shoulda'
 
 require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
 
@@ -86,3 +85,10 @@ include TestHelpers::XmlAssertions
 include TestHelpers::SectionsPermissions
 
 ActiveJob::Uniqueness.test_mode!
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :minitest
+    with.library :rails
+  end
+end

@@ -9,4 +9,8 @@ module JsHelpers
   def ensure_javascript
     raise 'This step requires JS enabled' unless @javascript
   end
+
+  def local_storage(key)
+    Capybara.current_session.driver.browser.local_storage.[](key)
+  end
 end

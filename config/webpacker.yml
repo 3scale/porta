@@ -28,6 +28,8 @@ default: &default
     - .gif
     - .jpeg
     - .jpg
+    - .yml
+    - .yaml
 
 development:
   <<: *default

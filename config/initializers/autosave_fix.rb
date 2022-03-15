@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+ActiveSupport.on_load(:active_record) do
+
 ActiveRecord::Base.prepend(Module.new do
   def save_has_one_association(reflection)
     if reflection.options[:through]
@@ -9,3 +11,5 @@ ActiveRecord::Base.prepend(Module.new do
     end
   end
 end)
+
+end
