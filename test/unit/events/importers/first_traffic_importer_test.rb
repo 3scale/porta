@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Events::Importers::FirstTrafficImporterTest < ActiveSupport::TestCase
@@ -9,9 +11,9 @@ class Events::Importers::FirstTrafficImporterTest < ActiveSupport::TestCase
     @timestamp = 1.day.ago.round
 
     @object = OpenStruct.new(
-               :application_id => @cinstance.application_id,
-               :service_id => service.id,
-               :timestamp => @timestamp.to_s
+      application_id: @cinstance.application_id,
+      service_id: service.id,
+      timestamp: @timestamp.to_s
     )
   end
 
@@ -24,7 +26,7 @@ class Events::Importers::FirstTrafficImporterTest < ActiveSupport::TestCase
 
   test "save importer after destroy the cinstance should not raise error" do
     @cinstance.destroy
-    refute importer.save!
+    assert_not importer.save!
   end
 
 
@@ -32,15 +34,22 @@ class Events::Importers::FirstTrafficImporterTest < ActiveSupport::TestCase
     @cinstance.account.update_attribute(:provider, true)
     ThreeScale::Analytics::UserTracking::Segment.expects(:track).with(has_entries(event: 'Traffic Sent',
                                                                                   properties: {
-                                                                                      timestamp: @object.timestamp,
+                                                                                    timestamp: @object.timestamp,
                                                                                       date: @object.timestamp.to_date
                                                                                   })).returns(true)
 
-    refute importer.notify_segment
+    assert_not importer.notify_segment
 
     assert @cinstance.update_attribute(:first_traffic_at, @object.timestamp)
 
     assert importer.notify_segment
+  end
+
+  # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/61ba778a71d2ed0008544c1d?event_id=622fc0e90092e226db140000&i=sk&m=fq
+  test 'user_tracking is nil' do
+    Events::Importers::BaseImporter.any_instance.expects(:user_tracking).returns(nil)
+    Cinstance.any_instance.expects(:first_traffic_at).returns(@object.timestamp)
+    assert_not importer.notify_segment
   end
 
   protected
