@@ -139,10 +139,17 @@ memcached-container: &memcached-container
 redis-container: &redis-container
   image: redis:4.0-alpine
 
+# https://github.com/poseidon/dnsmasq
+# TODO: create our own image like https://www.redhat.com/en/blog/build-ubi-containers-github-actions-buildah-and-podman
 dnsmasq-container: &dnsmasq-container
-  image: quay.io/mikz/dnsmasq
+  image: quay.io/poseidon/dnsmasq
   command:
+    - --user=root
+    - --keep-in-foreground
+    - --log-facility=-
+    - --log-queries
     - --no-poll
+    - --server=/circleci-internal-outer-build-agent/circleci-internal-outer-build-agent.ec2.internal/circleci.com/127.0.0.11
     - --address=/#/127.0.0.1
 
 only-master-filter: &only-master-filter
@@ -252,9 +259,16 @@ commands: # reusable commands with parameters
       - prepare-db-for-tests
       - *disable-internet-access
       - run:
+          name: Check internet access is disabled
+          command: |
+            echo "bundle exec cucumber --profile ci .circleci/no_internet.feature"
+            bundle exec cucumber --profile ci .circleci/no_internet.feature
+      - run:
           name: Run cucumber tests
           command: |
-            TESTS=$(circleci tests glob "features/**/*.feature" | circleci tests split --split-by=timings)
+            # saved test cases metadata can be read here:
+            # ${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json
+            TESTS=$(bundle exec ruby .circleci/features.rb | circleci tests split --split-by=timings)
             echo "bundle exec cucumber --profile ci ${TESTS}"
             bundle exec cucumber --profile ci ${TESTS}
       - *enable-internet-access

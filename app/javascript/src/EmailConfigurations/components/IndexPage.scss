@@ -1,0 +1,27 @@
+@import "~@patternfly/patternfly/sass-utilities/mixins.scss"; // Required by card.scss
+@import "~@patternfly/patternfly/components/Card/card.scss";
+@import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css'; // Used by Pagination perPage menu
+@import '~@patternfly/patternfly/components/Dropdown/dropdown.css'; // Used by table row options menu
+@import '~@patternfly/patternfly/components/Pagination/pagination.css';
+@import '~@patternfly/patternfly/components/Table/table.css';
+
+#email-configurations-index-page {
+  // HACK: removes Main 1.5 rem padding
+  margin: -1.5rem;
+
+  // HACK: force pagination in bottom toolbar to stick to the right
+  #bottom-toolbar .pf-l-toolbar__item {
+    flex: auto;
+  }
+
+  // HACK: variant='filter-group' should already provide the necessary styles once PF is upgraded
+  .pf-l-toolbar {
+    [variant="filter-group"] {
+      display: flex;
+
+      .pf-l-toolbar__item {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

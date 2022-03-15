@@ -34,6 +34,10 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
     proxy.service.backend_version = 'oauth'
     assert OIDC::ProxyChangedEvent.valid?(proxy)
 
+    proxy.service.save
+    proxy.service.backend_version = "2"
+    assert OIDC::ProxyChangedEvent.valid?(proxy)
+
     proxy.stubs(service: nil)
     refute OIDC::ProxyChangedEvent.valid?(proxy)
   end

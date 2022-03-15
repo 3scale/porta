@@ -470,6 +470,24 @@ ActiveRecord::Schema.define(version: 20220228215614) do
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id", using: :btree
   end
 
+  create_table "email_configurations", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer  "account_id"
+    t.string   "email",                         null: false, collation: "utf8_general_ci"
+    t.string   "domain",                                     collation: "utf8_general_ci"
+    t.string   "user_name"
+    t.string   "password"
+    t.string   "authentication"
+    t.string   "tls"
+    t.string   "openssl_verify_mode"
+    t.string   "address",                                    collation: "utf8_general_ci"
+    t.integer  "port",                limit: 2,                                            unsigned: true
+    t.bigint   "tenant_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.index ["account_id"], name: "index_email_configurations_on_account_id", using: :btree
+    t.index ["email"], name: "index_email_configurations_on_email", unique: true, using: :btree
+  end
+
   create_table "event_store_events", id: :bigint, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string   "stream",                       null: false
     t.string   "event_type",                   null: false

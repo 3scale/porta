@@ -19,6 +19,10 @@ module ThinkingSphinx
         new_settings = original_settings.dup.merge({"real_time_callbacks" => false})
         ThinkingSphinx::Configuration.any_instance.stubs(:settings).returns(new_settings)
       end
+
+      def indexed_models
+        ThinkingSphinx::Configuration.instance.index_set_class.new.map(&:model).map { |m| m.descendants.presence || m }.flatten
+      end
     end
   end
 end

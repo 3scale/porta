@@ -492,6 +492,25 @@ ActiveRecord::Schema.define(version: 20220228215614) do
   add_index "deleted_objects", ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id"
   add_index "deleted_objects", ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id"
 
+  create_table "email_configurations", force: :cascade do |t|
+    t.integer  "account_id",                     precision: 38
+    t.string   "email",                                         null: false
+    t.string   "domain"
+    t.string   "user_name"
+    t.string   "password"
+    t.string   "authentication"
+    t.string   "tls"
+    t.string   "openssl_verify_mode"
+    t.string   "address"
+    t.integer  "port",                           precision: 38
+    t.integer  "tenant_id",           limit: 19, precision: 19
+    t.datetime "created_at",                     precision: 6,  null: false
+    t.datetime "updated_at",                     precision: 6,  null: false
+  end
+
+  add_index "email_configurations", ["account_id"], name: "index_email_configurations_on_account_id"
+  add_index "email_configurations", ["email"], name: "index_email_configurations_on_email", unique: true
+
   create_table "event_store_events", force: :cascade do |t|
     t.string   "stream",                     null: false
     t.string   "event_type",                 null: false

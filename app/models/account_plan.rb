@@ -5,7 +5,7 @@ class AccountPlan < Plan
   has_many :account_contracts, :foreign_key => :plan_id
   alias contracts account_contracts
 
-  belongs_to :provider, :class_name => Account, :foreign_key => :issuer_id, :inverse_of => :account_plans
+  belongs_to :provider, :class_name => 'Account', :foreign_key => :issuer_id, :inverse_of => :account_plans
 
   before_destroy :destroy_contracts
 

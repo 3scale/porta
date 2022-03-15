@@ -7,7 +7,7 @@ class Master::Events::ImportsController < Master::BaseController
   def create
     ::Events.async_fetch_backend_events!
 
-    render :nothing => true, :status => :ok
+    head :ok
   end
 
   private

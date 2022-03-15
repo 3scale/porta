@@ -1,7 +1,7 @@
 class Notification < ApplicationRecord
   belongs_to :user, inverse_of: :notifications
   # This is not using the .id column, but rather using the event_id (uuid) for consistency
-  belongs_to :event, class_name: EventStore::Repository.adapter, primary_key: :event_id
+  belongs_to :event, class_name: EventStore::Repository.adapter.name, primary_key: :event_id
 
   class_attribute :available_notifications, instance_writer: false
 

@@ -548,6 +548,14 @@ System::Database::MySQL.define do
     SQL
   end
 
+  trigger 'email_configurations' do
+    <<~SQL
+      IF NEW.account_id <> master_id THEN
+          SET NEW.tenant_id = NEW.account_id;
+      END IF;
+    SQL
+  end
+
   procedure 'sp_invoices_friendly_id', invoice_id: 'bigint' do
     <<~SQL
       BEGIN
