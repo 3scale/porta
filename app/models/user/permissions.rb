@@ -5,7 +5,7 @@ require 'admin_section'
 module User::Permissions
   extend ActiveSupport::Concern
 
-  ATTRIBUTES = %I[ role member_permission_ids member_permission_service_ids ]
+  ATTRIBUTES = [:role, member_permission_ids: [], member_permission_service_ids: []].freeze # rubocop:disable Style/HashAsLastArrayItem
 
   included do
     has_many :member_permissions, dependent: :destroy, autosave: true

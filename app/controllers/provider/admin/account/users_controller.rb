@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Account::UsersController < Provider::Admin::Account::BaseController
   inherit_resources
   defaults :route_prefix => 'provider_admin_account'
@@ -38,11 +40,11 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
     # FIXME: in rails 3, we're getting an array
     attributes = attributes.first
 
-    protected_attributes = attributes.extract!(*User::Permissions::ATTRIBUTES)
+    # And in rails 5, it can be ActionController::Parameters or hash
+    attributes = ActionController::Parameters.new(attributes) unless attributes.is_a?(ActionController::Parameters)
+    protected_attributes = attributes.permit(User::Permissions::ATTRIBUTES)
 
-    unless current_account.provider_can_use?(:service_permissions)
-      protected_attributes.except!(:member_permission_service_ids)
-    end
+    protected_attributes.extract!(:member_permission_service_ids) unless current_account.provider_can_use?(:service_permissions)
 
     user.class.transaction do
       user.assign_attributes(attributes)
