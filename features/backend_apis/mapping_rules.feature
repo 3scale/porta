@@ -6,7 +6,7 @@ Feature: Backend API mapping rules
 
   Background:
     Given a provider "foo.3scale.localhost"
-    And a backend api "My Backend"
+    And a backend api
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And I log in as provider "foo.3scale.localhost"
 

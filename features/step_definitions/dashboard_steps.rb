@@ -39,7 +39,6 @@ When(/^I select the (products|backends) tab$/) do |tab|
   find('button', id: "tab-#{tab}").click
 end
 
-
 When (/^I search for "([^"]*)" using the (products|backends) search bar/) do |query, tab|
   search_bar = find("##{tab}_search").find('input[type="search"]')
   search_bar.send_keys query
@@ -47,4 +46,38 @@ end
 
 When 'All Dashboard widgets are loaded' do
   DashboardWidgetPresenter.any_instance.stubs(:loaded?).returns(true)
+end
+
+When "an admin that wants to find products and backends quickly" do
+  FactoryBot.create_list(:service, 10, account: @provider)
+  FactoryBot.create_list(:backend_api, 10, account: @provider)
+end
+
+Then "the most recently updated products and backends can be found in the Dashboard" do
+  visit admin_dashboard_path
+
+  products = @provider.services.order(updated_at: :desc)
+  backend_apis = @provider.backend_apis.order(updated_at: :desc)
+
+  within products_widget do
+    products.first(5).each do |p|
+      assert_selector('.pf-c-data-list__item', text: p.name)
+    end
+    assert_no_selector('.pf-c-data-list__item', text: products.last.name)
+  end
+
+  within backend_apis_widget do
+    backend_apis.first(5).each do |b|
+      assert_selector('.pf-c-data-list__item', text: b.name)
+    end
+    assert_no_selector('.pf-c-data-list__item', text: backend_apis.last.name)
+  end
+end
+
+def products_widget
+  find('#products-widget')
+end
+
+def backend_apis_widget
+  find('#backends-widget')
 end
