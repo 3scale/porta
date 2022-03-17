@@ -18,15 +18,6 @@ Feature: Dashboard
     And I should see the link "0 Messages" in the audience dashboard widget
 
   @javascript
-  Scenario: APIs widget
-    When I log in as provider "foo.3scale.localhost"
-    And I go to the provider dashboard
-    Then I should see "Products" in the apis dashboard products widget
-    And I should see the link "Create Product" in the apis dashboard products widget
-    And I should see "Backends" in the apis dashboard backends widget
-    And I should see the link "Create Backend" in the apis dashboard backends widget
-
-  @javascript
   Scenario: first API widget
     When I log in as provider "foo.3scale.localhost"
     And I should see "API" in the first api dashboard widget

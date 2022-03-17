@@ -5,6 +5,10 @@ Feature: Dashboard Widgets
   Background:
     Given a provider is logged in
 
-  Scenario: Products and Backends widget
-    When an admin that wants to find products and backends quickly
-    Then the most recently updated products and backends can be found in the Dashboard
+  Scenario: Find products and backends quickly
+    When an admin needs to find a product or backend quickly
+    Then the most recently updated products and backends can be found in the dashboard
+
+  Scenario: Add new products and backends quickly
+    When an admin needs a new product or backend quickly
+    Then products and backends can be created from the dashboard
