@@ -19,6 +19,14 @@ class PostOfficeTest < ActionMailer::TestCase
     assert_equal message, GlobalID::Locator.locate_signed(uri)
   end
 
+  test 'message_notification is graceful when recipient account is deleted' do
+    message = Message.create! sender: @provider, to: [@buyer]
+    @buyer.destroy!
+    message.reload
+
+    assert_instance_of ActionMailer::Base::NullMail, PostOffice.message_notification(message, message.recipients.first).message
+  end
+
   test 'message_notification manage viral footer on email messages' do
     subject = generate_message_subject
     message   = Message.create! sender: @provider, to: [@buyer], subject: subject, body: 'W0rmDr1nk'
