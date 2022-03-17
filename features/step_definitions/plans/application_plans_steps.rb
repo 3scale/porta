@@ -126,9 +126,3 @@ end
 Then /^I should be able to customize the plan$/ do
   should have_link("Convert to a Custom Plan")
 end
-
-Then "the application plans select should not contain custom plans of {provider}" do |provider|
-  provider.application_plans.customized.each do |custom_plan|
-    step %{the "Application plan" select should not contain "#{custom_plan.name}" option}
-  end
-end
