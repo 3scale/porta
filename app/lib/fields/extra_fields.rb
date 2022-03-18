@@ -57,9 +57,9 @@ module Fields::ExtraFields
         extra_fields.each_pair do |field, value|
           if extra_field?(field) && value.present?
             if value.respond_to?(:each)
-              value.each { |v| xml.tag!(field, v.strip) }
+              value.each { |v| xml.tag!(field, v.to_s.strip) }
             else
-              xml.tag!(field, value.strip)
+              xml.tag!(field, value.to_s.strip)
             end
           end
         end
