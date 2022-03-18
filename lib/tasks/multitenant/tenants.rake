@@ -20,6 +20,11 @@ namespace :multitenant do
       puts(query.any? ? 'Some of the tenants haven\t been suspended' : 'All the right tenants have been suspended')
     end
 
+    desc 'Fix in the background tenant_id missing in alerts, log entries and backend apis'
+    task :fix_missing_in_background => :environment do |_task, relations|
+      SetTenantIdWorker::BatchEnqueueWorker.perform_later(*relations.to_a)
+    end
+
     desc 'Fix empty or corrupted tenant_id in accounts'
     task :fix_corrupted_tenant_id_accounts, %i[batch_size sleep_time] => :environment do |_task, args|
       batch_size = (args[:batch_size] || 100).to_i
@@ -48,17 +53,17 @@ namespace :multitenant do
 
     desc 'Fix empty tenant_id in access_tokens'
     task :fix_empty_tenant_id_access_tokens, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, args.to_hash.merge({table_name: 'AccessToken'}))
+      update_tenant_ids(proc { |object| object.owner.tenant_id }, proc { owner }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'AccessToken' }))
     end
 
     desc 'Restore existing tenant_id in alerts'
     task :restore_existing_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, args.to_hash.merge({table_name: 'Alert'}))
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id != nil }, args.to_hash.merge({ table_name: 'Alert' }))
     end
 
     desc 'Restore empty tenant_id in alerts'
     task :restore_empty_tenant_id_alerts, %i[batch_size sleep_time] => :environment do |_task, args|
-      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({table_name: 'Alert'}))
+      update_tenant_ids(proc { |object| object.account.tenant_id }, proc { account }, proc { tenant_id == nil }, args.to_hash.merge({ table_name: 'Alert' }))
     end
 
     def update_tenant_ids(tenant_id_block, association_block, condition, **args)
