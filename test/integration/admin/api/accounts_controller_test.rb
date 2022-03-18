@@ -63,6 +63,19 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert buyer.reload.settings.monthly_billing_enabled
     end
 
+    # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/61eefe2bd365260008097f85
+    test '#update extra fields get stored as strings' do
+      rolling_updates_on
+      rolling_update(:service_permissions, enabled: true)
+
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'my_field')
+
+      put admin_api_account_path(buyer, format: :xml), params: update_params.merge({ extra_fields: { my_field: 4 } })
+      assert_response :ok
+
+      assert buyer.reload.extra_fields['my_field'].is_a?(String)
+    end
+
     test '#update from a member without service_permissions returns error message in xml' do
       rolling_updates_on
       rolling_update(:service_permissions, enabled: false)
@@ -100,6 +113,15 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
 
       get find_admin_api_accounts_path(format: :xml, provider_key: provider.api_key, email: buyer_user.email)
+      assert_response :success
+    end
+
+    test 'getting an account with numeric extra_field in XML format' do
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'my_field')
+      buyer.extra_fields = { my_field: 5 }
+      buyer.save!
+
+      get find_admin_api_accounts_path(format: :xml, provider_key: provider.api_key, user_id: buyer.users.first.id)
       assert_response :success
     end
   end

@@ -176,6 +176,13 @@ class ExtraFieldsTest < ActiveSupport::TestCase
       assert @buyer.errors[@provider_field].present?
     end
 
+    # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/61eefe2bd365260008097f85
+    test 'extra_field is an integer' do
+      @buyer.extra_fields = { provider_extra_field: 5 }
+      @buyer.save!
+
+      assert @buyer.to_xml
+    end
   end
 
   class ChoicesFieldsTest < ExtraFieldsTest
