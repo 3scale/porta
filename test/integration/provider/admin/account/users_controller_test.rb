@@ -46,7 +46,25 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
     assert_equal [], @user.admin_sections.to_a
   end
 
-  def test_update_no_member_permission_ids
+  # Test for https://app.bugsnag.com/3scale-networks-sl/system/errors/623154afea8d6b0008c052c5
+  test '#update member_permission_service_ids' do
+    rolling_updates_on
+    Account.any_instance.expects(:provider_can_use?).with(:service_permissions).returns(false)
+
+    put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: '' } }
+    assert_response :redirect
+
+    put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: '[]' } }
+    assert_response :redirect
+
+    put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: [''] } }
+    assert_response :redirect
+
+    put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: %w[1 2] } }
+    assert_response :redirect
+  end
+
+  test '#update with empty user' do
     assert_equal @default_ids, @user.admin_sections.to_a
 
     put provider_admin_account_user_path(@user), params: { user: {} }
@@ -54,6 +72,13 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
     @user.reload
 
     assert_equal @default_ids, @user.admin_sections.to_a
+  end
+
+  test '#update with no params' do
+    assert_equal @default_ids, @user.admin_sections.to_a
+
+    put provider_admin_account_user_path(@user)
+    assert_response :bad_request
   end
 
   test 'admin deletes another admin' do
