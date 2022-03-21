@@ -83,7 +83,7 @@ Then "products can be created from the dashboard" do
   assert_selector("a[href='#{new_admin_service_path}']", text: 'Create Product')
 end
 
-Then "and backends can be created from the dashboard" do
+And "backends can be created from the dashboard" do
   assert_selector("a[href='#{new_provider_admin_backend_api_path}']", text: 'Create Backend')
 end
 
