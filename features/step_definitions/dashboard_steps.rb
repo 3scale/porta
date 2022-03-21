@@ -48,9 +48,9 @@ When 'All Dashboard widgets are loaded' do
   DashboardWidgetPresenter.any_instance.stubs(:loaded?).returns(true)
 end
 
-When "an admin needs to find a product or backend quickly" do
-  FactoryBot.create_list(:service, 10, account: @provider)
-  FactoryBot.create_list(:backend_api, 10, account: @provider)
+Given "{int} products and {int} backend apis" do |products, backends|
+  FactoryBot.create_list(:service, products, account: @provider)
+  FactoryBot.create_list(:backend_api, backends, account: @provider)
 
   visit admin_dashboard_path
 end
@@ -75,14 +75,15 @@ Then "the most recently updated products and backends can be found in the dashbo
   end
 end
 
-When "an admin needs a new product or backend quickly" do
+When "an admin is at the dashboard" do
   visit admin_dashboard_path
 end
 
-Then "products and backends can be created from the dashboard" do
-  assert_equal current_path, provider_admin_dashboard_path
-
+Then "products can be created from the dashboard" do
   assert_selector("a[href='#{new_admin_service_path}']", text: 'Create Product')
+end
+
+Then "and backends can be created from the dashboard" do
   assert_selector("a[href='#{new_provider_admin_backend_api_path}']", text: 'Create Backend')
 end
 

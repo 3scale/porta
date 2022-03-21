@@ -6,9 +6,11 @@ Feature: Dashboard Widgets
     Given a provider is logged in
 
   Scenario: Find products and backends quickly
-    When an admin needs to find a product or backend quickly
+    Given 10 products and 10 backend apis
+    When an admin is at the dashboard
     Then the most recently updated products and backends can be found in the dashboard
 
   Scenario: Add new products and backends quickly
-    When an admin needs a new product or backend quickly
-    Then products and backends can be created from the dashboard
+    When an admin is at the dashboard
+    Then products can be created from the dashboard
+    And backends can be created from the dashboard

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given "an admin wants to update a backend api" do
+Given "an admin is at a backend api edit page" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
   visit edit_provider_admin_backend_api_path(@backend)
 end
@@ -44,7 +44,7 @@ Given "a backend api that {is} being used by a(ny) product(s)" do |used|
   end
 end
 
-When "an admin wants to delete the backend api" do
+When "an admin tries to delete the backend api from its edit page" do
   visit edit_provider_admin_backend_api_path(@backend)
 end
 
@@ -63,13 +63,13 @@ Given "an admin goes to the backend apis page" do
   visit provider_admin_backend_apis_path
 end
 
-Then "they can create a new backend api" do
+And "they create a new backend api" do
   click_on 'Create Backend'
   fill_in_backend_api_form
   assert_created
 end
 
-And "be redirected to the new backend api overview page" do
+Then "they are redirected to the new backend api overview page" do
   assert_equal current_path, provider_admin_backend_api_path(BackendApi.last)
 end
 
@@ -81,7 +81,7 @@ Given "a backend api" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
 end
 
-When "an admin is in the backend over page" do
+When "an admin is in the backend overview page" do
   visit provider_admin_backend_api_path(@backend)
 end
 

@@ -6,8 +6,8 @@ Feature: Backend API new page
 
   Scenario: Create a new Backend API
     When an admin goes to the backend apis page
-    Then they can create a new backend api
-    And be redirected to the new backend api overview page
+    And they create a new backend api
+    Then they are redirected to the new backend api overview page
 
   Scenario: Form validation
     When an admin is creating a new backend api
