@@ -13,6 +13,11 @@ And 'a backend used by this product' do
   FactoryBot.create(:backend_api_config, backend_api: @backend, service: @product)
 end
 
+Given 'a backend that is unavailable' do
+  @backend = @provider.backend_apis.create!(name: 'Deleted Backend', private_endpoint: 'https://foo')
+  @backend.update!(state: 'deleted')
+end
+
 And "an admin is at a product's backend usages page" do
   @product = @provider.default_service
   visit admin_service_backend_usages_path(@product)
@@ -33,19 +38,12 @@ And 'the product will be using this backend' do
   assert_includes @product.reload.backend_apis, @backend
 end
 
-When 'they try to add the backend again' do
+When 'they try to add the backend( again)' do
   click_on 'Add Backend'
 end
 
 Then "the backend won't be available" do
   assert_select_not_inclues_option('Backend', @backend.name)
-end
-
-Given 'an admin wants to add an unaccessible backend' do
-  @backend = @provider.backend_apis.create!(name: 'Deleted Backend', private_endpoint: 'https://foo')
-  @backend.update!(state: 'deleted')
-
-  visit new_admin_service_backend_usage_path(@provider.default_service)
 end
 
 Then "they can't add the backend with an invalid path" do

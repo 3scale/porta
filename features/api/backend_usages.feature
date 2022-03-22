@@ -28,5 +28,8 @@ Feature: Backend Usages
     Then they can't add the backend with an invalid path
 
   Scenario: Add a backend must be accessible
-    Given an admin wants to add an unaccessible backend
+    Given a product
+    And a backend that is unavailable
+    When an admin goes to the product's backend usages page
+    And they try to add the backend
     Then the backend won't be available
