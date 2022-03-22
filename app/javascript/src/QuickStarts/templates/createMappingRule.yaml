@@ -46,7 +46,7 @@ spec:
         ### Prerequisites
 
         - A backend. To create one, see Create a backend.
-        - A method. Mapping rules are required in your previously created methods, however, they are optional for metrics, To create one, see Create a method.
+        - A method. Mapping rules are required in your previously created methods, however, they are optional for metrics, To create one, see [Create a method](createMethod.yaml).
         
         ### Procedure
 
