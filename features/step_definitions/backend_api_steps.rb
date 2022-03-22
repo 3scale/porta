@@ -39,8 +39,8 @@ Given "a backend api that {is} being used by a(ny) product(s)" do |used|
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
 
   if used
-    @service = @provider.services.create!(name: 'My Product', mandatory_app_key: false)
-    @service.backend_api_configs.create!(backend_api: @backend, path: "/my_product")
+    @product = @provider.services.create!(name: 'My Product', mandatory_app_key: false)
+    @product.backend_api_configs.create!(backend_api: @backend, path: "/my_product")
   end
 end
 
@@ -94,13 +94,13 @@ Then "there is a list of all products using it" do
 end
 
 And "the product becomes inaccessible" do
-  @service.update!(state: 'deleted')
+  @product.update!(state: 'deleted')
 end
 
 Then "the product is not in the list of all products using it" do
-  assert @service.reload
+  assert @product.reload
   within products_used_table do
-    should_not have_css('[data-label="Name"]', text: @service.name)
+    should_not have_css('[data-label="Name"]', text: @product.name)
   end
 end
 

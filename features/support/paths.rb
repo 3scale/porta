@@ -277,10 +277,6 @@ World(Module.new do
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
 
-    when /^the service backends admin page of service "(.+?)"$/
-      service = Service.find_by!(name: $1)
-      admin_service_backend_usages_path(service)
-
     #
     # Account plans (buyer side)
     #

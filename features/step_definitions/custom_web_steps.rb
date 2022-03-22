@@ -107,7 +107,7 @@ Then /^I should not see button "([^\"]*)" within "([^"]*)"$/ do |label, selector
 end
 
 Then /^the "([^"]*)" select should not contain "([^"]*)" option$/ do |label, text|
-  assert_options_in_select(label, text)
+  assert_select_not_inclues_option(label, text)
 end
 
 Then /^the "([^"]*)" select should have "([^"]*)" selected$/ do |label, text|
@@ -308,7 +308,7 @@ When(/^I enter the admin password in "([^"]+)"$/) do |field|
   step %(I press "Confirm Password")
 end
 
-def assert_options_in_select(label, text)
+def assert_select_not_inclues_option(label, text)
   if page.has_css?('.pf-c-form__label', text: label)
     select = find('.pf-c-form__label', text: label).sibling('.pf-c-select')
     select.find('.pf-c-select__toggle-button').click
