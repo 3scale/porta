@@ -28,7 +28,7 @@ Capybara.configure do |config|
   config.raise_server_errors = true
   config.match = :prefer_exact
   config.always_include_port = true
-  config.default_max_wait_time = 10
+  config.default_max_wait_time = 2
 end
 
 # Needed because cucumber-rails requires capybara/cucumber
