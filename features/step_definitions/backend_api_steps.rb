@@ -77,7 +77,7 @@ When "an admin is creating a new backend api" do
   visit new_provider_admin_backend_api_path
 end
 
-Given "a backend api" do
+Given "a backend( api)" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
 end
 
