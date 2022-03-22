@@ -112,13 +112,4 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
 
     assert user.reload.admin?
   end
-
-  # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/623154afea8d6b0008c052c5
-  test 'admin cannot update member service_ids if no service permissions' do
-    rolling_updates_on
-    Account.any_instance.expects(:provider_can_use?).with(:service_permissions).returns(false)
-
-    put provider_admin_account_user_path(@user), params: { user: { member_permission_service_ids: %w[1 2] } }
-    assert_response :redirect
-  end
 end
