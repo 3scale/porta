@@ -5,6 +5,8 @@ require 'admin_section'
 module User::Permissions
   extend ActiveSupport::Concern
 
+  ATTRIBUTES = %I[ role member_permission_ids member_permission_service_ids ]
+
   included do
     has_many :member_permissions, dependent: :destroy, autosave: true
 

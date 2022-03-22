@@ -78,7 +78,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
     assert_equal @default_ids, @user.admin_sections.to_a
 
     put provider_admin_account_user_path(@user)
-    assert_response :bad_request
+    assert_response :redirect
   end
 
   test 'admin deletes another admin' do

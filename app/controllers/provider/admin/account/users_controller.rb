@@ -36,19 +36,22 @@ class Provider::Admin::Account::UsersController < Provider::Admin::Account::Base
     @users ||= end_of_association_chain.but_impersonation_admin.paginate(page: params[:page]).decorate
   end
 
-  def permitted_params
-    # TODO: this should be handled by cancancan
-    permitted = current_account.provider_can_use?(:service_permissions) ? %i[role member_permission_ids member_permission_service_ids] : %i[role member_permission_ids]
-    params.require(:user).permit(permitted)
-  end
-
   def update_resource(user, attributes)
     # FIXME: in rails 3, we're getting an array
     attributes = attributes.first
 
+    # After the rails 5.1 upgrade, attributes comes as ActionController::Parameters except when they are empty
+    attributes = attributes.permit!.to_h unless attributes.is_a?(Hash)
+
+    protected_attributes = attributes.extract!(*User::Permissions::ATTRIBUTES)
+
+    unless current_account.provider_can_use?(:service_permissions)
+      protected_attributes.except!(:member_permission_service_ids)
+    end
+
     user.class.transaction do
       user.assign_attributes(attributes)
-      user.assign_attributes(attributes, without_protection: can?(:update_role, user))
+      user.assign_attributes(protected_attributes, without_protection: can?(:update_role, user))
 
       user.save
     end
