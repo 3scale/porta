@@ -15,7 +15,7 @@ Feature: Backend API new page
     But it is possible to create it without system name
 
   Scenario: Create a Backend API with duplicate fields
-    Given a backend api
+    Given a backend
     When an admin is creating a new backend api
     Then it is possible to create it using the same name and url
     But it is not possible to use the same system name

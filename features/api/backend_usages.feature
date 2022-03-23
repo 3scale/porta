@@ -16,7 +16,8 @@ Feature: Backend Usages
 
   Scenario: A backend can be used by each product once
     Given a product
-    And a backend used by this product
+    And a backend
+    And the backend is used by this product
     When an admin goes to the product's backend usages page
     And they try to add the backend again
     Then the backend won't be available
@@ -29,7 +30,8 @@ Feature: Backend Usages
 
   Scenario: Add a backend must be accessible
     Given a product
-    And a backend that is unavailable
+    And a backend
+    But the backend is unavailable
     When an admin goes to the product's backend usages page
     And they try to add the backend
     Then the backend won't be available

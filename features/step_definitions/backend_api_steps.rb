@@ -35,13 +35,8 @@ Then "they will be able to update it with an existing name and url" do
   assert_updated
 end
 
-Given "a backend api that {is} being used by a(ny) product(s)" do |used|
-  @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
-
-  if used
-    @product = @provider.services.create!(name: 'My Product', mandatory_app_key: false)
-    @product.backend_api_configs.create!(backend_api: @backend, path: "/my_product")
-  end
+Given "the backend is used by this product" do
+  @product.backend_api_configs.create!(backend_api: @backend, path: "/my_product")
 end
 
 When "an admin tries to delete the backend api from its edit page" do
@@ -77,7 +72,7 @@ When "an admin is creating a new backend api" do
   visit new_provider_admin_backend_api_path
 end
 
-Given "a backend( api)" do
+Given "a backend" do
   @backend = @provider.backend_apis.create!(name: 'My Backend', private_endpoint: 'https://foo')
 end
 

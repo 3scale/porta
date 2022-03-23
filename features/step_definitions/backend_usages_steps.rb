@@ -9,8 +9,7 @@ And 'a backend used by this product' do
   FactoryBot.create(:backend_api_config, backend_api: @backend, service: @product)
 end
 
-Given 'a backend that is unavailable' do
-  @backend = @provider.backend_apis.create!(name: 'Deleted Backend', private_endpoint: 'https://foo')
+And 'the backend is unavailable' do
   @backend.update!(state: 'deleted')
 end
 
