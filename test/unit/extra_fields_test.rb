@@ -87,6 +87,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
     test 'override using [] notation' do
       @buyer.extra_fields = { provider_extra_field: '[] notation overridable' }
       @buyer.save!
+      assert_not @buyer.extra_fields.empty?
 
       @buyer[:extra_fields] = { }
       @buyer.save!
