@@ -7,12 +7,6 @@ Then /^I should see the partners submenu$/ do
   })
 end
 
-Then /^I should see the current API is "(.*?)"/ do |name|
-  within '#mainmenu' do
-    assert has_css? '.pf-c-nav__section-title', text: name
-  end
-end
-
 Then /^I should see there is no current API/ do
   within '#mainmenu' do
     assert_not has_css? '.pf-c-nav__section-title'
@@ -34,7 +28,6 @@ Then /^I should not see menu items$/ do |items|
     end
   end
 end
-
 
 Then /^there should be submenu items$/ do |items|
   items.rows.each do |item|
@@ -64,12 +57,23 @@ Then /^I should( not)? see the provider menu$/ do |negative|
   assert negative ? has_no_css?(menu) : has_css?(menu)
 end
 
-
 Given(/^provider "(.*?)" has xss protection options disabled$/) do |arg1|
   settings = current_account.settings
   settings.cms_escape_draft_html = false
   settings.cms_escape_published_html = false
   settings.save
+end
+
+Then "the name of the product can be seen on top of the menu" do
+  within '#mainmenu' do
+    assert has_css?('.pf-c-nav__section-title', text: Service.find_by(name: 'API').name)
+  end
+end
+
+Then "the name of the backend can be seen on top of the menu" do
+  within '#mainmenu' do
+    assert has_css?('.pf-c-nav__section-title', text: @backend.name)
+  end
 end
 
 def help_menu_selector

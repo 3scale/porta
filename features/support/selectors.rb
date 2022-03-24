@@ -13,10 +13,6 @@ module HtmlSelectorsHelper
       '#audience'
     when 'the apis dashboard widget', :apis_dashboard_widget
       '.DashboardSection--services'
-    when 'the apis dashboard products widget'
-      '#products-widget'
-    when 'the apis dashboard backends widget'
-      '#backends-widget'
     # TODO: there is no first api widget anymore, clean this up
     when 'the first api dashboard widget'
       '.DashboardSection--services'
