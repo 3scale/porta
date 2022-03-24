@@ -39,12 +39,7 @@ class ProxyConfig < ApplicationRecord
   scope :by_host,        ->(host) { where.has { hosts =~ "%|#{host}|%" } if host }
 
   scope :current_versions, -> do
-    table = BabySqueel[:proxy_configs].alias(:versions)
-    scope = joining { table.on((table.proxy_id == proxy_id) & (table.environment == environment)) }
-      .when_having { max(table.version) == version }
-      .group(:id)
-
-    System::Database.mysql? ? scope : where(id: scope.group(:version).select(:id))
+    where('NOT EXISTS (SELECT 1 FROM proxy_configs pc where proxy_configs.environment = environment AND proxy_configs.proxy_id = proxy_id AND proxy_configs.version < version)')
   end
 
   scope :by_version, ->(version) do
