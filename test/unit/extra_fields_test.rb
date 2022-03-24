@@ -177,10 +177,11 @@ class ExtraFieldsTest < ActiveSupport::TestCase
     end
 
     # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/61eefe2bd365260008097f85
-    test 'extra_field is an integer' do
+    test 'extra_field should not be store as an integer' do
       @buyer.extra_fields = { provider_extra_field: 5 }
       @buyer.save!
 
+      assert_equal '5', @buyer.extra_fields[:provider_extra_field]
       assert @buyer.to_xml
     end
   end
