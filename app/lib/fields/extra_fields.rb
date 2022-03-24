@@ -101,6 +101,8 @@ module Fields::ExtraFields
       encode_string_extra_field(value)
     when Integer
       value.to_s
+    when Array
+      value.map { |v| encode_extra_field(v) }
     else
       value
     end
