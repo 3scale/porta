@@ -1,22 +1,16 @@
-Feature: Dashboard search bar
+@javascript
+Feature: Dashboard Widgets
   In order to navigate easily to products and backends
-  As a provider
-  I want to be able to filter them by name
 
   Background:
     Given a provider is logged in
-    And a service "My Fancy Product"
-    And a service "My Regular Product"
-    And a backend api "My Fancy Backend API"
-    And a backend api "My Regular Backend API"
-    And I go to the provider dashboard
 
-  @javascript
-  Scenario: Products widget
-    Given I should see "My Fancy Product" in the apis dashboard products widget
-    And I should see "My Regular Product" in the apis dashboard products widget
+  Scenario: Find products and backends quickly
+    Given 10 products and 10 backend apis
+    When an admin is at the dashboard
+    Then the most recently updated products and backends can be found in the dashboard
 
-  @javascript
-  Scenario: Backends widget
-    Given I should see "My Fancy Backend API" in the apis dashboard backends widget
-    And I should see "My Regular Backend API" in the apis dashboard backends widget
+  Scenario: Add new products and backends quickly
+    When an admin is at the dashboard
+    Then products can be created from the dashboard
+    And backends can be created from the dashboard
