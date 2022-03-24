@@ -160,6 +160,22 @@ class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::Integrat
     assert_equal [proxy_config_version_new.id], response_proxy_config_ids
   end
 
+  test '#index for latest with pagination' do
+    service = FactoryBot.create(:simple_service, :with_default_backend_api, account: provider)
+    FactoryBot.create_list(:proxy_config, 2, proxy: service.proxy, environment: ProxyConfig::ENVIRONMENTS.first, content: content_hosts('foo.example.com'))
+
+    get admin_api_account_proxy_configs_path(
+      environment: ProxyConfig::ENVIRONMENTS.first,
+      access_token: access_token_value(user: provider.admin_user)
+    ), params: {
+      page: 5,
+      host: 'foo.example.com',
+      version: 'latest'
+    }
+
+    assert_equal [], response_proxy_config_ids
+  end
+
   private
 
   def content_hosts(*hosts)
