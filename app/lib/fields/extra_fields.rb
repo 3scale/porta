@@ -99,6 +99,8 @@ module Fields::ExtraFields
     case value
     when String
       encode_string_extra_field(value)
+    when Integer
+      value.to_s
     else
       value
     end
