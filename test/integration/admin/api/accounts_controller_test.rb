@@ -70,7 +70,7 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
       FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'my_field')
 
-      put admin_api_account_path(buyer, format: :xml), params: update_params.merge({ extra_fields: { my_field: 4 } })
+      put admin_api_account_path(buyer, format: :xml), params: update_params.merge({ extra_fields: { my_field: 4 } }), as: :json
       assert_response :ok
 
       assert buyer.reload.extra_fields['my_field'].is_a?(String)
