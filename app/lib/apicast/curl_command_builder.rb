@@ -134,7 +134,7 @@ module Apicast
     end
 
     def proxy_from_config
-      proxy_config = proxy.proxy_configs.by_environment(environment.to_s).current_versions.order(:id).first
+      proxy_config = proxy.proxy_configs.by_environment(environment.to_s).newest_first.first
       ProxyFromConfig.new(proxy_config.parsed_content) if proxy_config
     end
   end
