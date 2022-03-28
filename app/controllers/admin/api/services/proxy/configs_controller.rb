@@ -33,7 +33,6 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
     respond_with(service_proxy_configs)
   end
 
-  # TODO: THREESCALE-8208 deprecate
   def index_by_host
     respond_with(host_proxy_configs)
   end
@@ -110,7 +109,6 @@ class Admin::Api::Services::Proxy::ConfigsController < Admin::Api::Services::Bas
     service.proxy.proxy_configs.by_environment(environment)
   end
 
-  # TODO: THREESCALE-8208 deprecate
   def host_proxy_configs
     current_account.accessible_proxy_configs
       .by_environment(environment).by_host(host).current_versions

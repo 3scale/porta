@@ -135,14 +135,14 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
     proxy2 = FactoryBot.create(:proxy)
     proxy3 = FactoryBot.create(:proxy)
 
-    c1 = FactoryBot.create_list(:proxy_config, 2, proxy: proxy1, content: json_content(hosts: ['example.com']), environment: 'sandbox').last
-    c2 = FactoryBot.create_list(:proxy_config, 2, proxy: proxy1, content: json_content(hosts: ['example.com']), environment: 'production').last
+    c1 = create_proxy_configs(2, proxy1, 'sandbox', 'example.com').last
+    c2 = create_proxy_configs(2, proxy1, 'production', 'example.com').last
 
-    c3 = FactoryBot.create_list(:proxy_config, 2, proxy: proxy2, content: json_content(hosts: ['example.com']), environment: 'sandbox').last
-    c4 = FactoryBot.create_list(:proxy_config, 2, proxy: proxy2, content: json_content(hosts: ['example.com']), environment: 'production').last
+    c3 = create_proxy_configs(2, proxy2, 'sandbox', 'example.com').last
+    c4 = create_proxy_configs(2, proxy2, 'production', 'example.com').last
 
-    c5 = FactoryBot.create_list(:proxy_config, 2, proxy: proxy3, content: json_content(hosts: ['other.example.com']), environment: 'sandbox').last
-    c6 = FactoryBot.create_list(:proxy_config, 2, proxy: proxy3, content: json_content(hosts: ['other.example.com']), environment: 'production').last
+    c5 = create_proxy_configs(2, proxy3, 'sandbox', 'other.example.com').last
+    c6 = create_proxy_configs(2, proxy3, 'production', 'other.example.com').last
 
     assert_equal [],  ProxyConfig.sandbox.by_host('unknown').current_versions # assert_empty raises an error in mysql
     assert_same_elements [c1, c3], ProxyConfig.sandbox.by_host('example.com').current_versions
@@ -161,29 +161,6 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
 
     service.update(state: 'deleted')
     assert_same_elements [c1, c2], ProxyConfig.current_versions
-  end
-
-  test '#current_versions for available services only' do
-    account = FactoryBot.create(:account)
-
-    service1 = FactoryBot.create(:service, account: account)
-    service2 = FactoryBot.create(:service, account: account)
-
-    proxy1 = FactoryBot.create(:proxy, service: service1)
-    proxy2 = FactoryBot.create(:proxy, service: service2)
-
-    c1 = FactoryBot.create_list(:proxy_config, 3, proxy: proxy1).last
-    c2 = FactoryBot.create_list(:proxy_config, 3, proxy: proxy2).last
-    c3 = FactoryBot.create(:proxy_config)
-
-    assert_same_elements [c1, c2, c3], ProxyConfig.current_versions
-
-    # TODO: THREESCALE-8208: remove next line
-    assert_same_elements [c1, c2], account.accessible_proxy_configs.current_versions
-
-    service1.update(state: 'deleted')
-    # TODO: THREESCALE-8208: remove next line
-    assert_same_elements [c2], account.accessible_proxy_configs.current_versions
   end
 
   def test_filename
@@ -254,13 +231,13 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
     proxy2 = FactoryBot.create(:proxy)
 
     sandbox_latest = [
-      FactoryBot.create_list(:proxy_config, 2, proxy: proxy1, environment: 'sandbox').last,
-      FactoryBot.create_list(:proxy_config, 4, proxy: proxy2, environment: 'sandbox').last,
+      create_proxy_configs(2, proxy1, 'sandbox').last,
+      create_proxy_configs(4, proxy2, 'sandbox').last,
     ]
 
     production_latest = [
-      FactoryBot.create_list(:proxy_config, 4, proxy: proxy1, environment: 'production').last,
-      FactoryBot.create_list(:proxy_config, 2, proxy: proxy2, environment: 'production').last,
+      create_proxy_configs(4, proxy1, 'production').last,
+      create_proxy_configs(2, proxy2, 'production').last,
     ]
 
     assert_same_elements sandbox_latest, ProxyConfig.by_version('latest').by_environment('sandbox')
@@ -399,10 +376,10 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
     { proxy: { hosts: hosts }}.to_json
   end
 
-  def create_proxy_configs(length, proxy, env)
+  def create_proxy_configs(length, proxy, env, host = nil)
     content = case env
-      when 'production' then json_content(hosts: ['production.example.com'])
-      when 'sandbox' then json_content(hosts: ['sandbox.example.com'])
+      when 'production' then json_content(hosts: [host || 'production.example.com'])
+      when 'sandbox' then json_content(hosts: [host || 'sandbox.example.com'])
     end
 
     FactoryBot.create_list(:proxy_config, length, proxy: proxy, content: content, environment: env)
