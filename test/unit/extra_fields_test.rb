@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'test_helper' # rubocop:disable Style/FrozenStringLiteralComment
 
 class ExtraFieldsTest < ActiveSupport::TestCase
 
@@ -41,34 +41,6 @@ class ExtraFieldsTest < ActiveSupport::TestCase
 
       assert_not @buyer.valid?
       assert_not_empty @buyer.errors['provider_extra_field']
-    end
-
-    test 'to_xml renders extra_fields' do
-      FactoryBot.create(:fields_definition,
-                         account: @provider,
-                         target: 'Account',
-                         name: 'stuff',
-                         choices: %w[Orange Apple Banana])
-      @buyer.reload
-      @buyer.extra_fields = { 'stuff' => 'Apple' }
-      doc = Nokogiri::XML.parse(@buyer.to_xml)
-
-      assert_equal 1, doc.xpath('//extra_fields/stuff').size
-      assert_equal 'Apple', doc.xpath('//extra_fields/stuff').first.text
-    end
-
-    # Regression test for https://github.com/3scale/system/issues/2752
-    test 'to_xml works with multiple valued extra field' do
-      FactoryBot.create(:fields_definition,
-                         account: @provider,
-                         target: 'Account',
-                         name: 'stuff',
-                         choices: %w[Orange Apple Banana])
-      @buyer.reload
-      @buyer.extra_fields = { 'stuff' => %w[Apple Orange] }
-
-      doc = Nokogiri::XML.parse(@buyer.to_xml)
-      assert_equal %w[Apple Orange], doc.xpath('//extra_fields/stuff').map(&:text)
     end
 
     test 'never be done for provider resource' do
@@ -115,6 +87,7 @@ class ExtraFieldsTest < ActiveSupport::TestCase
     test 'override using [] notation' do
       @buyer.extra_fields = { provider_extra_field: '[] notation overridable' }
       @buyer.save!
+      assert_not @buyer.extra_fields.empty?
 
       @buyer[:extra_fields] = { }
       @buyer.save!
@@ -204,13 +177,22 @@ class ExtraFieldsTest < ActiveSupport::TestCase
       assert @buyer.errors[@provider_field].present?
     end
 
+    # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/61eefe2bd365260008097f85
+    test 'extra_field should not be stored as an integer' do
+      @buyer.extra_fields = { provider_extra_field: 5 }
+      @buyer.save!
+
+      assert_equal '5', @buyer.extra_fields[:provider_extra_field]
+      assert @buyer.to_xml
+    end
   end
 
   class ChoicesFieldsTest < ExtraFieldsTest
 
     def setup
       super
-      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'city', required: true, choices: %w[Vic Avia])
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'city', required: true, choices: %w[Vic Avia Barna])
+      FactoryBot.create(:fields_definition, account: @provider, target: 'Account', name: 'stuff', choices: %w[Orange Apple Banana])
     end
 
     test 'be invalid if value is not allowed' do
@@ -225,6 +207,33 @@ class ExtraFieldsTest < ActiveSupport::TestCase
       @buyer.validate_fields!
       assert @buyer.valid?
     end
-  end
 
+    test '#to_xml renders extra_fields' do
+      @buyer.extra_fields = { 'stuff' => 'Apple' }
+      doc = Nokogiri::XML.parse(@buyer.to_xml)
+
+      assert_equal 1, doc.xpath('//extra_fields/stuff').size
+      assert_equal 'Apple', doc.xpath('//extra_fields/stuff').first.text
+    end
+
+    # Regression test for https://github.com/3scale/system/issues/2752
+    test '#to_xml works with multiple valued extra field' do
+      @buyer.extra_fields = { 'stuff' => %w[Apple Orange] }
+
+      doc = Nokogiri::XML.parse(@buyer.to_xml)
+      assert_equal %w[Apple Orange], doc.xpath('//extra_fields/stuff').map(&:text)
+    end
+
+    # Regression: https://app.bugsnag.com/3scale-networks-sl/system/errors/61eefe2bd365260008097f85
+    test '#to_xml works with numeric values' do
+      @buyer.extra_fields = { 'stuff' => 4 }
+      doc = Nokogiri::XML.parse(@buyer.to_xml)
+      assert_equal 1, doc.xpath('//extra_fields/stuff').size
+      assert_equal '4', doc.xpath('//extra_fields/stuff').first.text
+
+      @buyer.extra_fields = { 'stuff' => [1, 2] }
+      doc = Nokogiri::XML.parse(@buyer.to_xml)
+      assert_equal %w[1 2], doc.xpath('//extra_fields/stuff').map(&:text)
+    end
+  end
 end
