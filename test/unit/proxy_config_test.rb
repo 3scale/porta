@@ -181,7 +181,7 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
     # TODO: THREESCALE-8208: remove next line
     assert_same_elements [c1, c2], account.accessible_proxy_configs.current_versions
 
-    service1.update(state: 'deleted')
+    service1.update(state: Service::DELETE_STATE)
     # TODO: THREESCALE-8208: remove next line
     assert_same_elements [c2], account.accessible_proxy_configs.current_versions
   end
