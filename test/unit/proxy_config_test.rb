@@ -159,7 +159,7 @@ class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassL
 
     assert_same_elements [c1, c2], ProxyConfig.current_versions
 
-    service.update(state: 'deleted')
+    service.update(state: Service::DELETE_STATE)
     assert_same_elements [c1, c2], ProxyConfig.current_versions
   end
 
