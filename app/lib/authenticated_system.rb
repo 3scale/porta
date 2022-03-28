@@ -30,7 +30,6 @@ module AuthenticatedSystem
     authenticated_request.reset!
   end
 
-  # Feel freee to add skip_after_action for this method in controllers for stats or api transactions
   def update_current_user_after_login
     handle_remember_cookie!(params[:remember_me] == "1")
     user_session.access(request) if user_session

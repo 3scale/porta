@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 class Provider::Admin::Dashboard::WidgetController < Provider::Admin::BaseController
   helper_method :widget, :current_range, :previous_range
   before_action :load_widget
+
+  skip_after_action :update_current_user_after_login # Called already by Provider::Admin::DashboardsController
 
   respond_to :js, :html, :json
 
