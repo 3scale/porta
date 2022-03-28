@@ -743,7 +743,7 @@ class AccountTest < ActiveSupport::TestCase
 
     assert_same_elements [c1, c2], account.accessible_proxy_configs.current_versions
 
-    service1.update(state: 'deleted')
+    service1.update(state: Service::DELETE_STATE)
     assert_same_elements [c2], account.accessible_proxy_configs.current_versions
   end
 end
