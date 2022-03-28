@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
-class ProxyConfigTest < ActiveSupport::TestCase
+class ProxyConfigTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
 
   def test_clone_to
     ProxyConfig::ENVIRONMENTS.each do |environment|
@@ -40,13 +42,17 @@ class ProxyConfigTest < ActiveSupport::TestCase
   end
 
   def test_by_host
-    FactoryBot.create(:proxy_config, content: json_content(hosts: ['example.com']))
-    assert ProxyConfig.by_host('example.com').present?
-    refute ProxyConfig.by_host('example.org').present?
+    c1 = FactoryBot.create(:proxy_config, content: json_content(hosts: ['example.com']))
+    assert_same_elements [c1], ProxyConfig.by_host('example.com')
+    assert_empty ProxyConfig.by_host('example')
+    assert_empty ProxyConfig.by_host('.com')
 
-    FactoryBot.create(:proxy_config, content: json_content(hosts: %w[example.com example.org]))
-    assert ProxyConfig.by_host('example.com').present?
-    assert ProxyConfig.by_host('example.org').present?
+    c2 = FactoryBot.create(:proxy_config, content: json_content(hosts: ['example.com', 'example.org']))
+    assert_same_elements [c1, c2], ProxyConfig.by_host('example.com')
+    assert_same_elements [c2], ProxyConfig.by_host('example.org')
+
+    assert_empty ProxyConfig.by_host('')
+    assert_same_elements [c1, c2], ProxyConfig.by_host(nil)
   end
 
   def test_hosts
@@ -58,15 +64,103 @@ class ProxyConfigTest < ActiveSupport::TestCase
     assert_equal [], config.hosts
   end
 
-  def test_current_versions
+  test '#current_versions: a service deploys to a new host' do
     proxy = FactoryBot.create(:proxy)
-    FactoryBot.create(:proxy_config, version: 1, proxy: proxy)
-    assert_equal [1], ProxyConfig.current_versions.pluck(:version)
 
-    FactoryBot.create(:proxy_config, version: 2, proxy: proxy)
-    assert_equal [2], ProxyConfig.current_versions.pluck(:version)
+    old_config = FactoryBot.create(:proxy_config, proxy: proxy, content: json_content(hosts: ['v1.example.com']), environment: 'production')
+    new_config = FactoryBot.create(:proxy_config, proxy: proxy, content: json_content(hosts: ['v2.example.com']), environment: 'production')
 
-    assert ProxyConfig.current_versions.to_a
+    assert_same_elements [new_config], ProxyConfig.current_versions
+  end
+
+  test '#current_versions: a service deploys to a different env' do
+    proxy = FactoryBot.create(:proxy)
+
+    sand_config = FactoryBot.create(:proxy_config, proxy: proxy, content: json_content(hosts: ['staging.example.com']), environment: 'sandbox')
+    prod_config = FactoryBot.create(:proxy_config, proxy: proxy, content: json_content(hosts: ['prod.example.com']), environment: 'production')
+
+    assert_same_elements [sand_config, prod_config], ProxyConfig.current_versions
+  end
+
+  test '#current_versions returns 1 config per proxy and per environment' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    current_versions = [
+      create_proxy_configs(3, proxy1, 'sandbox').last,
+      create_proxy_configs(4, proxy1, 'production').last,
+      create_proxy_configs(2, proxy2, 'sandbox').last,
+      create_proxy_configs(6, proxy2, 'production').last,
+    ]
+
+    assert_same_elements current_versions, ProxyConfig.current_versions
+  end
+
+  test '#current_versions returns 1 config per proxy for a single environment' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    sandbox_current_versions = [
+      create_proxy_configs(3, proxy1, 'sandbox').last,
+      create_proxy_configs(2, proxy2, 'sandbox').last,
+    ]
+
+    production_current_versions = [
+      create_proxy_configs(4, proxy1, 'production').last,
+      create_proxy_configs(6, proxy2, 'production').last,
+    ]
+
+    assert_same_elements sandbox_current_versions, ProxyConfig.by_environment('sandbox').current_versions
+    assert_same_elements production_current_versions, ProxyConfig.by_environment('production').current_versions
+  end
+
+  test '#current_versions returns 1 config per proxy and per host, when it is latest' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    c1 = FactoryBot.create(:proxy_config, proxy: proxy1, content: json_content(hosts: ['old.example.com']))
+    c2 = FactoryBot.create(:proxy_config, proxy: proxy1, content: json_content(hosts: ['new.example.com']))
+    c3 = FactoryBot.create(:proxy_config, proxy: proxy1, content: json_content(hosts: ['new.example.com']))
+
+    c4 = FactoryBot.create(:proxy_config, proxy: proxy2, content: json_content(hosts: ['old.example.com']))
+    c5 = FactoryBot.create(:proxy_config, proxy: proxy2, content: json_content(hosts: ['new.example.com']))
+    c6 = FactoryBot.create(:proxy_config, proxy: proxy2, content: json_content(hosts: ['new.example.com']))
+
+    assert_empty ProxyConfig.by_host('old.example.com').current_versions
+    assert_same_elements [c3, c6], ProxyConfig.by_host('new.example.com').current_versions
+  end
+
+  test '#current_versions returns 1 config per proxy for a single environment and host' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+    proxy3 = FactoryBot.create(:proxy)
+
+    c1 = create_proxy_configs(2, proxy1, 'sandbox', 'example.com').last
+    c2 = create_proxy_configs(2, proxy1, 'production', 'example.com').last
+
+    c3 = create_proxy_configs(2, proxy2, 'sandbox', 'example.com').last
+    c4 = create_proxy_configs(2, proxy2, 'production', 'example.com').last
+
+    c5 = create_proxy_configs(2, proxy3, 'sandbox', 'other.example.com').last
+    c6 = create_proxy_configs(2, proxy3, 'production', 'other.example.com').last
+
+    assert_equal [],  ProxyConfig.sandbox.by_host('unknown').current_versions # assert_empty raises an error in mysql
+    assert_same_elements [c1, c3], ProxyConfig.sandbox.by_host('example.com').current_versions
+    assert_same_elements [c2, c4], ProxyConfig.production.by_host('example.com').current_versions
+  end
+
+  test '#current_versions do not ignore configs for unavailable services' do
+    service = FactoryBot.create(:service)
+    proxy1 = FactoryBot.create(:proxy, service: service)
+    proxy2 = FactoryBot.create(:proxy)
+
+    c1 = FactoryBot.create(:proxy_config, proxy: proxy1)
+    c2 = FactoryBot.create(:proxy_config, proxy: proxy2)
+
+    assert_same_elements [c1, c2], ProxyConfig.current_versions
+
+    service.update(state: Service::DELETE_STATE)
+    assert_same_elements [c1, c2], ProxyConfig.current_versions
   end
 
   def test_filename
@@ -87,6 +181,146 @@ class ProxyConfigTest < ActiveSupport::TestCase
     assert_raises ProxyConfig::InvalidEnvironmentError do
       ProxyConfig.by_environment('foobar')
     end
+  end
+
+  test '#by_version returns all configs with given version' do
+    configs_v2 = []
+    proxies = FactoryBot.create_list(:proxy, 3)
+    proxies.each do |p|
+      FactoryBot.create(:proxy_config, version: 1, proxy: p)
+      configs_v2 << FactoryBot.create(:proxy_config, version: 2, proxy: p)
+      FactoryBot.create(:proxy_config, version: 3, proxy: p)
+    end
+
+    assert_same_elements configs_v2, ProxyConfig.by_version(2)
+    assert_empty ProxyConfig.by_version(5)
+  end
+
+  test '#by_version returns the latest version of each proxy' do
+    latest_versions = []
+    proxies = FactoryBot.create_list(:proxy, 3)
+    proxies.each { |p| latest_versions << FactoryBot.create_list(:proxy_config, 3, proxy: p).last }
+
+    assert_same_elements latest_versions, ProxyConfig.by_version('latest')
+  end
+
+  test '#by_version returns all configs with given version for a particular environment' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+    proxy3 = FactoryBot.create(:proxy)
+
+    sandbox_v2 = [
+      FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'sandbox'),
+      FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'sandbox'),
+    ]
+
+    production_v2 = [
+      FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'production'),
+      FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'production'),
+    ]
+
+    FactoryBot.create(:proxy_config, version: 3, proxy: proxy3, environment: 'production')
+    FactoryBot.create(:proxy_config, version: 3, proxy: proxy3, environment: 'sandbox')
+
+    assert_same_elements sandbox_v2, ProxyConfig.by_version(2).by_environment('sandbox')
+    assert_same_elements production_v2, ProxyConfig.by_version(2).by_environment('production')
+  end
+
+  test '#by_version returns the latest version of each proxy for a particular environment' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    sandbox_latest = [
+      create_proxy_configs(2, proxy1, 'sandbox').last,
+      create_proxy_configs(4, proxy2, 'sandbox').last,
+    ]
+
+    production_latest = [
+      create_proxy_configs(4, proxy1, 'production').last,
+      create_proxy_configs(2, proxy2, 'production').last,
+    ]
+
+    assert_same_elements sandbox_latest, ProxyConfig.by_version('latest').by_environment('sandbox')
+    assert_same_elements production_latest, ProxyConfig.by_version('latest').by_environment('production')
+  end
+
+  test '#by_version returns all configs with given version for a particular host' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    example_v2 = FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'production', content: json_content(hosts: ['foo.example.com']))
+    FactoryBot.create(:proxy_config, version: 3, proxy: proxy1, environment: 'production', content: json_content(hosts: ['foo.example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'production', content: json_content(hosts: ['new.example.com']))
+
+    assert_same_elements [example_v2], ProxyConfig.by_version(2).by_host('foo.example.com')
+    assert_empty ProxyConfig.by_version(2).by_host('example.com')
+  end
+
+  test '#by_version returns the latest version of each proxy for a particular host' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy1, environment: 'production', content: json_content(hosts: ['example.com']))
+    latest_p1 = FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'production', content: json_content(hosts: ['example.com']))
+
+    FactoryBot.create(:proxy_config, version: 3, proxy: proxy2, environment: 'production', content: json_content(hosts: ['example.com']))
+    latest_p2 = FactoryBot.create(:proxy_config, version: 4, proxy: proxy2, environment: 'production', content: json_content(hosts: ['new.example.com']))
+
+    assert_same_elements [latest_p1], ProxyConfig.by_version('latest').by_host('example.com')
+    assert_same_elements [latest_p2], ProxyConfig.by_version('latest').by_host('new.example.com')
+  end
+
+  test '#by_version returns all configs with given version for a particular environtment and host' do
+    expected_configs = []
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+    proxy3 = FactoryBot.create(:proxy)
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy1, environment: 'production', content: json_content(hosts: ['example.com']))
+    expected_configs << FactoryBot.create(:proxy_config, version: 1, proxy: proxy1, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'production', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy2, environment: 'production', content: json_content(hosts: ['example.com']))
+    expected_configs << FactoryBot.create(:proxy_config, version: 1, proxy: proxy2, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'production', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy3, environment: 'production', content: json_content(hosts: ['v3.example.com']))
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy3, environment: 'sandbox', content: json_content(hosts: ['v3.example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy3, environment: 'production', content: json_content(hosts: ['v3.example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy3, environment: 'sandbox', content: json_content(hosts: ['v3.example.com']))
+
+    assert_same_elements expected_configs, ProxyConfig.by_version(1).by_host('example.com').by_environment('sandbox')
+  end
+
+  test '#by_version returns the latest version of each proxy for a particular environtment and host' do
+    proxy1 = FactoryBot.create(:proxy)
+    proxy2 = FactoryBot.create(:proxy)
+    proxy3 = FactoryBot.create(:proxy)
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy1, environment: 'production', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy1, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'production', content: json_content(hosts: ['example.com']))
+    res1 = FactoryBot.create(:proxy_config, version: 2, proxy: proxy1, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+    res3 = FactoryBot.create(:proxy_config, version: 3, proxy: proxy1, environment: 'production', content: json_content(hosts: ['new.example.com']))
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy2, environment: 'production', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy2, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+    res2 = FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'production', content: json_content(hosts: ['example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy2, environment: 'sandbox', content: json_content(hosts: ['example.com']))
+    res4 = FactoryBot.create(:proxy_config, version: 3, proxy: proxy2, environment: 'sandbox', content: json_content(hosts: ['new.example.com']))
+
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy3, environment: 'production', content: json_content(hosts: ['v3.example.com']))
+    FactoryBot.create(:proxy_config, version: 1, proxy: proxy3, environment: 'sandbox', content: json_content(hosts: ['v3.example.com']))
+    FactoryBot.create(:proxy_config, version: 2, proxy: proxy3, environment: 'production', content: json_content(hosts: ['v3.example.com']))
+    res5 = FactoryBot.create(:proxy_config, version: 2, proxy: proxy3, environment: 'sandbox', content: json_content(hosts: ['v3.example.com']))
+
+    assert_same_elements [res1], ProxyConfig.by_version('latest').by_host('example.com').by_environment('sandbox')
+    assert_same_elements [res2], ProxyConfig.by_version('latest').by_host('example.com').by_environment('production')
+    assert_same_elements [res3], ProxyConfig.by_version('latest').by_host('new.example.com').by_environment('production')
+    assert_same_elements [res4], ProxyConfig.by_version('latest').by_host('new.example.com').by_environment('sandbox')
+    assert_same_elements [res5], ProxyConfig.by_version('latest').by_host('v3.example.com').by_environment('sandbox')
   end
 
   def test_create_without_service_token
@@ -140,5 +374,14 @@ class ProxyConfigTest < ActiveSupport::TestCase
 
   def json_content(hosts: [])
     { proxy: { hosts: hosts }}.to_json
+  end
+
+  def create_proxy_configs(length, proxy, env, host = nil)
+    content = case env
+      when 'production' then json_content(hosts: [host || 'production.example.com'])
+      when 'sandbox' then json_content(hosts: [host || 'sandbox.example.com'])
+    end
+
+    FactoryBot.create_list(:proxy_config, length, proxy: proxy, content: content, environment: env)
   end
 end

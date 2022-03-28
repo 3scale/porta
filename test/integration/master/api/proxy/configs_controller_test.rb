@@ -11,16 +11,17 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
   end
 
   test '#index get all latest proxy_configs' do
+    production_current_versions = []
     proxies = FactoryBot.create_list(:proxy, 3)
     proxies.each do |proxy|
       FactoryBot.create_list(:proxy_config, 5, proxy: proxy, environment: 'sandbox')
-      FactoryBot.create_list(:proxy_config, 3, proxy: proxy, environment: 'production')
+      production_current_versions << FactoryBot.create_list(:proxy_config, 3, proxy: proxy, environment: 'production').last
     end
 
     get master_api_proxy_configs_path(environment: 'production'), params: {access_token: @token.value}
     assert_response :success
 
-    assert_same_elements ProxyConfig.current_versions.by_environment('production').select(:id, :version).map(&:id),
+    assert_same_elements production_current_versions.map(&:id),
                          proxy_config_ids(response.body)
   end
 
@@ -59,6 +60,5 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
   def proxy_config_ids(json)
     JSON.parse(json).fetch('proxy_configs').map { |h| h.dig('proxy_config', 'id') }
   end
-
 
 end
