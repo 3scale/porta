@@ -4,6 +4,11 @@ require 'test_helper'
 
 class Provider::Admin::DashboardsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    # FIXME: why are these wrong?
+    Provider::Admin::DashboardsController.any_instance.expects(:update_current_user_after_login).once
+    Provider::Admin::Dashboard::PotentialUpgradesController.any_instance.expects(:update_current_user_after_login).never
+    Provider::Admin::Dashboard::NewAccountsController.any_instance.expects(:update_current_user_after_login).never
+
     @provider = FactoryBot.create(:provider_account, org_name: 'Company')
     user = FactoryBot.create(:admin, account: provider)
     user.activate!
