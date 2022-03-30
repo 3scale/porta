@@ -15,11 +15,11 @@ Feature: API Usage alerts
       And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
       And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
       And I have following API alerts:
-      | Application | Timestamp           | Utilization | Level | Message         | Alert id |
-      | Bobget      | 2010-09-13 12:20:00 | 0.5         | 50    | foos: 2 of 4    | 1        |
-      | Bobget      | 2010-09-13 15:04:00 | 2           | 200   | bars: 20 of 10  | 5        |
-      | Aliget      | 2010-10-14 11:11:00 | 0.9         | 90    | foos: 18 of 20  | 6        |
-      | Aliget      | 2010-10-15 14:14:00 | 1.5         | 150   | foos: 30 of 20  | 7        |
+      | Application | Timestamp               | Utilization | Level | Message         | Alert id |
+      | Bobget      | 2010-09-13 12:20:00 UTC | 0.5         | 50    | foos: 2 of 4    | 1        |
+      | Bobget      | 2010-09-13 15:04:00 UTC | 2           | 200   | bars: 20 of 10  | 5        |
+      | Aliget      | 2010-10-14 11:11:00 UTC | 0.9         | 90    | foos: 18 of 20  | 6        |
+      | Aliget      | 2010-10-15 14:14:00 UTC | 1.5         | 150   | foos: 30 of 20  | 7        |
 
     Given current domain is the admin domain of provider "foo.3scale.localhost"
     Given I am logged in as provider "foo.3scale.localhost"
