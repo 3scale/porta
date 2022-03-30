@@ -11,9 +11,9 @@ Feature: API Usage alerts
       And a metric "foos" with friendly name "Number of Foos" of provider "foo.3scale.localhost"
       And a metric "bars" with friendly name "Number of Bars" of provider "foo.3scale.localhost"
       And I have following API alerts:
-      | Application | Timestamp           | Utilization | Level | Message         | Alert id |
-      | Aliget      | 2010-10-14 11:11:00 | 0.9         | 90    | foos: 18 of 20  | 6        |
-      | Aliget      | 2010-10-15 14:14:00 | 1.5         | 150   | foos: 30 of 20  | 7        |
+      | Application | Timestamp               | Utilization | Level | Message         | Alert id |
+      | Aliget      | 2010-10-14 11:11:00 UTC | 0.9         | 90    | foos: 18 of 20  | 6        |
+      | Aliget      | 2010-10-15 14:14:00 UTC | 1.5         | 150   | foos: 30 of 20  | 7        |
     Given the current domain is "foo.3scale.localhost"
 
   @ignore-backend @ignore-backend-alerts
