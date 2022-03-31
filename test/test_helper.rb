@@ -31,6 +31,8 @@ require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
 
 require 'minitest/reporters'
 
+require "n_plus_one_control/minitest"
+
 report_dir = [junit_reporter_path, Process.pid].compact.join('-')
 # junit = MiniTest::Reporters::JUnitReporter.new(report_dir)
 

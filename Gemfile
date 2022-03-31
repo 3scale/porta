@@ -224,6 +224,7 @@ group :test do
   gem 'thin', require: false
 
   # performance tests
+  gem "n_plus_one_control"
   gem 'ruby-prof'
   gem 'with_env'
 end

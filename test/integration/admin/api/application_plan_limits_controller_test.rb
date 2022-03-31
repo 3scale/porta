@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::IntegrationTest
+  include NPlusOneControl::MinitestHelper
+
   attr_reader :service, :app_plan, :provider
 
   setup do
@@ -16,16 +18,13 @@ class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::Integrat
   test "index pagination" do
     populate
 
-    get admin_api_application_plan_limits_path(app_plan, format: :json, access_token: @token)
-    assert_response :success
+    get_plan_limits
     assert_equal 4, JSON.parse(response.body)['limits'].length
 
-    get admin_api_application_plan_limits_path(app_plan, per_page: 1, format: :json, access_token: @token)
-    assert_response :success
+    get_plan_limits(per_page: 1)
     assert_equal 1, JSON.parse(response.body)['limits'].length
 
-    get admin_api_application_plan_limits_path(app_plan, per_page: 2, page: 3, format: :json, access_token: @token)
-    assert_response :success
+    get_plan_limits(per_page: 2, page: 3)
     assert_equal 0, JSON.parse(response.body)['limits'].length
   end
 
@@ -33,11 +32,15 @@ class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::Integrat
     populate(owner: service)
     populate(owner: FactoryBot.create(:backend_api, account: provider))
 
-    get admin_api_application_plan_limits_path(app_plan, format: :json, access_token: @token)
-    assert_response :success
+    get_plan_limits
     assert_not_empty JSON.parse(response.body)['limits']
   end
 
+  test "n+1 queries on index" do
+    assert_perform_constant_number_of_queries &method(:get_plan_limits)
+  end
+
+  # must be public for n_plus_one_control to detect it
   def populate(times = 1, owner: service)
     metrics = FactoryBot.create_list(:metric, times, owner: owner)
     methods = FactoryBot.create_list(:method, times, owner: owner)
@@ -48,4 +51,13 @@ class Admin::Api::ApplicationPlanLimitsControllerTest < ActionDispatch::Integrat
       method.usage_limits.create(period: :month, value: 1, plan: app_plan)
     end
   end
+
+  def get_plan_limits(**extra_params)
+    get admin_api_application_plan_limits_path(app_plan, format: :json, access_token: @token, **extra_params)
+    assert_response :success
+  end
+
+  # if proxy affecting changes tracker is installed by another test, warmup is needed
+  # needs to be a method (https://github.com/palkan/n_plus_one_control/pull/58)
+  alias warmup get_plan_limits
 end

@@ -1567,6 +1567,7 @@ GEM
     multipart-post (2.1.1)
     mustache (1.1.1)
     mysql2 (0.5.3)
+    n_plus_one_control (0.6.2)
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
@@ -2045,6 +2046,7 @@ DEPENDENCIES
   minitest-stub-const
   mocha (~> 1.1.0)
   mysql2 (~> 0.5.3)
+  n_plus_one_control
   nokogiri (~> 1.10.10)
   non-stupid-digest-assets (~> 1.0)
   oauth2 (~> 1.4)
