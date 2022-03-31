@@ -23,7 +23,7 @@ module UsageLimitRepresenter
     when 'AccountPlan'
       admin_api_account_plan_url(plan_id)
     else 'ServicePlan' # TODO: make this route flat (without service)
-      polymorphic_url([:admin, :api, plan.service, plan])
+      polymorphic_url([:admin, :api, metric.service, plan])
     end if plan_id
   end
 end
