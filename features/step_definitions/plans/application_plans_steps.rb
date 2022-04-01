@@ -126,3 +126,8 @@ end
 Then /^I should be able to customize the plan$/ do
   should have_link("Convert to a Custom Plan")
 end
+
+Then "the application plan {string} should be deleted" do |name|
+  assert_content "The plan was deleted", wait: 10
+  step(%(I should not see plan "#{name}"))
+end

@@ -6,9 +6,7 @@ Feature: Application plans index page
   by name, no. of apps and state.
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And I am logged in as provider "foo.3scale.localhost"
+    Given a provider is logged in
     And an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has applications
     And I go to the application plans admin page
@@ -39,8 +37,7 @@ Feature: Application plans index page
     Given an application plan "Deleteme" of provider "foo.3scale.localhost"
     When I go to the application plans admin page
     And I select option "Delete" from the actions menu for plan "Deleteme" and I confirm dialog box
-    Then I should see "The plan was deleted"
-    And I should not see plan "Deleteme"
+    Then the application plan "Deleteme" should be deleted
 
   Scenario: Delete an Application plan is not allowed if subscribed to any application
     Then I should not see option "Delete" from the actions menu for plan "Basic"
