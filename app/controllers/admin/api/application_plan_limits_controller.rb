@@ -32,6 +32,6 @@ class Admin::Api::ApplicationPlanLimitsController < Admin::Api::BaseController
   end
 
   def usage_limits
-    @usage_limits ||= application_plan.usage_limits.includes(:plan, metric: [:service, :owner, :parent])
+    @usage_limits ||= application_plan.usage_limits.includes(plan: [:service], metric: [:owner, :parent])
   end
 end
