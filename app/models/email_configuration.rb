@@ -35,18 +35,8 @@ class EmailConfiguration < ApplicationRecord
     }.compact.merge(tls_settings)
   end
 
-  def tls_settings
-    return {} unless tls
-
-    {
-      enable_starttls_auto: tls == "starttls_auto",
-      enable_starttls: tls == "starttls",
-      tls: tls == "tls",
-    }
-  end
-
   def smtp_settings
-    base_settings = only_auth_changes? ? ActionMailer::Base.smtp_settings : {}
+    base_settings = only_auth_changes? ? ActionMailer::Base.smtp_settings : default_trust
     base_settings.merge local_settings
   end
 
@@ -61,6 +51,20 @@ class EmailConfiguration < ApplicationRecord
   end
 
   private
+
+  def default_trust
+    ActionMailer::Base.smtp_settings.slice(:ca_file, :ca_path)
+  end
+
+  def tls_settings
+    return {} unless tls
+
+    {
+      enable_starttls_auto: tls == "starttls_auto",
+      enable_starttls: tls == "starttls",
+      tls: tls == "tls",
+    }
+  end
 
   def account_is_provider
     errors.add(:account_id, "is not a provider account") unless account.try(:provider?)
