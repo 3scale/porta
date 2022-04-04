@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Account::ProviderDomains
+module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop:disable Metrics/BlockLength
     include ThreeScale::DomainSubstitution::Account
 
     with_options :if => :validate_domains? do |provider|
@@ -78,7 +78,9 @@ module Account::ProviderDomains
   end
 
   def domains_changed?
-    attribute_changed?(:domain) || attribute_changed?(:self_domain)
+    raise "crap" if !!(saved_change_to_domain? || saved_change_to_self_domain?) != (attribute_changed?(:domain) || attribute_changed?(:self_domain))
+
+    saved_change_to_domain? || saved_change_to_self_domain?
   end
 
   def publish_domain_events
