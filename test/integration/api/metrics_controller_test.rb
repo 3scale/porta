@@ -6,7 +6,7 @@ class Api::MetricsControllerTest < ActionDispatch::IntegrationTest
   def setup
     provider = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:service, account: provider)
-    @metric = FactoryBot.create(:metric, service: @service, friendly_name: 'super metric')
+    @metric = FactoryBot.create(:metric, owner: @service, friendly_name: 'super metric')
 
     login! provider
   end

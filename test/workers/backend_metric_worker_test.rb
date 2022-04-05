@@ -39,7 +39,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
 
     backend_api = service.backend_apis.first
     backend_hits = backend_api.metrics.hits
-    backend_other = FactoryBot.create(:metric, owner: backend_hits, system_name: 'other-metric-of-backend')
+    backend_other = FactoryBot.create(:method, owner: backend_api, system_name: 'other-metric-of-backend')
 
 
     worker = BackendMetricWorker.new
@@ -49,7 +49,7 @@ class BackendMetricWorkerTest < ActiveSupport::TestCase
       { id: service_hits.id, name: service_hits.system_name, parent_id: nil },
       { id: service_other.id, name: service_other.system_name, parent_id: nil },
       { id: backend_hits.id, name: backend_hits.system_name, parent_id: service_hits.id },
-      { id: backend_other.id, name: backend_other.system_name, parent_id: nil }
+      { id: backend_other.id, name: backend_other.system_name, parent_id: backend_hits.id }
     ]
     metric_attributes.each do |attrs|
       ThreeScale::Core::Metric.expects(:save).with(attrs.merge(service_id: service_backend_id))
