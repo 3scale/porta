@@ -3,7 +3,7 @@ require 'rails_helper'
 resource "Metric" do
 
   let(:service) { provider.services.default }
-  let(:resource) { FactoryBot.build(:metric, service: service) }
+  let(:resource) { FactoryBot.build(:metric, owner: service) }
 
   let(:service_id) { service.id }
 
@@ -41,7 +41,7 @@ resource "Metric" do
   end
 
   api 'method_metric' do
-    let(:resource) { FactoryBot.build(:metric, parent: service.metrics.hits) }
+    let(:resource) { FactoryBot.build(:method, owner: service) }
 
     get '/admin/api/services/:service_id/metrics/:id.:format', action: :show
 

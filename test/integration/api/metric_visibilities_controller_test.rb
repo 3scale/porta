@@ -7,7 +7,7 @@ class Api::MetricVisibilitiesControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:simple_provider)
     @service = FactoryBot.create(:simple_service, account: provider)
     @plan = FactoryBot.create(:application_plan, issuer: service)
-    @metric = FactoryBot.create(:metric, service: service)
+    @metric = FactoryBot.create(:metric, owner: service)
   end
 
   attr_reader :provider, :user, :service, :plan, :metric
@@ -111,7 +111,7 @@ class Api::MetricVisibilitiesControllerTest < ActionDispatch::IntegrationTest
 
       forbidden_service = FactoryBot.create(:simple_service, account: provider)
       forbidden_plan = FactoryBot.create(:application_plan, issuer: forbidden_service)
-      forbidden_metric = FactoryBot.create(:metric, service: forbidden_service)
+      forbidden_metric = FactoryBot.create(:metric, owner: forbidden_service)
 
       put toggle_visible_admin_application_plan_metric_visibility_path(forbidden_plan, forbidden_metric, format: :js)
       assert_response :not_found

@@ -42,7 +42,7 @@ class ApiDocs::AccountDataTest < ActiveSupport::TestCase
 
   def test_returns_metrics_for_provider
     @services.each { |s| s.metrics.delete_all }
-    metric = FactoryBot.create(:metric, service: @services[0], friendly_name: 'top level metric', unit: '1 per day', system_name: 'foo_metric')
+    metric = FactoryBot.create(:metric, owner: @services[0], friendly_name: 'top level metric', unit: '1 per day', system_name: 'foo_metric')
     data = ApiDocs::ProviderData.new(@provider).as_json[:results]
     assert_equal [{name: 'top level metric | service-user-key', value: 'foo_metric'}], data[:metric_names]
     assert_equal [{name: 'top level metric | service-user-key', value: metric.id}], data[:metric_ids]

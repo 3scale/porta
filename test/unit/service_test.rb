@@ -342,7 +342,7 @@ class ServiceTest < ActiveSupport::TestCase
 
     test "destroying service destroys it's metrics" do
       service = FactoryBot.create(:service)
-      metric  = FactoryBot.create(:metric, service: service)
+      metric  = FactoryBot.create(:metric, owner: service)
 
       service.destroy
 

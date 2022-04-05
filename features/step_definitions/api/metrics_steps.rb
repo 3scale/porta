@@ -2,7 +2,7 @@
 
 Given('the following metric(s):') do |table|
   table.raw.flatten.each do |name|
-    FactoryBot.create(:metric, service: @provider.default_service, system_name: name, friendly_name: name)
+    FactoryBot.create(:metric, owner: @provider.default_service, system_name: name, friendly_name: name)
   end
 end
 

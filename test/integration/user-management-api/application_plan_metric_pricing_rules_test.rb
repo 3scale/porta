@@ -9,7 +9,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
     @app_plan = FactoryBot.create(:application_plan, issuer: @service)
-    @metric = FactoryBot.create(:metric, service: @service)
+    @metric = FactoryBot.create(:metric, owner: @service)
     @pricing_rule = FactoryBot.create(:pricing_rule, plan: @app_plan, metric: @metric)
 
     host! @provider.external_admin_domain
