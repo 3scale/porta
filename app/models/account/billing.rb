@@ -33,8 +33,11 @@ module Account::Billing
   protected
 
   def update_invoices_vat_rates
-    if previously_changed?(:vat_rate) || changes.key?(:vat_rate)
-      self.invoices.not_frozen.reorder('').update_all(:vat_rate => self.vat_rate)
+    raise 'crap' if saved_change_to_vat_rate? != (previously_changed?(:vat_rate) || changes.key?(:vat_rate))
+
+    # TODO: once we are sure this predicate is equivalent, move it to after_save as optional if: in line 8
+    if saved_change_to_vat_rate?
+      invoices.not_frozen.reorder('').update_all(vat_rate: vat_rate)
     end
   end
 
