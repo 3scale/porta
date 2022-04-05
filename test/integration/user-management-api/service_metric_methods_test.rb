@@ -8,7 +8,7 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
 
     @service = FactoryBot.create(:service, account: @provider)
     @metric  = @service.metrics.hits
-    @metric_method = FactoryBot.create(:metric, service: @service, parent_id: @metric.id)
+    @metric_method = FactoryBot.create(:metric, owner: @service, parent_id: @metric.id)
 
     host! @provider.external_admin_domain
   end
@@ -26,7 +26,7 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
   test 'service api metrics index' do
     other_service = FactoryBot.create(:service, account: @provider)
     other_metric  = other_service.metrics.hits
-    FactoryBot.create(:metric, service: other_service, parent_id: other_metric.id)
+    FactoryBot.create(:metric, owner: other_service, parent_id: other_metric.id)
 
     get admin_api_service_metric_methods_path(@service, @metric), params: { provider_key: @provider.api_key, format: :xml }
 

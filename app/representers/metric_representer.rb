@@ -18,7 +18,7 @@ module MetricRepresenter
   property :updated_at
 
   link :service do
-    admin_api_service_url(service_id) unless backend_api_metric?
+    admin_api_service_url(owner_id) unless backend_api_metric?
   end
 
   link :backend_api do
