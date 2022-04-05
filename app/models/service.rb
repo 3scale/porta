@@ -100,8 +100,8 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_many :features, as: :featurable, dependent: :destroy
 
-  has_many :metrics, dependent: :destroy
-  has_many :top_level_metrics, -> { includes(:children).top_level }, class_name: 'Metric'
+  has_many :metrics, as: :owner, inverse_of: :owner, dependent: :destroy
+  has_many :top_level_metrics, -> { includes(:children).top_level }, as: :owner, class_name: 'Metric'
 
   has_many :service_tokens, inverse_of: :service, dependent: :destroy
 

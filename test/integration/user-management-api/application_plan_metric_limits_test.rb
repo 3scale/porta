@@ -7,7 +7,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
     @app_plan = FactoryBot.create(:application_plan, issuer: @service)
-    @metric = FactoryBot.create(:metric, service: @service)
+    @metric = FactoryBot.create(:metric, owner: @service)
     @limit = FactoryBot.create(:usage_limit, plan: @app_plan, metric: @metric)
 
     host! @provider.external_admin_domain
@@ -68,7 +68,7 @@ class Admin::Api::ApplicationPlanMetricLimitsTest < ActionDispatch::IntegrationT
 
     test 'application_plan_metric_limits_index only limits of this metric are returned' do
       # Regression test
-      another_metric = FactoryBot.create(:metric, service: @service)
+      another_metric = FactoryBot.create(:metric, owner: @service)
       FactoryBot.create(:usage_limit, plan: @app_plan, metric: another_metric)
 
       get admin_api_application_plan_metric_limits_path(@app_plan, @metric, format: :xml), params: params
