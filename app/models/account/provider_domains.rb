@@ -78,8 +78,6 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def domains_changed?
-    raise "crap" if !!(saved_change_to_domain? || saved_change_to_self_domain?) != (attribute_changed?(:domain) || attribute_changed?(:self_domain))
-
     saved_change_to_domain? || saved_change_to_self_domain?
   end
 
