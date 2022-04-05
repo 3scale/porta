@@ -42,6 +42,9 @@ class Stats::UsageController < Stats::ServiceBaseController
     @metric = @service.metrics.find(params[:metric_id])
   end
 
+  # TODO: render deprecated metric.service_id even when attribute is not set
+  # We can consider whether we can change this API as it is not intended for
+  # public use, see 0886ce743ab57c
   def metrics_with_methods
     {metrics: @metrics, methods: @methods}
   end

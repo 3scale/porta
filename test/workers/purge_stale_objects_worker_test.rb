@@ -14,7 +14,7 @@ class PurgeStaleObjectsWorkerTest < ActiveSupport::TestCase
 
   test 'perform for DeletedObject' do
     metrics = FactoryBot.create_list(:metric, 2)
-    deleted_objects = metrics.map { |metric| DeletedObject.create!(object: metric, owner: metric.service) }
+    deleted_objects = metrics.map { |metric| DeletedObject.create!(object: metric, owner: metric.owner) }
     DeletedObject.expects(:stale).returns(DeletedObject.where(id: deleted_objects.map(&:id)))
 
     deleted_objects.each { |deleted_obj| DeleteObjectHierarchyWorker.expects(:perform_later).with(deleted_obj) }
