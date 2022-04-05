@@ -42,6 +42,7 @@ module Backend
       end
 
       def execute_per_service(&block)
+        # TODO: stop referring to obsolete `service` attribute (5592fc2f407b7)
         services = [*owner.try(:services), service].compact
         services.each(&block)
       end

@@ -55,9 +55,12 @@ FactoryBot.define do
   end
 
   factory(:metric) do
-    association :service
+    association :owner, factory: :service
     sequence(:friendly_name) { |n| "Metric #{n}" }
     sequence(:unit) { |m| "metric_#{m}" }
+
+    # TODO: stop referring to obsolete `service` attribute (5592fc2f407b7)
+    service { owner if Service === owner }
 
     # TODO: use this factory throughout the codebase
     factory(:method) do

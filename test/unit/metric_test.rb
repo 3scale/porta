@@ -56,8 +56,8 @@ class MetricTest < ActiveSupport::TestCase
   test 'system_name is not case sensitive' do
     service = FactoryBot.create(:simple_service)
 
-    metric_one = FactoryBot.create(:metric, service: service, system_name: 'frags')
-    metric_two = FactoryBot.create(:metric, service: service)
+    FactoryBot.create(:metric, owner: service, system_name: 'frags')
+    metric_two = FactoryBot.create(:metric, owner: service)
 
     assert metric_two.update_column(:system_name, 'Frags')
   end
@@ -67,13 +67,13 @@ class MetricTest < ActiveSupport::TestCase
     service_one = FactoryBot.create(:service)
     service_two = FactoryBot.create(:service)
 
-    FactoryBot.create(:metric, :service => service_one, :system_name => 'frags')
+    FactoryBot.create(:metric, owner: service_one, system_name: 'frags')
 
-    metric_two = FactoryBot.build(:metric, :service => service_one, :system_name => 'frags')
+    metric_two = FactoryBot.build(:metric, owner: service_one, system_name: 'frags')
     refute metric_two.valid?
     assert_not_nil metric_two.errors[:system_name].presence
 
-    metric_three = FactoryBot.build(:metric, :service => service_two, :system_name => 'frags')
+    metric_three = FactoryBot.build(:metric, owner: service_two, system_name: 'frags')
     assert metric_three.valid?
   end
 
@@ -88,9 +88,9 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'fill owner' do
     service = FactoryBot.create(:simple_service)
-    service_metric = FactoryBot.build(:metric, service: service)
+    service_metric = service.metrics.build(system_name: "meth1")
     refute service_metric.owner
-    assert service_metric.valid?
+    service_metric.valid?
     assert_equal service, service_metric.owner
 
     backend_api = FactoryBot.create(:backend_api, name: 'API', system_name: 'api', account: service.provider)
