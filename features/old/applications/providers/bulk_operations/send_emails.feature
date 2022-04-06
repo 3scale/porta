@@ -31,6 +31,7 @@ Feature: Mass email bulk operations
     And I fill in "Subject" with "Nothing to say"
     And I press "Send"
     Then I should see "Selected Applications"
+    And "jane@me.us" should receive no emails
 
   Scenario: Emails can't be sent without subject
     Given I am logged in as provider "foo.3scale.localhost"
@@ -41,6 +42,7 @@ Feature: Mass email bulk operations
     And I fill in "Body" with "There is no Subject to this email"
     And I press "Send"
     Then I should see "Selected Applications"
+    And "jane@me.us" should receive no emails
     
   Scenario: Send mass email to application owners
     Given I am logged in as provider "foo.3scale.localhost"
