@@ -231,7 +231,7 @@ class CMS::Builtin < CMS::BasePage
     end
 
     def system_name_rules
-      raise "crap" if system_name_changed? != will_save_change_to_system_name?
+      raise "crap" if system_name_changed? != !!will_save_change_to_system_name?
 
       if new_record?
         unless self.class.system_name_whitelist.include?(system_name)
