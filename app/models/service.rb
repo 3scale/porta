@@ -2,7 +2,7 @@
 
 require 'backend_client'
 
-class Service < ApplicationRecord
+class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Searchable
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
@@ -538,7 +538,9 @@ class Service < ApplicationRecord
   end
 
   def deleted_without_state_machine
-    if state_changed? && deleted? && !@deleted_by_state_machine
+    raise 'crap' if state_changed? != saved_change_to_attribute?(:state)
+
+    if saved_change_to_attribute?(:state) && deleted? && !@deleted_by_state_machine
       System::ErrorReporting.report_error('Service has been deleted without using State Machine')
     end
   end
