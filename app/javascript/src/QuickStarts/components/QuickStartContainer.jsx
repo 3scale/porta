@@ -9,6 +9,7 @@ import {
 } from '@patternfly/quickstarts/dist/quickstarts-full.es'
 import { createReactWrapper } from 'utilities'
 import quickStarts from 'QuickStarts/templates'
+import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
 
 import './QuickStartContainer.scss'
 
@@ -22,6 +23,11 @@ const QuickStartContainer = ({ renderCatalog }: Props): React.Node => {
   const [activeQuickStartID, setActiveQuickStartID] = useLocalStorage('quickstartId', '')
   const [allQuickStartStates, setAllQuickStartStates] = useLocalStorage('quickstarts', {})
 
+  const markdown = {
+    renderExtension: (docContext, rootSelector) => <></>, // TODO: remove this when bug is fixed
+    extensions: [replaceLinksExtension]
+  }
+
   return (
     <PF4QuickStartContainer
       quickStarts={quickStarts}
@@ -33,6 +39,7 @@ const QuickStartContainer = ({ renderCatalog }: Props): React.Node => {
       loading={false}
       language="en"
       useLegacyHeaderColors
+      markdown={markdown}
     >
       {/* HACK: when container has no children, it messes with the page's height */}
       <div style={{ display: 'none' }}>test</div>
