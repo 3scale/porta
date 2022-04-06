@@ -23,11 +23,11 @@ class Api::IntegrationsController < Api::BaseController
     elsif @proxy.save_and_deploy(proxy_params)
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
       flash[:notice] = flash_message(:update_success, environment: environment)
-      update_mapping_rules_position
+      update_mapping_rules_position if params.require(:proxy).has_key?(:proxy_rules_attributes)
 
       redirect_to admin_service_integration_path(@service)
     else
-      attrs = proxy_rules_attributes
+      attrs = destroy_mapping_rules_attributes
       splitted = attrs.keys.group_by { |key| attrs[key]['_destroy'] == '1' }
 
       @marked_for_destroy = splitted[true]
@@ -116,16 +116,18 @@ class Api::IntegrationsController < Api::BaseController
   end
 
   def update_mapping_rules_position
-    proxy_rules_attributes.each_value do |attrs|
+    mappin_rules_position_attributes.each_value do |attrs|
       proxy_rule = @proxy.proxy_rules.find_by(id: attrs['id']) || next
       proxy_rule.set_list_position(attrs['position'])
     end
   end
 
-  def proxy_rules_attributes
-    # we need to permit proxy_rules_attributes: {} because for some reason we are accepting single proxy rule
-    # and also hash with multiple `id: proxy_rule` values
-    params.require(:proxy).permit(proxy_rules_attributes: {}).to_h.fetch(:proxy_rules_attributes, {})
+  def destroy_mapping_rules_attributes
+    params.require(:proxy).permit(proxy_rules_attributes: :destroy).to_h
+  end
+
+  def mappin_rules_position_attributes
+    params.require(:proxy).permit(proxy_rules_attributes: %i[id position]).require(:proxy_rules_attributes).to_h
   end
 
   PROXY_BASIC_PARAMS = [
