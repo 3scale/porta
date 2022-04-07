@@ -22,7 +22,7 @@ class OIDC::ProxyChangedEvent < BaseEventStoreEvent
     service = proxy.try(:service)
     return unless service
 
-    raise 'crap' if !!(service.backend_version.oauth? || service.backend_version_change_to_be_saved&.include?('oauth')) != !!(service.backend_version.oauth? || service.backend_version_change&.include?('oauth'))
+    raise 'crap' if !!(service.backend_version.oauth? || service.backend_version_change_to_be_saved&.include?('oauth') || service.saved_change_to_backend_version&.include?('oauth')) != !!(service.backend_version.oauth? || service.backend_version_change&.include?('oauth'))
 
     service.backend_version.oauth? || service.backend_version_change_to_be_saved&.include?('oauth') || service.saved_change_to_backend_version&.include?('oauth')
   end
