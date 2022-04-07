@@ -1,6 +1,6 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
-  name: getting-started-with-quick-starts
+  name: creating-a-metric-quick-start
   # you can add additional metadata here
   instructional: true
 spec:
@@ -23,7 +23,7 @@ spec:
   introduction: |-
     This quick start guides you through how to control access to your API by defining metrics to track the usage of your API.
     
-    To learn more about API metrics, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.10/html-single/admin_portal_guide/index#designating-methods-and-adding-metrics-for-capturing-usage-details_methods-and-metrics-for-products-and-backends).
+    To learn more about API metrics, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html-single/admin_portal_guide/index#designating-methods-and-adding-metrics-for-capturing-usage-details_methods-and-metrics-for-products-and-backends).
 
     _Hits_ is the built-in metric that exists for each API. It tracks the number of calls made to your API. To capture usage of your API apart from _Hits_, define a metric that reports the usage in different units. A unit should be quantifiable and apply a meaning for your business goals such as megabytes (MB), CPU time, or the number of elements returned by the API. Metrics other than _Hits_, such as CPU time or MB are not provided by default. Obtain these metrics by using an endpoint called by an external service configured by the user.
 
@@ -87,7 +87,7 @@ spec:
         ### Next step:
         1. Verify whether the added metric is available in your application plans.
         1. Edit limits and pricing rules for each method by going to <strong>[Your\_product\_name] > Applications > Application Plans > [plan_you_want_to_edit]</strong>.
-        1. Map your metrics to one or more URL patterns by going to <strong>[Your\_product\_name] > Integration > Mapping Rules</strong>. See Adding mapping rules to methods and metrics.
+        1. Map your metrics to one or more URL patterns by going to <strong>[Your\_product\_name] > Integration > Mapping Rules</strong>. See [Adding mapping rules to methods and metrics](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html-single/admin_portal_guide/index#adding-mapping-rules-to-methods-and-metrics_methods-and-metrics-for-products-and-backends).
 
       # optional - the task's Check your work module
       review:

@@ -1,6 +1,6 @@
 # Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
 metadata:
-  name: getting-started-with-quick-starts
+  name: creating-a-product-quick-start
   # you can add additional metadata here
   instructional: true
 spec:
