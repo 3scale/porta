@@ -46,7 +46,7 @@ spec:
         ### Prerequisites
 
         - A backend. To create one, see Create a backend.
-        - A method. Mapping rules are required in your previously created methods, however, they are optional for metrics, To create one, see [Create a method](createMethod.yaml).
+        - A method. Mapping rules are required in your previously created methods, however, they are optional for metrics, To create one, see create-a-method-link-in-create-mapping-rules.
         
         ### Procedure
 
@@ -57,7 +57,7 @@ spec:
         
           Important fields:
               - _Verb_: The HTTP request verb (GET, POST, DELETE, or PUT).
-              - _Pattern_: Add a valid URL that starts with a forward slash /. The URL can be from a wildcard you specified inside curly brackets {}.
+              - _Pattern_: Add a valid URL that starts with a forward slash /. The URL can be from a wildcard you specified inside curly brackets { }.
               - _Increment by_: The metric increment number. For example, 1.
               - _Last?_: If this mapping rule should be considered as the last one, to stop processing other mapping rules.
               - _Position_: Number that indicates the position of the execution of the mapping rule, to sort the mapping rules.

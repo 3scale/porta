@@ -1,5 +1,5 @@
 // @flow
 
 export default [
-  ['this-text-from-the-yml-will-be-replaced', '/with/this/href', 'And this text in the HTML']
+  ['create-a-method-in-create-mapping-rules', '/createMethod', 'Create a method']
 ]
