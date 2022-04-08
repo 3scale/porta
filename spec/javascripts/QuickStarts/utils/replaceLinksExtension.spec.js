@@ -2,10 +2,10 @@
 
 import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
 
-jest.mock('QuickStarts/templates/links', () => [
+const links = [
   ['[create-mapping-rule]', '/the/url', 'this page'],
   ['[click-me-link]', '/click/me', 'Click me!']
-])
+]
 
 it('should work', () => {
   const html = `
@@ -16,7 +16,7 @@ it('should work', () => {
 
     <footer>[click-me-link]</footer>
   `
-  const newHTML = replaceLinksExtension.filter(html)
+  const newHTML = replaceLinksExtension(links).filter(html)
 
   expect(newHTML).toMatch(`
     <h1>Create Mapping rules</h1>

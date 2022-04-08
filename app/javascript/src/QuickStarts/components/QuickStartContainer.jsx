@@ -14,18 +14,19 @@ import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
 import './QuickStartContainer.scss'
 
 type Props = {
+  links: Array<[string, string, string]>,
   renderCatalog?: boolean
 }
 
 const CATALOG_CONTAINER_ID = 'quick-start-catalog-page-wrapper'
 
-const QuickStartContainer = ({ renderCatalog }: Props): React.Node => {
+const QuickStartContainer = ({ links, renderCatalog }: Props): React.Node => {
   const [activeQuickStartID, setActiveQuickStartID] = useLocalStorage('quickstartId', '')
   const [allQuickStartStates, setAllQuickStartStates] = useLocalStorage('quickstarts', {})
 
   const markdown = {
     renderExtension: (docContext, rootSelector) => <></>, // TODO: remove this when bug is fixed
-    extensions: [replaceLinksExtension]
+    extensions: [replaceLinksExtension(links)]
   }
 
   return (

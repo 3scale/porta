@@ -11,9 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error(`Container not found: #${containerId}`)
   }
 
-  const { renderCatalog } = container.dataset
+  const { links, renderCatalog } = container.dataset
 
   QuickStartContainer({
+    links: safeFromJsonString<Array<[string, string, string]>>(links) || [],
     renderCatalog: safeFromJsonString<boolean>(renderCatalog)
   }, containerId)
 })

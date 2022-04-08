@@ -1,11 +1,9 @@
 // @flow
 
-import links from 'QuickStarts/templates/links'
-
 /**
  * This extension replaces all 'expression' from the quickstart HTML with a link made from 'href' and 'text'.
  */
-export default {
+const replaceLinksExtension = (links: Array<[string, string, string]>): ({ filter: (string) => string }) => ({
   type: 'output',
   filter: (html: string): string => {
     const filteredHtml = links.reduce((_html, link) => {
@@ -15,4 +13,6 @@ export default {
 
     return filteredHtml
   }
-}
+})
+
+export default replaceLinksExtension

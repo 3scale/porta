@@ -1,4 +1,4 @@
-#quick-start-container data-render-catalog=(active_menu == :quickstarts).to_s
+#quick-start-container data-render-catalog=(active_menu == :quickstarts).to_s data-links=QuickstartsPresenter.new(current_api).links
   = javascript_pack_tag 'quickstarts/container'
 
 javascript:
