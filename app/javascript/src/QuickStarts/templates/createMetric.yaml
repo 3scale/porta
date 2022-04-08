@@ -35,7 +35,7 @@ spec:
 
         ### Prerequisites
 
-        - A backend. To create one, see Creating a backend.
+        - A backend. To create one, see create-a-backend-link.
         
         ### Procedure
 
@@ -67,8 +67,8 @@ spec:
 
         ### Prerequisites
 
-        - A Product. To create one, see Creating a product.
-        - An application plan. To create one, see Create an application plan.
+        - A Product. To create one, see create-a-product-link.
+        - An application plan. To create one, see create-an-application-plan-link.
 
         The procedure for adding a method or metric to a product is similar to adding a method or metric to a backend. 
 

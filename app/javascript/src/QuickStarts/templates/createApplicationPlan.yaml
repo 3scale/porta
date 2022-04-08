@@ -30,7 +30,7 @@ spec:
         Application plans define the different sets of access rights you might want to allow for consumers of your API. These can determine anything from rate limits, which methods or resources are accessible and which features are enabled.
 
         ### Prerequiaites
-        - A product. To create one, see Create a product. 
+        - A product. To create one, see create-a-product-link. 
         
         ### Procedure
         1. You have two ways to start the creating process:
