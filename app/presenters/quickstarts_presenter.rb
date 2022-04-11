@@ -11,6 +11,7 @@ class QuickstartsPresenter
 
   attr_reader :current_api
 
+  # Consumed by app/javascript/src/QuickStarts/utils/replaceLinksExtension.js
   def links
     [
       ['create-a-product-link', new_admin_service_path, 'Create a product'],

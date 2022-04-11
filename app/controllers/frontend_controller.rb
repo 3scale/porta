@@ -37,6 +37,8 @@ class FrontendController < ApplicationController
 
   layout :pick_buyer_or_provider_layout
 
+  helper_method :quickstarts_presenter
+
   private
 
   def disable_x_content_type
@@ -167,5 +169,9 @@ class FrontendController < ApplicationController
 
   def set_display_currency
     ThreeScale::MoneyHelper.display_currency = current_account.currency if current_account
+  end
+
+  def quickstarts_presenter
+    @quickstarts_presenter ||= QuickstartsPresenter.new(@backend_api || @service || current_account.default_service)
   end
 end
