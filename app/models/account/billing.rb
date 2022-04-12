@@ -5,7 +5,7 @@ module Account::Billing
 
   included do
     has_many :invoices, :foreign_key => 'buyer_account_id'
-    after_save :update_invoices_vat_rates
+    after_save :update_invoices_vat_rates, if: :saved_change_to_vat_rate?
     before_destroy :check_unresolved_invoices
   end
 
@@ -33,13 +33,7 @@ module Account::Billing
   protected
 
   def update_invoices_vat_rates
-    # TODO: once we are sure this predicate is equivalent, move it to after_save as optional if: in line 8
-    # TODO: this is not equivalent to previous predicate "(previously_changed?(:vat_rate) || changes.key?(:vat_rate))" but
-    # does it make sense to update all vat_rate when previously changed? Wouldn't it be enough doing it only after vat_rate
-    # changes?
-    if saved_change_to_vat_rate?
-      invoices.not_frozen.reorder('').update_all(vat_rate: vat_rate)
-    end
+    invoices.not_frozen.reorder('').update_all(vat_rate: vat_rate)
   end
 
   # Will prevent the buyer from destroying if there are unresolved
