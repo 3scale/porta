@@ -280,7 +280,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def deployment_option_changed?
     [self, service].any? do |record|
-      record.respond_to?(:will_save_change_to_deployment_option?) && record.will_save_change_to_deployment_option?
+      record.will_save_change_to_attribute?(:deployment_option)
     end
   end
 
