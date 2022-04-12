@@ -1,5 +1,6 @@
 # TODO: parameter name was deprecated on 21.02.2014 and should be removed at one point.
 class Metric < ApplicationRecord
+  include ActiveModel::MassAssignmentSecurity
   include Backend::ModelExtensions::Metric
   include SystemName
   include BackendApiLogic::MetricExtension
@@ -26,8 +27,7 @@ class Metric < ApplicationRecord
 
   acts_as_tree
 
-  attr_protected :parent_id, :tenant_id, :audit_ids
-  attr_accessible :service_id, :friendly_name, :system_name, :unit, :description
+  attr_protected :service_id, :parent_id, :tenant_id, :audit_ids
 
   validates :unit, presence: true, unless: :child?
   validates :friendly_name, uniqueness: {scope: %i[owner_type owner_id]}, presence: true
@@ -53,14 +53,21 @@ class Metric < ApplicationRecord
     where.has { ((owner_type == 'Service') & owner_id.in(provider.services.pluck(:id))) | ((owner_type == 'BackendApi') & owner_id.in(provider.backend_apis.pluck(:id))) }
   }
 
+  def assign_attributes(values, options = {})
+    sanitize_for_mass_assignment(values, options[:as]).each do |k, v|
+      send("#{k}=", v)
+    end
+  end
+
   # Create one of the predefined, default metrics.
   #
   # == Arguments
   #
   # +type+:: Which default metric to create. Currently only :hits are supported.
   def self.create_default!(type, attributes = {})
-    metric = new(attributes.merge(:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
-                                  :description => 'Number of API hits'))
+    metric = Metric.new
+    metric.assign_attributes({:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
+                                :description => 'Number of API hits'})
     metric.service_id = attributes[:service_id]
     metric.save!
     metric
