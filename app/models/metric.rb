@@ -1,6 +1,5 @@
 # TODO: parameter name was deprecated on 21.02.2014 and should be removed at one point.
 class Metric < ApplicationRecord
-  include ActiveModel::MassAssignmentSecurity
   include Backend::ModelExtensions::Metric
   include SystemName
   include BackendApiLogic::MetricExtension
@@ -53,22 +52,17 @@ class Metric < ApplicationRecord
     where.has { ((owner_type == 'Service') & owner_id.in(provider.services.pluck(:id))) | ((owner_type == 'BackendApi') & owner_id.in(provider.backend_apis.pluck(:id))) }
   }
 
-  def assign_attributes(values, options = {})
-    sanitize_for_mass_assignment(values, options[:as]).each do |key, value|
-      send("#{key}=", value)
-    end
-  end
-
   # Create one of the predefined, default metrics.
   #
   # == Arguments
   #
   # +type+:: Which default metric to create. Currently only :hits are supported.
   def self.create_default!(type, attributes = {})
-    metric = Metric.new
-    metric.assign_attributes({:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
-                                :description => 'Number of API hits'})
-    metric.service_id = attributes[:service_id]
+    id = attributes[:service_id]
+    attributes.delete(:service_id)
+    metric = new(attributes.merge(:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
+                                  :description => 'Number of API hits'))
+    metric.service_id = id
     metric.save!
     metric
   end
