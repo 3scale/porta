@@ -269,8 +269,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def set_correct_endpoints?
-    raise "crap" if (apicast_configuration_driven_changed? || new_record?) != (will_save_change_to_apicast_configuration_driven? || new_record?)
-
     will_save_change_to_apicast_configuration_driven? || new_record?
   end
 

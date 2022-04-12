@@ -538,8 +538,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def deleted_without_state_machine
-    raise 'crap' if state_changed? != saved_change_to_attribute?(:state)
-
     if saved_change_to_attribute?(:state) && deleted? && !@deleted_by_state_machine
       System::ErrorReporting.report_error('Service has been deleted without using State Machine')
     end

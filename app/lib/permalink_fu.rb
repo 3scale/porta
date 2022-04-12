@@ -25,8 +25,6 @@ module PermalinkFu
   private
 
   def create_unique_permalink
-    raise 'crap' if (permalink.present? && !permalink_changed?) != (permalink.present? && !will_save_change_to_permalink?)
-
     return if permalink.present? && !will_save_change_to_permalink?
 
     base_permalink = build_permalink_from_attribute
