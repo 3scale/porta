@@ -237,7 +237,7 @@ class CMS::Builtin < CMS::BasePage
         unless self.class.system_name_whitelist.include?(system_name)
           errors.add(:system_name, :not_reserved)
         end
-      elsif will_save_change_to_system_name? && attribute_was('system_name') != system_name
+      elsif will_save_change_to_system_name?
         errors.add(:system_name, :cannot_be_changed)
       end
     end
