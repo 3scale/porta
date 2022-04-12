@@ -294,8 +294,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def track_apicast_version_change
-    raise "crap" if apicast_configuration_driven_changed? != saved_change_to_apicast_configuration_driven?
-
     tracking = ThreeScale::Analytics.current_user
 
     run_after_commit do
