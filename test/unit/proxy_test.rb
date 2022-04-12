@@ -659,6 +659,28 @@ class ProxyTest < ActiveSupport::TestCase
     @proxy.destroy
   end
 
+  test '#changed_for_autosave?' do
+    # no changes
+    assert_not @proxy.changed_for_autosave?
+
+    # deployment option changed
+    @proxy.expects(:deployment_option_changed?).returns(true)
+    assert @proxy.changed_for_autosave?
+  end
+
+  test '#deployment_option_changed?' do
+    service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
+    proxy = FactoryBot.create(:proxy, service: service)
+
+    assert_not proxy.deployment_option_changed?
+
+    proxy.service.deployment_option = 'hosted'
+    assert_not proxy.deployment_option_changed?
+
+    proxy.service.deployment_option = 'self_managed'
+    assert proxy.deployment_option_changed?
+  end
+
   def analytics
     ThreeScale::Analytics::UserTracking.any_instance
   end

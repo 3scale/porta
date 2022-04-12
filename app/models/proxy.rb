@@ -278,14 +278,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     nil
   end
 
-  DEPLOYMENT_OPTION_CHANGED = ->(record) {
-    raise 'crap' if record.saved_changes.key?(:deployment_option) != record.changed_attributes.key?(:deployment_option)
-
-    record.saved_change_to_attribute?(:deployment_option)
-  }
-
   def deployment_option_changed?
-    [ self, service ].any?(&DEPLOYMENT_OPTION_CHANGED)
+    [self, service].any? do |record|
+      record.respond_to?(:will_save_change_to_deployment_option?) && record.will_save_change_to_deployment_option?
+    end
   end
 
   # We want to autosave when Service#deployment_option changed
