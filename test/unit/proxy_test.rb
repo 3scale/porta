@@ -664,7 +664,7 @@ class ProxyTest < ActiveSupport::TestCase
     assert_not @proxy.changed_for_autosave?
 
     # deployment option changed
-    @proxy.expects(:deployment_option_changed?).returns(true)
+    @proxy.service.expects(:will_save_change_to_attribute?).with(:deployment_option).returns(true)
     assert @proxy.changed_for_autosave?
   end
 
