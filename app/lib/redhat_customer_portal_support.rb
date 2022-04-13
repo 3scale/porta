@@ -14,14 +14,14 @@ module RedhatCustomerPortalSupport
   end
 
   def redhat_account_recently_verified?
-    raise 'crap' if previous_changes['extra_fields'] != saved_change_to_attribute(:extra_fields)
+    raise 'crap' if previous_changes['extra_fields'].to_json != saved_change_to_extra_fields.to_json
 
-    extra_fields_change = saved_change_to_attribute(:extra_fields)
+    extra_fields_change = saved_change_to_extra_fields
 
     return false unless extra_fields_change
 
-    verified_by_was = extra_fields_change.first['red_hat_account_verified_by']
-    verified_by = extra_fields_change.last['red_hat_account_verified_by']
+    verified_by_was = extra_fields_change.first[:red_hat_account_verified_by]
+    verified_by = extra_fields_change.last[:red_hat_account_verified_by]
 
     verified_by_was.blank? && verified_by.present?
   end
