@@ -58,8 +58,7 @@ class Metric < ApplicationRecord
   #
   # +type+:: Which default metric to create. Currently only :hits are supported.
   def self.create_default!(type, attributes = {})
-    id = attributes[:service_id]
-    attributes.delete(:service_id)
+    service_id = attributes.delete(:service_id)
     metric = new(attributes.merge(:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
                                   :description => 'Number of API hits'))
     metric.service_id = id
