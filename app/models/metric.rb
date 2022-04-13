@@ -61,7 +61,7 @@ class Metric < ApplicationRecord
     service_id = attributes.delete(:service_id)
     metric = new(attributes.merge(:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
                                   :description => 'Number of API hits'))
-    metric.service_id = id
+    metric.service_id = service_id
     metric.save!
     metric
   end
