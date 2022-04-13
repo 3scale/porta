@@ -257,7 +257,9 @@ class Cinstance < Contract
   end
 
   def user_key_updated?
-    self.previous_changes.select { |a| a == "user_key"}.count > 0
+    raise 'crap' if (previous_changes.select { |a| a == "user_key"}.count > 0) != !!saved_change_to_user_key?
+
+    saved_change_to_user_key?
   end
 
   def push_webhook_key_updated

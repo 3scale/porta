@@ -14,7 +14,9 @@ module RedhatCustomerPortalSupport
   end
 
   def redhat_account_recently_verified?
-    extra_fields_change = previous_changes['extra_fields']
+    raise 'crap' if previous_changes['extra_fields'] != saved_change_to_attribute(:extra_fields)
+
+    extra_fields_change = saved_change_to_attribute(:extra_fields)
 
     return false unless extra_fields_change
 
@@ -25,7 +27,9 @@ module RedhatCustomerPortalSupport
   end
 
   def recently_suspended?
-    previous_changes['state'] && suspended?
+    raise 'crap' if previous_changes['state'] != saved_change_to_attribute(:state)
+
+    saved_change_to_attribute(:state) && suspended?
   end
 
   private

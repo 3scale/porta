@@ -77,6 +77,7 @@ class PaymentDetail < ApplicationRecord
   private
 
   def notify_credit_card_changes
-    CreditCardChangeNotifier.new(account, previous_changes).call
+    raise 'crap' if previous_changes != saved_changes
+    CreditCardChangeNotifier.new(account, saved_changes).call
   end
 end
