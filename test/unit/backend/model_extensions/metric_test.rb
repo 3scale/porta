@@ -56,21 +56,17 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
   end
 
   test 'sync backend metric data multiple times under race condition' do
-    class MetricWithFiber < ::Metric
-      def destroy
-        super
-        Fiber.yield
-      end
-    end
-
     service = FactoryBot.create(:simple_service)
-    metric = MetricWithFiber.create(service: service, friendly_name: 'My metric', unit: 'hits')
+    metric = Metric.create(service: service, friendly_name: 'My metric', unit: 'hits')
     metric_id = metric.id
 
     ::BackendMetricWorker.expects(:perform_later).with(service.backend_id, metric_id).twice
 
-    metric_f1 = MetricWithFiber.find(metric_id)
-    metric_f2 = MetricWithFiber.find(metric_id)
+    metric_f1 = Metric.find(metric_id)
+    metric_f2 = Metric.find(metric_id)
+
+    patch_metric_with_fiber metric_f1
+    patch_metric_with_fiber metric_f2
 
     f1 = Fiber.new { metric_f1.destroy }
     f2 = Fiber.new { metric_f2.destroy }
@@ -104,5 +100,16 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
     BackendMetricWorker.expects(:perform_now).with(service.backend_id, metric.id)
     metric.sync_backend_for_service!(service)
+  end
+
+  private
+
+  def patch_metric_with_fiber(metric)
+    class << metric
+      def destroy
+        super
+        Fiber.yield
+      end
+    end
   end
 end
