@@ -87,6 +87,9 @@ exports[`should not render reset password button when disablePasswordReset is tr
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-3"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -171,63 +174,79 @@ exports[`should not render reset password button when disablePasswordReset is tr
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_username"
                                 >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus="autoFocus"
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Email or Username
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus="autoFocus"
-                                  className=""
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
                                   type="text"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_username"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="username"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="text"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus="autoFocus"
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-5"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_username"
+                                      name="username"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="text"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -271,63 +290,79 @@ exports[`should not render reset password button when disablePasswordReset is tr
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_password"
                                 >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Password
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus={false}
-                                  className=""
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
                                   type="password"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_password"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="password"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="password"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus={false}
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-6"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_password"
+                                      name="password"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="password"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -337,49 +372,39 @@ exports[`should not render reset password button when disablePasswordReset is tr
                           className="pf-c-form__group pf-m-action"
                         >
                           <div
-                            className="pf-c-form__actions"
+                            className="pf-c-form__group-control"
                           >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
+                            <div
+                              className="pf-c-form__actions"
                             >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  Object {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <Button
+                                className="pf-c-button pf-m-primary pf-m-block"
+                                isDisabled={true}
+                                type="submit"
                               >
-                                <Button
+                                <ButtonBase
                                   className="pf-c-button pf-m-primary pf-m-block"
+                                  innerRef={null}
                                   isDisabled={true}
-                                  ouiaContext={
-                                    Object {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
                                   <button
-                                    aria-disabled={null}
+                                    aria-disabled={true}
                                     aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                    data-ouia-component-id="OUIA-Generated-Button-primary-3"
+                                    data-ouia-component-type="PF4/Button"
+                                    data-ouia-safe={true}
                                     disabled={true}
+                                    role={null}
                                     tabIndex={null}
                                     type="submit"
                                   >
                                      Sign in
                                   </button>
-                                </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                                </ButtonBase>
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </ActionGroup>
@@ -509,6 +534,9 @@ exports[`should render Login form and Authentication providers when available 1`
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-4"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -593,63 +621,79 @@ exports[`should render Login form and Authentication providers when available 1`
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_username"
                                 >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus="autoFocus"
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Email or Username
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus="autoFocus"
-                                  className=""
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
                                   type="text"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_username"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="username"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="text"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus="autoFocus"
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-7"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_username"
+                                      name="username"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="text"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -693,63 +737,79 @@ exports[`should render Login form and Authentication providers when available 1`
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_password"
                                 >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Password
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus={false}
-                                  className=""
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
                                   type="password"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_password"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="password"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="password"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus={false}
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-8"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_password"
+                                      name="password"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="password"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -759,49 +819,39 @@ exports[`should render Login form and Authentication providers when available 1`
                           className="pf-c-form__group pf-m-action"
                         >
                           <div
-                            className="pf-c-form__actions"
+                            className="pf-c-form__group-control"
                           >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
+                            <div
+                              className="pf-c-form__actions"
                             >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  Object {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <Button
+                                className="pf-c-button pf-m-primary pf-m-block"
+                                isDisabled={true}
+                                type="submit"
                               >
-                                <Button
+                                <ButtonBase
                                   className="pf-c-button pf-m-primary pf-m-block"
+                                  innerRef={null}
                                   isDisabled={true}
-                                  ouiaContext={
-                                    Object {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
                                   <button
-                                    aria-disabled={null}
+                                    aria-disabled={true}
                                     aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                    data-ouia-component-id="OUIA-Generated-Button-primary-4"
+                                    data-ouia-component-type="PF4/Button"
+                                    data-ouia-safe={true}
                                     disabled={true}
+                                    role={null}
                                     tabIndex={null}
                                     type="submit"
                                   >
                                      Sign in
                                   </button>
-                                </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                                </ButtonBase>
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </ActionGroup>
@@ -1155,6 +1205,9 @@ exports[`should render itself 1`] = `
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-1"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -1239,63 +1292,79 @@ exports[`should render itself 1`] = `
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_username"
                                 >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus="autoFocus"
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Email or Username
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus="autoFocus"
-                                  className=""
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
                                   type="text"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_username"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="username"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="text"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus="autoFocus"
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-1"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_username"
+                                      name="username"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="text"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -1339,63 +1408,79 @@ exports[`should render itself 1`] = `
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_password"
                                 >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Password
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus={false}
-                                  className=""
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
                                   type="password"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_password"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="password"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="password"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus={false}
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-2"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_password"
+                                      name="password"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="password"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -1405,49 +1490,39 @@ exports[`should render itself 1`] = `
                           className="pf-c-form__group pf-m-action"
                         >
                           <div
-                            className="pf-c-form__actions"
+                            className="pf-c-form__group-control"
                           >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
+                            <div
+                              className="pf-c-form__actions"
                             >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  Object {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <Button
+                                className="pf-c-button pf-m-primary pf-m-block"
+                                isDisabled={true}
+                                type="submit"
                               >
-                                <Button
+                                <ButtonBase
                                   className="pf-c-button pf-m-primary pf-m-block"
+                                  innerRef={null}
                                   isDisabled={true}
-                                  ouiaContext={
-                                    Object {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
                                   <button
-                                    aria-disabled={null}
+                                    aria-disabled={true}
                                     aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                    data-ouia-component-id="OUIA-Generated-Button-primary-1"
+                                    data-ouia-component-type="PF4/Button"
+                                    data-ouia-safe={true}
                                     disabled={true}
+                                    role={null}
                                     tabIndex={null}
                                     type="submit"
                                   >
                                      Sign in
                                   </button>
-                                </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                                </ButtonBase>
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </ActionGroup>
@@ -1599,6 +1674,9 @@ exports[`should render reset password button when disablePasswordReset is false 
                 >
                   <h2
                     className="pf-c-title pf-m-3xl"
+                    data-ouia-component-id="OUIA-Generated-Title-2"
+                    data-ouia-component-type="PF4/Title"
+                    data-ouia-safe={true}
                   >
                     Log in to your account
                   </h2>
@@ -1683,63 +1761,79 @@ exports[`should render reset password button when disablePasswordReset is false 
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_username"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_username"
                                 >
-                                  Email or Username
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus="autoFocus"
-                                id="session_username"
-                                isRequired={true}
-                                name="username"
-                                onChange={[Function]}
-                                type="text"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Email or Username
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus="autoFocus"
-                                  className=""
                                   id="session_username"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="username"
                                   onChange={[Function]}
                                   type="text"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus="autoFocus"
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_username"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="username"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="text"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus="autoFocus"
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-3"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_username"
+                                      name="username"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="text"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -1783,63 +1877,79 @@ exports[`should render reset password button when disablePasswordReset is false 
                             <div
                               className="pf-c-form__group"
                             >
-                              <label
-                                className="pf-c-form__label"
-                                htmlFor="session_password"
+                              <div
+                                className="pf-c-form__group-label"
                               >
-                                <span
-                                  className="pf-c-form__label-text"
+                                <label
+                                  className="pf-c-form__label"
+                                  htmlFor="session_password"
                                 >
-                                  Password
-                                </span>
-                                <span
-                                  aria-hidden="true"
-                                  className="pf-c-form__label-required"
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <ForwardRef
-                                autoFocus={false}
-                                id="session_password"
-                                isRequired={true}
-                                name="password"
-                                onChange={[Function]}
-                                type="password"
-                                value=""
+                                  <span
+                                    className="pf-c-form__label-text"
+                                  >
+                                    Password
+                                  </span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="pf-c-form__label-required"
+                                  >
+                                     
+                                    *
+                                  </span>
+                                </label>
+                                 
+                              </div>
+                              <div
+                                className="pf-c-form__group-control"
                               >
-                                <TextInputBase
-                                  aria-label={null}
+                                <TextInput
                                   autoFocus={false}
-                                  className=""
                                   id="session_password"
-                                  innerRef={null}
-                                  isDisabled={false}
-                                  isReadOnly={false}
                                   isRequired={true}
-                                  isValid={true}
                                   name="password"
                                   onChange={[Function]}
                                   type="password"
-                                  validated="default"
                                   value=""
                                 >
-                                  <input
-                                    aria-invalid={false}
+                                  <TextInputBase
                                     aria-label={null}
                                     autoFocus={false}
-                                    className="pf-c-form-control"
-                                    disabled={false}
+                                    className=""
                                     id="session_password"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isLeftTruncated={false}
+                                    isReadOnly={false}
+                                    isRequired={true}
                                     name="password"
                                     onChange={[Function]}
-                                    readOnly={false}
-                                    required={true}
+                                    ouiaSafe={true}
                                     type="password"
+                                    validated="default"
                                     value=""
-                                  />
-                                </TextInputBase>
-                              </ForwardRef>
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label={null}
+                                      autoFocus={false}
+                                      className="pf-c-form-control"
+                                      data-ouia-component-id="OUIA-Generated-TextInputBase-4"
+                                      data-ouia-component-type="PF4/TextInput"
+                                      data-ouia-safe={true}
+                                      disabled={false}
+                                      id="session_password"
+                                      name="password"
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      readOnly={false}
+                                      required={true}
+                                      type="password"
+                                      value=""
+                                    />
+                                  </TextInputBase>
+                                </TextInput>
+                              </div>
                             </div>
                           </FormGroup>
                         </FormGroup>
@@ -1849,49 +1959,39 @@ exports[`should render reset password button when disablePasswordReset is false 
                           className="pf-c-form__group pf-m-action"
                         >
                           <div
-                            className="pf-c-form__actions"
+                            className="pf-c-form__group-control"
                           >
-                            <Component
-                              className="pf-c-button pf-m-primary pf-m-block"
-                              isDisabled={true}
-                              type="submit"
+                            <div
+                              className="pf-c-form__actions"
                             >
-                              <ComponentWithOuia
-                                component={[Function]}
-                                componentProps={
-                                  Object {
-                                    "children": " Sign in",
-                                    "className": "pf-c-button pf-m-primary pf-m-block",
-                                    "isDisabled": true,
-                                    "type": "submit",
-                                  }
-                                }
-                                consumerContext={null}
+                              <Button
+                                className="pf-c-button pf-m-primary pf-m-block"
+                                isDisabled={true}
+                                type="submit"
                               >
-                                <Button
+                                <ButtonBase
                                   className="pf-c-button pf-m-primary pf-m-block"
+                                  innerRef={null}
                                   isDisabled={true}
-                                  ouiaContext={
-                                    Object {
-                                      "isOuia": false,
-                                      "ouiaId": null,
-                                    }
-                                  }
                                   type="submit"
                                 >
                                   <button
-                                    aria-disabled={null}
+                                    aria-disabled={true}
                                     aria-label={null}
-                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    className="pf-c-button pf-m-primary pf-m-disabled pf-c-button pf-m-primary pf-m-block"
+                                    data-ouia-component-id="OUIA-Generated-Button-primary-2"
+                                    data-ouia-component-type="PF4/Button"
+                                    data-ouia-safe={true}
                                     disabled={true}
+                                    role={null}
                                     tabIndex={null}
                                     type="submit"
                                   >
                                      Sign in
                                   </button>
-                                </Button>
-                              </ComponentWithOuia>
-                            </Component>
+                                </ButtonBase>
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </ActionGroup>
