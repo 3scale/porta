@@ -491,7 +491,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
     super
   ensure
     # always set correct proxy endpoints when deployment option changes
-    (proxy || build_proxy).try(:set_correct_endpoints) if deployment_option_changed?
+    (proxy || build_proxy).try(:set_correct_endpoints) if will_save_change_to_deployment_option?
   end
 
   def backend_version=(backend_version)

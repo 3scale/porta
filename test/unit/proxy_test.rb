@@ -664,7 +664,7 @@ class ProxyTest < ActiveSupport::TestCase
     assert_not @proxy.changed_for_autosave?
 
     # deployment option changed
-    @proxy.service.expects(:will_save_change_to_attribute?).with(:deployment_option).returns(true)
+    @proxy.service.deployment_option = 'self_managed'
     assert @proxy.changed_for_autosave?
   end
 
@@ -672,13 +672,20 @@ class ProxyTest < ActiveSupport::TestCase
     service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
     proxy = FactoryBot.create(:proxy, service: service)
 
-    assert_not proxy.deployment_option_changed?
+    assert_not proxy.saved_change_to_deployment_option?
+    assert_not proxy.will_save_change_to_deployment_option?
 
     proxy.service.deployment_option = 'hosted'
-    assert_not proxy.deployment_option_changed?
+    assert_not proxy.saved_change_to_deployment_option?
+    assert_not proxy.will_save_change_to_deployment_option?
 
     proxy.service.deployment_option = 'self_managed'
-    assert proxy.deployment_option_changed?
+    assert_not proxy.saved_change_to_deployment_option?
+    assert proxy.will_save_change_to_deployment_option?
+
+    proxy.service.save!
+    assert proxy.saved_change_to_deployment_option?
+    assert_not proxy.will_save_change_to_deployment_option?
   end
 
   def analytics

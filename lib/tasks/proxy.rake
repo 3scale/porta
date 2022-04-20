@@ -33,11 +33,6 @@ namespace :proxy do
     end
   end
 
-  desc 'Fixing nil endpoint for hosted'
-  task :set_correct_endpoint_hosted => :environment do
-    Service.includes(:proxy).where(proxies: {endpoint: nil}, deployment_option: 'hosted').find_each(&:deployment_option_changed)
-  end
-
   desc 'Resets proxy config tracking object'
   task :reset_config_change_history, [:account_id] => :environment do |_, args|
     account_id = args[:account_id]
