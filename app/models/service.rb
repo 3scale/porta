@@ -41,7 +41,7 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :kubernetes_service_link, length: {maximum: 255}
 
   after_create :create_default_metrics, :create_default_service_plan, :create_default_proxy
-  after_commit :update_notification_settings
+  after_commit :update_notification_settings, if: :saved_change_to_notification_settings?
 
   after_commit :create_and_publish_service_created_event, on: :create
   after_commit :create_and_publish_service_deleted_event, on: :destroy
@@ -558,8 +558,6 @@ class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def update_notification_settings
-    return unless previously_changed?(:notification_settings)
-
     current_alert_limits = alert_limits
 
     delete_alert_limits(current_alert_limits - notification_settings_levels)
