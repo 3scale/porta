@@ -20,7 +20,7 @@ class Contract < ApplicationRecord
   include Logic::PlanChanges::Contract
 
   after_destroy :destroy_customized_plan
-  after_commit :notify_plan_changed
+  after_commit :notify_plan_changed, if: :saved_change_to_plan_id?
 
   belongs_to :plan
   validate   :correct_plan_subclass?
@@ -310,7 +310,7 @@ class Contract < ApplicationRecord
   end
 
   def notify_plan_changed
-    if previously_changed?(:plan_id) && @old_plan
+    if @old_plan
       notify_observers(:bill_variable_for_plan_changed, @old_plan)
       notify_observers(:plan_changed)
 

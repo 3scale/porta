@@ -2,7 +2,7 @@
 
 require 'backend_client'
 
-class Service < ApplicationRecord
+class Service < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Searchable
   include Backend::ModelExtensions::Service
   include Logic::Contracting::Service
@@ -41,7 +41,7 @@ class Service < ApplicationRecord
   validates :kubernetes_service_link, length: {maximum: 255}
 
   after_create :create_default_metrics, :create_default_service_plan, :create_default_proxy
-  after_commit :update_notification_settings
+  after_commit :update_notification_settings, if: :saved_change_to_notification_settings?
 
   after_commit :create_and_publish_service_created_event, on: :create
   after_commit :create_and_publish_service_deleted_event, on: :destroy
@@ -491,7 +491,7 @@ class Service < ApplicationRecord
     super
   ensure
     # always set correct proxy endpoints when deployment option changes
-    (proxy || build_proxy).try(:set_correct_endpoints) if deployment_option_changed?
+    (proxy || build_proxy).try(:set_correct_endpoints) if will_save_change_to_deployment_option?
   end
 
   def backend_version=(backend_version)
@@ -538,7 +538,7 @@ class Service < ApplicationRecord
   end
 
   def deleted_without_state_machine
-    if state_changed? && deleted? && !@deleted_by_state_machine
+    if saved_change_to_attribute?(:state) && deleted? && !@deleted_by_state_machine
       System::ErrorReporting.report_error('Service has been deleted without using State Machine')
     end
   end
@@ -558,8 +558,6 @@ class Service < ApplicationRecord
   end
 
   def update_notification_settings
-    return unless previously_changed?(:notification_settings)
-
     current_alert_limits = alert_limits
 
     delete_alert_limits(current_alert_limits - notification_settings_levels)

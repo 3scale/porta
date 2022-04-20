@@ -21,6 +21,8 @@ class OIDC::ProxyChangedEvent < BaseEventStoreEvent
   def self.valid?(proxy)
     service = proxy.try(:service)
     return unless service
-    service.backend_version.oauth? || service.backend_version_change&.include?('oauth')
+
+    # TODO: second assertion is probably useless, or not. Revisit this in the future once we've seen this is safe. See https://github.com/3scale/porta/pull/2929/files#r846345372
+    service.backend_version.oauth? || service.backend_version_change_to_be_saved&.include?('oauth') || service.saved_change_to_backend_version&.include?('oauth')
   end
 end
