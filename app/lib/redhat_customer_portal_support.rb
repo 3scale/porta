@@ -14,11 +14,6 @@ module RedhatCustomerPortalSupport
   end
 
   def redhat_account_recently_verified?
-
-    ActiveSupport::Deprecation.silence do
-      raise 'crap' if previous_changes['extra_fields'].to_json != saved_change_to_extra_fields.to_json
-    end
-
     extra_fields_change = saved_change_to_extra_fields
 
     return false unless extra_fields_change
@@ -30,10 +25,6 @@ module RedhatCustomerPortalSupport
   end
 
   def recently_suspended?
-    ActiveSupport::Deprecation.silence do
-      raise 'crap' if previous_changes['state'] != saved_change_to_attribute(:state)
-    end
-
     saved_change_to_attribute(:state) && suspended?
   end
 

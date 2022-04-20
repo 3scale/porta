@@ -119,10 +119,6 @@ module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
                                               :credit_card_partial_number,
                                               :credit_card_expires_on)
 
-    ActiveSupport::Deprecation.silence do
-      raise 'crap' if credit_card_changes != previous_changes.slice(credit_card_stored_attribute, :credit_card_partial_number, :credit_card_expires_on)
-    end
-
     return unless credit_card_changes.present?
 
     old_auth_code, new_auth_code = credit_card_changes[credit_card_stored_attribute]

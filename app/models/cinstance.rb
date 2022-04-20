@@ -257,8 +257,6 @@ class Cinstance < Contract
   end
 
   def user_key_updated?
-    raise 'crap' if (previous_changes.select { |a| a == "user_key"}.count > 0) != !!saved_change_to_user_key?
-
     saved_change_to_user_key?
   end
 
