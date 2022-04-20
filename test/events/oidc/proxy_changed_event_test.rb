@@ -12,7 +12,7 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
 
   def test_create_and_publish!
     proxy = FactoryBot.create(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
-    refute OIDC::ProxyChangedEvent.create_and_publish!(proxy), 'service is not oauth'
+    assert_not OIDC::ProxyChangedEvent.create_and_publish!(proxy), 'service is not oauth'
 
     proxy.service.backend_version = 'oauth'
     assert OIDC::ProxyChangedEvent.create_and_publish!(proxy),'event should be created for OAuth service'
@@ -31,14 +31,18 @@ class OIDC::ProxyChangedEventTest < ActiveSupport::TestCase
 
   test '#valid? when service has been deleted' do
     proxy = FactoryBot.create(:simple_proxy, oidc_issuer_endpoint: 'http://example.com/auth/realm')
+    assert_not OIDC::ProxyChangedEvent.valid?(proxy)
+
     proxy.service.backend_version = 'oauth'
     assert OIDC::ProxyChangedEvent.valid?(proxy)
 
     proxy.service.save
+    assert OIDC::ProxyChangedEvent.valid?(proxy)
+
     proxy.service.backend_version = "2"
     assert OIDC::ProxyChangedEvent.valid?(proxy)
 
     proxy.stubs(service: nil)
-    refute OIDC::ProxyChangedEvent.valid?(proxy)
+    assert_not OIDC::ProxyChangedEvent.valid?(proxy)
   end
 end

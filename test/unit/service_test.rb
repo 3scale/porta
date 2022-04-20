@@ -532,12 +532,6 @@ class ServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'don not call update endpoint if deployment option has not changed' do
-    service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
-    service.expects(:deployment_option_changed).times(0)
-    service.update(deployment_option: 'hosted')
-  end
-
   test 'call update endpoint on proxy after update when deployment option has changed' do
     service = FactoryBot.create(:simple_service, deployment_option: 'hosted')
 

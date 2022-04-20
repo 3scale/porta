@@ -3,7 +3,7 @@
 require 'ipaddr'
 require 'resolv'
 
-class Proxy < ApplicationRecord
+class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include AfterCommitQueue
   include BackendApiLogic::ProxyExtension
   prepend BackendApiLogic::RoutingPolicy
@@ -106,7 +106,7 @@ class Proxy < ApplicationRecord
   after_save :publish_events
   before_destroy :publish_events
 
-  after_save :track_apicast_version_change, if: :apicast_configuration_driven_changed?
+  after_save :track_apicast_version_change, if: :saved_change_to_apicast_configuration_driven?
 
   alias_attribute :production_endpoint, :endpoint
   alias_attribute :staging_endpoint, :sandbox_endpoint
@@ -269,7 +269,7 @@ class Proxy < ApplicationRecord
   end
 
   def set_correct_endpoints?
-    apicast_configuration_driven_changed? || new_record?
+    will_save_change_to_apicast_configuration_driven? || new_record?
   end
 
   def publish_events
@@ -278,15 +278,21 @@ class Proxy < ApplicationRecord
     nil
   end
 
-  DEPLOYMENT_OPTION_CHANGED = ->(record) { record.changed_attributes.key?(:deployment_option) }
+  def will_save_change_to_deployment_option?
+    [self, service].any? do |record|
+      record.will_save_change_to_attribute?(:deployment_option)
+    end
+  end
 
-  def deployment_option_changed?
-    [ self, service ].any?(&DEPLOYMENT_OPTION_CHANGED)
+  def saved_change_to_deployment_option?
+    [self, service].any? do |record|
+      record.saved_change_to_attribute?(:deployment_option)
+    end
   end
 
   # We want to autosave when Service#deployment_option changed
   def changed_for_autosave?
-    deployment_option_changed? or super
+    will_save_change_to_deployment_option? or super
   end
 
   def self.config
