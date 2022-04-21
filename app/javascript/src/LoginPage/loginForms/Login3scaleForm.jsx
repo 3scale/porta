@@ -95,10 +95,11 @@ class Login3scaleForm extends React.Component<Props, State> {
         id='new_session'
         acceptCharset='UTF-8'
         method='post'
+        autoComplete="off"
       >
         <HiddenInputs/>
-        <TextField inputProps={usernameInputProps}/>
-        <PasswordField inputProps={passwordInputProps} />
+        <TextField inputProps={usernameInputProps} autoComplete="off"/>
+        <PasswordField inputProps={passwordInputProps} autoComplete="off"/>
         <ActionGroup>
           <Button className='pf-c-button pf-m-primary pf-m-block'
             type='submit'
