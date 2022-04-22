@@ -107,7 +107,7 @@ class Backend::ModelExtensions::UsageLimitTest < ActiveSupport::TestCase
     usage_limit = FactoryBot.create(:usage_limit, :period => :month, :value => 2000)
 
     ThreeScale::Core::UsageLimit.expects(:delete).with(
-      usage_limit.service.backend_id, usage_limit.plan.id, usage_limit.metric.id, usage_limit.period.to_s)
+      usage_limit.service.backend_id, usage_limit.plan.id, usage_limit.metric.id, usage_limit.period)
 
     usage_limit.destroy
   end

@@ -18,6 +18,14 @@ module Symbolize
       __symbolize_changes(attr, super)
     end
 
+    def saved_change_to_attribute(attr)
+      __symbolize_changes(attr, super)
+    end
+
+    def attribute_change_to_be_saved(attr)
+      __symbolize_changes(attr, super)
+    end
+
     private
     def __symbolize_changes(attr, changed_values)
       if changed_values.blank? || __symbolized_attributes.exclude?(attr.to_sym)

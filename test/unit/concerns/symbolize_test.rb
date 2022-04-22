@@ -54,16 +54,20 @@ class SymbolizeTest < ActiveSupport::TestCase
       usage = UsageLimit.new
       usage.period = 'hour'
       assert_equal({'period' => [nil, :hour]}, usage.changes)
+      assert_equal({'period' => [nil, "hour"]}, usage.changes_to_save) # FIXME
       usage.save!
 
       usage.reload
       assert_equal({}, usage.changes)
+      assert_equal({}, usage.changes_to_save)
       usage.period = 'day'
       assert_equal({'period' => [:hour, :day]}, usage.changes)
+      assert_equal({'period' => ["hour", "day"]}, usage.changes_to_save) # FIXME
 
       usage.save!
-      # FIXME: sadly previous_changes are not symbolized (yet)
+      # FIXME: sadly previous_changes and saved_changes are not symbolized (yet)
       assert_equal({'period' => ['hour', 'day']}, usage.previous_changes)
+      assert_equal({'period' => ['hour', 'day']}, usage.saved_changes)
     end
   end
 
