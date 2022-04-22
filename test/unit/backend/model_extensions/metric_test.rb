@@ -55,28 +55,6 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
     metric.destroy
   end
 
-  test 'sync backend metric data multiple times under race condition' do
-    service = FactoryBot.create(:simple_service)
-    metric = Metric.create(service: service, friendly_name: 'My metric', unit: 'hits')
-    metric_id = metric.id
-
-    ::BackendMetricWorker.expects(:perform_later).with(service.backend_id, metric_id).twice
-
-    metric_f1 = Metric.find(metric_id)
-    metric_f2 = Metric.find(metric_id)
-
-    patch_metric_with_fiber metric_f1
-    patch_metric_with_fiber metric_f2
-
-    f1 = Fiber.new { metric_f1.destroy }
-    f2 = Fiber.new { metric_f2.destroy }
-
-    f1.resume
-    f2.resume
-    f1.resume
-    f2.resume
-  end
-
   test 'sync backend api metric for multiple services' do
     services = FactoryBot.create_list(:simple_service, 2, :with_default_backend_api)
     backend_api = services.first.backend_api
@@ -100,16 +78,5 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
     BackendMetricWorker.expects(:perform_now).with(service.backend_id, metric.id)
     metric.sync_backend_for_service!(service)
-  end
-
-  private
-
-  def patch_metric_with_fiber(metric)
-    class << metric
-      def destroy
-        super
-        Fiber.yield
-      end
-    end
   end
 end
