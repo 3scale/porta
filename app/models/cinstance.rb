@@ -144,7 +144,7 @@ class Cinstance < Contract
   }
 
   def self.provided_by(account)
-    joins(:service).references(:service).merge(Service.of_account(account)).readonly(false)
+    joins(:service).merge(Service.of_account(account)).readonly(false)
   end
 
   scope :not_bought_by, ->(account) { where.has { user_account_id != account.id } }

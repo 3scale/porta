@@ -52,8 +52,7 @@ module ApplicationsControllerMethods
   end
 
   def find_cinstance
-    @cinstance = accessible_not_bought_cinstances.includes(plan: %i[service original plan_metrics pricing_rules])
-                                                 .find(params[:id])
+    @cinstance = accessible_not_bought_cinstances.find(params[:id])
   end
 
   def find_buyer

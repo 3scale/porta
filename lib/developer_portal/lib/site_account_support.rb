@@ -96,7 +96,7 @@ module SiteAccountSupport
     end
 
     def domain_account
-      Account.find_by(self_domain: internal_host)
+      Account.where(self_domain: internal_host).last
     end
 
     def site_account
@@ -109,11 +109,11 @@ module SiteAccountSupport
     end
 
     def site_account_by_domain
-      site = Account.find_by(self_domain: internal_host)
+      site = domain_account
       if site
         site.provider_account
       else
-        Account.find_by(domain: internal_host)
+        Account.where(domain: internal_host).last
       end
     end
 
