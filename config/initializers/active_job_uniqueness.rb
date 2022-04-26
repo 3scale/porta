@@ -23,7 +23,7 @@ Rails.application.configure do
 
       # Digest method for lock keys generating. Expected to have `hexdigest` class method.
       #
-      # config.digest_method = OpenSSL::Digest::MD5
+      config.digest_method = Digest::SHA256
 
       # Array of redis servers for Redlock quorum.
       # Read more at https://github.com/leandromoreira/redlock-rb#redis-client-configuration
