@@ -4,6 +4,7 @@ Feature: Header buttons and menus
     Given a provider is logged in
 
   Scenario: Help menu dropdown
+    Given quickstarts is disabled
     Then the help menu should have the following items:
       | Customer Portal  |
       | 3scale API Docs  |
