@@ -296,12 +296,6 @@ module Logic
         end
       end
 
-      class QuickStarts < Base
-        def missing_config
-          false
-        end
-      end
-
       class Unknown < Base
         def missing_config
           false

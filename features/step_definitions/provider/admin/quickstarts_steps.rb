@@ -65,7 +65,7 @@ Then "I should be able to restart its progress" do
 
   find("[data-test='tile #{test_quickstart_id}']").click
 
-  assert_selector "[data-testid='qs-drawer-#{test_quickstart_id.underscore.camelize(:lower)}']"
+  assert_selector '[data-test="quickstart drawer"]'
   assert_selector('[data-testid="qs-drawer-side-note-action"]', text: 'Restart')
 end
 
