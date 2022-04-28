@@ -10,6 +10,7 @@ PORT=3000
 VERSION := $(SYSTEM_VERSION)
 LOCAL_IMAGE := $(NAME):$(VERSION)
 REMOTE_IMAGE := $(NAMESPACE)/$(LOCAL_IMAGE)
+SPHINX_VERSION = $(shell ls $(PROJECT_PATH)/openshift/system/sphinx-*.rpm | sed -e 's/.*\/sphinx-//' -e 's/\.rhel7\.x86_64\.rpm$$//')
 
 DOCKERFILE := Dockerfile
 
@@ -31,7 +32,7 @@ build: ## Build docker image. Accepts DOCKERFILE parameter. Name will be LOCAL_I
 	# But also mistakenly matches `**/.*` as any file with a dot anywhere.
 	# https://github.com/docker/docker-py/issues/1471
 	# @$(DOCKER_COMPOSE) build --pull system
-	docker build --build-arg BUNDLER_ENV="$(BUNDLER_ENV)" --file "$(DOCKERFILE)" --tag $(LOCAL_IMAGE) --pull ../..
+	docker build --build-arg BUNDLER_ENV="$(BUNDLER_ENV)" --build-arg SPHINX_VERSION="$(SPHINX_VERSION)" --file "$(DOCKERFILE)" --tag $(LOCAL_IMAGE) --pull ../..
 
 run: export LOCAL_IMAGE := $(LOCAL_IMAGE)
 run: export DOCKERFILE := $(DOCKERFILE)
