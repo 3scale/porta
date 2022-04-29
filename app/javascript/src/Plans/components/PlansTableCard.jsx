@@ -3,24 +3,26 @@
 import * as React from 'react'
 
 import { Card } from '@patternfly/react-core'
-import { ApplicationPlansTable } from 'Plans'
+import { PlansTable } from 'Plans/components/PlansTable'
 import * as alert from 'utilities/alert'
 import {
   ajax,
+  createReactWrapper,
   safeFromJsonString,
   confirm
 } from 'utilities'
 
-import type { ApplicationPlan, Action } from 'Types'
+import type { Plan, Action } from 'Types'
 
 export type Props = {
-  plans: ApplicationPlan[],
+  columns: Array<{ attribute: string, title: string }>,
+  plans: Plan[],
   count: number,
   searchHref: string,
 }
 
-const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: Props): React.Node => {
-  const [plans, setPlans] = React.useState<ApplicationPlan[]>(initialPlans)
+const PlansTableCard = ({ columns, plans: initialPlans, count, searchHref }: Props): React.Node => {
+  const [plans, setPlans] = React.useState<Plan[]>(initialPlans)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   const handleActionCopy = (path) => ajax(path, { method: 'POST' })
@@ -29,9 +31,9 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
         if (data.status === 201) {
           alert.notice(res.notice)
           // $FlowIgnore[incompatible-type] we can assume safely this is a plan
-          const newPlan: ApplicationPlan = safeFromJsonString(res.plan)
+          const newPlan: Plan = safeFromJsonString(res.plan)
           setPlans([...plans, newPlan])
-        } else {
+        } else if (data.status === 422) {
           alert.error(res.error)
         }
       })
@@ -67,7 +69,7 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
         if (data.status === 200) {
           alert.notice(res.notice)
           // $FlowIgnore[incompatible-type] we can assume safely this is a plan
-          const newPlan: ApplicationPlan = safeFromJsonString(res.plan)
+          const newPlan: Plan = safeFromJsonString(res.plan)
           const i = plans.findIndex(p => p.id === newPlan.id)
           plans[i] = newPlan
           setPlans(plans)
@@ -110,7 +112,8 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
 
   return (
     <Card id="default_plan_card">
-      <ApplicationPlansTable
+      <PlansTable
+        columns={columns}
         plans={plans}
         count={count}
         searchHref={searchHref}
@@ -120,4 +123,8 @@ const ApplicationPlansTableCard = ({ plans: initialPlans, count, searchHref }: P
   )
 }
 
-export { ApplicationPlansTableCard }
+const PlansTableCardWrapper = (props: Props, containerId: string): void => (
+  createReactWrapper(<PlansTableCard {...props} />, containerId)
+)
+
+export { PlansTableCard, PlansTableCardWrapper }
