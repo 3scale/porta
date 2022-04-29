@@ -60,6 +60,7 @@ Feature: Application plans index page
     And plan "Secret Plan" should be published
     And I should not see option "Publish" from the actions menu for plan "Secret Plan"
 
+  @wip
   Scenario: Sorting Application plans
     Given a published application plan "Plan B" of provider "foo.3scale.localhost"
     And a published application plan "Plan C" of provider "foo.3scale.localhost"

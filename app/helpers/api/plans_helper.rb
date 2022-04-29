@@ -14,7 +14,7 @@ module Api::PlansHelper
       'service': service.to_json(root: false, only: %i[id name]),
       'application-plans': plans.to_json(root: false, only: %i[id name]),
       'current-plan': current_application_plan_data(service),
-      'path': masterize_admin_service_application_plans_path(':id')
+      'path': masterize_admin_service_application_plans_path(service)
     }
   end
 

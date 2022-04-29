@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const plans = safeFromJsonString<Plan[]>(dataset.plans) || []
+  const plans = safeFromJsonString<Plan[]>(dataset.applicationPlans) || []
   const initialDefaultPlan = safeFromJsonString<Plan>(dataset.currentPlan) || null
   const path: string = dataset.path
 
