@@ -405,7 +405,7 @@ class Cinstance < Contract
   private
 
   def only_traffic_updated?
-    (previous_changes.keys - %w[first_traffic_at first_daily_traffic_at updated_at]).empty?
+    (saved_changes.keys - %w[first_traffic_at first_daily_traffic_at updated_at]).empty?
   end
 
   # It calls to `create_key_after_create` to check if it's possible to add
