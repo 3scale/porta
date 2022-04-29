@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+# Deprecated, remove usage or replace with enum one by one as suggested in
+#   688adc03fa872e7976dbecf505cd6442dc6a3aba
 module Symbolize
 
 
