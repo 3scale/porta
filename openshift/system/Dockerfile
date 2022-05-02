@@ -28,8 +28,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-c
 
 # Install sphinx search
 ARG SPHINX_VERSION=3.4.1
-COPY openshift/system/sphinx-${SPHINX_VERSION}-efbcc65-linux-amd64.tar.gz /tmp/sphinxsearch.tar.gz
-RUN tar zxf /tmp/sphinxsearch.tar.gz -C /tmp \
+RUN curl -sSL https://sphinxsearch.com/files/sphinx-${SPHINX_VERSION}-efbcc65-linux-amd64.tar.gz | tar xz -C /tmp \
     && cp /tmp/sphinx-${SPHINX_VERSION}/bin/* /usr/bin/ \
     && rm -rf /tmp/sphinx*
 
