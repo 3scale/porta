@@ -144,7 +144,7 @@ class WebHook
     # :reek:NilCheck
     # That is fine as we want really to check for nil value in the changes
     def guess_event
-      resource_changes = @resource.previous_changes # TODO: use saved_changes instead?
+      resource_changes = @resource.saved_changes
       case
       when @resource.destroyed?
         'deleted'
