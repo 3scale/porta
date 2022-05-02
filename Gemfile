@@ -96,7 +96,7 @@ gem 'browser', '~> 5.0.0' # we can update to lts when we stop using ruby 2.4
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
-gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
+gem 'json-schema' # , git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
@@ -116,6 +116,8 @@ gem 'thinking-sphinx', '~> 5.4.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.1.6'
 gem 'zip-zip', require: false
+gem 'rswag-api'
+gem 'rswag-ui'
 
 gem 'acts_as_tree'
 gem 'addressable', require: false
@@ -203,6 +205,7 @@ group :test do
   gem 'equivalent-xml', require: false
 
   gem 'rspec-rails', '~> 4.1', require: false # version 5.x is needed for Rails 6
+  gem 'rswag-specs'
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
   gem 'rspec_api_documentation'

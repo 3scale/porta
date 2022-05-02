@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'swagger_helper'
 
-resource "Service" do
+describe 'Service API', type: :request, swagger_doc: '/doc/active_docs/swagger.json' do
 
   let(:resource) { FactoryBot.build(:service,
     account: provider,
@@ -21,60 +22,125 @@ resource "Service" do
     provider.settings.allow_multiple_services!
   end
 
-  api 'service' do
-    parameter :name, 'Service Name'
+  path '/admin/api/services.:format' do
+    parameter name: :service_name, in: :path, type: :string
 
-    get "/admin/api/services.:format", action: :index do
-      # reload resource because it has been touched
-      let(:serializable) { [provider.services.default, resource.reload] }
+    let(:serializable) { [provider.services.default, resource.reload] }
+
+    get 'reload resource because it has been touched' do
+      tags 'Service'
+      consumes 'application/json'
+      produces 'application/json'
     end
+  end
 
-    get "/admin/api/services/:id.:format", action: :show do
-      before { resource.reload }
-    end
+  # path '/admin/api/services/:id.:format' do
+  #   before { resource.reload }
+    
+  #   get 'show service' do
+  #     tags 'Service'
+  #     consumes 'application/json'
+  #     parameter name: :service_name, in: :body, schema: {
+  #       type: :object,
+  #     }
+  #   end
+  # end
 
-    post "/admin/api/services.:format", action: :create do
-      parameter :name, 'Service Name'
+  path '/admin/api/services.:format' do
+    post 'create service' do
+      tags 'Service'
+      consumes 'application/json'
+
+      parameter name: "Service Name", in: :body, schema: {
+        type: :object,
+        properties: {
+          name: { type: :string },
+        },
+        required: [ 'name' ]
+      }
+      
       let(:name) { 'Example service' }
-    end
-
-    put "/admin/api/services/:id.:format", action: :update do
-      parameter :name, 'Service Name'
-      let(:name) { 'some name' }
-    end
-  end
-
-  xml(:resource) do
-    before { resource.save! }
-
-    let(:root) { 'service' }
-
-    it { should have_tag(root) }
-
-    context 'service' do
-      subject(:service) { Hash.from_xml(serialized).fetch(root) }
-      it { should include(attributes.map do |attr_name|
-        next if (attr_value = resource.public_send(attr_name)).blank?
-        [attr_name, attr_value.to_s]
-      end.compact.to_h)}
-      it { should include('notification_settings' => resource.notification_settings.stringify_keys.transform_values(&:to_s)) }
+      
+      response '201', 'service created' do
+        
+        run_test!
+      end
     end
   end
 
-  json(:resource) do
-    before { resource.save! }
+  # path '/admin/api/services/:id.:format' do
 
-    let(:root) { 'service' }
+  #   put 'update service' do
+  #     tags 'Service'
+  #     consumes 'application/json'
+  #     parameter name: :service_name, in: :body, schema: {
+  #       type: :object,
+  #     }
 
-    it { should include(attributes.map { |attr_name| [attr_name, resource.public_send(attr_name)] }.to_h.delete_if { |k, v| v.nil? })}
-    it { should include('notification_settings' => resource.notification_settings.stringify_keys) }
-    it { should have_links(%w|self service_plans application_plans features metrics|)}
-  end
 
-  json(:collection) do
-    let(:root) { 'services' }
-    it { should be_an(Array) }
-  end
+  #      response '200', 'blog updated' do
+  #       let(:file) { Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/thumbnail.png")) }
+  #       run_test!
+  #     end
+
+  #   end
+  # end
+  
+
+  # api 'service' do
+  #   parameter :name, 'Service Name'
+
+  #   get "/admin/api/services.:format", action: :index do
+  #     # reload resource because it has been touched
+  #     let(:serializable) { [provider.services.default, resource.reload] }
+  #   end
+
+  #   get "/admin/api/services/:id.:format", action: :show do
+  #     before { resource.reload }
+  #   end
+
+  #   post "/admin/api/services.:format", action: :create do
+  #     parameter :name, 'Service Name'
+  #     let(:name) { 'Example service' }
+  #   end
+
+  #   put "/admin/api/services/:id.:format", action: :update do
+  #     parameter :name, 'Service Name'
+  #     let(:name) { 'some name' }
+  #   end
+  # end
+
+  # xml(:resource) do
+  #   before { resource.save! }
+
+  #   let(:root) { 'service' }
+
+  #   it { should have_tag(root) }
+
+  #   context 'service' do
+  #     subject(:service) { Hash.from_xml(serialized).fetch(root) }
+  #     it { should include(attributes.map do |attr_name|
+  #       next if (attr_value = resource.public_send(attr_name)).blank?
+  #       [attr_name, attr_value.to_s]
+  #     end.compact.to_h)}
+  #     it { should include('notification_settings' => resource.notification_settings.stringify_keys.transform_values(&:to_s)) }
+  #   end
+  # end
+
+  # json(:resource) do
+  #   before { resource.save! }
+
+  #   let(:root) { 'service' }
+
+  #   it { should include(attributes.map { |attr_name| [attr_name, resource.public_send(attr_name)] }.to_h.delete_if { |k, v| v.nil? })}
+  #   it { should include('notification_settings' => resource.notification_settings.stringify_keys) }
+  #   it { should have_links(%w|self service_plans application_plans features metrics|)}
+  # end
+
+  # json(:collection) do
+  #   let(:root) { 'services' }
+  #   it { should be_an(Array) }
+  # end
 end
 
 __END__
