@@ -50,6 +50,27 @@ class EmailConfigurationTest < ActiveSupport::TestCase
     end
   end
 
+  test "should merge default trust" do
+    local_settings = {
+      user_name: "local_username",
+      password: "local_password",
+      tls: "starttls",
+      address: "another.smtp.example.com",
+    }
+
+    config = FactoryBot.create(:email_configuration, **local_settings)
+    assert_empty config.local_settings.slice(:ca_path, :ca_file)
+
+    set_global_config
+    assert_empty config.smtp_settings.slice(:ca_path, :ca_file)
+
+    set_global_config(ca_file: "/path/to/file")
+    assert config.smtp_settings[:ca_file]
+
+    set_global_config(ca_path: "/trust/path")
+    assert config.smtp_settings[:ca_path]
+  end
+
   test "account should be provider" do
     account = FactoryBot.create(:buyer_account)
     config = FactoryBot.build(:email_configuration, account: account)
@@ -111,7 +132,7 @@ class EmailConfigurationTest < ActiveSupport::TestCase
     }.freeze
   end
 
-  def set_global_config
-    ActionMailer::Base.stubs(:smtp_settings).returns(global_settings)
+  def set_global_config(more_settings = {})
+    ActionMailer::Base.stubs(:smtp_settings).returns(global_settings.merge more_settings)
   end
 end
