@@ -13,7 +13,7 @@ gem 'aws-sdk-rails', '~> 2'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.1.7'
+gem 'rails', '~> 5.2.7'
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
@@ -73,7 +73,7 @@ gem 'gruff', '~>0.3', require: false
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 gem 'rmagick', '~> 2.15.3', require: false
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
-gem 'inherited_resources', '~> 1.7.2'
+gem 'inherited_resources', '~> 1.12.0'
 gem 'json', '~> 2.3.0'
 
 gem 'mysql2', '~> 0.5.3'
@@ -252,7 +252,7 @@ gem 'unicorn', require: false, group: %i[production preview]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 1.8.0', install_if: oracle
+gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
 
 gem 'kubeclient'
