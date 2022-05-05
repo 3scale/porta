@@ -8443,7 +8443,7 @@
       </dependency>
           <dependency>
         <packageName>globalid</packageName>
-        <version>0.4.2</version>
+        <version>1.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -14789,12 +14789,7 @@
       </dependency>
           <dependency>
         <packageName>sprockets-rails</packageName>
-<<<<<<< Updated upstream
         <version>3.4.2</version>
-=======
-        <version>3.2.2</version>
->>>>>>> Stashed changes
-        <licenses>
                       <license>
               <name>MIT</name>
               <url>http://opensource.org/licenses/mit-license</url>
