@@ -1,4 +1,4 @@
-name: Fast-forward candidate or stable branch to a SHA1
+name: Fast-forward dev or stable branch to a SHA1
 on:
   workflow_dispatch:
     inputs:
@@ -6,13 +6,13 @@ on:
         description: 'The release version number (e.g, 2.11)'
         required: true
       ref:
-        description: 'The SHA1 or branch name the candidate or stable branch will point to. The output branch will be 3scale-{release}-{branch_suffix}'
+        description: 'The SHA1 or branch name the dev or stable branch will point to. The output branch will be 3scale-{release}-{branch_suffix}'
         required: true
         default: master
       branch_suffix:
-        description: 'The branch suffix can be `candidate|stable`. The output branch will be 3scale-{release}-{branch_suffix}'
+        description: 'The branch suffix can be `dev|stable`. The output branch will be 3scale-{release}-{branch_suffix}'
         required: true
-        default: candidate
+        default: dev
 
 jobs:
   fast-forward:
