@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # on servers we don't have proper LANG
 Encoding.default_external = Encoding::UTF_8
 
@@ -15,7 +13,7 @@ gem 'aws-sdk-rails', '~> 2'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.0.7'
+gem 'rails', '~> 5.2.7'
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
@@ -48,8 +46,6 @@ gem '3scale_time_range', '0.0.6'
 
 gem 'statsd-ruby', require: false
 
-gem 'sinatra', require: false # for sidekiq web
-
 # Sidekiq
 gem 'sidekiq', '< 6', require: %w[sidekiq sidekiq/web]
 gem 'sidekiq-batch', '~> 0.1.6'
@@ -77,7 +73,7 @@ gem 'gruff', '~>0.3', require: false
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
 gem 'rmagick', '~> 2.15.3', require: false
 # TODO: Not actively maintained https://github.com/activeadmin/inherited_resources#notice replace with respond_with and fix things the rails way
-gem 'inherited_resources', '~> 1.7.2'
+gem 'inherited_resources', '~> 1.12.0'
 gem 'json', '~> 2.3.0'
 
 gem 'mysql2', '~> 0.5.3'
@@ -103,7 +99,7 @@ gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
 gem 'prawn-layout', '0.2.1'
-gem 'rails_event_store', '~> 0.9.0'
+gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
@@ -114,7 +110,7 @@ gem 'rest-client', '~> 2.0.2'
 gem 'rubyzip', '~>1.3.0', require: false
 gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev'
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
-gem 'thinking-sphinx', '~> 3.0'
+gem 'thinking-sphinx', '~> 5.4.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
 gem 'will_paginate', '~> 3.1.6'
 gem 'zip-zip', require: false
@@ -210,9 +206,7 @@ group :test do
   gem 'rspec_api_documentation'
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
 
-  gem 'shoulda', '~> 3.5.0', require: false
-  gem 'shoulda-context', '~> 1.2.2'
-  gem 'shoulda-matchers', '~> 2.8.0'
+  gem 'shoulda', '~> 4.0'
   gem 'timecop', '~> 0.9'
 
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
@@ -245,8 +239,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-shell'
   gem 'pry-stack_explorer'
-  # to generate the swagger JSONs
-  gem 'sour', github: 'HakubJozak/sour', require: false
 
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
@@ -260,7 +252,7 @@ gem 'unicorn', require: false, group: %i[production preview]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 1.7.0', install_if: oracle
+gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
 
 gem 'kubeclient'

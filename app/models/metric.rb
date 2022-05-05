@@ -27,6 +27,7 @@ class Metric < ApplicationRecord
   acts_as_tree
 
   attr_protected :service_id, :parent_id, :tenant_id, :audit_ids
+
   validates :unit, presence: true, unless: :child?
   validates :friendly_name, uniqueness: {scope: %i[owner_type owner_id]}, presence: true
   validates :system_name, :unit, :friendly_name, :owner_type, length: { maximum: 255 }
@@ -57,9 +58,10 @@ class Metric < ApplicationRecord
   #
   # +type+:: Which default metric to create. Currently only :hits are supported.
   def self.create_default!(type, attributes = {})
+    service_id = attributes.delete(:service_id)
     metric = new(attributes.merge(:friendly_name => 'Hits', :system_name => 'hits', :unit => 'hit',
                                   :description => 'Number of API hits'))
-    metric.service_id = attributes[:service_id]
+    metric.service_id = service_id
     metric.save!
     metric
   end

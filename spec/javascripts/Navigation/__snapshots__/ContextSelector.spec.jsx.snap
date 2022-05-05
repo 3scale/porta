@@ -11,6 +11,7 @@ exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = 
 >
   <div
     className="pf-c-context-selector header-context-selector  pf-m-expanded"
+    data-quickstart-id="context-selector"
   >
     <a
       className="pf-c-context-selector__toggle "
@@ -111,6 +112,7 @@ exports[`should not have Audience if not provided 1`] = `
 >
   <div
     className="pf-c-context-selector header-context-selector  pf-m-expanded"
+    data-quickstart-id="context-selector"
   >
     <a
       className="pf-c-context-selector__toggle "

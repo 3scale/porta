@@ -592,7 +592,7 @@ class Invoice < ApplicationRecord
   private :set_friendly_id
 
   def update_counter
-    return unless previous_changes.key?(:friendly_id)
+    return unless saved_change_to_friendly_id?
     counter.update_count(id_sufix.to_i)
   end
 

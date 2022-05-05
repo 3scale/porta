@@ -39,7 +39,7 @@ module Authentication
       end
 
       def just_changed_password?
-        previous_changes.key?('password_digest') || super
+        saved_change_to_password_digest? || super
       end
 
       private
@@ -113,7 +113,7 @@ module Authentication
       end
 
       def just_changed_password?
-        previous_changes.key?('crypted_password')
+        saved_change_to_crypted_password?
       end
 
       private

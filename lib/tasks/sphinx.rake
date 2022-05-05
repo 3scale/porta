@@ -23,10 +23,14 @@ namespace :sphinx do
       # As we enqueue, we only need the :id
       scope.select(:id).find_in_batches(batch_size: 1000) do |batch|
         batch.each do |record|
-          SphinxIndexationWorker.perform_later(record)
+          SphinxIndexationWorker.perform_later(record.class, record.id)
         end
         progress.call(increment: batch.size)
       end
+      # TODO: when we implement clean-up, add the logic here or perhaps just run
+      #       the whole ThinkingSphinx::RealTime::Populator in a single worker
+      #       see https://github.com/pat/thinking-sphinx/pull/1192
+      #       see https://github.com/pat/thinking-sphinx/issues/1215
       puts
     end
   end

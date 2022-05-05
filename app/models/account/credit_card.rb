@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # TODO: will become a CreditCard model by itself soon
-module Account::CreditCard
+module Account::CreditCard # rubocop:disable Metrics/ModuleLength(RuboCop)
   extend ActiveSupport::Concern
 
   included do
@@ -113,9 +115,9 @@ module Account::CreditCard
   end
 
   def notify_credit_card_change
-    credit_card_changes = previous_changes.slice(credit_card_stored_attribute,
-                                     :credit_card_partial_number,
-                                     :credit_card_expires_on)
+    credit_card_changes = saved_changes.slice(credit_card_stored_attribute,
+                                              :credit_card_partial_number,
+                                              :credit_card_expires_on)
 
     return unless credit_card_changes.present?
 

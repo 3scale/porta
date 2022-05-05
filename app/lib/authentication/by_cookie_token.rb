@@ -51,11 +51,10 @@ module Authentication
       # always be deleted together.
       #
       def forget_me
-        self.remember_token_expires_at = nil
-        self.remember_token            = nil
-        self.class.where(id: id).update_all(:remember_token_expires_at => nil, :remember_token => nil) # TODO: replace by update_columns
-      end
+        return if remember_token_expires_at.nil? && remember_token.nil?
 
+        update_columns(remember_token_expires_at: nil, remember_token: nil) # rubocop:disable Rails/SkipsModelValidations
+      end
     end # instance methods
   end
 

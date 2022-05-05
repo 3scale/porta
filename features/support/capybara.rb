@@ -28,7 +28,7 @@ Capybara.configure do |config|
   config.raise_server_errors = true
   config.match = :prefer_exact
   config.always_include_port = true
-  config.default_max_wait_time = 10
+  config.default_max_wait_time = 2
 end
 
 # Needed because cucumber-rails requires capybara/cucumber
@@ -101,6 +101,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-popup-blocking')
   options.add_argument('--window-size=1280,2048')
+  options.add_argument('--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE *.localhost')
 
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
   options.add_option(:w3c, false)

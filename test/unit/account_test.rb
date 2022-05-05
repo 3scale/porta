@@ -725,6 +725,27 @@ class AccountTest < ActiveSupport::TestCase
     assert master_account.reload
     assert_not master_account.reload.scheduled_for_deletion?
   end
+
+  test "#current_versions for an account's services" do
+    account = FactoryBot.create(:account)
+
+    service1 = FactoryBot.create(:service, account: account)
+    service2 = FactoryBot.create(:service, account: account)
+
+    proxy1 = FactoryBot.create(:proxy, service: service1)
+    proxy2 = FactoryBot.create(:proxy, service: service2)
+
+    c1 = FactoryBot.create_list(:proxy_config, 3, proxy: proxy1).last
+    c2 = FactoryBot.create_list(:proxy_config, 3, proxy: proxy2).last
+    c3 = FactoryBot.create(:proxy_config)
+
+    assert_same_elements [c1, c2, c3], ProxyConfig.current_versions
+
+    assert_same_elements [c1, c2], account.accessible_proxy_configs.current_versions
+
+    service1.update(state: Service::DELETE_STATE)
+    assert_same_elements [c2], account.accessible_proxy_configs.current_versions
+  end
 end
 
 #TODO: test scopes chained, and with nil params

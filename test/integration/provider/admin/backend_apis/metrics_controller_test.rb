@@ -17,17 +17,6 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
   attr_reader :provider, :service, :backend_api, :hits, :meth, :ads
 
-  test '#index' do
-    get provider_admin_backend_api_metrics_path(backend_api)
-    assert_response :success
-
-    assert_select 'table#methods.data tr', count: 2 # 1 of the method + header
-    assert_select 'table#methods.data tr td', text: meth.system_name
-
-    assert_select 'table#metrics.data tr', count: 3 # 2 of the metrics + header
-    [hits, ads].each { |metric| assert_select 'table#metrics.data tr td', text: metric.system_name }
-  end
-
   test '#new' do
     get new_provider_admin_backend_api_metric_child_path(backend_api, hits)
     assert_response :success
@@ -96,7 +85,7 @@ class Provider::Admin::BackendApis::MetricsControllerTest < ActionDispatch::Inte
 
   test '#destroy' do
     delete provider_admin_backend_api_metric_path(backend_api, ads)
-    refute backend_api.metrics.find_by(system_name: "ads.#{backend_api.id}")
+    assert_not backend_api.metrics.find_by(system_name: "ads.#{backend_api.id}")
   end
 
   test 'it cannot operate for metrics under a non-accessible backend api' do

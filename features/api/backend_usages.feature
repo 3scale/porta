@@ -5,32 +5,33 @@ Feature: Backend Usages
   I want to see a menu that lets me add Backends to a Product
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    And current domain is the admin domain of provider "foo.3scale.localhost"
-    And a backend api "my backend"
-    And I log in as provider "foo.3scale.localhost"
-    And I go to the provider dashboard
-    And I go to the service backends admin page of service "API"
+    Given a provider is logged in
 
-  Scenario: Add a backend api that is unused
-    Given I should see "Backends"
-    And I follow "Add Backend"
-    Then I should see "Add a Backend"
-    And I select "my backend" from "Backend"
-    And I fill in "Path" with "/api/v1"
-    And I press "Add to Product"
-    Then I should see "Backend added to Product."
-    Then I follow "Add Backend"
-    And the "Backend" select should not contain "my backend" option
+  Scenario: Add a backend API
+    Given a backend
+    And a product
+    When an admin goes to the product's backend usages page
+    Then they can add the backend by filling up the form
+    And the product will be using this backend
+
+  Scenario: A backend can be used by each product once
+    Given a product
+    And a backend
+    And the backend is used by this product
+    When an admin goes to the product's backend usages page
+    And they try to add the backend again
+    Then the backend won't be available
 
   Scenario: Add a backend with wrong path
-    Given I follow "Add Backend"
-    And I select "my backend" from "Backend"
-    And I fill in "Path" with "https://my-api.exaple.org"
-    And I press "Add to Product"
-    Then I should see "Couldn't add Backend to Product"
+    Given a backend
+    And a product
+    When an admin goes to the product's backend usages page
+    Then they can't add the backend with an invalid path
 
   Scenario: Add a backend must be accessible
-    Given a backend api "NO backend" that is deleted
-    Then I follow "Add Backend"
-    And the "Backend" select should not contain "NO backend" option
+    Given a product
+    And a backend
+    But the backend is unavailable
+    When an admin goes to the product's backend usages page
+    And they try to add the backend
+    Then the backend won't be available

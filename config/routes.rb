@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'routing_constraints'
 require 'prometheus_exporter_port'
 
@@ -199,8 +197,9 @@ without fake Core server your after commit callbacks will crash and you might ge
 
     get 'admin', to: 'admin#show'
 
+    # provider/admin
     namespace :admin do
-      # provider/admin/applications
+      resource :quickstarts, only: :show
       resources :applications do
         member do
           put :accept
@@ -248,7 +247,9 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
 
       resource :go_live_state, only: [:show, :update]
-      resource :account, :only => [:show, :edit, :update]
+      resource :account, only: %i[show edit update] do
+        resources :email_configurations, except: :show, controller: 'account/email_configurations'
+      end
       resource :api_docs, :only => [:show]
       resource :liquid_docs, :only => [:show]
       resource :webhooks, :only => [ :new, :edit, :create, :update, :show ]

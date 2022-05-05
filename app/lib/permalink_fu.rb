@@ -25,7 +25,8 @@ module PermalinkFu
   private
 
   def create_unique_permalink
-    return if permalink.present? && !permalink_changed?
+    return if permalink.present? && !will_save_change_to_permalink?
+
     base_permalink = build_permalink_from_attribute
     count = where_match_permalink_with_conditions(base_permalink).count
     self.permalink = count.positive? ? "#{base_permalink}-#{count + 1}" : base_permalink

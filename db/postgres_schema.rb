@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211117094502) do
+ActiveRecord::Schema.define(version: 20220228215614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -469,6 +469,24 @@ ActiveRecord::Schema.define(version: 20211117094502) do
     t.text     "metadata"
     t.index ["object_type", "object_id"], name: "index_deleted_objects_on_object_type_and_object_id", using: :btree
     t.index ["owner_type", "owner_id"], name: "index_deleted_objects_on_owner_type_and_owner_id", using: :btree
+  end
+
+  create_table "email_configurations", force: :cascade do |t|
+    t.integer  "account_id"
+    t.string   "email",               null: false
+    t.string   "domain"
+    t.string   "user_name"
+    t.string   "password"
+    t.string   "authentication"
+    t.string   "tls"
+    t.string   "openssl_verify_mode"
+    t.string   "address"
+    t.integer  "port"
+    t.bigint   "tenant_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["account_id"], name: "index_email_configurations_on_account_id", using: :btree
+    t.index ["email"], name: "index_email_configurations_on_email", unique: true, using: :btree
   end
 
   create_table "event_store_events", force: :cascade do |t|

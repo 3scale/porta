@@ -44,9 +44,9 @@ module Backend
       end
 
       def update_backend_user_key_to_application_id_mapping
-        user_key_was, current_user_key = previous_changes[:user_key]
+        user_key_was, current_user_key = saved_change_to_user_key
 
-        if previously_changed?(:user_key) && service.id.present? && user_key_was.present?
+        if saved_change_to_user_key? && service.id.present? && user_key_was.present?
           ThreeScale::Core::Application.delete_id_by_key(service.backend_id, user_key_was)
         end
 
@@ -78,8 +78,8 @@ module Backend
       end
 
       def update_provider_backend_service_if_user_key_changed
-        if previously_changed?(:user_key)
-          user_key_was, user_key = previous_changes[:user_key]
+        if saved_change_to_user_key?
+          user_key_was, user_key = saved_change_to_user_key
 
           if user_account && user_account.provider? && user_key_was.present? && user_account.services.present?
             ThreeScale::Core::Service.change_provider_key!(user_key_was, user_key)

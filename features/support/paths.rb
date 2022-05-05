@@ -209,6 +209,10 @@ World(Module.new do
       provider_admin_account_invitations_path
     when 'the edit provider logo page'
       edit_provider_admin_account_logo_path
+    when 'the email configurations page'
+      provider_admin_account_email_configurations_path
+    when 'the new email configurations page'
+      new_provider_admin_account_email_configurations_path
 
     #
     # API Management
@@ -272,10 +276,6 @@ World(Module.new do
     when /^the edit page for plan "([^"]*)"$/, /^the edit for plan "([^"]*)" page$/
       plan = Plan.find_by_name!($1)
       edit_polymorphic_path([:admin, plan])
-
-    when /^the service backends admin page of service "(.+?)"$/
-      service = Service.find_by!(name: $1)
-      admin_service_backend_usages_path(service)
 
     #
     # Account plans (buyer side)
@@ -631,6 +631,8 @@ World(Module.new do
       admin_service_metrics_path(provider_first_service!, tab: 'metrics')
     when 'the metrics and methods page'
       admin_service_metrics_path(@provider.default_service)
+    when 'the metrics and methods page of my backend api'
+      provider_admin_backend_api_metrics_path(@provider.default_service.backend_api)
     when /^the integration show page for service "(.+?)"/
       service = Service.find_by!(name: $1)
       admin_service_integration_path(service)
@@ -655,8 +657,6 @@ World(Module.new do
     # Backend API
     when /^the backend api overview/
       provider_admin_backend_api_path(provider_first_service!.backend_api)
-    when /^the overview page of backend "(.+?)"/
-      provider_admin_backend_api_path(BackendApi.find_by!(name: $1))
 
     #
     # Help
@@ -669,6 +669,12 @@ World(Module.new do
     #
     when /^the upgrade notice page for "(.+?)"$/
       admin_upgrade_notice_path($1)
+
+    #
+    # Quick starts
+    #
+    when /^the quick start catalog page$/
+      provider_admin_quickstarts_path
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

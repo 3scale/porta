@@ -103,15 +103,15 @@ RSpec.configure do |config|
 
   config.around(:each, transactions: false) do |ex|
     require 'database_cleaner'
-    transactional = use_transactional_fixtures
-    self.use_transactional_fixtures = false
+    transactional = use_transactional_tests
+    self.use_transactional_tests = false
 
     begin
       DatabaseCleaner.strategy = :transaction
       ex.run
       DatabaseCleaner.clean_with(:deletion)
     ensure
-      self.use_transactional_fixtures = transactional
+      self.use_transactional_tests = transactional
     end
   end
 

@@ -32,8 +32,6 @@ class Admin::Api::ApplicationPlanLimitsController < Admin::Api::BaseController
   end
 
   def usage_limits
-    # [Rails bug, will be fixed in Rails 5] https://github.com/rails/rails/issues/8005
-    # includes(:plan, metric: [:service])
-    @usage_limits ||= application_plan.usage_limits.includes(metric: [:service])
+    @usage_limits ||= application_plan.usage_limits.includes(plan: [:service], metric: [:owner, :parent])
   end
 end

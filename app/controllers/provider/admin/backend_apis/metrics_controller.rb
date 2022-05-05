@@ -8,19 +8,24 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   activate_menu :backend_api, :methods_metrics
   sublayout 'api/service'
 
-  def index
-    @metrics = @backend_api.top_level_metrics.includes(:proxy_rules)
-  end
+  helper_method :presenter
+
+  attr_reader :backend_api
+
+  delegate :metrics, to: :backend_api, prefix: true
+
+  def index; end
 
   def new
     @metric = collection.build
   end
 
+  # TODO: DRY this, similar to app/controllers/api/metrics_controller.rb#create
   def create
     @metric = collection.build(create_params)
     if @metric.save
       flash[:notice] = "The #{metric_type} was created"
-      redirect_to provider_admin_backend_api_metrics_path(@backend_api)
+      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
     else
       flash[:error] = "#{metric_type.capitalize} could not be created"
       render :new
@@ -32,7 +37,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   def update
     if @metric.update_attributes(update_params)
       flash[:notice] = "The #{metric_type} was updated"
-      redirect_to provider_admin_backend_api_metrics_path(@backend_api)
+      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
     else
       flash[:error] = "#{metric_type.capitalize} could not be updated"
       render :edit
@@ -42,7 +47,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   def destroy
     if @metric.destroy
       flash[:notice] = "The #{metric_type} was deleted"
-      redirect_to provider_admin_backend_api_metrics_path(@backend_api)
+      redirect_to provider_admin_backend_api_metrics_path(@backend_api, tab: "#{metric_type}s")
     else
       flash[:error] = "The #{metric_type} could not be deleted"
       render :edit
@@ -52,11 +57,7 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
   private
 
   def find_metric
-    @metric = find_backend_api_metric_by(params[:id])
-  end
-
-  def find_backend_api_metric_by(id)
-    @backend_api.metrics.find(id)
+    @metric = backend_api_metrics.find(params[:id])
   end
 
   def metric_type
@@ -65,6 +66,10 @@ class Provider::Admin::BackendApis::MetricsController < Provider::Admin::Backend
 
   def collection
     metric_id = params[:metric_id]
-    metric_id ? find_backend_api_metric_by(metric_id).children : @backend_api.metrics
+    metric_id ? backend_api_metrics.find(metric_id).children : backend_api_metrics
+  end
+
+  def presenter
+    @presenter ||= Provider::Admin::BackendApis::MetricsIndexPresenter.new(backend_api: backend_api, params: params)
   end
 end

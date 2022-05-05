@@ -13,7 +13,7 @@ Feature: API menu
       And I follow "API"
 
   Scenario: Current API title
-    Then I should see the current API is "API"
+    Then the name of the product can be seen on top of the menu
 
   Scenario: API menu structure
     Then I should see menu items

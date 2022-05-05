@@ -3,8 +3,10 @@
 require 'test_helper'
 
 class Stats::Api::ApplicationsControllerTest < ActionController::TestCase
-
-  should route(:get, '/stats/api/applications/42/usage.json').to :application_id => '42', :action => 'usage', :format => 'json'
+  test 'routes' do
+    assert_routing({ method: :get, path: '/stats/api/applications/42/usage.json' },
+                   { application_id: '42', action: 'usage', format: 'json', controller: 'stats/api/applications' })
+  end
 
   def test_summary
     setup_data(login_as: :buyer)

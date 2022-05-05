@@ -972,6 +972,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>@babel/runtime</packageName>
+        <version>7.17.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>@babel/runtime-corejs2</packageName>
         <version>7.14.6</version>
         <licenses>
@@ -1252,6 +1262,36 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>@patternfly/patternfly</packageName>
+        <version>4.122.2</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>@patternfly/quickstarts</packageName>
+        <version>1.4.1-rc.1</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>@patternfly/react-catalog-view-extension</packageName>
+        <version>4.12.15</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>@patternfly/react-core</packageName>
         <version>3.158.4</version>
         <licenses>
@@ -1264,6 +1304,16 @@
           <dependency>
         <packageName>@patternfly/react-core</packageName>
         <version>4.135.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>@patternfly/react-core</packageName>
+        <version>4.192.15</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1292,6 +1342,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>@patternfly/react-icons</packageName>
+        <version>4.43.15</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>@patternfly/react-styles</packageName>
         <version>3.7.14</version>
         <licenses>
@@ -1304,6 +1364,16 @@
           <dependency>
         <packageName>@patternfly/react-styles</packageName>
         <version>4.11.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>@patternfly/react-styles</packageName>
+        <version>4.42.15</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1334,6 +1404,16 @@
           <dependency>
         <packageName>@patternfly/react-tokens</packageName>
         <version>4.12.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>@patternfly/react-tokens</packageName>
+        <version>4.44.15</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1663,7 +1743,7 @@
       </dependency>
           <dependency>
         <packageName>actioncable</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1673,7 +1753,7 @@
       </dependency>
           <dependency>
         <packageName>actionmailer</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1683,7 +1763,7 @@
       </dependency>
           <dependency>
         <packageName>actionpack</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1693,7 +1773,7 @@
       </dependency>
           <dependency>
         <packageName>actionview</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1703,7 +1783,7 @@
       </dependency>
           <dependency>
         <packageName>activejob</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1733,7 +1813,7 @@
       </dependency>
           <dependency>
         <packageName>activemodel</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1753,7 +1833,17 @@
       </dependency>
           <dependency>
         <packageName>activerecord</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>activestorage</packageName>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1763,7 +1853,7 @@
       </dependency>
           <dependency>
         <packageName>activesupport</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1993,7 +2083,7 @@
       </dependency>
           <dependency>
         <packageName>arel</packageName>
-        <version>7.1.4</version>
+        <version>9.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -5693,6 +5783,16 @@
       </dependency>
           <dependency>
         <packageName>camelcase</packageName>
+        <version>4.1.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>camelcase</packageName>
         <version>5.3.1</version>
         <licenses>
                       <license>
@@ -5743,7 +5843,7 @@
       </dependency>
           <dependency>
         <packageName>caniuse-lite</packageName>
-        <version>1.0.30001245</version>
+        <version>1.0.30001311</version>
         <licenses>
                       <license>
               <name>CC-BY-4.0</name>
@@ -5938,6 +6038,16 @@
                       <license>
               <name>MIT</name>
               <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>cliui</packageName>
+        <version>4.1.0</version>
+        <licenses>
+                      <license>
+              <name>ISC</name>
+              <url>http://en.wikipedia.org/wiki/ISC_license</url>
             </license>
                   </licenses>
       </dependency>
@@ -6233,7 +6343,7 @@
       </dependency>
           <dependency>
         <packageName>concurrent-ruby</packageName>
-        <version>1.1.9</version>
+        <version>1.1.10</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -6493,7 +6603,7 @@
       </dependency>
           <dependency>
         <packageName>cross-fetch</packageName>
-        <version>3.1.4</version>
+        <version>3.1.5</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -6504,6 +6614,16 @@
           <dependency>
         <packageName>cross-spawn</packageName>
         <version>3.0.1</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>cross-spawn</packageName>
+        <version>5.1.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -7118,6 +7238,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>dompurify</packageName>
+        <version>2.3.5</version>
+        <licenses>
+                      <license>
+              <name>(MPL-2.0 OR Apache-2.0)</name>
+              <url></url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>domutils</packageName>
         <version>1.7.0</version>
         <licenses>
@@ -7368,8 +7498,8 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>erubis</packageName>
-        <version>2.7.0</version>
+        <packageName>erubi</packageName>
+        <version>1.10.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -7570,6 +7700,16 @@
           <dependency>
         <packageName>evp_bytestokey</packageName>
         <version>1.0.3</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>execa</packageName>
+        <version>0.7.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -7859,6 +7999,16 @@
       </dependency>
           <dependency>
         <packageName>find-up</packageName>
+        <version>2.1.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>find-up</packageName>
         <version>3.0.0</version>
         <licenses>
                       <license>
@@ -8072,26 +8222,6 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>fsevents</packageName>
-        <version>1.2.13</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>fsevents</packageName>
-        <version>2.3.2</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
         <packageName>fstream</packageName>
         <version>1.0.12</version>
         <licenses>
@@ -8153,6 +8283,16 @@
       </dependency>
           <dependency>
         <packageName>get-caller-file</packageName>
+        <version>1.0.3</version>
+        <licenses>
+                      <license>
+              <name>ISC</name>
+              <url>http://en.wikipedia.org/wiki/ISC_license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>get-caller-file</packageName>
         <version>2.0.5</version>
         <licenses>
                       <license>
@@ -8174,6 +8314,16 @@
           <dependency>
         <packageName>get-stdin</packageName>
         <version>4.0.1</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>get-stream</packageName>
+        <version>3.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -8293,7 +8443,7 @@
       </dependency>
           <dependency>
         <packageName>globalid</packageName>
-        <version>0.4.2</version>
+        <version>1.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -8473,7 +8623,7 @@
       </dependency>
           <dependency>
         <packageName>has_scope</packageName>
-        <version>0.7.2</version>
+        <version>0.8.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -8558,6 +8708,16 @@
                       <license>
               <name>New BSD</name>
               <url>http://opensource.org/licenses/BSD-3-Clause</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>history</packageName>
+        <version>5.2.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
             </license>
                   </licenses>
       </dependency>
@@ -8923,7 +9083,7 @@
       </dependency>
           <dependency>
         <packageName>inherited_resources</packageName>
-        <version>1.7.2</version>
+        <version>1.12.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -9014,6 +9174,16 @@
           <dependency>
         <packageName>invariant</packageName>
         <version>2.2.4</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>invert-kv</packageName>
+        <version>1.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -9932,6 +10102,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>lcid</packageName>
+        <version>1.0.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>lines-and-columns</packageName>
         <version>1.1.6</version>
         <licenses>
@@ -9983,6 +10163,16 @@
       </dependency>
           <dependency>
         <packageName>loader-utils</packageName>
+        <version>2.0.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>locate-path</packageName>
         <version>2.0.0</version>
         <licenses>
                       <license>
@@ -10093,7 +10283,7 @@
       </dependency>
           <dependency>
         <packageName>loofah</packageName>
-        <version>2.12.0</version>
+        <version>2.17.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10252,6 +10442,20 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>marcel</packageName>
+        <version>1.0.2</version>
+        <licenses>
+                      <license>
+              <name>Apache 2.0</name>
+              <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>md5.js</packageName>
         <version>1.3.5</version>
         <licenses>
@@ -10278,6 +10482,16 @@
                       <license>
               <name>CC0-1.0</name>
               <url></url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>mem</packageName>
+        <version>1.1.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
             </license>
                   </licenses>
       </dependency>
@@ -10422,6 +10636,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>mimic-fn</packageName>
+        <version>1.2.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>min-document</packageName>
         <version>2.19.0</version>
         <licenses>
@@ -10443,7 +10667,7 @@
       </dependency>
           <dependency>
         <packageName>mini_mime</packageName>
-        <version>1.0.2</version>
+        <version>1.1.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10493,7 +10717,7 @@
       </dependency>
           <dependency>
         <packageName>minimist</packageName>
-        <version>1.2.5</version>
+        <version>1.2.6</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10593,7 +10817,7 @@
       </dependency>
           <dependency>
         <packageName>moment</packageName>
-        <version>2.29.1</version>
+        <version>2.29.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10684,16 +10908,6 @@
           <dependency>
         <packageName>multipipe</packageName>
         <version>1.0.2</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>mustermann</packageName>
-        <version>1.0.3</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10813,7 +11027,7 @@
       </dependency>
           <dependency>
         <packageName>nio4r</packageName>
-        <version>2.5.2</version>
+        <version>2.5.8</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10843,7 +11057,7 @@
       </dependency>
           <dependency>
         <packageName>node-fetch</packageName>
-        <version>2.6.1</version>
+        <version>2.6.7</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10984,6 +11198,16 @@
           <dependency>
         <packageName>normalize-url</packageName>
         <version>3.3.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>npm-run-path</packageName>
+        <version>2.0.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -11222,6 +11446,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>os-locale</packageName>
+        <version>2.1.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>os-tmpdir</packageName>
         <version>1.0.2</version>
         <licenses>
@@ -11242,8 +11476,38 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>p-finally</packageName>
+        <version>1.0.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>p-limit</packageName>
+        <version>1.3.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>p-limit</packageName>
         <version>2.3.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>p-locate</packageName>
+        <version>2.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -11284,6 +11548,16 @@
           <dependency>
         <packageName>p-map</packageName>
         <version>4.0.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>p-try</packageName>
+        <version>1.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -12841,7 +13115,7 @@
       </dependency>
           <dependency>
         <packageName>rack-test</packageName>
-        <version>0.6.3</version>
+        <version>1.1.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -12881,7 +13155,7 @@
       </dependency>
           <dependency>
         <packageName>rails</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -12941,7 +13215,7 @@
       </dependency>
           <dependency>
         <packageName>railties</packageName>
-        <version>5.0.7.2</version>
+        <version>5.2.7.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -13631,6 +13905,16 @@
       </dependency>
           <dependency>
         <packageName>require-main-filename</packageName>
+        <version>1.0.1</version>
+        <licenses>
+                      <license>
+              <name>ISC</name>
+              <url>http://en.wikipedia.org/wiki/ISC_license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>require-main-filename</packageName>
         <version>2.0.0</version>
         <licenses>
                       <license>
@@ -13721,7 +14005,7 @@
       </dependency>
           <dependency>
         <packageName>responders</packageName>
-        <version>2.4.0</version>
+        <version>3.0.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -13781,7 +14065,7 @@
       </dependency>
           <dependency>
         <packageName>riddle</packageName>
-        <version>2.4.0</version>
+        <version>2.4.3</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -14194,6 +14478,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>showdown</packageName>
+        <version>1.8.6</version>
+        <licenses>
+                      <license>
+              <name>New BSD</name>
+              <url>http://opensource.org/licenses/BSD-3-Clause</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>side-channel</packageName>
         <version>1.0.4</version>
         <licenses>
@@ -14276,16 +14570,6 @@
           <dependency>
         <packageName>simple-swizzle</packageName>
         <version>0.2.2</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>sinatra</packageName>
-        <version>2.0.4</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -14515,7 +14799,7 @@
       </dependency>
           <dependency>
         <packageName>sprockets-rails</packageName>
-        <version>3.2.1</version>
+        <version>3.4.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -14824,6 +15108,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>strip-eof</packageName>
+        <version>1.0.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>strip-indent</packageName>
         <version>1.0.1</version>
         <licenses>
@@ -15105,7 +15399,7 @@
       </dependency>
           <dependency>
         <packageName>thinking-sphinx</packageName>
-        <version>3.4.2</version>
+        <version>5.4.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -15304,6 +15598,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>tr46</packageName>
+        <version>0.0.3</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>traverse</packageName>
         <version>0.6.6</version>
         <licenses>
@@ -15376,6 +15680,16 @@
           <dependency>
         <packageName>tslib</packageName>
         <version>2.3.0</version>
+        <licenses>
+                      <license>
+              <name>BSD Zero Clause License</name>
+              <url>https://opensource.org/licenses/0BSD</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>tslib</packageName>
+        <version>2.3.1</version>
         <licenses>
                       <license>
               <name>BSD Zero Clause License</name>
@@ -15717,7 +16031,7 @@
       </dependency>
           <dependency>
         <packageName>url-parse</packageName>
-        <version>1.5.1</version>
+        <version>1.5.10</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -15896,6 +16210,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>webidl-conversions</packageName>
+        <version>3.0.1</version>
+        <licenses>
+                      <license>
+              <name>Simplified BSD</name>
+              <url>http://opensource.org/licenses/bsd-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>webpack</packageName>
         <version>4.46.0</version>
         <licenses>
@@ -15947,11 +16271,11 @@
       </dependency>
           <dependency>
         <packageName>websocket-driver</packageName>
-        <version>0.6.5</version>
+        <version>0.7.5</version>
         <licenses>
                       <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
+              <name>Apache 2.0</name>
+              <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
                   </licenses>
       </dependency>
@@ -15968,6 +16292,16 @@
           <dependency>
         <packageName>whatwg-fetch</packageName>
         <version>3.6.2</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>whatwg-url</packageName>
+        <version>5.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -16028,6 +16362,16 @@
           <dependency>
         <packageName>worker-farm</packageName>
         <version>1.7.0</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>wrap-ansi</packageName>
+        <version>2.1.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -16102,6 +16446,16 @@
                       <license>
               <name>MIT</name>
               <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>y18n</packageName>
+        <version>3.2.2</version>
+        <licenses>
+                      <license>
+              <name>ISC</name>
+              <url>http://en.wikipedia.org/wiki/ISC_license</url>
             </license>
                   </licenses>
       </dependency>
@@ -16197,6 +16551,16 @@
       </dependency>
           <dependency>
         <packageName>yargs</packageName>
+        <version>10.1.2</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>yargs</packageName>
         <version>13.3.2</version>
         <licenses>
                       <license>
@@ -16208,6 +16572,16 @@
           <dependency>
         <packageName>yargs-parser</packageName>
         <version>13.1.2</version>
+        <licenses>
+                      <license>
+              <name>ISC</name>
+              <url>http://en.wikipedia.org/wiki/ISC_license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>yargs-parser</packageName>
+        <version>8.1.0</version>
         <licenses>
                       <license>
               <name>ISC</name>

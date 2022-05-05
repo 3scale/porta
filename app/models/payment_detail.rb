@@ -77,6 +77,6 @@ class PaymentDetail < ApplicationRecord
   private
 
   def notify_credit_card_changes
-    CreditCardChangeNotifier.new(account, previous_changes).call
+    CreditCardChangeNotifier.new(account, saved_changes).call
   end
 end

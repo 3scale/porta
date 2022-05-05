@@ -257,7 +257,7 @@ class Cinstance < Contract
   end
 
   def user_key_updated?
-    self.previous_changes.select { |a| a == "user_key"}.count > 0
+    saved_change_to_user_key?
   end
 
   def push_webhook_key_updated
@@ -390,10 +390,11 @@ class Cinstance < Contract
     service.plan_change_permission(ApplicationPlan) == :request_credit_card
   end
 
-  alias account_for_sphinx user_account
-  protected :account_for_sphinx
-
   protected
+
+  def account_for_sphinx
+    user_account_id
+  end
 
   def correct_plan_subclass?
     unless self.plan.is_a? ApplicationPlan
@@ -404,7 +405,7 @@ class Cinstance < Contract
   private
 
   def only_traffic_updated?
-    (previous_changes.keys - %w[first_traffic_at first_daily_traffic_at updated_at]).empty?
+    (saved_changes.keys - %w[first_traffic_at first_daily_traffic_at updated_at]).empty?
   end
 
   # It calls to `create_key_after_create` to check if it's possible to add

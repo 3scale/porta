@@ -6,7 +6,7 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
   test '#domain must be downcase' do
     account_one = FactoryBot.create(:simple_provider)
     account_one.subdomain = 'FOO'
-    refute account_one.valid?
+    assert_not account_one.valid?
   end
 
   test '#domain must be unique' do
@@ -16,7 +16,7 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     account_two = FactoryBot.build(:provider_account)
     account_two.domain = account_one.domain
 
-    refute account_two.valid?
+    assert_not account_two.valid?
     assert account_two.errors[:subdomain].include? 'already taken'
   end
 
@@ -27,7 +27,7 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     account_two = FactoryBot.build(:provider_account)
     account_two.domain = account_one.domain
 
-    refute account_two.valid?
+    assert_not account_two.valid?
     assert account_two.errors[:subdomain].include? 'already taken'
 
     account_one.destroy
@@ -132,5 +132,33 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal 'master',                                  account.self_subdomain
     assert_equal "master.#{ThreeScale.config.superdomain}", account.domain
     assert_equal "master.#{ThreeScale.config.superdomain}", account.self_domain
+  end
+
+  test '#publish_domain_events when domain changes' do
+    provider = FactoryBot.create(:simple_provider)
+    provider.expects(:publish_domain_events).once
+
+    provider.domain = 'new.example.com'
+    provider.save
+
+    provider.org_name = 'Do Not Change Domain Again'
+    provider.save
+
+    provider.domain = 'new.example.com'
+    provider.save
+  end
+
+  test '#publish_domain_events when subdomain changes' do
+    provider = FactoryBot.create(:simple_provider)
+    provider.expects(:publish_domain_events).once
+
+    provider.domain = 'new.example.com'
+    provider.save
+
+    provider.org_name = 'Do Not Change Domain Again'
+    provider.save
+
+    provider.domain = 'new.example.com'
+    provider.save
   end
 end

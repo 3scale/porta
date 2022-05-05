@@ -107,17 +107,7 @@ Then /^I should not see button "([^\"]*)" within "([^"]*)"$/ do |label, selector
 end
 
 Then /^the "([^"]*)" select should not contain "([^"]*)" option$/ do |label, text|
-  if page.has_css?('.pf-c-form__label', text: label)
-    select = find('.pf-c-form__label', text: label).sibling('.pf-c-select')
-    select.find('.pf-c-select__toggle-button').click
-    selector = '.pf-c-select__menu-item'
-  else
-    # DEPRECATED: remove when all selects have been replaced for PF4
-    ThreeScale::Deprecation.warn "[cucumber] Detected a select not using PF4 css"
-    selector = 'option'
-    select = find_field(label)
-  end
-  assert select.all(selector, :text => text).empty?, %(The "#{label}" select should not contain "#{text}" option, but it does)
+  assert_select_not_inclues_option(label, text)
 end
 
 Then /^the "([^"]*)" select should have "([^"]*)" selected$/ do |label, text|
@@ -244,7 +234,6 @@ When /^(.*) within ([^:"]+)$/ do |lstep, scope|
 end
 
 [ 'the audience dashboard widget', 'the apis dashboard widget',
-  'the apis dashboard products widget', 'the apis dashboard backends widget',
   'the first api dashboard widget',
   'the main menu',
   'the subsubmenu','the user widget',
@@ -317,4 +306,18 @@ end
 When(/^I enter the admin password in "([^"]+)"$/) do |field|
   step %(I fill in "#{field}" with "supersecret")
   step %(I press "Confirm Password")
+end
+
+def assert_select_not_inclues_option(label, text)
+  if page.has_css?('.pf-c-form__label', text: label)
+    select = find('.pf-c-form__label', text: label).sibling('.pf-c-select')
+    select.find('.pf-c-select__toggle-button').click
+    selector = '.pf-c-select__menu-item'
+  else
+    # DEPRECATED: remove when all selects have been replaced for PF4
+    ThreeScale::Deprecation.warn "[cucumber] Detected a select not using PF4 css"
+    selector = 'option'
+    select = find_field(label)
+  end
+  assert select.all(selector, text: text).empty?, %(The "#{label}" select should not contain "#{text}" option, but it does)
 end

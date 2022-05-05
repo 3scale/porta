@@ -127,8 +127,7 @@ Then /^I should be able to customize the plan$/ do
   should have_link("Convert to a Custom Plan")
 end
 
-Then "the application plans select should not contain custom plans of {provider}" do |provider|
-  provider.application_plans.customized.each do |custom_plan|
-    step %{the "Application plan" select should not contain "#{custom_plan.name}" option}
-  end
+Then "the application plan {string} should be deleted" do |name|
+  assert_content "The plan was deleted", wait: 10
+  step(%(I should not see plan "#{name}"))
 end

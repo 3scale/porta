@@ -21,7 +21,7 @@ System::Database::Postgres.define do
 
   trigger 'alerts' do
     <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND master <> TRUE;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND (master <> TRUE OR master is NULL);
     SQL
   end
 
@@ -425,7 +425,7 @@ System::Database::Postgres.define do
 
   trigger 'log_entries' do
     <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.provider_id AND master <> TRUE;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.provider_id AND (master <> TRUE OR master is NULL);
     SQL
   end
 
@@ -445,7 +445,7 @@ System::Database::Postgres.define do
 
   trigger 'backend_apis' do
     <<~SQL
-      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND master <> TRUE;
+      SELECT tenant_id INTO NEW.tenant_id FROM accounts WHERE id = NEW.account_id AND (master <> TRUE OR master is NULL);
     SQL
   end
 
@@ -560,6 +560,14 @@ System::Database::Postgres.define do
   trigger 'gateway_configurations' do
     <<~SQL
       SELECT tenant_id INTO NEW.tenant_id FROM proxies WHERE id = NEW.proxy_id AND tenant_id <> master_id;
+    SQL
+  end
+
+  trigger 'email_configurations' do
+    <<~SQL
+      IF NEW.account_id <> master_id THEN
+          NEW.tenant_id := NEW.account_id;
+      END IF;
     SQL
   end
 
