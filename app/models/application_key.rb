@@ -33,8 +33,6 @@ class ApplicationKey < ApplicationRecord
 
   after_commit :destroy_backend_value, on: :destroy, unless: :destroyed_by_association
 
-  scope :without, ->(value) { where(['value <> ?', value])}
-
   module AssociationExtension
     include ReferrerFilter::AssociationExtension
     include System::AssociationExtension
@@ -65,7 +63,7 @@ class ApplicationKey < ApplicationRecord
 
     # Need to use scoping because without is a method defined in Enumerable now and thus overriding the scope
     def can_remove?(value)
-      !(proxy_association.owner.service.mandatory_app_key && scoping { ApplicationKey.without(value).empty?})
+      !(proxy_association.owner.service.mandatory_app_key && where.not(value: value).empty?)
     end
 
     # Only oauth applicatinons can regenerate keys
