@@ -54,13 +54,13 @@ to stop the application, run:
 make dev-stop
 ```
 
-## Manual setup on Mac OS X (10.13 - 11.0)
+## Manual setup on Mac OS X (10.13 - 12.3.1)
 
 ### Prerequisites
 
 #### Ruby version
 
-The project supports **2.5.x**.
+The project supports **2.6.x**.
 
 Verify you have a proper version by running on your terminal:
 
@@ -74,12 +74,12 @@ Example with RVM:
 ```bash
 gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable
-rvm install 2.5
+rvm install 2.6
 ```
 
 #### Node version
 
-The project supports **Version: 10.X.X**.
+The project supports **Version: 12.X.X**.
 
 You might want to use [nvm](https://github.com/creationix/nvm/) to install and work with specific Node versions:
 
@@ -90,13 +90,13 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | 
 Restart the terminal and install Node:
 
 ```bash
-nvm install 10 && nvm use 10
+nvm install 12 && nvm use 12
 ```
 
 ###### As an alternative for Mac OS, and if you don't want multiple Node versions, you could use homebrew:
 
 ```bash
-brew install node@10
+brew install node@12
 ```
 
 #### Xcode
@@ -110,7 +110,7 @@ Make sure you have [Homebrew](https://brew.sh/) in your machine to install the f
 
 ```shell
 brew tap homebrew/cask
-brew cask install chromedriver
+brew install chromedriver --cask
 brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql memcached
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
@@ -216,7 +216,7 @@ yarn install
 
 #### Ruby version
 
-The project supports **2.5.x**.
+The project supports **2.6.x**.
 
 Verify you have a proper version by running on your terminal:
 
@@ -228,10 +228,10 @@ ruby -v
 
 #### Node version
 
-The project supports **Version: 10.X.X**.
+The project supports **Version: 12.X.X**.
 
 ```bash
-dnf module install nodejs:10
+dnf module install nodejs:12
 ```
 
 #### Dependencies
