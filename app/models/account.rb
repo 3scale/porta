@@ -6,9 +6,6 @@ class Account < ApplicationRecord
                             proxy_configs_updated_at proxy_configs_conf_file_name proxy_configs_conf_content_type
                             proxy_configs_conf_file_size proxy_configs_conf_updated_at]
 
-  # need to reset column information to clear column_names and such
-  reset_column_information
-
   # it has to be THE FIRST callback after create, so associations get the tenant id
   after_create :update_tenant_id, if: :provider?, prepend: true
 
