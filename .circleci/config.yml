@@ -108,14 +108,14 @@ system-builder-ruby26: &system-builder-ruby26
     RAILS_ENV: test
 
 mysql-container: &mysql-container
-  image: circleci/mysql:5.7-ram
+  image: cimg/mysql:5.7
   environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: yes
     MYSQL_ROOT_PASSWORD: ''
     MYSQL_DATABASE: circleci
 
 postgres-container: &postgres-container
-  image: circleci/postgres:10.5-alpine
+  image: cimg/postgres:10.20
   environment:
     POSTGRES_USER: postgres
     POSTGRES_DB: systemdb
@@ -708,7 +708,7 @@ jobs:
 
   notify_start:
     docker:
-      - image: circleci/buildpack-deps
+      - image: cimg/base
     steps:
       - run:
           name: Notify Slack about tests start
@@ -748,7 +748,7 @@ jobs:
 
   notify_failure:
     docker:
-      - image: circleci/buildpack-deps
+      - image: cimg/base
     steps:
       - run:
           name: Notify Slack about tests failure
@@ -779,7 +779,7 @@ jobs:
 
   notify_success:
     docker:
-      - image: circleci/buildpack-deps
+      - image: cimg/base
     steps:
       - run:
           name: Notify Slack about tests passing
