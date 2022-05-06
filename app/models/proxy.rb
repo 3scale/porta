@@ -47,8 +47,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
   }.freeze
 
-  reset_column_information
-
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
 
   validates :endpoint,         uri: true, allow_nil: true, allow_blank: true
