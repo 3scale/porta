@@ -91,7 +91,8 @@ gem 'nokogiri', '~> 1.10.10'
 gem 'secure_headers', '~> 6.3.0'
 
 gem 'acts-as-taggable-on', '~> 8.0'
-gem 'baby_squeel', '~> 1.3.1'
+gem 'baby_squeel', '~> 1.4.3'
+gem 'ransack', '2.4.1' # we can remove line when stop using ruby 2.4
 gem 'browser', '~> 5.0.0' # we can update to lts when we stop using ruby 2.4
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
