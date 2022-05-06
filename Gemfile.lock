@@ -1285,10 +1285,9 @@ GEM
     aws-sigv2 (1.1.0)
     aws-sigv4 (1.4.0)
       aws-eventstream (~> 1, >= 1.0.2)
-    baby_squeel (1.3.1)
-      activerecord (>= 4.2.0)
-      join_dependency (~> 0.1.2)
-      polyamorous (~> 1.3)
+    baby_squeel (1.4.4)
+      activerecord (>= 5.2, < 7.1)
+      ransack (~> 2.3)
     bcrypt (3.1.13)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
@@ -1608,8 +1607,6 @@ GEM
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
       net-http-persistent
-    polyamorous (1.3.3)
-      activerecord (>= 3.0)
     prawn-format (0.2.1)
       prawn-core
     prawn-layout (0.2.1)
@@ -1695,6 +1692,10 @@ GEM
     rainbow (3.0.0)
     raindrops (0.19.0)
     rake (13.0.6)
+    ransack (2.4.1)
+      activerecord (>= 5.2.4)
+      activesupport (>= 5.2.4)
+      i18n
     ratelimit (1.0.3)
       redis (>= 2.0.0)
       redis-namespace (>= 1.0.0)
@@ -1987,7 +1988,7 @@ DEPENDENCIES
   aws-sdk (~> 3)
   aws-sdk-rails (~> 2)
   aws-sdk-s3 (~> 1)
-  baby_squeel (~> 1.3.1)
+  baby_squeel (~> 1.4.3)
   bcrypt (~> 3.1.7)
   bootsnap (~> 1.4)
   braintree (~> 2.93)
@@ -2078,6 +2079,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-observers
   rails_event_store (~> 0.9.0)
+  ransack (= 2.4.1)
   ratelimit
   recaptcha (= 4.13.1)
   record_tag_helper (~> 1.0)
