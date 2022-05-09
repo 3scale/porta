@@ -27,7 +27,7 @@ type Props = {
 const NO_DEFAULT_PLAN: Plan = { id: -1, name: '(No default plan)' }
 
 const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): React.Node => {
-  const [defaultPlan, setDefaultPlan] = React.useState<Plan>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
+  const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
   const availablePlans = [NO_DEFAULT_PLAN, ...product.appPlans]
 
@@ -55,18 +55,17 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
             item={defaultPlan}
             // $FlowIgnore[incompatible-type] id can be either number or string
             items={plans}
-            // $FlowIgnore[incompatible-type] plan is either Plan or null
             onSelect={setDefaultPlan}
             fieldId="id"
             name="id"
-            placeholderText={defaultPlan.name}
+            placeholderText={defaultPlan ? defaultPlan.name : "Select application plan"}
           />
 
           <ActionGroup>
             <Button
               variant="primary"
               type="submit"
-              // isDisabled={!plan}
+              isDisabled={!defaultPlan}
             >
               Change plan
             </Button>
