@@ -4,7 +4,17 @@
   margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
 
   form {
+    // HACK: Using flex so we can align FormGroup with ActionGroup inline
+    align-items: flex-end;
+    display: flex;
+
     // isWidthLimited isn't available in current version. See: https://github.com/patternfly/patternfly-react/blob/master/packages/react-core/src/components/Form/Form.tsx#L12
     max-width: 500px;
+    
+    .pf-c-form__group, 
+    .pf-m-action {
+      flex: 1;
+    }
   }
 }
+
