@@ -248,7 +248,7 @@ group :development, :test do
   gem 'unicorn-rails'
 end
 
-gem 'webpacker', '~> 4'
+gem 'shakapacker', '6.2.1' # Must be the same as node package
 
 gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production preview]
