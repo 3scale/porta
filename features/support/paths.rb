@@ -81,6 +81,9 @@ World(Module.new do
     when "the compose page"
       new_admin_messages_outbox_path
 
+    when "the outbox compose page"
+      new_provider_admin_messages_outbox_path
+
     when "the inbox page"
       admin_messages_root_path
 
