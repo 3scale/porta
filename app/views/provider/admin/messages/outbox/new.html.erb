@@ -20,7 +20,8 @@
     </li>
 
     <%= form.input :subject, :as => :string, :label => 'Subject:', input_html: { required: true } %>
-    <%= form.input :body, :input_html => {:rows => 10}, :label => 'Body:', input_html: { required: true } %>
+    <%= form.input :body, :input_html => {:rows => 10, required: true}, :label => 'Body:' %>
+
   <% end %>
   <%= form.buttons do %>
     <% if request.xhr? %>
