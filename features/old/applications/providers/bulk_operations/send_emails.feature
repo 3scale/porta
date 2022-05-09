@@ -81,7 +81,7 @@ Feature: Mass email bulk operations
     Given I am logged in as provider "foo.3scale.localhost"
     And I am on the outbox compose page
     And a clear email queue
-    And I press "Send"
     And I fill in "Body" with "There is no Subject to this email"
+    And I press "Send"
     Then I should see "Compose"
     And "jane@me.us" should receive no emails
