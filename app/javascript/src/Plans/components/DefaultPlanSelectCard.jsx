@@ -50,7 +50,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
           {/* $FlowIgnore[prop-missing] description is optional */}
           {/* $FlowIgnore[incompatible-type-arg] id can be either number or string */}
           <SelectFormGroup
-            label={<h3>Change plan</h3>}
+            label="Default plan"
             // $FlowIgnore[incompatible-type] plan is either Plan or null
             item={defaultPlan}
             // $FlowIgnore[incompatible-type] id can be either number or string
@@ -59,6 +59,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
             fieldId="id"
             name="id"
             placeholderText={defaultPlan ? defaultPlan.name : "Select application plan"}
+            helperText="Default application plan (if any) is selected automatically upon service subscription."
           />
 
           <ActionGroup>
