@@ -14,3 +14,4 @@ const envSpecificConfig = () => {
 }
 
 module.exports = envSpecificConfig()
+// module.exports = webpackConfig

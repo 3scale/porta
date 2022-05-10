@@ -111,7 +111,6 @@ config/amazon_s3.yml
 db/sphinx
 public/.com.apple*
 *_flymake.rb
-/node_modules/
 /public/javascripts/cache/
 
 /test/unit/stats/tmp/
@@ -130,7 +129,6 @@ Gemfile.local
 .powrc
 /public/packs
 /public/packs-test
-/node_modules
 
 /vendor/oracle/*.zip
 
@@ -148,3 +146,11 @@ config/cable.yml
 .pnp.*
 package-lock.json
 *.orig
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Shakapacker
+/public/packs
+/public/packs-test
+/node_modules
