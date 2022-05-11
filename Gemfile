@@ -203,7 +203,6 @@ group :test do
   gem 'rspec-rails', '~> 4.1', require: false # version 5.x is needed for Rails 6
 
   # Reason to use the fork: https://github.com/kucaahbe/rspec-html-matchers/pull/21
-  gem 'rspec_api_documentation'
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
 
   gem 'shoulda', '~> 4.0'

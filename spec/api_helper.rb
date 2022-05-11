@@ -3,8 +3,6 @@
 # so we can include them by metadata
 #
 # maybe load the environment first?
-require 'rspec_api_documentation'
-require 'rspec_api_documentation/dsl'
 
 module NamingHelper
   def model_name
