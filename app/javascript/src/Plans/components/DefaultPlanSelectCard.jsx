@@ -11,7 +11,8 @@ import {
   Card,
   CardBody
 } from '@patternfly/react-core'
-import { Select as SelectFormGroup } from 'Common'
+import { Select as SelectFormGroup } from 'Common/components/Select'
+import { HelperText, HelperTextItem } from 'Common/components/HelperText'
 import { CSRFToken } from 'utilities'
 
 import type { Product, Plan } from 'Types'
@@ -58,20 +59,23 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
             onSelect={setDefaultPlan}
             fieldId="id"
             name="id"
-            placeholderText={defaultPlan ? defaultPlan.name : "Select application plan"}
-            helperText="Default application plan (if any) is selected automatically upon service subscription."
+            placeholderText={defaultPlan ? defaultPlan.name : 'Select application plan'}
           />
-
           <ActionGroup>
             <Button
               variant="primary"
               type="submit"
               isDisabled={!defaultPlan}
-            >
+              >
               Change plan
             </Button>
           </ActionGroup>
         </Form>
+        <HelperText>
+          <HelperTextItem>
+            Default application plan (if any) is selected automatically upon service subscription.
+          </HelperTextItem>
+        </HelperText>
       </CardBody>
     </Card>
   )

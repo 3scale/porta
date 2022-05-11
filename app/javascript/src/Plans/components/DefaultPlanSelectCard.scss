@@ -5,7 +5,7 @@
 
   .pf-c-form {
     // HACK: Using flex so we can align FormGroup with ActionGroup inline
-    align-items: flex-start;
+    align-items: flex-end;
     display: flex;
 
     // isWidthLimited isn't available in current version. See: https://github.com/patternfly/patternfly-react/blob/master/packages/react-core/src/components/Form/Form.tsx#L12
@@ -16,20 +16,7 @@
     }
     .pf-c-form__group.pf-m-action {
       flex: 1;
-      margin-top: 1.87rem;
-    }
-    .pf-c-form__helper-text {
-      white-space: nowrap;
+      // margin-top: 1.87rem;
     }
   }
 }
-
-//TODO: Review these styles coming from DefaultPlanSelect
-// .pf-c-select__toggle.pf-m-disabled input {
-//   background-color: var(--pf-global--disabled-color--300);
-// }
-
-// .pf-c-select__menu {
-//   max-height: 150px;
-//   overflow-y: auto;
-// }
