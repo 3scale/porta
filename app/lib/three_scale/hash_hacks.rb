@@ -17,34 +17,6 @@ module ThreeScale
       end
     end
 
-    # This is a copy of ActiveSupport 5.1 #deep_merge and #deep_merge! where current Hash gets its block called
-    #   for each key present in the other_hash. On some places we rely on this behavior by creating a Hash
-    #   like `Hash.new { |hash, key| hash[key] = Set.new }`, then expect other_hash'es elements to merge with that
-    #   default value.
-    # See https://github.com/rails/rails/commit/2eacb1c30eac4058b8412527f9bda6e7ba6103d4
-    # TODO: use a better approach
-    def deep_merge_forcing_default_value(other_hash, &block)
-      dup.deep_merge_forcing_default_value!(other_hash, &block)
-    end
-
-    def deep_merge_forcing_default_value!(other_hash, &block)
-      other_hash.each_pair do |current_key, other_value|
-        this_value = self[current_key]
-
-        self[current_key] = if this_value.is_a?(Hash) && other_value.is_a?(Hash)
-                              this_value.deep_merge_forcing_default_value(other_value, &block)
-                            else
-                              if block_given? && key?(current_key)
-                                block.call(current_key, this_value, other_value)
-                              else
-                                other_value
-                              end
-                            end
-      end
-
-      self
-    end
-
     def sweep
       # no op, just to prevent airbrake
       # rails things hash is a flashhash
