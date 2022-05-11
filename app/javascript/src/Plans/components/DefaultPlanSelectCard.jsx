@@ -25,7 +25,8 @@ type Props = {
   path: string
 }
 
-const NO_DEFAULT_PLAN: Plan = { id: -1, name: '(No default plan)' }
+// $FlowIgnore[incompatible-type] id should be a number but the controller has to recieve empty string
+const NO_DEFAULT_PLAN: Plan = { id: '', name: '(No default plan)' }
 
 const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): React.Node => {
   const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
