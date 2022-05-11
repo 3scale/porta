@@ -8,6 +8,10 @@
 
 import type { ReactWrapper } from 'enzyme'
 
+function openSelect <T> (wrapper: ReactWrapper<T>) {
+  wrapper.find('Select button.pf-c-select__toggle-button').simulate('click')
+}
+
 function openSelectWithModal <T> (wrapper: ReactWrapper<T>) {
   // HACK: suppress error logs during this step cause wrapping it inside act() makes the test fail
   const spy = jest.spyOn(console, 'error')
@@ -66,6 +70,7 @@ function updateInput <T> (wrapper: ReactWrapper<T>, value: string, input?: strin
 }
 
 export {
+  openSelect,
   openSelectWithModal,
   closeSelectWithModal,
   mockLocation,

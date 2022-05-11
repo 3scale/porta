@@ -7,6 +7,8 @@ import { ChangePlanSelectCard } from 'Plans'
 
 import type { SelectOptionObject } from 'utilities'
 
+import { openSelect } from 'utilities/test-utils'
+
 const plan = { id: 0, name: 'I am a plan' }
 const defaultProps = {
   applicationPlans: [plan, { id: 1, name: 'I am another plan' }],
@@ -14,7 +16,6 @@ const defaultProps = {
 }
 
 const mountWrapper = (props) => mount(<ChangePlanSelectCard {...{ ...defaultProps, ...props }} />)
-const openSelect = (wrapper) => wrapper.find('Select button.pf-c-select__toggle-button').simulate('click')
 
 afterEach(() => {
   jest.resetAllMocks()
