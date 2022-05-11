@@ -99,7 +99,7 @@ class Policies::PoliciesListService
     end
 
     def merge!(other)
-      @sets.deep_merge!(other.to_h) do |_key, values, other_values|
+      @sets.deep_merge_forcing_default_value!(other.to_h) do |_key, values, other_values|
         values + other_values
       end
     end
