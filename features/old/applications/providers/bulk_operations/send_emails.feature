@@ -76,3 +76,13 @@ Feature: Mass email bulk operations
     Given the email will fail when sent
     And I press "Send" and I confirm dialog box within colorbox
     Then I should see the bulk action failed with account "jane"
+
+Scenario: Emails can't be sent without subject
+    Given I am logged in as provider "foo.3scale.localhost"
+    And I am on the provider compose page
+    And a clear email queue
+    And I press "Send email"
+    And I fill in "Body" with "There is no Subject to this email"
+    And I press "Send"
+    Then I should see "PROVIDER NAME"
+    And "jane@me.us" should receive no emails

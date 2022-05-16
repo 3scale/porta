@@ -155,6 +155,9 @@ World(Module.new do
     when 'the provider account page'
       provider_admin_account_path
 
+    when "the provider compose page"
+      admin_messages_new_path
+
     when 'the provider personal page'
       edit_provider_admin_user_personal_details_path
 
