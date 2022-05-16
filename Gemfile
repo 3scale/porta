@@ -94,7 +94,7 @@ gem 'browser', '~> 5.0.0' # we can update to lts when we stop using ruby 2.4
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
-gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
+gem 'json-schema' # git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
 gem 'prawn-format', '0.2.1'
@@ -242,6 +242,8 @@ group :development, :test do
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
   gem 'unicorn-rails'
+
+  gem 'rswag-specs'
 end
 
 gem 'webpacker', '~> 4'
@@ -257,3 +259,5 @@ gem 'ruby-oci8', require: false, install_if: oracle
 gem 'kubeclient'
 
 gem 'pg', '~> 0.21.0'
+gem 'rswag-api'
+gem 'rswag-ui'
