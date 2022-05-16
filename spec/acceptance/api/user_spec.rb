@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'swagger_helper'
 
-resource "User" do
+describe "User", type: :request, swagger_doc: '/v1/swagger.json' do
 
   let(:resource) { FactoryBot.build(:user, account: provider) }
   let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
@@ -9,171 +10,199 @@ resource "User" do
     provider.settings.allow_multiple_users!
   end
 
-  api 'user' do
+  path '/admin/api/users.:format', action: :create do
 
-    get '/admin/api/users/:id.:format', action: :show
+    post 'Creates a user' do
+      tags 'Users'
+      consumes 'application/json'
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          username: { type: :string },
+          email: { type: :string },
+          password: { type: :string }
+        },
+        required: [ 'username', 'email', 'password']
+      }
 
-    delete '/admin/api/users/:id', action: :destroy
-
-    get '/admin/api/users.:format', action: :index do
-      let(:serializable) { [ provider.users.first, resource ] }
-
-      context do
-        parameter :state, 'Filter by state'
-        parameter :role, 'Filter by role'
-
-        let(:state) { 'active' }
-        let(:role) { 'admin' }
-
-        before { resource.save }
-        let(:serializable) { provider.users.where(state: state, role: role) }
-
-        request "List approved admin #{models}" do
-          response_body.should == serialized
-          status.should == 200
-          serializable.size.should == 1
-        end
+      response '201', 'user created' do
+        let(:user) { { username: 'bob', email: 'bob@example.com', password: 'test@123' } }
+        run_test!
       end
-    end
 
-    context do
-      parameter :username, 'Username'
-      parameter :email, 'Valid email address'
-      parameter :password, 'Desired Password'
-
-      let(:username) { 'bob' }
-      let(:email) { 'bob@example.com' }
-
-      post '/admin/api/users.:format', action: :create
-      put '/admin/api/users/:id.:format', action: :update
-    end
-
-    # roles
-    put '/admin/api/users/:id/member.:format', action: :member do
-      before { resource.make_admin }
-    end
-
-    put '/admin/api/users/:id/admin.:format', action: :admin do
-      before { resource.make_member }
-    end
-
-    # states
-    put '/admin/api/users/:id/activate.:format', action: :activate do
-      before { resource.state.should == 'pending' }
-    end
-
-    put '/admin/api/users/:id/suspend.:format', action: :suspend do
-      before { resource.activate! }
-    end
-
-    put '/admin/api/users/:id/unsuspend.:format', action: :unsuspend do
-      before { resource.activate! && resource.suspend! }
+      # response '422', 'invalid request' do
+      #   let(:username) { 'bob' }
+      #   let(:email) { 'bobexample.com' }
+      #   #run_test!
+      # end
     end
   end
 
-  api 'buyer user' do
+  # api 'user' do
 
-    let(:account_id) { buyer.id }
+  #   get '/admin/api/users/:id.:format', action: :show
 
-    let (:user) { FactoryBot.build(:user, account: buyer) }
+  #   delete '/admin/api/users/:id', action: :destroy
 
-    let(:resource) do
-      FieldsDefinition.create_defaults!(master)
-      provider.reload
-      user
-    end
+  #   get '/admin/api/users.:format', action: :index do
+  #     let(:serializable) { [ provider.users.first, resource ] }
 
-    get '/admin/api/accounts/:account_id/users/:id.:format', action: :show
-    delete '/admin/api/accounts/:account_id/users/:id', action: :destroy
+  #     context do
+  #       parameter :state, 'Filter by state'
+  #       parameter :role, 'Filter by role'
 
-    get '/admin/api/accounts/:account_id/users.:format', action: :index do
-      let(:serializable) { [ buyer.users.first, resource ] }
+  #       let(:state) { 'active' }
+  #       let(:role) { 'admin' }
 
-      context do
-        parameter :state, 'Filter by state'
-        parameter :role, 'Filter by role'
+  #       before { resource.save }
+  #       let(:serializable) { provider.users.where(state: state, role: role) }
 
-        let(:state) { 'active' }
-        let(:role) { 'admin' }
+  #       request "List approved admin #{models}" do
+  #         response_body.should == serialized
+  #         status.should == 200
+  #         serializable.size.should == 1
+  #       end
+  #     end
+  #   end
 
-        before { resource.save }
-        let(:serializable) { buyer.users.where(state: state, role: role) }
+  #   context do
+  #     parameter :username, 'Username'
+  #     parameter :email, 'Valid email address'
+  #     parameter :password, 'Desired Password'
 
-        request "List approved admin #{models}" do
-          response_body.should == serialized
-          status.should == 200
-          serializable.size.should == 1
-        end
-      end
-    end
+  #     let(:username) { 'bob' }
+  #     let(:email) { 'bob@example.com' }
 
-    context do
-      parameter :username, 'Username'
-      parameter :email, 'Valid email address'
-      parameter :password, 'Desired Password'
+  #     post '/admin/api/users.:format', action: :create
+  #     put '/admin/api/users/:id.:format', action: :update
+  #   end
 
-      let(:username) { 'bob' }
-      let(:email) { 'bob@example.com' }
+  #   # roles
+  #   put '/admin/api/users/:id/member.:format', action: :member do
+  #     before { resource.make_admin }
+  #   end
 
-      post '/admin/api/accounts/:account_id/users.:format', action: :create
-      put '/admin/api/accounts/:account_id/users/:id.:format', action: :update
-    end
+  #   put '/admin/api/users/:id/admin.:format', action: :admin do
+  #     before { resource.make_member }
+  #   end
 
-    # roles
-    put '/admin/api/accounts/:account_id/users/:id/member.:format', action: :member do
-      before { resource.make_admin }
-    end
+  #   # states
+  #   put '/admin/api/users/:id/activate.:format', action: :activate do
+  #     before { resource.state.should == 'pending' }
+  #   end
 
-    put '/admin/api/accounts/:account_id/users/:id/admin.:format', action: :admin do
-      before { resource.make_member }
-    end
+  #   put '/admin/api/users/:id/suspend.:format', action: :suspend do
+  #     before { resource.activate! }
+  #   end
 
-    # states
-    put '/admin/api/accounts/:account_id/users/:id/activate.:format', action: :activate do
-      before { resource.state.should == 'pending' }
-    end
+  #   put '/admin/api/users/:id/unsuspend.:format', action: :unsuspend do
+  #     before { resource.activate! && resource.suspend! }
+  #   end
+  # end
 
-    put '/admin/api/accounts/:account_id/users/:id/suspend.:format', action: :suspend do
-      before { resource.activate! }
-    end
+  # api 'buyer user' do
 
-    put '/admin/api/accounts/:account_id/users/:id/unsuspend.:format', action: :unsuspend do
-      before { resource.activate! && resource.suspend! }
-    end
-  end
+  #   let(:account_id) { buyer.id }
 
-  json(:resource) do
-    let(:root) { 'user' }
+  #   let (:user) { FactoryBot.build(:user, account: buyer) }
 
-    let(:user) { FactoryBot.create(:user, account: provider) }
+  #   let(:resource) do
+  #     FieldsDefinition.create_defaults!(master)
+  #     provider.reload
+  #     user
+  #   end
 
-    # creating new db records for fields that are in db is pathetic as it can get
-    let(:resource) do
-      FieldsDefinition.create_defaults!(master)
-      provider.reload
-      user
-    end
+  #   get '/admin/api/accounts/:account_id/users/:id.:format', action: :show
+  #   delete '/admin/api/accounts/:account_id/users/:id', action: :destroy
 
-    it { should include('id' => user.id, 'state' => user.state, 'role' => user.role.to_s) }
-    it { should include('email' => user.email, 'username' => user.username) }
-    # TODO: test different conditions like signup types
+  #   get '/admin/api/accounts/:account_id/users.:format', action: :index do
+  #     let(:serializable) { [ buyer.users.first, resource ] }
 
-    context "provider user" do
-      let(:resource) { FactoryBot.create(:user, account: provider) }
-      it { should have_links('self') }
-      it { should_not have_links('account') }
-    end
+  #     context do
+  #       parameter :state, 'Filter by state'
+  #       parameter :role, 'Filter by role'
 
-    context "buyer user" do
-      let(:resource) { FactoryBot.create(:user, account: buyer) }
-      it { should have_links('self', 'account') }
-    end
-  end
+  #       let(:state) { 'active' }
+  #       let(:role) { 'admin' }
 
-  json(:collection) do
-    let(:root) { 'users' }
-    it { should be_an(Array) }
-  end
+  #       before { resource.save }
+  #       let(:serializable) { buyer.users.where(state: state, role: role) }
+
+  #       request "List approved admin #{models}" do
+  #         response_body.should == serialized
+  #         status.should == 200
+  #         serializable.size.should == 1
+  #       end
+  #     end
+  #   end
+
+  #   context do
+  #     parameter :username, 'Username'
+  #     parameter :email, 'Valid email address'
+  #     parameter :password, 'Desired Password'
+
+  #     let(:username) { 'bob' }
+  #     let(:email) { 'bob@example.com' }
+
+  #     post '/admin/api/accounts/:account_id/users.:format', action: :create
+  #     put '/admin/api/accounts/:account_id/users/:id.:format', action: :update
+  #   end
+
+  #   # roles
+  #   put '/admin/api/accounts/:account_id/users/:id/member.:format', action: :member do
+  #     before { resource.make_admin }
+  #   end
+
+  #   put '/admin/api/accounts/:account_id/users/:id/admin.:format', action: :admin do
+  #     before { resource.make_member }
+  #   end
+
+  #   # states
+  #   put '/admin/api/accounts/:account_id/users/:id/activate.:format', action: :activate do
+  #     before { resource.state.should == 'pending' }
+  #   end
+
+  #   put '/admin/api/accounts/:account_id/users/:id/suspend.:format', action: :suspend do
+  #     before { resource.activate! }
+  #   end
+
+  #   put '/admin/api/accounts/:account_id/users/:id/unsuspend.:format', action: :unsuspend do
+  #     before { resource.activate! && resource.suspend! }
+  #   end
+  # end
+
+  # json(:resource) do
+  #   let(:root) { 'user' }
+
+  #   let(:user) { FactoryBot.create(:user, account: provider) }
+
+  #   # creating new db records for fields that are in db is pathetic as it can get
+  #   let(:resource) do
+  #     FieldsDefinition.create_defaults!(master)
+  #     provider.reload
+  #     user
+  #   end
+
+  #   it { should include('id' => user.id, 'state' => user.state, 'role' => user.role.to_s) }
+  #   it { should include('email' => user.email, 'username' => user.username) }
+  #   # TODO: test different conditions like signup types
+
+  #   context "provider user" do
+  #     let(:resource) { FactoryBot.create(:user, account: provider) }
+  #     it { should have_links('self') }
+  #     it { should_not have_links('account') }
+  #   end
+
+  #   context "buyer user" do
+  #     let(:resource) { FactoryBot.create(:user, account: buyer) }
+  #     it { should have_links('self', 'account') }
+  #   end
+  # end
+
+  # json(:collection) do
+  #   let(:root) { 'users' }
+  #   it { should be_an(Array) }
+  # end
 end
 
 __END__
