@@ -8,6 +8,12 @@
 
 import type { ReactWrapper } from 'enzyme'
 
+function selectOption <T> (wrapper: ReactWrapper<T>, name: string) {
+  wrapper.findWhere(node => node.text() === name)
+  .find('button')
+  .simulate('click')
+}
+
 function openSelect <T> (wrapper: ReactWrapper<T>) {
   wrapper.find('Select button.pf-c-select__toggle-button').simulate('click')
 }
@@ -70,6 +76,7 @@ function updateInput <T> (wrapper: ReactWrapper<T>, value: string, input?: strin
 }
 
 export {
+  selectOption,
   openSelect,
   openSelectWithModal,
   closeSelectWithModal,
