@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'swagger_helper'
 
-describe "User", type: :request, swagger_doc: '/v1/swagger.json' do
+describe "User", type: :request, swagger_doc: '/v1/swagger.yaml' do
 
   let(:resource) { FactoryBot.build(:user, account: provider) }
   let(:buyer) { FactoryBot.create(:buyer_account, provider_account: provider) }
