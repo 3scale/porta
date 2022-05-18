@@ -5,8 +5,6 @@ import { mount } from 'enzyme'
 
 import { DefaultPlanSelectCard } from 'Plans'
 
-import type { SelectOptionObject } from 'utilities'
-
 import { openSelect, selectOption } from 'utilities/test-utils'
 
 const plan = { id: 1, name: 'My Plan' }
@@ -18,7 +16,7 @@ const defaultProps = {
   path: '/foo/bar'
 }
 
-const mountWrapper = (props) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props}}/>)
+const mountWrapper = (props) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }}/>)
 
 it('should render', () => {
   const wrapper = mountWrapper()
@@ -28,7 +26,7 @@ it('should render', () => {
 it('should have a helper text', () => {
   const wrapper = mountWrapper()
   const text = 'Default application plan (if any) is selected automatically upon service subscription.'
-  
+
   const helperText = wrapper.find('.pf-c-helper-text')
 
   expect(helperText.text()).toBe(text)
@@ -36,7 +34,7 @@ it('should have a helper text', () => {
 
 it('should have a "no default plan" option', () => {
   const wrapper = mountWrapper()
-  
+
   selectOption(wrapper, '(No default plan)')
 
   expect(wrapper.find('Select').first().prop('item').id).toEqual('')
@@ -44,7 +42,7 @@ it('should have a "no default plan" option', () => {
 
 it('should be able to select a plan', () => {
   const wrapper = mountWrapper()
-  
+
   selectOption(wrapper, plan.name)
 
   expect(wrapper.find('Select').first().prop('item').id).toEqual(plan.id)
@@ -58,22 +56,22 @@ it('should disabled the button when clearing select', () => {
 })
 
 it('should disable the button when the default plan is selected', () => {
-  const initialDefaultPlan = { id: 5, name: 'Default plan'}
+  const initialDefaultPlan = { id: 5, name: 'Default plan' }
   const newProduct = {...product, appPlans: [...appPlans, initialDefaultPlan]}
   const wrapper = mountWrapper({ product: newProduct, initialDefaultPlan })
   const isButtonDisabled = (disabled) => expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(disabled)
-    
+
   isButtonDisabled(true)
 
   selectOption(wrapper, plan.name)
   isButtonDisabled(false)
 
-  selectOption(wrapper, initialDefaultPlan.name) 
+  selectOption(wrapper, initialDefaultPlan.name)
   isButtonDisabled(true)
 })
 
 it('should disable the plan option when plan already selected', () => {
-  const initialDefaultPlan = { id: 5, name: 'Default plan'}
+  const initialDefaultPlan = { id: 5, name: 'Default plan' }
   const newProduct = {...product, appPlans: [...appPlans, initialDefaultPlan]}
   const wrapper = mountWrapper({ product: newProduct, initialDefaultPlan })
   const option = (plan) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
