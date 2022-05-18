@@ -9,9 +9,10 @@
 import type { ReactWrapper } from 'enzyme'
 
 function selectOption <T> (wrapper: ReactWrapper<T>, name: string) {
-  wrapper.findWhere(node => node.text() === name)
-  .find('button')
-  .simulate('click')
+  openSelect(wrapper)
+  wrapper.find('.pf-c-select__menu-item')
+    .findWhere(node => node.type() === 'button' && node.text() === name)
+    .simulate('click')
 }
 
 function openSelect <T> (wrapper: ReactWrapper<T>) {
