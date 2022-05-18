@@ -66,8 +66,8 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
             <Button
               variant="primary"
               type="submit"
-              isDisabled={!defaultPlan}
-              >
+              isDisabled={!defaultPlan || defaultPlan.id === initialDefaultPlan?.id || (defaultPlan.id === NO_DEFAULT_PLAN.id && !initialDefaultPlan)}
+            >
               Change plan
             </Button>
           </ActionGroup>
