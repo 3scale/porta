@@ -4,11 +4,6 @@ module AuditHacks
   TTL = 3.months
 
   included do
-    include AfterCommitQueue
-
-    attr_accessor :enqueued
-    attr_writer :synchronous
-
     # this could also validate provider_id, but unfortunately we have to much going on
     # and factories destroy the whole thing
     validates :kind, :presence => true
@@ -62,34 +57,16 @@ module AuditHacks
     changes.merge('id' => auditable_id)
   end
 
-  def synchronous
-    self.class.synchronous || @synchronous
-  end
-
-  def persisted?
-    synchronous ? super : true
-  end
-
-  def create_or_update(*args)
-    Audited.audit_class.as_user(User.current) do
-      if synchronous
-        super
-      elsif !enqueued
-        # all before_create callbacks except version
-        set_audit_user
-        set_request_uuid
-        set_remote_address
-
-        run_after_commit(:enqueue_job)
-        self.enqueued = true
-      end
-    end
+  # runs all before_create callbacks except version, which performs a database call redundant for background auditing
+  def before_background_callbacks(*args)
+    set_audit_user
+    set_request_uuid
+    set_remote_address
   end
 
   def enqueue_job
     AuditedWorker.perform_async(attributes)
   end
-
 end
 
 module AuditedHacks
@@ -103,15 +80,17 @@ module AuditedHacks
     def audited(options = {})
       super
 
+      # this disables auditing only for current thread
       self.disable_auditing if Rails.env.test?
 
       include InstanceMethods
+      include AfterCommitQueue
       class << self
         prepend ClassMethods
       end
     end
 
-    def synchronous
+    def synchronous_audits
       original = Thread.current.thread_variable_get(:audit_hacks_synchronous)
 
       Thread.current.thread_variable_set(:audit_hacks_synchronous, true)
@@ -122,8 +101,17 @@ module AuditedHacks
       Thread.current.thread_variable_set(:audit_hacks_synchronous, original)
     end
 
+    # override method to also enable auditing globally
+    def with_auditing
+      auditing_was_enabled = Audited.auditing_enabled
+      Audited.auditing_enabled = true
+      super
+    ensure
+      Audited.auditing_enabled = false unless auditing_was_enabled
+    end
+
     def with_synchronous_auditing(&block)
-      synchronous { with_auditing(&block) }
+      synchronous_audits { with_auditing(&block) }
     end
   end
 
@@ -135,18 +123,37 @@ module AuditedHacks
     private
 
     def write_audit(attrs)
-      if auditing_enabled
-        provider_id = respond_to?(:tenant_id) && self.tenant_id
-        provider_id ||= respond_to?(:provider_account_id) && self.provider_account_id
-        provider_id ||= respond_to?(:provider_id) && self.provider_id
-        provider_id ||= respond_to?(:provider_account) && self.provider_account.try!(:id)
-        provider_id ||= self.provider_id_for_audits
+      return unless auditing_enabled
 
-        attrs[:provider_id] = provider_id
-        attrs[:kind] = self.class.to_s
+      provider_id = respond_to?(:tenant_id) && self.tenant_id
+      provider_id ||= respond_to?(:provider_account_id) && self.provider_account_id
+      provider_id ||= respond_to?(:provider_id) && self.provider_id
+      provider_id ||= respond_to?(:provider_account) && self.provider_account.try!(:id)
+      provider_id ||= self.provider_id_for_audits
+
+      attrs[:provider_id] = provider_id
+      attrs[:kind] = self.class.to_s
+
+      Audited.audit_class.as_user(User.current) do
+        if self.class.synchronous_audits
+          super
+        else
+          # this is basically a copy of super that enqueues audit instead of creating it
+          self.audit_comment = nil
+
+          attrs[:associated] = send(audit_associated_with) unless audit_associated_with.nil?
+
+          run_callbacks(:audit) {
+            audit = audits.build(attrs)
+            audit.before_background_callbacks
+            audit.destroy # avoid autosave logic
+            run_after_commit { audit.enqueue_job }
+            # if needed to combine audits, that can be moved to the background job
+            # combine_audits_if_needed if attrs[:action] != "create"
+            audit
+          }
+        end
       end
-
-      super
     end
 
     protected
@@ -167,6 +174,9 @@ module AuditedHacks
 end
 
 ActiveSupport.on_load(:active_record) do
+  # Unlike above, this disables auditing globally
+  Audited.auditing_enabled = false if Rails.env.test?
+
   # we want to audit created_at field
   Audited.ignored_attributes = %w(lock_version updated_at created_on updated_on)
 
