@@ -3,7 +3,7 @@
 import { ChangePlanSelectCardWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities'
 
-import type { Plan } from 'Types'
+import type { Record as Plan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'change_plan_select'

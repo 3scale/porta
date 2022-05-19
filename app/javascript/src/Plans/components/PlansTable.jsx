@@ -19,29 +19,26 @@ import {
   TableBody
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
-import type { ApplicationPlan, Action } from 'Types'
+import type { Plan, Action } from 'Types'
 
-import './ApplicationPlansTable.scss'
+import './PlansTable.scss'
 
 export type Props = {
-  plans: ApplicationPlan[],
+  columns: Array<{ attribute: string, title: string }>,
+  plans: Plan[],
   count: number,
   searchHref: string,
   onAction: (action: Action) => void
 }
 
-const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): React.Node => {
-  const tableColumns = [
-    { title: 'Name' },
-    { title: 'Applications' },
-    { title: 'State' }
-  ]
+const PlansTable = ({ columns, plans, count, searchHref, onAction }: Props): React.Node => {
+  const tableColumns = columns.map(c => ({ title: c.title }))
 
   const tableRows = plans.map(p => ({
     disableActions: false,
     cells: [
       { title: <Button href={p.editPath} component="a" variant="link" isInline>{p.name}</Button> },
-      { title: <Button href={p.applicationsPath} component="a" variant="link" isInline>{p.applications}</Button> },
+      { title: <Button href={p.contractsPath} component="a" variant="link" isInline>{p.contracts}</Button> },
       p.state
     ]
   }))
@@ -79,7 +76,7 @@ const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): R
         onFirstClick={(_ev, page) => goToPage(page)}
         onLastClick={(_ev, page) => goToPage(page)}
         onPageInput={(_ev, page) => goToPage(page)}
-        perPageOptions={[10, 20].map(n => ({ title: n, value: n }))}
+        perPageOptions={[10, 20].map(n => ({ title: String(n), value: n }))}
         variant={variant}
       />
     )
@@ -115,4 +112,4 @@ const ApplicationPlansTable = ({ plans, count, searchHref, onAction }: Props): R
   )
 }
 
-export { ApplicationPlansTable }
+export { PlansTable }

@@ -7,7 +7,7 @@ export * from 'Types/NavigationTypes'
 export * from 'Types/FlashMessages'
 export * from 'Types/Signup'
 
-export type Plan = {
+export type Record = {
   id: number,
   name: string
 }
@@ -18,33 +18,27 @@ export type Action = {
   method: Method
 }
 
-export type ApplicationPlan = Plan & {
-  applications: number,
+export type Plan = Record & {
+  contracts: number,
   state: string,
   actions: Action[],
   editPath: string,
-  applicationsPath: string
+  contractsPath: string
 }
 
-export type Product = {
-  id: number,
-  name: string,
+export type Product = Record & {
   systemName: string,
   path?: string,
-  appPlans: Plan[]
+  appPlans: Record[]
 }
 
-export type Backend = {
-  id: number,
-  name: string,
+export type Backend = Record & {
   systemName: string,
   description?: string,
   privateEndpoint: string
 }
 
-export type Metric = {
-  id: number,
-  name: string,
+export type Metric = Record & {
   systemName: string,
   path?: string,
   unit?: string,
