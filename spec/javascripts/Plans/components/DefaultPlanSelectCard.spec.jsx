@@ -8,10 +8,9 @@ import { DefaultPlanSelectCard } from 'Plans'
 import { openSelect, selectOption } from 'utilities/test-utils'
 
 const plan = { id: 1, name: 'My Plan' }
-const appPlans = [plan]
-const product = { id: 0, name: 'My API', appPlans, systemName: 'my_api' }
+const plans = [plan]
 const defaultProps = {
-  product,
+  plans,
   initialDefaultPlan: null,
   path: '/foo/bar'
 }
@@ -57,8 +56,7 @@ it('should disabled the button when clearing select', () => {
 
 it('should disable the button when the default plan is selected', () => {
   const initialDefaultPlan = { id: 5, name: 'Default plan' }
-  const newProduct = {...product, appPlans: [...appPlans, initialDefaultPlan]}
-  const wrapper = mountWrapper({ product: newProduct, initialDefaultPlan })
+  const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
   const isButtonDisabled = (disabled) => expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(disabled)
 
   isButtonDisabled(true)
@@ -72,8 +70,7 @@ it('should disable the button when the default plan is selected', () => {
 
 it('should disable the plan option when plan already selected', () => {
   const initialDefaultPlan = { id: 5, name: 'Default plan' }
-  const newProduct = {...product, appPlans: [...appPlans, initialDefaultPlan]}
-  const wrapper = mountWrapper({ product: newProduct, initialDefaultPlan })
+  const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
   const option = (plan) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
   const isOptionDisabled = (plan, disabled) => expect(option(plan).prop('className').includes('pf-m-disabled')).toBe(disabled)
 

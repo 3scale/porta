@@ -3,7 +3,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ChangePlanSelectCard } from 'Plans'
+import { ChangePlanSelectCard } from 'Plans/components/ChangePlanSelectCard'
 
 import type { SelectOptionObject } from 'utilities'
 

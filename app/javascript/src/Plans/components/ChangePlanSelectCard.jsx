@@ -14,7 +14,7 @@ import {
 import { Select as SelectFormGroup } from 'Common'
 import { CSRFToken } from 'utilities'
 
-import type { Plan } from 'Types'
+import type { Record as Plan } from 'Types'
 
 import './ChangePlanSelectCard.scss'
 

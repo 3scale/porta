@@ -46,8 +46,6 @@ gem '3scale_time_range', '0.0.6'
 
 gem 'statsd-ruby', require: false
 
-gem 'sinatra', require: false # for sidekiq web
-
 # Sidekiq
 gem 'sidekiq', '< 6', require: %w[sidekiq sidekiq/web]
 gem 'sidekiq-batch', '~> 0.1.6'
@@ -241,8 +239,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-shell'
   gem 'pry-stack_explorer'
-  # to generate the swagger JSONs
-  gem 'sour', github: 'HakubJozak/sour', require: false
 
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'

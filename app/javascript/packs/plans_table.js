@@ -1,9 +1,9 @@
 // @flow
 
-import { ApplicationPlansTableCardWrapper } from 'Plans'
+import { PlansTableCardWrapper } from 'Plans/components/PlansTableCard'
 import { safeFromJsonString } from 'utilities'
 
-import type { ApplicationPlan } from 'Types'
+import type { Plan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'plans_table'
@@ -13,11 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { searchHref } = container.dataset
-  const count = safeFromJsonString<number>(container.dataset.count) || 0
-  const plans = safeFromJsonString<ApplicationPlan[]>(container.dataset.plans) || []
+  const { dataset } = container
+  const { searchHref } = dataset
+  const columns = safeFromJsonString<Array<{ attribute: string, title: string }>>(dataset.columns) || []
+  const count = safeFromJsonString<number>(dataset.count) || 0
+  const plans = safeFromJsonString<Plan[]>(dataset.plans) || []
 
-  ApplicationPlansTableCardWrapper({
+  PlansTableCardWrapper({
+    columns,
     plans,
     count,
     searchHref

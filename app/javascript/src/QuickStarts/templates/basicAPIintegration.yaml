@@ -1,0 +1,200 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: getting-started-with-quick-starts
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Complete a basic API integration
+  durationMinutes: 20
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Create the required objects to complete a basic integration with 3scale.
+  introduction: |-
+    This quick start guides you to create the required objects to complete a basic integration with 3scale as an API provider including 7 tasks. 
+    
+    To learn more about API configuration, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api#products-backends-for-threescale-apis_configuring-your-api).
+  tasks:
+    - title: Create a new backend
+      description: |-
+        A backend is an internal API that is bundled to a product. In this quick start, you first create a backend and then a product.In practice, you can create either product or backend first.
+        
+        ### Procedure
+
+        1. Go to _Backends_ page: click the context selector on the header and select <strong>Backends</strong>.
+        1. On the _Backends_ page, click <strong>Create backend</strong>.
+        1. On the _New backend_ page, fill in the details to create the backend. 
+        
+          Important fields:
+              - _System name_:  3scale needs this name to internally identify and refer to the backend.
+              - _Private Base URL_: It is the base URL endpoint of the private API.
+        1. Click <strong>Create backend</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create a new product
+      description: |-
+        An API product is a bundle of one or more API backends. For this quick start, first generate an API product and name it before bundling backends to this product.
+
+        ### Procedure
+
+        1. Go to _Products_ page: click the context selector on the header and select <strong>Products</strong>.
+        1. On the _Products_ page, click <strong>Create product</strong>.
+        1. On the _New Product_ page, fill in the details to create the product. 
+        
+          Important fields:
+              - _System name_:  3scale needs this name to internally identify and refer to the backend.
+                - A product _system\_name_ is used to generate proxy endpoints and domain names.
+        1. Click <strong>Create product</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Specify the path to mount the backend to the product
+      description: |-
+        Add a backend to the product to facilitate API offerings.
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page, navigate to <strong>Integration > Backends</strong>.
+        1. Click <strong>Add backend</strong>.
+        1. On the _Add a backend_ page, fill in the details. 
+        
+          Important fields:
+              - _Path_: when you add a backend to a product, you define the path that the backend uses to communicate with the specified product. When defining the path for a backend:
+                - You can indicate / as the path of one of the backends.
+                - Paths must be unique inside the product.
+                - You can give the same backend the same path in different products.
+        1. Click <strong>Add to product</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create a new application plan
+      description: |-
+        An application plan defines the rules such as limits, pricing, and features for using your API product.
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page.
+        1. Click <strong>Create application plan</strong>.
+        1. On the _New application plan_ page, fill in the details. 
+        
+          Important fields:
+              - _System name_: A system name must be unique in your 3scale installation.
+              - _Application plan approval_: select the check box to require applications getting approval before they can access your API.
+        1. Click <strong>Create application plan</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Create a new application
+      description: |-
+        Create applications that subscribe to an application plan.
+
+        ### Procedure
+
+        1. On <strong>[Your\_product\_name]</strong> overview page: click the context selector on the header and select _Audience_.
+        1. On the _Publish application plans_ card, click the <strong>x live applications</strong> link.
+        1. On the Applications on your <strong>[Your\_product\_name]</strong> page, click <strong>Create application</strong>.
+        1. On the _New application page_, fill in the details. 
+        
+          Important fields:
+              - _Application plan_: An application is always associated with an application plan.
+        1. Click <strong>Create application</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Promote configuration to staging
+      description: |-
+        Before you can send a test request to your API product, you must promote the APIcast configuration to staging and production. An APIcast configuration consists of the backends you have added to a product with the corresponding mapping rules, applications, and application plans.
+
+        ### Procedure
+
+        1. Go to <strong>[Your\_product\_name] > Integration > Configuration</strong> page.
+              - Click the context selector on the header and select _Product_.
+              - Click <strong>[Your\_product\_name]</strong> and go to the _Overview_ page.
+              - Click <strong>Integration > Configuration</strong> on left navigation.
+        1. Under _APIcast Configuration_, click <strong>Promote v.[n] to Staging APIcast</strong>.
+        1. Under Staging APIcast, click <strong>Promote v.[n] to Production APIcast</strong>.
+
+        > <strong>Tip:</strong> Every time you modify the product configuration and before making calls to your API, you must promote the updated configuration to the staging and production environments.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you complete the task successfully?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Test example curl
+      description: |-
+        After promoting the API cast configuration, you can send a command line request to a product to test the integration of a backend based on the first mapping rule added to the product.
+
+        ### Procedure
+
+        - To test requests to your API product, copy the command provided in Example curl for testing and run it in a terminal.
+        - The curl command example is based on the first mapping rule of the product.
+        - After you run the command, you should get an HTML response containing results from the backend you are testing.
+        - If you do not get a response, delete the catch-all mapping rule from your product, promote the new APIcast configuration to staging and then to production, and run the example curl command.
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you create an application plan for your product?
+          - Did you create an application that subscribes to the application plan?
+          - Did you promote the APIcast configuration to staging and production?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+    This concludes the set up of your basic API intergation with 3scale.
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - mas-alert-note-prereq

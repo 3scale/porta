@@ -1,21 +1,8 @@
-// this is pretty invasive
-h1 + p.description {
-  clear: both;
-}
-
+// TODO: is this used anywhere?
 // plan change widget
 .plan-preview-box {
   a.select-plan-button {
     width: auto;
     display: inline-block;
   }
-}
-
-form.formtastic.default_plan fieldset {
-  padding-left: 0em;
-  padding-bottom: 0;
-
-  & > ol > li >p.inline-hints {
-  margin-left: 0.25em;
-}
 }

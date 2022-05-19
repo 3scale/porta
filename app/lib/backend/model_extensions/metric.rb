@@ -11,6 +11,7 @@ module Backend
           # - 2 threads are trying to destroy a metric – T1 and T2
           # - T1 succeeds and T2 gets `persisted? => false` inside `ActiveRecord::Persistence#destroy` due to https://apidock.com/rails/v4.2.7/ActiveRecord/Core/sync_with_transaction_state, thus making `@_trigger_destroy_callback = true`
           # - Because of `m.destroyed? == true`, both T1 and T2 will invoke the callback
+          # TODO: this condition seems to do nothing, maybe delete it
           after_commit :sync_backend, if: ->(m) { (m.persisted? || m.destroyed?) && !m.changed? }
         end
       end

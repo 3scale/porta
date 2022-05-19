@@ -2,8 +2,6 @@
 
 import * as React from 'react'
 
-import { createReactWrapper } from 'utilities'
-
 import {
   ActionGroup,
   Button,
@@ -13,30 +11,28 @@ import {
 } from '@patternfly/react-core'
 import { Select as SelectFormGroup } from 'Common/components/Select'
 import { HelperText, HelperTextItem } from 'Common/components/HelperText'
-import { CSRFToken } from 'utilities'
+import { createReactWrapper, CSRFToken } from 'utilities'
 
-import type { Product, Plan } from 'Types'
+import type { Record as Plan } from 'Types'
 
 import './DefaultPlanSelectCard.scss'
 
 type Props = {
-  product: Product,
+  plans: Array<Plan>,
   initialDefaultPlan: Plan | null,
   path: string
 }
 
-// $FlowIgnore[incompatible-type] id should be a number but the controller has to recieve empty string
-const NO_DEFAULT_PLAN: Plan = { id: '', name: '(No default plan)' }
+const DefaultPlanSelectCard = ({ plans, initialDefaultPlan, path: url }: Props): React.Node => {
+  // $FlowIgnore[incompatible-type] id should be a number but the controller has to recieve empty string
+  const NO_DEFAULT_PLAN: Plan = { id: '', name: '(No default plan)' }
 
-const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): React.Node => {
   const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
-  const availablePlans = [NO_DEFAULT_PLAN, ...product.appPlans]
+  const availablePlans = [NO_DEFAULT_PLAN, ...plans]
 
   // TODO: in PF4, "isDisabled" behaviour is replaced by ticking the selected item. Remove this after upgrading.
-  const plans = defaultPlan ? availablePlans.map(p => ({ ...p, disabled: p.id === defaultPlan.id })) : availablePlans
-
-  const url = path.replace(':id', String(product.id))
+  const mappedPlans = defaultPlan ? availablePlans.map(p => ({ ...p, disabled: p.id === defaultPlan.id })) : availablePlans
 
   return (
     <Card id="default_plan_card">
@@ -56,7 +52,7 @@ const DefaultPlanSelectCard = ({ product, initialDefaultPlan, path }: Props): Re
             // $FlowIgnore[incompatible-type] plan is either Plan or null
             item={defaultPlan}
             // $FlowIgnore[incompatible-type] id can be either number or string
-            items={plans}
+            items={mappedPlans}
             onSelect={setDefaultPlan}
             fieldId="id"
             name="id"

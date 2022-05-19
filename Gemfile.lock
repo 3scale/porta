@@ -61,12 +61,6 @@ GIT
     swagger-ui_rails (0.1.7)
 
 GIT
-  remote: https://github.com/HakubJozak/sour.git
-  revision: d2ca8cf7761a664efa4c89cb4b32c55d509ce58d
-  specs:
-    sour (0.1.3)
-
-GIT
   remote: https://github.com/mikz/httpclient.git
   revision: fec23fb32fb899b87a8b2c94e2d2069b6b4c633c
   branch: ssl-env-cert
@@ -1564,7 +1558,6 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     mustache (1.1.1)
-    mustermann (1.0.3)
     mysql2 (0.5.3)
     net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.1)
@@ -1831,11 +1824,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    sinatra (2.0.4)
-      mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.4)
-      tilt (~> 2.0)
     slim (4.0.1)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -2104,9 +2092,7 @@ DEPENDENCIES
   sidekiq-prometheus-exporter
   sidekiq-throttled
   simplecov (~> 0.21.2)
-  sinatra
   slim-rails (~> 3.2)
-  sour!
   source2swagger!
   sprockets-rails
   state_machines (~> 0.5.0)

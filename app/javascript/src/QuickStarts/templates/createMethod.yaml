@@ -1,0 +1,101 @@
+# Additional info: https://docs.openshift.com/container-platform/4.9/web_console/creating-quick-start-tutorials.html
+metadata:
+  name: creating-a-method-quick-start
+  # you can add additional metadata here
+  instructional: true
+spec:
+  displayName: Create a method
+  durationMinutes: 10
+  # Optional type section, will display as a tile on the card
+  type: 
+    text: Quick start
+    # 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey'
+    color: grey
+  # - The icon defined as a base64 value. Example flow:
+  # 1. Find an .svg you want to use, like from here: https://www.patternfly.org/v4/guidelines/icons/#all-icons
+  # 2. Upload the file here and encode it (output format - plain text): https://base64.guru/converter/encode/image
+  # 3. compose - `icon: data:image/svg+xml;base64,<base64 string from step 2>`
+  # - If empty string (icon: ''), will use a default rocket icon
+  # - If set to null (icon: ~) will not show an icon
+  icon: data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KPHRpdGxlPjwvdGl0bGU+CjxnIGlkPSJpY29tb29uLWlnbm9yZSI+CjwvZz4KPHBhdGggZD0iTTQ0OCA2NHY0MTZoLTMzNmMtMjYuNTEzIDAtNDgtMjEuNDktNDgtNDhzMjEuNDg3LTQ4IDQ4LTQ4aDMwNHYtMzg0aC0zMjBjLTM1LjE5OSAwLTY0IDI4LjgtNjQgNjR2Mzg0YzAgMzUuMiAyOC44MDEgNjQgNjQgNjRoMzg0di00NDhoLTMyeiI+PC9wYXRoPgo8cGF0aCBkPSJNMTEyLjAyOCA0MTZ2MGMtMC4wMDkgMC4wMDEtMC4wMTkgMC0wLjAyOCAwLTguODM2IDAtMTYgNy4xNjMtMTYgMTZzNy4xNjQgMTYgMTYgMTZjMC4wMDkgMCAwLjAxOS0wLjAwMSAwLjAyOC0wLjAwMXYwLjAwMWgzMDMuOTQ1di0zMmgtMzAzLjk0NXoiPjwvcGF0aD4KPC9zdmc+Cg==
+  description: |-
+    Configure enforcement of limits and rules.
+  introduction: |-
+    This quick start guides you through how to control access to your API by designating methods. The methods capture individual usage details to enable enforcement of limits and pricing rules.
+    
+    To learn more about API methods, see the [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.10/html-single/admin_portal_guide/index#designating-methods-and-adding-metrics-for-capturing-usage-details_methods-and-metrics-for-products-and-backends).
+
+    You can designate methods for products and backends. Adding a method to a product or backend means that you are designating a method in your API for which you want to capture individual usage details. An application plan provides the ability to set a limit for each method that you add to a product or backend.
+
+    This provides finer granularity for tracking API use. Reporting traffic to a method automatically increases counters for the method and for the Hits metric.
+  tasks:
+    - title: Add methods to backend
+      description: |-
+        For backends, adding methods enables setting limits and pricing rules in the application plans for any product that bundles that backend.
+
+        ### Prerequisites
+
+        - A backend. To create one, see create-a-backend-link.
+        
+        ### Procedure
+
+        1. Navigate to <strong>[Your\_backend\_name] > Methods and Metrics</strong>.
+        1. Click <strong>New method</strong>.
+        1. On the _New method_ page, fill in the details to create the method.
+        
+          Important fields:
+              - _Friendly name_: A short description of the method. This name is displayed in different sections of the 3scale Admin Portal.
+              - _System name_: The name of the method in your API to use to report the usage through the 3scale Service Management API. The system name must be unique.
+              > <strong>Tip:</strong> Be careful with changing the system name of the methods or deleting them. These changes can break your already deployed 3scale integration if there are mapping rules pointing to the previous system name of the method.
+        1. Click <strong>Create method</strong>
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you create a unique system name for the method?
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+    - title: Add methods to product
+      description: |-
+        For products, adding methods enables setting limits and pricing rules in the product’s application plans. The procedure for adding a method to a product is similar to adding a method to a backend.
+
+        ### Prerequisites
+
+        - A product. To create one, see create-a-product-link.
+        - An application plan. To create one, see create-an-application-plan-link.
+
+        ### Procedure
+
+        1. Navigate to <strong>[Your\_product\_name] > Integration > Methods and Metrics</strong>.
+        1. Click <strong>Add a method</strong>.
+        1. On the _New method_ page, fill in the details to create the method.
+        
+          Important fields:
+              - _Friendly name_: A short description of the method. This name is displayed in different sections of the 3scale Admin Portal.
+              - _System name_: The name of the method in your API to use to report the usage through the 3scale Service Management API. The system name must be unique.
+        1. Click <strong>Create method</strong>
+
+        ###Next steps:
+        
+        1. Verify whether the added methods are available in your application plans.
+        1. Edit limits and pricing rules for each method by going to <strong>[Your\_product\_name] > Applications > Application Plans > [plan\_you\_want\_to\_edit]</strong>.
+
+
+      # optional - the task's Check your work module
+      review:
+        instructions: |-
+          - Did you create a unique system name for the method?
+          - Did you verify the added methods are available in your application plans? 
+        failedTaskHelp: This task isn’t verified yet. Try the task again.
+      # optional - the task's success and failure messages
+      summary:
+        success: Shows a success message in the task header
+        failed: Shows a failed message in the task header
+  conclusion: |-
+    This concludes the set up for adding methods to a backend and a product.
+  # you can link to the next quick start(s) here
+  nextQuickStart:
+    - mas-alert-note-prereq
