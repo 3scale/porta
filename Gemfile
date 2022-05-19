@@ -115,7 +115,7 @@ gem 'swagger-ui_rails', git: 'https://github.com/3scale/swagger-ui_rails.git', b
 gem 'swagger-ui_rails2', git: 'https://github.com/3scale/swagger-ui_rails.git', branch: 'dev-2.1.3'
 gem 'thinking-sphinx', '~> 5.4.0'
 gem 'ts-datetime-delta', require: 'thinking_sphinx/deltas/datetime_delta'
-gem 'will_paginate', '~> 3.1.6'
+gem 'will_paginate', '~> 3.3'
 gem 'zip-zip', require: false
 
 gem 'acts_as_tree'
