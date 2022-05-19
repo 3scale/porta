@@ -24,9 +24,7 @@ When "I follow {string} for {plan}" do |label, plan|
 end
 
 When "I select {string} as default plan" do | plan |
-  select = find(:css, '#default_plan_card .pf-c-select')
-  select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
-  select.find('.pf-c-select__menu-item', text: plan).click(wait: 5)
+  select_default_plan(plan)
 end
 
 Then /^I should not see "(.*?)" in the default plans list$/ do | plan_name |
@@ -86,4 +84,12 @@ end
 
 When "{plan} has been deleted" do |plan|
   plan.destroy
+end
+
+def select_default_plan(plan_name)
+  select = find(:css, '#default_plan_card .pf-c-select')
+  select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
+  select.find('.pf-c-select__menu-item', text: plan_name).click
+  button = find(:css, '#default_plan_card .pf-c-button[type="submit"]') 
+  button.click(wait: 5)
 end
