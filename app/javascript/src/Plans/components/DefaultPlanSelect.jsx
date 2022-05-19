@@ -7,7 +7,7 @@ import { toSelectOption } from 'utilities'
 
 import './DefaultPlanSelect.scss'
 
-import type { Plan } from 'Types'
+import type { Record as Plan } from 'Types'
 
 type Props = {
   plan: Plan,

@@ -14,7 +14,7 @@ module Api::PlansHelper
       'service': service.to_json(root: false, only: %i[id name]),
       'application-plans': plans.to_json(root: false, only: %i[id name]),
       'current-plan': current_application_plan_data(service),
-      'path': masterize_admin_service_application_plans_path(':id')
+      'path': masterize_admin_service_application_plans_path(service)
     }
   end
 
@@ -24,10 +24,19 @@ module Api::PlansHelper
 
   def application_plans_table_data(service_id:, page_plans:, plans_size:)
     {
+      columns: columns.to_json,
       plans: application_plans_index_data(page_plans).to_json,
       count: plans_size,
       'search-href': admin_service_application_plans_path(service_id)
     }
+  end
+
+  def columns
+    [
+      { attribute: :name, title: ApplicationPlan.human_attribute_name(:name) },
+      { attribute: :contracts_count, title: ApplicationPlan.human_attribute_name(:contracts) },
+      { attribute: :state, title: ApplicationPlan.human_attribute_name(:state) }
+    ]
   end
 
   def application_plans_index_data(plans)

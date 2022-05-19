@@ -4,7 +4,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-import { ApplicationPlansTableCard } from 'Plans'
+import { PlansTableCard } from 'Plans/components/PlansTableCard'
 
 const fetch = jest.fn()
 fetch.mockResolvedValue({ status: 200 })
@@ -21,14 +21,19 @@ const actions = [
   { title: 'Delete', path: '/delete', method: 'POST' }
 ]
 
-const plans = [{ id: 0, name: 'Basic Plan', actions, applications: 0, state: 'state', editPath: '/edit', applicationsPath: '/apps' }]
+const plans = [{ id: 0, name: 'Basic Plan', actions, contracts: 0, state: 'state', editPath: '/edit', contractsPath: '/apps' }]
 const defaultProps = {
+  columns: [
+    { attribute: 'name', title: 'Name' },
+    { attribute: 'contracts_count', title: 'Contracts' },
+    { attribute: 'state', title: 'State' }
+  ],
   plans,
   count: plans.length,
   searchHref: '/plans'
 }
 
-const mountWrapper = (props) => mount(<ApplicationPlansTableCard {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props) => mount(<PlansTableCard {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.clearAllMocks()
