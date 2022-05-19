@@ -1943,7 +1943,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    will_paginate (3.1.6)
+    will_paginate (3.3.1)
     wisper (2.0.1)
     with_env (1.1.0)
     xml-simple (1.1.8)
@@ -2131,7 +2131,7 @@ DEPENDENCIES
   unicorn-rails
   webmock (~> 3.8.0)
   webpacker (~> 4)
-  will_paginate (~> 3.1.6)
+  will_paginate (~> 3.3)
   with_env
   xpath (~> 3.2.0)
   yabeda-prometheus-mmap
