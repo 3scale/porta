@@ -90,6 +90,6 @@ def select_default_plan(plan_name)
   select = find(:css, '#default_plan_card .pf-c-select')
   select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
   select.find('.pf-c-select__menu-item', text: plan_name).click
-  button = find(:css, '#default_plan_card .pf-c-button[type="submit"]') 
+  button = find(:css, '#default_plan_card .pf-c-button[type="submit"]')
   button.click(wait: 5)
 end

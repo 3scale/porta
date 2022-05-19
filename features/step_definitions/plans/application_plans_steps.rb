@@ -147,7 +147,7 @@ Then "an admin can select the application plan as default" do
   assert @plan.reload.master?
 end
 
-Given "the application plan has been deleted" do 
+Given "the application plan has been deleted" do
   @plan.destroy
 end
 
