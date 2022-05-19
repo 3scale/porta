@@ -124,8 +124,13 @@ module ProxyConfigAffectingChanges
 
       protected
 
-      def write_attribute(attr_name, value)
-        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name)
+      def _write_attribute(attr_name, value)
+        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
+        super
+      end
+
+      def write_attribute_without_type_cast(attr_name, value)
+        track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
         super
       end
 
