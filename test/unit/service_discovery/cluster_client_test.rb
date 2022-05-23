@@ -193,14 +193,15 @@ module ServiceDiscovery
 
       test '.build_client' do
         assert_equal client_endpoint, 'https://my-cluster.com:8443/api'
-        assert_equal client_endpoint(api_path: 'k8s'), 'https://my-cluster.com:8443/k8s'
+        assert_equal client_endpoint(api_path: 'api'), 'https://my-cluster.com:8443/api'
+        assert_equal client_endpoint(api_path: 'apis/project.openshift.io'), 'https://my-cluster.com:8443/apis/project.openshift.io'
       end
 
       test '.build_client_for_projects' do
         assert_equal client_endpoint_for_projects, 'https://my-cluster.com:8443/apis/project.openshift.io'
-        assert_equal client_endpoint_for_projects(api_path_for_projects: 'projs'), 'https://my-cluster.com:8443/projs'
+        assert_equal client_endpoint_for_projects(api_path_for_projects: 'apis/projs'), 'https://my-cluster.com:8443/apis/projs'
         assert_equal client_endpoint_for_projects(api_path: 'k8s'), 'https://my-cluster.com:8443/apis/project.openshift.io'
-        assert_equal client_endpoint_for_projects(api_path: 'k8s', api_path_for_projects: 'projs'), 'https://my-cluster.com:8443/projs'
+        assert_equal client_endpoint_for_projects(api_path: 'k8s', api_path_for_projects: 'apis/projs'), 'https://my-cluster.com:8443/apis/projs'
       end
 
       protected
