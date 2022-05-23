@@ -139,7 +139,7 @@ end
 
 Given "the application plan is published" do
   @plan.publish!
-  assert @plan.reload.published?
+  assert @plan.published?
 end
 
 Given "the application plan is hidden" do
