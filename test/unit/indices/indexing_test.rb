@@ -56,7 +56,7 @@ class IndexingTest < ActiveSupport::TestCase
 
   # the idea is to double check #indexed_models lists all models, assuring we cover them all in tests
   test "all models with index methods are indexed" do
-    exclusions = [ApplicationRecord, Plan, Cinstance, User]
+    exclusions = [ActiveStorage::Blob, ActiveStorage::Attachment, ApplicationRecord, Plan, Cinstance, User]
     index_modules = [Searchable, AccountIndex::ForAccount]
     index_modules << TopicIndex unless System::Database.oracle?
 
