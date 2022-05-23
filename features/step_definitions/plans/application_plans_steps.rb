@@ -138,12 +138,17 @@ And "an application plan that is not default" do
 end
 
 Given "the application plan is published" do
+  next if @plan.published?
+
   @plan.publish!
-  assert @plan.published?
+  assert @plan.reload.published?
 end
 
 Given "the application plan is hidden" do
-  assert @plan.hidden?
+  next if @plan.hidden?
+
+  @plan.hide!
+  assert @plan.reload.hidden?
 end
 
 Then "an admin can select the application plan as default" do
