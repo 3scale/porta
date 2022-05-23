@@ -15,13 +15,8 @@ module TestHelpers
       end
     end
 
-    def cluster_resource(entity_type, data)
-      klass = Kubeclient::ClientMixin.resource_class(Kubeclient, entity_type)
-      cluster.new_entity(data, klass)
-    end
-
     def cluster_namespace(data = {})
-      cluster_resource('Namespace', cluster_namespace_data(data))
+      Kubeclient::Resource.new(cluster_namespace_data(data))
     end
 
     def cluster_namespace_data(data = {})
@@ -44,13 +39,13 @@ module TestHelpers
     end
 
     def cluster_project(data = {})
-      cluster_resource('Project', cluster_project_data(data))
+      Kubeclient::Resource.new(cluster_project_data(data))
     end
 
     alias cluster_project_data cluster_namespace_data
 
     def cluster_service(data = {})
-      cluster_resource('Service', cluster_service_data(data))
+      Kubeclient::Resource.new(cluster_service_data(data))
     end
 
     def cluster_service_data(data = {})
@@ -77,7 +72,7 @@ module TestHelpers
     end
 
     def cluster_route(data = {})
-      cluster_resource('Route', cluster_route_data(data))
+      Kubeclient::Resource.new(cluster_route_data(data))
     end
 
     def cluster_route_data(data = {})
