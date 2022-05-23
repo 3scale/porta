@@ -117,7 +117,8 @@ Feature: Application plans index page
     #   | Plan B  | 1            | published |
     #   | Plan A  | 2            | hidden    |
 
-  Scenario: Marking plan as default
+  Scenario: Marking a published plan as default
+    Given the application plan is published
     Then an admin can select the application plan as default
 
   Scenario: Marking a Hidden plan as default

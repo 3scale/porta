@@ -137,6 +137,11 @@ And "an application plan that is not default" do
   assert_not @plan.master?
 end
 
+Given "the application plan is published" do
+  @plan.publish!
+  assert @plan.reload.published?
+end
+
 Given "the application plan is hidden" do
   assert @plan.hidden?
 end
