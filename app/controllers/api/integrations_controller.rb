@@ -23,7 +23,7 @@ class Api::IntegrationsController < Api::BaseController
     elsif @proxy.save_and_deploy(proxy_params)
       environment = @proxy.service_mesh_integration? ? 'Production' : 'Staging'
       flash[:notice] = flash_message(:update_success, environment: environment)
-      update_mapping_rules_position if params.require(:proxy).has_key?(:proxy_rules_attributes)
+      update_mapping_rules_position if params.require(:proxy).key?(:proxy_rules_attributes)
 
       redirect_to admin_service_integration_path(@service)
     else
