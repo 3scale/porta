@@ -12,7 +12,7 @@ module Searchable
 
     scope :by_query, ->(query) do
       options = {ids_only: true, per_page: 1_000_000, star: true, ignore_scopes: true, with: { }}
-      where(id: search(ThinkingSphinx::Query.escape(query), options))
+      where(id: unscoped.search(ThinkingSphinx::Query.escape(query), options))
     end
 
     private
