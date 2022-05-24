@@ -2,10 +2,17 @@
 
 import * as React from 'react'
 
-import { Form, Card, CardBody } from '@patternfly/react-core'
-import { DefaultPlanSelect } from 'Plans/components/DefaultPlanSelect'
-import { ajax, createReactWrapper } from 'utilities'
-import * as alert from 'utilities/alert'
+import {
+  ActionGroup,
+  Button,
+  Form,
+  Card,
+  CardBody
+} from '@patternfly/react-core'
+import { Select as SelectFormGroup } from 'Common/components/Select'
+import { HelperText, HelperTextItem } from 'Common/components/HelperText'
+import { createReactWrapper, CSRFToken } from 'utilities'
+
 import type { Record as Plan } from 'Types'
 
 import './DefaultPlanSelectCard.scss'
@@ -17,55 +24,60 @@ type Props = {
 }
 
 const DefaultPlanSelectCard = ({ plans, initialDefaultPlan, path: url }: Props): React.Node => {
-  const NO_DEFAULT_PLAN: Plan = { id: -1, name: '(No default plan)' }
+  // $FlowIgnore[incompatible-type] id should be a number but the controller has to recieve empty string
+  const NO_DEFAULT_PLAN: Plan = { id: '', name: '(No default plan)' }
 
-  const [defaultPlan, setDefaultPlan] = React.useState<Plan>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
+  const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
-  const [isLoading, setIsLoading] = React.useState(false)
+  const availablePlans = [NO_DEFAULT_PLAN, ...plans]
 
-  const onSelectPlan = (plan: Plan) => {
-    const body = plan.id >= 0 ? new URLSearchParams({ id: plan.id.toString() }) : undefined
-
-    ajax(url, { method: 'POST', body })
-      .then(data => {
-        if (data.ok) {
-          alert.notice('Default plan was updated')
-          setDefaultPlan(plan)
-        } else {
-          if (data.status === 404) {
-            alert.error("The selected plan doesn't exist.")
-          } else {
-            alert.error('Plan could not be updated')
-          }
-        }
-      })
-      .catch(err => {
-        console.error(err)
-        alert.error('An error ocurred. Please try again later.')
-      })
-      .finally(() => setIsLoading(false))
-
-    setIsLoading(true)
-  }
-
-  const availablePlans = [NO_DEFAULT_PLAN, ...plans].filter(p => p.id !== defaultPlan.id)
+  // TODO: in PF4, "isDisabled" behaviour is replaced by ticking the selected item. Remove this after upgrading.
+  const mappedPlans = defaultPlan ? availablePlans.map(p => ({ ...p, disabled: p.id === defaultPlan.id })) : availablePlans
 
   return (
     <Card id="default_plan_card">
       <CardBody>
-        <Form onSubmit={e => e.preventDefault()}>
-          <DefaultPlanSelect
-            plan={defaultPlan}
-            plans={availablePlans}
-            onSelectPlan={onSelectPlan}
-            isLoading={isLoading}
+        <Form
+          acceptCharset="UTF-8"
+          method="post"
+          action={url}
+        >
+          <CSRFToken />
+          <input type="hidden" name="utf8" value="✓" />
+
+          {/* $FlowIgnore[prop-missing] description is optional */}
+          {/* $FlowIgnore[incompatible-type-arg] id can be either number or string */}
+          <SelectFormGroup
+            label="Default plan"
+            // $FlowIgnore[incompatible-type] plan is either Plan or null
+            item={defaultPlan}
+            // $FlowIgnore[incompatible-type] id can be either number or string
+            items={mappedPlans}
+            onSelect={setDefaultPlan}
+            fieldId="id"
+            name="id"
+            placeholderText={defaultPlan ? defaultPlan.name : 'Select application plan'}
           />
+          <ActionGroup>
+            <Button
+              variant="primary"
+              type="submit"
+              isDisabled={!defaultPlan || defaultPlan.id === initialDefaultPlan?.id || (defaultPlan.id === NO_DEFAULT_PLAN.id && !initialDefaultPlan)}
+            >
+              Change plan
+            </Button>
+          </ActionGroup>
         </Form>
+        <HelperText>
+          <HelperTextItem>
+            Default application plan (if any) is selected automatically upon service subscription.
+          </HelperTextItem>
+        </HelperText>
       </CardBody>
     </Card>
   )
 }
 
-const DefaultPlanSelectWrapper = (props: Props, containerId: string): void => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
+const DefaultPlanSelectCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
 
-export { DefaultPlanSelectCard, DefaultPlanSelectWrapper }
+export { DefaultPlanSelectCard, DefaultPlanSelectCardWrapper }

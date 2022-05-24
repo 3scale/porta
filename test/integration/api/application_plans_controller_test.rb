@@ -287,8 +287,13 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       put admin_application_plan_path(plan), params: { application_plan:{ name: 'New plan name' } }
       assert_response :redirect
 
-      post masterize_admin_service_application_plans_path(service, plan, format: :js)
-      assert_response :success
+      post masterize_admin_service_application_plans_path(service)
+      assert_response :redirect
+      assert_nil service.reload.default_application_plan
+
+      post masterize_admin_service_application_plans_path(service, params: { id: @plan.id })
+      assert_response :redirect
+      assert_equal @plan, service.reload.default_application_plan
 
       post publish_admin_plan_path(plan, format: :json)
       assert_response :ok
@@ -328,8 +333,13 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       put admin_application_plan_path(plan), params: { application_plan: { name: 'New plan name' } }
       assert_response :redirect
 
-      post masterize_admin_service_application_plans_path(service, plan, format: :js)
-      assert_response :success
+      post masterize_admin_service_application_plans_path(service)
+      assert_response :redirect
+      assert_nil service.reload.default_application_plan
+
+      post masterize_admin_service_application_plans_path(service, params: { id: @plan.id })
+      assert_response :redirect
+      assert_equal @plan, service.reload.default_application_plan
 
       post publish_admin_plan_path(plan, format: :json)
       assert_response :ok

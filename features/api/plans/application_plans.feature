@@ -9,6 +9,7 @@ Feature: Application plans index page
     Given a provider is logged in
     And an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has applications
+    And an application plan that is not default
     And I go to the application plans admin page
 
   Scenario: Create a simple Application plan
@@ -115,3 +116,15 @@ Feature: Application plans index page
     #   | Plan C  | 0            | published |
     #   | Plan B  | 1            | published |
     #   | Plan A  | 2            | hidden    |
+
+  Scenario: Marking a published plan as default
+    Given the application plan is published
+    Then an admin can select the application plan as default
+
+  Scenario: Marking a Hidden plan as default
+    Given the application plan is hidden
+    Then an admin can select the application plan as default
+  
+  Scenario: Selected plan doesn't exist
+    Given the application plan has been deleted
+    Then an admin can't select the application plan as default

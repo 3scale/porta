@@ -1,86 +1,87 @@
 // @flow
 
 import React from 'react'
-import { act } from 'react-dom/test-utils'
-import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
 import { mount } from 'enzyme'
 
-import * as alert from 'utilities/alert'
-const noticeSpy = jest.spyOn(alert, 'notice')
-const errorSpy = jest.spyOn(alert, 'error')
+import { DefaultPlanSelectCard } from 'Plans'
 
-jest.mock('utilities/ajax')
-import * as AJAX from 'utilities/ajax'
-const ajax = (AJAX.ajax: JestMockFn<empty, any>)
+import { openSelect, selectOption } from 'utilities/test-utils'
 
 const plan = { id: 1, name: 'My Plan' }
+const plans = [plan]
 const defaultProps = {
-  plans: [plan],
+  plans,
   initialDefaultPlan: null,
   path: '/foo/bar'
 }
 
-const mountWrapper = (props) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }} />)
-
-const openSelect = (wrapper) => wrapper.find('.pf-c-select__toggle-button').simulate('click')
-const selectPlan = (wrapper, plan) => act(async () => wrapper.find('DefaultPlanSelect').invoke('onSelectPlan')(plan))
+const mountWrapper = (props) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }}/>)
 
 it('should render', () => {
   const wrapper = mountWrapper()
   expect(wrapper.exists()).toBe(true)
 })
 
-it('should show a success message if request goes well', async () => {
-  ajax.mockResolvedValue({ ok: true })
+it('should have a helper text', () => {
   const wrapper = mountWrapper()
+  const text = 'Default application plan (if any) is selected automatically upon service subscription.'
 
-  await selectPlan(wrapper, plan)
+  const helperText = wrapper.find('.pf-c-helper-text')
 
-  expect(noticeSpy).toHaveBeenCalledWith('Default plan was updated')
+  expect(helperText.text()).toBe(text)
 })
 
-it('should show an error message when selected plan does not exist', async () => {
-  ajax.mockResolvedValueOnce({ status: 404 })
+it('should have a "no default plan" option', () => {
   const wrapper = mountWrapper()
 
-  await selectPlan(wrapper, plan)
+  selectOption(wrapper, '(No default plan)')
 
-  expect(errorSpy).toHaveBeenCalledWith("The selected plan doesn't exist.")
+  expect(wrapper.find('Select').first().prop('item').id).toEqual('')
 })
 
-it('should show an error message when server returns an error', async () => {
-  ajax.mockResolvedValue({ status: 403 })
+it('should be able to select a plan', () => {
   const wrapper = mountWrapper()
 
-  await selectPlan(wrapper, plan)
+  selectOption(wrapper, plan.name)
 
-  expect(errorSpy).toHaveBeenCalledWith('Plan could not be updated')
+  expect(wrapper.find('Select').first().prop('item').id).toEqual(plan.id)
 })
 
-it('should show an error message when connection fails', async () => {
-  // $FlowExpectedError[cannot-write] suppress error logs during test
-  console.error = jest.fn()
-
-  ajax.mockRejectedValue()
+it('should disabled the button when clearing select', () => {
   const wrapper = mountWrapper()
+  wrapper.find('.pf-c-select__toggle-clear').simulate('click')
 
-  await selectPlan(wrapper, plan)
-
-  expect(errorSpy).toHaveBeenCalledWith('An error ocurred. Please try again later.')
+  expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(true)
 })
 
-it('should not add a "no default plan" option by default', () => {
-  const wrapper = mountWrapper()
+it('should disable the button when the default plan is selected', () => {
+  const initialDefaultPlan = { id: 5, name: 'Default plan' }
+  const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
+  const isButtonDisabled = (disabled) => expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(disabled)
+
+  isButtonDisabled(true)
+
+  selectOption(wrapper, plan.name)
+  isButtonDisabled(false)
+
+  selectOption(wrapper, initialDefaultPlan.name)
+  isButtonDisabled(true)
+})
+
+it('should disable the plan option when plan already selected', () => {
+  const initialDefaultPlan = { id: 5, name: 'Default plan' }
+  const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
+  const option = (plan) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
+  const isOptionDisabled = (plan, disabled) => expect(option(plan).prop('className').includes('pf-m-disabled')).toBe(disabled)
+
   openSelect(wrapper)
-  expect(wrapper.find('.pf-c-select SelectOption').findWhere(n => n.text() === '(No default plan)').exists()).toBe(false)
+  isOptionDisabled(initialDefaultPlan, true)
+  isOptionDisabled(plan, false)
+
+  option(plan).simulate('click')
+  openSelect(wrapper)
+  isOptionDisabled(initialDefaultPlan, false)
+  isOptionDisabled(plan, true)
 })
 
-describe('when a plan is default', () => {
-  const props = { ...defaultProps, initialDefaultPlan: plan }
-
-  it('should add a "no default plan" option to the select', () => {
-    const wrapper = mountWrapper(props)
-    openSelect(wrapper)
-    expect(wrapper.find('.pf-c-select SelectOption').first().text()).toEqual('(No default plan)')
-  })
-})
+it.todo('should be able to filter by name')

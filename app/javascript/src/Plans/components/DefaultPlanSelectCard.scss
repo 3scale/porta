@@ -3,8 +3,19 @@
 .pf-c-card#default_plan_card {
   margin-bottom: var(--pf-c-page__main-section--PaddingBottom);
 
-  form {
+  .pf-c-form {
+    // HACK: Using flex so we can align FormGroup with ActionGroup inline
+    align-items: flex-end;
+    display: flex;
+
     // isWidthLimited isn't available in current version. See: https://github.com/patternfly/patternfly-react/blob/master/packages/react-core/src/components/Form/Form.tsx#L12
-    max-width: 500px;
+    max-width: 600px;
+
+    .pf-c-form__group {
+      flex: 2;
+      &.pf-m-action {
+        flex: 1;
+      }
+    }
   }
 }

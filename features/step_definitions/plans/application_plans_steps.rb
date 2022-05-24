@@ -131,3 +131,37 @@ Then "the application plan {string} should be deleted" do |name|
   assert_content "The plan was deleted", wait: 10
   step(%(I should not see plan "#{name}"))
 end
+
+And "an application plan that is not default" do
+  @plan = FactoryBot.create(:application_plan, name: "Magic", issuer: @provider.default_service)
+  assert_not @plan.master?
+end
+
+Given "the application plan is published" do
+  next if @plan.published?
+
+  @plan.publish!
+  assert @plan.reload.published?
+end
+
+Given "the application plan is hidden" do
+  next if @plan.hidden?
+
+  @plan.hide!
+  assert @plan.reload.hidden?
+end
+
+Then "an admin can select the application plan as default" do
+  select_default_plan(@plan.name)
+  assert has_content? "The default plan has been changed."
+  assert @plan.reload.master?
+end
+
+Given "the application plan has been deleted" do
+  @plan.destroy
+end
+
+Then "an admin can't select the application plan as default" do
+  select_default_plan(@plan.name)
+  assert has_content? "Not Found"
+end
