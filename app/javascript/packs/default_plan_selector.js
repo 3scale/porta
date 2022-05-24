@@ -1,12 +1,13 @@
 // @flow
 
-import { DefaultPlanSelectWrapper } from 'Plans'
+import { DefaultPlanSelectCardWrapper } from 'Plans'
 import { safeFromJsonString } from 'utilities'
 
 import type { Record as Plan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('default_plan')
+  const containerId = 'default_plan'
+  const container = document.getElementById(containerId)
 
   if (!container) {
     return
@@ -17,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialDefaultPlan = safeFromJsonString<Plan>(dataset.currentPlan) || null
   const path: string = dataset.path
 
-  DefaultPlanSelectWrapper({
+  DefaultPlanSelectCardWrapper({
     initialDefaultPlan,
     plans: plans,
     path
-  }, 'default_plan')
+  }, containerId)
 })

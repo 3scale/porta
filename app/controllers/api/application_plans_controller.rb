@@ -35,6 +35,8 @@ class Api::ApplicationPlansController < Api::PlansBaseController
 
   def masterize
     assign_plan!(@service, :default_application_plan)
+    flash[:notice] = 'The default plan has been changed.'
+    redirect_to admin_service_application_plans_path(@service)
   end
 
   protected
