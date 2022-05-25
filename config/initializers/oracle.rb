@@ -3,6 +3,15 @@
 ActiveSupport.on_load(:active_record) do
   if System::Database.oracle?
     require 'arel/visitors/oracle12_hack'
+
+    # in 6.0.6 we probably don't need this as it introduces
+    # #use_shorter_identifier, #supports_longer_identifier? and
+    # #max_identifier_length
+    ActiveRecord::ConnectionAdapters::OracleEnhanced::DatabaseLimits.class_eval do
+      remove_const(:IDENTIFIER_MAX_LENGTH)
+      const_set(:IDENTIFIER_MAX_LENGTH, 128)
+    end
+
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
       # see https://github.com/rails/rails/issues/44114
       self.use_old_oracle_visitor = true
@@ -27,11 +36,9 @@ ActiveSupport.on_load(:active_record) do
     ENV['NLS_LANG'] ||= 'AMERICAN_AMERICA.UTF8'
 
     ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
-      remove_const(:IDENTIFIER_MAX_LENGTH)
-      const_set(:IDENTIFIER_MAX_LENGTH, 128)
-      remove_method(:log)
-
       prepend(Module.new do
+        # TODO: is this needed after
+        # https://github.com/rsim/oracle-enhanced/commit/f76b6ef4edda72bddabab252177cb7f28d4418e2
         def add_column(table_name, column_name, type, options = {})
           if type == :integer
             super(table_name, column_name, type, options.except(:limit))
@@ -52,20 +59,11 @@ ActiveSupport.on_load(:active_record) do
             # I know this looks ugly, but that just modified copy paste of what the adapter does (minus the rescue).
             # It is a bit improved in next version due to ActiveRecord Attributes API.
             %{to_blob(#{quote(value.to_s)})}
-          when ActiveRecord::OracleEnhanced::Type::Text::Data
+          when ActiveRecord::Type::OracleEnhanced::Text::Data
             %{to_clob(#{quote(value.to_s)})}
           else
             super
           end
-        end
-
-        protected
-        # Patches broken compatibility with ActiveRecord::ConnectionAdapters::AbstractAdapter#log that now expects `type_casted_binds`
-        def log(sql, name = "SQL", binds = [], statement_name = nil) #:nodoc:
-          type_casted_binds = binds.map { |attr| type_cast(attr.value_for_database) }
-          super(sql, name, binds, type_casted_binds, statement_name)
-        ensure
-          log_dbms_output if dbms_output_enabled?
         end
       end)
     end
@@ -167,6 +165,7 @@ ActiveSupport.on_load(:active_record) do
       def add_index(table_name, column_name, options = {}) #:nodoc:
         # All this code is exactly the same as the original except the line of the ALTER TABLE, which adds an additional USING INDEX #{quote_column_name(index_name)}
         # The reason of this is otherwise it picks the first index that finds that contains that column name, even if it is shared with other columns and it is not unique.
+        # upstreamed: https://github.com/rsim/oracle-enhanced/pull/2293
         index_name, index_type, quoted_column_names, tablespace, index_options = add_index_options(table_name, column_name, options)
         quoted_table_name = quote_table_name(table_name)
         quoted_column_name = quote_column_name(index_name)
@@ -174,10 +173,7 @@ ActiveSupport.on_load(:active_record) do
         if index_type == 'UNIQUE' && quoted_column_names !~ /\(.*\)/
           execute "ALTER TABLE #{quoted_table_name} ADD CONSTRAINT #{quoted_column_name} #{index_type} (#{quoted_column_names}) USING INDEX #{quoted_column_name}"
         end
-      ensure
-        self.all_schema_indexes = nil
       end
     end
-
   end
 end
