@@ -49,6 +49,7 @@ const BuyerSelect = ({
       isDisabled={isDisabled}
       title="Select an account"
       placeholder="Select an account"
+      searchPlaceholder="Find an account"
       footerLabel="View all accounts"
     />
   )
