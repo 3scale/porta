@@ -16,9 +16,9 @@ module Tasks
     attr_reader :impersonation_other_admin_users, :other_admin_users
 
     test 'update' do
-      other_admin_users_attributes_before = other_admin_users_attributes
-
-      execute_rake_task 'impersonation_admin_user.rake', 'impersonation_admin_user:update', 'example-username', 'domain.example.com'
+      assert_no_changes "other_admin_users.map(&:reload)" do
+        execute_rake_task 'impersonation_admin_user.rake', 'impersonation_admin_user:update', 'example-username', 'domain.example.com'
+      end
 
       # It doesn't test that ALL '3scaleadmin' users have been updated because this would be error-prone under concurrency
       impersonation_other_admin_users.each do |user|
@@ -26,15 +26,6 @@ module Tasks
         assert_equal 'example-username', user.username
         assert_equal "example-username+#{user.account.self_domain}@domain.example.com", user.email
       end
-
-      # After upgrading to Rails v5.2, we can use `assert_no_changes` around `execute_rake_task` instead of this
-      assert_equal other_admin_users_attributes_before, other_admin_users_attributes
-    end
-
-    protected
-
-    def other_admin_users_attributes
-      other_admin_users.map { |user| user.reload.attributes.slice('username', 'email') }
     end
   end
 end
