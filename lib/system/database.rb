@@ -147,23 +147,6 @@ module System
   end
 end
 
-# TODO: Remove for Rails 5.1 because it is already implemented there
-ActiveRecord::ConnectionAdapters::ConnectionPool.prepend(Module.new do
-  def stat
-    synchronize do
-      {
-        size: size,
-        connections: @connections.size,
-        busy: @connections.count { |c| c.in_use? && c.owner.alive? },
-        dead: @connections.count { |c| c.in_use? && !c.owner.alive? },
-        idle: @connections.count { |c| !c.in_use? },
-        waiting: num_waiting_in_queue,
-        checkout_timeout: checkout_timeout
-      }
-    end
-  end
-end)
-
 ActiveSupport.on_load(:active_record) do
 if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
