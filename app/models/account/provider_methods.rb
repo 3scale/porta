@@ -179,7 +179,7 @@ module Account::ProviderMethods
   # @return [Array<AuthenticationProvider>]
   def authentication_provider_kinds
     available = AuthenticationProvider.available
-    indexed = authentication_providers.where(type: available).group_by(&:type)
+    indexed = authentication_providers.where(type: available.map(&:name)).group_by(&:type)
 
     available.each do |model|
       unless indexed[model.name].present?
