@@ -33,12 +33,16 @@ module TableHelpers
     [header] + body
   end
 
-  def assert_plans_table(plans, headers: false)
+  def assert_plans_table(plans, headers: false, sort: false)
     table = extract_pf4_table
     table.shift unless headers
 
     rows = plans.pluck(:name, :contracts_count, :state).map { |r| r.map(&:to_s) }
-    assert_same_elements rows, table
+    if sort
+      assert_equal rows, table
+    else
+      assert_same_elements rows, table
+    end
   end
 
 end

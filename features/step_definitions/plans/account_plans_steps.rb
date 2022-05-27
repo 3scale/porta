@@ -113,9 +113,9 @@ end
 
 When "an admin is looking for an account plan" do
   AccountPlan.destroy_all
-  @plan_a = FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One', state: 'published')
-  @plan_b = FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one')
-  @plan_c = FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last')
+  @plan_a = FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One')
+  @plan_b = FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one', state: 'published')
+  @plan_c = FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last', state: 'published')
 
   FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(@plan_a)
   FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(@plan_b)
@@ -124,6 +124,5 @@ When "an admin is looking for an account plan" do
   @plan_b.reset_contracts_counter
 
   visit admin_buyers_account_plans_path
-  binding.pry
   assert_plans_table [@plan_a, @plan_b, @plan_c]
 end

@@ -90,6 +90,9 @@ When "an admin is looking for an application plan" do
   FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(@plan_a)
   FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(@plan_b)
 
+  @plan_b.publish!
+  @plan_c.publish!
+
   visit admin_service_application_plans_path(default_service)
   assert_plans_table [@plan_a, @plan_b, @plan_c]
 end

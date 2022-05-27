@@ -140,7 +140,25 @@ Then "they can filter plans by name" do
 end
 
 And "they can sort plans by name, no. of contracts and state" do
-  pending "TODO: Implement sorting first!"
+  within plans_table do
+    click_on 'Name'
+    assert_plans_table([@plan_c, @plan_b, @plan_a], sort: true)
+
+    click_on 'Name'
+    assert_plans_table([@plan_a, @plan_b, @plan_c], sort: true)
+
+    click_on 'Contracts'
+    assert_plans_table([@plan_c, @plan_a, @plan_b], sort: true)
+
+    click_on 'Contracts'
+    assert_plans_table([@plan_a, @plan_b, @plan_c], sort: true)
+
+    click_on 'State'
+    assert_plans_table([@plan_a, @plan_b, @plan_c], sort: true)
+
+    click_on 'State'
+    assert_plans_table([@plan_b, @plan_c, @plan_a], sort: true)
+  end
 end
 
 def find_action_for_plan(action, plan)

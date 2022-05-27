@@ -10,6 +10,7 @@ import {
   ToolbarItem
 } from '@patternfly/react-core'
 import {
+  sortable,
   Table,
   TableHeader,
   TableBody
@@ -28,7 +29,7 @@ export type Props = {
 }
 
 const PlansTable = ({ columns, plans, count, searchHref, onAction }: Props): React.Node => {
-  const tableColumns = columns.map(c => ({ title: c.title }))
+  const tableColumns = columns.map(c => ({ title: c.title, transforms: [sortable] }))
 
   const tableRows = plans.map(p => ({
     disableActions: false,
@@ -46,6 +47,18 @@ const PlansTable = ({ columns, plans, count, searchHref, onAction }: Props): Rea
     }))
 
   const url = new URL(window.location.href)
+
+  const sortParam = url.searchParams.get('sort')
+  const sortBy = {
+    index: columns.findIndex(c => c.attribute === sortParam),
+    direction: url.searchParams.get('direction')
+  }
+
+  const onSort = (_event, index, direction) => {
+    url.searchParams.set('direction', direction)
+    url.searchParams.set('sort', columns[index].attribute)
+    window.location.replace(url.toString())
+  }
 
   const selectPerPage = (_event, selectedPerPage) => {
     url.searchParams.set('per_page', selectedPerPage)
@@ -92,7 +105,7 @@ const PlansTable = ({ columns, plans, count, searchHref, onAction }: Props): Rea
         </ToolbarItem>
       </Toolbar>
       <Divider />
-      <Table aria-label="Plans Table" actionResolver={actionResolver} cells={tableColumns} rows={tableRows}>
+      <Table aria-label="Plans Table" actionResolver={actionResolver} cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
         <TableHeader />
         <TableBody />
       </Table>
