@@ -59,7 +59,7 @@ Feature: Service plans index page
       When an admin publishes a plan from the service plans page
       # Then what happens?
 
-    @search @wip
+    @search
     Scenario: Filtering and sorting service plans
       When an admin is looking for a service plan
       Then they can filter plans by name

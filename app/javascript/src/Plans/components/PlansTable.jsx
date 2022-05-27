@@ -3,13 +3,9 @@
 import * as React from 'react'
 import {
   Button,
-  ButtonVariant,
   Divider,
-  Form,
-  InputGroup,
   Pagination as PFPagination,
   PaginationVariant,
-  TextInput,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
@@ -18,7 +14,7 @@ import {
   TableHeader,
   TableBody
 } from '@patternfly/react-table'
-import { SearchIcon } from '@patternfly/react-icons'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import type { Plan, Action } from 'Types'
 
 import './PlansTable.scss'
@@ -86,15 +82,10 @@ const PlansTable = ({ columns, plans, count, searchHref, onAction }: Props): Rea
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
-          <Form action={searchHref} acceptCharset="UTF-8" method="get">
-            <InputGroup>
-              <input name="utf8" type="hidden" value="✓" />
-              <TextInput placeholder="Find an Application plan" name="search[query]" type="search" aria-label="Find an Application plan" />
-              <Button variant={ButtonVariant.control} aria-label="search button for search input" type="submit">
-                <SearchIcon />
-              </Button>
-            </InputGroup>
-          </Form>
+          <ToolbarSearch
+            placeholder="Find an Application plan"
+            inputAriaLabel="Find an Application plan"
+          />
         </ToolbarItem>
         <ToolbarItem align={{ default: 'alignRight' }}>
           <Pagination />

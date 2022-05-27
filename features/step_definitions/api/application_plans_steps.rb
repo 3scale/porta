@@ -82,22 +82,16 @@ Then "a buyer {will} be able to use it for their applications" do |will|
 end
 
 When "an admin is looking for an application plan" do
-  plan_a = create_plan(:application, name: 'C Plan One', issuer: default_service, published: true)
-  plan_b = create_plan(:application, name: 'B Plan Two', issuer: default_service, published: true)
-  create_plan(:application, name: 'A Last one', issuer: default_service, published: true)
+  ApplicationPlan.destroy_all
+  @plan_a = FactoryBot.create(:application_plan, issuer: default_service, name: 'This is number One')
+  @plan_b = FactoryBot.create(:application_plan, issuer: default_service, name: 'Now the second one')
+  @plan_c = FactoryBot.create(:application_plan, issuer: default_service, name: 'Finally the Last')
 
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(plan_a)
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(plan_b)
+  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(@plan_a)
+  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(@plan_b)
 
   visit admin_service_application_plans_path(default_service)
-  # TODO: don't reuse steps
-  steps %(
-    Then I should see the following table:
-      | Name        | Contracts | State     |
-      | A Last one  | 0         | published |
-      | B Plan Two  | 1         | published |
-      | C Plan One  | 1         | published |
-  )
+  assert_plans_table [@plan_a, @plan_b, @plan_c]
 end
 
 #TODO: FIXME: rename to: application plan
@@ -291,20 +285,4 @@ Then "they can edit its details" do
   find('input.update[type="submit"]').click
 
   assert_equal new_name, @plan.reload.name
-end
-
-Then "they can filter plans by name" do
-  input = find('input[type="search"]')
-
-  input.set('one')
-  input.sibling('button').click
-  assert_equal 2, find_all('tbody td[data-label="Name"]').length
-
-  input.set('last')
-  input.sibling('button').click
-  assert_equal 1, find_all('tbody td[data-label="Name"]').length
-
-  input.set('')
-  input.sibling('button').click
-  assert_equal 3, find_all('tbody td[data-label="Name"]').length
 end

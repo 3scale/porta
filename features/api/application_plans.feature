@@ -48,63 +48,8 @@ Feature: Application plans index page
     When an admin publishes a plan from the application plans page
     Then a buyer will be able to use it for their applications
 
-  @search @wip
+  @search
   Scenario: Filtering and sorting application plans
     When an admin is looking for an application plan
     Then they can filter plans by name
     And they can sort plans by name, no. of contracts and state
-
-  # Scenario: Sorting application plans
-  #   Given a published application plan "Plan B" of provider "foo.3scale.localhost"
-  #   And a published application plan "Plan C" of provider "foo.3scale.localhost"
-  #   And a buyer "foo" signed up to application plan "Basic"
-  #   And a buyer "bar" signed up to application plan "Plan B"
-  #   And I am on the application plans admin page
-  #   Then I should see the following table:
-  #     | Name    | Applications | State     |
-  #     | Basic   | 2            | hidden    |
-  #     | Plan B  | 1            | published |
-  #     | Plan C  | 0            | published |
-
-  # TODO: Column sorting not yet implemented
-  # And I press on "Name" within the table header
-  # Then I should see following table:
-  #   | Name    | Applications | State     |
-  #   | Plan A  | 2            | hidden    |
-  #   | Plan B  | 1            | published |
-  #   | Plan C  | 0            | published |
-
-  # And I press on "Name" within the table header
-  # Then I should see following table:
-  #   | Name    | Applications | State     |
-  #   | Plan C  | 0            | published |
-  #   | Plan B  | 1            | published |
-  #   | Plan A  | 2            | hidden    |
-
-  # And I press on "Applications" within the table header
-  # Then I should see following table:
-  #   | Name    | Applications | State     |
-  #   | Plan A  | 2            | hidden    |
-  #   | Plan B  | 1            | published |
-  #   | Plan C  | 0            | published |
-
-  # And I press on "Applications" within the table header
-  # Then I should see following table:
-  #   | Name    | Applications | State     |
-  #   | Plan C  | 0            | published |
-  #   | Plan B  | 1            | published |
-  #   | Plan A  | 2            | hidden    |
-
-  # And I press on "State" within the table header
-  # Then I should see following table:
-  #   | Name    | Applications | State     |
-  #   | Plan A  | 2            | hidden    |
-  #   | Plan C  | 0            | published |
-  #   | Plan B  | 1            | published |
-
-  # And I press on "State" within the table header
-  # Then I should see following table:
-  #   | Name    | Applications | State     |
-  #   | Plan C  | 0            | published |
-  #   | Plan B  | 1            | published |
-  #   | Plan A  | 2            | hidden    |

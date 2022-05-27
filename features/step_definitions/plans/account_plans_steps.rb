@@ -110,3 +110,20 @@ When "an admin publishes a plan from the account plans page" do
 
   publish_plan_and_assert(@plan)
 end
+
+When "an admin is looking for an account plan" do
+  AccountPlan.destroy_all
+  @plan_a = FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One', state: 'published')
+  @plan_b = FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one')
+  @plan_c = FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last')
+
+  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(@plan_a)
+  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(@plan_b)
+
+  @plan_a.reset_contracts_counter
+  @plan_b.reset_contracts_counter
+
+  visit admin_buyers_account_plans_path
+  binding.pry
+  assert_plans_table [@plan_a, @plan_b, @plan_c]
+end

@@ -119,6 +119,26 @@ Given /^master has an? application plan "([^"]*)"$/ do |plan_name|
   create_plan :application, name: plan_name, issuer: Account.master
 end
 
+Then "they can filter plans by name" do
+  input = find('#plans_table input[type="search"]')
+
+  input.set('one')
+  input.sibling('button').click
+  assert_plans_table [@plan_a, @plan_b]
+
+  input.set('last')
+  input.sibling('button').click
+  assert_plans_table [@plan_c]
+
+  input.set('foooo')
+  input.sibling('button').click
+  assert_plans_table []
+
+  input.set('')
+  input.sibling('button').click
+  assert_plans_table [@plan_a, @plan_b, @plan_c]
+end
+
 And "they can sort plans by name, no. of contracts and state" do
   pending "TODO: Implement sorting first!"
 end

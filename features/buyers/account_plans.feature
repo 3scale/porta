@@ -52,11 +52,11 @@ Feature: Account plans index page
       When an admin publishes a plan from the account plans page
       # Then what happens?
 
-    @search @wip
+    @search
     Scenario: Filtering and sorting account plans
       When an admin is looking for an account plan
       Then they can filter plans by name
-      And they can sort plans by name, contracts and state
+      And they can sort plans by name, no. of contracts and state
 
   Rule: Account plans hidden
 
