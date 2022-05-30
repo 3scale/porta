@@ -28,7 +28,7 @@ const ServicePlanSelect = ({
 }: Props): React.Node => {
   const hint = isPlanContracted ? (
     <p className="hint">
-      {'This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to '}
+      {'This account already subscribes to the service plan of the selected product. To change the account to subscribe to a different service plan for this product, go to '}
       <Button component="a" variant="link" href={serviceSubscriptionsPath} isInline>Service subscriptions</Button>.
     </p>
   ) : (
