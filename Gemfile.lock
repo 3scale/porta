@@ -1494,8 +1494,9 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (2.3.0)
-    jsonpath (1.1.2)
+    jsonpath (1.0.5)
       multi_json
+      to_regexp (~> 0.2.1)
     jwt (1.5.6)
     kgio (2.11.3)
     kramdown (2.3.1)
@@ -1884,6 +1885,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.9)
     timecop (0.9.1)
+    to_regexp (0.2.1)
     tomlrb (2.0.1)
     ts-datetime-delta (2.0.2)
       thinking-sphinx (>= 1.3.8)
@@ -2027,6 +2029,7 @@ DEPENDENCIES
   jquery-rails (~> 4.3)
   json (~> 2.3.0)
   json-schema!
+  jsonpath (= 1.0.5)
   jwt (~> 1.5.2)
   kubeclient
   launchy
