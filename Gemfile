@@ -256,5 +256,6 @@ gem 'activerecord-oracle_enhanced-adapter', '~> 1.8.0', install_if: oracle
 gem 'ruby-oci8', require: false, install_if: oracle
 
 gem 'kubeclient'
+gem 'jsonpath', '1.0.5' # remove line after we stop supporting ruby 2.4
 
 gem 'pg', '~> 0.21.0'
