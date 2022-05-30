@@ -1631,7 +1631,7 @@ GEM
       pry (~> 0.13)
     public_suffix (4.0.7)
     raabro (1.4.0)
-    rack (2.1.4)
+    rack (2.1.4.1)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-no_animations (1.0.3)
