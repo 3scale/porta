@@ -1,0 +1,110 @@
+@javascript
+Feature: Application plans index page
+
+  In order to manage application plans from the index page, I want to perform the following
+  actions: create, copy, edit, delete, publish and hide. Moreover, I want to sort the table
+  by name, no. of apps and state.
+
+  Background:
+    Given a provider is logged in
+
+  Scenario: Set a default application plan
+    When an admin selects an application plan as default
+    Then any new application will use this plan
+
+  Scenario: Hidden plans can be default
+    When an admin selects a hidden application plan as default
+    Then any new application will use this plan
+
+  Scenario: Selected default plan doesn't exist
+    When an application plan has been deleted
+    Then an admin can't select the plan as default
+
+  Scenario: Create an application plan
+    When an admin is in the application plans page
+    Then they can add new application plans
+
+  Scenario: Copy an application plan
+    When an admin selects the action copy of an application plan
+    Then a copy of the plan is added to the list
+
+  Scenario: Edit an application plan
+    When an admin clicks on an application plan
+    Then they can edit its details
+
+  Scenario: Delete an application plan
+    When an application plan is not being used in any applications
+    Then an admin can delete it from the application plans page
+
+  Scenario: Delete an application plan is not allowed if subscribed to any application
+    When an application plan is being used in an application
+    Then an admin cannot delete it from the application plans page
+
+  Scenario: Hide an application plan
+    When an admin hides a plan from the application plans page
+    Then a buyer won't be able to use it for their applications
+
+  Scenario: Publish an application plan
+    When an admin publishes a plan from the application plans page
+    Then a buyer will be able to use it for their applications
+
+  @search @wip
+  Scenario: Filtering and sorting application plans
+    When an admin is looking for an application plan
+    Then they can filter plans by name
+    And they can sort plans by name, no. of contracts and state
+
+  # Scenario: Sorting application plans
+  #   Given a published application plan "Plan B" of provider "foo.3scale.localhost"
+  #   And a published application plan "Plan C" of provider "foo.3scale.localhost"
+  #   And a buyer "foo" signed up to application plan "Basic"
+  #   And a buyer "bar" signed up to application plan "Plan B"
+  #   And I am on the application plans admin page
+  #   Then I should see the following table:
+  #     | Name    | Applications | State     |
+  #     | Basic   | 2            | hidden    |
+  #     | Plan B  | 1            | published |
+  #     | Plan C  | 0            | published |
+
+  # TODO: Column sorting not yet implemented
+  # And I press on "Name" within the table header
+  # Then I should see following table:
+  #   | Name    | Applications | State     |
+  #   | Plan A  | 2            | hidden    |
+  #   | Plan B  | 1            | published |
+  #   | Plan C  | 0            | published |
+
+  # And I press on "Name" within the table header
+  # Then I should see following table:
+  #   | Name    | Applications | State     |
+  #   | Plan C  | 0            | published |
+  #   | Plan B  | 1            | published |
+  #   | Plan A  | 2            | hidden    |
+
+  # And I press on "Applications" within the table header
+  # Then I should see following table:
+  #   | Name    | Applications | State     |
+  #   | Plan A  | 2            | hidden    |
+  #   | Plan B  | 1            | published |
+  #   | Plan C  | 0            | published |
+
+  # And I press on "Applications" within the table header
+  # Then I should see following table:
+  #   | Name    | Applications | State     |
+  #   | Plan C  | 0            | published |
+  #   | Plan B  | 1            | published |
+  #   | Plan A  | 2            | hidden    |
+
+  # And I press on "State" within the table header
+  # Then I should see following table:
+  #   | Name    | Applications | State     |
+  #   | Plan A  | 2            | hidden    |
+  #   | Plan C  | 0            | published |
+  #   | Plan B  | 1            | published |
+
+  # And I press on "State" within the table header
+  # Then I should see following table:
+  #   | Name    | Applications | State     |
+  #   | Plan C  | 0            | published |
+  #   | Plan B  | 1            | published |
+  #   | Plan A  | 2            | hidden    |

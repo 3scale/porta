@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-Given 'a product' do
-  @product = @provider.default_service
-end
-
 And 'a backend used by this product' do
   @backend = FactoryBot.create(:backend_api, name: 'My Backend', private_endpoint: 'https://foo', account: @provider)
   FactoryBot.create(:backend_api_config, backend_api: @backend, service: @product)

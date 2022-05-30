@@ -6,13 +6,7 @@ p
   | to target different audiences by using multiple plans (i.e. 'basic', 'pro', 'premium') with
   | different sets of rules.
 
-- if can_create_plan?(@new_plan)
-  = pf_button_in_title 'Create Application plan', new_polymorphic_path([:admin, @service, @new_plan])
+- if can_create_plan? ApplicationPlan
+  = pf_button_in_title 'Create Application plan', new_polymorphic_path([:admin, @service, ApplicationPlan])
 
-section class="pf-c-page__main-section pf-m-no-padding"
-  - if @plans.size > 0
-    div id='default_plan' data=default_application_plan_data(@service, @plans)
-      = javascript_pack_tag 'default_plan_selector'
-
-  div id='plans_table' data=application_plans_table_data(service_id: @service.id, page_plans: @page_plans, plans_size: @plans.size)
-    = javascript_pack_tag 'plans_table'
+= render 'shared/plans/plans_index_main_section'

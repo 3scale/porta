@@ -1,4 +1,0 @@
-<% ThreeScale::Deprecation.warn "Plans are being migrated to React this logic should be handled inside a component" %>
-$.colorbox.close();
-$.flash.notice('Plan copied.');
-$('#table-body-plans').replaceWith(<%= json render(partial: 'api/plans/table_body', locals: {plans: @plans}) %>);

@@ -43,4 +43,11 @@ class ApplicationPlanDecoratorTest < Draper::TestCase
     assert_equal "<a href=\"#{System::UrlHelpers.system_url_helpers.admin_service_applications_path(service)}?search%5Bplan_id%5D=\">0 applications</a>",
                  decorator.link_to_applications
   end
+
+  test '#index_table_data' do
+    plan = FactoryBot.create(:application_plan, service: FactoryBot.create(:service))
+    data = plan.decorate.index_table_data
+
+    assert data.assert_valid_keys(:id, :name, :editPath, :contracts, :contractsPath, :state, :actions)
+  end
 end

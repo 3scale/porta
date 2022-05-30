@@ -112,7 +112,12 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
       member.save!
 
       post masterize_admin_service_service_plans_path(service_id: service.id), xhr: true, params: { id: other_service_plan.id }
-      assert_response :success
+      assert_response :redirect
+      assert_equal other_service_plan, service.reload.default_service_plan
+
+      post masterize_admin_service_service_plans_path(service_id: service.id), xhr: true
+      assert_response :redirect
+      assert_equal nil, service.reload.default_service_plan
 
       post masterize_admin_service_service_plans_path(service_id: forbidden_service.id), xhr: true, params: { id: other_forbidden_service_plan.id }
       assert_response :not_found
@@ -182,7 +187,8 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
       member.save!
 
       delete admin_service_plan_path(service_plan)
-      assert_response :redirect
+      assert_response :success
+      assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
 
       delete admin_service_plan_path(forbidden_service_plan)
       assert_response :not_found

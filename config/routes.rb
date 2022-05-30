@@ -436,10 +436,10 @@ without fake Core server your after commit callbacks will crash and you might ge
   namespace :buyers, :as => 'admin', :path => 'admin/buyers' do
     resources :account_plans, :only => [:new, :create, :edit, :update, :destroy] do
       collection do
-        post :masterize
+        post :masterize, constraints: { format: :json }, defaults: { format: :json }
       end
       member do
-        post :copy
+        post :copy, constraints: { format: :json }, defaults: { format: :json }
       end
     end
   end
@@ -774,15 +774,16 @@ without fake Core server your after commit callbacks will crash and you might ge
         get '/' => 'services#index', :as => :apiconfig_root, :namespace => 'api/', :path_prefix => 'admin/apiconfig'
         resources :plans, :only => [] do
           member do
-            post :publish
-            post :hide
+            post :publish, constraints: { format: :json }, defaults: { format: :json }
+            post :hide, constraints: { format: :json }, defaults: { format: :json }
           end
           resources :features, :except => [:index]
           resources :featurings, :only => [:create, :destroy]
         end
 
-        resources :plan_copies, :only => [:new, :create]
-        resources :service_plans, :only => [:show, :edit, :update, :destroy]
+        resources :plan_copies, only: %i[new create], constraints: { format: :json }, defaults: { format: :json }
+        resources :service_plans, only: %i[show edit update]
+        resources :service_plans, only: %i[destroy], constraints: { format: :json }, defaults: { format: :json }
         resources :application_plans, :only => [:show, :edit, :update, :destroy]
 
         resources :application_plans, only: [] do
@@ -817,19 +818,19 @@ without fake Core server your after commit callbacks will crash and you might ge
 
           resources :application_plans, :only => [:index, :new, :create] do
             collection do
-              post :masterize
+              post :masterize, constraints: { format: :json }, defaults: { format: :json }
             end
             member do
-              post :copy
+              post :copy, constraints: { format: :json }, defaults: { format: :json }
             end
           end
 
           resources :service_plans, :only => [:index, :new, :create] do
             collection do
-              post :masterize
+              post :masterize, constraints: { format: :json }, defaults: { format: :json }
             end
             member do
-              post :copy
+              post :copy, constraints: { format: :json }, defaults: { format: :json }
             end
           end
 
@@ -950,7 +951,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resources :account_contracts, :only => :update
         resources :account_plans, :only => [:index, :new, :create] do
           collection do
-            post :masterize
+            post :masterize, constraints: { format: :json }, defaults: { format: :json }
           end
         end
         resources :service_contracts, :only => [:index]

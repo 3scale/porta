@@ -252,7 +252,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       put admin_application_plan_path(plan), params: { application_plan:{ name: 'New plan name' } }
       assert_response :forbidden
 
-      post masterize_admin_service_application_plans_path(service, plan, format: :js)
+      post masterize_admin_service_application_plans_path(service)
       assert_response :forbidden
 
       post publish_admin_plan_path(plan, format: :json)
@@ -318,8 +318,11 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
       get admin_service_application_plans_path(service)
       assert_response :success
-      assert_same_elements service.application_plans, assigns(:plans)
-      assert_not_includes assigns(:plans), forbidden_plan
+
+      # This is testing presenter logic, not integration. Test body response. Use Nokogiri::HTML::Document.parse(response.body)
+      plans = assigns(:presenter).plans
+      assert_same_elements service.application_plans, plans
+      assert_not_includes plans, forbidden_plan
 
       get new_admin_service_application_plan_path(service)
       assert_response :success
@@ -368,7 +371,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       put admin_application_plan_path(forbidden_plan), params: { application_plan:{ name: 'New plan name' } }
       assert_response :not_found
 
-      post masterize_admin_service_application_plans_path(forbidden_service, forbidden_plan, format: :js)
+      post masterize_admin_service_application_plans_path(forbidden_service)
       assert_response :not_found
 
       post hide_admin_plan_path(forbidden_plan, format: :json)
