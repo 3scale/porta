@@ -85,7 +85,7 @@ gem 'dalli', '~> 2.7'
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
-gem 'nokogiri', '~> 1.10.10'
+gem 'nokogiri', '~> 1.13.6'
 gem 'secure_headers', '~> 6.3.0'
 
 gem 'acts-as-taggable-on', '~> 8.0'
