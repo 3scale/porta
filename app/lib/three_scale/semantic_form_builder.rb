@@ -1,5 +1,5 @@
 module ThreeScale
-  class SemanticFormBuilder < ::Formtastic::SemanticFormBuilder
+  class SemanticFormBuilder < ::Formtastic::FormBuilder
     include ThreeScale::SpamProtection::Integration::FormBuilder
 
     # Allow specify how to display errors for the input
@@ -181,8 +181,8 @@ module ThreeScale
     #
     # Use this inside a buttons block:
     #
-    #   <%= form.buttons do %>
-    #     <%= form.commit_button %>
+    #   <%= form.actions do %>
+    #     <%= form.action, as: :button %>
     #     <%= form.cancel_link(some_url) %>
     #   <% end %>
     #
@@ -245,6 +245,7 @@ module ThreeScale
       template.content_tag(:div, fieldset_content)
     end
 
+    # TODO: remove this? find_option was deprecated in formtastic 2.2.0.rc
     # As #find_collection_for_column but returns the collection without mapping the label and value
     #
     def find_raw_collection_for_column(column, options) #:nodoc:

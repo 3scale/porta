@@ -69,8 +69,8 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       @subject ||= ThreeScale::SpamProtection::Integration::FormBuilder
     end
 
-    test "should not be included in Formtastic::SemanticFormBuilder" do
-      assert_not Formtastic::SemanticFormBuilder <= subject
+    test "should not be included in Formtastic::FormBuilder" do
+      assert_not Formtastic::FormBuilder <= subject
     end
 
     test "should be included in ThreeScale::SemanticFormBuilder" do
