@@ -76,12 +76,4 @@ Feature: Mass email bulk operations
     Given the email will fail when sent
     And I press "Send" and I confirm dialog box within colorbox
     Then I should see the bulk action failed with account "jane"
-
-  Scenario: Outbox Message can't be sent without subject/body
-    Given I am logged in as provider "foo.3scale.localhost"
-    And I am on the outbox compose page
-    And a clear email queue
-    And I fill in "Body" with "There is no Subject to this email"
-    And I press "Send"
-    Then I should see "Compose"
-    And "jane@me.us" should receive no emails
+    
