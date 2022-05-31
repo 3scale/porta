@@ -83,7 +83,7 @@ gem 'mysql2', '~> 0.5.3'
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
-gem 'dalli', '~> 2.7'
+gem 'dalli', '~> 2.7' # remove version once we stop supporting ruby 2.4
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'

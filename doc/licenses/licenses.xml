@@ -8623,7 +8623,7 @@
       </dependency>
           <dependency>
         <packageName>has_scope</packageName>
-        <version>0.8.0</version>
+        <version>0.7.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -13245,7 +13245,7 @@
       </dependency>
           <dependency>
         <packageName>ransack</packageName>
-        <version>2.5.0</version>
+        <version>2.4.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -14789,11 +14789,7 @@
       </dependency>
           <dependency>
         <packageName>sprockets-rails</packageName>
-<<<<<<< Updated upstream
-        <version>3.4.2</version>
-=======
         <version>3.2.2</version>
->>>>>>> Stashed changes
         <licenses>
                       <license>
               <name>MIT</name>
