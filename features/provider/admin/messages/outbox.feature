@@ -5,17 +5,7 @@ Feature: Outbox messages
   I want to have an internal messaging system at my disposal
 
   Background:
-    Given a provider "foo.3scale.localhost"
-    Given a default application plan "Basic" of provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" has multiple applications enabled
-
-    Given a following buyers with applications exists:
-      | name | provider        | applications        |
-      | bob  | foo.3scale.localhost | BobApp              |
-      | jane | foo.3scale.localhost | JaneApp, JaneAppTwo |
-
-    Given current domain is the admin domain of provider "foo.3scale.localhost"
-      And I don't care about application keys
+    Given a provider is logged in
 
   Scenario: Outbox Message can't be sent without subject/body
     Given I am logged in as provider "foo.3scale.localhost"
