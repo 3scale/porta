@@ -16,11 +16,11 @@ Feature: Outbox messages
   Scenario: Outbox Message can't be sent without subject
     And I fill in "Body" with "Subject is empty"
     And I press "Send"
-    And there should be no message from provider "foo.3scale.localhost" to buyer "jane" with body "Subject is empty"
+    Then I should see "Compose"
     And I am on the outbox compose page
 
   Scenario: Outbox Message can't be sent without body
-    And I fill in "subject" with "Body is empty"
+    And I fill in "Subject" with "Body is empty"
     And I press "Send"
-    And there should be no message from provider "foo.3scale.localhost" to buyer "jane" with subject "Body is empty"
+    Then I should see "Compose"
     And I am on the outbox compose page
