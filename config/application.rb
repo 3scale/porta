@@ -44,8 +44,12 @@ module System
     config.action_controller.forgery_protection_origin_check = false
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
+
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
+    # Use a modern approved hashing function
+    # config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
+    ActiveSupport::Digest.hash_digest_class = OpenSSL::Digest::SHA256 # option above should work with Rails 6.x
 
 
     # The old config_for gem returns HashWithIndifferentAccess
