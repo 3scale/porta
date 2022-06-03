@@ -253,7 +253,7 @@ World(Module.new do
     when /^the (edit|settings) page for service "([^"]+)" of provider "(.+?)"$/
       provider = Account.providers.find_by_org_name! $3
       service = provider.services.find_by_name! $2
-      polymorphic_path [$1, :admin, service]
+      polymorphic_path [$1.to_sym, :admin, service]
 
     when 'the new service page'
       new_admin_service_path
