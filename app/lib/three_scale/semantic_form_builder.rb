@@ -58,29 +58,6 @@ module ThreeScale
       end
     end
 
-    def domain_input(method, options)
-      basic_input_helper(:text_field, :string, method, options) <<
-        template.content_tag(:strong, ".3scale.net")
-    end
-
-    # Adds input followed by currency string and displays only two
-    # decimals of the value.
-    #
-    # FIXME: if the price has more than 2 decimals than they are cut
-    # on display - clicking save then damages the data!
-    #
-    def price_input(method, options)
-      html_options = options.delete(:input_html) || {}
-      html_options = default_string_options(method, :numeric).merge(html_options)
-
-      currency = options[:currency] || @object.try!(:currency) || Account::DEFAULT_CURRENCY
-      value = options[:value] || template.format_cost(@object.send(method))
-
-      label(method, options_for_label(options)) <<
-        send(:text_field, method, html_options.merge(:value => value)) <<
-        ' ' + currency.to_s
-    end
-
     # Renders select for APPLICATION plans or SERVICE plans grouped by service.
     #
     #  form.input :plan, :as => :plan_selector, :collection => available_plans
@@ -196,50 +173,6 @@ module ThreeScale
       else
         input :system_name, :input_html => { :disabled => true }
       end
-    end
-
-    def check_boxes_with_hints_input(method, options)
-      collection   = find_collection_for_column(method, options)
-      html_options = options.delete(:input_html) || {}
-
-      input_name      = generate_association_input_name(method)
-      hidden_fields   = options.delete(:hidden_fields)
-      value_as_class  = options.delete(:value_as_class)
-      unchecked_value = options.delete(:unchecked_value) || ''
-      hint_method     = options.delete(:hint_method)
-      html_options    = { :name => "#{@object_name}[#{input_name}][]" }.merge(html_options)
-      input_ids       = []
-
-      selected_values = find_selected_values_for_column(method, options)
-      disabled_option_is_present = options.key?(:disabled)
-      disabled_values = [*options[:disabled]] if disabled_option_is_present
-
-      list_item_content = collection.map do |c|
-        label = c.is_a?(Array) ? c.first : c
-        value = c.is_a?(Array) ? c.last : c
-        hint  = hint_method.call(value) if hint_method
-        input_id = generate_html_id(input_name, value.to_s.gsub(/\s/, '_').gsub(/\W/, '').downcase)
-        input_ids << input_id
-
-        html_options[:checked] = selected_values.include?(value)
-        html_options[:disabled] = disabled_values.include?(value) if disabled_option_is_present
-        html_options[:id] = input_id
-
-        li_content = template.content_tag(:label,
-                                          Formtastic::Util.html_safe("#{create_check_boxes(input_name, html_options, value, unchecked_value, hidden_fields)} #{escape_html_entities(label)}"),
-                                          :for => input_id
-                                         )
-
-        li_content << template.content_tag(:p, hint, class: 'inline-hints') if hint.present?
-        li_options = value_as_class ? { :class => [method.to_s.singularize, value.to_s.downcase].join('_') } : {}
-        li_options[:class] = "#{li_options[:class]} boolean"
-
-        template.content_tag(:li, Formtastic::Util.html_safe(li_content), li_options)
-      end
-
-      fieldset_content = create_hidden_field_for_check_boxes(input_name, value_as_class) unless hidden_fields
-      fieldset_content << template.content_tag(:ol, Formtastic::Util.html_safe(list_item_content.join))
-      template.content_tag(:div, fieldset_content)
     end
 
     # TODO: remove this? find_option was deprecated in formtastic 2.2.0.rc

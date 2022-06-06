@@ -18,7 +18,7 @@
   </ul>
 
   <div id="cms-template-draft" class="cms-template-content-tab" >
-    <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+    <%= f.input :draft, :as => :codemirror, :input_html => { :value => f.object.current } %>
   </div>
 
   <div id="cms-template-live" class="cms-template-content-tab">

@@ -7,10 +7,10 @@
 
       ol
 
-        = f.input :enabled_notifications, as: :check_boxes_with_hints, required: false,
-              collection: category.notifications,
-              label_method: ->(value) { t(value, scope: :notification_preference_titles) },
-              hint_method: ->(value) { t(value, scope: :notification_preference_hints) }
+        = f.input :enabled_notifications, as: :check_boxes_with_hints,
+                                          collection: category.notifications,
+                                          member_label: ->(value) { t(value, scope: :notification_preference_titles) },
+                                          member_hint: ->(value) { t(value, scope: :notification_preference_hints) }
 
   = f.actions do
     = f.commit_button I18n.t('provider.admin.user.notification_preferences.form.submit_button_label')
