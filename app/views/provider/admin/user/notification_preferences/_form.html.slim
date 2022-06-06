@@ -12,6 +12,6 @@
               label_method: ->(value) { t(value, scope: :notification_preference_titles) },
               hint_method: ->(value) { t(value, scope: :notification_preference_hints) }
 
-  = f.buttons do
-    = f.button I18n.t('provider.admin.user.notification_preferences.form.submit_button_label'), button_html: { class: 'pf-c-button pf-m-primary' }
+  = f.actions do
+    = f.commit_button I18n.t('provider.admin.user.notification_preferences.form.submit_button_label')
 

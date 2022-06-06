@@ -35,7 +35,7 @@ div#pf-login-page-container data-login-props={redirectUrl: (session[:return_to].
             = f.input :username, label: 'Email or Username', input_html: { value: params[:username], name: 'username', tabindex: 1, autofocus: (params[:username] ? false : true) }
             = f.input :password, input_html: { name: 'password', tabindex: 2, autofocus: (params[:username] ? true : false) }
             = f.hidden_field :remember_me, value: 'true'
-          = f.buttons do
+          = f.actions do
             - unless is_master_account
               li.forgot
                 = link_to 'Forgot password?', provider_login_path(request_password_reset: true), class: 'toggle-panel', data: { panel:  'request_password_reset_panel' }

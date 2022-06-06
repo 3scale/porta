@@ -7,7 +7,7 @@
     <%= render 'buyers/service_contracts/bulk/selected_contracts' %>
     <%= form.input :action, :as => :select, :collection => humanized_actions %>
     <p class="inline-hint">Remember that when you suspend service subsription which is on paid plan, it will be invoiced and/or charged accordingly.</p>
-    <%= form.buttons do %>
+    <%= form.actions do %>
       <%= form.commit_button 'Change state', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <% end %>
   <% end %>

@@ -151,21 +151,18 @@ module ThreeScale
       label(method, label_options) + template.link_to(input, url, link_options)
     end
 
-
-    def commit_button(*args)
-      opts = args.extract_options!
+    def commit_button(label = nil, opts = {})
       button_html = (opts[:button_html] ||= {})
+      pf4_button_classes = 'pf-c-button pf-m-primary '
 
-      if html_class = button_html[:class]
-        html_class += ' important-button'
+      if button_html.key?(:class)
+        button_html[:class].prepend(pf4_button_classes)
       else
-        button_html[:class] = 'important-button'
+        button_html[:class] = pf4_button_classes
       end
 
-      args << opts
-      super(*args)
+      action :submit, label: label, as: :button, **opts
     end
-
 
     def button(label, *args)
       options = args.extract_options!
@@ -182,7 +179,7 @@ module ThreeScale
     # Use this inside a buttons block:
     #
     #   <%= form.actions do %>
-    #     <%= form.action, as: :button %>
+    #     <%= form.commit_button %>
     #     <%= form.cancel_link(some_url) %>
     #   <% end %>
     #

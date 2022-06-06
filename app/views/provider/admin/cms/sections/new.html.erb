@@ -6,8 +6,8 @@
   <p>
     <%= render 'form', :f => f %>
 
-    <%= f.buttons do %>
-      <%= f.button 'Create Section', button_html: { class: 'pf-c-button pf-m-primary' } %>
+    <%= f.actions do %>
+      <%= f.commit_button 'Create Section' %>
     <% end %>
   </p>
 <% end %>

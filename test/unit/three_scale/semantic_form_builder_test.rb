@@ -31,17 +31,17 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
 
   def test_column_for_override_needed
     file = FactoryBot.create(:cms_file)
+    message = "Probably Formtastic was updated and ThreeScale::SemanticFormBuilder#column_for can be removed."
 
     assert_not_empty(semantic_form_for(file, url: '') { |f| f.input :tag_list; f.input :date })
 
-    assert_nothing_raised do
+    assert_raises message do
       semantic_form_for(file, url: '', builder: ::Formtastic::FormBuilder) do |f|
         f.input :tag_list
       end
     end
 
-    assert_nothing_raised do
-      semantic_form_for(file, url: '') do |f|
+    assert_raises message do
       semantic_form_for(file, url: '', builder: ::Formtastic::FormBuilder) do |f|
         f.input :date
       end
@@ -84,5 +84,19 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
 
     # errors of author as sentence
     assert_equal 'error 1 and error 2', html_doc.css('li#dummy_author_input p.inline-errors').text
+  end
+
+  test 'commit_button' do
+    app = FactoryBot.create(:application)
+    semantic_form_for app, url: '' do |form|
+      button = form.commit_button nil, button_html: { class: 'foo' }
+      assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary.foo').length.positive?
+
+      button = form.commit_button
+      assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary').length.positive?
+
+      button = form.commit_button nil, button_html: { class: 'pf-c-button pf-m-primary' }
+      assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary').length.positive?
+    end
   end
 end
