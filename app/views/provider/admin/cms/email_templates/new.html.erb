@@ -8,7 +8,7 @@
     <%= f.input :system_name, :as => :hidden %>
   <% end %>
 
-  <%= f.input :draft, :as => :codemirror, :value => f.object.current %>
+  <%= f.input :draft, :as => :codemirror, :input_html => { :value => f.object.current } %>
 
   <%= render 'buttons', f: f %>
 <% end %>

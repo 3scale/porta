@@ -16,9 +16,9 @@
                                                         value: 'Save',
                                                         name: 'commit',
                                                         disable_with: 'Save' } %>
-    <%= f.action :submit, as: :button, label: 'Save as Version', button_html: { class: 'save_as_version',
-                                                                                title: 'Saves current draft in a version history without publishing it.',
-                                                                                name: :version,
-                                                                                value: true } %>
+    <%= f.commit_button 'Save as Version', button_html: { class: 'save_as_version',
+                                                          title: 'Saves current draft in a version history without publishing it.',
+                                                          name: :version,
+                                                          value: true } %>
   <% end %>
 </li>

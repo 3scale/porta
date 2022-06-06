@@ -6,7 +6,7 @@
 
 <%= semantic_form_for @plan, :url => admin_account_plan_path(@plan) do |form| %>
   <%= render :partial => 'form', :object => form %>
-  <%= form.actions %>
+  <%= form.actions do %>
     <%= form.commit_button %>
   <% end %>
 <%- end %>
