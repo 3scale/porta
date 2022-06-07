@@ -138,8 +138,6 @@ module ThreeScale
         button_html[:class] = pf4_button_classes
       end
 
-      label ||= 'Save' unless @object.respond_to?(:new_record?) && @object.new_record?
-
       action :submit, label: label, as: :button, **opts
     end
 

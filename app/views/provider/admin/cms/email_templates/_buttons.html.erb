@@ -1,6 +1,6 @@
 <div class="button-bar">
   <%= f.actions  :style => 'position:absolute' do %>
     <%= disable_sending_button %>
-    <%= f.commit_button %>
+    <%= f.commit_button "#{@page.new_record? ? 'Create Email Template' : 'Save'}" %>
   <% end %>
 </div>
