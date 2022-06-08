@@ -18,5 +18,5 @@
 
 = semantic_form_for @service, :url => admin_service_path(@service) do |form|
   = render :partial => 'api/services/forms/usage_rules', :locals => { :form => form }
-  = form.buttons do
-    = form.button 'Update Product', button_html: { class: 'pf-c-button pf-m-primary' }
+  = form.actions do
+    = form.commit_button 'Update Product'

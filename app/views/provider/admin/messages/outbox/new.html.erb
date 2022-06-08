@@ -23,14 +23,14 @@
     <%= form.input :body, input_html: { rows: 10, required: true }, label: 'Body:' %>
 
   <% end %>
-  <%= form.buttons do %>
+  <%= form.actions do %>
     <% if request.xhr? %>
       <li class="link">
         <%= link_to 'Cancel', provider_admin_messages_root_path, class: 'fancybox-close' %>
       </li>
     <% end %>
-    <%= form.button 'Send', button_html: { class: 'pf-c-button pf-m-primary' } %>
-  <% end %>  
+    <%= form.commit_button 'Send' %>
+  <% end %>
 
   <%= hidden_field_tag :to, params[:to] if params[:to] %>
 

@@ -9,7 +9,7 @@
     <%= form.input :cc_refunds_path, :label => 'Path to Refund page' %>
   <% end %>
 
-  <%= form.buttons do %>
-    <%= form.button 'Save',  button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <%= form.actions do %>
+    <%= form.commit_button 'Save' %>
   <% end %>
 <% end %>

@@ -74,7 +74,7 @@ a.next {
 }
 
 
-.formtastic .buttons {
+.formtastic .actions {
   button, input[type='submit'] {
      height: line-height-times(1.5);
   }
@@ -90,7 +90,7 @@ form.formtastic .button-bar, .button-bar {
 
   & > fieldset {
 
-    &.buttons:first-child {
+    &.actions:first-child {
       position: absolute;
       left: 0;
       margin: line-height-times(1/2) 0 0 0;
@@ -102,7 +102,7 @@ form.formtastic .button-bar, .button-bar {
       }
     }
 
-    &.buttons:last-child {
+    &.actions:last-child {
       position: absolute;
       width: 65%;
       right: 0;

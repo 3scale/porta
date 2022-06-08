@@ -23,8 +23,8 @@
     <% end %>
   <% end %>
 
-  <%= form.buttons do %>
-    <%= form.button 'Update User', button_html: { class: "pf-c-button pf-m-primary" } %>
+  <%= form.actions do %>
+    <%= form.commit_button %>
     <% if @user.can_be_destroyed? -%>
       <%= delete_link_for admin_buyers_account_user_path(account_id: @user.account_id, id: @user.id), data: {confirm: "Are you sure you want to destroy user #{@user.username}?" } %>
     <% end -%>
@@ -34,7 +34,7 @@
   <style type="text/css">
     <%# the 'Role' radio button is unclickable without this style (see #1994)%>
     #user_role_input legend.label { width:auto; }
-    form.formtastic fieldset.buttons ol {left: -157px;}
+    form.formtastic fieldset.actions ol {left: -157px;}
   </style>
 
 <% end %>

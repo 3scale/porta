@@ -8,5 +8,5 @@ p.help
 = semantic_form_for @webhook, url: provider_admin_webhooks_path do |f|
   = render 'form', form: f
 
-  = f.buttons do
-    = f.button I18n.t('provider.admin.webhooks.edit.form.submit_button_label'),  button_html: { class: 'pf-c-button pf-m-primary' }
+  = f.actions do
+    = f.commit_button I18n.t('provider.admin.webhooks.edit.form.submit_button_label')
