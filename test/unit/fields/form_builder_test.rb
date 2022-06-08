@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Fields::FormBuilderTest < ActiveSupport::TestCase
-  def test_field_with_options
+  test 'builtin field with options' do
     builder = form_builder(:user)
 
     field = FieldsDefinition.new
@@ -13,15 +15,15 @@ class Fields::FormBuilderTest < ActiveSupport::TestCase
     user.stubs(:extra_field?).with('signup_origin').returns(false)
     user.stubs(:internal_field?).with('signup_origin').returns(false)
 
-    builder.template.expects(:text_field).with(:user, :signup_origin, has_entry(class: 'my-class')).returns('')
+    input_html_options = { input_html: { class: 'my-class' }}
+    builder.expects(:input).with(:signup_origin, { label: "Signup origin", required: false, hint: nil }.merge(input_html_options)).returns('')
 
-    builder.field(:signup_origin, { input_html: { class: 'my-class' }})
+    builder.field(:signup_origin, input_html_options)
   end
 
-
-  def form_builder(object_name, template = {params: nil, content_tag: '', label: ''}, options = {}, proc = Proc.new{})
+  def form_builder(object_name)
     object = mock(object_name.to_s)
-    template = mock('template', template)
+    template = mock('template')
     Fields::FormBuilder.new(object_name, object, template, {})
   end
 end

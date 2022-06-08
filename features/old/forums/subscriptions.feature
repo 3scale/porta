@@ -18,7 +18,7 @@ Feature: Users can subscribe to forum topics
      | member_on_foo | active |
     When the current domain is foo.3scale.localhost
 
-    @javascript
+  @wip @javascript
   Scenario: Active user can subscribe to topics
     Given I am logged in as "buyer"
     When I navigate to a topic in the forum of "foo.3scale.localhost"

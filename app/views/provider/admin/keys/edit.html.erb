@@ -7,7 +7,7 @@
     <%= form.input :user_key, :label => 'Custom User Key', :input_html => {:size => 100, :value => ''} %>
   <% end %>
 
-  <%= form.buttons do %>
+  <%= form.actions do %>
     <%= link_to 'Cancel', "#", :class => 'fancybox-close less-important-button' %>
     <%= form.commit_button 'Set Custom Key' %>
   <% end %>

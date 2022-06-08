@@ -5,7 +5,7 @@
 <%= cms_form_for(@file, :html => { :multipart => true }) do |f| %>
   <%= render 'form', :f => f %>
 
-  <%= f.buttons do %>
-    <%= f.button 'Create File', button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <%= f.actions do %>
+    <%= f.commit_button 'Create File' %>
   <% end %>
 <% end %>

@@ -2,6 +2,6 @@
   <% if logged_in? %>
     <%= form.input :anonymous_user, :as => :boolean, :label => 'Post anonymously?' %>
   <% else %>
-    <%= form.input :anonymous_user, :as => :hidden, :value => true %>
+    <%= form.input :anonymous_user, :as => :hidden, :input_html => { :value => true } %>
   <% end %>
 <% end %>

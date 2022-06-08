@@ -16,8 +16,8 @@
   = form.input :body, label: 'API JSON Spec', inline_errors: :list
   = form.semantic_errors :base_path
   = form.input :skip_swagger_validations, as: :boolean
-= form.buttons do
-  = form.button commit_button_label, button_html: { class: 'pf-c-button pf-m-primary' } 
+= form.actions do
+  = form.commit_button commit_button_label
 
 css:
   #api_docs_service_body_input .CodeMirror {

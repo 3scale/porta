@@ -7,5 +7,5 @@
   = form.input :last, label: 'Last?'
   = form.input :position
 
-= form.buttons do
-  = form.button "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule", button_html: { class: 'pf-c-button pf-m-primary' }
+= form.actions do
+  = form.commit_button "#{proxy_rule.new_record? ? 'Create' : 'Update'} Mapping Rule"

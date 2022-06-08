@@ -9,7 +9,7 @@
     = f.input :permission, as: :select, collection: access_token.available_permissions, include_blank: false
 
 
-  = f.buttons
+  = f.actions
     = f.commit_button
     - unless access_token.new_record?
       = link_to 'Delete', provider_admin_user_access_token_path(@access_token),

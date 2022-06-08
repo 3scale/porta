@@ -5,8 +5,8 @@ module ThreeScale::SpamProtection
       def input(form)
         template = form.template
 
-        yes = form.input :javascript, :as => :hidden, :value => '1', :wrapper_html => { :style => HIDE_STYLE }
-        no = form.input :javascript, :as => :hidden, :value => '0', :wrapper_html => { :style => HIDE_STYLE }
+        yes = form.input :javascript, :as => :hidden, :input_html => { :value => '1' }, :wrapper_html => { :style => HIDE_STYLE }
+        no = form.input :javascript, :as => :hidden, :input_html => { :value => '0' }, :wrapper_html => { :style => HIDE_STYLE }
 
         js = %{document.write("#{template.escape_javascript(yes)}");}
 

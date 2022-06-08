@@ -12,7 +12,7 @@
                 disabled: !Recaptcha.captcha_configured?  %>
     <% end %>
 
-  <%= form.buttons do %>
-    <%= form.button 'Update Settings', button_html: { class: "pf-c-button pf-m-primary" }  %>
+  <%= form.actions do %>
+    <%= form.commit_button 'Update Settings' %>
   <% end %>
 <% end %>
