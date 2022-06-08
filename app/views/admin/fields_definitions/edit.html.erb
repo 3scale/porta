@@ -13,8 +13,8 @@
     <%= render :partial => 'form', :locals => { :f => f } %>
   <% end %>
 
-  <%= f.buttons do %>
-    <%= f.button 'Update field', button_html: { class: "pf-c-button pf-m-primary" } %>
+  <%= f.actions do %>
+    <%= f.commit_button 'Update field' %>
     <li>
       <%= delete_link_for(admin_fields_definition_path(@fields_definition), :confirm => 'Are you sure?') unless @fields_definition.required_field_on_target? %>
     </li>

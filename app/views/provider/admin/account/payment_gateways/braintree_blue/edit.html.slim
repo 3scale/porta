@@ -91,9 +91,8 @@ p
   = hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce'
 
   = render partial: '/shared/legal_terms_for_cc_details'
-  = form.buttons do
-    li.commit
-      = form.submit 'Save credit card', class: 'important-button'
+  = form.actions do
+    = form.commit_button 'Save credit card'
 
 script src="https://js.braintreegateway.com/web/3.69.0/js/client.min.js"
 script src="https://js.braintreegateway.com/web/3.69.0/js/hosted-fields.min.js"

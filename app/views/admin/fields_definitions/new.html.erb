@@ -17,8 +17,8 @@ The label is the text developers will see when viewing or entering their data.
     <%= render :partial => 'form', :locals => { :f=> f } %>
   <% end %>
 
-  <%= f.buttons do %>
-    <%= f.button 'Create', button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <%= f.actions do %>
+    <%= f.commit_button 'Create' %>
   <% end %>
 <% end %>
 </div>
