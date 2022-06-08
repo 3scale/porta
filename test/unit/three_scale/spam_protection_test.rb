@@ -176,20 +176,14 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       test "should not render captcha" do
         subject.stubs(:captcha_needed?).returns(false)
         @block.call(@form)
-        assert_match /<li .+? id="model_confirmation_input" class="boolean required"/, @output
-        assert_match /If you're human, leave this field empty./, @output
-        assert_match /type="hidden" name="model\[timestamp\]"/, @output
-        assert_match /noscript/, @output
+        assert_output
       end
 
       test 'should not render captcha because of missing configuration' do
         subject.stubs(:level).returns(:captcha)
         subject.stubs(:captcha_configured?).returns(false)
         @block.call(@form)
-        assert_match /<li .+? id="model_confirmation_input" class="boolean required"/, @output
-        assert_match /If you're human, leave this field empty./, @output
-        assert_match /type="hidden" name="model\[timestamp\]"/, @output
-        assert_match /noscript/, @output
+        assert_output
       end
 
       test 'should render captcha - configuration has been added' do
@@ -207,6 +201,16 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
         assert_match %r{src="https://www.google.com/recaptcha/api.js}, @output
         assert_match %r{src="https://www.google.com/recaptcha/api/fallback}, @output
         assert_match /name="g-recaptcha-response"/, @output
+      end
+
+      private
+
+      def assert_output
+        html = Nokogiri::HTML(@output)
+        assert html.at_css('li.boolean.required#model_confirmation_input')
+        assert_equal "If you're human, leave this field empty.", html.at_css('.inline-hints').text
+        assert html.at_css('input[type="hidden"][name="model[timestamp]"]')
+        assert html.at_css('noscript')
       end
     end
   end
