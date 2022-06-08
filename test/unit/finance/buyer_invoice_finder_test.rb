@@ -44,4 +44,12 @@ class Finance::BuyerInvoiceFinderTest < ActiveSupport::TestCase
       assert_not_equal manual_invoice, invoice
     end
   end
+
+  test "creates an invoice with the specified creation_type if it does not exist" do
+    assert_difference -> { Invoice.count } do
+      background_invoice = Finance::BuyerInvoiceFinder.find(buyer: @buyer, period: @period, creation_type: :background)
+
+      assert_equal 'background', background_invoice.creation_type
+    end
+  end
 end
