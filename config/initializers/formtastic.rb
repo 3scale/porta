@@ -55,6 +55,9 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 # i.e. :label => true, or :hint => true (or opposite depending on initialized value)
 Formtastic::FormBuilder.i18n_lookups_by_default = true
 
+# reading strings from i18n with HTML tags escapes them otherwise
+Formtastic::FormBuilder.escape_html_entities_in_hints_and_labels = false
+
 # Specifies if I18n lookups of the default I18n Localizer should be cached to improve performance.
 # Defaults to true.
 # Formtastic::FormBuilder.i18n_cache_lookups = false
