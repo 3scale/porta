@@ -138,11 +138,11 @@ class Finance::BillingStrategy < ApplicationRecord
 
   def build_invoice(opts = {})
     options = opts.reverse_merge(period: Month.new(Time.now.utc.to_date))
-
+    creation_type = options.delete(:creation_type)
     create_invoice_counter(options[:period])
 
     provider.buyer_invoices.new(options) do |new_invoice|
-      new_invoice.creation_type = options[:creation_type] if options[:creation_type].present?
+      new_invoice.creation_type = creation_type if creation_type.present?
     end
   end
 
