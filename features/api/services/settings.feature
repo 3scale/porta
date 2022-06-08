@@ -15,7 +15,7 @@ Feature: Integration Settings
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
     Then I should see within "#service_deployment_option_input" the following:
       | name                           |
-      | APIcast a 3scale managed       |
+      | APIcast                        |
       | APIcast self-managed           |
 
     And I should see within "#service_proxy_authentication_method_input" the following:
@@ -29,7 +29,7 @@ Feature: Integration Settings
     And I go to the settings page for service "API" of provider "foo.3scale.localhost"
     Then I should see within "#service_deployment_option_input" the following:
       | name                           |
-      | APIcast a 3scale managed       |
+      | APIcast                        |
       | APIcast self-managed           |
       | Istio                          |
 

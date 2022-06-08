@@ -8,7 +8,7 @@
 = form.inputs name: 'Webhooks endpoint', class: 'inputs' do
   = form.input :url, required: true
   - if @webhook.persisted? && @webhook.url.present?
-    = form.button 'Ping!',
+    = form.commit_button 'Ping!',
                   button_html: { class: 'less-important-button button next',
                                  type: 'button',
                                  value: 'ping',

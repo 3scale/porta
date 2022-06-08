@@ -8,7 +8,7 @@
     <% params[:selected].each do |selected_id| %>
       <%= hidden_field_tag 'selected[]', selected_id %>
     <% end %>
-    <%= form.buttons do %>
+    <%= form.actions do %>
       <%= form.commit_button 'Delete', button_html: { data: { 'disable-with' => 'Running bulk action...' }} %>
     <% end %>
   <% end %>

@@ -8,7 +8,7 @@
     <%= f.input :email, :label => 'Send invitation to', :hint => 'Email address to invite to this account' %>
   <% end %>
 
-  <%= f.buttons do %>
-    <%= f.button 'Send', button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <%= f.actions do %>
+    <%= f.commit_button 'Send' %>
   <% end %>
 <% end %>

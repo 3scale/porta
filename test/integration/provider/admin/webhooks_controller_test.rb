@@ -9,7 +9,7 @@ class Provider::Admin::WebhooksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'GET new shows or not account_plan_changed depending on onpremises value' do
-    xpath_selector = './/li[@id="web_hook_account_plan_changed_on_input"]'
+    xpath_selector = './/li[@id="web_hook_account_plan_changed_on_input"]/label'
     element_text = 'Account Plan changed'
 
     # Saas

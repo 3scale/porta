@@ -17,7 +17,7 @@
 
     <div class='sub-details'>
       <%= form_for UserTopic.new, :url => forum_subscriptions_path do |f| -%>
-      <%= f.hidden_field :topic_id, :value => @topic.id %>
+      <%= f.hidden_field :topic_id, :input_html => { :value => @topic.id } %>
       <p class='new-topic-button'>
         Want email updates on this thread?
         <a id='subscribe' href='#'>Subscribe to thread</a>

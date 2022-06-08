@@ -9,7 +9,7 @@
     = render partial: authentication_provider.kind,
              locals: { f: f, authentication_provider: authentication_provider }
 
-  = f.buttons do
+  = f.actions do
     = f.commit_button
     -  if can? :manage, :authentication_providers
       = link_to 'Delete',
