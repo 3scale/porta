@@ -6,12 +6,14 @@ require "prawn/measurement_extensions"
 require 'gruff'
 require 'pdf/format'
 require 'pdf/data'
+require 'pdf/utils'
 require 'pdf/styles/colored'
 
 # REFACTOR: extract abstract Report class, and DRY functionality with InvoiceReporter
 module Pdf
   class Report
     include Printer
+    include Pdf::Utils::Cache
 
     attr_accessor :account, :period, :pdf, :service, :report
 
@@ -56,6 +58,8 @@ module Pdf
       @report = @pdf.render_file(pdf_file_path)
 
       self
+    ensure
+      clear_thread_cache
     end
 
     def deliver_notification?(user)

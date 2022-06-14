@@ -5,6 +5,7 @@ require 'prawn/format'
 require "prawn/measurement_extensions"
 require 'gruff'
 require "open-uri"
+require 'pdf/utils'
 
 module Pdf
   module Finance
@@ -15,6 +16,7 @@ module Pdf
       include ActionView::Helpers::NumberHelper
       include ThreeScale::MoneyHelper
       include ::Finance::InvoicesHelper
+      include Pdf::Utils::Cache
 
       def initialize(invoice_data)
         @data = invoice_data
@@ -52,6 +54,8 @@ module Pdf
         move_down
 
         @pdf.render
+      ensure
+        clear_thread_cache
       end
 
       private
