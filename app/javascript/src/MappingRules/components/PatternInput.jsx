@@ -19,6 +19,10 @@ const PatternInput = ({ pattern, validatePattern, validated = 'default', helperT
       validated={validated}
       fieldId="proxy_rule_pattern"
       helperText="Examples: /my-path/{someid}, /collection/{id}?filter={value}"
+
+      helperText={(
+        <>Examples: <span className="pf-m-redhatmono-font">{'/my-path/{someid}, /collection/{id}?filter={value}'}</span></>
+      )}
       helperTextInvalid={helperTextInvalid}
     >
       <TextInput
