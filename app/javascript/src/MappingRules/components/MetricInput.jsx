@@ -39,7 +39,7 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
   return (
     <FormGroup
       isRequired
-      label="Method or Metric to increment"
+      label="Method or metric to increment"
       validated="default"
       fieldId="proxy_rule_metric_id"
     >
@@ -68,10 +68,11 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
             header="Most recently created methods"
             title="Select a method"
             placeholder="Select a method"
+            searchPlaceholder="Find a method"
             aria-label="Select a method"
             onToggle={setIsExpanded}
             isExpanded={isExpanded}
-            footerLabel="Show all methods"
+            footerLabel="View all methods"
           />
         )}
       </div>
@@ -100,10 +101,11 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
             header="Most recently created metrics"
             title="Select a metric"
             placeholder="Select a metric"
+            searchPlaceholder="Find a metric"
             aria-label="Select a metric"
             onToggle={setIsExpanded}
             isExpanded={isExpanded}
-            footerLabel="Show all metrics"
+            footerLabel="View all metrics"
           />
         )}
       </div>

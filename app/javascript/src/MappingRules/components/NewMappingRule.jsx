@@ -99,7 +99,7 @@ const NewMappingRule = ({ url, isProxyProEnabled = false, topLevelMetrics, metho
             isDisabled={!isFormComplete || loading}
             data-testid="newMappingRule-buttonSubmit"
           >
-            Create Mapping Rule
+            Create mapping rule
           </Button>
         </ActionGroup>
       </Form>

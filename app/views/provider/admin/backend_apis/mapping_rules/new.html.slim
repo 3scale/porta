@@ -2,6 +2,6 @@ h1 New Mapping Rule
 
 div{ id="new-mapping-rule-form" data-url=provider_admin_backend_api_mapping_rules_path(@backend_api)
                                 data-http-methods=ProxyRule::ALLOWED_HTTP_METHODS
-                                data-top-level-metrics=@backend_api.top_level_metrics.decorate.map(&:new_mapping_rule_data).to_json
-                                data-methods=@backend_api.method_metrics.decorate.map(&:new_mapping_rule_data).to_json}
+                                data-top-level-metrics=@backend_api.top_level_metrics.reorder(updated_at: :desc).decorate.map(&:new_mapping_rule_data).to_json
+                                data-methods=@backend_api.method_metrics.reorder(updated_at: :desc).decorate.map(&:new_mapping_rule_data).to_json}
   = javascript_pack_tag 'new_mapping_rule'
