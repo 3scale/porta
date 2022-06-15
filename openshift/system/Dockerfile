@@ -70,7 +70,7 @@ RUN export ${BUNDLER_ENV} >/dev/null \
     && cd /opt/system \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
-    && bundle exec rake assets:precompile tmp:clear \
+    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
 
