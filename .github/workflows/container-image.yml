@@ -3,7 +3,12 @@ on:
   # push:
   #   branches:
   #   - master
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: Platforms to build for
+        required: false
+        default: 'linux/amd64'
 
   # pull_request:
   # branches: [ master ]
@@ -18,7 +23,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      # Allow multi-target builds, uncomment this to use `platfotms` below
+      # Allow multi-target builds
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -47,6 +52,6 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          # platforms: linux/amd64,linux/s390x,linux/ppc64le
+          platforms: ${{ github.event.inputs.platforms or "linux/amd64,linux/s390x,linux/ppc64le" }}
           labels: ${{ steps.meta.outputs.labels }}
           file: openshift/system/Dockerfile
