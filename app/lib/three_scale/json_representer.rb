@@ -22,7 +22,7 @@ module ThreeScale::JSONRepresenter
     doc = options.fetch(:doc)
     xml = to_xml(builder: builder)
 
-    Nokogiri::XML::Node.new('root', doc).add_child(xml)
+    Nokogiri::XML::Node.new('root', doc).replace(xml)
   end
 
   module Format
