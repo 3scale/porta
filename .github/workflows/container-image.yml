@@ -3,13 +3,7 @@ on:
   # push:
   #   branches:
   #   - master
-  workflow_dispatch:
-    inputs:
-      platforms:
-        description: Platforms to build for
-        required: false
-        default: 'linux/amd64'
-
+  workflow_dispatch: {}
   # pull_request:
   # branches: [ master ]
 
@@ -52,6 +46,6 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/s390x,linux/ppc64le' }}
+          platforms: linux/amd64,linux/s390x,linux/ppc64le
           labels: ${{ steps.meta.outputs.labels }}
           file: openshift/system/Dockerfile
