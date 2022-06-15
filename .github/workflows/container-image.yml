@@ -52,6 +52,6 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          platforms: ${{ github.event.inputs.platforms or "linux/amd64,linux/s390x,linux/ppc64le" }}
+          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/s390x,linux/ppc64le' }}
           labels: ${{ steps.meta.outputs.labels }}
           file: openshift/system/Dockerfile
