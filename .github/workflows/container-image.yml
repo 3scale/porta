@@ -1,10 +1,9 @@
 name: Build porta container image
 on:
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #   - master
   workflow_dispatch: {}
-
   # pull_request:
   # branches: [ master ]
 
@@ -45,8 +44,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v2
         with:
-          context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
+          platforms: linux/amd64,linux/s390x,linux/ppc64le
           labels: ${{ steps.meta.outputs.labels }}
           file: openshift/system/Dockerfile
