@@ -1484,7 +1484,7 @@ GEM
       responders
     injectedlogger (0.0.13)
     innertube (1.1.0)
-    jmespath (1.4.0)
+    jmespath (1.6.1)
     join_dependency (0.1.4)
       activerecord (>= 4.2.0)
     joiner (0.3.4)
