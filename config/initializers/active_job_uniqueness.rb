@@ -2,6 +2,12 @@
 
 Rails.application.configure do
   config.after_initialize do
+    ActiveSupport::Notifications.subscribe('conflict.active_job_uniqueness') do
+|name, start, finish, id, payload|
+      job = payload[:job]
+      job.logger.info "Another job is already scheduled for: #{job.class} #{job.arguments}"
+    end
+
     ActiveJob::Uniqueness.configure do |config|
       # Global default expiration for lock keys. Each job can define its own ttl via :lock_ttl option.
       # Stategy :until_and_while_executing also accept :on_runtime_ttl option.
@@ -19,7 +25,7 @@ Rails.application.configure do
       #   :log - instruments ActiveSupport::Notifications and logs event to the ActiveJob::Logger
       #   proc - custom Proc. For example, ->(job) { job.logger.info('Oops') }
       #
-      config.on_conflict = ->(job) { job.logger.info "Another job is already scheduled for: #{job.class} #{job.arguments}" }
+      config.on_conflict = :log
 
       # Digest method for lock keys generating. Expected to have `hexdigest` class method.
       #
