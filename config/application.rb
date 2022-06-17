@@ -272,6 +272,7 @@ module System
       bucket: ->(*) { CMS::S3.bucket },
       s3_protocol: ->(*) { CMS::S3.protocol },
       s3_permissions: 'private',
+      s3_headers: { "checksum-algorithm" => "SHA256" },
       s3_region: ->(*) { CMS::S3.region },
       s3_host_name: ->(*) { CMS::S3.hostname },
       url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',

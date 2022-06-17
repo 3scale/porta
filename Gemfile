@@ -8,8 +8,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'rack', '~> 2.1.4'
 
-gem 'aws-sdk', '~> 3'
-gem 'aws-sdk-rails', '~> 2'
+gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
