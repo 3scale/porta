@@ -1,5 +1,4 @@
-default: &default
-  enabled: false
+default: &default {}
 
 s3: &s3
   access_key_id:     "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
