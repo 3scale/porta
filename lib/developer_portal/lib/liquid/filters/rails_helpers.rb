@@ -51,7 +51,7 @@ module Liquid
         js = RailsHelpers.replace_googleapis(name)
         case
         when THREESCALE_WEBPACK_PACKS.include?(name) # TODO: This is an intermediate step in order to tackle webpack assets in dev portal. A final solution might be needed easing the update of templates/assets.
-          active_docs_proxy(name) + view.javascript_pack_tag(name, options)
+          active_docs_proxy(name) + view.append_javascript_pack_tag(name, options)
         when js != name || THREESCALE_JAVASCRIPTS.include?(js)
           active_docs_proxy(js) + view.javascript_include_tag(js)
         else

@@ -1,5 +1,3 @@
-import '@babel/polyfill'
-import 'core-js/es7/object'
 import {safeFromJsonString, isBrowserIE11} from 'utilities'
 
 const isIE11 = isBrowserIE11(window)

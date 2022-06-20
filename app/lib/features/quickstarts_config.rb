@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
 module Features
-  class QuickstartsConfig < Config; end
+  class QuickstartsConfig < Config
+    def enabled?
+      true
+    end
+  end
 end

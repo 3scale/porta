@@ -8,7 +8,7 @@ class ReactPageGenerator < Rails::Generators::NamedBase
   def create_view_file
     create_file "app/views/#{file_name}.html.slim", <<~FILE
       ##{container_id}
-        = javascript_pack_tag '#{module_name}/#{pack_file_name}'
+        - append_javascript_pack_tag '#{module_name}/#{pack_file_name}'
     FILE
   end
 

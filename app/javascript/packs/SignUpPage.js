@@ -1,6 +1,3 @@
-import '@babel/polyfill'
-import 'core-js/es7/object'
-
 import {SignupPageWrapper} from 'LoginPage'
 import {safeFromJsonString, isBrowserIE11} from 'utilities'
 
