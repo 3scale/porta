@@ -76,4 +76,3 @@ Feature: Mass email bulk operations
     Given the email will fail when sent
     And I press "Send" and I confirm dialog box within colorbox
     Then I should see the bulk action failed with account "jane"
-    
