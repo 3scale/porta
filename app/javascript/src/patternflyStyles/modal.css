@@ -1,6 +1,0 @@
-@import "~@patternfly/patternfly/components/ModalBox/modal-box.css";
-
-.pf-c-modal-box h1.pf-c-title {
-  text-align: initial;
-  font-size: var(--pf-global--FontSize--2xl);
-}

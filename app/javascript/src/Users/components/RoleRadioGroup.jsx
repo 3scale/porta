@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react'
-import ReactHtmlParser from 'react-html-parser'
 
 import type { Role } from 'Users/types'
 
@@ -54,7 +53,7 @@ const UserRole = ({ role, label, checked, onChange }: {
         value={role}
         onChange={() => onChange(role) }
       />
-      { ReactHtmlParser(label) }
+      {label}
     </label>
   </li>
 )

@@ -5,8 +5,7 @@ html[lang="en" class="pf-m-redhat-font"]
     title 3scale Login
     = csrf_meta_tag
 
-    = javascript_pack_tag 'pf4_styles_base'
-    = javascript_pack_tag 'pf4_styles_loginPage'
+    = stylesheet_pack_tag 'pf4_base'
     = javascript_include_tag 'vendor/jquery-1.8.2.min.js', 'vendor/rails.js'
 
   //
@@ -17,3 +16,5 @@ html[lang="en" class="pf-m-redhat-font"]
 
   body class="login-layout"
     = yield
+
+= javascript_pack_tag 'pf4_styles_ie11_styles'

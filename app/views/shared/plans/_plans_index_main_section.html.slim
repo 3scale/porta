@@ -1,6 +1,6 @@
 section class="pf-c-page__main-section pf-m-no-padding"
   div id='default_plan' data=default_plan_select_data
-    = javascript_pack_tag 'default_plan_selector'
+    - append_javascript_pack_tag 'default_plan_selector'
 
   div id='plans_table' data=plans_table_data
-    = javascript_pack_tag 'plans_table'
+    - append_javascript_pack_tag 'plans_table'

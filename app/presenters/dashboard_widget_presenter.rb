@@ -19,9 +19,7 @@ class DashboardWidgetPresenter
   end
 
   def render
-    content = h.render(partial: template_name, locals: locals)
-    content << h.render(partial: ajax_load, locals: locals) unless loaded? # trigger ajax refresh when not toggled
-    content
+    h.render(partial: template_name, locals: locals)
   end
 
   def render_chart
@@ -48,10 +46,6 @@ class DashboardWidgetPresenter
 
   def template_name
     "provider/admin/dashboards/widgets/#{name}"
-  end
-
-  def ajax_load
-    'provider/admin/dashboards/ajax_load'.freeze
   end
 
   def load_chart

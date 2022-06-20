@@ -1,8 +1,7 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
 
-= content_for :javascripts do
-  = javascript_pack_tag 'dashboard'
+= stylesheet_pack_tag 'pf4_dashboard'
 
 .Dashboard
   div.Dashboard-widgets
@@ -23,6 +22,7 @@
 
 
       // Account Level Widgets
+      - append_javascript_pack_tag 'dashboard_widgets'
       = dashboard_widget :new_accounts if can?(:manage, :partners)
       = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
@@ -34,7 +34,6 @@
         div.apiContainer
           = render 'products_widget'
           = render 'backends_widget'
-          = javascript_pack_tag 'pf4_styles_dashboard'
 
   div.Dashboard-events
     section.DashboardStream
