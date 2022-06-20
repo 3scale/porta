@@ -1,13 +1,13 @@
-@import '~@patternfly/patternfly/components/Button/button.css';
-@import '~@patternfly/patternfly/components/Divider/divider.css';
-@import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
-@import '~@patternfly/patternfly/layouts/Level/level.css';
-@import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
-@import '~@patternfly/patternfly/components/Page/page.css';
-@import '~@patternfly/patternfly/components/Pagination/pagination.css';
-@import '~@patternfly/patternfly/components/Table/table.css';
-@import '~@patternfly/patternfly/components/Title/title.css';
-@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '@patternfly/patternfly/components/Button/button.css';
+@import '@patternfly/patternfly/components/Divider/divider.css';
+@import '@patternfly/patternfly/components/Dropdown/dropdown.css';
+@import '@patternfly/patternfly/layouts/Level/level.css';
+@import '@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+@import '@patternfly/patternfly/components/Page/page.css';
+@import '@patternfly/patternfly/components/Pagination/pagination.css';
+@import '@patternfly/patternfly/components/Table/table.css';
+@import '@patternfly/patternfly/components/Title/title.css';
+@import '@patternfly/patternfly/components/Toolbar/toolbar.css';
 
 // HACK: removes Main 1.5 rem padding
 #products-index-page {

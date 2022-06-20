@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react'
-import ReactHtmlParser from 'react-html-parser'
 
 import {
   getFeatureName,
@@ -51,7 +50,7 @@ const FeaturesFieldset = ({ features, selectedSections = [], areServicesVisible 
  */
 const LabelDescriptionItems = ({ descriptionItems }: { descriptionItems: Array<string> }) => (
   <ul className="FeatureAccessList-item--labelDescription">
-    {descriptionItems.map(item => <li key={item}>{ReactHtmlParser(item)}</li>)}
+    {descriptionItems.map(item => <li key={item}>{item}</li>)}
   </ul>
 )
 
@@ -82,7 +81,7 @@ const FeatureCheckbox = ({ value, checked, onChange }: {
           checked={checked}
           onChange={() => onChange(value)}
         />
-        { ReactHtmlParser(getFeatureName(value)) }
+        { getFeatureName(value) }
         { descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
       </label>
     </li>

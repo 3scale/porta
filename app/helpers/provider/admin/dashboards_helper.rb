@@ -8,8 +8,7 @@ module Provider::Admin::DashboardsHelper
   # @param params [Hash]
   # @param variables [Hash]
   def dashboard_widget(name, params = {}, variables = {})
-    widget = DashboardWidgetPresenter.new(name, params, variables)
-    widget.render
+    DashboardWidgetPresenter.new(name, params, variables).render
   end
 
   def friendly_service_name(service)

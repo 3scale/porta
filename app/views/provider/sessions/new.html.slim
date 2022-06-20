@@ -1,4 +1,4 @@
-= javascript_pack_tag 'LoginPage'
+- append_javascript_pack_tag 'LoginPage'
 - authentication_providers = (@authentication_providers || []).map { |ap| {authorizeURL: ap.authorize_url, humanKind: ap.human_kind} }
 - flash_messages = (flash || []).map { |f| {type: f[0], message: f[1]}}
 - is_master_account = domain_account.master?

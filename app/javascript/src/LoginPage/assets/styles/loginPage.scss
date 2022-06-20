@@ -1,3 +1,10 @@
+@import '@patternfly/patternfly/components/Login/login.css';
+@import '@patternfly/patternfly/components/BackgroundImage/background-image.css';
+@import '@patternfly/patternfly/components/Form/form.css';
+@import '@patternfly/patternfly/components/FormControl/form-control.css';
+@import '@patternfly/patternfly/components/Title/title.css';
+@import '@patternfly/patternfly/components/Button/button.css';
+
 // HACK
 // This is a hack to hide the old login page and avoid flickering when replaced by the new one
 // It's needed because whit display:none, visibility:hidden or negative margins cukes can't find the elements

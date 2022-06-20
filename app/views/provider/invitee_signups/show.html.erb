@@ -1,4 +1,4 @@
-<%= javascript_pack_tag 'SignUpPage' %>
+<%= append_javascript_pack_tag 'SignUpPage' %>
 
 <%= tag("div", :id => "pf-login-page-container", :"data-signup-props" => {:path => provider_invitee_signup_path(@invitation.token),
   :name => @invitation.account.name,

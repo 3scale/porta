@@ -1,10 +1,10 @@
-@import "~@patternfly/patternfly/components/Backdrop/backdrop.css";
-@import "~@patternfly/patternfly/layouts/Bullseye/bullseye.css";
-@import '~@patternfly/patternfly/components/Table/table.css';
-@import '~@patternfly/patternfly/components/Pagination/pagination.css';
-@import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
-@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
-@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '@patternfly/patternfly/components/Backdrop/backdrop.css';
+@import '@patternfly/patternfly/layouts/Bullseye/bullseye.css';
+@import '@patternfly/patternfly/components/Table/table.css';
+@import '@patternfly/patternfly/components/Pagination/pagination.css';
+@import '@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+@import '@patternfly/patternfly/components/InputGroup/input-group.css';
+@import '@patternfly/patternfly/components/Toolbar/toolbar.css';
 
 .pf-c-page__main-section {
   form {

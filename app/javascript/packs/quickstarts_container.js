@@ -5,6 +5,7 @@ import { getActiveQuickstart } from 'QuickStarts/utils/progressTracker'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('quickstarts_container')
   const containerId = 'quick-start-container'
   const container = document.getElementById(containerId)
 

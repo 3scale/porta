@@ -7,7 +7,7 @@
       p
         = ".#{backend_api.id}"
       div id='system_name_popover'
-        = javascript_pack_tag('system_name_input_popover')
+        - append_javascript_pack_tag 'system_name_input_popover'
     p class='inline-hints' Only ASCII letters, numbers, dashes and underscores are allowed.
   = form.input :unit unless @metric.child?
   = form.input :description, input_html: { rows: 3 }

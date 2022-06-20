@@ -1,8 +1,8 @@
-@import '~@patternfly/patternfly/components/Button/button.css';
-@import '~@patternfly/patternfly/components/Form/form.css';
-@import '~@patternfly/patternfly/components/InputGroup/input-group.css';
-@import '~@patternfly/patternfly/components/Popover/popover.css';
-@import '~@patternfly/patternfly/components/Toolbar/toolbar.css';
+@import '@patternfly/patternfly/components/Button/button.css';
+@import '@patternfly/patternfly/components/Form/form.css';
+@import '@patternfly/patternfly/components/InputGroup/input-group.css';
+@import '@patternfly/patternfly/components/Popover/popover.css';
+@import '@patternfly/patternfly/components/Toolbar/toolbar.css';
 
 // HACK: we're using inconsistent PF versions and therefore missing the correct color. Remove this patch once we upgrade everything to PF4.
 .pf-c-button.pf-m-control:disabled {

@@ -12,7 +12,7 @@ p
 section class="pf-c-page__main-section pf-m-no-padding"
   - if @plans.size > 0
     div id='default_plan' data=default_application_plan_data(@service, @plans)
-      = javascript_pack_tag 'default_plan_selector'
+      - append_javascript_pack_tag 'default_plan_selector'
 
   div id='plans_table' data=application_plans_table_data(service_id: @service.id, page_plans: @page_plans, plans_size: @plans.size)
-    = javascript_pack_tag 'plans_table'
+    - append_javascript_pack_tag 'plans_table'

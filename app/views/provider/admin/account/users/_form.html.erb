@@ -57,7 +57,7 @@
     </script>
     <%- if current_account.provider_can_use?(:service_permissions) %>
         <% content_for :javascripts do %>
-            <% javascript_pack_tag 'permissions' %>
+            <% append_javascript_pack_tag 'permissions' %>
         <% end %>
     <%- end -%>
   <% end %>

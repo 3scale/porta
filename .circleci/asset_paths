@@ -1,7 +1,6 @@
 Gemfile.lock
 yarn.lock
 .babelrc
-.postcssrc.yml
 app/javascript
 app/assets
 app/lib/pdf/images

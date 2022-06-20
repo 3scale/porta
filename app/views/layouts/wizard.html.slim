@@ -6,7 +6,7 @@ html[lang="en" class="pf-m-redhat-font"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
-    = javascript_pack_tag 'pf4_styles_base'
+    = stylesheet_pack_tag 'pf4_base'
     = stylesheet_link_tag "provider/themes/wizard.css"
     = render 'provider/analytics'
     = javascript_include_tag 'provider/layout/provider'
@@ -32,3 +32,5 @@ html[lang="en" class="pf-m-redhat-font"]
         step: 'closed',
         path: window.location.pathname
       })
+
+= javascript_pack_tag
