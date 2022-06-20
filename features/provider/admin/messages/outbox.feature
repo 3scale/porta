@@ -6,10 +6,8 @@ Feature: Outbox messages
   Background:
     Given a provider "foo.3scale.localhost"
     Given current domain is the admin domain of provider "foo.3scale.localhost"
-
     Given these buyers signed up to provider "foo.3scale.localhost"
       | jane | foo.3scale.localhost | JaneApp, JaneAppTwo |
-
     Given I am logged in as provider "foo.3scale.localhost"
       And I am on the outbox compose page
 

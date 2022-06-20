@@ -3,30 +3,30 @@
   <h2>Compose</h2>
 <% end %>
 
-<%= semantic_form_for @message, :url => provider_admin_messages_outbox_index_path,
-  :html => {:class => if request.xhr? then 'remote' end, :id => "message-form"} do |form| %>
+<%= semantic_form_for @message, url: provider_admin_messages_outbox_index_path,
+  html: { class: if request.xhr? then 'remote' end, id: "message-form" } do |form| %>
 
   <%= form.inputs do %>
     <li>
       <label>To:</label>
       <% if current_account.provider? && params[:to].nil? && @message.to.size == current_account.buyer_accounts.size %>
-        <%= text_field_tag '', "All Users", :readonly => true %>
+        <%= text_field_tag '', "All Users", readonly: true %>
         <p class="inline-hints">
           If you want to send a message to a particular user, go to the <%= link_to 'accounts page', admin_buyers_accounts_path %>, click on the user and then click on the send message icon.
         </p>
       <% else %>
-        <%= text_field_tag 'to', @message.to.map(&:org_name).join(', '), :readonly => true  %>
+        <%= text_field_tag 'to', @message.to.map(&:org_name).join(', '), readonly: true %>
       <% end %>
     </li>
 
-    <%= form.input :subject, :as => :string, :label => 'Subject:', input_html: { required: true } %>
-    <%= form.input :body, :input_html => {:rows => 10, required: true}, :label => 'Body:' %>
+    <%= form.input :subject, as: :string, label: 'Subject:', input_html: { required: true } %>
+    <%= form.input :body, input_html: { rows: 10, required: true }, label: 'Body:' %>
 
   <% end %>
   <%= form.buttons do %>
     <% if request.xhr? %>
       <li class="link">
-        <%= link_to 'Cancel', provider_admin_messages_root_path, :class => 'fancybox-close' %>
+        <%= link_to 'Cancel', provider_admin_messages_root_path, class: 'fancybox-close' %>
       </li>
     <% end %>
     <%= form.button 'Send', button_html: { class: 'pf-c-button pf-m-primary' } %>
