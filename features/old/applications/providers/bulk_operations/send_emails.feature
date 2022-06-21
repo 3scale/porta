@@ -77,12 +77,14 @@ Feature: Mass email bulk operations
     And I press "Send" and I confirm dialog box within colorbox
     Then I should see the bulk action failed with account "jane"
 
-Scenario: Emails can't be sent without subject
-    Given I am logged in as provider "foo.3scale.localhost"
+  Scenario: Emails can't be sent without subject
+    Given the current domain is foo.3scale.localhost
+    When I go to the login page
+     And I fill in the "bob" login data
+    Then I should be logged in the Development Portal
     And I am on the provider compose page
     And a clear email queue
-    And I press "Send email"
     And I fill in "Body" with "There is no Subject to this email"
     And I press "Send"
-    Then I should see "PROVIDER NAME"
+    Then I should see "COMPOSE"
     And "jane@me.us" should receive no emails
