@@ -4,7 +4,7 @@ end
 
 Given /^I visit a page showing the current user's SSO data$/ do
   steps <<-GHERKIN
-    Then I should be logged in the Development Portal
+    Then I should be logged in the Developer Portal
     Given the provider has cms page "/sso_authorizations" with:
       """
       {% for authorization in current_user.sso_authorizations %}

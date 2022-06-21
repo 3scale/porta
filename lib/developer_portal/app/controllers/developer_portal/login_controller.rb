@@ -7,6 +7,8 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   wrap_parameters :session, include: %i[username password remember_me]
 
   before_action :redirect_if_logged_in, :only => [ :new ]
+  before_action :check_captcha, only: :create
+  before_action :logout_keeping_session!, only: :create
   before_action :ensure_buyer_domain
   before_action :set_strategy
   skip_before_action :finish_signup_for_paid_plan
@@ -25,9 +27,6 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   end
 
   def create
-    logout_keeping_session!
-    return render_creation_error('Spam protection failed.') unless spam_check(buyer)
-
     if sign_in_user
       self.current_user = @user
       create_user_session!
@@ -49,6 +48,17 @@ class DeveloperPortal::LoginController < DeveloperPortal::BaseController
   end
 
   private
+
+  def check_captcha
+    render_creation_error('Spam protection failed.') if captcha_needed? && !spam_check(buyer)
+  end
+
+  # TODO: this comes from app/lib/three_scale/spam_protection/protector.rb#captcha_needed? It would be nice to DRY it somehow.
+  def captcha_needed?
+    Recaptcha.captcha_configured? &&
+      site_account.settings.spam_protection_level == :captcha ||
+      ThreeScale::SpamProtection::SessionStore.new(request.session).marked_as_possible_spam?
+  end
 
   def buyer
     @buyer ||= site_account.buyers.build

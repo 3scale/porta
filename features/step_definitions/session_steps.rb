@@ -117,7 +117,7 @@ Then /^I should be logged in as "([^"]*)"$/ do |username|
   assert has_content?(/Signed (?:in|up) successfully/i), message
 end
 
-Then /^I should be logged in the Development Portal$/ do
+Then /^I should be logged in the Developer Portal$/ do
   steps <<-GHERKIN
     Then I should be logged in as "foo"
     And I should be at url for the home page

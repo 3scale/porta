@@ -9,6 +9,6 @@ end
 
 module Recaptcha
   def self.captcha_configured?
-    !Recaptcha::Verify.skip?(Rails.env)
+    Recaptcha.configuration.skip_verify_env.exclude?(Rails.env)
   end
 end

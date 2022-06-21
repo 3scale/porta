@@ -101,7 +101,7 @@ gem 'prawn-format', '0.2.1'
 gem 'prawn-layout', '0.2.1'
 gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
-gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
+gem 'recaptcha', '5.9.0', require: 'recaptcha/rails'
 gem 'redcarpet', '~>3.5.1', require: false
 gem 'RedCloth', '~>4.3', require: false
 gem 'redis', '~> 4.1.3', require: ['redis', 'redis/connection/hiredis']
