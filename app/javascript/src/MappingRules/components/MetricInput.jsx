@@ -16,6 +16,12 @@ type Props = {
   methods: Array<Metric>
 }
 
+type RadioOptionProps = {
+  type: "metric" | "method",
+  label: string,
+  items: Array<Metric>
+}
+
 const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): React.Node => {
   const [checked, setChecked] = React.useState<'method' | 'metric'>('method')
   const [isExpanded, setIsExpanded] = React.useState(false)
@@ -36,6 +42,42 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
     { title: 'Last updated', propName: 'updatedAt' }
   ]
 
+  const RadioOption = ({ type, label, items }: RadioOptionProps): React.Node => (
+    <div id={`wrapper_${type}`}>
+      <Radio
+        isChecked={checked === type}
+        name="radio-1"
+        onChange={() => handleOnRadioChange(type)}
+        label={label}
+        id={`proxy_rule_metric_id_radio_${type}`}
+      />
+      {checked === type && (
+        // $FlowFixMe[prop-missing] implement async pagination
+        // $FlowIssue[incompatible-type-arg]
+        <SelectWithModal
+          label=""
+          fieldId="proxy_rule_metric_id"
+          id={`proxy_rule_metric_id_select_${type}`}
+          name="proxy_rule[metric_id]"
+          // $FlowIssue[incompatible-type] metrics can be null, that's the point
+          item={metric}
+          items={items}
+          itemsCount={items.length}
+          cells={cells}
+          onSelect={handleOnSelect}
+          header={`Most recently created ${type}s`}
+          title={`Select a ${type}`}
+          placeholder={`Select a ${type}`}
+          searchPlaceholder={`Find a ${type}`}
+          aria-label={`Select a ${type}`}
+          onToggle={setIsExpanded}
+          isExpanded={isExpanded}
+          footerLabel={`View all ${type}s`}
+        />
+      )}
+    </div>
+  )
+
   return (
     <FormGroup
       isRequired
@@ -43,72 +85,16 @@ const MetricInput = ({ metric, setMetric, topLevelMetrics, methods }: Props): Re
       validated="default"
       fieldId="proxy_rule_metric_id"
     >
-      <div id="wrapper_method">
-        <Radio
-          isChecked={checked === 'method'}
-          name="radio-1"
-          onChange={() => handleOnRadioChange('method')}
-          label="Method"
-          id="proxy_rule_metric_id_radio_method"
-        />
-        {checked === 'method' && (
-          // $FlowFixMe[prop-missing] implement async pagination
-          // $FlowIssue[incompatible-type-arg]
-          <SelectWithModal
-            label=""
-            fieldId="proxy_rule_metric_id"
-            id="proxy_rule_metric_id_select_method"
-            name="proxy_rule[metric_id]"
-            // $FlowIssue[incompatible-type] metrics can be null, that's the point
-            item={metric}
-            items={methods}
-            itemsCount={methods.length}
-            cells={cells}
-            onSelect={handleOnSelect}
-            header="Most recently created methods"
-            title="Select a method"
-            placeholder="Select a method"
-            searchPlaceholder="Find a method"
-            aria-label="Select a method"
-            onToggle={setIsExpanded}
-            isExpanded={isExpanded}
-            footerLabel="View all methods"
-          />
-        )}
-      </div>
-      <div id="wrapper_metric">
-        <Radio
-          isChecked={checked === 'metric'}
-          name="radio-1"
-          onChange={() => handleOnRadioChange('metric')}
-          label="Metric"
-          id="proxy_rule_metric_id_radio_metric"
-        />
-        {checked === 'metric' && (
-          // $FlowFixMe[prop-missing] implement async pagination
-          // $FlowIssue[incompatible-type-arg]
-          <SelectWithModal
-            label=""
-            fieldId="proxy_rule_metric_id"
-            id="proxy_rule_metric_id_select_metric"
-            name="proxy_rule[metric_id]"
-            // $FlowIssue[incompatible-type] metrics can be null, that's the point
-            item={metric}
-            items={topLevelMetrics}
-            itemsCount={topLevelMetrics.length}
-            cells={cells}
-            onSelect={handleOnSelect}
-            header="Most recently created metrics"
-            title="Select a metric"
-            placeholder="Select a metric"
-            searchPlaceholder="Find a metric"
-            aria-label="Select a metric"
-            onToggle={setIsExpanded}
-            isExpanded={isExpanded}
-            footerLabel="View all metrics"
-          />
-        )}
-      </div>
+      <RadioOption
+        type="method"
+        label="Method"
+        items={methods}
+      />
+      <RadioOption
+        type="metric"
+        label="Metric"
+        items={topLevelMetrics}
+      />
     </FormGroup>
   )
 }
