@@ -70,7 +70,7 @@ Given(/^I add a new mapping rule with method "([^"]*)" pattern "([^"]*)" positio
       end
     end
   end
-  click_on 'Create Mapping Rule'
+  click_on 'Create mapping rule'
 end
 
 MAPPING_RULE_ATTR = %w[http_method pattern position metric].freeze

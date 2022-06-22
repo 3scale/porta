@@ -6,7 +6,7 @@ table#mapping_rules.data
       - if local_assigns[:include_redirect]
         th Redirect
       th title="increment" +
-      th = sortable('metrics.friendly_name', 'Metric or Method')
+      th = sortable('metrics.friendly_name', 'Metric or method')
       th = sortable('proxy_rules.last', 'Last?')
       th = sortable('proxy_rules.position', 'Position')
       th
@@ -14,7 +14,7 @@ table#mapping_rules.data
       = search_form do |s|
         th
         th colspan="3"
-          = s.text_field :query, size: 20, class: :query, placeholder: 'Search for Pattern'
+          = s.text_field :query, size: 20, class: :query, placeholder: 'Search for a pattern'
         th colspan="4"
           = s.button 'Search', name: 'commit', data: { disable_with: 'Searching...' }, class: 'pf-c-button pf-m-primary'
   tbody
