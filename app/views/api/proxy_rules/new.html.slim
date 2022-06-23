@@ -1,10 +1,5 @@
-h1 New Mapping Rule
-
-div{ id="new-mapping-rule-form" data-url=admin_service_proxy_rules_path(@service)
-                                data-http-methods=ProxyRule::ALLOWED_HTTP_METHODS
-                                data-is-proxy-pro-enabled=@service.using_proxy_pro?
-                                data-top-level-metrics=@service.top_level_metrics.reorder(updated_at: :desc).decorate.map(&:new_mapping_rule_data).to_json
-                                data-errors=@proxy_rule.errors.to_json
-                                data-methods=@service.method_metrics.reorder(updated_at: :desc).decorate.map(&:new_mapping_rule_data).to_json}
-  = javascript_pack_tag 'new_mapping_rule'
-
+= render 'shared/new_mapping_rules', url: admin_service_proxy_rules_path(@service),
+                                     is_proxy_pro_enabled: @service.using_proxy_pro?,
+                                     top_level_metrics: @service.top_level_metrics.reorder(updated_at: :desc).decorate.map(&:new_mapping_rule_data).to_json,
+                                     errors: @proxy_rule.errors.to_json,
+                                     methods: @service.method_metrics.reorder(updated_at: :desc).decorate.map(&:new_mapping_rule_data).to_json
