@@ -1396,7 +1396,7 @@ GEM
     database_cleaner (1.7.0)
     debug_inspector (1.1.0)
     diff-lcs (1.4.4)
-    diffy (3.2.1)
+    diffy (3.4.2)
     disposable (0.1.15)
       representable (>= 2.2.3, < 2.4.0)
       uber
