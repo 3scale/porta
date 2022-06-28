@@ -1,9 +1,3 @@
-if RUBY_VERSION < '1.9'
-  require 'md5'
-else
-  require 'digest/md5'
-end
-
 # TODO: Let's try to find new homes for these guys. It's getting crowded here...
 
 
