@@ -1,11 +1,10 @@
-name: Build porta container image
+name: Build porta container image - reusable buildx
 on:
-  # push:
-  #   branches:
-  #   - master
-  workflow_dispatch: {}
-  # pull_request:
-  # branches: [ master ]
+  workflow_call:
+    inputs:
+      platforms:
+        description: comma-separated list of platforms to build for
+        default: linux/amd64,linux/s390x,linux/ppc64le
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -46,6 +45,6 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          platforms: linux/amd64,linux/s390x,linux/ppc64le
+          platforms: ${{ inputs.platforms }}
           labels: ${{ steps.meta.outputs.labels }}
           file: openshift/system/Dockerfile

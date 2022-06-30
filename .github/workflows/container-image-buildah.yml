@@ -1,0 +1,68 @@
+name: Build porta oci container image
+
+on:
+  workflow_dispatch: {}
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: quay.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  buildah:
+    runs-on: ubuntu-latest
+    steps:
+      # Allow multi-target builds
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Log in to Red Hat Registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.QUAY_USER_NAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - uses: actions/checkout@v3
+
+      - name: Build image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          tags: ${{ steps.meta.outputs.tags }}
+          # enable platforms once base image has them
+          # platforms: linux/amd64,linux/s390x,linux/ppc64le
+          labels: ${{ steps.meta.outputs.labels }}
+          layers: false
+          oci: true
+          tls-verify: true
+          extra-args: |
+            --squash
+          containerfiles: |
+            openshift/system/Dockerfile
+
+      - name: Echo Outputs
+        run: |
+          echo "Image: ${{ steps.build-image.outputs.image }}"
+          echo "Tags: ${{ steps.build-image.outputs.tags }}"
+          echo "Tagged Image: ${{ steps.build-image.outputs.image-with-tag }}"
+
+      - name: Check images created
+        run: buildah images
+
+      - name: Push To quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        if: github.event_name != 'pull_request'
+        with:
+          tags: ${{ steps.build-image.outputs.tags }}
+
+      - name: Print image url
+        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
