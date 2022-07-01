@@ -7,7 +7,7 @@ class Provider::ActivationsControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @user = FactoryBot.create(:pending_user, account: @provider)
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   test 'create' do

@@ -30,13 +30,15 @@ class Account::BuyerTest < ActiveSupport::TestCase
 
   test "factory simple buyer should not have domains" do
     buyer = FactoryBot.build(:simple_buyer)
-    assert_nil buyer.domain
-    assert_nil buyer.self_domain
+    assert_nil buyer.internal_domain
+    assert_nil buyer.internal_domain
+    assert_raises(Account::ProviderMethods::ProviderOnlyMethodCalledError) { buyer.internal_admin_domain }
+    assert_raises(Account::ProviderMethods::ProviderOnlyMethodCalledError) { buyer.internal_admin_domain }
   end
 
   test "factory simple account should include 'simple' in domain" do
     buyer = FactoryBot.build(:simple_account)
-    assert_match(/simple/, buyer.domain)
+    assert_match(/simple/, buyer.internal_domain)
   end
 
   # TODO: when the separation of accounts in Buyer, Provider and Master is done

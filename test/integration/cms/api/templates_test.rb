@@ -8,7 +8,7 @@ module CMS
 
       def setup
         @provider = FactoryBot.create(:provider_account)
-        host! @provider.admin_domain
+        host! @provider.internal_admin_domain
       end
 
       test 'index' do
@@ -245,7 +245,7 @@ module CMS
         put publish_admin_api_cms_template_path(page, format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
 
-        host! @provider.domain
+        host! @provider.internal_domain
 
         get "/important/page.html"
 

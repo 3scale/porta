@@ -11,7 +11,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
     @buyer   = FactoryBot.create(:buyer_account, provider_account: provider)
     @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
 
-    host! provider.admin_domain
+    host! provider.internal_admin_domain
   end
 
   def test_index
@@ -59,7 +59,7 @@ class Admin::Api::BuyersApplicationsControllerTest < ActionDispatch::Integration
       @provider = FactoryBot.create(:provider_account)
       @access_token = FactoryBot.create(:access_token, owner: @provider.admin_user, scopes: 'account_management')
 
-      host! @provider.admin_domain
+      host! @provider.internal_admin_domain
 
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       @plan = FactoryBot.create(:application_plan, service: @provider.default_service)

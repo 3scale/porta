@@ -8,7 +8,7 @@ class EnterpriseApiServicePlanFeaturesTest < ActionDispatch::IntegrationTest
     @service_plan = FactoryBot.create(:service_plan, issuer: @provider.default_service)
     FactoryBot.create(:feature, featurable: @provider.default_service, scope: 'ServicePlan')
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   test 'index' do

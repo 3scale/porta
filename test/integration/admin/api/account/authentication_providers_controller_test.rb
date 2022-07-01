@@ -6,7 +6,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
   end
 
@@ -141,7 +141,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
   end
 
   private
-  
+
   def create_authentication_provider
     AuthenticationProvider::Auth0.create!(client_id: 'firstClientId', client_secret: 'firstClientSecret',
                                           site: 'http://example.net', account_type: AuthenticationProvider.account_types[:provider], account: @provider)

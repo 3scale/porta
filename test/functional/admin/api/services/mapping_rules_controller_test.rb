@@ -10,7 +10,7 @@ module Admin::Api::Services
       assert @service = provider.first_service!
       assert @proxy = @service.proxy
 
-      host! provider.admin_domain
+      host! provider.internal_admin_domain
     end
 
     def test_index_json

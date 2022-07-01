@@ -5,7 +5,7 @@ class Api::SettingsTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
 
-    host! @provider.self_domain
+    host! @provider.internal_admin_domain
   end
 
   def test_show

@@ -101,7 +101,7 @@ Then "{string} should receive an invitation to {account}" do |address, account|
 end
 
 Then "an invitation with the admin domain of {account} should be sent to {string}" do |provider, address|
-  invitation_message_should_be_valid find_latest_email(to: address), provider, provider.self_domain
+  invitation_message_should_be_valid find_latest_email(to: address), provider, provider.internal_admin_domain
 end
 
 Then(/^(?:the |)invitation (?:to|from) account "([^\"]*)" should be sent to "([^\"]*)"$/) do |org_name, email|

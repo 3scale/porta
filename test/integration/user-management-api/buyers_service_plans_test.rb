@@ -14,7 +14,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
     @buyer.reload
 
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   test 'index' do
@@ -41,7 +41,7 @@ class Admin::Api::BuyersServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'security wise: index is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get admin_api_account_service_plans_path(@buyer, format: :xml, provider_key: @provider.api_key)
 
     assert_response :forbidden

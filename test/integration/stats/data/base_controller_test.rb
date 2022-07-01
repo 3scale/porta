@@ -9,7 +9,7 @@ class Stats::Data::BaseControllerTest < ActionDispatch::IntegrationTest
     @metric = service.metrics.hits
     @access_token = FactoryBot.create(:access_token, owner: provider.admin_users.first, scopes: ['stats'])
 
-    host! @provider.self_domain
+    host! @provider.internal_admin_domain
   end
 
   attr_reader :provider, :service, :metric, :access_token

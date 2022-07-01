@@ -28,12 +28,12 @@ ActionController::TestCase.class_eval do
   end
 
   def login_provider(account, user: account.admins.first!)
-    host! account.admin_domain
+    host! account.internal_admin_domain
     login_as user
   end
 
   def login_buyer(account, user: account.admins.first!)
-    host! account.provider_account.domain
+    host! account.provider_account.internal_domain
     login_as user
   end
 end
@@ -42,14 +42,14 @@ ActionDispatch::IntegrationTest.class_eval do
   private
 
   def login!(provider, user: provider.admins.first)
-    host! provider.self_domain
+    host! provider.internal_admin_domain
     provider_login_with user.username, 'supersecret'
   end
 
   alias_method :login_provider, :login!
 
   def login_buyer(account)
-    host! account.provider_account.domain
+    host! account.provider_account.internal_domain
     user = account.admins.first
     login_with user.username, 'supersecret'
   end

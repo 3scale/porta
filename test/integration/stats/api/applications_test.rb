@@ -5,7 +5,7 @@ require 'test_helper'
 class Stats::Api::ApplicationsTest < ActionDispatch::IntegrationTest
   def setup
     @cinstance = FactoryBot.create :cinstance
-    host! @cinstance.provider_account.admin_domain
+    host! @cinstance.provider_account.internal_admin_domain
     @admin = @cinstance.provider_account.admins.first.username
   end
 

@@ -20,8 +20,8 @@ When /^I hit "([^"]*)" on ([^\s]+)$/ do |path,domain|
 end
 
 Given "current domain is the {word} domain of {provider}" do |level, provider|
-  raise "Missing admin domain of #{provider.name}" if provider.admin_domain.blank?
-  step %(the current domain is #{level == 'admin' ? provider.admin_domain : 'the master domain'})
+  raise "Missing admin domain of #{provider.name}" if provider.internal_admin_domain.blank?
+  step %(the current domain is #{level == 'admin' ? provider.internal_admin_domain : 'the master domain'})
   @provider = provider
 end
 
@@ -36,15 +36,15 @@ Then /^the current domain in a new window should be ([^\s]+)$/ do |domain|
 end
 
 Then /^the current domain should be the master domain$/ do
-  step %(the current domain should be "#{Account.master.domain}")
+  step %(the current domain should be "#{Account.master.internal_domain}")
 end
 
 Then /^the current domain is the master domain$/ do
-  step %(the current domain is "#{Account.master.domain}")
+  step %(the current domain is "#{Account.master.internal_domain}")
 end
 
 Then "the current domain should be the admin domain of {provider}" do |provider|
-  step %(the current domain should be #{provider.admin_domain})
+  step %(the current domain should be #{provider.internal_admin_domain})
 end
 
 
@@ -67,9 +67,9 @@ Given "the domain of {provider} is {string}" do |provider, domain|
 end
 
 Then "the domain of {provider} should be {string}" do |provider, domain|
-  assert_equal domain, provider.domain
+  assert_equal domain, provider.internal_domain
 end
 
 Then "the admin domain of {provider} should be {string}" do |provider, domain|
-  assert_equal domain, provider.admin_domain
+  assert_equal domain, provider.internal_admin_domain
 end

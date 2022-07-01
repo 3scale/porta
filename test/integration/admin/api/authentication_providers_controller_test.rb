@@ -6,7 +6,7 @@ class Admin::Api::AuthenticationProvidersControllerTest < ActionDispatch::Integr
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! provider.admin_domain
+    host! provider.internal_admin_domain
     settings = provider.settings
     settings.allow_branding
     settings.allow_iam_tools

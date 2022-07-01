@@ -6,7 +6,7 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     Recaptcha.stubs(:captcha_configured?).returns(true)
-    host! provider.domain
+    host! provider.internal_domain
   end
 
   def test_password_token

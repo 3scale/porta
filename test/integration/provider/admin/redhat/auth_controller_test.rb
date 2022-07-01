@@ -12,7 +12,7 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
   test 'successful provider callback - auth code flow' do
     ThreeScale.config.redhat_customer_portal.stubs(:flow).returns('auth_code')
     login_provider @provider
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
     user_data = ThreeScale::OAuth2::UserData.new(username: 'redhat_user')
     ThreeScale::OAuth2::KeycloakClient.any_instance.stubs(:authenticate!).returns(user_data)
     get @callback_url
@@ -22,7 +22,7 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
   test 'successful provider callback - implicit flow' do
     ThreeScale.config.redhat_customer_portal.stubs(:flow).returns('implicit')
     login_provider @provider
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
     user_data = ThreeScale::OAuth2::UserData.new(username: 'redhat_user')
     ThreeScale::OAuth2::RedhatCustomerPortalClient::ImplicitFlow.any_instance.stubs(:authenticate!).returns(user_data)
     get @callback_url
@@ -31,7 +31,7 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
 
   test 'undefined error on provider callback' do
     login_provider @provider
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
     ThreeScale::OAuth2::KeycloakClient.any_instance.stubs(:authenticate!).returns(nil)
     assert_raise ThreeScale::OAuth2::ClientBase::ClientError do
       get @callback_url
@@ -42,7 +42,7 @@ class Provider::Admin::Redhat::AuthControllerTest < ActionDispatch::IntegrationT
     ThreeScale.config.redhat_customer_portal.stubs(enabled: false)
 
     login_provider @provider
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
     get @callback_url
     assert_equal 404, response.status
   end

@@ -12,7 +12,7 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   attr_reader :provider, :buyer, :invoice, :access_token
@@ -59,7 +59,7 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     buyer = FactoryBot.create(:buyer_account, provider_account: without_finance)
     invoice = FactoryBot.create(:invoice, provider_account: without_finance, buyer_account: buyer)
     FactoryBot.create(:payment_transaction, success: true, invoice: invoice)
-    host! without_finance.self_domain
+    host! without_finance.internal_admin_domain
 
     get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
     assert_response :forbidden
@@ -72,13 +72,13 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     buyer = FactoryBot.create(:buyer_account, provider_account: without_finance)
     invoice = FactoryBot.create(:invoice, provider_account: without_finance, buyer_account: buyer)
     FactoryBot.create(:payment_transaction, success: true, invoice: invoice)
-    host! without_finance.self_domain
+    host! without_finance.internal_admin_domain
     get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
     assert_response :forbidden
   end
 
   test 'work only on provider admin domain' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)
     assert_response :not_found
   end
@@ -89,7 +89,7 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
   end
 
   test '#index for master' do
-    host! master_account.admin_domain
+    host! master_account.internal_admin_domain
     invoice = FactoryBot.create(:invoice, provider_account: master_account)
     access_token = FactoryBot.create(:access_token, owner: master_account.first_admin, scopes: ['finance'])
     get api_invoice_payment_transactions_path(invoice, format: :xml, access_token: access_token.value)

@@ -6,7 +6,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
 
   def setup
     @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: %w[account_management]).value
-    host! current_account.admin_domain
+    host! current_account.internal_admin_domain
   end
 
   class MasterAccountTest < Admin::Api::ApiDocsServicesControllerTest
@@ -120,7 +120,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
         member.member_permission_service_ids = [accessible_service.id]
         member.activate!
 
-        host! provider.admin_domain
+        host! provider.internal_admin_domain
       end
 
       attr_reader :provider, :accessible_service, :forbidden_service, :accessible_api_docs_service, :forbidden_api_docs_service, :member, :access_token

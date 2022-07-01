@@ -11,7 +11,7 @@ module Finance::Api
       @provider.save!
       @key = @provider.api_key
 
-      host! @provider.admin_domain
+      host! @provider.internal_admin_domain
       @context = ''
     end
 
@@ -23,7 +23,7 @@ module Finance::Api
 
       test 'deny access if finance module is disabled' do
         without_finance = FactoryBot.create(:provider_account, billing_strategy: nil)
-        host! without_finance.self_domain
+        host! without_finance.internal_admin_domain
         get "/api/#{@context}invoices.xml?provider_key=#{without_finance.api_key}"
         assert_response :forbidden
         assert_match 'Finance module not enabled for the account', @response.body

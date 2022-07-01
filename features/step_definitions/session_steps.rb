@@ -35,7 +35,7 @@ Given /^the master account admin has username "([^\"]*)" and password "([^\"]*)"
 end
 
 When /^I am logged in as master admin on master domain$/ do
-  step %(the current domain is #{Account.master.domain})
+  step %(the current domain is #{Account.master.internal_domain})
   step %(I log in as provider "#{Account.master.admins.first.username}")
 end
 
@@ -75,7 +75,7 @@ When /^I log in as (provider )?"([^"]*)" on (\S+)$/ do |provider,username, domai
 end
 
 When "I log in as {string} on the admin domain of {provider}" do |username, provider|
-  step %(I log in as provider "#{username}" on #{provider.admin_domain})
+  step %(I log in as provider "#{username}" on #{provider.internal_admin_domain})
 end
 
 

@@ -1,3 +1,4 @@
+# TODO: supress deprecation warning
 FactoryBot.define do
   factory(:account_without_users, :class => Account) do
     country_id do
@@ -121,7 +122,7 @@ FactoryBot.define do
       # Everything disallowed by default
       account.stubs(:feature_allowed?).returns(false)
 
-      Account.stubs(:find_by_domain).with(account.domain).returns(account)
+      Account.stubs(:find_by_domain).with(account.internal_domain).returns(account)
     end
 
     after(:create) do |account|
@@ -235,7 +236,7 @@ FactoryBot.define do
 
     after(:stub) do |account|
       Account.stubs(:master).returns(account)
-      Account.stubs(:find_by_domain).with(account.domain).returns(account)
+      Account.stubs(:find_by_domain).with(account.internal_domain).returns(account)
     end
   end
 end

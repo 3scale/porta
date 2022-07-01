@@ -24,7 +24,7 @@ class SiteAccountSupportTest < ActiveSupport::TestCase
     mock_request = ActionDispatch::TestRequest.create(
       "action_dispatch.request.parameters" => { provider_key: p2.api_key }
     )
-    mock_request.host = p2.self_domain
+    mock_request.host = p2.internal_admin_domain
     object.request = mock_request
 
     assert_equal p2, object.site_account

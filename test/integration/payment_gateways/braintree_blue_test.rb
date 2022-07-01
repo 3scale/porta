@@ -9,7 +9,7 @@ class BraintreeBlueTest < ActionDispatch::IntegrationTest
 
     @buyer_account = FactoryBot.create(:buyer_account, :provider_account => @provider_account)
     @buyer_account.buy!(plan)
-    host! @provider_account.domain
+    host! @provider_account.internal_domain
   end
 
   test "navigate to the correct link" do

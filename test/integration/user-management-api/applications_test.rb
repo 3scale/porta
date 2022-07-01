@@ -21,7 +21,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
 
     @application = @provider.provided_cinstances.last
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   #TODO: test extra fields in indexes
@@ -262,7 +262,7 @@ class EnterpriseApiApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'security wise: applications is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get admin_api_applications_path(format: :xml), params: { provider_key: @provider.api_key }
 
     assert_response :forbidden

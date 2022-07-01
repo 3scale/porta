@@ -7,7 +7,7 @@ class Provider::PasswordsControllerTest < ActionController::TestCase
   def setup
     @provider = FactoryBot.create(:provider_account)
     @user = @provider.first_admin
-    @request.host = @provider.self_domain
+    @request.host = @provider.internal_admin_domain
   end
 
   # This test cover the posibility of tokens without 'generate_at'

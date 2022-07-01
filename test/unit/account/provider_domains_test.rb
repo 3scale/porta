@@ -14,7 +14,7 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     ThreeScale.config.stubs(superdomain: 'example.com')
     account_two = FactoryBot.build(:provider_account)
-    account_two.domain = account_one.domain
+    account_two.domain = account_one.internal_domain
 
     assert_not account_two.valid?
     assert account_two.errors[:subdomain].include? 'already taken'
@@ -25,7 +25,7 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     ThreeScale.config.stubs(superdomain: 'example.com')
     account_two = FactoryBot.build(:provider_account)
-    account_two.domain = account_one.domain
+    account_two.domain = account_one.internal_domain
 
     assert_not account_two.valid?
     assert account_two.errors[:subdomain].include? 'already taken'
@@ -91,8 +91,10 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     assert_equal 'provider-name',                                        account.subdomain
     assert_equal 'provider-name-admin',                                  account.self_subdomain
-    assert_equal "provider-name.#{ThreeScale.config.superdomain}",       account.domain
-    assert_equal "provider-name-admin.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal "provider-name.#{ThreeScale.config.superdomain}",       account.internal_domain
+    assert_equal "provider-name.#{ThreeScale.config.superdomain}",       account.internal_domain
+    assert_equal "provider-name-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
+    assert_equal "provider-name-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
   test '#generate_domains generates correctly custom for provider' do
@@ -105,8 +107,10 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     assert_equal 'provider',                                        account.subdomain
     assert_equal 'provider-admin',                                  account.self_subdomain
-    assert_equal "provider.#{ThreeScale.config.superdomain}",       account.domain
-    assert_equal "provider-admin.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal "provider.#{ThreeScale.config.superdomain}",       account.internal_domain
+    assert_equal "provider.#{ThreeScale.config.superdomain}",       account.internal_domain
+    assert_equal "provider-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
+    assert_equal "provider-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
   test '#generate_domains generates correctly default for master' do
@@ -117,8 +121,10 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     assert_equal 'new-master-account',                                  account.subdomain
     assert_equal 'new-master-account',                                  account.self_subdomain
-    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.domain
-    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_domain
+    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_domain
+    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_admin_domain
+    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
   test '#generate_domains generates correctly custom for master' do
@@ -130,8 +136,10 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     assert_equal 'master',                                  account.subdomain
     assert_equal 'master',                                  account.self_subdomain
-    assert_equal "master.#{ThreeScale.config.superdomain}", account.domain
-    assert_equal "master.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_domain
+    assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_domain
+    assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_admin_domain
+    assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
   test '#publish_domain_events when domain changes' do

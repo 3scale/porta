@@ -16,7 +16,7 @@ Given /^I visit a page showing the current user's SSO data$/ do
 end
 
 Given /^I'm logged in as a malicious buyer$/ do
-  step "the current domain is #{@provider.domain}"
+  step "the current domain is #{@provider.internal_domain}"
   step %|a buyer "malicious_buyer" of provider "#{@provider.org_name}"|
   Account.buyers.last!.update_attribute(:org_name, 'malicious <script></script>buyer')
   step 'I am logged in as "malicious_buyer"'

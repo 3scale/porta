@@ -8,7 +8,7 @@ class Admin::Api::AccountPlanFeaturesTest < ActionDispatch::IntegrationTest
     @account_plan = FactoryBot.create(:account_plan, issuer: @provider)
     @feat = FactoryBot.create(:feature, featurable: @provider)
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   attr_reader :feat

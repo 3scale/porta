@@ -7,7 +7,7 @@ class Admin::Api::WebHooksFailuresControllerTest < ActionController::TestCase
   def setup
     @provider = FactoryBot.create(:provider_account)
     @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
-    host! @provider.self_domain
+    host! @provider.internal_admin_domain
   end
 
   # regression test https://github.com/3scale/system/issues/3046

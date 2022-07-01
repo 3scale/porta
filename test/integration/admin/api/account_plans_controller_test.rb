@@ -7,7 +7,7 @@ class Admin::Api::AccountPlansControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   # This simple test is because rails 5.0 upgrade.

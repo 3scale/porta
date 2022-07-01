@@ -17,7 +17,7 @@ class Admin::Api::CreditCardsTest < ActionDispatch::IntegrationTest
 
     @buyer.buy! @application_plan
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
     @provider.payment_gateway_type = :stripe
     @provider.save!
   end

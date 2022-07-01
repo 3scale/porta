@@ -12,7 +12,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:account_plan, issuer: @provider)
     FactoryBot.create(:application_plan, issuer: @provider.default_service)
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   # Access token
@@ -48,7 +48,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
   end
 
   test 'security wise: api is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get admin_api_service_plans_path(provider_key: @provider.api_key, format: :xml)
 
     assert_response :forbidden

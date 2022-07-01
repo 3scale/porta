@@ -4,7 +4,7 @@ class DeveloperPortal::Buyer::AccountContractsControllerTest < DeveloperPortal::
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    @request.host = @provider.domain
+    @request.host = @provider.internal_domain
 
     @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     login_as(@buyer.admins.first)

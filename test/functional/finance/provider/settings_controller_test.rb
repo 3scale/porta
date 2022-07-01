@@ -5,7 +5,7 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
   def setup
     @provider = FactoryBot.create(:provider_account, :billing_strategy => FactoryBot.create(:postpaid_with_charging))
     @provider.settings.allow_finance!
-    @request.host = @provider.admin_domain
+    @request.host = @provider.internal_admin_domain
   end
 
   test 'login is required' do

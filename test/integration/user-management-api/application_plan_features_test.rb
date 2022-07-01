@@ -8,7 +8,7 @@ class Admin::Api::ApplicationPlanFeaturesTest < ActionDispatch::IntegrationTest
     @app_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
     FactoryBot.create(:feature, featurable: @provider.default_service)
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   class AccessTokenTest < Admin::Api::ApplicationPlanFeaturesTest

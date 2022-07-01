@@ -7,7 +7,7 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
 
   setup do
     provider = FactoryBot.create(:simple_provider)
-    @provider_domain = provider.external_self_domain
+    @provider_domain = provider.internal_admin_domain
     @app = ->(env) { [403, {}, []] }
   end
 

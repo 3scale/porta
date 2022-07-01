@@ -15,7 +15,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
   class ProviderAdminTest < self
     setup do
       @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
-      host! @provider.admin_domain
+      host! @provider.internal_admin_domain
     end
 
     test 'create' do

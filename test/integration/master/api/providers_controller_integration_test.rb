@@ -15,7 +15,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
 
     master_account.stubs(:provider_can_use?).with(:service_permissions).returns(true)
 
-    host! master_account.admin_domain
+    host! master_account.internal_admin_domain
   end
 
   test '#create' do

@@ -14,7 +14,7 @@ class EnterpriseApiBuyersAccountPlanChangeTest < ActionDispatch::IntegrationTest
 
     @hidden_account_plan = FactoryBot.create(:account_plan, issuer: @provider)
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   test 'successful change account plan' do
@@ -52,7 +52,7 @@ class EnterpriseApiBuyersAccountPlanChangeTest < ActionDispatch::IntegrationTest
   end
 
   test 'security wise: account plans change is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     put change_plan_admin_api_account_path(@buyer,
                                            provider_key: @provider.api_key,
                                            plan_id: @published_account_plan.id,

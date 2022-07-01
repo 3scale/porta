@@ -210,18 +210,6 @@ module Account::ProviderMethods
     application_plans.published
   end
 
-  def admin_domain
-    if provider?
-      if self_domain.present?
-        self_domain
-      else # connect case
-        Account.master.domain
-      end
-    else
-      raise ProviderOnlyMethodCalledError
-    end
-  end
-
   def admin_base_url
     build_base_url(admin_domain)
   end
@@ -335,6 +323,18 @@ module Account::ProviderMethods
   end
 
   private
+
+  def admin_domain
+    if provider?
+      if self_domain.present?
+        self_domain
+      else # connect case
+        Account.master.domain
+      end
+    else
+      raise ProviderOnlyMethodCalledError
+    end
+  end
 
   def ensure_provider
     raise ProviderOnlyMethodCalledError if self.buyer?

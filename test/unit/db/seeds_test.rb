@@ -49,8 +49,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal master_account.id, master_account.provider_account_id
     assert_equal 'Master Account', master_account.name
     assert_equal 'master-account', master_account.subdomain
-    assert_equal 'master-account.example.com', master_account.domain
-    assert_equal 'master-account.example.com', master_account.self_domain
+    assert_equal 'master-account.example.com', master_account.internal_domain
+    assert_equal 'master-account.example.com', master_account.internal_admin_domain
     refute master_account.provider
     assert_nil master_account.site_access_code.presence
 
@@ -110,8 +110,8 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal Account.master.id, tenant_account.provider_account_id
     assert tenant_account.onboarding
     assert_equal 'provider', tenant_account.subdomain
-    assert_equal 'provider.example.com', tenant_account.domain
-    assert_equal 'provider-admin.example.com', tenant_account.self_domain
+    assert_equal 'provider.example.com', tenant_account.internal_domain
+    assert_equal 'provider-admin.example.com', tenant_account.internal_admin_domain
     assert tenant_account.sample_data.presence
     assert tenant_account.approved?
     assert tenant_account.state_changed_at.present?
@@ -134,7 +134,7 @@ class SeedsTest < ActiveSupport::TestCase
     assert impersonation_user.active?
     assert impersonation_user.activated_at.present?
     assert_equal impersonation_admin_config['username'], impersonation_user.username
-    assert_equal "#{impersonation_admin_config['username']}+#{tenant_account.self_domain}@#{impersonation_admin_config['domain']}", impersonation_user.email
+    assert_equal "#{impersonation_admin_config['username']}+#{tenant_account.internal_admin_domain}@#{impersonation_admin_config['domain']}", impersonation_user.email
     assert_equal '3scale', impersonation_user.first_name
     assert_equal 'Admin', impersonation_user.last_name
 
@@ -170,8 +170,8 @@ class SeedsTest < ActiveSupport::TestCase
     master_account = Account.master
     assert_equal ENV_VARIABLES['MASTER_NAME'], master_account.name
     assert_equal ENV_VARIABLES['MASTER_DOMAIN'], master_account.subdomain
-    assert_equal "#{ENV_VARIABLES['MASTER_DOMAIN']}.example.com", master_account.domain
-    assert_equal "#{ENV_VARIABLES['MASTER_DOMAIN']}.example.com", master_account.self_domain
+    assert_equal "#{ENV_VARIABLES['MASTER_DOMAIN']}.example.com", master_account.internal_domain
+    assert_equal "#{ENV_VARIABLES['MASTER_DOMAIN']}.example.com", master_account.internal_admin_domain
     assert_equal ENV_VARIABLES['MASTER_ACCESS_CODE'], master_account.site_access_code
     assert_equal ENV_VARIABLES['MASTER_USER'], master_account.users.first!.username
     assert_equal ENV_VARIABLES['MASTER_SERVICE'], master_account.default_service.name
@@ -181,8 +181,8 @@ class SeedsTest < ActiveSupport::TestCase
     tenant_account = Account.tenants.first!
     assert_equal ENV_VARIABLES['PROVIDER_NAME'], tenant_account.name
     assert_equal ENV_VARIABLES['TENANT_NAME'], tenant_account.subdomain
-    assert_equal "#{ENV_VARIABLES['TENANT_NAME']}.example.com", tenant_account.domain
-    assert_equal "#{ENV_VARIABLES['TENANT_NAME']}-admin.example.com", tenant_account.self_domain
+    assert_equal "#{ENV_VARIABLES['TENANT_NAME']}.example.com", tenant_account.internal_domain
+    assert_equal "#{ENV_VARIABLES['TENANT_NAME']}-admin.example.com", tenant_account.internal_admin_domain
     assert_nil tenant_account.sample_data.presence
     tenant_user = tenant_account.users.but_impersonation_admin.first!
     assert_equal ENV_VARIABLES['USER_LOGIN'], tenant_user.username

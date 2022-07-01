@@ -10,7 +10,7 @@ class DeveloperPortal::Admin::ServiceContractsControllerTest <  DeveloperPortal:
     @provider = @buyer.provider_account
     @provider.settings.allow_multiple_services!
     @provider.settings.show_multiple_services!
-    @request.host = @provider.domain
+    @request.host = @provider.internal_domain
     login_as(@buyer.admins.first)
   end
 

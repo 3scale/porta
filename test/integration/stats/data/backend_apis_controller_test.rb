@@ -9,7 +9,7 @@ class Stats::Data::BackendApisControllerTest < ActionDispatch::IntegrationTest
     @metric = backend_api.metrics.hits
     @access_token  = FactoryBot.create(:access_token, owner: provider.admin_users.first, scopes: ['stats'])
 
-    host! @provider.self_domain
+    host! @provider.internal_admin_domain
   end
 
   attr_reader :provider, :backend_api, :metric, :access_token

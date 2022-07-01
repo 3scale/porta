@@ -10,7 +10,7 @@ class Admin::Api::MemberPermissionsControllerTest < ActionDispatch::IntegrationT
     @user = FactoryBot.create(:active_user, account: @provider)
     @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management]).value
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   test 'get' do

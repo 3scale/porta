@@ -8,7 +8,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
   class ProviderAccountTest < Admin::Api::CMS::BaseControllerTest
     setup do
       @provider = FactoryBot.create(:provider_account)
-      host! @provider.admin_domain
+      host! @provider.internal_admin_domain
     end
 
     test 'admin user with cms scope has permission' do
@@ -57,7 +57,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
 
   class MasterAccountTest < Admin::Api::CMS::BaseControllerTest
     setup do
-      host! master_account.admin_domain
+      host! master_account.internal_admin_domain
     end
 
     class MasterAccountOnPremTest < MasterAccountTest

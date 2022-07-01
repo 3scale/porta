@@ -4,7 +4,7 @@ class Admin::UpgradeNoticesControllerTest < ActionController::TestCase
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    @request.host = @provider.self_domain
+    @request.host = @provider.internal_admin_domain
     login_as(@provider.admins.first)
 
     # that saves us fromt the need of creating the whole 3scale plan

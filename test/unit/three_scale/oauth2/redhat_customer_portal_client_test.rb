@@ -77,7 +77,7 @@ class ThreeScale::OAuth2::RedhatCustomerPortalClientTest < ActiveSupport::TestCa
       }
       request = ActionDispatch::TestRequest.create env
 
-      assert_equal "http://#{master_account.admin_domain}/auth/#{authentication_provider.system_name}/callback?plan_id=1&self_domain=example.net", RedirectUri.call(oauth2, request)
+      assert_equal "http://#{master_account.internal_admin_domain}/auth/#{authentication_provider.system_name}/callback?plan_id=1&self_domain=example.net", RedirectUri.call(oauth2, request)
     end
   end
 

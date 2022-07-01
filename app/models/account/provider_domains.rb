@@ -68,7 +68,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
 
     def is_master_domain?(domain)
       return true if ThreeScale.master_on_premises?
-      master.domain == domain or master.self_domain == domain
+      master.match_internal_domain?(domain) or master.match_internal_admin_domain?(domain)
     end
 
     def same_domain(domain)

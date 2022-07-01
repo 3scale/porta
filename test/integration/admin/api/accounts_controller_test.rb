@@ -6,14 +6,14 @@ class Admin::Api::AccountsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! provider.admin_domain
+    host! provider.internal_admin_domain
   end
 
   attr_reader :provider
 
   class MasterAccountTest < ActionDispatch::IntegrationTest
     def setup
-      host! master_account.admin_domain
+      host! master_account.internal_admin_domain
     end
 
     def test_find

@@ -4,7 +4,7 @@ class ThreeScale::Analytics::UserTrackingTest < ActiveSupport::TestCase
   include ThreeScale::Analytics
 
   def setup
-    account = FactoryBot.build_stubbed(:simple_account, provider: true)
+    account = FactoryBot.build_stubbed(:simple_provider)
     @user = FactoryBot.build_stubbed(:user, account: account, email: 'foo@example.net', first_name: 'John', last_name: 'Doe')
   end
 

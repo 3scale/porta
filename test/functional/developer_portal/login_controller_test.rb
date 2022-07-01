@@ -11,7 +11,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     provider_settings = provider_account.settings
     provider_settings.authentication_strategy = 'internal'
     provider_settings.save!
-    @request.host = provider_account.domain
+    @request.host = provider_account.internal_domain
 
     get :new
 
@@ -27,7 +27,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     provider_settings.authentication_strategy = 'cas'
     provider_settings.cas_server_url = "http://mamacit.as"
     provider_settings.save!
-    @request.host = provider_account.domain
+    @request.host = provider_account.internal_domain
 
     get :new
 
@@ -47,7 +47,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     user.activate!
     user.save!
 
-    @request.host = provider_account.domain
+    @request.host = provider_account.internal_domain
 
     res = stub :body => "yes\nlaurie", :code => 200
     HTTPClient.expects(:get).with(anything).returns(res)
@@ -64,7 +64,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     user
 
     authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
-    @request.host = provider_account.domain
+    @request.host = provider_account.internal_domain
 
     mock_oauth2('oauth|1234', 'C6789', authentication_provider.user_info_url)
 
@@ -78,7 +78,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
     user
 
     authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
-    @request.host = provider_account.domain
+    @request.host = provider_account.internal_domain
 
     user.sso_authorizations.create(authentication_provider: authentication_provider, uid: user.authentication_id, id_token: 'first-id_token')
 
@@ -92,7 +92,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
   test 'oauth2 redirect to signup' do
     authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
-    @request.host = provider_account.domain
+    @request.host = provider_account.internal_domain
 
     mock_oauth2('foo', 'C6789', authentication_provider.user_info_url)
 
@@ -104,7 +104,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
   end
 
   test 'disabled when account is suspended' do
-    host! FactoryBot.create(:simple_provider, state: 'suspended').domain
+    host! FactoryBot.create(:simple_provider, state: 'suspended').internal_domain
 
     get :new
 
@@ -113,7 +113,7 @@ class DeveloperPortal::LoginControllerTest < DeveloperPortal::ActionController::
 
   test 'ssl certificate error' do
     authentication_provider = FactoryBot.create(:authentication_provider, account: provider_account, kind: 'base')
-    host! provider_account.domain
+    host! provider_account.internal_domain
 
     client = mock
     client.stubs(:authenticate!).returns(ThreeScale::OAuth2::ErrorData.new(error: error = 'hostname "example.com" does not match the server certificate'))

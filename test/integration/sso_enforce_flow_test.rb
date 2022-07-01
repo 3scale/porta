@@ -7,7 +7,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     @user = FactoryBot.create(:simple_admin, account: @provider, password: 'alaska1233')
     @user.activate!
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   def test_sso_enforce

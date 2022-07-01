@@ -35,7 +35,7 @@ module Signup
         assert_equal org_name_param, account.name
         assert_equal org_name_param_downcase, account.subdomain
         assert_equal "#{org_name_param_downcase}-admin", account.self_subdomain
-        assert_equal "#{org_name_param_downcase}-admin.#{ThreeScale.config.superdomain}", account.self_domain
+        assert_equal "#{org_name_param_downcase}-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
 
         # the main user has the right attributes
         valid_user_params.each do |user_attribute_name, expected_user_attribute_value|
@@ -44,7 +44,7 @@ module Signup
         assert_equal :admin, user.role
 
         # impersonation_admin user is also created with the right attributes
-        assert_equal "#{ThreeScale.config.impersonation_admin['username']}+#{account.self_domain}@#{imp_config['domain']}", impersonation_user.email
+        assert_equal "#{ThreeScale.config.impersonation_admin['username']}+#{account.internal_domain}@#{imp_config['domain']}", impersonation_user.email
         assert_equal '3scale', impersonation_user.first_name
         assert_equal 'Admin', impersonation_user.last_name
 

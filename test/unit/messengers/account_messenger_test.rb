@@ -14,7 +14,7 @@ class AccountMessengerTest < ActiveSupport::TestCase
     AccountMessenger.invoices_to_review( @provider_account ).deliver
 
     message = @provider_account.received_messages.last
-    assert_match url_helpers.admin_finance_invoices_url(host: @provider_account.self_domain, state: :finalized), message.body
+    assert_match url_helpers.admin_finance_invoices_url(host: @provider_account.internal_admin_domain, state: :finalized), message.body
   end
 
   test 'expired_credit_card_notification_for_buyer' do

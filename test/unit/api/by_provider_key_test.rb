@@ -21,7 +21,7 @@ class ApiAuthentication::ByProviderKeyTest < ActiveSupport::TestCase
     p2 = FactoryBot.create(:provider_account)
 
     request = ActionDispatch::TestRequest.create
-    request.host = p2.self_domain
+    request.host = p2.internal_admin_domain
 
     object = Params.new(:provider_key => p2.api_key)
     object.request = request

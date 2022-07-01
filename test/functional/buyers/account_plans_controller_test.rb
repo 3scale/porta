@@ -9,7 +9,7 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
   class ProviderAccountPlansTest < Buyers::AccountPlansControllerTest
     def setup
       @provider = FactoryBot.create :provider_account
-      @request.host = @provider.domain
+      @request.host = @provider.internal_domain
 
       login_as(@provider.admins.first)
 
@@ -43,7 +43,7 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
   class MasterAccountPlansTest < Buyers::AccountPlansControllerTest
     def setup
       @master = master_account
-      @request.host = @master.domain
+      @request.host = @master.internal_domain
 
       login_as(@master.admins.first)
     end

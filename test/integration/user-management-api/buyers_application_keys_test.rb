@@ -18,7 +18,7 @@ class Admin::Api::BuyersApplicationKeysTest < ActionDispatch::IntegrationTest
     @app_plan = FactoryBot.create(:application_plan, issuer: @provider.first_service!)
     @buyer.buy! @app_plan
     @buyer.reload
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
 
     ApplicationKey.enable_backend!
   end

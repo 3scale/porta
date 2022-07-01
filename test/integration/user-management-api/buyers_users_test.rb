@@ -17,7 +17,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
 
     FactoryBot.create :user
 
-    host! @provider.admin_domain
+    host! @provider.internal_admin_domain
   end
 
   class AccessTokenWithCallbacks < ActionDispatch::IntegrationTest
@@ -25,7 +25,7 @@ class Admin::Api::BuyerUsersTest < ActionDispatch::IntegrationTest
       @provider = FactoryBot.create(:simple_provider)
       @buyer    = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
-      host! @provider.admin_domain
+      host! @provider.internal_admin_domain
     end
 
     test 'create action should not logout a current user' do

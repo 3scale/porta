@@ -7,7 +7,7 @@ class Admin::Api::WebHooksFailuresTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
-    host! @provider.self_domain
+    host! @provider.internal_admin_domain
   end
 
   # Access token

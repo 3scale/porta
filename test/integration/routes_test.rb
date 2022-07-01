@@ -23,7 +23,7 @@ class RoutesTest < ActionDispatch::IntegrationTest
     provider = FactoryBot.create(:provider_account)
     provider.create_onboarding
 
-    host! provider.admin_domain
+    host! provider.internal_admin_domain
     login_provider provider
 
     get '/p/admin'

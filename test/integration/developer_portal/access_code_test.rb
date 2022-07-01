@@ -4,7 +4,7 @@ class DeveloperPortal::AccessCodeTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:simple_provider)
-    host! Account.master.admin_domain
+    host! Account.master.internal_admin_domain
   end
 
   def test_show
