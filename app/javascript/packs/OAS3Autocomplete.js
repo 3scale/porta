@@ -73,32 +73,16 @@ const injectAutocompleteToResponseBody = (responseBody: ResponseBody | string, a
   return res
 }
 
-const injectServerToResponseBody = (responseBody: ResponseBody | string, serviceEndpoint: string): ResponseBody | string => {
-  if (typeof responseBody === 'string') {
-    return responseBody
-  }
-
-  const originalServers = responseBody.servers || []
-  const servers = serviceEndpoint ? [{ url: serviceEndpoint }] : originalServers
-
-  return {
-    ...responseBody,
-    // $FlowFixMe[incompatible-return] should be safe to assume correct type
-    servers
-  }
-}
-
 export const autocompleteOAS3 = async (response: SwaggerResponse, accountDataUrl: string, serviceEndpoint: string): Promise<SwaggerResponse> => {
-  const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
   const body = await fetchData(accountDataUrl)
     .then(data => (
       data.results
-        ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
-        : bodyWithServer
+        ? injectAutocompleteToResponseBody(response.body, data.results)
+        : response.body
     ))
     .catch(error => {
       console.error(error)
-      return bodyWithServer
+      return response.body
     })
 
   return {
