@@ -49,15 +49,13 @@ Feature: Service plans index page
       When a service plan is being used in an application
       Then an admin cannot delete it from the service plans page
 
-    @wip
     Scenario: Hide a service plan
       When an admin hides a plan from the service plans page
-      # Then what happens?
+      Then the plan is hidden
 
-    @wip
     Scenario: Publish a service plan
       When an admin publishes a plan from the service plans page
-      # Then what happens?
+      Then the plan is published
 
     @search
     Scenario: Filtering and sorting service plans

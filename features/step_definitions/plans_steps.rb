@@ -201,17 +201,23 @@ def hide_plan_and_assert(plan)
   assert has_content?("Plan #{plan.name} was hidden.")
 
   find('td', text: plan.name).sibling('[data-label="State"]', text: /hidden/i)
+end
 
-  assert plan.reload.hidden?
-  assert_not find_action_for_plan(/hide/i, plan)
+Then "the plan is hidden" do
+  assert @plan.reload.hidden?
+  assert find_action_for_plan(/publish/i, @plan)
+  assert_not find_action_for_plan(/hide/i, @plan)
 end
 
 def publish_plan_and_assert(plan)
-  find_action_for_plan(/publish/i, @plan).click
+  find_action_for_plan(/publish/i, plan).click
   assert has_content?("Plan #{plan.name} was published.")
 
   find('td', text: plan.name).sibling('[data-label="State"]', text: /published/i)
+end
 
-  assert plan.reload.published?
+Then "the plan is published" do
+  assert @plan.reload.published?
   assert_not find_action_for_plan(/publish/i, @plan)
+  assert find_action_for_plan(/hide/i, @plan)
 end

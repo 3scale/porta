@@ -42,15 +42,13 @@ Feature: Account plans index page
       When a buyer is subscribed to the provider using an account plan
       Then an admin cannot delete it from the account plans page
 
-    @wip
     Scenario: Hide an account plan
       When an admin hides a plan from the account plans page
-      # Then what happens?
+      Then the plan is hidden
 
-    @wip
     Scenario: Publish an account plan
       When an admin publishes a plan from the account plans page
-      # Then what happens?
+      Then the plan is published
 
     @search
     Scenario: Filtering and sorting account plans

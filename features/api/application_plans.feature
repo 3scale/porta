@@ -42,11 +42,13 @@ Feature: Application plans index page
 
   Scenario: Hide an application plan
     When an admin hides a plan from the application plans page
-    Then a buyer won't be able to use it for their applications
+    Then the plan is hidden
+    And a buyer won't be able to use it for their applications
 
   Scenario: Publish an application plan
     When an admin publishes a plan from the application plans page
-    Then a buyer will be able to use it for their applications
+    Then the plan is published
+    And a buyer will be able to use it for their applications
 
   @search
   Scenario: Filtering and sorting application plans
