@@ -96,8 +96,8 @@ const PlansTable = ({ columns, plans, count, searchHref, onAction }: Props): Rea
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
           <ToolbarSearch
-            placeholder="Find an Application plan"
-            inputAriaLabel="Find an Application plan"
+            placeholder="Find a plan"
+            inputAriaLabel="Find a plan"
           />
         </ToolbarItem>
         <ToolbarItem align={{ default: 'alignRight' }}>

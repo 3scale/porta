@@ -19,15 +19,15 @@ import type { Record as Plan } from 'Types'
 import './ChangePlanSelectCard.scss'
 
 type Props = {
-  applicationPlans: Plan[],
+  plans: Plan[],
   path: string
 }
 
-const ChangePlanSelectCard = ({ applicationPlans, path }: Props): React.Node => {
+const ChangePlanSelectCard = ({ plans, path }: Props): React.Node => {
   const [plan, setPlan] = useState<Plan | null>(null)
 
   // TODO: in PF4, "isDisabled" behaviour is replaced by ticking the selected item. Remove this after upgrading.
-  const plans = plan ? applicationPlans.map(p => ({ ...p, disabled: p.id === plan.id })) : applicationPlans
+  const items = plan ? plans.map(p => ({ ...p, disabled: p.id === plan.id })) : plans
 
   return (
     <Card id="change_plan_card">
@@ -47,7 +47,7 @@ const ChangePlanSelectCard = ({ applicationPlans, path }: Props): React.Node => 
             // $FlowIgnore[incompatible-type] plan is either Plan or null
             item={plan}
             // $FlowIgnore[incompatible-type] id can be either number or string
-            items={plans}
+            items={items}
             onSelect={setPlan}
             fieldId="cinstance_plan_id"
             name="cinstance[plan_id]"
