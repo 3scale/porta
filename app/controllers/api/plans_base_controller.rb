@@ -15,6 +15,7 @@ class Api::PlansBaseController < Api::BaseController
   delegate :plans, to: :presenter
 
   class UndefinedCollectionMethod < StandardError; end
+  class UndefinedPlanTypeMethod < StandardError; end
 
   def index; end
 
@@ -43,7 +44,7 @@ class Api::PlansBaseController < Api::BaseController
   end
 
   def plan_type
-    raise UndefinedCollectionMethod, 'You have to override plan_type method'
+    raise UndefinedPlanTypeMethod, 'You have to override plan_type method'
   end
 
   def find_plan

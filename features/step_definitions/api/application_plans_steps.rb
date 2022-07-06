@@ -14,7 +14,10 @@ Then "any new application will use this plan" do
   FactoryBot.create(:buyer_account, provider_account: @provider)
 
   visit new_provider_admin_application_path
-  fill_in_new_application_form
+  pf4_select_first(from: 'Account')
+  pf4_select_first(from: 'Product')
+  find('.pf-c-form__label', text: 'Name').sibling('input').set('My App')
+  find('.pf-c-form__label', text: 'Description').sibling('input').set('This is some kind of application')
   click_on 'Create application'
 
   assert_equal @plan, Cinstance.last.plan

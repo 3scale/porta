@@ -11,7 +11,7 @@ import { openSelect } from 'utilities/test-utils'
 
 const plan = { id: 0, name: 'I am a plan' }
 const defaultProps = {
-  plans: [plan, { id: 1, name: 'I am another plan' }],
+  applicationPlans: [plan, { id: 1, name: 'I am another plan' }],
   path: '/applications/123/change_plan'
 }
 
