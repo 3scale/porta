@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryBot.define do
+FactoryBot.define do # rubocop:disable Metrics/BlockLength
   factory (:plan) do
     sequence(:name) { |n| "plan#{n}" }
     sequence(:system_name) {|n| "plan#{n}" }
@@ -14,6 +14,12 @@ FactoryBot.define do
 
   factory(:account_plan, :parent => :plan, :class => AccountPlan) do
     association(:issuer, :factory => :provider_account)
+  end
+
+  factory(:published_account_plan, parent: :account_plan) do
+    after(:create) do |plan|
+      plan.publish!
+    end
   end
 
   factory(:service_plan, :parent => :plan, :class => ServicePlan) do

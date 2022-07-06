@@ -67,7 +67,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
     private
 
     def service_plan_params(state_event: 'publish', approval_required: 0)
-      @service_plan_params ||= { service_id: service.id, service_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json, access_token: @token }
+      @service_plan_params ||= { service_id: service.id, service_plan: { name: 'testing', system_name: 'system_name', state_event: state_event, approval_required: approval_required }, format: :json, access_token: @token }
     end
   end
 
@@ -112,7 +112,12 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
       member.save!
 
       post masterize_admin_service_service_plans_path(service_id: service.id), xhr: true, params: { id: other_service_plan.id }
-      assert_response :success
+      assert_response :redirect
+      assert_equal other_service_plan, service.reload.default_service_plan
+
+      post masterize_admin_service_service_plans_path(service_id: service.id), xhr: true
+      assert_response :redirect
+      assert_equal nil, service.reload.default_service_plan
 
       post masterize_admin_service_service_plans_path(service_id: forbidden_service.id), xhr: true, params: { id: other_forbidden_service_plan.id }
       assert_response :not_found
@@ -182,7 +187,8 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
       member.save!
 
       delete admin_service_plan_path(service_plan)
-      assert_response :redirect
+      assert_response :success
+      assert_equal 'The plan was deleted', (JSON.parse response.body)['notice']
 
       delete admin_service_plan_path(forbidden_service_plan)
       assert_response :not_found

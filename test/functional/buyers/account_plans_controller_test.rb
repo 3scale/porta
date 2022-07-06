@@ -31,7 +31,6 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
     test 'render index' do
       get :index
       assert_equal 200, response.status
-      assert_template 'api/plans/_default_plan'
     end
 
     test 'destroy account plan, when account plan cant be destroyed, should not raise error' do
@@ -65,12 +64,6 @@ class Buyers::AccountPlansControllerTest < ActionController::TestCase
         post :create
         assert_equal 403, response.status
         assert_template 'errors/provider/forbidden'
-      end
-
-      test 'render index' do
-        get :index
-        assert_equal 200, response.status
-        assert_template 'api/plans/_default_plan'
       end
     end
 

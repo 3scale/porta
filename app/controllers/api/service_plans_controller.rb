@@ -3,50 +3,36 @@
 class Api::ServicePlansController < Api::PlansBaseController
   before_action :authorize_service_plans!
 
-  before_action :activate_sidebar_menu
-
   activate_menu :serviceadmin, :subscriptions, :service_plans
   sublayout 'api/service'
 
-  def index
-    @new_plan = ServicePlan
-  end
+  helper_method :default_plan_select_data, :plans_table_data
+  delegate :default_plan_select_data, :plans_table_data, to: :presenter
 
-  def new
-    @plan = collection.build params[:service_plan]
-  end
+  alias service_plans plans
 
-  def edit
-    @plan || raise(ActiveRecord::RecordNotFound)
-  end
-
-  # class super metod which is Api::PlansBaseController#create
-  # to create plan same way as all plans
-  #
+  # rubocop:disable Lint/UselessMethodDefinition We need these, otherwise integration tests will fail
   def create
-    super create_service_plan_params
+    super
   end
 
   def update
-    super update_service_plan_params do
-      redirect_to plans_index_path, :notice => "Service plan updated."
-    end
+    super
   end
 
   def destroy
     super
   end
+  # rubocop:enable Lint/UselessMethodDefinition
 
   def masterize
-    generic_masterize_plan(@service, :default_service_plan)
+    super(@service, :default_service_plan)
   end
 
   protected
 
-  DEFAULT_PARAMS = %i[name state setup_fee cost_per_month trial_period_days cancellation_period approval_required].freeze
-
-  def activate_sidebar_menu
-    activate_menu :sidebar => :service_plans
+  def plan_type
+    :service_plan
   end
 
   def collection(service_id = params[:service_id].presence)
@@ -62,11 +48,7 @@ class Api::ServicePlansController < Api::PlansBaseController
     authorize! :manage, :service_plans
   end
 
-  def create_service_plan_params
-    params.require(:service_plan).permit(DEFAULT_PARAMS | %i[system_name])
-  end
-
-  def update_service_plan_params
-    params.require(:service_plan).permit(DEFAULT_PARAMS)
+  def presenter
+    @presenter ||= Api::ServicePlansPresenter.new(service: @service, collection: collection, params: params)
   end
 end

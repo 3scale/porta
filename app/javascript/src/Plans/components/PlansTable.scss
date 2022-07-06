@@ -1,4 +1,5 @@
-@import '~@patternfly/patternfly/components/Table/table.css';
+@import '~@patternfly/react-styles/css/components/Table/table.css';
+
 @import '~@patternfly/patternfly/components/Button/button.css';
 @import '~@patternfly/patternfly/components/Pagination/pagination.css';
 @import '~@patternfly/patternfly/components/InputGroup/input-group.css';
@@ -8,3 +9,10 @@
 @import '~@patternfly/patternfly/components/DataList/data-list.css';
 @import '~@patternfly/patternfly/components/Dropdown/dropdown.css';
 @import '~@patternfly/patternfly/components/OptionsMenu/options-menu.css';
+
+// HACK: this should not be necessary. Remove after upgrading Patternfly.
+.pf-c-table .pf-c-table__sort,
+.pf-c-table .pf-c-table__sort:first-child,
+.pf-c-table .pf-c-table__sort:last-child {
+  padding: var(--pf-c-table--cell--first-last-child--PaddingLeft);
+}
