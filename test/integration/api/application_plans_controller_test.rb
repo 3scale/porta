@@ -37,8 +37,16 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_difference @service.application_plans.method(:count) do
         post admin_service_application_plans_path(service), params: application_plan_params
         assert_response :redirect
-        assert_equal 'Created Application plan testing', flash[:notice]
+        assert_equal "Created Application plan #{application_plan[:name]}", flash[:notice]
       end
+
+      app = service.reload.application_plans.last
+      assert_equal app.name, application_plan[:name]
+      assert_equal app.system_name, application_plan[:system_name]
+      assert_not app.approval_required
+      assert_equal app.trial_period_days, application_plan[:trial_period_days]
+      assert_equal app.setup_fee, ThreeScale::Money.new(application_plan[:setup_fee], 'EUR')
+      assert_equal app.cost_per_month, ThreeScale::Money.new(application_plan[:cost_per_month], 'EUR')
 
       ThreeScale.stubs(master_on_premises?: true)
       assert_no_difference @service.application_plans.method(:count) do
@@ -158,7 +166,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_difference service.application_plans.method(:count) do
         post admin_service_application_plans_path(service), params: application_plan_params
         assert_response :redirect
-        assert_equal 'Created Application plan testing', flash[:notice]
+        assert_equal "Created Application plan #{application_plan[:name]}", flash[:notice]
       end
     end
 
@@ -252,7 +260,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       put admin_application_plan_path(plan), params: { application_plan:{ name: 'New plan name' } }
       assert_response :forbidden
 
-      post masterize_admin_service_application_plans_path(service, plan, format: :js)
+      post masterize_admin_service_application_plans_path(service)
       assert_response :forbidden
 
       post publish_admin_plan_path(plan, format: :json)
@@ -318,8 +326,11 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
 
       get admin_service_application_plans_path(service)
       assert_response :success
-      assert_same_elements service.application_plans, assigns(:plans)
-      assert_not_includes assigns(:plans), forbidden_plan
+
+      # This is testing presenter logic, not integration. Test body response. Use Nokogiri::HTML::Document.parse(response.body)
+      plans = assigns(:presenter).plans
+      assert_same_elements service.application_plans, plans
+      assert_not_includes plans, forbidden_plan
 
       get new_admin_service_application_plan_path(service)
       assert_response :success
@@ -368,7 +379,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       put admin_application_plan_path(forbidden_plan), params: { application_plan:{ name: 'New plan name' } }
       assert_response :not_found
 
-      post masterize_admin_service_application_plans_path(forbidden_service, forbidden_plan, format: :js)
+      post masterize_admin_service_application_plans_path(forbidden_service)
       assert_response :not_found
 
       post hide_admin_plan_path(forbidden_plan, format: :json)
@@ -394,7 +405,11 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
   protected
 
   def application_plan_params
-    { service_id: service.id, application_plan: { name: 'testing', system_name: 'testing', approval_required: 0 } }
+    { service_id: service.id, application_plan: application_plan }
+  end
+
+  def application_plan
+    { name: 'Plan name', system_name: 'system_name', approval_required: 0, trial_period_days: 2, setup_fee: 10.5, cost_per_month: 2.5 }
   end
 
   def error_message(key)

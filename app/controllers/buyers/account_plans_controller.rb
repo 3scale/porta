@@ -1,47 +1,39 @@
 # frozen_string_literal: true
 
 class Buyers::AccountPlansController < Api::PlansBaseController
-  before_action :authorize_manage_account_plans!, :only => %i[new create]
+  before_action :authorize_manage_account_plans!, only: %i[new create]
   before_action :authorize_read_account_plans!
 
   activate_menu! :audience, :accounts, :account_plans
 
-  def index
-    @new_plan = AccountPlan
-  end
+  helper_method :default_plan_select_data, :plans_table_data, :no_available_plans
+  delegate :default_plan_select_data, :plans_table_data, :no_available_plans, to: :presenter
 
-  def new
-    @plan = collection.build params[:account_plan]
-  end
+  alias account_plans plans
 
-  def edit; end
-
-  # class super metod which is Api::PlansBaseController#create
-  # to create plan same way as all plans
-  #
+  # rubocop:disable Lint/UselessMethodDefinition We need these, otherwise integration tests will fail
   def create
-    super params[:account_plan] do
-      redirect_to admin_buyers_account_plans_path
-    end
+    super
   end
 
   def update
-    super params[:account_plan] do
-      redirect_to admin_buyers_account_plans_path
-    end
+    super
   end
 
   def destroy
-    super do
-      redirect_to admin_buyers_account_plans_path
-    end
+    super
   end
+  # rubocop:enable Lint/UselessMethodDefinition
 
   def masterize
-    generic_masterize_plan(current_account, :default_account_plan)
+    super(current_account, :default_account_plan)
   end
 
   protected
+
+  def plan_type
+    :account_plan
+  end
 
   def plans_index_path
     admin_buyers_account_plans_path
@@ -57,5 +49,9 @@ class Buyers::AccountPlansController < Api::PlansBaseController
 
   def authorize_read_account_plans!
     authorize! :read, :account_plans
+  end
+
+  def presenter
+    @presenter ||= Buyers::AccountPlansPresenter.new(collection: collection, params: params)
   end
 end

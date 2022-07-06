@@ -24,7 +24,7 @@ it('should render', () => {
 
 it('should have a helper text', () => {
   const wrapper = mountWrapper()
-  const text = 'Default application plan (if any) is selected automatically upon service subscription.'
+  const text = 'Default plan (if any) is selected automatically upon service subscription.'
 
   const helperText = wrapper.find('.pf-c-helper-text')
 

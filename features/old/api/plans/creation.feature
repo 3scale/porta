@@ -1,3 +1,4 @@
+@javascript
 Feature: Plan creation
   In order to offer my client different features and usage conditions
   As a provider
@@ -11,7 +12,7 @@ Feature: Plan creation
   Scenario: Create simple service plan
     Given provider "foo.3scale.localhost" has "service_plans" switch allowed
      When I go to the service plans admin page
-      And I follow "Create Service Plan"
+      And I follow "Create Service plan"
       And I fill in "Name" with "Basic"
       And I press "Create Service plan"
 

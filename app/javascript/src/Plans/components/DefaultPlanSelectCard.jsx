@@ -56,7 +56,7 @@ const DefaultPlanSelectCard = ({ plans, initialDefaultPlan, path: url }: Props):
             onSelect={setDefaultPlan}
             fieldId="id"
             name="id"
-            placeholderText={defaultPlan ? defaultPlan.name : 'Select application plan'}
+            placeholderText={defaultPlan ? defaultPlan.name : 'Select plan'}
           />
           <ActionGroup>
             <Button
@@ -70,7 +70,7 @@ const DefaultPlanSelectCard = ({ plans, initialDefaultPlan, path: url }: Props):
         </Form>
         <HelperText>
           <HelperTextItem>
-            Default application plan (if any) is selected automatically upon service subscription.
+            Default plan (if any) is selected automatically upon service subscription.
           </HelperTextItem>
         </HelperText>
       </CardBody>

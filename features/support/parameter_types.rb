@@ -88,7 +88,7 @@ ParameterType(
 ParameterType(
   name: 'plan_type',
   regexp: /account|service|application/,
-  transformer: ->(type) { type }
+  transformer: ->(type) { "#{type}_plan" }
 )
 
 ParameterType(
@@ -317,6 +317,12 @@ ParameterType(
   name: 'is',
   regexp: /is|is not/,
   transformer: ->(value) { value == 'is' }
+)
+
+ParameterType(
+  name: 'will',
+  regexp: /will|will not|won't/,
+  transformer: ->(value) { value == 'will' }
 )
 
 ParameterType(

@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+Given 'a product' do
+  @product = @provider.default_service
+end
+
 Given "a service {string} of {provider}" do |name, provider|
   provider.services.create! :name => name, :mandatory_app_key => false
 end
