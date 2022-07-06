@@ -63,10 +63,9 @@ class Api::PlansBaseController < Api::BaseController
   CREATE_PARAMS = %i[name system_name approval_required trial_period_days setup_fee cost_per_month].freeze
   UPDATE_PARAMS = (CREATE_PARAMS - [:system_name]).freeze
 
-  def create
-    attrs = params.require(plan_type).permit(UPDATE_PARAMS)
+  def create # rubocop:disable Metrics/AbcSize
+    attrs = params.require(plan_type).permit(CREATE_PARAMS)
     @plan = collection.build(attrs)
-    @plan.system_name = attrs[:system_name]
 
     if @plan.save
       if block_given?
