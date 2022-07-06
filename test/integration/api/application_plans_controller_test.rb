@@ -166,7 +166,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       assert_difference service.application_plans.method(:count) do
         post admin_service_application_plans_path(service), params: application_plan_params
         assert_response :redirect
-        assert_equal 'Created Application plan testing', flash[:notice]
+        assert_equal "Created Application plan #{application_plan[:name]}", flash[:notice]
       end
     end
 
