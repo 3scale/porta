@@ -25,7 +25,6 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
         assert JSON.parse(response.body).dig('service_plan', 'id').present?
         assert_equal service_plan_params[:service_plan][:name], JSON.parse(response.body).dig('service_plan', 'name')
         assert_equal 'published', JSON.parse(response.body).dig('service_plan', 'state')
-        assert_equal 'system_name', JSON.parse(response.body).dig('service_plan', 'system_name')
       end
     end
 
