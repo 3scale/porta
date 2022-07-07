@@ -232,7 +232,7 @@ describe('when in Service context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account to subscribe to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -562,7 +562,7 @@ describe('when in Account context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account to subscribe to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })
@@ -880,7 +880,7 @@ describe('when in Audience context', () => {
 
         const hints = wrapper.find('.hint')
         expect(hints.length).toBe(1)
-        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account subscription to a different service plan for this product, go to Service subscriptions.')
+        expect(hints.at(0).text()).toMatch('This account already subscribes to the service plan of the selected product. To change the account to subscribe to a different service plan for this product, go to Service subscriptions.')
         expect(hints.find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
       })
     })

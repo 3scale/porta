@@ -16,11 +16,8 @@
     max-width: 110px;
   }
 
-  #proxy_rule_pattern-helper {
+  // HACK: we're using different PF versions and therefore missing the actual class for monospace font. Remove this once we upgrade to PF4.
+  .pf-m-redhatmono-font {
     font-family: monospace;
-
-    &::first-letter {
-      text-transform: capitalize;
-    }
   }
 }

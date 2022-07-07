@@ -49,11 +49,11 @@ After '@ignore-backend-alerts' do
 end
 
 Before '@recaptcha' do
-  skip_recaptcha(false)
+  Recaptcha.configuration.skip_verify_env.delete(Rails.env)
 end
 
 After '@recaptcha' do
-  skip_recaptcha(true)
+  Recaptcha.configuration.skip_verify_env << Rails.env
 end
 
 AfterStep do

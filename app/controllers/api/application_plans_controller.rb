@@ -33,7 +33,6 @@ class Api::ApplicationPlansController < Api::PlansBaseController
     :application_plan
   end
 
-  # TODO: leave or delete? When is it current_account the scope?
   def scope
     @service || current_account
   end

@@ -15,6 +15,7 @@ class Api::PlansBaseController < Api::BaseController
   delegate :plans, to: :presenter
 
   class UndefinedCollectionMethod < StandardError; end
+  class UndefinedPlanTypeMethod < StandardError; end
 
   def index; end
 
@@ -43,7 +44,7 @@ class Api::PlansBaseController < Api::BaseController
   end
 
   def plan_type
-    raise UndefinedCollectionMethod, 'You have to override plan_type method'
+    raise UndefinedPlanTypeMethod, 'You have to override plan_type method'
   end
 
   def find_plan
@@ -63,10 +64,9 @@ class Api::PlansBaseController < Api::BaseController
   CREATE_PARAMS = %i[name system_name approval_required trial_period_days setup_fee cost_per_month].freeze
   UPDATE_PARAMS = (CREATE_PARAMS - [:system_name]).freeze
 
-  def create
-    attrs = params.require(plan_type).permit(UPDATE_PARAMS)
+  def create # rubocop:disable Metrics/AbcSize
+    attrs = params.require(plan_type).permit(CREATE_PARAMS)
     @plan = collection.build(attrs)
-    @plan.system_name = attrs[:system_name]
 
     if @plan.save
       if block_given?

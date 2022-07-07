@@ -67,7 +67,7 @@ class Admin::Api::ServicePlansControllerTest < ActionDispatch::IntegrationTest
     private
 
     def service_plan_params(state_event: 'publish', approval_required: 0)
-      @service_plan_params ||= { service_id: service.id, service_plan: { name: 'testing', state_event: state_event, approval_required: approval_required }, format: :json, access_token: @token }
+      @service_plan_params ||= { service_id: service.id, service_plan: { name: 'testing', system_name: 'system_name', state_event: state_event, approval_required: approval_required }, format: :json, access_token: @token }
     end
   end
 
