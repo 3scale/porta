@@ -15,12 +15,16 @@ class PlansBasePresenter
 
   def plans
     @plans ||= collection.not_custom
+                         .reorder('name ASC')
   end
 
-  def table_plans 
-    @table_plans ||= plans.reorder(sorting_params)
-                          .scope_search(search)
-                          .paginate(pagination_params)
+  def table_plans
+    @table_plans ||= plans.scope_search(search)
+                          .reorder(sorting_params)
+  end
+
+  def paginated_table_plans
+    @paginated_table_plans ||= table_plans.paginate(pagination_params)
   end
 
   def default_plan_select_data
@@ -34,8 +38,8 @@ class PlansBasePresenter
   def plans_table_data
     {
       columns: columns.to_json,
-      plans: table_plans.decorate.map(&:index_table_data).to_json,
-      count: table_plans.total_entries,
+      plans: paginated_table_plans.decorate.map(&:index_table_data).to_json,
+      count: paginated_table_plans.total_entries,
       'search-href': search_href
     }
   end

@@ -9,8 +9,8 @@ class PlanPresentersTest < ActiveSupport::TestCase
     assert_same_elements plans.order(created_at: :desc), presenter({ sort: 'created_at', direction: 'desc' }).plans
   end
 
-  test '#paginated_plans' do
-    assert_same_elements plans[2, 2], presenter({ page: 2, per_page: 2 }).paginated_plans
+  test '#paginated_table_plans' do
+    assert_same_elements plans[2, 2], presenter({ page: 2, per_page: 2 }).paginated_table_plans
   end
 
   test '#default_plan_select_data' do
