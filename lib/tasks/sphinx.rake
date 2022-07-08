@@ -21,7 +21,7 @@ namespace :sphinx do
       puts "Enqueueing indexation of #{index.model}"
       progress = ProgressCounter.new(total)
       # As we enqueue, we only need the :id
-      scope.select(:id).find_in_batches(batch_size: 1000) do |batch|
+      scope.select(:id).except(:includes).find_in_batches(batch_size: 1000) do |batch|
         batch.each do |record|
           SphinxIndexationWorker.perform_later(record.class, record.id)
         end
