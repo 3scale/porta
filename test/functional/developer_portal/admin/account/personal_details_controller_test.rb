@@ -6,13 +6,13 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
   def setup
     super
     @provider = FactoryBot.create(:provider_account)
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
   end
 
   test 'no access granted for provider admin' do
     # now exists other routes in provider side
-    @request.host = @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     login_as @provider.admins.first
     get :show
@@ -22,7 +22,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsControllerTest < Developer
 
   test 'no access granted for provider members' do
     # now exists other routes in provider side
-    @request.host = @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     provider_member = FactoryBot.create(:active_user, account: @provider)
     assert provider_member.member?

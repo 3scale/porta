@@ -10,7 +10,7 @@ class Admin::Api::ServiceMetricMethodsTest < ActionDispatch::IntegrationTest
     @metric  = @service.metrics.hits
     @metric_method = FactoryBot.create(:metric, service: @service, parent_id: @metric.id)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'service not found' do

@@ -13,7 +13,7 @@ class UtilizationTest < ActionDispatch::IntegrationTest
     @application = plan.create_contract_with(buyer)
     @metrics = FactoryBot.create_list(:metric, 4, service: service)
 
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
     provider_login_with provider.admins.first.username, 'supersecret'
   end
 

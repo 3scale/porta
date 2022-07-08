@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Api::Account::ProxyConfigsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
   end
 
   attr_reader :provider

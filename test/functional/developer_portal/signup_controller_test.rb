@@ -10,7 +10,7 @@ class DeveloperPortal::SignupControllerTest < DeveloperPortal::ActionController:
     @provider = FactoryBot.create(:provider_account)
     @service = @provider.first_service!
 
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
   end
 
   class WithDefaultAccountPlan < DeveloperPortal::SignupControllerTest

@@ -8,7 +8,7 @@ class Admin::Api::ObjectsControllerTest < ActionDispatch::IntegrationTest
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management])
     @token = @access_token.value
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   def test_status_object_not_found

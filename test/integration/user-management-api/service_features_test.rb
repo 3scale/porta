@@ -7,7 +7,7 @@ class EnterpriseApiFeaturesTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   # Access token

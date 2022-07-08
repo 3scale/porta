@@ -11,7 +11,7 @@ class ProcessDomainEventsWorkerTest < ActiveSupport::TestCase
   def test_proxy_domain_changed_event
     provider = FactoryBot.create(:simple_provider)
     proxy = FactoryBot.create(:simple_proxy)
-    proxy.update_attributes!(endpoint: "http://#{provider.internal_admin_domain}")
+    proxy.update_attributes!(endpoint: "http://#{provider.external_admin_domain}")
     event = Domains::ProxyDomainsChangedEvent.create_and_publish!(proxy)
 
     provider_domains_changed = EventStore::Repository.adapter.where(event_type: 'Domains::ProviderDomainsChangedEvent')
@@ -24,7 +24,7 @@ class ProcessDomainEventsWorkerTest < ActiveSupport::TestCase
   def test_provider_domain_changed_event
     provider = FactoryBot.create(:simple_provider)
     proxy = FactoryBot.create(:simple_proxy)
-    proxy.update_attributes!(endpoint: "http://#{provider.internal_admin_domain}")
+    proxy.update_attributes!(endpoint: "http://#{provider.external_admin_domain}")
     event = Domains::ProviderDomainsChangedEvent.create_and_publish!(provider)
 
     proxy_domains_changed = EventStore::Repository.adapter.where(event_type: 'Domains::ProxyDomainsChangedEvent')

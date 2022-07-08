@@ -43,7 +43,7 @@ class UserMailerTest < ActionMailer::TestCase
         with_default_url_options protocol: 'https' do
           email = deliver_lost_password
           assert_match "You can reset your password by visiting the following link", email.body.to_s
-          assert_match "https://#{@provider_account.internal_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
+          assert_match "https://#{@provider_account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
         end
       end
 
@@ -65,7 +65,7 @@ class UserMailerTest < ActionMailer::TestCase
         assert_match "Lost password recovery", email.subject
         assert_match "Dear #{user_decorator.display_name},", email.body.to_s
         assert_match "CUSTOM MESSAGE", email.body.to_s
-        assert_match "http://#{@provider_account.internal_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
+        assert_match "http://#{@provider_account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
         assert_match "The API Team", email.body.to_s
       end
     end
@@ -151,7 +151,7 @@ class UserMailerTest < ActionMailer::TestCase
         with_default_url_options protocol: 'https' do
           email = deliver_lost_password
           assert_match "You can reset your password by visiting the following link", email.body.to_s
-          assert_match "https://#{@provider_account.internal_domain}/admin/account/password?password_reset_token=abc123", email.body.to_s
+          assert_match "https://#{@provider_account.external_domain}/admin/account/password?password_reset_token=abc123", email.body.to_s
         end
       end
 
@@ -173,7 +173,7 @@ class UserMailerTest < ActionMailer::TestCase
         assert_match "Lost password recovery", email.subject
         assert_match "Dear #{user_decorator.display_name},", email.body.to_s
         assert_match "CUSTOM MESSAGE", email.body.to_s
-        assert_match "http://#{@provider_account.internal_domain}/admin/account/password?password_reset_token=abc123", email.body.to_s
+        assert_match "http://#{@provider_account.external_domain}/admin/account/password?password_reset_token=abc123", email.body.to_s
         assert_match "The API Team", email.body.to_s
       end
     end

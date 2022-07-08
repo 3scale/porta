@@ -2,7 +2,7 @@ When /^I delete the buyer "([^\"]*)" via API using provider key of "([^\"]*)"$/ 
   provider_account = Account.find_by_org_name!(provider_name)
   service = provider_account.first_service!
   requests = inspect_requests do
-    http_request Account.master.internal_domain, :delete, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key
+    http_request Account.master.external_domain, :delete, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key
   end
   assert_equal 200, requests.first.status_code
 end
@@ -12,7 +12,7 @@ When /^I update the user "([^\"]*)" with user_key "([^\"]*)" via API using provi
   provider_account = Account.find_by_org_name!(provider_name)
 
   requests = inspect_requests do
-    http_request Account.master.internal_domain, :put, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key, :user_key => buyer_key
+    http_request Account.master.external_domain, :put, "/users/#{buyer_name}.xml", :provider_key => provider_account.api_key, :user_key => buyer_key
   end
   assert_equal 200, requests.first.status_code
 end

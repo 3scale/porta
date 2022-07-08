@@ -42,7 +42,7 @@ ActionDispatch::IntegrationTest.class_eval do
   private
 
   def login!(provider, user: provider.admins.first)
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
     provider_login_with user.username, 'supersecret'
   end
 

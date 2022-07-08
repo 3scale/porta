@@ -14,7 +14,7 @@ class Admin::Api::UsersTest < ActionDispatch::IntegrationTest
 
     @member = FactoryBot.create(:user, account: @provider, role: 'member', admin_sections: ['partners'])
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   # ACCESS TOKEN

@@ -10,7 +10,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     @user = FactoryBot.create(:simple_admin, account: @provider)
     @token = FactoryBot.create(:access_token, owner: @user, scopes: %w[account_management], permission: 'rw')
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   def test_wrapped_parameters_on_multipart_form
@@ -38,7 +38,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     def setup
       provider = FactoryBot.create(:provider_account)
       @token = FactoryBot.create(:access_token, owner: provider.admin_users.first!, scopes: %w[account_management]).value
-      host! provider.internal_admin_domain
+      host! provider.external_admin_domain
     end
 
     test 'JSON for a representer class without pagination' do
@@ -137,7 +137,7 @@ class Admin::Api::BaseControllerIntegrationTest < ActionDispatch::IntegrationTes
     end
 
     def test_provider_admin_domain
-      host! @provider.internal_admin_domain
+      host! @provider.external_admin_domain
       with_api_routes do
         get '/api', params: {access_token: 'access_token'}
         assert_response :success

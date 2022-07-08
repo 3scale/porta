@@ -15,7 +15,7 @@ class PlansMessengerTest < ActiveSupport::TestCase
     end
 
     email = ActionMailer::Base.deliveries.last
-    expected_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(cinstance, host: cinstance.account.provider_account.internal_admin_domain)
+    expected_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(cinstance, host: cinstance.account.provider_account.external_admin_domain)
     assert_includes email.body.to_s, expected_url
   end
 end

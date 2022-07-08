@@ -12,7 +12,7 @@ class Admin::Api::ApplicationPlanMetricPricingRulesTest < ActionDispatch::Integr
     @metric = FactoryBot.create(:metric, service: @service)
     @pricing_rule = FactoryBot.create(:pricing_rule, plan: @app_plan, metric: @metric)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   class AccessTokenTest < Admin::Api::ApplicationPlanMetricPricingRulesTest

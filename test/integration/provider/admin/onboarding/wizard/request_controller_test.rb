@@ -6,7 +6,7 @@ class Provider::Admin::Onboarding::Wizard::RequestControllerTest < ActionDispatc
   setup do
     provider = FactoryBot.create(:provider_account)
     FactoryBot.create(:service_token, service: provider.first_service!)
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
     login_provider provider
   end
 

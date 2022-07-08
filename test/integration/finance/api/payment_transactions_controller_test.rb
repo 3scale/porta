@@ -12,7 +12,7 @@ class Finance::Api::PaymentTransactionsControllerTest < ActionDispatch::Integrat
     @buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   attr_reader :provider, :buyer, :invoice, :access_token

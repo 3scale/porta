@@ -6,7 +6,7 @@ class Admin::Api::Account::AuthenticationProvidersControllerTest < ActionDispatc
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[account_management], permission: 'rw')
   end
 

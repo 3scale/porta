@@ -7,7 +7,7 @@ class Admin::Api::BackendApis::MetricsControllerTest < ActionDispatch::Integrati
     @provider = FactoryBot.create(:simple_provider)
     @backend_api = FactoryBot.create(:backend_api, account: provider)
     @metric = FactoryBot.create(:metric, owner: backend_api, service_id: nil) # the 2nd metric of the backend
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
   end
 
   attr_reader :provider, :backend_api, :metric

@@ -127,7 +127,7 @@ Given('Provider has setup RH SSO') do
   And the provider account allows signups
   And the provider has the authentication provider "Keycloak" published
   And current domain is the admin domain of provider "#{@provider.internal_domain}"
-  And the current domain is "#{@provider.internal_domain}"
+  And the current domain is "#{@provider.external_domain}"
   GHERKIN
 end
 

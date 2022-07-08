@@ -9,7 +9,7 @@ class Master::EventsImporterTest < ActionDispatch::IntegrationTest
   end
 
   test 'forbids master event import if on admin portal' do
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     ThreeScale.config.stubs(tenant_mode: 'multitenant')
     post master_events_import_url, params: { secret: 'shared-secret!' }

@@ -7,7 +7,7 @@ class Provider::Admin::Account::EnforceSSOTest < ActionDispatch::IntegrationTest
 
     login_provider @provider
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   def test_create

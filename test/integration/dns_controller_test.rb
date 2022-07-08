@@ -24,7 +24,6 @@ class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
     @provider.reload
     assert_equal 'abcdefgh', @provider.site_access_code
     assert_equal 'provider.example.net', @provider.internal_domain
-    assert_equal 'provider.example.net', @provider.internal_domain
     assert_equal 'support@example.net', @provider.from_email
 
 
@@ -33,7 +32,6 @@ class Sites::DnsControllerTest < ActionDispatch::IntegrationTest
 
     @provider.reload
     assert_equal 'abcdefgh', @provider.site_access_code
-    assert_equal 'another.dev.example.net', @provider.internal_domain
     assert_equal 'another.dev.example.net', @provider.internal_domain
     assert_equal 'info@dev.example.net', @provider.from_email
 

@@ -58,7 +58,7 @@ class CinstanceMessengerTest < ActiveSupport::TestCase
     CinstanceMessenger.new_application(@app).deliver
 
     assert_match "This application requires your approval", Message.last.body
-    expected_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(@app, host: @provider_account.internal_admin_domain)
+    expected_url = System::UrlHelpers.system_url_helpers.provider_admin_application_url(@app, host: @provider_account.external_admin_domain)
     assert_match expected_url, Message.last.body
   end
 

@@ -15,7 +15,7 @@ class DeveloperPortal::Admin::Account::AuthorizeNetControllerTest < DeveloperPor
       login:      'LoginID',
       trans_key:  'Transaction Key',
       profile_id: 'authcode',
-      ok_url: "http://#{@provider.internal_domain}/admin/account/authorize_net/hosted_success"
+      ok_url: "http://#{@provider.external_domain}/admin/account/authorize_net/hosted_success"
     )
     authorize_net.expects(:payment_profile)
     authorize_net.expects(:action_form_url)

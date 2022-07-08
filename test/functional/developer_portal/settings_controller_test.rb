@@ -4,7 +4,7 @@ class DeveloperPortal::SettingsControllerTest < DeveloperPortal::ActionControlle
 
   setup do
     @provider = FactoryBot.create :provider_account
-    request.host = @provider.internal_domain
+    request.host = @provider.external_domain
   end
 
   test 'get to terms should redirect' do

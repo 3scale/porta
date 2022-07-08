@@ -26,7 +26,7 @@ class WebHookTest < ActiveSupport::TestCase
       @service = FactoryBot.create(:simple_service, backend_version: '2', account: @provider)
       @app_plan = FactoryBot.create(:simple_application_plan, issuer: @service)
 
-      @wh = WebHook.create!(account: @provider, url: "http://#{@provider.internal_domain}", active: true)
+      @wh = WebHook.create!(account: @provider, url: "http://#{@provider.external_domain}", active: true)
 
       @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
     end

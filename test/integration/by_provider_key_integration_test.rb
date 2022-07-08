@@ -5,7 +5,7 @@ class ApiAuthentication::ByProviderKeyIntegrationTest < ActionDispatch::Integrat
   def setup
     @provider = FactoryBot.create(:provider_account)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'authenticates using HttpBasicAuth' do

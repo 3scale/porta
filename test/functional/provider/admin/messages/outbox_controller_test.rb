@@ -20,7 +20,7 @@ class Provider::Admin::Messages::OutboxControllerTest < ActionController::TestCa
   test 'should render a 404 when given an invalid page parameter' do
     provider = FactoryBot.create :provider_account
     login_as provider.first_admin
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
 
     get 'index', params: { page: 'xoforvfmy' }
     assert_response :not_found

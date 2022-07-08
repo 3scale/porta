@@ -120,7 +120,7 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
         member.member_permission_service_ids = [accessible_service.id]
         member.activate!
 
-        host! provider.internal_admin_domain
+        host! provider.external_admin_domain
       end
 
       attr_reader :provider, :accessible_service, :forbidden_service, :accessible_api_docs_service, :forbidden_api_docs_service, :member, :access_token

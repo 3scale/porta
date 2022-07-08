@@ -35,7 +35,7 @@ Given /^the master account admin has username "([^\"]*)" and password "([^\"]*)"
 end
 
 When /^I am logged in as master admin on master domain$/ do
-  step %(the current domain is #{Account.master.internal_domain})
+  step %(the current domain is #{Account.master.external_domain})
   step %(I log in as provider "#{Account.master.admins.first.username}")
 end
 

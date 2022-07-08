@@ -63,7 +63,7 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @provider.settings.allow_finance!
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[finance]).value
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     %w[2017-07 2018-08].each { |month| FactoryBot.create(:invoice_counter, provider_account: @provider, invoice_prefix: month) }
   end

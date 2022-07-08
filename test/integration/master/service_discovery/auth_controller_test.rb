@@ -13,7 +13,7 @@ class Master::ServiceDiscovery::AuthControllerTest < ActionDispatch::Integration
   attr_reader :provider
 
   test 'master callback redirects to provider callback' do
-    provider_self_domain = provider.internal_admin_domain
+    provider_self_domain = provider.external_admin_domain
     params = { code: '123', referrer: '/apiconfig/services/new', state: '' }
     get auth_service_discovery_callback_path(self_domain: provider_self_domain, **params)
     assert_redirected_to url_for(host: provider_self_domain, controller: 'provider/admin/service_discovery/auth', action: :show, **params)

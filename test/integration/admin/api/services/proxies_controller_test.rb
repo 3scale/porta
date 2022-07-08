@@ -8,7 +8,7 @@ module Admin::Api::Services
       provider = FactoryBot.create(:provider_account)
       @service = provider.default_service
       @token = FactoryBot.create(:access_token, owner: provider.admin_user, scopes: 'account_management', permission: 'rw')
-      host! provider.internal_admin_domain
+      host! provider.external_admin_domain
     end
 
     attr_reader :service, :token

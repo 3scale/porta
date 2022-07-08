@@ -12,7 +12,7 @@ class Admin::Api::ServicePlansTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:account_plan, issuer: @provider)
     FactoryBot.create(:application_plan, issuer: @provider.default_service)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   # Access token

@@ -7,7 +7,7 @@ class Admin::Api::BackendApis::MappingRulesControllerTest < ActionDispatch::Inte
     @provider = FactoryBot.create(:simple_provider)
     @backend_api = FactoryBot.create(:backend_api, account: provider)
     @mapping_rule = FactoryBot.create(:proxy_rule, owner: backend_api, proxy: nil)
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
   end
 
   attr_reader :provider, :backend_api, :mapping_rule

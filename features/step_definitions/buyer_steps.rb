@@ -179,7 +179,7 @@ end
 
 
 Given('the provider has a buyer') do
-  step %'the current domain is #{@provider.internal_domain}'
+  step %'the current domain is #{@provider.external_domain}'
 
   visit signup_path
 
@@ -199,7 +199,7 @@ Given('the provider has a buyer') do
   page.should have_content('Thank you')
   page.should have_content('We have sent you an email to confirm your email address.')
 
-  email = open_email(user.email, with_subject: "#{@provider.internal_domain} API account confirmation")
+  email = open_email(user.email, with_subject: "#{@provider.external_domain} API account confirmation")
   click_first_link_in_email(email)
 
   within login_form do
@@ -261,7 +261,7 @@ end
 
 When(/^the buyer logs in to the provider$/) do
   steps %(
-    When the current domain is #{@provider.internal_domain}
+    When the current domain is #{@provider.external_domain}
     And I go to the login page
     And I fill in "Username" with "#{@buyer.admins.first.username}"
     And I fill in "Password" with "supersecret"

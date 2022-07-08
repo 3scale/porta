@@ -32,8 +32,6 @@ class Account::BuyerTest < ActiveSupport::TestCase
     buyer = FactoryBot.build(:simple_buyer)
     assert_nil buyer.internal_domain
     assert_nil buyer.internal_domain
-    assert_raises(Account::ProviderMethods::ProviderOnlyMethodCalledError) { buyer.internal_admin_domain }
-    assert_raises(Account::ProviderMethods::ProviderOnlyMethodCalledError) { buyer.internal_admin_domain }
   end
 
   test "factory simple account should include 'simple' in domain" do

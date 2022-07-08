@@ -7,7 +7,7 @@ class Admin::Api::SsoTokensControllerTest < ActionDispatch::IntegrationTest
     @admin.activate!
     @access_token = FactoryBot.create(:access_token, owner: @admin, scopes: 'account_management', permission: 'rw').value
 
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
   end
 
   test 'post create without sso_token params' do

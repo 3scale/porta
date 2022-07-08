@@ -92,8 +92,6 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal 'provider-name',                                        account.subdomain
     assert_equal 'provider-name-admin',                                  account.self_subdomain
     assert_equal "provider-name.#{ThreeScale.config.superdomain}",       account.internal_domain
-    assert_equal "provider-name.#{ThreeScale.config.superdomain}",       account.internal_domain
-    assert_equal "provider-name-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
     assert_equal "provider-name-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
@@ -108,8 +106,6 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal 'provider',                                        account.subdomain
     assert_equal 'provider-admin',                                  account.self_subdomain
     assert_equal "provider.#{ThreeScale.config.superdomain}",       account.internal_domain
-    assert_equal "provider.#{ThreeScale.config.superdomain}",       account.internal_domain
-    assert_equal "provider-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
     assert_equal "provider-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
@@ -122,8 +118,6 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal 'new-master-account',                                  account.subdomain
     assert_equal 'new-master-account',                                  account.self_subdomain
     assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_domain
-    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_domain
-    assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_admin_domain
     assert_equal "new-master-account.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 
@@ -137,8 +131,6 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal 'master',                                  account.subdomain
     assert_equal 'master',                                  account.self_subdomain
     assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_domain
-    assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_domain
-    assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_admin_domain
     assert_equal "master.#{ThreeScale.config.superdomain}", account.internal_admin_domain
   end
 

@@ -356,7 +356,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
   class NotLoggedInTest < ActionDispatch::IntegrationTest
     test "anonymous users can't manage buyer accounts" do
       provider = FactoryBot.create(:provider_account)
-      host! provider.internal_admin_domain
+      host! provider.external_admin_domain
 
       get admin_buyers_accounts_path
       assert_redirected_to provider_login_path

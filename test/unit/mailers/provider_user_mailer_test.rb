@@ -25,7 +25,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{Dear #{user_decorator.informal_name}}, email_body
         assert_match %r{Thank you for signing up to Red Hat 3scale}, email_body
-        assert_match %r{#{account.internal_admin_domain}/p/activate/[a-z0-9]+}, email_body
+        assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
       end
 
@@ -40,12 +40,12 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{#{user_decorator.informal_name}}, email_body
         assert_match %r{A couple of days ago you signed up for Red Hat 3scale to manage your API}, email_body
-        assert_match %r{#{account.internal_admin_domain}/p/activate/[a-z0-9]+}, email_body
+        assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
       end
 
       test 'lost_domain' do
-        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.internal_domain]).deliver_now
+        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.external_domain]).deliver_now
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -55,7 +55,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal '{"category": "Domain Recovery"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
         assert_match %r{Dear User}, email_body
-        assert_match %r{https://#{account.internal_domain}/p/login}, email_body
+        assert_match %r{https://#{account.external_domain}/p/login}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
       end
 
@@ -70,7 +70,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{Dear #{user_decorator.display_name}}, email_body
         assert_match %r{You can reset your password by visiting the following link}, email_body
-        assert_match %r{#{account.internal_admin_domain}/p/password}, email_body
+        assert_match %r{#{account.external_admin_domain}/p/password}, email_body
         assert_match %r{The Red Hat 3scale Team}, email_body
       end
     end
@@ -92,7 +92,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{Dear #{user_decorator.informal_name}}, email_body
         assert_match %r{Thank you for signing up to #{master_account.org_name}}, email_body
-        assert_match %r{#{account.internal_admin_domain}/p/activate/[a-z0-9]+}, email_body
+        assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
@@ -108,13 +108,13 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{#{user_decorator.informal_name}}, email_body
         assert_match %r{A couple of days ago you signed up for #{master_account.org_name} to manage your API}, email_body
-        assert_match %r{#{account.internal_admin_domain}/p/activate/[a-z0-9]+}, email_body
+        assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
 
       test 'lost_domain' do
-        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.internal_domain]).deliver_now
+        ProviderUserMailer.lost_domain('the.one.who.forgets@example.com', [account.external_domain]).deliver_now
         email = ActionMailer::Base.deliveries.last
         email_body = email.body.to_s
 
@@ -124,7 +124,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
         assert_equal '{"category": "Domain Recovery"}', email.header_fields.find{ |header| header.name.eql? 'X-SMTPAPI' }.value
 
         assert_match %r{Dear User}, email_body
-        assert_match %r{https://#{account.internal_domain}/p/login}, email_body
+        assert_match %r{https://#{account.external_domain}/p/login}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
@@ -140,7 +140,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
         assert_match %r{Dear #{user_decorator.display_name}}, email_body
         assert_match %r{You can reset your password by visiting the following link}, email_body
-        assert_match %r{#{account.internal_admin_domain}/p/password}, email_body
+        assert_match %r{#{account.external_admin_domain}/p/password}, email_body
         assert_match %r{The #{master_account.org_name} Team}, email_body
         refute_match %r{/3scale|redhat/i}, email_body
       end
@@ -150,7 +150,7 @@ class ProviderUserMailerTest < ActionMailer::TestCase
           user.stubs lost_password_token: 'abc123'
           ProviderUserMailer.lost_password(user).deliver_now
           email = ActionMailer::Base.deliveries.last
-          assert_match "https://#{account.internal_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
+          assert_match "https://#{account.external_admin_domain}/p/password?password_reset_token=abc123", email.body.to_s
         end
       end
     end
@@ -180,13 +180,13 @@ class ProviderUserMailerTest < ActionMailer::TestCase
 
     test 'master user activation on saas' do
       ProviderUserMailer.activation(user).deliver_now
-      assert_match %r{#{account.internal_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
+      assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
     end
 
     test 'master user activation on-prem' do
       ThreeScale.config.stubs(onpremises: true)
       ProviderUserMailer.activation(user).deliver_now
-      assert_match %r{#{account.internal_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
+      assert_match %r{#{account.external_admin_domain}/p/activate/[a-z0-9]+}, ActionMailer::Base.deliveries.last.body.to_s
     end
 
     private

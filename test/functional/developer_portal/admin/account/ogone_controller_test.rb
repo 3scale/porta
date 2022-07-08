@@ -8,7 +8,7 @@ class DeveloperPortal::Admin::Account::OgoneControllerTest < DeveloperPortal::De
     ogone = mock
     ogone.expects(:url)
     ogone.expects(:fields).returns({})
-    ogone.expects(:fill_fields).with "http://#{@provider.internal_domain}/admin/account/ogone/hosted_success"
+    ogone.expects(:fill_fields).with "http://#{@provider.external_domain}/admin/account/ogone/hosted_success"
 
     PaymentGateways::OgoneCrypt.expects(:new).returns(ogone)
     get :show

@@ -3,7 +3,7 @@ require 'test_helper'
 class Partners::UsersControllerTest < ActionController::TestCase
 
   def setup
-    @request.host = master_account.internal_domain
+    host! master_account.external_domain
     @partner = FactoryBot.create(:partner)
     @account = FactoryBot.create(:simple_provider, partner: @partner)
   end

@@ -26,7 +26,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
   end
 
   test 'login is required' do
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
     get :index
     assert_redirected_to '/login'
   end
@@ -36,7 +36,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
     buyer = FactoryBot.create(:buyer_account, :provider_account => @provider)
     buyer.buy! plan
 
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
     login_as(buyer.admins.first)
     get :index
 
@@ -51,7 +51,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
     plan2 = FactoryBot.create(:account_plan, :issuer => @provider)
     plan2.publish!
 
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
     login_as(buyer.admins.first)
     get :index
 
@@ -62,7 +62,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
     Account.expects(:first_by_provider_key!).with('fake')
       .raises(Backend::ProviderKeyInvalid)
 
-    @request.host = @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     post :change, params: { format: 'xml', id: '42',
          provider_key: 'fake', username: 'bob' }
 
@@ -79,7 +79,7 @@ class DeveloperPortal::Admin::Account::AccountPlansControllerTest < DeveloperPor
     @provider.buyer_users.expects(:find_by)
       .with(username: 'fake').returns(nil).at_least_once
 
-    @request.host = @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     post :change, params: { format: 'xml', id: '42',
          provider_key: @provider.api_key,
          username: 'fake' }

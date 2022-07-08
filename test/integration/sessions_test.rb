@@ -16,7 +16,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     Authentication::Strategy::ProviderOauth2.any_instance.expects(:authenticate).returns(provider_user)
 
     open_session do |session|
-      session.host! @provider.internal_admin_domain
+      session.host! @provider.external_admin_domain
       session.get provider_sso_path
 
       session.assert_response :redirect
@@ -25,7 +25,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'sso end-to-end integration' do
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     post admin_api_sso_tokens_path, params: {
       format: :xml,
@@ -53,7 +53,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
 
     user = FactoryBot.create(:user, account: @buyer, username: 'someuser')
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     post admin_api_sso_tokens_path, params: {
       format: :xml,
@@ -78,7 +78,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'sso end-to-end with username and without expires_in' do
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     post admin_api_sso_tokens_path, params: {
       format: :xml,
@@ -158,7 +158,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     get developer_portal.login_path(return_to: 'http://example.com/some-page')
     post developer_portal.session_path(username: 'xi@example.net', password: 'password')
 
-    assert_redirected_to "http://#{@provider.internal_domain}/some-page"
+    assert_redirected_to "http://#{@provider.external_domain}/some-page"
     assert_equal user, User.current
   end
 
@@ -167,7 +167,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     provider_user.activate!
 
     open_session do |session|
-      session.host! @provider.internal_admin_domain
+      session.host! @provider.external_admin_domain
       session.post provider_sessions_path(username: 'provider', password: 'provider')
 
       session.assert_response :redirect
@@ -200,7 +200,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
         .in_sequence(analytics)
         .with { |params| params[:user_id] == provider_user.id }
 
-      session.host! @provider.internal_admin_domain
+      session.host! @provider.external_admin_domain
       session.post provider_sessions_path(username: 'provider', password: 'provider')
 
       session.assert_response :redirect
@@ -212,7 +212,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
         .in_sequence(analytics)
         .with { |params| params[:user_id] == other_provider_user.id }
 
-      session.host! @provider.internal_admin_domain
+      session.host! @provider.external_admin_domain
       session.post provider_sessions_path(username: 'other_provider', password: 'provider')
 
       session.assert_response :redirect
@@ -220,7 +220,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'logout if authentication token is invalid' do
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     user = @provider.admins.first
 
     provider_login_with user.username, 'supersecret'
@@ -243,7 +243,7 @@ class SessionsTest < ActionDispatch::IntegrationTest
     user = @provider.admins.first
     user.user_sessions.create
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     provider_login_with user.username, 'supersecret'
     assert_equal 2, user.user_sessions.count
     put provider_admin_user_personal_details_path, params: { user: {

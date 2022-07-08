@@ -7,7 +7,7 @@ class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'create' do

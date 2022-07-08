@@ -11,7 +11,7 @@ module Finance::Api
       @provider.save!
       @key = @provider.api_key
 
-      host! @provider.internal_admin_domain
+      host! @provider.external_admin_domain
       @context = ''
     end
 

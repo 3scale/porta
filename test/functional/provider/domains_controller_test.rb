@@ -10,7 +10,7 @@ class Provider::DomainsControllerTest < ActionController::TestCase
   end
 
   test 'email list of domains' do
-    @request.host = Account.master.internal_domain
+    host! Account.master.external_domain
 
     assert_change :of => -> { ActionMailer::Base.deliveries.count } do
       post :recover, params: { email: @provider1.emails.first }

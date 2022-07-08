@@ -5,7 +5,7 @@ class Sites::EmailsControllerTest < ActionController::TestCase
   def setup
     @provider  = FactoryBot.create(:provider_account)
     @service = @provider.default_service
-    request.host = @provider.internal_admin_domain
+    request.host = @provider.external_admin_domain
     login_as(@provider.admins.first)
   end
 

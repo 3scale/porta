@@ -12,7 +12,7 @@ class Admin::Api::BuyerAccountPlansTest < ActionDispatch::IntegrationTest
 
     @not_plan = FactoryBot.create(:application_plan, issuer: @provider.default_service)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'account plans listing' do

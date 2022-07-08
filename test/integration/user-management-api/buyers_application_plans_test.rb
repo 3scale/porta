@@ -22,7 +22,7 @@ class Admin::Api::BuyersApplicationPlansTest < ActionDispatch::IntegrationTest
     @service.save!
 
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'index (access_token)' do

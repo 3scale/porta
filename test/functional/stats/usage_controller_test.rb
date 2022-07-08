@@ -5,7 +5,7 @@ class Stats::UsageControllerTest < ActionController::TestCase
   def setup
     @provider = FactoryBot.create :provider_account
     @service = @provider.default_service
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
   end
 
   test 'index requires login' do

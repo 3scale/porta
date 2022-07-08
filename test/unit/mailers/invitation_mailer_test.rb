@@ -19,7 +19,7 @@ class InvitationMailerTest < ActionMailer::TestCase
   test 'body contains signup link to admin domain of the inviting provider' do
     account = @invitation.account
 
-    assert_match("https://#{account.internal_admin_domain}/signup/#{@invitation.token}", @email.body.to_s)
+    assert_match("https://#{account.external_admin_domain}/signup/#{@invitation.token}", @email.body.to_s)
     assert_match(@invitation.account.org_name, @email.body.to_s)
   end
 
@@ -28,7 +28,7 @@ class InvitationMailerTest < ActionMailer::TestCase
     buyer_invitation = FactoryBot.create(:invitation, account: buyer)
     buyer_email = InvitationMailer.invitation(buyer_invitation)
 
-    assert_match("https://#{buyer.provider_account.internal_domain}/signup/#{buyer_invitation.token}", buyer_email.body.to_s)
+    assert_match("https://#{buyer.provider_account.external_domain}/signup/#{buyer_invitation.token}", buyer_email.body.to_s)
   end
 
   # TODO: is sent from ...

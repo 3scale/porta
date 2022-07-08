@@ -11,7 +11,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:application_plan, issuer: service)
     FactoryBot.create(:service_plan, issuer: service)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   class AccessTokenTest < Admin::Api::AccountPlansTest
@@ -72,7 +72,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     end
 
     pending_test 'apis can be behind the site_access code' do
-      host! @provider.internal_admin_domain
+      host! @provider.external_admin_domain
       Account.master.update_attribute :site_access_code, "123456"
 
       get admin_api_account_plans_path(format: :xml), params: params

@@ -7,7 +7,7 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
   def setup
     @provider = FactoryBot.create(:provider_account)
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     @user  = FactoryBot.create(:member, account: @provider, admin_sections: %w[partners finance])
     @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
@@ -32,7 +32,7 @@ class ApiAuthentication::ByAccessTokenIntegrationTest < ActionDispatch::Integrat
     get admin_api_accounts_path(format: :xml), params: { access_token: @token.value }
     assert_response :forbidden
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     # invalid token
     get admin_api_accounts_path(format: :xml), params: { access_token: 'alaska' }
     assert_response :forbidden

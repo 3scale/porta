@@ -7,7 +7,7 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'yo-provider.example.com')
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'get to show' do
@@ -17,14 +17,8 @@ class Admin::Api::ProvidersTest < ActionDispatch::IntegrationTest
 
     account = JSON.parse(response.body)['account']
 
-    assert_equal @provider.internal_admin_domain, account['admin_domain']
-    # assert_equal @provider.internal_admin_domain, account['admin_domain']
-    assert_equal @provider.internal_domain, account['domain']
-    # assert_equal @provider.internal_domain, account['domain']
-  end
-
-  test 'external domain could be different' do
-    # TODO
+    assert_equal @provider.external_admin_domain, account['admin_domain']
+    assert_equal @provider.external_domain, account['domain']
   end
 
   test 'update support emails test' do

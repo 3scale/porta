@@ -35,7 +35,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
   end
 
   test '#authorize_url' do
-    domain = @authentication_provider.account.internal_domain
+    domain = @authentication_provider.account.external_domain
 
     authorize_url = @drop.authorize_url
 
@@ -55,7 +55,7 @@ class Liquid::Drops::AuthenticationProviderDropTest < ActiveSupport::TestCase
   end
 
   test '#callback_url' do
-    domain = @authentication_provider.account.internal_domain
+    domain = @authentication_provider.account.external_domain
 
     callback_url = @drop.callback_url
     assert_equal "https://#{domain}/auth/#{@authentication_provider.system_name}/callback", callback_url

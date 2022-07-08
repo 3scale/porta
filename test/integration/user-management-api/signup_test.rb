@@ -25,7 +25,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     @service_plan2 = FactoryBot.create(:service_plan, issuer: @provider.default_service)
     @service_plan2.publish!
 
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     stub_backend_get_keys
   end

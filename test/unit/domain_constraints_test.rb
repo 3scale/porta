@@ -14,7 +14,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     attr_reader :domain, :request
 
     test 'master domain is not a buyer domain' do
-      request.stubs(:host).returns(master_account.internal_domain)
+      request.stubs(:host).returns(master_account.external_domain)
       refute BuyerDomainConstraint.matches?(request)
     end
 
@@ -83,7 +83,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     test 'master domain' do
       master = master_account
       request = ActionDispatch::TestRequest.create
-      request.host = master.internal_domain
+      request.host = master.external_domain
 
       refute ProviderDomainConstraint.matches?(request)
     end
@@ -93,7 +93,7 @@ class DomainConstraintsTest < ActiveSupport::TestCase
     test 'master domain' do
       master = master_account
       request = ActionDispatch::TestRequest.create
-      request.host = master.internal_domain
+      request.host = master.external_domain
       assert MasterDomainConstraint.matches?(request)
     end
 
@@ -103,11 +103,11 @@ class DomainConstraintsTest < ActiveSupport::TestCase
 
       master = master_account
       request = ActionDispatch::TestRequest.create
-      request.host = master.internal_domain
+      request.host = master.external_domain
 
       assert MasterDomainConstraint.matches?(request)
 
-      request.stubs(:host).returns('different' + master.internal_domain)
+      request.stubs(:host).returns('different' + master.external_domain)
       assert MasterDomainConstraint.matches?(request)
     end
   end

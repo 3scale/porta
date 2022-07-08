@@ -6,7 +6,7 @@ class SignupExpressTest < ActionDispatch::IntegrationTest
   def setup
     @account_plan = FactoryBot.create(:account_plan, approval_required: true)
     @provider = @account_plan.provider
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'signup express with org name' do

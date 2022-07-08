@@ -67,7 +67,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     user = provider.admins.first
     token = FactoryBot.create(:access_token, owner: user, scopes: 'account_management', permission: 'rw').value
 
-    host! provider.internal_admin_domain
+    host! provider.external_admin_domain
 
     with_forgery_protection do
       post admin_api_signup_path(format: :json), params: {

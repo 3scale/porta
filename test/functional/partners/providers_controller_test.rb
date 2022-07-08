@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Partners::ProvidersControllerTest < ActionController::TestCase
   def setup
-    @request.host = master_account.internal_domain
+    host! master_account.external_domain
     @partner = FactoryBot.create(:partner, system_name: 'someone')
   end
 
@@ -23,7 +23,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'routes' do
-    assert_routing({ method: 'post', path: "http://#{master_account.internal_domain}/partners/providers" }, { action: 'create', format: 'json', controller: 'partners/providers' })
+    assert_routing({ method: 'post', path: "http://#{master_account.external_domain}/partners/providers" }, { action: 'create', format: 'json', controller: 'partners/providers' })
   end
 
   test 'required api_key' do

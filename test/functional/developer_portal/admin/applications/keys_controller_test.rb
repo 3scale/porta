@@ -16,7 +16,7 @@ class DeveloperPortal::Admin::Applications::KeysControllerTest < DeveloperPortal
     @application = @buyer.bought_cinstances.first
     @service = @provider.default_service
 
-    @request.host = @provider.internal_domain
+    host! @provider.external_domain
     login_as(@buyer.admins.first)
   end
 

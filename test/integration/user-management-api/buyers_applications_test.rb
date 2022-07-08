@@ -7,7 +7,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
 
     @service = @provider.default_service
 
@@ -171,7 +171,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'find return 404 on non found app' do
-    host! @provider.internal_admin_domain
+    host! @provider.external_admin_domain
     get find_admin_api_account_applications_path(@buyer.id, format: :xml), params: { user_key: "SHAWARMA", provider_key: @provider.api_key }
     assert_xml_404
   end
