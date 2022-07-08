@@ -4,7 +4,6 @@ require 'rails_helper'
 
 resource 'Signup::ResultWithAccessToken' do
   let(:resource) do
-    binding.pry
     account = FactoryBot.build(:provider_account)
     user = FactoryBot.build(:user, account: account)
     result = ::Signup::ResultWithAccessToken.new(user: user, account: account)
@@ -18,7 +17,6 @@ resource 'Signup::ResultWithAccessToken' do
     let(:root) { 'signup' }
 
     it do
-      binding.pry
       subject.fetch('account').should have_properties(expected_account_properties).from(resource.account)
       subject.fetch('access_token').should have_properties(expected_access_token_properties).from(resource.access_token)
     end

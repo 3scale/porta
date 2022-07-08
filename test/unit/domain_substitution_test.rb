@@ -65,11 +65,6 @@ class DomainSubstitutionTest < ActiveSupport::TestCase
       @account.external_domain
     end
 
-    def test_external_self_domain
-      Substitutor.expects(:to_external).with(@account['self_domain'])
-      @account.internal_admin_domain
-    end
-
     def test_external_admin_domain
       Substitutor.expects(:to_external).with(@account['self_domain'])
       @account.external_admin_domain
