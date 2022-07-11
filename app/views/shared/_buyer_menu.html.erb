@@ -1,4 +1,4 @@
-<% unless site_account.external_domain == request.host %>
+<% unless request.host == site_account.external_admin_domain%>
   <%= main_menu_item(:root, 'Home', root_path) %>
 <% end %>
 

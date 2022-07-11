@@ -35,7 +35,7 @@ module MasterDomainConstraint
 
     master = Account.master
     host = request.internal_host
-    master.external_admin_domain == host or master.external_domain == host
+    master.match_internal_admin_domain?(host) or master.match_internal_domain?(host)
   end
 end
 

@@ -52,7 +52,7 @@ module SiteAccountSupport
   end
 
   def admin_domain?
-    current_account.external_admin_domain == internal_host
+    current_account.match_internal_admin_domain?(internal_host)
   end
 
   class Request
