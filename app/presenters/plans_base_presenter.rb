@@ -13,23 +13,15 @@ class PlansBasePresenter
 
   attr_reader :service, :collection, :pagination_params, :search, :sorting_params
 
-  def plans
-    @plans ||= collection.not_custom
-                         .reorder('name ASC')
-  end
-
-  def table_plans
-    @table_plans ||= plans.scope_search(search)
-                          .reorder(sorting_params)
-  end
-
   def paginated_table_plans
-    @paginated_table_plans ||= table_plans.paginate(pagination_params)
+    @paginated_table_plans ||= plans.scope_search(search)
+                                    .reorder(sorting_params)
+                                    .paginate(pagination_params)
   end
 
   def default_plan_select_data
     {
-      'plans': plans.to_json(root: false, only: %i[id name]),
+      'plans': plans.reorder(name: :asc).to_json(root: false, only: %i[id name]),
       'current-plan': current_plan,
       'path': masterize_path
     }
@@ -45,6 +37,10 @@ class PlansBasePresenter
   end
 
   private
+
+  def plans
+    @plans ||= collection.not_custom
+  end
 
   def current_plan
     raise NoMethodError, "#{__method__} not implemented in #{self.class}"
