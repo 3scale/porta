@@ -327,10 +327,10 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       get admin_service_application_plans_path(service)
       assert_response :success
 
-      # This is testing presenter logic, not integration. Test body response. Use Nokogiri::HTML::Document.parse(response.body)
-      plans = assigns(:presenter).plans
-      assert_same_elements service.application_plans, plans
-      assert_not_includes plans, forbidden_plan
+      page = Nokogiri::HTML::Document.parse(response.body)
+      data_plans_ids = JSON.parse(page.css('#default_plan').first.attributes["data-plans"].value).map{|p| p["id"]}
+      assert_same_elements service.application_plans.pluck(:id), data_plans_ids
+      assert_not_includes data_plans_ids, forbidden_plan.id
 
       get new_admin_service_application_plan_path(service)
       assert_response :success
