@@ -3,13 +3,13 @@
 require 'test_helper'
 
 class PlanPresentersTest < ActiveSupport::TestCase
-  attr_reader :service, :plans, :provider
+  attr_reader :service, :plans
 
   test '#paginated_table_plans can be ordered' do
-    assert_equal plans.reorder(name: :desc), presenter({sort: 'name', direction: 'desc'}).paginated_table_plans
+    assert_equal plans.reorder(name: :desc), presenter({ sort: 'name', direction: 'desc' }).paginated_table_plans
   end
 
-  test '#paginated_table_plans can have pagination' do 
+  test '#paginated_table_plans can have pagination' do
     assert_equal plans[2, 2], presenter({ page: 2, per_page: 2 }).paginated_table_plans
   end
 
@@ -25,22 +25,22 @@ class PlanPresentersTest < ActiveSupport::TestCase
     def setup
       @service = FactoryBot.create(:service)
       FactoryBot.create_list(:application_plan, 5, issuer: service)
-      
+
       @plans = @service.application_plans
                        .order(name: :asc)
     end
-    
-    test '#paginated_table_plans can search' do 
+
+    test '#paginated_table_plans can search' do
       FactoryBot.create(:application_plan, issuer: service, name: 'Basic')
-      
-      result = plans.where({name: 'Basic'})
-      empty_result = plans.where({name: 'Foo'})
+
+      result = plans.where({ name: 'Basic' })
+      empty_result = plans.where({ name: 'Foo' })
 
       ApplicationPlan.expects(:scope_search).returns(result).once
-      assert_equal result, presenter({ search: 'Basic'}).paginated_table_plans
+      assert_equal result, presenter({ search: 'Basic' }).paginated_table_plans
 
       ApplicationPlan.expects(:scope_search).returns(empty_result).once
-      assert_equal empty_result, presenter({ search: 'Foo'}).paginated_table_plans
+      assert_equal empty_result, presenter({ search: 'Foo' }).paginated_table_plans
     end
 
     def presenter(params = {})
@@ -53,23 +53,22 @@ class PlanPresentersTest < ActiveSupport::TestCase
       provider = FactoryBot.create(:simple_provider)
       @service = FactoryBot.create(:service, account: provider)
       FactoryBot.create_list(:service_plan, 5, service: service)
-      
-      
+
       @plans = provider.service_plans
                        .reorder(name: :asc)
     end
-    
-    test '#paginated_table_plans can search' do 
+
+    test '#paginated_table_plans can search' do
       FactoryBot.create(:service_plan, issuer: service, name: 'Basic')
-            
-      result = plans.where({name: 'Basic'})
-      empty_result = plans.where({name: 'Foo'})
-      
+
+      result = plans.where({ name: 'Basic' })
+      empty_result = plans.where({ name: 'Foo' })
+
       ServicePlan.expects(:scope_search).returns(result).once
-      assert_equal result, presenter({ search: 'Basic'}).paginated_table_plans
-      
+      assert_equal result, presenter({ search: 'Basic' }).paginated_table_plans
+
       ServicePlan.expects(:scope_search).returns(empty_result).once
-      assert_equal empty_result, presenter({ search: 'Foo'}).paginated_table_plans
+      assert_equal empty_result, presenter({ search: 'Foo' }).paginated_table_plans
     end
 
     def presenter(params = {})
@@ -78,25 +77,27 @@ class PlanPresentersTest < ActiveSupport::TestCase
   end
 
   class Buyers::AccountPlansPresenterTest < PlanPresentersTest
+    attr_reader :provider
+
     def setup
       @provider = FactoryBot.create(:simple_provider)
       FactoryBot.create_list(:account_plan, 5, provider: provider)
-      
+
       @plans = provider.account_plans
                         .order(name: :asc)
     end
-    
-    test '#paginated_table_plans can search' do 
+
+    test '#paginated_table_plans can search' do
       FactoryBot.create(:account_plan, provider: provider, name: 'Basic')
-      
-      result = plans.where({name: 'Basic'})
-      empty_result = plans.where({name: 'Foo'})
+
+      result = plans.where({name: 'Basic' })
+      empty_result = plans.where({name: 'Foo' })
 
       AccountPlan.expects(:scope_search).returns(result).once
-      assert_equal result, presenter({ search: 'Basic'}).paginated_table_plans
+      assert_equal result, presenter({ search: 'Basic' }).paginated_table_plans
 
       AccountPlan.expects(:scope_search).returns(empty_result).once
-      assert_equal empty_result, presenter({ search: 'Foo'}).paginated_table_plans
+      assert_equal empty_result, presenter({ search: 'Foo' }).paginated_table_plans
     end
 
     def presenter(params = {})
