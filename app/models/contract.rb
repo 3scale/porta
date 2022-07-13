@@ -115,7 +115,7 @@ class Contract < ApplicationRecord
   delegate :paid?, :to => :plan
 
   def messenger
-    (self.class.name.to_s << "Messenger").constantize
+    "#{self.class.name.to_s}Messenger".constantize
   end
 
   # TODO: rename service_id field to issuer_id on plan
