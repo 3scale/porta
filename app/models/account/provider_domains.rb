@@ -165,7 +165,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def subdomain_from(domain)
-    read_attribute(:domain).to_s[/\A(.+)\.#{Regexp.quote(superdomain)}\z/, 1]
+    domain.to_s[/\A(.+)\.#{Regexp.quote(superdomain)}\z/, 1]
   end
 
   def subdomain_unique?(subdomain:)
