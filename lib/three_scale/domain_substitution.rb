@@ -102,14 +102,14 @@ module ThreeScale::DomainSubstitution
     # or some internal checks (See lib/routing_constraints.rb)
     # @return [String] the domain of the Account
     def internal_domain
-      domain
+      ThreeScale::Deprecation.silence { domain }
     end
 
-    # This is an alias to _#admin_domain_ as _#admin_domain_ will be private.
+    # This is an alias to _#admin_domain_ as it is private.
     # Use this method when checking against the database
     # @return [String] the admin domain of the Account
     def internal_admin_domain
-      admin_domain
+      ThreeScale::Deprecation.silence { admin_domain }
     end
 
     # Use this method if you want to expose the domain to the view.
@@ -118,7 +118,9 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_domain)
     #   # => "https://provider.proxied-domain.com"
     def external_domain
-      ThreeScale::DomainSubstitution::Substitutor.to_external(domain)
+      ThreeScale::Deprecation.silence do
+        ThreeScale::DomainSubstitution::Substitutor.to_external(domain)
+      end
     end
 
     # Use this method if you want to expose the domain to the view.
@@ -127,7 +129,9 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_admin_domain)
     #   # => "https://provider-admin.proxied-domain.com"
     def external_admin_domain
-      ThreeScale::DomainSubstitution::Substitutor.to_external(admin_domain)
+      ThreeScale::Deprecation.silence do
+        ThreeScale::DomainSubstitution::Substitutor.to_external(admin_domain)
+      end
     end
 
     # Matches if the database value of _self_domain_ matches the host.
@@ -146,8 +150,16 @@ module ThreeScale::DomainSubstitution
       internal_domain == host
     end
 
+    def domain
+      self[:domain]
+    end
+
+    def self_domain
+      self[:self_domain]
+    end
+
     deprecate domain: "use #internal_domain or #external_domain",
-      admin_domain: "use #internal_admin_domain or #external_admin_domain",
+      self_domain: "use #internal_admin_domain or #external_admin_domain",
       deprecator: ThreeScale::Deprecation::Deprecator.new
   end
 
