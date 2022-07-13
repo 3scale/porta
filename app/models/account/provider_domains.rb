@@ -100,7 +100,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def domains_present?
-    domain.present? && self_domain.present?
+    self[:domain].present? && self[:self_domain].present?
   end
 
   def subdomain=(name)
@@ -117,7 +117,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def subdomain
-    subdomain_from(domain)
+    subdomain_from(self[:domain])
   end
 
   def superdomain
@@ -145,7 +145,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def self_subdomain
-    subdomain_from(self_domain)
+    subdomain_from(self[:self_domain])
   end
 
   def self.unique?(attr:, val:, scope: all)
@@ -165,7 +165,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def subdomain_from(domain)
-    domain.to_s[/\A(.+)\.#{Regexp.quote(superdomain)}\z/, 1]
+    read_attribute(:domain).to_s[/\A(.+)\.#{Regexp.quote(superdomain)}\z/, 1]
   end
 
   def subdomain_unique?(subdomain:)
@@ -203,7 +203,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def domain_not_self_domain
-    if domain && self_domain && domain == self_domain
+    if read_attribute(:domain) && read_attribute(:self_domain) && (read_attribute(:domain) == read_attribute(:self_domain))
       if subdomain
         errors.add(:subdomain, :same)
         errors.add(:self_subdomain, :same)
