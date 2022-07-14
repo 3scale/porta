@@ -25,7 +25,7 @@ type Props = {
 
 const DefaultPlanSelectCard = ({ plans, initialDefaultPlan, path: url }: Props): React.Node => {
   // $FlowIgnore[incompatible-type] id should be a number but the controller has to recieve empty string
-  const NO_DEFAULT_PLAN: Plan = { id: '', name: '(No default plan)' }
+  const NO_DEFAULT_PLAN: Plan = { id: '', name: 'No plan selected' }
 
   const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
@@ -70,7 +70,7 @@ const DefaultPlanSelectCard = ({ plans, initialDefaultPlan, path: url }: Props):
         </Form>
         <HelperText>
           <HelperTextItem>
-            Default plan (if any) is selected automatically upon service subscription.
+            If an application plan is set as default, 3scale sets this plan upon service subscription.
           </HelperTextItem>
         </HelperText>
       </CardBody>
