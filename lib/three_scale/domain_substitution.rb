@@ -150,14 +150,6 @@ module ThreeScale::DomainSubstitution
       internal_domain == host
     end
 
-    def domain
-      self[:domain]
-    end
-
-    def self_domain
-      self[:self_domain]
-    end
-
     deprecate domain: "use #internal_domain or #external_domain",
       self_domain: "use #internal_admin_domain or #external_admin_domain",
       deprecator: ThreeScale::Deprecation::Deprecator.new
