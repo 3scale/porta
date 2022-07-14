@@ -47,7 +47,7 @@ class Stats::Api::ApplicationsController < Stats::Api::BaseController
 
   # TODO: render deprecated metric.service_id even when attribute is not set
   # We can consider whether we can change this API as it is not intended for
-  # public use, see 0886ce743ab57c
+  # public use, see 0886ce743ab57c (#2599)
   def metrics_with_methods
     {metrics: @metrics, methods: @methods}
   end

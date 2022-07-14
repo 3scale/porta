@@ -34,8 +34,8 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'index uniq of system_name in service scope' do
     service = FactoryBot.create(:service)
-    FactoryBot.create(:metric, :service => service, :system_name => 'frags')
-    metric_two = FactoryBot.create(:metric, :service => service)
+    FactoryBot.create(:metric, owner: service, system_name: 'frags')
+    metric_two = FactoryBot.create(:metric, owner: service)
     assert_raise ActiveRecord::RecordNotUnique do
       metric_two.update_column(:system_name, 'frags')
     end
@@ -45,7 +45,7 @@ class MetricTest < ActiveSupport::TestCase
     service = FactoryBot.create(:simple_service, :with_default_backend_api)
     owners = [service, service.backend_api]
     owners.each do |owner|
-      owner_attributes = { service: (owner.is_a?(Service) ? owner : nil), owner: owner }
+      owner_attributes = { owner: owner }
       metric_one = FactoryBot.create(:metric, **owner_attributes, system_name: 'frags')
       metric_two = FactoryBot.create(:metric, owner_attributes)
       refute metric_two.update_attributes(system_name: 'frags')
@@ -97,16 +97,31 @@ class MetricTest < ActiveSupport::TestCase
 
     backend_api = FactoryBot.create(:backend_api, name: 'API', system_name: 'api', account: service.provider)
     backend_metric = backend_api.metrics.build(system_name: "met2", friendly_name: "Met 2", unit: "met2")
-    ThreeScale::Deprecation.silence_warnings { assert_not backend_metric.service }
+    assert_not backend_metric.service
     assert_equal backend_api, backend_metric.owner
     assert_valid backend_metric
   end
 
   test 'fill same owner as the parent' do
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
+    owners = [service, service.backend_api]
+    owners.each do |owner|
+      hits = owner.metrics.hits
+      method = hits.children.create(system_name: 'meth1')
+      assert_equal owner, method.owner
+    end
+  end
+
+  test 'associate service_id with service owner' do
+    service = FactoryBot.create(:simple_service)
+    metric = service.metrics.create!(system_name: "met1", friendly_name: "Metric 1", unit: "beeps")
+    assert_equal metric.owner, metric.service
+  end
+
+  test 'do not associate service_id with backend api owner' do
     backend_api = FactoryBot.create(:backend_api)
-    hits = backend_api.metrics.hits
-    method = hits.children.create(system_name: 'meth1')
-    assert_equal backend_api, method.owner
+    metric = backend_api.metrics.create!(system_name: "met1", friendly_name: "Metric 1", unit: "beeps")
+    assert_nil metric.service
   end
 
   pending_test 'should destroy pricing_rules on :destroy'
@@ -185,7 +200,7 @@ class MetricTest < ActiveSupport::TestCase
 
   class MetricWithChildren < ActiveSupport::TestCase
     setup do
-      @metric = service = FactoryBot.create(:service).metrics.first
+      @metric = FactoryBot.create(:service).metrics.first
       @metric.children.create!(:friendly_name => 'Foos')
     end
 

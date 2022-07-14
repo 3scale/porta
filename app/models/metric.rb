@@ -8,7 +8,7 @@ class Metric < ApplicationRecord
   self.background_deletion = %i[pricing_rules usage_limits plan_metrics proxy_rules]
 
   before_destroy :avoid_destruction
-  before_validation :associate_to_service_of_parent, :fill_owner
+  before_validation :associate_to_service, :fill_owner
 
   # update Service's updated_at when Metric caches for nicer cache keys
   belongs_to :service, touch: true, inverse_of: false
@@ -247,9 +247,13 @@ class Metric < ApplicationRecord
   end
 
   # keep service_id attribute in sync with parent before we remove all its usages
-  def associate_to_service_of_parent
+  def associate_to_service
     ThreeScale::Deprecation.silence do
-      self.service = parent.service if parent
+      if parent
+        self.service = parent.service
+      elsif owner.is_a? Service
+        self.service = owner
+      end
     end
   end
 

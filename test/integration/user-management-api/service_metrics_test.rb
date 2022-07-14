@@ -134,7 +134,8 @@ class Admin::Api::MetricsTest < ActionDispatch::IntegrationTest
     setup do
       @metric_svc = FactoryBot.create(:metric, service: @service, owner: nil) # has service attribute set
       @metric_no_svc = FactoryBot.create(:metric, owner: @service) # does not have service attribute set
-      assert_not @metric_no_svc.service
+      @metric_no_svc.update_column(:service_id, nil)
+      assert_not @metric_no_svc.reload.service
     end
 
     test 'json representer does not rely on service_id model attribute' do
