@@ -64,9 +64,7 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider
 
     msg = Message.new
-    msg.sender_id =  buyer.id
-    msg.subject = ""
-    msg.body = "its body"
+    msg.sender_id = buyer.id
     assert !msg.valid?
   end
 
