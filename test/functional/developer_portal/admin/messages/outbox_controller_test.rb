@@ -55,7 +55,7 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
 
     msg = Message.new
     msg.sender_id = buyer.id
-    msg.subject = "it subject"
+    msg.subject = "I am subject"
     msg.body = ""
     assert !msg.valid?
   end
@@ -65,6 +65,8 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
 
     msg = Message.new
     msg.sender_id = buyer.id
+    msg.body = "I am body"
+    msg.subject = ""
     assert !msg.valid?
   end
 
