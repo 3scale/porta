@@ -30,7 +30,7 @@ end
 Then "they can add new application plans" do
   click_link 'Create application plan'
   fill_in('Name', with: 'Basic')
-  click_on('Create Application Plan', wait: 5)
+  click_on('Create application plan', wait: 5)
 
   assert_content /created application plan basic/i
   assert current_path, admin_service_application_plans_path(default_service)
@@ -269,7 +269,7 @@ When(/^the provider creates a plan$/) do
     fill_in 'Name', with: name
     fill_in 'System name', with: name
 
-    click_on 'Create Application Plan'
+    click_on 'Create application plan'
   end
 
   page.should have_content("Created Application plan #{name}")

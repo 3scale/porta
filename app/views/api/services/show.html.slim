@@ -59,7 +59,7 @@ section class="service-widget"
             '  Published
             => link_to 'Application Plans', admin_service_application_plans_path(service)
           = pf_action_link_to :new, new_admin_service_application_plan_path(service),
-            label: 'Create Application Plan', class: 'flex-item'
+            label: 'Create application plan', class: 'flex-item'
 
         ul.application-plans[data-hint="published"]
           = list_items_or_empty service.published_application_plans, 'There are no published application plans. Create one!' do |plan|
