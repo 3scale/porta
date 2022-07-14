@@ -30,6 +30,26 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     assert_equal "web", msg.origin
   end
 
+   test "will not create messages without subject and body" do
+    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+
+    msg = Message.new
+    msg.sender_id =  buyer.id
+    msg.subject = ""
+    msg.body =""
+    assert !msg.valid?
+  end
+
+  test "will create messages with subject and body" do
+    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+
+    msg = Message.new
+    msg.sender_id =  buyer.id
+    msg.subject = "I am subject"
+    msg.body ="I am body"
+    assert msg.valid?
+  end
+
   def test_index
     get :index
 

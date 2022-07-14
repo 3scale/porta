@@ -31,6 +31,8 @@ class Message < ApplicationRecord
   has_many   :recipients, -> { kind_first }, class_name: 'MessageRecipient', dependent: :destroy
 
   validates :sender_id, presence: true
+  validates :subject, presence: true
+  validates :body, presence: true
   validates :type, :origin, length: { maximum: 255 }
 
   after_save :update_recipients

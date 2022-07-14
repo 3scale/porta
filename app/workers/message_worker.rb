@@ -8,6 +8,8 @@ class MessageWorker
   def perform(recipients, attributes)
     message = Message.new(attributes)
     message.sender_id = attributes["sender_id"]
+    message.body = attributes["body"]
+    message.subject = attributes["subject"]
 
     # ATTENTION:
     #
