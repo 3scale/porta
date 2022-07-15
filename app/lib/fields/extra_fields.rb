@@ -21,6 +21,8 @@ module Fields::ExtraFields
   def read_attribute_for_validation(name)
     if fields_definitions_source_root && extra_field?(name)
       extra_fields.try!(:[], name.to_s)
+    elsif %i[domain self_domain].include?(name)
+      ThreeScale::Deprecation.silence { super }
     else
       super
     end
