@@ -24,7 +24,7 @@ it('should render', () => {
 
 it('should have a helper text', () => {
   const wrapper = mountWrapper()
-  const text = 'Default plan (if any) is selected automatically upon service subscription.'
+  const text = 'If an application plan is set as default, 3scale sets this plan upon service subscription.'
 
   const helperText = wrapper.find('.pf-c-helper-text')
 
@@ -34,7 +34,7 @@ it('should have a helper text', () => {
 it('should have a "no default plan" option', () => {
   const wrapper = mountWrapper()
 
-  selectOption(wrapper, '(No default plan)')
+  selectOption(wrapper, 'No plan selected')
 
   expect(wrapper.find('Select').first().prop('item').id).toEqual('')
 })
