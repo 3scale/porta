@@ -18,7 +18,7 @@ type Props = {
   onSelect: (Backend | null) => void
 }
 
-const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, error }: Props): React.Node => {
+const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, searchPlaceholder, error }: Props): React.Node => {
   const cells = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },
@@ -44,6 +44,7 @@ const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, error 
         title="Select a backend"
         placeholder="Select a backend"
         footerLabel="View all backends"
+        searchPlaceholder={searchPlaceholder}
         helperTextInvalid={error}
       />
       <Button

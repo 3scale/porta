@@ -63,6 +63,7 @@ const AddBackendForm = ({ backend: initialBackend, backends, url, backendsPath, 
             backends={updatedBackends}
             onSelect={setBackend}
             onCreateNewBackend={() => setIsModalOpen(true)}
+            searchPlaceholder="Find a backend"
             error={inlineErrors ? inlineErrors.backend_api_id && inlineErrors.backend_api_id[0] : undefined}
           />
 
