@@ -65,7 +65,7 @@ RSpec::Matchers.define :have_tags do |*properties|
   match do |xml|
     if @resource
       properties.flatten.all? do |property|
-        expected = @resource.send(property)
+        expected = @resource.public_send(property)
         expected = expected.try(:iso8601) || expected.to_s
         actual = xml.xpath(".//#{property}").first&.text
         expected == actual
