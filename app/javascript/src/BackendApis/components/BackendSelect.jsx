@@ -40,10 +40,10 @@ const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, error 
         cells={cells}
         // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
         onSelect={onSelect}
-        header="Most recently created Backends"
-        title="Select a Backend"
-        placeholder="Select a Backend"
-        footerLabel="View all Backends"
+        header="Recently created backends"
+        title="Select a backend"
+        placeholder="Select a backend"
+        footerLabel="View all backends"
         helperTextInvalid={error}
       />
       <Button
@@ -53,7 +53,7 @@ const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, error 
         data-testid="newBackendCreateBackend-buttonLink"
         className="pf-c-button__as-hint"
       >
-        Create new Backend
+        Create a backend
       </Button>
     </>
   )

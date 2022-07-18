@@ -79,7 +79,7 @@ const AddBackendForm = ({ backend: initialBackend, backends, url, backendsPath, 
               isDisabled={!isFormComplete || loading}
               data-testid="addBackend-buttonSubmit"
             >
-              Add to Product
+              Add to product
             </Button>
           </ActionGroup>
         </Form>

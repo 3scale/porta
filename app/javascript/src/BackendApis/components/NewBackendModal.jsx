@@ -50,7 +50,7 @@ const NewBackendModal = ({ backendsPath, isOpen = false, onClose, onCreateBacken
   const header = (
     <React.Fragment>
       <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']} className="with-spinner">
-        Create Backend
+        Create backend
       </Title>
       {isLoading && <Spinner size='md' className='pf-u-ml-md' />}
     </React.Fragment>
@@ -59,7 +59,7 @@ const NewBackendModal = ({ backendsPath, isOpen = false, onClose, onCreateBacken
   return (
     <Modal
       isSmall
-      title="Create Backend"
+      title="Create backend"
       header={header}
       isOpen={isOpen}
       onClose={onClose}
