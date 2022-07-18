@@ -19,10 +19,10 @@ When "an admin goes to the product's backend usages page" do
 end
 
 Then 'they can add the backend by filling up the form' do
-  click_on 'Add Backend'
+  click_on 'Add backend'
   pf4_select(@backend.name, from: 'Backend')
   fill_in('Path', with: '/api/v1')
-  click_on 'Add to Product'
+  click_on 'Add to product'
 end
 
 And 'the product will be using this backend' do
@@ -30,7 +30,7 @@ And 'the product will be using this backend' do
 end
 
 When 'they try to add the backend( again)' do
-  click_on 'Add Backend'
+  click_on 'Add backend'
 end
 
 Then "the backend won't be available" do
@@ -38,10 +38,10 @@ Then "the backend won't be available" do
 end
 
 Then "they can't add the backend with an invalid path" do
-  click_on 'Add Backend'
+  click_on 'Add backend'
   pf4_select(@backend.name, from: 'Backend')
   fill_in('Path', with: '???')
-  click_on 'Add to Product'
+  click_on 'Add to product'
 
   assert_content "Couldn't add Backend to Product"
   assert_not_includes @product.reload.backend_apis, @backend
