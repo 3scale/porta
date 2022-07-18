@@ -78,7 +78,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
     test 'GET index shows the create button for Saas' do
       # Saas is the default
       get admin_service_application_plans_path(service)
-      assert_xpath "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create Application plan'
+      assert_xpath "//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create application plan'
     end
 
     test 'index pagination does not count custom plans' do
@@ -195,7 +195,7 @@ class Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTest
       [true, false].each do |onpremises|
         ThreeScale.config.stubs(onpremises: onpremises)
         get admin_service_application_plans_path(service)
-        assert_xpath("//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create Application plan')
+        assert_xpath("//a[contains(@href, '#{new_admin_service_application_plan_path(service)}')]", 'Create application plan')
       end
     end
 

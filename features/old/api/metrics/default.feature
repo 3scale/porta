@@ -12,6 +12,6 @@ Feature: Default metrics
     And I go to the application plans admin page
       And I follow "Create new plan"
       And I fill in "Name" with "Amazing"
-      And I press "Create Application plan"
+      And I press "Create application plan"
     When I follow "Edit"
       Then I should see metric "Hits"
