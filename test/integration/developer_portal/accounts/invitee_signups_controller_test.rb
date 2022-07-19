@@ -7,7 +7,7 @@ class DeveloperPortal::Accounts::InviteeSignupsControllerTest < ActionDispatch::
 
   def setup
     @buyer = FactoryBot.create(:buyer_account)
-    host! buyer.provider_account.domain
+    host! buyer.provider_account.internal_domain
   end
 
   attr_reader :buyer

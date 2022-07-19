@@ -17,7 +17,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
 
     @buyer.buy! @application_plan
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   class AccessTokenTest < Admin::Api::AccountsTest
@@ -342,7 +342,7 @@ class Admin::Api::AccountsTest < ActionDispatch::IntegrationTest
     end
 
     test 'security wise: index is access denied in buyer side' do
-      host! @provider.domain
+      host! @provider.internal_domain
       get admin_api_accounts_path(format: :xml), params: params
 
       assert_response :forbidden

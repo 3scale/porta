@@ -12,7 +12,7 @@ class DeveloperPortal::LoginTest < ActionDispatch::IntegrationTest
     @auth = FactoryBot.create(:authentication_provider, account: @provider, kind: 'base')
 
     @user.activate!
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   def teardown

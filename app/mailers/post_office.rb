@@ -30,7 +30,7 @@ class PostOffice < ActionMailer::Base
       msg_url = if receiver.buyer?
         developer_portal.admin_messages_inbox_url(recipient, host: receiver.provider_account.external_domain)
                 else # provider or master
-        provider_admin_messages_inbox_url(recipient, host: receiver.external_self_domain)
+        provider_admin_messages_inbox_url(recipient, host: receiver.external_admin_domain)
                 end
 
       @sender = message.sender.org_name

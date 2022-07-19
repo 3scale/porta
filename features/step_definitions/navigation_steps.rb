@@ -76,7 +76,7 @@ end
 When /^I navigate to the default application of the provider$/ do
   provider = Account.providers.first!
   app = provider.bought_cinstances.first!
-  step "I navigate to the application \"#{app.name}\" of the provider \"#{provider.domain}\""
+  step "I navigate to the application \"#{app.name}\" of the provider \"#{provider.internal_domain}\""
 end
 
 When /^I navigate to the application "([^"]*)" of the provider "([^"]*)"$/ do |app, partner|

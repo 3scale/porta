@@ -9,7 +9,7 @@ class DeveloperPortal::Admin::Messages::OutboxControllerIntegrationTest < Action
 
     login_buyer @buyer
 
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   def test_index

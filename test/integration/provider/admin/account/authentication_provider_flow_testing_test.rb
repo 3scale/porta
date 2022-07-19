@@ -9,7 +9,7 @@ class Provider::Admin::Account::AuthenticationProviderFlowTestingTest < ActionDi
 
     login_provider @account
 
-    host! @account.admin_domain
+    host! @account.internal_admin_domain
   end
 
   def test_flow_testing

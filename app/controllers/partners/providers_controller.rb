@@ -22,7 +22,7 @@ class Partners::ProvidersController < Partners::BaseController
       tracking = ThreeScale::Analytics.user_tracking(@user)
       tracking.identify({})
       tracking.track('Signup', {})
-      render json: {id: @account.id, provider_key: @account.api_key, end_point: @account.self_domain, success: true}
+      render json: {id: @account.id, provider_key: @account.api_key, end_point: @account.external_admin_domain, success: true}
     else
       render json: {errors: {user: @user.errors, account: @account.errors}, success: false}, status: :unprocessable_entity
     end

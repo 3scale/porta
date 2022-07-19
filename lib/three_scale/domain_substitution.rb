@@ -102,33 +102,14 @@ module ThreeScale::DomainSubstitution
     # or some internal checks (See lib/routing_constraints.rb)
     # @return [String] the domain of the Account
     def internal_domain
-      self['domain']
+      ThreeScale::Deprecation.silence { domain }
     end
 
-    # This is an alias to _#admin_domain_ as _#admin_domain_ will be private.
+    # This is an alias to _#admin_domain_ as it is private.
     # Use this method when checking against the database
     # @return [String] the admin domain of the Account
     def internal_admin_domain
-      ThreeScale::Deprecation.silence do
-        admin_domain
-      end
-    end
-
-    # This is just an alias to _#self_domain_
-    # @deprecated Use {#internal_admin_domain}
-    # @return [String] the database _self_domain_ value
-    def internal_self_domain
-      self['self_domain']
-    end
-
-    # Use this method if you want to expose the self domain to the view
-    # @deprecated Use {#external_admin_domain}
-    # @return [String] the mapped external self domain to be used in views
-    # @example
-    #   root_url(host: account.external_self_domain)
-    #   # => "https://provider-admin.proxied-domain.com"
-    def external_self_domain
-      ThreeScale::DomainSubstitution::Substitutor.to_external(self['self_domain'])
+      ThreeScale::Deprecation.silence { admin_domain }
     end
 
     # Use this method if you want to expose the domain to the view.
@@ -137,7 +118,9 @@ module ThreeScale::DomainSubstitution
     #   root_url(host: account.external_domain)
     #   # => "https://provider.proxied-domain.com"
     def external_domain
-      ThreeScale::DomainSubstitution::Substitutor.to_external(self['domain'])
+      ThreeScale::Deprecation.silence do
+        ThreeScale::DomainSubstitution::Substitutor.to_external(domain)
+      end
     end
 
     # Use this method if you want to expose the domain to the view.
@@ -159,14 +142,6 @@ module ThreeScale::DomainSubstitution
       internal_admin_domain == host
     end
 
-    # @deprecated Use {#match_internal_admin_domain?}
-    # @param host [String] the host to compare
-    # @return [Boolean]
-    # @see #match_internal_admin_domain?
-    def match_internal_self_domain?(host)
-      internal_self_domain == host
-    end
-
     # Matches if the database value of _domain_ matches the host
     # @param host [String] the host to compare
     #   with the database value of _domain_
@@ -177,8 +152,6 @@ module ThreeScale::DomainSubstitution
 
     deprecate domain: "use #internal_domain or #external_domain",
       self_domain: "use #internal_admin_domain or #external_admin_domain",
-      external_self_domain: "use #external_admin_domain",
-      match_internal_self_domain?: "use #match_internal_admin_domain?",
       deprecator: ThreeScale::Deprecation::Deprecator.new
   end
 

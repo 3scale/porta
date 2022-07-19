@@ -9,7 +9,7 @@ class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def setup
-    host! master_account.domain
+    host! master_account.internal_domain
     ::Events.stubs(shared_secret: 'SECRET')
   end
 
@@ -32,6 +32,6 @@ class Master::Events::ImportsControllerTest < ActionDispatch::IntegrationTest
   test 'import asynchronously' do
     Events.expects(:async_fetch_backend_events!)
 
-    post master_events_import_path secret: Events.shared_secret, :host => master_account.domain
+    post master_events_import_path secret: Events.shared_secret, :host => master_account.internal_domain
   end
 end

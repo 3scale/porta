@@ -7,7 +7,7 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
 
     @active_doc1 = @provider.api_docs_services.create!(name: 'The Foo API', body: '{"basePath":"http://zebra.example.net", "apis":[]}', published: false)
     @active_doc2 = @provider.api_docs_services.create!(name: 'API FOO 2', body: '{"basePath":"http://zoo.example.net", "apis":[{"foo":"bar"}]}', published: true)
@@ -136,7 +136,7 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
   end
 
   test 'security wise: active docs is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get admin_api_active_doc_path(format: :json, id: @active_doc1.id), params: params
     assert_response :forbidden
   end

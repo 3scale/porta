@@ -22,7 +22,7 @@ class ProviderOauthFlowPresenter < OauthFlowPresenter
   attr_reader :self_domain
 
   def domain_parameters
-    callback_account.self_domain == self_domain ? {} : { self_domain: self_domain }
+    callback_account.external_admin_domain == self_domain ? {} : { self_domain: self_domain }
   end
 
   def account_domain

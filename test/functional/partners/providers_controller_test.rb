@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Partners::ProvidersControllerTest < ActionController::TestCase
   def setup
-    @request.host = master_account.domain
+    host! master_account.external_domain
     @partner = FactoryBot.create(:partner, system_name: 'someone')
   end
 
@@ -23,7 +23,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
   end
 
   test 'routes' do
-    assert_routing({ method: 'post', path: "http://#{master_account.domain}/partners/providers" }, { action: 'create', format: 'json', controller: 'partners/providers' })
+    assert_routing({ method: 'post', path: "http://#{master_account.external_domain}/partners/providers" }, { action: 'create', format: 'json', controller: 'partners/providers' })
   end
 
   test 'required api_key' do
@@ -57,8 +57,8 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     assert_equal provider_params[:last_name], user.last_name
     assert_equal provider_params[:email], user.email
 
-    assert_equal "troloro-#{@partner.system_name}.#{ThreeScale.config.superdomain}", account.domain
-    assert_equal "troloro-#{@partner.system_name}-admin.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal "troloro-#{@partner.system_name}.#{ThreeScale.config.superdomain}", account.internal_domain
+    assert_equal "troloro-#{@partner.system_name}-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
     assert_equal "#{@partner.system_name}-#{provider_params[:org_name]}", account.org_name
     assert_equal @partner.application_plans.first, account.bought_cinstance.plan
     assert_equal @partner.system_name, account.extra_fields['partner']
@@ -71,7 +71,7 @@ class Partners::ProvidersControllerTest < ActionController::TestCase
     body = JSON.parse(response.body)
     assert_equal body['id'], account.id
     assert_equal body['provider_key'], account.api_key
-    assert_equal body['end_point'], account.self_domain
+    assert_equal body['end_point'], account.internal_admin_domain
     assert_equal body['success'], true
   end
 

@@ -7,7 +7,7 @@ class Provider::Admin::Messages::Bulk::TrashControllerTest < ActionController::T
     @received_message = FactoryBot.create(:received_message, receiver: @provider)
     @sent_message     = FactoryBot.create(:message, sender: @provider)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
 
     login_provider @provider
   end

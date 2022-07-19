@@ -4,7 +4,7 @@ class DeveloperPortal::Swagger::SpecControllerTest < ActionDispatch::Integration
   def setup
     @active_doc = FactoryBot.create(:api_docs_service, published: true)
     @provider = @active_doc.account
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   def test_show

@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
     @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry], permission: 'rw')
     ::Logic::RollingUpdates.stubs(enabled?: true)
     ::Account.any_instance.stubs(:provider_can_use?).with(any_parameters).returns(false)
@@ -80,7 +80,7 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
   end
 
   test 'POST create disabled for master' do
-    host! master_account.admin_domain
+    host! master_account.internal_admin_domain
     access_token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[policy_registry], permission: 'rw').value
     assert_no_difference(Policy.method(:count)) do
       post admin_api_registry_policies_path(policy_params(access_token))
@@ -163,7 +163,7 @@ class Admin::Api::Registry::PoliciesControllerTest < ActionDispatch::Integration
                                            name: policy_schema['name'],
                                            version: policy_schema['version'],
                                            schema: policy_schema)
-      host! @provider.admin_domain
+      host! @provider.external_admin_domain
       @access_token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[policy_registry], permission: 'rw')
       ::Account.any_instance.stubs(:provider_can_use?).returns(true)
     end

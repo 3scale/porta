@@ -7,7 +7,7 @@ class Admin::Api::BuyersUsersControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: provider)
 
-    host! provider.admin_domain
+    host! provider.external_admin_domain
   end
 
   attr_reader :provider, :buyer

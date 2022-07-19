@@ -8,7 +8,7 @@ module CMS
 
       def setup
         @provider = FactoryBot.create(:provider_account)
-        host! @provider.admin_domain
+        host! @provider.external_admin_domain
       end
 
       def create_section

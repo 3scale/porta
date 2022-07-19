@@ -3,7 +3,7 @@ require 'test_helper'
 class Master::Providers::SwitchesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    host! master_account.self_domain
+    host! master_account.internal_admin_domain
     login! master_account
   end
 

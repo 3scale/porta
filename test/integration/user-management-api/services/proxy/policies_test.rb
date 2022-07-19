@@ -12,7 +12,7 @@ class Admin::Api::Services::Proxy::PoliciesTest < ActionDispatch::IntegrationTes
     admin    = FactoryBot.create(:admin, account: account)
     @token   = FactoryBot.create(:access_token, owner: admin, scopes: 'account_management')
 
-    host! account.admin_domain
+    host! account.internal_admin_domain
   end
 
   def test_show
