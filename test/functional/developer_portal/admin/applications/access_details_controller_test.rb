@@ -7,7 +7,7 @@ class DeveloperPortal::Admin::Applications::AccessDetailsControllerTest < Develo
     buyer = FactoryBot.create(:buyer_account)
     provider = buyer.provider_account
     FactoryBot.create(:application_contract, user_account: buyer)
-    host! provider.domain
+    host! provider.internal_domain
     login_as(buyer.admins.first)
 
     get :show

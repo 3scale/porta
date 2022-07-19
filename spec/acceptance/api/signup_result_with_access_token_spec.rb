@@ -35,7 +35,12 @@ resource 'Signup::ResultWithAccessToken' do
 
     context 'account' do
       subject { xml.root.xpath('./account') }
-      it { should have_tags(expected_account_properties).from(resource.account) }
+      it do
+        should have_tags(expected_account_properties - %w[domain admin_domain]).from(resource.account)
+
+        should have_tag('domain', resource.account.external_domain)
+        should have_tag('admin_domain', resource.account.external_admin_domain)
+      end
     end
 
     context 'access_token' do

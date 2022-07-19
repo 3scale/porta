@@ -61,7 +61,7 @@ Given /^a buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, 
 end
 
 Given(/^a buyer signed up to the provider$/) do
-  step %(an approved buyer "John" signed up to provider "#{@provider.domain}")
+  step %(an approved buyer "John" signed up to provider "#{@provider.internal_domain}")
   @buyer = Account.find_by_org_name!('John')
   step 'buyer "John" has application "TimeMachine"'
   @application = @buyer.application_contracts.find_by_name!('TimeMachine')
@@ -179,7 +179,7 @@ end
 
 
 Given('the provider has a buyer') do
-  step %'the current domain is #{@provider.domain}'
+  step %'the current domain is #{@provider.external_domain}'
 
   visit signup_path
 
@@ -199,7 +199,7 @@ Given('the provider has a buyer') do
   page.should have_content('Thank you')
   page.should have_content('We have sent you an email to confirm your email address.')
 
-  email = open_email(user.email, with_subject: "#{@provider.domain} API account confirmation")
+  email = open_email(user.email, with_subject: "#{@provider.external_domain} API account confirmation")
   click_first_link_in_email(email)
 
   within login_form do
@@ -227,8 +227,8 @@ When(/^the buyer has simple API key$/) do
 end
 
 And(/^has a buyer with (application|service) plan/) do |plan|
-  step %(provider "#{@provider.domain}" has "service_plans" switch allowed)
-  step %(a default service of provider "#{@provider.domain}" has name "API")
+  step %(provider "#{@provider.internal_domain}" has "service_plans" switch allowed)
+  step %(a default service of provider "#{@provider.internal_domain}" has name "API")
   if plan == 'service'
     step 'a service plan "Gold" for service "API" exists'
     step 'a buyer "Alexander" signed up to service plan "Gold"'
@@ -261,7 +261,7 @@ end
 
 When(/^the buyer logs in to the provider$/) do
   steps %(
-    When the current domain is #{@provider.domain}
+    When the current domain is #{@provider.external_domain}
     And I go to the login page
     And I fill in "Username" with "#{@buyer.admins.first.username}"
     And I fill in "Password" with "supersecret"

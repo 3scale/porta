@@ -71,7 +71,7 @@ Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} w
 end
 
 Then('a message should be sent from buyer to provider with plan change details from free to paid') do
-  step %(a message should be sent from buyer "#{@buyer.org_name}" to provider "#{@provider.domain}" with subject "API System: Application plan change" and body match with "plan from #{@free_application_plan.name} to #{@paid_application_plan.name}")
+  step %(a message should be sent from buyer "#{@buyer.org_name}" to provider "#{@provider.internal_domain}" with subject "API System: Application plan change" and body match with "plan from #{@free_application_plan.name} to #{@paid_application_plan.name}")
 end
 
 Then('a message should be sent from buyer to provider requesting to change plan to paid') do

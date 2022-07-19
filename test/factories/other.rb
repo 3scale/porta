@@ -106,7 +106,7 @@ FactoryBot.define do
 
   factory(:webhook, :class => WebHook) do
     account { |wh| wh.association(:provider_account) }
-    url { |wh| 'http://' + wh.account.domain }
+    url { |wh| 'http://' + wh.account.external_domain }
     active { true }
     provider_actions { true }
   end

@@ -3,7 +3,7 @@ require 'test_helper'
 class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
 
   def belongs_to_provider(line, provider)
-    line["#{provider.org_name}/#{provider.domain} "]
+    line["#{provider.org_name}/#{provider.internal_domain} "]
   end
 
   def correct_objects(line, what)

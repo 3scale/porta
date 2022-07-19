@@ -14,7 +14,7 @@ class DeleteAccountHierarchyWorker < DeleteObjectHierarchyWorker
     id = account.id
     org_name = account.org_name
     if account.provider?
-      "Deleting provider [##{id}] #{org_name} - #{account.admin_domain}"
+      "Deleting provider [##{id}] #{org_name} - #{account.internal_admin_domain}"
     else
       "Deleting buyer [##{id}] of provider #{org_name}"
     end

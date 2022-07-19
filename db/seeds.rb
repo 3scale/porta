@@ -126,7 +126,7 @@ ActiveRecord::Base.transaction do
   ###
 
   user_login = ENV.fetch('USER_LOGIN', 'admin')
-  user_email = ENV['USER_EMAIL'].presence || "#{user_login}@#{provider.domain}"
+  user_email = ENV['USER_EMAIL'].presence || "#{user_login}@#{provider.internal_domain}"
   user_password = ENV.fetch('USER_PASSWORD') { SecureRandom.base64(32) }
 
   user = User.create!(username: user_login, password: user_password, password_confirmation: user_password) do |user|
@@ -176,7 +176,7 @@ ActiveRecord::Base.transaction do
   impersonation_admin_username = impersonation_admin_config['username']
   impersonation_admin.attributes = {
     username: impersonation_admin_username,
-    email: "#{impersonation_admin_username}+#{provider.self_domain}@#{impersonation_admin_config['domain']}",
+    email: "#{impersonation_admin_username}+#{provider.external_admin_domain}@#{impersonation_admin_config['domain']}",
     first_name: '3scale',
     last_name: 'Admin'
   }
@@ -226,7 +226,7 @@ ActiveRecord::Base.transaction do
 
   if master_login && master_password
     puts <<~INFO
-      Master Domain: #{master.admin_domain}
+      Master Domain: #{master.external_admin_domain}
       Master User Login: #{master_login}
       Master User Password: #{master_password}
       Master RW access token: #{master_access_token}\n
@@ -234,8 +234,8 @@ ActiveRecord::Base.transaction do
   end
 
   puts <<~INFO
-    Provider Admin Domain: #{provider.admin_domain}
-    Provider Portal Domain: #{provider.domain}
+    Provider Admin Domain: #{provider.external_admin_domain}
+    Provider Portal Domain: #{provider.external_domain}
     Provider User Login: #{user_login}
     Provider User Password: #{user_password}
     APIcast Access Token: #{apicast_access_token}

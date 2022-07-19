@@ -9,7 +9,7 @@ class Admin::Api::NginxTest < ActionDispatch::IntegrationTest
 
     rolling_updates_on
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   def spec_path

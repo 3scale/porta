@@ -31,7 +31,7 @@ class InvoiceMessengerTest < ActiveSupport::TestCase
     InvoiceMessenger.upcoming_charge_notification(master_invoice).deliver
 
     message = @provider.received_messages.last
-    assert_match @provider.self_domain, message.body
+    assert_match @provider.external_admin_domain, message.body
     assert_match %r{http://.*/p/admin/account/invoices/\d+}, message.body
   end
 

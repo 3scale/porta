@@ -21,6 +21,9 @@ module Fields::ExtraFields
   def read_attribute_for_validation(name)
     if fields_definitions_source_root && extra_field?(name)
       extra_fields.try!(:[], name.to_s)
+    # domain and self_domain accessors have been deprecated but validation still use them. More info in lib/three_scale/domain_substitution.rb
+    elsif %i[domain self_domain].include?(name)
+      ThreeScale::Deprecation.silence { super }
     else
       super
     end
