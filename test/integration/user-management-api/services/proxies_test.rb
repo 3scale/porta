@@ -7,7 +7,7 @@ class Admin::Api::Services::ProxiesTest < ActionDispatch::IntegrationTest
     @account = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:simple_service, :with_default_backend_api, account: @account)
 
-    host! @account.admin_domain
+    host! @account.internal_admin_domain
   end
 
   def test_crud_access_token

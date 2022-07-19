@@ -10,7 +10,7 @@ class Admin::Api::Services::Proxy::ConfigsTest < ActionDispatch::IntegrationTest
     @config  = FactoryBot.create(:proxy_config, proxy: @service.proxy, environment: ProxyConfig::ENVIRONMENTS.first)
     @token   = FactoryBot.create(:access_token, owner: @account.admin_user, scopes: 'account_management')
 
-    host! @account.admin_domain
+    host! @account.internal_admin_domain
   end
 
   test 'latest' do

@@ -10,7 +10,7 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
     @service = @plan.service
     @provider = @plan.service.account
     login_as(@provider.admins.first)
-    host! @provider.self_domain
+    host! @provider.external_admin_domain
   end
 
   test 'do not create an application without a name' do
@@ -79,7 +79,7 @@ class Buyers::ApplicationsControllerTest < ActionController::TestCase
       @service = @plan.service
       @provider = @plan.service.account
       login_as(@provider.admins.first)
-      host! @provider.self_domain
+      host! @provider.external_admin_domain
     end
 
     disable_transactional_fixtures!

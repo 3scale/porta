@@ -7,7 +7,7 @@ class Admin::Api::NginxesControllerTest < ActionController::TestCase
 
   test 'spec returns a json' do
     provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
-    host! provider.admin_domain
+    host! provider.external_admin_domain
 
     get :spec, params: { format: :json, provider_key: provider.api_key }
 

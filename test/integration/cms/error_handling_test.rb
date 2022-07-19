@@ -5,7 +5,7 @@ module CMS
   class ErrorHandlingTest < ActionDispatch::IntegrationTest
     def setup
       @provider = FactoryBot.create(:provider_account)
-      host! @provider.domain
+      host! @provider.internal_domain
     end
 
     test 'not_found is rendered from builtin page in DB' do

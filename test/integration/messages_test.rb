@@ -5,7 +5,7 @@ class MessagesTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create :provider_account
     @buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
     provider_login_with @provider.admins.first, 'supersecret'
   end
 

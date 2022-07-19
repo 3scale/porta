@@ -3,7 +3,7 @@ require 'test_helper'
 class Provider::SignupsControllerTest < ActionController::TestCase
 
   def setup
-    @request.host = master_account.domain
+    host! master_account.external_domain
     Account.any_instance.stubs(:signup_provider_possible?).returns(true)
     extra_fields = [
       {name: 'API_Status_3s__c', target: "Account", label: "At What Stage is your API Project?"},

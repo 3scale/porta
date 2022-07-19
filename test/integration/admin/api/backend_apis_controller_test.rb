@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Api::BackendApisControllerTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! provider.admin_domain
+    host! provider.external_admin_domain
   end
 
   attr_reader :provider
@@ -117,7 +117,7 @@ class Admin::Api::BackendApisControllerTest < ActionDispatch::IntegrationTest
       @member = FactoryBot.create(:member, account: provider)
       @access_token = FactoryBot.create(:access_token, owner: member, scopes: %w[account_management], permission: 'rw')
       member.activate!
-      host! @provider.admin_domain
+      host! @provider.external_admin_domain
     end
 
     attr_reader :provider, :backend_api, :member, :access_token

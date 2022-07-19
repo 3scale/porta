@@ -11,11 +11,11 @@ class ApiAuthentication::BySsoTokenTest < ActionDispatch::IntegrationTest
   def test_sso_token
     # apicast mapping service use case
     FactoryBot.create(:active_admin, account: @account, username: ThreeScale.config.impersonation_admin['username'])
-    host! Account.master.admin_domain
+    host! Account.master.internal_admin_domain
     post provider_create_admin_api_sso_tokens_path(format: :json), params: { provider_key: @master.api_key, provider_id: @account.id }
     sso_token = JSON.parse(response.body)['sso_token']
 
-    host! @account.admin_domain
+    host! @account.internal_admin_domain
 
     # all good, all fine, life's awesome, i'm making a soup
     params = { host: 'http://example.com', token: sso_token['token'] }

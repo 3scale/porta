@@ -6,7 +6,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
   def setup
     @provider     = FactoryBot.create(:provider_account)
-    @request.host = @provider.admin_domain
+    host! @provider.external_admin_domain
     @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first!, scopes: %w[cms]).value
   end
 

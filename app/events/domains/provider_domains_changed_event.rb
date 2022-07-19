@@ -5,8 +5,8 @@ class Domains::ProviderDomainsChangedEvent < BaseEventStoreEvent
       parent_event_type: parent_event&.class&.name,
 
       provider:    provider,
-      admin_domains: [ provider.self_domain ],
-      developer_domains: [ provider.domain ],
+      admin_domains: [provider.internal_admin_domain],
+      developer_domains: [provider.internal_domain],
 
       metadata: {
         provider_id: provider.id,

@@ -8,7 +8,7 @@ class Provider::PasswordsControllerIntegrationTest < ActionDispatch::Integration
     def setup
       @user = FactoryBot.create(:simple_user)
 
-      host! @user.account.self_domain
+      host! @user.account.internal_admin_domain
     end
 
     def test_user_reset_his_password

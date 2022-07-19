@@ -215,7 +215,12 @@ resource "Account" do
                           finance_support_email: 'finance@email.com', site_access_code: 'access-code')
       end
 
-      it { should have_tags(expected_provider_fields).from(resource) }
+      it do
+        should have_tags(expected_provider_fields - %w[domain admin_domain]).from(resource)
+
+        should have_tag('domain', resource.external_domain)
+        should have_tag('admin_domain', resource.external_admin_domain)
+      end
     end
   end
 end

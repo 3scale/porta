@@ -6,7 +6,7 @@ class Provider::Admin::User::PersonalDetailsControllerTest < ActionController::T
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
     login_as @provider.admins.first
   end
 

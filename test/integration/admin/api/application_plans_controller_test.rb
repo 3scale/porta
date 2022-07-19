@@ -7,7 +7,7 @@ class Admin::Api::ApplicationPlansControllerTest < ActionDispatch::IntegrationTe
   def setup
     Settings::Switch.any_instance.stubs(:allowed?).returns(true)
     @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: %w[account_management]).value
-    host! current_account.admin_domain
+    host! current_account.internal_admin_domain
     @service = FactoryBot.create(:service, account: current_account)
   end
 
