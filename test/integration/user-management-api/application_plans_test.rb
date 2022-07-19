@@ -13,7 +13,7 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:account_plan, issuer: @provider)
     FactoryBot.create(:service_plan, issuer: @provider.default_service)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   class AccessTokenTest < Admin::Api::ApplicationPlansTest
@@ -70,7 +70,7 @@ class Admin::Api::ApplicationPlansTest < ActionDispatch::IntegrationTest
     end
 
     test 'security wise: index is access denied in buyer side' do
-      host! @provider.domain
+      host! @provider.internal_domain
       get admin_api_application_plans_path(provider_key: @provider.api_key, format: :xml)
       assert_response :forbidden
     end

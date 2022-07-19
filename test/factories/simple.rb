@@ -42,7 +42,7 @@ FactoryBot.define do
 
     after(:stub) do |account|
       Account.stubs(:master).returns(account)
-      Account.stubs(:find_by_domain).with(account.domain).returns(account)
+      Account.stubs(:find_by_domain).with(account.internal_domain).returns(account)
     end
   end
 

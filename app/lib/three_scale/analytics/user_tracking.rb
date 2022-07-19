@@ -102,7 +102,7 @@ module ThreeScale
 
             account_id: @account.id,
             domain: @account.internal_domain,
-            self_domain: @account.internal_self_domain
+            self_domain: @account.provider? ? @account.internal_admin_domain : nil
         }
       end
 

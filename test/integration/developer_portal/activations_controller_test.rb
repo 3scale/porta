@@ -8,7 +8,7 @@ class DeveloperPortal::ActivationsControllerTest < ActionDispatch::IntegrationTe
     @user     = FactoryBot.create(:pending_user, account: @buyer)
     @service  = @provider.first_service!
 
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   test 'wrong activation code' do

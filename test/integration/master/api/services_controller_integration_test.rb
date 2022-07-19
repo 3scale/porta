@@ -7,7 +7,7 @@ class Master::Api::ServicesControllerIntegrationTest < ActionDispatch::Integrati
   setup do
     @provider = FactoryBot.create(:provider_account, provider_account: master_account)
     @service = @provider.services.create!(system_name: 'servicename', name: 'servicename')
-    host! master_account.admin_domain
+    host! master_account.internal_admin_domain
   end
 
   attr_reader :service, :provider

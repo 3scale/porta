@@ -6,7 +6,7 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     Recaptcha.configuration.skip_verify_env.delete('test')
-    host! provider.domain
+    host! provider.internal_domain
   end
 
   def test_password_token

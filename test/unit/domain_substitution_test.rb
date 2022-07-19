@@ -56,22 +56,13 @@ class DomainSubstitutionTest < ActiveSupport::TestCase
       assert_equal @account['domain'], @account.internal_domain
     end
 
-    def test_internal_self_domain
-      assert_equal @account['self_domain'], @account.internal_self_domain
-    end
-
     def test_internal_admin_domain
-      assert_equal @account.admin_domain, @account.internal_admin_domain
+      assert_equal @account['self_domain'], @account.internal_admin_domain
     end
 
     def test_external_domain
       Substitutor.expects(:to_external).with(@account['domain'])
       @account.external_domain
-    end
-
-    def test_external_self_domain
-      Substitutor.expects(:to_external).with(@account['self_domain'])
-      @account.external_self_domain
     end
 
     def test_external_admin_domain
@@ -92,5 +83,9 @@ class DomainSubstitutionTest < ActiveSupport::TestCase
       assert_equal 'foo.localhost', Substitutor.to_internal('foo.preview.example.com')
       assert_equal 'foo.foo.bar', Substitutor.to_external('foo.localhost')
     end
+  end
+
+  test 'external domain could be different' do
+    # TODO
   end
 end

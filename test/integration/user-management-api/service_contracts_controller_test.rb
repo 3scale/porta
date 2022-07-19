@@ -13,7 +13,7 @@ class Admin::Api::ServiceContractsControllerTest < ActionDispatch::IntegrationTe
     @buyer.buy! @application_plan
 
     @token = FactoryBot.create(:access_token, owner: current_account.admin_users.first!, scopes: 'account_management').value
-    host! current_account.admin_domain
+    host! current_account.internal_admin_domain
   end
 
   class ProviderAccountTest < Admin::Api::ServiceContractsControllerTest

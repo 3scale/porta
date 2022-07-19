@@ -6,7 +6,7 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
   def setup
     super
     @provider = FactoryBot.create(:provider_account)
-    @request.host = @provider.domain
+    host! @provider.external_domain
   end
 
   class BeforeLoginTest < DeveloperPortal::Buyer::StatsControllerTest

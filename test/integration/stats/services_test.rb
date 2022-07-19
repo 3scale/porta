@@ -10,7 +10,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     @metric = @service.metrics.hits!
     Stats::Base.storage.flushdb
 
-    host! @provider_account.admin_domain
+    host! @provider_account.internal_admin_domain
     provider_login_with @provider_account.admins.first.username, 'supersecret'
   end
 

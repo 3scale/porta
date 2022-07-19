@@ -4,7 +4,7 @@ class Provider::Admin::ApiDocs::SpecsControllerTest < ActionController::TestCase
 
   def setup
     account = FactoryBot.create(:provider_account)
-    host! account.self_domain
+    host! account.internal_admin_domain
     login_as(account.admins.first)
   end
 

@@ -7,7 +7,7 @@ class PaymentDetailsIntegrationTest < ActionDispatch::IntegrationTest
     buyer = FactoryBot.create(:buyer_account, :provider_account => provider)
     buyer.buy!(plan)
 
-    host! provider.domain
+    host! provider.internal_domain
 
     assert !provider.settings.finance.visible?
     login_with buyer.admins.first.username, "supersecret"

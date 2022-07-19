@@ -162,7 +162,7 @@ And(/^has an application$/) do
   buyer_name = SecureRandom.uuid # Use Faker ? use FactoryBot.create to generate just he values?
   plan_name = SecureRandom.uuid
 
-  step %{an application plan "#{plan_name}" of provider "#{@provider.domain}"}
+  step %{an application plan "#{plan_name}" of provider "#{@provider.internal_domain}"}
   step %{a buyer "#{buyer_name}" signed up to application plan "#{plan_name}"}
 
   @application = Account.find_by_org_name!(buyer_name).bought_cinstance

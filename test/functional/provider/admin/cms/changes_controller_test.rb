@@ -4,7 +4,7 @@ class Provider::Admin::CMS::ChangesControllerTest < ActionController::TestCase
 
   def setup
     @provider = FactoryBot.create(:provider_account)
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
     login_as FactoryBot.create(:admin, :account => @provider)
   end
 

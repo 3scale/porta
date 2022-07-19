@@ -25,7 +25,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
     @service_plan2 = FactoryBot.create(:service_plan, issuer: @provider.default_service)
     @service_plan2.publish!
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
 
     stub_backend_get_keys
   end
@@ -258,7 +258,7 @@ class Admin::Api::SignupTest < ActionDispatch::IntegrationTest
   end
 
   test 'security wise: api signup is access denied in buyer side' do
-    host! @provider.domain # buyer domain
+    host! @provider.internal_domain # buyer domain
     post admin_api_signup_path, params: { format: :xml,
                                           provider_key: @provider.api_key,
                                           org_name: 'fiona',

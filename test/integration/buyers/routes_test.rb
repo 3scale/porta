@@ -5,7 +5,7 @@ class Buyers::RoutesTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    host! @provider.domain
+    host! @provider.internal_domain
     login_with @buyer.admins.first.username, "supersecret"
   end
 

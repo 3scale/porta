@@ -107,7 +107,7 @@ module ThreeScale
         end
 
         def host
-          Account.master.external_self_domain
+          Account.master.external_admin_domain
         end
 
         attr_reader :client, :request

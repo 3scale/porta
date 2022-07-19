@@ -407,7 +407,7 @@ class NotificationMailer < ActionMailer::Base
   end
 
   def default_url_options
-    super.merge(host: provider_account.try!(:admin_domain))
+    super.merge(host: provider_account&.external_admin_domain)
   end
 
   def t_subject(key, options = {})

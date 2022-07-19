@@ -16,7 +16,7 @@ module ThreeScale
 
         traits = {
             account_id: @provider.id,
-            self_domain: @provider.internal_self_domain,
+            self_domain: @provider.internal_admin_domain,
 
             plan: bought_plan.name,
             plan_id: bought_plan.id,
