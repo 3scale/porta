@@ -27,6 +27,7 @@ class Provider::Admin::ApplicationsController < FrontendController
   def show
     @service = @cinstance.service
     @utilization = @cinstance.backend_object.utilization(@service.metrics)
+    activate_menu(:serviceadmin)
   end
 
   def new; end
