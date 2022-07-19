@@ -7,7 +7,7 @@ class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'create' do
@@ -31,7 +31,7 @@ class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
 
   # this test is not a good idea. but anyway...
   test 'security: access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get admin_api_account_applications_path(@buyer, format: :xml), params: { provider_key: @provider.api_key }
 
     assert_response :forbidden

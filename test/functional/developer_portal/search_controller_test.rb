@@ -7,7 +7,7 @@ class DeveloperPortal::SearchControllerTest < DeveloperPortal::ActionController:
   test 'index forbidden' do
     provider = FactoryBot.create(:provider_account)
     provider.settings.update_attribute(:public_search, false)
-    request.host = provider.domain
+    request.host = provider.external_domain
 
     get :index, params: { format: 'json', q: 'stuff' }
 
@@ -17,7 +17,7 @@ class DeveloperPortal::SearchControllerTest < DeveloperPortal::ActionController:
   test 'index as json' do
     provider = FactoryBot.create(:provider_account)
     provider.settings.update_attribute(:public_search, true)
-    request.host = provider.domain
+    request.host = provider.external_domain
     SearchPresenters::IndexPresenter.any_instance.stubs(search_results: ['stuff'])
 
     get :index, params: { format: 'json', q: 'stuff' }

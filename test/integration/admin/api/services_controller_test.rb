@@ -6,7 +6,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   class MasterHostTest < Admin::Api::ServicesControllerTest
     setup do
       @token = FactoryBot.create(:access_token, owner: master_account.admin_users.first!, scopes: %w[account_management]).value
-      host! master_account.admin_domain
+      host! master_account.internal_admin_domain
     end
 
     test 'create' do
@@ -60,7 +60,7 @@ class Admin::Api::ServicesControllerTest < ActionDispatch::IntegrationTest
   class TenantHostTest < ActionDispatch::IntegrationTest
     setup do
       @provider = FactoryBot.create(:provider_account)
-      host! provider.admin_domain
+      host! provider.external_admin_domain
       @service = FactoryBot.create(:service, account: provider)
       Account.any_instance.stubs(can_create_service?: true)
       Logic::RollingUpdates.stubs(enabled?: true)

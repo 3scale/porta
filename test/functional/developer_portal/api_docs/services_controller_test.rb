@@ -6,7 +6,7 @@ class DeveloperPortal::ApiDocs::ServicesControllerTest < DeveloperPortal::Action
     provider = FactoryBot.create(:simple_provider)
     buyer    = FactoryBot.create(:simple_buyer, provider_account: provider)
 
-    host! provider.domain
+    host! provider.internal_domain
 
     login_as buyer.first_admin
   end

@@ -45,7 +45,7 @@ class Pdf::ReportTest < ActiveSupport::TestCase
   end
 
   test 'pdf file name' do
-    filename = "report-#{@account.domain}-#{@service.id}.pdf"
+    filename = "report-#{@account.internal_domain}-#{@service.id}.pdf"
     assert_equal filename, @report.pdf_file_name
 
     @report.pdf.expects(:render_file).with(Rails.root.join('tmp', filename))

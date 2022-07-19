@@ -24,7 +24,7 @@ module Tasks
       impersonation_other_admin_users.each do |user|
         user.reload
         assert_equal 'example-username', user.username
-        assert_equal "example-username+#{user.account.self_domain}@domain.example.com", user.email
+        assert_equal "example-username+#{user.account.internal_admin_domain}@domain.example.com", user.email
       end
     end
   end

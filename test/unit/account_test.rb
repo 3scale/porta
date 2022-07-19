@@ -143,7 +143,7 @@ class AccountTest < ActiveSupport::TestCase
     assert account.valid?
     assert other.valid?
 
-    other.self_domain = account.self_domain.upcase
+    other.self_domain = account.internal_admin_domain.upcase
 
     assert_not other.valid?
     assert other.errors[:self_domain]
@@ -359,13 +359,13 @@ class AccountTest < ActiveSupport::TestCase
     account.provider_account = master_account
     account.save!
 
-    assert_equal "amazing-name-123.#{ThreeScale.config.superdomain}", account.domain
-    assert_equal "amazing-name-123-admin.#{ThreeScale.config.superdomain}", account.self_domain
+    assert_equal "amazing-name-123.#{ThreeScale.config.superdomain}", account.internal_domain
+    assert_equal "amazing-name-123-admin.#{ThreeScale.config.superdomain}", account.internal_admin_domain
 
     account = Account.new(org_name: '')
     account.save
     assert_equal false, account.valid?
-    assert_nil account.domain
+    assert_nil account.internal_domain
   end
 
   test 'does not generate site_access_code if the account is not a provider' do

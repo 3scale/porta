@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Master::Api::ServicesControllerTest < ActionController::TestCase
   def setup
-    @request.host = master_account.domain
+    host! master_account.external_domain
   end
 
   test 'required master api_key' do

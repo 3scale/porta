@@ -16,7 +16,7 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
     @admin = FactoryBot.create :simple_user, account: @provider, role: 'admin'
     User.current = @admin
 
-    host! provider.admin_domain
+    host! provider.external_admin_domain
 
     @audit_class = Audited.audit_class
 

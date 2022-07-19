@@ -5,7 +5,7 @@ module CMS
   class BuiltinStaticPageTest < ActionDispatch::IntegrationTest
     def setup
       @provider = FactoryBot.create(:provider_account)
-      host! @provider.domain
+      host! @provider.internal_domain
     end
 
     test 'builtin static page has default layout' do

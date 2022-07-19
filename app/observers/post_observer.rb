@@ -27,7 +27,7 @@ class PostObserver < ActiveRecord::Observer
       TopicMailer.new_post(subscriber, post).deliver_later unless subscriber.email_unverified?
     end
 
-    url = admin_forum_topic_url(post.topic, host: post.forum.account.self_domain)
+    url = admin_forum_topic_url(post.topic, host: post.forum.account.external_admin_domain)
 
     name = user ? user.account.org_name : 'Anonymous User'
     message.body = <<-MSG

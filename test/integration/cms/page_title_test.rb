@@ -11,7 +11,7 @@ module CMS
       @root_section = @provider.sections.root
       @provider.name = 'lalala'
 
-      host! @provider.domain
+      host! @provider.internal_domain
     end
 
     test 'page has default title' do

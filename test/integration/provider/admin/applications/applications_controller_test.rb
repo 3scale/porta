@@ -276,7 +276,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
 
         assert_equal cinstance.reload.plan, new_plan
         assert mail = ActionMailer::Base.deliveries.first, 'missing email'
-        assert_match provider_admin_application_url(cinstance, host: provider.self_domain), mail.body.to_s
+        assert_match provider_admin_application_url(cinstance, host: provider.internal_admin_domain), mail.body.to_s
       end
 
       #regression test for https://github.com/3scale/system/issues/1889

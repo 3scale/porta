@@ -9,7 +9,7 @@ class Admin::Api::AccessTokensTest < ActionDispatch::IntegrationTest
     @admin.activate!
     @member = FactoryBot.create(:simple_user, account: @provider)
 
-    host! @provider.self_domain
+    host! @provider.external_admin_domain
   end
 
   test 'create with access_token can not create for another user' do

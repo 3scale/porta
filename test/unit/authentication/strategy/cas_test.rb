@@ -18,7 +18,7 @@ class Authentication::Strategy::CasTest < ActiveSupport::TestCase
       strategy.login_url
     end
 
-    assert strategy.service =~ /#{provider.domain}/
+    assert strategy.service =~ /#{provider.internal_domain}/
 
   end
 

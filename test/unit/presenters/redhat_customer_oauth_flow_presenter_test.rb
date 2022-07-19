@@ -5,7 +5,7 @@ class RedhatCustomerOAuthFlowPresenterTest < ActiveSupport::TestCase
     provider_account = FactoryBot.create(:simple_provider, provider_account: master_account, self_domain: 'admin.company.com', domain: 'company.com')
 
     query_params = { plan_id: 52 }
-    host = provider_account.self_domain
+    host = provider_account.external_admin_domain
     @request = ActionDispatch::TestRequest.create(
       'HTTP_HOST' => host,
       "action_dispatch.request.parameters" => query_params,
@@ -17,7 +17,7 @@ class RedhatCustomerOAuthFlowPresenterTest < ActiveSupport::TestCase
 
   def test_callback_url
     system_name = RedhatCustomerPortalSupport::RH_CUSTOMER_PORTAL_SYSTEM_NAME
-    assert_equal "http://#{master_account.admin_domain}/auth/#{system_name}/callback?plan_id=52&self_domain=admin.company.com", @redhat_customer_oauth_flow_presenter.callback_url
+    assert_equal "http://#{master_account.external_admin_domain}/auth/#{system_name}/callback?plan_id=52&self_domain=admin.company.com", @redhat_customer_oauth_flow_presenter.callback_url
   end
 
   def test_domain_parameters

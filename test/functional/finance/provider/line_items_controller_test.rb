@@ -7,7 +7,7 @@ class Finance::Provider::LineItemsControllerTest < ActionController::TestCase
   def setup
     @provider     = FactoryBot.create(:provider_account)
     @buyer        = FactoryBot.create(:buyer_account, provider_account: @provider)
-    @request.host = @provider.admin_domain
+    host! @provider.external_admin_domain
     @invoice      = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     @line_item    = FactoryBot.create(:line_item_plan_cost, invoice: @invoice, name: 'JohnDoe', cost: 10.0)
     @provider.settings.allow_finance!

@@ -38,7 +38,7 @@ module DeveloperPortal::CMS::ToolbarHelper
     if template.new_record?
       # This should not happen when we have all templates in db
     else
-      opts = { host: site_account.external_self_domain }
+      opts = { host: site_account.external_admin_domain }
 
       # main_app is not available in the engine
       routes = Rails.application.routes

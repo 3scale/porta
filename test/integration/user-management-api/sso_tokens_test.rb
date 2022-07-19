@@ -6,7 +6,7 @@ class Admin::Api::SsoTokensTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   test 'api should access deny on missing provider_key param' do

@@ -9,7 +9,7 @@ class Admin::Api::Services::MappingRulesTest < ActionDispatch::IntegrationTest
     @service = FactoryBot.create(:simple_service, account: @account)
     @proxy_rule = @service.proxy.proxy_rules.last
 
-    host! @account.admin_domain
+    host! @account.internal_admin_domain
   end
 
   def test_crud_access_token

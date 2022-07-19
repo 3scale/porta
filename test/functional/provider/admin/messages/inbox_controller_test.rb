@@ -6,7 +6,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     account  = FactoryBot.create(:provider_account)
     @message = FactoryBot.create(:received_message, receiver: account)
 
-    host! account.self_domain
+    host! account.internal_admin_domain
 
     @member = FactoryBot.create(:member)
     account.users << @member

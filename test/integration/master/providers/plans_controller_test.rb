@@ -14,7 +14,7 @@ class Master::Providers::PlansControllerTest < ActionDispatch::IntegrationTest
   attr_reader :tenant, :old_plan, :new_plan, :master_member, :service
 
   test '#update from an unauthenticated user' do
-    host! master_account.self_domain
+    host! master_account.internal_admin_domain
 
     put master_provider_plan_path(tenant), params: { plan_id: new_plan.id, format: :js }
 
