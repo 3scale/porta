@@ -1485,8 +1485,6 @@ GEM
     injectedlogger (0.0.13)
     innertube (1.1.0)
     jmespath (1.6.1)
-    join_dependency (0.1.4)
-      activerecord (>= 4.2.0)
     joiner (0.3.4)
       activerecord (>= 4.1.0)
     jquery-rails (4.3.5)
@@ -1608,7 +1606,7 @@ GEM
     prawn-format (0.2.1)
       prawn-core
     prawn-layout (0.2.1)
-    prometheus-client-mmap (0.11.0)
+    prometheus-client-mmap (0.16.2)
     protected_attributes_continued (1.8.2)
       activemodel (>= 5.0)
     pry (0.13.1)
@@ -1644,7 +1642,7 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rack-utf8_sanitizer (1.6.0)
+    rack-utf8_sanitizer (1.7.0)
       rack (>= 1.0, < 3.0)
     rack-x_served_by (0.1.1)
     rails (5.2.8)
@@ -2062,6 +2060,7 @@ DEPENDENCIES
   prawn-core!
   prawn-format (= 0.2.1)
   prawn-layout (= 0.2.1)
+  prometheus-client-mmap (~> 0.16.2)
   protected_attributes_continued (~> 1.8.2)
   pry-byebug (>= 3.7.0)
   pry-doc (>= 0.8)
@@ -2071,7 +2070,7 @@ DEPENDENCIES
   rack (~> 2.1.4)
   rack-cors
   rack-no_animations (~> 1.0.3)
-  rack-utf8_sanitizer
+  rack-utf8_sanitizer (~> 1.7.0)
   rack-x_served_by (~> 0.1.1)
   rails (~> 5.2.7)
   rails-controller-testing

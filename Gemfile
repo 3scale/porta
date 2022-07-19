@@ -60,6 +60,7 @@ gem 'sidekiq-prometheus-exporter'
 gem 'yabeda-prometheus-mmap'
 gem 'yabeda-rails'
 gem 'yabeda-sidekiq'
+gem 'prometheus-client-mmap', '~> 0.16.2'
 
 gem 'activemerchant', '~> 1.107.4'
 gem 'audited', '~> 5.0.2'
@@ -128,7 +129,7 @@ gem 'roar-rails'
 gem 'reform', '~> 2.0.3', require: false
 
 # sanitize params passed to rack
-gem 'rack-utf8_sanitizer'
+gem 'rack-utf8_sanitizer', '~> 1.7.0'
 
 gem 'jwt', '~> 1.5.2', require: false
 
