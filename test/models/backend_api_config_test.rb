@@ -66,7 +66,7 @@ class BackendApiConfigTest < ActiveSupport::TestCase
     @config.backend_api = FactoryBot.create(:backend_api, account: service.account)
     @config.path = 'foo'
     refute @config.valid?
-    assert @config.errors[:path].include? 'has already been taken'
+    assert @config.errors[:path].include? 'This path is already taken. Specify a different path.'
 
     @config.path = 'bar'
     assert @config.valid?
