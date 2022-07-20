@@ -1,16 +1,16 @@
 h1 Backends
-p.intro For a Product to work, it needs to have at least one Backend with a Private Base URL (your API). If multiple Backends are added to a Product, each Backend should have a unique Public Path.
+p.intro For a product to work, it must have at least one backend with a private base URL - your API. If you add multiple backends to a product, each backend must have a unique public path.
 
-= pf_button_in_title 'Add Backend', new_admin_service_backend_usage_path(@service)
+= pf_button_in_title 'Add backend', new_admin_service_backend_usage_path(@service)
 
 
 table#backend_api_configs.data
   thead
     tr
       th = sortable('backend_apis.name', 'Name')
-      th = sortable('backend_apis.private_endpoint', 'Private Base URL')
+      th = sortable('backend_apis.private_endpoint', 'Private base URL')
       th
-        = sortable('backend_api_configs.path', 'Public Path')
+        = sortable('backend_api_configs.path', 'Public path')
       th
   tbody
     - @backend_api_configs.each do |config|

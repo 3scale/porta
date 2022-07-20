@@ -16,7 +16,7 @@ const PrivateEndpointInput = ({ privateEndpoint, setPrivateEndpoint, errors = []
     label="Private Base URL"
     validated="default"
     fieldId="backend_api_private_endpoint"
-    helperText="Private address of your API that will be called by the API gateway. For end-to-end encryption your private base URL scheme should use a secure protocol (https or wss)."
+    helperText="The private address of your API that will be called by the API gateway. For end-to-end encryption, your private base URL scheme must use a secure protocol - https or wss."
     helperTextInvalid={errors ? errors[0] : ''}
     isValid={errors.length === 0}
   >

@@ -18,7 +18,7 @@ class BackendApiConfig < ApplicationRecord
 
   validates :service_id, :backend_api_id, presence: true
   validates :backend_api_id, uniqueness: { scope: :service_id }
-  validates :path, uniqueness: { scope: :service_id, case_sensitive: false }
+  validates :path, uniqueness: { scope: :service_id, case_sensitive: false, message: "This path is already taken. Specify a different path." }
   validates :path, length: { in: 1..255, allow_nil: false }, path: true
 
   scope :by_service,     ->(service_id)     { where.has { self.service_id     == service_id     } }

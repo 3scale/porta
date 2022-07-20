@@ -14,7 +14,7 @@ const SystemNameInput = ({ systemName, setSystemName }: Props): React.Node => (
     label="SystemName"
     validated="default"
     fieldId="backend_api_system_name"
-    helperText="Only ASCII letters, numbers, dashes and underscores are allowed."
+    helperText="Only ASCII letters, numbers, dashes, and underscores are allowed."
   >
     <TextInput
       type="text"
