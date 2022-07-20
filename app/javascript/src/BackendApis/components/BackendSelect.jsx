@@ -16,7 +16,7 @@ type Props = {
   onCreateNewBackend: () => void,
   error?: string,
   searchPlaceholder?: string,
-  onSelect: (Backend | null) => void,
+  onSelect: (Backend | null) => void
 }
 
 const BackendSelect = ({ backend, backends, onSelect, onCreateNewBackend, searchPlaceholder, error }: Props): React.Node => {
