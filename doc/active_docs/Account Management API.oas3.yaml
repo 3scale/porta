@@ -1,0 +1,2518 @@
+---
+openapi: 3.0.3
+info:
+  title: 3scale REST API
+  version: "2.12"
+  description: 3scale REST API for Account Management
+servers:
+- url: "https://{tenant-name}-admin.{ocp-wildcard-url}/"
+  variables:
+    tenant-name:
+      default: 3scale
+      description: The 3scale tenant to operate on
+    ocp-wildcard-url:
+      default: apps.your.openshift.example.com
+      description: Wildcard URL used when installing 3scale
+paths:
+  /admin/api/active_docs.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedArrayOfActiveDocsSpec'
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-activedocs-specs
+      summary: List ActiveDocs Specifications
+      description: Lists all ActiveDocs specs
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActiveDocsSpecCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/ActiveDocsSpecJsonResponse'
+      security:
+      - access_token: []
+      operationId: create-activedocs-spec
+      summary: Create ActiveDocs Specification
+      description: Creates a new ActiveDocs spec
+  /admin/api/active_docs/{activedocs_spec_id}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ActiveDocsSpecJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-activedocs-spec
+      summary: Read ActiveDocs Specification
+      description: Returns the ActiveDocs spec by ID
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActiveDocsSpecUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ActiveDocsSpecJsonResponse'
+      security:
+      - access_token: []
+      operationId: update-activedocs-spec
+      summary: Update ActiveDocs Specification
+      description: Updates the ActiveDocs spec by ID
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyJsonResponse'
+      security:
+      - access_token: []
+      operationId: delete-activedocs-spec
+      summary: Delete ActiveDocs Specification
+      description: Deletes the ActiveDocs spec by ID
+    parameters:
+    - name: activedocs_spec_id
+      schema:
+        $ref: '#/components/schemas/ActiveDocsSpecId'
+      in: path
+      required: true
+  /admin/api/backend_apis.json:
+    get:
+      tags:
+      - AccountManagement
+      parameters:
+      - name: page
+        description: Page in the paginated list. Defaults to 1.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: per_page
+        description: Number of results per page. Default and max is 500.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedArrayOfBackend'
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-backends
+      summary: List Backends
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BackendCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/BackendJsonResponse'
+        "422":
+          $ref: '#/components/responses/ValidationErrorJsonResponse'
+      security:
+      - access_token: []
+      operationId: create-backend
+      summary: Create Backend
+  /admin/api/backend_apis/{backend_id}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-backend
+      summary: Read Backend
+      description: Returns a backend.
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BackendUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendJsonResponse'
+        "400":
+          $ref: '#/components/responses/ValidationErrorPlainTextResponse'
+        "422":
+          $ref: '#/components/responses/ValidationErrorJsonResponse'
+      security:
+      - access_token: []
+      operationId: update-backend
+      summary: Update Backend
+      description: Updates a backend.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyJsonResponse'
+      security:
+      - access_token: []
+      operationId: delete-backend
+      summary: Delete Backend
+      description: Deletes a backend.
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+  /admin/api/backend_apis/{backend_id}/mapping_rules.json:
+    get:
+      tags:
+      - AccountManagement
+      parameters:
+      - name: page
+        description: Page in the paginated list. Defaults to 1.
+        schema:
+          type: integer
+        in: query
+      - name: per_page
+        description: Number of results per page. Default and max is 500.
+        schema:
+          type: integer
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedArrayOfBackendMappingRule'
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-backend-mapping-rules
+      summary: List Backend Mapping Rules
+      description: Returns the Mapping Rules of a Backend.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommonMappingRuleUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/BackendMappingRuleJsonResponse'
+      security:
+      - access_token: []
+      operationId: create-backend-mapping-rule
+      summary: Create Backend Mapping Rule
+      description: Creates a Mapping Rule of a Backend.
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+  /admin/api/backend_apis/{backend_id}/mapping_rules/{mapping_rule_id}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendMappingRuleJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-backend-mapping-rule
+      summary: Read Backend Mapping Rule
+      description: Returns the Mapping Rule of a Backend.
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommonMappingRuleUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendMappingRuleJsonResponse'
+      security:
+      - access_token: []
+      operationId: update-backend-mapping-rule
+      summary: Update Backend Mapping Rule
+      description: Updates a Mapping Rule of a Backend.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyJsonResponse'
+      security:
+      - access_token: []
+      operationId: delete-backend-mapping-rule
+      summary: Delete Backend Mapping Rule
+      description: Deletes a Mapping Rule of a Backend.
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+    - name: mapping_rule_id
+      schema:
+        $ref: '#/components/schemas/CommonMappingRuleId'
+      in: path
+      required: true
+  /admin/api/backend_apis/{backend_id}/metrics.json:
+    get:
+      tags:
+      - AccountManagement
+      parameters:
+      - name: page
+        description: Page in the paginated list. Defaults to 1.
+        schema:
+          type: integer
+        in: query
+      - name: per_page
+        description: Number of results per page. Default and max is 500.
+        schema:
+          type: integer
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedArrayOfBackendMetric'
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-backend-metrics
+      summary: List Backend Metrics
+      description: Returns the list of metrics of a backend api.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BackendMetricCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/BackendMetricJsonResponse'
+      security:
+      - access_token: []
+      operationId: create-backend-metric
+      summary: Create Backend Metric
+      description: Creates a metric on a backend api.
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+  /admin/api/backend_apis/{backend_id}/metrics/{metric_id}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendMetricJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-backend-metric
+      summary: Read Backend Metric
+      description: Returns the metric of a backend api.
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommonMetricUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendMetricJsonResponse'
+      security:
+      - access_token: []
+      operationId: update-backend-metric
+      summary: Update Backend Metric
+      description: Updates the metric of a backend api.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyJsonResponse'
+      security:
+      - access_token: []
+      operationId: delete-backend-metric
+      summary: Delete Backend Metric
+      description: "Deletes the metric of a backend api. When you delete a metric\
+        \ or a method, it will also remove all the associated limits."
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+    - name: metric_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+  /admin/api/backend_apis/{backend_id}/metrics/{metric_id}/methods.json:
+    get:
+      tags:
+      - AccountManagement
+      parameters:
+      - name: page
+        description: Page in the paginated list. Defaults to 1.
+        schema:
+          type: integer
+        in: query
+      - name: per_page
+        description: Number of results per page. Default and max is 500.
+        schema:
+          type: integer
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedArrayOfBackendMethod'
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-backend-methods
+      summary: List Backend Methods
+      description: List the methods of a metric that belongs to a backend api. Methods
+        are metrics that are children of a parent metric.
+    post:
+      requestBody:
+        description: "As recently as 3scale v2.11, it is impossible to create a method\
+          \ against any metric other than \"hits\""
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BackendMethodCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/BackendMethodJsonResponse'
+      security:
+      - access_token: []
+      operationId: create-backend-method
+      summary: Create Backend Method
+      description: Creates a method under a metric that belongs to a backend api.
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+    - name: metric_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+  /admin/api/backend_apis/{backend_id}/metrics/{metric_id}/methods/{method_id}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendMethodJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-backend-method
+      summary: Read Backend Method
+      description: Returns the method of a metric that belongs to a backend api.
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommonMethodUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendMethodJsonResponse'
+      security:
+      - access_token: []
+      operationId: update-backend-method
+      summary: Update Backend Method
+      description: Updates a method of a metric that belongs to a backend api.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyJsonResponse'
+      security:
+      - access_token: []
+      operationId: delete-backend-method
+      summary: Delete Backend Method
+      description: Deletes the method of a metric that belongs to a backend api.
+    parameters:
+    - name: backend_id
+      schema:
+        $ref: '#/components/schemas/BackendId'
+      in: path
+      required: true
+    - name: metric_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+    - name: method_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+  /admin/api/services.xml:
+    get:
+      tags:
+      - AccountManagement
+      parameters:
+      - name: page
+        description: Page in the paginated list. Defaults to 1.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: per_page
+        description: Number of results per page. Default and max is 500.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiProduct'
+                xml:
+                  name: services
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-api-products
+      summary: List API Products
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/ApiProductXmlResponse'
+      security:
+      - access_token: []
+      operationId: create-api-product
+      summary: Create API Product
+  /admin/api/services/{api_product_id}.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductXmlResponse'
+        "404":
+          $ref: '#/components/responses/NoBodyXmlResponse'
+      security:
+      - access_token: []
+      operationId: read-api-product
+      summary: Read API Product
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductXmlResponse'
+      security:
+      - access_token: []
+      operationId: update-api-product
+      summary: Update API Product
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyXmlResponse'
+      security:
+      - access_token: []
+      operationId: delete-api-product
+      summary: Delete API Product
+    parameters:
+    - examples:
+        API Product ID:
+          value: "4"
+      name: api_product_id
+      description: The ID of an API Product
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/backend_usages.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WrappedBackendUsage'
+          description: Successful listing
+        "404":
+          $ref: '#/components/responses/NotFoundJsonResponse'
+      security:
+      - access_token: []
+      operationId: list-backend-usages
+      summary: List Backend Usages
+      description: Returns the list of all Backend being used by a Service (Product)
+        with the corresponding path.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BackendUsageCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/BackendUsageJsonResponse'
+        "422":
+          $ref: '#/components/responses/ValidationErrorJsonResponse'
+      security:
+      - access_token: []
+      operationId: create-backend-usage
+      summary: Create Backend Usage
+      description: Adds a Backend to a Service (Product).
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/backend_usages/{backend_usage_id}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendUsageJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-backend-usage
+      summary: Read Backend Usage
+      description: Show the usage of a Backend within the scope of the Service (Product).
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BackendUsageUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/BackendUsageJsonResponse'
+        "400":
+          $ref: '#/components/responses/ValidationErrorPlainTextResponse'
+      security:
+      - access_token: []
+      operationId: update-backend-usage
+      summary: Update Backend Usage
+      description: Updates the path of a Backend within the scope of the Service (Product).
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyJsonResponse'
+      security:
+      - access_token: []
+      operationId: delete-backend-usage
+      summary: Delete Backend Usage
+      description: Removes the backend from a Service (Product).
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: backend_usage_id
+      schema:
+        $ref: '#/components/schemas/BackendUsageId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/metrics.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiProductMetric'
+                xml:
+                  name: metrics
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-api-product-metrics
+      summary: List API Product Metrics
+      description: Returns the list of metrics of a service.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductMetricCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/ApiProductMetricXmlResponse'
+      security:
+      - access_token: []
+      operationId: create-api-product-metric
+      summary: Create API Product Metric
+      description: Creates a metric on a service.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/metrics/{metric_id}.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductMetricXmlResponse'
+      security:
+      - access_token: []
+      operationId: read-api-product-metric
+      summary: Read API Product Metric
+      description: Returns the metric of a service.
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommonMetricUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductMetricXmlResponse'
+      security:
+      - access_token: []
+      operationId: update-api-product-metric
+      summary: Update API Product Metric
+      description: Updates the metric of a service.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyXmlResponse'
+      security:
+      - access_token: []
+      operationId: delete-api-product-metric
+      summary: Delete API Product Metric
+      description: "Deletes the metric of a service. When you delete a metric or a\
+        \ method, it will also remove all the associated limits across application\
+        \ plans."
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: metric_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/metrics/{metric_id}/methods.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiProductMethod'
+                xml:
+                  name: methods
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-api-product-methods
+      summary: List API Product Methods
+      description: List the methods of a metric that belongs to a service. Methods
+        are metrics that are children of a parent metric.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductMethodCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/ApiProductMethodXmlResponse'
+      security:
+      - access_token: []
+      operationId: create-api-product-method
+      summary: Create API Product Method
+      description: Creates a method under a metric that belongs to a service.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: metric_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/metrics/{metric_id}/methods/{method_id}.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductMethodXmlResponse'
+      security:
+      - access_token: []
+      operationId: read-api-product-method
+      summary: Read API Product Method
+      description: Returns the method of a metric that belongs to a service.
+    put:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductMethodUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductMethodXmlResponse'
+      security:
+      - access_token: []
+      operationId: update-api-product-method
+      summary: Update API Product Method
+      description: Updates a method of a metric that belongs to a service.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyXmlResponse'
+      security:
+      - access_token: []
+      operationId: delete-api-product-method
+      summary: Delete API Product Method
+      description: Deletes the method of a metric that belongs to a service.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: metric_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+    - name: method_id
+      schema:
+        $ref: '#/components/schemas/CommonMetricAndMethodId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductProxyConfigXmlResponse'
+      security:
+      - access_token: []
+      operationId: read-api-product-proxy-config
+      summary: Read API Product Proxy Config
+      description: Returns the Proxy of a Service.
+    patch:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductProxyConfigUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductProxyConfigXmlResponse'
+      security:
+      - access_token: []
+      operationId: update-api-product-proxy-config
+      summary: Update API Product Proxy Config
+      description: Changes the Proxy settings. This will create a new APIcast configuration
+        version for the Staging environment with the updated settings.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/deploy.xml:
+    post:
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/ApiProductProxyConfigXmlResponse'
+      security:
+      - access_token: []
+      operationId: deploy-api-product-proxy-config
+      summary: Deploy API Product Proxy Config
+      description: Promotes the APIcast configuration to the Staging Environment (Production
+        Environment in case of Service Mesh).
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/configs/{environment}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedArrayOfGatewayConfiguration'
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-gateway-configurations
+      summary: List Gateway Configurations
+      description: Returns the Proxy Configs of a Service
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: environment
+      schema:
+        $ref: '#/components/schemas/EnumGatewayEnvironment'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/configs/{environment}/latest.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/GatewayConfigurationJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-gateway-configuration-latest
+      summary: Read Latest Gateway Configuration
+      description: Returns the latest Proxy Config.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: environment
+      schema:
+        $ref: '#/components/schemas/EnumGatewayEnvironment'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/configs/{environment}/{version}.json:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/GatewayConfigurationJsonResponse'
+      security:
+      - access_token: []
+      operationId: read-gateway-configuration-version
+      summary: Read Gateway Configuration Version
+      description: Returns a Proxy Config.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: environment
+      schema:
+        $ref: '#/components/schemas/EnumGatewayEnvironment'
+      in: path
+      required: true
+    - name: version
+      schema:
+        type: integer
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/configs/{environment}/{version}/promote.json:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GatewayConfigurationPromotionRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/GatewayConfigurationJsonResponse'
+      security:
+      - access_token: []
+      operationId: promote-gateway-configuration
+      summary: Promote Gateway Configuration
+      description: Promotes a Proxy Config from one environment to another environment.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: environment
+      schema:
+        $ref: '#/components/schemas/EnumGatewayEnvironment'
+      in: path
+      required: true
+    - name: version
+      schema:
+        $ref: '#/components/schemas/GatewayConfigurationVersion'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/mapping_rules.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiProductMappingRule'
+                xml:
+                  name: mapping_rules
+          description: Successful listing
+      security:
+      - access_token: []
+      operationId: list-api-product-mapping-rules
+      summary: List API Product Mapping Rules
+      description: Returns the Mapping Rules of a Proxy.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiProductMappingRuleCreateRequest'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "201":
+          $ref: '#/components/responses/ApiProductMappingRuleXmlResponse'
+      security:
+      - access_token: []
+      operationId: create-api-product-mapping-rule
+      summary: Create API Product Mapping Rule
+      description: Creates a Proxy Mapping Rule. The proxy object needs to be updated
+        after a mapping rule is added to apply the change to the APIcast configuration.
+        If adding multiple mapping rules then only one call to the Proxy Update endpoint
+        is necessary after all mapping rules have been created.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/mapping_rules/{mapping_rule_id}.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductMappingRuleXmlResponse'
+      security:
+      - access_token: []
+      operationId: read-api-product-mapping-rule
+      summary: Read API Product Mapping Rule
+      description: Returns the Mapping Rule.
+    delete:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/NoBodyXmlResponse'
+      security:
+      - access_token: []
+      operationId: delete-api-product-mapping-rule
+      summary: Delete API Product Mapping Rule
+      description: Deletes a Proxy Mapping Rule. The proxy object needs to be updated
+        after a mapping rule is deleted to apply the change to the APIcast configuration.
+        If deleting multiple mapping rules then only one call to the Proxy Update
+        endpoint is necessary after all desired mapping rules have been deleted.
+    patch:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommonMappingRuleUpdatableFields'
+        required: true
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductMappingRuleXmlResponse'
+      security:
+      - access_token: []
+      operationId: update-api-product-mapping-rule
+      summary: Update API Product Mapping Rule
+      description: Updates a Proxy Mapping Rule. The proxy object needs to be updated
+        after a mapping rule is updated to apply the change to the APIcast configuration.
+        If updating multiple mapping rules then only one call to the Proxy Update
+        endpoint is necessary after all mapping rules have been updated.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+    - name: mapping_rule_id
+      schema:
+        $ref: '#/components/schemas/CommonMappingRuleId'
+      in: path
+      required: true
+  /admin/api/services/{api_product_id}/proxy/oidc_configuration.xml:
+    get:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductOidcConfigurationXmlResponse'
+      security:
+      - access_token: []
+      operationId: read-api-product-oidc-configuration
+      summary: Read API Product OIDC Configuration
+      description: Get the Proxy OIDC configuration.
+    patch:
+      tags:
+      - AccountManagement
+      responses:
+        "200":
+          $ref: '#/components/responses/ApiProductOidcConfigurationXmlResponse'
+      security:
+      - access_token: []
+      operationId: update-api-product-oidc-configuration
+      summary: Update API Product OIDC Configuration
+      description: Changes the Proxy OIDC configuration.
+    parameters:
+    - name: api_product_id
+      schema:
+        $ref: '#/components/schemas/ApiProductId'
+      in: path
+      required: true
+components:
+  schemas:
+    AccountId:
+      type: integer
+    ActiveDocsSpec:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/ActiveDocsSpecId'
+          system_name:
+            description: "System Name of the ActiveDocs spec. Only ASCII letters,\
+              \ numbers, dashes and underscores are allowed. If blank, 'system_name'\
+              \ will be generated from the 'name' parameter"
+            type: string
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+      - $ref: '#/components/schemas/ActiveDocsSpecUpdatableFields'
+    ActiveDocsSpecCreateRequest:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          system_name:
+            description: "System Name of the ActiveDocs spec. Only ASCII letters, numbers,\
+              \ dashes and underscores are allowed. If blank, 'system_name' will be\
+              \ generated from the 'name' parameter"
+            type: string
+      - $ref: '#/components/schemas/ActiveDocsSpecUpdatableFields'
+    ActiveDocsSpecId:
+      type: integer
+    ActiveDocsSpecUpdatableFields:
+      description: Updatable fields for `ActiveDocsSpec`
+      type: object
+      properties:
+        name:
+          description: Name of the ActiveDocs spec
+          type: string
+        description:
+          description: Description of the ActiveDocs spec
+          type: string
+        published:
+          description: "Set to 'true' to publish the spec on the developer portal,\
+            \ or 'false' to hide it. The default value is 'false'"
+          type: boolean
+        skip_swagger_validations:
+          description: "Set to 'true' to skip validation of the Swagger specification,\
+            \ or 'false' to validate the spec. The default value is 'false'"
+          type: boolean
+        body:
+          description: ActiveDocs specification in JSON format (based on Swagger)
+          type: string
+        service_id:
+          allOf:
+          - $ref: '#/components/schemas/ApiProductId'
+          - description: API Product ID of the ActiveDocs spec
+    ApiProductCreateRequest:
+      allOf:
+      - required:
+        - name
+        type: object
+        properties:
+          name:
+            description: Name of the API Product to be created
+            minLength: 1
+            type: string
+          description:
+            description: Description of the API Product to be created.
+            type: string
+          deployment_option:
+            allOf:
+            - $ref: '#/components/schemas/EnumDeploymentOption'
+            - description: "Deployment option for the gateway: 'hosted' for APIcast\
+                \ hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio'\
+                \ for Istio service mesh option "
+          backend_version:
+            allOf:
+            - $ref: '#/components/schemas/EnumBackendVersion'
+            - description: "Authentication mode: '1' for API key, '2' for App Id /\
+                \ App Key, 'oidc' for OpenID Connect"
+          system_name:
+            description: "System Name of the object to be created. System names cannot\
+              \ be modified after creation, they are used as the key to identify the\
+              \ objects. "
+            type: string
+      - $ref: '#/components/schemas/ApiProductUpdatableFields'
+    ApiProduct:
+      description: API Product (formerly named Service)
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            allOf:
+            - $ref: '#/components/schemas/ApiProductId'
+            - example: "2"
+          account_id:
+            allOf:
+            - $ref: '#/components/schemas/AccountId'
+            - example: "2"
+          system_name:
+            description: System Name used for this API Product
+            type: string
+            example: api
+      - $ref: '#/components/schemas/ApiProductUpdatableFields'
+      xml:
+        name: service
+      example: |-
+        <service>
+            <id>2</id>
+            <account_id>2</account_id>
+            <name>API</name>
+            <state>incomplete</state>
+            <system_name>api</system_name>
+            <backend_version>1</backend_version>
+            <description/>
+            <intentions_required>false</intentions_required>
+            <buyers_manage_apps>true</buyers_manage_apps>
+            <buyers_manage_keys>true</buyers_manage_keys>
+            <referrer_filters_required>false</referrer_filters_required>
+            <custom_keys_enabled>true</custom_keys_enabled>
+            <buyer_key_regenerate_enabled>true</buyer_key_regenerate_enabled>
+            <mandatory_app_key>true</mandatory_app_key>
+            <buyer_can_select_plan>false</buyer_can_select_plan>
+            <buyer_plan_change_permission>request</buyer_plan_change_permission>
+            <deployment_option>hosted</deployment_option>
+            <support_email>admin@3scale.apps.ocp.example.com</support_email>
+        </service>
+    ApiProductId:
+      type: integer
+    ApiProductMappingRule:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/CommonMappingRuleId'
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+      - $ref: '#/components/schemas/CommonMappingRuleUpdatableFields'
+      xml:
+        name: mapping_rule
+    ApiProductMappingRuleCreateRequest:
+      type: object
+      allOf:
+      - required:
+        - delta
+        - http_method
+        - metric_id
+        - pattern
+        type: object
+        properties:
+          metric_id:
+            allOf:
+            - $ref: '#/components/schemas/CommonMetricAndMethodId'
+            - description: "ID for `ApiProductMetric`, `ApiProductMethod`, `BackendMetric`\
+                \ or `BackendMethod` that should be updated when rule matches"
+          pattern:
+            description: Mapping Rule pattern.
+            type: string
+          http_method:
+            allOf:
+            - $ref: '#/components/schemas/EnumHttpMethod'
+            - description: HTTP method.
+          delta:
+            description: Increase the metric by this delta.
+            type: integer
+      - $ref: '#/components/schemas/CommonMappingRuleUpdatableFields'
+    ApiProductMethod:
+      description: API Product Method Definition
+      allOf:
+      - required:
+        - id
+        - system_name
+        - service_id
+        - metric_id
+        type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/CommonMetricAndMethodId'
+          name:
+            type: string
+          system_name:
+            type: string
+          service_id:
+            $ref: '#/components/schemas/ApiProductId'
+          metric_id:
+            $ref: '#/components/schemas/CommonMetricAndMethodId'
+      - $ref: '#/components/schemas/ApiProductMethodUpdatableFields'
+      xml:
+        name: method
+      example: |-
+        <method>
+            <id>12</id>
+            <name>list-widgets</name>
+            <system_name>list-widgets</system_name>
+            <friendly_name>List Widgets</friendly_name>
+            <service_id>4</service_id>
+            <description></description>
+            <metric_id>11</metric_id>
+        </method>
+    ApiProductMethodCreateRequest:
+      type: object
+      allOf:
+      - required:
+        - friendly_name
+        - unit
+        type: object
+        properties:
+          friendly_name:
+            type: string
+          unit:
+            type: string
+          system_name:
+            type: string
+      - $ref: '#/components/schemas/ApiProductMethodUpdatableFields'
+    ApiProductMethodUpdatableFields:
+      description: Updatable fields for `ApiProductMethod`
+      allOf:
+      - type: object
+        properties:
+          unit:
+            type: string
+      - $ref: '#/components/schemas/CommonMethodUpdatableFields'
+    ApiProductMetric:
+      description: API Product Metric Definition
+      allOf:
+      - required:
+        - id
+        - name
+        - system_name
+        - service_id
+        type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/CommonMetricAndMethodId'
+          name:
+            description: DEPRECATED. Please use `system_name` property instead
+            type: string
+          system_name:
+            type: string
+          service_id:
+            $ref: '#/components/schemas/ApiProductId'
+      - $ref: '#/components/schemas/CommonMetricUpdatableFields'
+      xml:
+        name: metric
+      example: |-
+        <metric>
+            <id>11</id>
+            <name>hits</name>
+            <system_name>hits</system_name>
+            <friendly_name>Hits</friendly_name>
+            <service_id>4</service_id>
+            <description>Number of API hits</description>
+            <unit>hit</unit>
+        </metric>
+    ApiProductMetricCreateRequest:
+      type: object
+      allOf:
+      - required:
+        - friendly_name
+        - unit
+        type: object
+        properties:
+          system_name:
+            type: string
+          friendly_name:
+            type: string
+          unit:
+            type: string
+      - $ref: '#/components/schemas/CommonMetricUpdatableFields'
+    ApiProductProxyConfig:
+      description: Configuration options for an `ApiProduct` related to the APIcast
+        Gateway (or Service Mesh)
+      type: object
+      allOf:
+      - type: object
+        properties:
+          service_id:
+            allOf:
+            - $ref: '#/components/schemas/ApiProductId'
+            - description: ID of the `ApiProduct`
+          api_test_path:
+            type: string
+          policies_config:
+            type: string
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+          deployment_option:
+            $ref: '#/components/schemas/EnumDeploymentOption'
+          lock_version:
+            type: integer
+      - $ref: '#/components/schemas/ApiProductProxyConfigUpdatableFields'
+      xml:
+        name: proxy
+      example: |-
+        <proxy>
+            <service_id>2</service_id>
+            <endpoint>https://api-3scale-apicast-production.example.com:443</endpoint>
+            <api_backend>https://echo-api.3scale.net:443</api_backend>
+            <credentials_location>query</credentials_location>
+            <auth_app_key>app_key</auth_app_key>
+            <auth_app_id>app_id</auth_app_id>
+            <auth_user_key>user_key</auth_user_key>
+            <error_auth_failed>Authentication failed</error_auth_failed>
+            <error_auth_missing>Authentication parameters missing</error_auth_missing>
+            <error_status_auth_failed>403</error_status_auth_failed>
+            <error_headers_auth_failed>text/plain; charset=us-ascii</error_headers_auth_failed>
+            <error_status_auth_missing>403</error_status_auth_missing>
+            <error_headers_auth_missing>text/plain; charset=us-ascii</error_headers_auth_missing>
+            <error_no_match>No Mapping Rule matched</error_no_match>
+            <error_status_no_match>404</error_status_no_match>
+            <error_headers_no_match>text/plain; charset=us-ascii</error_headers_no_match>
+            <error_limits_exceeded>Usage limit exceeded</error_limits_exceeded>
+            <error_status_limits_exceeded>429</error_status_limits_exceeded>
+            <error_headers_limits_exceeded>text/plain; charset=us-ascii</error_headers_limits_exceeded>
+            <secret_token>Shared_secret_sent_from_proxy_to_API_backend_cbd35336f0fd9d4e</secret_token>
+            <hostname_rewrite/>
+            <sandbox_endpoint>https://api-3scale-apicast-staging.example.com:443</sandbox_endpoint>
+            <api_test_path>/</api_test_path>
+            <policies_config>[{"name"=&gt;"apicast", "version"=&gt;"builtin", "configuration"=&gt;{}, "enabled"=&gt;true}]</policies_config>
+            <created_at>2022-03-05 03:27:58 UTC</created_at>
+            <updated_at>2022-03-14 18:02:31 UTC</updated_at>
+            <deployment_option>hosted</deployment_option>
+            <lock_version>5</lock_version>
+        </proxy>
+    ApiProductProxyConfigUpdatableFields:
+      description: Updatable fields for `ApiProductProxyConfig`
+      type: object
+      properties:
+        endpoint:
+          description: Public Base URL for production environment.
+          type: string
+        api_backend:
+          description: Private Base URL. Caution! Do not use it if the account has
+            API as a Product enabled. It may cause API backend usages to be removed
+            from the Product.
+          type: string
+        credentials_location:
+          allOf:
+          - $ref: '#/components/schemas/EnumCredentialsLocation'
+          - description: "Credentials Location. Either headers, query or authorization\
+              \ for the Basic Authorization."
+        auth_app_key:
+          description: Parameter/Header where App Key is expected.
+          type: string
+        auth_app_id:
+          description: Parameter/Header where App ID is expected.
+          type: string
+        auth_user_key:
+          description: Parameter/Header where User Key is expected.
+          type: string
+        error_auth_failed:
+          description: Error message on failed authentication.
+          type: string
+        error_status_auth_failed:
+          description: Status code on failed authentication.
+          type: integer
+        error_headers_auth_failed:
+          description: Content-Type header on failed authentication.
+          type: string
+        error_auth_missing:
+          description: Error message on missing authentication.
+          type: string
+        error_status_auth_missing:
+          description: Status code on missing authentication.
+          type: integer
+        error_headers_auth_missing:
+          description: Content-Type header on missing authentication.
+          type: string
+        error_no_match:
+          description: Error message when no mapping rule is matched.
+          type: string
+        error_status_no_match:
+          description: Status code when no mapping rule is matched.
+          type: integer
+        error_headers_no_match:
+          description: Content-Type header when no mapping rule is matched.
+          type: string
+        error_status_limits_exceeded:
+          description: Status code when usage limit exceeded.
+          type: integer
+        error_headers_limits_exceeded:
+          description: Content-Type header when usage limit exceeded.
+          type: string
+        error_limits_exceeded:
+          description: Error message on usage limit exceeded.
+          type: string
+        oidc_issuer_endpoint:
+          description: Location of your OpenID Provider.
+          type: string
+        oidc_issuer_type:
+          allOf:
+          - $ref: '#/components/schemas/EnumOidcIssuerType'
+          - description: Type of your OpenID Provider.
+        hostname_rewrite:
+          description: Lets you define a custom Host request header. This is needed
+            if your API backend only accepts traffic from a specific host.
+          type: string
+        sandbox_endpoint:
+          description: Sandbox endpoint.
+          type: string
+        jwt_claim_with_client_id:
+          description: JWT Claim With ClientId Location.
+          type: string
+        jwt_claim_with_client_id_type:
+          allOf:
+          - $ref: '#/components/schemas/EnumJwtClientIdType'
+          - description: JWT Claim With ClientId Type. Either `plain` or `liquid`
+        secret_token:
+          description: 'Enables you to block any direct developer requests to your
+            API backend; each 3scale API gateway call to your API backend contains
+            a request header called `X-3scale-proxy-secret-token`. The value of this
+            header can be set by you here. It''s up to you ensure your backend only
+            allows calls with this secret header. '
+          type: string
+    ApiProductUpdatableFields:
+      description: Updatable fields for `ApiProduct`
+      type: object
+      properties:
+        name:
+          type: string
+          example: API
+        state:
+          enum:
+          - incomplete
+          type: string
+          example: incomplete
+        backend_version:
+          allOf:
+          - $ref: '#/components/schemas/EnumBackendVersion'
+          - description: "Authentication mode: '1' for API key, '2' for App id / App\
+              \ Key, 'oidc' for OpenID Connect"
+            example: "1"
+        description:
+          description: Description for this API Product
+          type: string
+        intentions_required:
+          type: boolean
+          example: "false"
+        buyers_manage_apps:
+          type: boolean
+          example: "true"
+        buyers_manage_keys:
+          type: boolean
+          example: "true"
+        referrer_filters_required:
+          type: boolean
+          example: "false"
+        custom_keys_enabled:
+          type: boolean
+          example: "true"
+        buyer_key_regenerate_enabled:
+          type: boolean
+          example: "true"
+        mandatory_app_key:
+          description: Whether to prevent deletion of the last app_key when configured
+            with app id / app key authentication
+          type: boolean
+          example: "true"
+        buyer_can_select_plan:
+          type: boolean
+          example: "true"
+        buyer_plan_change_permission:
+          allOf:
+          - $ref: '#/components/schemas/EnumPlanChangePermission'
+          - example: request
+        deployment_option:
+          allOf:
+          - $ref: '#/components/schemas/EnumDeploymentOption'
+          example: hosted
+        support_email:
+          type: string
+          example: admin@3scale.apps.ocp.example.com
+    ApiProductOidcConfiguration:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/AccountId'
+      - $ref: '#/components/schemas/ApiProductOidcConfigurationUpdatableFields'
+      xml:
+        name: oidc_configuration
+    ApiProductOidcConfigurationUpdatableFields:
+      description: Updatable fields for `ApiProductOidcConfiguration`
+      type: object
+      properties:
+        standard_flow_enabled:
+          description: Enable Authorization Code Flow (Standard Flow)
+          type: boolean
+        implicit_flow_enabled:
+          description: Enable Implicit Flow
+          type: boolean
+        service_accounts_enabled:
+          description: Enable Service Account Flow
+          type: boolean
+        direct_access_grants_enabled:
+          description: Enable Direct Access Grant Flow
+          type: boolean
+    Backend:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/BackendId'
+          system_name:
+            type: string
+          account_id:
+            $ref: '#/components/schemas/AccountId'
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+          links:
+            type: array
+            items:
+              $ref: '#/components/schemas/HateoasLink'
+      - $ref: '#/components/schemas/BackendUpdatableFields'
+      example:
+        id: 7
+        name: test
+        system_name: test
+        private_endpoint: https://www.example.com:443
+        account_id: 2
+        created_at: 2022-03-15T18:34:54.000Z
+        updated_at: 2022-03-15T18:34:54.000Z
+        links:
+        - rel: metrics
+          href: /admin/api/backend_apis/7/metrics
+        - rel: mapping_rules
+          href: /admin/api/backend_apis/7/mapping_rules
+    BackendCreateRequest:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          system_name:
+            type: string
+      - $ref: '#/components/schemas/BackendUpdatableFields'
+    BackendId:
+      type: integer
+    BackendMappingRule:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/CommonMappingRuleId'
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+          links:
+            type: array
+            items:
+              $ref: '#/components/schemas/HateoasLink'
+      - $ref: '#/components/schemas/CommonMappingRuleUpdatableFields'
+    BackendMethod:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/CommonMetricAndMethodId'
+          system_name:
+            description: System Name of the metric. If blank a system_name will be
+              generated for you from the friendly_name parameter
+            type: string
+          parent_id:
+            $ref: '#/components/schemas/CommonMetricAndMethodId'
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+          links:
+            type: array
+            items:
+              $ref: '#/components/schemas/HateoasLink'
+      - $ref: '#/components/schemas/CommonMethodUpdatableFields'
+    BackendMethodCreateRequest:
+      type: object
+      allOf:
+      - required:
+        - friendly_name
+        type: object
+        properties:
+          friendly_name:
+            type: string
+          system_name:
+            description: System Name of the metric. If blank a system_name will be
+              generated for you from the friendly_name parameter
+            type: string
+      - $ref: '#/components/schemas/CommonMethodUpdatableFields'
+    BackendMetric:
+      description: Metric on a `Backend`
+      type: object
+      allOf:
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/CommonMetricAndMethodId'
+          parent_id:
+            allOf:
+            - $ref: '#/components/schemas/CommonMetricAndMethodId'
+            - description: Field used when methods are listed as metrics
+          system_name:
+            type: string
+          created_at:
+            format: date-time
+            type: string
+          updated_at:
+            format: date-time
+            type: string
+          links:
+            type: array
+            items:
+              $ref: '#/components/schemas/HateoasLink'
+      - $ref: '#/components/schemas/CommonMetricUpdatableFields'
+      example:
+        id: 10
+        system_name: hits.4
+        friendly_name: Hits
+        description: Number of API hits
+        unit: hit
+        created_at: 2022-03-10T19:16:25.000Z
+        updated_at: 2022-03-10T19:16:25.000Z
+        links: []
+    BackendMetricCreateRequest:
+      type: object
+      allOf:
+      - required:
+        - unit
+        - friendly_name
+        type: object
+        properties:
+          unit:
+            type: string
+          system_name:
+            type: string
+          friendly_name:
+            type: string
+      - $ref: '#/components/schemas/CommonMetricUpdatableFields'
+    BackendUpdatableFields:
+      description: Updatable fields for `Backend`
+      required:
+      - private_endpoint
+      - name
+      type: object
+      properties:
+        name:
+          description: Name of the Backend
+          type: string
+        description:
+          description: Description of the Backend
+          type: string
+        private_endpoint:
+          description: |-
+            Private Base URL (your API) in the form scheme://address(:port)(/path). Accepted
+            schemes are http, https, ws and wss
+          minLength: 0
+          type: string
+    BackendUsage:
+      description: Relationship between `ApiProduct` and `Backend`
+      type: object
+      allOf:
+      - required:
+        - backend_id
+        - service_id
+        type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/BackendUsageId'
+          service_id:
+            $ref: '#/components/schemas/ApiProductId'
+          backend_id:
+            $ref: '#/components/schemas/BackendId'
+          links:
+            type: array
+            items:
+              $ref: '#/components/schemas/HateoasLink'
+      - $ref: '#/components/schemas/BackendUsageUpdatableFields'
+      example:
+        id: 4
+        path: /widgets
+        service_id: 4
+        backend_id: 4
+        links:
+        - rel: service
+          href: https://3scale-admin.example.com/admin/api/services/4
+        - rel: backend_api
+          href: https://3scale-admin.example.com/admin/api/backend_apis/4
+    BackendUsageId:
+      type: integer
+    BackendUsageCreateRequest:
+      type: object
+      allOf:
+      - required:
+        - service_id
+        - backend_api_id
+        type: object
+        properties:
+          service_id:
+            $ref: '#/components/schemas/ApiProductId'
+          backend_api_id:
+            $ref: '#/components/schemas/BackendId'
+      - $ref: '#/components/schemas/BackendUsageUpdatableFields'
+    BackendUsageUpdatableFields:
+      description: Updatable fields for `BackendUsage`
+      type: object
+      properties:
+        path:
+          description: |-
+            Path that will be routed from incoming API requests to the API Product. This
+            path will be removed from the request as it is passed to the backend.
+          minLength: 1
+          type: string
+          example: /
+    CommonMappingRuleId:
+      description: ID for `ApiProductMappingRule` and `BackendMappingRule`
+      type: integer
+    CommonMappingRuleUpdatableFields:
+      description: Updatable fields for `ApiProductMappingRules` and `BackendMappingRules`
+      type: object
+      properties:
+        metric_id:
+          allOf:
+          - $ref: '#/components/schemas/CommonMetricAndMethodId'
+          - description: "ID for `ApiProductMetric`, `ApiProductMethod`, `BackendMetric`\
+              \ or `BackendMethod` that should be updated when rule matches"
+        pattern:
+          description: Mapping Rule pattern.
+          type: string
+        http_method:
+          allOf:
+          - $ref: '#/components/schemas/EnumHttpMethod'
+          - description: HTTP method.
+        delta:
+          description: Increase the metric by this delta.
+          type: integer
+        position:
+          description: Mapping Rule position
+          type: integer
+        last:
+          description: Last matched Mapping Rule to process
+          type: boolean
+    CommonMetricAndMethodId:
+      description: "ID for `ApiProductMetric`, `ApiProductMethod`, `BackendMetric`,\
+        \ and `BackendMethod`"
+      type: integer
+    CommonMethodUpdatableFields:
+      description: Updatable fields for `ApiProductMethod` and `BackendMethod`
+      type: object
+      properties:
+        friendly_name:
+          type: string
+        description:
+          type: string
+    CommonMetricUpdatableFields:
+      description: Updatable fields for `ApiProductMetric` and `BackendMetric`
+      type: object
+      properties:
+        friendly_name:
+          type: string
+        description:
+          type: string
+        unit:
+          type: string
+    EnumBackendVersion:
+      description: "Authentication mode: '1' for API key, '2' for App Id / App Key,\
+        \ 'oidc' for OpenID Connect"
+      enum:
+      - "1"
+      - "2"
+      - oidc
+      type: string
+    EnumCredentialsLocation:
+      enum:
+      - headers
+      - query
+      - authorization
+      type: string
+    EnumDeploymentOption:
+      description: "Deployment option for the gateway: 'hosted' for APIcast hosted,\
+        \ 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio\
+        \ service mesh option"
+      enum:
+      - hosted
+      - self_managed
+      - service_mesh_istio
+      type: string
+    EnumGatewayEnvironment:
+      enum:
+      - sandbox
+      - production
+      type: string
+    EnumHttpMethod:
+      enum:
+      - POST
+      - GET
+      - PUT
+      - PATCH
+      - DELETE
+      - HEAD
+      - OPTIONS
+      - TRACE
+      type: string
+    EnumJwtClientIdType:
+      enum:
+      - plain
+      - liquid
+      type: string
+    EnumOidcIssuerType:
+      enum:
+      - keycloak
+      - rest
+      type: string
+    EnumPlanChangePermission:
+      enum:
+      - request
+      - direct
+      - credit_card
+      - request_credit_card
+      - none
+      type: string
+    ErrorObjectWrapper:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            input_name:
+              type: array
+              items:
+                type: string
+      example:
+        errors:
+          input_name:
+          - problem description 1
+    ExtendedApiProduct:
+      description: |-
+        Extended version of `ApiProduct` that includes a lot more data to be included into `GatewayConfiguration`
+
+        TODO: Complete this
+      type: object
+      allOf:
+      - type: object
+        properties:
+          logo_file_name:
+            type: string
+      - $ref: '#/components/schemas/ApiProduct'
+    GatewayConfiguration:
+      description: Full configuration for an API Gateway
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ApiProductId'
+        version:
+          $ref: '#/components/schemas/GatewayConfigurationVersion'
+        environment:
+          $ref: '#/components/schemas/EnumGatewayEnvironment'
+        content:
+          $ref: '#/components/schemas/ExtendedApiProduct'
+      example:
+        id: 33
+        version: 1
+        environment: sandbox
+        content:
+          id: 12
+          account_id: 2
+          name: "[TESTING] Swagger Petstore - OpenAPI 3.0"
+          description: Testing import of an OpenAPI spec
+          created_at: 2022-03-16T00:18:49.000Z
+          updated_at: 2022-03-17T03:49:56.000Z
+          state: incomplete
+          intentions_required: false
+          buyers_manage_apps: false
+          buyers_manage_keys: false
+          custom_keys_enabled: false
+          buyer_plan_change_permission: request
+          buyer_can_select_plan: false
+          tenant_id: 2
+          system_name: test-product
+          backend_version: "1"
+          mandatory_app_key: false
+          buyer_key_regenerate_enabled: false
+          support_email: apiteam@example.com
+          referrer_filters_required: false
+          deployment_option: hosted
+          proxiable?: true
+          backend_authentication_type: service_token
+          backend_authentication_value: 080abb90c39cdeaa6d643a609e68d05ffe3450acdadf806cc57478a0051626d9
+          proxy:
+            service_id: 12
+            apicast_configuration_driven: true
+            id: 12
+            lock_version: 7
+            api_test_path: /
+            secret_token: Shared_secret_sent_from_proxy_to_API_backend_046ae3e42dc851df
+            sandbox_endpoint: https://test-product-3scale-apicast-staging.example.com:443
+            endpoint: https://test-product-3scale-apicast-production.example.com:443
+            error_status_no_match: 404
+            error_status_auth_missing: 403
+            error_status_auth_failed: 403
+            error_status_limits_exceeded: 429
+            credentials_location: headers
+            auth_app_id: app_id
+            auth_app_key: app_key
+            auth_user_key: user_key
+            error_headers_auth_failed: text/plain; charset=us-ascii
+            error_headers_auth_missing: text/plain; charset=us-ascii
+            error_headers_no_match: text/plain; charset=us-ascii
+            error_auth_failed: Authentication failed
+            error_auth_missing: Authentication parameters missing
+            error_no_match: No Mapping Rule matched
+            error_headers_limits_exceeded: text/plain; charset=us-ascii
+            error_limits_exceeded: Usage limit exceeded
+            oidc_issuer_endpoint: https://a.b.c/auth/realms/a
+            oidc_issuer_type: rest
+            authentication_method: "1"
+            staging_domain: test-product-3scale-apicast-staging.example.com
+            production_domain: test-product-3scale-apicast-production.example.com
+            tenant_id: 2
+            created_at: 2022-03-16T00:18:49.000Z
+            updated_at: 2022-03-16T20:09:23.000Z
+            hostname_rewrite_for_sandbox: asdf
+            endpoint_port: 443
+            valid?: true
+            service_backend_version: "1"
+            hosts:
+            - test-product-3scale-apicast-production.example.com
+            - test-product-3scale-apicast-staging.example.com
+            backend:
+              endpoint: https://backend-3scale.example.com
+              host: backend-3scale.example.com
+            policy_chain:
+            - name: routing
+              version: builtin
+              enabled: true
+              configuration:
+                rules:
+                - url: https://petstore3.example.com:443/api/v3
+                  owner_id: 8
+                  owner_type: BackendApi
+                  condition:
+                    operations:
+                    - match: path
+                      op: matches
+                      value: ^(/petstore/.*|/petstore/?)
+                  replace_path: "{{uri | remove_first: '/petstore'}}"
+            - name: apicast
+              version: builtin
+              configuration: {}
+            jwt_claim_with_client_id: azp
+            jwt_claim_with_client_id_type: plain
+            proxy_rules:
+            - id: 24
+              proxy_id: 12
+              http_method: GET
+              pattern: /
+              metric_id: 34
+              metric_system_name: hits
+              delta: 1
+              tenant_id: 2
+              created_at: 2022-03-16T00:18:49.000Z
+              updated_at: 2022-03-16T00:18:49.000Z
+              position: 1
+              last: false
+              owner_id: 12
+              owner_type: Proxy
+              parameters: []
+              querystring_parameters: {}
+    GatewayConfigurationPromotionRequest:
+      required:
+      - to
+      type: object
+      properties:
+        to:
+          $ref: '#/components/schemas/EnumGatewayEnvironment'
+    GatewayConfigurationVersion:
+      type: integer
+    HateoasLink:
+      description: HATEOAS-style link object
+      type: object
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
+      example:
+        rel: service
+        href: https://3scale-admin.example.com/admin/api/services/4
+    StatusWrapper:
+      type: object
+      properties:
+        status:
+          type: string
+      example:
+        status: Not found
+    WrappedActiveDocsSpec:
+      description: Wrapper around `ActiveDocsSpec`
+      required:
+      - api_doc
+      type: object
+      properties:
+        api_doc:
+          $ref: '#/components/schemas/ActiveDocsSpec'
+    WrappedArrayOfActiveDocsSpec:
+      required:
+      - api_docs
+      type: object
+      properties:
+        api_docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrappedActiveDocsSpec'
+    WrappedArrayOfBackend:
+      required:
+      - backend_apis
+      type: object
+      properties:
+        backend_apis:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrappedBackend'
+    WrappedArrayOfBackendMappingRule:
+      type: object
+      properties:
+        mapping_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrappedBackendMappingRule'
+    WrappedArrayOfBackendMethod:
+      required:
+      - methods
+      type: object
+      properties:
+        methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrappedBackendMethod'
+    WrappedArrayOfBackendMetric:
+      required:
+      - metrics
+      type: object
+      properties:
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrappedBackendMetric'
+      example:
+        metrics:
+        - metric:
+            id: 10
+            system_name: hits.4
+            friendly_name: Hits
+            description: Number of API hits
+            unit: hit
+            created_at: 2022-03-10T19:16:25.000Z
+            updated_at: 2022-03-10T19:16:25.000Z
+            links:
+            - rel: backend_api
+              href: https://3scale-admin.example.com/admin/api/backend_apis/4
+            - rel: self
+              href: https://3scale-admin.example.com/admin/api/backend_apis/4/metrics/10
+    WrappedArrayOfGatewayConfiguration:
+      required:
+      - proxy_configs
+      type: object
+      properties:
+        proxy_configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrappedGatewayConfiguration'
+    WrappedBackend:
+      required:
+      - backend_api
+      type: object
+      properties:
+        backend_api:
+          $ref: '#/components/schemas/Backend'
+    WrappedBackendMappingRule:
+      description: Wrapper around `BackendMappingRule`
+      type: object
+      properties:
+        mapping_rule:
+          $ref: '#/components/schemas/BackendMappingRule'
+    WrappedBackendMethod:
+      description: Wrapper around `BackendMethod`
+      required:
+      - method
+      type: object
+      properties:
+        method:
+          $ref: '#/components/schemas/BackendMethod'
+    WrappedBackendMetric:
+      description: Wrapper around `BackendMetric`
+      required:
+      - metric
+      type: object
+      properties:
+        metric:
+          $ref: '#/components/schemas/BackendMetric'
+    WrappedBackendUsage:
+      description: JSON wrapper around `BackendUsage`
+      required:
+      - backend_usage
+      type: object
+      properties:
+        backend_usage:
+          $ref: '#/components/schemas/BackendUsage'
+      example:
+        backend_usage:
+          id: 4
+          path: /widgets
+          service_id: 4
+          backend_id: 4
+          links:
+          - rel: service
+            href: https://3scale-admin.example.com/admin/api/services/4
+          - rel: backend_api
+            href: https://3scale-admin.example.com/admin/api/backend_apis/4
+    WrappedGatewayConfiguration:
+      description: Wrapper around `GatewayConfiguration`
+      required:
+      - proxy_config
+      type: object
+      properties:
+        proxy_config:
+          $ref: '#/components/schemas/GatewayConfiguration'
+  responses:
+    ActiveDocsSpecJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedActiveDocsSpec'
+      description: Response with a single `ActiveDocsSpec` in JSON form
+    ApiProductMappingRuleXmlResponse:
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ApiProductMappingRule'
+      description: Response with a single `ApiProductMappingRule` in XML form
+    ApiProductMethodXmlResponse:
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ApiProductMethod'
+      description: Response with a single `ApiProductMethod` in XML form
+    ApiProductMetricXmlResponse:
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ApiProductMetric'
+      description: Response with a single `ApiProductMetric` in XML form
+    ApiProductOidcConfigurationXmlResponse:
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ApiProductOidcConfiguration'
+      description: Response with `ApiProductOidcConfiguration` in XML form
+    ApiProductProxyConfigXmlResponse:
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ApiProductProxyConfig'
+      description: Response with `ApiProductProxyConfig` in XML form
+    ApiProductXmlResponse:
+      content:
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ApiProduct'
+          examples:
+            Default Echo API Example:
+              value: |-
+                <service>
+                    <id>2</id>
+                    <account_id>2</account_id>
+                    <name>API</name>
+                    <state>incomplete</state>
+                    <system_name>api</system_name>
+                    <backend_version>1</backend_version>
+                    <description/>
+                    <intentions_required>false</intentions_required>
+                    <buyers_manage_apps>true</buyers_manage_apps>
+                    <buyers_manage_keys>true</buyers_manage_keys>
+                    <referrer_filters_required>false</referrer_filters_required>
+                    <custom_keys_enabled>true</custom_keys_enabled>
+                    <buyer_key_regenerate_enabled>true</buyer_key_regenerate_enabled>
+                    <mandatory_app_key>true</mandatory_app_key>
+                    <buyer_can_select_plan>false</buyer_can_select_plan>
+                    <buyer_plan_change_permission>request</buyer_plan_change_permission>
+                    <deployment_option>hosted</deployment_option>
+                    <support_email>admin@3scale.apps.ocp.example.com</support_email>
+                    <metrics>
+                        <metric>
+                            <id>6</id>
+                            <name>hits</name>
+                            <system_name>hits</system_name>
+                            <friendly_name>Hits</friendly_name>
+                            <service_id>2</service_id>
+                            <description>Number of API hits</description>
+                            <unit>hit</unit>
+                        </metric>
+                    </metrics>
+                </service>
+      description: Response with a single `ApiProduct` in XML form
+    BackendJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedBackend'
+      description: Response with a single `Backend`
+    BackendMappingRuleJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedBackendMappingRule'
+      description: Response with a single `BackendMappingRule` in JSON form
+    BackendMethodJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedBackendMethod'
+      description: Response with a single `BackendMethod` in JSON form
+    BackendMetricJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedBackendMetric'
+      description: Response with a single `BackendMetric` in JSON form
+    BackendUsageJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedBackendUsage'
+      description: Response with a single `BackendUsage` in JSON form
+    GatewayConfigurationJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedGatewayConfiguration'
+      description: Response with the complete configuration for an API Product in
+        JSON form.
+    NoBodyJsonResponse:
+      content:
+        application/json:
+          schema:
+            type: string
+          examples:
+            No Body:
+              value: ""
+      description: Response with no body for a JSON response
+    NoBodyXmlResponse:
+      content:
+        application/xml:
+          schema:
+            type: string
+          examples:
+            No Body:
+              value: ""
+      description: Response with no body for an XML response
+    NotFoundJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StatusWrapper'
+          examples:
+            Not Found Example:
+              value:
+                status: Not found
+      description: Response in JSON indicating an object was not found
+    ValidationErrorJsonResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorObjectWrapper'
+      description: Response with object describing validation errors
+    ValidationErrorPlainTextResponse:
+      content:
+        test/plain:
+          schema:
+            type: string
+      description: Response describing the failure in plain text
+  securitySchemes:
+    access_token:
+      type: apiKey
+      description: 3scale Personal Access Token
+      name: access_token
+      in: query
+tags:
+- name: AccountManagement
+  description: Requests grouped as Account Management API within the 3scale REST API
+    documentation
