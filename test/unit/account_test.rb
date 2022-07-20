@@ -517,7 +517,7 @@ class AccountTest < ActiveSupport::TestCase
   test "destroying account destroys the default service firing services destroy callbacks" do
     account = FactoryBot.create(:provider_account)
     service = account.default_service
-    metric = FactoryBot.create(:metric, service: service)
+    metric = FactoryBot.create(:metric, owner: service)
     feature = FactoryBot.create(:feature, featurable: service)
 
     account.destroy

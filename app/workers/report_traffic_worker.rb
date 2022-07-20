@@ -104,7 +104,7 @@ class ReportTrafficWorker
   end
 
   def master_service_metric?(metric_system_name)
-    Metric.exists?(system_name: metric_system_name, service_id: master_service.id)
+    Metric.exists?(system_name: metric_system_name, owner: master_service)
   end
 
   def report_traffic_log(request, response)

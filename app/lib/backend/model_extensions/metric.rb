@@ -43,7 +43,7 @@ module Backend
       end
 
       def execute_per_service(&block)
-        services = [*owner.try(:services), service].compact
+        services = backend_api_metric? ? owner.services : [owner]
         services.each(&block)
       end
     end
