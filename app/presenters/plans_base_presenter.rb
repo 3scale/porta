@@ -8,7 +8,7 @@ class PlansBasePresenter
     @collection = collection
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
     @search = ThreeScale::Search.new(params[:search])
-    @sorting_params = "#{params[:sort].presence || 'name'} #{params[:direction].presence || 'asc'}"
+    @sorting_params = "plans.#{params[:sort].presence || 'name'} #{params[:direction].presence || 'asc'}"
   end
 
   attr_reader :service, :collection, :pagination_params, :search, :sorting_params
