@@ -5,7 +5,7 @@ module VerticalNavHelper
 
   def vertical_nav_data
     {
-      'current-api': (current_api.to_json(root: false, only: %i[name]) if active_menu == :serviceadmin),
+      'current-api': (current_api.to_json(root: false, only: %i[name]) if active_menu == :serviceadmin || active_menu == :backend_api),
       sections: vertical_nav_sections.to_json,
       'active-section': active_submenu,
       'active-item': active_sidebar
