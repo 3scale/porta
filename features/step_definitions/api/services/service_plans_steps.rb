@@ -76,16 +76,25 @@ end
 
 When "an admin is looking for a service plan" do
   ServicePlan.destroy_all
-  @plan_a = FactoryBot.create(:service_plan, issuer: default_service, name: 'This is number One')
-  @plan_b = FactoryBot.create(:service_plan, issuer: default_service, name: 'Now the second one', state: 'published')
-  @plan_c = FactoryBot.create(:service_plan, issuer: default_service, name: 'Finally the Last', state: 'published')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'This is number One')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'Now the second one')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'Finally the Last')
 
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').bought_service_contracts.create!(plan: @plan_a)
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').bought_service_contracts.create!(plan: @plan_b)
+  FactoryBot.create_list(:service_plan, 10, issuer: default_service)
+  FactoryBot.create_list(:service_plan, 5, issuer: default_service, state: 'published')
+
+  @plans = default_service.service_plans
+
+  @plans.take(10).each do |plan|
+    FactoryBot.create(:buyer_account, provider_account: @provider).bought_service_contracts.create!(plan: plan)
+  end
+
+  @plans.take(5).each do |plan|
+    FactoryBot.create(:buyer_account, provider_account: @provider).bought_service_contracts.create!(plan: plan)
+  end
 
   visit admin_service_service_plans_path(default_service)
-
-  assert_plans_table [@plan_a, @plan_b, @plan_c]
+  assert_plans_table @plans
 end
 
 Then "an admin {is} able to see its service plans" do |visible|

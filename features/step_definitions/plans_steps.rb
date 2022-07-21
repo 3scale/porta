@@ -124,11 +124,11 @@ Then "they can filter plans by name" do
 
   input.set('one')
   input.sibling('button').click
-  assert_plans_table [@plan_a, @plan_b]
+  assert_plans_table @plans.by_query('one')
 
   input.set('last')
   input.sibling('button').click
-  assert_plans_table [@plan_c]
+  assert_plans_table @plans.by_query('last')
 
   input.set('foooo')
   input.sibling('button').click
@@ -136,28 +136,28 @@ Then "they can filter plans by name" do
 
   input.set('')
   input.sibling('button').click
-  assert_plans_table [@plan_a, @plan_b, @plan_c]
+  assert_plans_table @plans
 end
 
 And "they can sort plans by name, no. of contracts and state" do
   within plans_table do
     click_on 'Name'
-    assert_plans_table([@plan_c, @plan_b, @plan_a], sort: true)
+    assert_plans_table @plans.reorder(name: :asc), sort: true
 
     click_on 'Name'
-    assert_plans_table([@plan_a, @plan_b, @plan_c], sort: true)
+    assert_plans_table @plans.reorder(name: :desc), sort: true
 
     click_on 'Contracts'
-    assert_plans_table([@plan_c, @plan_a, @plan_b], sort: true)
+    assert_plans_table @plans.reorder(contracts_count: :asc), sort: true
 
     click_on 'Contracts'
-    assert_plans_table([@plan_a, @plan_b, @plan_c], sort: true)
+    assert_plans_table @plans.reorder(contracts_count: :desc), sort: true
 
     click_on 'State'
-    assert_plans_table([@plan_a, @plan_b, @plan_c], sort: true)
+    assert_plans_table @plans.reorder(state: :asc), sort: true
 
     click_on 'State'
-    assert_plans_table([@plan_b, @plan_c, @plan_a], sort: true)
+    assert_plans_table @plans.reorder(state: :desc), sort: true
   end
 end
 
