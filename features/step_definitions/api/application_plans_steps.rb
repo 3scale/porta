@@ -86,18 +86,24 @@ end
 
 When "an admin is looking for an application plan" do
   ApplicationPlan.destroy_all
-  @plan_a = FactoryBot.create(:application_plan, issuer: default_service, name: 'This is number One')
-  @plan_b = FactoryBot.create(:application_plan, issuer: default_service, name: 'Now the second one')
-  @plan_c = FactoryBot.create(:application_plan, issuer: default_service, name: 'Finally the Last')
+  FactoryBot.create(:application_plan, issuer: default_service, name: 'This is number One')
+  FactoryBot.create(:application_plan, issuer: default_service, name: 'Now the second one')
+  FactoryBot.create(:application_plan, issuer: default_service, name: 'Finally the Last')
 
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(@plan_a)
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(@plan_b)
+  FactoryBot.create(:buyer_account, provider_account: @provider).buy!(
+    FactoryBot.create(:application_plan, issuer: default_service, name: 'This has been bought')
+  )
 
-  @plan_b.publish!
-  @plan_c.publish!
+  plan = FactoryBot.create(:application_plan, issuer: default_service, name: 'This has been bought twice!')
+  FactoryBot.create_list(:buyer_account, 2, provider_account: @provider).each do |buyer|
+    buyer.buy!(plan)
+  end
+
+  @plans = default_service.application_plans
+  @plans.last(3).each(&:publish!)
 
   visit admin_service_application_plans_path(default_service)
-  assert_plans_table [@plan_a, @plan_b, @plan_c]
+  assert_plans_table @plans
 end
 
 #TODO: FIXME: rename to: application plan

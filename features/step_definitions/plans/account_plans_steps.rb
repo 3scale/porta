@@ -113,16 +113,21 @@ end
 
 When "an admin is looking for an account plan" do
   AccountPlan.destroy_all
-  @plan_a = FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One')
-  @plan_b = FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one', state: 'published')
-  @plan_c = FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last', state: 'published')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one', state: 'published')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last')
 
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 1').buy!(@plan_a)
-  FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'Org 2').buy!(@plan_b)
+  plan = FactoryBot.create(:account_plan, provider: @provider, name: 'This has been bought')
+  FactoryBot.create(:buyer_account, provider_account: @provider).buy!(plan)
+  plan.reset_contracts_counter
 
-  @plan_a.reset_contracts_counter
-  @plan_b.reset_contracts_counter
+  plan2 = FactoryBot.create(:account_plan, provider: @provider, name: 'This has been bought twice!')
+  FactoryBot.create_list(:buyer_account, 2, provider_account: @provider).each do |buyer|
+    buyer.buy!(plan2)
+  end
+  plan2.reset_contracts_counter
 
+  @plans = @provider.account_plans
   visit admin_buyers_account_plans_path
-  assert_plans_table [@plan_a, @plan_b, @plan_c]
+  assert_plans_table @plans
 end
