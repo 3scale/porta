@@ -19,6 +19,23 @@ class Api::ServicesIndexPresenterTest < ActiveSupport::TestCase
     assert_equal 20, presenter.products.size
   end
 
+  test "deleted products should not be shown" do
+    FactoryBot.create_list(:simple_service, 2, account: provider)
+    presenter = Api::ServicesIndexPresenter.new(current_user: user, params: {})
+
+    service = provider.services.first
+
+    assert_includes provider.services, service
+    assert_includes presenter.products, service
+
+    service.mark_as_deleted
+
+    presenter = Api::ServicesIndexPresenter.new(current_user: user, params: {})
+
+    assert_includes provider.services, service
+    assert_not_includes presenter.products, service
+  end
+
   test "filter products by query" do
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
