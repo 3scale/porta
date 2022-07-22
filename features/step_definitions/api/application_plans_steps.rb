@@ -90,18 +90,17 @@ When "an admin is looking for an application plan" do
   FactoryBot.create(:application_plan, issuer: default_service, name: 'Now the second one')
   FactoryBot.create(:application_plan, issuer: default_service, name: 'Finally the Last')
 
-  FactoryBot.create_list(:application_plan, 15, issuer: default_service)
+  FactoryBot.create(:buyer_account, provider_account: @provider).buy!(
+    FactoryBot.create(:application_plan, issuer: default_service, name: 'This has been bought')
+  )
+
+  plan = FactoryBot.create(:application_plan, issuer: default_service, name: 'This has been bought twice!')
+  FactoryBot.create_list(:buyer_account, 2, provider_account: @provider).each do |buyer|
+    buyer.buy!(plan)
+  end
+
   @plans = default_service.application_plans
-
-  @plans.take(10).each do |plan|
-    FactoryBot.create(:buyer_account, provider_account: @provider).buy! plan
-  end
-
-  @plans.take(5).each do |plan|
-    FactoryBot.create(:buyer_account, provider_account: @provider).buy! plan
-  end
-
-  @plans.last(10).each(&:publish!)
+  @plans.last(3).each(&:publish!)
 
   visit admin_service_application_plans_path(default_service)
   assert_plans_table @plans

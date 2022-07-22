@@ -114,24 +114,20 @@ end
 When "an admin is looking for an account plan" do
   AccountPlan.destroy_all
   FactoryBot.create(:account_plan, provider: @provider, name: 'This is number One')
-  FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one')
+  FactoryBot.create(:account_plan, provider: @provider, name: 'Now the second one', state: 'published')
   FactoryBot.create(:account_plan, provider: @provider, name: 'Finally the Last')
 
-  FactoryBot.create_list(:account_plan, 10, provider: @provider)
-  FactoryBot.create_list(:account_plan, 5, provider: @provider, state: 'published')
+  plan = FactoryBot.create(:account_plan, provider: @provider, name: 'This has been bought')
+  FactoryBot.create(:buyer_account, provider_account: @provider).buy!(plan)
+  plan.reset_contracts_counter
+
+  plan2 = FactoryBot.create(:account_plan, provider: @provider, name: 'This has been bought twice!')
+  FactoryBot.create_list(:buyer_account, 2, provider_account: @provider).each do |buyer|
+    buyer.buy!(plan2)
+  end
+  plan2.reset_contracts_counter
 
   @plans = @provider.account_plans
-
-  @plans.take(10).each do |plan|
-    FactoryBot.create(:buyer_account, provider_account: @provider).buy!(plan)
-    plan.reset_contracts_counter
-  end
-
-  @plans.take(5).each do |plan|
-    FactoryBot.create(:buyer_account, provider_account: @provider).buy!(plan)
-    plan.reset_contracts_counter
-  end
-
   visit admin_buyers_account_plans_path
   assert_plans_table @plans
 end

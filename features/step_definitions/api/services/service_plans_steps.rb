@@ -77,22 +77,19 @@ end
 When "an admin is looking for a service plan" do
   ServicePlan.destroy_all
   FactoryBot.create(:service_plan, issuer: default_service, name: 'This is number One')
-  FactoryBot.create(:service_plan, issuer: default_service, name: 'Now the second one')
+  FactoryBot.create(:service_plan, issuer: default_service, name: 'Now the second one', state: 'published')
   FactoryBot.create(:service_plan, issuer: default_service, name: 'Finally the Last')
 
-  FactoryBot.create_list(:service_plan, 10, issuer: default_service)
-  FactoryBot.create_list(:service_plan, 5, issuer: default_service, state: 'published')
+  FactoryBot.create(:buyer_account, provider_account: @provider).bought_service_contracts.create!(
+    plan: FactoryBot.create(:service_plan, issuer: default_service, name: 'This has been bought')
+  )
+
+  plan = FactoryBot.create(:service_plan, issuer: default_service, name: 'This has been bought twice!')
+  FactoryBot.create_list(:buyer_account, 2, provider_account: @provider).each do |buyer|
+    buyer.bought_service_contracts.create!(plan: plan)
+  end
 
   @plans = default_service.service_plans
-
-  @plans.take(10).each do |plan|
-    FactoryBot.create(:buyer_account, provider_account: @provider).bought_service_contracts.create!(plan: plan)
-  end
-
-  @plans.take(5).each do |plan|
-    FactoryBot.create(:buyer_account, provider_account: @provider).bought_service_contracts.create!(plan: plan)
-  end
-
   visit admin_service_service_plans_path(default_service)
   assert_plans_table @plans
 end
