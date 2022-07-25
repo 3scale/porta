@@ -179,7 +179,7 @@ end
 
 
 Given('the provider has a buyer') do
-  step %'the current domain is #{@provider.external_domain}'
+  step %(the current domain is #{@provider.external_domain})
 
   visit signup_path
 

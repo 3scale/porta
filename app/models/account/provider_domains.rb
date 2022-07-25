@@ -203,14 +203,16 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def domain_not_self_domain
-    if read_attribute(:domain) && read_attribute(:self_domain) && (read_attribute(:domain) == read_attribute(:self_domain))
-      if subdomain
-        errors.add(:subdomain, :same)
-        errors.add(:self_subdomain, :same)
-      else
-        errors.add(:domain, :same)
-        errors.add(:self_domain, :same)
-      end
+    return unless (domain = read_attribute(:domain)) &&
+                  (self_domain = read_attribute(:self_domain)) &&
+                  (domain == self_domain)
+
+    if subdomain
+      errors.add(:subdomain, :same)
+      errors.add(:self_subdomain, :same)
+    else
+      errors.add(:domain, :same)
+      errors.add(:self_domain, :same)
     end
   end
 

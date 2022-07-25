@@ -21,6 +21,7 @@ end
 
 Given "current domain is the {word} domain of {provider}" do |level, provider|
   raise "Missing admin domain of #{provider.name}" if provider.internal_admin_domain.blank?
+
   step %(the current domain is #{level == 'admin' ? provider.external_admin_domain : 'the master domain'})
   @provider = provider
 end
