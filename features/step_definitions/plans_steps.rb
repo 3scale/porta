@@ -192,7 +192,7 @@ def delete_plan_from_table_action(plan)
   accept_confirm do
     find_action_for_plan(/delete/i, plan).click
   end
-  assert_flash 'The plan was deleted'
+  assert has_content?('The plan was deleted')
   assert_not has_content?(plan.name) # TODO: assert table row not whole content
 end
 
