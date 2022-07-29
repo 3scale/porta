@@ -50,7 +50,7 @@ const PlansTableCard = ({ columns, plans: initialPlans, count, searchHref }: Pro
         return ajax(path, { method: 'DELETE' })
           .then(data => data.json().then(res => {
             if (data.status === 200) {
-              alert.notice(res.notice)
+              window.$.flash.notice(res.notice)
               const purgedPlans = plans.filter(p => p.id !== res.id)
               setPlans(purgedPlans)
             }
