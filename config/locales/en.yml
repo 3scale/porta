@@ -572,9 +572,7 @@ en:
     apicast: APIcast
     apicast_hint: Nginx reverse proxy server.
 
-    service_mesh_istio: |
-      Istio
-      <span>A uniform way to secure, connect, and monitor microservices.</span>
+    service_mesh_istio: Istio
 
     on_amazon: Amazon
     plugin_ruby: |
