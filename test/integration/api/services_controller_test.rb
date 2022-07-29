@@ -88,6 +88,25 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       page = Nokogiri::HTML::Document.parse(response.body)
       hosted_option = page.at_css('#service_deployment_option_hosted')
       assert hosted_option.attribute('checked').present?
+
+      # Istio
+      service.update!(deployment_option: 'service_mesh_istio')
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      istio_option = page.at_css('#service_deployment_option_service_mesh_istio')
+      assert istio_option.attribute('checked').present?
+    end
+
+    test 'receives proper names and values from deployment options' do
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+
+      page_deployment_options_collection = page.css('[name="service[deployment_option]"]').map{|i| [i.parent.text, i[:value]]}
+      deployment_options_collection = [['APIcast', 'hosted'], ['APIcast self-managed', 'self_managed'], ['Istio', 'service_mesh_istio']]
+
+      assert_equal page_deployment_options_collection, deployment_options_collection
     end
 
     test 'update the settings' do
@@ -199,6 +218,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     def update_params(oidc_id: nil)
       @update_params ||= { service:
         { intentions_required: '0',
+          deployment_option: 'service_mesh_istio',
           buyers_manage_apps: '0',
           referrer_filters_required: '1',
           custom_keys_enabled: '1',
