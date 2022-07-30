@@ -1,32 +1,45 @@
-FROM quay.io/centos7/ruby-26-centos7
+FROM quay.io/centos/centos:stream8 AS build
+ENV DNF_INSTALL_OPTS="-y --allowerasing --setopt=skip_missing_names_on_install=False --setopt=install_weak_deps=false --nodocs"
+RUN dnf install $DNF_INSTALL_OPTS podman-catatonit
 
-USER root
+
+FROM quay.io/centos/centos:stream8
 
 ARG BUNDLER_ENV
-ENV BUNDLER_ENV="${BUNDLER_ENV}" \
-    TZ=:/etc/localtime \
+ARG NPM_REPO
+ARG GEMS_REPO
+ENV RAILS_ENV=production \
+    BUNDLER_ENV="${BUNDLER_ENV}" \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
-    NODEJS_SCL=rh-nodejs12
+    DNF_INSTALL_OPTS="-y --allowerasing --setopt=skip_missing_names_on_install=False --setopt=install_weak_deps=false --nodocs" \
+    TZ=:/etc/localtime \
+    SAFETY_ASSURED=1 \
+    NODE_OPTIONS="--max_old_space_size=4096" \
+    NPM_REPO="${NPM_REPO}" \
+    GEMS_REPO="${GEMS_REPO}"
 
 WORKDIR /opt/system
 
-RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-candidate_x86_64_os_.skip_if_unavailable=true \
-    && rpm -Uvh https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
-    && yum -y update \
-    && yum remove -y postgresql \
-    && yum -y install centos-release-scl-rh \
+RUN dnf config-manager --set-enabled powertools \
+    && dnf install $DNF_INSTALL_OPTS epel-release \
+    && dnf -y module enable ruby:2.6 nodejs:12 \
+    && dnf install $DNF_INSTALL_OPTS \
+              autoconf automake make cmake libtool gcc-c++ pkgconf redhat-rpm-config \
+              openssl-devel zlib-devel glibc-devel \
+              npm \
+              ruby-devel rubygem-bigdecimal rubygem-io-console\
               ImageMagick \
               ImageMagick-devel \
               unixODBC-devel \
-              mysql \
-              postgresql10 postgresql10-devel postgresql10-libs \
+              mysql-devel \
+              libpq-devel \
+              git \
               file \
-              rh-nodejs12 \
-    && yum install -y epel-release \
-    && yum -y clean all
+    && dnf -y clean all
 
 # Install sphinx search
+# TODO: sphinx (compile?) for all supported archs
 ARG SPHINX_VERSION=3.4.1
 RUN curl -sSL https://sphinxsearch.com/files/sphinx-${SPHINX_VERSION}-efbcc65-linux-amd64.tar.gz | tar xz -C /tmp \
     && cp /tmp/sphinx-${SPHINX_VERSION}/bin/* /usr/bin/ \
@@ -39,19 +52,11 @@ ADD vendor/active-docs/*.gemspec vendor/active-docs/
 ADD Gemfile* ./
 ADD Rakefile ./
 
-COPY openshift/system/contrib/scl_enable ./etc/
-
-ENV BASH_ENV=/opt/system/etc/scl_enable \
-    ENV=/opt/system/etc/scl_enable \
-    PROMPT_COMMAND=". /opt/system/etc/scl_enable" \
-    RAILS_ENV=production \
-    SAFETY_ASSURED=1
-
-RUN export ${BUNDLER_ENV} >/dev/null\
-    && source /opt/system/etc/scl_enable \
+RUN export ${BUNDLER_ENV} >/dev/null \
+    && echo "gem: --no-document" > ~/.gemrc \
     && gem install bundler --version 2.2.25 \
-    && bundle config build.pg --with-pg-config=/usr/pgsql-10/bin/pg_config \
-    && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
+    && bundle config set --local deployment 'true' \
+    && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
 
@@ -62,23 +67,25 @@ ADD yarn.lock ./
 ADD openshift/system/config/* ./config/
 
 RUN export ${BUNDLER_ENV} >/dev/null \
-    && source /opt/system/etc/scl_enable \
     && bundle exec rake tmp:create \
     && mkdir -p public/assets db/sphinx \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \
     && cd /opt/system \
-    && npm install -g yarn \
+    && npm --unsafe-perm install -g yarn \
     && yarn install:safe --no-progress \
     && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
 
+# with RHEL 9.1 we can just install package podman-catatonit
+COPY --from=build /usr/libexec/podman/catatonit /usr/libexec/podman/
+
 USER 1001
 ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
+ADD openshift/system/container-entrypoint /usr/bin/container-entrypoint
 EXPOSE 3000 9306
-# TODO: dumb-init!
-ENTRYPOINT ["/opt/system/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/container-entrypoint", "/opt/system/entrypoint.sh"]
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
 # vim: set ft=dockerfile:
