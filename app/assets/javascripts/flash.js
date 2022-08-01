@@ -4,6 +4,9 @@
 
   var timeouts = [],
     display_notice = function (message, clazz, opts) {
+      if (message == '') {
+        throw new Error('flash cannot be empty')
+      }
       var id
       while (id = timeouts.shift()) { clearTimeout(id) }
 
