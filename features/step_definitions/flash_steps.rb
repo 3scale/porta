@@ -9,17 +9,13 @@ def assert_flash(message)
   # is rendered with the proper message, regardless of visibility.
 
   # For admin portal see app/views/shared/provider/_flash.html.erb
-  if has_css?('#flashWrapper span', visible: :all)
-    wrapper = find('#flashWrapper span', visible: :all)
   # For dev portal see lib/developer_portal/app/views/shared/_flash_message.html.erb
-  elsif has_css?('#flashWrapper p', visible: :all)
-    wrapper = find('#flashWrapper p', visible: :all)
   # and app/assets/javascripts/flash-buyer.js
-  elsif has_css?('#flash-messages')
-    wrapper = find('#flash-messages .alert .container')
-  else
-    raise "No flash messages container has been found"
-  end
 
-  wrapper.assert_text(:all, message)
+  if has_css?('#flashWrapper', visible: :all, wait: 10)
+    assert has_css?('#flashWrapper span', visible: :all, exact_text: message) ||
+           has_css?('#flashWrapper p', visible: :all, exact_text: message), "No flash has been found"
+  else
+    assert has_css?('#flash-messages', exact_text: message), "No flash has been found"
+  end
 end
