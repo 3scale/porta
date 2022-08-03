@@ -103,10 +103,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       page = Nokogiri::HTML::Document.parse(response.body)
 
-      page_deployment_options_collection = page.css('[name="service[deployment_option]"]').map{|i| [i.parent.text, i[:value]]}
-      deployment_options_collection = [['APIcast', 'hosted'], ['APIcast self-managed', 'self_managed'], ['Istio', 'service_mesh_istio']]
+      deployment_options = page.css('[name="service[deployment_option]"]').map{|i| [i.parent.text, i[:value]]}
+      expected_deployment_options = [['APIcast 3scale managed', 'hosted'], ['APIcast self-managed', 'self_managed'], ['Istio', 'service_mesh_istio']]
 
-      assert_equal page_deployment_options_collection, deployment_options_collection
+      assert_equal expected_deployment_options, deployment_options
     end
 
     test 'update the settings' do
