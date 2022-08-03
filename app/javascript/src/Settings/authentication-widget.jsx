@@ -1,7 +1,5 @@
 // TODO: Create React module for Integration Settings. Please.
 
-import 'Settings/styles/authentication.scss'
-
 const AUTH_WRAPPER_ID = 'auth-wrapper'
 const AUTH_METHOD_CLASS = 'auth-method'
 const AUTH_SETS_CLASS = 'auth-settings'
