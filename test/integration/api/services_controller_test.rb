@@ -92,7 +92,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     test 'shows authentication options' do
       # Default value
-      service.stubs(:backend_version).returns(nil)
+      service.stubs(:backend_version)
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
