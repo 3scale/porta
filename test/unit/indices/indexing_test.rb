@@ -67,6 +67,22 @@ class IndexingTest < ActiveSupport::TestCase
     assert_equal Set.new(models.map(&:name)), Set.new(ThinkingSphinx::Test.indexed_models.map(&:name))
   end
 
+  test 'MySQL uses correct sql index when querying accounts in batches' do
+    skip "this test applies to MySQL only" unless System::Database.mysql?
+
+    index = ThinkingSphinx::Test.index_for(Account)
+
+    provider = FactoryBot.create(:simple_provider)
+    FactoryBot.create_list(:simple_buyer, 10, provider_account: provider)
+
+    # this query simulates getting accounts in batches with the scope defined for sphinx indexation
+    query = "EXPLAIN #{index.scope.where.has{id > provider.id}.order(id: :asc).limit(5).to_sql}"
+    res = ActiveRecord::Base.connection.execute(query)
+    key = res.fields.index("key")
+    # in particular we had an issue where `index_accounts_on_master` was selected instead of PRIMARY
+    assert_equal "PRIMARY", res.first[key]
+  end
+
   private
 
   def indexed_models
