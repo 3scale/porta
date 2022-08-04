@@ -23,6 +23,10 @@ module ThinkingSphinx
       def indexed_models
         ThinkingSphinx::Configuration.instance.index_set_class.new.map(&:model).map { |m| m.descendants.presence || m }.flatten
       end
+
+      def index_for(model)
+        ThinkingSphinx::Configuration.instance.index_set_class.new(classes: [model]).first
+      end
     end
   end
 end
