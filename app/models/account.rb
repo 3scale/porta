@@ -85,7 +85,7 @@ class Account < ApplicationRecord
   # scope :buyers, :conditions => {:provider => false, :master => false}
   scope :buyers, -> { where(provider: false, buyer: true) }
 
-  scope :not_master, -> { where(master: [false, nil]) }
+  scope :not_master, -> { where.has { (master != true) | (master == nil) } }
 
   audited allow_mass_assignment: true
 
