@@ -18,6 +18,22 @@ class Provider::Admin::BackendApisIndexPresenterTest < ActiveSupport::TestCase
     assert_equal 20, presenter.backend_apis.size
   end
 
+  test "deleted backend apis should not be shown" do
+    FactoryBot.create(:backend_api, account: provider)
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
+    backend_api = provider.backend_apis.first
+
+    assert_includes provider.backend_apis, backend_api
+    assert_includes presenter.backend_apis, backend_api
+
+    backend_api.mark_as_deleted
+
+    presenter = Provider::Admin::BackendApisIndexPresenter.new(current_account: provider, params: {})
+
+    assert_includes provider.backend_apis, backend_api
+    assert_not_includes presenter.backend_apis, backend_api
+  end
+
   test "filter backend_apis by query" do
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs(only: SphinxIndexationWorker) do

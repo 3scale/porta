@@ -15,7 +15,7 @@ class Provider::Admin::BackendApisIndexPresenter
   delegate :total_entries, to: :backend_apis
 
   def backend_apis
-    @backend_apis ||= current_account.backend_apis
+    @backend_apis ||= current_account.accessible_backend_apis
                                      .order(sorting_params)
                                      .scope_search(search)
                                      .paginate(pagination_params)
