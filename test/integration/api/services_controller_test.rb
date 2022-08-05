@@ -90,6 +90,39 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert hosted_option.attribute('checked').present?
     end
 
+    test 'shows and update authentication options' do
+      # Default value
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      default = page.at_css('#service_proxy_authentication_method_1')
+      assert default.attribute('checked').present?
+
+      # App_Id and App_Key Pair 
+      put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '2' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      app_id_app_key_option = page.at_css('#service_proxy_authentication_method_2')
+
+      assert app_id_app_key_option.attribute('checked').present?
+
+      # API Key (user_key)
+      put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '1' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      api_key_option = page.at_css('#service_proxy_authentication_method_1')
+
+      assert api_key_option.attribute('checked').present?
+    end
+
     test 'update the settings' do
       Account.any_instance.stubs(:provider_can_use?).returns(true)
       service.update!(deployment_option: 'self_managed')
