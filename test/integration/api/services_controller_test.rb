@@ -63,18 +63,19 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'shows the correct deployment option' do
+    test 'shows and update the correct deployment option' do
       # Default value
-      service.stubs(:deployment_option).returns(nil)
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
       hosted_option = page.at_css('#service_deployment_option_hosted')
       assert hosted_option.attribute('checked').present?
-      service.unstub(:deployment_option)
 
       # Self managed
-      service.update!(deployment_option: 'self_managed')
+      put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'self_managed' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
@@ -82,7 +83,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert self_managed_option.attribute('checked').present?
 
       # Hosted
-      service.update!(deployment_option: 'hosted')
+      put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'hosted' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
@@ -90,7 +94,10 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert hosted_option.attribute('checked').present?
 
       # Istio
-      service.update!(deployment_option: 'service_mesh_istio')
+      put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'service_mesh_istio' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
@@ -218,7 +225,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     def update_params(oidc_id: nil)
       @update_params ||= { service:
         { intentions_required: '0',
-          deployment_option: 'service_mesh_istio',
           buyers_manage_apps: '0',
           referrer_filters_required: '1',
           custom_keys_enabled: '1',
