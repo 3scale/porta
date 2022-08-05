@@ -567,14 +567,12 @@ en:
 
     self_managed: APIcast self-managed
     self_managed_hint: Manage your own NGINX based API gateway for ultimate flexibility and customization.
-    hosted: APIcast
+    hosted: APIcast 3scale managed
     hosted_hint: a 3scale managed NGINX based API gateway for quick and reliable integrations
     apicast: APIcast
     apicast_hint: Nginx reverse proxy server.
 
-    service_mesh_istio: |
-      Istio
-      <span>A uniform way to secure, connect, and monitor microservices.</span>
+    service_mesh_istio: Istio
 
     on_amazon: Amazon
     plugin_ruby: |
