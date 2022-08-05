@@ -90,33 +90,37 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert hosted_option.attribute('checked').present?
     end
 
-    test 'shows authentication options' do
+    test 'shows and update authentication options' do
       # Default value
-      service.stubs(:backend_version)
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
       default = page.at_css('#service_proxy_authentication_method_1')
       assert default.attribute('checked').present?
-      service.unstub(:backend_version)
 
-      # API Key (user_key)
-      service.update!(backend_version: '1')
-      get settings_admin_service_path(service)
+      # App_Id and App_Key Pair 
+      put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '2' })
 
-      page = Nokogiri::HTML::Document.parse(response.body)
-      api_key_option = page.at_css('#service_proxy_authentication_method_1')
-      assert api_key_option.attribute('checked').present?
-      service.unstub(:backend_version)
+      assert_equal 'Product information updated.', flash[:notice]
 
-      # App_ID and App_Key Pair
-      service.update!(backend_version: '2')
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
       app_id_app_key_option = page.at_css('#service_proxy_authentication_method_2')
+
       assert app_id_app_key_option.attribute('checked').present?
-      service.unstub(:backend_version)
+
+      # API Key (user_key)
+      put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '1' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      api_key_option = page.at_css('#service_proxy_authentication_method_1')
+
+      assert api_key_option.attribute('checked').present?
     end
 
     test 'update the settings' do
@@ -205,19 +209,6 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Product information updated.', flash[:notice]
       assert_equal 'http://api.example.com:8080', proxy.endpoint
       assert_equal 'http://api.staging.example.com:8080', proxy.sandbox_endpoint
-    end
-
-    test 'update authentication option' do
-      get settings_admin_service_path(service)
-
-      backend_version = service.backend_version
-      assert_equal '1', backend_version
-
-      backend_version = '2'
-
-      put admin_service_path(service), params: update_params
-      assert_equal 'Product information updated.', flash[:notice]
-      assert_equal '2', backend_version
     end
 
     test 'update settings' do
