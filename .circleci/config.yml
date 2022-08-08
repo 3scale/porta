@@ -708,7 +708,7 @@ jobs:
 
   notify_start:
     docker:
-      - image: cimg/base
+      - image: cimg/base:current
     steps:
       - run:
           name: Notify Slack about tests start
@@ -748,7 +748,7 @@ jobs:
 
   notify_failure:
     docker:
-      - image: cimg/base
+      - image: cimg/base:current
     steps:
       - run:
           name: Notify Slack about tests failure
@@ -779,7 +779,7 @@ jobs:
 
   notify_success:
     docker:
-      - image: cimg/base
+      - image: cimg/base:current
     steps:
       - run:
           name: Notify Slack about tests passing
