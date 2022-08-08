@@ -1,5 +1,5 @@
 base: &default
-  - :dalli_store
+  - :mem_cache_store
   - <%= ENV['MEMCACHE_SERVERS'].presence || 'system-memcache:11211' %>
 
 preview: *default

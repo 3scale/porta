@@ -1,18 +1,18 @@
 development:
   access_key_id:     access_key_id
   secret_access_key: secret_access_key
-  bucket:            dev.my-s3-bucket.example.com
+  bucket:            dev-my-s3-bucket
   region:            "us-east-1"
-  force_path_style:  true
+  force_path_style:  false
 
 test: &test
   access_key_id: invalid
   secret_access_key: invalid
-  bucket: test.my-s3-bucket.example.com
+  bucket: test-my-s3-bucket
   region: "us-east-1"
 
 production:
   access_key_id: invalid
   secret_access_key: invalid
-  bucket: prod.my-s3-bucket.example.com
+  bucket: prod-my-s3-bucket
   region: "us-east-1"
