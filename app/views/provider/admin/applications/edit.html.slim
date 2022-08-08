@@ -7,7 +7,7 @@ h2 = "Edit application: #{@cinstance.name}"
   = form.inputs do
     = form.user_defined_form
 
-  = form.buttons do
-    = form.button 'Update Application', button_html: {class: 'pf-c-button pf-m-primary' }
+  = form.actions do
+    = form.commit_button
     li
       = delete_application_link(@cinstance)

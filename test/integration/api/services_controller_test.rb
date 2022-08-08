@@ -63,18 +63,19 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    test 'shows the correct deployment option' do
+    test 'shows and update the correct deployment option' do
       # Default value
-      service.stubs(:deployment_option).returns(nil)
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
       hosted_option = page.at_css('#service_deployment_option_hosted')
       assert hosted_option.attribute('checked').present?
-      service.unstub(:deployment_option)
 
       # Self managed
-      service.update!(deployment_option: 'self_managed')
+      put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'self_managed' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
@@ -82,12 +83,70 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert self_managed_option.attribute('checked').present?
 
       # Hosted
-      service.update!(deployment_option: 'hosted')
+      put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'hosted' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
       get settings_admin_service_path(service)
 
       page = Nokogiri::HTML::Document.parse(response.body)
       hosted_option = page.at_css('#service_deployment_option_hosted')
       assert hosted_option.attribute('checked').present?
+
+      # Istio
+      put admin_service_path(service), params: update_params.deep_merge(service: { deployment_option: 'service_mesh_istio' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      istio_option = page.at_css('#service_deployment_option_service_mesh_istio')
+      assert istio_option.attribute('checked').present?
+    end
+
+    test 'receives proper names and values from deployment options' do
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+
+      deployment_options = page.css('[name="service[deployment_option]"]').map{|i| [i.parent.text, i[:value]]}
+      expected_deployment_options = [['APIcast 3scale managed', 'hosted'], ['APIcast self-managed', 'self_managed'], ['Istio', 'service_mesh_istio']]
+
+      assert_equal expected_deployment_options, deployment_options
+    end
+
+    test 'shows and update authentication options' do
+      # Default value
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      default = page.at_css('#service_proxy_authentication_method_1')
+      assert default.attribute('checked').present?
+
+      # App_Id and App_Key Pair 
+      put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '2' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      app_id_app_key_option = page.at_css('#service_proxy_authentication_method_2')
+
+      assert app_id_app_key_option.attribute('checked').present?
+
+      # API Key (user_key)
+      put admin_service_path(service), params: update_params.deep_merge(service: { backend_version: '1' })
+
+      assert_equal 'Product information updated.', flash[:notice]
+
+      get settings_admin_service_path(service)
+
+      page = Nokogiri::HTML::Document.parse(response.body)
+      api_key_option = page.at_css('#service_proxy_authentication_method_1')
+
+      assert api_key_option.attribute('checked').present?
     end
 
     test 'update the settings' do

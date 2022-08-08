@@ -5,7 +5,7 @@ require 'test_helper'
 class Forums::Public::TopicsControllerTest < ActionController::TestCase
   setup do
     @provider = FactoryBot.create(:provider_account)
-    @request.host = @provider.domain
+    host! @provider.external_domain
 
     @forum = FactoryBot.create(:forum, account: @provider)
     @topic = FactoryBot.create(:topic, forum: @forum, user: @provider.admins.first!)

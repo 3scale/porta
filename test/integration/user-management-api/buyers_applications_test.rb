@@ -7,7 +7,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
 
     @service = @provider.default_service
 
@@ -69,7 +69,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   pending_test 'index returns fields defined'
 
   test 'security wise: buyers applications is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     get admin_api_account_applications_path(@buyer, format: :xml), params: { provider_key: @provider.api_key }
 
     assert_response :forbidden
@@ -171,7 +171,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
   end
 
   test 'find return 404 on non found app' do
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
     get find_admin_api_account_applications_path(@buyer.id, format: :xml), params: { user_key: "SHAWARMA", provider_key: @provider.api_key }
     assert_xml_404
   end
@@ -421,7 +421,7 @@ class Admin::Api::BuyersApplicationsTest < ActionDispatch::IntegrationTest
 
   #TODO: is this one needed?
   test 'security wise: applications plan change is access denied in buyer side' do
-    host! @provider.domain
+    host! @provider.internal_domain
     put change_plan_admin_api_account_application_path(@buyer,
                                                        @buyer.application_contracts.first,
                                                        provider_key: @provider.api_key,

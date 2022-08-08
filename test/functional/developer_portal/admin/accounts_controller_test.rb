@@ -6,7 +6,7 @@ class DeveloperPortal::Admin::AccountsControllerTest < DeveloperPortal::ActionCo
     provider = FactoryBot.create(:simple_provider)
     buyer = FactoryBot.create(:buyer_account, :provider_account => provider)
 
-    host! provider.domain
+    host! provider.internal_domain
     login_as buyer.first_admin
     put :update
     assert_response 400

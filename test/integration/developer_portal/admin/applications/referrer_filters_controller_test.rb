@@ -42,7 +42,7 @@ class DeveloperPortal::Admin::Applications::ReferrerFiltersControllerTest < Acti
       plan = FactoryBot.create(:simple_application_plan, issuer: service)
       @cinstance = FactoryBot.create(:simple_cinstance, plan: plan)
 
-      host! provider.domain
+      host! provider.internal_domain
     end
 
     attr_reader :cinstance, :provider

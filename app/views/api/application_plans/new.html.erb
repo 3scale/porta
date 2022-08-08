@@ -2,7 +2,7 @@
 
 <%= semantic_form_for @plan, :url => admin_service_application_plans_path(@service) do |form| %>
   <%= render :partial => 'form', :object => form %>
-  <%= form.buttons do %>
-    <%= form.commit_button 'Create application plan'  %>
+  <%= form.actions do %>
+    <%= form.commit_button 'Create application plan' %>
   <% end %>
 <%- end %>

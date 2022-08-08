@@ -24,7 +24,7 @@ class DeveloperPortal::Admin::PlansWidgetControllerNotRequiringCreditCardTest < 
     @free_plan  = FactoryBot.create :application_plan, :issuer => @service, :name => 'free plan'
     @free_plan.publish!
 
-    host! @provider.domain
+    host! @provider.internal_domain
     login_as @buyer.admins.first
     assert_equal false, @service.buyer_plan_change_permission == 'request_credit_card'
   end

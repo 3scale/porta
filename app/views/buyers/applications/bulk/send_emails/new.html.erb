@@ -8,7 +8,7 @@
     <%= form.input :to, :as => :string, input_html: {required: true , :disabled => true, :value => "#{applications.count} selected applications"} %>
     <%= form.input :subject, :as => :string, input_html: {required: true } %>
     <%= form.input :body, :as => :text, input_html: {:rows => 10, required: true } %>
-    <%= form.buttons do %>
+    <%= form.actions do %>
       <%= form.commit_button 'Send', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <% end %>
   <% end %>

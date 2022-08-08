@@ -60,7 +60,7 @@ module Logic
       end
 
       def create_cms_assets
-        self.builtin_sections.create!(title: 'Root', system_name: 'root', parent_id: nil)
+        self.builtin_sections.create!({ title: 'Root', system_name: 'root', parent_id: nil }, without_protection: true)
         # TODO: add SimpleLayout logic here
       end
     end

@@ -7,7 +7,7 @@ class ProviderOAuthFlowPresenterTest < ActiveSupport::TestCase
     authentication_provider = AuthenticationProvider::Auth0.new(account: provider, kind: 'auth0', system_name: 'auth0_abc123')
 
     request = ActionDispatch::TestRequest.create
-    @presenter = ProviderOauthFlowPresenter.new(authentication_provider, request, provider.self_domain)
+    @presenter = ProviderOauthFlowPresenter.new(authentication_provider, request, provider.external_admin_domain)
   end
 
   def test_human_kind

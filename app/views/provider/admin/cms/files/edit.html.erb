@@ -6,14 +6,14 @@
   <%= render 'form', :f => f %>
 
   <div class='button-bar'>
-    <%= f.buttons :style => 'position:absolute' do %>
+    <%= f.actions :style => 'position:absolute' do %>
       <%= f.delete_button %>
     <% end %>
-    <%= f.buttons :style => 'position:absolute' do %>
+    <%= f.actions :style => 'position:absolute' do %>
       <li>
         <%= link_to "Download", @file.url.to_s, :class => 'less-important-button'  %>
       </li>
-      <%= f.commit_button %>
+      <%= f.commit_button 'Save' %>
     <% end %>
   </div>
 

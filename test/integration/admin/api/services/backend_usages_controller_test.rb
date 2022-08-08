@@ -6,7 +6,7 @@ class Admin::Api::Services::BackendUsagesControllerTest < ActionDispatch::Integr
   def setup
     @tenant = FactoryBot.create(:provider_account)
     @service = FactoryBot.create(:simple_service, account: @tenant)
-    host! @tenant.admin_domain
+    host! @tenant.internal_admin_domain
   end
 
   attr_reader :tenant, :service

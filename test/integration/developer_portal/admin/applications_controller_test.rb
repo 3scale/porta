@@ -18,7 +18,7 @@ class DeveloperPortal::Admin::ApplicationsControllerTest < ActionDispatch::Integ
     @buyer.buy! @plan
     @buyer.reload
 
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   class SingleAppModeTest < DeveloperPortal::Admin::ApplicationsControllerTest

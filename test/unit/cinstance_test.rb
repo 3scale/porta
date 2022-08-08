@@ -515,23 +515,55 @@ class CinstanceTest < ActiveSupport::TestCase
     assert_equal 'Service', deleted_object_entry.owner_type
   end
 
-  test 'application_id uniqueness' do
-    provider = FactoryBot.create(:provider_account)
-    service_one = provider.first_service!
-    service_two = FactoryBot.create(:service, account: provider)
-    plan_one = FactoryBot.create(:application_plan, issuer: service_one)
-    plan_two = FactoryBot.create(:application_plan, issuer: service_two)
+  class ApplicationIdUniquenessTest < ActiveSupport::TestCase
+    attr_reader :provider, :service_one, :service_two, :plan_one, :plan_two, :app_one
 
-    app_one = FactoryBot.create(:cinstance, plan: plan_one, application_id: 'app1')
-    FactoryBot.create(:cinstance, plan: plan_two, application_id: 'app2')
+    setup do
+      @provider = FactoryBot.create(:provider_account)
+      @service_one = provider.first_service!
+      @service_two = FactoryBot.create(:service, account: provider)
+      @plan_one = FactoryBot.create(:application_plan, issuer: service_one)
+      @plan_two = FactoryBot.create(:application_plan, issuer: service_two)
+      @app_one = FactoryBot.create(:cinstance, plan: plan_one, application_id: 'app1')
+    end
 
-    dup = app_one.dup
-    dup.user_key = 'fobar'
+    test 'when rolling updates are disabled' do
+      FactoryBot.create(:cinstance, plan: plan_two, application_id: 'app2')
 
-    assert_not dup.save
+      dup = app_one.dup
+      dup.user_key = 'fobar'
 
-    assert dup.errors[:application_id].presence
+      assert_not dup.save
+      assert dup.errors[:application_id].presence
+    end
+
+    test 'duplication is controlled by roling update' do
+      Logic::RollingUpdates.stubs(enabled?: true)
+
+      app_dup = FactoryBot.build(:cinstance, plan: plan_two, application_id: app_one.application_id)
+
+      Rails.configuration.three_scale.rolling_updates.stubs(features: { duplicate_application_id: [] })
+      assert_not app_dup.save
+      assert app_dup.errors[:application_id].presence
+
+      Rails.configuration.three_scale.rolling_updates.stubs(features: { duplicate_application_id: [provider.id] })
+      assert app_dup.save
+    end
+
+    test 'duplication is allowed for enterprise customers' do
+      Logic::RollingUpdates.stubs(enabled?: true)
+      Rails.configuration.three_scale.rolling_updates.stubs(features: { duplicate_application_id: false })
+
+      app_dup = FactoryBot.build(:cinstance, plan: plan_two, application_id: app_one.application_id)
+      assert_not app_dup.save
+      assert app_dup.errors[:application_id].presence
+
+      provider.bought_cinstances.first.destroy!
+      FactoryBot.create(:cinstance, user_account: provider, plan: FactoryBot.create(:application_plan, system_name: '2022_enterprise_3M', issuer: master_account.default_service))
+      assert app_dup.save
+    end
   end
+
 
   test 'buyer_alerts_enabled??' do
     app = Cinstance.new

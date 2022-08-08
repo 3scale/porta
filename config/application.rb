@@ -3,7 +3,8 @@ require_relative 'boot'
 require 'rails/all'
 
 ActiveSupport.on_load(:active_record) do
-  unless $last_initializer_loaded
+  # Some rails tasks like db:create may load database before environment
+  if $environment_loaded && !$last_initializer_loaded
     warning = "WARNING: ActiveRecord loading before initializers completed. Configuration set in initializers may not be effective:#{caller.map { |l| "\n  #{l}"}.join}"
     STDERR.puts warning rescue nil # avoid failing if write fails
   end
@@ -37,6 +38,15 @@ module System
     config.load_defaults 5.1
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
+    # Enable per-form CSRF tokens. Rails before 5.0 had false.
+    config.action_controller.per_form_csrf_tokens = false
+    # Enable origin-checking CSRF mitigation. Rails before had false.
+    config.action_controller.forgery_protection_origin_check = false
+    # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
+    config.action_view.form_with_generates_remote_forms = false
+    # Make Ruby preserve the timezone of the receiver when calling `to_time`.
+    config.active_support.to_time_preserves_timezone = false
+
 
     # The old config_for gem returns HashWithIndifferentAccess
     # https://github.com/3scale/config_for/blob/master/lib/config_for/config.rb#L16

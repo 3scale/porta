@@ -7,7 +7,7 @@ class Admin::Api::BuyersApplicationReferrerFiltersTest < ActionDispatch::Integra
 
   def setup
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
 
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @buyer.buy! @provider.default_account_plan

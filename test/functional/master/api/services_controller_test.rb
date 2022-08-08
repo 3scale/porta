@@ -4,7 +4,7 @@ require 'test_helper'
 
 class Master::Api::ServicesControllerTest < ActionController::TestCase
   def setup
-    @request.host = master_account.domain
+    host! master_account.external_domain
   end
 
   test 'required master api_key' do
@@ -17,9 +17,9 @@ class Master::Api::ServicesControllerTest < ActionController::TestCase
   test 'destroy a service' do
     provider  = FactoryBot.create(:provider_account)
     buyer     = FactoryBot.create(:simple_buyer, provider_account: provider)
-    cinstance = FactoryBot.create(:simple_cinstance, user_account: buyer)
     service   = FactoryBot.create(:simple_service, account: provider)
-    app_plan  =  FactoryBot.create(:simple_application_plan, cinstances: [cinstance], issuer: service)
+    app_plan  =  FactoryBot.create(:simple_application_plan, issuer: service)
+    cinstance = FactoryBot.create(:simple_cinstance, user_account: buyer, plan: app_plan)
 
     method_service_deleted_event_count = RailsEventStoreActiveRecord::Event.where(event_type: Services::ServiceDeletedEvent.to_s).method(:count)
     method_notification_event_count    = RailsEventStoreActiveRecord::Event.where(event_type: NotificationEvent.to_s).method(:count)
@@ -32,5 +32,6 @@ class Master::Api::ServicesControllerTest < ActionController::TestCase
     assert_response 200
     assert_raise(ActiveRecord::RecordNotFound) { app_plan.reload }
     assert_raise(ActiveRecord::RecordNotFound) { service.reload }
+    assert_raise(ActiveRecord::RecordNotFound) { cinstance.reload }
   end
 end

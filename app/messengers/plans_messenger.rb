@@ -6,7 +6,7 @@ class PlansMessenger < Messenger::Base
     @buyer = application.user_account
     @user = @buyer.admins.first
     @plan = new_plan
-    @credit_card_url = developer_portal_routes.admin_account_payment_details_url(:host => @provider.domain)
+    @credit_card_url = developer_portal_routes.admin_account_payment_details_url(:host => @provider.external_domain)
 
     assign_drops :application => @application,
                  :provider         => Liquid::Drops::Provider.new(@provider),
@@ -20,7 +20,7 @@ class PlansMessenger < Messenger::Base
     @buyer = application.user_account
     @plan = new_plan
 
-    url = app_routes.provider_admin_application_url(application, host: application.account.provider_account.admin_domain)
+    url = app_routes.provider_admin_application_url(application, host: application.account.provider_account.external_admin_domain)
     # Pending: Create a view for the body.
     body = %|#{@buyer.org_name} are requesting to have their plan changed to #{@plan.name} for application #{application.name}. You can do this from the application page: #{url}|
 

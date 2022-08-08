@@ -34,8 +34,8 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'index uniq of system_name in service scope' do
     service = FactoryBot.create(:service)
-    FactoryBot.create(:metric, :service => service, :system_name => 'frags')
-    metric_two = FactoryBot.create(:metric, :service => service)
+    FactoryBot.create(:metric, owner: service, system_name: 'frags')
+    metric_two = FactoryBot.create(:metric, owner: service)
     assert_raise ActiveRecord::RecordNotUnique do
       metric_two.update_column(:system_name, 'frags')
     end
@@ -45,7 +45,7 @@ class MetricTest < ActiveSupport::TestCase
     service = FactoryBot.create(:simple_service, :with_default_backend_api)
     owners = [service, service.backend_api]
     owners.each do |owner|
-      owner_attributes = { service: (owner.is_a?(Service) ? owner : nil), owner: owner }
+      owner_attributes = { owner: owner }
       metric_one = FactoryBot.create(:metric, **owner_attributes, system_name: 'frags')
       metric_two = FactoryBot.create(:metric, owner_attributes)
       refute metric_two.update_attributes(system_name: 'frags')
@@ -56,8 +56,8 @@ class MetricTest < ActiveSupport::TestCase
   test 'system_name is not case sensitive' do
     service = FactoryBot.create(:simple_service)
 
-    metric_one = FactoryBot.create(:metric, service: service, system_name: 'frags')
-    metric_two = FactoryBot.create(:metric, service: service)
+    FactoryBot.create(:metric, owner: service, system_name: 'frags')
+    metric_two = FactoryBot.create(:metric, owner: service)
 
     assert metric_two.update_column(:system_name, 'Frags')
   end
@@ -67,13 +67,13 @@ class MetricTest < ActiveSupport::TestCase
     service_one = FactoryBot.create(:service)
     service_two = FactoryBot.create(:service)
 
-    FactoryBot.create(:metric, :service => service_one, :system_name => 'frags')
+    FactoryBot.create(:metric, owner: service_one, system_name: 'frags')
 
-    metric_two = FactoryBot.build(:metric, :service => service_one, :system_name => 'frags')
+    metric_two = FactoryBot.build(:metric, owner: service_one, system_name: 'frags')
     refute metric_two.valid?
     assert_not_nil metric_two.errors[:system_name].presence
 
-    metric_three = FactoryBot.build(:metric, :service => service_two, :system_name => 'frags')
+    metric_three = FactoryBot.build(:metric, owner: service_two, system_name: 'frags')
     assert metric_three.valid?
   end
 
@@ -88,22 +88,40 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'fill owner' do
     service = FactoryBot.create(:simple_service)
-    service_metric = FactoryBot.build(:metric, service: service)
-    refute service_metric.owner
-    assert service_metric.valid?
+    service_metric = service.metrics.build(system_name: "met1")
+    service_metric.owner = nil
+    service_metric.service_id = service.id
+    assert_not service_metric.owner
+    service_metric.valid?
     assert_equal service, service_metric.owner
 
     backend_api = FactoryBot.create(:backend_api, name: 'API', system_name: 'api', account: service.provider)
-    backend_metric = FactoryBot.build(:metric, owner: backend_api)
+    backend_metric = backend_api.metrics.build(system_name: "met2", friendly_name: "Met 2", unit: "met2")
+    assert_not backend_metric.service
     assert_equal backend_api, backend_metric.owner
-    assert backend_metric.valid?
+    assert_valid backend_metric
   end
 
   test 'fill same owner as the parent' do
+    service = FactoryBot.create(:simple_service, :with_default_backend_api)
+    owners = [service, service.backend_api]
+    owners.each do |owner|
+      hits = owner.metrics.hits
+      method = hits.children.create(system_name: 'meth1')
+      assert_equal owner, method.owner
+    end
+  end
+
+  test 'associate service_id with service owner' do
+    service = FactoryBot.create(:simple_service)
+    metric = service.metrics.create!(system_name: "met1", friendly_name: "Metric 1", unit: "beeps")
+    assert_equal metric.owner, metric.service
+  end
+
+  test 'do not associate service_id with backend api owner' do
     backend_api = FactoryBot.create(:backend_api)
-    hits = backend_api.metrics.hits
-    method = hits.children.create(system_name: 'meth1')
-    assert_equal backend_api, method.owner
+    metric = backend_api.metrics.create!(system_name: "met1", friendly_name: "Metric 1", unit: "beeps")
+    assert_nil metric.service
   end
 
   pending_test 'should destroy pricing_rules on :destroy'
@@ -182,7 +200,7 @@ class MetricTest < ActiveSupport::TestCase
 
   class MetricWithChildren < ActiveSupport::TestCase
     setup do
-      @metric = service = FactoryBot.create(:service).metrics.first
+      @metric = FactoryBot.create(:service).metrics.first
       @metric.children.create!(:friendly_name => 'Foos')
     end
 
@@ -201,18 +219,18 @@ class MetricTest < ActiveSupport::TestCase
 
   test 'return only top-level metric on top_level' do
     service = FactoryBot.create(:service)
-    metric_one = FactoryBot.create(:metric, :service => service)
-    metric_two = FactoryBot.create(:metric, :service => service)
-    metric_three = FactoryBot.create(:metric, :parent => service.metrics.hits, :service => service)
+    metric_one = FactoryBot.create(:metric, owner: service)
+    metric_two = FactoryBot.create(:metric, owner: service)
+    metric_three = FactoryBot.create(:method, owner: service)
 
     assert_same_elements [service.metrics.hits, metric_one, metric_two], service.metrics.top_level
   end
 
   test '.ids_indexed_by_names returns metric ids indexed by names' do
     service = FactoryBot.create(:service)
-    metric_1 = FactoryBot.create(:metric, :system_name => 'foo', :service => service)
-    metric_2 = FactoryBot.create(:metric, :system_name => 'bar', :service => service)
-    metric_3 = FactoryBot.create(:metric, :system_name => 'XoXo', :service => service)
+    metric_1 = FactoryBot.create(:metric, system_name: 'foo', owner: service)
+    metric_2 = FactoryBot.create(:metric, system_name: 'bar', owner: service)
+    metric_3 = FactoryBot.create(:metric, system_name: 'XoXo', owner: service)
     hits = service.metrics.hits
     assert_equal({'hits' => hits.id, 'foo' => metric_1.id, 'bar' => metric_2.id, 'xoxo' => metric_3.id},
                  service.metrics.ids_indexed_by_names)
@@ -221,7 +239,7 @@ class MetricTest < ActiveSupport::TestCase
   test '.ancestors_ids returns hash of ancestors ids indexed by descendant id' do
     service = FactoryBot.create(:service)
     hits = service.metrics.hits
-    child = FactoryBot.create(:metric, :parent => hits, :service => service)
+    child = FactoryBot.create(:method, owner: service)
 
     assert_equal({child.id => [hits.id]},
                  service.metrics.ancestors_ids)
@@ -237,8 +255,8 @@ class MetricTest < ActiveSupport::TestCase
   test '.hits returns first metric if there is no one called hits' do
     service = FactoryBot.create(:service)
     service.metrics.find_by_system_name("hits").delete
-    metric_one = FactoryBot.create(:metric, :system_name => 'foos', :service => service)
-    metric_two = FactoryBot.create(:metric, :system_name => 'bars', :service => service)
+    metric_one = FactoryBot.create(:metric, system_name: 'foos', owner: service)
+    metric_two = FactoryBot.create(:metric, system_name: 'bars', owner: service)
 
     assert_equal metric_one, service.metrics.hits
   end

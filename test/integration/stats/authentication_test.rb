@@ -7,7 +7,7 @@ class Stats::AuthenticationTest < ActionDispatch::IntegrationTest
     @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.default_service
 
-    host! @provider_account.admin_domain
+    host! @provider_account.internal_admin_domain
   end
 
   test 'access allowed with authentication' do

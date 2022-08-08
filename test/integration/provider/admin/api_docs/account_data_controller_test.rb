@@ -38,7 +38,7 @@ class Provider::Admin::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
   end
 
   test 'forbidden when user not logged in' do
-    get provider_admin_api_docs_account_data_url(host: provider.self_domain, format: :json)
+    get provider_admin_api_docs_account_data_url(host: provider.external_admin_domain, format: :json)
 
     assert_response :forbidden
   end

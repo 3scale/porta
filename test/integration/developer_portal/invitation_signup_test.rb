@@ -11,7 +11,7 @@ class DeveloperPortal::InvitationSignupTest < ActionDispatch::IntegrationTest
     @invitation = FactoryBot.create(:invitation, account: @buyer)
     @auth_provider = FactoryBot.create(:authentication_provider, account: @provider)
 
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   def test_show

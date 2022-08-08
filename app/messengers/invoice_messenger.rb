@@ -19,7 +19,7 @@ class InvoiceMessenger < Messenger::Base
     @cost = format_cost(@invoice.cost)
 
     @invoice_url = if @buyer_account.provider?
-      app_routes.provider_admin_account_invoice_url(@invoice, :host => @buyer_account.external_self_domain)
+      app_routes.provider_admin_account_invoice_url(@invoice, :host => @buyer_account.external_admin_domain)
                    else
       developer_portal_routes.admin_account_invoice_url(@invoice, :host => @invoice.provider_account.external_domain)
     end
@@ -84,7 +84,7 @@ class InvoiceMessenger < Messenger::Base
     return '' if type.nil? || type == :bogus
 
     if invoice.provider_account.master?
-      app_routes.polymorphic_url([:provider, :admin, :account, type.to_sym],host: invoice.buyer_account.external_self_domain)
+      app_routes.polymorphic_url([:provider, :admin, :account, type.to_sym],host: invoice.buyer_account.external_admin_domain)
     else
       developer_portal_routes.polymorphic_url([:admin, :account, type.to_sym], host: invoice.provider_account.external_domain)
     end

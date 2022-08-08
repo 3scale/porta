@@ -6,7 +6,7 @@ class Admin::Api::PoliciesTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:provider_account)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   def test_index

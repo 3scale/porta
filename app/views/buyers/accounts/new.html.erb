@@ -18,7 +18,7 @@
     <%= form.user_defined_form %>
   <% end -%>
 
-  <%= form.buttons do %>
-    <%= form.button 'Create', :button_html => { :class => 'pf-c-button pf-m-primary' } %>
+  <%= form.actions do %>
+    <%= form.commit_button 'Create' %>
   <% end %>
 <% end %>

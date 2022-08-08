@@ -7,7 +7,7 @@ class Api::PricingRulesControllerTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:simple_provider)
     @service = FactoryBot.create(:simple_service, account: provider)
     @plan = FactoryBot.create(:application_plan, issuer: service)
-    @metric = FactoryBot.create(:metric, service: service)
+    @metric = FactoryBot.create(:metric, owner: service)
     @pricing_rule = FactoryBot.create(:pricing_rule, plan: plan, metric: metric, min: 1, max: 50)
   end
 
@@ -21,7 +21,7 @@ class Api::PricingRulesControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'index' do
-      other_metric = FactoryBot.create(:metric, service: service, friendly_name: 'Other metric')
+      other_metric = FactoryBot.create(:metric, owner: service, friendly_name: 'Other metric')
       other_pricing_rule = FactoryBot.create(:pricing_rule, plan: plan, metric: other_metric, min: 1, max: nil)
 
       get admin_application_plan_metric_pricing_rules_path(plan, metric), xhr: true
@@ -120,7 +120,7 @@ class Api::PricingRulesControllerTest < ActionDispatch::IntegrationTest
 
       forbidden_service = FactoryBot.create(:simple_service, account: provider)
       forbidden_plan = FactoryBot.create(:application_plan, issuer: forbidden_service)
-      forbidden_metric = FactoryBot.create(:metric, service: forbidden_service)
+      forbidden_metric = FactoryBot.create(:metric, owner: forbidden_service)
       forbidden_pricing_rule = FactoryBot.create(:pricing_rule, plan: forbidden_plan, metric: forbidden_metric, min: 1, max: 50)
 
       get admin_application_plan_metric_pricing_rules_path(forbidden_plan, forbidden_metric), xhr: true

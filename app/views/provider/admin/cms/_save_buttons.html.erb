@@ -10,5 +10,15 @@
 </li>
 
 <li>
-  <%= f.buttons :commit, :save_as_version, :class => 'button-group dropdown-buttons' %>
+  <%= f.actions class: 'button-group dropdown-buttons' do %>
+    <%= f.action :submit, label: 'Save', button_html: { title: 'Save the draft',
+                                                        class: 'important-button update',
+                                                        value: 'Save',
+                                                        name: 'commit',
+                                                        disable_with: 'Save' } %>
+    <%= f.commit_button 'Save as Version', button_html: { class: 'save_as_version',
+                                                          title: 'Saves current draft in a version history without publishing it.',
+                                                          name: :version,
+                                                          value: true } %>
+  <% end %>
 </li>

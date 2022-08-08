@@ -9,7 +9,7 @@ class DeveloperPortal::EditAccountTest < ActionDispatch::IntegrationTest
 
     login_buyer @buyer
 
-    host! @provider.domain
+    host! @provider.internal_domain
   end
 
   def test_update

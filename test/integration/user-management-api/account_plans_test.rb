@@ -11,7 +11,7 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:application_plan, issuer: service)
     FactoryBot.create(:service_plan, issuer: service)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   class AccessTokenTest < Admin::Api::AccountPlansTest
@@ -66,13 +66,13 @@ class Admin::Api::AccountPlansTest < ActionDispatch::IntegrationTest
     end
 
     test 'security wise: index is access denied in buyer side' do
-      host! @provider.domain
+      host! @provider.internal_domain
       get admin_api_account_plans_path(format: :xml), params: params
       assert_response :forbidden
     end
 
     pending_test 'apis can be behind the site_access code' do
-      host! @provider.admin_domain
+      host! @provider.external_admin_domain
       Account.master.update_attribute :site_access_code, "123456"
 
       get admin_api_account_plans_path(format: :xml), params: params

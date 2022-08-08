@@ -7,7 +7,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
     @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
     @service = FactoryBot.create(:service, account: @provider)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
   end
 
   # Access token
@@ -115,7 +115,7 @@ class Admin::Api::ServicesTest < ActionDispatch::IntegrationTest
       @provider = FactoryBot.create(:provider_account, domain: 'provider.example.com')
       @service = FactoryBot.create(:service, account: @provider)
 
-      host! @provider.admin_domain
+      host! @provider.external_admin_domain
     end
 
     test 'update with a ro token fails' do

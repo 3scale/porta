@@ -20,8 +20,12 @@ module ThinkingSphinx
         ThinkingSphinx::Configuration.any_instance.stubs(:settings).returns(new_settings)
       end
 
+      def indexed_base_models
+        ThinkingSphinx::Configuration.instance.index_set_class.new.map(&:model)
+      end
+
       def indexed_models
-        ThinkingSphinx::Configuration.instance.index_set_class.new.map(&:model).map { |m| m.descendants.presence || m }.flatten
+        indexed_base_models.map { |m| m.descendants.presence || m }.flatten
       end
 
       def index_for(model)

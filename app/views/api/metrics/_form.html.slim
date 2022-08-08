@@ -4,5 +4,5 @@
   = form.input :unit unless @metric.child?
   = form.input :description, input_html: { rows: 3 }
 
-= form.buttons do
-  = form.button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}", button_html: { class: 'pf-c-button pf-m-primary' } 
+= form.actions do
+  = form.commit_button "#{@metric.new_record? ? 'Create' : 'Update'} #{@metric.child? ? 'Method' : 'Metric'}"

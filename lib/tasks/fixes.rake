@@ -40,7 +40,7 @@ namespace :fixes do
       print "==> changing email address of impersonation_admin user of provider: #{provider.org_name}(#{provider.id}) "
 
 
-      if user.update_attribute(:email, "#{impersonation_admin_username}+#{provider.self_domain}@#{impersonation_admin_domain}")
+      if user.update_attribute(:email, "#{impersonation_admin_username}+#{provider.external_admin_domain}@#{impersonation_admin_domain}")
         print "[ok]\n"
       else
         print "[skip]\n"

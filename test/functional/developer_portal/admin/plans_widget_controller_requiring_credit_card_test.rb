@@ -25,7 +25,7 @@ class DeveloperPortal::Admin::PlansWidgetControllerRequiringCreditCardTest < Dev
     @free_plan  = FactoryBot.create :application_plan, :issuer => @service, :name => 'free plan'
     @free_plan.publish!
 
-    host! @provider.domain
+    host! @provider.internal_domain
     login_as @buyer.admins.first
   end
 

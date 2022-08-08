@@ -12,7 +12,7 @@ resource 'AuthenticationProvider' do
   let(:resource) do
     env = {
       'HTTPS' => 'on',
-      'HTTP_HOST' => authentication_provider.account.internal_domain
+      'HTTP_HOST' => authentication_provider.account.external_domain
     }
     request = ActionDispatch::TestRequest.create(env)
     OauthFlowPresenter.new(authentication_provider, request)

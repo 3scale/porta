@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 Given "a metric {string} of {provider}" do |metric_name, provider|
-  FactoryBot.create(:metric, :service => provider.default_service, :system_name => metric_name, :friendly_name => metric_name)
+  FactoryBot.create(:metric, owner: provider.default_service, system_name: metric_name, friendly_name: metric_name)
 end
 
 Given "a metric {string} with friendly name {string} of {provider}" do |name, friendly_name, provider|
-  FactoryBot.create(:metric, :service => provider.default_service, :system_name => name, :friendly_name => friendly_name)
+  FactoryBot.create(:metric, owner: provider.default_service, system_name: name, friendly_name: friendly_name)
 end
 
 Given "a method {string} of {provider}" do |name, provider|
-  FactoryBot.create(:metric, :friendly_name => name, :parent => provider.default_service.metrics.hits)
+  FactoryBot.create(:method, friendly_name: name, owner: provider.default_service)
 end
 
 Given "the metrics {with} usage limits of {plan}:" do |enabled, app_plan, table|
   table.hashes.each do |hash|
-    metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => hash['metric'])
+    metric = FactoryBot.create(:metric, owner: app_plan.issuer, friendly_name: hash['metric'])
     if enabled
       ul = app_plan.usage_limits.new(:period => "day", :value => 1)
       ul.metric = metric
@@ -24,7 +24,7 @@ Given "the metrics {with} usage limits of {plan}:" do |enabled, app_plan, table|
 end
 
 Given "the metric {string} {with} usage limit {int} of {plan}" do |name, enabled, limit, app_plan|
-  metric = FactoryBot.create(:metric, :service => app_plan.issuer, :friendly_name => name)
+  metric = FactoryBot.create(:metric, owner: app_plan.issuer, friendly_name: name)
   if enabled
     ul = app_plan.usage_limits.new(:period => "day", :value => limit.to_i)
     ul.metric = metric
@@ -33,7 +33,7 @@ Given "the metric {string} {with} usage limit {int} of {plan}" do |name, enabled
 end
 
 Given "the metric {string} with all used periods of {plan}" do |name, app_plan|
-  metric = FactoryBot.create(:metric, service: app_plan.issuer, friendly_name: name)
+  metric = FactoryBot.create(:metric, owner: app_plan.issuer, friendly_name: name)
 
   UsageLimit::PERIODS.each do |period|
     app_plan.usage_limits.create!(period: period, value: 1, metric: metric)
