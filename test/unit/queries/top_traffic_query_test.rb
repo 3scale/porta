@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'active_support/cache/dalli_store'
 
 class TopTrafficQueryTest < ActiveSupport::TestCase
 
@@ -8,7 +7,7 @@ class TopTrafficQueryTest < ActiveSupport::TestCase
     @stats             = Stats::Service.new @provider.first_service!
     @top_traffic_query = TopTrafficQuery.new @stats
 
-    Rails.stubs(:cache).returns(ActiveSupport::Cache::DalliStore.new)
+    Rails.stubs(:cache).returns(ActiveSupport::Cache::MemCacheStore.new)
   end
 
   def test_by_range

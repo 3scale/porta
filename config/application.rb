@@ -44,8 +44,12 @@ module System
     config.action_controller.forgery_protection_origin_check = false
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
+
     # Make Ruby preserve the timezone of the receiver when calling `to_time`.
     config.active_support.to_time_preserves_timezone = false
+    # Use a modern approved hashing function
+    # config.active_support.hash_digest_class = OpenSSL::Digest::SHA256
+    ActiveSupport::Digest.hash_digest_class = OpenSSL::Digest::SHA256 # option above should work with Rails 6.x
 
 
     # The old config_for gem returns HashWithIndifferentAccess
@@ -268,6 +272,7 @@ module System
       bucket: ->(*) { CMS::S3.bucket },
       s3_protocol: ->(*) { CMS::S3.protocol },
       s3_permissions: 'private',
+      s3_headers: { "checksum-algorithm" => "SHA256" },
       s3_region: ->(*) { CMS::S3.region },
       s3_host_name: ->(*) { CMS::S3.hostname },
       url: ':storage_root/:class/:id/:attachment/:style/:basename.:extension',

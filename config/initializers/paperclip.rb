@@ -47,6 +47,7 @@ end
 
 Paperclip.interpolates(:s3_path_url) do |attachment, style|
   if attachment.options.dig(:s3_options, :force_path_style) || attachment.bucket_name =~ /\./
+    # sub-domains with dots fail to match the wildcard certificate of service, so use path style
     "#{attachment.s3_protocol(style, true)}//#{attachment.s3_host_name}/#{attachment.bucket_name}/#{attachment.path(style).sub(%r{\A/}, ''.freeze)}"
   else
     "#{attachment.s3_protocol(style, true)}//#{attachment.bucket_name}.#{attachment.s3_host_name}/#{attachment.path(style).sub(%r{\A/}, ''.freeze)}"
@@ -65,9 +66,15 @@ module Paperclip
 
   # Security Warning: this basically turns off the content type detection
   # based on the file contents. Not sure what we else we can do.
-  class ContentTypeDetector
+  ContentTypeDetector.prepend(Module.new do
     def type_from_mime_magic
       @type_from_mime_magic ||= MimeMagic.by_path(@filepath).try(:type)
     end
-  end
+  end)
+
+  TempfileFactory.prepend(Module.new do
+    def basename
+      Digest::SHA256.hexdigest(File.basename(@name, extension))
+    end
+  end)
 end

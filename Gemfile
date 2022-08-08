@@ -8,8 +8,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'rack', '~> 2.1.4'
 
-gem 'aws-sdk', '~> 3'
-gem 'aws-sdk-rails', '~> 2'
+gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
@@ -83,7 +82,7 @@ gem 'mysql2', '~> 0.5.3'
 gem '3scale_client', '~> 2.11', require: false
 gem 'analytics-ruby', require: false
 
-gem 'dalli', '~> 2.7'
+gem 'dalli', '~> 2.7' # remove version once we stop supporting ruby 2.4
 gem 'faraday', '~> 0.15.3'
 gem 'faraday_middleware', '~> 0.13.1'
 gem 'mimemagic', '~> 0.3.10'
