@@ -15,7 +15,7 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     provider = FactoryBot.create(:provider_account)
     @user    = FactoryBot.create(:user, account: provider)
 
-    host! provider.domain
+    host! provider.internal_domain
 
     login_as @user
   end

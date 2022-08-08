@@ -2,6 +2,6 @@
   <%= form.input :email, :label => 'Send invitation to', :hint => hint %>
 <% end %>
 
-<%= form.buttons do %>
-  <%= form.button 'Send', button_html: { class: 'pf-c-button pf-m-primary' } %>
+<%= form.actions do %>
+  <%= form.commit_button 'Send' %>
 <% end %>

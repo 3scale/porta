@@ -23,7 +23,7 @@ class DeveloperPortal::ApiDocs::AccountDataControllerTest < ActionDispatch::Inte
   end
 
   test 'forbidden when user not logged in' do
-    get api_docs_account_data_url(host: provider.domain, format: :json)
+    get api_docs_account_data_url(host: provider.external_domain, format: :json)
 
     assert_equal({status: 401}, JSON.parse(response.body).symbolize_keys)
   end

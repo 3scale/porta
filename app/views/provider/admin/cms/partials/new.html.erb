@@ -6,8 +6,8 @@
   <%= render 'form', :f => f %>
   <%= f.input :draft, :as => :codemirror, :label => false %>
 
-  <%= f.buttons do %>
-    <%= f.button 'Create Partial', button_html: { class: 'pf-c-button pf-m-primary' } %>
+  <%= f.actions do %>
+    <%= f.commit_button 'Create Partial' %>
   <% end %>
 
 <% end %>

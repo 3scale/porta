@@ -2,8 +2,6 @@
 
 FactoryBot.define do
   factory(:audit, class: Audited.audit_class) do
-    synchronous { true }
-
     provider_id { build_stubbed(:simple_provider).id }
 
     auditable_type { 'Account' }

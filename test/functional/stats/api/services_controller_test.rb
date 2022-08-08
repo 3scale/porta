@@ -26,7 +26,7 @@ class Stats::Api::ServicesControllerTest < ActionController::TestCase
     @buyer    = FactoryBot.create(:buyer_account, :provider_account => @provider, timezone: 'Mountain Time (US & Canada)')
     @app_plan = FactoryBot.create(:application_plan, :issuer => @provider.default_service)
     @app = @buyer.buy! @app_plan
-    @request.host = @provider.admin_domain
+    host! @provider.external_admin_domain
     login_provider @provider
   end
 end

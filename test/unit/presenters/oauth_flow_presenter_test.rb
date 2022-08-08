@@ -19,22 +19,22 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
   def test_sso_integration_callback_url
     @authentication_provider.kind = 'github'
     presenter = OauthFlowPresenter.new(@authentication_provider, @request)
-    assert_equal "http://#{@provider.domain}/auth/#{@authentication_provider.system_name}/callback", presenter.sso_integration_callback_url
+    assert_equal "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback", presenter.sso_integration_callback_url
 
     @authentication_provider.kind = 'auth0'
     presenter = OauthFlowPresenter.new(@authentication_provider, @request)
-    assert_equal "http://#{@provider.domain}/auth/#{@authentication_provider.system_name}/callback, " \
-      "http://#{@provider.domain}/auth/invitations/auth0/#{@authentication_provider.system_name}/callback",
+    assert_equal "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback, " \
+      "http://#{@provider.external_domain}/auth/invitations/auth0/#{@authentication_provider.system_name}/callback",
         presenter.sso_integration_callback_url
   end
 
   test 'callback_endpoint' do
-    expected_url = "http://#{@provider.domain}/auth/#{@authentication_provider.system_name}/callback?plan_id=42"
+    expected_url = "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback?plan_id=42"
     assert_equal expected_url, @presenter.callback_url
   end
 
   test 'callback_endpoint with query overriden' do
-    expected_url = "http://#{@provider.domain}/auth/#{@authentication_provider.system_name}/callback?code=secret"
+    expected_url = "http://#{@provider.external_domain}/auth/#{@authentication_provider.system_name}/callback?code=secret"
     assert_equal expected_url, @presenter.callback_url(query: {code: 'secret'})
   end
 
@@ -52,7 +52,7 @@ class OAuthFlowPresenterTest < ActiveSupport::TestCase
 
     presenter = OauthFlowPresenter.new(authentication_provider, @request)
 
-    expected_url = "http://#{Account.master.domain}/master/devportal/auth/#{authentication_provider.system_name}/callback?domain=#{authentication_provider.account.domain}"
+    expected_url = "http://#{Account.master.external_domain}/master/devportal/auth/#{authentication_provider.system_name}/callback?domain=#{authentication_provider.account.external_domain}"
     assert_equal expected_url, presenter.callback_url
   end
 

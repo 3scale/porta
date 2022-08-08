@@ -48,8 +48,8 @@
           = form.inputs "Service Plan Changing", class: "use-service-plans #{hide_class_unless_service_plans_visible(@settings)}" do
             = render 'shared/plan_change_settings', form: form, permission: :change_service_plan_permission, label: ''
 
-    = form.buttons do
-      = form.button 'Update Settings', button_html: { class: 'pf-c-button pf-m-primary' }
+    = form.actions do
+      = form.commit_button 'Update Settings'
 
 = javascript_include_tag 'sites/general_settings.js'
 javascript:

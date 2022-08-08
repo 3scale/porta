@@ -55,7 +55,7 @@ FactoryBot.define do
   end
 
   factory(:metric) do
-    association :service
+    association :owner, factory: :service
     sequence(:friendly_name) { |n| "Metric #{n}" }
     sequence(:unit) { |m| "metric_#{m}" }
 
@@ -106,7 +106,7 @@ FactoryBot.define do
 
   factory(:webhook, :class => WebHook) do
     account { |wh| wh.association(:provider_account) }
-    url { |wh| 'http://' + wh.account.domain }
+    url { |wh| 'http://' + wh.account.external_domain }
     active { true }
     provider_actions { true }
   end

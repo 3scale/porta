@@ -26,8 +26,8 @@ h1 data-hook="account-show"
             td = link_to @account.external_domain, public_domain(@account), target: "_blank"
           tr
             th Admin domain
-            td = link_to @account.external_self_domain,
-                         provider_admin_dashboard_url(host: @account.external_self_domain),
+            td = link_to @account.external_admin_domain,
+                         provider_admin_dashboard_url(host: @account.external_admin_domain),
                          target: "_blank"
         - if @account.admins.present?
           tr
@@ -101,7 +101,7 @@ h1 data-hook="account-show"
                                      @available_account_plans,
                                      :id,
                                      :name
-            fieldset.buttons
+            fieldset.actions
               ol
                 li.commit
                   = form.submit 'Change',

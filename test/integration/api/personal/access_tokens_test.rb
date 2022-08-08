@@ -5,7 +5,7 @@ require 'test_helper'
 class Admin::Api::Personal::AccessTokensTest < ActionDispatch::IntegrationTest
   def setup
     @provider = FactoryBot.create(:simple_provider)
-    host! @provider.self_domain
+    host! @provider.external_admin_domain
     @admin = FactoryBot.create(:simple_admin, account: @provider)
     @admin_access_token = FactoryBot.create(:access_token, owner: @admin, scopes: %w[account_management])
   end

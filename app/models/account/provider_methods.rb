@@ -179,7 +179,7 @@ module Account::ProviderMethods
   # @return [Array<AuthenticationProvider>]
   def authentication_provider_kinds
     available = AuthenticationProvider.available
-    indexed = authentication_providers.where(type: available).group_by(&:type)
+    indexed = authentication_providers.where(type: available.map(&:name)).group_by(&:type)
 
     available.each do |model|
       unless indexed[model.name].present?
@@ -208,18 +208,6 @@ module Account::ProviderMethods
 
   def published_application_plans
     application_plans.published
-  end
-
-  def admin_domain
-    if provider?
-      if self_domain.present?
-        self_domain
-      else # connect case
-        Account.master.domain
-      end
-    else
-      raise ProviderOnlyMethodCalledError
-    end
   end
 
   def admin_base_url
@@ -335,6 +323,18 @@ module Account::ProviderMethods
   end
 
   private
+
+  def admin_domain
+    if provider?
+      if self_domain.present?
+        self_domain
+      else # connect case
+        Account.master.domain
+      end
+    else
+      raise ProviderOnlyMethodCalledError
+    end
+  end
 
   def ensure_provider
     raise ProviderOnlyMethodCalledError if self.buyer?

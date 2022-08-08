@@ -5,7 +5,7 @@ require 'test_helper'
 class Stats::Data::ServicesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @application = FactoryBot.create :cinstance
-    host! @application.provider_account.admin_domain
+    host! @application.provider_account.internal_admin_domain
     user = @application.provider_account.admins.first!
     @token = FactoryBot.create(:access_token, owner: user, scopes: %w[stats], permission: 'rw').value
   end

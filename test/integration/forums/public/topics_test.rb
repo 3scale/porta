@@ -10,7 +10,7 @@ class Forums::Public::TopicsTest < ActionDispatch::IntegrationTest
     provider.settings.forum_enabled = true
     provider.settings.forum_public  = true
 
-    host! provider.domain
+    host! provider.internal_domain
   end
 
   def test_request_formats

@@ -47,8 +47,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     rest: I18n.t(:rest, scope: 'proxy.oidc_issuer_type').freeze,
   }.freeze
 
-  reset_column_information
-
   validates :api_test_path,    format: { with: URI_PATH_PART,      allow_nil: true, allow_blank: true }
 
   validates :endpoint,         uri: true, allow_nil: true, allow_blank: true
@@ -682,7 +680,7 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
       begin
         uri = URI.parse(attribute_value)
         value = URI::Generic.new(uri.scheme, uri.userinfo, uri.host, uri.port, uri.registry, uri.path, uri.opaque, uri.query, uri.fragment).to_s
-        @model[attribute] = value
+        @model[attribute] = value unless @model[attribute] == value
       rescue URI::InvalidURIError
         @model.errors.add(attribute, 'Invalid domain')
       end

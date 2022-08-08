@@ -126,8 +126,8 @@ Given('Provider has setup RH SSO') do
   steps <<-GHERKIN
   And the provider account allows signups
   And the provider has the authentication provider "Keycloak" published
-  And current domain is the admin domain of provider "#{@provider.domain}"
-  And the current domain is "#{@provider.domain}"
+  And current domain is the admin domain of provider "#{@provider.internal_domain}"
+  And the current domain is "#{@provider.external_domain}"
   GHERKIN
 end
 
@@ -197,7 +197,7 @@ end
 
 Given(/^a provider with one active member is logged in$/) do
   step 'a provider is logged in'
-  step %(an active user "alex" of account "#{@provider.domain}")
+  step %(an active user "alex" of account "#{@provider.internal_domain}")
 end
 
 When(/^I have opened edit page for the active member$/) do
@@ -215,14 +215,14 @@ Then(/^no permissions should be checked$/) do
 end
 
 Given(/^the provider account allows signups$/) do
-  step %(provider "#{@provider.domain}" has multiple applications disabled)
-  step %(provider "#{@provider.domain}" has default service and account plan)
-  step %(a default application plan "Base" of provider "#{@provider.domain}")
+  step %(provider "#{@provider.internal_domain}" has multiple applications disabled)
+  step %(provider "#{@provider.internal_domain}" has default service and account plan)
+  step %(a default application plan "Base" of provider "#{@provider.internal_domain}")
 end
 
 And(/^the provider has a buyer with application$/) do
-  step %(an published application plan "Default" of provider "#{@provider.domain}")
-  step %(a service plan "Gold" of provider "#{@provider.domain}")
+  step %(an published application plan "Default" of provider "#{@provider.internal_domain}")
+  step %(a service plan "Gold" of provider "#{@provider.internal_domain}")
   step 'a buyer "bob" signed up to service plan "Gold"'
   step 'buyer "bob" has application "Alexisonfire" with description "Slightly less awesome widget"'
 end
@@ -253,9 +253,9 @@ end
 
 When(/^the provider is charging its buyers$/) do
   steps <<-GHERKIN
-  And provider "#{@provider.domain}" has "finance" switch visible
-  And provider "#{@provider.domain}" is charging
-  And provider "#{@provider.domain}" manages payments with "braintree_blue"
+  And provider "#{@provider.internal_domain}" has "finance" switch visible
+  And provider "#{@provider.internal_domain}" is charging
+  And provider "#{@provider.internal_domain}" manages payments with "braintree_blue"
   GHERKIN
 end
 
@@ -267,19 +267,19 @@ end
 Given(/^a provider with billing and finance enabled$/) do
   step 'a provider exists'
   steps <<-GHERKIN
-  And current domain is the admin domain of provider "#{@provider.domain}"
-  And provider "#{@provider.domain}" has postpaid billing enabled
-  And provider "#{@provider.domain}" has "finance" switch visible
-  And I log in as provider "#{@provider.domain}"
+  And current domain is the admin domain of provider "#{@provider.internal_domain}"
+  And provider "#{@provider.internal_domain}" has postpaid billing enabled
+  And provider "#{@provider.internal_domain}" has "finance" switch visible
+  And I log in as provider "#{@provider.internal_domain}"
   GHERKIN
 end
 
 And(/^the provider has one buyer$/) do
-  step %(a buyer "bob" signed up to provider "#{@provider.domain}")
+  step %(a buyer "bob" signed up to provider "#{@provider.internal_domain}")
 end
 
 And(/^the provider enables credit card on signup feature manually/) do
-  step %(provider "#{@provider.domain}" has "require_cc_on_signup" switch visible)
+  step %(provider "#{@provider.internal_domain}" has "require_cc_on_signup" switch visible)
   @provider.reload
 end
 

@@ -56,7 +56,7 @@ class AlertMessenger < Messenger::Base
   end
 
   def self_domain
-    @alert.account.external_self_domain
+    @alert.account.external_admin_domain
   end
 
   def send_alert(alert, sender)

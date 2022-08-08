@@ -9,7 +9,7 @@ class Stats::ApplicationsTest < ActionDispatch::IntegrationTest
     @plan = FactoryBot.create(:simple_application_plan, issuer: @service)
     @application = FactoryBot.create(:simple_cinstance, plan: @plan)
 
-    host! @provider.admin_domain
+    host! @provider.external_admin_domain
     login_provider @provider
   end
 

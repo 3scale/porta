@@ -11,7 +11,7 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
     @access_token = FactoryBot.create(:access_token, owner: master_account.first_admin, scopes: ['account_management'])
 
-    host! master_account.domain
+    host! master_account.internal_domain
   end
 
   test 'create billing job' do
@@ -93,7 +93,7 @@ class Master::Api::Finance::BillingJobsControllerTest < ActionDispatch::Integrat
       @provider = FactoryBot.create(:provider_with_billing)
       @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
       @master_admin = master_account.first_admin
-      host! master_account.domain
+      host! master_account.internal_domain
     end
 
     test 'scope account_management is required to create jobs' do

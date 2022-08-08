@@ -22,8 +22,8 @@
       = render partial: "provider/admin/account/authentication_providers/form/#{authentication_provider.kind}",
              locals: { f: f, authentication_provider: authentication_provider }
 
-  = f.buttons do
-    = f.button I18n.t('provider.admin.authentication_providers.form.submit_button_label'), button_html: { class: 'pf-c-button pf-m-primary' }
+  = f.actions do
+    = f.commit_button I18n.t('provider.admin.authentication_providers.form.submit_button_label')
     - unless authentication_provider.new_record?
       = pf_link_to 'Delete',
                 provider_admin_account_authentication_provider_path(@authentication_provider),

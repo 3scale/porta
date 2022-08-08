@@ -7,7 +7,7 @@
   <%= form.inputs do %>
     <%= render 'buyers/applications/bulk/selected_applications', applications: applications %>
     <%= form.input :plan_id, :as => :select, :collection => plans %>
-    <%= form.buttons do %>
+    <%= form.actions do %>
       <%= form.commit_button 'Change plan', :button_html => {:'data-disable-with' => 'Running bulk action...' } %>
     <% end %>
   <% end %>

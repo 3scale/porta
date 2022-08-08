@@ -10,7 +10,7 @@ class FindEachMocker
   def find_in_batches
     return enum_for(__method__) { total_pages } unless block_given?
 
-    current_page.upto(total_pages) do |page|
+    current_page.to_i.upto(total_pages) do |page|
       yield collection.page(page)
     end
   end

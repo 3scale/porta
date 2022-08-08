@@ -2,6 +2,6 @@
 
 = semantic_form_for @proxy, url: admin_service_policies_path(@service) do |f|
   = render '/api/integrations/apicast/shared/policies', f: f
-  = f.buttons do
-    = f.button t('formtastic.actions.policies.update'), button_html: {class: "pf-c-button pf-m-primary update", name: 'update', value: '1',
+  = f.actions do
+    = f.commit_button t('formtastic.actions.policies.update'), button_html: {class: 'update', name: 'update', value: '1',
       id: 'policies-button-sav', title: 'Update Policies', disabled: (@error ? true : nil) }

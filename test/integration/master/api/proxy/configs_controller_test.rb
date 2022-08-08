@@ -7,7 +7,7 @@ class Master::Api::Proxy::ConfigsControllerTest < ActionDispatch::IntegrationTes
     @provider = FactoryBot.create(:provider_account)
     @user = master_account.first_admin!
     @token = FactoryBot.create(:access_token, owner: @user, scopes: 'account_management')
-    host! master_account.admin_domain
+    host! master_account.internal_admin_domain
   end
 
   test '#index get all latest proxy_configs' do

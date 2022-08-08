@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
 
-  include Formtastic::SemanticFormHelper
+  include Formtastic::Helpers::FormHelper
 
   class Dummy
     extend ActiveModel::Naming
@@ -36,13 +36,13 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     assert_not_empty(semantic_form_for(file, url: '') { |f| f.input :tag_list; f.input :date })
 
     assert_raises message do
-      semantic_form_for(file, url: '', builder: ::Formtastic::SemanticFormBuilder) do |f|
+      semantic_form_for(file, url: '', builder: ::Formtastic::FormBuilder) do |f|
         f.input :tag_list
       end
     end
 
     assert_raises message do
-      semantic_form_for(file, url: '', builder: ::Formtastic::SemanticFormBuilder) do |f|
+      semantic_form_for(file, url: '', builder: ::Formtastic::FormBuilder) do |f|
         f.input :date
       end
     end
@@ -50,21 +50,6 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
 
   test 'inline errors' do
     dummy = Dummy.new
-
-    #
-    # Inline errors
-    #
-    buffer = TestOutputBuffer.new
-    buffer.concat(
-      semantic_form_for(dummy, :url => '', as: :dummy) do |f|
-        f.input(:title, inline_errors: :list).html_safe
-      end
-    )
-
-    html_doc = Nokogiri::HTML(buffer.output)
-    # errors as list
-    assert html_doc.css('li#dummy_title_input ul.errors').present?
-
 
     #
     # Normal behaviour
@@ -87,17 +72,31 @@ class ThreeScale::SemanticFormBuilderTest < ActionView::TestCase
     buffer = TestOutputBuffer.new
     buffer.concat(
       semantic_form_for(dummy, :url => '', as: :dummy) do |f|
-        f.input(:title, inline_errors: :list).html_safe +
+        f.input(:title).html_safe +
         f.input(:author).html_safe
       end
     )
 
     html_doc = Nokogiri::HTML(buffer.output)
 
-    # errors of title as list
-    assert html_doc.css('li#dummy_title_input ul.errors').present?
+    # errors of title
+    assert html_doc.css('li#dummy_title_input p.inline-errors').present?
 
     # errors of author as sentence
     assert_equal 'error 1 and error 2', html_doc.css('li#dummy_author_input p.inline-errors').text
+  end
+
+  test 'commit_button' do
+    app = FactoryBot.create(:application)
+    semantic_form_for app, url: '' do |form|
+      button = form.commit_button nil, button_html: { class: 'foo' }
+      assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary.foo').length.positive?
+
+      button = form.commit_button
+      assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary').length.positive?
+
+      button = form.commit_button nil, button_html: { class: 'pf-c-button pf-m-primary' }
+      assert Nokogiri.parse(button).css('button.pf-c-button.pf-m-primary').length.positive?
+    end
   end
 end

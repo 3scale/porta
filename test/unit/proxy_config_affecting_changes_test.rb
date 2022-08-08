@@ -52,6 +52,33 @@ class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     end
   end
 
+  test 'tracks proxy config affecting changes on attribute update' do
+    CheapTrick = Class.new(Model)
+    object = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
+    with_proxy_config_affecting_changes_tracker do |tracker|
+      tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
+      object[:system_name] = "newname"
+    end
+  end
+
+  test 'tracks proxy config affecting changes on column update' do
+    CheapTrick = Class.new(Model)
+    object = CheapTrick.create(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
+    with_proxy_config_affecting_changes_tracker do |tracker|
+      tracker.expects(:track).with(instance_of(CheapTrick)).at_least_once
+      object.update_column(:system_name, "newname")
+    end
+  end
+
+  test 'does no track proxy config affecting changes on untracked attributes' do
+    CheapTrick = Class.new(Model)
+    object = CheapTrick.new(name: 'foo', system_name: 'bar', description: 'this is my proxy config affecting model', created_at: Time.now, updated_at: Time.now)
+    with_proxy_config_affecting_changes_tracker do |tracker|
+      tracker.expects(:track).with(instance_of(CheapTrick)).never
+      object[:state] = "deleted"
+    end
+  end
+
   test 'tracks proxy config affecting changes on destroy' do
     within_thread do
       tracker = ProxyConfigAffectingChangesTest.build_tracker

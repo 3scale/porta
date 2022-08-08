@@ -39,7 +39,7 @@ module Tasks
 
       assert File.exists?(file_path)
 
-      expected_line_values_format = ->(pgs) { "#{pgs.account_id};#{pgs.account.admin_domain};#{pgs.account.state}\n" }
+      expected_line_values_format = ->(pgs) { "#{pgs.account_id};#{pgs.account.external_admin_domain};#{pgs.account.state}\n" }
       expected_provider_ids = providers_with_stripe_configured.map(&:id)
       expected_all_values = PaymentGatewaySetting.where(account_id: expected_provider_ids).order(id: :asc).joins(:account).map(&expected_line_values_format)
       expected_file_data = ["id;admin_domain;state\n"] + expected_all_values

@@ -68,7 +68,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
 
     def is_master_domain?(domain)
       return true if ThreeScale.master_on_premises?
-      master.domain == domain or master.self_domain == domain
+      master.match_internal_domain?(domain) or master.match_internal_admin_domain?(domain)
     end
 
     def same_domain(domain)
@@ -100,7 +100,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def domains_present?
-    domain.present? && self_domain.present?
+    self[:domain].present? && self[:self_domain].present?
   end
 
   def subdomain=(name)
@@ -117,7 +117,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def subdomain
-    subdomain_from(domain)
+    subdomain_from(self[:domain])
   end
 
   def superdomain
@@ -145,7 +145,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def self_subdomain
-    subdomain_from(self_domain)
+    subdomain_from(self[:self_domain])
   end
 
   def self.unique?(attr:, val:, scope: all)
@@ -203,7 +203,7 @@ module Account::ProviderDomains # rubocop:disable Metrics/ModuleLength
   end
 
   def domain_not_self_domain
-    if domain && self_domain && domain == self_domain
+    if read_attribute(:domain) && read_attribute(:self_domain) && (read_attribute(:domain) == read_attribute(:self_domain))
       if subdomain
         errors.add(:subdomain, :same)
         errors.add(:self_subdomain, :same)

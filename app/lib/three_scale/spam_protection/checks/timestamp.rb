@@ -19,7 +19,7 @@ module ThreeScale::SpamProtection
       end
 
       def input(form)
-        form.input :timestamp, :as => :hidden, :value => encode(timestamp_value), :wrapper_html => { :style => HIDE_STYLE }
+        form.input :timestamp, :as => :hidden, :input_html => { :value => encode(timestamp_value) }, :wrapper_html => { :style => HIDE_STYLE }
       end
 
       def probability(object)

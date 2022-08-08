@@ -8,11 +8,11 @@ class Metric < ApplicationRecord
   self.background_deletion = %i[pricing_rules usage_limits plan_metrics proxy_rules]
 
   before_destroy :avoid_destruction
-  before_validation :associate_to_service_of_parent, :fill_owner
+  before_validation :associate_to_service, :fill_owner
 
   # update Service's updated_at when Metric caches for nicer cache keys
-  belongs_to :service, touch: true
-  belongs_to :owner, polymorphic: true, touch: true
+  belongs_to :service, touch: true, inverse_of: false
+  belongs_to :owner, polymorphic: true, touch: true, inverse_of: :metrics
 
   has_many :line_items, inverse_of: :metric
   has_many :pricing_rules, :dependent => :destroy
@@ -27,16 +27,18 @@ class Metric < ApplicationRecord
   acts_as_tree
 
   attr_protected :service_id, :parent_id, :tenant_id, :audit_ids
-
   validates :unit, presence: true, unless: :child?
   validates :friendly_name, uniqueness: {scope: %i[owner_type owner_id]}, presence: true
   validates :system_name, :unit, :friendly_name, :owner_type, length: { maximum: 255 }
-  validates :owner_id, :owner_type, presence: true
+  validates :owner, presence: true
 
   validate :only_hits_has_children
 
   # alias_attribute :name, :system_name
 
+  deprecate service: "refer to #owner",
+            service_id: "use #owner_type and #owner_id",
+            deprecator: ThreeScale::Deprecation::Deprecator.new
 
   # After add the index the results for .first changed.
   # http://api.rubyonrails.org/classes/ActiveRecord/FinderMethods.html
@@ -143,7 +145,7 @@ class Metric < ApplicationRecord
       xml.name          name # As of February 2014 this is deprecated and should be removed
       xml.system_name   name
       xml.friendly_name friendly_name
-      xml.service_id    service_id
+      xml.service_id    (backend_api_metric? ? nil : owner_id)
       xml.description   description
       if method_metric?
         xml.metric_id parent_id
@@ -244,13 +246,20 @@ class Metric < ApplicationRecord
     metric ||= plan_metrics.find_by_metric_id(self.id)
   end
 
-  def associate_to_service_of_parent
-    self.service = parent.service if parent
+  # keep service_id attribute in sync with parent before we remove all its usages
+  def associate_to_service
+    ThreeScale::Deprecation.silence do
+      if parent
+        self.service = parent.service
+      elsif owner.is_a? Service
+        self.service = owner
+      end
+    end
   end
 
   protected
 
-  delegate :provider_id_for_audits, :to => :service, :allow_nil => true
+  delegate :provider_id_for_audits, :to => :service_owner, :allow_nil => true
 
   def fill_owner
     return true if owner_type?
@@ -258,8 +267,13 @@ class Metric < ApplicationRecord
     if new_record? && child?
       self.owner = parent.owner
     else
+      ThreeScale::Deprecation.warn "Metrics should be created by specifying owner_id and owner_type instead of service_id"
       self.owner_id = service_id
       self.owner_type = 'Service'
     end
+  end
+
+  def service_owner
+    backend_api_metric? ? nil : owner
   end
 end

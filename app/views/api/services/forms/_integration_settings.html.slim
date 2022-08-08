@@ -16,13 +16,12 @@
 
   = form.inputs 'Authentication', id: 'auth-wrapper' do
     = form.input :proxy_authentication_method,
-            name: 'service[backend_version]',
             as: :radio,
             required: false,
             collection: BackendVersion.visible_versions(service: service),
             value_as_class: true,
             label: false,
-            input_html: {class: 'auth-method'}
+            input_html: { class: 'auth-method', name: 'service[backend_version]' }
 
     = form.semantic_fields_for :proxy do |f|
       = render 'api/services/forms/authentication_settings', f: f, oauth_hint: 'apicast_oauth'

@@ -7,7 +7,9 @@
 <div>
   <%= semantic_form_for @plan, :url => admin_application_plan_path(@plan) do |form| %>
     <%= render :partial => 'form', :object => form %>
-    <%= form.buttons :commit %>
+    <%= form.actions do %>
+      <%= form.commit_button %>
+    <%- end %>
   <%- end %>
   <%= render 'api/plans/metrics' -%>
 

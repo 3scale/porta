@@ -565,13 +565,14 @@ en:
       plugin_csharp: .NET Plugin
       service_mesh_istio: Istio Service Mesh
 
-    self_managed: APIcast self-managed <span>Manage your own NGINX based API gateway for ultimate flexibility and customization.</span>
-    hosted: APIcast <span>a 3scale managed NGINX based API gateway for quick and reliable integrations</span>
-    apicast: APIcast <span>Nginx reverse proxy server.</span>
+    self_managed: APIcast self-managed
+    self_managed_hint: Manage your own NGINX based API gateway for ultimate flexibility and customization.
+    hosted: APIcast 3scale managed
+    hosted_hint: a 3scale managed NGINX based API gateway for quick and reliable integrations
+    apicast: APIcast
+    apicast_hint: Nginx reverse proxy server.
 
-    service_mesh_istio: |
-      Istio
-      <span>A uniform way to secure, connect, and monitor microservices.</span>
+    service_mesh_istio: Istio
 
     on_amazon: Amazon
     plugin_ruby: |
@@ -616,10 +617,14 @@ en:
       </span>
 
   authentication_options:
-    v1: "API Key (user_key) <span>The application is identified & authenticated via a single string.</span>"
-    v2: "App_ID and App_Key Pair <span>The application is identified via the App_ID and authenticated via the App_Key.</span>"
-    oauth: "OAuth 2.0 <span>The application is identified via the client_id and authenticated via an access token.</span>"
-    oidc: "OpenID Connect <span>Use OpenID Connect for any OAuth 2.0 flow.</span>"
+    v1: "API Key (user_key)"
+    v1_hint: The application is identified & authenticated via a single string.
+    v2: "App_ID and App_Key Pair"
+    v2_hint: The application is identified via the App_ID and authenticated via the App_Key.
+    oauth: "OAuth 2.0"
+    oauth_hint: The application is identified via the client_id and authenticated via an access token.
+    oidc: "OpenID Connect"
+    oidc_hint: Use OpenID Connect for any OAuth 2.0 flow.
   plugins:
     java: Java
     csharp: C#

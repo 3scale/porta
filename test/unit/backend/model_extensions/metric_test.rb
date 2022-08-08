@@ -49,8 +49,9 @@ class Backend::ModelExtensions::MetricTest < ActiveSupport::TestCase
 
   test 'sync backend metric data when metric is destroyed' do
     metric = FactoryBot.create(:metric)
+    assert_instance_of Service, metric.owner
 
-    BackendMetricWorker.expects(:perform_later).with(metric.service.backend_id, metric.id)
+    BackendMetricWorker.expects(:perform_later).with(metric.owner.backend_id, metric.id)
 
     metric.destroy
   end

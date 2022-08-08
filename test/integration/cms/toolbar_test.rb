@@ -8,7 +8,7 @@ class CMS::ToolbarTest < ActionDispatch::IntegrationTest
   end
 
   test 'CMS toolbar rendering' do
-    host! @provider.domain
+    host! @provider.internal_domain
 
     get "/?cms_token=#{@provider.settings.cms_token!}"
     assert_response :success

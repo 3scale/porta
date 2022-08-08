@@ -99,9 +99,13 @@ class Policies::PoliciesListService
     end
 
     def merge!(other)
-      @sets.deep_merge!(other.to_h) do |_key, values, other_values|
-        values + other_values
+      return self if other.blank?
+
+      other.each do |key, value|
+        @sets[key] = @sets[key] + value
       end
+
+      self
     end
 
     def initialize_copy(source)
