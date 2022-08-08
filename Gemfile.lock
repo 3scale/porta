@@ -717,7 +717,7 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    shakapacker (6.3.0.pre.rc.1)
+    shakapacker (6.5.0)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -1015,7 +1015,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   secure_headers (~> 6.3.0)
   selenium-webdriver (~> 3.142)
-  shakapacker (= 6.3.0.pre.rc.1)
+  shakapacker (= 6.5.0)
   shoulda (~> 4.0)
   sidekiq (< 6)
   sidekiq-batch (~> 0.1.6)
@@ -1052,4 +1052,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   2.2.25
+   2.3.19
