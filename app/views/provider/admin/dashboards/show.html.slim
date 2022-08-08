@@ -1,8 +1,6 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
 
-= stylesheet_pack_tag 'PF4Styles/dashboard'
-
 .Dashboard
   div.Dashboard-widgets
     // account level
@@ -23,6 +21,7 @@
 
       // Account Level Widgets
       - append_javascript_pack_tag 'dashboard_widgets'
+      - append_stylesheet_pack_tag 'PF4Styles/dashboard'
       = dashboard_widget :new_accounts if can?(:manage, :partners)
       = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 

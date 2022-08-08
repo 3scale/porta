@@ -1,17 +1,4 @@
-doctype html
-html[lang="en" class="pf-m-redhat-font"]
-  head
-    meta[charset="utf-8"]
-    title
-      = content_for?(:title) ? yield(:title) : default_title
-      |  | Red Hat 3scale API Management
-    = csrf_meta_tag
-    = stylesheet_pack_tag 'PF4Styles/base', 'PF4Styles/settings_page'
-    = render 'provider/theme'
-    = render 'provider/analytics'
-    = javascript_include_tag 'provider/layout/provider'
-    = yield :javascripts
-
+- content_for :body do
   body
     = render 'shared/provider/quickstarts_container' if Features::QuickstartsConfig.enabled?
     #wrapper.pf-c-page
@@ -28,4 +15,20 @@ html[lang="en" class="pf-m-redhat-font"]
         = render "/provider/footer"
     = render '/shared/provider/call_to_action' if call_to_action?
 
-= javascript_pack_tag
+doctype html
+html[lang="en" class="pf-m-redhat-font"]
+  head
+    meta[charset="utf-8"]
+    title
+      = content_for?(:title) ? yield(:title) : default_title
+      |  | Red Hat 3scale API Management
+    = csrf_meta_tag
+    = stylesheet_pack_tag 'PF4Styles/base', 'PF4Styles/settings_page'
+    = render 'provider/theme'
+    = render 'provider/analytics'
+    = javascript_include_tag 'provider/layout/provider'
+    = javascript_pack_tag
+    = yield :javascripts
+
+  = content_for :body
+
