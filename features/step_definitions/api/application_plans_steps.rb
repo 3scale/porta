@@ -294,7 +294,7 @@ Then "they can edit its details" do
   new_name = 'New name'
 
   fill_in('Name', with: new_name)
-  find('input.update[type="submit"]').click
+  find('.pf-c-button[type="submit"]').click
 
   assert_equal new_name, @plan.reload.name
 end
