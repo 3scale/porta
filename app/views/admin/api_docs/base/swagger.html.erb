@@ -26,7 +26,7 @@
 <%# TODO: this is here until we get swagger-ui 2.1 to load swagger spec 1.2 and 2.0 %>
 
 <% if @api_docs_service.specification.openapi_3_0? -%>
- <%= append_javascript_pack_tag 'service_active_docs'%>
+ <% append_javascript_pack_tag 'service_active_docs'%>
 
 <% elsif @api_docs_service.specification.swagger_2_0? -%>
 

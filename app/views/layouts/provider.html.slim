@@ -6,10 +6,9 @@ html[lang="en" class="pf-m-redhat-font"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
-    = stylesheet_pack_tag 'pf4_base'
+    = stylesheet_pack_tag 'PF4Styles/base', 'PF4Styles/settings_page'
     = render 'provider/theme'
     = render 'provider/analytics'
-    = stylesheet_pack_tag 'pf4_settings_page'
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
 

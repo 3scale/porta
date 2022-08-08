@@ -12,7 +12,7 @@
   data-countries-list="<%= merchant_countries.to_json %>"
   data-selected-country-code="<%= selected_country_code %>"
 ></div>
-<%= append_javascript_pack_tag 'braintree_customer_form'%>
+<% append_javascript_pack_tag 'braintree_customer_form'%>
 
 <% unless @errors.blank? %>
     <div class="errorExplanation" id="errorExplanation">
