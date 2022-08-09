@@ -13,8 +13,8 @@ def assert_flash(message)
   # and app/assets/javascripts/flash-buyer.js
 
   if has_css?('#flashWrapper', visible: :all, wait: 10)
-    assert has_css?('#flashWrapper span', visible: :all, text: message) ||
-           has_css?('#flashWrapper p', visible: :all, text: message), "No flash has been found"
+    assert has_css?('#flashWrapper span', visible: :all, text: message, wait: 10) ||
+           has_css?('#flashWrapper p', visible: :all, text: message, wait: 10), "No flash has been found"
   else
     assert has_css?('#flash-messages', text: message), "No flash has been found"
   end
