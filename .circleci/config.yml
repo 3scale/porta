@@ -382,7 +382,7 @@ executors:
       - *redis-container
 
   cucumber-with-oracle-ruby26: &cucumber-with-oracle-ruby26
-    resource_class: large
+    resource_class: xlarge
     docker:
       - *system-builder-ruby26
       - *dnsmasq-container
