@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-Given "quickstarts is {enabled}" do |enabled|
-  Features::QuickstartsConfig.stubs(enabled?: enabled)
-  visit current_path
-end
-
 Then "I should be able to start following a quick start from a gallery" do
   within '#quick-start-catalog-page-wrapper .pfext-quick-start-catalog__gallery' do
     quickstarts = find_all('.pfext-quick-start-catalog__gallery-item')
