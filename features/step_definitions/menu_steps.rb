@@ -13,6 +13,12 @@ Then /^I should see there is no current API/ do
   end
 end
 
+Then /^I should see there is current API/ do
+  within '#mainmenu' do
+    assert has_css? '.pf-c-nav__section-title'
+  end
+end
+
 Then /^I should see menu items$/ do |items|
   items.raw.each do |item|
     within '#mainmenu' do
