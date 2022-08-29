@@ -53,4 +53,17 @@ class ProxyRuleTest < ActiveSupport::TestCase
       assert_equal master_account.proxy_rules, query.search_for('')
     end
   end
+
+  test '#search_for queries when there are more results than page size' do
+    ThinkingSphinx::Test.rt_run do
+      backend_api = FactoryBot.build_stubbed(:backend_api)
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+        proxy_rules = FactoryBot.create_list(:proxy_rule, 25, owner: backend_api, pattern: '/path/test')
+        query      = ProxyRuleQuery.new(owner_type: proxy_rules.first.owner_type, owner_id: proxy_rules.first.owner_id)
+
+        assert_equal 25, query.search_for('test').size
+      end
+    end
+  end
+
 end
