@@ -14,7 +14,7 @@ module ProxyRuleSharedController
   def index
     @search = ThreeScale::Search.new(params[:search])
     query = ProxyRuleQuery.new(owner_type: params[:owner_type], owner_id: owner_id,
-                                 direction: params[:direction], sort: params[:sort])
+                               direction: params[:direction], sort: params[:sort])
     @proxy_rules = query.search_for(@search['query'], proxy_rules.includes(:metric))
                         .paginate(pagination_params)
   end
