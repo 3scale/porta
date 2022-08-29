@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProxyRuleTest < ActiveSupport::TestCase
+class ProxyRuleQueryTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   test '#search_for uses sphinx if query given' do
@@ -10,7 +10,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
         proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
+        query = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
 
         assert_equal [proxy_rule], query.search_for('test')
       end
@@ -21,10 +21,10 @@ class ProxyRuleTest < ActiveSupport::TestCase
     ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule   = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
-        proxy_rule2  = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test2', position: 2)
-        query        = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
-        scope        = ProxyRule.where(position: 2)
+        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
+        proxy_rule2 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test2', position: 2)
+        query = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id)
+        scope = ProxyRule.where(position: 2)
 
         assert_equal [proxy_rule2], query.search_for('test', scope)
       end
@@ -35,9 +35,9 @@ class ProxyRuleTest < ActiveSupport::TestCase
     ThinkingSphinx::Test.rt_run do
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
-        proxy_rule   = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
-        proxy_rule2  = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test2', position: 2)
-        query        = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id,
+        proxy_rule = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test1', position: 1)
+        proxy_rule2 = FactoryBot.create(:proxy_rule, owner: backend_api, pattern: '/path/test2', position: 2)
+        query = ProxyRuleQuery.new(owner_type: proxy_rule.owner_type, owner_id: proxy_rule.owner_id,
                                           sort: :position, direction: :desc)
 
         assert_equal [proxy_rule2, proxy_rule], query.search_for('test')
@@ -59,7 +59,7 @@ class ProxyRuleTest < ActiveSupport::TestCase
       backend_api = FactoryBot.build_stubbed(:backend_api)
       perform_enqueued_jobs(only: SphinxIndexationWorker) do
         proxy_rules = FactoryBot.create_list(:proxy_rule, 25, owner: backend_api, pattern: '/path/test')
-        query      = ProxyRuleQuery.new(owner_type: proxy_rules.first.owner_type, owner_id: proxy_rules.first.owner_id)
+        query = ProxyRuleQuery.new(owner_type: proxy_rules.first.owner_type, owner_id: proxy_rules.first.owner_id)
 
         assert_equal 25, query.search_for('test').size
       end
