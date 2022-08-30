@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 module Liquid
   module Forms
-    class Login < Forms::SpamProtected
+    class Login < Forms::Create
 
       def html_class_name
         'formtastic session'

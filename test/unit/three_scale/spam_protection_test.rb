@@ -155,7 +155,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
 
       setup do
         # We do not want to skip Recaptcha in these tests
-        Recaptcha.configuration.skip_verify_env.delete('test')
+        Recaptcha::Verify.stubs(skip?: false)
         @object = ModelJS.new
         @object.stubs(:errors).returns({})
         @template = ActionView::Base.new
@@ -188,17 +188,18 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
 
       test 'should render captcha - configuration has been added' do
         subject.stubs(:level).returns(:captcha)
+        subject.stubs(:captcha_configured?).returns(true)
         @block.call(@form)
-        assert_match %r{src="https://www.recaptcha.net/recaptcha/api.js}, @output
-        assert_match %r{src="https://www.recaptcha.net/recaptcha/api/fallback}, @output
+        assert_match %r{src="https://www.google.com/recaptcha/api.js}, @output
+        assert_match %r{src="https://www.google.com/recaptcha/api/fallback}, @output
         assert_match /name="g-recaptcha-response"/, @output
       end
 
       test "should render captcha" do
         subject.stubs(:captcha_needed?).returns(true)
         @block.call(@form)
-        assert_match %r{src="https://www.recaptcha.net/recaptcha/api.js}, @output
-        assert_match %r{src="https://www.recaptcha.net/recaptcha/api/fallback}, @output
+        assert_match %r{src="https://www.google.com/recaptcha/api.js}, @output
+        assert_match %r{src="https://www.google.com/recaptcha/api/fallback}, @output
         assert_match /name="g-recaptcha-response"/, @output
       end
 
