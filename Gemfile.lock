@@ -611,7 +611,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    recaptcha (5.9.0)
+    recaptcha (4.13.1)
       json
     record_tag_helper (1.0.1)
       actionview (>= 5)
@@ -990,7 +990,7 @@ DEPENDENCIES
   rails_event_store (~> 0.9.0)
   ransack (= 2.4.1)
   ratelimit
-  recaptcha (= 5.9.0)
+  recaptcha (= 4.13.1)
   record_tag_helper (~> 1.0)
   redcarpet (~> 3.5.1)
   redis (~> 4.1.3)
