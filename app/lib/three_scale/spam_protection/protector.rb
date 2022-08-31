@@ -29,7 +29,7 @@ module ThreeScale::SpamProtection
     end
 
     class FormProtector
-      include Recaptcha::Adapters::ViewMethods
+      include Recaptcha::ClientHelper
 
       attr_reader :form, :protector, :session_store
 

@@ -5,7 +5,7 @@ require 'test_helper'
 class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    Recaptcha.configuration.skip_verify_env.delete('test')
+    Recaptcha.stubs(:captcha_configured?).returns(true)
     host! provider.internal_domain
   end
 
@@ -55,17 +55,16 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'captcha is present when the previous request was considered as spam' do
     provider.settings.update_attributes(spam_protection_level: :auto)
     ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
-
-    DeveloperPortal::Admin::Account::PasswordsController.any_instance.expects(:verify_captcha).returns(false)
+    Recaptcha::Verify.stubs(skip?: false)
 
     get developer_portal.new_admin_account_password_path
     assert_response :success
     assert_not body.include? 'g-recaptcha'
 
-    ThreeScale::SpamProtection::SessionStore.any_instance.expects(:mark_possible_spam).once
     post developer_portal.admin_account_password_path(email: 'user@example.com')
+    assert_equal 'Spam protection failed.', flash[:error]
+    assert_redirected_to developer_portal.new_admin_account_password_path(request_password_reset: true)
 
-    ThreeScale::SpamProtection::SessionStore.any_instance.expects(:marked_as_possible_spam?).returns(true).once
     get developer_portal.new_admin_account_password_path
     assert_response :success
     assert body.include? 'g-recaptcha'
@@ -81,7 +80,8 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   test 'create responds with error message when detects spam' do
     provider.settings.update_attributes(spam_protection_level: :auto)
-    DeveloperPortal::Admin::Account::PasswordsController.any_instance.expects(:verify_captcha).returns(false)
+    ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
+    Recaptcha::Verify.stubs(skip?: false)
 
     post developer_portal.admin_account_password_path(email: 'user@example.com')
     assert_equal 'Spam protection failed.', flash[:error]
@@ -91,7 +91,7 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
   test 'create sends the email when captcha passes and finds the email' do
     provider.settings.update_attributes(spam_protection_level: :auto)
     ThreeScale::SpamProtection::Protector.any_instance.stubs(spam?: true)
-    DeveloperPortal::Admin::Account::PasswordsController.any_instance.expects(:verify_captcha).returns(true)
+    Recaptcha::Verify.stubs(skip?: true)
 
     UserMailer.expects(:lost_password).returns(mock('mail', deliver_later: true)).once
 
@@ -105,6 +105,7 @@ class DeveloperPortal::PasswordsControllerTest < ActionDispatch::IntegrationTest
 
   test 'create renders the right error message when the email is not found' do
     provider.settings.update_attributes(spam_protection_level: :none)
+    Recaptcha::Verify.stubs(skip?: false)
 
     post developer_portal.admin_account_password_path(email: 'fake@example.com')
     assert_equal 'Email not found.', flash[:error]
