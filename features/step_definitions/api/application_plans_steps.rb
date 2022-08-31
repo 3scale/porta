@@ -284,10 +284,8 @@ When(/^the provider creates a plan$/) do
 end
 
 Then "a copy of the plan is added to the list" do
-  steps %(
-    Then I should see "Plan copied."
-    And I should see "#{@plan.name} (copy)"
-  )
+  assert_flash "Plan copied."
+  assert_content "#{@plan.name} (copy)"
 end
 
 Then "they can edit its details" do
