@@ -12,6 +12,7 @@ ThinkingSphinx::Index.define(:account, with: :real_time) do
   indexes sphinx_user_ids,   as: :user_id
 
   set_property field_weights: { name: 2 }
+  #                                                    #     %     '     *  +  ,     .     :     ;     ?     _     `     {     }
   set_property charset_table: "0..9, A..Z->a..z, a..z, U+23, U+25, U+27, U+2A..U+2C, U+2E, U+3A, U+3B, U+3F, U+5F, U+60, U+7B, U+7D"
 
   has provider_account_id, type: :bigint
