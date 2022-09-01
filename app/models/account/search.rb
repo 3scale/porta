@@ -57,7 +57,7 @@ class Account
 
         options = options
                   .reverse_merge(ids_only: true, star: true,
-                                 per_page: ThreeScale::Search::Helpers::MAX_SEARCH_PAGE_SIZE,
+                                 per_page: ThreeScale::Search::Helpers::SPHINX_PAGE_SIZE_INFINITE,
                                  ignore_scopes: true, with: { })
 
         if (tenant_id = User.tenant_id)
