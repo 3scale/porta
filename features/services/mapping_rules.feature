@@ -1,8 +1,8 @@
 @javascript
 Feature: Product mapping rules
-  In order to integrate with 3scale via a on-premise proxy
+  In order to configure API gateway access control
   As a provider
-  I want to download config files from the inteface
+  I want to be able to manage my mapping rules
 
   Background:
     Given all the rolling updates features are off
@@ -45,3 +45,11 @@ Feature: Product mapping rules
     Given I have proxy_pro feature disabled
     When I go to the create mapping rule page for service "one"
     Then I should not see field "Redirect URL"
+
+  @search
+  Scenario: Pagination when search results are multi-page
+    Given a service "ManyRules"
+    And the service "ManyRules" has 30 mapping rules starting with pattern "/test"
+    When I go to the mapping rules index page for service "ManyRules"
+    And I search mapping rules for pattern "/test"
+    Then I should see 2 pages
