@@ -13,7 +13,7 @@ class ProxyRuleQuery
     return scope if query.blank?
 
     options = {
-      ids_only: true, star: true, per_page: ThreeScale::Search::Helpers::MAX_SEARCH_PAGE_SIZE, ignore_scopes: true,
+      ids_only: true, star: true, per_page: ThreeScale::Search::Helpers::SPHINX_PAGE_SIZE_INFINITE, ignore_scopes: true,
       with: { owner_type: @owner_type, owner_id: @owner_id }
     }
     ids = ProxyRule.search(ThinkingSphinx::Query.escape(query), options)

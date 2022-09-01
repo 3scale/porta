@@ -12,7 +12,7 @@ module Searchable
 
     scope :by_query, ->(query) do
       options = { ids_only: true, star: true, ignore_scopes: true, with: { },
-                  per_page: ThreeScale::Search::Helpers::MAX_SEARCH_PAGE_SIZE }
+                  per_page: ThreeScale::Search::Helpers::SPHINX_PAGE_SIZE_INFINITE }
       where(id: unscoped.search(ThinkingSphinx::Query.escape(query), options))
     end
 
