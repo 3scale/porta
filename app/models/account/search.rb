@@ -56,7 +56,8 @@ class Account
         return [] if query.blank?
 
         options = options
-                  .reverse_merge(ids_only: true, per_page: 1_000_000, star: true,
+                  .reverse_merge(ids_only: true, star: true,
+                                 per_page: ThreeScale::Search::Helpers::SPHINX_PAGE_SIZE_INFINITE,
                                  ignore_scopes: true, with: { })
 
         if (tenant_id = User.tenant_id)

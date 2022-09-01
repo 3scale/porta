@@ -184,7 +184,13 @@ class ThreeScale::Search < ActiveSupport::HashWithIndifferentAccess
 
   module Helpers
 
+    # Default maximum page size for search results
     MAX_PER_PAGE = 20
+
+    # By default sphinx paginates search results, and the default page size is 20.
+    # Setting to a high value "disables" sphinx-based pagination to use will_paginate instead
+    # See https://freelancing-gods.com/thinking-sphinx/v5/searching.html#pagination
+    SPHINX_PAGE_SIZE_INFINITE = 1_000_000
 
     def self.included(controller)
       controller.class_eval do
