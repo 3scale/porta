@@ -28,22 +28,30 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
     assert_equal 'application/pdf', attachment.content_type
   end
 
-  test 'should generate valid PDF content with logo and line items' do
-    logo_file = File.open(file_fixture('wide.jpg'), 'rb')
+  test 'should generate valid PDF content with jpg logo and line items' do
+    test_generate_with_logo_and_lines("wide.jpg")
+  end
+
+  test 'should generate valid PDF content with png logo and line items' do
+    test_generate_with_logo_and_lines("wide.png")
+  end
+
+  private
+  def test_generate_with_logo_and_lines(image_name)
+    logo_file = File.open(file_fixture(image_name), 'rb')
     @data.expects(:with_logo).yields(logo_file)
     @data.stubs(:provider).returns(LONG_ADDRESS)
     items = [['Licorice', '5', '222', ''],
              ['Haribo  ', '11', '11', ''],
              ["Chocolatte#{Prawn::Text::NBSP}", '', '11', ''],
              ['Sugar', nil, '11', '']]
-
     @data.stubs(:line_items).returns(items)
-
     content = @generator.generate
-    assert_not_nil content
+    assert content
+    assert_equal "pdf", MimeMagic.by_magic(content)&.subtype
 
     # ensure an image is present in the PDF
-    assert_equal 1, content.scan(%r{/Type /XObject}).size
+    assert_not_equal 0, content.scan(%r{/Type /XObject}).size
 
     strings = PDF::Inspector::Text.analyze(content).strings
     flat_items = items.flatten.reject(&:blank?).map(&:strip)

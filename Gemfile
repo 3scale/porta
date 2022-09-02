@@ -102,6 +102,7 @@ gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
+gem 'local-fastimage_resize', '~> 3.4.0', require: 'fastimage/resize'
 gem 'paperclip', '~> 6.0'
 gem 'prawn'
 gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
