@@ -54,49 +54,20 @@ to stop the application, run:
 make dev-stop
 ```
 
-## Manual setup on Mac OS X (10.13 - 12.3.1)
+## Manual setup on Mac OS X (10.13 - 12.5.1)
 
 ### Prerequisites
 
-#### Ruby version
+#### Ruby and Node.js
 
-The project supports **2.6.x**.
+> [asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
+> from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
+> of these packages and it will override the system's ruby version.
 
-Verify you have a proper version by running on your terminal:
-
-```bash
-ruby -v
-```
-
-> We recommend using [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install any ruby version.
-
-Example with RVM:
-```bash
-gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-\curl -sSL https://get.rvm.io | bash -s stable
-rvm install 2.6
-```
-
-#### Node version
-
-The project supports **Version: 12.X.X**.
-
-You might want to use [nvm](https://github.com/creationix/nvm/) to install and work with specific Node versions:
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. Verify you have a proper version by running on your terminal:
 
 ```bash
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-```
-
-Restart the terminal and install Node:
-
-```bash
-nvm install 12 && nvm use 12
-```
-
-###### As an alternative for Mac OS, and if you don't want multiple Node versions, you could use homebrew:
-
-```bash
-brew install node@12
+ruby -v && node -v
 ```
 
 #### Xcode
@@ -214,24 +185,16 @@ yarn install
 
 ### Prerequisites
 
-#### Ruby version
+#### Ruby and Node.js
 
-The project supports **2.6.x**.
+> [asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
+> from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
+> of these packages and it will override the system's ruby version.
 
-Verify you have a proper version by running on your terminal:
-
-```bash
-ruby -v
-```
-
-> You can use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install ruby.
-
-#### Node version
-
-The project supports **Version: 12.X.X**.
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. Verify you have a proper version by running on your terminal:
 
 ```bash
-dnf module install nodejs:12
+ruby -v && node -v
 ```
 
 #### Dependencies
