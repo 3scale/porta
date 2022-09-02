@@ -58,6 +58,19 @@ make dev-stop
 
 ### Prerequisites
 
+Make sure you have [Homebrew](https://brew.sh/) in your machine to install all required packages during the setup.
+
+#### Python (only M1 macs)
+
+```
+brew install python@3.10
+```
+
+Then add the following line to your .bash_profile or similar file:
+```sh
+export PATH="/opt/homebrew/opt/python@3.10/libexec/bin:${PATH}
+```
+
 #### Ruby and Node.js
 
 The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. Verify you have a proper version by running on your terminal:
@@ -88,8 +101,6 @@ Install Xcode from the App Store.
 You can download all Xcode versions from [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
 
 #### Dependencies
-
-Make sure you have [Homebrew](https://brew.sh/) in your machine to install the following dependencies:
 
 ```shell
 brew tap homebrew/cask
@@ -236,7 +247,7 @@ sudo systemctl restart memcached
 Postgres, MySQL or Oracle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
 ```shell
-docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7 
+docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
 ```
 
 Alternatively, you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
