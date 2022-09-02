@@ -60,14 +60,26 @@ make dev-stop
 
 #### Ruby and Node.js
 
-> [asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
-> from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
-> of these packages and it will override the system's ruby version.
-
 The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. Verify you have a proper version by running on your terminal:
 
 ```bash
 ruby -v && node -v
+```
+
+[asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
+from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
+of these packages and it will override the system's ruby version. After installing it using Homebrew you need
+to install a plugin for each individual package:
+
+```sh
+brew install asdf
+asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+```
+
+Finally, download the specific versions and use them in the local folder:
+```sh
+asdf install
 ```
 
 #### Xcode
@@ -187,14 +199,28 @@ yarn install
 
 #### Ruby and Node.js
 
-> [asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
-> from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
-> of these packages and it will override the system's ruby version.
-
 The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. Verify you have a proper version by running on your terminal:
 
 ```bash
 ruby -v && node -v
+```
+
+[asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
+from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
+of these packages and it will override the system's ruby version. After installing the required dependencies
+and asdf you need to install a plugin for each individual package:
+
+```sh
+apt install curl git
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+
+asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+```
+
+Finally, download the specific versions and use them in the local folder:
+```sh
+asdf install
 ```
 
 #### Dependencies
