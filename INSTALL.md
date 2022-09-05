@@ -60,38 +60,33 @@ make dev-stop
 
 Make sure you have [Homebrew](https://brew.sh/) in your machine to install all required packages during the setup.
 
+To manage Ruby and Node.js we use [asdf](https://asdf-vm.com/guide/getting-started.html#global). It is a
+convenient tool version manager that reads from a `.tool-versions` file included in this project. This way you won't
+have to worry about the versioning of these packages and it will override the system versions.
+
+```
+brew install asdf
+```
+
 #### Python (only M1 macs)
+The project requires Python 2.7.18. However, it is not included anymore in Apple macs with Silicon. The recommended way
+to handle Python is via `asdf`:
 
 ```
-brew install python@3.10
-```
-
-Then add the following line to your .bash_profile or similar file:
-```sh
-export PATH="/opt/homebrew/opt/python@3.10/libexec/bin:${PATH}
+asdf plugin-add python
+asdf install python 2.7.18
+asdf global python 2.7.18
 ```
 
 #### Ruby and Node.js
 
-The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**. Verify you have a proper version by running on your terminal:
-
-```bash
-ruby -v && node -v
-```
-
-[asdf](https://asdf-vm.com/guide/getting-started.html#global) is a convenient tool version manager that reads
-from the `.tool-versions` file included in this project. This way you won't have to worry about the versioning
-of these packages and it will override the system's ruby version. After installing it using Homebrew you need
-to install a plugin for each individual package:
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**.
+The recommended way to install them is with `asdf`:
 
 ```sh
-brew install asdf
 asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-```
 
-Finally, download the specific versions and use them in the local folder:
-```sh
 asdf install
 ```
 
@@ -104,17 +99,19 @@ You can download all Xcode versions from [Apple's developer site](https://develo
 
 ```shell
 brew install
-brew install chromedriver imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql@14 memcached
+brew install chromedriver imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 brew services start mysql@5.7
 ```
 
-Depending on your needs you may want launch memcached and postgresql services instead of mysql.
-
-```shell
-brew services start memcached postgresql@14
-```
+> Depending on your needs you may want use `memcached` and `postgresql` services instead of `mysql`.
+>
+> ```shell
+> brew install postgresql@14 memcached
+>
+> brew services start memcached postgresql@14
+> ```
 
 #### Sphinx Search
 Install [Sphinx](http://sphinxsearch.com/) for **mysql@5.7** with Homebrew:
@@ -147,7 +144,7 @@ Copy example config files from the examples folder:
 cp config/examples/* config/
 ```
 
-#### Bundle
+#### Bundler
 
 Install [Bundler](https://bundler.io/) to manage all required Ruby gems:
 ```
@@ -157,9 +154,9 @@ gem install bundler
 Then configure the bundle config with:
 ```shell
 bundle config --global build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-bundle config --global build.mysql2 "--with-opt-dir=/usr/local/opt/openssl"
-bundle config --local build.github-markdown --with-cflags="-Wno-error=implicit-function-declaration"
-bundle config --local build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+bundle config --global build.mysql2 --with-opt-dir=/usr/local/opt/openssl
+bundle config --local build.github-markdown --with-cflags=-Wno-error=implicit-function-declaration
+bundle config --local build.thin --with-cflags=-Wno-error=implicit-function-declaration
 ```
 
 And finally install all gems:
@@ -181,7 +178,7 @@ bundle install
 >
 > and run `bundle install` again.
 
-#### Node packages
+#### Yarn
 
 Install [Yarn](https://yarnpkg.com/) to manage all required Javscript packages:
 
