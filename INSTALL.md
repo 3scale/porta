@@ -103,27 +103,23 @@ You can download all Xcode versions from [Apple's developer site](https://develo
 #### Dependencies
 
 ```shell
-brew tap homebrew/cask
-brew install chromedriver --cask
-brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql memcached
+brew install
+brew install chromedriver imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql@14 memcached
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 brew services start mysql@5.7
 ```
 
-Optionally, depending on your needs you can launch memcached and postgresql services
+Depending on your needs you may want launch memcached and postgresql services instead of mysql.
 
 ```shell
-brew services start memcached postgresql
+brew services start memcached postgresql@14
 ```
 
 #### Sphinx Search
-
-[Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7** and compiled from source:
-
-```shell
-sed -i '' -e 's|depends_on "mysql"|depends_on "mysql@5.7"|g' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb
-brew install --build-from-source sphinx
+Install [Sphinx](http://sphinxsearch.com/) for **mysql@5.7** with Homebrew:
+```
+brew install sphinx
 ```
 
 #### Redis
@@ -143,14 +139,6 @@ brew services start redis
 
 ### Setup
 
-#### Eventmachine
-
-Eventmachine has to be installed with `--with-cppflags=-I/usr/local/opt/openssl/include`. Simply run:
-
-```shell
-bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-```
-
 #### Config files
 
 Copy example config files from the examples folder:
@@ -161,7 +149,12 @@ cp config/examples/* config/
 
 #### Bundle
 
-On MacOS 10.15 or newer, first configure the bundle config with:
+Install [Bundler](https://bundler.io/) to manage all required Ruby gems:
+```
+gem install bundler
+```
+
+Then configure the bundle config with:
 ```shell
 bundle config --global build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
 bundle config --global build.mysql2 "--with-opt-dir=/usr/local/opt/openssl"
@@ -169,36 +162,34 @@ bundle config --local build.github-markdown --with-cflags="-Wno-error=implicit-f
 bundle config --local build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 ```
 
-Run [Bundler](https://bundler.io/) to install all required Ruby gems:
-
+And finally install all gems:
 ```shell
 bundle install
 ```
 
-If the `mysql2` gem installation fails with the error:
-
-```
-ld: library not found for -lssl
-```
-
-you can fix it setting the flags:
-
-```shell
-bundle config --local build.mysql2 "--with-ldflags=-L/usr/local/opt/openssl/lib --with-cppflags=-I/usr/local/opt/openssl/include"
-```
-
-and run `bundle install` again.
+> If the `mysql2` gem installation fails with the error:
+>
+> ```
+> ld: library not found for -lssl
+> ```
+>
+> you can fix it setting the flags:
+>
+> ```shell
+> bundle config --local build.mysql2 "--with-ldflags=-L/usr/local/opt/openssl/lib --with-cppflags=-I/usr/local/opt/openssl/include"
+> ```
+>
+> and run `bundle install` again.
 
 #### Node packages
 
-Install [Yarn](https://yarnpkg.com/):
+Install [Yarn](https://yarnpkg.com/) to manage all required Javscript packages:
 
 ```bash
 brew install yarn
 ```
 
-
-Run [Yarn](https://www.yarnpkg.com/) to install all the required dependencies:
+And install them:
 
 ```bash
 yarn install
