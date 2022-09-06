@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {AuthenticationProviders} from 'LoginPage'
+import { AuthenticationProviders } from 'LoginPage'
 
 const props = {
   authenticationProviders: [

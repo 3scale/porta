@@ -50,10 +50,10 @@ const VerticalNav = ({ sections, activeSection, activeItem, currentApi }: Props)
   )
 }
 
-const NavSection = ({title, isSectionActive, activeItem, items, outOfDateConfig}) => {
+const NavSection = ({ title, isSectionActive, activeItem, items, outOfDateConfig }) => {
   return (
     <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive} className={outOfDateConfig ? 'outdated-config' : ''}>
-      {items.map(({id, title, path, target, itemOutOfDateConfig}) => (
+      {items.map(({ id, title, path, target, itemOutOfDateConfig }) => (
         path
           ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target} key={title} className={itemOutOfDateConfig ? 'outdated-config' : ''}>{title}</NavItem>
           : <NavGroup title={title} className='vertical-nav-label' key={title}></NavGroup>

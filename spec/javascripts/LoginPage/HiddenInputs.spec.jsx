@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
-import {HiddenInputs} from 'LoginPage'
+import { HiddenInputs } from 'LoginPage'
 
 it('should render itself', () => {
   const wrapper = shallow(<HiddenInputs />)

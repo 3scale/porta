@@ -5,11 +5,11 @@ import c3 from 'c3'
 import numeral from 'numeral'
 
 export class StatsChart {
-  constructor ({container}) {
+  constructor ({ container }) {
     this.chartContainer = container
   }
 
-  render ({data, selectedSeries}) {
+  render ({ data, selectedSeries }) {
     this.plotChart = this._renderChart()
     $(this.chartContainer).data('chart', this.plotChart)
     this._appendNoDataAvailableMessage()

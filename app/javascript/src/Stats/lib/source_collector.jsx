@@ -1,10 +1,10 @@
 import $ from 'jquery'
 import 'core-js/fn/array/find'
 
-import {StatsMetrics} from 'Stats/lib/metrics_list'
+import { StatsMetrics } from 'Stats/lib/metrics_list'
 
 export class StatsSourceCollector {
-  constructor ({id, metrics}) {
+  constructor ({ id, metrics }) {
     this.id = id
     this.metricsPromise = metrics
   }
@@ -31,12 +31,12 @@ export class StatsSourceCollector {
     return metricsPromise
   }
 
-  getSources ({id, selectedMetricName}) {
+  getSources ({ id, selectedMetricName }) {
     let selectedId = id || this.id
-    return this._resolveSources({id: selectedId, selectedMetricName, metrics: this.metrics})
+    return this._resolveSources({ id: selectedId, selectedMetricName, metrics: this.metrics })
   }
 
-  params ({dateRange, selectedMetricName}) {
+  params ({ dateRange, selectedMetricName }) {
     return {
       metric_name: selectedMetricName,
       granularity: dateRange.granularity,
@@ -48,16 +48,16 @@ export class StatsSourceCollector {
 
   buildSources (id, metrics) {
     const Source = Object.getPrototypeOf(this).constructor.Source
-    return metrics.map(metricDetails => new Source({id, details: metricDetails}))
+    return metrics.map(metricDetails => new Source({ id, details: metricDetails }))
   }
 
   _fetchMetrics (url) {
     return StatsMetrics.getMetrics(url)
   }
 
-  _resolveSources ({id, selectedMetricName, metrics}) {
+  _resolveSources ({ id, selectedMetricName, metrics }) {
     return metrics.then(list => {
-      let selectedMetrics = StatsMetrics.getSelectedMetrics({selectedMetricName, list})
+      let selectedMetrics = StatsMetrics.getSelectedMetrics({ selectedMetricName, list })
       return this.buildSources(id, selectedMetrics)
     })
   }

@@ -1,13 +1,13 @@
 /** @jsx StatsUI.dom */
-import {StatsUsageChart} from 'Stats/lib/usage_chart'
-import {StatsUsageChartManager} from 'Stats/lib/usage_chart_manager'
-import {StatsMetrics} from 'Stats/lib/metrics_list'
-import {StatsSourceCollector} from 'Stats/lib/source_collector'
-import {StatsMethodsTable} from 'Stats/lib/methods_table'
-import {StatsApplicationMetricsSource} from 'Stats/lib/application_metrics_source'
-import {StatsCSVLink} from 'Stats/lib/csv_link'
-import {Stats} from 'Stats/lib/stats'
-import {StatsStore} from 'Stats/lib/store'
+import { StatsUsageChart } from 'Stats/lib/usage_chart'
+import { StatsUsageChartManager } from 'Stats/lib/usage_chart_manager'
+import { StatsMetrics } from 'Stats/lib/metrics_list'
+import { StatsSourceCollector } from 'Stats/lib/source_collector'
+import { StatsMethodsTable } from 'Stats/lib/methods_table'
+import { StatsApplicationMetricsSource } from 'Stats/lib/application_metrics_source'
+import { StatsCSVLink } from 'Stats/lib/csv_link'
+import { Stats } from 'Stats/lib/stats'
+import { StatsStore } from 'Stats/lib/store'
 import $ from 'jquery'
 
 function getStoredApplicationId () {
@@ -22,7 +22,7 @@ export class StatsApplicationSourceCollector extends StatsSourceCollector {
 
   getSources (options) {
     const { selectedApplicationId, selectedMetricName } = options
-    return super.getSources({id: selectedApplicationId, selectedMetricName})
+    return super.getSources({ id: selectedApplicationId, selectedMetricName })
   }
 }
 
@@ -51,13 +51,13 @@ let statsApplication = (applicationId, options = {}) => {
   const id = getStoredApplicationId() || applicationId
   const applicationMetricsUrl = `/stats/api/applications/${id}/summary.json?version=2.0`
   const metrics = StatsMetrics.getMetrics(applicationMetricsUrl)
-  const csvLink = new StatsCSVLink({container: options.csvLinkContainer})
-  const methodsTable = new StatsMethodsTable({container: options.methodsTableContainer})
+  const csvLink = new StatsCSVLink({ container: options.csvLinkContainer })
+  const methodsTable = new StatsMethodsTable({ container: options.methodsTableContainer })
 
-  Stats({ChartManager: StatsApplicationChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector})
+  Stats({ ChartManager: StatsApplicationChartManager, Chart: StatsUsageChart, Sources: StatsApplicationSourceCollector })
     .build({
       id,
-      selectedState: {timezone: options.timezone, selectedApplicationId: id},
+      selectedState: { timezone: options.timezone, selectedApplicationId: id },
       metrics,
       widgets: [csvLink, methodsTable],
       options

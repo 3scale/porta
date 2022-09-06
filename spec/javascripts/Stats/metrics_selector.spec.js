@@ -10,11 +10,11 @@ describe('StatsMetricsSelector', () => {
   }
 
   let metrics = [
-    {id: 42, name: 'Pierogi', systemName: 'pierogi'},
-    {id: 666, name: 'Choripanes', systeName: 'choripanes'}
+    { id: 42, name: 'Pierogi', systemName: 'pierogi' },
+    { id: 666, name: 'Choripanes', systeName: 'choripanes' }
   ]
 
-  let metricsSelector = new StatsMetricsSelector({statsState: userSelectedState, metrics, container: '#selector'})
+  let metricsSelector = new StatsMetricsSelector({ statsState: userSelectedState, metrics, container: '#selector' })
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="selector"></div>'

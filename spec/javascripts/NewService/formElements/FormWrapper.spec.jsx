@@ -3,8 +3,7 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 
-import {FormWrapper} from 'NewService/components/FormElements'
-import {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements'
+import { FormWrapper, HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
 
 const submitText = 'Add API'
 const props = {

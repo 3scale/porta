@@ -4,9 +4,10 @@ import * as React from 'react'
 
 import { BraintreeForm } from 'PaymentGateways'
 import { mount } from 'enzyme'
+import * as hostedFields from 'braintree-web/hosted-fields'
+import * as validate from 'validate.js'
 
 jest.mock('braintree-web/hosted-fields')
-import * as hostedFields from 'braintree-web/hosted-fields'
 jest.spyOn(hostedFields, 'create').mockImplementation(() => Promise.resolve({
   getState: () => ({ fields: {} }),
   on: (event, fn) => {
@@ -17,7 +18,6 @@ jest.spyOn(hostedFields, 'create').mockImplementation(() => Promise.resolve({
 }))
 
 jest.mock('validate.js')
-import * as validate from 'validate.js'
 
 const COUNTRIES_LIST = '[["Afghanistan","AF"],["Albania","AL"],["Algeria","DZ"],["Spain","ES"]]'
 

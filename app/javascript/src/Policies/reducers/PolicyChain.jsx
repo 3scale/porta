@@ -14,7 +14,7 @@ import type {
 export type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction
 
 function createChainPolicy (policy: RegistryPolicy): ChainPolicy {
-  return {...policy, humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid()}
+  return { ...policy, humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid() }
 }
 
 function addPolicy (state: Array<ChainPolicy>, action: AddPolicyToChainAction): Array<ChainPolicy> {

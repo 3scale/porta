@@ -10,8 +10,8 @@ type Props = {
 }
 
 const ServiceSourceForm = (props: Props): React.Node => {
-  const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    handleFormsVisibility, loadingProjects} = props
+  const { isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
+    handleFormsVisibility, loadingProjects } = props
   const classNameDisabled = isServiceDiscoveryUsable ? '' : 'disabled'
   return (
     <form className="formtastic" id="new_service_source">

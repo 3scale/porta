@@ -1,9 +1,9 @@
 // @flow
 
 import * as React from 'react'
-import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
-import type {FormProps, ServiceFormTemplate} from 'NewService/types'
-import type {Api} from 'Types/Api'
+import { FormWrapper, ServiceManualListItems } from 'NewService/components/FormElements'
+import type { FormProps, ServiceFormTemplate } from 'NewService/types'
+import type { Api } from 'Types/Api'
 
 type Props = {
   template: ServiceFormTemplate,
@@ -12,7 +12,7 @@ type Props = {
 }
 
 const ServiceManualForm = (props: Props): React.Node => {
-  const {template, formActionPath} = props
+  const { template, formActionPath } = props
 
   const formProps: FormProps = {
     id: 'new_service',

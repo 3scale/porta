@@ -1,11 +1,11 @@
 /** @jsx StatsUI.dom */
 import numeral from 'numeral'
 
-import {StatsUI} from 'Stats/lib/ui'
+import { StatsUI } from 'Stats/lib/ui'
 
 export class StatsApplicationsTable extends StatsUI {
-  constructor ({container}) {
-    super({container})
+  constructor ({ container }) {
+    super({ container })
     this.data = []
   }
 

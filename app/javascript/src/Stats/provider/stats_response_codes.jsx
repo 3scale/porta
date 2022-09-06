@@ -1,13 +1,13 @@
 import 'core-js/fn/object/assign' // make Object.assign on IE 11
 import $ from 'jquery'
 
-import {StatsChart} from 'Stats/lib/chart'
-import {StatsChartManager} from 'Stats/lib/chart_manager'
-import {StatsState, PeriodRangeDate} from 'Stats/lib/state'
-import {StatsStore} from 'Stats/lib/store'
-import {StatsMetricsSource} from 'Stats/lib/metrics_source'
-import {StatsSeries} from 'Stats/lib/series'
-import {StatsMenu} from 'Stats/lib/menu'
+import { StatsChart } from 'Stats/lib/chart'
+import { StatsChartManager } from 'Stats/lib/chart_manager'
+import { StatsState, PeriodRangeDate } from 'Stats/lib/state'
+import { StatsStore } from 'Stats/lib/store'
+import { StatsMetricsSource } from 'Stats/lib/metrics_source'
+import { StatsSeries } from 'Stats/lib/series'
+import { StatsMenu } from 'Stats/lib/menu'
 
 const OPTIONS = {
   metrics: [
@@ -35,25 +35,25 @@ class StatsResponseCodeChartManager extends StatsChartManager {
   }
 
   renderChart (noDataMessageContainer) {
-    this._processChart().then(data => this.chart.render({noDataMessageContainer, data}))
+    this._processChart().then(data => this.chart.render({ noDataMessageContainer, data }))
   }
 }
 
 class StatsResponseCodeChart extends StatsChart {
-  constructor ({container, statsState}) {
-    super({container})
+  constructor ({ container, statsState }) {
+    super({ container })
     this.statsState = statsState
   }
 
-  render ({noDataMessageContainer, data}) {
+  render ({ noDataMessageContainer, data }) {
     this.noDataMessageContainer = noDataMessageContainer
     $(this.noDataMessageContainer).addClass('is-hidden')
-    super.render({data})
+    super.render({ data })
     this._showSelectedSeries()
   }
 
   updateFromSeries (series, topics = ['series']) {
-    this.statsState.setState({code: series}, topics)
+    this.statsState.setState({ code: series }, topics)
   }
 
   showData (dataPresent) {
@@ -105,7 +105,7 @@ class StatsResponseCodeSource extends StatsMetricsSource {
     return `/stats/api/services/${this.id}/usage_response_code.json`
   }
 
-  params ({dateRange}) {
+  params ({ dateRange }) {
     return {
       response_code: this.details.system_name,
       granularity: dateRange.granularity,
@@ -127,8 +127,8 @@ let statsResponseCodes = (serviceId, options = {}) => {
   let settings = Object.assign({}, defaults, options)
   let store = new StatsStore(window)
   let statsState = new StatsState(store, { dateRange: new PeriodRangeDate(), code: DEFAULT_CODES })
-  let sources = OPTIONS.metrics.map((metric) => new StatsResponseCodeSource({id: serviceId, details: metric}))
-  let chart = new StatsResponseCodeChart({container: settings.chartContainer, statsState})
+  let sources = OPTIONS.metrics.map((metric) => new StatsResponseCodeSource({ id: serviceId, details: metric }))
+  let chart = new StatsResponseCodeChart({ container: settings.chartContainer, statsState })
 
   const PERIODS = [
     { number: 24, unit: 'hour' },
@@ -137,7 +137,7 @@ let statsResponseCodes = (serviceId, options = {}) => {
     { number: 12, unit: 'month' }
   ]
 
-  new StatsMenu({statsState, periods: PERIODS, container: settings.menuContainer}).render()
+  new StatsMenu({ statsState, periods: PERIODS, container: settings.menuContainer }).render()
 
   new StatsResponseCodeChartManager({
     statsState,

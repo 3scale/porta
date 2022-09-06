@@ -4,7 +4,7 @@ import React from 'react'
 import type { Node } from 'react'
 import type { InputProps } from 'PaymentGateways'
 
-const Input = ({id, required = false, name, value, onChange}: InputProps): Node => (
+const Input = ({ id, required = false, name, value, onChange }: InputProps): Node => (
   <input
     id={id}
     required={required}

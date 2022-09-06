@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {TextField, PasswordField, EmailField} from 'LoginPage'
+import { TextField, PasswordField, EmailField } from 'LoginPage'
 
 describe('TextField', () => {
   const textFieldInputProps = {
@@ -31,7 +31,7 @@ describe('TextField', () => {
   })
 
   it('should render an error message if not valid', () => {
-    const invalidFieldProps = {...textFieldInputProps, isValid: false}
+    const invalidFieldProps = { ...textFieldInputProps, isValid: false }
     const wrapper = mount(<TextField inputProps={invalidFieldProps}/>)
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })
@@ -62,7 +62,7 @@ describe('PasswordField', () => {
   })
 
   it('should render an error message if not valid', () => {
-    const invalidFieldProps = {...passwordFieldInputProps, isValid: false}
+    const invalidFieldProps = { ...passwordFieldInputProps, isValid: false }
     const wrapper = mount(<PasswordField inputProps={invalidFieldProps}/>)
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })
@@ -93,7 +93,7 @@ describe('EmailField', () => {
   })
 
   it('should render an error message if not valid', () => {
-    const invalidFieldProps = {...emailFieldInputProps, isValid: false}
+    const invalidFieldProps = { ...emailFieldInputProps, isValid: false }
     const wrapper = mount(<EmailField inputProps={invalidFieldProps}/>)
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })

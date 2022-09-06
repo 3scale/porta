@@ -1,4 +1,4 @@
-import {StatsSeries} from 'Stats/lib/series'
+import { StatsSeries } from 'Stats/lib/series'
 
 export class StatsUsageSeries extends StatsSeries {
   _customOptions (responses) {

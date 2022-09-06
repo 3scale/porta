@@ -1,12 +1,12 @@
 // @flow
 
 import * as React from 'react'
-import {Label} from 'NewService/components/FormElements'
-import type {ServiceFormTemplate} from 'NewService/types'
+import { Label } from 'NewService/components/FormElements'
+import type { ServiceFormTemplate } from 'NewService/types'
 
 type Props = ServiceFormTemplate
 
-const ServiceManualListItems = ({service, errors}: Props): React.Node => {
+const ServiceManualListItems = ({ service, errors }: Props): React.Node => {
   const [name, setName] = React.useState(service.name)
   const [systemName, setSystemName] = React.useState(service.system_name)
   const [description, setDescription] = React.useState(service.description)
@@ -45,4 +45,4 @@ const ServiceManualListItems = ({service, errors}: Props): React.Node => {
     </React.Fragment>
   )
 }
-export {ServiceManualListItems}
+export { ServiceManualListItems }

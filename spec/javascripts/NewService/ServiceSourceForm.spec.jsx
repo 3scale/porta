@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { act } from 'react-dom/test-utils'
-import {mount, shallow} from 'enzyme'
+import { mount, shallow } from 'enzyme'
 
-import {ServiceSourceForm} from 'NewService'
+import { ServiceSourceForm } from 'NewService'
 
 const serviceDiscoveryAuthenticateUrl = 'my-url'
 const props = {
