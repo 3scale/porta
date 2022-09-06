@@ -13,6 +13,6 @@ export function hideUiComponent (component: UIComponent): HideUIComponentAction 
 }
 
 export type UIComponentTransitionAction = { type: 'UI_COMPONENT_TRANSITION', hide: UIComponent, show: UIComponent }
-export function uiComponentTransition ({hide, show}: {hide: UIComponent, show: UIComponent}): UIComponentTransitionAction {
+export function uiComponentTransition ({ hide, show }: {hide: UIComponent, show: UIComponent}): UIComponentTransitionAction {
   return { type: 'UI_COMPONENT_TRANSITION', hide, show }
 }

@@ -1,12 +1,12 @@
 import $ from 'jquery'
-import {StatsMetric} from 'Stats/lib/metric'
+import { StatsMetric } from 'Stats/lib/metric'
 
 export class StatsMetrics {
   static getMetrics (url) {
     return this._makeRequest(url).then(response => this._parseResponse(response))
   }
 
-  static getSelectedMetrics ({selectedMetricName, list}) {
+  static getSelectedMetrics ({ selectedMetricName, list }) {
     const listMethods = list.methods || []
     const selectedMetric = (list.metrics.concat(listMethods)).find(metric => metric.systemName === selectedMetricName)
     const methodsOfSelectedMetric = listMethods.filter(method => method.parentId === selectedMetric.id)

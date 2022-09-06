@@ -1,13 +1,13 @@
 // @flow
 
 import * as React from 'react'
-import type {FormProps} from 'NewService/types'
-import {CSRFToken} from 'utilities'
-import {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements'
+import type { FormProps } from 'NewService/types'
+import { CSRFToken } from 'utilities'
+import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
 import { Button } from '@patternfly/react-core'
 
 const FormWrapper = (props: FormProps): React.Node => {
-  const {id, formActionPath, hasHiddenServiceDiscoveryInput, submitText} = props
+  const { id, formActionPath, hasHiddenServiceDiscoveryInput, submitText } = props
   return (
     <form
       className='formtastic service'
@@ -36,4 +36,4 @@ const FormWrapper = (props: FormProps): React.Node => {
   )
 }
 
-export {FormWrapper}
+export { FormWrapper }

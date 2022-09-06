@@ -1,6 +1,6 @@
-import {StatsMenu} from 'Stats/lib/menu'
-import {StatsStore} from 'Stats/lib/store'
-import {StatsState} from 'Stats/lib/state'
+import { StatsMenu } from 'Stats/lib/menu'
+import { StatsStore } from 'Stats/lib/store'
+import { StatsState } from 'Stats/lib/state'
 
 describe('StatsMenu', () => {
   const PERIODS = [
@@ -52,7 +52,7 @@ describe('StatsMenu', () => {
     let window = { history: new FakeHistory() }
     let store = new StatsStore(window)
     var statsState = new FakeState(store)
-    let menu = new StatsMenu({statsState, periods: PERIODS, container: '#menu'})
+    let menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
 
     beforeEach(() => {
       menu.render()
@@ -100,7 +100,7 @@ describe('StatsMenu', () => {
       }
       let store = new StatsStore(window)
       let statsState = new StatsState(store)
-      let menu = new StatsMenu({statsState, periods: PERIODS, container: '#menu'})
+      let menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
 
       menu.render()
 
@@ -120,7 +120,7 @@ describe('StatsMenu', () => {
       }
       let store = new StatsStore(window)
       let statsState = new StatsState(store)
-      let menu = new StatsMenu({statsState, periods: PERIODS, container: '#menu'})
+      let menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
 
       menu.render()
       menu.statsState.store.getStateFromURL()

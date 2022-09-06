@@ -4,6 +4,8 @@ import { mount } from 'enzyme'
 import InlineChart from 'Stats/inlinechart/index'
 import c3 from 'c3'
 
+import * as utils from 'utilities/fetchData'
+
 // Mocking moment.js
 const mockSince = '2018-11-17'
 const mockUntil = '2018-12-17'
@@ -23,8 +25,6 @@ const data = {
   },
   values: [1, 2, 3]
 }
-
-import * as utils from 'utilities/fetchData'
 const fetchMock = jest.spyOn(utils, 'fetchData')
   .mockImplementation(() => Promise.resolve(data))
 

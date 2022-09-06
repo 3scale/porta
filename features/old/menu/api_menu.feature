@@ -12,6 +12,7 @@ Feature: API menu
       And I go to the provider dashboard
       And I follow "API"
 
+  @javascript
   Scenario: Current API title
     Then the name of the product can be seen on top of the menu
 

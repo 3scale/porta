@@ -23,7 +23,7 @@ it('should render correctly', () => {
 })
 
 it('should not render Auth Settings, Security, Credential Locations and API Gateway when Istio is selected', () => {
-  const customProps = { integrationMethod: {...INTEGRATION_METHOD_DEFAULTS, value: 'service_mesh_istio'} }
+  const customProps = { integrationMethod: { ...INTEGRATION_METHOD_DEFAULTS, value: 'service_mesh_istio' } }
   const { view } = setup(customProps)
   expect(view).toMatchSnapshot()
 })

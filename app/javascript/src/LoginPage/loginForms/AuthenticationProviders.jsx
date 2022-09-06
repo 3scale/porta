@@ -12,7 +12,7 @@ type Props = {
   authenticationProviders: Array<ProvidersProps>
 }
 
-const Provider = ({authorizeURL, humanKind}: {authorizeURL: string, humanKind: string}) => {
+const Provider = ({ authorizeURL, humanKind }: {authorizeURL: string, humanKind: string}) => {
   return (
     <p className='login-provider'>
       <a className='login-provider-link' href={authorizeURL}>
@@ -24,7 +24,7 @@ const Provider = ({authorizeURL, humanKind}: {authorizeURL: string, humanKind: s
 }
 
 const AuthenticationProviders = (props: Props): React.Node => {
-  const {authenticationProviders} = props
+  const { authenticationProviders } = props
   const providersList = authenticationProviders.map(
     provider => <Provider authorizeURL={provider.authorizeURL} humanKind={provider.humanKind} key={provider.humanKind}/>
   )
@@ -38,4 +38,4 @@ const AuthenticationProviders = (props: Props): React.Node => {
   )
 }
 
-export {AuthenticationProviders}
+export { AuthenticationProviders }

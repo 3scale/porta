@@ -20,13 +20,13 @@ const create = () => {
   }]
 
   const store = {
-    getState: jest.fn(() => ({registry, chain})),
+    getState: jest.fn(() => ({ registry, chain })),
     dispatch: jest.fn()
   }
   const next = jest.fn()
   const invoke = (action) => policyChainMiddleware(store)(next)(action)
 
-  return {store, next, invoke}
+  return { store, next, invoke }
 }
 
 describe('PolicyChain Middleware', () => {
@@ -37,14 +37,14 @@ describe('PolicyChain Middleware', () => {
   })
 
   it('Passes through non of middleware actions', () => {
-    const action = {type: 'TEST'}
+    const action = { type: 'TEST' }
     invoke(action)
 
     expect(next).toHaveBeenCalledWith(action)
   })
 
-  const validPolicy = {name: 'echo', version: 'builtin', configuration: {config: 'bond'}, enabled: true}
-  const wrongPolicy = {name: 'foo', version: 'builtin', configuration: {}, enabled: true}
+  const validPolicy = { name: 'echo', version: 'builtin', configuration: { config: 'bond' }, enabled: true }
+  const wrongPolicy = { name: 'foo', version: 'builtin', configuration: {}, enabled: true }
 
   it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action', () => {
     invoke({

@@ -67,7 +67,7 @@ class Login3scaleForm extends React.Component<Props, State> {
   }
 
   render (): Node {
-    const {username, password, validation} = this.state
+    const { username, password, validation } = this.state
     const usernameInputProps = {
       isRequired: true,
       name: USERNAME_ATTRS.name,

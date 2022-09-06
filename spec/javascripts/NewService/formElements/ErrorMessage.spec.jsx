@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {ErrorMessage} from 'NewService/components/FormElements'
+import { ErrorMessage } from 'NewService/components/FormElements'
 
 const props = {
   fetchErrorMessage: 'it failed'

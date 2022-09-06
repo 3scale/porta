@@ -2,10 +2,10 @@
 
 import * as React from 'react'
 
-import {ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm} from 'NewService'
-import {createReactWrapper} from 'utilities'
-import type {Api} from 'Types/Api'
-import type {ServiceFormTemplate} from 'NewService/types'
+import { ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm } from 'NewService'
+import { createReactWrapper } from 'utilities'
+import type { Api } from 'Types/Api'
+import type { ServiceFormTemplate } from 'NewService/types'
 
 type Props = {
   template: ServiceFormTemplate,
@@ -18,8 +18,8 @@ type Props = {
 }
 
 const NewServiceForm = (props: Props): React.Node => {
-  const {template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    providerAdminServiceDiscoveryServicesPath, adminServicesPath, backendApis} = props
+  const { template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
+    providerAdminServiceDiscoveryServicesPath, adminServicesPath, backendApis } = props
 
   const [formMode, setFormMode] = React.useState('manual')
   const [loadingProjects, setLoadingProjects] = React.useState(false)
@@ -52,4 +52,4 @@ const NewServiceForm = (props: Props): React.Node => {
 const NewServiceFormWrapper = (props: Props, containerId: string): void =>
   createReactWrapper(<NewServiceForm {...props} />, containerId)
 
-export {NewServiceForm, NewServiceFormWrapper}
+export { NewServiceForm, NewServiceFormWrapper }

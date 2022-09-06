@@ -1,7 +1,7 @@
 import { StatsMethodsTable } from 'Stats/lib/methods_table'
 
 describe('StatsMethodsTable', () => {
-  let methodsTable = new StatsMethodsTable({container: '#methods_table'})
+  let methodsTable = new StatsMethodsTable({ container: '#methods_table' })
 
   beforeEach(() => {
     document.body.innerHTML = '<table id="methods_table"></table>'

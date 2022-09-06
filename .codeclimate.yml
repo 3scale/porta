@@ -17,6 +17,7 @@ plugins:
     enabled: true
   eslint:
     enabled: true
+    channel: "eslint-6"
     config:
       config: .eslintrc
       extensions:
@@ -34,12 +35,9 @@ plugins:
   scss-lint:
     enabled: true
 exclude_patterns:
-  - "app/assets/javascripts/plans_widget.js"
-  - "app/assets/javascripts/provider/plans_widget.js"
   - "app/javascript/src/patternflyStyles/pf4BaseIE11.scss"
   - "tmp/**/*"
   - "**/vendor/*"
-  - "app/assets/patternfly"
   - "app/assets/images/**/*"
   - "public/images/**/*"
   - "public/themes/**/*"

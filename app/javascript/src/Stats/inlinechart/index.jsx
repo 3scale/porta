@@ -1,9 +1,9 @@
 // @flow
 
-import React, {Component } from 'react'
+import React, { Component } from 'react'
 import type { Node } from 'react'
 import c3 from 'c3'
-import {fetchData} from 'utilities'
+import { fetchData } from 'utilities'
 import 'core-js/es6/promise'
 import 'url-polyfill'
 import moment from 'moment'

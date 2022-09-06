@@ -2,16 +2,16 @@
 import 'core-js/fn/array/find'
 import moment from 'moment'
 
-import {StatsUI} from 'Stats/lib/ui'
-import {StatsChart} from 'Stats/lib/chart'
-import {StatsTopAppsSourceCollector} from 'Stats/lib/top_apps_source_collector'
-import {StatsSourceCollectorChartManager} from 'Stats/lib/source_collector_chart_manager'
-import {StatsSeries} from 'Stats/lib/series'
-import {StatsMetrics} from 'Stats/lib/metrics_list'
-import {StatsCSVLink} from 'Stats/lib/csv_link'
-import {StatsApplicationsTable} from 'Stats/lib/applications_table'
-import {applicationDetails} from 'Stats/lib/application_details'
-import {Stats} from 'Stats/lib/stats'
+import { StatsUI } from 'Stats/lib/ui'
+import { StatsChart } from 'Stats/lib/chart'
+import { StatsTopAppsSourceCollector } from 'Stats/lib/top_apps_source_collector'
+import { StatsSourceCollectorChartManager } from 'Stats/lib/source_collector_chart_manager'
+import { StatsSeries } from 'Stats/lib/series'
+import { StatsMetrics } from 'Stats/lib/metrics_list'
+import { StatsCSVLink } from 'Stats/lib/csv_link'
+import { StatsApplicationsTable } from 'Stats/lib/applications_table'
+import { applicationDetails } from 'Stats/lib/application_details'
+import { Stats } from 'Stats/lib/stats'
 
 export class StatsTopAppsMetrics extends StatsMetrics {
   getSelectedMetrics (selectedMetricName) {
@@ -83,11 +83,11 @@ class StatsTopAppsChart extends StatsChart {
 let statsTopApps = (serviceId, options = {}) => {
   let topAppsMetricsUrl = `/services/${serviceId}/stats/usage/top_applications.json`
   let metrics = StatsMetrics.getMetrics(topAppsMetricsUrl)
-  let csvLink = new StatsCSVLink({container: options.csvLinkContainer})
-  let helpText = new StatsTopAppsHelpText({container: options.helpTextContainer})
-  let applicationsTable = new StatsApplicationsTable({container: options.tableContainer})
+  let csvLink = new StatsCSVLink({ container: options.csvLinkContainer })
+  let helpText = new StatsTopAppsHelpText({ container: options.helpTextContainer })
+  let applicationsTable = new StatsApplicationsTable({ container: options.tableContainer })
 
-  Stats({ChartManager: StatsTopAppsChartManager, Chart: StatsTopAppsChart, Sources: StatsTopAppsSourceCollector}).build({
+  Stats({ ChartManager: StatsTopAppsChartManager, Chart: StatsTopAppsChart, Sources: StatsTopAppsSourceCollector }).build({
     id: serviceId,
     metrics,
     widgets: [csvLink, helpText, applicationsTable],

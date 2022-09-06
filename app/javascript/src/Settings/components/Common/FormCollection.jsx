@@ -10,7 +10,7 @@ type Props = {
   legend: string
 }
 
-const FormCollection = ({collection, ItemComponent, legend}: Props): React.Node => {
+const FormCollection = ({ collection, ItemComponent, legend }: Props): React.Node => {
   return (
     <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
       <FormLegend>{legend}</FormLegend>

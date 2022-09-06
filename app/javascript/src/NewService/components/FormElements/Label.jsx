@@ -8,10 +8,10 @@ type Props = {
   required?: boolean
 }
 const Label = (props: Props): React.Node => {
-  const {htmlFor, label, required} = props
+  const { htmlFor, label, required } = props
   return <label htmlFor={htmlFor}>{label}
     {required && <abbr title="required">*</abbr>}
   </label>
 }
 
-export {Label}
+export { Label }
