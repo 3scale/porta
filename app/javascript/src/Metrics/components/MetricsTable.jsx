@@ -67,7 +67,7 @@ const MetricsTable = ({
       ) : (
         // TODO: It would be nice to have the metric preselected in the Add mapping rule form
         <a href={`${addMappingRulePath}?metric_id=${m.id}`}>Add a mapping rule</a>
-      )}
+      ) }
     ]
   }))
 

@@ -22,6 +22,6 @@ it('should render correctly', () => {
 })
 
 it('should default value when indicated', () => {
-  const { view } = setup({isDefaultValue: true})
+  const { view } = setup({ isDefaultValue: true })
   expect(view.find('input').prop('value')).toBe('Le Monstre')
 })

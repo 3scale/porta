@@ -1,7 +1,7 @@
 import { StatsUsageChart } from 'Stats/lib/usage_chart'
 
 describe('StatsUsageChart', () => {
-  let chart = new StatsUsageChart({container: '#chart', groupedSeries: ['marvin', 'trillian', 'zaphod']})
+  let chart = new StatsUsageChart({ container: '#chart', groupedSeries: ['marvin', 'trillian', 'zaphod'] })
   const load = jest.fn()
   chart.plotChart = { load }
 
@@ -35,7 +35,7 @@ describe('StatsUsageChart', () => {
   })
 
   it('should call plotChart.load once when updating data', () => {
-    chart._updateChart({columns: [['x', '2017-01-01'], ['Lola', 40], ['Simon', 2]]})
+    chart._updateChart({ columns: [['x', '2017-01-01'], ['Lola', 40], ['Simon', 2]] })
     expect(load).toHaveBeenCalledTimes(1)
     expect(load).not.toHaveBeenCalledTimes(2)
   })

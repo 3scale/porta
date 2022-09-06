@@ -45,9 +45,9 @@ export class StatsState {
 
   _processStoredState (params) {
     if ('period' in params.dateRange) {
-      return Object.assign({}, params, {dateRange: new PeriodRangeDate(params.dateRange.period)})
+      return Object.assign({}, params, { dateRange: new PeriodRangeDate(params.dateRange.period) })
     } else {
-      return Object.assign({}, params, {dateRange: new CustomRangeDate(params.dateRange)})
+      return Object.assign({}, params, { dateRange: new CustomRangeDate(params.dateRange) })
     }
   }
 
@@ -60,7 +60,7 @@ const MACHINE_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss'
 const RANGE_CORRECTOR = 1
 
 export class CustomRangeDate {
-  constructor ({Since, Until, granularity}) {
+  constructor ({ Since, Until, granularity }) {
     this.Since = Since
     this.Until = Until
     this.granularity = granularity

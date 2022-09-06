@@ -28,7 +28,7 @@ describe('StatsState', () => {
 
   it('should save the right state when calling setState', () => {
     let statsState = new StatsState(fakeStore)
-    let state = {dateRange: {period: {number: 24, unit: 'hours'}}, code: '200'}
+    let state = { dateRange: { period: { number: 24, unit: 'hours' } }, code: '200' }
 
     statsState.setState(state)
 
@@ -39,7 +39,7 @@ describe('StatsState', () => {
   // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should trigger the right events when setting the state', () => {
     let statsState = new StatsState(fakeStore)
-    let state = {jesus: 'you dont fu*ck with the jaysus!'}
+    let state = { jesus: 'you dont fu*ck with the jaysus!' }
     let topics = ['jesus']
 
     const fakeFunction = jest.fn()
@@ -67,7 +67,7 @@ describe('StatsState', () => {
   // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should call setState when navigation event was triggered with the rigth params', () => {
     let statsState = new StatsState(fakeStore)
-    let stubbedState = {milonga: true}
+    let stubbedState = { milonga: true }
     jest.spyOn(statsState, 'setState')
     jest.spyOn(statsState, 'getStoredState').mockReturnValue(stubbedState)
 

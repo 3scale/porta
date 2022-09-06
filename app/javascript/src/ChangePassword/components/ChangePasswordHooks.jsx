@@ -56,7 +56,7 @@ const fieldsPristineTemplate: FieldErrorsState = {
 }
 const extractFirstErrorMessage = (errorMessageArray: string[]): string => errorMessageArray[0]
 const isFieldValid = (errorMessageArray: string[]): boolean => !errorMessageArray.length
-const isPassConfirmLongEnough = ({[PASSWORD]: pass, [PASSWORD_CONFIRMATION]: conf}: FieldState): boolean => (conf.length >= pass.length)
+const isPassConfirmLongEnough = ({ [PASSWORD]: pass, [PASSWORD_CONFIRMATION]: conf }: FieldState): boolean => (conf.length >= pass.length)
 
 type FormInput = {
   value: string,
@@ -85,9 +85,9 @@ const useFormState = (): IUseFormState => {
     const visibleErrors = !!validationErrors && Object.keys(validationErrors)
       .filter(key => !areFieldsPristine[key])
       .filter(key => !key === PASSWORD_CONFIRMATION || isPassConfirmLongEnough(fieldValues))
-      .reduce((errors, key) => ({...errors, [key]: validationErrors[key]}), {})
+      .reduce((errors, key) => ({ ...errors, [key]: validationErrors[key] }), {})
     // $FlowExpectedError[cannot-spread-inexact] visibleErrors is supposed to be inexact
-    setFieldErrors(visibleErrors ? {...fieldErrorsTemplate, ...visibleErrors} : fieldErrorsTemplate)
+    setFieldErrors(visibleErrors ? { ...fieldErrorsTemplate, ...visibleErrors } : fieldErrorsTemplate)
     setIsFormDisabled(!!validationErrors)
   }
 
@@ -99,10 +99,10 @@ const useFormState = (): IUseFormState => {
   const onFieldBlur = (fieldName: FieldName) => (event: SyntheticInputEvent<HTMLInputElement>) => {
     // $FlowIgnore[incompatible-type] we can assume types here
     const validationErrors: ValidationErrors = validate(
-      {...fieldValues, [fieldName]: event.currentTarget.value},
-      {[fieldName]: validationConstraints[fieldName]}
-    ) || {[fieldName]: []}
-    setFieldErrors(({...fieldErrors, ...validationErrors}))
+      { ...fieldValues, [fieldName]: event.currentTarget.value },
+      { [fieldName]: validationConstraints[fieldName] }
+    ) || { [fieldName]: [] }
+    setFieldErrors(({ ...fieldErrors, ...validationErrors }))
   }
 
   const buildFieldProps = (fieldName: FieldName) => (

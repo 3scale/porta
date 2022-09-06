@@ -1,10 +1,10 @@
 // @flow
 
 import * as React from 'react'
-import {useState, useEffect} from 'react'
-import {Label, Select} from 'NewService/components/FormElements'
-import {fetchData} from 'utilities'
-import {BASE_PATH} from 'NewService'
+import { useState, useEffect } from 'react'
+import { Label, Select } from 'NewService/components/FormElements'
+import { fetchData } from 'utilities'
+import { BASE_PATH } from 'NewService'
 
 type Props = {
   projects: string[],
@@ -68,4 +68,4 @@ const ServiceDiscoveryListItems = (props: Props): React.Node => {
   )
 }
 
-export {ServiceDiscoveryListItems}
+export { ServiceDiscoveryListItems }

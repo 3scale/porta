@@ -1,4 +1,4 @@
-import {StatsTopAppsSourceCollector} from 'Stats/lib/top_apps_source_collector'
+import { StatsTopAppsSourceCollector } from 'Stats/lib/top_apps_source_collector'
 
 describe('StatsTopAppsSourceCollector', () => {
   let options = {
@@ -11,10 +11,10 @@ describe('StatsTopAppsSourceCollector', () => {
   }
 
   let metrics = Promise.resolve({
-    metrics: [{id: 7, name: 'Marvin', systemName: 'marvin'}]
+    metrics: [{ id: 7, name: 'Marvin', systemName: 'marvin' }]
   })
 
-  let sourceCollector = new StatsTopAppsSourceCollector({id: 42, metrics})
+  let sourceCollector = new StatsTopAppsSourceCollector({ id: 42, metrics })
 
   it('should return the right params', () => {
     let params = sourceCollector.params(options)

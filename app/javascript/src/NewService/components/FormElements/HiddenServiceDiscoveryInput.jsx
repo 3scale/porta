@@ -10,4 +10,4 @@ const HiddenServiceDiscoveryInput = (): React.Node =>
     id='service_source'
   />
 
-export {HiddenServiceDiscoveryInput}
+export { HiddenServiceDiscoveryInput }

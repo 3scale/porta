@@ -1,12 +1,12 @@
-import {StatsMetrics} from 'Stats/lib/metrics_list'
+import { StatsMetrics } from 'Stats/lib/metrics_list'
 
 describe('StatsMetrics', () => {
   beforeEach((done) => {
     jest.spyOn(StatsMetrics, '_makeRequest')
       .mockResolvedValue({
         metrics: [
-          { metric: {id: 1, service_id: 1, friendly_name: 'Awesome Metric', system_name: 'awesome_metric'} },
-          { metric: {id: 2, service_id: 1, firendly_name: 'Amazing Metric', system_name: 'amazing_metric'} }
+          { metric: { id: 1, service_id: 1, friendly_name: 'Awesome Metric', system_name: 'awesome_metric' } },
+          { metric: { id: 2, service_id: 1, firendly_name: 'Amazing Metric', system_name: 'amazing_metric' } }
         ]
       })
     done()
@@ -22,11 +22,11 @@ describe('StatsMetrics', () => {
   })
 
   it('should get the selected metrics', () => {
-    let list = {metrics: [
-      {id: 1, serviceId: 1, name: 'Awesome Metric', systemName: 'awesome_metric', isMethod: false, isHits: false},
-      {id: 2, serviceId: 1, name: 'Amazing Metric', systemName: 'amazing_metric', isMethod: false, isHits: false}
-    ]}
-    let selectedMetrics = StatsMetrics.getSelectedMetrics({selectedMetricName: 'amazing_metric', list})
+    let list = { metrics: [
+      { id: 1, serviceId: 1, name: 'Awesome Metric', systemName: 'awesome_metric', isMethod: false, isHits: false },
+      { id: 2, serviceId: 1, name: 'Amazing Metric', systemName: 'amazing_metric', isMethod: false, isHits: false }
+    ] }
+    let selectedMetrics = StatsMetrics.getSelectedMetrics({ selectedMetricName: 'amazing_metric', list })
     expect(JSON.stringify(selectedMetrics)).toEqual('[{"id":2,"serviceId":1,"name":"Amazing Metric","systemName":"amazing_metric","isMethod":false,"isHits":false}]')
   })
 })

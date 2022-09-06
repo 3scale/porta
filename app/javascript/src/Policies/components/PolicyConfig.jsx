@@ -20,17 +20,17 @@ type Props = {
   }
 }
 
-const PolicyConfig = ({policy, actions}: Props): React.Node => {
+const PolicyConfig = ({ policy, actions }: Props): React.Node => {
   const { submitPolicyConfig, removePolicyFromChain, closePolicyConfig, updatePolicyConfig } = actions
   const { humanName, version, summary, description, enabled, configuration, data, removable } = policy
 
   const onSubmit = (policy) => {
-    return ({formData, schema}) => {
-      submitPolicyConfig({...policy, configuration: schema, data: formData})
+    return ({ formData, schema }) => {
+      submitPolicyConfig({ ...policy, configuration: schema, data: formData })
     }
   }
   const togglePolicy = (event) => {
-    updatePolicyConfig({...policy, enabled: event.target.checked})
+    updatePolicyConfig({ ...policy, enabled: event.target.checked })
   }
   const remove = () => removePolicyFromChain(policy)
   const cancel = () => closePolicyConfig()

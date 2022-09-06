@@ -1,13 +1,13 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {Login3scaleForm, HiddenInputs} from 'LoginPage'
+import { Login3scaleForm, HiddenInputs } from 'LoginPage'
 
 const props = {
   providerSessionsPath: 'sessions-path',
-  session: {username: ''}
+  session: { username: '' }
 }
 
 it('should render itself with right props', () => {
@@ -92,7 +92,7 @@ describe('password', () => {
   })
 
   it('should autofocus password input when username is passed as param', () => {
-    const propsUsernameParams = {...props, session: {username: 'bob'}}
+    const propsUsernameParams = { ...props, session: { username: 'bob' } }
     const wrapper = mount(<Login3scaleForm {...propsUsernameParams}/>)
     expect(wrapper.find('input#session_password').props().autoFocus).toEqual('autoFocus')
     expect(wrapper.find('input#session_username').props().autoFocus).toEqual(false)

@@ -9,7 +9,7 @@ export class StatsUI {
     return h(el, props, children)
   }
 
-  constructor ({statsState, container}) {
+  constructor ({ statsState, container }) {
     this.element = null
     this.tree = null
     this.statsState = statsState

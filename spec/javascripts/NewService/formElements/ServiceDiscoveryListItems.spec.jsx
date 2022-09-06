@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react'
-import {act} from 'react-dom/test-utils'
-import {mount, shallow, render} from 'enzyme'
+import { act } from 'react-dom/test-utils'
+import { mount, shallow, render } from 'enzyme'
 
-import {ServiceDiscoveryListItems} from 'NewService/components/FormElements'
+import { ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import * as utils from 'utilities/fetchData'
 import { BASE_PATH } from 'NewService'
 

@@ -7,7 +7,7 @@ console.warn = jest.fn()
 
 describe('fromJsonString', () => {
   it('should successfully parse the json string', () => {
-    expect(fromJsonString(goodOlJsonString)).toEqual({'answer': '42'})
+    expect(fromJsonString(goodOlJsonString)).toEqual({ 'answer': '42' })
   })
 
   it('should throw error when parsing a bad formatted json string', () => {
@@ -21,7 +21,7 @@ describe('fromJsonString', () => {
 
 describe('safeFromJsonString', () => {
   it('should successfully parse the json string', () => {
-    expect(safeFromJsonString(goodOlJsonString)).toEqual({'answer': '42'})
+    expect(safeFromJsonString(goodOlJsonString)).toEqual({ 'answer': '42' })
   })
 
   it('should return undefined when parsing a bad formatted json string', () => {

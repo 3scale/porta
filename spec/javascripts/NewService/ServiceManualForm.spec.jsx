@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react'
-import {shallow, mount} from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
-import {ServiceManualForm} from 'NewService'
-import {FormWrapper, ServiceManualListItems} from 'NewService/components/FormElements'
+import { ServiceManualForm } from 'NewService'
+import { FormWrapper, ServiceManualListItems } from 'NewService/components/FormElements'
 
 const props = {
   backendApis: [],

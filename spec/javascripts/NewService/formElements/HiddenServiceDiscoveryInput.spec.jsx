@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {HiddenServiceDiscoveryInput} from 'NewService/components/FormElements'
+import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
 
 it('should render itself properly', () => {
   const wrapper = mount(<HiddenServiceDiscoveryInput />)

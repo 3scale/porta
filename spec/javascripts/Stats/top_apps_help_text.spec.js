@@ -1,7 +1,7 @@
-import {StatsTopAppsHelpText} from 'Stats/provider/stats_top_apps'
+import { StatsTopAppsHelpText } from 'Stats/provider/stats_top_apps'
 
 describe('StatsTopAppsHelpText', () => {
-  let helpText = new StatsTopAppsHelpText({container: '#container'})
+  let helpText = new StatsTopAppsHelpText({ container: '#container' })
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="container"></div>'

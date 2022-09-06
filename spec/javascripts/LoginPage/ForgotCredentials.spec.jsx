@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {ForgotCredentials} from 'LoginPage'
+import { ForgotCredentials } from 'LoginPage'
 
 const props = {
   requestPasswordResetPath: 'login-path'

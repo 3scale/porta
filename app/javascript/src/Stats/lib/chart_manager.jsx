@@ -1,9 +1,9 @@
 import 'core-js/fn/symbol/index' // make Symbol work on IE 11
 import $ from 'jquery'
-import {StatsSeries} from 'Stats/lib/series'
+import { StatsSeries } from 'Stats/lib/series'
 
 export class StatsChartManager {
-  constructor ({statsState, metricsSelector, sources, chart, widgets = []}) {
+  constructor ({ statsState, metricsSelector, sources, chart, widgets = [] }) {
     this.statsState = statsState
     this.Sources = sources
     this.chart = chart
@@ -33,7 +33,7 @@ export class StatsChartManager {
   renderChart () {
     return this._processChart().then((data) => {
       let selectedSeries = data ? this._getSelectedSeries(data) : null
-      return this.chart.render({data, selectedSeries})
+      return this.chart.render({ data, selectedSeries })
     })
   }
 
@@ -46,7 +46,7 @@ export class StatsChartManager {
   }
 
   updateSeriesState (selectedSeries) {
-    this.statsState.setState({selectedSeries: this._serializeSeries(selectedSeries)}, ['series'])
+    this.statsState.setState({ selectedSeries: this._serializeSeries(selectedSeries) }, ['series'])
   }
 
   _processChart () {
@@ -104,7 +104,7 @@ export class StatsChartManager {
 
   _updateSeriesTotal (data) {
     let total = data._totalValues
-    this.statsState.setState({seriesTotal: total}, ['seriesTotal'], false)
+    this.statsState.setState({ seriesTotal: total }, ['seriesTotal'], false)
   }
 
   _bindEvents () {

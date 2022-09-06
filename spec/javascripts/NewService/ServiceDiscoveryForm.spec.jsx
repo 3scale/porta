@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react'
-import {shallow, mount} from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
-import {ServiceDiscoveryForm} from 'NewService'
-import {FormWrapper, ErrorMessage, ServiceDiscoveryListItems} from 'NewService/components/FormElements'
+import { ServiceDiscoveryForm } from 'NewService'
+import { FormWrapper, ErrorMessage, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import * as utils from 'utilities/fetchData'
 
 const props = {

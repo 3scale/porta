@@ -1,6 +1,6 @@
 // @flow
 
-import {createStore, compose, applyMiddleware} from 'redux'
+import { createStore, compose, applyMiddleware } from 'redux'
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant'
 import thunk from 'redux-thunk'
 import { apiMiddleware } from 'redux-api-middleware'

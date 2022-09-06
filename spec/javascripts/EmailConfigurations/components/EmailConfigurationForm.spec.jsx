@@ -18,7 +18,7 @@ const defaultProps = {
 }
 
 const mountWrapper = (props) => mount(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
-const renderWrapper = (props) => render(<EmailConfigurationForm {...{...defaultProps, ...props}}/>)
+const renderWrapper = (props) => render(<EmailConfigurationForm {...{ ...defaultProps, ...props }}/>)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

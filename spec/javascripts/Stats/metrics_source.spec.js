@@ -1,8 +1,8 @@
 import $ from 'jquery'
 
-import {StatsMetricsSource} from 'Stats/lib/metrics_source'
+import { StatsMetricsSource } from 'Stats/lib/metrics_source'
 
-let source = new StatsMetricsSource({id: 42, details: {id: 8, system_name: 'slartibarfast'}})
+let source = new StatsMetricsSource({ id: 42, details: { id: 8, system_name: 'slartibarfast' } })
 
 describe('StatsMetricsSource', () => {
   let options = {
@@ -58,7 +58,7 @@ describe('CustomMetricSource', () => {
   })
 
   it('should make an ajax request with the right params', (done) => {
-    let source = new CustomMetricSource({id: 42, details: {id: 7, system_name: 'marvin'}})
+    let source = new CustomMetricSource({ id: 42, details: { id: 7, system_name: 'marvin' } })
     source.data(options)
 
     expect($.getJSON).toHaveBeenCalledWith('http://example.com/api', {

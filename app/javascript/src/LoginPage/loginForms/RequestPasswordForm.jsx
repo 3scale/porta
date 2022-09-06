@@ -37,7 +37,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
 
   handleTextInputEmail: (string, SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
     const isValid = validateSingleField(event)
-    this.setState({ email, validation: {email: isValid} })
+    this.setState({ email, validation: { email: isValid } })
   }
 
   render (): Node {

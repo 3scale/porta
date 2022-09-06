@@ -6,8 +6,8 @@ import $ from 'jquery'
 import 'jquery-ui/ui/widgets/datepicker'
 
 import * as helpers from 'Stats/lib/stats_helpers'
-import {StatsUI} from 'Stats/lib/ui'
-import {CustomRangeDate, PeriodRangeDate} from 'Stats/lib/state'
+import { StatsUI } from 'Stats/lib/ui'
+import { CustomRangeDate, PeriodRangeDate } from 'Stats/lib/state'
 
 class Hook {
   constructor (options) {
@@ -30,8 +30,8 @@ class Hook {
 }
 
 export class StatsMenu extends StatsUI {
-  constructor ({statsState, periods, granularities = ['hour', 'day', 'month'], container}) {
-    super({statsState, container})
+  constructor ({ statsState, periods, granularities = ['hour', 'day', 'month'], container }) {
+    super({ statsState, container })
     this.periods = periods
     this.graularities = granularities
   }
@@ -75,8 +75,8 @@ export class StatsMenu extends StatsUI {
               <a className={`StatsMenu-Link StatsMenu-periodLink period-${period.number}-${period.unit}
                                   ${JSON.stringify(period) === JSON.stringify(statsState.state.dateRange.period)
         ? 'is-selected' : ''}`}
-              attributes={{'data-number': period.number, 'data-unit': period.unit}}
-              onclick={ ev => statsState.setState({dateRange: new PeriodRangeDate(period)})}>
+              attributes={{ 'data-number': period.number, 'data-unit': period.unit }}
+              onclick={ ev => statsState.setState({ dateRange: new PeriodRangeDate(period) })}>
                 {`${period.number} ${pluralize.plural(period.unit)}`}
               </a>
             </li>
@@ -99,7 +99,7 @@ export class StatsMenu extends StatsUI {
             {' per '}
             <a
               className='StatsMenu-Link'
-              style={{display: this.show_granularity ? 'none' : 'inline-block'}}
+              style={{ display: this.show_granularity ? 'none' : 'inline-block' }}
               onclick={ev => {
                 this.show_granularity = true
                 this.refresh()
@@ -110,7 +110,7 @@ export class StatsMenu extends StatsUI {
                 this.show_granularity = false
                 let date = new CustomRangeDate(statsState.state.dateRange)
                 date.granularity = ev.target.value
-                statsState.setState({dateRange: date})
+                statsState.setState({ dateRange: date })
               }}>
               {this.graularities.map(granularity =>
                 <option value={granularity}
