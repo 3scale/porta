@@ -17,7 +17,7 @@ const classNames = {
   cancel: 'PolicyChain-addPolicy--cancel'
 }
 
-const Icon = ({type}) => (
+const Icon = ({ type }) => (
   type === 'add' ? <PlusIcon/> : <TimesIcon/>
 )
 

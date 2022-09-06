@@ -1,6 +1,6 @@
 import '@babel/polyfill'
 import 'patternflyStyles/pf4Base'
-import {isBrowserIE11} from 'utilities'
+import { isBrowserIE11 } from 'utilities'
 
 const isIE11 = isBrowserIE11(window)
 if (isIE11) {

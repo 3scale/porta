@@ -14,7 +14,7 @@ const JsonWebToken = (props: TypeItemProps) => (
   <TypeItemCombo {...props} legend='JSON Web Token (JWT) Claim with ClientID' inputType='text' />
 )
 
-const FlowItem = ({name, label, checked}: FieldGroupProps) => {
+const FlowItem = ({ name, label, checked }: FieldGroupProps) => {
   const [ isChecked, setIsChecked ] = React.useState(checked)
   const onChange = (check, _e) => setIsChecked(check)
   return (
@@ -39,7 +39,7 @@ type Props = {
   flowSettings: FieldGroupProps[]
 }
 
-const OidcFieldset = ({isServiceMesh, basicSettings, jwtSettings, flowSettings}: Props): React.Node => (
+const OidcFieldset = ({ isServiceMesh, basicSettings, jwtSettings, flowSettings }: Props): React.Node => (
   <FormFieldset id='fieldset-Oidc'>
     <FormLegend>OPENID CONNECT (OIDC)</FormLegend>
     <Basics {...basicSettings} />

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 
-import { createReactWrapper } from 'utilities'
+import { createReactWrapper, CSRFToken } from 'utilities'
 import {
   ActionGroup,
   Button,
@@ -12,7 +12,6 @@ import {
   CardBody
 } from '@patternfly/react-core'
 import { Select as SelectFormGroup } from 'Common'
-import { CSRFToken } from 'utilities'
 
 import type { Record as Plan } from 'Types'
 

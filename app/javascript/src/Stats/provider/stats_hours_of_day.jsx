@@ -1,12 +1,12 @@
 /** @jsx StatsUI.dom */
 
-import {PeriodRangeDate} from 'Stats/lib/state'
-import {StatsAverageMetricsSource} from 'Stats/lib/average_metrics_source'
-import {StatsChart} from 'Stats/lib/chart'
-import {StatsAverageChartManager} from 'Stats/lib/average_chart_manager'
-import {StatsMetrics} from 'Stats/lib/metrics_list'
-import {StatsCSVLink} from 'Stats/lib/csv_link'
-import {Stats} from 'Stats/lib/stats'
+import { PeriodRangeDate } from 'Stats/lib/state'
+import { StatsAverageMetricsSource } from 'Stats/lib/average_metrics_source'
+import { StatsChart } from 'Stats/lib/chart'
+import { StatsAverageChartManager } from 'Stats/lib/average_chart_manager'
+import { StatsMetrics } from 'Stats/lib/metrics_list'
+import { StatsCSVLink } from 'Stats/lib/csv_link'
+import { Stats } from 'Stats/lib/stats'
 
 import numeral from 'numeral'
 
@@ -50,9 +50,9 @@ let statsHoursOfDay = (serviceId, options = {}) => {
   let selectedState = { dateRange: new PeriodRangeDate(PERIOD) }
   let usageMetricsUrl = `/services/${serviceId}/stats/usage.json`
   let metrics = StatsMetrics.getMetrics(usageMetricsUrl)
-  let csvLink = new StatsHoursOfDayCsvLink({container: options.csvLinkContainer})
+  let csvLink = new StatsHoursOfDayCsvLink({ container: options.csvLinkContainer })
 
-  Stats({ChartManager: StatsAverageChartManager, Chart: StatsHoursOfDayChart, Sources: StatsAverageMetricsSource}).build({
+  Stats({ ChartManager: StatsAverageChartManager, Chart: StatsHoursOfDayChart, Sources: StatsAverageMetricsSource }).build({
     id: serviceId,
     selectedState,
     metrics,

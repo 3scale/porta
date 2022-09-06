@@ -104,7 +104,7 @@ const createHostedFieldsInstance = (
     .catch(error => console.error(error))
 }
 const create3DSecureInstance = async (threeDSecure: any, clientInstance: any): Promise<any> => {
-  return await threeDSecure.create({
+  return threeDSecure.create({
     version: 2,
     client: clientInstance
   })
@@ -124,7 +124,7 @@ const veryfyCard = async (threeDSecureInstance: any, payload: any, billingAddres
     challengeRequested: true,
     ...threeDSecureParameters
   }
-  return await threeDSecureInstance.verifyCard(options)
+  return threeDSecureInstance.verifyCard(options)
     .then(response => response)
     .catch(error => error)
 }

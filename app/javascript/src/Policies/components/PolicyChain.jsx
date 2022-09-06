@@ -26,7 +26,7 @@ type Props = {
 const DragHandle = SortableHandle(() => <div className="Policy-sortHandle"><i className="fa fa-sort" /></div>)
 
 // $FlowIgnore[signature-verification-failure] missing react-sortable-hoc types
-const SortableItem = SortableElement(({value, editPolicy, index}) => {
+const SortableItem = SortableElement(({ value, editPolicy, index }) => {
   const edit = () => editPolicy(value, index)
   return (
     <li className={ value.enabled ? 'Policy' : 'Policy Policy--disabled' }>
@@ -50,8 +50,8 @@ const SortableList = SortableContainer(({ items, editPolicy }) => (
   </ul>
 ))
 
-const PolicyChain = ({chain, actions}: Props): React.Node => {
-  const onSortEnd = ({oldIndex, newIndex}) => {
+const PolicyChain = ({ chain, actions }: Props): React.Node => {
+  const onSortEnd = ({ oldIndex, newIndex }) => {
     const sortedChain = arrayMove(chain, oldIndex, newIndex)
     actions.sortPolicyChain(sortedChain)
   }

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import type { Node } from 'react'
-import {createReactWrapper} from 'utilities'
+import { createReactWrapper } from 'utilities'
 import 'url-polyfill'
 
 import {
@@ -103,4 +103,4 @@ class SimpleLoginPage extends React.Component<Props, State> {
 const LoginPageWrapper = (props: Props, containerId: string): void =>
   createReactWrapper(<SimpleLoginPage {...props} />, containerId)
 
-export {SimpleLoginPage, LoginPageWrapper}
+export { SimpleLoginPage, LoginPageWrapper }

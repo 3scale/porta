@@ -1,20 +1,20 @@
 // @flow
 
-import React, {useEffect} from 'react'
-import type {Node} from 'react'
+import React, { useEffect } from 'react'
+import type { Node } from 'react'
 
-import {FormWrapper, ErrorMessage,
-  ServiceDiscoveryListItems} from 'NewService/components/FormElements'
-import {fetchData} from 'utilities'
+import { FormWrapper, ErrorMessage,
+  ServiceDiscoveryListItems } from 'NewService/components/FormElements'
+import { fetchData } from 'utilities'
 
-import {PROJECTS_PATH} from 'NewService'
+import { PROJECTS_PATH } from 'NewService'
 
 type Props = {
   formActionPath: string,
   setLoadingProjects: boolean => void
 }
 
-const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props): Node => {
+const ServiceDiscoveryForm = ({ formActionPath, setLoadingProjects }: Props): Node => {
   // Don't use named imports so that useState can be mocked in specs
   const [projects, setProjects] = React.useState([])
   const [fetchErrorMessage, setFetchErrorMessage] = React.useState('')
@@ -32,7 +32,7 @@ const ServiceDiscoveryForm = ({formActionPath, setLoadingProjects}: Props): Node
     }
   }
 
-  const listItemsProps = {projects, onError: setFetchErrorMessage}
+  const listItemsProps = { projects, onError: setFetchErrorMessage }
 
   useEffect(() => {
     fetchProjects()

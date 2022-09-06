@@ -3,11 +3,11 @@ import $ from 'jquery'
 import numeral from 'numeral'
 import 'core-js/fn/array/find'
 
-import {StatsUI} from 'Stats/lib/ui'
+import { StatsUI } from 'Stats/lib/ui'
 
 export class StatsMetricsSelector extends StatsUI {
-  constructor ({statsState, metrics, container}) {
-    super({statsState, container})
+  constructor ({ statsState, metrics, container }) {
+    super({ statsState, container })
     this.metricsList = metrics
     this._bindEvents()
   }
@@ -48,7 +48,7 @@ export class StatsMetricsSelector extends StatsUI {
   }
 
   selectMetric (metric) {
-    this._setState({selectedMetricName: metric.systemName}, ['redraw'])
+    this._setState({ selectedMetricName: metric.systemName }, ['redraw'])
   }
 
   update (metrics) {

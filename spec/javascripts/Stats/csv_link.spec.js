@@ -1,7 +1,7 @@
-import {StatsCSVLink} from 'Stats/lib/csv_link'
+import { StatsCSVLink } from 'Stats/lib/csv_link'
 
 describe('StatsCSVLink', () => {
-  let csvLink = new StatsCSVLink({container: '#csv_link'})
+  let csvLink = new StatsCSVLink({ container: '#csv_link' })
   let data = {
     _period: {
       since: '1952-03-11T07:00:00+00:00',
@@ -49,7 +49,7 @@ describe('StatsCSVLink', () => {
   })
 
   it('should throw error if no container was provided', () => {
-    let csvLink2 = new StatsCSVLink({container: undefined})
+    let csvLink2 = new StatsCSVLink({ container: undefined })
     expect(() => {
       csvLink2.render()
     }).toThrow(new Error('There was no container provided.'))

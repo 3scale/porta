@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react'
-import {act} from 'react-dom/test-utils'
-import {mount} from 'enzyme'
+import { act } from 'react-dom/test-utils'
+import { mount } from 'enzyme'
 
-import {NewServiceForm} from 'NewService'
+import { NewServiceForm } from 'NewService'
 
 // Children components that use hooks cause some nasty warnings in the log. Mocking them
 // prevents react-dom.development from complaining.

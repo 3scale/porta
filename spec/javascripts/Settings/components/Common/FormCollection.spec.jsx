@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 import { FormCollection } from 'Settings/components/Common'
 
 it('should render correctly', () => {
-  const GoodBand = ({name}) => <span>{name} rocks!</span>
+  const GoodBand = ({ name }) => <span>{name} rocks!</span>
 
   const props = {
     legend: 'Some Good Bands',

@@ -29,7 +29,7 @@ const updatePolicy = (chain: Array<ChainPolicy>, policyConfig: ChainPolicy): Arr
   return chain.map(policy => (policy.uuid === policyConfig.uuid) ? policyConfig : policy)
 }
 
-const loadChain = ({registry, policiesConfig, dispatch}: {registry: Array<RegistryPolicy>, policiesConfig: Array<PolicyConfig>, dispatch: Dispatch}) => {
+const loadChain = ({ registry, policiesConfig, dispatch }: {registry: Array<RegistryPolicy>, policiesConfig: Array<PolicyConfig>, dispatch: Dispatch}) => {
   let errors = 0
   let updatedChain: Array<ChainPolicy> = []
   policiesConfig.forEach(storedPolicy => {
@@ -51,7 +51,7 @@ const policyChainMiddleware = ({ dispatch, getState }: { dispatch: Dispatch, get
   const state = getState()
   switch (action.type) {
     case 'LOAD_CHAIN':
-      loadChain({registry: state.registry, policiesConfig: action.policiesConfig, dispatch})
+      loadChain({ registry: state.registry, policiesConfig: action.policiesConfig, dispatch })
       break
     case 'REMOVE_POLICY_FROM_CHAIN':
       dispatch(updatePolicyChain(removePolicy(state.chain, action.policy)))

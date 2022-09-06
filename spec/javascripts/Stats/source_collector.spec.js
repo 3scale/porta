@@ -1,4 +1,4 @@
-import {StatsSourceCollector} from 'Stats/lib/source_collector'
+import { StatsSourceCollector } from 'Stats/lib/source_collector'
 
 describe('StatsSourceCollector', () => {
   let options = {
@@ -10,7 +10,7 @@ describe('StatsSourceCollector', () => {
     selectedMetricName: 'hits'
   }
 
-  let sourceCollector = new StatsSourceCollector({id: 42, metrics: []})
+  let sourceCollector = new StatsSourceCollector({ id: 42, metrics: [] })
 
   beforeEach((done) => {
     jest.spyOn(sourceCollector, '_fetchMetrics')
@@ -46,7 +46,7 @@ describe('StatsSourceCollector', () => {
   it.skip('should get the correct sources', (done) => {
     const buildSourcesSpy = jest.spyOn(sourceCollector, 'buildSources')
     sourceCollector.getMetrics('/le/cool/url')
-    sourceCollector.getSources({id: 42, selectedMetricName: 'awesome_metric'}).then(_res => {
+    sourceCollector.getSources({ id: 42, selectedMetricName: 'awesome_metric' }).then(_res => {
       expect(buildSourcesSpy).toHaveBeenCalledWith(42, [{ id: 1, systemName: 'awesome_metric' }])
       done()
     })
@@ -54,7 +54,7 @@ describe('StatsSourceCollector', () => {
 
   it('should build the right sources', () => {
     class StubbedSource {
-      constructor ({id, details}) {
+      constructor ({ id, details }) {
         this.id = id
         this.details = details
       }
@@ -66,9 +66,9 @@ describe('StatsSourceCollector', () => {
       }
     }
 
-    let selectedMetrics = [{id: 7, systemName: 'bond'}]
+    let selectedMetrics = [{ id: 7, systemName: 'bond' }]
 
-    let childSourceCollector = new ChildSourceCollector({id: 42, metrics: {}})
+    let childSourceCollector = new ChildSourceCollector({ id: 42, metrics: {} })
     let sources = childSourceCollector.buildSources(42, selectedMetrics)
 
     expect(sources[0] instanceof StubbedSource).toBe(true)

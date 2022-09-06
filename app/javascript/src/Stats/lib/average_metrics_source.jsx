@@ -2,7 +2,7 @@ import 'core-js/fn/object/assign' // make Object.assign work on IE 11
 import 'core-js/modules/es6.map' // make Maps work on IE 11
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import {StatsMetricsSource} from 'Stats/lib/metrics_source'
+import { StatsMetricsSource } from 'Stats/lib/metrics_source'
 
 const moment = extendMoment(Moment)
 
@@ -12,7 +12,7 @@ export class StatsAverageMetricsSource extends StatsMetricsSource {
   }
 
   _processResponse (response, options) {
-    return Object.assign({}, response, {values: this._average(response.values, options)})
+    return Object.assign({}, response, { values: this._average(response.values, options) })
   }
 
   _average (responseValues, stateOptions) {
