@@ -1,5 +1,5 @@
 // @flow
-import type {FlashMessage} from 'Types'
+import type { FlashMessage } from 'Types'
 
 export type SignupProps = {
   name?: string,

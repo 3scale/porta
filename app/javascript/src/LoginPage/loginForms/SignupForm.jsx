@@ -13,7 +13,7 @@ import {
   EmailField,
   validateSingleField
 } from 'LoginPage'
-import type {SignupProps, InputProps} from 'Types'
+import type { SignupProps, InputProps } from 'Types'
 
 type Validation = {
   [string]: boolean | void

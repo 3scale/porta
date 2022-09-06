@@ -3,7 +3,7 @@ import 'core-js/fn/array/find-index' // make Object.findIndex on IE 11
 import 'core-js/fn/array/find'
 import Moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
-import {HITS_METRIC} from 'Stats/lib/metric'
+import { HITS_METRIC } from 'Stats/lib/metric'
 
 const moment = extendMoment(Moment)
 

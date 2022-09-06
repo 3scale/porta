@@ -1,11 +1,11 @@
 import 'core-js/fn/object/assign' // make Object.assign on IE 11
-import {StatsStore} from 'Stats/lib/store'
-import {StatsState, PeriodRangeDate} from 'Stats/lib/state'
-import {StatsMenu} from 'Stats/lib/menu'
-import {StatsMetricsSelector} from 'Stats/lib/metrics_selector'
-import {StatsApplicationsSelector} from 'Stats/lib/applications_selector'
+import { StatsStore } from 'Stats/lib/store'
+import { StatsState, PeriodRangeDate } from 'Stats/lib/state'
+import { StatsMenu } from 'Stats/lib/menu'
+import { StatsMetricsSelector } from 'Stats/lib/metrics_selector'
+import { StatsApplicationsSelector } from 'Stats/lib/applications_selector'
 
-export const Stats = function ({ChartManager, Chart, Sources}) {
+export const Stats = function ({ ChartManager, Chart, Sources }) {
   const DEFAULT_PERIODS = [
     { number: 24, unit: 'hour' },
     { number: 7, unit: 'day' },
@@ -20,7 +20,7 @@ export const Stats = function ({ChartManager, Chart, Sources}) {
       statsState,
       periods: DEFAULT_PERIODS,
       granularities: settings.granularities,
-      container: settings.menuContainer}).render()
+      container: settings.menuContainer }).render()
   }
 
   function renderApplicationSelector (statsState, settings) {
@@ -58,11 +58,11 @@ export const Stats = function ({ChartManager, Chart, Sources}) {
 
       metrics.then(list => {
         const groupedMetrics = groupMetrics(list, settings)
-        let metricsSelector = new StatsMetricsSelector({statsState, metrics: groupedMetrics, container: settings.selectorContainer})
+        let metricsSelector = new StatsMetricsSelector({ statsState, metrics: groupedMetrics, container: settings.selectorContainer })
         widgets.forEach(widget => widget.render())
         let groupedMethods = settings.hasGroupedMethods ? list.methods.map(method => method.name) : null
-        let chart = new Chart({container: settings.chartContainer, groupedSeries: groupedMethods})
-        let sources = (settings.isSourceCollector) ? new Sources({id, metrics}) : [new Sources({id})]
+        let chart = new Chart({ container: settings.chartContainer, groupedSeries: groupedMethods })
+        let sources = (settings.isSourceCollector) ? new Sources({ id, metrics }) : [new Sources({ id })]
         let chartManager = new ChartManager({
           statsState,
           metricsSelector,

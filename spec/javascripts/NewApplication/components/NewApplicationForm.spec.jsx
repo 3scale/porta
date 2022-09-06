@@ -36,8 +36,8 @@ const defaultProps = {
   error: undefined
 }
 
-const mountWrapper = (props) => mount(<NewApplicationForm {...{...defaultProps, ...props}}/>)
-const renderWrapper = (props) => render(<NewApplicationForm {...{...defaultProps, ...props}}/>)
+const mountWrapper = (props) => mount(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
+const renderWrapper = (props) => render(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
 
 const select = (wrapper, from: string, obj: { name: string }) => {
   const toggle = wrapper.find(`${from} .pf-c-select__toggle-button`)

@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {Label} from 'NewService/components/FormElements'
+import { Label } from 'NewService/components/FormElements'
 
 const props = {
   htmlFor: 'label',
@@ -19,7 +19,7 @@ it('should render itself properly', () => {
 })
 
 it('should not render <abbr> tag when not required', () => {
-  const propsNotRequired = {...props, required: false}
+  const propsNotRequired = { ...props, required: false }
   const wrapper = mount(<Label {...propsNotRequired}/>)
   expect(wrapper.find('abbr').exists()).toEqual(false)
 })

@@ -18,7 +18,7 @@ it('should render with server side errors when present', () => {
   const props = {
     lostPasswordToken: 'foo',
     url: 'foo/bar',
-    errors: [{type: 'error', message: 'Ooops!'}]
+    errors: [{ type: 'error', message: 'Ooops!' }]
   }
   const wrapper = mount(<ChangePassword {...props} />)
   expect(wrapper).toMatchSnapshot()

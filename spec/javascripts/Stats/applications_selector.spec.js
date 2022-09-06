@@ -7,8 +7,8 @@ describe('StatsApplicationsSelector', () => {
   }
 
   let applicationGroups = {
-    'Dumplings': [{id: 666, name: 'Wan Tun App'}, {id: 42, name: 'Pierogi App'}],
-    'Empanadas': [{id: 7, name: 'Argenta'}]
+    'Dumplings': [{ id: 666, name: 'Wan Tun App' }, { id: 42, name: 'Pierogi App' }],
+    'Empanadas': [{ id: 7, name: 'Argenta' }]
   }
 
   let applicationsSelector = new StatsApplicationsSelector({
@@ -40,6 +40,6 @@ describe('StatsApplicationsSelector', () => {
     const event = new Event('change')
     select.value = '666'
     select.dispatchEvent(event)
-    expect(userSelectedState.setState).toHaveBeenCalledWith({selectedApplicationId: '666', selectedMetricName: 'hits'}, ['applicationSelected'])
+    expect(userSelectedState.setState).toHaveBeenCalledWith({ selectedApplicationId: '666', selectedMetricName: 'hits' }, ['applicationSelected'])
   })
 })

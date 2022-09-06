@@ -1,4 +1,4 @@
-import {StatsMetric} from 'Stats/lib/metric'
+import { StatsMetric } from 'Stats/lib/metric'
 
 describe('StatsMetric', () => {
   it('should create the right metric', () => {

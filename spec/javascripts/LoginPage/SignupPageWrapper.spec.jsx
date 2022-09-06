@@ -1,9 +1,9 @@
 // @flow
 
 import React from 'react'
-import {mount} from 'enzyme'
+import { mount } from 'enzyme'
 
-import {SignupPage} from 'LoginPage'
+import { SignupPage } from 'LoginPage'
 
 const props = {
   name: 'Bob Sponge',
@@ -14,8 +14,8 @@ const props = {
     lastname: 'Sponge',
     username: 'bobsponge',
     errors: [
-      {type: 'error', message: 'username has already been taken'},
-      {type: 'error', message: 'password is too short (minimum is 6 characters)'}
+      { type: 'error', message: 'username has already been taken' },
+      { type: 'error', message: 'password is too short (minimum is 6 characters)' }
     ]
   }
 }

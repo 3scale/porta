@@ -10,13 +10,13 @@ type Props = {
   options: Array<string>
 }
 
-const Options = ({options}) => {
+const Options = ({ options }) => {
   return options.map((option) => {
     return <option key={option} value={option}>{option}</option>
   })
 }
 
-const Select = ({name, id, disabled, onChange, options}: Props): React.Node =>
+const Select = ({ name, id, disabled, onChange, options }: Props): React.Node =>
   <select
     required="required"
     name={name}
@@ -27,4 +27,4 @@ const Select = ({name, id, disabled, onChange, options}: Props): React.Node =>
     <Options options={options}/>
   </select>
 
-export {Select}
+export { Select }

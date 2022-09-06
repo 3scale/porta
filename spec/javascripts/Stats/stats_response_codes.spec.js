@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import {StatsResponseCodeSource, StatsResponseCodeChart} from 'Stats/provider/stats_response_codes'
+import { StatsResponseCodeSource, StatsResponseCodeChart } from 'Stats/provider/stats_response_codes'
 
 let metric = { system_name: '2XX' }
 let options = {
@@ -12,7 +12,7 @@ let options = {
 }
 
 describe('StatsResponseCodeSource', () => {
-  let responseSource = new StatsResponseCodeSource({id: 42, details: metric})
+  let responseSource = new StatsResponseCodeSource({ id: 42, details: metric })
 
   it('should return the right url', () => {
     expect(responseSource.url).toEqual('/stats/api/services/42/usage_response_code.json')
@@ -47,7 +47,7 @@ describe('StatsResponseCodeChart', () => {
         }
       }
     }
-    let chart = new StatsResponseCodeChart({container: '#chart', statsState: fakeState})
+    let chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
     let data = {
       columns: [
         [
@@ -62,7 +62,7 @@ describe('StatsResponseCodeChart', () => {
       unload: true,
       _totalValues: 0
     }
-    chart.render({container: '#chart', noDataMessageContainer: '#no-data', data})
+    chart.render({ container: '#chart', noDataMessageContainer: '#no-data', data })
     let noDataMessage = $(chart.noDataMessageContainer)
 
     chart.showData(false)
@@ -73,12 +73,12 @@ describe('StatsResponseCodeChart', () => {
   it.skip('should call setState with the right args when updateFromSeries', () => {
     // eslint-disable-next-line no-undef
     let fakeState = jasmine.createSpyObj('fakeState', ['setState'])
-    let chart = new StatsResponseCodeChart({container: '#chart', statsState: fakeState})
+    let chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
     let series = '2XX, 4XX'
     let topics = ['cure']
 
     chart.updateFromSeries(series, topics)
 
-    expect(fakeState.setState).toHaveBeenCalledWith({code: series}, topics)
+    expect(fakeState.setState).toHaveBeenCalledWith({ code: series }, topics)
   })
 })

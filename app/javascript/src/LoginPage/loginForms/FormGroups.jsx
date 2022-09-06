@@ -26,8 +26,8 @@ const helperTexts = {
   }
 }
 
-const FormGroup = ({type, helperTextInvalid, inputProps}: Props) => {
-  const {isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid} = inputProps
+const FormGroup = ({ type, helperTextInvalid, inputProps }: Props) => {
+  const { isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid } = inputProps
   return (
     <React.Fragment>
       <PF4FormGroup
@@ -54,7 +54,7 @@ const FormGroup = ({type, helperTextInvalid, inputProps}: Props) => {
   )
 }
 
-const TextField = ({inputProps}: {inputProps: InputProps}): React.Node => {
+const TextField = ({ inputProps }: {inputProps: InputProps}): React.Node => {
   return (
     <FormGroup
       type='text'
@@ -64,7 +64,7 @@ const TextField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   )
 }
 
-const EmailField = ({inputProps}: {inputProps: InputProps}): React.Node => {
+const EmailField = ({ inputProps }: {inputProps: InputProps}): React.Node => {
   return (
     <FormGroup
       type='email'
@@ -74,7 +74,7 @@ const EmailField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   )
 }
 
-const PasswordField = ({inputProps}: {inputProps: InputProps}): React.Node => {
+const PasswordField = ({ inputProps }: {inputProps: InputProps}): React.Node => {
   let helperText = helperTexts.password
   return (
     <FormGroup
@@ -85,7 +85,7 @@ const PasswordField = ({inputProps}: {inputProps: InputProps}): React.Node => {
   )
 }
 
-const PasswordConfirmationField = ({inputProps}: {inputProps: InputProps}): React.Node => {
+const PasswordConfirmationField = ({ inputProps }: {inputProps: InputProps}): React.Node => {
   const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
   const errorMessage = inputProps.errorMessage
   let helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage

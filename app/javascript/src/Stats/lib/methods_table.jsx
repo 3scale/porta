@@ -2,13 +2,13 @@
 import numeral from 'numeral'
 import moment from 'moment-timezone'
 
-import {StatsUI} from 'Stats/lib/ui'
+import { StatsUI } from 'Stats/lib/ui'
 
 const TIMESTAMP_FORMAT = 'DD MMM YYYY HH:mm:ss zz'
 
 export class StatsMethodsTable extends StatsUI {
-  constructor ({container}) {
-    super({container})
+  constructor ({ container }) {
+    super({ container })
     this.data = []
   }
 

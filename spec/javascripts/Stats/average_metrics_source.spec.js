@@ -1,4 +1,4 @@
-import {StatsAverageMetricsSource} from 'Stats/lib/average_metrics_source'
+import { StatsAverageMetricsSource } from 'Stats/lib/average_metrics_source'
 
 describe('StatsAverageMetricsSource', () => {
   describe('StatsAverageMetricsSource Methods', () => {

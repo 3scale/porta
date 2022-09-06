@@ -8,9 +8,9 @@ describe('Policy Chain Actions', () => {
         endpoint: '/admin/api/services/666/proxy/policies.json',
         method: 'GET',
         types: [
-          {type: 'FETCH_CHAIN_REQUEST'},
-          {type: 'FETCH_CHAIN_SUCCESS'},
-          {type: 'FETCH_CHAIN_ERROR'}
+          { type: 'FETCH_CHAIN_REQUEST' },
+          { type: 'FETCH_CHAIN_SUCCESS' },
+          { type: 'FETCH_CHAIN_ERROR' }
         ]
       }
     })

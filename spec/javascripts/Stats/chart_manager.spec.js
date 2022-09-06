@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import {StatsChartManager} from 'Stats/lib/chart_manager'
+import { StatsChartManager } from 'Stats/lib/chart_manager'
 
 const statsState = {
   setState: jest.fn(),
@@ -19,7 +19,7 @@ const metricsSelector = {
   render: jest.fn()
 }
 
-let chartManager = new StatsChartManager({statsState, metricsSelector, sources, chart})
+let chartManager = new StatsChartManager({ statsState, metricsSelector, sources, chart })
 let data = {
   columns: [
     [
@@ -72,7 +72,7 @@ describe('ChartManager', () => {
 
   it('should set the correct state when updating series total', () => {
     chartManager._updateSeriesTotal(data)
-    expect(statsState.setState).toHaveBeenCalledWith({seriesTotal: 111}, [ 'seriesTotal' ], false)
+    expect(statsState.setState).toHaveBeenCalledWith({ seriesTotal: 111 }, [ 'seriesTotal' ], false)
   })
 
   // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor

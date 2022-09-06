@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-const ErrorMessage = ({fetchErrorMessage}: {
+const ErrorMessage = ({ fetchErrorMessage }: {
   fetchErrorMessage: string
 }): React.Node => (
   <p className='errorMessage'>

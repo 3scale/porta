@@ -2,13 +2,13 @@
 import 'core-js/fn/symbol/iterator' // make Symbol work on IE 11
 import moment from 'moment-timezone'
 
-import {StatsUI} from 'Stats/lib/ui'
+import { StatsUI } from 'Stats/lib/ui'
 
 const TIMESTAMP_FORMAT = 'DD MMM YYYY HH:mm:ss zz'
 
 export class StatsCSVLink extends StatsUI {
-  constructor ({container}) {
-    super({container})
+  constructor ({ container }) {
+    super({ container })
     this.csvString = ''
   }
 
