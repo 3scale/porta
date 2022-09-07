@@ -57,4 +57,3 @@ exclude_patterns:
   - "app/javascript/src/*/*/*.spec.*"
   - "bin/webpack*"
   - "**/node_modules/"
-  - "**/flow-typed"

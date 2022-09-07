@@ -6,7 +6,6 @@
 .bin
 cookbooks
 node_modules
-flow-typed
 assets/jspm_packages/*/*
 vendor/bundle
 .vagrant

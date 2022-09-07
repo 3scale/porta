@@ -22,7 +22,6 @@
         }
       }
     ],
-    "@babel/react",
-    "@babel/flow"
+    "@babel/react"
   ]
 }

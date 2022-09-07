@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./app/javascript/src",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "module": "es6",
+    "sourceMap": true,
+    "target": "es5",
+    "jsx": "preserve",
+    "moduleResolution": "Node"
+  },
+  "include": ["app/javascript"],
+  "exclude": [
+    "**/*.spec.ts",
+    "node_modules",
+    "public"
+  ],
+  "compileOnSave": false
+}
