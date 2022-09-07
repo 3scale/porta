@@ -19,7 +19,7 @@ class Provider::Admin::DashboardsController < FrontendController
   end
 
   include DashboardTimeRange
-  helper_method :current_range, :previous_range, :backend_apis_presenter, :products_presenter
+  helper_method :current_range, :previous_range, :new_accounts_presenter, :backend_apis_presenter, :products_presenter
 
   private
 
@@ -41,6 +41,10 @@ class Provider::Admin::DashboardsController < FrontendController
 
   def unread_messages_presenter
     ::Dashboard::UnreadMessagesPresenter.new(current_account.received_messages.not_system)
+  end
+
+  def new_accounts_presenter
+    Provider::Admin::NewAccountsPresenter.new(current_account: current_account)
   end
 
   def backend_apis_presenter
