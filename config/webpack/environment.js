@@ -10,6 +10,11 @@ environment.loaders.delete('moduleCss')
 environment.loaders.delete('sass')
 environment.loaders.delete('moduleSass')
 
+environment.loaders.append('ts', {
+  test: /.(ts|tsx)$/,
+  loader: 'ts-loader'
+})
+
 environment.loaders.append('null', {
   test: /\.css$/,
   include: stylesheet => stylesheet.indexOf('@patternfly/react-styles/css/') > -1,

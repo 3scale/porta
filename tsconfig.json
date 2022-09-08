@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./app/javascript/src",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "module": "es6",
+    "sourceMap": true,
+    "target": "es5",
+    "jsx": "react",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
+  },
+  "include": ["app/javascript"],
+  "exclude": [
+    "**/*.spec.ts",
+    "node_modules",
+    "public"
+  ],
+  "compileOnSave": false
+}

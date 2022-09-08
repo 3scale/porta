@@ -28,16 +28,9 @@ store-log-artifacts: &store-log-artifacts
     path: log
     destination: log
 
-flow-type-key: &flow-typed-cache-key flow-typed-{{ checksum "yarn.lock" }}-5
 npm-cache-key: &npm-cache-key node-v10-{{ checksum "yarn.lock" }}-5
 bundle-cache-key: &bundle-cache-key v2-bundler-gems-{{ .Environment.DB }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 assets-cache-key: &assets-cache-key v1-asset-cache-{{ checksum "tmp/assets_related_checksums" }}
-
-save-flow-typed-cache: &save-flow-typed-cache
-  save_cache:
-    key: *flow-typed-cache-key
-    paths:
-      - ./flow-typed
 
 restore-npm-cache: &restore-npm-cache
   restore_cache:
@@ -48,11 +41,6 @@ save-npm-cache: &save-npm-cache
     key: *npm-cache-key
     paths:
       - ./node_modules
-      - ./flow-typed
-
-restore-flow-typed-cache: &restore-flow-typed-cache
-  restore_cache:
-    key: *flow-typed-cache-key
 
 save-assets-cache: &save-assets-cache
   save_cache:
@@ -497,13 +485,10 @@ jobs:
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
-      - *restore-flow-typed-cache
       - run:
-          name: Eslint & Flow
+          name: Eslint
           command: |
-            yarn flow:install
             yarn lint
-      - *save-flow-typed-cache
       - store_artifacts:
           path: doc/licenses
           destination: licenses

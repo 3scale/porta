@@ -22,7 +22,7 @@
         }
       }
     ],
-    "@babel/react",
-    "@babel/flow"
+    "@babel/preset-typescript",
+    "@babel/react"
   ]
 }
