@@ -36,4 +36,21 @@ class Service::SearchTest < ActiveSupport::TestCase
     end
   end
 
+  test 'search with query by system_name' do
+    ThinkingSphinx::Test.rt_run do
+      services = []
+
+      perform_enqueued_jobs(only: SphinxIndexationWorker) do
+        services = [
+          FactoryBot.create(:simple_service, name: 'one', system_name: 'first'),
+          FactoryBot.create(:simple_service, name: 'two', system_name: 'second_api'),
+          FactoryBot.create(:simple_service, name: 'three', system_name: 'third_api')
+        ]
+      end
+
+      search_results = Service.scope_search(query: 'api').select(:id).map(&:id)
+      expected_services = services.select { |s| s.system_name.include?('api') }.map(&:id)
+      assert_equal search_results.sort, expected_services.sort
+    end
+  end
 end
