@@ -318,6 +318,16 @@ Run [Yarn](https://www.yarnpkg.com/) to install all the required dependencies:
 yarn install
 ```
 
+## Enable caching
+
+Caching is disabled by default in Rails. It can be switched on/off by running:
+
+```bash
+bundle exec rails dev:cache
+```
+
+For caching to work, a memcached instance must be running and listening at `localhost:11211`
+
 ## Setup Database
 
 Finally, initialize the database with some seed data by running:
