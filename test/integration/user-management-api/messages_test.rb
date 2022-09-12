@@ -11,7 +11,8 @@ class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create' do
-    post admin_api_account_messages_path(@buyer, format: :json), params: { message: { body: "Lluís Companys is calling" }, provider_key: @provider.api_key }
+    post admin_api_account_messages_path(@buyer, format: :json), params: { message: { body: "Lluís Companys is calling" , 
+      subject: "I am subject" }, provider_key: @provider.api_key }
 
     assert_response :success
     assert_equal 'sent', JSON.parse(@response.body)['message']['state']
@@ -24,7 +25,8 @@ class Admin::Api::MessagesTest < ActionDispatch::IntegrationTest
   end
 
   test 'create flattened' do
-    post admin_api_account_messages_path(@buyer, format: :xml), params: { body: "text of the message", provider_key: @provider.api_key }
+    post admin_api_account_messages_path(@buyer, format: :xml), params: { body: "text of the message", subject: "I am subject",
+     provider_key: @provider.api_key }
 
     assert_response :success
   end
