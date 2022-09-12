@@ -34,16 +34,21 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
 
 
   def create
-    @message.enqueue! :to => current_account.provider_account.id
-    @notice = 'Message was sent.'
+    if @message.subject.present?
+      @message.enqueue! :to => current_account.provider_account.id
+      @notice = 'Message was sent.'
 
-    respond_to do |format|
-      format.html do
-        flash[:notice] = @notice
-        redirect_to admin_messages_root_path
+      respond_to do |format|
+        format.html do
+          flash[:notice] = @notice
+          redirect_to admin_messages_root_path
+        end
+
+        format.js
       end
-
-      format.js
+    else
+      flash[:error] = 'Please fill subject and body.'
+      redirect_to admin_messages_new_path
     end
   end
 

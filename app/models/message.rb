@@ -32,6 +32,7 @@ class Message < ApplicationRecord
 
   validates :sender_id, presence: true
   validates :type, :origin, length: { maximum: 255 }
+  validates :subject, presence: true
 
   after_save :update_recipients
   after_initialize :default_values
