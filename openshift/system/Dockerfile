@@ -27,10 +27,13 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-c
     && yum -y clean all
 
 # Install sphinx search
-ARG SPHINX_VERSION=3.4.1
-RUN curl -sSL https://sphinxsearch.com/files/sphinx-${SPHINX_VERSION}-efbcc65-linux-amd64.tar.gz | tar xz -C /tmp \
-    && cp /tmp/sphinx-${SPHINX_VERSION}/bin/* /usr/bin/ \
-    && rm -rf /tmp/sphinx*
+RUN if [ "`uname -m`" == "x86_64" ]; then \
+      yum install -y https://sphinxsearch.com/files/sphinx-2.2.11-1.rhel7.x86_64.rpm ; \
+    else \
+      curl -sSL http://sphinxsearch.com/files/sphinx-2.2.11-release.tar.gz | tar xz -C /tmp \
+      && cd /tmp/sphinx-2.2.11-release && ./configure && make install \
+      && rm -rf /tmp/sphinx* ; \
+    fi
 
 # We don't want to redo the bundle install step every time a file has changed:
 # copying only the gemspec files and copying all the other files after the build
