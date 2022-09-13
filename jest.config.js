@@ -66,8 +66,7 @@ module.exports = {
   // An array of directory names to be searched recursively up from the requiring module's location
   moduleDirectories: [
     'node_modules',
-    'app/javascript/src',
-    'app/javascript/packs'
+    '<rootDir>/app/javascript/src'
   ],
 
   // An array of file extensions your modules use
@@ -95,7 +94,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  preset: "ts-jest",
+  preset: 'ts-jest',
 
   // Run tests from one or more projects
   // projects: null,
@@ -139,10 +138,12 @@ module.exports = {
   ],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  testEnvironment: 'jsdom',
 
   // Options that will be passed to the testEnvironment
-  // testEnvironmentOptions: {},
+  testEnvironmentOptions: {
+    url: 'http://localhost'
+  },
 
   // Adds a location field to test results
   // testLocationInResults: false,
@@ -167,15 +168,11 @@ module.exports = {
   // This option allows use of a custom test runner
   // testRunner: "jasmine2",
 
-  // This option sets the URL for the jsdom environment. It is reflected in properties such as location.href
-  testURL: 'http://localhost',
-
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
   transform: {
-    // '^.+\\.tsx?$': './node_modules/ts-jest',
     // Png and svg imports fails in jest, workaround found in:
     // https://github.com/facebook/jest/issues/2663#issuecomment-369040789
     '.+\\.(png|svg)$': 'jest-transform-stub'
@@ -197,4 +194,4 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}

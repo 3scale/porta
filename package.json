@@ -9,8 +9,7 @@
     "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline --link-duplicates",
     "clean": "rm -rf node_modules/ && yarn cache clean",
     "lint": "eslint --ext .ts,.tsx .",
-    "jest": "jest",
-    "jest:watch": "jest --watch"
+    "jest": "jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",

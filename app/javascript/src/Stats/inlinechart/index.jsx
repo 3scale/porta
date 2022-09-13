@@ -124,7 +124,7 @@ class InlineChart extends Component<Props, State> {
     this.updateState(response)
   }
 
-  render (): Node {
+  render () {
     const { loading, title, total } = this.state
     return (
       <div>
