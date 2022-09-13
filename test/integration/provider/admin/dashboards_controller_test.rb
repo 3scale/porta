@@ -12,6 +12,24 @@ class Provider::Admin::DashboardsControllerTest < ActionDispatch::IntegrationTes
 
   attr_reader :provider
 
+  test 'new accounts widget' do
+    xpath_selector = './/div[@id="new-accounts-widget"]'
+    # Using "with(:manage, :partners)" in this stub raises a [Minitest::Assertion: unexpected invocation]
+    Ability.any_instance.stubs(:can?).returns(true).at_least_once
+
+    get provider_admin_dashboard_path
+    assert_xpath(xpath_selector)
+  end
+
+  test 'potential upgrades widget' do
+    xpath_selector = './/div[@id="potential-upgrades-widget"]'
+    # Using "with(:manage, :plans)" in this stub raises a [Minitest::Assertion: unexpected invocation]
+    Ability.any_instance.stubs(:can?).returns(true).at_least_once
+
+    get provider_admin_dashboard_path
+    assert_xpath(xpath_selector)
+  end
+
   test 'products and backends widgets' do
     xpath_selector = './/section[@id="apis"]'
     element_text = 'APIs'
@@ -19,6 +37,24 @@ class Provider::Admin::DashboardsControllerTest < ActionDispatch::IntegrationTes
     User.any_instance.stubs(:access_to_service_admin_sections?).returns(true)
     get provider_admin_dashboard_path
     assert_xpath(xpath_selector, element_text)
+  end
+
+  test 'new accounts widget no access' do
+    xpath_selector = './/div[@id="new-accounts-widget"]'
+    # Using "with(:manage, :partners)" in this stub raises a [Minitest::Assertion: unexpected invocation]
+    Ability.any_instance.stubs(:can?).returns(false).at_least_once
+
+    get provider_admin_dashboard_path
+    refute_xpath(xpath_selector)
+  end
+
+  test 'potential upgrades widget no access' do
+    xpath_selector = './/div[@id="potential-upgrades-widget"]'
+    # Using "with(:manage, :plans)" in this stub raises a [Minitest::Assertion: unexpected invocation]
+    Ability.any_instance.stubs(:can?).returns(false).at_least_once
+
+    get provider_admin_dashboard_path
+    refute_xpath(xpath_selector)
   end
 
   test 'products and backends widgets no access' do
