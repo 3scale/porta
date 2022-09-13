@@ -141,8 +141,8 @@ class MessageTest < ActiveSupport::TestCase
     assert_equal 1, message.errors[:sender_id].size
   end
 
-  test 'A message not require a subject' do
-    message = FactoryBot.build(:message, subject: nil, sender: FactoryBot.create(:simple_account))
+  test 'A message require a subject' do
+    message = FactoryBot.build(:message, subject: "I am subject", sender: FactoryBot.create(:simple_account))
     assert_valid message
   end
 
