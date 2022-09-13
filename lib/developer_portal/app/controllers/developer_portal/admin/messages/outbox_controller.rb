@@ -44,7 +44,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
         format.js
       end
     else
-      flash[:error] = 'Please fill subject and body.'
+      flash[:error] = 'Please fill subject.'
       redirect_to admin_messages_new_path
     end
   end
