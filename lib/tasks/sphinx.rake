@@ -2,6 +2,11 @@
 
 require 'progress_counter'
 
+# The queue that SphinxIndexationWorker normally uses is is 'default'
+# This rake task however enqueues into a different queue, which allows setting a lower
+# priority for this non-time-critical maintenance task, and even delete all enqueued jobs at once
+BULK_INDEXING_QUEUE = 'bulk_indexing'
+
 namespace :sphinx do
   desc "Enqueue indexation of tables"
   task enqueue: :environment do |_task, args|
@@ -23,7 +28,7 @@ namespace :sphinx do
       # As we enqueue, we only need the :id
       scope.select(:id).except(:includes).find_in_batches(batch_size: 1000) do |batch|
         batch.each do |record|
-          SphinxLowPrioIndexationWorker.perform_later(record.class, record.id)
+          SphinxIndexationWorker.new(record.class, record.id).enqueue queue: BULK_INDEXING_QUEUE
         end
         progress.call(increment: batch.size)
       end
