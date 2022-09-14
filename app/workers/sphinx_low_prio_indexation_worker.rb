@@ -5,5 +5,5 @@
 # this one is handled by a lower priority queue, which also allows managing the jobs better,
 # e.g. delete all at once
 class SphinxLowPrioIndexationWorker < SphinxIndexationWorker
-  queue_as :non_critical
+  queue_as :optional
 end
