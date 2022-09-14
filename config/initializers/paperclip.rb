@@ -78,3 +78,6 @@ module Paperclip
     end
   end)
 end
+
+# Adds Paperclip storage-related monkey patches
+Dir[Rails.root.join('lib', 'paperclip', 'storage', '*.rb')].each(&method(:require))
