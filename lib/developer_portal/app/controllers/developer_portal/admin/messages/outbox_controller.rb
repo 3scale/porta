@@ -35,14 +35,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
 
   def create
     if @message.subject.present?
-      @message.enqueue! :to => current_account.provider_account.id
-      respond_to do |format|
-        format.html do
-          flash[:notice] = 'Message was sent.'
-          redirect_to admin_messages_root_path
-        end
-        format.js
-      end
+      enqueue_message
     else
       flash[:error] = 'Please fill subject.'
       redirect_to admin_messages_new_path
@@ -50,6 +43,17 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
   end
 
   private
+
+  def enqueue_message
+    @message.enqueue! :to => current_account.provider_account.id
+    respond_to do |format|
+      format.html do
+        flash[:notice] = 'Message was sent.'
+        redirect_to admin_messages_root_path
+      end
+      format.js
+    end
+  end
 
   def build_message
     @message = current_account.messages.build((message_params[:message] || {}).merge(:origin => "web"))
