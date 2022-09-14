@@ -18,7 +18,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   def setup
-    Timecop.return
+    travel_back
     @provider = FactoryBot.create(:simple_provider)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
@@ -67,7 +67,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test 'finalize state' do
     time = Time.zone.now
-    Timecop.freeze(time) { @invoice.finalize! }
+    travel_to(time) { @invoice.finalize! }
 
     # assert_in_delta because the time stored in database do not have usec
     # But end of day has .999999
@@ -83,7 +83,7 @@ class InvoiceTest < ActiveSupport::TestCase
     cancelled = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     finalized = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
 
-    Timecop.freeze(time) { [finalized, cancelled].each(&:finalize!) }
+    travel_to(time) { [finalized, cancelled].each(&:finalize!) }
     cancelled.cancel!
 
     assert Invoice.finalized_before(time - 1.hour).empty?
@@ -167,7 +167,7 @@ class InvoiceTest < ActiveSupport::TestCase
     @invoice.stubs(:cost).returns(0.to_has_money('EUR'))
     @invoice.finalize!
 
-    Timecop.freeze(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
+    travel_to(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
 
     assert_equal @now.utc.to_date, @invoice.issued_on
     assert_in_delta @now, @invoice.paid_at, 1.second
@@ -184,7 +184,7 @@ class InvoiceTest < ActiveSupport::TestCase
     @invoice.stubs(:cost).returns(100.to_has_money('EUR'))
     @invoice.finalize!
 
-    Timecop.freeze(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
+    travel_to(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
 
     assert_equal @now.utc.to_date, @invoice.issued_on
     assert_not_nil @invoice.due_on
@@ -193,7 +193,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test 'have due_on after issued_on' do
     @invoice.stubs(:cost).returns(100.to_has_money('EUR'))
-    Timecop.freeze(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
+    travel_to(@now = Time.zone.now) { @invoice.issue_and_pay_if_free! }
     assert @invoice.issued_on < @invoice.due_on
   end
 
@@ -249,7 +249,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   # TODO: remove - use open? instead
   test 'have current? method' do
-    Timecop.freeze do
+    freeze_time do
       invoice_one = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)), provider_account: @provider, buyer_account: @buyer)
       invoice_two = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
 

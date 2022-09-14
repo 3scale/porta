@@ -47,7 +47,7 @@ class DeletedObjectTest < ActiveSupport::TestCase
 
   test 'stale' do
     deleted_child_but_owner_persisted_old = deleted_child_and_owner_contract_deleted_old = deleted_object_contract_but_owner_persisted_old = nil
-    Timecop.freeze((1.week + 1.day).ago) do
+    travel_to((1.week + 1.day).ago) do
       contract = FactoryBot.create(:simple_cinstance)
       app_key = FactoryBot.create(:application_key, application: contract)
       deleted_child_but_owner_persisted_old = DeletedObject.create(object: app_key, owner: contract).id
@@ -61,7 +61,7 @@ class DeletedObjectTest < ActiveSupport::TestCase
 
     deleted_child_but_owner_persisted_recent = deleted_child_and_owner_contract_deleted_recent = deleted_child_and_owner_account_deleted_recent = nil
     deleted_object_contract_but_owner_persisted_recent = deleted_object_account_but_owner_persisted_recent = nil
-    Timecop.freeze((1.week - 1.day).ago) do
+    travel_to((1.week - 1.day).ago) do
       contract = FactoryBot.create(:simple_cinstance)
       app_key = FactoryBot.create(:application_key, application: contract)
       deleted_child_but_owner_persisted_recent = DeletedObject.create(object: app_key, owner: contract).id

@@ -3,7 +3,7 @@ require 'test_helper'
 class DateParsingTest < ActiveSupport::TestCase
 
   def test_parse_correct_date
-    Timecop.freeze(Date.parse('2016-12-23')) do
+    travel_to(Date.parse('2016-12-23')) do
 
       date = Time.zone.parse('2nd December, 1989')
       assert_equal 2, date.day

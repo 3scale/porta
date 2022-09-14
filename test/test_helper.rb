@@ -25,6 +25,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'minitest/unit'
 
 require 'rails/test_help'
+require 'active_support/testing/time_helpers'
 require "paperclip/matchers"
 
 require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
@@ -70,7 +71,7 @@ class ActiveSupport::TestCase
 
   def teardown
     User.current = nil
-    Timecop.return
+    travel_back
   end
 end
 

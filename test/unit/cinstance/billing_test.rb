@@ -47,7 +47,7 @@ class Cinstance::BillingTest < ActiveSupport::TestCase
 
   class StuffToBillTest < Cinstance::BillingTest
     setup do
-      Timecop.freeze(2010,1,1)
+      travel_to(2010,1,1)
       @invoice = FactoryBot.create(:invoice)
     end
 

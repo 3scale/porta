@@ -85,7 +85,7 @@ class InvitationTest < ActiveSupport::TestCase
   test 'Invitation#accept! accepts the invitation' do
     invitation = @provider.invitations.create!(:email => 'bob@example.com')
 
-    Timecop.freeze(Time.utc(2010, 3, 12)) do
+    travel_to(Time.utc(2010, 3, 12)) do
       assert_change :of => -> { invitation.accepted? }, :from => false, :to => true do
         invitation.accept!
       end
@@ -98,7 +98,7 @@ class InvitationTest < ActiveSupport::TestCase
     invitation = @provider.invitations.create!(:email => 'bob@example.com')
     invitation.accept!
 
-    Timecop.travel(2.days.from_now) do
+    travel_to(2.days.from_now) do
       assert_no_change :of => -> { invitation.accepted_at } do
         invitation.accept!
       end

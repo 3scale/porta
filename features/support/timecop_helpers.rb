@@ -1,21 +1,21 @@
 After do
-  Timecop.return
+  travel_back
 end
 
 module TimecopHelpers
   def time_machine(till)
-    Timecop.freeze(Time.zone.now)
+    travel_to(Time.zone.now)
 
     while Time.zone.now < till
-      Timecop.freeze(1.day.from_now)
+      travel_to(1.day.from_now)
       run(ThreeScale::Jobs::MONTH) if Time.zone.now == Time.zone.now.beginning_of_month
       run(ThreeScale::Jobs::WEEK) if Time.zone.now == Time.zone.now.beginning_of_week
       run(ThreeScale::Jobs::DAILY)
       run(ThreeScale::Jobs::BILLING)
     end
-    Timecop.travel(till)
+    travel_to(till)
   rescue
-    Timecop.return
+    travel_back
     raise
   end
 

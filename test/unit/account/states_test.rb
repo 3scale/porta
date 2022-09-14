@@ -291,7 +291,7 @@ class Account::StatesTest < ActiveSupport::TestCase
       account = FactoryBot.create(:simple_provider, state: :created)
 
       %i[make_pending! reject! approve! suspend! resume! schedule_for_deletion!].each do |transition|
-        Timecop.freeze do
+        freeze_time do
           account.public_send(transition)
           assert_equal Time.zone.now.to_s, account.reload.state_changed_at.to_s
         end

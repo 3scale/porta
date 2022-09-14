@@ -713,7 +713,7 @@ class ProxyTest < ActiveSupport::TestCase
     # latest config is ahead of affecting change record
     refute proxy.pending_affecting_changes?
 
-    Timecop.travel(1.second.from_now) do
+    travel_to(1.second.from_now) do
       proxy.affecting_change_history.touch
 
       # latest config is behind of affecting change record

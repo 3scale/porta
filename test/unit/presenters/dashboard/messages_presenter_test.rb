@@ -5,11 +5,11 @@ class Dashboard::MessagesPresenterTest < Draper::TestCase
   LIMIT = Dashboard::MessagesPresenter::LIMIT
 
   def setup
-    Timecop.freeze(DateTime.now.midday)
+    travel_to(DateTime.now.midday)
   end
 
   def teardown
-    Timecop.return
+    travel_back
   end
 
   def test_render_no_messages

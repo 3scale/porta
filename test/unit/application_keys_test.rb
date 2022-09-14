@@ -182,7 +182,7 @@ class ApplicationKeysTest < ActiveSupport::TestCase
     @application.reload
     expected_updated_at = @application.updated_at + 2.hours
 
-    Timecop.travel(2.hours.from_now) do
+    travel_to(2.hours.from_now) do
       @application_keys.regenerate(key)
     end
     assert_in_delta expected_updated_at, @application.updated_at, 1.second

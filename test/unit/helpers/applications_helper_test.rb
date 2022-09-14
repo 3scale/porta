@@ -56,7 +56,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     application.expects(:first_daily_traffic_at?).returns(true).once
     application.expects(:first_daily_traffic_at).returns(yesterday).once
 
-    Timecop.freeze(today) do
+    travel_to(today) do
       html = Nokogiri::HTML.parse last_traffic(application)
       time = html.css('time')
 
@@ -86,7 +86,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     application = FactoryBot.build(:cinstance, trial_period_expires_at: today - 1.day)
     expected_text = '– trial expires in 1 day'
 
-    Timecop.freeze(today) do
+    travel_to(today) do
       html = Nokogiri::HTML.parse remaining_trial_days(application)
       assert_equal expected_text, html.text
     end
@@ -97,7 +97,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     application = FactoryBot.build(:cinstance, trial_period_expires_at: today + 1.day)
     expected_text = '– trial expires in 1 day'
 
-    Timecop.freeze(today) do
+    travel_to(today) do
       html = Nokogiri::HTML.parse remaining_trial_days(application)
       assert_equal expected_text, html.text
     end

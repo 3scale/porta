@@ -22,11 +22,11 @@ class UsageLimitViolationsQueryTest < ActiveSupport::TestCase
   def test_in_range
     Time.use_zone('Pacific Time (US & Canada)') do
 
-      Timecop.freeze(2010, 1, 1) do
+      travel_to(2010, 1, 1) do
         assert_equal Time.zone.now, create_violation.timestamp
       end
 
-      Timecop.freeze(2010, 1, 2) do
+      travel_to(2010, 1, 2) do
         range = @query.in_range(1.day.ago..Time.zone.now)
         assert range.present?
       end

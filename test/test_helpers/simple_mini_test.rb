@@ -4,6 +4,6 @@ class SimpleMiniTest < Minitest::Test
   def teardown
     super
     User.current = nil
-    Timecop.return
+    travel_back
   end
 end

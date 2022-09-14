@@ -17,11 +17,11 @@ class SymbolizeTest < ActiveSupport::TestCase
   end
 
   def setup
-    Timecop.freeze
+    freeze_time
   end
 
   def teardown
-    Timecop.return
+    travel_back
   end
 
   def test_symbolization
@@ -50,7 +50,7 @@ class SymbolizeTest < ActiveSupport::TestCase
   end
 
   test '#changes is symbolized but not #previous_changes' do
-    Timecop.freeze(Time.zone.now.round) do
+    travel_to(Time.zone.now.round) do
       usage = UsageLimit.new
       usage.period = 'hour'
       assert_equal({'period' => [nil, :hour]}, usage.changes)

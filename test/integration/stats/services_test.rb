@@ -15,11 +15,11 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   def teardown
-    Timecop.return
+    travel_back
   end
 
   test 'usage_response_code with no data as json' do
-    Timecop.freeze(Time.utc(2009, 12, 4, 11, 12))
+    travel_to(Time.utc(2009, 12, 4, 11, 12))
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
@@ -41,7 +41,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'usage with no data as json' do
-    Timecop.freeze(Time.utc(2009, 12, 4, 11, 12))
+    travel_to(Time.utc(2009, 12, 4, 11, 12))
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
@@ -68,7 +68,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'with simple plan and cinstance, retrieve data with account timezone' do
-    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    travel_to(Time.utc(2009, 12, 11, 19, 10))
     plan = FactoryBot.create(:application_plan, issuer: @service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
     @provider_account.update(timezone: 'Madrid')
@@ -87,7 +87,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
   end
 
   test 'with simple plan and cinstance, retrieve data with specified timezone' do
-    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    travel_to(Time.utc(2009, 12, 11, 19, 10))
     plan = FactoryBot.create(:application_plan, issuer: @service)
     @cinstance = FactoryBot.create(:cinstance, plan: plan)
 
@@ -115,7 +115,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12, 11, 18, 21), cinstance_id: cinstance.id)
     make_transaction_at(Time.utc(2009, 12, 11, 18, 45), cinstance_id: cinstance.id)
 
-    Timecop.freeze(Time.utc(2009, 12, 11, 19, 10))
+    travel_to(Time.utc(2009, 12, 11, 19, 10))
     get usage_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: 'day', metric_name: @metric.system_name, timezone: 'UTC', skip_change: false }
 
     assert_response :success
@@ -216,7 +216,7 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12,  3), cinstance_id: cinstance2.id)
     make_transaction_at(Time.utc(2009, 12, 15), cinstance_id: cinstance1.id)
 
-    Timecop.freeze(Time.utc(2009, 12, 22))
+    travel_to(Time.utc(2009, 12, 22))
     get top_applications_stats_api_services_path(@provider_account.default_service, format: :json), params: { period: :month, metric_name: @metric.system_name }
 
     assert_response :success

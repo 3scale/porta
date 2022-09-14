@@ -15,7 +15,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
   end
 
   def teardown
-    Timecop.return
+    travel_back
   end
 
   test 'usage with invalid period' do
@@ -33,7 +33,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12,  4, 22, 15), :cinstance_id => @cinstance.id)
     make_transaction_at(Time.utc(2009, 12, 12), :cinstance_id => @cinstance.id)
 
-    Timecop.freeze(Time.utc(2009, 12, 13))
+    travel_to(Time.utc(2009, 12, 13))
 
     login! @provider_account
     @provider_account.update(timezone: 'Madrid')
@@ -73,7 +73,7 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     make_transaction_at(Time.utc(2009, 12, 12), :cinstance_id => @cinstance.id)
     make_transaction_at(Time.utc(2009, 12, 12), :cinstance_id => @cinstance.id, :log => { 'code' => 404 } )
 
-    Timecop.freeze(Time.utc(2009, 12, 13))
+    travel_to(Time.utc(2009, 12, 13))
 
     login! @provider_account
     @provider_account.update(timezone: 'Madrid')

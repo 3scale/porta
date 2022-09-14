@@ -168,7 +168,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#user_used_sso_authorization creates a new sso_authorization for the given user when the user did not exist' do
-    Timecop.freeze do
+    freeze_time do
       user = User.new
       @strategy.send(:find_authentication_provider, @authentication_provider.system_name)
       @strategy.user_used_sso_authorization(user, ThreeScale::OAuth2::UserData.new(uid: '123456', id_token: 'fake-token'))
@@ -180,7 +180,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#user_used_sso_authorization creates a new sso_authorization for the given user when the user existed but the sso did not' do
-    Timecop.freeze do
+    freeze_time do
       user = FactoryBot.create(:user_with_account)
       @strategy.stubs(:authentication_provider).returns(@authentication_provider)
       @strategy.user_used_sso_authorization(user, ThreeScale::OAuth2::UserData.new(uid: '123456', id_token: 'fake-token'))
@@ -191,7 +191,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#user_used_sso_authorization updates the id_token when the sso already existed and the id_token has changed' do
-    Timecop.freeze do
+    freeze_time do
       authorization = FactoryBot.create(:sso_authorization, authentication_provider: @authentication_provider, id_token: 'first-token', updated_at: Time.now.utc - 1.week)
       @strategy.stubs(:authentication_provider).returns(@authentication_provider)
       @strategy.user_used_sso_authorization(authorization.user, ThreeScale::OAuth2::UserData.new(uid: authorization.uid, id_token: 'fake-token'))
@@ -200,7 +200,7 @@ class Authentication::Strategy::Oauth2Test < ActiveSupport::TestCase
   end
 
   test '#user_used_sso_authorization updates the updated_at when the sso already existed but the id_token has not changed' do
-    Timecop.freeze do
+    freeze_time do
       authorization = FactoryBot.create(:sso_authorization, authentication_provider: @authentication_provider, id_token: nil, updated_at: Time.now.utc - 1.week)
       @strategy.stubs(:authentication_provider).returns(@authentication_provider)
       @strategy.user_used_sso_authorization(authorization.user, ThreeScale::OAuth2::UserData.new(uid: authorization.uid, id_token: nil))

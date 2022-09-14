@@ -77,7 +77,7 @@ class AccountMailerTest < ActionMailer::TestCase
       trial_plan.plan_rule.metadata = {trial: true}
       @account.buy! trial_plan
 
-      Timecop.freeze(Date.new(2017, 11, 21)) do
+      travel_to(Date.new(2017, 11, 21)) do
         mail = AccountMailer.support_entitlements_assigned(@account)
 
         assert_equal '3scale Notification - Assign Entitlements', mail.subject
