@@ -16,7 +16,8 @@ import {
   TableHeader,
   TableBody,
   SortByDirection,
-  IRow
+  IRow,
+  ITransform
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
 import { NoMatchFound } from 'Common'
@@ -35,7 +36,7 @@ type Props<T extends Record> = {
   cells: Array<{
     title: string,
     propName: keyof T,
-    transforms?: any
+    transforms?: ITransform[]
   }>,
   isOpen?: boolean,
   isLoading?: boolean,

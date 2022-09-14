@@ -3,11 +3,12 @@ import * as React from 'react'
 import {
   FormGroup,
   Select,
-  SelectOptionObject,
+  SelectOptionObject as PFSelectOptionObject,
   SelectVariant
 } from '@patternfly/react-core'
 import {
   handleOnFilter,
+  SelectOptionObject,
   toSelectOption,
   toSelectOptionObject
 } from 'utilities'
@@ -19,16 +20,12 @@ import './FancySelect.scss'
 type Item = Record & {
   disabled?: boolean,
   className?: string
-};
-
-type FancySelectOptionObject = SelectOptionObject & {
-  id: string
 }
 
 type Props<T extends Record> = {
   item: T | undefined,
   items: T[],
-  onSelect: (arg1: T | undefined) => void,
+  onSelect: (arg1: T | null) => void,
   label: string,
   id: string,
   header: string,
@@ -68,10 +65,10 @@ const FancySelect = <T extends Record>(
   // TODO: Remove after upgrading @patternfly/react-core, see https://www.patternfly.org/v4/components/select#view-more
   const footerItem = footer && { id: FOOTER_ID, name: footer.label, className: 'pf-c-select__menu-item--sticky-footer' }
 
-  const handleOnSelect = (_e: any, _option: string | SelectOptionObject) => {
+  const handleOnSelect = (_e: any, _option: string | PFSelectOptionObject) => {
     setExpanded(false)
 
-    const option = (_option as FancySelectOptionObject)
+    const option = (_option as SelectOptionObject)
 
     if (option.id === FOOTER_ID) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -118,7 +115,7 @@ const FancySelect = <T extends Record>(
         onSelect={handleOnSelect}
         isExpanded={expanded}
         isDisabled={isDisabled}
-        onClear={() => onSelect(undefined)}
+        onClear={() => onSelect(null)}
         aria-labelledby={id}
         className={footer ? 'pf-c-select__menu--with-fixed-link' : undefined}
         isGrouped

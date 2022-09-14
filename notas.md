@@ -43,6 +43,7 @@ https://github.com/3scale/porta/blob/cbc214ef62a6643d4351fd3104be89f0572fd258/ap
   Hemos tenido mucho lio con le tema de la paginacion, los tipos number y string. En la consola de vez en cuando salen warnings debido a esto. Aunque al final da igual porque el number se convierte implicitamente a string, gracias a los types de Patternfly ahora podemos ver donde se originan estos warnings y usar el tipo (number vs string) adecuado.
 
 https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/app/javascript/src/Common/components/ToolbarSearch.jsx#L101-L114
+https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/app/javascript/src/Common/components/SystemNamePopover.jsx#L11
 
   Este componente (Popover) no nos daba ningún problema con Flow y de hecho se renderizaba, aunque de forma rara. Al pasar a TS ahora nos da un fallo de compilación, diciendo que el tipo de retorno no es correcto. Muy extraño porque parece un problema de tipado pero no podemos subir la version de patternfly y (creo que) tampoco podemos instalar types más modernos.
   TODO: averiguar que coño pasa, he escrito en el Slack de Patternfly.

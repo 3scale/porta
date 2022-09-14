@@ -33,7 +33,8 @@ export type Product = Record & {
 export type Backend = Record & {
   systemName: string,
   description?: string,
-  privateEndpoint: string
+  privateEndpoint: string,
+  updatedAt: string
 };
 
 export type Metric = Record & {

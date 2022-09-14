@@ -8,6 +8,7 @@ import {
   Popover,
   TextInput
 } from '@patternfly/react-core'
+// import { Popover } from '@patternfly/react-core/dist/js/components/Popover/Popover.js'
 import { SearchIcon } from '@patternfly/react-icons'
 
 import { createReactWrapper } from 'utilities'
@@ -78,6 +79,8 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
     onSubmitSearch((e.currentTarget as HTMLInputElement).value)
   }
 
+  const Popopover: any = Popover // HACK: remove this after upgrading @patternfly/react-core
+
   return (
     <Form
       id={FORM_ID}
@@ -100,8 +103,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           onChange={setSearchText}
           autoComplete="off"
         />
-        {/* FIXME: it seems we need to upgrade patternfly in order to make Popoover work */}
-        {/* <Popover
+        <Popopover
           aria-label="search minimum length"
           bodyContent={<div>To search, type at least 3 characters.</div>}
           isVisible={showPopover}
@@ -114,7 +116,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           >
             <SearchIcon />
           </Button>
-        </Popover> */}
+        </Popopover>
       </InputGroup>
     </Form>
   )

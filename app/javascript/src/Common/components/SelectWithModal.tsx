@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 
-import { SortByDirection, sortable } from '@patternfly/react-table'
+import { SortByDirection, ITransform } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
 import { FancySelect, TableModal } from 'Common'
 import { paginateCollection } from 'utilities'
@@ -13,18 +13,13 @@ import './SelectWithModal.scss'
 
 type Props<T extends Record> = {
   label: string,
-  fieldId: string,
   id: string,
   name: string,
   item: T | null,
   items: Array<T>,
   itemsCount: number,
-  cells: Array<{
-    title: string,
-    propName: string,
-    transforms?: [typeof sortable]
-  }>,
-  onSelect: (arg1: T | null) => void,
+  cells: Array<{ title: string, propName: keyof T, transforms?: ITransform[] }>,
+  onSelect: (t: T | null) => void,
   header: string,
   isDisabled?: boolean,
   title: string,
@@ -32,7 +27,7 @@ type Props<T extends Record> = {
   searchPlaceholder?: string,
   footerLabel: string,
   helperTextInvalid?: string,
-  fetchItems: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
+  fetchItems?: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
 };
 
 const PER_PAGE = 5
@@ -41,7 +36,6 @@ const MAX_ITEMS = 20
 const SelectWithModal = <T extends Record>(
   {
     label,
-    fieldId,
     id,
     name,
     item,
@@ -84,7 +78,7 @@ const SelectWithModal = <T extends Record>(
   }
 
   useEffect(() => {
-    if (!shouldHaveModal || !modalOpen) {
+    if (!shouldHaveModal || !modalOpen || !fetchItems) {
       return
     }
 
@@ -105,6 +99,10 @@ const SelectWithModal = <T extends Record>(
   }, [page, shouldHaveModal, modalOpen])
 
   useEffect(() => {
+    if (!fetchItems) {
+      return
+    }
+
     if (isOnMount) {
       setIsOnMount(false)
     } else {
@@ -139,10 +137,9 @@ const SelectWithModal = <T extends Record>(
     <>
       <FancySelect
         label={label}
-        fieldId={fieldId}
         id={id}
         name={name}
-        item={item}
+        item={item || undefined}
         items={initialItems.slice(0, MAX_ITEMS)}
         onSelect={onSelect}
         header={header}

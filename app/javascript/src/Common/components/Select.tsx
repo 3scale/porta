@@ -1,6 +1,11 @@
 import * as React from 'react'
 
-import { FormGroup, Select as PF4Select, SelectVariant } from '@patternfly/react-core'
+import {
+  FormGroup,
+  Select as PF4Select,
+  SelectOptionObject as PFSelectOptionObject,
+  SelectVariant
+} from '@patternfly/react-core'
 import { Spinner } from 'Common'
 import {
   toSelectOption,
@@ -54,10 +59,10 @@ const Select = <T extends Record>(
 ): React.ReactElement => {
   const [expanded, setExpanded] = React.useState(false)
 
-  const handleSelect = (_e: any, option: SelectOptionObject) => {
+  const handleSelect = (_e: any, option: string | PFSelectOptionObject) => {
     setExpanded(false)
 
-    const selected = items.find(i => i.id.toString() === option.id)
+    const selected = items.find(i => i.id.toString() === (option as SelectOptionObject).id)
     onSelect(selected || null)
   }
 
@@ -77,13 +82,13 @@ const Select = <T extends Record>(
       helperText={helperText}
       helperTextInvalid={helperTextInvalid}
     >
-      {isLoading && <Spinner size="md" isSVG className="pf-u-ml-md" />}
+      {isLoading && <Spinner size="md" className="pf-u-ml-md" />}
       {item && <input type="hidden" name={name} value={item.id} />}
       <PF4Select
         id={fieldId}
         variant={SelectVariant.typeahead}
         placeholderText={placeholderText}
-        selections={item && toSelectOptionObject(item)}
+        selections={(item && toSelectOptionObject(item)) || undefined}
         onToggle={() => setExpanded(!expanded)}
         onSelect={handleSelect}
         isExpanded={expanded}

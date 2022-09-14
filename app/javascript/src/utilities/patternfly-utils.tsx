@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import escapeRegExp from 'lodash.escaperegexp'
-import { SelectOption, SelectOptionObject } from '@patternfly/react-core'
+import { SelectOption, SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
 
 export type Record = {
   id: number | string,
@@ -9,15 +9,15 @@ export type Record = {
   description?: string
 };
 
-// TODO: this should come from @patternfly/react-core typings, but they're not compatible with Flow
-// export interface SelectOptionObject {
-//   id: string;
-//   name: string;
-//   toString: () => string;
-// }
+export interface SelectOptionObject extends PFSelectOptionObject {
+  id: string
+  name: string
+}
 
 // TODO: check removing id and name is correct
 export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
+  id: String(item.id),
+  name: item.name,
   toString: () => item.name
 })
 
