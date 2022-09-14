@@ -15,7 +15,8 @@ import {
   Table,
   TableHeader,
   TableBody,
-  SortByDirection
+  SortByDirection,
+  IRow
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
 import { NoMatchFound } from 'Common'
@@ -33,7 +34,7 @@ type Props<T extends Record> = {
   onClose: () => void,
   cells: Array<{
     title: string,
-    propName: string,
+    propName: keyof T,
     transforms?: any
   }>,
   isOpen?: boolean,
@@ -78,10 +79,8 @@ const TableModal = <T extends Record>(
     if (searchInputRef.current && onSearch) {
       const { current } = searchInputRef
 
-      current.addEventListener('input', ({
-        inputType
-      }: InputEvent) => {
-        if (!inputType) onSearch('')
+      current.addEventListener('input', (evt: Event) => {
+        if (!(evt as InputEvent).inputType) onSearch('')
       })
 
       current.addEventListener('keydown', ({
@@ -119,7 +118,7 @@ const TableModal = <T extends Record>(
     />
   )
 
-  const rows = pageItems.map((i) => ({
+  const rows: IRow[] = pageItems.map((i) => ({
     selected: i.id === selected?.id,
     cells: cells.map(({ propName }) => i[propName])
   }))

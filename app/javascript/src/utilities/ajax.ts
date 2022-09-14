@@ -1,29 +1,16 @@
 export type Method = 'GET' | 'POST' | 'DELETE';
 
-type FetchOptions = {
-  method: Method,
-  body?: URLSearchParams,
-  signal?: AbortSignal
-};
-type FetchFunction = (url: string, opts: FetchOptions) => Promise<Response>;
+type FetchOptions = { method: Method, body?: URLSearchParams, signal?: AbortSignal }
+type FetchFunction = (url: string, opts: FetchOptions) => Promise<Response>
 
-export type FetchItemsRequestParams = {
-  page: number,
-  perPage: number,
-  query?: string
-};
-export type FetchItemsResponse<T> = Promise<{
-  items: T[],
-  count: number
-}>;
+export type FetchItemsRequestParams = { page: number, perPage: number, query?: string }
+export type FetchItemsResponse<T> = Promise<{ items: T[], count: number }>
 
-const _ajax = (headers: {
-  [key: string]: string
-}) => {
+const _ajax = (headers: Record<string, string>) => {
   const meta = document.querySelector('meta[name="csrf-token"]')
   const token = (meta && meta.getAttribute('content')) || ''
 
-  return function (url: string, { method, body, signal }) {
+  return function (url: string, { method, body, signal }: FetchOptions) {
     return fetch(url, {
       method: method,
       headers: { ...headers, 'X-CSRF-Token': token },

@@ -24,24 +24,23 @@ const FORM_ID = 'toolbar-search-form'
 const INPUT_NAME_QUERY = 'search[query]'
 const INPUT_NAME_UTF8 = 'utf8'
 
-const ToolbarSearch = (
-  {
-    placeholder,
-    name = INPUT_NAME_QUERY,
-    children
-  }: Props
-): React.ReactElement => {
-  const query = new URL(window.location).searchParams.get(name)
+const ToolbarSearch: React.FunctionComponent<Props> = ({
+  placeholder,
+  name = INPUT_NAME_QUERY,
+  children
+}) => {
+  // const query = new URL(window.location).searchParams.get(name) TODO: check this is the same
+  const query = new URL(window.location.toString()).searchParams.get(name)
   const [searchText, setSearchText] = React.useState<string>(query || '')
   const [showPopover, setShowPopover] = React.useState<boolean>(false)
 
-  const inputRef = React.useRef()
+  const inputRef = React.useRef<HTMLInputElement>()
 
   React.useEffect(() => {
     const input = inputRef.current
-    if (input) input.addEventListener('search', handleOnSearch)
+    input?.addEventListener('search', handleOnSearch)
 
-    return () => input.removeEventListener('search', handleOnSearch)
+    return () => input?.removeEventListener('search', handleOnSearch)
   }, [])
 
   React.useEffect(() => {
@@ -51,7 +50,7 @@ const ToolbarSearch = (
   }, [searchText])
 
   const onSubmitSearch = (value: string) => {
-    const form: HTMLFormElement = document.forms[FORM_ID]
+    const form = document.forms.namedItem(FORM_ID) as HTMLFormElement
 
     const inputClearedBeforeAnySearch = !query && value.length === 0
     const inputCleared = value.length === 0
@@ -70,13 +69,13 @@ const ToolbarSearch = (
   }
 
   const removeEmptySearchQueryFromURL = (form: HTMLFormElement) => {
-    form.elements[name].removeAttribute('name')
-    form.elements[INPUT_NAME_UTF8].removeAttribute('name')
+    (form.elements.namedItem(name) as Element).removeAttribute('name');
+    (form.elements.namedItem(INPUT_NAME_UTF8) as Element).removeAttribute('name')
   }
 
-  const handleOnSearch = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  const handleOnSearch: EventListener = (e: Event) => {
     e.preventDefault()
-    onSubmitSearch(e.currentTarget.value)
+    onSubmitSearch((e.currentTarget as HTMLInputElement).value)
   }
 
   return (
@@ -91,8 +90,8 @@ const ToolbarSearch = (
         <input name={INPUT_NAME_UTF8} type="hidden" value="✓" />
         {children}
         <TextInput
-          // $FlowIgnore[incompatible-type] it's fine, really
-          ref={inputRef}
+          // HACK: remove this ugly casting after upgrading to @patternfly/react-core 4
+          ref={inputRef as unknown as React.Ref<HTMLInputElement> | undefined}
           placeholder={placeholder}
           name={name}
           type="search"
@@ -101,7 +100,8 @@ const ToolbarSearch = (
           onChange={setSearchText}
           autoComplete="off"
         />
-        <Popover
+        {/* FIXME: it seems we need to upgrade patternfly in order to make Popoover work */}
+        {/* <Popover
           aria-label="search minimum length"
           bodyContent={<div>To search, type at least 3 characters.</div>}
           isVisible={showPopover}
@@ -114,7 +114,7 @@ const ToolbarSearch = (
           >
             <SearchIcon />
           </Button>
-        </Popover>
+        </Popover> */}
       </InputGroup>
     </Form>
   )

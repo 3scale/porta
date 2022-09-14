@@ -19,3 +19,5 @@ declare module '\*.json' {
   const content: string
   export default content
 }
+
+declare function jQuery(str: string): Object

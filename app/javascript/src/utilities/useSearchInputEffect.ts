@@ -12,10 +12,8 @@ type InputRef = {
 * have search on typing. Search event is triggered on 'Enter' pressed.
 */
 export const useSearchInputEffect = (inputRef: InputRef, onSearch: OnSearch): void => useEffect(() => {
-  const listenToClearButton = ({
-    inputType
-  }: InputEvent) => {
-    if (!inputType) onSearch()
+  const listenToClearButton: EventListener = (evt: Event) => {
+    if (!(evt as InputEvent).inputType) onSearch()
   }
 
   const listenToKeyDown = ({

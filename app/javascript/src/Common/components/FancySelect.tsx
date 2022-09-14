@@ -3,23 +3,32 @@ import * as React from 'react'
 import {
   FormGroup,
   Select,
+  SelectOptionObject,
   SelectVariant
 } from '@patternfly/react-core'
 import {
   handleOnFilter,
   toSelectOption,
-  toSelectOptionObject,
-  SelectOptionObject
+  toSelectOptionObject
 } from 'utilities'
 
 import type { Record } from 'utilities'
 
 import './FancySelect.scss'
 
+type Item = Record & {
+  disabled?: boolean,
+  className?: string
+};
+
+type FancySelectOptionObject = SelectOptionObject & {
+  id: string
+}
+
 type Props<T extends Record> = {
-  item: T | null,
+  item: T | undefined,
   items: T[],
-  onSelect: (arg1: T | null) => void,
+  onSelect: (arg1: T | undefined) => void,
   label: string,
   id: string,
   header: string,
@@ -52,18 +61,21 @@ const FancySelect = <T extends Record>(
     placeholderText,
     footer
   }: Props<T>
-): React.ReactElement => {
+) => {
   const [expanded, setExpanded] = React.useState(false)
 
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' } as const
   // TODO: Remove after upgrading @patternfly/react-core, see https://www.patternfly.org/v4/components/select#view-more
   const footerItem = footer && { id: FOOTER_ID, name: footer.label, className: 'pf-c-select__menu-item--sticky-footer' }
 
-  const handleOnSelect = (_e: any, option: SelectOptionObject) => {
+  const handleOnSelect = (_e: any, _option: string | SelectOptionObject) => {
     setExpanded(false)
 
+    const option = (_option as FancySelectOptionObject)
+
     if (option.id === FOOTER_ID) {
-      footer.onClick()
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      footer!.onClick()
     } else {
       const selectedBackend = items.find(b => String(b.id) === option.id)
 
@@ -74,7 +86,7 @@ const FancySelect = <T extends Record>(
   }
 
   const getSelectOptionsForItems = (items: Array<T>) => {
-    const selectItems = [headerItem]
+    const selectItems: Array<Item> = [headerItem]
 
     if (items.length === 0) {
       selectItems.push(emptyItem)
@@ -106,12 +118,12 @@ const FancySelect = <T extends Record>(
         onSelect={handleOnSelect}
         isExpanded={expanded}
         isDisabled={isDisabled}
-        onClear={() => onSelect(null)}
+        onClear={() => onSelect(undefined)}
         aria-labelledby={id}
         className={footer ? 'pf-c-select__menu--with-fixed-link' : undefined}
         isGrouped
         // $FlowIgnore[incompatible-call] yes it is
-        onFilter={handleOnFilter(items, getSelectOptionsForItems)}
+        onFilter={handleOnFilter<T>(items, getSelectOptionsForItems)}
         placeholderText={placeholderText}
       >
         {getSelectOptionsForItems(items)}

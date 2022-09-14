@@ -36,19 +36,17 @@ type Props = {
 
 const PER_PAGE = 5
 
-const CompactListCard = (
-  {
-    columns,
-    items,
-    searchInputRef,
-    onSearch,
-    page,
-    setPage,
-    perPage = PER_PAGE,
-    searchInputPlaceholder,
-    tableAriaLabel
-  }: Props
-): React.ReactElement => {
+const CompactListCard: React.FunctionComponent<Props> = ({
+  columns,
+  items,
+  searchInputRef,
+  onSearch,
+  page,
+  setPage,
+  perPage = PER_PAGE,
+  searchInputPlaceholder,
+  tableAriaLabel
+}) => {
   const lastPage = Math.ceil(items.length / perPage)
   const pageItems = items.slice((page - 1) * perPage, page * perPage)
 
@@ -67,7 +65,8 @@ const CompactListCard = (
         ref={searchInputRef}
         placeholder={searchInputPlaceholder}
       />
-      <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={onSearch} data-testid="search">
+      {/* <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={onSearch} data-testid="search">  TODO: onSearch funcionaba con el evento del click??? */}
+      <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={() => onSearch()} data-testid="search">
         <SearchIcon />
       </Button>
     </InputGroup>

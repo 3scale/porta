@@ -42,8 +42,7 @@ function closeSelectWithModal<T> (wrapper: ReactWrapper<T>) {
  * @param {string} href - the URL to be expected
  */
 function mockLocation (href: string) {
-  delete window.location
-  const location: Location = (new URL(href) as any) // emulates Location object
+  const location = { ...new URL(href), replace: jest.fn() } as unknown as Location // emulates Location object
   location.replace = jest.fn()
   window.location = location
 }
@@ -54,7 +53,7 @@ function mockLocation (href: string) {
  * @return {boolean}
  */
 function isSubmitDisabled<T> (wrapper: ReactWrapper<T>): boolean {
-  return wrapper.update().find('button.pf-m-primary[type="submit"]').prop('disabled')
+  return Boolean(wrapper.update().find('button.pf-m-primary[type="submit"]').prop('disabled'))
 }
 
 /**

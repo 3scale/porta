@@ -6,6 +6,7 @@
     "experimentalDecorators": true,
     "lib": ["ES6", "DOM"],
     "module": "ES6",
+    "strict": true,
     "sourceMap": true,
     "target": "es5",
     "jsx": "react",
