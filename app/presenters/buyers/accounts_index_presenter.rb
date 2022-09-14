@@ -14,6 +14,7 @@ class Buyers::AccountsIndexPresenter
 
   def buyers
     @buyers ||= provider.buyer_accounts
+                        .includes([:admin_user])
                         .not_master
                         .scope_search(search)
                         .order_by(*sorting_params)
