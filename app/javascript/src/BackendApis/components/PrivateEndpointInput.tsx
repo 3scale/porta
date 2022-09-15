@@ -33,4 +33,4 @@ const PrivateEndpointInput = (
   />
 </FormGroup>
 
-export { PrivateEndpointInput }
+export { PrivateEndpointInput, Props }

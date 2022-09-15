@@ -8,7 +8,7 @@ import {
   Title,
   TitleLevel
 } from '@patternfly/react-core'
-import { NewBackendForm } from 'BackendApis'
+import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
 
 import './NewBackendModal.scss'
 
@@ -47,7 +47,9 @@ const NewBackendModal = (
   }
 
   React.useEffect(() => {
-    $('form#new_backend_api_config')
+    const jq = $ as any // HACK: remove this after finding the right typings
+    console.log('jQuery', $().jquery) // TODO: verify version of jquery and use .live or .on accordingly
+    jq('form#new_backend_api_config')
       // $FlowFixMe[prop-missing] jquery-ujs is deprecated, in rails 5 we should use rails-ujs. However, the former is broadly used so it's not trivial.
       .live('ajax:send', () => setIsLoading(true))
       .live('ajax:complete', handleOnAjaxComplete)
@@ -81,4 +83,4 @@ const NewBackendModal = (
   )
 }
 
-export { NewBackendModal }
+export { NewBackendModal, Props }

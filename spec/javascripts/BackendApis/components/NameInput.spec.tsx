@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { FormEvent } from 'react'
 import { act } from 'react-dom/test-utils'
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
 
-import { NameInput } from 'BackendApis'
+import { NameInput, Props } from 'BackendApis/components/NameInput'
+import { TextInput } from '@patternfly/react-core'
 
 const setName = jest.fn()
 
@@ -10,12 +11,8 @@ const defaultProps = {
   name: '',
   setName
 }
-declare global {
-  interface Window {
-    api?: any;
-  }
-}
-const mountWrapper = (props = {}) => mount(<NameInput {...{ ...defaultProps, ...props }} />)
+
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NameInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -29,11 +26,9 @@ it('should render itself', () => {
 it('should work', () => {
   const value = 'foo'
   const wrapper = mountWrapper()
+  const event = {} as React.FormEvent<HTMLInputElement>
 
-  act(() => {
-    const input: ReactWrapper<{ setName: Function }> = wrapper.find(NameInput)
-    input.props().setName(value)
-  })
+  act(() => { wrapper.find(TextInput).props().onChange!(value, event) })
 
   wrapper.update()
 

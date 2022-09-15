@@ -1,16 +1,17 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { IndexPage } from 'BackendApis'
+import { IndexPage, Props } from 'BackendApis/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
+import { Backend } from 'BackendApis/types'
 
 const defaultProps = {
   newBackendPath: '',
   backends: [],
   backendsCount: 0
-} as const
+}
 
-const mountWrapper = (props) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -24,7 +25,7 @@ it('should have a link to the New Product page', () => {
 })
 
 it('should render a table with backends', () => {
-  const backends = new Array(10).fill({}).map((i, j) => ({
+  const backends: Backend[] = new Array(10).fill({}).map((i, j) => ({
     id: j,
     name: `Backend API ${j}`,
     systemName: `backend_api_${j}`,

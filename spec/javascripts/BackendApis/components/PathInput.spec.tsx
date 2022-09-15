@@ -2,7 +2,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-import { PathInput } from 'BackendApis'
+import { PathInput, Props } from 'BackendApis/components/PathInput'
 
 const setPath = jest.fn()
 
@@ -11,7 +11,7 @@ const defaultProps = {
   setPath
 } as const
 
-const mountWrapper = (props: undefined) => mount(<PathInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<PathInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

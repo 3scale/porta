@@ -2,7 +2,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-import { SystemNameInput } from 'BackendApis'
+import { SystemNameInput, Props } from 'BackendApis/components/SystemNameInput'
 
 const setSystemName = jest.fn()
 
@@ -11,7 +11,7 @@ const defaultProps = {
   setSystemName
 } as const
 
-const mountWrapper = (props: undefined) => mount(<SystemNameInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<SystemNameInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

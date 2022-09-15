@@ -1,10 +1,8 @@
 import * as React from 'react'
 import { useState, useRef } from 'react'
 
-import { CompactListCard } from 'Common'
+import { CompactListCard, CompactListItem } from 'Common'
 import { createReactWrapper, useSearchInputEffect } from 'utilities'
-
-import type { CompactListItem } from 'Common'
 
 type Props = {
   products: Array<CompactListItem>
@@ -45,4 +43,4 @@ const ProductsUsedListCard = (
 
 const ProductsUsedListCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsUsedListCard {...props} />, containerId)
 
-export { ProductsUsedListCard, ProductsUsedListCardWrapper }
+export { ProductsUsedListCard, ProductsUsedListCardWrapper, Props }

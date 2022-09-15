@@ -4,7 +4,7 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 type Props = {
   name: string,
-  setName: (arg1: string) => void
+  setName: (name: string) => void
 };
 
 const NameInput = (
@@ -23,8 +23,8 @@ const NameInput = (
     id="backend_api_name"
     name="backend_api[name]"
     value={name}
-    onChange={setName}
+    onChange={(value) => setName(value)}
   />
 </FormGroup>
 
-export { NameInput }
+export { NameInput, Props }

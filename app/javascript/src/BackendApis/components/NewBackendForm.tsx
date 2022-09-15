@@ -3,12 +3,12 @@ import { useState } from 'react'
 
 import { ActionGroup, Button, Form } from '@patternfly/react-core'
 import validate from 'validate.js'
-import {
-  NameInput,
-  SystemNameInput,
-  DescriptionInput,
-  PrivateEndpointInput
-} from 'BackendApis'
+
+import { NameInput } from 'BackendApis/components/NameInput'
+import { SystemNameInput } from 'BackendApis/components/SystemNameInput'
+import { DescriptionInput } from 'BackendApis/components/DescriptionInput'
+import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInput'
+
 import { CSRFToken } from 'utilities'
 
 type Props = {
@@ -16,9 +16,10 @@ type Props = {
   onCancel: () => void,
   isLoading?: boolean,
   errors?: {
+    // eslint-disable-next-line camelcase
     private_endpoint: Array<string>
   }
-};
+}
 
 const VALIDATION_CONSTRAINTS = {
   name: { presence: { allowEmpty: false } },
@@ -33,9 +34,9 @@ const NewBackendForm = (
     action,
     onCancel,
     isLoading = false,
-    errors = {}
+    errors // FIXME: no default {} means it will fail
   }: Props
-): React.ReactElement => {
+) => {
   const [name, setName] = useState('')
   const [systemName, setSystemName] = useState('')
   const [description, setDescription] = useState('')
@@ -58,7 +59,7 @@ const NewBackendForm = (
       <NameInput name={name} setName={setName} />
       <SystemNameInput systemName={systemName} setSystemName={setSystemName} />
       <DescriptionInput description={description} setDescription={setDescription} />
-      <PrivateEndpointInput privateEndpoint={privateEndpoint} setPrivateEndpoint={setPrivateEndpoint} errors={errors.private_endpoint} />
+      <PrivateEndpointInput privateEndpoint={privateEndpoint} setPrivateEndpoint={setPrivateEndpoint} errors={errors?.private_endpoint} />
 
       <ActionGroup>
         <Button
@@ -82,4 +83,4 @@ const NewBackendForm = (
   )
 }
 
-export { NewBackendForm }
+export { NewBackendForm, Props }

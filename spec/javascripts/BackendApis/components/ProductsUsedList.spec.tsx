@@ -1,14 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ProductsUsedListCard } from 'BackendApis'
+import { ProductsUsedListCard, Props } from 'BackendApis/components/ProductsUsedListCard'
+import { CompactListItem } from 'Common'
 
 const defaultProps = {
   products: []
-} as const
+}
 
-const mountWrapper = (props) => mount(<ProductsUsedListCard {...{ ...defaultProps, ...props }} />)
-const mockProducts = (count: number) => new Array(count).fill({}).map((i, j) => ({ name: `Product ${j}`, description: `product_${j}`, href: `/products/${j}` }))
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ProductsUsedListCard {...{ ...defaultProps, ...props }} />)
+const mockProducts = (count: number): CompactListItem[] => new Array(count).fill({}).map((i, j) => ({ name: `Product ${j}`, description: `product_${j}`, href: `/products/${j}` }))
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -54,8 +55,8 @@ it.skip('should be filterable by name', () => {
 
 // FIXME: input not receiving change event
 it.skip('should search when pressing Enter', () => {
-  const Items = mockProducts(10)
-  const wrapper = mountWrapper({ Items })
+  const products = mockProducts(10)
+  const wrapper = mountWrapper({ products })
 
   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
   wrapper.find('input[type="search"]').simulate('keydown', { key: 'Enter' })

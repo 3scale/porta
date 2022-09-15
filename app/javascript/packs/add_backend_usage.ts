@@ -1,4 +1,4 @@
-import { AddBackendFormWrapper } from 'BackendApis'
+import { AddBackendFormWrapper } from 'BackendApis/components/AddBackendForm'
 import { safeFromJsonString } from 'utilities'
 
 import type { Backend } from 'Types'

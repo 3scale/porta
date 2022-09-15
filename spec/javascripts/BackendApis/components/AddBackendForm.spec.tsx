@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { act } from 'react-dom/test-utils'
 import { mount, ReactWrapper } from 'enzyme'
 
@@ -6,9 +7,8 @@ import { AddBackendForm, Props } from 'BackendApis/components/AddBackendForm'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
-import { bool } from 'prop-types'
 
-const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend' } as const
+const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend', updatedAt: '' } as const
 const backendsPath = '/backends'
 const defaultProps = {
   backend: null,
@@ -78,7 +78,7 @@ it('should open/close a modal with a form to create a new backend', () => {
 
 it('should select the new backend when created', () => {
   const wrapper = mountWrapper()
-  const newBackend = { id: 1, name: 'New backend', privateEndpoint: 'example.org', systemName: 'new_backend' } as const
+  const newBackend = { id: 1, name: 'New backend', privateEndpoint: 'example.org', systemName: 'new_backend', updatedAt: '' } as const
 
   act(() => { wrapper.find(NewBackendModal).props().onCreateBackend(newBackend) })
 
@@ -86,7 +86,7 @@ it('should select the new backend when created', () => {
   expect(wrapper.find(BackendSelect).prop('backend')).toBe(newBackend)
 })
 
-it('should be able to have a default backend selected', () => {
+it.only('should be able to have a default backend selected', () => {
   const wrapper = mountWrapper({ backend })
 
   expect(wrapper.find('BackendSelect .pf-c-select__toggle-typeahead').props().value).toEqual(backend.name)

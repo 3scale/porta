@@ -32,4 +32,4 @@ const PathInput = (
   />
 </FormGroup>
 
-export { PathInput }
+export { PathInput, Props }

@@ -27,4 +27,4 @@ const SystemNameInput = (
   />
 </FormGroup>
 
-export { SystemNameInput }
+export { SystemNameInput, Props }

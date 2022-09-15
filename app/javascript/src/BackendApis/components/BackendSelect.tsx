@@ -7,6 +7,7 @@ import { SelectWithModal } from 'Common'
 import type { Backend } from 'Types'
 
 import './BackendSelect.scss'
+import { FetchItemsRequestParams, FetchItemsResponse } from 'utilities'
 
 type Props = {
   backend: Backend | null,
@@ -27,7 +28,7 @@ const BackendSelect = (
     error
   }: Props
 ): React.ReactElement => {
-  const cells = [
+  const cells: { title: string, propName: keyof Backend }[] = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },
     { title: 'Last updated', propName: 'updatedAt' }
@@ -35,18 +36,14 @@ const BackendSelect = (
 
   return (
     <>
-      {/* $FlowFixMe[prop-missing] Implement async pagination */}
       <SelectWithModal
         label="Backend"
-        fieldId="backend_api_config_backend_api_id"
         id="backend_api_config_backend_api_id"
         name="backend_api_config[backend_api_id]"
-        // $FlowIssue[incompatible-type] backend is compatible with null
         item={backend}
         items={backends.map(b => ({ ...b, description: b.privateEndpoint }))}
         itemsCount={backends.length}
         cells={cells}
-        // $FlowIssue[incompatible-type] It should not complain since Record.id has union "number | string"
         onSelect={onSelect}
         header="Recently created backends"
         title="Select a backend"
@@ -54,7 +51,8 @@ const BackendSelect = (
         footerLabel="View all backends"
         searchPlaceholder={searchPlaceholder}
         helperTextInvalid={error}
-      />
+        // FIXME: add it or make it optional
+        fetchItems={() => { throw new Error('Function not implemented.') }} />
       <Button
         variant="link"
         icon={<PlusCircleIcon />}
@@ -67,4 +65,4 @@ const BackendSelect = (
     </>
   )
 }
-export { BackendSelect }
+export { BackendSelect, Props }

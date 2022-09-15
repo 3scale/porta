@@ -47,3 +47,4 @@ https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/ap
 
   Este componente (Popover) no nos daba ningún problema con Flow y de hecho se renderizaba, aunque de forma rara. Al pasar a TS ahora nos da un fallo de compilación, diciendo que el tipo de retorno no es correcto. Muy extraño porque parece un problema de tipado pero no podemos subir la version de patternfly y (creo que) tampoco podemos instalar types más modernos.
   TODO: averiguar que coño pasa, he escrito en el Slack de Patternfly.
+  SOLUCION: hacer un casteo puerco: `const Popopover: any = Popover`

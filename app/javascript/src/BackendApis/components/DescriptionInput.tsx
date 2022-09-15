@@ -19,10 +19,10 @@ const DescriptionInput = (
 >
   <TextArea
     id="backend_api_description"
-    description="backend_api[description]"
+    name="backend_api[description]"
     value={description}
     onChange={setDescription}
   />
 </FormGroup>
 
-export { DescriptionInput }
+export { DescriptionInput, Props }

@@ -1,4 +1,4 @@
-import { ProductsUsedListCardWrapper } from 'BackendApis'
+import { ProductsUsedListCardWrapper } from 'BackendApis/components/ProductsUsedListCard'
 import { safeFromJsonString } from 'utilities'
 
 import type { CompactListItem } from 'Common'

@@ -2,7 +2,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-import { PrivateEndpointInput } from 'BackendApis'
+import { PrivateEndpointInput, Props } from 'BackendApis/components/PrivateEndpointInput'
 
 const setPrivateEndpoint = jest.fn()
 
@@ -11,7 +11,7 @@ const defaultProps = {
   setPrivateEndpoint
 } as const
 
-const mountWrapper = (props: undefined) => mount(<PrivateEndpointInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<PrivateEndpointInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

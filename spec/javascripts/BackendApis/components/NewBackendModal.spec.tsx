@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { NewBackendModal } from 'BackendApis'
+import { NewBackendModal, Props } from 'BackendApis/components/NewBackendModal'
 
 const defaultProps = {
   backendsPath: '/backends',
@@ -10,7 +10,7 @@ const defaultProps = {
   onCreateBackend: () => {}
 } as const
 
-const mountWrapper = (props: undefined) => mount(<NewBackendModal {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NewBackendModal {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

@@ -8,18 +8,22 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { BackendSelect, PathInput, NewBackendModal } from 'BackendApis'
+
 import { CSRFToken, createReactWrapper, notice } from 'utilities'
 
 import type { Backend } from 'Types'
 
 import './AddBackendForm.scss'
+import { BackendSelect } from 'BackendApis/components/BackendSelect'
+import { PathInput } from 'BackendApis/components/PathInput'
+import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
 
 type Props = {
   backend: Backend | null,
   backends: Backend[],
   url: string,
   inlineErrors: null | {
+    // eslint-disable-next-line camelcase
     backend_api_id?: Array<string>,
     path?: Array<string>
   },
@@ -58,7 +62,7 @@ const AddBackendForm = (
           acceptCharset='UTF-8'
           method='post'
           action={url}
-          onSubmit={e => setLoading(true)}
+          onSubmit={() => setLoading(true)}
           // isWidthLimited TODO: use when available instead of hardcoded css
         >
           <CSRFToken />
@@ -104,4 +108,4 @@ const AddBackendForm = (
 
 const AddBackendFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<AddBackendForm {...props} />, containerId)
 
-export { AddBackendForm, AddBackendFormWrapper }
+export { AddBackendForm, AddBackendFormWrapper, Props }

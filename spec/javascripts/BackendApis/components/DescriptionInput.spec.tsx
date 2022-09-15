@@ -2,7 +2,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-import { DescriptionInput } from 'BackendApis'
+import { DescriptionInput, Props } from 'BackendApis/components/DescriptionInput'
 
 const setDescription = jest.fn()
 
@@ -11,7 +11,7 @@ const defaultProps = {
   setDescription
 } as const
 
-const mountWrapper = (props: undefined) => mount(<DescriptionInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<DescriptionInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

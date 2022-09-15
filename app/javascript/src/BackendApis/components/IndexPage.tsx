@@ -4,15 +4,17 @@ import {
   Divider,
   Level,
   LevelItem,
+  OnPerPageSelect,
   PageSection,
   PageSectionVariants,
   Pagination as PFPagination,
+  PaginationProps,
   PaginationVariant,
   Title,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
-import { Table, TableHeader, TableBody } from '@patternfly/react-table'
+import { Table, TableHeader, TableBody, IActions } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common'
 import { createReactWrapper } from 'utilities'
 
@@ -51,20 +53,20 @@ const IndexPage = (
     ]
   }))
 
-  const linkToPage = (rowId: any, actionNumber: number) => {
+  const linkToPage = (rowId: number, actionNumber: number) => {
     const { path } = backends[rowId].links[actionNumber]
     window.location.href = path
   }
 
-  const tableActions = ['Edit', 'Overview', 'Analytics', 'Methods and Metrics', 'Mapping Rules'].map((title, i) => ({
+  const tableActions: IActions = ['Edit', 'Overview', 'Analytics', 'Methods and Metrics', 'Mapping Rules'].map((title, i) => ({
     title,
     onClick: (_event, rowId) => linkToPage(rowId, i)
   }))
 
   const url = new URL(window.location.href)
 
-  const selectPerPage = (_event: any, selectedPerPage: any) => {
-    url.searchParams.set('per_page', selectedPerPage)
+  const selectPerPage: OnPerPageSelect = (_event, selectedPerPage) => {
+    url.searchParams.set('per_page', String(selectedPerPage))
     url.searchParams.delete('page')
     window.location.replace(url.toString())
   }
@@ -77,7 +79,7 @@ const IndexPage = (
   const Pagination = ({
     variant
   }: {
-    variant?: string
+    variant?: PaginationProps['variant']
   }) => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
@@ -116,7 +118,8 @@ const IndexPage = (
         <ToolbarItem>
           <ToolbarSearch placeholder="Find a backend" />
         </ToolbarItem>
-        <ToolbarItem align={{ default: 'alignRight' }}>
+        {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
+        <ToolbarItem>
           <Pagination />
         </ToolbarItem>
       </Toolbar>
@@ -125,7 +128,8 @@ const IndexPage = (
         <TableBody />
       </Table>
       <Toolbar id="bottom-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarItem align={{ default: 'alignRight' }}>
+        {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
+        <ToolbarItem>
           <Pagination variant={PaginationVariant.bottom} />
         </ToolbarItem>
       </Toolbar>
@@ -135,4 +139,4 @@ const IndexPage = (
 
 const BackendsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
 
-export { IndexPage, BackendsIndexPageWrapper }
+export { IndexPage, BackendsIndexPageWrapper, Props }
