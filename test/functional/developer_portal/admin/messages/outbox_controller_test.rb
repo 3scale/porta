@@ -55,6 +55,6 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     msg = Message.new
     msg.sender_id = buyer.id
     msg.body = "I am body"
-    assert !msg.valid?
+    assert_not msg.valid?
   end
 end
