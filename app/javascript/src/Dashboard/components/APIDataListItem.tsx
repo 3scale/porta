@@ -11,6 +11,7 @@ import {
   DataListItemCells,
   DataListAction
 } from '@patternfly/react-core'
+import { useClickOutside } from 'utilities/useClickOutside'
 
 type Props = {
   api: {
@@ -22,6 +23,7 @@ type Props = {
     }>,
     name: string,
     type: string,
+    // eslint-disable-next-line camelcase
     updated_at: string
   }
 }
@@ -29,13 +31,15 @@ type Props = {
 const APIDataListItem = ({ api }: Props) => {
   const { id, name, updated_at: updatedAt, link, links } = api
   const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
-  const handleClickOutside = useCallback((event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
+  const handleClickOutside = useCallback((event: Event) => {
+    if (ref.current && !ref.current.contains(event.target as HTMLDivElement)) {
       setIsOpen(false)
     }
   }, [ref])
+
+  useClickOutside(ref, () => setIsOpen(false))
 
   useEffect(() => {
     if (isOpen) {
@@ -85,4 +89,4 @@ const APIDataListItem = ({ api }: Props) => {
   )
 }
 
-export { APIDataListItem }
+export { APIDataListItem, Props }

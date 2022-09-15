@@ -27,6 +27,7 @@ type Props = {
     }>,
     name: string,
     type: string,
+    // eslint-disable-next-line camelcase
     updated_at: string
   }>
 };
@@ -73,4 +74,4 @@ const BackendsWidget = ({
 
 const BackendsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsWidget {...props} />, containerId)
 
-export { BackendsWidgetWrapper }
+export { BackendsWidget, BackendsWidgetWrapper, Props }
