@@ -1,6 +1,11 @@
 h2 Create new Account
 = semantic_form_for @provider, builder: Fields::FormBuilder, url: provider_admin_accounts_path do |form|
 
+  - if @provider.errors.any?
+    ul style = "color: red"
+      - @provider.errors.full_messages.each do |message|
+        li= h message
+
   = form.inputs name: 'User Information', for: [:user, @user] do |user|
     = user.user_defined_form
     = user.input :password, required: true
