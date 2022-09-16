@@ -20,6 +20,12 @@ shared_examples 'CRUD #update', action: :update do
   include_context "resource"
   include_context 'resource save'
 
+  before do
+    updatable_resource.created_at = 1.second.ago
+    updatable_resource.updated_at = updatable_resource.created_at
+    updatable_resource.save!
+  end
+
   request "Update #{model}" do
     updatable_resource.reload
     updatable_resource.updated_at.should_not == updatable_resource.created_at
