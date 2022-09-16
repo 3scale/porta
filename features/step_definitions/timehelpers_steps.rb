@@ -33,13 +33,13 @@ end
 
 When /^(\d+) (second|minute|hour|day|week|month|year)s? pass(?:es)?$/ do |amount, period|
   duration = amount.to_i.send(period.to_sym)
-  no_nest_travel_to(duration.from_now)
+  time_machine(duration.from_now)
   access_user_sessions
 end
 
 When /^(?:the )?time flies to (.*)$/ do |date|
   date = date.gsub(Regexp.union(%w(of st nd rd)), '')
-  no_nest_travel_to(Time.zone.parse(date))
+  time_machine(Time.zone.parse(date))
   step %(the date should be #{date})
   access_user_sessions
 end
