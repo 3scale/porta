@@ -37,7 +37,7 @@ class Message < ApplicationRecord
   after_save :update_recipients
   after_initialize :default_values
 
-  attr_protected :sender_id, :tenant_id
+  attr_protected :tenant_id
 
   scope :visible,      -> { where(hidden_at: nil) }
   scope :hidden,       -> { where.not(hidden_at: nil) }
