@@ -48,3 +48,20 @@ https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/ap
   Este componente (Popover) no nos daba ningún problema con Flow y de hecho se renderizaba, aunque de forma rara. Al pasar a TS ahora nos da un fallo de compilación, diciendo que el tipo de retorno no es correcto. Muy extraño porque parece un problema de tipado pero no podemos subir la version de patternfly y (creo que) tampoco podemos instalar types más modernos.
   TODO: averiguar que coño pasa, he escrito en el Slack de Patternfly.
   SOLUCION: hacer un casteo puerco: `const Popopover: any = Popover`
+
+https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/app/javascript/src/EmailConfigurations/components/EmailConfigurationsTable.jsx#L112
+
+  Otro ejemplo de una propiedad que no existe y que no estaba haciendo nada. En este caso 'align' viene de una errata en un ejemplo en la doc de Patternfly. En la versión actual aparece como "alignment".
+  TODO: checkear si afecta a la UI.
+
+https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/app/javascript/src/EmailConfigurations/components/EmailConfigurationsTable.jsx#L96
+
+  En el mismo componente, un problema similar. La prop 'variant' fue introducida en una versión más reciente, en la 3.158.4 no existe aún, por lo que la traspilación falla.
+  TODO: checkear si afecta a la UI.
+
+https://github.com/3scale/porta/blob/89f60bd65cc7437607e79da678a96ac65a8d4083/spec/javascripts/EmailConfigurations/components/IndexPage.spec.jsx#L21-L25
+
+  Un test queda falso positivo, de nuevo descubierto gracias a TS. De hecho este descubrimiento puede significar que hemos estado haciendo los tests mal todo el rato.
+  expect(wrapper.find(`a[href="${path}"]`).exists()) -> da true a pesar que ese elemento no existe. El promblema es que find devuelve un ReactWrapper aunque esté vacío, y exists solo comprueba que el ReactWrapper existe.
+
+  El fallo era que "path" no es una propiedad de IndexPage, pero como Flow no estaba activado en ese archivo, nada apuntaba a que hubiera un error.

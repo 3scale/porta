@@ -16,7 +16,8 @@ export type FormEmailConfiguration = {
 };
 
 export type FormErrors = {
-  user_name: string[],
-  email: string[],
-  password: string[]
+  // eslint-disable-next-line camelcase
+  user_name?: string[],
+  email?: string[],
+  password?: string[]
 };

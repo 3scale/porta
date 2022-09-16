@@ -42,4 +42,4 @@ const IndexPage = (
 
 const IndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
 
-export { IndexPage, IndexPageWrapper }
+export { IndexPage, IndexPageWrapper, Props }

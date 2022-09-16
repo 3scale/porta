@@ -3,7 +3,9 @@ import * as React from 'react'
 import {
   Button,
   Divider,
+  OnPerPageSelect,
   Pagination as PFPagination,
+  PaginationProps,
   PaginationVariant,
   Toolbar,
   ToolbarGroup,
@@ -11,10 +13,11 @@ import {
 } from '@patternfly/react-core'
 import {
   sortable,
-  SortByDirection,
   Table,
   TableHeader,
-  TableBody
+  TableBody,
+  ISortBy,
+  OnSort
 } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
@@ -52,31 +55,31 @@ const EmailConfigurationsTable = (
     ]
   }))
 
-  const sortBy = {
+  const sortBy: ISortBy = {
     index: 2, // updated_at by default
-    direction: url.searchParams.get('direction') || SortByDirection.desc
-  } as const
+    direction: (url.searchParams.get('direction') as 'asc' | 'desc' | undefined) || 'desc'
+  }
 
-  const onSort = (_event: any, _index: any, direction: any) => {
+  const onSort: OnSort = (_event, _index, direction) => {
     url.searchParams.set('direction', direction)
     window.location.replace(url.toString())
   }
 
-  const selectPerPage = (_event: any, selectedPerPage: any) => {
-    url.searchParams.set('per_page', selectedPerPage)
+  const selectPerPage: OnPerPageSelect = (_event, selectedPerPage) => {
+    url.searchParams.set('per_page', String(selectedPerPage))
     url.searchParams.delete('page')
     window.location.replace(url.toString())
   }
 
-  const goToPage = (page: any) => {
-    url.searchParams.set('page', page)
+  const goToPage = (page: number) => {
+    url.searchParams.set('page', String(page))
     window.location.replace(url.toString())
   }
 
   const Pagination = ({
     variant
   }: {
-    variant?: string
+    variant?: PaginationProps['variant']
   }) => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
@@ -101,7 +104,7 @@ const EmailConfigurationsTable = (
   return (
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarGroup variant='filter-group'>
+        <ToolbarGroup> {/* TODO: add variant='filter-group' after upgrading @patternfly/react-core */}
           <ToolbarItem>
             <ToolbarSearch placeholder="Find an email" name="query" />
           </ToolbarItem>
@@ -117,7 +120,7 @@ const EmailConfigurationsTable = (
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup>
-          <ToolbarItem align={{ default: 'alignRight' }}>
+          <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
             <Pagination />
           </ToolbarItem>
         </ToolbarGroup>
@@ -135,4 +138,4 @@ const EmailConfigurationsTable = (
   )
 }
 
-export { EmailConfigurationsTable }
+export { EmailConfigurationsTable, Props }

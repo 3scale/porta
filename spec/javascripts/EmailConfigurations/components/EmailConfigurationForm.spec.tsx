@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount, render } from 'enzyme'
 
-import { EmailConfigurationForm } from 'EmailConfigurations/components/EmailConfigurationForm'
+import { EmailConfigurationForm, Props } from 'EmailConfigurations/components/EmailConfigurationForm'
 import { isSubmitDisabled, updateInput } from 'utilities/test-utils'
 
 const defaultProps = {
@@ -13,10 +13,10 @@ const defaultProps = {
   errors: undefined,
   isUpdate: undefined,
   url: 'p/admin/email_configurations'
-} as const
+}
 
-const mountWrapper = (props) => mount(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
-const renderWrapper = (props: undefined) => render(<EmailConfigurationForm {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
+const renderWrapper = (props: Partial<Props> = {}) => render(<EmailConfigurationForm {...{ ...defaultProps, ...props }}/>)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -41,7 +41,7 @@ describe('when the server returns some errors', () => {
     email: ['Too long'],
     user_name: ['Too short'],
     password: ['Too silly']
-  } as const
+  }
 
   it('should render them properly', () => {
     const wrapper = mountWrapper({ errors })
@@ -63,7 +63,7 @@ describe('when some fields are returned by the server', () => {
     email: 'hello@ollivanders.co.uk',
     userName: 'ollivanders_wands',
     password: '123456'
-  } as const
+  }
 
   it('should populate the fields with the values', () => {
     const wrapper = mountWrapper({ emailConfiguration })

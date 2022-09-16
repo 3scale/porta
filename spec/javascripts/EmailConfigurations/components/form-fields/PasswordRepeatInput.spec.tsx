@@ -1,18 +1,16 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { PasswordRepeatInput } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
+import { PasswordRepeatInput, Props } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
 
 const setPassword = jest.fn()
 const defaultProps = {
   password: '',
   setPassword,
   errors: []
-} as const
+}
 
-const mountWrapper = (props: undefined | {
-  errors: Array<string>
-}) => mount(<PasswordRepeatInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<PasswordRepeatInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

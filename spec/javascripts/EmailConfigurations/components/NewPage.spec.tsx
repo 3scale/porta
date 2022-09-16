@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { NewPage } from 'EmailConfigurations/components/NewPage'
+import { NewPage, Props } from 'EmailConfigurations/components/NewPage'
 
 const defaultProps = {
   emailConfiguration: {
@@ -10,9 +10,9 @@ const defaultProps = {
     password: ''
   },
   url: 'p/admin/email_configurations'
-} as const
+}
 
-const mountWrapper = (props: undefined) => mount(<NewPage {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NewPage {...{ ...defaultProps, ...props }} />)
 
 it('should render a form', () => {
   const wrapper = mountWrapper()

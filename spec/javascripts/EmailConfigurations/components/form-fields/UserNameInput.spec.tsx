@@ -1,18 +1,16 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { UserNameInput } from 'EmailConfigurations/components/form-fields/UserNameInput'
+import { UserNameInput, Props } from 'EmailConfigurations/components/form-fields/UserNameInput'
 
 const setUserName = jest.fn()
 const defaultProps = {
   userName: '',
   setUserName,
   errors: []
-} as const
+}
 
-const mountWrapper = (props: undefined | {
-  errors: Array<string>
-}) => mount(<UserNameInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<UserNameInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

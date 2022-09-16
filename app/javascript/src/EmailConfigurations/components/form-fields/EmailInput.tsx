@@ -34,4 +34,4 @@ const EmailInput = (
   />
 </FormGroup>
 
-export { EmailInput }
+export { EmailInput, Props }

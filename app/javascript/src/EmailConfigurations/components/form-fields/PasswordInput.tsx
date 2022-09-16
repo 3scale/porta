@@ -35,4 +35,4 @@ const PasswordInput = (
   />
 </FormGroup>
 
-export { PasswordInput }
+export { PasswordInput, Props }

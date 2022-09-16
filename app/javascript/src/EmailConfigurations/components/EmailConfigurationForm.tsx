@@ -55,20 +55,20 @@ const EmailConfigurationForm = (
 
     isFormValid = isAnyFieldChanged && (password === emailConfiguration.password || (password !== emailConfiguration.password && passwordRepeat === password))
   } else {
-    isFormValid = password.length && passwordRepeat === password
+    isFormValid = password.length > 0 && passwordRepeat === password
   }
 
-  const handleOnDelete = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  const handleOnDelete = () => {
     if (window.confirm('Are you sure?')) {
-      const form: HTMLFormElement = document.forms[FORM_ID]
-      form.elements.namedItem('_method').value = 'delete'
+      const form = document.forms.namedItem(FORM_ID) as HTMLFormElement
+      (form.elements.namedItem('_method') as HTMLInputElement).value = 'delete'
 
       form.submit()
     }
   }
 
-  const handleOnUpdate = (e: React.SyntheticEvent<HTMLInputElement>) => {
-    const form: HTMLFormElement = document.forms[FORM_ID]
+  const handleOnUpdate = () => {
+    const form = document.forms.namedItem(FORM_ID) as HTMLFormElement
     form.submit()
   }
 
@@ -111,4 +111,4 @@ const EmailConfigurationForm = (
   )
 }
 
-export { EmailConfigurationForm }
+export { EmailConfigurationForm, Props }

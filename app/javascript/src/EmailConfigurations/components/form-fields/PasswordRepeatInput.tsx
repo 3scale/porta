@@ -37,4 +37,4 @@ const PasswordRepeatInput = (
   />
 </FormGroup>
 
-export { PasswordRepeatInput }
+export { PasswordRepeatInput, Props }

@@ -49,4 +49,4 @@ const NewPage = (
 
 const NewPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewPage {...props} />, containerId)
 
-export { NewPage, NewPageWrapper }
+export { NewPage, NewPageWrapper, Props }

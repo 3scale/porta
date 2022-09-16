@@ -34,4 +34,4 @@ const UserNameInput = (
   />
 </FormGroup>
 
-export { UserNameInput }
+export { UserNameInput, Props }

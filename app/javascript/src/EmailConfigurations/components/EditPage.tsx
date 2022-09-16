@@ -50,4 +50,4 @@ const EditPage = (
 
 const EditPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<EditPage {...props} />, containerId)
 
-export { EditPage, EditPageWrapper }
+export { EditPage, EditPageWrapper, Props }

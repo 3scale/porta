@@ -1,18 +1,16 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { EmailInput } from 'EmailConfigurations/components/form-fields/EmailInput'
+import { EmailInput, Props } from 'EmailConfigurations/components/form-fields/EmailInput'
 
 const setEmail = jest.fn()
 const defaultProps = {
   email: '',
   setEmail,
   errors: []
-} as const
+}
 
-const mountWrapper = (props: undefined | {
-  errors: Array<string>
-}) => mount(<EmailInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<EmailInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

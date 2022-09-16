@@ -1,15 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { IndexPage } from 'EmailConfigurations/components/IndexPage'
+import { IndexPage, Props } from 'EmailConfigurations/components/IndexPage'
 
 const defaultProps = {
   emailConfigurations: [],
   emailConfigurationsCount: 0,
   newEmailConfigurationPath: ''
-} as const
+}
 
-const mountWrapper = (props) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -17,9 +17,9 @@ it('should render itself', () => {
 })
 
 it('should have a button to create a new email configuration', () => {
-  const path = 'p/admin/email_configurations/new'
-  const wrapper = mountWrapper({ path })
-  expect(wrapper.find(`a[href="${path}"]`).exists())
+  const newEmailConfigurationPath = 'p/admin/email_configurations/new'
+  const wrapper = mountWrapper({ newEmailConfigurationPath })
+  expect(wrapper.exists(`a[href="${newEmailConfigurationPath}"]`))
 })
 
 describe('when there are no email configurations', () => {
