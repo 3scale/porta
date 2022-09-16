@@ -58,7 +58,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
                                               :timezone => @zone.name)
 
 
-    Time.freeze do
+    freeze_time do
       assert_equal @zone.local(2009, 12, 4, 22),             data[:period][:since]
       assert_equal @zone.local(2009, 12, 8, 18).end_of_hour, data[:period][:until]
     end
@@ -71,7 +71,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
       :granularity => :hour,
       :timezone => @zone.name)
 
-    Time.freeze do
+    freeze_time do
       assert_equal @zone.local(2009, 12, 4, 22),             data[:period][:since]
       assert_equal @zone.local(2009, 12, 8, 18).end_of_hour, data[:period][:until]
     end
@@ -84,7 +84,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
       :granularity => 6.hours,
       :timezone => @zone.name)
 
-    Time.freeze do
+    freeze_time do
       assert_equal @zone.local(2009, 12, 4, 18),             data[:period][:since]
       assert_equal @zone.local(2009, 12, 8, 23).end_of_hour, data[:period][:until]
     end
