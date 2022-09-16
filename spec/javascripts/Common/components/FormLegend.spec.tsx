@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+
 import { FormLegend } from 'Settings/components/Common/FormLegend'
 
 test('FormLegend', () => {

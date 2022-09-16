@@ -1,8 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { Select } from 'Common'
+import { Select, Props } from 'Common/components/Select'
 import { updateInput } from 'utilities/test-utils'
+import { Record } from 'Types'
 
 const onSelect = jest.fn()
 const items = [
@@ -10,7 +11,7 @@ const items = [
   { id: 101, name: 'Budd Lightyear' },
   { id: 102, name: 'Troll' }
 ]
-const defaultProps = {
+const defaultProps: Props<Record> = {
   item: null,
   items,
   onSelect,
@@ -27,13 +28,11 @@ const defaultProps = {
   isDisabled: undefined,
   isLoading: undefined,
   isRequired: undefined
-} as const
+}
 
-const mountWrapper = (props) => mount(<Select {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props<Record>> = {}) => mount(<Select {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

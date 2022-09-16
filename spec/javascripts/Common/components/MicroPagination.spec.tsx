@@ -1,7 +1,8 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme'
 
-import { MicroPagination } from 'Common'
+import { MicroPagination, Props } from 'Common/components/MicroPagination'
+import { Button } from '@patternfly/react-core'
 
 const setPage = jest.fn()
 const lastPage = 5
@@ -10,19 +11,13 @@ const defaultProps = {
   page: 1,
   lastPage,
   setPage
-} as const
+}
 
-const mountWrapper = (props: undefined | {
-  lastPage: number,
-  page: number,
-  setPage: jest.MockedFunction<any>
-}) => mount(<MicroPagination {...{ ...defaultProps, ...props }} />)
-const previousPageButton = (wrapper: ReactWrapper<any>) => wrapper.find('Button').first()
-const nextPageButton = (wrapper: ReactWrapper<any>) => wrapper.find('Button').last()
+const mountWrapper = (props: Partial<Props> = {}) => mount(<MicroPagination {...{ ...defaultProps, ...props }} />)
+const previousPageButton = (wrapper: ReactWrapper) => wrapper.find(Button).first()
+const nextPageButton = (wrapper: ReactWrapper) => wrapper.find(Button).last()
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

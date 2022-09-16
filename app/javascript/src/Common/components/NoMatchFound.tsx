@@ -35,4 +35,4 @@ const NoMatchFound = (
   )}
 </EmptyState>
 
-export { NoMatchFound }
+export { NoMatchFound, Props }

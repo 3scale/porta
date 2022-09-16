@@ -7,7 +7,7 @@ import './SystemNamePopover.scss'
 
 const Popopover: any = Popover // HACK: remove this after upgrading @patternfly/react-core
 
-const SystemNamePopover = (): React.ReactElement => (
+const SystemNamePopover: React.FunctionComponent = () => (
   <Popopover
     maxWidth="420px"
     aria-label="system name info popover"
@@ -21,4 +21,4 @@ const SystemNamePopover = (): React.ReactElement => (
 
 const SystemNamePopoverWrapper = (container: Element): void => render(<SystemNamePopover />, container)
 
-export { SystemNamePopoverWrapper }
+export { SystemNamePopover, SystemNamePopoverWrapper }

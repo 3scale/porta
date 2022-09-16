@@ -212,4 +212,4 @@ const TableModal = <T extends Record>(
   )
 }
 
-export { TableModal }
+export { TableModal, Props }

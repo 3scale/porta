@@ -1,19 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ToolbarSearch } from 'Common'
+import { ToolbarSearch, Props } from 'Common/components/ToolbarSearch'
 
 const defaultProps = {
   placeholder: ''
-} as const
+}
 
-const mountWrapper = (props: undefined | {
-  placeholder: string
-}) => mount(<ToolbarSearch {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ToolbarSearch {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

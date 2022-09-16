@@ -129,4 +129,4 @@ const FancySelect = <T extends Record>(
   )
 }
 
-export { FancySelect }
+export { FancySelect, Props }

@@ -124,4 +124,4 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
 
 const ToolbarSearchWrapper = (props: Props, containerId: string): void => createReactWrapper(<ToolbarSearch {...props} />, containerId)
 
-export { ToolbarSearch, ToolbarSearchWrapper }
+export { ToolbarSearch, ToolbarSearchWrapper, Props }

@@ -1,16 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { CompactListCard } from 'Common'
+import { CompactListCard, Props } from 'Common/components/CompactListCard'
 
 const onSearch = jest.fn()
 const setPage = jest.fn()
-const searchInputRef: {
-  current: HTMLInputElement | null
-} = {
-  // $FlowIgnore[incompatible-type]
-  current: jest.fn()
-}
+const searchInputRef: { current: HTMLInputElement | null } = { current: jest.fn() as unknown as HTMLInputElement }
 const item = { name: 'Item Name', href: '/item/href', description: 'Item description' } as const
 const defaultProps = {
   columns: ['Col A', 'Col B'],
@@ -22,9 +17,9 @@ const defaultProps = {
   perPage: 5,
   searchInputPlaceholder: 'Search',
   tableAriaLabel: 'Table'
-} as const
+}
 
-const mountWrapper = (props: undefined) => mount(<CompactListCard {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<CompactListCard {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

@@ -1,8 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { TableModal } from 'Common'
+import { TableModal, Props } from 'Common/components/TableModal'
 import { updateInput } from 'utilities/test-utils'
+import { Record } from 'Types'
 
 const onSelect = jest.fn()
 const onClose = jest.fn()
@@ -11,9 +12,9 @@ const onSearch = jest.fn()
 
 const cells = [
   { title: 'Name', propName: 'name' }
-]
+] as Props<Record>['cells']
 
-const defaultProps = {
+const defaultProps: Props<Record> = {
   title: 'My Table',
   selectedItem: null,
   pageItems: undefined,
@@ -29,13 +30,11 @@ const defaultProps = {
   onSearch,
   searchPlaceholder: undefined,
   sortBy: { index: 1, direction: 'desc' }
-} as const
+}
 
-const mountWrapper = (props) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props<Record>> = {}) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -48,7 +47,7 @@ it('should be hidden by default', () => {
 })
 
 describe('when is open', () => {
-  const props = { ...defaultProps, isOpen: true } as const
+  const props = { ...defaultProps, isOpen: true }
 
   it('should be closeable', () => {
     const wrapper = mountWrapper(props)

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import './Spinner.scss'
 
 type Props = {
@@ -6,12 +6,7 @@ type Props = {
   className?: string
 };
 
-const Spinner = (
-  {
-    size = 'md',
-    className = ''
-  }: Props
-): React.ReactElement => {
+const Spinner: React.FunctionComponent<Props> = ({ size = 'md', className = '' }) => {
   const classParameters = `pf-c-spinner pf-m-${size} ${className}`
 
   return (
@@ -23,4 +18,4 @@ const Spinner = (
   )
 }
 
-export { Spinner }
+export { Spinner, Props }

@@ -1,11 +1,14 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme'
 
-import { FancySelect } from 'Common'
+import { FancySelect, Props } from 'Common/components/FancySelect'
+import { Record } from 'Types'
 
 const onSelect = jest.fn()
 
-const items = [
+type CrewMember = Record & { role: string }
+
+const items: CrewMember[] = [
   { id: 0, name: 'J. Holden', role: 'Captain' },
   { id: 1, name: 'N. Nagata', role: 'Engineer' },
   { id: 2, name: 'A. Kamal', role: 'Pilot' }
@@ -13,29 +16,26 @@ const items = [
 
 const name = 'the_captain'
 
-const defaultProps = {
-  item: null,
+const defaultProps: Props<CrewMember> = {
+  item: undefined,
   items,
   onSelect,
   label: 'Rocinante',
   id: 'fancy_select',
   header: 'Most recent crew members',
   isDisabled: undefined,
-  isValid: undefined,
   name,
   helperText: undefined,
   helperTextInvalid: undefined,
   placeholderText: undefined,
   footer: undefined
-} as const
+}
 
-const mountWrapper = (props) => mount(<FancySelect {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props<CrewMember>> = {}) => mount(<FancySelect {...{ ...defaultProps, ...props }} />)
 
-const expandSelect = (wrapper: ReactWrapper<any>) => wrapper.find('.pf-c-select__toggle-button').simulate('click')
+const expandSelect = (wrapper: ReactWrapper) => wrapper.find('.pf-c-select__toggle-button').simulate('click')
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

@@ -2,21 +2,12 @@
 
 import * as React from 'react'
 
-type Props = {
-  children?: React.ReactNode,
-  className?: string
-};
+type Props = React.HTMLAttributes<HTMLLegendElement>
 
-const FormLegend = (
-  {
-    children,
-    className = '',
-    ...props
-  }: Props
-): React.ReactElement => <legend {...props} className={`pf-c-form__legend ${className}`}>
-  {children}
-</legend>
+const FormLegend: React.FunctionComponent<React.HTMLAttributes<HTMLLegendElement>> = ({ children, className = '', ...props }) => (
+  <legend {...props} className={`pf-c-form__legend ${className}`}>
+    {children}
+  </legend>
+)
 
-export {
-  FormLegend
-}
+export { FormLegend, Props }

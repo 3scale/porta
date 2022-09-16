@@ -174,4 +174,4 @@ const SelectWithModal = <T extends Record>(
   )
 }
 
-export { SelectWithModal }
+export { SelectWithModal, Props }

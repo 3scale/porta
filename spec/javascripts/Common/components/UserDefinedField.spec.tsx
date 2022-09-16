@@ -1,11 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { UserDefinedField } from 'Common'
+import { UserDefinedField, Props } from 'Common/components/UserDefinedField'
+import { FieldDefinition } from 'Types'
 
 const onChange = jest.fn()
 
-const fieldDefinition = {
+const fieldDefinition: FieldDefinition = {
   hidden: false,
   required: false,
   label: 'State',
@@ -15,18 +16,16 @@ const fieldDefinition = {
   hint: undefined,
   readOnly: false,
   type: 'extra'
-} as const
+}
 const defaultProps = {
   fieldDefinition,
   onChange,
   value: ''
-} as const
+}
 
-const mountWrapper = (props) => mount(<UserDefinedField {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<UserDefinedField {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -34,7 +33,7 @@ it('should render itself', () => {
 })
 
 describe('where it does not have choices', () => {
-  const field = { ...fieldDefinition, choices: undefined } as const
+  const field = { ...fieldDefinition, choices: undefined }
 
   it('should render a text input', () => {
     const wrapper = mountWrapper({ fieldDefinition: field })
@@ -43,7 +42,7 @@ describe('where it does not have choices', () => {
 })
 
 describe('where it has choices', () => {
-  const field = { ...fieldDefinition, choices: ['pending', 'active'] } as const
+  const field = { ...fieldDefinition, choices: ['pending', 'active'] }
 
   it('should render a select', () => {
     const wrapper = mountWrapper({ fieldDefinition: field })

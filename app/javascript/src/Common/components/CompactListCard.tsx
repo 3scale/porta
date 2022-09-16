@@ -23,9 +23,7 @@ export type CompactListItem = {
 type Props = {
   columns: Array<string>,
   items: Array<CompactListItem>,
-  searchInputRef: {
-    current: HTMLInputElement | null
-  },
+  searchInputRef: { current: HTMLInputElement | null },
   onSearch: (term?: string) => void,
   page: number,
   setPage: (arg1: number) => void,
@@ -89,4 +87,4 @@ const CompactListCard: React.FunctionComponent<Props> = ({
   )
 }
 
-export { CompactListCard }
+export { CompactListCard, Props }

@@ -35,4 +35,4 @@ const MicroPagination = (
   )
 }
 
-export { MicroPagination }
+export { MicroPagination, Props }

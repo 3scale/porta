@@ -69,4 +69,4 @@ const UserDefinedField = (
   )
 }
 
-export { UserDefinedField }
+export { UserDefinedField, Props }

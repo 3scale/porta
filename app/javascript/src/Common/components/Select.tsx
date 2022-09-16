@@ -107,4 +107,4 @@ const Select = <T extends Record>(
   )
 }
 
-export { Select }
+export { Select, Props }

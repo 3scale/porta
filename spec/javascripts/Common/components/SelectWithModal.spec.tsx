@@ -2,15 +2,19 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { openSelectWithModal as openModal } from 'utilities/test-utils'
-import { SelectWithModal } from 'Common'
+import { SelectWithModal, Props } from 'Common/components/SelectWithModal'
+import { TableModal } from 'Common/components/TableModal'
+import { Record } from 'Types'
 
 const onSelect = jest.fn()
 const fetchItems = jest.fn()
 
+type CrewMember = Record & { role: string }
+
 const cells = [
   { propName: 'name', title: 'Name' },
   { propName: 'role', title: 'Role' }
-]
+] as Props<CrewMember>['cells']
 
 const items = [
   { id: 0, name: 'J. Holden', role: 'Captain' },
@@ -20,9 +24,8 @@ const items = [
 
 const title = 'Select a crew member'
 
-const defaultProps = {
+const defaultProps: Props<CrewMember> = {
   label: 'Label',
-  fieldId: 'fieldId',
   id: 'id',
   name: 'name',
   item: null,
@@ -37,13 +40,11 @@ const defaultProps = {
   searchPlaceholder: undefined,
   footerLabel: 'Footer Label',
   fetchItems
-} as const
+}
 
-const mountWrapper = (props) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props<CrewMember>> = {}) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -61,11 +62,11 @@ it('should be able to select an item', () => {
 })
 
 describe('with 20 items or less', () => {
-  const items = new Array(20).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
+  const items: CrewMember[] = new Array(20).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}`, role: String(j) }))
   const props = {
     items,
     itemsCount: items.length
-  } as const
+  }
 
   it('should display all items and a title, but no sticky footer', () => {
     const wrapper = mountWrapper(props)
@@ -75,16 +76,16 @@ describe('with 20 items or less', () => {
 
   it('should not be able to show a modal', () => {
     const wrapper = mountWrapper(props)
-    expect(wrapper.find('TableModal').exists()).toBe(false)
+    expect(wrapper.exists(TableModal)).toBe(false)
   })
 })
 
 describe('with more than 20 items', () => {
-  const items = new Array(25).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}` }))
+  const items: CrewMember[] = new Array(25).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}`, role: String(j) }))
   const props = {
     items,
     itemsCount: items.length
-  } as const
+  }
 
   it('should display up to 20 items, a title and a sticky footer', () => {
     const wrapper = mountWrapper(props)
@@ -95,10 +96,10 @@ describe('with more than 20 items', () => {
   it('should be able to show a modal', () => {
     const wrapper = mountWrapper(props)
 
-    expect(wrapper.find('TableModal').props().isOpen).toBe(false)
+    expect(wrapper.find(TableModal).props().isOpen).toBe(false)
 
     openModal(wrapper)
-    expect(wrapper.find('TableModal').props().isOpen).toBe(true)
+    expect(wrapper.find(TableModal).props().isOpen).toBe(true)
     expect(onSelect).toBeCalledTimes(0)
   })
 
@@ -140,7 +141,7 @@ describe('with more than 20 items', () => {
     const props = {
       items: [],
       itemsCount: 30
-    } as const
+    }
 
     it('should fetch more items', async () => {
       fetchItems.mockResolvedValue({ items, count: 30 })
@@ -156,7 +157,7 @@ describe('with no items', () => {
   const props = {
     items: [],
     itemsCount: 0
-  } as const
+  }
 
   it('should show an empty message that is disabled', () => {
     const wrapper = mountWrapper(props)

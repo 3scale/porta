@@ -1,18 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { NoMatchFound } from 'Common'
+import { NoMatchFound, Props } from 'Common/components/NoMatchFound'
+import { Button } from '@patternfly/react-core'
 
 const onClearFiltersClick = jest.fn()
-const defaultProps: Record<string, any> = {}
+const defaultProps = {}
 
-const mountWrapper = (props: undefined | {
-  onClearFiltersClick: jest.MockedFunction<any>
-}) => mount(<NoMatchFound {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NoMatchFound {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+afterEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -21,20 +18,20 @@ it('should render itself', () => {
 
 it('should not render a button', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('Button').exists()).toBe(false)
+  expect(wrapper.exists(Button)).toBe(false)
 })
 
 describe('with an All Filter Clear button', () => {
-  const props = { onClearFiltersClick } as const
+  const props = { onClearFiltersClick }
 
   it('should render a button', () => {
     const wrapper = mountWrapper(props)
-    expect(wrapper.find('Button').text()).toEqual('Clear all filters')
+    expect(wrapper.find(Button).text()).toEqual('Clear all filters')
   })
 
   it('should invoke the callback', () => {
     const wrapper = mountWrapper(props)
-    wrapper.find('Button').props().onClick()
+    wrapper.find(Button).simulate('click')
     expect(onClearFiltersClick).toHaveBeenCalledTimes(1)
   })
 })
