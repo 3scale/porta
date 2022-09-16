@@ -6,27 +6,27 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
   test 'notify about expired trial periods' do
     plan = nil
 
-    travel_to(2010, 1, 1) do
+    travel_to (Date.new(2010, 1, 1)) do
       provider = FactoryBot.create(:provider_account, payment_gateway_options: { test: false })
       plan = FactoryBot.create(:application_plan, issuer: provider.default_service, trial_period_days: 20, cost_per_month: 10)
 
       FactoryBot.create(:cinstance, plan: plan)
     end
 
-    travel_to(2010, 1, 5) do
+    travel_to (Date.new(2010, 1, 5)) do
       Cinstances::CinstanceExpiredTrialEvent.expects(:create).never
       Cinstance.notify_about_expired_trial_periods
     end
 
     # the plan has a trial period
-    travel_to(2010, 1, 21) do
+    travel_to (Date.new(2010, 1, 21)) do
       Cinstances::CinstanceExpiredTrialEvent.expects(:create).once
       Cinstance.notify_about_expired_trial_periods
     end
 
     # the plan does not have a trial period
     plan.update(trial_period_days: 0)
-    travel_to(2010, 1, 21) do
+    travel_to (Date.new(2010, 1, 21)) do
       Cinstances::CinstanceExpiredTrialEvent.expects(:create).never
       Cinstance.notify_about_expired_trial_periods
     end
@@ -38,7 +38,7 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
     end
 
     test 'should compute correct expiration date' do
-      travel_to(2009,11,4) do
+      travel_to (Date.new(2009,11,4)) do
         cinstance = FactoryBot.create(:cinstance, plan: @plan)
         expected = (cinstance.created_at + 30.days).to_date
         assert_equal expected, cinstance.trial_period_expires_at.to_date
