@@ -50,6 +50,7 @@ class SymbolizeTest < ActiveSupport::TestCase
   end
 
   test '#changes is symbolized but not #previous_changes' do
+    travel_back
     travel_to(Time.zone.now.round) do
       usage = UsageLimit.new
       usage.period = 'hour'
