@@ -84,6 +84,9 @@ Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |file| require file }
 include TestHelpers::XmlAssertions
 include TestHelpers::SectionsPermissions
 
+# Use Rails TimeHelpers
+include ActiveSupport::Testing::TimeHelpers
+
 ActiveJobUniquenessTestHelper.active_job_uniqueness_test_mode!
 
 Shoulda::Matchers.configure do |config|
