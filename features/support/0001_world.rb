@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-World(TimecopHelpers)
 World(PlanHelpers)
 World(DummyAttachments)
 
