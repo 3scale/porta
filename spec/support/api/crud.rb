@@ -20,6 +20,7 @@ shared_examples 'CRUD #update', action: :update do
   include_context "resource"
   include_context 'resource save'
 
+  # More info about this: https://github.com/3scale/porta/pull/3062#issuecomment-1251161154
   before do
     updatable_resource.created_at = 1.second.ago
     updatable_resource.updated_at = updatable_resource.created_at
