@@ -50,15 +50,17 @@ Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
   # this ensures billing actions are run
   step %(time flies to #{date})
   # and then we freeze the time
-  no_nest_travel_to(Time.zone.parse(date))
-  step original.strip
+  no_nest_travel_to(Time.zone.parse(date)) do
+    step original.strip
+  end
 end
 
 Then /^(.+) at (\d{2}:\d{2}:\d{2})$/ do |original, time|
   time = Time.zone.parse(time)
 
-  no_nest_travel_to(time)
-  step original.strip
+  no_nest_travel_to(time) do
+    step original.strip
+  end
 end
 
 Then /^the (?:date|time) should be (.*)$/ do |time|
