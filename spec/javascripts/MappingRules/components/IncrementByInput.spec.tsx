@@ -8,7 +8,7 @@ const defaultProps = {
   setIncrement: () => {}
 } as const
 
-const mountWrapper = (props: undefined) => mount(<IncrementByInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<IncrementByInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

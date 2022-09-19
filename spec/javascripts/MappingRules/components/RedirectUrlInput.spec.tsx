@@ -8,7 +8,7 @@ const defaultProps = {
   setRedirectUrl: () => {}
 } as const
 
-const mountWrapper = (props: undefined) => mount(<RedirectUrlInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<RedirectUrlInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

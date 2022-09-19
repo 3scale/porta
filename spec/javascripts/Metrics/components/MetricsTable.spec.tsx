@@ -26,7 +26,7 @@ const defaultProps = {
   createButton: <button>Add a metric</button>
 } as const
 
-const mountWrapper = (props) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

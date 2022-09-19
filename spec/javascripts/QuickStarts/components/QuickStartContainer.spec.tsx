@@ -9,7 +9,7 @@
 //   // props here
 // }
 
-// const mountWrapper = (props) => shallow(<QuickStartContainer {...{ ...defaultProps, ...props }} />)
+// const mountWrapper = (props: Partial<Props> = {}) => shallow(<QuickStartContainer {...{ ...defaultProps, ...props }} />)
 
 // afterEach(() => {
 //   jest.resetAllMocks()

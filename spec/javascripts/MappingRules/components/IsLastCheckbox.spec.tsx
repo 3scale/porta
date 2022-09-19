@@ -8,7 +8,7 @@ const defaultProps = {
   setIsLast: () => {}
 } as const
 
-const mountWrapper = (props: undefined) => mount(<IsLastCheckbox {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<IsLastCheckbox {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

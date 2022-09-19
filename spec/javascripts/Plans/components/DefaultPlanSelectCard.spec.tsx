@@ -13,7 +13,7 @@ const defaultProps = {
   path: '/foo/bar'
 } as const
 
-const mountWrapper = (props) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }}/>)
 
 it('should render', () => {
   const wrapper = mountWrapper()

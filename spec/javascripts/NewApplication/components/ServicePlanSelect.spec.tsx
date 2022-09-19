@@ -13,7 +13,7 @@ const defaultProps = {
   createServicePlanPath: '/bar'
 } as const
 
-const mountWrapper = (props) => mount(<ServicePlanSelect {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ServicePlanSelect {...{ ...defaultProps, ...props }} />)
 
 const expectToBeDisabled = (wrapper: ReactWrapper<any>, isDisabled = true) => {
   expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)

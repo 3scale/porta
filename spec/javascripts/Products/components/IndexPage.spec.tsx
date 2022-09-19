@@ -10,7 +10,7 @@ const defaultProps = {
   productsCount: 0
 } as const
 
-const mountWrapper = (props) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

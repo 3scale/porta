@@ -12,7 +12,7 @@ const defaultProps = {
   metricsCount: 0
 } as const
 
-const mountWrapper = (props: undefined) => mount(<ProductIndexPage {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ProductIndexPage {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

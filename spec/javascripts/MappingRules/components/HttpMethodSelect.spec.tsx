@@ -9,7 +9,7 @@ const defaultProps = {
   setHttpMethod: () => {}
 } as const
 
-const mountWrapper = (props: undefined) => mount(<HttpMethodSelect {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<HttpMethodSelect {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

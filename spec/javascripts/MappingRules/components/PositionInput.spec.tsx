@@ -8,7 +8,7 @@ const defaultProps = {
   setPosition: () => {}
 } as const
 
-const mountWrapper = (props: undefined) => mount(<PositionInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<PositionInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

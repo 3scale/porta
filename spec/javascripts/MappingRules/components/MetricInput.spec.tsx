@@ -11,7 +11,7 @@ const defaultProps = {
   methods: [{ id: 1, name: 'Method 1', systemName: '', updatedAt: '' }]
 } as const
 
-const mountWrapper = (props: undefined) => mount(<MetricInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<MetricInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

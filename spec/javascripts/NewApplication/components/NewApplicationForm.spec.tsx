@@ -34,7 +34,7 @@ const defaultProps = {
   error: undefined
 } as const
 
-const mountWrapper = (props) => mount(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
 const renderWrapper = (props) => render(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
 
 const select = (wrapper: ReactWrapper<any>, from: string, obj: {

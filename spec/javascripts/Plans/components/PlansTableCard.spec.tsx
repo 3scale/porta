@@ -30,7 +30,7 @@ const defaultProps = {
   searchHref: '/plans'
 } as const
 
-const mountWrapper = (props) => mount(<PlansTableCard {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<PlansTableCard {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.clearAllMocks()

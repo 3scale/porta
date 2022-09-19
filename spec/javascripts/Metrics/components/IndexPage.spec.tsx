@@ -26,7 +26,7 @@ const defaultProps = {
   createMetricPath
 } as const
 
-const mountWrapper = (props: undefined) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

@@ -13,7 +13,7 @@ const defaultProps = {
   path: '/applications/123/change_plan'
 } as const
 
-const mountWrapper = (props: undefined) => mount(<ChangePlanSelectCard {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ChangePlanSelectCard {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

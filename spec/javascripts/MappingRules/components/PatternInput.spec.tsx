@@ -10,7 +10,7 @@ const defaultProps = {
   helperTextInvalid: ''
 } as const
 
-const mountWrapper = (props: undefined) => mount(<PatternInput {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<PatternInput {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

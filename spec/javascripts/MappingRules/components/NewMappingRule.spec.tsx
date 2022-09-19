@@ -10,7 +10,7 @@ const defaultProps = {
   httpMethods: []
 } as const
 
-const mountWrapper = (props: undefined) => mount(<NewMappingRule {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NewMappingRule {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => {
   jest.resetAllMocks()

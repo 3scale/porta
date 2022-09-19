@@ -7,7 +7,7 @@ const defaultProps = {
   backends: []
 } as const
 
-const mountWrapper = (props) => mount(<BackendsUsedListCard {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<BackendsUsedListCard {...{ ...defaultProps, ...props }} />)
 const mockBackends = (count: number) => new Array(count).fill({}).map((i, j) => ({ name: `Backend ${j}`, description: `backend_${j}`, href: `/backends/${j}` }))
 
 afterEach(() => {
