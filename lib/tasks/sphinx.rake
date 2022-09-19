@@ -5,7 +5,7 @@ require 'progress_counter'
 # The queue that SphinxIndexationWorker normally uses is is 'default'
 # This rake task however enqueues into a different queue, which allows setting a lower
 # priority for this non-time-critical maintenance task, and even delete all enqueued jobs at once
-BULK_INDEXING_QUEUE = 'bulk_indexing'
+BULK_INDEXING_QUEUE = Rails.configuration.three_scale.bulk_indexing_queue || 'default'
 
 namespace :sphinx do
   desc "Enqueue indexation of tables"
