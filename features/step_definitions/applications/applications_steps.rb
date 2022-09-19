@@ -9,6 +9,15 @@ Given "{buyer} has application {string} with extra fields:" do |buyer, app_name,
   cinstance.save!
 end
 
+Given "{buyer} has application {string} with plan {string}" do |buyer, name, plan_name|
+  plan = ApplicationPlan.find_by!(name: plan_name)
+  assert buyer.provider_account.application_plans.include?(plan)
+  FactoryBot.create(:cinstance, :user_account => buyer,
+                    :plan         => plan,
+                    :name         => name)
+end
+
+
 Given "{buyer} has application {string} with description {string}" do |buyer, name, description|
   plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
   FactoryBot.create(:cinstance, :user_account => buyer,
