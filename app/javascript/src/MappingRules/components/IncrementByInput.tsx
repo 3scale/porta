@@ -24,8 +24,8 @@ const IncrementByInput = (
     id="proxy_rule_delta"
     name="proxy_rule[delta]"
     value={increment}
-    onChange={setIncrement}
+    onChange={() => setIncrement}
   />
 </FormGroup>
 
-export { IncrementByInput }
+export { IncrementByInput, Props }

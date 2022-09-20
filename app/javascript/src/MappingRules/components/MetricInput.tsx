@@ -8,7 +8,7 @@ import type { Metric } from 'Types'
 import './MetricInput.scss'
 
 type Props = {
-  metric: Metric,
+  metric: Metric | null,
   setMetric: (arg1: Metric | null) => void,
   topLevelMetrics: Array<Metric>,
   methods: Array<Metric>
@@ -29,7 +29,6 @@ const MetricInput = (
   }: Props
 ): React.ReactElement => {
   const [checked, setChecked] = React.useState<'method' | 'metric'>('method')
-  const [isExpanded, setIsExpanded] = React.useState(false)
 
   const handleOnRadioChange = (radio: 'method' | 'metric') => {
     setChecked(radio)
@@ -37,11 +36,10 @@ const MetricInput = (
   }
 
   const handleOnSelect = (metric: Metric | null) => {
-    setIsExpanded(false)
     setMetric(metric)
   }
 
-  const cells = [
+  const cells: { title: string, propName: keyof Metric }[] = [
     { title: 'Name', propName: 'name' },
     { title: 'System name', propName: 'systemName' },
     { title: 'Last updated', propName: 'updatedAt' }
@@ -62,14 +60,10 @@ const MetricInput = (
       id={`proxy_rule_metric_id_radio_${type}`}
     />
     {checked === type && (
-      // $FlowFixMe[prop-missing] implement async pagination
-      // $FlowIssue[incompatible-type-arg]
       <SelectWithModal
         label=""
-        fieldId="proxy_rule_metric_id"
         id={`proxy_rule_metric_id_select_${type}`}
         name="proxy_rule[metric_id]"
-        // $FlowIssue[incompatible-type] metrics can be null, that's the point
         item={metric}
         items={items}
         itemsCount={items.length}
@@ -80,8 +74,6 @@ const MetricInput = (
         placeholder={`Select a ${type}`}
         searchPlaceholder={`Find a ${type}`}
         aria-label={`Select a ${type}`}
-        onToggle={setIsExpanded}
-        isExpanded={isExpanded}
         footerLabel={`View all ${type}s`}
       />
     )}
@@ -108,4 +100,4 @@ const MetricInput = (
   )
 }
 
-export { MetricInput }
+export { MetricInput, Props }

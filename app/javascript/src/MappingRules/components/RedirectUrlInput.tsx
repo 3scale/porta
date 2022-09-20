@@ -26,4 +26,4 @@ const RedirectUrlInput = (
   />
 </FormGroup>
 
-export { RedirectUrlInput }
+export { RedirectUrlInput, Props }

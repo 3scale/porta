@@ -26,4 +26,4 @@ const IsLastCheckbox = (
   />
 </FormGroup>
 
-export { IsLastCheckbox }
+export { IsLastCheckbox, Props }

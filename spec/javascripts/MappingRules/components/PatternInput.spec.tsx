@@ -1,14 +1,14 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { PatternInput } from 'MappingRules'
+import { PatternInput, Props } from 'MappingRules/components/PatternInput'
 
-const defaultProps = {
+const defaultProps: Props = {
   pattern: '',
-  validatePattern: () => {},
+  validatePattern: jest.fn(),
   validated: 'default',
   helperTextInvalid: ''
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PatternInput {...{ ...defaultProps, ...props }} />)
 

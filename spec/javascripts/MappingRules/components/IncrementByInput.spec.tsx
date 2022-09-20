@@ -1,12 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { IncrementByInput } from 'MappingRules'
+import { IncrementByInput, Props } from 'MappingRules/components/IncrementByInput'
 
 const defaultProps = {
   increment: 1,
-  setIncrement: () => {}
-} as const
+  setIncrement: jest.fn()
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<IncrementByInput {...{ ...defaultProps, ...props }} />)
 

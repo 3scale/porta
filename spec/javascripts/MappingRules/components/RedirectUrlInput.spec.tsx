@@ -1,12 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { RedirectUrlInput } from 'MappingRules'
+import { RedirectUrlInput, Props } from 'MappingRules/components/RedirectUrlInput'
 
 const defaultProps = {
   redirectUrl: '',
-  setRedirectUrl: () => {}
-} as const
+  setRedirectUrl: jest.fn()
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<RedirectUrlInput {...{ ...defaultProps, ...props }} />)
 

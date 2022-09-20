@@ -35,7 +35,7 @@ type Props = {
   errors?: Error
 };
 
-type Validated = 'success' | 'warning' | 'error' | 'default';
+type Validated = 'success' | 'error' | 'default' | undefined;
 
 const NewMappingRule = (
   {
@@ -91,8 +91,7 @@ const NewMappingRule = (
         <input name="utf8" type="hidden" value="✓" />
 
         <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
-        <PatternInput pattern={pattern} validatePattern={validatePattern} validated={patternValidated} helperTextInvalid={helperTextInvalid}/>
-        {/* $FlowIssue[incompatible-type] Yes it can be null, that's the whole point */}
+        <PatternInput pattern={pattern} validatePattern={() => validatePattern} validated={patternValidated} helperTextInvalid={helperTextInvalid}/>
         <MetricInput metric={metric} topLevelMetrics={topLevelMetrics} methods={methods} setMetric={setMetric} />
         {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
         <IncrementByInput increment={increment} setIncrement={setIncrement} />
@@ -116,4 +115,4 @@ const NewMappingRule = (
 
 const NewMappingRuleWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewMappingRule {...props} />, containerId)
 
-export { NewMappingRule, NewMappingRuleWrapper }
+export { NewMappingRule, NewMappingRuleWrapper, Props }

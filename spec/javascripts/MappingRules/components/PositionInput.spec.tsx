@@ -1,12 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { PositionInput } from 'MappingRules'
+import { PositionInput, Props } from 'MappingRules/components/PositionInput'
 
 const defaultProps = {
   position: 0,
-  setPosition: () => {}
-} as const
+  setPosition: jest.fn()
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PositionInput {...{ ...defaultProps, ...props }} />)
 

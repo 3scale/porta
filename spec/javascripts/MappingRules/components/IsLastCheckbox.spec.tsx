@@ -1,12 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { IsLastCheckbox } from 'MappingRules'
+import { IsLastCheckbox, Props } from 'MappingRules/components/IsLastCheckbox'
 
 const defaultProps = {
   isLast: false,
-  setIsLast: () => {}
-} as const
+  setIsLast: jest.fn()
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<IsLastCheckbox {...{ ...defaultProps, ...props }} />)
 

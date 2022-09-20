@@ -1,13 +1,13 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { HttpMethodSelect } from 'MappingRules'
+import { HttpMethodSelect, Props } from 'MappingRules/components/HttpMethodSelect'
 
 const defaultProps = {
   httpMethod: 'GET',
   httpMethods: ['GET', 'POST'],
-  setHttpMethod: () => {}
-} as const
+  setHttpMethod: jest.fn()
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<HttpMethodSelect {...{ ...defaultProps, ...props }} />)
 

@@ -48,4 +48,4 @@ const HttpMethodSelect = (
   )
 }
 
-export { HttpMethodSelect }
+export { HttpMethodSelect, Props }

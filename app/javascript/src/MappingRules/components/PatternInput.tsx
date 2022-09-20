@@ -5,7 +5,7 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 type Props = {
   pattern: string,
   validatePattern: (arg1: string) => void,
-  validated: string,
+  validated: 'default' | 'success' | 'error' | undefined,
   helperTextInvalid: string
 };
 
@@ -39,4 +39,4 @@ const PatternInput = (
   )
 }
 
-export { PatternInput }
+export { PatternInput, Props }

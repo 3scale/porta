@@ -24,8 +24,8 @@ const PositionInput = (
     id="proxy_rule_position"
     name="proxy_rule[position]"
     value={position}
-    onChange={setPosition}
+    onChange={() => setPosition}
   />
 </FormGroup>
 
-export { PositionInput }
+export { PositionInput, Props }
