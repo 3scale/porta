@@ -26,3 +26,5 @@ export type InputProps = {
   ariaInvalid?: boolean,
   errorMessage?: string
 };
+
+export type InputType = 'username' | 'email' | 'firstName' | 'lastName' | 'password' | 'passwordConfirmation'

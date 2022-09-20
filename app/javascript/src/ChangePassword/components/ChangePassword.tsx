@@ -37,7 +37,7 @@ const ChangePassword = (
     value: password.value,
     isValid: password.isValid,
     errorMessage: password.errorMessage,
-    autoFocus: 'autoFocus',
+    autoFocus: true,
     onBlur: password.onBlur,
     onChange: password.onChange
   }

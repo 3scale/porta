@@ -11,23 +11,15 @@ import {
   EmailField,
   validateSingleField
 } from 'LoginPage'
-import type { SignupProps, InputProps } from 'Types'
+import type { SignupProps, InputProps, InputType } from 'Types'
 
-type Validation = {
-  [key: string]: boolean | undefined
-};
+type InputNames = 'user[username]' | 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password]' | 'user[password_confirmation]'
 
-type State = {
-  ['user[username]']: string,
-  ['user[email]']: string,
-  ['user[first_name]']: string,
-  ['user[last_name]']: string,
-  ['user[password]']: string,
-  ['user[password_confirmation]']: string,
-  ['validation']: Validation
-};
+type Validation = Record<InputNames, boolean | undefined>
 
-const INPUT_NAMES = {
+type State = Record<InputNames, string> & { validation: Validation }
+
+const INPUT_NAMES: Record<InputType, InputNames> = {
   username: 'user[username]',
   email: 'user[email]',
   firstName: 'user[first_name]',
@@ -36,7 +28,7 @@ const INPUT_NAMES = {
   passwordConfirmation: 'user[password_confirmation]'
 } as const
 
-const INPUT_IDS = {
+const INPUT_IDS: Record<InputType, string> = {
   username: 'user_username',
   email: 'user_email',
   firstName: 'user_first_name',
@@ -45,7 +37,7 @@ const INPUT_IDS = {
   passwordConfirmation: 'user_password_confirmation'
 } as const
 
-const INPUT_LABELS = {
+const INPUT_LABELS: Record<InputType, string> = {
   username: 'Username',
   email: 'Email address',
   firstName: 'First name',
@@ -55,7 +47,7 @@ const INPUT_LABELS = {
 } as const
 
 class SignupForm extends React.Component<SignupProps, State> {
-  state: State = {
+  state = {
     [INPUT_NAMES.username]: this.props.user.username,
     [INPUT_NAMES.email]: this.props.user.email,
     [INPUT_NAMES.firstName]: this.props.user.firstname,
@@ -70,16 +62,16 @@ class SignupForm extends React.Component<SignupProps, State> {
       [INPUT_NAMES.password]: undefined,
       [INPUT_NAMES.passwordConfirmation]: undefined
     }
-  };
+  } as State
 
-  getInputProps: (arg1: string, arg2: boolean) => InputProps = (name, isRequired) => {
+  getInputProps = (name: InputType, isRequired: boolean): InputProps => {
     return {
       isRequired,
       name: INPUT_NAMES[name],
       fieldId: INPUT_IDS[name],
       label: INPUT_LABELS[name],
       isValid: this.state.validation[INPUT_NAMES[name]],
-      value: this.state[INPUT_NAMES[name]],
+      value: this.state[INPUT_NAMES[name]] as string,
       onChange: this.handleInputChange
     }
   };

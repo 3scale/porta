@@ -114,7 +114,7 @@ const PasswordConfirmationField = (
   }
 ): React.ReactElement => {
   const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
-  const errorMessage = inputProps.errorMessage
+  const errorMessage = inputProps.errorMessage as 'isMandatory' | 'mustMatch'
   const helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage
   return (
     <FormGroup
