@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeMachineHelpers
   def time_machine(till)
     travel_to(Time.zone.now)
