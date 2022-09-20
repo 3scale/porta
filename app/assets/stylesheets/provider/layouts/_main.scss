@@ -98,9 +98,4 @@ a.action.pf-c-button {
 @mixin white-box-shadow {
   background-color: $white;
   box-shadow: $whiteBoxShadow;
-
-  // IE 11
-  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    box-shadow: $whiteBoxShadowIE11;
-  }
 }

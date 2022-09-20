@@ -53,23 +53,13 @@ const PolicyList = ({ registry, chain, originalChain, policyConfig, ui, boundAct
 
   const buttonsFieldset = document.querySelector('[id^="edit_proxy_"] > fieldset.actions')
   if (buttonsFieldset) {
-    // classList.toggle second argument is not supported in IE11
-    if (ui.chain) {
-      buttonsFieldset.classList.remove('is-hidden')
-    } else {
-      buttonsFieldset.classList.add('is-hidden')
-    }
+    buttonsFieldset.classList.toggle('is-hidden', !ui.chain)
   }
 
   // HACK: enable the submit button after any change is made
   const submitButton = document.querySelector('#policies-button-sav')
   if (submitButton) {
-    // classList.toggle second argument is not supported in IE11
-    if (isPolicyChainChanged(chain, originalChain)) {
-      submitButton.removeAttribute('disabled')
-    } else {
-      submitButton.setAttribute('disabled', '')
-    }
+    submitButton.toggleAttribute('disabled', !isPolicyChainChanged(chain, originalChain))
   }
 
   return (

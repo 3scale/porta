@@ -6,7 +6,6 @@ import 'core-js/fn/symbol'
 import 'core-js/fn/array/find'
 import 'core-js/fn/array/iterator'
 import 'core-js/fn/array/from'
-import 'core-js/fn/object/assign' // make Object.assign on IE 11
 
 const store = window.localStorage
 const key = ident => `toggle:${ident}`
@@ -52,12 +51,7 @@ export function recoverState (ident: string, classList: DOMTokenList, className:
   let classState = typeof (storedState) === 'object' && storedState[className]
 
   if (typeof (classState) !== 'undefined') {
-    // Toggle method second argument not supported in IE11
-    if (classState) {
-      classList.add(className)
-    } else {
-      classList.remove(className)
-    }
+    classList.toggle(className, classState)
   }
 }
 

@@ -631,7 +631,3 @@ ul.list-auth-provider {
 ::-moz-placeholder {  /* Firefox 19+ */
   font-style: italic;
 }
-
-:-ms-input-placeholder {
-  font-style: italic;
-}
