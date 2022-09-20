@@ -35,7 +35,6 @@ plugins:
   scss-lint:
     enabled: true
 exclude_patterns:
-  - "app/javascript/src/patternflyStyles/pf4BaseIE11.scss"
   - "tmp/**/*"
   - "**/vendor/*"
   - "app/assets/images/**/*"

@@ -113,22 +113,12 @@ select {
   max-width: calc(100% - #{$border-width}) !important;
   padding-right: line-height-times(1/2);
 
-  &::-ms-expand {
-    border: 0;
-    background-color: transparent;
-    color: $border-color;
-  }
-
   &:hover,
   &:focus {
     background-image: url("data:image/svg+xml;charset=utf-8, \
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
         <polygon points='0,0 60,0 30,40' style='fill:#{$link-color};'/> \
       </svg>");
-
-    &::-ms-expand {
-      color: $link-color;
-    }
   }
 }
 
@@ -506,9 +496,6 @@ form.formtastic .radio.required abbr {
 }
 
 ::-moz-placeholder { /* Firefox 19+ */
-  @include placeholder;
-}
-:-ms-input-placeholder { /* IE 10+ */
   @include placeholder;
 }
 

@@ -333,14 +333,7 @@
 
   function getHost() {
     var base = basePathComponents();
-    // This is to make IE happy.
-    // https://connect.microsoft.com/IE/feedback/details/817343/ie11-scripting-value-of-htmlanchorelement-host-differs-between-script-created-link-and-link-from-document
-    var portPart = ((base.port == "") || (base.port == "443" && base.protocol == "https:"))? "" : base.port;
-    uri = base.protocol + "//" + base.hostname
-    if (portPart.length > 0){
-      uri += ":" + portPart
-    }
-    return  uri;
+    return base.protocol + "//" + base.host;
   }
 
   function basePathComponents(){
