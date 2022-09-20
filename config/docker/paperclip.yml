@@ -6,6 +6,12 @@ filesystem: &filesystem
 s3: &s3
   storage: 's3'
 
+development:
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'] || 'filesystem' %>
+
+test:
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'] || 'filesystem' %>
+
 preview:
   <<: *<%= ENV['PAPERCLIP_STORAGE'] || 'filesystem' %>
 

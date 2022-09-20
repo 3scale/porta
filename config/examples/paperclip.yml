@@ -7,7 +7,7 @@ s3: &s3
   storage: 's3'
 
 development:
-  <<: *<%= ENV['PAPERCLIP_STORAGE'] || 'filesystem' %>
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'] || 'filesystem' %>
 
 test:
-  <<: *<%= ENV['PAPERCLIP_STORAGE'] || 'filesystem' %>
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'] || 'filesystem' %>
