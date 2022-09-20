@@ -140,7 +140,7 @@ class User < ApplicationRecord
 
   scope :latest, -> {limit(5).order(created_at: :desc)}
 
-  scope :but_impersonation_admin, -> { where(['username <> ?', ThreeScale.config.impersonation_admin['username']]) }
+  scope :but_impersonation_admin, -> { where(['users.username <> ?', ThreeScale.config.impersonation_admin['username']]) }
   scope :impersonation_admins, -> { where(username: ThreeScale.config.impersonation_admin['username']) }
 
   scope :admins, -> { where(role: 'admin') }
