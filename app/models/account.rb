@@ -167,6 +167,8 @@ class Account < ApplicationRecord
   has_many :sso_authorizations, through: :users
   has_many :user_sessions, through: :users
 
+  validates_format_of :org_name, with: /\A.*[a-zA-Z0-9]+.*\z/
+
   alias_attribute :name, :org_name
 
   has_one :onboarding
