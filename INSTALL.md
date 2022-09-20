@@ -54,159 +54,157 @@ to stop the application, run:
 make dev-stop
 ```
 
-## Manual setup on Mac OS X (10.13 - 12.3.1)
+## Manual setup on MacOS (12.5.1)
 
 ### Prerequisites
 
-#### Ruby version
+#### Package and runtime version management
 
-The project supports **2.6.x**.
+To add all required missing packages, make sure you have [Homebrew](https://brew.sh/) installed in your machine.
 
-Verify you have a proper version by running on your terminal:
-
-```bash
-ruby -v
+To manage the required runtimes, such as Ruby and Node.js, we recommend using [asdf](https://asdf-vm.com/guide/getting-started.html#global). Install it with brew:
+```
+brew install asdf
 ```
 
-> We recommend using [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install any ruby version.
+> Don't forget to add to your ~/.zshrc:
+>
+> ```bash
+> echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+> ```
 
-Example with RVM:
-```bash
-gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-\curl -sSL https://get.rvm.io | bash -s stable
-rvm install 2.6
+And use the provided `.tool-versions.sample` file to use the appropriate versions.
+```
+ln -s .tool-versions.sample .tool-versions
 ```
 
-#### Node version
+#### Python (only M1 macs)
+The project requires Python 2.7.18. However, it is not included anymore in Apple macs with Silicon. We recommend to handle Python installation with `asdf`:
 
-The project supports **Version: 12.X.X**.
+```
+asdf plugin add python
 
-You might want to use [nvm](https://github.com/creationix/nvm/) to install and work with specific Node versions:
-
-```bash
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+asdf install
 ```
 
-Restart the terminal and install Node:
+#### Ruby and Node.js
 
-```bash
-nvm install 12 && nvm use 12
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**.
+The recommended way to install them is with `asdf`:
+
 ```
+asdf plugin add ruby
+asdf plugin add nodejs
 
-###### As an alternative for Mac OS, and if you don't want multiple Node versions, you could use homebrew:
-
-```bash
-brew install node@12
+asdf install
 ```
 
 #### Xcode
 
-Install Xcode from the App Store.
-You can download all Xcode versions from [Apple's developer site](https://developer.apple.com/download/more/?name=Xcode).
+Install Xcode from the App Store. Then run the following command from your terminal to install Command Line Tools:
+```
+xcode-select —install
+```
+
+> Older versions of Xcode are available at [Apple's developer site](https://developer.apple.com/download/all/?q=xcode).
 
 #### Dependencies
 
-Make sure you have [Homebrew](https://brew.sh/) in your machine to install the following dependencies:
-
-```shell
-brew tap homebrew/cask
-brew install chromedriver --cask
-brew install imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql memcached
+```
+brew install
+brew install chromedriver imagemagick@6 mysql@5.7 gs pkg-config openssl geckodriver postgresql@14 memcached
 brew link mysql@5.7 --force
 brew link imagemagick@6 --force
 brew services start mysql@5.7
 ```
 
-Optionally, depending on your needs you can launch memcached and postgresql services
-
-```shell
-brew services start memcached postgresql
+For M1 macs you will also need:
+```
+brew install pixman cairo pango
 ```
 
+> Depending on your needs, you may want use `postgresql` instead of `mysql`.
+>
+> ```
+> brew services start postgresql@14
+> ```
+
 #### Sphinx Search
-
-[Sphinx](http://sphinxsearch.com/) has to be installed with **mysql@5.7** and compiled from source:
-
-```shell
-sed -i '' -e 's|depends_on "mysql"|depends_on "mysql@5.7"|g' /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sphinx.rb
-brew install --build-from-source sphinx
+Install [Sphinx](http://sphinxsearch.com/) for **mysql@5.7** with Homebrew:
+```
+brew install sphinx
 ```
 
 #### Redis
 
 [Redis](https://redis.io) has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
-```shell
+```
 docker run -d -p 6379:6379 redis
 ```
 
 Alternatively, you can run Redis directly on your machine by using `brew`:
 
-```shell
+```
 brew install redis
 brew services start redis
 ```
 
 ### Setup
 
-#### Eventmachine
-
-Eventmachine has to be installed with `--with-cppflags=-I/usr/local/opt/openssl/include`. Simply run:
-
-```shell
-bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-```
-
 #### Config files
 
 Copy example config files from the examples folder:
 
-```shell
+```
 cp config/examples/* config/
 ```
 
-#### Bundle
+#### Bundler
 
-On MacOS 10.15 or newer, first configure the bundle config with:
-```shell
-bundle config --global build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-bundle config --global build.mysql2 "--with-opt-dir=/usr/local/opt/openssl"
-bundle config --local build.github-markdown --with-cflags="-Wno-error=implicit-function-declaration"
-bundle config --local build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+Install [Bundler](https://bundler.io/) to manage all required Ruby gems:
+```
+gem install bundler
 ```
 
-Run [Bundler](https://bundler.io/) to install all required Ruby gems:
+Then configure the bundle config with:
+```bash
+bundle config --global build.eventmachine --with-cppflags="-I$(brew --prefix openssl)/include"
+bundle config --global build.mysql2 --with-opt-dir="$(brew --prefix openssl)"
+bundle config --local build.github-markdown --with-cflags=-Wno-error=implicit-function-declaration
+bundle config --local build.thin --with-cflags=-Wno-error=implicit-function-declaration
+```
 
-```shell
+And finally install all gems:
+```
 bundle install
 ```
 
-If the `mysql2` gem installation fails with the error:
+> If the `mysql2` gem installation fails with the error:
+>
+> ```
+> ld: library not found for -lssl
+> ```
+>
+> you can fix it setting the flags:
+>
+> ```bash
+> bundle config --local build.mysql2 --with-ldflags="-L$(brew --prefix openssl)/lib" --with-cppflags="-I$(brew --prefix openssl)/include"
+> ```
+>
+> and run `bundle install` again.
+
+#### Yarn
+
+Install [Yarn](https://yarnpkg.com/) to manage all required Javscript packages:
 
 ```
-ld: library not found for -lssl
-```
-
-you can fix it setting the flags:
-
-```shell
-bundle config --local build.mysql2 "--with-ldflags=-L/usr/local/opt/openssl/lib --with-cppflags=-I/usr/local/opt/openssl/include"
-```
-
-and run `bundle install` again.
-
-#### Node packages
-
-Install [Yarn](https://yarnpkg.com/):
-
-```bash
 brew install yarn
 ```
 
+And install them:
 
-Run [Yarn](https://www.yarnpkg.com/) to install all the required dependencies:
-
-```bash
+```
 yarn install
 ```
 
@@ -214,29 +212,35 @@ yarn install
 
 ### Prerequisites
 
-#### Ruby version
+#### Package and runtime version management
 
-The project supports **2.6.x**.
+To manage the required runtimes, such as Ruby and Node.js, we recommend using [asdf](https://asdf-vm.com/guide/introduction.html). See its [getting started](https://asdf-vm.com/guide/getting-started.html) guide in order to get specific instructions for your SHELL and installation method.
 
-Verify you have a proper version by running on your terminal:
-
-```bash
-ruby -v
+Once installed, use the provided `.tool-versions.sample` file to get the appropriate versions.
+```
+ln -s .tool-versions.sample .tool-versions
 ```
 
-> You can use [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io/) to install ruby.
+#### Ruby and Node.js
 
-#### Node version
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**.
+The recommended way to install them is with `asdf`:
 
-The project supports **Version: 12.X.X**.
-
-```bash
-dnf module install nodejs:12
 ```
+asdf plugin add ruby
+asdf plugin add nodejs
+
+asdf install
+```
+
+> Alternatively, Node.js can be installed as a [Module](https://developer.fedoraproject.org/tech/languages/nodejs/nodejs.html):
+> ```
+> dnf module install nodejs:12
+> ```
 
 #### Dependencies
 
-```shell
+```
 sudo yum install patch autoconf automake bison libffi-devel libtool libyaml-devel readline-devel sqlite-devel zlib-devel openssl-devel ImageMagick ImageMagick-devel mysql-devel postgresql-devel chromedriver memcached
 
 sudo systemctl restart memcached
@@ -246,8 +250,8 @@ sudo systemctl restart memcached
 
 Postgres, MySQL or Oracle has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
-```shell
-docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7 
+```
+docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
 ```
 
 Alternatively, you can run Postgres directly on your machine by following [this article](https://developer.fedoraproject.org/tech/database/postgresql/about.html).
@@ -256,7 +260,7 @@ Alternatively, you can run Postgres directly on your machine by following [this 
 
 Install package and run it
 
-```shell
+```
 sudo dnf install sphinx
 bundle exec rake ts:configure ts:start
 ```
@@ -265,13 +269,13 @@ bundle exec rake ts:configure ts:start
 
 [Redis](https://redis.io) has to be running for the application to work. The easiest way to do it is in a [Docker](https://www.docker.com/) container by simply running:
 
-```shell
+```
 docker run -d -p 6379:6379 redis
 ```
 
 Alternatively, you can run Redis directly on your machine by using `yum`:
 
-```shell
+```
 sudo yum install redis
 
 sudo systemctl restart redis
@@ -283,7 +287,7 @@ sudo systemctl restart redis
 
 Eventmachine has to be installed with `--with-cppflags=-I/usr/include/openssl/`. Simply run:
 
-```shell
+```
 bundle config build.eventmachine --with-cppflags=-I/usr/include/openssl/
 ```
 
@@ -291,7 +295,7 @@ bundle config build.eventmachine --with-cppflags=-I/usr/include/openssl/
 
 Copy example config files from the examples folder:
 
-```shell
+```
 cp config/examples/* config/
 ```
 
@@ -299,7 +303,7 @@ cp config/examples/* config/
 
 Run [Bundler](https://bundler.io/) to install all required Ruby gems:
 
-```shell
+```
 bundle install
 ```
 
@@ -307,14 +311,14 @@ bundle install
 
 Install [Yarn](https://yarnpkg.com/):
 
-```bash
-brew install yarn
+```
+npm install --global yarn
 ```
 
 
 Run [Yarn](https://www.yarnpkg.com/) to install all the required dependencies:
 
-```bash
+```
 yarn install
 ```
 
@@ -332,7 +336,7 @@ development:
 
 Finally, initialize the database with some seed data by running:
 
-```bash
+```
 bundle exec rake db:setup
 ```
 
