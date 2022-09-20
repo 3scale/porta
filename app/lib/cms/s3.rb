@@ -35,7 +35,7 @@ module CMS
     end
 
     def credentials
-      config.slice(:access_key_id, :secret_access_key, :session_token) if enabled?
+      config.slice(:access_key_id, :secret_access_key) if enabled?
     end
 
     def hostname
