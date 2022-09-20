@@ -304,10 +304,3 @@ td.pattern,
 td.StatsMethodsTable-name {
   word-break: break-word;
 }
-
-// IE 11 hack
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  #results_list {
-    @include white-box-shadow;
-  }
-}

@@ -1,8 +1,3 @@
-# Inline hack to fix missing .origin from some browsers (such as IE < 11)
-unless window.location.origin
-  port_part = if window.location.port then ":" + window.location.port else ""
-  window.location.origin = window.location.protocol + "//" + window.location.hostname + port_part
-
 # Route all requests not having same origin to api docs proxy
 class ApiDocsProxy
 
@@ -31,7 +26,7 @@ class ApiDocsProxy
 
   apiDocsHeaders: (obj) -> {
     'X-Apidocs-Method': obj.method,
-    'X-Apidocs-Path'  : @apiDocsPath(),
+    'X-Apidocs-Path'  : @linkElement.pathname,
     'X-Apidocs-Url'   : @desiredOrigin(),
     'X-Apidocs-Query' : @linkElement.search.replace("?", "")
   }
@@ -57,21 +52,8 @@ class ApiDocsProxy
   enableApiDocsProxy: ->
     window.enableApiDocsProxy
 
-  apiDocsPath: ->
-    # In some browsers like IE pathname do not includes (/) slash at the
-    # begining of the string
-    pathname = @linkElement.pathname
-    if pathname.length > 0 and pathname.indexOf('/') != 0
-      pathname = '/' + pathname
-    pathname
-
   desiredOrigin: ->
-     # This is to make IE happy.
-     # https://connect.microsoft.com/IE/feedback/details/817343/ie11-scripting-value-of-htmlanchorelement-host-differs-between-script-created-link-and-link-from-document
-    if @linkElement.port is "443" and @linkElement.protocol is "https:"
-      portPart = ""
-    else
-      portPart = if @linkElement.port is "" then "" else ":" + @linkElement.port
+    portPart = if @linkElement.port is "" then "" else ":" + @linkElement.port
     @linkElement.protocol + "//" + @linkElement.hostname + portPart
 
 window.ApiDocsProxy = new ApiDocsProxy()

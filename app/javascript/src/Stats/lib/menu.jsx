@@ -1,6 +1,5 @@
 /** @jsx StatsUI.dom */
 
-import 'core-js/fn/object/assign' // make Object.assign on IE 11
 import pluralize from 'pluralize'
 import $ from 'jquery'
 import 'jquery-ui/ui/widgets/datepicker'

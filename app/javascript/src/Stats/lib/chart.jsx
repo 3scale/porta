@@ -1,4 +1,3 @@
-import 'core-js/fn/object/assign' // make Object.assign on IE 11
 import $ from 'jquery'
 import moment from 'moment'
 import c3 from 'c3'

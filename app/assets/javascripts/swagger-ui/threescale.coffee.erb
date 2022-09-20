@@ -1,8 +1,3 @@
-# Inline hack to fix missing .origin from some browsers (such as IE < 11)
-unless window.location.origin
-  port_part = if window.location.port then ":" + window.location.port else ""
-  window.location.origin = window.location.protocol + "//" + window.location.hostname + port_part
-
 # Extends SwaggerUi to load 3scale extensions
 swagger_ui_load = SwaggerUi::load
 class ThreeScaleSwaggerUi
@@ -70,17 +65,10 @@ class ThreeScaleHttp
 
   apiDocsHeaders: (obj) -> {
     'X-Apidocs-Method': obj.method,
-    'X-Apidocs-Path'  : @apiDocsPath(),
+    'X-Apidocs-Path'  : @linkElement.pathname,
     'X-Apidocs-Url'   : @desiredOrigin(),
     'X-Apidocs-Query' : @linkElement.search.replace("?", "")
   }
-
-  # we can't use .pathname as it does not add / in IE so this awesome code is to make IE happy
-  apiDocsPath: ->
-    if @linkElement.pathname.indexOf("/") isnt 0
-      "/#{@linkElement.pathname}"
-    else
-      @linkElement.pathname
 
   originHttps: ->
     window.top.location.protocol == 'https:'
@@ -100,12 +88,7 @@ class ThreeScaleHttp
       !@enableApiDocsProxy() || @desiredOrigin() == @locationOrigin()
 
   desiredOrigin: ->
-     # This is to make IE happy.
-     # https://connect.microsoft.com/IE/feedback/details/817343/ie11-scripting-value-of-htmlanchorelement-host-differs-between-script-created-link-and-link-from-document
-    if @linkElement.port is "443" and @linkElement.protocol is "https:"
-      portPart = ""
-    else
-      portPart = if @linkElement.port is "" then "" else ":" + @linkElement.port
+    portPart = if @linkElement.port is "" then "" else ":" + @linkElement.port
     @linkElement.protocol + "//" + @linkElement.hostname + portPart
 
 window.ThreeScaleHttp = ThreeScaleHttp
