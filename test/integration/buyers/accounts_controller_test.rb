@@ -399,9 +399,9 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     test 'no N+1 problems in the index' do
-      populate = ->(n) { FactoryBot.create_list(:buyer_account, n, provider_account: @provider) }
-      assert_perform_linear_number_of_queries(slope: 3, populate: populate, matching: /users/) do
-        get admin_buyers_accounts_path(format: :json)
+      populate = ->(n) {FactoryBot.create_list(:buyer_account, n, provider_account: @provider)}
+      assert_perform_constant_number_of_queries(populate: populate, matching: /users/) do
+        get admin_buyers_accounts_path
       end
     end
   end
