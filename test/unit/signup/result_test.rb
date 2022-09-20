@@ -105,7 +105,8 @@ module Signup
       refute user.persisted?
       refute account.persisted?
       assert_includes signup_result.errors[:account], 'Organization/Group Name can\'t be blank'
-      assert_equal 1, signup_result.errors.full_messages.length
+      assert_includes signup_result.errors[:account], 'Organization/Group Name invalid'
+      assert_equal 2, signup_result.errors.full_messages.length
     end
 
     test '#save does not save and #errors return the error when @errors has errors' do
