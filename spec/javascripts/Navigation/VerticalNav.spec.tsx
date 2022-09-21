@@ -7,7 +7,8 @@ const currentApi = {
   name: 'My Product',
   link: '/foo',
   type: 'product'
-} as const
+}
+
 const sections = [{
   id: '0',
   title: 'Section 0',

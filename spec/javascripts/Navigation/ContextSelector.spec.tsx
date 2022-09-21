@@ -1,98 +1,87 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { ContextSelector } from 'Navigation/components/ContextSelector'
+import { ContextSelector, Props } from 'Navigation/components/ContextSelector'
+import { Menu } from 'Types'
 
 const audienceLink = '/audience'
 const productsLink = '/products'
 const backendsLink = '/backends'
 const settingsLink = '/settings'
 
-const currentApi = { name: 'api 0', id: 0, link: 'foo.bar' } as const
-
-function getWrapper (customProps: undefined | {
-  activeMenu: string,
-  currentApi: {
-    id: number,
-    link: string,
-    name: string
-  }
-}) {
-  const props = {
-    currentApi: null,
-    activeMenu: 'dashboard',
-    audienceLink: audienceLink,
-    productsLink: productsLink,
-    backendsLink: backendsLink,
-    settingsLink: settingsLink,
-    ...customProps
-  } as const
-  return mount(<ContextSelector {...props} />)
+const defaultProps = {
+  activeMenu: '' as Menu,
+  audienceLink: audienceLink,
+  productsLink: productsLink,
+  backendsLink: backendsLink,
+  settingsLink: settingsLink
 }
 
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ContextSelector { ...{ ...defaultProps, ...props } } />)
+
 it('should render itself', () => {
-  expect(getWrapper().find(ContextSelector).exists()).toEqual(true)
+  expect(mountWrapper().find(ContextSelector).exists()).toEqual(true)
 })
 
 it('should have Dashboard, Audience, Products, Backends and Settings', () => {
-  const wrapper = getWrapper()
+  const wrapper = mountWrapper()
   wrapper.find('.pf-c-context-selector__toggle').simulate('click')
   expect(wrapper).toMatchSnapshot()
 })
 
 it('should not have Audience if not provided', () => {
-  const wrapper = getWrapper()
+  const wrapper = mountWrapper()
   wrapper.setProps({ audienceLink: undefined })
   wrapper.find('.pf-c-context-selector__toggle').simulate('click')
   expect(wrapper).toMatchSnapshot()
 })
 
 it('should highlight the selected context', () => {
-  const wrapper = getWrapper()
+  const wrapper = mountWrapper()
   wrapper.find('.pf-c-context-selector__toggle').simulate('click')
 
-  wrapper.setProps({ activeMenu: 'buyers', currentApi: null })
+  wrapper.setProps({ activeMenu: 'buyers' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Audience')
 
-  wrapper.setProps({ activeMenu: 'finance', currentApi: null })
+  wrapper.setProps({ activeMenu: 'finance' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Audience')
 
-  wrapper.setProps({ activeMenu: 'cms', currentApi: null })
+  wrapper.setProps({ activeMenu: 'cms' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Audience')
 
-  wrapper.setProps({ activeMenu: 'site', currentApi: null })
+  wrapper.setProps({ activeMenu: 'site' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Audience')
 
-  wrapper.setProps({ activeMenu: 'dashboard', currentApi })
+  wrapper.setProps({ activeMenu: 'dashboard' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Dashboard')
 
-  wrapper.setProps({ activeMenu: 'personal', currentApi })
+  wrapper.setProps({ activeMenu: 'personal' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
 
-  wrapper.setProps({ activeMenu: 'account', currentApi })
+  wrapper.setProps({ activeMenu: 'account' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
 
-  wrapper.setProps({ activeMenu: 'active_docs', currentApi })
+  wrapper.setProps({ activeMenu: 'active_docs' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Account Settings')
 
-  wrapper.setProps({ activeMenu: 'serviceadmin', currentApi })
+  wrapper.setProps({ activeMenu: 'serviceadmin' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Products')
 
-  wrapper.setProps({ activeMenu: 'backend_api', currentApi })
+  wrapper.setProps({ activeMenu: 'backend_api' })
   expect(wrapper.find('.current-context')).toHaveLength(1)
   expect(wrapper.find('.current-context').text()).toEqual('Backends')
 })
 
 it('should display the current api', () => {
-  const wrapper = getWrapper({ activeMenu: 'serviceadmin', currentApi })
+  const wrapper = mountWrapper({ activeMenu: 'serviceadmin' })
 
   expect(wrapper.find('.fa-cubes').exists()).toBe(true)
   expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')

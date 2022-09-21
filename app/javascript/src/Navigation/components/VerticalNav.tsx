@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Nav, NavExpandable, NavItem, NavList, NavGroup } from '@patternfly/react-core'
+import { Nav, NavExpandable, NavItem, NavList, NavGroup, NavExpandableProps } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities'
 import 'Navigation/styles/VerticalNav.scss'
 import type { Api } from 'Types'
@@ -24,14 +24,12 @@ type Props = {
   currentApi?: Api
 };
 
-const VerticalNav = (
-  {
-    sections,
-    activeSection,
-    activeItem,
-    currentApi
-  }: Props
-): React.ReactElement => {
+const VerticalNav: React.FunctionComponent<Props> = ({
+  sections,
+  activeSection,
+  activeItem,
+  currentApi
+}) => {
   const navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => {
     return items
       ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
@@ -55,7 +53,15 @@ const VerticalNav = (
   )
 }
 
-const NavSection = ({ title, isSectionActive, activeItem, items, outOfDateConfig }) => {
+type NavSectionProps = {
+  title: NavExpandableProps['title'],
+  isSectionActive: NavExpandableProps['isActive'],
+  activeItem: Props['activeItem'],
+  items: Item[],
+  outOfDateConfig: Section['outOfDateConfig']
+}
+
+const NavSection: React.FunctionComponent<NavSectionProps> = ({ title, isSectionActive, activeItem, items, outOfDateConfig }) => {
   return (
     <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive} className={outOfDateConfig ? 'outdated-config' : ''}>
       {items.map(({ id, title, path, target, itemOutOfDateConfig }) => (
@@ -69,4 +75,4 @@ const NavSection = ({ title, isSectionActive, activeItem, items, outOfDateConfig
 
 const VerticalNavWrapper = (props: Props, containerId: string): void => createReactWrapper(<VerticalNav {...props} />, containerId)
 
-export { VerticalNav, VerticalNavWrapper }
+export { VerticalNav, VerticalNavWrapper, Props }

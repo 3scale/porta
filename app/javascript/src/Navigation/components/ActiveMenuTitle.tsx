@@ -5,16 +5,13 @@ import 'core-js/es6/set'
 import 'Navigation/styles/ActiveMenuTitle.scss'
 
 import type { Menu } from 'Types'
+import { FunctionComponent } from 'enzyme'
 
 type Props = {
   activeMenu: Menu
 };
 
-const ActiveMenuTitle = (
-  {
-    activeMenu
-  }: Props
-): React.ReactElement => {
+const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
   const getIconAndText: () => [string, string] = () => {
     switch (activeMenu) {
       case 'dashboard':
@@ -65,4 +62,4 @@ const ActiveMenuTitle = (
   )
 }
 
-export { ActiveMenuTitle }
+export { ActiveMenuTitle, Props }

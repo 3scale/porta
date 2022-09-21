@@ -6,6 +6,7 @@ import { createReactWrapper, useClickOutside } from 'utilities'
 import 'Navigation/styles/ContextSelector.scss'
 
 import type { Menu } from 'Types'
+import { FunctionComponent } from 'enzyme'
 
 type Props = {
   activeMenu: Menu,
@@ -17,15 +18,13 @@ type Props = {
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
-const ContextSelector = (
-  {
-    activeMenu,
-    audienceLink,
-    settingsLink,
-    productsLink,
-    backendsLink
-  }: Props
-): React.ReactElement => {
+const ContextSelector: FunctionComponent<Props> = ({
+  activeMenu,
+  audienceLink,
+  settingsLink,
+  productsLink,
+  backendsLink
+}) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const ref = React.useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
@@ -88,4 +87,4 @@ const ContextSelector = (
 
 const ContextSelectorWrapper = (props: Props, containerId: string): void => createReactWrapper(<ContextSelector {...props} />, containerId)
 
-export { ContextSelector, ContextSelectorWrapper }
+export { ContextSelector, ContextSelectorWrapper, Props }

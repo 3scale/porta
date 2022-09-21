@@ -1,35 +1,33 @@
 import React from 'react'
-import { render } from 'enzyme'
-import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
-import type { Menu } from 'Types'
 
-function getWrapper (activeMenu: Menu, currentApi: undefined | {
-  name: string
-}) {
-  return render(<ActiveMenuTitle activeMenu={activeMenu} currentApi={currentApi} />)
-}
+import { render } from 'enzyme'
+
+import { ActiveMenuTitle, Props } from 'Navigation/components/ActiveMenuTitle'
+import { Menu } from 'Types'
+
+const renderWrapper = (props: Props) => render(<ActiveMenuTitle { ...props } />)
 
 it('should return the proper title depending on the current menu', () => {
-  expect(getWrapper('dashboard').text()).toEqual('Dashboard')
+  expect(renderWrapper({ activeMenu: 'dashboard' }).text()).toEqual('Dashboard')
 
-  expect(getWrapper('personal').text()).toEqual('Account Settings')
-  expect(getWrapper('account').text()).toEqual('Account Settings')
-  expect(getWrapper('active_docs').text()).toEqual('Account Settings')
+  expect(renderWrapper({ activeMenu: 'personal' }).text()).toEqual('Account Settings')
+  expect(renderWrapper({ activeMenu: 'account' }).text()).toEqual('Account Settings')
+  expect(renderWrapper({ activeMenu: 'active_docs' }).text()).toEqual('Account Settings')
 
-  expect(getWrapper('buyers').text()).toEqual('Audience')
-  expect(getWrapper('finance').text()).toEqual('Audience')
-  expect(getWrapper('cms').text()).toEqual('Audience')
-  expect(getWrapper('site').text()).toEqual('Audience')
-  expect(getWrapper('settings').text()).toEqual('Audience')
-  expect(getWrapper('audience').text()).toEqual('Audience')
-  expect(getWrapper('applications').text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'buyers' }).text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'finance' }).text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'cms' }).text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'site' }).text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'settings' }).text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'audience' }).text()).toEqual('Audience')
+  expect(renderWrapper({ activeMenu: 'applications' }).text()).toEqual('Audience')
 
-  expect(getWrapper('serviceadmin', { name: 'Test' }).text()).toEqual('Products')
-  expect(getWrapper('backend_api', { name: 'Test' }).text()).toEqual('Backends')
+  expect(renderWrapper({ activeMenu: 'serviceadmin' }).text()).toEqual('Products')
+  expect(renderWrapper({ activeMenu: 'backend_api' }).text()).toEqual('Backends')
 
-  expect(getWrapper('quickstarts', { name: 'Test' }).text()).toEqual('--')
+  expect(renderWrapper({ activeMenu: 'quickstarts' }).text()).toEqual('--')
 })
 
 it('should not return a default title', () => {
-  expect(getWrapper().text()).toEqual('')
+  expect(renderWrapper({ activeMenu: '' as Menu }).text()).toEqual('')
 })
