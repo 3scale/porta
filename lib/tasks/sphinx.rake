@@ -23,7 +23,7 @@ namespace :sphinx do
       # As we enqueue, we only need the :id
       scope.select(:id).except(:includes).find_in_batches(batch_size: 1000) do |batch|
         batch.each do |record|
-          SphinxIndexationWorker.perform_later(record.class, record.id)
+          SphinxIndexationWorker.new(record.class, record.id).enqueue queue: (Rails.configuration.three_scale.bulk_indexing_queue || 'default')
         end
         progress.call(increment: batch.size)
       end
