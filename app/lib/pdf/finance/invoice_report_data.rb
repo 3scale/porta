@@ -52,23 +52,22 @@ class Pdf::Finance::InvoiceReportData
   end
 
   def logo
-    @logo_stream ||= URI.open(logo_url(:invoice))
+    @logo_file ||= logo_file(:invoice)
   rescue StandardError => exception
-    # TODO: - uncomment complete exception!
-    # rescue OpenURI::HTTPError => e
     Rails.logger.error "Failed to retrieve logo from: #{exception.message}"
     nil
   end
 
   # Depending on the storage option for the attachment, retrieve either the full path
-  # of the local file, or the URL of the file in S3
-  def logo_url(args)
+  # of the local file, or the URL of the file in S3, and read the file differently
+  def logo_file(style)
     attachment = @invoice.provider_account.profile.logo
     case attachment.options[:storage].to_sym
     when :filesystem
-      attachment.path(args)
+      # read as binary file
+      File.open(attachment.path(style), 'rb')
     when :s3
-      attachment.url(args)
+      URI.open(attachment.url(style))
     else
       raise StandardError, 'Invalid attachment type'
     end
