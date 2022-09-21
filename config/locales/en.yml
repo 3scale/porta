@@ -915,6 +915,8 @@ en:
             org_name:
               blank: "can't be blank"
               taken: "already taken"
+              invalid_format: "should contain at least one alphanumeric character"
+
             subdomain:
               blank: "can't be blank"
               same: "can't be the same"
