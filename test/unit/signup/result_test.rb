@@ -99,13 +99,11 @@ module Signup
       assert_includes signup_result.errors[:user], 'Username is too short (minimum is 3 characters)'
     end
 
-    test '#save does not save and #errors return the error when the account is invalid' do
+    test '#save does not save and #errors return the errors when the account is invalid/blank' do
       @account = FactoryBot.build(:account, org_name: nil)
       signup_result.save
       refute user.persisted?
       refute account.persisted?
-      assert_includes signup_result.errors[:account], 'Organization/Group Name can\'t be blank'
-      assert_includes signup_result.errors[:account], 'Organization/Group Name invalid'
       assert_equal 2, signup_result.errors.full_messages.length
     end
 
