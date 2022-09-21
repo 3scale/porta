@@ -10,6 +10,8 @@ module Aws
 
     attr_reader :params
 
+    ROLE_SESSION_NAME = '3scale-porta'
+
     def initialize(params)
       @params = params
     end
@@ -35,12 +37,13 @@ module Aws
     def sts_credentials
       Aws::AssumeRoleWebIdentityCredentials.new(
         web_identity_token_file: sts_params[:web_identity_token_file],
-        role_arn: sts_params[:role_name]
+        role_arn: sts_params[:role_name],
+        role_session_name: sts_params[:role_session_name].presence || ROLE_SESSION_NAME
       )
     end
 
     def sts_params
-      params.slice(:web_identity_token_file, :role_name)
+      params.slice(:web_identity_token_file, :role_name, :role_session_name)
     end
   end
 end

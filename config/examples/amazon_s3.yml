@@ -6,7 +6,7 @@ development:
   force_path_style:  false
   web_identity_token_file: ""
   role_name: ""
-
+  role_session_name: ""
 
 test: &test
   access_key_id: invalid
@@ -15,6 +15,7 @@ test: &test
   region: "us-east-1"
   web_identity_token_file: ""
   role_name: ""
+  role_session_name: ""
 
 production:
   access_key_id: invalid
@@ -23,3 +24,4 @@ production:
   region: "us-east-1"
   web_identity_token_file: /path/to/token
   role_name: ROLE_ARN
+  role_session_name: ROLE_SESSION_NAME
