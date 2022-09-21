@@ -4,8 +4,8 @@ class AccountDecorator < ApplicationDecorator
   delegate :display_name, :email, to: :admin_user, prefix: true
 
   def first_admin
-    # when users are eager loaded, filter manually to save an extra query
-    @first_admin ||= users.loaded? ? users.find { |user| user.admin? && !user.impersonation_admin? } : super
+    # when admin_users is eager loaded, filter manually to save an extra query
+    @first_admin ||= admin_users.loaded? ? admin_users.find { |user| !user.impersonation_admin? } : super
   end
 
   private
