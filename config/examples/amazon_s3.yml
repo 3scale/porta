@@ -4,15 +4,22 @@ development:
   bucket:            dev-my-s3-bucket
   region:            "us-east-1"
   force_path_style:  false
+  web_identity_token_file: ""
+  role_name: ""
+
 
 test: &test
   access_key_id: invalid
   secret_access_key: invalid
   bucket: test-my-s3-bucket
   region: "us-east-1"
+  web_identity_token_file: ""
+  role_name: ""
 
 production:
   access_key_id: invalid
   secret_access_key: invalid
   bucket: prod-my-s3-bucket
   region: "us-east-1"
+  web_identity_token_file: /var/run/secrets/openshift/serviceaccount/token
+  role_name: ROLE_ARN
