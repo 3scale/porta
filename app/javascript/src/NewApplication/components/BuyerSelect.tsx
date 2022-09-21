@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { sortable } from '@patternfly/react-table'
 import { fetchPaginatedBuyers } from 'NewApplication/data'
-import { SelectWithModal } from 'Common'
+import { SelectWithModal, Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 
 import type { Buyer } from 'NewApplication/types'
 
@@ -15,28 +15,23 @@ type Props = {
   isDisabled?: boolean
 };
 
-const BuyerSelect = (
-  {
-    buyer,
-    buyers,
-    buyersCount,
-    onSelectBuyer,
-    buyersPath = '',
-    isDisabled
-  }: Props
-): React.ReactElement => {
-  const cells = [
+const BuyerSelect: React.FunctionComponent<Props> = ({
+  buyer,
+  buyers,
+  buyersCount,
+  onSelectBuyer,
+  buyersPath = '',
+  isDisabled
+}) => {
+  const cells: SelectWithModalProps<Buyer>['cells'] = [
     { title: 'Name', propName: 'name' },
     { title: 'Admin', propName: 'admin' },
     { title: 'Signup date', propName: 'createdAt', transforms: [sortable] }
   ]
 
   return (
-    // $FlowFixMe[prop-missing] description not needed for selected buyer
-    // $FlowIssue[incompatible-type-arg] id can be string too
     <SelectWithModal
       label="Account"
-      fieldId="account_id"
       id="account_id"
       name="account_id"
       item={buyer}

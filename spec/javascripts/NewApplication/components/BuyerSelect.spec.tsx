@@ -11,7 +11,7 @@ const buyer = {
   createApplicationPath: '',
   createdAt: '',
   multipleAppsAllowed: false
-} as const
+}
 const buyers = [buyer]
 const props = {
   buyer,
@@ -20,7 +20,7 @@ const props = {
   onSelectBuyer: jest.fn(),
   buyersPath: '/buyers',
   isDisabled: false
-} as const
+}
 
 it('should render', () => {
   const wrapper = mount(<BuyerSelect {...props} />)

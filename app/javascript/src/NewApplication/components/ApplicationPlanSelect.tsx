@@ -12,14 +12,12 @@ type Props = {
   createApplicationPlanPath: string
 };
 
-const ApplicationPlanSelect = (
-  {
-    appPlan,
-    product,
-    onSelect,
-    createApplicationPlanPath
-  }: Props
-): React.ReactElement => {
+const ApplicationPlanSelect: React.FunctionComponent<Props> = ({
+  appPlan,
+  product,
+  onSelect,
+  createApplicationPlanPath
+}) => {
   const appPlans = product ? product.appPlans : []
   const showHint = product && appPlans.length === 0
 
@@ -33,10 +31,7 @@ const ApplicationPlanSelect = (
   )
 
   return (
-    // $FlowIssue[incompatible-type-arg] It should not complain since Record.id has union "number | string"
-    // $FlowIssue[prop-missing] description is optional
     <Select
-      // $FlowIssue[incompatible-type] ServicePlan implements Record
       item={appPlan}
       items={appPlans}
       onSelect={onSelect}
@@ -51,4 +46,4 @@ const ApplicationPlanSelect = (
   )
 }
 
-export { ApplicationPlanSelect }
+export { ApplicationPlanSelect, Props }

@@ -23,7 +23,7 @@ const props = {
   onSelectProduct: jest.fn(),
   productsPath: '/products',
   isDisabled: undefined
-} as const
+}
 
 it('should render', () => {
   const wrapper = mount(<ProductSelect {...props} />)

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { ServicePlanSelect } from 'NewApplication'
-import { mount } from 'enzyme'
+import { ServicePlanSelect, Props } from 'NewApplication/components/ServicePlanSelect'
+import { mount, ReactWrapper } from 'enzyme'
 
 const defaultProps = {
   servicePlan: null,
@@ -11,11 +11,11 @@ const defaultProps = {
   isDisabled: undefined,
   serviceSubscriptionsPath: '/foo',
   createServicePlanPath: '/bar'
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ServicePlanSelect {...{ ...defaultProps, ...props }} />)
 
-const expectToBeDisabled = (wrapper: ReactWrapper<any>, isDisabled = true) => {
+const expectToBeDisabled = (wrapper: ReactWrapper, isDisabled = true) => {
   expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)
   expect(wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled).toBe(isDisabled)
   expect(wrapper.find('button.pf-c-select__toggle-button').props().disabled).toBe(isDisabled)
@@ -27,7 +27,7 @@ it('should be disabled', () => {
 })
 
 describe('when plan is contracted', () => {
-  const props = { ...defaultProps, isPlanContracted: true } as const
+  const props = { ...defaultProps, isPlanContracted: true }
 
   it('should show a hint and be disabled', () => {
     const wrapper = mountWrapper(props)
@@ -39,7 +39,7 @@ describe('when plan is contracted', () => {
 
 describe('when plan is not contracted', () => {
   describe('and there are some plans', () => {
-    const props = { ...defaultProps, isPlanContracted: false, servicePlans: [{ id: 0, name: 'service plan' }] } as const
+    const props = { ...defaultProps, isPlanContracted: false, servicePlans: [{ id: 0, name: 'service plan' }] }
 
     it('should show a hint', () => {
       const wrapper = mountWrapper(props)
@@ -50,7 +50,7 @@ describe('when plan is not contracted', () => {
   })
 
   describe('and there are no plans', () => {
-    const props = { ...defaultProps, isPlanContracted: false, servicePlans: [] } as const
+    const props = { ...defaultProps, isPlanContracted: false, servicePlans: [] }
 
     it('should show a hint and a link to create a new plan', () => {
       const wrapper = mountWrapper(props)
@@ -61,7 +61,7 @@ describe('when plan is not contracted', () => {
   })
 
   describe('and plans is null', () => {
-    const props = { ...defaultProps, isPlanContracted: false, servicePlans: null } as const
+    const props = { ...defaultProps, isPlanContracted: false, servicePlans: null }
 
     it('should show a hint and a link to create a new plan', () => {
       const wrapper = mountWrapper(props)

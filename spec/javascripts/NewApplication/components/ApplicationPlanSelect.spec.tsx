@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { ApplicationPlanSelect } from 'NewApplication'
-import { mount } from 'enzyme'
+import { ApplicationPlanSelect, Props } from 'NewApplication/components/ApplicationPlanSelect'
+import { mount, ReactWrapper } from 'enzyme'
 
-import type { Product, ApplicationPlan } from 'NewApplication/types'
+import { Product, ApplicationPlan } from 'NewApplication/types'
 
 const appPlan: ApplicationPlan = { id: 0, name: 'The Plan' }
 const createApplicationPlanPath = '/plans'
@@ -12,22 +12,18 @@ const defaultProps = {
   appPlan: null,
   createApplicationPlanPath,
   onSelect: jest.fn()
-} as const
+}
 
-const mountWrapper = (props: {
-  product: never
-} | {
-  product: null
-}) => mount(<ApplicationPlanSelect {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ApplicationPlanSelect {...{ ...defaultProps, ...props }} />)
 
-const expectToBeDisabled = (wrapper: ReactWrapper<any>, isDisabled = true) => {
+const expectToBeDisabled = (wrapper: ReactWrapper, isDisabled = true) => {
   expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)
   expect(wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled).toBe(isDisabled)
   expect(wrapper.find('button.pf-c-select__toggle-button').props().disabled).toBe(isDisabled)
 }
 
 describe('when no product selected', () => {
-  const props = { product: null } as const
+  const props = { product: null }
 
   it('should be disabled when no product is selected', () => {
     const wrapper = mountWrapper(props)
@@ -46,7 +42,7 @@ describe('when a product is selected', () => {
     defaultServicePlan: null,
     defaultAppPlan: null
   }
-  const props = { product } as const
+  const props = { product }
 
   it('should not be disabled', () => {
     const wrapper = mountWrapper(props)
@@ -54,7 +50,7 @@ describe('when a product is selected', () => {
   })
 
   describe('and the product has some application plans', () => {
-    const props = { product: { ...product, appPlans: [appPlan] } } as const
+    const props = { product: { ...product, appPlans: [appPlan] } }
 
     it('should not be disabled', () => {
       const wrapper = mountWrapper(props)
@@ -63,7 +59,7 @@ describe('when a product is selected', () => {
   })
 
   describe('but the product has no application plans', () => {
-    const props = { product: { ...product, appPlans: [] } } as const
+    const props = { product: { ...product, appPlans: [] } }
 
     it('should show a hint with a link to create a plan', () => {
       const wrapper = mountWrapper(props)

@@ -44,26 +44,24 @@ type Props = {
   error?: string
 };
 
-const NewApplicationForm = (
-  {
-    buyer: defaultBuyer,
-    buyers,
-    buyersCount = 0,
-    buyersPath,
-    createApplicationPath,
-    createApplicationPlanPath,
-    createServicePlanPath,
-    serviceSubscriptionsPath,
-    servicePlansAllowed = false,
-    product: defaultProduct,
-    products,
-    productsCount = 0,
-    productsPath,
-    definedFields,
-    validationErrors,
-    error
-  }: Props
-): React.ReactElement => {
+const NewApplicationForm: React.FunctionComponent<Props> = ({
+  buyer: defaultBuyer,
+  buyers,
+  buyersCount = 0,
+  buyersPath,
+  createApplicationPath,
+  createApplicationPlanPath,
+  createServicePlanPath,
+  serviceSubscriptionsPath,
+  servicePlansAllowed = false,
+  product: defaultProduct,
+  products,
+  productsCount = 0,
+  productsPath,
+  definedFields,
+  validationErrors,
+  error
+}) => {
   const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
   const [product, setProduct] = useState<Product | null>(defaultProduct || null)
   const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
@@ -148,8 +146,7 @@ const NewApplicationForm = (
             onSelectBuyer={setBuyer}
             buyersPath={buyersPath && `${buyersPath}.json`}
           />
-          // $FlowExpectedError[incompatible-use] either buyers or defaultBuyer is always defined
-        ) : <input type="hidden" name="account_id" value={defaultBuyer.id} />}
+        ) : <input type="hidden" name="account_id" value={(defaultBuyer as Buyer).id} />}
 
         {products && (
           <ProductSelect
@@ -209,4 +206,4 @@ const NewApplicationForm = (
 
 const NewApplicationFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewApplicationForm {...props} />, containerId)
 
-export { NewApplicationForm, NewApplicationFormWrapper }
+export { NewApplicationForm, NewApplicationFormWrapper, Props }

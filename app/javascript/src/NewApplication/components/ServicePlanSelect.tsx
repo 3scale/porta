@@ -15,17 +15,15 @@ type Props = {
   isDisabled?: boolean
 };
 
-const ServicePlanSelect = (
-  {
-    isDisabled,
-    isPlanContracted,
-    servicePlans,
-    servicePlan,
-    onSelect,
-    serviceSubscriptionsPath,
-    createServicePlanPath
-  }: Props
-): React.ReactElement => {
+const ServicePlanSelect: React.FunctionComponent<Props> = ({
+  isDisabled,
+  isPlanContracted,
+  servicePlans,
+  servicePlan,
+  onSelect,
+  serviceSubscriptionsPath,
+  createServicePlanPath
+}) => {
   const hint = isPlanContracted ? (
     <p className="hint">
       {'This account already subscribes to the service plan of the selected product. To change the account to subscribe to a different service plan for this product, go to '}
@@ -46,10 +44,7 @@ const ServicePlanSelect = (
   )
 
   return (
-    // $FlowIssue[incompatible-type-arg] It should not complain since Record.id has union "number | string"
-    // $FlowIssue[prop-missing] description is optional
     <Select
-      // $FlowIssue[incompatible-type] ServicePlan implements Record
       item={servicePlan}
       items={servicePlans || []}
       onSelect={onSelect}
@@ -65,4 +60,4 @@ const ServicePlanSelect = (
   )
 }
 
-export { ServicePlanSelect }
+export { ServicePlanSelect, Props }
