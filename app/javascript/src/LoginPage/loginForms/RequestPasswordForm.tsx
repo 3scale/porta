@@ -13,7 +13,7 @@ import {
   Button
 } from '@patternfly/react-core'
 
-type Props = {
+export type Props = {
   providerLoginPath: string,
   providerPasswordPath: string
 };

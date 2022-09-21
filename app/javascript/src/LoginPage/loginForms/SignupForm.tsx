@@ -11,7 +11,7 @@ import {
   EmailField,
   validateSingleField
 } from 'LoginPage'
-import type { SignupProps, InputProps, InputType } from 'Types'
+import { SignupProps, InputProps, InputType } from 'Types'
 
 type InputNames = 'user[username]' | 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password]' | 'user[password_confirmation]'
 

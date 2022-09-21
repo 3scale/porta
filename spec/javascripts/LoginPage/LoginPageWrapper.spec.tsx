@@ -13,7 +13,7 @@ const props = {
   show3scaleLoginForm: true,
   disablePasswordReset: false,
   session: { username: '' }
-} as const
+}
 
 it('should render itself', () => {
   const wrapper = mount(<SimpleLoginPage {...props}/>)
@@ -29,7 +29,7 @@ it('should not render reset password button when disablePasswordReset is true', 
   const propsDisabeldPasswordReset = {
     ...props,
     disablePasswordReset: true
-  } as const
+  }
   const wrapper = mount(<SimpleLoginPage {...propsDisabeldPasswordReset}/>)
   expect(wrapper).toMatchSnapshot()
 })
@@ -38,7 +38,7 @@ it('should render Login form and Authentication providers when available', () =>
   const propsWithProviders = {
     ...props,
     authenticationProviders: [{ authorizeURL: 'url-1', humanKind: 'Human 1' }, { authorizeURL: 'url-2', humanKind: 'Human 2' }]
-  } as const
+  }
   const wrapper = mount(<SimpleLoginPage {...propsWithProviders}/>)
   expect(wrapper).toMatchSnapshot()
 })
@@ -48,7 +48,7 @@ it('should render only Authenticaction providers when enforce SSO is enabled', (
     ...props,
     show3scaleLoginForm: false,
     authenticationProviders: [{ authorizeURL: 'url-1', humanKind: 'Human 1' }, { authorizeURL: 'url-2', humanKind: 'Human 2' }]
-  } as const
+  }
   const wrapper = mount(<SimpleLoginPage {...propsEnforceSSO}/>)
   expect(wrapper.find('form#new_session').exists()).toBe(false)
   expect(wrapper.find('.login-provider-link').exists()).toBe(true)
