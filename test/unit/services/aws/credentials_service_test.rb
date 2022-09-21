@@ -3,6 +3,10 @@
 require 'test_helper'
 
 class Aws::CredentialsServiceTest < ActiveSupport::TestCase
+  setup do
+    File.stubs(:exist?).returns(true)
+  end
+
   test '#call returns STS credentials when available' do
     params_for_sts_credentials = full_params.slice(:web_identity_token_file, :role_name, :role_session_name)
 
@@ -36,6 +40,15 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
       access_key_id: params_for_aws_credentials[:access_key_id],
       secret_access_key: params_for_aws_credentials[:secret_access_key]
     }
+  end
+
+  test '#call does not try to assume role if the web_identity_token_file does not exist' do
+    params_for_sts_credentials = full_params.slice(:web_identity_token_file, :role_name)
+    File.stubs(:exist?).with(params_for_sts_credentials[:web_identity_token_file]).returns(false)
+
+    Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
+
+    assert Aws::CredentialsService.call(params_for_sts_credentials)
   end
 
   private

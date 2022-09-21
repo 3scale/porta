@@ -21,7 +21,7 @@ module Aws
     # { web_identity_token_file: 'foo', role_name: 'bar' } if the values are present;
     # An empy Hash if no configurations are available;
     def call
-      if sts_params.any? && sts_params.all? { |_key, value| value.present? }
+      if sts_params.any? && sts_params.all? { |_key, value| value.present? } && web_identity_token_file_exists?
         { credentials: sts_credentials }
       else
         aws_credentials
@@ -38,12 +38,16 @@ module Aws
       Aws::AssumeRoleWebIdentityCredentials.new(
         web_identity_token_file: sts_params[:web_identity_token_file],
         role_arn: sts_params[:role_name],
-        role_session_name: sts_params[:role_session_name].presence || ROLE_SESSION_NAME
+        role_session_name: params[:role_session_name].presence || ROLE_SESSION_NAME
       )
     end
 
     def sts_params
-      params.slice(:web_identity_token_file, :role_name, :role_session_name)
+      params.slice(:web_identity_token_file, :role_name)
+    end
+
+    def web_identity_token_file_exists?
+      File.exist?(sts_params[:web_identity_token_file])
     end
   end
 end
