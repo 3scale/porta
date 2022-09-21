@@ -64,4 +64,10 @@ class CMS::S3Test < ActiveSupport::TestCase
     assert CMS::S3.options[:endpoint]
     assert_not CMS::S3.options[:use_fips_endpoint]
   end
+
+  test "#credentials calls Aws::CredentialsService with the correct arguments" do
+    Aws::CredentialsService.expects(:call).with(CMS::S3.send(:config))
+
+    CMS::S3.credentials
+  end
 end

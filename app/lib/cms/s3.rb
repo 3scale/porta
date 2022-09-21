@@ -35,7 +35,9 @@ module CMS
     end
 
     def credentials
-      config.slice(:access_key_id, :secret_access_key) if enabled?
+      return unless enabled?
+
+      Aws::CredentialsService.call(config)
     end
 
     def hostname
