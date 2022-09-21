@@ -11,7 +11,7 @@ it('should render required form fields', () => {
       description: 'A brand new API'
     },
     errors: {}
-  } as const
+  }
   const view = shallow(<ServiceManualListItems {...props}/>)
 
   expect(view).toMatchSnapshot()
@@ -28,7 +28,7 @@ it('should render required form fields with errors', () => {
       name: ["Can't be blank"],
       system_name: ['Only ASCII letters, numbers, dashes and underscores are allowed.']
     }
-  } as const
+  }
   const view = shallow(<ServiceManualListItems {...props}/>)
 
   expect(view).toMatchSnapshot()

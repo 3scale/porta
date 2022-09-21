@@ -15,13 +15,13 @@ const props = {
     errors: {}
   },
   formActionPath: 'action-path'
-} as const
+}
 
 it('should render itself', () => {
   const wrapper = shallow(<ServiceManualForm {...props}/>)
   const form = wrapper.find('#new_service')
   expect(form.exists()).toEqual(true)
-  expect(form.props().formActionPath).toEqual('action-path')
+  expect(form.prop('formActionPath')).toEqual('action-path')
 })
 
 it('should render `FormWrapper` child', () => {

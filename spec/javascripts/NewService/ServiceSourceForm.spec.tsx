@@ -10,7 +10,7 @@ const props = {
   serviceDiscoveryAuthenticateUrl,
   handleFormsVisibility: () => {},
   loadingProjects: false
-} as const
+}
 
 it('should render itself', () => {
   const wrapper = mount(<ServiceSourceForm {...props} />)

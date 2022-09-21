@@ -8,7 +8,7 @@ const props = {
   name: 'my-select',
   id: 'select-id',
   options
-} as const
+}
 
 it('should render itself properly', () => {
   const wrapper = mount(<Select {...props}/>)

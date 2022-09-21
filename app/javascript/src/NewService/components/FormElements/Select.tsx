@@ -8,28 +8,20 @@ type Props = {
   options: Array<string>
 };
 
-const Options = ({ options }) => {
-  return options.map((option) => {
-    return <option key={option} value={option}>{option}</option>
-  })
-}
-
-const Select = (
-  {
-    name,
-    id,
-    disabled,
-    onChange,
-    options
-  }: Props
-): React.ReactElement => <select
+const Select: React.FunctionComponent<Props> = ({
+  name,
+  id,
+  disabled,
+  onChange,
+  options
+}) => <select
   required
   name={name}
   id={id}
   disabled={disabled}
   onChange={onChange}
 >
-  <Options options={options}/>
+  { options.map((option) => <option key={option} value={option}>{option}</option>) }
 </select>
 
 export { Select }

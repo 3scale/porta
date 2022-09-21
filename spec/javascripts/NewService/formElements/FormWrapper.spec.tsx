@@ -9,7 +9,7 @@ const props = {
   formActionPath: 'my-path',
   hasHiddenServiceDiscoveryInput: true,
   submitText
-} as const
+}
 
 it('should render itself', () => {
   const wrapper = shallow(<FormWrapper {...props}/>)

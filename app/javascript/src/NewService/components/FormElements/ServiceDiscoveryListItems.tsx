@@ -9,10 +9,10 @@ type Props = {
   onError: (err: string) => void
 };
 
-const ServiceDiscoveryListItems = (props: Props): React.ReactElement => {
+const ServiceDiscoveryListItems: React.FunctionComponent<Props> = (props) => {
   const { projects, onError } = props
 
-  const [services, setServices] = useState([])
+  const [services, setServices] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

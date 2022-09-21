@@ -5,7 +5,7 @@ import { ErrorMessage } from 'NewService/components/FormElements'
 
 const props = {
   fetchErrorMessage: 'it failed'
-} as const
+}
 
 it('should render itself', () => {
   const wrapper = mount(<ErrorMessage {...props}/>)

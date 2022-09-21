@@ -1,25 +1,21 @@
-import React, { useEffect } from 'react'
-import type { ReactNode } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 
-import { FormWrapper, ErrorMessage,
-  ServiceDiscoveryListItems } from 'NewService/components/FormElements'
+import { FormWrapper, ErrorMessage, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import { fetchData } from 'utilities'
 
 import { PROJECTS_PATH } from 'NewService'
 
 type Props = {
   formActionPath: string,
-  setLoadingProjects: (arg1: boolean) => void
+  setLoadingProjects: (loading: boolean) => void
 };
 
-const ServiceDiscoveryForm = (
-  {
-    formActionPath,
-    setLoadingProjects
-  }: Props
-) => {
+const ServiceDiscoveryForm: FunctionComponent<Props> = ({
+  formActionPath,
+  setLoadingProjects
+}) => {
   // Don't use named imports so that useState can be mocked in specs
-  const [projects, setProjects] = React.useState([])
+  const [projects, setProjects] = React.useState<string[]>([])
   const [fetchErrorMessage, setFetchErrorMessage] = React.useState('')
 
   const fetchProjects = async () => {
@@ -58,6 +54,4 @@ const ServiceDiscoveryForm = (
   )
 }
 
-export {
-  ServiceDiscoveryForm
-}
+export { ServiceDiscoveryForm, Props }

@@ -7,7 +7,7 @@ const props = {
   htmlFor: 'label',
   label: 'My Label',
   required: true
-} as const
+}
 
 it('should render itself properly', () => {
   const wrapper = mount(<Label {...props}/>)
@@ -17,7 +17,7 @@ it('should render itself properly', () => {
 })
 
 it('should not render <abbr> tag when not required', () => {
-  const propsNotRequired = { ...props, required: false } as const
+  const propsNotRequired = { ...props, required: false }
   const wrapper = mount(<Label {...propsNotRequired}/>)
   expect(wrapper.find('abbr').exists()).toEqual(false)
 })

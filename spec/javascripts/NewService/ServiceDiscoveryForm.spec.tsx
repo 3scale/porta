@@ -1,20 +1,20 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 
-import { ServiceDiscoveryForm } from 'NewService'
+import { ServiceDiscoveryForm, Props } from 'NewService/components/ServiceDiscoveryForm'
 import { FormWrapper, ErrorMessage, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import * as utils from 'utilities/fetchData'
 
-const props = {
+const props: Props = {
   formActionPath: 'action-path',
-  setLoadingProjects: () => {}
-} as const
+  setLoadingProjects: jest.fn()
+}
 
 it('should render itself', () => {
   const wrapper = shallow(<ServiceDiscoveryForm {...props}/>)
   const form = wrapper.find('#service_source')
   expect(form.exists()).toEqual(true)
-  expect(form.props().formActionPath).toEqual('action-path')
+  expect(form.prop('formActionPath')).toEqual('action-path')
 })
 
 it('should render `FormWrapper` child', () => {
@@ -36,25 +36,26 @@ describe('fetchProjects', () => {
 
   it('should render an error when fetching projects is unsuccessful', done => {
     const msg = 'Something went wrong'
-    fetch.mockImplementation(url => { throw new Error(msg) })
+    fetch.mockImplementation(() => { throw new Error(msg) })
 
     const wrapper = mount(<ServiceDiscoveryForm {...props}/>)
 
     expect(wrapper.find(ErrorMessage).exists()).toBe(true)
     expect(wrapper.find(ErrorMessage).text()).toContain(msg)
 
-    setImmediate(done)
+    done()
   })
 
   it('should fetch projects when first redendered', done => {
     const projects = [{ name: 'project_00' }]
-    fetch.mockImplementation(url => projects)
+    fetch.mockResolvedValue(projects)
 
     const setState = jest.fn(val => {
       expect(val).toEqual(projects)
       done()
     })
     const useState = jest.spyOn(React, 'useState')
+      // @ts-ignore TODO: we should not test Reacts useState but the component's state
       .mockImplementationOnce(init => [init, setState])
 
     mount(<ServiceDiscoveryForm {...props}/>)
