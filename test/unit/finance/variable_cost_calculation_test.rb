@@ -19,7 +19,7 @@ class Finance::VariableCostCalculationTest < ActiveSupport::TestCase
 
   # http://i2.kym-cdn.com/photos/images/original/000/234/786/bf7.gif
   test "variable line items are created" do
-    travel_to (Date.new(Date.today.year + 1, 11, 04)) do
+    travel_to(Date.new(Date.today.year + 1, 11, 04)) do
 
       billing_strategy = @cinstance.provider_account.billing_strategy = FactoryBot.create(:postpaid_billing)
 

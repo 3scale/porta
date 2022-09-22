@@ -297,13 +297,13 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance.notify_about_expired_trial_periods does not send anything if plan is free' do
-    travel_to (Date.new(2009, 11, 4)) do
+    travel_to(Date.new(2009, 11, 4)) do
       provider_account = FactoryBot.create(:provider_account)
       plan = FactoryBot.create(:application_plan, issuer: provider_account.first_service!, trial_period_days: 30, cost_per_month: 0)
       FactoryBot.create(:cinstance, plan: plan)
     end
 
-    travel_to (Date.new(2009, 11, 24)) do
+    travel_to(Date.new(2009, 11, 24)) do
       CinstanceMessenger.expects(:expired_trial_period_notification).never
       Cinstance.notify_about_expired_trial_periods
     end
