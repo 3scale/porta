@@ -391,4 +391,18 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
       assert_redirected_to provider_login_path
     end
   end
+
+  class ManyAccountsTest < ActionDispatch::IntegrationTest
+    def setup
+      @provider = FactoryBot.create(:provider_account)
+      login! @provider
+    end
+
+    test 'no N+1 problems in the index' do
+      populate = ->(n) {FactoryBot.create_list(:buyer_account, n, provider_account: @provider)}
+      assert_perform_constant_number_of_queries(populate: populate) do
+        get admin_buyers_accounts_path
+      end
+    end
+  end
 end
