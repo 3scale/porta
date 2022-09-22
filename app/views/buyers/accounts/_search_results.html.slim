@@ -1,3 +1,5 @@
+- account_plans_size = @account_plans.size
+
 table class="data" id="buyer_accounts"
   thead
     tr
@@ -6,7 +8,7 @@ table class="data" id="buyer_accounts"
       th Admin
       th = sortable('created_at', 'Signup Date')
 
-      - if @account_plans.size > 1
+      - if account_plans_size > 1
         th = sortable('plans.name', 'Plan')
       - if can?(:see, :multiple_applications)
         th Apps
@@ -23,7 +25,7 @@ table class="data" id="buyer_accounts"
           = s.text_field :query, :value => search_query_value,
                                  :size => 20, :class => :query, :placeholder => 'Search for Group/Org., User login, First name, Last name, email, user_key, app_id or Application Name.'
         th
-        - if @account_plans.size > 1
+        - if account_plans_size > 1
           th = s.collection_select :plan_id, @account_plans, :id, :name,
                   { :include_blank => true },
                   { :class => :account_plans }
@@ -46,7 +48,7 @@ table class="data" id="buyer_accounts"
         td = link_to (account.org_name), admin_buyers_account_path(account)
         td = account.admin_user_display_name
         td = account.created_at.strftime("%e %b, %Y")
-        - if @account_plans.size > 1
+        - if account_plans_size > 1
           td class="plan" = h account.bought_account_plan.try(:name)
 
         - if can? :see, :multiple_applications
