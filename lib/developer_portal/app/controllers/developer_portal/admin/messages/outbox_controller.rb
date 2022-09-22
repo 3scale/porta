@@ -34,7 +34,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
 
 
   def create
-    if @message.subject.present?
+    if @message.valid?
       enqueue_message
     else
       flash[:error] = 'Please fill subject.'
