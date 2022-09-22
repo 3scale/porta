@@ -55,4 +55,4 @@ const BackendAPIIndexPage = (
 
 const BackendAPIIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendAPIIndexPage {...props} />, containerId)
 
-export { BackendAPIIndexPage, BackendAPIIndexPageWrapper }
+export { BackendAPIIndexPage, BackendAPIIndexPageWrapper, Props }

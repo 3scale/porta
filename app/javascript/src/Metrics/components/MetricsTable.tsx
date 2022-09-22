@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   Pagination as PFPagination,
+  PaginationProps,
   PaginationVariant,
   Toolbar,
   ToolbarGroup,
@@ -85,7 +86,7 @@ const MetricsTable = (
   const Pagination = ({
     variant
   }: {
-    variant?: string
+    variant?: PaginationProps['variant']
   }) => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
@@ -110,7 +111,7 @@ const MetricsTable = (
   return (
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <ToolbarGroup variant='filter-group'>
+        <ToolbarGroup> {/* TODO: add variant='filter-group' after upgrading @patternfly/react-core */}
           <ToolbarItem>
             <ToolbarSearch placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`} name="query">
               <input name="tab" type="hidden" value={activeTabKey} />
@@ -121,7 +122,7 @@ const MetricsTable = (
           </ToolbarItem>
         </ToolbarGroup>
         <ToolbarGroup>
-          <ToolbarItem align={{ default: 'alignRight' }}>
+          <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
             <Pagination />
           </ToolbarItem>
         </ToolbarGroup>
@@ -138,4 +139,4 @@ const MetricsTable = (
   )
 }
 
-export { MetricsTable }
+export { MetricsTable, Props }

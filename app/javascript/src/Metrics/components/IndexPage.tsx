@@ -39,8 +39,11 @@ const IndexPage = (
   const isActiveTabMetrics = url.searchParams.get('tab') === 'metrics'
   const activeTabKey: TabKey = isActiveTabMetrics ? 'metrics' : 'methods'
 
-  const handleTabClick = (_event: any, tabKey: TabKey) => {
-    url.searchParams.set('tab', tabKey)
+  const handleTabClick = (_event: any, tabKey: string | number) => {
+    if (tabKey !== 'metrics' && tabKey !== 'methods') {
+      throw new Error('invalid tab key')
+    }
+    url.searchParams.set('tab', tabKey as TabKey)
     url.searchParams.delete('query')
     url.searchParams.delete('page')
     url.searchParams.delete('utf8')
@@ -87,4 +90,4 @@ const IndexPage = (
   )
 }
 
-export { IndexPage }
+export { IndexPage, Props }

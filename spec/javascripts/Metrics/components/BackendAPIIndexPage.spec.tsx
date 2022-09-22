@@ -1,15 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { BackendAPIIndexPage } from 'Metrics'
+import { BackendAPIIndexPage, Props } from 'Metrics/components/BackendAPIIndexPage'
 
-const defaultProps = {
+const defaultProps: Props = {
   addMappingRulePath: '/mapping-rule/new',
   createMetricPath: '/metrics/new',
   mappingRulesPath: '/mapping-rules',
   metrics: [],
   metricsCount: 0
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<BackendAPIIndexPage {...{ ...defaultProps, ...props }} />)
 

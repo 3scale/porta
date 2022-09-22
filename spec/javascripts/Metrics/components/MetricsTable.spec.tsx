@@ -2,7 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { CheckIcon } from '@patternfly/react-icons'
-import { MetricsTable } from 'Metrics'
+import { MetricsTable, Props } from 'Metrics/components/MetricsTable'
 import { mockLocation } from 'utilities/test-utils'
 
 const metrics = new Array(6).fill({}).map((i, j) => ({
@@ -17,14 +17,14 @@ const metrics = new Array(6).fill({}).map((i, j) => ({
 }))
 const metricsCount = metrics.length * 2
 
-const defaultProps = {
+const defaultProps: Props = {
   activeTabKey: 'methods',
   mappingRulesPath: '',
   addMappingRulePath: '',
   metrics,
   metricsCount,
   createButton: <button>Add a metric</button>
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)
 

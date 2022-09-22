@@ -42,8 +42,9 @@ function closeSelectWithModal<T> (wrapper: ReactWrapper<T>) {
  * @param {string} href - the URL to be expected
  */
 function mockLocation (href: string) {
-  const location = { ...new URL(href), replace: jest.fn() } as unknown as Location // emulates Location object
-  location.replace = jest.fn()
+  const location = { href: href, toString: () => href, replace: jest.fn() } as unknown as Location
+
+  delete (window as any).location
   window.location = location
 }
 

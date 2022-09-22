@@ -57,4 +57,4 @@ const ProductIndexPage = (
 
 const ProductIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductIndexPage {...props} />, containerId)
 
-export { ProductIndexPage, ProductIndexPageWrapper }
+export { ProductIndexPage, ProductIndexPageWrapper, Props }

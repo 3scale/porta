@@ -1,16 +1,16 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ProductIndexPage } from 'Metrics'
+import { ProductIndexPage, Props } from 'Metrics/components/ProductIndexPage'
 
-const defaultProps = {
+const defaultProps: Props = {
   applicationPlansPath: '/plans',
   addMappingRulePath: '/mapping-rule/new',
   createMetricPath: '/metrics/new',
   mappingRulesPath: '/mapping-rules',
   metrics: [],
   metricsCount: 0
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ProductIndexPage {...{ ...defaultProps, ...props }} />)
 

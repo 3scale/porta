@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { IndexPage } from 'Metrics'
+import { IndexPage, Props } from 'Metrics/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
 
 const metrics = new Array(5).fill({}).map((i, j) => ({
@@ -17,14 +17,14 @@ const metrics = new Array(5).fill({}).map((i, j) => ({
 
 const createMetricPath = '/metrics/new'
 
-const defaultProps = {
+const defaultProps: Props = {
   metrics,
   metricsCount: metrics.length * 2,
   infoCard: <div>info</div>,
   addMappingRulePath: '',
   mappingRulesPath: '',
   createMetricPath
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
 

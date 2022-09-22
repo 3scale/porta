@@ -1,6 +1,6 @@
-export * from './components/IndexPage'
-export * from './components/MetricsTable'
-export * from './components/ProductIndexPage'
-export * from './components/BackendAPIIndexPage'
+export { IndexPage } from './components/IndexPage'
+export { MetricsTable } from './components/MetricsTable'
+export { ProductIndexPage } from './components/ProductIndexPage'
+export { BackendAPIIndexPage } from './components/BackendAPIIndexPage'
 
-export * from './types'
+export { TabKey } from './types'
