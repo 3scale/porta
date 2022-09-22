@@ -55,7 +55,7 @@ table class="data" id="buyer_accounts"
         td class="state" = account_states_info(account)
         td class="actions operations"
           ul.Actions
-            - if account.first_admin.try!(:pending?)
+            - if account.admin_user.try!(:pending?)
               li.Actions-item = link_to_activate_buyer_user(account.admins.first)
 
             - elsif account.pending?
