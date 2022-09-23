@@ -46,9 +46,7 @@ class Cinstance::TrialTest < ActiveSupport::TestCase
     end
 
     test 'should expire the trial after 31 days' do
-      freeze_time
       cinstance = FactoryBot.create(:cinstance, plan: @plan)
-      travel_back
       travel_to(31.days.from_now) { assert_not cinstance.trial? }
     end
   end
