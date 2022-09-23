@@ -1,9 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { Input } from 'PaymentGateways'
+import { Input, Props } from 'PaymentGateways/braintree/components/Input'
 
 const onChangeSPy = jest.fn()
-const props = {
+const props: Props = {
   id: 'my-id',
   required: true,
   name: 'username',

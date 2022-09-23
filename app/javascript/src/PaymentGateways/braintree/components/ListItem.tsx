@@ -1,21 +1,19 @@
-import React from 'react'
-import type { ReactNode } from 'react'
-import type { ListItemProps } from 'PaymentGateways'
+import React, { FunctionComponent, PropsWithChildren } from 'react'
 
-const ListItem = (
-  {
-    id,
-    children
-  }: ListItemProps
-): Node => {
-  return (
-    <li
-      id={id}
-      className="string optional form-group"
-    >
-      {children}
-    </li>
-  )
-}
+type Props = PropsWithChildren<{
+  id: string,
+}>
 
-export { ListItem }
+const ListItem: FunctionComponent<Props> = ({
+  id,
+  children
+}) => (
+  <li
+    id={id}
+    className="string optional form-group"
+  >
+    {children}
+  </li>
+)
+
+export { ListItem, Props }

@@ -1,18 +1,20 @@
-import React from 'react'
-import type { ReactNode } from 'react'
-import type { LabelProps } from 'PaymentGateways'
+import React, { FunctionComponent } from 'react'
 
-const Label = (
-  {
-    htmlFor,
-    label,
-    required
-  }: LabelProps
-): Node => <label
+type Props = {
+  htmlFor: string,
+  label: string,
+  required?: boolean
+};
+
+const Label: FunctionComponent<Props> = ({
+  htmlFor,
+  label,
+  required
+}) => <label
   htmlFor={htmlFor}
   className="col-md-4 control-label"
 >
   {`${label}${required ? ' *' : ''}`}
 </label>
 
-export { Label }
+export { Label, Props }

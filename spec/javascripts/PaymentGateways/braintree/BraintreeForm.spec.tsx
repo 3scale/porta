@@ -1,26 +1,29 @@
 import * as React from 'react'
 
-import { BraintreeForm } from 'PaymentGateways'
+import { BraintreeForm, Props } from 'PaymentGateways/braintree/BraintreeForm'
 import { mount } from 'enzyme'
+import { Client } from 'braintree-web'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore Don't care about missing types for this
 import * as hostedFields from 'braintree-web/hosted-fields'
 import * as validate from 'validate.js'
 
 jest.mock('braintree-web/hosted-fields')
-jest.spyOn(hostedFields, 'create').mockImplementation(() => Promise.resolve({
+jest.spyOn(hostedFields, 'create').mockResolvedValue({
   getState: () => ({ fields: {} }),
-  on: (event, fn) => {
+  on: (event: string, fn: any) => {
     if (event === 'validityChange') {
       fn()
     }
   }
-}))
+})
 
-jest.mock('validate')
+jest.mock('validate.js')
 
 const COUNTRIES_LIST = '[["Afghanistan","AF"],["Albania","AL"],["Algeria","DZ"],["Spain","ES"]]'
 
-const props = {
-  braintreeClient: {},
+const props: Props = {
+  braintreeClient: {} as Client,
   billingAddress: {
     company: 'Kserol',
     address: '',
@@ -36,7 +39,7 @@ const props = {
   formActionPath: 'form-path',
   countriesList: COUNTRIES_LIST,
   selectedCountryCode: 'ES'
-} as const
+}
 
 it('should render properly', () => {
   const wrapper = mount(<BraintreeForm {...props} />)
@@ -57,7 +60,7 @@ it('should pre-fill billing address inputs when a value is provided', () => {
   expect(wrapper.find('select#customer_credit_card_billing_address_country_name').props().value).toEqual('ES')
 })
 
-console.error = () => {}
+console.error = jest.fn()
 
 // FIXME: Fix log error 'Warning: An update to BraintreeForm inside a test was not wrapped in act'
 // Using 'act' or other solutions like 'runAllImmediates' does not seem to be valid solutions. Instead, the component BraintreeForm

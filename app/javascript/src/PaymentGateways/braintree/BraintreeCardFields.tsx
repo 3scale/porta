@@ -1,8 +1,8 @@
-import React from 'react'
-import type { ReactNode } from 'react'
+import React, { FunctionComponent } from 'react'
+
 import { Label, ListItem } from 'PaymentGateways'
 
-const BraintreeCardFields = (): Node => {
+const BraintreeCardFields: FunctionComponent = () => {
   return (
     <>
       <legend>Credit Card</legend>

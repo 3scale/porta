@@ -1,16 +1,20 @@
-import React from 'react'
-import type { ReactNode } from 'react'
-import type { InputProps } from 'PaymentGateways'
+import React, { FunctionComponent } from 'react'
 
-const Input = (
-  {
-    id,
-    required = false,
-    name,
-    value,
-    onChange
-  }: InputProps
-): Node => <input
+type Props = {
+  id: string,
+  required?: boolean,
+  name: string,
+  value: string,
+  onChange?: (event: React.SyntheticEvent<HTMLInputElement>) => void
+};
+
+const Input: FunctionComponent<Props> = ({
+  id,
+  required = false,
+  name,
+  value,
+  onChange
+}) => <input
   id={id}
   required={required}
   name={name}
@@ -20,4 +24,4 @@ const Input = (
   type="text"
 />
 
-export { Input }
+export { Input, Props }

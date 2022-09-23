@@ -1,6 +1,7 @@
-/* eslint-disable flowtype/no-weak-types */
-
-import type { BillingAddressData, HostedFieldsOptions } from 'PaymentGateways'
+import { Client, HostedFields, ThreeDSecure } from 'braintree-web'
+import { HostedFieldsFieldDataFields, HostedFieldsTokenizePayload } from 'braintree-web/modules/hosted-fields'
+import { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions, ThreeDSecureVerifyPayload } from 'braintree-web/modules/three-d-secure'
+import { BillingAddressData, HostedFieldsOptions } from 'PaymentGateways'
 
 const validationConstraints = {
   'customer[first_name]': {
@@ -43,7 +44,7 @@ const validationConstraints = {
       message: '^isMandatory'
     }
   }
-} as const
+}
 
 const hostedFieldOptions = {
   styles: {
@@ -71,21 +72,21 @@ const hostedFieldOptions = {
       placeholder: 'MM/YY'
     }
   }
-} as const
+}
 
-const createBraintreeClient = (client: any, clientToken: string): any => {
+const createBraintreeClient = (client: Client, clientToken: string) => {
   return client.create({ authorization: clientToken })
     .then((clientInstance) => clientInstance)
     .catch(error => console.error(error))
 }
 
 const createHostedFieldsInstance = (
-  hostedFields: any,
-  clientInstance: any,
+  hostedFields: HostedFields,
+  clientInstance: Client,
   hostedFieldOptions: HostedFieldsOptions,
   setIsCardValid: (cardValid: boolean) => void,
   setCardError: (err: string | null) => void
-): any => {
+) => {
   return hostedFields.create({
     ...hostedFieldOptions,
     client: clientInstance
@@ -93,7 +94,7 @@ const createHostedFieldsInstance = (
     .then((hostedFieldsInstance) => {
       hostedFieldsInstance.on('validityChange', () => {
         const state = hostedFieldsInstance.getState()
-        const cardValid = Object.keys(state.fields).every((key) => state.fields[key].isValid)
+        const cardValid = Object.keys(state.fields).every((key) => state.fields[key as keyof HostedFieldsFieldDataFields].isValid)
         setIsCardValid(cardValid)
       })
       hostedFieldsInstance.on('focus', () => setCardError(null))
@@ -101,8 +102,8 @@ const createHostedFieldsInstance = (
     })
     .catch(error => console.error(error))
 }
-const create3DSecureInstance = async (threeDSecure: any, clientInstance: any): Promise<any> => {
-  return await threeDSecure.create({
+const create3DSecureInstance = (threeDSecure: ThreeDSecure, clientInstance: Client) => {
+  return threeDSecure.create({
     version: 2,
     client: clientInstance
   })
@@ -110,23 +111,22 @@ const create3DSecureInstance = async (threeDSecure: any, clientInstance: any): P
     .catch(error => console.error(error))
 }
 
-const veryfyCard = async (
-  threeDSecureInstance: any,
-  payload: any,
+const veryfyCard = (
+  threeDSecureInstance: ThreeDSecure,
+  payload: HostedFieldsTokenizePayload,
   billingAddress: BillingAddressData
-): Promise<any> => {
-  const threeDSecureParameters = {
-    amount: '0.00',
-    billingAddress,
-    onLookupComplete: (data, next) => next()
-  } as const
-  const options = {
+): Promise<ThreeDSecureVerifyPayload> => {
+  const options: ThreeDSecureVerifyOptions = {
     nonce: payload.nonce,
     bin: payload.details.bin,
     challengeRequested: true,
-    ...threeDSecureParameters
-  } as const
-  return await threeDSecureInstance.verifyCard(options)
+    amount: 0.0,
+    billingAddress,
+    onLookupComplete: (_data: ThreeDSecureVerificationData, next: () => void) => next() // From https://github.com/DefinitelyTyped/DefinitelyTyped/pull/61818/commits/8411fba432567e70b1cd6bf7c79a88e7dd9a6aee
+  } as any // TODO: 2 things wrong with this:
+           // - Types must be outdated, onLookupComplete is missing from ThreeDSecureVerifyOptions.
+           // - billingAddress is completely wrong?? BillingAddressData (custom) vs. ThreeDSecureBillingAddress (what takes verifyCard)
+  return threeDSecureInstance.verifyCard(options)
     .then(response => response)
     .catch(error => error)
 }

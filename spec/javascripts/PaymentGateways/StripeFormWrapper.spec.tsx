@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+import { StripeElementsForm, Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 import { mount } from 'enzyme'
 
-const defaultProps = {
+const defaultProps: Props = {
   stripePublishableKey: 'abcd',
   setupIntentSecret: 'efgh',
   billingAddressDetails: {
@@ -14,7 +14,8 @@ const defaultProps = {
     postal_code: '80440',
     country: 'US'
   },
-  successUrl: '/Broflovski/Residence'
+  successUrl: '/Broflovski/Residence',
+  isCreditCardStored: false
 }
 
 /**

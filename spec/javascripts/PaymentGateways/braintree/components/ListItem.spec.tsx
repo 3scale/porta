@@ -1,12 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { ListItem } from 'PaymentGateways'
+import { ListItem, Props } from 'PaymentGateways/braintree/components/ListItem'
 
 const Child = () => {
   return <p id="child">Hi</p>
 }
 
-const props = {
+const props: Props = {
   id: 'my-unique-id',
   children: null
 }
@@ -22,7 +22,10 @@ it('should render without children', () => {
 })
 
 it('should render children', () => {
-  const propsChildren = { id: 'my-unique-id', children: <Child /> }
-  const wrapper = mount(<ListItem {...propsChildren} />)
+  const wrapper = mount(
+    <ListItem id="my-unique-id">
+      <Child />
+    </ListItem>
+  )
   expect(wrapper.find('#child').exists()).toBe(true)
 })

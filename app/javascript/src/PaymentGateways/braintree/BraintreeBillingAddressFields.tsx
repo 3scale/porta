@@ -1,16 +1,25 @@
-import React, { useState } from 'react'
-import { Label, Input, ListItem } from 'PaymentGateways'
-import type { ReactNode } from 'react'
-import type { BillingAddressProps } from 'PaymentGateways'
+import React, { FunctionComponent, useState } from 'react'
+import {
+  BillingAddressData,
+  Input,
+  Label,
+  ListItem
+} from 'PaymentGateways'
+import { ChangeEventHandler } from 'react'
 
-const BraintreeBillingAddressFields = (
-  {
-    countriesList,
-    billingAddressData,
-    setBillingAddressData,
-    selectedCountryCode = ''
-  }: BillingAddressProps
-): Node => {
+type Props = {
+  countriesList: Array<string[]>,
+  billingAddressData: BillingAddressData,
+  setBillingAddressData: (obj: BillingAddressData) => void,
+  selectedCountryCode: string
+}
+
+const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
+  countriesList,
+  billingAddressData,
+  setBillingAddressData,
+  selectedCountryCode = ''
+}) => {
   const [selectValue, setSelectValue] = useState(selectedCountryCode)
 
   const onChangeBillingAddressData = (value: string, field: string) => {
@@ -20,7 +29,7 @@ const BraintreeBillingAddressFields = (
     })
   }
 
-  const onSelectCountry = (e: any) => {
+  const onSelectCountry: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setSelectValue(e.currentTarget.value)
     onChangeBillingAddressData(e.currentTarget.options[e.currentTarget.selectedIndex].text, 'country')
   }
@@ -92,7 +101,7 @@ const BraintreeBillingAddressFields = (
           />
           <Input
             id="customer_credit_card_billing_address_region"
-            maxLength="3"
+            // maxLength="3" TODO: not doing anything, is it needed?
             name="customer[credit_card][billing_address][region]"
             value={billingAddressData.state}
             onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'state')}

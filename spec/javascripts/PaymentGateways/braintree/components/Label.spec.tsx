@@ -1,8 +1,8 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { Label } from 'PaymentGateways'
+import { Label, Props } from 'PaymentGateways/braintree/components/Label'
 
-const props = {
+const props: Props = {
   htmlFor: 'username',
   label: 'Username',
   required: false

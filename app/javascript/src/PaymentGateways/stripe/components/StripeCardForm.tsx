@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { useState, useRef } from 'react'
+import { useState, useRef, FunctionComponent, PropsWithChildren, FormEventHandler } from 'react'
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 import { CSRFToken } from 'utilities'
+import { PaymentMethod, StripeCardElement, StripeCardElementChangeEvent, StripeCardElementOptions } from '@stripe/stripe-js'
 
-const CARD_OPTIONS = {
+const CARD_OPTIONS: StripeCardElementOptions = {
   iconStyle: 'solid',
   style: {
     base: {
@@ -25,64 +26,44 @@ const CARD_OPTIONS = {
     focus: 'is-focused',
     empty: 'is-empty'
   }
-} as const
+}
 
-type CardElementEvent = {
-  complete: boolean,
-  brand: string,
-  elementType: string,
-  empty: boolean,
-  error: {
-    code: string,
-    message: string,
-    type: string
-  } | null | undefined,
-  value: {
-    postalCode: string
-  }
-};
-
-type EditCreditCardDetailsProps = {
+const EditCreditCardDetails: FunctionComponent<{
   onToogleVisibility: () => void,
   isStripeFormVisible: boolean
-};
-
-const EditCreditCardDetails = ({
+}> = ({
   onToogleVisibility,
   isStripeFormVisible
-}: EditCreditCardDetailsProps) => (
+}) => (
   <a className="editCardButton" onClick={onToogleVisibility}>
     <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`}></i>
     <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
   </a>
 )
 
-const CreditCardErrors = (props) => (
+const CreditCardErrors: FunctionComponent<PropsWithChildren> = ({ children }) => (
   <div className="cardErrors" role="alert">
-    {props.children}
+    {children}
   </div>
 )
 
-type StripeCardFormProps = {
+type Props = {
   setupIntentSecret: string,
   billingAddressDetails: Record<any, any>,
   successUrl: string,
   isCreditCardStored: boolean
 };
 
-const StripeCardForm = (
-  {
-    setupIntentSecret,
-    billingAddressDetails,
-    successUrl,
-    isCreditCardStored
-  }: StripeCardFormProps
-): React.ReactElement => {
-  // eslint-disable-next-line flowtype/no-weak-types
-  const formRef = useRef<any | HTMLFormElement>(null)
-  const [cardErrorMessage, setCardErrorMessage] = useState(null)
+const StripeCardForm: FunctionComponent<Props> = ({
+  setupIntentSecret,
+  billingAddressDetails,
+  successUrl,
+  isCreditCardStored
+}): React.ReactElement => {
+  const formRef = useRef<HTMLFormElement | null>(null)
+  const [cardErrorMessage, setCardErrorMessage] = useState<string | undefined>(undefined)
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
-  const [stripePaymentMethodId, setStripePaymentMethodId] = useState('')
+  const [stripePaymentMethodId, setStripePaymentMethodId] = useState<string | PaymentMethod | null>('')
   const [formComplete, setFormComplete] = useState(false)
 
   const stripe = useStripe()
@@ -90,7 +71,7 @@ const StripeCardForm = (
 
   const toogleVisibility = () => setIsStripeFormVisible(!isStripeFormVisible)
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit: FormEventHandler = async (event) => {
     event.preventDefault()
     setFormComplete(false)
 
@@ -100,7 +81,7 @@ const StripeCardForm = (
 
     const { error, setupIntent } = await stripe.confirmCardSetup(setupIntentSecret, {
       payment_method: {
-        card: elements.getElement(CardElement),
+        card: elements.getElement(CardElement) as StripeCardElement,
         billing_details: {
           address: billingAddressDetails
         }
@@ -109,15 +90,15 @@ const StripeCardForm = (
 
     if (setupIntent && setupIntent.status === 'succeeded') {
       setStripePaymentMethodId(setupIntent.payment_method)
-      formRef.current.submit()
+      formRef.current!.submit()
     } else {
-      setCardErrorMessage(error.message)
+      setCardErrorMessage(error && error.message)
     }
   }
 
-  const validateCardElement = (event: CardElementEvent) => {
+  const validateCardElement = (event: StripeCardElementChangeEvent) => {
     setFormComplete(event.complete)
-    setCardErrorMessage(event.error ? event.error.message : null)
+    setCardErrorMessage(event.error && event.error.message)
   }
 
   return (
@@ -162,7 +143,7 @@ const StripeCardForm = (
           id="stripe_payment_method_id"
           name="stripe[payment_method_id]"
           type="hidden"
-          value={stripePaymentMethodId}
+          value={stripePaymentMethodId ? stripePaymentMethodId.toString() : undefined}
         />
         <CSRFToken />
       </form>
@@ -170,4 +151,4 @@ const StripeCardForm = (
   )
 }
 
-export { StripeCardForm }
+export { StripeCardForm, Props }

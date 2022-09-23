@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { Label, Input, ListItem } from 'PaymentGateways'
-import type { ReactNode } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 
-const BraintreeUserFields = (): Node => {
+import { Label, Input, ListItem } from 'PaymentGateways'
+
+const BraintreeUserFields: FunctionComponent = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [phone, setPhone] = useState('')

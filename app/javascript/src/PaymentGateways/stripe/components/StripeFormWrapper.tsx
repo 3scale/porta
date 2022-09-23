@@ -13,6 +13,7 @@ type Props = {
     line2: string,
     city: string,
     state: string,
+    // eslint-disable-next-line camelcase
     postal_code: string,
     country: string
   },
@@ -20,15 +21,13 @@ type Props = {
   isCreditCardStored: boolean
 };
 
-const StripeElementsForm = (
-  {
-    stripePublishableKey,
-    setupIntentSecret,
-    billingAddressDetails,
-    successUrl,
-    isCreditCardStored
-  }: Props
-): React.ReactElement => {
+const StripeElementsForm: React.FunctionComponent<Props> = ({
+  stripePublishableKey,
+  setupIntentSecret,
+  billingAddressDetails,
+  successUrl,
+  isCreditCardStored
+}) => {
   const stripePromise = loadStripe(stripePublishableKey)
 
   return (
@@ -45,4 +44,4 @@ const StripeElementsForm = (
 
 const StripeFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<StripeElementsForm {...props} />, containerId)
 
-export { StripeElementsForm, StripeFormWrapper }
+export { StripeElementsForm, StripeFormWrapper, Props }
