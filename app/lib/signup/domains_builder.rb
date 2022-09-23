@@ -15,7 +15,7 @@ module Signup
     end
 
     def generate_subdomain
-      result = org_name.tr("_", "-").to_s.parameterize
+      result = org_name.to_s.tr('_', '-').parameterize
 
       while result.present? && invalid_subdomain_condition.call(subdomain: result)
         base, sequence = result.match(/\A(.*?)(?:\-(\d+))?\z/).to_a[1, 2]
