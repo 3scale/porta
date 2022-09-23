@@ -2,7 +2,6 @@ require 'test_helper'
 
 class Stats::ServiceTest < ActiveSupport::TestCase
   def setup
-    travel_back
     # TestHelpers::Time::set_format("%a, %e %B %Y %k:%M")
     @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.first_service!

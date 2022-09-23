@@ -18,7 +18,6 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   def setup
-    travel_back
     @provider = FactoryBot.create(:simple_provider)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
