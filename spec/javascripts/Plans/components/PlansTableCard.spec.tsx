@@ -2,7 +2,9 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
-import { PlansTableCard } from 'Plans/components/PlansTableCard'
+import { PlansTableCard, Props } from 'Plans/components/PlansTableCard'
+
+import type { Plan, Action } from 'Types'
 
 const fetch = jest.fn()
 fetch.mockResolvedValue({ status: 200 })
@@ -11,15 +13,15 @@ global.fetch = fetch
 const consoleSpy = jest.fn()
 console.error = consoleSpy
 
-const actions = [
+const actions: Action[] = [
   { title: 'Copy', path: '/copy', method: 'POST' },
   { title: 'Publish', path: '/publish', method: 'POST' },
   { title: 'Hide', path: '/hide', method: 'POST' },
   { title: 'Delete', path: '/delete', method: 'POST' }
 ]
 
-const plans = [{ id: 0, name: 'Basic Plan', actions, contracts: 0, state: 'state', editPath: '/edit', contractsPath: '/apps' }]
-const defaultProps = {
+const plans: Plan[] = [{ id: 0, name: 'Basic Plan', actions, contracts: 0, state: 'state', editPath: '/edit', contractsPath: '/apps' }]
+const defaultProps: Props = {
   columns: [
     { attribute: 'name', title: 'Name' },
     { attribute: 'contracts_count', title: 'Contracts' },
@@ -28,7 +30,7 @@ const defaultProps = {
   plans,
   count: plans.length,
   searchHref: '/plans'
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PlansTableCard {...{ ...defaultProps, ...props }} />)
 

@@ -22,14 +22,12 @@ export type Props = {
   searchHref: string
 };
 
-const PlansTableCard = (
-  {
-    columns,
-    plans: initialPlans,
-    count,
-    searchHref
-  }: Props
-): React.ReactElement => {
+const PlansTableCard: React.FunctionComponent<Props> = ({
+  columns,
+  plans: initialPlans,
+  count,
+  searchHref
+}) => {
   const [plans, setPlans] = React.useState<Plan[]>(initialPlans)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
@@ -38,7 +36,7 @@ const PlansTableCard = (
       .then(res => {
         if (data.status === 201) {
           alert.notice(res.notice)
-          const newPlan: Plan = safeFromJsonString(res.plan)
+          const newPlan = safeFromJsonString(res.plan) as Plan
           setPlans([...plans, newPlan])
         } else if (data.status === 422) {
           alert.error(res.error)
@@ -75,7 +73,7 @@ const PlansTableCard = (
       .then(res => {
         if (data.status === 200) {
           alert.notice(res.notice)
-          const newPlan: Plan = safeFromJsonString(res.plan)
+          const newPlan = safeFromJsonString(res.plan) as Plan
           const i = plans.findIndex(p => p.id === newPlan.id)
           plans[i] = newPlan
           setPlans(plans)
@@ -92,11 +90,7 @@ const PlansTableCard = (
     })
     .finally(() => setIsLoading(false))
 
-  const handleAction = ({
-    title,
-    path,
-    method
-  }: Action) => {
+  const handleAction = ({ title, path }: Action) => {
     if (isLoading) {
       // Block table or something when is loading, show user feedback
       return

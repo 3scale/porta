@@ -21,14 +21,12 @@ type Props = {
   path: string
 };
 
-const DefaultPlanSelectCard = (
-  {
-    plans,
-    initialDefaultPlan,
-    path: url
-  }: Props
-): React.ReactElement => {
-  const NO_DEFAULT_PLAN: Plan = { id: '', name: 'No plan selected' }
+const DefaultPlanSelectCard: React.FunctionComponent<Props> = ({
+  plans,
+  initialDefaultPlan,
+  path: url
+}) => {
+  const NO_DEFAULT_PLAN: Plan = { id: -1, name: 'No plan selected' }
 
   const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
@@ -48,13 +46,9 @@ const DefaultPlanSelectCard = (
           <CSRFToken />
           <input type="hidden" name="utf8" value="✓" />
 
-          {/* $FlowIgnore[prop-missing] description is optional */}
-          {/* $FlowIgnore[incompatible-type-arg] id can be either number or string */}
           <SelectFormGroup
             label="Default plan"
-            // $FlowIgnore[incompatible-type] plan is either Plan or null
             item={defaultPlan}
-            // $FlowIgnore[incompatible-type] id can be either number or string
             items={mappedPlans}
             onSelect={setDefaultPlan}
             fieldId="id"
@@ -83,4 +77,4 @@ const DefaultPlanSelectCard = (
 
 const DefaultPlanSelectCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
 
-export { DefaultPlanSelectCard, DefaultPlanSelectCardWrapper }
+export { DefaultPlanSelectCard, DefaultPlanSelectCardWrapper, Props }

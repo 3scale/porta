@@ -1,16 +1,16 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { PlansTable } from 'Plans/components/PlansTable'
+import { PlansTable, Props } from 'Plans/components/PlansTable'
 
 const plans: Array<never> = []
-const defaultProps = {
+const defaultProps: Props = {
   columns: [],
-  onAction: () => {},
+  onAction: jest.fn(),
   plans,
   count: plans.length,
   searchHref: '/plans'
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PlansTable {...{ ...defaultProps, ...props }} />)
 

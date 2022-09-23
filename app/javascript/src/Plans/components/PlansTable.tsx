@@ -2,7 +2,9 @@ import * as React from 'react'
 import {
   Button,
   Divider,
+  OnPerPageSelect,
   Pagination as PFPagination,
+  PaginationProps,
   PaginationVariant,
   Toolbar,
   ToolbarItem
@@ -11,7 +13,10 @@ import {
   sortable,
   Table,
   TableHeader,
-  TableBody
+  TableBody,
+  OnSort,
+  ISortBy,
+  IActionsResolver
 } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import type { Plan, Action } from 'Types'
@@ -29,15 +34,13 @@ export type Props = {
   onAction: (action: Action) => void
 };
 
-const PlansTable = (
-  {
-    columns,
-    plans,
-    count,
-    searchHref,
-    onAction
-  }: Props
-): React.ReactElement => {
+const PlansTable: React.FunctionComponent<Props> = ({
+  columns,
+  plans,
+  count,
+  searchHref,
+  onAction
+}) => {
   const tableColumns = columns.map(c => ({ title: c.title, transforms: [sortable] }))
 
   const tableRows = plans.map(p => ({
@@ -49,12 +52,8 @@ const PlansTable = (
     ]
   }))
 
-  const actionResolver = (_rowData: any, {
-    rowIndex
-  }: {
-    rowIndex: number
-  }) =>
-    plans[rowIndex].actions.map(a => ({
+  const actionResolver: IActionsResolver = (_rowData, { rowIndex }) =>
+    plans[rowIndex as number].actions.map(a => ({
       title: a.title,
       onClick: () => onAction(a)
     }))
@@ -62,19 +61,19 @@ const PlansTable = (
   const url = new URL(window.location.href)
 
   const sortParam = url.searchParams.get('sort')
-  const sortBy = {
+  const sortBy: ISortBy = {
     index: columns.findIndex(c => c.attribute === sortParam),
-    direction: url.searchParams.get('direction')
-  } as const
+    direction: (url.searchParams.get('direction') as 'asc' | 'desc' | undefined) || 'desc'
+  }
 
-  const onSort = (_event: any, index: any, direction: any) => {
+  const onSort: OnSort = (_event, index, direction) => {
     url.searchParams.set('direction', direction)
     url.searchParams.set('sort', columns[index].attribute)
     window.location.replace(url.toString())
   }
 
-  const selectPerPage = (_event: any, selectedPerPage: any) => {
-    url.searchParams.set('per_page', selectedPerPage)
+  const selectPerPage: OnPerPageSelect = (_event, selectedPerPage) => {
+    url.searchParams.set('per_page', String(selectedPerPage))
     url.searchParams.delete('page')
     window.location.href = url.toString()
   }
@@ -84,11 +83,7 @@ const PlansTable = (
     window.location.href = url.toString()
   }
 
-  const Pagination = ({
-    variant
-  }: {
-    variant?: string
-  }) => {
+  const Pagination = ({ variant }: { variant?: PaginationProps['variant'] }) => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
     return (
@@ -112,12 +107,9 @@ const PlansTable = (
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
-          <ToolbarSearch
-            placeholder="Find a plan"
-            inputAriaLabel="Find a plan"
-          />
+          <ToolbarSearch placeholder="Find a plan" />
         </ToolbarItem>
-        <ToolbarItem align={{ default: 'alignRight' }}>
+        <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
           <Pagination />
         </ToolbarItem>
       </Toolbar>

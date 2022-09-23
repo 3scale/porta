@@ -1,17 +1,19 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { DefaultPlanSelectCard } from 'Plans'
+import { DefaultPlanSelectCard, Props } from 'Plans/components/DefaultPlanSelectCard'
+
+import { Select } from 'Common/components/Select'
 
 import { openSelect, selectOption } from 'utilities/test-utils'
 
-const plan = { id: 1, name: 'My Plan' } as const
+const plan = { id: 1, name: 'My Plan' }
 const plans = [plan]
-const defaultProps = {
+const defaultProps: Props = {
   plans,
   initialDefaultPlan: null,
   path: '/foo/bar'
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }}/>)
 
@@ -34,7 +36,7 @@ it('should have a "no default plan" option', () => {
 
   selectOption(wrapper, 'No plan selected')
 
-  expect(wrapper.find('Select').first().prop('item').id).toEqual('')
+  expect(wrapper.find(Select).props().item!.id).toEqual(-1)
 })
 
 it('should be able to select a plan', () => {
@@ -42,7 +44,7 @@ it('should be able to select a plan', () => {
 
   selectOption(wrapper, plan.name)
 
-  expect(wrapper.find('Select').first().prop('item').id).toEqual(plan.id)
+  expect(wrapper.find(Select).props().item!.id).toEqual(plan.id)
 })
 
 it('should disabled the button when clearing select', () => {

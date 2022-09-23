@@ -83,7 +83,7 @@ const Select = <T extends Record>(
       helperTextInvalid={helperTextInvalid}
     >
       {isLoading && <Spinner size="md" className="pf-u-ml-md" />}
-      {item && <input type="hidden" name={name} value={item.id} />}
+      {item && <input type="hidden" name={name} value={item.id > -1 ? item.id : ''} />}
       <PF4Select
         id={fieldId}
         variant={SelectVariant.typeahead}
@@ -95,11 +95,9 @@ const Select = <T extends Record>(
         onClear={handleOnClear}
         aria-label={ariaLabel}
         isDisabled={isDisabled}
-        // $FlowIssue[incompatible-call] should not complain about plan having id as number, since Record has union "number | string"
         onFilter={handleOnFilter(items)}
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
       >
-        {/* $FlowIssue[prop-missing] className and disabled are optional */}
         {items.map(toSelectOption)}
       </PF4Select>
       {hint}

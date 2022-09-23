@@ -1,17 +1,17 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { ChangePlanSelectCard } from 'Plans/components/ChangePlanSelectCard'
+import { ChangePlanSelectCard, Props } from 'Plans/components/ChangePlanSelectCard'
+import { Select } from '@patternfly/react-core'
 
-import type { SelectOptionObject } from 'utilities'
-
+import { SelectOptionObject } from 'utilities/patternfly-utils'
 import { openSelect } from 'utilities/test-utils'
 
-const plan = { id: 0, name: 'I am a plan' } as const
-const defaultProps = {
+const plan = { id: 0, name: 'I am a plan' }
+const defaultProps: Props = {
   applicationPlans: [plan, { id: 1, name: 'I am another plan' }],
   path: '/applications/123/change_plan'
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ChangePlanSelectCard {...{ ...defaultProps, ...props }} />)
 
@@ -29,7 +29,7 @@ it('should be able to select a plan', () => {
   openSelect(wrapper)
   wrapper.find('SelectOption button').first().simulate('click')
 
-  const selected: SelectOptionObject = wrapper.find('Select#cinstance_plan_id').prop('selections')
+  const selected = wrapper.find(Select).props().selections as SelectOptionObject
   expect(selected.name).toBe(plan.name)
 })
 
@@ -54,7 +54,8 @@ it('should disable the plan already selected', () => {
 
   openSelect(wrapper)
   option().simulate('click')
-  expect(wrapper.find('Select#cinstance_plan_id').prop('selections').name).toBe(plan.name)
+  const selected = wrapper.find(Select).props().selections as SelectOptionObject
+  expect(selected.name).toBe(plan.name)
 
   openSelect(wrapper)
   expect(option().prop('className')).toMatch('pf-m-disabled')
