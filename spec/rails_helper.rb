@@ -135,7 +135,6 @@ RSpec.configure do |config|
     config.add_formatter RspecJunitFormatter, junit
   end
 
-  # Use Rails TimeHelpers
   config.include ActiveSupport::Testing::TimeHelpers
 end
 
