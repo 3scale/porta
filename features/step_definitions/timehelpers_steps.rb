@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-After do
+# We need the hooks to avoid nested time traveling
+Before do
   travel_back
 end
-
-def no_nest_travel_to(time, &block)
+After do
   travel_back
-  travel_to(time, &block)
 end
 
 def access_user_sessions
@@ -14,18 +13,18 @@ def access_user_sessions
 end
 
 Given /^the year is (\d+)$/ do |year|
-  no_nest_travel_to(Time.zone.now.change(:year => year.to_i))
+  travel_to(Time.zone.now.change(:year => year.to_i))
 end
 
 Given /^the (?:date|time) is (.*)$/ do |time|
   time = Time.zone.parse(time)
-  no_nest_travel_to(time)
+  travel_to(time)
   access_user_sessions
 end
 
 Given(/^this happened (\d+) (hours|days?) ago$/) do |num, time_range|
   time = num.to_i.public_send(time_range).ago
-  no_nest_travel_to(time)
+  travel_to(time)
   access_user_sessions
 end
 
@@ -52,14 +51,14 @@ Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
   # this ensures billing actions are run
   step %(time flies to #{date})
   # and then we freeze the time
-  no_nest_travel_to(Time.zone.parse(date))
+  travel_to(Time.zone.parse(date))
   step original.strip
 end
 
 Then /^(.+) at (\d{2}:\d{2}:\d{2})$/ do |original, time|
   time = Time.zone.parse(time)
 
-  no_nest_travel_to(time)
+  travel_to(time)
   step original.strip
 end
 
