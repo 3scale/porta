@@ -6,9 +6,6 @@ require 'test_helper'
 # Finished in 170.63189s
 # 87 tests, 160 assertions, 0 failures, 0 errors, 0 skips
 class CinstanceTest < ActiveSupport::TestCase
-  def teardown
-    travel_back
-  end
 
   test 'deleted cinstance have #to_xml working' do
     @cinstance = FactoryBot.create(:cinstance)
@@ -26,8 +23,8 @@ class CinstanceTest < ActiveSupport::TestCase
 
     travel_to(1.year.ago)
     cinstance_two = FactoryBot.create(:cinstance)
-
     travel_back
+
     assert_does_not_contain Cinstance.live_at(6.months.ago), cinstance_one
     assert_contains Cinstance.live_at(6.months.ago), cinstance_two
   end
@@ -37,8 +34,8 @@ class CinstanceTest < ActiveSupport::TestCase
 
     travel_to(1.year.ago)
     cinstance_two = FactoryBot.create(:cinstance)
-
     travel_back
+
     assert_does_not_contain Cinstance.live_at(100.years.ago..1.month.ago), cinstance_one
     assert_contains Cinstance.live_at(100.years.ago..1.month.ago), cinstance_two
   end
@@ -46,8 +43,8 @@ class CinstanceTest < ActiveSupport::TestCase
   test 'Cinstance.live returns live cinstances' do
     travel_to(1.year.ago)
     cinstance = FactoryBot.create(:cinstance)
-
     travel_back
+
     assert_contains Cinstance.live, cinstance
   end
 
@@ -56,8 +53,8 @@ class CinstanceTest < ActiveSupport::TestCase
 
     travel_to(1.year.ago)
     cinstance = FactoryBot.create(:cinstance, plan: plan)
-
     travel_back
+
     cinstance.deprecate!
 
     assert_contains Cinstance.live, cinstance
@@ -66,8 +63,8 @@ class CinstanceTest < ActiveSupport::TestCase
   test 'Cinstance.live does not return suspended cinstances' do
     travel_to(6.months.ago)
     cinstance = FactoryBot.create(:cinstance)
-
     travel_back
+
     cinstance.suspend!
 
     assert_does_not_contain Cinstance.live, cinstance
@@ -76,8 +73,8 @@ class CinstanceTest < ActiveSupport::TestCase
   test 'Cinstance.live does not return destroyed cinstances' do
     travel_to(6.months.ago)
     cinstance = FactoryBot.create(:cinstance)
-
     travel_back
+
     cinstance.destroy
 
     assert_does_not_contain Cinstance.live, cinstance
@@ -221,14 +218,12 @@ class CinstanceTest < ActiveSupport::TestCase
     plan = FactoryBot.create(:application_plan)
     cinstances = []
 
-    travel_to(1.month.ago)
-
-    6.times do
-      travel_to(1.day.from_now)
-      cinstances << FactoryBot.create(:cinstance, plan: plan)
+    travel_to(1.month.ago) do
+      6.times do
+        travel_to(1.day.from_now)
+        cinstances << FactoryBot.create(:cinstance, plan: plan)
+      end
     end
-
-    travel_back
 
     assert_equal([cinstances[5], cinstances[4], cinstances[3], cinstances[2], cinstances[1]],
                  plan.cinstances.latest)
@@ -653,6 +648,10 @@ class OnCreationTest < ActiveSupport::TestCase
     plan = FactoryBot.create(:application_plan, setup_fee: 42.42, trial_period_days: 3)
     travel_to(Time.zone.local(1942,1,1,15,20))
     @cinstance = Cinstance.create(plan: plan)
+  end
+
+  def teardown
+    travel_back
   end
 
   test 'set setup_fee and trial from plan' do

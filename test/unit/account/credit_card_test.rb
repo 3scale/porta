@@ -98,12 +98,12 @@ class Account::CreditCardTest < ActiveSupport::TestCase
   end
 
   test '#credit_card_exires_on_with_default' do
-    travel_to(Time.utc(2017,8,30))
-    account = FactoryBot.create(:simple_provider)
+    travel_to(Time.utc(2017,8,30)) do
+      account = FactoryBot.create(:simple_provider)
 
-    assert_equal '2017-08-01', account.credit_card_expires_on_with_default.to_s
-    assert_nil account.credit_card_expires_on
-    travel_back
+      assert_equal '2017-08-01', account.credit_card_expires_on_with_default.to_s
+      assert_nil account.credit_card_expires_on
+    end
   end
 
   class CreditCardNeededTest < ActiveSupport::TestCase
