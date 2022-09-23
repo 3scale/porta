@@ -310,6 +310,10 @@ class UserTest < ActiveSupport::TestCase
       @user.activate!
     end
 
+    teardown do
+      travel_back
+    end
+
     test 'not rehash password' do
       @user.update(username: 'person2')
       @user.reload
