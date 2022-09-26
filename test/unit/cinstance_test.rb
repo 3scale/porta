@@ -20,10 +20,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'Cinstance.live_at returns cinstances live at given time' do
     cinstance_one = FactoryBot.create(:cinstance)
-
-    travel_to(1.year.ago)
-    cinstance_two = FactoryBot.create(:cinstance)
-    travel_back
+    cinstance_two = travel_to(1.year.ago) { FactoryBot.create(:cinstance) }
 
     assert_does_not_contain Cinstance.live_at(6.months.ago), cinstance_one
     assert_contains Cinstance.live_at(6.months.ago), cinstance_two
@@ -31,19 +28,14 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'Cinstance.live_at returns cinstances live in given period' do
     cinstance_one = FactoryBot.create(:cinstance)
-
-    travel_to(1.year.ago)
-    cinstance_two = FactoryBot.create(:cinstance)
-    travel_back
+    cinstance_two = travel_to(1.year.ago) { FactoryBot.create(:cinstance) }
 
     assert_does_not_contain Cinstance.live_at(100.years.ago..1.month.ago), cinstance_one
     assert_contains Cinstance.live_at(100.years.ago..1.month.ago), cinstance_two
   end
 
   test 'Cinstance.live returns live cinstances' do
-    travel_to(1.year.ago)
-    cinstance = FactoryBot.create(:cinstance)
-    travel_back
+    cinstance = travel_to(1.year.ago) { FactoryBot.create(:cinstance) }
 
     assert_contains Cinstance.live, cinstance
   end
@@ -51,9 +43,7 @@ class CinstanceTest < ActiveSupport::TestCase
   test 'Cinstance.live returns deprecated cinstances' do
     plan = FactoryBot.create(:application_plan, cancellation_period: 1.month)
 
-    travel_to(1.year.ago)
-    cinstance = FactoryBot.create(:cinstance, plan: plan)
-    travel_back
+    cinstance = travel_to(1.year.ago) { FactoryBot.create(:cinstance, plan: plan) }
 
     cinstance.deprecate!
 
@@ -61,9 +51,7 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance.live does not return suspended cinstances' do
-    travel_to(6.months.ago)
-    cinstance = FactoryBot.create(:cinstance)
-    travel_back
+    cinstance = travel_to(6.months.ago) { FactoryBot.create(:cinstance) }
 
     cinstance.suspend!
 
@@ -71,9 +59,7 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance.live does not return destroyed cinstances' do
-    travel_to(6.months.ago)
-    cinstance = FactoryBot.create(:cinstance)
-    travel_back
+    cinstance = travel_to(6.months.ago) { FactoryBot.create(:cinstance) }
 
     cinstance.destroy
 
