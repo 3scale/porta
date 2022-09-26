@@ -1,7 +1,7 @@
-import type { ChainPolicy } from 'Policies/types'
+import { ChainPolicy } from 'Policies/types'
+import { Action } from 'redux'
 
-export type UpdatePolicyConfigAction = {
-  type: 'UPDATE_POLICY_CONFIG',
+export type UpdatePolicyConfigAction = Action<'UPDATE_POLICY_CONFIG'> & {
   policy: ChainPolicy
 };
 export function updatePolicyConfig (policy: ChainPolicy): UpdatePolicyConfigAction {

@@ -5,7 +5,7 @@ import { apiMiddleware } from 'redux-api-middleware'
 import { policyChainMiddleware } from 'Policies/middleware/PolicyChain'
 import rootReducer from 'Policies/reducers'
 
-import type { State, Store } from 'Policies/types'
+import { State, Store } from 'Policies/types'
 
 function configureStoreProd (initialState: State): Store {
   const middlewares = [

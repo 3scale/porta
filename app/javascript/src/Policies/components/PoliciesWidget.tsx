@@ -1,5 +1,5 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, Dispatch } from 'redux'
 import * as actions from 'Policies/actions'
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { PolicyChain } from 'Policies/components/PolicyChain'
@@ -8,7 +8,7 @@ import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInp
 import { connect } from 'react-redux'
 import { isPolicyChainChanged } from 'Policies/util'
 
-import type { ChainPolicy, State, RegistryPolicy, UIState, Dispatch, IPoliciesActions } from 'Policies/types'
+import type { ChainPolicy, State, RegistryPolicy, UIState, IPoliciesActions } from 'Policies/types'
 
 type Props = {
   registry: Array<RegistryPolicy>,
@@ -58,23 +58,13 @@ const PolicyList = ({
 
   const buttonsFieldset = document.querySelector('[id^="edit_proxy_"] > fieldset.buttons')
   if (buttonsFieldset) {
-    // classList.toggle second argument is not supported in IE11
-    if (ui.chain) {
-      buttonsFieldset.classList.remove('is-hidden')
-    } else {
-      buttonsFieldset.classList.add('is-hidden')
-    }
+    buttonsFieldset.classList.toggle('is-hidden', !ui.chain)
   }
 
   // HACK: enable the submit button after any change is made
   const submitButton = document.querySelector('#policies-button-sav')
   if (submitButton) {
-    // classList.toggle second argument is not supported in IE11
-    if (isPolicyChainChanged(chain, originalChain)) {
-      submitButton.removeAttribute('disabled')
-    } else {
-      submitButton.setAttribute('disabled', '')
-    }
+    submitButton.toggleAttribute('disabled', !isPolicyChainChanged(chain, originalChain))
   }
 
   return (
@@ -93,3 +83,4 @@ const PoliciesWidget = connect(
 )(PolicyList)
 
 export default PoliciesWidget
+export { PolicyList, Props }

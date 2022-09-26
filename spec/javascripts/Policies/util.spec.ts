@@ -1,7 +1,7 @@
 import { createReducer, generateGuid, isNotApicastPolicy, isPolicyChainChanged } from 'Policies/util'
 
-const policy00 = { $schema: '', uuid: '0', humanName: 'Headers', name: 'headers', description: ['Headers'], version: '1.0.0', configuration: {}, enabled: true, removable: true, summary: '', id: '666', data: {} } as const
-const policy01 = { $schema: '', uuid: '1', humanName: 'CORS', name: 'cors', description: ['CORS'], version: '1.0.0', configuration: {}, removable: true, summary: '', enabled: true, id: '007', data: {} } as const
+const policy00 = { $schema: '', uuid: '0', humanName: 'Headers', name: 'headers', description: ['Headers'], version: '1.0.0', configuration: {}, enabled: true, removable: true, summary: '', id: '666', data: {} }
+const policy01 = { $schema: '', uuid: '1', humanName: 'CORS', name: 'cors', description: ['CORS'], version: '1.0.0', configuration: {}, removable: true, summary: '', enabled: true, id: '007', data: {} }
 
 describe('isPolicyChainChanged', () => {
   const chain = [policy00]
@@ -36,12 +36,12 @@ describe('isPolicyChainChanged', () => {
 
 describe('isNotApicastPolicy', () => {
   it('should detect if an apicast policy', () => {
-    const apicastPolicy = { ...policy00, name: 'apicast' } as const
+    const apicastPolicy = { ...policy00, name: 'apicast' }
     expect(isNotApicastPolicy(apicastPolicy)).toBe(false)
   })
 
   it('should detect if not an apicast policy', () => {
-    const otherPolicy = { ...policy00, name: 'any-but-apicast' } as const
+    const otherPolicy = { ...policy00, name: 'any-but-apicast' }
     expect(isNotApicastPolicy(otherPolicy)).toBe(true)
   })
 })

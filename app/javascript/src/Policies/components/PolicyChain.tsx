@@ -3,7 +3,8 @@ import {
   SortableContainer,
   SortableElement,
   SortableHandle,
-  arrayMove
+  arrayMove,
+  SortEndHandler
 } from 'react-sortable-hoc'
 import { PolicyTile } from 'Policies/components/PolicyTile'
 import { HeaderButton } from 'Policies/components/HeaderButton'
@@ -22,7 +23,13 @@ type Props = {
 
 const DragHandle = SortableHandle(() => <div className="Policy-sortHandle"><i className="fa fa-sort" /></div>)
 
-const SortableItem = SortableElement(({ value, editPolicy, index }) => {
+type SortableItemProps = {
+  value: ChainPolicy,
+  editPolicy: Props['actions']['editPolicy'],
+  index: number
+}
+
+const SortableItem = SortableElement<SortableItemProps>(({ value, editPolicy, index }: SortableItemProps) => {
   const edit = () => editPolicy(value, index)
   return (
     <li className={ value.enabled ? 'Policy' : 'Policy Policy--disabled' }>
@@ -32,7 +39,12 @@ const SortableItem = SortableElement(({ value, editPolicy, index }) => {
   )
 })
 
-const SortableList = SortableContainer(({ items, editPolicy }) => (
+type SortableListProps = {
+  items: Props['chain'],
+  editPolicy: Props['actions']['editPolicy']
+}
+
+const SortableList = SortableContainer<SortableListProps>((({ items, editPolicy }: SortableListProps) => (
   <ul className="list-group">
     {items.map((policy, index) => (
       <SortableItem
@@ -43,15 +55,13 @@ const SortableList = SortableContainer(({ items, editPolicy }) => (
       />
     ))}
   </ul>
-))
+)))
 
-const PolicyChain = (
-  {
-    chain,
-    actions
-  }: Props
-): React.ReactElement => {
-  const onSortEnd = ({ oldIndex, newIndex }) => {
+const PolicyChain: React.FunctionComponent<Props> = ({
+  chain,
+  actions
+}) => {
+  const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {
     const sortedChain = arrayMove(chain, oldIndex, newIndex)
     actions.sortPolicyChain(sortedChain)
   }

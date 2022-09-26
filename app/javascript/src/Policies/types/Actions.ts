@@ -1,3 +1,4 @@
+import { ThunkAction as ReduxThunkAction } from 'redux-thunk'
 import type {
   AddPolicyToChainAction,
   RemovePolicyFromChainAction,
@@ -17,19 +18,16 @@ import type {
   LoadRegistrySuccessAction
 } from 'Policies/actions/PolicyRegistry'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
-import type { Dispatch, GetState, ChainPolicy, PolicyConfig, RegistryPolicy } from 'Policies/types'
-
-export interface IAction {
-  type: string;
-}
+import type { ChainPolicy, PolicyConfig, RegistryPolicy, State } from 'Policies/types'
 
 type PolicyChainAction = AddPolicyToChainAction | SortPolicyChainAction | LoadChainSuccessAction | LoadChainErrorAction | UpdatePolicyChainAction;
 type PolicyRegistryAction = FetchRegistrySuccessAction | FetchRegistryErrorAction | LoadRegistrySuccessAction;
 type PolicyConfigAction = UpdatePolicyConfigAction;
 
-export type ThunkAction = (dispatch: Dispatch, getState: GetState) => void;
 export type PolicyChainMiddlewareAction = UpdatePolicyInChainAction | RemovePolicyFromChainAction | LoadChainAction;
 export type Action = PolicyConfigAction | PolicyRegistryAction | PolicyChainAction | UIComponentTransitionAction | PolicyChainMiddlewareAction | SetOriginalPolicyChainAction;
+
+export type ThunkAction = ReduxThunkAction<void, State, void, Action>
 
 export interface IPoliciesActions {
   openPolicyRegistry: () => ThunkAction;
@@ -47,15 +45,6 @@ export interface IPoliciesActions {
     registry?: Array<RegistryPolicy>,
   ) => ThunkAction;
 }
-
-export type RSSAAction = {
-  [key: string]: {
-    endpoint: string,
-    method: string,
-    credentials: string,
-    types: []
-  }
-};
 
 export type FetchErrorAction = FetchChainErrorAction | FetchRegistryErrorAction;
 export type PromiseAction = Promise<Action>;

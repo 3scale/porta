@@ -1,5 +1,6 @@
 import PolicyConfigReducer from 'Policies/reducers/PolicyConfig'
 import { initialState } from 'Policies/reducers/initialState'
+import { ChainPolicy } from 'Policies/types'
 
 const schema = {
   properties: {
@@ -8,7 +9,7 @@ const schema = {
       description: 'HTTP status code to be returned'
     }
   }
-} as const
+}
 
 describe('PolicyConfigReducer', () => {
   it('should return the initial state', () => {
@@ -16,7 +17,7 @@ describe('PolicyConfigReducer', () => {
   })
 
   it('should return the updated state when updating the config', () => {
-    const newConfig = {
+    const newConfig: ChainPolicy = {
       $schema: '',
       schema,
       name: 'echo',
@@ -29,7 +30,7 @@ describe('PolicyConfigReducer', () => {
       enabled: true,
       removable: true,
       uuid: ''
-    } as const
+    }
     expect(PolicyConfigReducer(initialState.policyConfig, { type: 'UPDATE_POLICY_CONFIG', policy: newConfig }))
       .toEqual(newConfig)
   })

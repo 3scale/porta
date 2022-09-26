@@ -1,22 +1,16 @@
-import type { Reducer, ChainPolicy, IAction } from 'Policies/types'
+import { ChainPolicy } from 'Policies/types'
+import { Reducer } from 'redux'
 
-function isNotApicastPolicy (
-  policy: {
-    name: string
-  }
-): boolean {
+function isNotApicastPolicy (policy: { name: string }): boolean {
   return policy.name !== 'apicast'
 }
 
 // TODO: refactor Action types, create a common interface and remove 'any' from here
-// eslint-disable-next-line flowtype/no-weak-types
 function createReducer<S> (
   initialState: S,
-  handlers: {
-    [key: string]: (arg1: S, arg2?: any) => S
-  }
+  handlers: Record<string, (state: S, actions?: any) => S>
 ): Reducer<S> {
-  return function reducer (state: S | null | undefined = initialState, action: IAction) {
+  return function reducer (state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
       return handlers[action.type](state, action)
     }

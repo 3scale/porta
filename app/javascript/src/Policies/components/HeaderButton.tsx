@@ -1,31 +1,29 @@
-import * as React from 'react'
+import React, { FunctionComponent } from 'react'
 import { Button } from '@patternfly/react-core'
 import { PlusIcon, TimesIcon } from '@patternfly/react-icons'
+import { ThunkAction } from 'Policies/types/Actions'
 
-import type { ThunkAction } from 'Policies/types'
-
+type ButtonType = 'add' | 'cancel'
 type Props = {
-  type: 'add' | 'cancel',
+  type: ButtonType,
   onClick: () => ThunkAction,
   children?: React.ReactNode
 };
 
-const classNames = {
+const classNames: Record<ButtonType, string> = {
   add: 'PolicyChain-addPolicy',
   cancel: 'PolicyChain-addPolicy--cancel'
-} as const
+}
 
-const Icon = ({ type }) => (
+const Icon: FunctionComponent<{ type: ButtonType }> = ({ type }) => (
   type === 'add' ? <PlusIcon/> : <TimesIcon/>
 )
 
-const HeaderButton = (
-  {
-    type,
-    onClick,
-    children
-  }: Props
-): React.ReactElement => <Button
+const HeaderButton: FunctionComponent<Props> = ({
+  type,
+  onClick,
+  children
+}) => <Button
   className={classNames[type]}
   variant="link"
   icon={<Icon type={type}/>}

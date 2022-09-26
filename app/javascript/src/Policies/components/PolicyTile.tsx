@@ -8,13 +8,11 @@ type Props = {
   onClick: () => ThunkAction
 };
 
-const PolicyTile = function (
-  {
-    policy,
-    onClick,
-    title = 'Edit this Policy'
-  }: Props
-): React.ReactNode {
+const PolicyTile: React.FunctionComponent<Props> = ({
+  policy,
+  onClick,
+  title = 'Edit this Policy'
+}) => {
   return (
     <article onClick={onClick} className="Policy-article" title={title}>
       <h3 className="Policy-name">{policy.humanName}</h3>
@@ -27,4 +25,4 @@ const PolicyTile = function (
   )
 }
 
-export { PolicyTile }
+export { PolicyTile, Props }

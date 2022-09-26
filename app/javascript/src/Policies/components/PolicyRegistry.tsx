@@ -14,25 +14,25 @@ type Props = {
   }
 };
 
-const PolicyRegistry = (
-  {
-    items,
-    actions: { addPolicy, closePolicyRegistry }
-  }: Props
-): React.ReactElement => <section className="PolicyRegistry">
-  <header>
-    <h2>Select a Policy</h2>
-    <HeaderButton type='cancel' onClick={closePolicyRegistry}>
-      Cancel
-    </HeaderButton>
-  </header>
-  <ul className="list-group">
-    {items.filter(isNotApicastPolicy).map(p => (
-      <li className="Policy" key={p.name}>
-        <PolicyTile policy={p} onClick={() => addPolicy(p)} title="Add this Policy" />
-      </li>
-    ))}
-  </ul>
-</section>
+const PolicyRegistry: React.FunctionComponent<Props> = ({
+  items,
+  actions: { addPolicy, closePolicyRegistry }
+}) => (
+  <section className="PolicyRegistry">
+    <header>
+      <h2>Select a Policy</h2>
+      <HeaderButton type='cancel' onClick={closePolicyRegistry}>
+        Cancel
+      </HeaderButton>
+    </header>
+    <ul className="list-group">
+      {items.filter(isNotApicastPolicy).map(p => (
+        <li className="Policy" key={p.name}>
+          <PolicyTile policy={p} onClick={() => addPolicy(p)} title="Add this Policy" />
+        </li>
+      ))}
+    </ul>
+  </section>
+)
 
-export { PolicyRegistry }
+export { PolicyRegistry, Props }

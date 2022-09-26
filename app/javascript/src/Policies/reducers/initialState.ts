@@ -1,4 +1,4 @@
-import type { State } from 'Policies/types'
+import { State } from 'Policies/types'
 
 export const initialState: State = {
   registry: [],
@@ -6,11 +6,9 @@ export const initialState: State = {
   originalChain: [],
   policyConfig: {
     $schema: '',
-    schema: {},
     name: '',
     humanName: '',
     configuration: {},
-    id: 0,
     version: '',
     description: [''],
     summary: '',

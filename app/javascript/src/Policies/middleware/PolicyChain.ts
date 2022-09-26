@@ -75,4 +75,11 @@ const policyChainMiddleware = ({
   }
 }
 
-export { policyChainMiddleware }
+export {
+  findRegistryPolicy,
+  convertToChainPolicy,
+  removePolicy,
+  updatePolicy,
+  loadChain,
+  policyChainMiddleware
+}

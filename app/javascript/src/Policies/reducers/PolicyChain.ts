@@ -1,13 +1,14 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer, generateGuid } from 'Policies/util'
 
-import type { Reducer, ChainPolicy, RegistryPolicy } from 'Policies/types'
-import type {
+import { ChainPolicy, RegistryPolicy } from 'Policies/types'
+import {
   AddPolicyToChainAction,
   FetchChainSuccessAction,
   SortPolicyChainAction,
   UpdatePolicyChainAction
 } from 'Policies/actions/PolicyChain'
+import { Reducer } from 'redux'
 
 export type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction;
 
@@ -24,7 +25,7 @@ function updateChain (_state: Array<ChainPolicy>, action: UpdatePolicyChainActio
 }
 
 function updatePolicies (state: Array<ChainPolicy>, action: UpdateChainPolicies): Array<ChainPolicy> {
-  return [...[], ...action.payload]
+  return [...action.payload]
 }
 
 // TODO: use combineReducers instead of createReducer

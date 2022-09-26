@@ -1,4 +1,4 @@
-import { uiComponentTransition } from 'Policies/actions/UISettings'
+import { UIComponent, uiComponentTransition } from 'Policies/actions/UISettings'
 import { fetchRegistry, loadRegistrySuccess } from 'Policies/actions/PolicyRegistry'
 
 import {
@@ -9,10 +9,9 @@ import {
   loadChain
 } from 'Policies/actions/PolicyChain'
 
-import { updatePolicyConfig } from 'Policies/actions'
+import { updatePolicyConfig } from 'Policies/actions/PolicyConfig'
 
-import type { UIComponent } from 'Policies/actions/UISettings'
-import type { Dispatch, RegistryPolicy, ChainPolicy, PolicyConfig, ThunkAction } from 'Policies/types'
+import { RegistryPolicy, ChainPolicy, PolicyConfig, ThunkAction, Dispatch } from 'Policies/types'
 
 const chain: UIComponent = 'chain'
 const registry: UIComponent = 'registry'
@@ -22,8 +21,8 @@ const policyConfig: UIComponent = 'policyConfig'
  * Takes the @proxy.policies_config and @registry_policies from rails as props and
  * populates State's chain, originalChain and registry
  */
-export function loadSavedPolicies (policiesConfig: Array<PolicyConfig>, registry: Array<RegistryPolicy>): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const loadSavedPolicies = (policiesConfig: Array<PolicyConfig>, registry: Array<RegistryPolicy>): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(loadRegistrySuccess(registry))
     dispatch(loadChain(policiesConfig))
   }
@@ -34,12 +33,12 @@ export function loadSavedPolicies (policiesConfig: Array<PolicyConfig>, registry
  * if passed as arguments
  * TODO: remove this method and call fetch OR loadSaved
  */
-export function populateChainFromConfigs (
+export const populateChainFromConfigs = (
   serviceId: string,
   policiesConfig?: Array<PolicyConfig>,
   registry?: Array<RegistryPolicy>
-): ThunkAction {
-  return function (dispatch: Dispatch) {
+): ThunkAction => {
+  return (dispatch: Dispatch) => {
     if (registry && policiesConfig) {
       dispatch(loadSavedPolicies(policiesConfig, registry))
     } else {
@@ -53,8 +52,8 @@ export function populateChainFromConfigs (
  * Copies a policy from the registry and adds it to the chain with a new UUID,
  * then hides the registry component and shows the policy chain.
  */
-export function addPolicyFromRegistry (policy: RegistryPolicy): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const addPolicyFromRegistry = (policy: RegistryPolicy): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(addPolicyToChain(policy))
     dispatch(uiComponentTransition({ hide: registry, show: chain }))
   }
@@ -64,8 +63,8 @@ export function addPolicyFromRegistry (policy: RegistryPolicy): ThunkAction {
  * Removes a policy from the policy chain and then hides the policy's
  * form and shows the policy chain component.
  */
-export function removePolicyFromChain (policy: ChainPolicy): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const removePolicyFromChain = (policy: ChainPolicy): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(removePolicy(policy))
     dispatch(uiComponentTransition({ hide: policyConfig, show: chain }))
   }
@@ -74,8 +73,8 @@ export function removePolicyFromChain (policy: ChainPolicy): ThunkAction {
 /**
  * Hides the policy chain component and shows the registry component
  */
-export function openPolicyRegistry (): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const openPolicyRegistry = (): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(uiComponentTransition({ hide: chain, show: registry }))
   }
 }
@@ -83,8 +82,8 @@ export function openPolicyRegistry (): ThunkAction {
 /**
  * Hides the registry component and shows the policy chain component
  */
-export function closePolicyRegistry (): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const closePolicyRegistry = (): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(uiComponentTransition({ hide: registry, show: chain }))
   }
 }
@@ -93,8 +92,8 @@ export function closePolicyRegistry (): ThunkAction {
  * Hides the policy chain component and shows a detail of a chain
  * policy with a form to edit it.
  */
-export function openPolicyForm (policy: ChainPolicy): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const openPolicyForm = (policy: ChainPolicy): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(updatePolicyConfig(policy))
     dispatch(uiComponentTransition({ hide: chain, show: policyConfig }))
   }
@@ -105,9 +104,9 @@ export function openPolicyForm (policy: ChainPolicy): ThunkAction {
  * in the policy chain array. Then hides the form and shows the
  * policy chain component.
  */
-export function submitPolicyForm (policyConfig: ChainPolicy): ThunkAction {
-  return function (dispatch: Dispatch) {
-    dispatch(updatePolicyInChain(policyConfig))
+export const submitPolicyForm = (policyConfig: ChainPolicy): ThunkAction => {
+  return (dispatch: Dispatch) => {
+  dispatch(updatePolicyInChain(policyConfig))
     dispatch(closePolicyForm())
   }
 }
@@ -116,8 +115,8 @@ export function submitPolicyForm (policyConfig: ChainPolicy): ThunkAction {
  * Hides the selected policy's detail, discarding any changes
  * made in the form, then shows the policy chain component.
  */
-export function closePolicyForm (): ThunkAction {
-  return function (dispatch: Dispatch) {
+export const closePolicyForm = (): ThunkAction => {
+  return (dispatch: Dispatch) => {
     dispatch(uiComponentTransition({ hide: policyConfig, show: chain }))
   }
 }

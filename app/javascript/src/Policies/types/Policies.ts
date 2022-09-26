@@ -13,7 +13,7 @@ export type PolicyConfig = {
 export type RegistryPolicy = {
   $schema: string,
   configuration: Configuration,
-  description: [string],
+  description: string[], // TODO: verify this prop is correctly typed
   name: string,
   summary: string,
   version: string,

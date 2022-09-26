@@ -18,21 +18,19 @@ type Props = {
   }
 };
 
-const PolicyConfig = (
-  {
-    policy,
-    actions
-  }: Props
-): React.ReactElement => {
+const PolicyConfig: React.FunctionComponent<Props> = ({
+  policy,
+  actions
+}) => {
   const { submitPolicyConfig, removePolicyFromChain, closePolicyConfig, updatePolicyConfig } = actions
   const { humanName, version, summary, description, enabled, configuration, data, removable } = policy
 
   const onSubmit = (policy: ChainPolicy) => {
-    return ({ formData, schema }) => {
+    return ({ formData, schema }: { formData: ChainPolicy['data'], schema: ChainPolicy['configuration'] }) => {
       submitPolicyConfig({ ...policy, configuration: schema, data: formData })
     }
   }
-  const togglePolicy = (event: any) => {
+  const togglePolicy = (event: React.ChangeEvent<HTMLInputElement>) => {
     updatePolicyConfig({ ...policy, enabled: event.target.checked })
   }
   const remove = () => removePolicyFromChain(policy)
@@ -87,4 +85,4 @@ const PolicyConfig = (
   )
 }
 
-export { PolicyConfig }
+export { PolicyConfig, Props }

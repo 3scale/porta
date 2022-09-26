@@ -1,7 +1,8 @@
 import RegistryReducer from 'Policies/reducers/PolicyRegistry'
 import { initialState } from 'Policies/reducers/initialState'
+import { RegistryPolicy } from 'Policies/types'
 
-const registry = [{
+const registry: RegistryPolicy[] = [{
   $schema: 'http://apicast.io/policy-v1/schema#manifest',
   name: 'cors',
   humanName: 'CORS',
@@ -17,7 +18,7 @@ describe('RegistryReducer', () => {
   })
 
   it('should return the updated state', () => {
-    const action = { type: 'FETCH_REGISTRY_SUCCESS', payload: registry } as const
+    const action = { type: 'FETCH_REGISTRY_SUCCESS', payload: registry }
     expect(RegistryReducer([], action)).toEqual([...registry, ...[]])
   })
 })
