@@ -24,7 +24,7 @@ Given "{forum} has topic {string} from {user}" do |forum, title, user|
 end
 
 Given "{forum} has topic {string} from {user} created {word}" do |forum, title, user, time|
-  travel_to(Chronic.parse(time)) do
+  safe_travel_to(Chronic.parse(time)) do
     FactoryBot.create(:topic, :forum => forum, :title => title, :user => user)
   end
 end
@@ -48,7 +48,7 @@ Given "{forum} has the following topics:" do |forum, table|
 
     created_at = hash['Created at'] || 'now'
 
-    travel_to(Chronic.parse(created_at)) do
+    safe_travel_to(Chronic.parse(created_at)) do
       topic = FactoryBot.create(:topic, :forum    => forum,
                               :title    => hash['Topic'],
                               :tag_list => hash['Tags'],

@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
-# We need the hooks to avoid nested time traveling
-Before do
-  travel_back
-end
 After do
   travel_back
+end
+
+# Wrapper for travel_to but implementing safe nested traveling
+def safe_travel_to(time, &block)
+  previous_time = Time.zone.now
+  travel_back
+  travel_to(time, &block)
+  travel_to(previous_time) if block_given?
 end
 
 def access_user_sessions
@@ -51,15 +55,17 @@ Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
   # this ensures billing actions are run
   step %(time flies to #{date})
   # and then we freeze the time
-  travel_to(Time.zone.parse(date))
-  step original.strip
+  safe_travel_to(Time.zone.parse(date)) do
+    step original.strip
+  end
 end
 
 Then /^(.+) at (\d{2}:\d{2}:\d{2})$/ do |original, time|
   time = Time.zone.parse(time)
 
-  travel_to(time)
-  step original.strip
+  safe_travel_to(time) do
+    step original.strip
+  end
 end
 
 Then /^the (?:date|time) should be (.*)$/ do |time|

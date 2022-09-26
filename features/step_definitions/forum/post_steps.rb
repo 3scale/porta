@@ -73,7 +73,7 @@ Given "a post {string} under {topic}" do |body, topic|
 end
 
 Given "{user} posted {string} {today} under {topic}" do |user, body, time, topic|
-  travel_to(Chronic.parse(time)) do
+  safe_travel_to(Chronic.parse(time)) do
     FactoryBot.create(:post, :user => user, :topic => topic, :body => body)
   end
 end
