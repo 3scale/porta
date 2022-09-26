@@ -18,12 +18,10 @@ type Props = {
 
 const CATALOG_CONTAINER_ID = 'quick-start-catalog-page-wrapper'
 
-const QuickStartContainer = (
-  {
-    links,
-    renderCatalog
-  }: Props
-): React.ReactElement => {
+const QuickStartContainer: React.FunctionComponent<Props> = ({
+  links,
+  renderCatalog
+}) => {
   const [activeQuickStartID, setActiveQuickStartID] = useLocalStorage('quickstartId', '')
   const [allQuickStartStates, setAllQuickStartStates] = useLocalStorage('quickstarts', {})
 
