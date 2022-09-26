@@ -71,7 +71,6 @@ class ActiveSupport::TestCase
 
   def teardown
     User.current = nil
-    travel_back
   end
 end
 
