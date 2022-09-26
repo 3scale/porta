@@ -9,6 +9,7 @@ def safe_travel_to(time, &block)
   previous_time = Time.zone.now
   travel_back
   travel_to(time, &block)
+ensure
   travel_to(previous_time) if block_given?
 end
 
