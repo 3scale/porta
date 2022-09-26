@@ -13,8 +13,8 @@ Given "{buyer} has application {string} with plan {string}" do |buyer, name, pla
   plan = ApplicationPlan.find_by!(name: plan_name)
   assert buyer.provider_account.application_plans.include?(plan)
   FactoryBot.create(:cinstance, :user_account => buyer,
-                    :plan         => plan,
-                    :name         => name)
+                    plan:  plan,
+                    name:  name)
 end
 
 
