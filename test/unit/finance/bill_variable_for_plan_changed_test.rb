@@ -14,7 +14,6 @@ class Finance::BillVariableForPlanChangedTest < ActiveSupport::TestCase
   end
 
   teardown do
-    travel_back
     ENV["TZ"] = @org_tz
   end
 
