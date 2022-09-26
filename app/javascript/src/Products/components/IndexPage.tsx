@@ -7,6 +7,7 @@ import {
   PageSection,
   PageSectionVariants,
   Pagination as PFPagination,
+  PaginationProps,
   PaginationVariant,
   Title,
   Toolbar,
@@ -26,13 +27,11 @@ type Props = {
   productsCount: number
 };
 
-const IndexPage = (
-  {
-    newProductPath,
-    productsCount,
-    products
-  }: Props
-): React.ReactElement => {
+const IndexPage: React.FunctionComponent<Props> = ({
+  newProductPath,
+  productsCount,
+  products
+}) => {
   const tableColumns = [
     'Name',
     'System name',
@@ -60,10 +59,10 @@ const IndexPage = (
 
   const tableActions = ['Edit', 'Overview', 'Analytics', 'Applications', 'ActiveDocs', 'Integration'].map((title, i) => ({
     title,
-    onClick: (_event, rowId) => linkToPage(rowId, i)
+    onClick: (_event: any, rowId: any) => linkToPage(rowId, i)
   }))
 
-  const url = new URL(window.location)
+  const url = new URL(window.location.href)
 
   const selectPerPage = (_event: any, selectedPerPage: any) => {
     url.searchParams.set('per_page', selectedPerPage)
@@ -79,7 +78,7 @@ const IndexPage = (
   const Pagination = ({
     variant
   }: {
-    variant?: string
+    variant?: PaginationProps['variant']
   }) => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
@@ -118,7 +117,7 @@ const IndexPage = (
         <ToolbarItem>
           <ToolbarSearch placeholder="Find a product" />
         </ToolbarItem>
-        <ToolbarItem align={{ default: 'alignRight' }}>
+        <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
           <Pagination />
         </ToolbarItem>
       </Toolbar>
@@ -137,4 +136,4 @@ const IndexPage = (
 
 const ProductsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
 
-export { IndexPage, ProductsIndexPageWrapper }
+export { IndexPage, ProductsIndexPageWrapper, Props }

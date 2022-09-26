@@ -4,17 +4,13 @@ import { useState, useRef } from 'react'
 import { CompactListCard } from 'Common'
 import { createReactWrapper, useSearchInputEffect } from 'utilities'
 
-import type { CompactListItem } from 'Common'
+import type { CompactListItem } from 'Common/components/CompactListCard'
 
 type Props = {
   backends: Array<CompactListItem>
-};
+}
 
-const BackendsUsedListCard = (
-  {
-    backends
-  }: Props
-): React.ReactElement => {
+const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
   const [page, setPage] = useState(1)
   const [filteredBackends, setFilteredBackends] = useState(backends)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -45,4 +41,4 @@ const BackendsUsedListCard = (
 
 const BackendsUsedListCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsUsedListCard {...props} />, containerId)
 
-export { BackendsUsedListCard, BackendsUsedListCardWrapper }
+export { BackendsUsedListCard, BackendsUsedListCardWrapper, Props }

@@ -1,14 +1,16 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { IndexPage } from 'Products'
+import { IndexPage, Props } from 'Products/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
 
-const defaultProps = {
+import type { Product } from 'Products/types'
+
+const defaultProps: Props = {
   newProductPath: '',
   products: [],
   productsCount: 0
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...defaultProps, ...props }} />)
 
@@ -24,7 +26,7 @@ it('should have a link to the New Product page', () => {
 })
 
 it('should render a table with products', () => {
-  const products = new Array(10).fill({}).map((i, j) => ({
+  const products: Product[] = new Array(10).fill({}).map((i, j) => ({
     id: j,
     name: `API ${j}`,
     systemName: `api_${j}`,

@@ -1,11 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { BackendsUsedListCard } from 'Products'
+import { BackendsUsedListCard, Props } from 'Products/components/BackendsUsedListCard'
 
-const defaultProps = {
+const defaultProps: Props = {
   backends: []
-} as const
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<BackendsUsedListCard {...{ ...defaultProps, ...props }} />)
 const mockBackends = (count: number) => new Array(count).fill({}).map((i, j) => ({ name: `Backend ${j}`, description: `backend_${j}`, href: `/backends/${j}` }))
@@ -37,7 +37,7 @@ it('should be paginated and have 5 items per page', () => {
 // FIXME: input not receiving change event
 it.skip('should be filterable by name', () => {
   const Items = mockBackends(10)
-  const wrapper = mountWrapper({ Items })
+  const wrapper = mountWrapper({ backends: Items })
 
   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
   wrapper.find('.pf-c-input-group button').last().simulate('click')
@@ -49,7 +49,7 @@ it.skip('should be filterable by name', () => {
 // FIXME: input not receiving change event
 it.skip('should search when pressing Enter', () => {
   const Items = mockBackends(10)
-  const wrapper = mountWrapper({ Items })
+  const wrapper = mountWrapper({ backends: Items })
 
   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
   wrapper.find('input[type="search"]').simulate('keydown', { key: 'Enter' })
