@@ -66,9 +66,10 @@ Given "{buyer} has {int} application(s)" do |buyer, number|
 
   number.to_i.times do |index|
     FactoryBot.create(:cinstance, :user_account => buyer,
-                        :plan         => plan,
-                        :name         => "App #{index + 1}",
-                        :description  => "Yet another app")
+                        plan:         plan,
+                        name:         "App #{index + 1}",
+                        description:  "Yet another app",
+                        created_at: (number.to_i-index).seconds.ago) #Ensure applications are not created at the same second
   end
 end
 
