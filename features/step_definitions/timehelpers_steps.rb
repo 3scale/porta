@@ -14,7 +14,7 @@ ensure
 end
 
 def access_user_sessions
-  UserSession.where("revoked_at is null").each {|e| e.update_attribute(:accessed_at, Time.zone.now)}
+  UserSession.where("revoked_at is null").each {|session| session.update({ accessed_at: Time.zone.now} ) }
 end
 
 Given /^the year is (\d+)$/ do |year|
@@ -33,7 +33,7 @@ Given(/^this happened (\d+) (hours|days?) ago$/) do |num, time_range|
   access_user_sessions
 end
 
-Given /^the current date is not conflicting in new year\'s boundaries$/ do
+Given /^the current date is not conflicting in new year's boundaries$/ do
   step "the date is 15 March 2011"
 end
 
@@ -44,13 +44,13 @@ When /^(\d+) (second|minute|hour|day|week|month|year)s? pass(?:es)?$/ do |amount
 end
 
 When /^(?:the )?time flies to (.*)$/ do |date|
-  date = date.gsub(Regexp.union(%w(of st nd rd)), '')
+  date = date.gsub(Regexp.union(%w[of st nd rd]), '')
   time_machine(Time.zone.parse(date))
   step %(the date should be #{date})
   access_user_sessions
 end
 
-# Sufix 'on 5th July 2009'
+# Suffix 'on 5th July 2009'
 #
 Then /^(.+) on (\d+(?:th|st|nd|rd) \S* \d{4}(?: .*)?)$/ do |original, date|
   # this ensures billing actions are run
