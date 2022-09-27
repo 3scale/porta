@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { shallow } from 'enzyme'
 
-import { FormCollection } from 'Settings/components/Common'
+import { FormCollection, Props } from 'Settings/components/Common/FormCollection'
+import { FieldGroupProps } from 'Settings/types'
 
 it('should render correctly', () => {
-  const GoodBand = ({ name }) => <span>{name} rocks!</span>
+  const GoodBand: FunctionComponent<FieldGroupProps> = ({ name }) => <span>{name} rocks!</span>
 
-  const props = {
+  const props: Props = {
     legend: 'Some Good Bands',
     ItemComponent: GoodBand,
     collection: [
@@ -15,7 +16,7 @@ it('should render correctly', () => {
       { name: 'Radiohead' },
       { name: 'Blur' },
       { name: 'The Clash' }
-    ]
+    ] as FieldGroupProps[]
   }
 
   const view = shallow(<FormCollection {...props} />)

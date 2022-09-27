@@ -26,31 +26,31 @@ type Props = Record & {
   className?: string
 }
 
-export const toSelectOption = (
-  {
-    id,
-    name,
-    description,
-    disabled = false,
-    className
-  }: Props
-): React.ReactElement => <SelectOption
-  key={String(id)}
-  value={toSelectOptionObject({ id, name, description })}
-  className={className}
-  // TODO: when we upgrade PF, use description prop directly
-  // description={record.description}
-  data-description={description}
-  isDisabled={disabled}
+export const toSelectOption = ({
+  id,
+  name,
+  description,
+  disabled = false,
+  className
+}: Props): React.ReactElement => (
+  <SelectOption
+    key={String(id)}
+    value={toSelectOptionObject({ id, name, description })}
+    className={className}
+    // TODO: when we upgrade PF, use description prop directly
+    // description={record.description}
+    data-description={description}
+    isDisabled={disabled}
 />
+)
 
 /**
  * It creates a callback that's to be passed to a PF4 select of variant "typeahead"
  */
 export const handleOnFilter = <T extends Record>(
   items: T[],
-  getSelectOptionsForItems?: (arg1: T[]) => React.ReactElement[]
-): (e: React.ChangeEvent<HTMLInputElement>) => React.ReactElement[] => {
+  getSelectOptionsForItems?: (items: T[]) => React.ReactElement[]
+) => {
   return (e: React.SyntheticEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
     const term = new RegExp(escapeRegExp(value), 'i')

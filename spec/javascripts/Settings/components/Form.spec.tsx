@@ -1,29 +1,20 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Form } from 'Settings/components/Form'
-import {
-  SETTINGS_DEFAULT,
-  INTEGRATION_METHOD_DEFAULTS
-} from 'Settings/defaults'
 
-function setup (customProps = {}) {
-  const props = {
-    ...SETTINGS_DEFAULT,
-    ...customProps
-  }
+import { Form, Props } from 'Settings/components/Form'
+import { SETTINGS_DEFAULT, INTEGRATION_METHOD_DEFAULTS } from 'Settings/defaults'
 
-  const view = shallow(<Form {...props} />)
+const defaultProps: Props = SETTINGS_DEFAULT
 
-  return { view, props }
-}
+const mountWrapper = (props: Partial<Props> = {}) => shallow(<Form { ...{ ...defaultProps, ...props } } />)
 
 it('should render correctly', () => {
-  const { view } = setup()
+  const view = mountWrapper()
   expect(view).toMatchSnapshot()
 })
 
 it('should not render Auth Settings, Security, Credential Locations and API Gateway when Istio is selected', () => {
   const customProps = { integrationMethod: { ...INTEGRATION_METHOD_DEFAULTS, value: 'service_mesh_istio' } }
-  const { view } = setup(customProps)
+  const view = mountWrapper(customProps)
   expect(view).toMatchSnapshot()
 })

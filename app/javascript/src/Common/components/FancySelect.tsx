@@ -43,22 +43,20 @@ type Props<T extends Record> = {
 const emptyItem = { id: -1, name: 'No results found', disabled: true, privateEndpoint: '' } as const
 const FOOTER_ID = 'footer_id'
 
-const FancySelect = <T extends Record>(
-  {
-    item,
-    items,
-    onSelect,
-    label,
-    id,
-    header,
-    isDisabled,
-    name,
-    helperText,
-    helperTextInvalid,
-    placeholderText,
-    footer
-  }: Props<T>
-) => {
+const FancySelect = <T extends Record>({
+  item,
+  items,
+  onSelect,
+  label,
+  id,
+  header,
+  isDisabled,
+  name,
+  helperText,
+  helperTextInvalid,
+  placeholderText,
+  footer
+}: Props<T>) => {
   const [expanded, setExpanded] = React.useState(false)
 
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' } as const
@@ -119,7 +117,6 @@ const FancySelect = <T extends Record>(
         aria-labelledby={id}
         className={footer ? 'pf-c-select__menu--with-fixed-link' : undefined}
         isGrouped
-        // $FlowIgnore[incompatible-call] yes it is
         onFilter={handleOnFilter<T>(items, getSelectOptionsForItems)}
         placeholderText={placeholderText}
       >

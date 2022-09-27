@@ -1,23 +1,22 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { FormGroup, TextInput } from '@patternfly/react-core'
-import type { FieldGroupProps } from 'Settings/types'
 
-const TextInputGroup = (
-  {
-    defaultValue,
-    placeholder,
-    label,
-    name,
-    hint,
-    value,
-    isDefaultValue = false,
-    readOnly = false,
-    inputType = 'text'
-  }: FieldGroupProps
-): React.ReactElement => {
+import { FormGroup, TextInput } from '@patternfly/react-core'
+import { FieldGroupProps } from 'Settings/types'
+
+const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({
+  defaultValue,
+  placeholder,
+  label,
+  name,
+  hint,
+  value,
+  isDefaultValue = false,
+  readOnly = false,
+  inputType = 'text'
+}) => {
   const [ inputValue, setInputValue ] = useState(value)
-  const onChange = (value: any, _e: any) => setInputValue(value)
+  const onChange = (value: string) => setInputValue(value)
   return (
     <FormGroup label={label} fieldId={`service_proxy_attributes_${name}_input`} helperText={hint}>
       <TextInput
@@ -33,6 +32,4 @@ const TextInputGroup = (
   )
 }
 
-export {
-  TextInputGroup
-}
+export { TextInputGroup, FieldGroupProps as Props }

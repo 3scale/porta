@@ -1,20 +1,19 @@
 import * as React from 'react'
+
 import { FormFieldset, FormLegend } from 'Settings/components/Common'
-import type { FieldGroupProps } from 'Settings/types'
+import { FieldGroupProps } from 'Settings/types'
 
 type Props = {
   collection: FieldGroupProps[],
-  ItemComponent: (arg1: FieldGroupProps) => React.ReactElement,
+  ItemComponent: React.FunctionComponent<FieldGroupProps>,
   legend: string
 };
 
-const FormCollection = (
-  {
-    collection,
-    ItemComponent,
-    legend
-  }: Props
-): React.ReactElement => {
+const FormCollection: React.FunctionComponent<Props> = ({
+  collection,
+  ItemComponent,
+  legend
+}) => {
   return (
     <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
       <FormLegend>{legend}</FormLegend>
@@ -23,6 +22,4 @@ const FormCollection = (
   )
 }
 
-export {
-  FormCollection
-}
+export { FormCollection, Props }

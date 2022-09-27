@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should not render when Service Mesh is active 1`] = `""`;
+
+exports[`should render correctly 1`] = `
+<FormFieldset
+  id="fieldset-AuthenticationSettings"
+>
+  <FormLegend>
+    Authentication Settings
+  </FormLegend>
+  <FormCollection
+    ItemComponent={[Function]}
+    collection={
+      Array [
+        Object {
+          "label": "Auth user key",
+          "name": "auth_user_key",
+          "value": "user_key",
+        },
+      ]
+    }
+    legend="API KEY (USER_KEY) BASICS"
+  />
+</FormFieldset>
+`;
+
+exports[`should render only OIDC when Service Mesh is active and Oidc method is selected 1`] = `
+<FormFieldset
+  id="fieldset-AuthenticationSettings"
+>
+  <FormLegend>
+    Authentication Settings
+  </FormLegend>
+  <OidcFieldset
+    basicSettings={
+      Object {
+        "item": Object {
+          "hint": "Location of your OpenID Provider. The format of this endpoint is determined on your OpenID Provider setup. A common guidance would be \\"https://CLIENT_ID:CLIENT_SECRET@HOST:PORT/auth/realms/REALM_NAME\\".",
+          "label": "OpenID Connect Issuer",
+          "name": "oidc_issuer_endpoint",
+          "placeholder": "https://sso.example.com/auth/realms/gateway",
+          "value": "",
+        },
+        "type": Object {
+          "catalog": Object {
+            "keycloak": "Red Hat Single Sign-On",
+            "rest": "REST API",
+          },
+          "label": "OpenID Connect Issuer Type",
+          "name": "oidc_issuer_type",
+          "value": "keycloak",
+        },
+      }
+    }
+    flowSettings={
+      Array [
+        Object {
+          "checked": false,
+          "label": "Service Accounts Flow",
+          "name": "service_accounts_enabled",
+        },
+        Object {
+          "checked": false,
+          "label": "Authorization Code Flow",
+          "name": "standard_flow_enabled",
+        },
+        Object {
+          "checked": false,
+          "label": "Implicit Flow",
+          "name": "implicit_flow_enabled",
+        },
+        Object {
+          "checked": false,
+          "label": "Direct Access Grant Flow",
+          "name": "direct_access_grants_enabled",
+        },
+      ]
+    }
+    isServiceMesh={true}
+    jwtSettings={
+      Object {
+        "item": Object {
+          "hint": "The Token Claim that contains the clientID. Defaults to \\"azp\\".",
+          "label": "ClientID Token Claim",
+          "name": "jwt_claim_with_client_id",
+          "placeholder": "azp",
+          "value": "azp",
+        },
+        "type": Object {
+          "catalog": Object {
+            "liquid": "liquid",
+            "plain": "plain",
+          },
+          "hint": "Process the ClientID Token Claim value as a string or as a liquid template. When set to \\"Liquid\\" you can define more complex rules. e.g. If \\"some_claim\\" is an array you can select the first value this like {{ some_claim | first }}.",
+          "label": "ClientID Token Claim Type",
+          "name": "jwt_claim_with_client_id_type",
+          "value": "plain",
+        },
+      }
+    }
+  />
+</FormFieldset>
+`;

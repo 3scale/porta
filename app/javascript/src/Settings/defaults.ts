@@ -1,15 +1,21 @@
-const INTEGRATION_METHOD_DEFAULTS = {
+import { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeItemProps } from 'Settings/types'
+import { Props } from './components/Form'
+
+const INTEGRATION_METHOD_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
   value: 'hosted',
   name: 'deployment_option',
+  label: '',
   catalog: {
     hosted: 'APIcast 3scale managed',
     self_managed: 'APIcast self-managed',
     service_mesh_istio: 'Istio'
   }
 }
-const AUTHENTICATION_METHOD_DEFAULTS = {
+
+const AUTHENTICATION_METHOD_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
   value: '1',
   name: 'proxy_authentication_method',
+  label: '',
   catalog: {
     '1': 'API Key (user_key)',
     '2': 'App_ID and App_Key Pair',
@@ -17,7 +23,7 @@ const AUTHENTICATION_METHOD_DEFAULTS = {
   }
 }
 
-const PROXY_ENDPOINTS_DEFAULTS = [
+const PROXY_ENDPOINTS_DEFAULTS: FieldGroupProps[] = [
   {
     defaultValue: 'https://api-2.staging.apicast.com',
     placeholder: 'https://api.provider-name.com',
@@ -38,13 +44,13 @@ const PROXY_ENDPOINTS_DEFAULTS = [
   }
 ]
 
-const API_KEY_SETTINGS_DEFAULT = {
+const API_KEY_SETTINGS_DEFAULT: FieldGroupProps = {
   label: 'Auth user key',
   name: 'auth_user_key',
   value: 'user_key'
 }
 
-const APP_ID_KEY_PAIR_SETTINGS_DEFAULT = [
+const APP_ID_KEY_PAIR_SETTINGS_DEFAULT: FieldGroupProps[] = [
   {
     label: 'App ID parameter',
     name: 'auth_app_id',
@@ -58,7 +64,7 @@ const APP_ID_KEY_PAIR_SETTINGS_DEFAULT = [
   }
 ]
 
-const OIDC_BASICS_SETTINGS_DEFAULTS = {
+const OIDC_BASICS_SETTINGS_DEFAULTS: TypeItemProps = {
   type: {
     value: 'keycloak',
     name: 'oidc_issuer_type',
@@ -77,14 +83,14 @@ const OIDC_BASICS_SETTINGS_DEFAULTS = {
   }
 }
 
-const OIDC_FLOW_SETTINGS_DEFAULTS = [
+const OIDC_FLOW_SETTINGS_DEFAULTS: FieldGroupProps[] = [
   { name: 'service_accounts_enabled', label: 'Service Accounts Flow', checked: false },
   { name: 'standard_flow_enabled', label: 'Authorization Code Flow', checked: false },
   { name: 'implicit_flow_enabled', label: 'Implicit Flow', checked: false },
   { name: 'direct_access_grants_enabled', label: 'Direct Access Grant Flow', checked: false }
-]
+] as FieldGroupProps[] // Hack: value is required string, however it is not in the defaults... We need to check this before making it optional or adding empty string '' to the defaults.
 
-const OIDC_JWT_SETTINGS_DEFAULTS = {
+const OIDC_JWT_SETTINGS_DEFAULTS: TypeItemProps = {
   type: {
     value: 'plain',
     name: 'jwt_claim_with_client_id_type',
@@ -110,9 +116,10 @@ const OIDC_SETTINGS_DEFAULTS = {
   jwtSettings: OIDC_JWT_SETTINGS_DEFAULTS
 }
 
-const CREDENTIALS_LOCATION_DEFAULTS = {
+const CREDENTIALS_LOCATION_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
   value: 'headers',
   name: 'credentials_location',
+  label: '',
   catalog: {
     headers: 'As HTTP Headers',
     query: 'As query parameters (GET) or body parameters (POST/PUT/DELETE)',
@@ -120,7 +127,7 @@ const CREDENTIALS_LOCATION_DEFAULTS = {
   }
 }
 
-const SECURITY_DEFAULTS = [
+const SECURITY_DEFAULTS: FieldGroupProps[] = [
   {
     defaultValue: '',
     placeholder: 'https://api.provider-name.com',
@@ -141,7 +148,7 @@ const SECURITY_DEFAULTS = [
   }
 ]
 
-const GATEWAY_RESPONSE_DEFAULT = [
+const GATEWAY_RESPONSE_DEFAULT: LegendCollectionProps[] = [
   {
     legend: 'Authentication Failed Error',
     collection: [
@@ -242,7 +249,7 @@ const AUTHENTICATION_SETTINGS_DEFAULT = {
   apiKeySettings: API_KEY_SETTINGS_DEFAULT
 }
 
-const SETTINGS_DEFAULT = {
+const SETTINGS_DEFAULT: Props = {
   isProxyCustomUrlActive: false,
   integrationMethod: INTEGRATION_METHOD_DEFAULTS,
   authenticationMethod: AUTHENTICATION_METHOD_DEFAULTS,

@@ -9,22 +9,16 @@ type Props = {
   legend: string
 };
 
-const TypeItemCombo = (
-  {
-    type,
-    item,
-    legend
-  }: Props
-): React.ReactElement => {
-  return (
-    <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
-      <FormLegend>{legend}</FormLegend>
-      <SelectGroup {...type} />
-      <TextInputGroup {...item} />
-    </FormFieldset>
-  )
-}
+const TypeItemCombo: React.FunctionComponent<Props> = ({
+  type,
+  item,
+  legend
+}: Props) => (
+  <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
+    <FormLegend>{legend}</FormLegend>
+    <SelectGroup {...type} />
+    <TextInputGroup {...item} />
+  </FormFieldset>
+)
 
-export {
-  TypeItemCombo
-}
+export { TypeItemCombo }

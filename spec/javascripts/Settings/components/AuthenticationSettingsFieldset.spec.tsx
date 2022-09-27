@@ -1,11 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+
 import { AuthenticationSettingsFieldset } from 'Settings/components/AuthenticationSettingsFieldset'
-import { AUTHENTICATION_SETTINGS_DEFAULTS } from 'Settings/defaults'
+import { AUTHENTICATION_SETTINGS_DEFAULT } from 'Settings/defaults'
 
 function setup (customProps = {}) {
   const props = {
-    ...AUTHENTICATION_SETTINGS_DEFAULTS,
+    ...AUTHENTICATION_SETTINGS_DEFAULT,
     ...{
       isServiceMesh: false,
       authenticationMethod: '1'

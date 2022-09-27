@@ -15,4 +15,4 @@ const FormFieldset: React.FunctionComponent<Props> = ({ children, className = ''
   </fieldset>
 )
 
-export { FormFieldset }
+export { FormFieldset, Props }

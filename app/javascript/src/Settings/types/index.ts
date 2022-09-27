@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { TextInputProps } from '@patternfly/react-core'
 
 export type FieldGroupProps = {
   name: string,
@@ -6,20 +6,18 @@ export type FieldGroupProps = {
   label: string,
   children?: React.ReactNode,
   legend?: string,
-  checked?: string,
+  checked?: boolean,
   hint?: string,
   placeholder?: string,
   defaultValue?: string,
   readOnly?: boolean,
-  inputType?: string,
+  inputType?: TextInputProps['type'],
   isDefaultValue?: boolean,
   onChange?: (value: string, event: React.SyntheticEvent<HTMLButtonElement>) => void
 };
 
 export type FieldCatalogProps = {
-  catalog: {
-    [key: string]: string
-  }
+  catalog: Record<string, string>
 };
 
 export type TypeItemProps = {
@@ -30,23 +28,4 @@ export type TypeItemProps = {
 export type LegendCollectionProps = {
   legend: string,
   collection: FieldGroupProps[]
-};
-
-export type SettingsProps = {
-  isProxyCustomUrlActive: boolean,
-  integrationMethod: FieldGroupProps & FieldCatalogProps,
-  authenticationMethod: FieldGroupProps & FieldCatalogProps,
-  proxyEndpoints: FieldGroupProps[],
-  authenticationSettings: {
-    appIdKeyPairSettings: FieldGroupProps[],
-    apiKeySettings: FieldGroupProps,
-    oidcSettings: {
-      basicSettings: TypeItemProps,
-      flowSettings: FieldGroupProps[],
-      jwtSettings: TypeItemProps
-    }
-  },
-  credentialsLocation: FieldGroupProps & FieldCatalogProps,
-  security: FieldGroupProps[],
-  gatewayResponse: LegendCollectionProps[]
 };
