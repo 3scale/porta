@@ -17,20 +17,20 @@ module Aws
     end
 
     # @return [Hash] Depending on the available connections, this method may return:
-    # { credentials: Aws::STS::Types::AssumeRoleWithWebIdentityResponse } if STS credentials are available;
-    # { web_identity_token_file: 'foo', role_name: 'bar' } if the values are present;
-    # An empy Hash if no configurations are available;
+    # When STS credentials are available: { credentials: Aws::STS::Types::AssumeRoleWithWebIdentityResponse };
+    # When STS credentials are not available: { web_identity_token_file: 'foo', role_name: 'bar' };
+    # When no configurations are available: An empy Hash{};
     def call
       if sts_params.any? && sts_params.all? { |_key, value| value.present? } && web_identity_token_file_exists?
         { credentials: sts_credentials }
       else
-        aws_credentials
+        iam_credentials
       end
     end
 
     private
 
-    def aws_credentials
+    def iam_credentials
       params.slice(:access_key_id, :secret_access_key)
     end
 
