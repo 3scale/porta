@@ -167,8 +167,6 @@ class Account < ApplicationRecord
   has_many :sso_authorizations, through: :users
   has_many :user_sessions, through: :users
 
-  validates :org_name, format: { with: /\A.*[a-zA-Z0-9]+.*\z/, message: :invalid_format }
-
   alias_attribute :name, :org_name
 
   has_one :onboarding
@@ -262,7 +260,8 @@ class Account < ApplicationRecord
 
   # TODO: multitenant. enable it?
   # validates_uniqueness_of :s3_prefix
-  validates :org_name, presence: true, length: { maximum: 255 }
+  validates :org_name, format: { with: /\A.*[a-zA-Z0-9]+.*\z/, message: :invalid_format },
+                       presence: true, length: { maximum: 255 }
 
   validates :org_legaladdress, :domain, :telephone_number, :site_access_code,
             :billing_address_name, :billing_address_address1, :billing_address_address2, :billing_address_city,
