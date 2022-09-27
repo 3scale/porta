@@ -8,8 +8,6 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call returns STS credentials when available' do
-    params_for_sts_credentials = full_params.slice(:web_identity_token_file, :role_name, :role_session_name)
-
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(
       web_identity_token_file: params_for_sts_credentials[:web_identity_token_file],
       role_arn: params_for_sts_credentials[:role_name],
@@ -20,15 +18,15 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call uses a default role session name for STS credentials if not provided' do
-    params_for_sts_credentials = full_params.slice(:web_identity_token_file, :role_name)
-
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(
       web_identity_token_file: params_for_sts_credentials[:web_identity_token_file],
       role_arn: params_for_sts_credentials[:role_name],
       role_session_name: '3scale-porta'
     ).returns(assume_role_response)
 
-    assert Aws::CredentialsService.call(params_for_sts_credentials), { credentials: assume_role_response }
+    assert Aws::CredentialsService.call(
+      params_for_sts_credentials.except(:role_session_name)
+    ), { credentials: assume_role_response }
   end
 
   test '#call returns AWS default credentials when STS ones are not available' do
@@ -43,7 +41,6 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call does not try to assume role if the web_identity_token_file does not exist' do
-    params_for_sts_credentials = full_params.slice(:web_identity_token_file, :role_name)
     File.stubs(:exist?).with(params_for_sts_credentials[:web_identity_token_file]).returns(false)
 
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
@@ -61,6 +58,10 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
       role_name: 'ROLE_NAME',
       role_session_name: 'role_session_name'
     }
+  end
+
+  def params_for_sts_credentials
+    full_params.slice(:web_identity_token_file, :role_name, :role_session_name)
   end
 
   def assume_role_response
