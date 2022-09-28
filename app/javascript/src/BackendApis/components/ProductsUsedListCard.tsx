@@ -1,18 +1,15 @@
 import * as React from 'react'
 import { useState, useRef } from 'react'
 
-import { CompactListCard, CompactListItem } from 'Common'
-import { createReactWrapper, useSearchInputEffect } from 'utilities'
+import { CompactListCard, CompactListItem } from 'Common/components/CompactListCard'
+import { useSearchInputEffect } from 'utilities/useSearchInputEffect'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 type Props = {
   products: Array<CompactListItem>
 };
 
-const ProductsUsedListCard = (
-  {
-    products
-  }: Props
-): React.ReactElement => {
+const ProductsUsedListCard: React.FunctionComponent<Props> = ({ products }) => {
   const [page, setPage] = useState(1)
   const [filteredProducts, setFilteredProducts] = useState(products)
   const searchInputRef = useRef<HTMLInputElement | null>(null)

@@ -1,9 +1,7 @@
-import { fromJsonString, safeFromJsonString } from 'utilities'
+import { fromJsonString, safeFromJsonString } from 'utilities/json-utils'
 
 const goodOlJsonString = '{"answer": "42"}'
 const badOlJsonString = "{answer': '42'}"
-
-console.warn = jest.fn()
 
 describe('fromJsonString', () => {
   it('should successfully parse the json string', () => {
@@ -13,10 +11,6 @@ describe('fromJsonString', () => {
   it('should throw error when parsing a bad formatted json string', () => {
     expect(() => fromJsonString(badOlJsonString)).toThrow('Unexpected token a in JSON at position 1')
   })
-
-  it('should throw an error when parsing undefined', () => {
-    expect(() => fromJsonString(undefined)).toThrow()
-  })
 })
 
 describe('safeFromJsonString', () => {
@@ -25,6 +19,7 @@ describe('safeFromJsonString', () => {
   })
 
   it('should return undefined when parsing a bad formatted json string', () => {
+    jest.spyOn(console, 'error').mockImplementationOnce(() => undefined)
     expect(safeFromJsonString(badOlJsonString)).toBe(undefined)
   })
 

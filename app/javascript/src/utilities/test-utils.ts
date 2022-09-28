@@ -19,13 +19,10 @@ function openSelect<T> (wrapper: ReactWrapper<T>) {
 
 function openSelectWithModal<T> (wrapper: ReactWrapper<T>) {
   // HACK: suppress error logs during this step cause wrapping it inside act() makes the test fail
-  const spy = jest.spyOn(console, 'error')
-  spy.mockImplementation(() => {})
+  jest.spyOn(console, 'error').mockImplementationOnce(() => '')
 
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
-
-  spy.mockClear()
 }
 
 function closeSelectWithModal<T> (wrapper: ReactWrapper<T>) {
@@ -44,6 +41,7 @@ function closeSelectWithModal<T> (wrapper: ReactWrapper<T>) {
 function mockLocation (href: string) {
   const location = { href: href, toString: () => href, replace: jest.fn() } as unknown as Location
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (window as any).location
   window.location = location
 }
@@ -66,7 +64,7 @@ function isSubmitDisabled<T> (wrapper: ReactWrapper<T>): boolean {
 function updateInput<T> (
   wrapper: ReactWrapper<T>,
   value: string,
-  input: string | ReactWrapper<any> = 'input'
+  input: string | ReactWrapper<unknown> = 'input'
 ) {
   const _input = typeof input === 'string' ? wrapper.find(input).at(0) : input
   const node: HTMLInputElement = _input.getDOMNode()

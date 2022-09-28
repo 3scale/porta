@@ -6,5 +6,5 @@ it('should work', () => {
   mockLocation('http://www.example.com?tab=metrics')
   expect(isActiveTab('metrics')).toBe(true)
 
-  expect(isActiveTab('metric')).toBe(false)
+  expect(isActiveTab('methods')).toBe(false)
 })

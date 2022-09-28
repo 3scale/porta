@@ -1,4 +1,4 @@
-// eslint-disable-next-line flowtype/no-weak-types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toJsonString = (val: any): string => JSON.stringify(val, null, 2)
 
 const fromJsonString = <T>(json: string): T => JSON.parse(json)
@@ -11,7 +11,7 @@ const safeFromJsonString = <T>(json?: string): T | undefined => {
 
   try {
     return fromJsonString<T>(json)
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('That doesn\'t look like a valid json!', err)
     return undefined
   }

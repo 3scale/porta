@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 
-const useClickOutside = (ref: any, cb: any) => {
+const useClickOutside = (ref: React.MutableRefObject<HTMLElement | null>, cb: () => unknown) => {
   useEffect(() => {
     /**
     * Alert if clicked on outside of element
     */
-    function handleClickOutside (event: any) {
-      if (ref.current && !ref.current.contains(event.target)) {
+    function handleClickOutside (event: Event) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         cb()
       }
     }

@@ -1,24 +1,18 @@
 import { useEffect } from 'react'
-import { TextInput } from '@patternfly/react-core'
 
 type OnSearch = (term?: string) => void;
-type InputRef = {
-  current: null | React.ElementRef<typeof TextInput>
-};
 
 /**
 * Custom React hook to use with input fields of type search
 * It receives a React reference and attach all necessary hooks and events in order to
 * have search on typing. Search event is triggered on 'Enter' pressed.
 */
-export const useSearchInputEffect = (inputRef: InputRef, onSearch: OnSearch): void => useEffect(() => {
-  const listenToClearButton: EventListener = (evt: Event) => {
+export const useSearchInputEffect = (inputRef: React.MutableRefObject<HTMLInputElement | null>, onSearch: OnSearch): void => useEffect(() => {
+  const listenToClearButton: EventListener = (evt) => {
     if (!(evt as InputEvent).inputType) onSearch()
   }
 
-  const listenToKeyDown = ({
-    key
-  }: KeyboardEvent) => {
+  const listenToKeyDown = ({ key }: KeyboardEvent) => {
     if (key === 'Enter' && inputRef.current) onSearch(inputRef.current.value)
   }
 
