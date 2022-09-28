@@ -235,9 +235,6 @@ without fake Core server your after commit callbacks will crash and you might ge
       resource :dashboard, :only => [:show]
 
       namespace :dashboard do
-        resource :new_accounts, only: [:show]
-        resource :potential_upgrades, only: [:show]
-
         namespace :service, path: 'service/:service_id', as: :service do
           resource :hits, only: [:show]
           resource :integration_errors, only: [:show]

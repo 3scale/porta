@@ -16,8 +16,8 @@ class Provider::Admin::PotentialUpgradesPresenter
       violations: current_violations,
       incorrectSetUp: (!is_set_up_correctly? && current_account.accessible_services.any?),
       links: {
-        adminServiceApplicationPlans: admin_service_application_plans_path(service),
-        settingsAdminService: settings_admin_service_path(service, anchor: 'web_provider')
+        adminServiceApplicationPlans: any_services? ? admin_service_application_plans_path(service) : '',
+        settingsAdminService: any_services? ? settings_admin_service_path(service, anchor: 'web_provider') : ''
       }
     }
   end
@@ -26,6 +26,10 @@ class Provider::Admin::PotentialUpgradesPresenter
 
   def service
     @service ||= current_account.accessible_services.first
+  end
+
+  def any_services?
+    current_account.accessible_services.any?
   end
 
   def is_set_up_correctly?

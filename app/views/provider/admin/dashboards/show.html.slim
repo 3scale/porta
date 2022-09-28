@@ -20,7 +20,6 @@
 
 
       // Account Level Widgets
-      - binding.pry
       = render 'new_accounts_widget' if can?(:manage, :partners)
       = render 'potential_upgrades_widget' if can?(:manage, :plans)
 
