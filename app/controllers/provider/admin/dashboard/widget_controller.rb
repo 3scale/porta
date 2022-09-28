@@ -20,7 +20,6 @@ class Provider::Admin::Dashboard::WidgetController < Provider::Admin::BaseContro
     previous_sum      = get_sum_from_values(previous_data.values)
     percentual_change = ((current_sum.to_f - previous_sum.to_f) / previous_sum.to_f) * 100
 
-    # binding.pry
     {
       chart: {
         values:   current_data,

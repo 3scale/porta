@@ -1,9 +1,6 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
 
-= content_for :javascripts do
-  = javascript_pack_tag 'dashboard'
-
 .Dashboard
   div.Dashboard-widgets
     // account level
@@ -23,10 +20,9 @@
 
 
       // Account Level Widgets
-      / = dashboard_widget :new_accounts if can?(:manage, :partners)
+      - binding.pry
       = render 'new_accounts_widget' if can?(:manage, :partners)
       = render 'potential_upgrades_widget' if can?(:manage, :plans)
-      / = dashboard_widget :potential_upgrades if can?(:manage, :plans)
 
     section#apis.DashboardSection.DashboardSection--services class=('DashboardSection--wide' unless can?(:manage, :plans))
       - unless current_user.access_to_service_admin_sections?

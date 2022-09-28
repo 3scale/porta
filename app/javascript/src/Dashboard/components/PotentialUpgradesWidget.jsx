@@ -31,7 +31,6 @@ const PotentialUpgradesWidget = ({ violations, incorrectSetUp, links }: Props) =
       <span className='DashboardWidget-intro'>
         Accounts that hit their Usage Limits in the last 30 days
       </span>
-      {/* {<Spinner size="md" isSVG className="pf-u-ml-md DashboardWidget-spinner" />} */}
 
       {
         violations.some((violation) => violation)
