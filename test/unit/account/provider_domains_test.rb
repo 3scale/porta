@@ -180,4 +180,13 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     assert_equal 'customer-name', provider.subdomain
   end
 
+  test 'subdomain should start and end with a alphanumeric character' do
+    provider = Account.new(name: '$-test-2__') do |account|
+      account.provider = true
+    end
+    provider.generate_domains
+
+    assert provider.valid?
+    assert_equal 'test-2', provider.subdomain
+  end
 end
