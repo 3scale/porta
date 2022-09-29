@@ -86,4 +86,18 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     @provider.update_attribute(:org_name, '<ScRipT>alert("address1")</ScRipT>')
     assert_equal @data.provider[0][1], '&lt;ScRipT&gt;alert(&quot;address1&quot;)&lt;/ScRipT&gt;'
   end
+
+  test '#with_logo should yield to a block with open file and close is after' do
+    @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
+
+    logo_file = nil
+    @data.with_logo do |logo|
+      logo_file = logo
+      assert logo.is_a? File
+      assert logo&.binmode?
+      assert logo.respond_to?(:read)
+    end
+    assert logo_file&.closed?
+  end
+
 end

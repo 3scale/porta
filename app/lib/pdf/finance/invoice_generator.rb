@@ -60,8 +60,9 @@ module Pdf
         two_columns do |column|
           case column
           when :left
-            @pdf.image(@data.logo, fit: [200,50], position: :left) if @data.logo?
-
+            @data.with_logo do |logo|
+              @pdf.image(logo, fit: [200,50], position: :left) if logo
+            end
           when :right
             print_address(@data.buyer)
           end

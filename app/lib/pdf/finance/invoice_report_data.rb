@@ -7,6 +7,7 @@ class Pdf::Finance::InvoiceReportData
 
   LINE_ITEMS_HEADING = %w[Name Quantity Cost Charged].freeze
   DATE_FORMAT = "%e %B, %Y"
+  LOGO_ATTACHMENT_STYLE = :invoice
 
   delegate :name, :cost, :to => :@invoice
 
@@ -51,30 +52,15 @@ class Pdf::Finance::InvoiceReportData
     @invoice.buyer_account.bought_plan.name
   end
 
-  def logo
-    @logo_file ||= logo_file(:invoice)
+  def with_logo
+    file = logo_file
+    yield file if block_given?
   rescue StandardError => exception
-    Rails.logger.error "Failed to retrieve logo from: #{exception.message}"
-    nil
-  end
-
-  # Depending on the storage option for the attachment, retrieve either the full path
-  # of the local file, or the URL of the file in S3, and read the file differently
-  def logo_file(style)
-    attachment = @invoice.provider_account.profile.logo
-    case attachment.options[:storage].to_sym
-    when :filesystem
-      # read as binary file
-      File.open(attachment.path(style), 'rb')
-    when :s3
-      URI.open(attachment.url(style))
-    else
-      raise StandardError, 'Invalid attachment type'
-    end
-  end
-
-  def logo?
-    @invoice.provider_account.profile.logo.file? && logo
+    Rails.logger.error "Failed to retrieve logo: #{exception.message}"
+    yield nil if block_given?
+  ensure
+    file ||= nil # initialize the variable if it is not initialized yet
+    file&.close
   end
 
   def line_items
@@ -142,4 +128,21 @@ class Pdf::Finance::InvoiceReportData
       [total_without_vat, total_vat, total]
     end
   end
+
+  # Depending on the storage option for the attachment:
+  # - retrieve either the full path of the local file, or the URL of the file in S3
+  # - read the file differently
+  def logo_file
+    attachment = @invoice.provider_account.profile.logo
+    case storage = attachment.options[:storage].to_sym
+    when :filesystem
+      # read as binary file 'b'
+      File.open(attachment.path(LOGO_ATTACHMENT_STYLE), 'rb')
+    when :s3
+      URI.open(attachment.url(LOGO_ATTACHMENT_STYLE))
+    else
+      raise StandardError, "Invalid attachment type #{storage}"
+    end
+  end
+
 end
