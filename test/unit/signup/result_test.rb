@@ -112,7 +112,7 @@ module Signup
       signup_result.save
       refute user.persisted?
       refute account.persisted?
-      assert_includes signup_result.errors[:account], "Organization/Group Name should contain at least one alphanumeric character"
+      assert_includes signup_result.errors[:account], "Organization/Group Name must contain at least one alphanumeric character"
     end
 
     test '#save does not save and #errors return the error when @errors has errors' do
