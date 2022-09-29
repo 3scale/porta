@@ -170,4 +170,14 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
 
     assert_equal 'test-2-s-n-me', provider.subdomain
   end
+
+  test 'all characters are set to lowercase in subdomain' do
+    provider = Account.new(name: 'Customer Name') do |account|
+      account.provider = true
+    end
+    provider.generate_domains
+
+    assert_equal 'customer-name', provider.subdomain
+  end
+
 end
