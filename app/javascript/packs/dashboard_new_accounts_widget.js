@@ -1,3 +1,5 @@
+// @flow
+
 import { NewAccountsWidgetWrapper } from 'Dashboard/components/NewAccountsWidget'
 import { safeFromJsonString } from 'utilities'
 
