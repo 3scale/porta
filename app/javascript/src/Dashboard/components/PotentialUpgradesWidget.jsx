@@ -22,7 +22,7 @@ type Props = {
   }
 }
 
-const PotentialUpgradesWidget = ({ violations, incorrectSetUp, links }: Props) => {
+const PotentialUpgradesWidget = ({ violations, incorrectSetUp, links }: Props): React.Node => {
   return (
     <article className='DashboardWidget' id='dashboard-widget-potential_upgrades'>
       <h1 className='DashboardWidget-title'>

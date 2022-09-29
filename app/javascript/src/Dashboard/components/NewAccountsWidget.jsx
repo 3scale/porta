@@ -34,7 +34,7 @@ type Props = {
   percentualChange: number
 }
 
-const NewAccountsWidget = ({ chartData, newAccountsTotal, hasHistory, links, percentualChange }: Props) => {
+const NewAccountsWidget = ({ chartData, newAccountsTotal, hasHistory, links, percentualChange }: Props): React.Node => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
