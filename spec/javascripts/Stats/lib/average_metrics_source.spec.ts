@@ -3,7 +3,7 @@ import { StatsAverageMetricsSource } from 'Stats/lib/average_metrics_source'
 describe('StatsAverageMetricsSource', () => {
   describe('StatsAverageMetricsSource Methods', () => {
     it('_sortValues', () => {
-      const averageSerieSource = new StatsAverageMetricsSource(42, {})
+      const averageSerieSource = new StatsAverageMetricsSource({} as any)
       const map = new Map([
         [1, 30], [2, 30], [3, 30], [4, 30], [5, 30], [6, 30],
         [7, 30], [8, 30], [9, 30], [10, 30], [11, 30], [12, 30],
@@ -16,7 +16,7 @@ describe('StatsAverageMetricsSource', () => {
     })
 
     it('_average', () => {
-      const averageSerieSource = new StatsAverageMetricsSource(42, {})
+      const averageSerieSource = new StatsAverageMetricsSource({} as any)
       const responseValues = [0, 10, 22, 33, 42, 55, 60, 77, 80, 99, 100, 111,
         11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0] // 24 months
       const stateOptions = {

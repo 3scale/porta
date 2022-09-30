@@ -20,4 +20,4 @@ declare module '\*.json' {
   export default content
 }
 
-declare function jQuery(str: string): Object
+// declare function jQuery(str: string): Object

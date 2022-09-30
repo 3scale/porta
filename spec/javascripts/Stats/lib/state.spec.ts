@@ -2,13 +2,14 @@ import $ from 'jquery'
 import MockDate from 'mockdate'
 
 import { StatsState, PeriodRangeDate, CustomRangeDate } from 'Stats/lib/state'
+import { StatsStore } from 'Stats/lib/store'
 
 describe('StatsState', () => {
   const save = jest.fn()
   const fakeStore = {
     getStateFromURL: jest.fn(),
     save
-  }
+  } as unknown as StatsStore
 
   const stubbedState = {
     dateRange: {
@@ -18,13 +19,13 @@ describe('StatsState', () => {
       },
       granularity: 'day'
     }
-  }
+  } as unknown as StatsStore
 
   const StubbedStore = {
     getStateFromURL () {
       return stubbedState
     }
-  }
+  } as unknown as StatsStore
 
   it('should save the right state when calling setState', () => {
     const statsState = new StatsState(fakeStore)
@@ -38,7 +39,7 @@ describe('StatsState', () => {
 
   // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor
   it('should trigger the right events when setting the state', () => {
-    const statsState = new StatsState(fakeStore)
+    const statsState = new StatsState(fakeStore) as any
     const state = { jesus: 'you dont fu*ck with the jaysus!' }
     const topics = ['jesus']
 
@@ -90,7 +91,7 @@ describe('StatsState', () => {
       it('should return the timestamp without offset when granularity != hour', () => {
         const customPeriodGranularityHour = {
           number: 7,
-          unit: 'day'
+          unit: 'day' as const
         }
         const periodRangeDate = new PeriodRangeDate(customPeriodGranularityHour)
 

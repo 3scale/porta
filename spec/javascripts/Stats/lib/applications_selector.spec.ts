@@ -1,10 +1,11 @@
 import { StatsApplicationsSelector } from 'Stats/lib/applications_selector'
+import { StatsState } from 'Stats/lib/state'
 
 describe('StatsApplicationsSelector', () => {
   const userSelectedState = {
     state: { selectedApplicationId: '42' },
-    setState: () => {}
-  }
+    setState: jest.fn()
+  } as unknown as StatsState
 
   const applicationGroups = {
     'Dumplings': [{ id: 666, name: 'Wan Tun App' }, { id: 42, name: 'Pierogi App' }],
@@ -23,7 +24,7 @@ describe('StatsApplicationsSelector', () => {
   })
 
   it('should render the right applications selector', () => {
-    const selector = document.querySelector('#selector-container .StatsApplicationSelector')
+    const selector = document.querySelector('#selector-container .StatsApplicationSelector') as Element
     expect(selector.innerHTML).toEqual(
       '<optgroup label="Dumplings"><option value="666">Wan Tun App</option><option value="42">Pierogi App</option></optgroup>' +
       '<optgroup label="Empanadas"><option value="7">Argenta</option></optgroup>'
@@ -31,12 +32,12 @@ describe('StatsApplicationsSelector', () => {
   })
 
   it('should have the correct application selected', () => {
-    expect(document.querySelector('.StatsApplicationSelector option[value="42"]').selected).toBe(true)
+    expect(document.querySelector<any>('.StatsApplicationSelector option[value="42"]')!.selected).toBe(true)
   })
 
   it('should set the application id on the state when changing the dropdown and default metric', () => {
     jest.spyOn(userSelectedState, 'setState')
-    const select = document.querySelector('.StatsApplicationSelector')
+    const select = document.querySelector('.StatsApplicationSelector') as HTMLInputElement
     const event = new Event('change')
     select.value = '666'
     select.dispatchEvent(event)

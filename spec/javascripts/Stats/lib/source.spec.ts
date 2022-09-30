@@ -1,6 +1,7 @@
 import { StatsSource } from 'Stats/lib/source'
 
-const source = new StatsSource()
+class TestStatsSource extends StatsSource {}
+const source = new TestStatsSource()
 
 describe('StatsSource', () => {
   it('should throw error when call params directly', () => {

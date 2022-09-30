@@ -3,7 +3,7 @@ import { StatsUsageChart } from 'Stats/lib/usage_chart'
 describe('StatsUsageChart', () => {
   const chart = new StatsUsageChart({ container: '#chart', groupedSeries: ['marvin', 'trillian', 'zaphod'] })
   const load = jest.fn()
-  chart.plotChart = { load }
+  chart.plotChart = { load } as any
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -41,6 +41,6 @@ describe('StatsUsageChart', () => {
   })
 
   it('should have the right grouped data', () => {
-    expect(JSON.stringify(chart.chartOptions().data.groups)).toBe(JSON.stringify([ [ 'marvin', 'trillian', 'zaphod' ] ]))
+    expect(JSON.stringify((chart.chartOptions().data as any).groups)).toBe(JSON.stringify([ [ 'marvin', 'trillian', 'zaphod' ] ]))
   })
 })

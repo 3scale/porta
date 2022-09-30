@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import type { ReactNode } from 'react'
 import c3 from 'c3'
 import { fetchData } from 'utilities'
 import 'core-js/es6/promise'
@@ -65,7 +64,7 @@ class InlineChart extends Component<Props, State> {
       point: { show: false },
       data: {
         columns: [
-          [...this.state.values]
+          [...this.state.values] as any // FIXME: number not assignable to string
         ]
       },
       tooltip: {
@@ -139,4 +138,4 @@ class InlineChart extends Component<Props, State> {
   }
 }
 
-export default InlineChart
+export { InlineChart as default, Props, State }

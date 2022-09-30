@@ -41,7 +41,7 @@ describe('StatsCSVLink', () => {
 
   it('should render correctly', () => {
     csvLink.update(data)
-    const link = document.querySelector('#csv_link').querySelector('a')
+    const link = document.querySelector('#csv_link a') as HTMLAnchorElement
 
     expect(link).toBeDefined()
     expect(link.innerHTML).toEqual('Download CSV')

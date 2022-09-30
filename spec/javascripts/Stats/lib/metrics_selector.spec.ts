@@ -25,7 +25,7 @@ describe('StatsMetricsSelector', () => {
 
     expect(document.querySelector('.StatsSelector-toggle')).toBeTruthy()
     expect(document.querySelector('.StatsSelector-menu')).toBeTruthy()
-    expect(document.querySelector('.StatsSelector-toggle').innerHTML).toContain('42.5K Pierogi')
+    expect(document.querySelector('.StatsSelector-toggle')!.innerHTML).toContain('42.5K Pierogi')
     expect(document.querySelectorAll('.StatsSelector-menu > li')).toHaveLength(2)
   })
 })

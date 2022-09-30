@@ -62,16 +62,17 @@ describe('StatsResponseCodeChart', () => {
       unload: true,
       _totalValues: 0
     }
-    chart.render({ container: '#chart', noDataMessageContainer: '#no-data', data })
+    chart.render({ noDataMessageContainer: '#no-data', data })
     const noDataMessage = $(chart.noDataMessageContainer)
 
     chart.showData(false)
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore FIXME: why toContainText is not recognized?
     expect(noDataMessage).toContainText('No data \'ere mate!')
   })
 
   it.skip('should call setState with the right args when updateFromSeries', () => {
-    // eslint-disable-next-line no-undef
     const fakeState = jasmine.createSpyObj('fakeState', ['setState'])
     const chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
     const series = '2XX, 4XX'

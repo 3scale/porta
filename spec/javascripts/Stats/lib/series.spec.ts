@@ -2,7 +2,7 @@ import { StatsSeries } from 'Stats/lib/series'
 
 describe('StatsSeries', () => {
   const source = {
-    data: () => {}
+    data: jest.fn()
   }
 
   beforeEach((done) => {

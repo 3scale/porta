@@ -47,7 +47,7 @@ describe('ChartManager', () => {
   })
 
   it('should render chart with metrics selector and all series', (done) => {
-    chartManager.renderChart('#container').then(() => {
+    chartManager.renderChart().then(() => {
       expect(chart.render).toHaveBeenCalled()
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hits', 'Hots'] })
       done()
@@ -57,7 +57,7 @@ describe('ChartManager', () => {
   it('should render chart with stored selected series', (done) => {
     jest.spyOn(chartManager, '_getStoredSelectedSeries')
       .mockImplementation(() => 'Hots')
-    chartManager.renderChart('#container').then(() => {
+    chartManager.renderChart().then(() => {
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hots'] })
       done()
     })

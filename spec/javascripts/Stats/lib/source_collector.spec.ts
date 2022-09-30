@@ -1,5 +1,7 @@
 import { StatsSourceCollector } from 'Stats/lib/source_collector'
 
+class TestStatsSourceCollector extends StatsSourceCollector {}
+
 describe('StatsSourceCollector', () => {
   const options = {
     dateRange: {
@@ -10,7 +12,7 @@ describe('StatsSourceCollector', () => {
     selectedMetricName: 'hits'
   }
 
-  const sourceCollector = new StatsSourceCollector({ id: 42, metrics: [] })
+  const sourceCollector = new TestStatsSourceCollector({ id: 42, metrics: [] })
 
   beforeEach((done) => {
     jest.spyOn(sourceCollector, '_fetchMetrics')
@@ -46,7 +48,7 @@ describe('StatsSourceCollector', () => {
   it.skip('should get the correct sources', (done) => {
     const buildSourcesSpy = jest.spyOn(sourceCollector, 'buildSources')
     sourceCollector.getMetrics('/le/cool/url')
-    sourceCollector.getSources({ id: 42, selectedMetricName: 'awesome_metric' }).then(_res => {
+    sourceCollector.getSources({ id: undefined, selectedMetricName: 'awesome_metric' }).then((_res: any) => {
       expect(buildSourcesSpy).toHaveBeenCalledWith(42, [{ id: 1, systemName: 'awesome_metric' }])
       done()
     })
@@ -54,7 +56,10 @@ describe('StatsSourceCollector', () => {
 
   it('should build the right sources', () => {
     class StubbedSource {
-      constructor ({ id, details }) {
+      id: number
+      details: any
+
+      constructor ({ id, details }: { id: number, details: any }) {
         this.id = id
         this.details = details
       }
@@ -62,7 +67,7 @@ describe('StatsSourceCollector', () => {
 
     class ChildSourceCollector extends StatsSourceCollector {
       static get Source () {
-        return StubbedSource
+        return StubbedSource as any
       }
     }
 

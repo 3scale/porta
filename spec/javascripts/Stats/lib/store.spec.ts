@@ -1,10 +1,13 @@
 import $ from 'jquery'
+import { StatsState } from 'Stats/lib/state'
 
 import { StatsStore } from 'Stats/lib/store'
 
 describe('StatsStore', () => {
   class FakeHistory {
-    pushState (state) {
+    state!: StatsState
+
+    pushState (state: StatsState) {
       this.state = state
     }
   }
@@ -14,7 +17,7 @@ describe('StatsStore', () => {
       hash: '#%7B%22period%22:%7B%22number%22:24,%22unit%22:%22hour%22%7D,%22granularity%22:%22hour%22%7D'
     },
     history: new FakeHistory()
-  }
+  } as unknown as Window
   const store = new StatsStore(window)
 
   it('should update history', () => {

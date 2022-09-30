@@ -11,13 +11,18 @@ describe('StatsMenu', () => {
   ]
 
   class FakeHistory {
-    pushState (state) {
+    state!: StatsState['State']
+
+    pushState (state: StatsState['State']) {
       this.state = state
     }
   }
 
   class FakeState {
-    constructor (store) {
+    store: StatsStore
+    state: Partial<StatsState['State']>
+
+    constructor (store: StatsStore) {
       this.store = store
       this.state = {
         dateRange: {
@@ -39,7 +44,7 @@ describe('StatsMenu', () => {
       return this.state
     }
 
-    setState (state) {
+    setState (state: StatsState['state']) {
       this.state = Object.assign({}, this.state, state)
     }
   }
@@ -49,7 +54,7 @@ describe('StatsMenu', () => {
       document.body.innerHTML = '<div id="menu"></div>'
     })
 
-    const window = { history: new FakeHistory() }
+    const window = { history: new FakeHistory() } as unknown as Window
     const store = new StatsStore(window)
     const statsState = new FakeState(store)
     const menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
@@ -59,30 +64,30 @@ describe('StatsMenu', () => {
     })
 
     it('should render HTML', () => {
-      const element = document.querySelector('#menu')
+      const element = document.querySelector('#menu') as Element
 
       expect(element.querySelectorAll('ol > li a[data-number][data-unit]')).toHaveLength(4)
       expect(element.querySelectorAll('select > option')).toHaveLength(3)
-      expect(element.querySelector('select > option:first-child').value).toBe('hour')
+      expect(element.querySelector<HTMLInputElement>('select > option:first-child')!.value).toBe('hour')
     })
 
     it('should set the right period state', () => {
-      const periodLink = document.querySelector('#menu .period-24-hour')
+      const periodLink = document.querySelector('#menu .period-24-hour') as HTMLButtonElement
       periodLink.click()
 
-      expect(menu.statsState.state.dateRange.granularity).toBe('hour')
-      expect(menu.statsState.state.dateRange.period.number).toBe(24)
+      expect(menu.statsState!.state.dateRange.granularity).toBe('hour')
+      expect(menu.statsState!.state.dateRange.period.number).toBe(24)
     })
 
     it('should set the right granularity when selected', () => {
-      const menuElement = document.querySelector('#menu')
-      const select = menuElement.querySelector('select')
+      const menuElement = document.querySelector('#menu') as Element
+      const select = menuElement.querySelector('select') as HTMLSelectElement
       select.querySelectorAll('option')[2].selected = true
 
       const event = new Event('change')
       select.dispatchEvent(event)
 
-      expect(menu.statsState.state.dateRange.granularity).toBe('month')
+      expect(menu.statsState!.state.dateRange.granularity).toBe('month')
     })
   })
 
@@ -97,14 +102,14 @@ describe('StatsMenu', () => {
           hash: ''
         },
         history: new FakeHistory()
-      }
+      } as unknown as Window
       const store = new StatsStore(window)
       const statsState = new StatsState(store)
       const menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
 
       menu.render()
 
-      const periodLink = document.querySelector('#menu .period-24-hour')
+      const periodLink = document.querySelector('#menu .period-24-hour') as HTMLButtonElement
 
       periodLink.click()
 
@@ -118,17 +123,17 @@ describe('StatsMenu', () => {
           hash: '#{"dateRange":{"Since":"2015-08-01T00:00:00+00:00","Until":"2015-08-10T00:00:00+00:00","granularity":"hour"}}'
         }
       }
-      const store = new StatsStore(window)
+      const store = new StatsStore(window as Window)
       const statsState = new StatsState(store)
       const menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
 
       menu.render()
-      menu.statsState.store.getStateFromURL()
+      menu.statsState!.store.getStateFromURL()
 
-      const statsMenu = document.querySelector('.StatsMenu')
+      const statsMenu = document.querySelector('.StatsMenu') as Element
 
-      expect(statsMenu.querySelector('.StatsMenu-customLink--since').innerHTML).toBe('08/01/2015')
-      expect(statsMenu.querySelector('.StatsMenu-customLink--until').innerHTML).toBe('08/10/2015')
+      expect(statsMenu.querySelector('.StatsMenu-customLink--since')!.innerHTML).toBe('08/01/2015')
+      expect(statsMenu.querySelector('.StatsMenu-customLink--until')!.innerHTML).toBe('08/10/2015')
     })
   })
 })

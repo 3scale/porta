@@ -48,7 +48,7 @@ describe('CustomMetricSource', () => {
   }
 
   class CustomMetricSource extends StatsMetricsSource {
-    get url () { return 'http://example.com/api' }
+    get url () { return 'http://example.com/api' as any }
   }
 
   beforeEach((done) => {

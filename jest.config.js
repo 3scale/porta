@@ -94,7 +94,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/js-with-babel',
 
   // Run tests from one or more projects
   // projects: null,
@@ -160,7 +160,7 @@ module.exports = {
   // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
-  testRegex: '.*.spec.tsx?',
+  testRegex: '.*.spec.(j|t)sx?',
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: null,
