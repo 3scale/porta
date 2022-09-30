@@ -13,6 +13,7 @@ class Pdf::Finance::InvoiceReportData
 
   def initialize(invoice)
     @invoice = invoice
+    @logo = @invoice.provider_account.profile.logo
   end
 
   def buyer
@@ -53,13 +54,14 @@ class Pdf::Finance::InvoiceReportData
   end
 
   def with_logo
-    file = logo_file
+    file = begin
+      logo_file
+    rescue StandardError => exception
+      Rails.logger.error "Failed to retrieve logo: #{exception.message}"
+      nil
+    end
     yield file if block_given?
-  rescue StandardError => exception
-    Rails.logger.error "Failed to retrieve logo: #{exception.message}"
-    yield nil if block_given?
   ensure
-    file ||= nil # initialize the variable if it is not initialized yet
     file&.close
   end
 
@@ -133,13 +135,12 @@ class Pdf::Finance::InvoiceReportData
   # - retrieve either the full path of the local file, or the URL of the file in S3
   # - read the file differently
   def logo_file
-    attachment = @invoice.provider_account.profile.logo
-    case storage = attachment.options[:storage].to_sym
+    case storage = @logo.options[:storage].to_sym
     when :filesystem
       # read as binary file 'b'
-      File.open(attachment.path(LOGO_ATTACHMENT_STYLE), 'rb')
+      File.open(@logo.path(LOGO_ATTACHMENT_STYLE), 'rb')
     when :s3
-      URI.open(attachment.url(LOGO_ATTACHMENT_STYLE))
+      URI.open(@logo.url(LOGO_ATTACHMENT_STYLE))
     else
       raise StandardError, "Invalid attachment type #{storage}"
     end

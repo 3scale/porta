@@ -58,14 +58,8 @@ module Pdf
 
       def print_header
         two_columns do |column|
-          case column
-          when :left
-            @data.with_logo do |logo|
-              @pdf.image(logo, fit: [200,50], position: :left) if logo
-            end
-          when :right
-            print_address(@data.buyer)
-          end
+          print_logo if column == :left
+          print_address(@data.buyer) if column == :right
         end
 
         move_down(14)
@@ -77,13 +71,17 @@ module Pdf
         move_down(3)
       end
 
+      def print_logo
+        @data.with_logo do |logo|
+          @pdf.image(logo, fit: [200,50], position: :left) if logo
+        end
+      end
+
       def print_address_columns
         # TODO: cleanup the constants
         two_columns( [0.mm, @pdf.cursor], height: 50.mm) do |column|
-          case column
-          when :left then print_address( @data.provider, 'Issued by')
-          when :right then print_address( @data.buyer, 'For')
-          end
+          print_address( @data.provider, 'Issued by') if column == :left
+          print_address( @data.buyer, 'For') if column == :right
         end
       end
 
