@@ -7,7 +7,7 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
     @buyer = FactoryBot.create(:buyer_account, provider_account: @provider)
-    @invoice = FactoryBot.create(:invoice, :provider_account => @provider, :buyer_account => @buyer)
+    @invoice = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
     @data = Pdf::Finance::InvoiceReportData.new(@invoice)
   end
 
@@ -85,17 +85,44 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   #
   test 'not be vulnerable to XSS attack' do
     @provider.update_attribute(:org_name, '<ScRipT>alert("address1")</ScRipT>')
+    @invoice.reload
     assert_equal @data.provider[0][1], '&lt;ScRipT&gt;alert(&quot;address1&quot;)&lt;/ScRipT&gt;'
   end
 
-  test '#with_logo should yield to a block with open file and close is after' do
+  test '#with_logo yields to a block with open file and close is after' do
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
+    @data = Pdf::Finance::InvoiceReportData.new(@invoice.reload)
 
     logo_file = nil
     @data.with_logo do |logo|
       logo_file = logo
       assert logo.is_a? File
       assert logo&.binmode?
+      assert logo.respond_to?(:read)
+    end
+    assert logo_file&.closed?
+  end
+
+  test '#with_logo yields nil if logo not set' do
+    @provider.profile.update(logo: nil)
+    @data = Pdf::Finance::InvoiceReportData.new(@invoice.reload)
+
+    @data.with_logo do |logo|
+      assert logo.nil?
+    end
+  end
+
+  test '#with_logo calls S3 URL if S3 is used for storage' do
+    default_options = Paperclip::Attachment.default_options
+    Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
+    @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
+    @data = Pdf::Finance::InvoiceReportData.new(@invoice.reload)
+    URI.stubs(:open).returns(File.open(file_fixture("wide.jpg")))
+
+    logo_file = nil
+    @data.with_logo do |logo|
+      logo_file = logo
+      assert logo.is_a? File
       assert logo.respond_to?(:read)
     end
     assert logo_file&.closed?
