@@ -1,4 +1,3 @@
-// eslint-disable-next-line flowtype/no-weak-types
 export type Configuration = any;
 
 // Represents the data stored for @proxy.policies_config
@@ -12,6 +11,7 @@ export type PolicyConfig = {
 // Represents policies of the Registry
 export type RegistryPolicy = {
   $schema: string,
+  schema?: any
   configuration: Configuration,
   description: string[], // TODO: verify this prop is correctly typed
   name: string,

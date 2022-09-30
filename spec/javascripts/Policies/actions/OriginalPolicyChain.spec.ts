@@ -16,6 +16,6 @@ const chainPolicy: ChainPolicy = {
 }
 
 it('#setOriginalPolicyChain should create an action', () => {
-  const payload = chainPolicy
+  const payload = [chainPolicy]
   expect(setOriginalPolicyChain(payload)).toEqual({ type: 'SET_ORIGINAL_POLICY_CHAIN', payload })
 })

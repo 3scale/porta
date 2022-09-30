@@ -2,7 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 
 import { ProductsUsedListCard, Props } from 'BackendApis/components/ProductsUsedListCard'
-import { CompactListItem } from 'Common'
+import { CompactListItem } from 'Common/components/CompactListCard'
 
 const defaultProps = {
   products: []

@@ -64,7 +64,7 @@ function isSubmitDisabled<T> (wrapper: ReactWrapper<T>): boolean {
 function updateInput<T> (
   wrapper: ReactWrapper<T>,
   value: string,
-  input: string | ReactWrapper<unknown> = 'input'
+  input: string | ReactWrapper = 'input'
 ) {
   const _input = typeof input === 'string' ? wrapper.find(input).at(0) : input
   const node: HTMLInputElement = _input.getDOMNode()

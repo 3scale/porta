@@ -7,7 +7,7 @@ const registry: RegistryPolicy[] = [{
   name: 'cors',
   humanName: 'CORS',
   summary: 'CORS Summary',
-  description: 'CORS Description',
+  description: ['CORS Description'],
   version: 'builtin',
   configuration: {}
 }]

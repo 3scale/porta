@@ -10,7 +10,7 @@ const X_DATA_PARAMS_DESCRIPTIONS = {
 } as const
 
 const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
-  const xDataKey = param[X_DATA_ATTRIBUTE]
+  const xDataKey = param[X_DATA_ATTRIBUTE] as keyof typeof X_DATA_PARAMS_DESCRIPTIONS
   const autocompleteData = accountData[xDataKey]
   const paramHasAutocompleteData = autocompleteData && autocompleteData.length > 0 &&
     autocompleteData.every(param => param.name !== '')
@@ -19,7 +19,7 @@ const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
     ? {
       ...param,
       examples: autocompleteData.reduce((examples, item) => (
-        [...examples, { summary: item.name, value: item.value }]
+        [...examples, { summary: item.name, value: item.value }] as any
       ), [{ summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-' }])
     }
     : param
@@ -28,7 +28,7 @@ const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
 const injectParametersToPathOperation = (pathOperation: any, accountData: AccountData): any => {
   const operationParameters = pathOperation.parameters
   if (!operationParameters) return pathOperation
-  const parametersWithAutocompleteData = operationParameters.map(param => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
+  const parametersWithAutocompleteData = operationParameters.map((param: any) => X_DATA_ATTRIBUTE in param ? addAutocompleteToParam(param, accountData) : param)
   return {
     ...pathOperation,
     parameters: parametersWithAutocompleteData
@@ -46,8 +46,6 @@ const injectParametersToPath = (
 ): any => (Object.keys(path).reduce<Record<string, any>>((updatedPath, item) => {
   updatedPath[item] = (item === 'parameters' && commonParameters)
     ? injectAutocompleteToCommonParameters(commonParameters, accountData)
-    // $FlowIgnore[incompatible-call] should be safe to assume correct type
-    // $FlowIgnore[incompatible-return] should be safe to assume correct type
     : injectParametersToPathOperation(path[item], accountData)
   return updatedPath
 }, {}))

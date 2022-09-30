@@ -7,7 +7,6 @@ import { SelectWithModal } from 'Common'
 import type { Backend } from 'Types'
 
 import './BackendSelect.scss'
-import { FetchItemsRequestParams, FetchItemsResponse } from 'utilities'
 
 type Props = {
   backend: Backend | null,
@@ -18,16 +17,14 @@ type Props = {
   onSelect: (arg1: Backend | null) => void
 };
 
-const BackendSelect = (
-  {
-    backend,
-    backends,
-    onSelect,
-    onCreateNewBackend,
-    searchPlaceholder,
-    error
-  }: Props
-): React.ReactElement => {
+const BackendSelect: React.FunctionComponent<Props> = ({
+  backend,
+  backends,
+  onSelect,
+  onCreateNewBackend,
+  searchPlaceholder,
+  error
+}) => {
   const cells: { title: string, propName: keyof Backend }[] = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },

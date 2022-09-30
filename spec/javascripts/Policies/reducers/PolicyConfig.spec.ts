@@ -23,10 +23,9 @@ describe('PolicyConfigReducer', () => {
       name: 'echo',
       humanName: 'Echo',
       configuration: {},
-      id: '007',
       version: 'builtin',
       summary: '',
-      description: 'Echo policy',
+      description: ['Echo policy'],
       enabled: true,
       removable: true,
       uuid: ''

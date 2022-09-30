@@ -17,7 +17,8 @@ import {
   TableBody,
   SortByDirection,
   IRow,
-  ITransform
+  ITransform,
+  IRowCell
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
 import { NoMatchFound } from 'Common'
@@ -121,7 +122,7 @@ const TableModal = <T extends Record>(
 
   const rows: IRow[] = pageItems.map((i) => ({
     selected: i.id === selected?.id,
-    cells: cells.map(({ propName }) => i[propName])
+    cells: cells.map(({ propName }) => i[propName]) as IRowCell[]
   }))
 
   const onAccept = () => {
@@ -193,7 +194,6 @@ const TableModal = <T extends Record>(
         <Table
           aria-label={title}
           sortBy={sortBy}
-          onSort={() => {}}
           onSelect={handleOnSelect}
           cells={cells}
           rows={rows}

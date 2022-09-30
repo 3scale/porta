@@ -1,5 +1,5 @@
-import React from 'react'
-import { mount } from 'enzyme'
+import React, { InputHTMLAttributes } from 'react'
+import { mount, ReactWrapper } from 'enzyme'
 
 import { TableModal, Props } from 'Common/components/TableModal'
 import { updateInput } from 'utilities/test-utils'
