@@ -30,15 +30,15 @@ class PaperclipTest < ActiveSupport::TestCase
     end
 
     test 'force_path_style' do
-      Paperclip::Attachment.default_options.merge!(s3_options: { force_path_style: true })
+      Paperclip::Attachment.default_options[:s3_options] = { force_path_style: true }
       attachment = Paperclip::Attachment.new(:attachment, account, url: ':url_root/:account_id/:class/:attachment/:style/:basename.:extension')
       attachment.stubs(original_filename: 'fake_attachment.png')
 
       assert_equal "https://s3.amazonaws.com/my-bucket/fake-s3-prefix/#{account.id}/accounts/attachments/medium/fake_attachment.png", attachment.url(:medium)
     end
 
-    test 'bucket name contaning a dot' do
-      Paperclip::Attachment.default_options.merge!(bucket: 'test.my-bucket')
+    test 'bucket name containing a dot' do
+      Paperclip::Attachment.default_options[:bucket] = 'test.my-bucket'
       attachment = Paperclip::Attachment.new(:attachment, account, url: ':url_root/:account_id/:class/:attachment/:style/:basename.:extension')
       attachment.stubs(original_filename: 'fake_attachment.png')
 

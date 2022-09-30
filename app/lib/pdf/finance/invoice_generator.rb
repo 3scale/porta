@@ -79,9 +79,9 @@ module Pdf
 
       def print_address_columns
         # TODO: cleanup the constants
-        two_columns( [0.mm, @pdf.cursor], height: 50.mm) do |column|
-          print_address( @data.provider, 'Issued by') if column == :left
-          print_address( @data.buyer, 'For') if column == :right
+        two_columns([0.mm, @pdf.cursor], height: 50.mm) do |column|
+          print_address(@data.provider, 'Issued by') if column == :left
+          print_address(@data.buyer, 'For') if column == :right
         end
       end
 

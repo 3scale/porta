@@ -99,5 +99,4 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     end
     assert logo_file&.closed?
   end
-
 end
