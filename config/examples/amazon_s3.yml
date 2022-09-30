@@ -12,6 +12,12 @@ s3: &s3
 development:
   <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
 
+test: &test
+  access_key_id: invalid
+  secret_access_key: invalid
+  bucket: test-my-s3-bucket
+  region: "us-east-1"
+
 preview:
   <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
 
