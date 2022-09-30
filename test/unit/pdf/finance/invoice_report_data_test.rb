@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
-
 
   def setup
     @provider = FactoryBot.create(:provider_with_billing)
@@ -13,8 +14,8 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   test 'not change total without VAT rate' do
     @invoice.line_items.create :name => 'Junk', :cost => 42
 
-    assert_equal ["Junk"                     , "", 42 , '' ], @data.line_items[0]
-    assert_equal ["Total cost" , "", 42 , 42 ], @data.line_items[1]
+    assert_equal ["Junk", "", 42, ''], @data.line_items[0]
+    assert_equal ["Total cost", "", 42, 42], @data.line_items[1]
   end
 
   test 'respect the defined labels of fields' do
@@ -46,14 +47,14 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     @invoice.reload
     @invoice.line_items.create :name => 'Junk', :cost => 10000
 
-    assert_equal [ 'Fiscal code', 'chino22' ], @data.buyer[3]
-    assert_equal [ 'VAT Code', 'vat55' ], @data.buyer[4]
-    assert_equal [ 'PO num', 'po123s' ], @data.buyer[5]
+    assert_equal ['Fiscal code', 'chino22'], @data.buyer[3]
+    assert_equal ['VAT Code', 'vat55'], @data.buyer[4]
+    assert_equal ['PO num', 'po123s'], @data.buyer[5]
 
-    assert_equal [ [ "Junk", "", 10000.0 , ''],
-                   [ "Total cost (without Vat rate)",  "", 10000.0, 10000.0 ],
-                   [ "Total Vat rate Amount",  "", 234.0, 234.0 ],
-                   [ "Total cost (Vat rate 2.34% included)", "", '', 10234.0 ] ], @data.line_items
+    assert_equal [["Junk", "", 10000.0, ''],
+                  ["Total cost (without Vat rate)",  "", 10000.0, 10000.0 ],
+                  ["Total Vat rate Amount",  "", 234.0, 234.0 ],
+                  ["Total cost (Vat rate 2.34% included)", "", '', 10234.0 ]], @data.line_items
   end
 
   test 'respect and provide VAT rate and po number if present and modified by provider' do
@@ -69,14 +70,14 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     @invoice.reload
     @invoice.line_items.create :name => 'Junk', :cost => 10000
 
-    assert_equal [ 'Fiscal code', 'chino22' ], @data.buyer[3]
-    assert_equal [ 'ABN', 'vat55' ], @data.buyer[4]
-    assert_equal [ 'PO num', 'po123s' ], @data.buyer[5]
+    assert_equal ['Fiscal code', 'chino22'], @data.buyer[3]
+    assert_equal ['ABN', 'vat55'], @data.buyer[4]
+    assert_equal ['PO num', 'po123s'], @data.buyer[5]
 
-    assert_equal [ [ "Junk", "", 10000.0 , ''],
-                   [ "Total cost (without GST)",  "", 10000.0, 10000.0 ],
-                   [ "Total GST Amount",  "", 234.0, 234.0 ],
-                   [ "Total cost (GST 2.34% included)", "", '', 10234.0 ] ], @data.line_items
+    assert_equal [["Junk", "", 10000.0, ''],
+                  ["Total cost (without GST)",  "", 10000.0, 10000.0],
+                  ["Total GST Amount",  "", 234.0, 234.0],
+                  ["Total cost (GST 2.34% included)", "", '', 10234.0]], @data.line_items
   end
 
 
