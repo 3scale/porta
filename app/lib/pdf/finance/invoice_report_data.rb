@@ -13,7 +13,10 @@ class Pdf::Finance::InvoiceReportData
 
   def initialize(invoice)
     @invoice = invoice
-    @logo = @invoice.provider_account.profile.logo
+  end
+
+  def logo
+    @logo ||= @invoice.provider_account.profile.logo
   end
 
   def buyer
@@ -135,12 +138,12 @@ class Pdf::Finance::InvoiceReportData
   # - retrieve either the full path of the local file, or the URL of the file in S3
   # - read the file differently
   def logo_file
-    case storage = @logo.options[:storage].to_sym
+    case storage = logo.options[:storage].to_sym
     when :filesystem
       # read as binary file 'b'
-      File.open(@logo.path(LOGO_ATTACHMENT_STYLE), 'rb')
+      File.open(logo.path(LOGO_ATTACHMENT_STYLE), 'rb')
     when :s3
-      URI.open(@logo.url(LOGO_ATTACHMENT_STYLE))
+      URI.open(logo.url(LOGO_ATTACHMENT_STYLE))
     else
       raise StandardError, "Invalid attachment type #{storage}"
     end

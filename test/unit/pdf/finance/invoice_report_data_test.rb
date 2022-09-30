@@ -85,13 +85,11 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
   #
   test 'not be vulnerable to XSS attack' do
     @provider.update_attribute(:org_name, '<ScRipT>alert("address1")</ScRipT>')
-    @invoice.reload
     assert_equal @data.provider[0][1], '&lt;ScRipT&gt;alert(&quot;address1&quot;)&lt;/ScRipT&gt;'
   end
 
   test '#with_logo yields to a block with open file and close is after' do
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
-    @data = Pdf::Finance::InvoiceReportData.new(@invoice.reload)
 
     logo_file = nil
     @data.with_logo do |logo|
@@ -105,7 +103,6 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
 
   test '#with_logo yields nil if logo not set' do
     @provider.profile.update(logo: nil)
-    @data = Pdf::Finance::InvoiceReportData.new(@invoice.reload)
 
     @data.with_logo do |logo|
       assert logo.nil?
@@ -116,7 +113,6 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     default_options = Paperclip::Attachment.default_options
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
-    @data = Pdf::Finance::InvoiceReportData.new(@invoice.reload)
     URI.stubs(:open).returns(File.open(file_fixture("wide.jpg")))
 
     logo_file = nil
