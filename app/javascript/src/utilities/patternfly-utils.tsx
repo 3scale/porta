@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import escapeRegExp from 'lodash.escaperegexp'
 import { SelectOption, SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'

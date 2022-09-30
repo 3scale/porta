@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import {
   QuickStartCatalogPage,
@@ -26,7 +25,7 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
   const [allQuickStartStates, setAllQuickStartStates] = useLocalStorage('quickstarts', {})
 
   const markdown = {
-    renderExtension: (docContext, rootSelector) => <></>, // TODO: remove this when bug is fixed
+    renderExtension: () => <></>, // TODO: remove this when bug is fixed
     extensions: [replaceLinksExtension(links)]
   } as const
 

@@ -1,4 +1,3 @@
-import { element } from 'prop-types'
 import * as AuthenticationWidget from 'Settings/authentication-widget'
 
 it('#toggle should call a function with an element', () => {

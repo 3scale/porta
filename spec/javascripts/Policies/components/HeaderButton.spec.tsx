@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, mount } from 'enzyme'
 
 import { HeaderButton } from 'Policies/components/HeaderButton'

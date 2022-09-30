@@ -1,4 +1,3 @@
-import React from 'react'
 
 import { ApplicationPlanSelect, Props } from 'NewApplication/components/ApplicationPlanSelect'
 import { mount, ReactWrapper } from 'enzyme'

@@ -48,7 +48,7 @@ describe('StatsSourceCollector', () => {
   it.skip('should get the correct sources', (done) => {
     const buildSourcesSpy = jest.spyOn(sourceCollector, 'buildSources')
     sourceCollector.getMetrics('/le/cool/url')
-    sourceCollector.getSources({ id: undefined, selectedMetricName: 'awesome_metric' }).then((_res: any) => {
+    sourceCollector.getSources({ id: undefined, selectedMetricName: 'awesome_metric' }).then(() => {
       expect(buildSourcesSpy).toHaveBeenCalledWith(42, [{ id: 1, systemName: 'awesome_metric' }])
       done()
     })

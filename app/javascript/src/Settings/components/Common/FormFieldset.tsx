@@ -1,7 +1,5 @@
 // TODO: Replace this component when patternfly-react implements it.
 
-import * as React from 'react'
-
 import styles from '@patternfly/react-styles/css/components/Form/form'
 import { css } from '@patternfly/react-styles'
 

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   Button,
   Divider,
@@ -38,7 +37,6 @@ const PlansTable: React.FunctionComponent<Props> = ({
   columns,
   plans,
   count,
-  searchHref,
   onAction
 }) => {
   const tableColumns = columns.map(c => ({ title: c.title, transforms: [sortable] }))

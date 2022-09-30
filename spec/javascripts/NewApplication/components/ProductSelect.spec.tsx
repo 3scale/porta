@@ -1,4 +1,3 @@
-import React from 'react'
 
 import { ProductSelect } from 'NewApplication'
 import { mount } from 'enzyme'

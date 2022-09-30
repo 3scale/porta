@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { ChangePlanSelectCard, Props } from 'Plans/components/ChangePlanSelectCard'

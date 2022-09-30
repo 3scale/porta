@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 import { ContextSelector, Props } from 'Navigation/components/ContextSelector'
 import { Menu } from 'Types'

@@ -1,4 +1,3 @@
-import React from 'react'
 
 import { StripeElementsForm, Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 import { mount } from 'enzyme'

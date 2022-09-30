@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { FunctionComponent, useState } from 'react'
 import {
   FormGroup,
   Select,
@@ -13,14 +12,12 @@ type Props = {
   setHttpMethod: (arg1: string) => void
 };
 
-const HttpMethodSelect = (
-  {
-    httpMethod,
-    httpMethods,
-    setHttpMethod
-  }: Props
-): React.ReactElement => {
-  const [isExpanded, setIsExpanded] = React.useState(false)
+const HttpMethodSelect: FunctionComponent<Props> = ({
+  httpMethod,
+  httpMethods,
+  setHttpMethod
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleOnSelect = (_e: any, value: any) => {
     setIsExpanded(false)

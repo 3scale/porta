@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { FunctionComponent, useState } from 'react'
 
 import { FormGroup, Radio } from '@patternfly/react-core'
 import { SelectWithModal } from 'Common'
@@ -20,15 +20,13 @@ type RadioOptionProps = {
   items: Array<Metric>
 };
 
-const MetricInput = (
-  {
-    metric,
-    setMetric,
-    topLevelMetrics,
-    methods
-  }: Props
-): React.ReactElement => {
-  const [checked, setChecked] = React.useState<'method' | 'metric'>('method')
+const MetricInput: FunctionComponent<Props> = ({
+  metric,
+  setMetric,
+  topLevelMetrics,
+  methods
+}) => {
+  const [checked, setChecked] = useState<'method' | 'metric'>('method')
 
   const handleOnRadioChange = (radio: 'method' | 'metric') => {
     setChecked(radio)

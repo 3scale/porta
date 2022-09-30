@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component, createRef } from 'react'
 import c3 from 'c3'
 import { fetchData } from 'utilities'
 import 'core-js/es6/promise'
@@ -41,7 +41,7 @@ class InlineChart extends Component<Props, State> {
 
   constructor (props: Props) {
     super(props)
-    this.c3ChartContainer = React.createRef()
+    this.c3ChartContainer = createRef()
     this.state = {
       loading: true,
       title: this.props.title,

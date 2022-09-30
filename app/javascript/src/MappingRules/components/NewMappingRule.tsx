@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import React, { FunctionComponent } from 'react'
 import {
   ActionGroup,
   Button,
@@ -22,9 +21,7 @@ import type { Metric } from 'Types'
 
 import './NewMappingRule.scss'
 
-type Error = {
-  [key: string]: Array<string>
-};
+type Error = Record<string, string[]>
 
 type Props = {
   url: string,
@@ -37,16 +34,14 @@ type Props = {
 
 type Validated = 'success' | 'error' | 'default' | undefined;
 
-const NewMappingRule = (
-  {
-    url,
-    isProxyProEnabled = false,
-    topLevelMetrics,
-    methods,
-    httpMethods,
-    errors
-  }: Props
-): React.ReactElement => {
+const NewMappingRule: FunctionComponent<Props> = ({
+  url,
+  isProxyProEnabled = false,
+  topLevelMetrics,
+  methods,
+  httpMethods,
+  errors
+}) => {
   const [httpMethod, setHttpMethod] = React.useState(httpMethods[0])
   const [pattern, setPattern] = React.useState('')
   const [patternValidated, setPatternValidated] = React.useState<Validated>('default')
@@ -65,7 +60,7 @@ const NewMappingRule = (
     }
   }, [])
 
-  const validatePattern = (value: string, _event: undefined) => {
+  const validatePattern = (value: string) => {
     setPattern(value)
     setPatternValidated('default')
   }
@@ -84,7 +79,7 @@ const NewMappingRule = (
         acceptCharset="UTF-8"
         method="post"
         action={url}
-        onSubmit={e => setLoading(true)}
+        onSubmit={() => setLoading(true)}
         // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />

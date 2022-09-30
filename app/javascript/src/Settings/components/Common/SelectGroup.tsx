@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState } from 'react'
 
 import { FormGroup, Select, SelectOption, SelectOptionObject } from '@patternfly/react-core'

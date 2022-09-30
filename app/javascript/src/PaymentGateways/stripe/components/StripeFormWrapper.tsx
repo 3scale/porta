@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities'

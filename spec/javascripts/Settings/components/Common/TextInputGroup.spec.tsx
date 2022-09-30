@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { TextInputGroup, Props } from 'Settings/components/Common/TextInputGroup'

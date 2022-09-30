@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { IndexPage } from 'Metrics'
 import { createReactWrapper } from 'utilities/createReactWrapper'

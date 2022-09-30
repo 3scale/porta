@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 import { PolicyChain, SortableList, SortableItem, DragHandle } from 'Policies/components/PolicyChain'
 import { ChainPolicy } from 'Policies/types'

@@ -1,18 +1,12 @@
-import * as React from 'react'
-
 import { FormGroup, Checkbox } from '@patternfly/react-core'
+import { FunctionComponent } from 'react'
 
 type Props = {
   isLast: boolean,
   setIsLast: (arg1: boolean) => void
 };
 
-const IsLastCheckbox = (
-  {
-    isLast,
-    setIsLast
-  }: Props
-): React.ReactElement => <FormGroup
+const IsLastCheckbox: FunctionComponent<Props> = ({ isLast }) => <FormGroup
   isRequired
   validated="default"
   fieldId="proxy_rule_last"

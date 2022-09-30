@@ -58,7 +58,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
     const hasAuthenticationProviders = this.props.authenticationProviders
     const show3scaleLoginForm = this.props.show3scaleLoginForm
     return (
-      <React.Fragment>
+       <>
         { show3scaleLoginForm &&
             <Login3scaleForm
               providerSessionsPath={this.props.providerSessionsPath}
@@ -72,7 +72,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
             />
           </div>
         }
-      </React.Fragment>
+       </>
     )
   }
 

@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { FunctionComponent, useState } from 'react'
 import { Card } from '@patternfly/react-core'
 import { PlansTable } from 'Plans/components/PlansTable'
 import * as alert from 'utilities/alert'
@@ -22,14 +21,14 @@ export type Props = {
   searchHref: string
 };
 
-const PlansTableCard: React.FunctionComponent<Props> = ({
+const PlansTableCard: FunctionComponent<Props> = ({
   columns,
   plans: initialPlans,
   count,
   searchHref
 }) => {
-  const [plans, setPlans] = React.useState<Plan[]>(initialPlans)
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [plans, setPlans] = useState<Plan[]>(initialPlans)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleActionCopy = (path: string) => ajax(path, { method: 'POST' })
     .then(data => data.json()

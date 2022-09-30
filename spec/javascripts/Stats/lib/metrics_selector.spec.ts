@@ -6,7 +6,7 @@ describe('StatsMetricsSelector', () => {
       selectedMetricName: 'pierogi',
       seriesTotal: 42500
     },
-    setState: () => {}
+    setState: jest.fn()
   }
 
   const metrics = [

@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { ProductsUsedListCard, Props } from 'BackendApis/components/ProductsUsedListCard'

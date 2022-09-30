@@ -45,7 +45,8 @@
     // See: https://github.com/babel/babel-eslint/issues/681#issuecomment-420663038
     // We should upgrade from babel-eslint (deprecated) to @babel/eslint-parser
     "template-curly-spacing": "off",
-    "indent": "off"
+    "indent": "off",
+    "@typescript-eslint/no-explicit-any": "off" // TODO: only temporary!!
   },
   "settings": {
     "react": {

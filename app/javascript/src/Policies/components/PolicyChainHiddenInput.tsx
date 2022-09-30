@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import type { ChainPolicy } from 'Policies/types'
 

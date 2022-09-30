@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { NewBackendModal, Props } from 'BackendApis/components/NewBackendModal'
@@ -6,8 +5,8 @@ import { NewBackendModal, Props } from 'BackendApis/components/NewBackendModal'
 const defaultProps = {
   backendsPath: '/backends',
   isOpen: true,
-  onClose: () => {},
-  onCreateBackend: () => {}
+  onClose: jest.fn(),
+  onCreateBackend: jest.fn()
 } as const
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<NewBackendModal {...{ ...defaultProps, ...props }} />)

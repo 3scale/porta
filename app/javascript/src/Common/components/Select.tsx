@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { useState } from 'react'
 import {
   FormGroup,
   Select as PF4Select,
@@ -57,7 +56,7 @@ const Select = <T extends Record>(
     isRequired = false
   }: Props<T>
 ): React.ReactElement => {
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const handleSelect = (_e: any, option: string | PFSelectOptionObject) => {
     setExpanded(false)

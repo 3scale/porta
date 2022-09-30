@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   FormGroup as PF4FormGroup,
   TextInput
@@ -32,7 +31,7 @@ const FormGroup = ({
 }: Props) => {
   const { isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid } = inputProps
   return (
-    <React.Fragment>
+     <>
       <PF4FormGroup
         isRequired={isRequired}
         label={label}
@@ -53,7 +52,7 @@ const FormGroup = ({
           aria-invalid={ariaInvalid}
         />
       </PF4FormGroup>
-    </React.Fragment>
+     </>
   )
 }
 

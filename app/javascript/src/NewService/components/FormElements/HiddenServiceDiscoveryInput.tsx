@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 const HiddenServiceDiscoveryInput = (): React.ReactElement => <input
   value='discover'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount, ReactWrapper } from 'enzyme'
 
@@ -57,7 +56,7 @@ const invalidPaths = [
 
 const defaultProps = {
   action: '/backends',
-  onCancel: () => {},
+  onCancel: jest.fn(),
   isLoading: false,
   errors: undefined
 } as const

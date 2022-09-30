@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   SortableContainer,
   SortableElement,
@@ -44,7 +43,7 @@ type SortableListProps = {
   editPolicy: Props['actions']['editPolicy']
 }
 
-const SortableList = SortableContainer<SortableListProps>((({ items, editPolicy }: SortableListProps) => (
+const SortableList = SortableContainer<SortableListProps>(({ items, editPolicy }: SortableListProps) => (
   <ul className="list-group">
     {items.map((policy, index) => (
       <SortableItem
@@ -55,7 +54,7 @@ const SortableList = SortableContainer<SortableListProps>((({ items, editPolicy 
       />
     ))}
   </ul>
-)))
+))
 
 const PolicyChain: React.FunctionComponent<Props> = ({
   chain,

@@ -1,5 +1,4 @@
-import React from 'react'
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme'
 
 import { PermissionsForm, Props } from 'Users/components/PermissionsForm'
 

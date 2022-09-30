@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { useState } from 'react'
 import { ServiceSourceForm, ServiceDiscoveryForm, ServiceManualForm } from 'NewService'
 import { createReactWrapper } from 'utilities'
 import type { Api } from 'Types/Api'
@@ -19,8 +18,8 @@ const NewServiceForm = (props: Props): React.ReactElement => {
   const { template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
     providerAdminServiceDiscoveryServicesPath, adminServicesPath, backendApis } = props
 
-  const [formMode, setFormMode] = React.useState('manual')
-  const [loadingProjects, setLoadingProjects] = React.useState(false)
+  const [formMode, setFormMode] = useState('manual')
+  const [loadingProjects, setLoadingProjects] = useState(false)
 
   const handleFormsVisibility = (event: React.SyntheticEvent<HTMLInputElement>) =>
     setFormMode(event.currentTarget.value)
@@ -30,7 +29,7 @@ const NewServiceForm = (props: Props): React.ReactElement => {
     : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
 
   return (
-    <React.Fragment>
+     <>
       <h1>New Product</h1>
       <div className="new-service-form">
         {isServiceDiscoveryAccessible &&
@@ -43,7 +42,7 @@ const NewServiceForm = (props: Props): React.ReactElement => {
         }
         {formToRender()}
       </div>
-    </React.Fragment>
+     </>
   )
 }
 

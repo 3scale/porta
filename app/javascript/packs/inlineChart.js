@@ -1,4 +1,3 @@
-import React from 'react'
 import { render } from 'react-dom'
 import InlineChart from '../src/Stats/inlinechart/index'
 

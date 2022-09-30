@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FunctionComponent } from 'react'
 import { Label, Select } from 'NewService/components/FormElements'
 import { fetchData } from 'utilities'
 import { BASE_PATH } from 'NewService'
@@ -9,7 +8,7 @@ type Props = {
   onError: (err: string) => void
 };
 
-const ServiceDiscoveryListItems: React.FunctionComponent<Props> = (props) => {
+const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
   const { projects, onError } = props
 
   const [services, setServices] = useState<string[]>([])
@@ -36,7 +35,7 @@ const ServiceDiscoveryListItems: React.FunctionComponent<Props> = (props) => {
   }
 
   return (
-    <React.Fragment>
+     <>
       <li id="service_name_input" className="string required">
         <Label
           htmlFor='service_namespace'
@@ -62,7 +61,7 @@ const ServiceDiscoveryListItems: React.FunctionComponent<Props> = (props) => {
           options={services}
         />
       </li>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { FunctionComponent, useState } from 'react'
 import {
   ActionGroup,
   Button,
@@ -21,14 +20,14 @@ type Props = {
   path: string
 };
 
-const DefaultPlanSelectCard: React.FunctionComponent<Props> = ({
+const DefaultPlanSelectCard: FunctionComponent<Props> = ({
   plans,
   initialDefaultPlan,
   path: url
 }) => {
   const NO_DEFAULT_PLAN: Plan = { id: -1, name: 'No plan selected' }
 
-  const [defaultPlan, setDefaultPlan] = React.useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
+  const [defaultPlan, setDefaultPlan] = useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 
   const availablePlans = [NO_DEFAULT_PLAN, ...plans]
 

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react'
 import { shallow } from 'enzyme'
 
 import { FormCollection, Props } from 'Settings/components/Common/FormCollection'

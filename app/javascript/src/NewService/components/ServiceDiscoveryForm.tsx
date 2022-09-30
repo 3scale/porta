@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 
 import { FormWrapper, ErrorMessage, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import { fetchData } from 'utilities'
@@ -15,8 +15,8 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   setLoadingProjects
 }) => {
   // Don't use named imports so that useState can be mocked in specs
-  const [projects, setProjects] = React.useState<string[]>([])
-  const [fetchErrorMessage, setFetchErrorMessage] = React.useState('')
+  const [projects, setProjects] = useState<string[]>([])
+  const [fetchErrorMessage, setFetchErrorMessage] = useState('')
 
   const fetchProjects = async () => {
     setLoadingProjects(true)
@@ -45,12 +45,12 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   } as const
 
   return (
-    <React.Fragment>
+     <>
       {fetchErrorMessage && <ErrorMessage fetchErrorMessage={fetchErrorMessage}/>}
       <FormWrapper {...formProps}>
         <ServiceDiscoveryListItems {...listItemsProps}/>
       </FormWrapper>
-    </React.Fragment>
+     </>
   )
 }
 

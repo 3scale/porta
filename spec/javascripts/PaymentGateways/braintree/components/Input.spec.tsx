@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 import { Input, Props } from 'PaymentGateways/braintree/components/Input'
 

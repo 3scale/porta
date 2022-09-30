@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { BraintreeForm, Props } from 'PaymentGateways/braintree/BraintreeForm'
 import { mount } from 'enzyme'

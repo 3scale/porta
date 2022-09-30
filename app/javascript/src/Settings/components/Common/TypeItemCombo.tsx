@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { FormFieldset, FormLegend, TextInputGroup, SelectGroup } from 'Settings/components/Common'
 import type { FieldGroupProps, FieldCatalogProps } from 'Settings/types'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { EmailInput, Props } from 'EmailConfigurations/components/form-fields/EmailInput'

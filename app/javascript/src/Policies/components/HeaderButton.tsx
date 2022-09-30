@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react'
 import { Button } from '@patternfly/react-core'
 import { PlusIcon, TimesIcon } from '@patternfly/react-icons'
 import { ThunkAction } from 'Policies/types/Actions'

@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action } from 'redux'
 
 export type UIComponent = 'chain' | 'registry' | 'policyConfig';
 

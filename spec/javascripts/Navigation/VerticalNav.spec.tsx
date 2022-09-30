@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, mount } from 'enzyme'
 import { VerticalNav } from 'Navigation/components/VerticalNav'
 

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState, useRef } from 'react'
 
 import { CompactListCard } from 'Common'

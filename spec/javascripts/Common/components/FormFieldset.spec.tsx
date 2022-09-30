@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 

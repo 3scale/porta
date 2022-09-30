@@ -1,5 +1,4 @@
-import React from 'react'
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme'
 
 import { ServicesFieldset, Props } from 'Users/components/ServicesFieldset'
 

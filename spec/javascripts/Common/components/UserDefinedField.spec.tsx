@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { UserDefinedField, Props } from 'Common/components/UserDefinedField'

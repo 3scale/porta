@@ -1,9 +1,9 @@
 import validate from 'validate.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form: HTMLFormElement = document.getElementById('signup_form')
-  const submitBtn: HTMLInputElement = document.querySelector('input[type="submit"]')
-  const captchaInput: HTMLInputElement = document.getElementById('captchaChecked')
+  const form = document.getElementById('signup_form') as HTMLFormElement
+  const submitBtn = document.querySelector('input[type="submit"]') as HTMLInputElement
+  const captchaInput = document.getElementById('captchaChecked') as HTMLInputElement
 
   // Fields 'org_name', 'username' and 'email' are always required
   const mandatoryFields = {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   captchaInput.value = captchaRequired ? '' : 'ok'
 
   const inputs = document.querySelectorAll('input')
-  inputs.forEach(input => input.addEventListener('keyup', (event: KeyboardEvent) => {
+  inputs.forEach(input => input.addEventListener('keyup', () => {
     const errors = validate(form, constraints)
     submitBtn.disabled = !!errors
   }))

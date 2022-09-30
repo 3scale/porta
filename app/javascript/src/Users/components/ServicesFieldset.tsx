@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import type { Api } from 'Types'
 import type { AdminSection } from 'Users/types'
 
@@ -61,7 +59,6 @@ type ServiceCheckboxProps = {
 
 const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
   service = {} as Api,
-  selectedSections,
   checked,
   disabled,
   onChange

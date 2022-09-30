@@ -55,7 +55,8 @@ describe('fetchProjects', () => {
       done()
     })
     const useState = jest.spyOn(React, 'useState')
-      // @ts-ignore TODO: we should not test Reacts useState but the component's state
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: we should not test Reacts useState but the component's state
       .mockImplementationOnce(init => [init, setState])
 
     mount(<ServiceDiscoveryForm {...props}/>)

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Nav, NavExpandable, NavItem, NavList, NavGroup, NavExpandableProps } from '@patternfly/react-core'
 import { createReactWrapper } from 'utilities'
 import 'Navigation/styles/VerticalNav.scss'

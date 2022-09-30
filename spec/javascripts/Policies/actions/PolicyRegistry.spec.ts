@@ -28,4 +28,3 @@ it('#fetchRegistry should create an action to use the redux api middleware', () 
     }
   `)
 })
-

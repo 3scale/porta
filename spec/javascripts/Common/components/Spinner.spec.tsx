@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { Spinner, Props } from 'Common/components/Spinner'

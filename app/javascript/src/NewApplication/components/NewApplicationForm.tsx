@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState, useEffect } from 'react'
 import {
   Form,
@@ -133,7 +132,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
         acceptCharset='UTF-8'
         method='post'
         action={url}
-        onSubmit={e => setLoading(true)}
+        onSubmit={() => setLoading(true)}
       >
         <CSRFToken />
         <input name='utf8' type='hidden' value='✓' />

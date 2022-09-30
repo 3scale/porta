@@ -1,4 +1,3 @@
-import * as React from 'react'
 import Form from 'react-jsonschema-form'
 import { Button } from '@patternfly/react-core'
 

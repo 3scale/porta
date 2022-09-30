@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 
 import {
   BaseSizes,
@@ -21,14 +20,12 @@ type Props = {
   onCreateBackend: (arg1: Backend) => void
 };
 
-const NewBackendModal = (
-  {
-    backendsPath,
-    isOpen = false,
-    onClose,
-    onCreateBackend
-  }: Props
-): React.ReactElement => {
+const NewBackendModal: FunctionComponent<Props> = ({
+  backendsPath,
+  isOpen = false,
+  onClose,
+  onCreateBackend
+}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState()
 
@@ -46,8 +43,9 @@ const NewBackendModal = (
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const jq = $ as any // HACK: remove this after finding the right typings
+    // eslint-disable-next-line no-console
     console.log('jQuery', $().jquery) // TODO: verify version of jquery and use .live or .on accordingly
     jq('form#new_backend_api_config')
       // $FlowFixMe[prop-missing] jquery-ujs is deprecated, in rails 5 we should use rails-ujs. However, the former is broadly used so it's not trivial.
@@ -57,12 +55,12 @@ const NewBackendModal = (
   }, [])
 
   const header = (
-    <React.Fragment>
+    <>
       <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']} className="with-spinner">
         Create backend
       </Title>
       {isLoading && <Spinner size='md' className='pf-u-ml-md' />}
-    </React.Fragment>
+    </>
   )
 
   return (

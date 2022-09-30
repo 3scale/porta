@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { isNotApicastPolicy } from 'Policies/util'
 import { PolicyTile } from 'Policies/components/PolicyTile'

@@ -1,4 +1,3 @@
-import React from 'react'
 
 import { PolicyList, Props } from 'Policies/components/PoliciesWidget'
 import { mount } from 'enzyme'

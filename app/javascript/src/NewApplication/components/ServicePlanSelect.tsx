@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { Button } from '@patternfly/react-core'
 import { Select } from 'Common'

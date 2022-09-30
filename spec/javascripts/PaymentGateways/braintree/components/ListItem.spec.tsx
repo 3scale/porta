@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 import { ListItem, Props } from 'PaymentGateways/braintree/components/ListItem'
 

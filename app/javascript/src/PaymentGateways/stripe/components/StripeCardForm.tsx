@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useState, useRef, FunctionComponent, PropsWithChildren, FormEventHandler } from 'react'
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 import { CSRFToken } from 'utilities'
@@ -90,7 +89,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
 
     if (setupIntent && setupIntent.status === 'succeeded') {
       setStripePaymentMethodId(setupIntent.payment_method)
-      formRef.current!.submit()
+      formRef.current?.submit()
     } else {
       setCardErrorMessage(error && error.message)
     }

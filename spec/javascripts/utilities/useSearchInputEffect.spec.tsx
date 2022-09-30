@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react'
 import { mount } from 'enzyme'
 
 import { useSearchInputEffect } from 'utilities/useSearchInputEffect'

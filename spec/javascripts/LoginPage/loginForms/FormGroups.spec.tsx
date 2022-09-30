@@ -1,4 +1,4 @@
-import React, { AllHTMLAttributes } from 'react'
+import { AllHTMLAttributes } from 'react'
 import { mount } from 'enzyme'
 
 import { TextField, PasswordField, EmailField } from 'LoginPage'

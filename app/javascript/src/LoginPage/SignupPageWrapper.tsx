@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { createReactWrapper } from 'utilities'
 
 import { LoginPage } from '@patternfly/react-core'

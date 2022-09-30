@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount, ReactWrapper } from 'enzyme'
 
 import { RoleRadioGroup, Props } from 'Users/components/RoleRadioGroup'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { mount } from 'enzyme'
 
 import { PolicyConfig, Props } from 'Policies/components/PolicyConfig'
@@ -6,7 +5,7 @@ import { HeaderButton } from 'Policies/components/HeaderButton'
 import { ChainPolicy } from 'Policies/types'
 
 describe('PolicyConfig Component', () => {
-  const { warn } = console
+  let consoleSpy: jest.SpyInstance
 
   beforeAll(() => {
     /**
@@ -29,11 +28,11 @@ describe('PolicyConfig Component', () => {
      *   at unstable_runWithPriority (node_modules/scheduler/cjs/scheduler.development.js:653:12)
      *   at runWithPriority$1 (node_modules/react-dom/cjs/react-dom.development.js:11039:10)
      */
-    console.warn = jest.fn()
+    consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => '')
   })
 
   afterAll(() => {
-    console.warn = warn
+    consoleSpy.mockRestore()
   })
 
   function setup () {

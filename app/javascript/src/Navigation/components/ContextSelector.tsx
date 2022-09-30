@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 import { createReactWrapper, useClickOutside } from 'utilities'
 
@@ -7,6 +5,7 @@ import 'Navigation/styles/ContextSelector.scss'
 
 import type { Menu } from 'Types'
 import { FunctionComponent } from 'enzyme'
+import { useRef, useState } from 'react'
 
 type Props = {
   activeMenu: Menu,
@@ -25,8 +24,8 @@ const ContextSelector: FunctionComponent<Props> = ({
   productsLink,
   backendsLink
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const ref = React.useRef(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef(null)
   useClickOutside(ref, () => setIsOpen(false))
 
   function getClassNamesForMenu (menu: Menu): string {

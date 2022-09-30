@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { LoginMainFooterBandItem } from '@patternfly/react-core'
 
 const ForgotCredentials = (

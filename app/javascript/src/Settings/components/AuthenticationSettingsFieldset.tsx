@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { FormCollection, FormFieldset, FormLegend, TextInputGroup } from 'Settings/components/Common'
 import { OidcFieldset } from 'Settings/components/OidcFieldset'

@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { FormGroup, TextArea } from '@patternfly/react-core'
 

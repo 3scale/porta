@@ -1,4 +1,3 @@
-import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount, shallow } from 'enzyme'
 
@@ -8,7 +7,7 @@ const serviceDiscoveryAuthenticateUrl = 'my-url'
 const props = {
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl,
-  handleFormsVisibility: () => {},
+  handleFormsVisibility: jest.fn(),
   loadingProjects: false
 }
 

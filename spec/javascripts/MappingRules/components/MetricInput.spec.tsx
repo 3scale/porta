@@ -1,7 +1,7 @@
-import React, { FormEvent } from 'react'
+import { FormEvent } from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
-import { RadioProps} from '@patternfly/react-core'
+import { RadioProps } from '@patternfly/react-core'
 
 import { MetricInput, Props } from 'MappingRules/components/MetricInput'
 

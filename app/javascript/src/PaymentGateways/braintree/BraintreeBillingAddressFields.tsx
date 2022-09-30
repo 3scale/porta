@@ -1,11 +1,10 @@
-import React, { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useState, ChangeEventHandler } from 'react'
 import {
   BillingAddressData,
   Input,
   Label,
   ListItem
 } from 'PaymentGateways'
-import { ChangeEventHandler } from 'react'
 
 type Props = {
   countriesList: Array<string[]>,

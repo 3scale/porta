@@ -1,9 +1,8 @@
-import React, { FormEvent } from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 
 import { NameInput, Props } from 'BackendApis/components/NameInput'
-import { TextInput } from '@patternfly/react-core'
+import { TextInput } from '@patternfly/react-core'
 
 const setName = jest.fn()
 

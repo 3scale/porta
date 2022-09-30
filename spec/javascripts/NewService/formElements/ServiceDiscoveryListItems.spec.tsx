@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import { FormEvent } from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount, shallow, render, ReactWrapper } from 'enzyme'
 

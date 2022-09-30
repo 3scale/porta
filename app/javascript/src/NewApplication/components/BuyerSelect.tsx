@@ -1,4 +1,3 @@
-import * as React from 'react'
 
 import { sortable } from '@patternfly/react-table'
 import { fetchPaginatedBuyers } from 'NewApplication/data'

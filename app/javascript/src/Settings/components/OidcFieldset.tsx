@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 
 import { Checkbox, CheckboxProps } from '@patternfly/react-core'
 import { FormCollection, FormFieldset, FormLegend, TypeItemCombo } from 'Settings/components/Common'
@@ -14,8 +13,8 @@ const JsonWebToken: FunctionComponent<TypeItemProps> = (props) => (
 )
 
 const FlowItem: FunctionComponent<FieldGroupProps> = ({ name, label, checked }) => {
-  const [ isChecked, setIsChecked ] = React.useState(checked)
-  const onChange: CheckboxProps['onChange'] = (check, _e) => setIsChecked(check)
+  const [ isChecked, setIsChecked ] = useState(checked)
+  const onChange: CheckboxProps['onChange'] = (check) => setIsChecked(check)
   return (
     <Checkbox
       id={`service_proxy_attributes_oidc_configuration_attributes_${name}_input`}

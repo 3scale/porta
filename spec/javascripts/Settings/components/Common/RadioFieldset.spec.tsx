@@ -1,4 +1,3 @@
-import React from 'react'
 import { shallow } from 'enzyme'
 
 import { RadioFieldset, Props } from 'Settings/components/Common/RadioFieldset'

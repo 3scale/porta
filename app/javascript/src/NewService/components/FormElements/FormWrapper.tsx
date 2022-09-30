@@ -1,4 +1,3 @@
-import * as React from 'react'
 import type { FormProps } from 'NewService/types'
 import { CSRFToken } from 'utilities'
 import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'

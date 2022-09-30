@@ -1,4 +1,3 @@
-import React from 'react'
 
 import Root from 'Policies/components/Root'
 import configureStore from 'Policies/store/configureStore'

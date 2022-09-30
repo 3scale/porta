@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { KeyIcon, LessThanIcon, GreaterThanIcon } from '@patternfly/react-icons'
 
 export type ProvidersProps = {
@@ -34,11 +33,11 @@ const AuthenticationProviders = (props: Props): React.ReactElement => {
   )
 
   return (
-    <React.Fragment>
+     <>
       <div className='providers-list'>
         {providersList}
       </div>
-    </React.Fragment>
+     </>
   )
 }
 

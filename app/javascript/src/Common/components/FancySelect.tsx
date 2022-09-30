@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { useState } from 'react'
 import {
   FormGroup,
   Select,
@@ -57,7 +56,7 @@ const FancySelect = <T extends Record>({
   placeholderText,
   footer
 }: Props<T>) => {
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' } as const
   // TODO: Remove after upgrading @patternfly/react-core, see https://www.patternfly.org/v4/components/select#view-more

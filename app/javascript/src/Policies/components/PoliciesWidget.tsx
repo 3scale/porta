@@ -1,4 +1,3 @@
-import React from 'react'
 import { bindActionCreators, Dispatch } from 'redux'
 import * as actions from 'Policies/actions'
 import { PolicyConfig } from 'Policies/components/PolicyConfig'

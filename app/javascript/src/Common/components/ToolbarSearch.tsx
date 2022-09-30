@@ -1,5 +1,4 @@
-import * as React from 'react'
-
+import { useEffect, useRef, useState } from 'react'
 import {
   Button,
   ButtonVariant,
@@ -32,19 +31,19 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
 }) => {
   // const query = new URL(window.location).searchParams.get(name) TODO: check this is the same
   const query = new URL(window.location.toString()).searchParams.get(name)
-  const [searchText, setSearchText] = React.useState<string>(query || '')
-  const [showPopover, setShowPopover] = React.useState<boolean>(false)
+  const [searchText, setSearchText] = useState<string>(query || '')
+  const [showPopover, setShowPopover] = useState<boolean>(false)
 
-  const inputRef = React.useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement>()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const input = inputRef.current
     input?.addEventListener('search', handleOnSearch)
 
     return () => input?.removeEventListener('search', handleOnSearch)
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (showPopover) {
       setShowPopover(false)
     }
