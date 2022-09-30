@@ -9,13 +9,6 @@ import {
 
 import type { Feature, AdminSection } from 'Users/types'
 
-type Props = {
-  features: Feature[],
-  selectedSections?: AdminSection[],
-  areServicesVisible?: boolean,
-  onAdminSectionSelected: (arg1: AdminSection) => void
-};
-
 /**
  * Contains a set of Features that can be checked by the user.
  * @param {Feature[]}       features                - An array containing all available Features in the fieldset.
@@ -23,14 +16,19 @@ type Props = {
  * @param {boolean}         areServicesVisible      - Whether or not the fieldset with all services is visible.
  * @param {function}        onAdminSectionSelected  - A callback function triggered when a feature is checked or unchecked.
  */
-const FeaturesFieldset = (
-  {
-    features,
-    selectedSections = [],
-    areServicesVisible = false,
-    onAdminSectionSelected
-  }: Props
-): React.ReactElement => {
+type Props = {
+  features: Feature[],
+  selectedSections?: AdminSection[],
+  areServicesVisible?: boolean,
+  onAdminSectionSelected: (arg1: AdminSection) => void
+};
+
+const FeaturesFieldset: React.FunctionComponent<Props> = ({
+  features,
+  selectedSections = [],
+  areServicesVisible = false,
+  onAdminSectionSelected
+}) => {
   const featuresListClassName = `FeatureAccessList ${areServicesVisible ? '' : 'FeatureAccessList--noServicePermissionsGranted'}`
   const allServicesChecked = !selectedSections.includes('services')
 
@@ -70,14 +68,16 @@ const LabelDescriptionItems = ({
  * @param {boolean}   checked   - Whether or not this checkbox is selected.
  * @param {Function}  onChange  - A callback function triggered when its value changes.
  */
-const FeatureCheckbox = ({
-  value,
-  checked,
-  onChange
-}: {
+type FeatureCheckboxProps = {
   value: Feature,
   checked?: boolean,
   onChange: (arg1: Feature) => void
+}
+
+const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
+  value,
+  checked,
+  onChange
 }) => {
   const featuresListItemClassName = `FeatureAccessList-item FeatureAccessList-item--${value} ${checked ? 'is-checked' : 'is-unchecked'}`
   const featureCheckboxClassName = `user_member_permission_ids ${canFeatureSetServicePermissions(value) ? 'user_member_permission_ids--service' : ''}`
@@ -107,12 +107,14 @@ const FeatureCheckbox = ({
  * @param {boolean}   checked   - Whether the checkbox is selected.
  * @param {Function}  onChange  - A callback function triggered when the checkbox value changes.
  */
-const AllServicesCheckbox = ({
-  checked,
-  onChange
-}: {
+type AllServicesCheckboxProps = {
   checked?: boolean,
   onChange: (arg1: 'services') => void
+}
+
+const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = ({
+  checked,
+  onChange
 }) => {
   // if service feature access checkbox is unchecked
   // at least blank service_ids array has to be sent
@@ -137,4 +139,4 @@ const AllServicesCheckbox = ({
   )
 }
 
-export { FeaturesFieldset }
+export { FeaturesFieldset, Props }

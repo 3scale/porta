@@ -1,7 +1,9 @@
 import { canFeatureSetServicePermissions, toggleElementInCollection, getFeatureName } from 'Users/utils'
 
+import type { Feature } from 'Users/types'
+
 // Features
-const FEATURES = ['portal', 'finance', 'settings', 'partners', 'monitoring', 'plans', 'policy_registry']
+const FEATURES: Feature[] = ['portal', 'finance', 'settings', 'partners', 'monitoring', 'plans', 'policy_registry']
 
 describe('canFeatureSetServicePermissions', () => {
   it('should return whether or not service permissions are available', () => {

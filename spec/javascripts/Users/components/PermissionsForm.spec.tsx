@@ -1,16 +1,19 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme';
 
-import { PermissionsForm } from 'Users/components/PermissionsForm'
+import { PermissionsForm, Props } from 'Users/components/PermissionsForm'
 
-function getWrapper (testProps) {
-  const defaultProps = { features: [], services: [] }
-  const props = { ...defaultProps, ...testProps }
+import type { Role, Feature, AdminSection } from 'Users/types'
+import type { Api } from 'Types'
+
+function getWrapper (testProps?: Partial<Props>) {
+  const defaultProps: Props = { features: [], services: [] }
+  const props: Props = { ...defaultProps, ...testProps }
 
   wrapper = mount(<PermissionsForm { ...props } />)
 }
 
-let wrapper
+let wrapper: ReactWrapper
 
 beforeEach(() => {
   getWrapper()
@@ -62,22 +65,22 @@ describe('when role is "admin"', () => {
 })
 
 describe('when role is "member"', () => {
-  const findFeatures = () => wrapper.find('input[type="checkbox"][name="user[member_permission_ids][]"]')
-  const FEATURES = ['portal', 'finance', 'settings', 'policy_registry']
-  const FEATURES_FOR_SERVICES = ['partners', 'monitoring', 'plans']
-  const allFeatures = [ ...FEATURES, ...FEATURES_FOR_SERVICES ]
+  const findFeatures = () => wrapper.find('input[type="checkbox"][name="user[member_permission_ids][]"]') as ReactWrapper
+  const FEATURES: Feature[] = ['portal', 'finance', 'settings', 'policy_registry']
+  const FEATURES_FOR_SERVICES: Feature[] = ['partners', 'monitoring', 'plans']
+  const allFeatures: Feature[] = [ ...FEATURES, ...FEATURES_FOR_SERVICES ]
 
   beforeEach(() => {
     getWrapper({
-      initialState: { role: 'member' },
-      features: allFeatures
+      initialState: { role: 'member' as Role },
+      features: allFeatures as Feature[]
     })
   })
 
   it('should render the given features', () => {
     getWrapper({
-      initialState: { role: 'member' },
-      features: ['portal', 'finance', 'settings']
+      initialState: { role: 'member' as Role },
+      features: ['portal', 'finance', 'settings'] as Feature[]
     })
 
     expect(wrapper.containsAllMatchingElements([
@@ -93,8 +96,8 @@ describe('when role is "member"', () => {
     ])).toBe(false)
 
     getWrapper({
-      initialState: { role: 'member' },
-      features: ['partners', 'monitoring', 'plans']
+      initialState: { role: 'member' as Role },
+      features: ['partners', 'monitoring', 'plans'] as Feature[]
     })
 
     expect(wrapper.containsAllMatchingElements([
@@ -159,8 +162,8 @@ describe('when role is "member"', () => {
   describe('when "services" checkbox is visible and included in admin_sections', () => {
     beforeEach(() => {
       getWrapper({
-        initialState: { role: 'member', admin_sections: ['partners', 'services'] },
-        services: SERVICES
+        initialState: { role: 'member' as Role, admin_sections: ['partners', 'services'] as AdminSection[] },
+        services: SERVICES as Api[]
       })
     })
 
@@ -175,8 +178,8 @@ describe('when role is "member"', () => {
 
     it('should render all services included in "selectedServicesIds" checked', () => {
       getWrapper({
-        initialState: { role: 'member', admin_sections: ['partners', 'services'], member_permission_service_ids: [SERVICES[0].id] },
-        services: SERVICES
+        initialState: { role: 'member' as Role, admin_sections: ['partners', 'services'] as AdminSection[], member_permission_service_ids: [SERVICES[0].id] },
+        services: SERVICES as Api[]
       })
 
       expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toBe(true)
@@ -203,8 +206,8 @@ describe('when role is "member"', () => {
   describe('when "services" checkbox is visible and NOT selected', () => {
     beforeEach(() => {
       getWrapper({
-        initialState: { role: 'member', admin_sections: ['partners'] },
-        services: SERVICES
+        initialState: { role: 'member' as Role, admin_sections: ['partners'] as AdminSection[] },
+        services: SERVICES as Api[]
       })
     })
 

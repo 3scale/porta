@@ -11,15 +11,15 @@ const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API prod
  * @param {Role}      selectedRole  - The radio button currently selected.
  * @param {Function}  onRoleChanged - A callback function triggered when the selected value changes.
  */
-const RoleRadioGroup = (
-  {
-    selectedRole,
-    onRoleChanged
-  }: {
-    selectedRole: Role,
-    onRoleChanged: (arg1: Role) => void
-  }
-): React.ReactElement => <li className='radio optional' id='user_role_input'>
+type Props = {
+  selectedRole: Role,
+  onRoleChanged: (arg1: Role) => void
+}
+
+const RoleRadioGroup: React.FunctionComponent<Props> = ({
+  selectedRole,
+  onRoleChanged
+}) => <li className='radio optional' id='user_role_input'>
   <fieldset>
     <legend className='label'>
       <label>Role</label>
@@ -38,16 +38,18 @@ const RoleRadioGroup = (
  * @param {boolean}   checked   - Whether it is selected or not.
  * @param {Function}  onChange  - A callback function triggered when selected.
  */
-const UserRole = ({
-  role,
-  label,
-  checked,
-  onChange
-}: {
+type UserRoleProps = {
   role: Role,
   label: string,
   checked: boolean,
   onChange: (role: Role) => void
+}
+
+const UserRole: React.FunctionComponent<UserRoleProps> = ({
+  role,
+  label,
+  checked,
+  onChange
 }) => (
   <li>
     <label htmlFor={`user_role_${role}`}>
@@ -65,4 +67,4 @@ const UserRole = ({
   </li>
 )
 
-export { RoleRadioGroup }
+export { RoleRadioGroup, Props }

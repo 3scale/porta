@@ -1,21 +1,23 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme';
 
-import { ServicesFieldset } from 'Users/components/ServicesFieldset'
+import { ServicesFieldset, Props } from 'Users/components/ServicesFieldset'
 
-let wrapper
+import type { Api } from 'Types'
 
-const SERVICES = [
+let wrapper: ReactWrapper
+
+const SERVICES: Api[] = [
   { id: 0, name: 'The Super API', link: '' },
   { id: 1, name: 'Cool Villains', link: '' }
-]
+] as Api[]
 
-function getWrapper (testProps) {
-  const defaultProps = {
+function getWrapper (testProps?: Partial<Props>) {
+  const defaultProps: Props = {
     services: SERVICES,
     onServiceSelected: jest.fn()
   }
-  const props = { ...defaultProps, ...testProps }
+  const props: Props = { ...defaultProps, ...testProps }
 
   wrapper = mount(<ServicesFieldset {...props} />)
 }
@@ -40,7 +42,7 @@ it('should render a checkbox for each service', () => {
 
 it('should call onServiceSelected with the service id when being selected', () => {
   const onServiceSelected = jest.fn()
-  const service = SERVICES[0]
+  const service: Api = SERVICES[0]
   wrapper.setProps({ onServiceSelected })
 
   wrapper.find(`input#user_member_permission_service_ids_${service.id}`).simulate('change')

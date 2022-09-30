@@ -1,18 +1,20 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme'
 
-import { FeaturesFieldset } from 'Users/components/FeaturesFieldset'
+import { FeaturesFieldset, Props } from 'Users/components/FeaturesFieldset'
 
-let wrapper
+import type { Feature, AdminSection } from 'Users/types'
+
+let wrapper: ReactWrapper
 
 const FEATURES = ['plans', 'monitoring', 'settings']
 
-function getWrapper (testProps) {
-  const defaultProps = {
-    features: FEATURES,
+function getWrapper (testProps?: Partial<Props>) {
+  const defaultProps: Props = {
+    features: FEATURES as Feature[],
     onAdminSectionSelected: jest.fn()
   }
-  const props = { ...defaultProps, ...testProps }
+  const props: Props = { ...defaultProps, ...testProps }
 
   wrapper = mount(<FeaturesFieldset {...props} />)
 }
@@ -42,10 +44,10 @@ it('should have each input the correct id', () => {
 })
 
 it('should render inputs checked if included in "selectedSections"', () => {
-  getWrapper({ selectedSections: ['plans'] })
+  getWrapper({ selectedSections: ['plans'] as AdminSection[] })
   expect(wrapper.find('input[type="checkbox"]').find({ checked: true }).prop('value')).toEqual('plans')
 
-  getWrapper({ selectedSections: FEATURES })
+  getWrapper({ selectedSections: FEATURES as AdminSection[] })
   expect(wrapper.find('input[type="checkbox"]').find({ checked: true })).toHaveLength(FEATURES.length)
 })
 
@@ -91,19 +93,19 @@ describe('when services are visible', () => {
   })
 
   it('should render "services" checked if not included in selectedSections', () => {
-    getWrapper({ areServicesVisible: true, selectedSections: [] })
+    getWrapper({ areServicesVisible: true, selectedSections: [] as AdminSection[] })
     expect(wrapper.find('input#user_member_permission_ids_services').prop('checked')).toBe(true)
 
-    getWrapper({ areServicesVisible: true, selectedSections: ['services'] })
+    getWrapper({ areServicesVisible: true, selectedSections: ['services'] as AdminSection[] })
     expect(wrapper.find('input#user_member_permission_ids_services').prop('checked')).toBe(false)
   })
 
   it('should render a hidden input when "services" is not selected', () => {
-    getWrapper({ areServicesVisible: true, selectedSections: [] })
+    getWrapper({ areServicesVisible: true, selectedSections: [] as AdminSection[] })
     expect(wrapper.find('input#user_member_permission_ids_services').prop('checked')).toBe(true)
     expect(wrapper.find('input').find({ name: 'user[member_permission_service_ids][]' }).exists()).toBe(false)
 
-    getWrapper({ areServicesVisible: true, selectedSections: ['services'] })
+    getWrapper({ areServicesVisible: true, selectedSections: ['services'] as AdminSection[] })
     expect(wrapper.find('input#user_member_permission_ids_services').prop('checked')).toBe(false)
     expect(wrapper.find('input').find({ name: 'user[member_permission_service_ids][]' }).exists()).toBe(true)
   })

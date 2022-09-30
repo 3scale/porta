@@ -29,7 +29,7 @@ const FEATURES_GRANTING_SERVICE_ACCESS = ['partners', 'monitoring', 'plans']
 
 export function getFeatureName (feature: Feature): string {
   if (feature in FEATURE_NAMES) {
-    return FEATURE_NAMES[feature]
+    return FEATURE_NAMES[feature] as string
   }
 
   throw new Error(`${feature} is not a known feature`)

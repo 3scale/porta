@@ -1,16 +1,18 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme'
 
-import { RoleRadioGroup } from 'Users/components/RoleRadioGroup'
+import { RoleRadioGroup, Props } from 'Users/components/RoleRadioGroup'
 
-function getWrapper (testProps) {
-  const defaultProps = { selectedRole: 'member', onRoleChanged: jest.fn() }
-  const props = { ...defaultProps, ...testProps }
+import type { Role } from 'Users/types'
+
+function getWrapper (testProps?: Partial<Props>) {
+  const defaultProps: Props = { selectedRole: 'member', onRoleChanged: jest.fn() }
+  const props: Props = { ...defaultProps, ...testProps }
 
   wrapper = mount(<RoleRadioGroup {...props} />)
 }
 
-let wrapper
+let wrapper: ReactWrapper
 
 beforeEach(() => {
   getWrapper()
@@ -36,7 +38,7 @@ it('should render a radio button for each Role', () => {
 })
 
 it('should render the selected role', () => {
-  const selectedRole = 'admin'
+  const selectedRole: Role = 'admin'
   getWrapper({ selectedRole })
 
   expect(wrapper.find(`input[value="${selectedRole}"]`).prop('checked')).toBe(true)

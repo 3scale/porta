@@ -29,13 +29,11 @@ type Props = {
  * @param {Feature[]}     features      - The set of features or sections the user can have access to.
  * @param {Api[]}         services      - The list of services or APIs the user can have access to.
  */
-const PermissionsForm = (
-  {
-    initialState = {},
-    features,
-    services
-  }: Props
-): React.ReactElement => {
+const PermissionsForm: React.FunctionComponent<Props> = ({
+  initialState = {},
+  features,
+  services
+}) => {
   const [role, setRole] = React.useState(initialState.role || 'admin')
   const [selectedSections, setSelectedSections] = React.useState(initialState.admin_sections || [])
   const [selectedServicesIds, setSelectedServicesIds] = React.useState(initialState.member_permission_service_ids || [])
@@ -84,4 +82,4 @@ const PermissionsForm = (
   )
 }
 
-export { PermissionsForm }
+export { PermissionsForm, Props }

@@ -10,19 +10,19 @@ import type { AdminSection } from 'Users/types'
  * @param {number[]}        selectedServicesIds - Ids of the services that are selected for the user.
  * @param {Function}        onServiceSelected   - A callback function triggered when any service is selected.
  */
-const ServicesFieldset = (
-  {
-    services = [],
-    selectedSections = [],
-    selectedServicesIds = [],
-    onServiceSelected
-  }: {
-    services?: Api[],
-    selectedSections?: AdminSection[],
-    selectedServicesIds?: number[],
-    onServiceSelected: (arg1: number) => void
-  }
-): React.ReactElement => {
+type Props = {
+  services?: Api[],
+  selectedSections?: AdminSection[],
+  selectedServicesIds?: number[],
+  onServiceSelected: (arg1: number) => void
+}
+
+const ServicesFieldset: React.FunctionComponent<Props> = ({
+  services = [],
+  selectedSections = [],
+  selectedServicesIds = [],
+  onServiceSelected
+}) => {
   const servicesListClassName = `ServiceAccessList`
   const allServicesChecked = !selectedSections.includes('services')
 
@@ -51,18 +51,20 @@ const ServicesFieldset = (
  * @param {boolean}         disabled          - Whether the checkbox is disabled or not.
  * @param {Function}        onChange          - A callback function triggered when the checkbox is selected.
  */
-const ServiceCheckbox = ({
-  service = {},
-  selectedSections,
-  checked,
-  disabled,
-  onChange
-}: {
+type ServiceCheckboxProps = {
   service: Api,
   selectedSections: AdminSection[],
   checked: boolean,
   disabled: boolean,
   onChange: (arg1: number) => void
+}
+
+const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
+  service = {} as Api,
+  selectedSections,
+  checked,
+  disabled,
+  onChange
 }) => {
   const { id, name } = service
 
@@ -85,4 +87,4 @@ const ServiceCheckbox = ({
   )
 }
 
-export { ServicesFieldset }
+export { ServicesFieldset, Props }
