@@ -9,14 +9,13 @@
     "strict": true,
     "sourceMap": true,
     "target": "es5",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
   },
-  "include": ["app/javascript"],
+  "include": ["app/javascript", "**/*.spec.ts", "**/*.spec.tsx"], // FIXME: should not include tests but VSCode needs it
   "exclude": [
-    "**/*.spec.ts",
     "node_modules",
     "public"
   ],

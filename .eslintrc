@@ -13,9 +13,8 @@
   "globals": {
     "$": true
   },
-  "extends": ["standard", "plugin:@typescript-eslint/recommended"],
+  "extends": ["standard", "plugin:@typescript-eslint/recommended", "plugin:react/jsx-runtime"],
   "plugins": [
-    "react",
     "@typescript-eslint"
   ],
   "root": true,
@@ -42,9 +41,6 @@
       }
     ],
     "react/no-unused-prop-types": 0,
-    "react/jsx-uses-react": 2,
-    "react/jsx-uses-vars": 2,
-    "react/react-in-jsx-scope": 2,
     // Workaround to bypass error: TypeError: Cannot read property 'range' of null
     // See: https://github.com/babel/babel-eslint/issues/681#issuecomment-420663038
     // We should upgrade from babel-eslint (deprecated) to @babel/eslint-parser
