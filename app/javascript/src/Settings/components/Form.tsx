@@ -61,7 +61,6 @@ const Form: React.FunctionComponent<Props> = ({
       <RadioFieldset {...integrationMethod} onChange={onChange(setSelectedIntegrationMethod)} value={selectedIntegrationMethod} legend='Integration' />
       { !isServiceMesh && <FormCollection collection={customProxyEndpoints} ItemComponent={TextInputGroup} legend='API gateway' /> }
       <RadioFieldset {...authenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} value={selectedAuthenticationMethod} legend='Authentication' />
-      {/* $FlowIgnore[cannot-spread-inexact] */}
       <AuthenticationSettingsFieldset
         isServiceMesh={isServiceMesh}
         authenticationMethod={selectedAuthenticationMethod}

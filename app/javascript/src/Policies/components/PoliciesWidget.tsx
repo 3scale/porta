@@ -27,7 +27,6 @@ const mapStateToProps = (state: State) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  // $FlowIgnore[incompatible-call] flow complaining because importing all actions at once
   boundActionCreators: bindActionCreators(actions, dispatch)
 })
 

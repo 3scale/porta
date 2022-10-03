@@ -72,7 +72,6 @@ const injectServerToResponseBody = (responseBody: any | string, serviceEndpoint:
 
   return {
     ...responseBody,
-    // $FlowFixMe[incompatible-return] should be safe to assume correct type
     servers
   }
 }

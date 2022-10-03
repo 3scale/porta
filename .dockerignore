@@ -47,7 +47,6 @@ log/*
 **/*.swp
 **/.*
 !.eslintrc
-!.flowconfig
 !.babelrc
 !.ruby-version.sample
 !Gemfile*
