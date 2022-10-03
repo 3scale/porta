@@ -95,17 +95,17 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     @data.with_logo do |logo|
       logo_file = logo
       assert logo.is_a? File
-      assert logo&.binmode?
+      assert logo.binmode?
       assert logo.respond_to?(:read)
     end
-    assert logo_file&.closed?
+    assert logo_file.closed?
   end
 
   test '#with_logo yields nil if logo not set' do
     @provider.profile.update(logo: nil)
 
     @data.with_logo do |logo|
-      assert logo.nil?
+      assert_nil logo
     end
   end
 
@@ -113,7 +113,7 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     default_options = Paperclip::Attachment.default_options
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
-    URI.stubs(:open).returns(File.open(file_fixture("wide.jpg")))
+    URI.expects(:open).with(regexp_matches(/\Ahttps.*\/profiles\/logos\/invoice\/wide.png\z/)).returns(File.open(file_fixture('wide.jpg')))
 
     logo_file = nil
     @data.with_logo do |logo|

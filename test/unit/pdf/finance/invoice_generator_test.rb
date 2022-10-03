@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
-  LOGO_PICTURE = Rails.root.join('test/fixtures/wide.jpg').to_s
 
   LONG_ADDRESS = [%w[Name Farnsworth],
                   ['Address', "AAA\n" * 5],
@@ -28,8 +27,9 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
   end
 
   test 'should generate valid PDF content with logo and line items' do
+    logo_file = File.open(file_fixture('wide.jpg'), 'rb')
     @data.stubs(:logo?).returns(true)
-    @data.stubs(:logo).returns(LOGO_PICTURE)
+    @data.expects(:with_logo).yields(logo_file)
     @data.stubs(:provider).returns(LONG_ADDRESS)
     items = [['Licorice', '5', '222', ''],
              ['Haribo  ', '11', '11', ''],
@@ -40,5 +40,14 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
     content = @generator.generate
     assert_not_nil content
+
+    # ensure an image is present in the PDF
+    assert_equal 1, content.scan(%r{/Type /XObject}).size
+
+    text = PDF::Inspector::Text.analyze(content)
+    flat_items = items.flatten.reject(&:blank?)
+    assert flat_items.all? { |item| text.strings.include? item }
+  ensure
+    logo_file.close
   end
 end

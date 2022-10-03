@@ -57,15 +57,10 @@ class Pdf::Finance::InvoiceReportData
   end
 
   def with_logo
-    file = begin
-      logo_file
-    rescue StandardError => exception
-      Rails.logger.error "Failed to retrieve logo: #{exception.message}"
-      nil
-    end
-    yield file if block_given?
+    io = logo_io
+    yield io if block_given?
   ensure
-    file&.close
+    io&.close
   end
 
   def line_items
@@ -137,7 +132,7 @@ class Pdf::Finance::InvoiceReportData
   # Depending on the storage option for the attachment:
   # - retrieve either the full path of the local file, or the URL of the file in S3
   # - read the file differently
-  def logo_file
+  def logo_io
     case storage = logo.options[:storage].to_sym
     when :filesystem
       # read as binary file 'b'
@@ -147,6 +142,8 @@ class Pdf::Finance::InvoiceReportData
     else
       raise StandardError, "Invalid attachment type #{storage}"
     end
+  rescue StandardError => exception
+    Rails.logger.error "Failed to retrieve logo: #{exception.message}"
+    nil
   end
-
 end
