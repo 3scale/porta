@@ -28,7 +28,6 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
   test 'should generate valid PDF content with logo and line items' do
     logo_file = File.open(file_fixture('wide.jpg'), 'rb')
-    @data.stubs(:logo?).returns(true)
     @data.expects(:with_logo).yields(logo_file)
     @data.stubs(:provider).returns(LONG_ADDRESS)
     items = [['Licorice', '5', '222', ''],

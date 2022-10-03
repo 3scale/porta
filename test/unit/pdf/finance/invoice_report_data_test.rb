@@ -123,4 +123,10 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     end
     assert logo_file&.closed?
   end
+
+  test '#with_logo raises an error if no block is passed' do
+    assert_raises ArgumentError, 'Calling #with_logo requires a block' do
+      @data.with_logo
+    end
+  end
 end

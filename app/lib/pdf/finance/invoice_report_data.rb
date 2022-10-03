@@ -15,10 +15,6 @@ class Pdf::Finance::InvoiceReportData
     @invoice = invoice
   end
 
-  def logo
-    @logo ||= @invoice.provider_account.profile.logo
-  end
-
   def buyer
     person_data(@invoice.to, @invoice.fiscal_code, @invoice.vat_code, po_number)
   end
@@ -57,8 +53,10 @@ class Pdf::Finance::InvoiceReportData
   end
 
   def with_logo
+    raise ArgumentError, 'Calling #with_logo requires a block' unless block_given?
+
     io = logo_io
-    yield io if block_given?
+    yield io
   ensure
     io&.close
   end
@@ -129,6 +127,10 @@ class Pdf::Finance::InvoiceReportData
     end
   end
 
+  def logo
+    @logo ||= @invoice.provider_account.profile.logo
+  end
+
   # Depending on the storage option for the attachment:
   # - retrieve either the full path of the local file, or the URL of the file in S3
   # - read the file differently
@@ -140,7 +142,7 @@ class Pdf::Finance::InvoiceReportData
     when :s3
       URI.open(logo.url(LOGO_ATTACHMENT_STYLE))
     else
-      raise StandardError, "Invalid attachment type #{storage}"
+      raise "Invalid attachment type #{storage}"
     end
   rescue StandardError => exception
     Rails.logger.error "Failed to retrieve logo: #{exception.message}"
