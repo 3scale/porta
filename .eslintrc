@@ -1,9 +1,16 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": false
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "impliedStrict": true,
+      "jsx": true
+    },
+    // "project": ["./tsconfig.json"],
+    // "sourceType": "module",
+    // "allowImportExportEverywhere": false,
+    // "codeFrame": false
   },
   "env": {
     "browser": true,
@@ -11,41 +18,31 @@
     "jest": true
   },
   "globals": {
-    "$": true
+    "$": "readonly"
   },
   "extends": [
-    "standard",
-    "plugin:@typescript-eslint/recommended",
+    "eslint:recommended",
+    "plugin:react/recommended",
     "plugin:react/jsx-runtime"
+    // "standard",
+    // "plugin:@typescript-eslint/recommended",
   ],
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "react"
   ],
-  "root": true,
   "rules": {
-    "indent": [
-      "error",
-      2,
-      { "SwitchCase": 1 }
-    ],
-    "no-console": [
-      "warn",
-      {
-        "allow": [
-          "error"
-        ]
-      }
-    ],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "no-console": ["warn", { "allow": ["error"] }],
     "no-duplicate-imports": "error",
-    // Workaround to bypass error: TypeError: Cannot read property 'range' of null
-    // See: https://github.com/babel/babel-eslint/issues/681#issuecomment-420663038
-    // We should upgrade from babel-eslint (deprecated) to @babel/eslint-parser
-    // "template-curly-spacing": "off",
     "@typescript-eslint/no-explicit-any": "off" // TODO: only temporary!!
   },
   "settings": {
     "react": {
-      "version": "detect"
+      "version": "detect" // React version. "detect" automatically picks the version you have installed.
     }
-  }
+  },
+  "ignorePatterns": [
+    "spec/javascripts/__mocks__/"
+  ]
 }

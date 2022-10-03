@@ -8,7 +8,7 @@
   "scripts": {
     "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline --link-duplicates",
     "clean": "rm -rf node_modules/ && yarn cache clean",
-    "lint": "eslint --ext .ts,.tsx .",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "jest": "jest"
   },
   "devDependencies": {
