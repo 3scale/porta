@@ -27,5 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const wrapperContainer = document.getElementById('wrapper')
   const quickStartsContainer = document.querySelector('.pfext-quick-start-drawer__body')
 
-  quickStartsContainer.after(wrapperContainer)
+  if (quickStartsContainer && wrapperContainer) {
+    quickStartsContainer.after(wrapperContainer)
+  }
 })

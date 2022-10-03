@@ -1,7 +1,7 @@
-import { ProductIndexPageWrapper } from 'Metrics'
+import { ProductIndexPageWrapper } from 'Metrics/components/ProductIndexPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Metric } from 'Types'
+import { Metric } from 'Types'
 
 const containerId = 'product-metrics-index-container'
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const { applicationPlansPath, addMappingRulePath, createMetricPath, mappingRulesPath } = dataset
+  const { applicationPlansPath = '', addMappingRulePath = '', createMetricPath = '', mappingRulesPath = '' } = dataset
   const metrics = safeFromJsonString<Array<Metric>>(dataset.metrics) || []
   const metricsCount = safeFromJsonString<number>(dataset.metricsCount) || metrics.length
 

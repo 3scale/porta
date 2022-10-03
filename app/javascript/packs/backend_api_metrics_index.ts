@@ -1,7 +1,7 @@
-import { BackendAPIIndexPageWrapper } from 'Metrics'
+import { BackendAPIIndexPageWrapper } from 'Metrics/components/BackendAPIIndexPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Metric } from 'Types'
+import { Metric } from 'Types'
 
 const containerId = 'backend-api-metrics-index-container'
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const { addMappingRulePath, createMetricPath, mappingRulesPath } = dataset
+  const { addMappingRulePath = '', createMetricPath = '', mappingRulesPath = '' } = dataset
   const metrics = safeFromJsonString<Array<Metric>>(dataset.metrics) || []
   const metricsCount = safeFromJsonString<number>(dataset.metricsCount) || metrics.length
 

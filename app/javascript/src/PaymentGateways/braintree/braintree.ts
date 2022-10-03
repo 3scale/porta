@@ -124,8 +124,8 @@ const veryfyCard = (
     billingAddress,
     onLookupComplete: (_data: ThreeDSecureVerificationData, next: () => void) => next() // From https://github.com/DefinitelyTyped/DefinitelyTyped/pull/61818/commits/8411fba432567e70b1cd6bf7c79a88e7dd9a6aee
   } as any // TODO: 2 things wrong with this:
-           // - Types must be outdated, onLookupComplete is missing from ThreeDSecureVerifyOptions.
-           // - billingAddress is completely wrong?? BillingAddressData (custom) vs. ThreeDSecureBillingAddress (what takes verifyCard)
+  // - Types must be outdated, onLookupComplete is missing from ThreeDSecureVerifyOptions.
+  // - billingAddress is completely wrong?? BillingAddressData (custom) vs. ThreeDSecureBillingAddress (what takes verifyCard)
   return threeDSecureInstance.verifyCard(options)
     .then(response => response)
     .catch(error => error)

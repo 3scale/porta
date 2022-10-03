@@ -1,2 +1,2 @@
-export * from './components/ChangePlanSelectCard'
-export * from './components/DefaultPlanSelectCard'
+export { ChangePlanSelectCard } from './components/ChangePlanSelectCard'
+export { DefaultPlanSelectCard } from './components/DefaultPlanSelectCard'

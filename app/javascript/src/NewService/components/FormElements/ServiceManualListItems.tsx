@@ -14,7 +14,7 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
   const onChange = (fn: (arg1: ((arg1: any | string) => any | string) | any | string) => void) => (e: any) => fn(e.currentTarget.value)
 
   return (
-     <>
+    <>
       <li id="service_name_input" className={`string required ${errors && errors.name ? 'error' : ''}`}>
         <Label
           htmlFor='service_name'
@@ -43,7 +43,7 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
         <textarea onChange={onChange(setDescription)} value={description} rows={3} id="service_description" name="service[description]"></textarea>
         { !!errors.description && <p className="inline-errors">{errors.description}</p> }
       </li>
-     </>
+    </>
   )
 }
 export { ServiceManualListItems }

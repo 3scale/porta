@@ -1,7 +1,6 @@
-import { ProductsIndexPageWrapper } from 'Products'
-import { safeFromJsonString } from 'utilities'
-
-import type { Product } from 'Products/types'
+import { ProductsIndexPageWrapper } from 'Products/components/IndexPage'
+import { Product } from 'Products/types'
+import { safeFromJsonString } from 'utilities/json-utils'
 
 const containerId = 'products'
 
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { newProductPath, products, productsCount } = container.dataset
+  const { newProductPath = '', products, productsCount } = container.dataset
 
   ProductsIndexPageWrapper({
     newProductPath,

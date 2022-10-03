@@ -1,4 +1,3 @@
-
 import { mount } from 'enzyme'
 import { CSRFToken } from 'utilities'
 

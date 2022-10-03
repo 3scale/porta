@@ -1,4 +1,4 @@
-import { ChangePlanSelectCardWrapper } from 'Plans'
+import { ChangePlanSelectCardWrapper } from 'Plans/components/ChangePlanSelectCard'
 import { safeFromJsonString } from 'utilities'
 
 import type { Record as Plan } from 'Types'
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = container
   const applicationPlans = safeFromJsonString<Plan[]>(dataset.applicationPlans) || []
-  const path: string = dataset.path
+  const path: string = dataset.path || ''
 
   ChangePlanSelectCardWrapper({
     applicationPlans,

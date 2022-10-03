@@ -57,7 +57,7 @@ const Form: React.FunctionComponent<Props> = ({
   }))
 
   return (
-     <>
+    <>
       <RadioFieldset {...integrationMethod} onChange={onChange(setSelectedIntegrationMethod)} value={selectedIntegrationMethod} legend='Integration' />
       { !isServiceMesh && <FormCollection collection={customProxyEndpoints} ItemComponent={TextInputGroup} legend='API gateway' /> }
       <RadioFieldset {...authenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} value={selectedAuthenticationMethod} legend='Authentication' />
@@ -67,7 +67,7 @@ const Form: React.FunctionComponent<Props> = ({
         authenticationMethod={selectedAuthenticationMethod}
         {...authenticationSettings}
       />
-      { !isServiceMesh &&  <>
+      { !isServiceMesh && <>
         <RadioFieldset {...credentialsLocation} legend='Credentials Location' />
         <FormCollection collection={security} ItemComponent={TextInputGroup} legend='Security' />
         <FormFieldset id='fieldset-GatewayResponse'>
@@ -76,8 +76,8 @@ const Form: React.FunctionComponent<Props> = ({
             <FormCollection key={settings.legend} collection={settings.collection} ItemComponent={TextInputGroup} legend={settings.legend} />
           ))}
         </FormFieldset>
-       </> }
-     </>
+      </> }
+    </>
   )
 }
 

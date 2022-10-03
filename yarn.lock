@@ -3018,6 +3018,13 @@
   dependencies:
     redux "^4.0.1"
 
+"@types/redux-immutable-state-invariant@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@types/redux-immutable-state-invariant/-/redux-immutable-state-invariant-2.1.2.tgz#294af91f3ef9bd94b8e432888e9f1b64871521f6"
+  integrity sha512-EMcMgNTncxYxwBqKqUQYrrKPLzDsyBhEH1eL8ylcLJ64t2jFvCF8+hiP2rlI/cdEK21pwOeE5ZXixOWYBdD3lg==
+  dependencies:
+    redux "^3.6.0 || ^4.0.0"
+
 "@types/scheduler@*":
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
@@ -12652,7 +12659,7 @@ redux@=3.7.2:
     loose-envify "^1.1.0"
     symbol-observable "^1.0.3"
 
-redux@^4.0.0:
+"redux@^3.6.0 || ^4.0.0", redux@^4.0.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.0.tgz#46f10d6e29b6666df758780437651eeb2b969f13"
   integrity sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==

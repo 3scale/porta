@@ -2,8 +2,6 @@
 import { BraintreeForm, Props } from 'PaymentGateways/braintree/BraintreeForm'
 import { mount } from 'enzyme'
 import { Client } from 'braintree-web'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore Don't care about missing types for this
 import * as hostedFields from 'braintree-web/hosted-fields'
 import * as validate from 'validate.js'
 

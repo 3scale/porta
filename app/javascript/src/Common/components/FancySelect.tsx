@@ -7,12 +7,11 @@ import {
 } from '@patternfly/react-core'
 import {
   handleOnFilter,
+  Record,
   SelectOptionObject,
   toSelectOption,
   toSelectOptionObject
 } from 'utilities'
-
-import type { Record } from 'utilities'
 
 import './FancySelect.scss'
 

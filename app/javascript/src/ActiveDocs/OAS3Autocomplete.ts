@@ -84,8 +84,8 @@ export const autocompleteOAS3 = async (response: any, accountDataUrl: string, se
   let body
   try {
     body = data.results
-          ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
-          : bodyWithServer
+      ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
+      : bodyWithServer
   } catch (error) {
     console.error(error)
     body = bodyWithServer

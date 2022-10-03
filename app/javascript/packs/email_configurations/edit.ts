@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const { url } = dataset
+  const { url = '' } = dataset
   const emailConfiguration = safeFromJsonString<FormEmailConfiguration>(dataset.emailConfiguration)
 
   if (!emailConfiguration) {

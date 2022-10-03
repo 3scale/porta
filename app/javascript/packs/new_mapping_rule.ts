@@ -1,4 +1,4 @@
-import { NewMappingRuleWrapper } from 'MappingRules'
+import { NewMappingRuleWrapper } from 'MappingRules/components/NewMappingRule'
 import { safeFromJsonString } from 'utilities'
 
 const CONTAINER_ID = 'new-mapping-rule-form'
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { url, httpMethods, topLevelMetrics, methods, isProxyProEnabled, errors } = container.dataset
+  const { url = '', httpMethods, topLevelMetrics, methods, isProxyProEnabled, errors } = container.dataset
 
   NewMappingRuleWrapper({
     url,

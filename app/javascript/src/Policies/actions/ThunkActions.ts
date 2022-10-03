@@ -106,7 +106,7 @@ export const openPolicyForm = (policy: ChainPolicy): ThunkAction => {
  */
 export const submitPolicyForm = (policyConfig: ChainPolicy): ThunkAction => {
   return (dispatch: Dispatch) => {
-  dispatch(updatePolicyInChain(policyConfig))
+    dispatch(updatePolicyInChain(policyConfig))
     dispatch(closePolicyForm())
   }
 }

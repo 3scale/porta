@@ -51,15 +51,24 @@ describe('CustomMetricSource', () => {
     get url () { return 'http://example.com/api' as any }
   }
 
-  beforeEach((done) => {
+  beforeEach(() => {
     jest.spyOn($, 'getJSON')
-      .mockResolvedValue('{}')
-    done()
+      .mockReturnValue({
+        getJSON: () => { return this },
+        done: (fn: any) => {
+          if (fn) fn()
+          return this
+        },
+        fail: (fn: any) => {
+          if (fn) fn()
+          return this
+        }
+      } as any)
   })
 
-  it('should make an ajax request with the right params', (done) => {
+  it('should make an ajax request with the right params', async () => {
     const source = new CustomMetricSource({ id: 42, details: { id: 7, system_name: 'marvin' } })
-    source.data(options)
+    await source.data(options)
 
     expect($.getJSON).toHaveBeenCalledWith('http://example.com/api', {
       metric_name: 'zaphod',
@@ -69,6 +78,5 @@ describe('CustomMetricSource', () => {
       timezone: 'Asia/Kamchatka',
       skip_change: true
     })
-    done()
   })
 })

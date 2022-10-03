@@ -18,8 +18,8 @@ describe('StatsSourceCollector', () => {
     jest.spyOn(sourceCollector, '_fetchMetrics')
       .mockResolvedValue({
         metrics: [
-        { id: 1, systemName: 'awesome_metric' },
-        { id: 2, systemName: 'amazing_metric' }
+          { id: 1, systemName: 'awesome_metric' },
+          { id: 2, systemName: 'amazing_metric' }
         ]
       })
     done()

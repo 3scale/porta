@@ -1,7 +1,7 @@
-import { BackendsUsedListCardWrapper } from 'Products'
-import { safeFromJsonString } from 'utilities'
+import { BackendsUsedListCardWrapper } from 'Products/components/BackendsUsedListCard'
+import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { CompactListItem } from 'Common'
+import { CompactListItem } from 'Common/components/CompactListCard'
 
 const containerId = 'backends-used-list-container'
 

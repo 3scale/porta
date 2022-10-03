@@ -1,9 +1,10 @@
 import {
   FormGroup as PF4FormGroup,
+  TextInputProps,
   TextInput
 } from '@patternfly/react-core'
+import { FunctionComponent } from 'react'
 import type { InputProps } from 'Types'
-import type { TextInputProps } from '@patternfly/react-core'
 
 type Props = {
   type?: TextInputProps['type'],
@@ -24,14 +25,14 @@ const helperTexts = {
   }
 } as const
 
-const FormGroup = ({
+const FormGroup: FunctionComponent<Props> = ({
   type,
   helperTextInvalid,
   inputProps
-}: Props) => {
+}) => {
   const { isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid } = inputProps
   return (
-     <>
+    <>
       <PF4FormGroup
         isRequired={isRequired}
         label={label}
@@ -52,49 +53,27 @@ const FormGroup = ({
           aria-invalid={ariaInvalid}
         />
       </PF4FormGroup>
-     </>
+    </>
   )
 }
 
-const TextField = (
-  {
-    inputProps
-  }: {
-    inputProps: InputProps
-  }
-): React.ReactElement => {
-  return (
-    <FormGroup
-      type='text'
-      inputProps={inputProps}
-      helperTextInvalid={helperTexts.emailOrUsername}
-    />
-  )
-}
+const TextField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => (
+  <FormGroup
+    type='text'
+    inputProps={inputProps}
+    helperTextInvalid={helperTexts.emailOrUsername}
+  />
+)
 
-const EmailField = (
-  {
-    inputProps
-  }: {
-    inputProps: InputProps
-  }
-): React.ReactElement => {
-  return (
-    <FormGroup
-      type='email'
-      inputProps={inputProps}
-      helperTextInvalid={helperTexts.email}
-    />
-  )
-}
+const EmailField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => (
+  <FormGroup
+    type='email'
+    inputProps={inputProps}
+    helperTextInvalid={helperTexts.email}
+  />
+)
 
-const PasswordField = (
-  {
-    inputProps
-  }: {
-    inputProps: InputProps
-  }
-): React.ReactElement => {
+const PasswordField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => {
   const helperText = helperTexts.password
   return (
     <FormGroup
@@ -105,13 +84,7 @@ const PasswordField = (
   )
 }
 
-const PasswordConfirmationField = (
-  {
-    inputProps
-  }: {
-    inputProps: InputProps
-  }
-): React.ReactElement => {
+const PasswordConfirmationField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => {
   const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
   const errorMessage = inputProps.errorMessage as 'isMandatory' | 'mustMatch'
   const helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage

@@ -13,12 +13,21 @@
   "globals": {
     "$": true
   },
-  "extends": ["standard", "plugin:@typescript-eslint/recommended", "plugin:react/jsx-runtime"],
+  "extends": [
+    "standard",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/jsx-runtime"
+  ],
   "plugins": [
     "@typescript-eslint"
   ],
   "root": true,
   "rules": {
+    "indent": [
+      "error",
+      2,
+      { "SwitchCase": 1 }
+    ],
     "no-console": [
       "warn",
       {
@@ -27,25 +36,11 @@
         ]
       }
     ],
-    "no-duplicate-imports": 0,
-    "react/sort-comp": [
-      2,
-      {
-        "order": [
-          "type-annotations",
-          "static-methods",
-          "life-cycle",
-          "everything-else",
-          "render"
-        ]
-      }
-    ],
-    "react/no-unused-prop-types": 0,
+    "no-duplicate-imports": "error",
     // Workaround to bypass error: TypeError: Cannot read property 'range' of null
     // See: https://github.com/babel/babel-eslint/issues/681#issuecomment-420663038
     // We should upgrade from babel-eslint (deprecated) to @babel/eslint-parser
-    "template-curly-spacing": "off",
-    "indent": "off",
+    // "template-curly-spacing": "off",
     "@typescript-eslint/no-explicit-any": "off" // TODO: only temporary!!
   },
   "settings": {

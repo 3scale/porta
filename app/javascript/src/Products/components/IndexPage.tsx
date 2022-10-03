@@ -126,8 +126,8 @@ const IndexPage: React.FunctionComponent<Props> = ({
       </Table>
       <Toolbar id="bottom-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
-         <Pagination variant={PaginationVariant.bottom} />
-       </ToolbarItem>
+          <Pagination variant={PaginationVariant.bottom} />
+        </ToolbarItem>
       </Toolbar>
     </PageSection>
   )

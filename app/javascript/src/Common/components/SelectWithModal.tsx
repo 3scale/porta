@@ -3,10 +3,9 @@ import { useState, useEffect } from 'react'
 import { SortByDirection, ITransform } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
 import { FancySelect, TableModal } from 'Common'
-import { paginateCollection } from 'utilities'
+import { paginateCollection, Record } from 'utilities'
 
-import type { Record } from 'utilities'
-import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
+import { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
 
 import './SelectWithModal.scss'
 

@@ -29,7 +29,7 @@ const NewServiceForm = (props: Props): React.ReactElement => {
     : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
 
   return (
-     <>
+    <>
       <h1>New Product</h1>
       <div className="new-service-form">
         {isServiceDiscoveryAccessible &&
@@ -42,7 +42,7 @@ const NewServiceForm = (props: Props): React.ReactElement => {
         }
         {formToRender()}
       </div>
-     </>
+    </>
   )
 }
 

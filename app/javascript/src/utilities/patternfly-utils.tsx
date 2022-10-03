@@ -40,7 +40,7 @@ export const toSelectOption = ({
     // description={record.description}
     data-description={description}
     isDisabled={disabled}
-/>
+  />
 )
 
 /**

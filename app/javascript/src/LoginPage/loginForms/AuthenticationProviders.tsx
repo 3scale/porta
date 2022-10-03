@@ -33,11 +33,11 @@ const AuthenticationProviders = (props: Props): React.ReactElement => {
   )
 
   return (
-     <>
+    <>
       <div className='providers-list'>
         {providersList}
       </div>
-     </>
+    </>
   )
 }
 

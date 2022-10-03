@@ -7,13 +7,12 @@ import {
 } from '@patternfly/react-core'
 import { Spinner } from 'Common'
 import {
+  Record,
   toSelectOption,
   toSelectOptionObject,
   SelectOptionObject,
   handleOnFilter
 } from 'utilities'
-
-import type { Record } from 'utilities'
 
 import './Select.scss'
 

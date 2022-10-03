@@ -19,3 +19,8 @@ declare module '*.json' {
   const content: string
   export default content
 }
+
+declare module '*.yaml' {
+  const data: any
+  export default data
+}

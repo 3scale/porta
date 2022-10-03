@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const { searchHref } = dataset
+  const { searchHref = '' } = dataset
   const columns = safeFromJsonString<Array<{
     attribute: string,
     title: string

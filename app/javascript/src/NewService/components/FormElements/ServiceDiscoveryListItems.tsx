@@ -35,7 +35,7 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
   }
 
   return (
-     <>
+    <>
       <li id="service_name_input" className="string required">
         <Label
           htmlFor='service_namespace'

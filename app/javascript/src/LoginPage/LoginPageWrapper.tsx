@@ -2,14 +2,13 @@ import React from 'react'
 import { createReactWrapper } from 'utilities'
 import 'url-polyfill'
 
-import {
-  LoginPage
-} from '@patternfly/react-core'
+import { LoginPage } from '@patternfly/react-core'
 
 import {
   ForgotCredentials,
   Login3scaleForm,
   AuthenticationProviders,
+  ProvidersProps,
   FlashMessages
 } from 'LoginPage'
 
@@ -18,8 +17,7 @@ import 'LoginPage/assets/styles/loginPage.scss'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 
-import type { FlashMessage } from 'Types'
-import type { ProvidersProps } from 'LoginPage'
+import { FlashMessage } from 'Types'
 
 type Props = {
   authenticationProviders: Array<ProvidersProps>,
@@ -58,7 +56,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
     const hasAuthenticationProviders = this.props.authenticationProviders
     const show3scaleLoginForm = this.props.show3scaleLoginForm
     return (
-       <>
+      <>
         { show3scaleLoginForm &&
             <Login3scaleForm
               providerSessionsPath={this.props.providerSessionsPath}
@@ -72,7 +70,7 @@ class SimpleLoginPage extends React.Component<Props, State> {
             />
           </div>
         }
-       </>
+      </>
     )
   }
 

@@ -45,12 +45,12 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   } as const
 
   return (
-     <>
+    <>
       {fetchErrorMessage && <ErrorMessage fetchErrorMessage={fetchErrorMessage}/>}
       <FormWrapper {...formProps}>
         <ServiceDiscoveryListItems {...listItemsProps}/>
       </FormWrapper>
-     </>
+    </>
   )
 }
 

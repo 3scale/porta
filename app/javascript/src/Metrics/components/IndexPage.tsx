@@ -1,4 +1,3 @@
-
 import {
   Button,
   Card,
@@ -8,10 +7,10 @@ import {
   Tabs,
   Tab
 } from '@patternfly/react-core'
-import { MetricsTable } from 'Metrics'
+import { MetricsTable, TabKey } from 'Metrics'
+import { FunctionComponent } from 'react'
 
-import type { TabKey } from 'Metrics'
-import type { Metric } from 'Types'
+import { Metric } from 'Types'
 
 import './IndexPage.scss'
 
@@ -24,16 +23,14 @@ type Props = {
   createMetricPath: string
 };
 
-const IndexPage = (
-  {
-    metrics,
-    metricsCount,
-    infoCard,
-    mappingRulesPath,
-    addMappingRulePath,
-    createMetricPath
-  }: Props
-): React.ReactElement => {
+const IndexPage: FunctionComponent<Props> = ({
+  metrics,
+  metricsCount,
+  infoCard,
+  mappingRulesPath,
+  addMappingRulePath,
+  createMetricPath
+}) => {
   const url = new URL(window.location.href)
   const isActiveTabMetrics = url.searchParams.get('tab') === 'metrics'
   const activeTabKey: TabKey = isActiveTabMetrics ? 'metrics' : 'methods'
@@ -75,12 +72,12 @@ const IndexPage = (
             metrics={metrics}
             metricsCount={metricsCount}
             createButton={(
-            <Button
-              href={createMetricPath}
-              component="a"
-              variant="primary"
-              isInline>{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
-            </Button>
+              <Button
+                href={createMetricPath}
+                component="a"
+                variant="primary"
+                isInline>{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
+              </Button>
             )}
           />
         </Card>

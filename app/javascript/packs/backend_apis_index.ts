@@ -1,7 +1,7 @@
 import { BackendsIndexPageWrapper } from 'BackendApis/components/IndexPage'
 import { safeFromJsonString } from 'utilities'
 
-import type { Backend } from 'BackendApis/types'
+import { Backend } from 'BackendApis/types'
 
 const containerId = 'backend-apis'
 
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
-  const { newBackendPath, backends, backendsCount } = container.dataset
+  const { newBackendPath = '', backends, backendsCount } = container.dataset
 
   BackendsIndexPageWrapper({
     newBackendPath,
