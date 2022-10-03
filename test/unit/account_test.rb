@@ -746,6 +746,17 @@ class AccountTest < ActiveSupport::TestCase
     service1.update(state: Service::DELETE_STATE)
     assert_same_elements [c2], account.accessible_proxy_configs.current_versions
   end
+
+  test "allow underscore in org_name" do
+    account = FactoryBot.build(:simple_account, org_name: 'name@._+1')
+    assert account.valid?
+  end
+
+  test "there should be at least one alphanum character anywhere in the org_name" do
+    account = FactoryBot.build(:simple_account, org_name: '.?+@')
+    assert_not account.valid?
+    assert_includes account.errors.messages[:org_name], "must contain at least one alphanumeric character"
+  end
 end
 
 #TODO: test scopes chained, and with nil params
