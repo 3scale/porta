@@ -28,7 +28,9 @@ class Provider::Admin::NewAccountsPresenterTest < ActiveSupport::TestCase
     assert data[:links][:previousRangeAdminBuyersAccount].key? :value
     assert data[:links].key? :currentRangeAdminBuyersAccount
     assert data[:links][:currentRangeAdminBuyersAccount].key? :url
-    assert data[:links][:currentRangeAdminBuyersAccount].key? :value
+    assert data[:links].key? :lastDayInRangeAdminBuyersAccount
+    assert data[:links][:lastDayInRangeAdminBuyersAccount].key? :url
+    assert data[:links][:lastDayInRangeAdminBuyersAccount].key? :value
     assert data.key? :percentualChange
   end
 

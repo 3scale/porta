@@ -27,7 +27,10 @@ class Provider::Admin::NewAccountsPresenter
           value: has_history? ? number_to_percentage(number_to_human(percentual_change), precision: 0) : "0"
         },
         currentRangeAdminBuyersAccount: {
-          url: admin_buyers_accounts_path(search: { created_within: [previous_range.first, previous_range.last] }),
+          url: admin_buyers_accounts_path(search: { created_within: [current_range.first, current_range.last] })
+        },
+        lastDayInRangeAdminBuyersAccount: {
+          url: admin_buyers_accounts_path(search: { created_within: [current_range.last, current_range.last] }),
           value: number_to_human(current_range_sum_value)
         }
       },

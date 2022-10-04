@@ -27,6 +27,9 @@ type Props = {
       value: string
     },
     currentRangeAdminBuyersAccount: {
+      url: string
+    },
+    lastDayInRangeAdminBuyersAccount: {
       url: string,
       value: string
     }
@@ -48,18 +51,18 @@ const NewAccountsWidget = ({ chartData, newAccountsTotal, hasHistory, links, per
       <div className="Dashboard-chart c3" data-chart/>
       <header className="DashboardWidget-badge">
         <h1 className="DashboardWidget-title">
-          <a className="DashboardWidget-link" href="">
+          <a className="DashboardWidget-link" href={links.currentRangeAdminBuyersAccount.url}>
             <strong data-title-count="true">{newAccountsTotal}</strong> Signups
           </a>
         </h1>
         <div className="DashboardWidget-percentageInfo" data-toggle-visibility="true">
           {
             hasHistory
-              ? <a href={links.currentRangeAdminBuyersAccount.url} className="DashboardWidget-link DashboardWidget-link--today">
-                  {links.currentRangeAdminBuyersAccount.value}
-                </a>
-              : <a href={links.previousRangeAdminBuyersAccount.url} className={`DashboardWidget-link ${percentualChange > 0 ? 'u-plus' : 'u-minus' }`}>
+              ? <a href={links.previousRangeAdminBuyersAccount.url} className={`DashboardWidget-link ${percentualChange > 0 ? 'u-plus' : 'u-minus' }`}>
                   {links.previousRangeAdminBuyersAccount.value}
+                </a>
+              : <a href={links.lastDayInRangeAdminBuyersAccount.url} className="DashboardWidget-link DashboardWidget-link--today">
+                  {links.lastDayInRangeAdminBuyersAccount.value}
                 </a>
           }
           <span className="DashboardWidget-intro DashboardWidget-intro--primary" data-title-intro="true">
