@@ -1,4 +1,4 @@
-import { bindActionCreators, Dispatch } from 'redux'
+import { bindActionCreators } from 'redux'
 import * as actions from 'Policies/actions'
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { PolicyChain } from 'Policies/components/PolicyChain'
@@ -7,7 +7,8 @@ import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInp
 import { connect } from 'react-redux'
 import { isPolicyChainChanged } from 'Policies/util'
 
-import type { ChainPolicy, State, RegistryPolicy, UIState, IPoliciesActions } from 'Policies/types'
+import type { Dispatch } from 'redux'
+import type { ChainPolicy, IPoliciesActions, RegistryPolicy, State, UIState } from 'Policies/types'
 
 type Props = {
   registry: Array<RegistryPolicy>,
@@ -16,7 +17,7 @@ type Props = {
   policyConfig: ChainPolicy,
   ui: UIState,
   boundActionCreators: IPoliciesActions
-};
+}
 
 const mapStateToProps = (state: State) => ({
   registry: state.registry,
@@ -67,9 +68,9 @@ const PolicyList = ({
 
   return (
     <div className="PoliciesWidget">
-      {ui.chain && <PolicyChain chain={chain} actions={chainActions} />}
-      {ui.registry && <PolicyRegistry items={registry} actions={policyRegistryActions} />}
-      {ui.policyConfig && <PolicyConfig policy={policyConfig} actions={policyConfigActions} />}
+      {ui.chain ? <PolicyChain actions={chainActions} chain={chain} /> : null}
+      {ui.registry ? <PolicyRegistry actions={policyRegistryActions} items={registry} /> : null}
+      {ui.policyConfig ? <PolicyConfig actions={policyConfigActions} policy={policyConfig} /> : null}
       <PolicyChainHiddenInput policies={chain} />
     </div>
   )

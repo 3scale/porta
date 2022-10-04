@@ -1,7 +1,8 @@
 import { mount } from 'enzyme'
-
-import { IndexPage, Props } from 'Metrics/components/IndexPage'
+import { IndexPage } from 'Metrics/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
+
+import type { Props } from 'Metrics/components/IndexPage'
 
 const metrics = new Array(5).fill({}).map((i, j) => ({
   id: j,

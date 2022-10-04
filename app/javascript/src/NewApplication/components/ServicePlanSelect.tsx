@@ -1,6 +1,5 @@
-
 import { Button } from '@patternfly/react-core'
-import { Select } from 'Common'
+import { Select } from 'Common/components/Select'
 
 import type { ServicePlan } from 'NewApplication/types'
 
@@ -12,7 +11,7 @@ type Props = {
   serviceSubscriptionsPath: string,
   createServicePlanPath: string,
   isDisabled?: boolean
-};
+}
 
 const ServicePlanSelect: React.FunctionComponent<Props> = ({
   isDisabled,
@@ -26,7 +25,7 @@ const ServicePlanSelect: React.FunctionComponent<Props> = ({
   const hint = isPlanContracted ? (
     <p className="hint">
       {'This account already subscribes to the service plan of the selected product. To change the account to subscribe to a different service plan for this product, go to '}
-      <Button component="a" variant="link" href={serviceSubscriptionsPath} isInline>Service subscriptions</Button>.
+      <Button isInline component="a" href={serviceSubscriptionsPath} variant="link">Service subscriptions</Button>.
     </p>
   ) : (
     <>
@@ -34,27 +33,27 @@ const ServicePlanSelect: React.FunctionComponent<Props> = ({
       {servicePlans && servicePlans.length === 0 && (
         <p className="hint">
           {'No service plans exist for the selected product. '}
-          <Button component="a" variant="link" href={createServicePlanPath} isInline>
+          <Button isInline component="a" href={createServicePlanPath} variant="link">
             Create a new service plan
           </Button>
-        </p>)
-      }
+        </p>
+      )}
     </>
   )
 
   return (
     <Select
-      item={servicePlan}
-      items={servicePlans || []}
-      onSelect={onSelect}
-      label="Service plan"
       fieldId="cinstance_service_plan_id"
-      name="cinstance[service_plan_id]"
-      placeholderText="Select a service plan"
       hint={hint}
+      isClearable={false}
       isDisabled={isDisabled || isPlanContracted}
       isRequired={!isPlanContracted}
-      isClearable={false}
+      item={servicePlan}
+      items={servicePlans || []}
+      label="Service plan"
+      name="cinstance[service_plan_id]"
+      placeholderText="Select a service plan"
+      onSelect={onSelect}
     />
   )
 }

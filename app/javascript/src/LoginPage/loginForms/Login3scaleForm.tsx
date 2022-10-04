@@ -1,15 +1,14 @@
-import React from 'react'
+import * as React from 'react'
 import {
   HiddenInputs,
-  TextField,
   PasswordField,
+  TextField,
   validateSingleField
 } from 'LoginPage'
-
 import {
-  Form,
   ActionGroup,
-  Button
+  Button,
+  Form
 } from '@patternfly/react-core'
 
 type Props = {
@@ -86,23 +85,26 @@ class Login3scaleForm extends React.Component<Props, State> {
     } as const
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
     return (
-      <Form noValidate
-        action={this.props.providerSessionsPath}
-        id='new_session'
+      <Form
+        noValidate
         acceptCharset='UTF-8'
-        method='post'
+        action={this.props.providerSessionsPath}
         autoComplete="off"
+        id='new_session'
+        method='post'
       >
-        <HiddenInputs/>
+        <HiddenInputs />
         {/* <TextField inputProps={usernameInputProps} autoComplete="off"/> */}
         <TextField inputProps={usernameInputProps} />
         {/* <PasswordField inputProps={passwordInputProps} autoComplete="off"/> */}
         <PasswordField inputProps={passwordInputProps} />
         <ActionGroup>
-          <Button className='pf-c-button pf-m-primary pf-m-block'
-            type='submit'
+          <Button
+            className='pf-c-button pf-m-primary pf-m-block'
             isDisabled={formDisabled}
-          > Sign in</Button>
+            type='submit'
+          > Sign in
+          </Button>
         </ActionGroup>
       </Form>
     )

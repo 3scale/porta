@@ -1,4 +1,4 @@
-import { FunctionComponent, PropsWithChildren } from 'react'
+import type { FunctionComponent, PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
   id: string,
@@ -9,8 +9,8 @@ const ListItem: FunctionComponent<Props> = ({
   children
 }) => (
   <li
-    id={id}
     className="string optional form-group"
+    id={id}
   >
     {children}
   </li>

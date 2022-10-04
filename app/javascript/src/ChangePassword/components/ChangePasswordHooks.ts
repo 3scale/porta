@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import validate from 'validate.js' // TODO: including this since validateSingleField and validateForm from LoginPage/utils/formValidation screams for a refactor
 
-type ValidatorName = 'presence' | 'length' | 'equality';
+type ValidatorName = 'presence' | 'length' | 'equality'
 type ValidatorOption = {
   message: string,
   minimum?: number,
   attribute?: string
-};
+}
 type Constraints = Record<string, Partial<Record<ValidatorName, ValidatorOption>>>
 type FieldState = Record<string, string>
 type ValidationErrors = Record<string, string[]>
-type FieldErrorsState = ValidationErrors;
+type FieldErrorsState = ValidationErrors
 type FieldErrorsPristineState = Record<string, boolean>
 
 const PASSWORD = 'user[password]'
@@ -71,14 +71,14 @@ type FormInput = {
   errorMessage: string,
   onChange: (value: string) => void,
   onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void
-};
+}
 
 type IUseFormState = {
   isFormDisabled: boolean,
   onFormChange: (e: React.FormEvent<HTMLFormElement>) => void,
   password: FormInput,
   passwordConfirmation: FormInput
-};
+}
 
 const useFormState = (): IUseFormState => {
   const [fieldValues, setFieldValues] = useState(fieldsTemplate)

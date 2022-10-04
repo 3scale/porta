@@ -1,5 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react'
-
+import { useEffect, useState } from 'react'
 import {
   BaseSizes,
   Modal,
@@ -9,16 +8,17 @@ import {
 } from '@patternfly/react-core'
 import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
 
-import './NewBackendModal.scss'
-
+import type { FunctionComponent } from 'react'
 import type { Backend } from 'Types'
+
+import './NewBackendModal.scss'
 
 type Props = {
   backendsPath: string,
   isOpen?: boolean,
   onClose: () => void,
   onCreateBackend: (arg1: Backend) => void
-};
+}
 
 const NewBackendModal: FunctionComponent<Props> = ({
   backendsPath,
@@ -56,26 +56,26 @@ const NewBackendModal: FunctionComponent<Props> = ({
 
   const header = (
     <>
-      <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']} className="with-spinner">
+      <Title className="with-spinner" headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
         Create backend
       </Title>
-      {isLoading && <Spinner size='md' className='pf-u-ml-md' />}
+      {isLoading ? <Spinner className='pf-u-ml-md' size='md' /> : null}
     </>
   )
 
   return (
     <Modal
       isSmall
-      title="Create backend"
       header={header}
       isOpen={isOpen}
+      title="Create backend"
       onClose={onClose}
     >
       <NewBackendForm
         action={backendsPath}
-        onCancel={onClose}
-        isLoading={isLoading}
         errors={errors}
+        isLoading={isLoading}
+        onCancel={onClose}
       />
     </Modal>
   )

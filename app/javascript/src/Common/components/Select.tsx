@@ -2,17 +2,20 @@ import { useState } from 'react'
 import {
   FormGroup,
   Select as PF4Select,
-  SelectOptionObject as PFSelectOptionObject,
   SelectVariant
 } from '@patternfly/react-core'
 import { Spinner } from 'Common'
 import {
-  Record,
+  handleOnFilter,
   toSelectOption,
-  toSelectOptionObject,
-  SelectOptionObject,
-  handleOnFilter
+  toSelectOptionObject
 } from 'utilities'
+
+import type {
+  Record,
+  SelectOptionObject } from 'utilities'
+import type {
+  SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
 
 import './Select.scss'
 
@@ -33,7 +36,7 @@ type Props<T extends Record> = {
   isDisabled?: boolean,
   isLoading?: boolean,
   isRequired?: boolean
-};
+}
 
 const Select = <T extends Record>(
   {
@@ -73,28 +76,28 @@ const Select = <T extends Record>(
 
   return (
     <FormGroup
-      isRequired={isRequired}
-      label={label}
       fieldId={fieldId}
-      isValid={isValid}
       helperText={helperText}
       helperTextInvalid={helperTextInvalid}
+      isRequired={isRequired}
+      isValid={isValid}
+      label={label}
     >
-      {isLoading && <Spinner size="md" className="pf-u-ml-md" />}
-      {item && <input type="hidden" name={name} value={item.id > -1 ? item.id : ''} />}
+      {isLoading ? <Spinner className="pf-u-ml-md" size="md" /> : null}
+      {item ? <input name={name} type="hidden" value={item.id > -1 ? item.id : ''} /> : null}
       <PF4Select
+        aria-label={ariaLabel}
+        className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
         id={fieldId}
-        variant={SelectVariant.typeahead}
+        isDisabled={isDisabled}
+        isExpanded={expanded}
         placeholderText={placeholderText}
         selections={(item && toSelectOptionObject(item)) || undefined}
-        onToggle={() => setExpanded(!expanded)}
-        onSelect={handleSelect}
-        isExpanded={expanded}
+        variant={SelectVariant.typeahead}
         onClear={handleOnClear}
-        aria-label={ariaLabel}
-        isDisabled={isDisabled}
         onFilter={handleOnFilter(items)}
-        className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}
+        onSelect={handleSelect}
+        onToggle={() => setExpanded(!expanded)}
       >
         {items.map(toSelectOption)}
       </PF4Select>

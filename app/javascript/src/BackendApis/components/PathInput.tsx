@@ -5,7 +5,7 @@ type Props = {
   error?: string,
   path: string,
   setPath: (arg1: string) => void
-};
+}
 
 const PathInput = (
   {
@@ -13,22 +13,24 @@ const PathInput = (
     path,
     setPath
   }: Props
-): React.ReactElement => <FormGroup
-  label="Path"
-  validated="default"
-  fieldId="backend_api_config_path"
-  isValid={!error}
-  helperTextInvalid={error}
->
-  <TextInput
-    type="text"
-    id="backend_api_config_path"
-    name="backend_api_config[path]"
-    value={path}
-    onChange={setPath}
-    placeholder="/"
+): React.ReactElement => (
+  <FormGroup
+    fieldId="backend_api_config_path"
+    helperTextInvalid={error}
     isValid={!error}
-  />
-</FormGroup>
+    label="Path"
+    validated="default"
+  >
+    <TextInput
+      id="backend_api_config_path"
+      isValid={!error}
+      name="backend_api_config[path]"
+      placeholder="/"
+      type="text"
+      value={path}
+      onChange={setPath}
+    />
+  </FormGroup>
+)
 
 export { PathInput, Props }

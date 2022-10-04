@@ -1,7 +1,10 @@
-import { useState, useRef, FunctionComponent, PropsWithChildren, FormEventHandler } from 'react'
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
-import { CSRFToken } from 'utilities'
-import { PaymentMethod, StripeCardElement, StripeCardElementChangeEvent, StripeCardElementOptions } from '@stripe/stripe-js'
+/* eslint-disable react/no-multi-comp */
+import { useRef, useState } from 'react'
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import { CSRFToken } from 'utilities/CSRFToken'
+
+import type { FormEventHandler, FunctionComponent, PropsWithChildren } from 'react'
+import type { PaymentMethod, StripeCardElement, StripeCardElementChangeEvent, StripeCardElementOptions } from '@stripe/stripe-js'
 
 const CARD_OPTIONS: StripeCardElementOptions = {
   iconStyle: 'solid',
@@ -35,7 +38,7 @@ const EditCreditCardDetails: FunctionComponent<{
   isStripeFormVisible
 }) => (
   <a className="editCardButton" onClick={onToogleVisibility}>
-    <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`}></i>
+    <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`} />
     <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
   </a>
 )
@@ -51,7 +54,7 @@ type Props = {
   billingAddressDetails: Record<any, any>,
   successUrl: string,
   isCreditCardStored: boolean
-};
+}
 
 const StripeCardForm: FunctionComponent<Props> = ({
   setupIntentSecret,
@@ -103,35 +106,35 @@ const StripeCardForm: FunctionComponent<Props> = ({
   return (
     <div className='well StripeElementsForm'>
       <EditCreditCardDetails
-        onToogleVisibility={toogleVisibility}
         isStripeFormVisible={isStripeFormVisible}
+        onToogleVisibility={toogleVisibility}
       />
       <form
-        onSubmit={handleSubmit}
-        action={successUrl}
-        id="stripe-form"
         acceptCharset="UTF-8"
-        method="post"
+        action={successUrl}
         className={isStripeFormVisible ? '' : 'hidden'}
+        id="stripe-form"
+        method="post"
         ref={formRef}
+        onSubmit={handleSubmit}
       >
         <fieldset>
           <legend>Credit card details</legend>
           <CardElement
-            options={CARD_OPTIONS}
             className="col-md-12"
+            options={CARD_OPTIONS}
             onChange={validateCardElement}
           />
-          {cardErrorMessage && <CreditCardErrors>{cardErrorMessage}</CreditCardErrors>}
+          {cardErrorMessage ? <CreditCardErrors>{cardErrorMessage}</CreditCardErrors> : null}
         </fieldset>
         <fieldset>
           <div className="form-group">
             <div className="col-md-10 operations">
               <button
-                type="submit"
-                disabled={!formComplete}
                 className="btn btn-primary pull-right"
+                disabled={!formComplete}
                 id="stripe-submit"
+                type="submit"
               >
                 Save details
               </button>

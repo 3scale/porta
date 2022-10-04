@@ -1,5 +1,6 @@
 import { fetchData } from 'utilities'
-import { AccountData } from 'Types/SwaggerTypes'
+
+import type { AccountData } from 'Types/SwaggerTypes'
 
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
 

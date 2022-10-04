@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import type { FunctionComponent } from 'react'
 
 type Props = {
   onSubmitForm: (event: React.MouseEvent<HTMLButtonElement>) => Promise<unknown> | undefined,
@@ -13,8 +13,8 @@ const BraintreeSubmitFields: FunctionComponent<Props> = ({
     <div className="col-md-10 operations">
       <button
         className="btn btn-primary pull-right"
-        onClick={onSubmitForm}
         disabled={!isFormValid}
+        onClick={onSubmitForm}
       >
         Save details
       </button>

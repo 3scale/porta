@@ -1,12 +1,13 @@
+/* eslint-disable react/no-multi-comp */
 import ReactHtmlParser from 'react-html-parser'
-
 import {
+  canFeatureSetServicePermissions,
   getFeatureName,
-  getFeatureNameDescription,
-  canFeatureSetServicePermissions
+  getFeatureNameDescription
 } from 'Users/utils'
 
-import type { Feature, AdminSection } from 'Users/types'
+import type { FunctionComponent } from 'react'
+import type { AdminSection, Feature } from 'Users/types'
 
 /**
  * Contains a set of Features that can be checked by the user.
@@ -20,7 +21,7 @@ type Props = {
   selectedSections?: AdminSection[],
   areServicesVisible?: boolean,
   onAdminSectionSelected: (arg1: AdminSection) => void
-};
+}
 
 const FeaturesFieldset: React.FunctionComponent<Props> = ({
   features,
@@ -35,13 +36,13 @@ const FeaturesFieldset: React.FunctionComponent<Props> = ({
     <fieldset>
       <legend className='label'>This member user can:</legend>
       <ol className={featuresListClassName}>
-        <input type='hidden' name='user[member_permission_ids][]' />
-        {features.map(feature =>
-          <FeatureCheckbox key={feature} value={feature} checked={selectedSections.includes(feature)} onChange={onAdminSectionSelected} />
-        )}
-        {areServicesVisible &&
+        <input name='user[member_permission_ids][]' type='hidden' />
+        {features.map(feature => (
+          <FeatureCheckbox key={feature} checked={selectedSections.includes(feature)} value={feature} onChange={onAdminSectionSelected} />
+        ))}
+        {areServicesVisible && (
           <AllServicesCheckbox checked={allServicesChecked} onChange={onAdminSectionSelected} />
-        }
+        )}
       </ol>
     </fieldset>
   )
@@ -51,11 +52,7 @@ const FeaturesFieldset: React.FunctionComponent<Props> = ({
  * A list describing member permissions for each label.
  * @param {Array} descriptionItems - An array of strings containing the description of the label.
  */
-const LabelDescriptionItems = ({
-  descriptionItems
-}: {
-  descriptionItems: Array<string>
-}) => (
+const LabelDescriptionItems: FunctionComponent<{ descriptionItems: Array<string> }> = ({ descriptionItems }) => (
   <ul className="FeatureAccessList-item--labelDescription">
     {descriptionItems.map(item => <li key={item}>{ReactHtmlParser(item)}</li>)}
   </ul>
@@ -86,16 +83,16 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
     <li className={featuresListItemClassName}>
       <label htmlFor={`user_member_permission_ids_${value}`}>
         <input
-          className={featureCheckboxClassName}
-          name='user[member_permission_ids][]'
-          id={`user_member_permission_ids_${value}`}
-          value={value}
-          type='checkbox'
           checked={checked}
+          className={featureCheckboxClassName}
+          id={`user_member_permission_ids_${value}`}
+          name='user[member_permission_ids][]'
+          type='checkbox'
+          value={value}
           onChange={() => onChange(value)}
         />
         { ReactHtmlParser(getFeatureName(value)) }
-        { descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
+        { descriptionItems ? <LabelDescriptionItems descriptionItems={descriptionItems} /> : null }
       </label>
     </li>
   )
@@ -117,18 +114,18 @@ const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = (
 }) => {
   // if service feature access checkbox is unchecked
   // at least blank service_ids array has to be sent
-  const blankServiceIdsInput = checked ? null : <input type='hidden' name='user[member_permission_service_ids][]' />
+  const blankServiceIdsInput = checked ? null : <input name='user[member_permission_service_ids][]' type='hidden' />
 
   return (
     <li className='FeatureAccessList-item FeatureAccessList-item--services FeatureAccessList--services'>
       <label htmlFor='user_member_permission_ids_services'>
         <input
-          className='user_member_permission_ids'
-          name='user[member_permission_service_ids]'
-          id='user_member_permission_ids_services'
-          value=''
-          type='checkbox'
           checked={checked}
+          className='user_member_permission_ids'
+          id='user_member_permission_ids_services'
+          name='user[member_permission_service_ids]'
+          type='checkbox'
+          value=''
           onChange={() => onChange('services')}
         />
         All current and future existing API products

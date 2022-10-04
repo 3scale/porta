@@ -1,9 +1,10 @@
 
 import { sortable } from '@patternfly/react-table'
 import { fetchPaginatedProducts } from 'NewApplication/data'
-import { SelectWithModal, Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
+import { SelectWithModal } from 'Common/components/SelectWithModal'
 
-import { Product } from 'NewApplication/types'
+import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
+import type { Product } from 'NewApplication/types'
 
 type Props = {
   product: Product | null,
@@ -12,7 +13,7 @@ type Props = {
   onSelectProduct: (arg1: Product | null) => void,
   productsPath?: string,
   isDisabled?: boolean
-};
+}
 
 const ProductSelect: React.FunctionComponent<Props> = ({
   product,
@@ -30,21 +31,21 @@ const ProductSelect: React.FunctionComponent<Props> = ({
 
   return (
     <SelectWithModal
-      label="Product"
+      cells={cells}
+      fetchItems={(params) => fetchPaginatedProducts(productsPath, params)}
+      footerLabel="View all products"
+      header="Recently updated products"
       id="product"
-      name=""
+      isDisabled={isDisabled}
       item={product}
       items={products.map(p => ({ ...p, description: p.systemName }))}
       itemsCount={productsCount}
-      cells={cells}
-      onSelect={onSelectProduct}
-      fetchItems={(params) => fetchPaginatedProducts(productsPath, params)}
-      header="Recently updated products"
-      isDisabled={isDisabled}
-      title="Select a product"
+      label="Product"
+      name=""
       placeholder="Select a product"
       searchPlaceholder="Find a product"
-      footerLabel="View all products"
+      title="Select a product"
+      onSelect={onSelectProduct}
     />
   )
 }

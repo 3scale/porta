@@ -1,5 +1,6 @@
 import { setOriginalPolicyChain } from 'Policies/actions/OriginalPolicyChain'
-import { ChainPolicy } from 'Policies/types'
+
+import type { ChainPolicy } from 'Policies/types'
 
 const chainPolicy: ChainPolicy = {
   name: 'name',

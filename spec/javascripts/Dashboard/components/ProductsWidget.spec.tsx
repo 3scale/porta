@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { ProductsWidget } from 'Dashboard/components/ProductsWidget'
 
-import { ProductsWidget, Props } from 'Dashboard/components/ProductsWidget'
+import type { Props } from 'Dashboard/components/ProductsWidget'
 
 const defaultProps = {
   newProductPath: '',

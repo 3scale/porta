@@ -1,15 +1,14 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
-
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
+  DataListAction,
+  DataListCell,
+  DataListItem,
+  DataListItemCells,
+  DataListItemRow,
   Dropdown,
   DropdownItem,
   DropdownPosition,
-  KebabToggle,
-  DataListItem,
-  DataListCell,
-  DataListItemRow,
-  DataListItemCells,
-  DataListAction
+  KebabToggle
 } from '@patternfly/react-core'
 import { useClickOutside } from 'utilities/useClickOutside'
 
@@ -65,22 +64,22 @@ const APIDataListItem = ({ api }: Props) => {
           ]}
         />
         <DataListAction
+          aria-label="Actions"
           aria-labelledby="multi-actions-item1 multi-actions-action1"
           id="actions-menu"
-          aria-label="Actions"
         >
           <div ref={ref}>
             <Dropdown
               isPlain
-              id="actions-menu"
-              position={DropdownPosition.right}
-              isOpen={isOpen}
               className="dashboard-list-item-action"
-              onClick={() => setIsOpen(!isOpen)}
-              toggle={<KebabToggle id={id.toString()} />}
               dropdownItems={links.map(({ name, path }) => (
                 <DropdownItem key={name} href={path}>{name}</DropdownItem>
               ))}
+              id="actions-menu"
+              isOpen={isOpen}
+              position={DropdownPosition.right}
+              toggle={<KebabToggle id={id.toString()} />}
+              onClick={() => setIsOpen(!isOpen)}
             />
           </div>
         </DataListAction>

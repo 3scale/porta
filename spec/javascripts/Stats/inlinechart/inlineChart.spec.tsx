@@ -1,9 +1,10 @@
-import { mount, ReactWrapper } from 'enzyme'
-
+import { mount } from 'enzyme'
 import c3 from 'c3'
-
 import * as utils from 'utilities/fetchData'
-import InlineChart, { Props, State } from 'Stats/inlinechart'
+import InlineChart from 'Stats/inlinechart'
+
+import type { Props, State } from 'Stats/inlinechart'
+import type { ReactWrapper } from 'enzyme'
 
 // Mocking moment.js
 const mockSince = '2018-11-17'
@@ -36,7 +37,7 @@ const props = {
 }
 
 beforeEach(() => {
-  wrapper = mount(<InlineChart {...props}/>)
+  wrapper = mount(<InlineChart {...props} />)
 })
 
 afterEach(() => {

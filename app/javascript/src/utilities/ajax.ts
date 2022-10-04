@@ -1,4 +1,4 @@
-export type Method = 'GET' | 'POST' | 'DELETE';
+export type Method = 'GET' | 'POST' | 'DELETE'
 
 type FetchOptions = { method: Method, body?: URLSearchParams, signal?: AbortSignal }
 type FetchFunction = (url: string, opts: FetchOptions) => Promise<Response>

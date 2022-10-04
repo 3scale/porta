@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { BackendsWidget } from 'Dashboard/components/BackendsWidget'
 
-import { BackendsWidget, Props } from 'Dashboard/components/BackendsWidget'
+import type { Props } from 'Dashboard/components/BackendsWidget'
 
 const defaultProps = {
   newBackendPath: '',

@@ -1,9 +1,9 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer } from 'Policies/util'
 
-import { UIState, FetchErrorAction } from 'Policies/types'
-import { UIComponentTransitionAction } from 'Policies/actions/UISettings'
-import { Reducer } from 'redux'
+import type { FetchErrorAction, UIState } from 'Policies/types'
+import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
+import type { Reducer } from 'redux'
 
 function updateComponentTransition (state: UIState, action: UIComponentTransitionAction): UIState {
   return { ...state, [action.hide]: false, [action.show]: true }

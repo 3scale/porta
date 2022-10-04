@@ -1,5 +1,7 @@
 import { mount } from 'enzyme'
-import { Label, Props } from 'PaymentGateways/braintree/components/Label'
+import { Label } from 'PaymentGateways/braintree/components/Label'
+
+import type { Props } from 'PaymentGateways/braintree/components/Label'
 
 const props: Props = {
   htmlFor: 'username',

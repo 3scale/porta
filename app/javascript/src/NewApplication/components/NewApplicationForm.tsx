@@ -1,24 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  Form,
   ActionGroup,
   Button,
+  Form,
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import {
-  BuyerSelect,
-  ProductSelect,
-  ApplicationPlanSelect,
-  ServicePlanSelect
-} from 'NewApplication'
-import { UserDefinedField } from 'Common'
-import { BuyerLogic } from 'Logic'
-import { createReactWrapper, CSRFToken } from 'utilities'
 import * as flash from 'utilities/alert'
+import { UserDefinedField } from 'Common/components/UserDefinedField'
+import { BuyerLogic } from 'Logic/BuyerLogic'
+import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
+import { BuyerSelect } from 'NewApplication/components/BuyerSelect'
+import { ProductSelect } from 'NewApplication/components/ProductSelect'
+import { ServicePlanSelect } from 'NewApplication/components/ServicePlanSelect'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { CSRFToken } from 'utilities/CSRFToken'
 
-import type { Buyer, Product, ServicePlan, ApplicationPlan } from 'NewApplication/types'
 import type { FieldDefinition } from 'Types'
+import type { ApplicationPlan, Buyer, Product, ServicePlan } from 'NewApplication/types'
 
 import './NewApplicationForm.scss'
 
@@ -41,7 +40,7 @@ type Props = {
     [key: string]: string[] | undefined
   },
   error?: string
-};
+}
 
 const NewApplicationForm: React.FunctionComponent<Props> = ({
   buyer: defaultBuyer,
@@ -130,8 +129,8 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
     <PageSection variant={PageSectionVariants.light}>
       <Form
         acceptCharset='UTF-8'
-        method='post'
         action={url}
+        method='post'
         onSubmit={() => setLoading(true)}
       >
         <CSRFToken />
@@ -142,58 +141,59 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
             buyer={buyer}
             buyers={buyers}
             buyersCount={buyersCount}
+            buyersPath={buyersPath ? buyersPath : `${buyersPath}.json`}
             onSelectBuyer={setBuyer}
-            buyersPath={buyersPath && `${buyersPath}.json`}
           />
-        ) : <input type="hidden" name="account_id" value={(defaultBuyer as Buyer).id} />}
+        ) : <input name="account_id" type="hidden" value={(defaultBuyer as Buyer).id} />}
 
         {products && (
           <ProductSelect
+            isDisabled={!buyer}
             product={product}
             products={products}
             productsCount={productsCount}
+            productsPath={productsPath ? productsPath : `${productsPath}.json`}
             onSelectProduct={setProduct}
-            isDisabled={!buyer}
-            productsPath={productsPath && `${productsPath}.json`}
           />
         )}
 
         {servicePlansAllowed && (
           <ServicePlanSelect
+            createServicePlanPath={product ? createServicePlanPath.replace(':id', String(product.id)) : ''}
+            isDisabled={!buyer || !product || !servicePlan}
+            isPlanContracted={isServiceSubscribedToBuyer}
             servicePlan={servicePlan}
             servicePlans={product ? product.servicePlans : null}
-            onSelect={setServicePlan}
-            isPlanContracted={isServiceSubscribedToBuyer}
-            isDisabled={!buyer || !product || !servicePlan}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
-            createServicePlanPath={product ? createServicePlanPath.replace(':id', String(product.id)) : ''}
+            onSelect={setServicePlan}
           />
         )}
 
         <ApplicationPlanSelect
           appPlan={appPlan}
-          product={product}
-          onSelect={setAppPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(
             ':id',
             product ? String(product.id) : ''
           )}
+          product={product}
+          onSelect={setAppPlan}
         />
 
         {definedFields && definedFields.map(f => (
           <UserDefinedField
-            validationErrors={validationErrors[f.id]}
+            key={f.id}
             fieldDefinition={f}
+            validationErrors={validationErrors[f.id]}
             value={definedFieldsState[f.id]}
             onChange={handleOnDefinedFieldChange(f.id)}
-            key={f.id} />
+          />
         ))}
 
         <ActionGroup>
           <Button
-            variant='primary'
-            type='submit'
             isDisabled={!isFormComplete || loading}
+            type='submit'
+            variant='primary'
           >
               Create application
           </Button>
@@ -203,6 +203,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const NewApplicationFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewApplicationForm {...props} />, containerId)
 
 export { NewApplicationForm, NewApplicationFormWrapper, Props }

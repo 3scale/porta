@@ -1,7 +1,8 @@
 import { mount } from 'enzyme'
-
 import { openSelectWithModal as openModal } from 'utilities/test-utils'
-import { BackendSelect, Props } from 'BackendApis/components/BackendSelect'
+import { BackendSelect } from 'BackendApis/components/BackendSelect'
+
+import type { Props } from 'BackendApis/components/BackendSelect'
 
 const onCreateNewBackend = jest.fn()
 const onSelect = jest.fn()

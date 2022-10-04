@@ -1,5 +1,6 @@
 import { updatePolicyConfig } from 'Policies/actions/PolicyConfig'
-import { ChainPolicy } from 'Policies/types'
+
+import type { ChainPolicy } from 'Policies/types'
 
 const chainPolicy: ChainPolicy = {
   name: 'name',

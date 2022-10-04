@@ -1,4 +1,4 @@
-import type { Feature, AdminSection } from 'Users/types'
+import type { AdminSection, Feature } from 'Users/types'
 
 const FEATURE_NAMES: Partial<Record<Feature, string>> = {
   portal: 'Create, read, update, and delete content & code of the <strong>developer portal</strong>',

@@ -1,7 +1,0 @@
-export { FormCollection } from 'Settings/components/Common/FormCollection'
-export { FormFieldset } from 'Settings/components/Common/FormFieldset'
-export { FormLegend } from 'Settings/components/Common/FormLegend'
-export { SelectGroup } from 'Settings/components/Common/SelectGroup'
-export { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
-export { RadioFieldset } from 'Settings/components/Common/RadioFieldset'
-export { TypeItemCombo } from 'Settings/components/Common/TypeItemCombo'

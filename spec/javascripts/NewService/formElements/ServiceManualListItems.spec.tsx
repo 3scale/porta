@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme'
-
 import { ServiceManualListItems } from 'NewService/components/FormElements'
 
 it('should render required form fields', () => {
@@ -11,7 +10,7 @@ it('should render required form fields', () => {
     },
     errors: {}
   }
-  const view = shallow(<ServiceManualListItems {...props}/>)
+  const view = shallow(<ServiceManualListItems {...props} />)
 
   expect(view).toMatchSnapshot()
 })
@@ -28,7 +27,7 @@ it('should render required form fields with errors', () => {
       system_name: ['Only ASCII letters, numbers, dashes and underscores are allowed.']
     }
   }
-  const view = shallow(<ServiceManualListItems {...props}/>)
+  const view = shallow(<ServiceManualListItems {...props} />)
 
   expect(view).toMatchSnapshot()
 })

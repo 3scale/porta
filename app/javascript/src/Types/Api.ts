@@ -3,4 +3,4 @@ export type Api = {
   name: string,
   link: string,
   type: string
-};
+}

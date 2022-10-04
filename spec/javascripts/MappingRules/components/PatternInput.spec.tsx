@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { PatternInput } from 'MappingRules/components/PatternInput'
 
-import { PatternInput, Props } from 'MappingRules/components/PatternInput'
+import type { Props } from 'MappingRules/components/PatternInput'
 
 const defaultProps: Props = {
   pattern: '',

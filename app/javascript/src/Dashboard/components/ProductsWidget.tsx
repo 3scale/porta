@@ -3,16 +3,17 @@ import {
   Card,
   CardActions,
   CardBody,
-  CardHeader,
   CardFooter,
-  Title,
-  DataList
+  CardHeader,
+  DataList,
+  Title
 } from '@patternfly/react-core'
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
-import { createReactWrapper } from 'utilities'
-
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import 'Dashboard/styles/dashboard.scss'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   newProductPath: string,
@@ -29,26 +30,26 @@ type Props = {
     // eslint-disable-next-line camelcase
     updated_at: string
   }>
-};
+}
 
-const ProductsWidget = ({
+const ProductsWidget: FunctionComponent<Props> = ({
   newProductPath,
   productsPath,
   products
-}: Props) => (
+}) => (
   <Card className="pf-c-card">
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
-        <CubesIcon/>
+        <CubesIcon />
         <Title headingLevel="h1" size="xl">
           Products
         </Title>
         <CardActions>
           <Button
-            data-testid="dashboardCreateProduct-buttonLink"
             component="a"
-            variant="primary"
+            data-testid="dashboardCreateProduct-buttonLink"
             href={newProductPath}
+            variant="primary"
           >
             Create Product
           </Button>
@@ -60,17 +61,18 @@ const ProductsWidget = ({
     </CardHeader>
     <CardBody>
       <DataList aria-label="">
-        {products.map(api => <APIDataListItem api={api} key={api.id}/>)}
+        {products.map(api => <APIDataListItem key={api.id} api={api} />)}
       </DataList>
     </CardBody>
     <CardFooter>
-      <Button variant="link" component="a" isInline href={productsPath}>
+      <Button isInline component="a" href={productsPath} variant="link">
         Explore all Products
       </Button>
     </CardFooter>
   </Card>
 )
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const ProductsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsWidget {...props} />, containerId)
 
 export { ProductsWidget, ProductsWidgetWrapper, Props }

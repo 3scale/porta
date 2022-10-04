@@ -1,6 +1,5 @@
 import '@babel/polyfill'
-
-import { toggleNavigation, hideAllToggleable } from 'Navigation/utils/toggle_navigation'
+import { hideAllToggleable, toggleNavigation } from 'Navigation/utils/toggle_navigation'
 
 document.addEventListener('DOMContentLoaded', () => {
   let store = window.localStorage

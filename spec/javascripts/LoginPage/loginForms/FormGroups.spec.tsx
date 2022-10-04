@@ -1,7 +1,7 @@
-import { AllHTMLAttributes } from 'react'
 import { mount } from 'enzyme'
+import { EmailField, PasswordField, TextField } from 'LoginPage'
 
-import { TextField, PasswordField, EmailField } from 'LoginPage'
+import type { AllHTMLAttributes } from 'react'
 
 export type InputProps = {
   isRequired: boolean,
@@ -15,7 +15,7 @@ export type InputProps = {
   autoFocus?: AllHTMLAttributes<HTMLInputElement>['autoFocus'],
   ariaInvalid?: boolean,
   errorMessage?: string
-};
+}
 
 describe('TextField', () => {
   const textFieldInputProps = {
@@ -29,7 +29,7 @@ describe('TextField', () => {
   }
 
   it('should render TextField form group', () => {
-    const wrapper = mount(<TextField inputProps={textFieldInputProps}/>)
+    const wrapper = mount(<TextField inputProps={textFieldInputProps} />)
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
@@ -44,7 +44,7 @@ describe('TextField', () => {
 
   it('should render an error message if not valid', () => {
     const invalidFieldProps = { ...textFieldInputProps, isValid: false } as const
-    const wrapper = mount(<TextField inputProps={invalidFieldProps}/>)
+    const wrapper = mount(<TextField inputProps={invalidFieldProps} />)
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })
 })
@@ -60,7 +60,7 @@ describe('PasswordField', () => {
     onChange: jest.fn()
   } as const
   it('should render PasswordField form group', () => {
-    const wrapper = mount(<PasswordField inputProps={passwordFieldInputProps}/>)
+    const wrapper = mount(<PasswordField inputProps={passwordFieldInputProps} />)
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
@@ -75,7 +75,7 @@ describe('PasswordField', () => {
 
   it('should render an error message if not valid', () => {
     const invalidFieldProps = { ...passwordFieldInputProps, isValid: false } as const
-    const wrapper = mount(<PasswordField inputProps={invalidFieldProps}/>)
+    const wrapper = mount(<PasswordField inputProps={invalidFieldProps} />)
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })
 })
@@ -91,7 +91,7 @@ describe('EmailField', () => {
     onChange: jest.fn()
   } as const
   it('should render EmailField form group', () => {
-    const wrapper = mount(<EmailField inputProps={emailFieldInputProps}/>)
+    const wrapper = mount(<EmailField inputProps={emailFieldInputProps} />)
     expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
@@ -106,7 +106,7 @@ describe('EmailField', () => {
 
   it('should render an error message if not valid', () => {
     const invalidFieldProps = { ...emailFieldInputProps, isValid: false } as const
-    const wrapper = mount(<EmailField inputProps={invalidFieldProps}/>)
+    const wrapper = mount(<EmailField inputProps={invalidFieldProps} />)
     expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
   })
 })

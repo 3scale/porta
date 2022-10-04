@@ -1,1 +1,1 @@
-export type TabKey = 'methods' | 'metrics';
+export type TabKey = 'methods' | 'metrics'

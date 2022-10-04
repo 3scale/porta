@@ -1,15 +1,17 @@
-import { FunctionComponent, useState } from 'react'
+import { useState } from 'react'
 import {
   ActionGroup,
   Button,
-  Form,
   Card,
-  CardBody
+  CardBody,
+  Form
 } from '@patternfly/react-core'
 import { Select as SelectFormGroup } from 'Common/components/Select'
 import { HelperText, HelperTextItem } from 'Common/components/HelperText'
-import { createReactWrapper, CSRFToken } from 'utilities'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { CSRFToken } from 'utilities/CSRFToken'
 
+import type { FunctionComponent } from 'react'
 import type { Record as Plan } from 'Types'
 
 import './DefaultPlanSelectCard.scss'
@@ -18,7 +20,7 @@ type Props = {
   plans: Array<Plan>,
   initialDefaultPlan: Plan | null,
   path: string
-};
+}
 
 const DefaultPlanSelectCard: FunctionComponent<Props> = ({
   plans,
@@ -39,26 +41,26 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
       <CardBody>
         <Form
           acceptCharset="UTF-8"
-          method="post"
           action={url}
+          method="post"
         >
           <CSRFToken />
-          <input type="hidden" name="utf8" value="✓" />
+          <input name="utf8" type="hidden" value="✓" />
 
           <SelectFormGroup
-            label="Default plan"
+            fieldId="id"
             item={defaultPlan}
             items={mappedPlans}
-            onSelect={setDefaultPlan}
-            fieldId="id"
+            label="Default plan"
             name="id"
             placeholderText={defaultPlan ? defaultPlan.name : 'Select plan'}
+            onSelect={setDefaultPlan}
           />
           <ActionGroup>
             <Button
-              variant="primary"
-              type="submit"
               isDisabled={!defaultPlan || defaultPlan.id === initialDefaultPlan?.id || (defaultPlan.id === NO_DEFAULT_PLAN.id && !initialDefaultPlan)}
+              type="submit"
+              variant="primary"
             >
               Change plan
             </Button>
@@ -74,6 +76,7 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const DefaultPlanSelectCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
 
 export { DefaultPlanSelectCard, DefaultPlanSelectCardWrapper, Props }

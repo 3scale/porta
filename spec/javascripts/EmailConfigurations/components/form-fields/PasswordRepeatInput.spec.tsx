@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { PasswordRepeatInput } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
 
-import { PasswordRepeatInput, Props } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
+import type { Props } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
 
 const setPassword = jest.fn()
 const defaultProps = {

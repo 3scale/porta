@@ -1,5 +1,4 @@
 import { mount } from 'enzyme'
-
 import { SimpleLoginPage } from 'LoginPage'
 
 const props = {
@@ -15,12 +14,12 @@ const props = {
 }
 
 it('should render itself', () => {
-  const wrapper = mount(<SimpleLoginPage {...props}/>)
+  const wrapper = mount(<SimpleLoginPage {...props} />)
   expect(wrapper).toMatchSnapshot()
 })
 
 it('should render reset password button when disablePasswordReset is false', () => {
-  const wrapper = mount(<SimpleLoginPage {...props}/>)
+  const wrapper = mount(<SimpleLoginPage {...props} />)
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -29,7 +28,7 @@ it('should not render reset password button when disablePasswordReset is true', 
     ...props,
     disablePasswordReset: true
   }
-  const wrapper = mount(<SimpleLoginPage {...propsDisabeldPasswordReset}/>)
+  const wrapper = mount(<SimpleLoginPage {...propsDisabeldPasswordReset} />)
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -38,7 +37,7 @@ it('should render Login form and Authentication providers when available', () =>
     ...props,
     authenticationProviders: [{ authorizeURL: 'url-1', humanKind: 'Human 1' }, { authorizeURL: 'url-2', humanKind: 'Human 2' }]
   }
-  const wrapper = mount(<SimpleLoginPage {...propsWithProviders}/>)
+  const wrapper = mount(<SimpleLoginPage {...propsWithProviders} />)
   expect(wrapper).toMatchSnapshot()
 })
 
@@ -48,7 +47,7 @@ it('should render only Authenticaction providers when enforce SSO is enabled', (
     show3scaleLoginForm: false,
     authenticationProviders: [{ authorizeURL: 'url-1', humanKind: 'Human 1' }, { authorizeURL: 'url-2', humanKind: 'Human 2' }]
   }
-  const wrapper = mount(<SimpleLoginPage {...propsEnforceSSO}/>)
+  const wrapper = mount(<SimpleLoginPage {...propsEnforceSSO} />)
   expect(wrapper.find('form#new_session').exists()).toBe(false)
   expect(wrapper.find('.login-provider-link').exists()).toBe(true)
 })

@@ -1,7 +1,8 @@
 import { mount } from 'enzyme'
-
-import { NoMatchFound, Props } from 'Common/components/NoMatchFound'
+import { NoMatchFound } from 'Common/components/NoMatchFound'
 import { Button } from '@patternfly/react-core'
+
+import type { Props } from 'Common/components/NoMatchFound'
 
 const onClearFiltersClick = jest.fn()
 const defaultProps = {}

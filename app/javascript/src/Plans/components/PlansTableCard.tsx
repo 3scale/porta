@@ -1,15 +1,14 @@
-import { FunctionComponent, useState } from 'react'
+import { useState } from 'react'
 import { Card } from '@patternfly/react-core'
 import { PlansTable } from 'Plans/components/PlansTable'
 import * as alert from 'utilities/alert'
-import {
-  ajax,
-  createReactWrapper,
-  safeFromJsonString,
-  confirm
-} from 'utilities'
+import { ajax } from 'utilities/ajax'
+import { confirm } from 'utilities/confirm-dialog'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Plan, Action } from 'Types'
+import type { FunctionComponent } from 'react'
+import type { Action, Plan } from 'Types'
 
 export type Props = {
   columns: Array<{
@@ -19,7 +18,7 @@ export type Props = {
   plans: Plan[],
   count: number,
   searchHref: string
-};
+}
 
 const PlansTableCard: FunctionComponent<Props> = ({
   columns,
@@ -117,8 +116,8 @@ const PlansTableCard: FunctionComponent<Props> = ({
     <Card id="default_plan_card">
       <PlansTable
         columns={columns}
-        plans={plans}
         count={count}
+        plans={plans}
         searchHref={searchHref}
         onAction={handleAction}
       />
@@ -126,6 +125,7 @@ const PlansTableCard: FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const PlansTableCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<PlansTableCard {...props} />, containerId)
 
 export { PlansTableCard, PlansTableCardWrapper }

@@ -1,5 +1,6 @@
 import { StatsApplicationsSelector } from 'Stats/lib/applications_selector'
-import { StatsState } from 'Stats/lib/state'
+
+import type { StatsState } from 'Stats/lib/state'
 
 describe('StatsApplicationsSelector', () => {
   const userSelectedState = {

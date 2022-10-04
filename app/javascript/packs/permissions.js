@@ -1,7 +1,5 @@
 import 'core-js/es7/array'
-
 import { render } from 'react-dom'
-
 import { PermissionsForm } from 'Users/components/PermissionsForm'
 import { safeFromJsonString } from 'utilities'
 
@@ -12,5 +10,5 @@ document.addEventListener('DOMContentLoaded', () => {
   const services = safeFromJsonString(container.dataset.services)
   const features = safeFromJsonString(container.dataset.features)
 
-  render(<PermissionsForm initialState={initialState} services={services} features={features} />, container)
+  render(<PermissionsForm features={features} initialState={initialState} services={services} />, container)
 })

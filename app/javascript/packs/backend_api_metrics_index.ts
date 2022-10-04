@@ -1,7 +1,7 @@
 import { BackendAPIIndexPageWrapper } from 'Metrics/components/BackendAPIIndexPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import { Metric } from 'Types'
+import type { Metric } from 'Types'
 
 const containerId = 'backend-api-metrics-index-container'
 

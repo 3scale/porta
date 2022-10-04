@@ -2,16 +2,19 @@ import { useState } from 'react'
 import {
   FormGroup,
   Select,
-  SelectOptionObject as PFSelectOptionObject,
   SelectVariant
 } from '@patternfly/react-core'
 import {
   handleOnFilter,
-  Record,
-  SelectOptionObject,
   toSelectOption,
   toSelectOptionObject
 } from 'utilities'
+
+import type {
+  SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import type {
+  Record,
+  SelectOptionObject } from 'utilities'
 
 import './FancySelect.scss'
 
@@ -36,7 +39,7 @@ type Props<T extends Record> = {
     label: string,
     onClick: () => void
   }
-};
+}
 
 const emptyItem = { id: -1, name: 'No results found', disabled: true, privateEndpoint: '' } as const
 const FOOTER_ID = 'footer_id'
@@ -97,26 +100,26 @@ const FancySelect = <T extends Record>({
   return (
     <FormGroup
       isRequired
-      label={label}
       fieldId={id}
       helperText={helperText}
       helperTextInvalid={helperTextInvalid}
       isValid={!helperTextInvalid}
+      label={label}
     >
-      {name && item && <input type="hidden" name={name} value={item.id} />}
+      {name && item ? <input name={name} type="hidden" value={item.id} /> : null}
       <Select
-        variant={SelectVariant.typeahead}
-        selections={item && toSelectOptionObject(item)}
-        onToggle={() => setExpanded(!expanded)}
-        onSelect={handleOnSelect}
-        isExpanded={expanded}
-        isDisabled={isDisabled}
-        onClear={() => onSelect(null)}
+        isGrouped
         aria-labelledby={id}
         className={footer ? 'pf-c-select__menu--with-fixed-link' : undefined}
-        isGrouped
-        onFilter={handleOnFilter<T>(items, getSelectOptionsForItems)}
+        isDisabled={isDisabled}
+        isExpanded={expanded}
         placeholderText={placeholderText}
+        selections={item ? toSelectOptionObject(item) : null}
+        variant={SelectVariant.typeahead}
+        onClear={() => onSelect(null)}
+        onFilter={handleOnFilter<T>(items, getSelectOptionsForItems)}
+        onSelect={handleOnSelect}
+        onToggle={() => setExpanded(!expanded)}
       >
         {getSelectOptionsForItems(items)}
       </Select>

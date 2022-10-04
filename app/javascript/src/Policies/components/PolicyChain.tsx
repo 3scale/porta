@@ -2,13 +2,13 @@ import {
   SortableContainer,
   SortableElement,
   SortableHandle,
-  arrayMove,
-  SortEndHandler
+  arrayMove
 } from 'react-sortable-hoc'
 import { PolicyTile } from 'Policies/components/PolicyTile'
 import { HeaderButton } from 'Policies/components/HeaderButton'
 
-import type { ThunkAction, ChainPolicy } from 'Policies/types'
+import type { SortEndHandler } from 'react-sortable-hoc'
+import type { ChainPolicy, ThunkAction } from 'Policies/types'
 import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
     editPolicy: (arg1: ChainPolicy, arg2: number) => ThunkAction,
     sortPolicyChain: (arg1: Array<ChainPolicy>) => SortPolicyChainAction
   }
-};
+}
 
 const DragHandle = SortableHandle(() => <div className="Policy-sortHandle"><i className="fa fa-sort" /></div>)
 
@@ -31,9 +31,9 @@ type SortableItemProps = {
 const SortableItem = SortableElement<SortableItemProps>(({ value, editPolicy, index }: SortableItemProps) => {
   const edit = () => editPolicy(value, index)
   return (
-    <li className={ value.enabled ? 'Policy' : 'Policy Policy--disabled' }>
-      <PolicyTile policy={value} onClick={edit} title="Edit this Policy" />
-      <DragHandle/>
+    <li className={value.enabled ? 'Policy' : 'Policy Policy--disabled'}>
+      <PolicyTile policy={value} title="Edit this Policy" onClick={edit} />
+      <DragHandle />
     </li>
   )
 })
@@ -47,10 +47,10 @@ const SortableList = SortableContainer<SortableListProps>(({ items, editPolicy }
   <ul className="list-group">
     {items.map((policy, index) => (
       <SortableItem
-        key={`item-${index}`}
+        key={policy.uuid}
+        editPolicy={editPolicy}
         index={index}
         value={policy}
-        editPolicy={editPolicy}
       />
     ))}
   </ul>
@@ -74,11 +74,11 @@ const PolicyChain: React.FunctionComponent<Props> = ({
         </HeaderButton>
       </header>
       <SortableList
-        items={chain}
-        onSortEnd={onSortEnd}
         useDragHandle
         editPolicy={actions.editPolicy}
         helperClass="Policy--sortable"
+        items={chain}
+        onSortEnd={onSortEnd}
       />
     </section>
   )

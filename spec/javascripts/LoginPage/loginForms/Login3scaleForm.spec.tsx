@@ -1,7 +1,7 @@
-import { FormEvent } from 'react'
 import { mount } from 'enzyme'
+import { HiddenInputs, Login3scaleForm } from 'LoginPage'
 
-import { Login3scaleForm, HiddenInputs } from 'LoginPage'
+import type { FormEvent } from 'react'
 
 const props = {
   providerSessionsPath: 'sessions-path',
@@ -9,19 +9,19 @@ const props = {
 } as const
 
 it('should render itself with right props', () => {
-  const wrapper = mount(<Login3scaleForm {...props}/>)
+  const wrapper = mount(<Login3scaleForm {...props} />)
   expect(wrapper.find('form#new_session').exists()).toEqual(true)
   expect(wrapper.props().providerSessionsPath).toEqual('sessions-path')
 })
 
 it('should render HTML form markup', () => {
-  const wrapper = mount(<Login3scaleForm {...props}/>)
+  const wrapper = mount(<Login3scaleForm {...props} />)
   expect(wrapper.find('input#session_username').exists()).toEqual(true)
   expect(wrapper.find('input#session_password').exists()).toEqual(true)
 })
 
 it('should render HiddenInputs component', () => {
-  const wrapper = mount(<Login3scaleForm {...props}/>)
+  const wrapper = mount(<Login3scaleForm {...props} />)
   expect(wrapper.find(HiddenInputs).exists()).toEqual(true)
 })
 
@@ -34,7 +34,7 @@ describe('username', () => {
         type: 'text'
       }
     } as unknown as FormEvent
-    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props}/>)
+    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props} />)
     wrapper.find('input#session_username').props().onChange!(event)
     expect(wrapper.state('username')).toEqual('Bob')
     expect(wrapper.state().validation.username).toEqual(true)
@@ -48,14 +48,14 @@ describe('username', () => {
         type: 'text'
       }
     } as unknown as FormEvent
-    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props}/>)
+    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props} />)
     wrapper.find('input#session_username').props().onChange!(event)
     expect(wrapper.state().username).toEqual('')
     expect(wrapper.state().validation.username).toEqual(false)
   })
 
   it('should autofocus username input when username is not passed as param', () => {
-    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props}/>)
+    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props} />)
 
     expect(wrapper.find('input#session_username').props().autoFocus).toBe(true)
     expect(wrapper.find('input#session_password').props().autoFocus).toBe(false)
@@ -71,7 +71,7 @@ describe('password', () => {
         type: 'password'
       }
     } as unknown as FormEvent
-    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props}/>)
+    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props} />)
     wrapper.find('input#session_password').props().onChange!(event)
     expect(wrapper.state().password).toEqual('gary1234')
     expect(wrapper.state().validation.password).toEqual(true)
@@ -85,7 +85,7 @@ describe('password', () => {
         type: 'text'
       }
     } as unknown as FormEvent
-    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props}/>)
+    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props} />)
     wrapper.find('input#session_password').props().onChange!(event)
     expect(wrapper.state().password).toEqual('')
     expect(wrapper.state().validation.password).toEqual(false)
@@ -93,7 +93,7 @@ describe('password', () => {
 
   it('should autofocus password input when username is passed as param', () => {
     const propsUsernameParams = { ...props, session: { username: 'bob' } } as const
-    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...propsUsernameParams}/>)
+    const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...propsUsernameParams} />)
     expect(wrapper.find('input#session_password').props().autoFocus).toBe(true)
     expect(wrapper.find('input#session_username').props().autoFocus).toBe(false)
   })

@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { BackendAPIIndexPage } from 'Metrics/components/BackendAPIIndexPage'
 
-import { BackendAPIIndexPage, Props } from 'Metrics/components/BackendAPIIndexPage'
+import type { Props } from 'Metrics/components/BackendAPIIndexPage'
 
 const defaultProps: Props = {
   addMappingRulePath: '/mapping-rule/new',

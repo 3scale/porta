@@ -1,10 +1,9 @@
 import { mount } from 'enzyme'
-
-import { DefaultPlanSelectCard, Props } from 'Plans/components/DefaultPlanSelectCard'
-
+import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
 import { Select } from 'Common/components/Select'
-
 import { openSelect, selectOption } from 'utilities/test-utils'
+
+import type { Props } from 'Plans/components/DefaultPlanSelectCard'
 
 const plan = { id: 1, name: 'My Plan' }
 const plans = [plan]
@@ -14,7 +13,7 @@ const defaultProps: Props = {
   path: '/foo/bar'
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCard {...{ ...defaultProps, ...props }} />)
 
 it('should render', () => {
   const wrapper = mountWrapper()

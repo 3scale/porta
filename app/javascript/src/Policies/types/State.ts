@@ -1,4 +1,4 @@
-import type { RegistryPolicy, ChainPolicy } from 'Policies/types'
+import type { ChainPolicy, RegistryPolicy } from 'Policies/types'
 
 export type UIState = {
   readonly registry: boolean,
@@ -7,7 +7,7 @@ export type UIState = {
   readonly requests: number,
   readonly submitButtonEnabled: boolean,
   readonly error: Record<any, any>
-};
+}
 
 export type State = {
   readonly registry: RegistryPolicy[],
@@ -15,6 +15,6 @@ export type State = {
   readonly originalChain: ChainPolicy[],
   readonly policyConfig: ChainPolicy,
   readonly ui: UIState
-};
+}
 
-export type StateSlice = RegistryPolicy[] | ChainPolicy | ChainPolicy[] | UIState;
+export type StateSlice = RegistryPolicy[] | ChainPolicy | ChainPolicy[] | UIState

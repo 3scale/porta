@@ -1,7 +1,7 @@
-import { Client, HostedFields, ThreeDSecure } from 'braintree-web'
-import { HostedFieldsFieldDataFields, HostedFieldsTokenizePayload } from 'braintree-web/modules/hosted-fields'
-import { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions, ThreeDSecureVerifyPayload } from 'braintree-web/modules/three-d-secure'
-import { BillingAddressData, HostedFieldsOptions } from 'PaymentGateways'
+import type { Client, HostedFields, ThreeDSecure } from 'braintree-web'
+import type { HostedFieldsFieldDataFields, HostedFieldsTokenizePayload } from 'braintree-web/modules/hosted-fields'
+import type { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions, ThreeDSecureVerifyPayload } from 'braintree-web/modules/three-d-secure'
+import type { BillingAddressData, HostedFieldsOptions } from 'PaymentGateways'
 
 const validationConstraints = {
   'customer[first_name]': {

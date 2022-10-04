@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { Spinner } from 'Common/components/Spinner'
 
-import { Spinner, Props } from 'Common/components/Spinner'
+import type { Props } from 'Common/components/Spinner'
 
 const defaultProps: Props = {
   size: undefined,

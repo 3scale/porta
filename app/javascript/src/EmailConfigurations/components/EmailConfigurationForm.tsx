@@ -1,20 +1,20 @@
-import { useState } from 'react'
 
+import { useState } from 'react'
 import {
   ActionGroup,
   Button,
   Form
 } from '@patternfly/react-core'
-import {
-  EmailInput,
-  UserNameInput,
-  PasswordInput,
-  PasswordRepeatInput
-} from './form-fields'
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
 
+import {
+  EmailInput,
+  PasswordInput,
+  PasswordRepeatInput,
+  UserNameInput
+} from './form-fields'
 import './EmailConfigurationForm.scss'
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
   emailConfiguration: FormEmailConfiguration,
   isUpdate?: boolean,
   errors?: FormErrors
-};
+}
 
 const EmailConfigurationForm = (
   {
@@ -73,34 +73,34 @@ const EmailConfigurationForm = (
 
   const buttons = isUpdate ? (
     <>
-      <Button variant="primary" type="submit" onClick={handleOnUpdate} isDisabled={!isFormValid}>Update email configuration</Button>
-      <Button variant="danger" type="submit" onClick={handleOnDelete}>Delete</Button>
+      <Button isDisabled={!isFormValid} type="submit" variant="primary" onClick={handleOnUpdate}>Update email configuration</Button>
+      <Button type="submit" variant="danger" onClick={handleOnDelete}>Delete</Button>
     </>
   ) : (
-    <Button variant="primary" type="submit" isDisabled={!isFormValid}>Create email configuration</Button>
+    <Button isDisabled={!isFormValid} type="submit" variant="primary">Create email configuration</Button>
   )
 
   return (
     <Form
-      id={FORM_ID}
       acceptCharset="UTF-8"
-      method="post"
       action={url}
+      id={FORM_ID}
+      method="post"
       onSubmit={isUpdate ? (e: any) => e.preventDefault() : undefined}
     >
       <CSRFToken />
       <input name="utf8" type="hidden" value="✓" />
-      {isUpdate && <input type="hidden" name="_method" value="put" />}
+      {isUpdate ? <input name="_method" type="hidden" value="put" /> : null}
 
-      <EmailInput email={email} setEmail={setEmail} errors={emailErrors} isRequired={!isUpdate} />
-      <UserNameInput userName={userName} setUserName={setUserName} errors={userNameErrors} isRequired={!isUpdate} />
-      <PasswordInput password={password} setPassword={setPassword} errors={passwordErrors} isRequired={!isUpdate} />
+      <EmailInput email={email} errors={emailErrors} isRequired={!isUpdate} setEmail={setEmail} />
+      <UserNameInput errors={userNameErrors} isRequired={!isUpdate} setUserName={setUserName} userName={userName} />
+      <PasswordInput errors={passwordErrors} isRequired={!isUpdate} password={password} setPassword={setPassword} />
       <PasswordRepeatInput
+        errors={passwordRepeatErrors}
+        isDisabled={isUpdate ? password === emailConfiguration.password : null}
+        isRequired={!isUpdate}
         password={passwordRepeat}
         setPassword={setPasswordRepeat}
-        errors={passwordRepeatErrors}
-        isDisabled={isUpdate && password === emailConfiguration.password}
-        isRequired={!isUpdate}
       />
 
       <ActionGroup>

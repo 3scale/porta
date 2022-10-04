@@ -1,7 +1,8 @@
 
 import { mount } from 'enzyme'
 import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
-import { ChainPolicy } from 'Policies/types'
+
+import type { ChainPolicy } from 'Policies/types'
 
 const policies: ChainPolicy[] = [
   { enabled: true, name: 'cors', humanName: 'CORS', description: ['CORS headers'], version: '1.0.0', configuration: {}, $schema: '', data: {}, removable: true, summary: '', uuid: '1' },

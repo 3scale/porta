@@ -1,6 +1,8 @@
 
-import { StripeElementsForm, Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 import { mount } from 'enzyme'
+
+import type { Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 
 const defaultProps: Props = {
   stripePublishableKey: 'abcd',
@@ -52,7 +54,7 @@ describe('No credit card is stored', () => {
   const props = { ...defaultProps, isCreditCardStored: false }
 
   it('should render properly', () => {
-    const wrapper = mount(<StripeElementsForm { ...props } />)
+    const wrapper = mount(<StripeElementsForm {...props} />)
     expect(wrapper.find('#stripe-form').hasClass('hidden')).toBe(false)
   })
 })

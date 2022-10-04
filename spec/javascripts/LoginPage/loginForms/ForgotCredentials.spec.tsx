@@ -1,5 +1,4 @@
 import { mount } from 'enzyme'
-
 import { ForgotCredentials } from 'LoginPage'
 
 const props = {
@@ -7,6 +6,6 @@ const props = {
 }
 
 it('should render itself', () => {
-  const wrapper = mount(<ForgotCredentials {...props}/>)
+  const wrapper = mount(<ForgotCredentials {...props} />)
   expect(wrapper).toMatchSnapshot()
 })

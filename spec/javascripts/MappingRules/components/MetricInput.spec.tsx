@@ -1,9 +1,10 @@
-import { FormEvent } from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
-import { RadioProps } from '@patternfly/react-core'
+import { MetricInput } from 'MappingRules/components/MetricInput'
 
-import { MetricInput, Props } from 'MappingRules/components/MetricInput'
+import type { FormEvent } from 'react'
+import type { RadioProps } from '@patternfly/react-core'
+import type { Props } from 'MappingRules/components/MetricInput'
 
 const defaultProps = {
   metric: { id: 0, name: 'Metric 0', systemName: '', updatedAt: '' },

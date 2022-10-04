@@ -1,18 +1,22 @@
+/* eslint-disable react/jsx-props-no-spreading */
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
+import { FormLegend } from 'Settings/components/Common/FormLegend'
+import { SelectGroup } from 'Settings/components/Common/SelectGroup'
+import { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
 
-import { FormFieldset, FormLegend, TextInputGroup, SelectGroup } from 'Settings/components/Common'
-import type { FieldGroupProps, FieldCatalogProps } from 'Settings/types'
+import type { FieldCatalogProps, FieldGroupProps } from 'Settings/types'
 
 type Props = {
   type: FieldCatalogProps & FieldGroupProps,
   item: FieldGroupProps,
   legend: string
-};
+}
 
 const TypeItemCombo: React.FunctionComponent<Props> = ({
   type,
   item,
   legend
-}: Props) => (
+}) => (
   <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
     <FormLegend>{legend}</FormLegend>
     <SelectGroup {...type} />

@@ -1,6 +1,6 @@
-import { ReactElement } from 'react'
-
 import * as patternflyUtils from 'utilities/patternfly-utils'
+
+import type { ReactElement } from 'react'
 
 const item = { id: 10, name: 'The item', description: 'A standard item object' }
 

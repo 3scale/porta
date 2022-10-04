@@ -1,8 +1,8 @@
-import { FunctionComponent, useState } from 'react'
-
+import { useState } from 'react'
 import { FormGroup, Radio } from '@patternfly/react-core'
-import { SelectWithModal } from 'Common'
+import { SelectWithModal } from 'Common/components/SelectWithModal'
 
+import type { FunctionComponent } from 'react'
 import type { Metric } from 'Types'
 
 import './MetricInput.scss'
@@ -12,13 +12,13 @@ type Props = {
   setMetric: (arg1: Metric | null) => void,
   topLevelMetrics: Array<Metric>,
   methods: Array<Metric>
-};
+}
 
 type RadioOptionProps = {
   type: 'metric' | 'method',
   label: string,
   items: Array<Metric>
-};
+}
 
 const MetricInput: FunctionComponent<Props> = ({
   metric,
@@ -43,56 +43,57 @@ const MetricInput: FunctionComponent<Props> = ({
     { title: 'Last updated', propName: 'updatedAt' }
   ]
 
-  const RadioOption = (
-    {
-      type,
-      label,
-      items
-    }: RadioOptionProps
-  ): React.ReactElement => <div id={`wrapper_${type}`}>
-    <Radio
-      isChecked={checked === type}
-      name="radio-1"
-      onChange={() => handleOnRadioChange(type)}
-      label={label}
-      id={`proxy_rule_metric_id_radio_${type}`}
-    />
-    {checked === type && (
-      <SelectWithModal
-        label=""
-        id={`proxy_rule_metric_id_select_${type}`}
-        name="proxy_rule[metric_id]"
-        item={metric}
-        items={items}
-        itemsCount={items.length}
-        cells={cells}
-        onSelect={handleOnSelect}
-        header={`Most recently created ${type}s`}
-        title={`Select a ${type}`}
-        placeholder={`Select a ${type}`}
-        searchPlaceholder={`Find a ${type}`}
-        aria-label={`Select a ${type}`}
-        footerLabel={`View all ${type}s`}
+  // eslint-disable-next-line react/no-multi-comp
+  const RadioOption: FunctionComponent<RadioOptionProps> = ({
+    type,
+    label,
+    items
+  }) => (
+    <div id={`wrapper_${type}`}>
+      <Radio
+        id={`proxy_rule_metric_id_radio_${type}`}
+        isChecked={checked === type}
+        label={label}
+        name="radio-1"
+        onChange={() => handleOnRadioChange(type)}
       />
-    )}
-  </div>
+      {checked === type && (
+        <SelectWithModal
+          aria-label={`Select a ${type}`}
+          cells={cells}
+          footerLabel={`View all ${type}s`}
+          header={`Most recently created ${type}s`}
+          id={`proxy_rule_metric_id_select_${type}`}
+          item={metric}
+          items={items}
+          itemsCount={items.length}
+          label=""
+          name="proxy_rule[metric_id]"
+          placeholder={`Select a ${type}`}
+          searchPlaceholder={`Find a ${type}`}
+          title={`Select a ${type}`}
+          onSelect={handleOnSelect}
+        />
+      )}
+    </div>
+  )
 
   return (
     <FormGroup
       isRequired
+      fieldId="proxy_rule_metric_id"
       label="Method or metric to increment"
       validated="default"
-      fieldId="proxy_rule_metric_id"
     >
       <RadioOption
-        type="method"
-        label="Method"
         items={methods}
+        label="Method"
+        type="method"
       />
       <RadioOption
-        type="metric"
-        label="Metric"
         items={topLevelMetrics}
+        label="Metric"
+        type="metric"
       />
     </FormGroup>
   )

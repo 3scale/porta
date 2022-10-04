@@ -3,7 +3,7 @@ import type { ChainPolicy } from 'Policies/types'
 
 type Props = {
   policies: ChainPolicy[]
-};
+}
 
 const PolicyChainHiddenInput: React.FunctionComponent<Props> = ({ policies }) => {
   // TODO: Next iteration see if we can store the config as data field in Rails
@@ -12,9 +12,9 @@ const PolicyChainHiddenInput: React.FunctionComponent<Props> = ({ policies }) =>
 
   return (
     <input
-      type='hidden'
       id='proxy[policies_config]'
       name='proxy[policies_config]'
+      type='hidden'
       value={data}
     />
   )

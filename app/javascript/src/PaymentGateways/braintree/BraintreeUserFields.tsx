@@ -1,6 +1,7 @@
-import { FunctionComponent, useState } from 'react'
+import { useState } from 'react'
+import { Input, Label, ListItem } from 'PaymentGateways'
 
-import { Label, Input, ListItem } from 'PaymentGateways'
+import type { FunctionComponent } from 'react'
 
 const BraintreeUserFields: FunctionComponent = () => {
   const [firstName, setFirstName] = useState('')
@@ -11,37 +12,37 @@ const BraintreeUserFields: FunctionComponent = () => {
     <ul className="list-unstyled">
       <ListItem id="customer_first_name_input">
         <Label
+          required
           htmlFor="customer_first_name"
           label="First name"
-          required
         />
         <Input
+          required
           id="customer_first_name"
           name="customer[first_name]"
           value={firstName}
           onChange={(e) => setFirstName(e.currentTarget.value)}
-          required
         />
       </ListItem>
       <ListItem id="customer_last_name_input">
         <Label
+          required
           htmlFor="customer_last_name"
           label="Last name"
-          required
         />
         <Input
+          required
           id="customer_last_name"
           name="customer[last_name]"
           value={lastName}
           onChange={(e) => setLastName(e.currentTarget.value)}
-          required
         />
       </ListItem>
       <ListItem id="customer_phone_input">
         <Label
+          required
           htmlFor="customer_phone"
           label="Phone"
-          required
         />
         <Input
           id="customer_phone"

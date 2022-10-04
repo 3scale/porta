@@ -1,5 +1,4 @@
 import $ from 'jquery'
-
 import { StatsMetricsSource } from 'Stats/lib/metrics_source'
 
 const source = new StatsMetricsSource({ id: 42, details: { id: 8, system_name: 'slartibarfast' } })

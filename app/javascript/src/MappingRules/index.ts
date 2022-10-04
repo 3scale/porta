@@ -1,8 +1,0 @@
-export { MetricInput } from './components/MetricInput'
-export { NewMappingRule } from './components/NewMappingRule'
-export { HttpMethodSelect } from './components/HttpMethodSelect'
-export { PatternInput } from './components/PatternInput'
-export { RedirectUrlInput } from './components/RedirectUrlInput'
-export { IncrementByInput } from './components/IncrementByInput'
-export { IsLastCheckbox } from './components/IsLastCheckbox'
-export { PositionInput } from './components/PositionInput'

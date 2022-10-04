@@ -1,8 +1,9 @@
 import { mount } from 'enzyme'
-
-import { TableModal, Props } from 'Common/components/TableModal'
+import { TableModal } from 'Common/components/TableModal'
 import { updateInput } from 'utilities/test-utils'
-import { Record } from 'Types'
+
+import type { Props } from 'Common/components/TableModal'
+import type { Record } from 'Types'
 
 const onSelect = jest.fn()
 const onClose = jest.fn()

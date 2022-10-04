@@ -1,7 +1,8 @@
 import { mount, render } from 'enzyme'
-
-import { EmailConfigurationForm, Props } from 'EmailConfigurations/components/EmailConfigurationForm'
+import { EmailConfigurationForm } from 'EmailConfigurations/components/EmailConfigurationForm'
 import { isSubmitDisabled, updateInput } from 'utilities/test-utils'
+
+import type { Props } from 'EmailConfigurations/components/EmailConfigurationForm'
 
 const defaultProps = {
   emailConfiguration: {
@@ -15,7 +16,7 @@ const defaultProps = {
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
-const renderWrapper = (props: Partial<Props> = {}) => render(<EmailConfigurationForm {...{ ...defaultProps, ...props }}/>)
+const renderWrapper = (props: Partial<Props> = {}) => render(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

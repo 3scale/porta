@@ -1,8 +1,9 @@
 import { mount } from 'enzyme'
-
-import { IndexPage, Props } from 'BackendApis/components/IndexPage'
+import { IndexPage } from 'BackendApis/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
-import { Backend } from 'BackendApis/types'
+
+import type { Props } from 'BackendApis/components/IndexPage'
+import type { Backend } from 'BackendApis/types'
 
 const defaultProps = {
   newBackendPath: '',

@@ -1,6 +1,6 @@
-import { FunctionComponent } from 'react'
-
 import { Label, ListItem } from 'PaymentGateways'
+
+import type { FunctionComponent } from 'react'
 
 const BraintreeCardFields: FunctionComponent = () => {
   return (
@@ -9,41 +9,41 @@ const BraintreeCardFields: FunctionComponent = () => {
       <ul className="list-unstyled">
         <ListItem id="customer_credit_card_number_input">
           <Label
+            required
             htmlFor="customer_credit_card_number"
             label="Number"
-            required
           />
           <div
-            id="customer_credit_card_number"
             className="form-control col-md-6"
             data-name="customer[credit_card][number]"
-          ></div>
+            id="customer_credit_card_number"
+          />
           <div className="col-md-6 col-md-offset-4 inline-hints">Incorrect card number. Specify a valid credit card number</div>
         </ListItem>
         <ListItem id="customer_credit_card_cvv_input">
           <Label
+            required
             htmlFor="customer_credit_card_cvv"
             label="CVV"
-            required
           />
           <div
-            id="customer_credit_card_cvv"
             className="form-control col-md-6"
             data-name="customer[credit_card][cvv]"
-          ></div>
+            id="customer_credit_card_cvv"
+          />
 
         </ListItem>
         <ListItem id="customer_credit_card_expiration_date_input">
           <Label
+            required
             htmlFor="customer_credit_card_expiration_date"
             label="Expiration Date (MM/YY)"
-            required
           />
           <div
-            id="customer_credit_card_expiration_date"
             className="form-control col-md-6"
             data-name="customer[credit_card][expiration_date]"
-          ></div>
+            id="customer_credit_card_expiration_date"
+          />
         </ListItem>
       </ul>
     </>

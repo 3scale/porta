@@ -7,7 +7,7 @@ type Props = {
   errors: string[],
   isRequired?: boolean,
   isDisabled?: boolean
-};
+}
 
 const PasswordRepeatInput = (
   {
@@ -17,23 +17,25 @@ const PasswordRepeatInput = (
     isRequired,
     isDisabled
   }: Props
-): React.ReactElement => <FormGroup
-  isRequired={isRequired}
-  label="Confirm password"
-  validated="default"
-  fieldId="email_configuration_password_repeat"
-  isValid={!errors.length}
-  helperTextInvalid={errors.toString()}
->
-  <TextInput
-    type="password"
-    id="email_configuration_password_repeat"
-    value={password}
-    onChange={setPassword}
+): React.ReactElement => (
+  <FormGroup
+    fieldId="email_configuration_password_repeat"
+    helperTextInvalid={errors.toString()}
+    isRequired={isRequired}
     isValid={!errors.length}
-    isDisabled={isDisabled}
-    autoComplete="new-password"
-  />
-</FormGroup>
+    label="Confirm password"
+    validated="default"
+  >
+    <TextInput
+      autoComplete="new-password"
+      id="email_configuration_password_repeat"
+      isDisabled={isDisabled}
+      isValid={!errors.length}
+      type="password"
+      value={password}
+      onChange={setPassword}
+    />
+  </FormGroup>
+)
 
 export { PasswordRepeatInput, Props }

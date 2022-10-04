@@ -3,20 +3,21 @@ import {
   Divider,
   Level,
   LevelItem,
-  OnPerPageSelect,
+  Pagination as PFPagination,
   PageSection,
   PageSectionVariants,
-  Pagination as PFPagination,
-  PaginationProps,
   PaginationVariant,
   Title,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
-import { Table, TableHeader, TableBody, IActions } from '@patternfly/react-table'
-import { ToolbarSearch } from 'Common'
-import { createReactWrapper } from 'utilities'
+import { Table, TableBody, TableHeader } from '@patternfly/react-table'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
+import type { FunctionComponent, ReactElement } from 'react'
+import type { IActions } from '@patternfly/react-table'
+import type { OnPerPageSelect, PaginationProps } from '@patternfly/react-core'
 import type { Backend } from 'BackendApis/types'
 
 import './IndexPage.scss'
@@ -25,15 +26,13 @@ type Props = {
   newBackendPath: string,
   backends: Array<Backend>,
   backendsCount: number
-};
+}
 
-const IndexPage = (
-  {
-    newBackendPath,
-    backendsCount,
-    backends
-  }: Props
-): React.ReactElement => {
+const IndexPage: FunctionComponent<Props> = ({
+  newBackendPath,
+  backendsCount,
+  backends
+}) => {
   const tableColumns = [
     'Name',
     'System name',
@@ -44,8 +43,9 @@ const IndexPage = (
 
   const tableRows = backends.map((tableRow) => ({
     cells: [
-      { title: <Button href={tableRow.links[1].path} component="a" variant="link" isInline>{tableRow.name}</Button> },
+      { title: <Button isInline component="a" href={tableRow.links[1].path} variant="link">{tableRow.name}</Button> },
       tableRow.systemName,
+      // eslint-disable-next-line react/jsx-key
       <span className="api-table-timestamp">{tableRow.updatedAt}</span>,
       tableRow.privateEndpoint,
       tableRow.productsCount
@@ -75,45 +75,42 @@ const IndexPage = (
     window.location.replace(url.toString())
   }
 
-  const Pagination = ({
-    variant
-  }: {
-    variant?: PaginationProps['variant']
-  }) => {
+  // eslint-disable-next-line react/no-multi-comp
+  const Pagination = ({ variant }: Pick<PaginationProps, 'variant'>): ReactElement<PaginationProps> => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
     return (
       <PFPagination
-        widgetId="pagination-options-menu-top"
         itemCount={backendsCount}
-        perPage={Number(perPage) || 20}
         page={Number(page)}
-        onPerPageSelect={selectPerPage}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
+        perPage={Number(perPage) || 20}
         perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
         variant={variant}
+        widgetId="pagination-options-menu-top"
+        onFirstClick={(_ev, page) => goToPage(page)}
+        onLastClick={(_ev, page) => goToPage(page)}
+        onNextClick={(_ev, page) => goToPage(page)}
+        onPerPageSelect={selectPerPage}
+        onPreviousClick={(_ev, page) => goToPage(page)}
       />
     )
   }
 
   return (
-    <PageSection variant={PageSectionVariants.light} id="backend-apis-index-page">
+    <PageSection id="backend-apis-index-page" variant={PageSectionVariants.light}>
       <Level>
         <LevelItem>
           <Title headingLevel="h1" size="2xl">Backends</Title>
         </LevelItem>
         <LevelItem>
-          <Button variant="primary" component="a" href={newBackendPath}>
+          <Button component="a" href={newBackendPath} variant="primary">
             Create Backend
           </Button>
         </LevelItem>
       </Level>
       <p>Explore and manage all your internal APIs.</p>
-      <Divider/>
-      <Toolbar id="top-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
+      <Divider />
+      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="top-toolbar">
         <ToolbarItem>
           <ToolbarSearch placeholder="Find a backend" />
         </ToolbarItem>
@@ -122,11 +119,11 @@ const IndexPage = (
           <Pagination />
         </ToolbarItem>
       </Toolbar>
-      <Table aria-label="Backend APIs Table" actions={tableActions} cells={tableColumns} rows={tableRows}>
+      <Table actions={tableActions} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar id="bottom-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
+      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
         {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
         <ToolbarItem>
           <Pagination variant={PaginationVariant.bottom} />
@@ -136,6 +133,7 @@ const IndexPage = (
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
 
 export { IndexPage, BackendsIndexPageWrapper, Props }

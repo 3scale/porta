@@ -1,7 +1,7 @@
 import { DefaultPlanSelectCardWrapper } from 'Plans/components/DefaultPlanSelectCard'
 import { safeFromJsonString } from 'utilities'
 
-import { Record as Plan } from 'Types'
+import type { Record as Plan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'default_plan'

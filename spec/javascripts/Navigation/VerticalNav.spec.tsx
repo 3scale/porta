@@ -1,4 +1,4 @@
-import { render, mount } from 'enzyme'
+import { mount, render } from 'enzyme'
 import { VerticalNav } from 'Navigation/components/VerticalNav'
 
 const currentApi = {
@@ -16,7 +16,7 @@ const sections = [{
 }]
 
 it('should display the current API on top', () => {
-  const wrapper = render(<VerticalNav sections={sections} currentApi={currentApi} />)
+  const wrapper = render(<VerticalNav currentApi={currentApi} sections={sections} />)
   const sectionTitle = wrapper.find('.pf-c-nav__section-title').first()
 
   expect(sectionTitle.text()).toBe(currentApi.name)

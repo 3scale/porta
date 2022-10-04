@@ -1,4 +1,4 @@
-export type Configuration = any;
+export type Configuration = any
 
 // Represents the data stored for @proxy.policies_config
 export type PolicyConfig = {
@@ -6,7 +6,7 @@ export type PolicyConfig = {
   configuration: Configuration,
   version: string,
   enabled: boolean
-};
+}
 
 // Represents policies of the Registry
 export type RegistryPolicy = {
@@ -19,11 +19,11 @@ export type RegistryPolicy = {
   version: string,
   data?: Configuration,
   humanName: string
-};
+}
 
 // Represents policies stored in the Chain, once copied from the Registry
 export type ChainPolicy = RegistryPolicy & {
   uuid: string,
   enabled: boolean,
   removable: boolean
-};
+}

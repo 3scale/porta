@@ -1,11 +1,12 @@
 import { mount } from 'enzyme'
+import { FormLegend } from 'Settings/components/Common/FormLegend'
 
-import { FormLegend, Props } from 'Settings/components/Common/FormLegend'
+import type { Props } from 'Settings/components/Common/FormLegend'
 
 const defaultProps: Props = {}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(
-  <FormLegend { ...{ ...defaultProps, ...props } } />
+  <FormLegend {...{ ...defaultProps, ...props }} />
 )
 
 it('should render correctly', () => {

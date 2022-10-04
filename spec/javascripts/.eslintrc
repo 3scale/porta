@@ -1,5 +1,7 @@
 {
   "rules": {
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "react/jsx-key": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

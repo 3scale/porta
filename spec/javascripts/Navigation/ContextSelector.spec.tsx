@@ -1,6 +1,8 @@
 import { mount } from 'enzyme'
-import { ContextSelector, Props } from 'Navigation/components/ContextSelector'
-import { Menu } from 'Types'
+import { ContextSelector } from 'Navigation/components/ContextSelector'
+
+import type { Props } from 'Navigation/components/ContextSelector'
+import type { Menu } from 'Types'
 
 const audienceLink = '/audience'
 const productsLink = '/products'
@@ -15,7 +17,7 @@ const defaultProps = {
   settingsLink: settingsLink
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<ContextSelector { ...{ ...defaultProps, ...props } } />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<ContextSelector {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   expect(mountWrapper().find(ContextSelector).exists()).toEqual(true)

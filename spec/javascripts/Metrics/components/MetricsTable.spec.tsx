@@ -1,8 +1,9 @@
 import { mount } from 'enzyme'
-
 import { CheckIcon } from '@patternfly/react-icons'
-import { MetricsTable, Props } from 'Metrics/components/MetricsTable'
+import { MetricsTable } from 'Metrics/components/MetricsTable'
 import { mockLocation } from 'utilities/test-utils'
+
+import type { Props } from 'Metrics/components/MetricsTable'
 
 const metrics = new Array(6).fill({}).map((i, j) => ({
   id: j,

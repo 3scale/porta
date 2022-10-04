@@ -1,8 +1,9 @@
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
+import { FeaturesFieldset } from 'Users/components/FeaturesFieldset'
 
-import { FeaturesFieldset, Props } from 'Users/components/FeaturesFieldset'
-
-import type { Feature, AdminSection } from 'Users/types'
+import type { ReactWrapper } from 'enzyme'
+import type { Props } from 'Users/components/FeaturesFieldset'
+import type { AdminSection, Feature } from 'Users/types'
 
 let wrapper: ReactWrapper
 
@@ -32,7 +33,7 @@ it('should render itself', () => {
 
 it('should render a hidden input', () => {
   expect(wrapper.containsMatchingElement(
-    <input type={'hidden'} name={'user[member_permission_ids][]'} />
+    <input name="user[member_permission_ids][]" type="hidden" />
   )).toBe(true)
 })
 

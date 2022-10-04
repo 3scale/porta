@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
 
-import { NewBackendModal, Props } from 'BackendApis/components/NewBackendModal'
+import type { Props } from 'BackendApis/components/NewBackendModal'
 
 const defaultProps = {
   backendsPath: '/backends',

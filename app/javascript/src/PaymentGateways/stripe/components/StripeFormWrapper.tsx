@@ -1,7 +1,7 @@
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
-import { createReactWrapper } from 'utilities'
-import { StripeCardForm } from 'PaymentGateways'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { StripeCardForm } from 'PaymentGateways/stripe/components/StripeCardForm'
 import 'PaymentGateways/stripe/styles/stripe.scss'
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
   },
   successUrl: string,
   isCreditCardStored: boolean
-};
+}
 
 const StripeElementsForm: React.FunctionComponent<Props> = ({
   stripePublishableKey,
@@ -32,15 +32,16 @@ const StripeElementsForm: React.FunctionComponent<Props> = ({
   return (
     <Elements stripe={stripePromise}>
       <StripeCardForm
-        setupIntentSecret={setupIntentSecret}
         billingAddressDetails={billingAddressDetails}
-        successUrl={successUrl}
         isCreditCardStored={isCreditCardStored}
+        setupIntentSecret={setupIntentSecret}
+        successUrl={successUrl}
       />
     </Elements>
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const StripeFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<StripeElementsForm {...props} />, containerId)
 
 export { StripeElementsForm, StripeFormWrapper, Props }

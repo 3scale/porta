@@ -1,7 +1,7 @@
 import type { Buyer, Product, ServicePlan } from 'NewApplication/types'
 
 class BuyerLogic {
-  buyer: Buyer;
+  buyer: Buyer
 
   constructor (buyer: Buyer) {
     this.buyer = buyer

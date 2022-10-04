@@ -1,11 +1,12 @@
 import { mount } from 'enzyme'
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 
-import { FormFieldset, Props } from 'Settings/components/Common/FormFieldset'
+import type { Props } from 'Settings/components/Common/FormFieldset'
 
 const defaultProps: Props = {}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(
-  <FormFieldset { ...{ ...defaultProps, ...props } }>
+  <FormFieldset {...{ ...defaultProps, ...props }}>
     <div id="child">The Child</div>
   </FormFieldset>
 )

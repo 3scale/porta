@@ -1,15 +1,16 @@
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
+import { PermissionsForm } from 'Users/components/PermissionsForm'
 
-import { PermissionsForm, Props } from 'Users/components/PermissionsForm'
-
-import type { Role, Feature, AdminSection } from 'Users/types'
+import type { ReactWrapper } from 'enzyme'
+import type { Props } from 'Users/components/PermissionsForm'
+import type { AdminSection, Feature, Role } from 'Users/types'
 import type { Api } from 'Types'
 
 function getWrapper (testProps?: Partial<Props>) {
   const defaultProps: Props = { features: [], services: [] }
   const props: Props = { ...defaultProps, ...testProps }
 
-  wrapper = mount(<PermissionsForm { ...props } />)
+  wrapper = mount(<PermissionsForm {...props} />)
 }
 
 let wrapper: ReactWrapper
@@ -83,15 +84,15 @@ describe('when role is "member"', () => {
     })
 
     expect(wrapper.containsAllMatchingElements([
-      <input id={'user_member_permission_ids_portal'} />,
-      <input id={'user_member_permission_ids_finance'} />,
-      <input id={'user_member_permission_ids_settings'} />
+      <input id="user_member_permission_ids_portal" />,
+      <input id="user_member_permission_ids_finance" />,
+      <input id="user_member_permission_ids_settings" />
     ])).toBe(true)
 
     expect(wrapper.containsAllMatchingElements([
-      <input id={'user_member_permission_ids_partners'} />,
-      <input id={'user_member_permission_ids_monitoring'} />,
-      <input id={'user_member_permission_ids_plans'} />
+      <input id="user_member_permission_ids_partners" />,
+      <input id="user_member_permission_ids_monitoring" />,
+      <input id="user_member_permission_ids_plans" />
     ])).toBe(false)
 
     getWrapper({
@@ -100,15 +101,15 @@ describe('when role is "member"', () => {
     })
 
     expect(wrapper.containsAllMatchingElements([
-      <input id={'user_member_permission_ids_partners'} />,
-      <input id={'user_member_permission_ids_monitoring'} />,
-      <input id={'user_member_permission_ids_plans'} />
+      <input id="user_member_permission_ids_partners" />,
+      <input id="user_member_permission_ids_monitoring" />,
+      <input id="user_member_permission_ids_plans" />
     ])).toBe(true)
 
     expect(wrapper.containsAllMatchingElements([
-      <input id={'user_member_permission_ids_portal'} />,
-      <input id={'user_member_permission_ids_finance'} />,
-      <input id={'user_member_permission_ids_settings'} />
+      <input id="user_member_permission_ids_portal" />,
+      <input id="user_member_permission_ids_finance" />,
+      <input id="user_member_permission_ids_settings" />
     ])).toBe(false)
   })
 

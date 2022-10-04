@@ -1,8 +1,8 @@
 import $ from 'jquery'
 import MockDate from 'mockdate'
+import { CustomRangeDate, PeriodRangeDate, StatsState } from 'Stats/lib/state'
 
-import { StatsState, PeriodRangeDate, CustomRangeDate } from 'Stats/lib/state'
-import { StatsStore } from 'Stats/lib/store'
+import type { StatsStore } from 'Stats/lib/store'
 
 describe('StatsState', () => {
   const save = jest.fn()

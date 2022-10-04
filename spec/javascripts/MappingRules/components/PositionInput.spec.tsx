@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { PositionInput } from 'MappingRules/components/PositionInput'
 
-import { PositionInput, Props } from 'MappingRules/components/PositionInput'
+import type { Props } from 'MappingRules/components/PositionInput'
 
 const defaultProps = {
   position: 0,

@@ -1,31 +1,31 @@
-import { ThunkAction as ReduxThunkAction } from 'redux-thunk'
+import type { ThunkAction as ReduxThunkAction } from 'redux-thunk'
 import type {
   AddPolicyToChainAction,
-  RemovePolicyFromChainAction,
-  SortPolicyChainAction,
-  UpdatePolicyInChainAction,
   FetchChainErrorAction,
   LoadChainAction,
-  LoadChainSuccessAction,
   LoadChainErrorAction,
-  UpdatePolicyChainAction
+  LoadChainSuccessAction,
+  RemovePolicyFromChainAction,
+  SortPolicyChainAction,
+  UpdatePolicyChainAction,
+  UpdatePolicyInChainAction
 } from 'Policies/actions/PolicyChain'
 import type { SetOriginalPolicyChainAction } from 'Policies/actions/OriginalPolicyChain'
 import type { UIComponentTransitionAction } from 'Policies/actions/UISettings'
 import type {
-  FetchRegistrySuccessAction,
   FetchRegistryErrorAction,
+  FetchRegistrySuccessAction,
   LoadRegistrySuccessAction
 } from 'Policies/actions/PolicyRegistry'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 import type { ChainPolicy, PolicyConfig, RegistryPolicy, State } from 'Policies/types'
 
-type PolicyChainAction = AddPolicyToChainAction | SortPolicyChainAction | LoadChainSuccessAction | LoadChainErrorAction | UpdatePolicyChainAction;
-type PolicyRegistryAction = FetchRegistrySuccessAction | FetchRegistryErrorAction | LoadRegistrySuccessAction;
-type PolicyConfigAction = UpdatePolicyConfigAction;
+type PolicyChainAction = AddPolicyToChainAction | SortPolicyChainAction | LoadChainSuccessAction | LoadChainErrorAction | UpdatePolicyChainAction
+type PolicyRegistryAction = FetchRegistrySuccessAction | FetchRegistryErrorAction | LoadRegistrySuccessAction
+type PolicyConfigAction = UpdatePolicyConfigAction
 
-export type PolicyChainMiddlewareAction = UpdatePolicyInChainAction | RemovePolicyFromChainAction | LoadChainAction;
-export type Action = PolicyConfigAction | PolicyRegistryAction | PolicyChainAction | UIComponentTransitionAction | PolicyChainMiddlewareAction | SetOriginalPolicyChainAction;
+export type PolicyChainMiddlewareAction = UpdatePolicyInChainAction | RemovePolicyFromChainAction | LoadChainAction
+export type Action = PolicyConfigAction | PolicyRegistryAction | PolicyChainAction | UIComponentTransitionAction | PolicyChainMiddlewareAction | SetOriginalPolicyChainAction
 
 export type ThunkAction = ReduxThunkAction<void, State, void, Action>
 
@@ -46,5 +46,5 @@ export interface IPoliciesActions {
   ) => ThunkAction;
 }
 
-export type FetchErrorAction = FetchChainErrorAction | FetchRegistryErrorAction;
-export type PromiseAction = Promise<Action>;
+export type FetchErrorAction = FetchChainErrorAction | FetchRegistryErrorAction
+export type PromiseAction = Promise<Action>

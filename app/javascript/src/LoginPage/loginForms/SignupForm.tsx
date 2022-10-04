@@ -1,17 +1,18 @@
-import React from 'react'
+import * as React from 'react'
 import {
-  Form,
   ActionGroup,
-  Button
+  Button,
+  Form
 } from '@patternfly/react-core'
 import {
-  HiddenInputs,
-  TextField,
-  PasswordField,
   EmailField,
+  HiddenInputs,
+  PasswordField,
+  TextField,
   validateSingleField
 } from 'LoginPage'
-import { SignupProps, InputProps, InputType } from 'Types'
+
+import type { InputProps, InputType, SignupProps } from 'Types'
 
 type InputNames = 'user[username]' | 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password]' | 'user[password_confirmation]'
 
@@ -74,7 +75,7 @@ class SignupForm extends React.Component<SignupProps, State> {
       value: this.state[INPUT_NAMES[name]] as string,
       onChange: this.handleInputChange
     }
-  };
+  }
 
   handleInputChange: (arg1: string, arg2: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
@@ -87,7 +88,7 @@ class SignupForm extends React.Component<SignupProps, State> {
       [event.currentTarget.name]: value,
       validation
     } as State)
-  };
+  }
 
   render (): React.ReactElement {
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
@@ -100,26 +101,29 @@ class SignupForm extends React.Component<SignupProps, State> {
     const passwordConfirmationInputProps = this.getInputProps('passwordConfirmation', true)
 
     return (
-      <Form noValidate
+      <Form
+        noValidate
+        acceptCharset='UTF-8'
         action={this.props.path}
         id='signup_form'
-        acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs />
-        <TextField inputProps={usernameInputProps}/>
-        <EmailField inputProps={emailInputProps}/>
-        <TextField inputProps={firstNameInputProps}/>
-        <TextField inputProps={lastNameInputProps}/>
-        <PasswordField inputProps={passwordInputProps}/>
-        <PasswordField inputProps={passwordConfirmationInputProps}/>
+        <TextField inputProps={usernameInputProps} />
+        <EmailField inputProps={emailInputProps} />
+        <TextField inputProps={firstNameInputProps} />
+        <TextField inputProps={lastNameInputProps} />
+        <PasswordField inputProps={passwordInputProps} />
+        <PasswordField inputProps={passwordConfirmationInputProps} />
 
         <ActionGroup>
-          <Button className='pf-c-button pf-m-primary pf-m-block'
-            type='submit'
-            name="commit"
+          <Button
+            className='pf-c-button pf-m-primary pf-m-block'
             isDisabled={formDisabled}
-          >Sign up</Button>
+            name="commit"
+            type='submit'
+          >Sign up
+          </Button>
         </ActionGroup>
       </Form>
     )

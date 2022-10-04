@@ -1,4 +1,4 @@
-import { canFeatureSetServicePermissions, toggleElementInCollection, getFeatureName } from 'Users/utils'
+import { canFeatureSetServicePermissions, getFeatureName, toggleElementInCollection } from 'Users/utils'
 
 import type { Feature } from 'Users/types'
 

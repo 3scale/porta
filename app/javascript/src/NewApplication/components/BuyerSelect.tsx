@@ -1,8 +1,9 @@
 
 import { sortable } from '@patternfly/react-table'
 import { fetchPaginatedBuyers } from 'NewApplication/data'
-import { SelectWithModal, Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
+import { SelectWithModal } from 'Common/components/SelectWithModal'
 
+import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 import type { Buyer } from 'NewApplication/types'
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
   onSelectBuyer: (arg1: Buyer | null) => void,
   buyersPath?: string,
   isDisabled?: boolean
-};
+}
 
 const BuyerSelect: React.FunctionComponent<Props> = ({
   buyer,
@@ -30,21 +31,21 @@ const BuyerSelect: React.FunctionComponent<Props> = ({
 
   return (
     <SelectWithModal
-      label="Account"
+      cells={cells}
+      fetchItems={(params) => fetchPaginatedBuyers(buyersPath, params)}
+      footerLabel="View all accounts"
+      header="Recently created accounts"
       id="account_id"
-      name="account_id"
+      isDisabled={isDisabled}
       item={buyer}
       items={buyers.map(b => ({ ...b, description: `Admin: ${b.admin}` }))}
       itemsCount={buyersCount}
-      cells={cells}
-      onSelect={onSelectBuyer}
-      fetchItems={(params) => fetchPaginatedBuyers(buyersPath, params)}
-      header="Recently created accounts"
-      isDisabled={isDisabled}
-      title="Select an account"
+      label="Account"
+      name="account_id"
       placeholder="Select an account"
       searchPlaceholder="Find an account"
-      footerLabel="View all accounts"
+      title="Select an account"
+      onSelect={onSelectBuyer}
     />
   )
 }

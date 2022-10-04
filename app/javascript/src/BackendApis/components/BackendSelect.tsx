@@ -1,7 +1,6 @@
-
 import { Button } from '@patternfly/react-core'
 import { PlusCircleIcon } from '@patternfly/react-icons'
-import { SelectWithModal } from 'Common'
+import { SelectWithModal } from 'Common/components/SelectWithModal'
 
 import type { Backend } from 'Types'
 
@@ -13,8 +12,8 @@ type Props = {
   onCreateNewBackend: () => void,
   error?: string,
   searchPlaceholder?: string,
-  onSelect: (arg1: Backend | null) => void
-};
+  onSelect: (backend: Backend | null) => void
+}
 
 const BackendSelect: React.FunctionComponent<Props> = ({
   backend,
@@ -33,32 +32,33 @@ const BackendSelect: React.FunctionComponent<Props> = ({
   return (
     <>
       <SelectWithModal
-        label="Backend"
+        cells={cells}
+        fetchItems={() => { throw new Error('Function not implemented.') }} // FIXME: add it or make it optional
+        footerLabel="View all backends"
+        header="Recently created backends"
+        helperTextInvalid={error}
         id="backend_api_config_backend_api_id"
-        name="backend_api_config[backend_api_id]"
         item={backend}
         items={backends.map(b => ({ ...b, description: b.privateEndpoint }))}
         itemsCount={backends.length}
-        cells={cells}
-        onSelect={onSelect}
-        header="Recently created backends"
-        title="Select a backend"
+        label="Backend"
+        name="backend_api_config[backend_api_id]"
         placeholder="Select a backend"
-        footerLabel="View all backends"
         searchPlaceholder={searchPlaceholder}
-        helperTextInvalid={error}
-        // FIXME: add it or make it optional
-        fetchItems={() => { throw new Error('Function not implemented.') }} />
+        title="Select a backend"
+        onSelect={onSelect}
+      />
       <Button
-        variant="link"
-        icon={<PlusCircleIcon />}
-        onClick={onCreateNewBackend}
-        data-testid="newBackendCreateBackend-buttonLink"
         className="pf-c-button__as-hint"
+        data-testid="newBackendCreateBackend-buttonLink"
+        icon={<PlusCircleIcon />}
+        variant="link"
+        onClick={onCreateNewBackend}
       >
         Create a backend
       </Button>
     </>
   )
 }
+
 export { BackendSelect, Props }

@@ -1,15 +1,17 @@
 
 import { act } from 'react-dom/test-utils'
-import { render, mount, ReactWrapper } from 'enzyme'
-import { NewApplicationForm, Props } from 'NewApplication/components/NewApplicationForm'
+import { mount, render } from 'enzyme'
+import { NewApplicationForm } from 'NewApplication/components/NewApplicationForm'
 import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
 import { UserDefinedField } from 'Common/components/UserDefinedField'
 import { isSubmitDisabled } from 'utilities/test-utils'
-
-import { FieldDefinition } from 'Types'
-import { Buyer, Product, ApplicationPlan, ServicePlan } from 'NewApplication/types'
-
 import * as alert from 'utilities/alert'
+
+import type { FieldDefinition } from 'Types'
+import type { ApplicationPlan, Buyer, Product, ServicePlan } from 'NewApplication/types'
+import type { Props } from 'NewApplication/components/NewApplicationForm'
+import type { ReactWrapper } from 'enzyme'
+
 const errorSpy = jest.spyOn(alert, 'error')
 
 const appPlans = [{ id: 0, name: 'Basic Plan', default: false }]
@@ -38,8 +40,8 @@ const defaultProps = {
   error: undefined
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
-const renderWrapper = (props: Partial<Props> = {}) => render(<NewApplicationForm {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<NewApplicationForm {...{ ...defaultProps, ...props }} />)
+const renderWrapper = (props: Partial<Props> = {}) => render(<NewApplicationForm {...{ ...defaultProps, ...props }} />)
 
 const select = (wrapper: ReactWrapper, from: string, obj: { name: string }) => {
   const toggle = wrapper.find(`${from} .pf-c-select__toggle-button`)

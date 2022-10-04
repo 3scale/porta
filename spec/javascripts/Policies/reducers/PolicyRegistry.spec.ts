@@ -1,6 +1,7 @@
 import RegistryReducer from 'Policies/reducers/PolicyRegistry'
 import { initialState } from 'Policies/reducers/initialState'
-import { RegistryPolicy } from 'Policies/types'
+
+import type { RegistryPolicy } from 'Policies/types'
 
 const registry: RegistryPolicy[] = [{
   $schema: 'http://apicast.io/policy-v1/schema#manifest',

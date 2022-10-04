@@ -6,7 +6,7 @@ type Props = {
   setPassword: (arg1: string) => void,
   isRequired?: boolean,
   errors: string[]
-};
+}
 
 const PasswordInput = (
   {
@@ -15,23 +15,25 @@ const PasswordInput = (
     isRequired,
     errors
   }: Props
-): React.ReactElement => <FormGroup
-  isRequired={isRequired}
-  label="Password"
-  validated="default"
-  fieldId="email_configuration_password"
-  isValid={!errors.length}
-  helperTextInvalid={errors.toString()}
->
-  <TextInput
-    type="password"
-    id="email_configuration_password"
-    name="email_configuration[password]"
-    value={password}
-    onChange={setPassword}
+): React.ReactElement => (
+  <FormGroup
+    fieldId="email_configuration_password"
+    helperTextInvalid={errors.toString()}
+    isRequired={isRequired}
     isValid={!errors.length}
-    autoComplete="new-password"
-  />
-</FormGroup>
+    label="Password"
+    validated="default"
+  >
+    <TextInput
+      autoComplete="new-password"
+      id="email_configuration_password"
+      isValid={!errors.length}
+      name="email_configuration[password]"
+      type="password"
+      value={password}
+      onChange={setPassword}
+    />
+  </FormGroup>
+)
 
 export { PasswordInput, Props }

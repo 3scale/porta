@@ -1,16 +1,16 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer, generateGuid } from 'Policies/util'
 
-import { ChainPolicy, RegistryPolicy } from 'Policies/types'
-import {
+import type { ChainPolicy, RegistryPolicy } from 'Policies/types'
+import type {
   AddPolicyToChainAction,
   FetchChainSuccessAction,
   SortPolicyChainAction,
   UpdatePolicyChainAction
 } from 'Policies/actions/PolicyChain'
-import { Reducer } from 'redux'
+import type { Reducer } from 'redux'
 
-export type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction;
+export type UpdateChainPolicies = FetchChainSuccessAction | SortPolicyChainAction
 
 function createChainPolicy (policy: RegistryPolicy): ChainPolicy {
   return { ...policy, humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid() }

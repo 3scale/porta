@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme'
-
 import { FormLegend } from 'Settings/components/Common/FormLegend'
 
 test('FormLegend', () => {
@@ -14,7 +13,7 @@ test('FormLegend with additional class name', () => {
 
 test('FormLegend with additional class name and props', () => {
   const view = shallow(
-    <FormLegend className="first-class" id="legendary" data-label-name="Legendary">
+    <FormLegend className="first-class" data-label-name="Legendary" id="legendary">
       I am Legendary
     </FormLegend>
   )

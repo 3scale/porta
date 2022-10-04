@@ -1,6 +1,7 @@
 import PolicyConfigReducer from 'Policies/reducers/PolicyConfig'
 import { initialState } from 'Policies/reducers/initialState'
-import { ChainPolicy } from 'Policies/types'
+
+import type { ChainPolicy } from 'Policies/types'
 
 const schema = {
   properties: {

@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { EmailInput } from 'EmailConfigurations/components/form-fields/EmailInput'
 
-import { EmailInput, Props } from 'EmailConfigurations/components/form-fields/EmailInput'
+import type { Props } from 'EmailConfigurations/components/form-fields/EmailInput'
 
 const setEmail = jest.fn()
 const defaultProps = {

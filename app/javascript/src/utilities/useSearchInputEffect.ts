@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-type OnSearch = (term?: string) => void;
+type OnSearch = (term?: string) => void
 
 /**
 * Custom React hook to use with input fields of type search

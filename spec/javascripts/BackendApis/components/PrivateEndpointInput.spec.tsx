@@ -1,7 +1,8 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInput'
 
-import { PrivateEndpointInput, Props } from 'BackendApis/components/PrivateEndpointInput'
+import type { Props } from 'BackendApis/components/PrivateEndpointInput'
 
 const setPrivateEndpoint = jest.fn()
 

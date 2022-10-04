@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { HttpMethodSelect } from 'MappingRules/components/HttpMethodSelect'
 
-import { HttpMethodSelect, Props } from 'MappingRules/components/HttpMethodSelect'
+import type { Props } from 'MappingRules/components/HttpMethodSelect'
 
 const defaultProps = {
   httpMethod: 'GET',

@@ -7,10 +7,8 @@ import {
   Popover,
   TextInput
 } from '@patternfly/react-core'
-// import { Popover } from '@patternfly/react-core/dist/js/components/Popover/Popover.js'
 import { SearchIcon } from '@patternfly/react-icons'
-
-import { createReactWrapper } from 'utilities'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import './ToolbarSearch.scss'
 
@@ -18,7 +16,7 @@ type Props = {
   placeholder: string,
   name?: string,
   children?: React.ReactNode
-};
+}
 
 const FORM_ID = 'toolbar-search-form'
 const INPUT_NAME_QUERY = 'search[query]'
@@ -82,8 +80,8 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
 
   return (
     <Form
-      id={FORM_ID}
       acceptCharset="UTF-8"
+      id={FORM_ID}
       method="get"
       role="search"
       onSubmit={e => e.preventDefault()}
@@ -93,14 +91,14 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
         {children}
         <TextInput
           // HACK: remove this ugly casting after upgrading to @patternfly/react-core 4
-          ref={inputRef as unknown as React.Ref<HTMLInputElement> | undefined}
-          placeholder={placeholder}
-          name={name}
-          type="search"
           aria-label="Search"
+          autoComplete="off"
+          name={name}
+          placeholder={placeholder}
+          ref={inputRef as unknown as React.Ref<HTMLInputElement> | undefined}
+          type="search"
           value={searchText}
           onChange={setSearchText}
-          autoComplete="off"
         />
         <Popopover
           aria-label="search minimum length"
@@ -109,8 +107,8 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           shouldClose={() => setShowPopover(false)}
         >
           <Button
-            variant={ButtonVariant.control}
             aria-label="search button for search input"
+            variant={ButtonVariant.control}
             onClick={() => onSubmitSearch(searchText)}
           >
             <SearchIcon />
@@ -121,6 +119,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const ToolbarSearchWrapper = (props: Props, containerId: string): void => createReactWrapper(<ToolbarSearch {...props} />, containerId)
 
 export { ToolbarSearch, ToolbarSearchWrapper, Props }

@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react'
-
-import { CompactListCard } from 'Common'
-import { createReactWrapper, useSearchInputEffect } from 'utilities'
+import { useRef, useState } from 'react'
+import { CompactListCard } from 'Common/components/CompactListCard'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { useSearchInputEffect } from 'utilities/useSearchInputEffect'
 
 import type { CompactListItem } from 'Common/components/CompactListCard'
 
@@ -28,16 +28,17 @@ const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
     <CompactListCard
       columns={['Name', 'Private Endpoint']}
       items={filteredBackends}
-      searchInputRef={searchInputRef}
-      onSearch={handleOnSearch}
       page={page}
-      setPage={setPage}
       searchInputPlaceholder="Find a backend"
+      searchInputRef={searchInputRef}
+      setPage={setPage}
       tableAriaLabel="Backends used in this product"
+      onSearch={handleOnSearch}
     />
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsUsedListCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsUsedListCard {...props} />, containerId)
 
 export { BackendsUsedListCard, BackendsUsedListCardWrapper, Props }

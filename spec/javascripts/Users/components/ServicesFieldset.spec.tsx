@@ -1,7 +1,8 @@
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
+import { ServicesFieldset } from 'Users/components/ServicesFieldset'
 
-import { ServicesFieldset, Props } from 'Users/components/ServicesFieldset'
-
+import type { ReactWrapper } from 'enzyme'
+import type { Props } from 'Users/components/ServicesFieldset'
 import type { Api } from 'Types'
 
 let wrapper: ReactWrapper

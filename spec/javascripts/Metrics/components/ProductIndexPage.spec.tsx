@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { ProductIndexPage } from 'Metrics/components/ProductIndexPage'
 
-import { ProductIndexPage, Props } from 'Metrics/components/ProductIndexPage'
+import type { Props } from 'Metrics/components/ProductIndexPage'
 
 const defaultProps: Props = {
   applicationPlansPath: '/plans',

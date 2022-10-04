@@ -1,7 +1,8 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+import { SystemNameInput } from 'BackendApis/components/SystemNameInput'
 
-import { SystemNameInput, Props } from 'BackendApis/components/SystemNameInput'
+import type { Props } from 'BackendApis/components/SystemNameInput'
 
 const setSystemName = jest.fn()
 

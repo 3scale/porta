@@ -1,14 +1,14 @@
 import { useState } from 'react'
-
-import { createReactWrapper, CSRFToken } from 'utilities'
 import {
   ActionGroup,
   Button,
-  Form,
   Card,
-  CardBody
+  CardBody,
+  Form
 } from '@patternfly/react-core'
-import { Select as SelectFormGroup } from 'Common'
+import { Select as SelectFormGroup } from 'Common/components/Select'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { Record as Plan } from 'Types'
 
@@ -17,7 +17,7 @@ import './ChangePlanSelectCard.scss'
 type Props = {
   applicationPlans: Plan[],
   path: string
-};
+}
 
 const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
   applicationPlans,
@@ -33,28 +33,28 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
       <CardBody>
         <Form
           acceptCharset="UTF-8"
-          method="post"
           action={path}
+          method="post"
         >
           <CSRFToken />
-          <input type="hidden" name="utf8" value="✓" />
-          <input type="hidden" name="_method" value="put" />
+          <input name="utf8" type="hidden" value="✓" />
+          <input name="_method" type="hidden" value="put" />
 
           <SelectFormGroup
-            label={<h3>Change plan</h3>}
+            fieldId="cinstance_plan_id"
             item={plan}
             items={plans}
-            onSelect={setPlan}
-            fieldId="cinstance_plan_id"
+            label={<h3>Change plan</h3>}
             name="cinstance[plan_id]"
             placeholderText="Select plan"
+            onSelect={setPlan}
           />
 
           <ActionGroup>
             <Button
-              variant="primary"
-              type="submit"
               isDisabled={!plan}
+              type="submit"
+              variant="primary"
             >
               Change plan
             </Button>
@@ -65,6 +65,7 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const ChangePlanSelectCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<ChangePlanSelectCard {...props} />, containerId)
 
 export { ChangePlanSelectCard, ChangePlanSelectCardWrapper, Props }

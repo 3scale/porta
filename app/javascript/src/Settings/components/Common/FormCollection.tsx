@@ -1,12 +1,14 @@
+/* eslint-disable react/jsx-props-no-spreading */
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
+import { FormLegend } from 'Settings/components/Common/FormLegend'
 
-import { FormFieldset, FormLegend } from 'Settings/components/Common'
-import { FieldGroupProps } from 'Settings/types'
+import type { FieldGroupProps } from 'Settings/types'
 
 type Props = {
   collection: FieldGroupProps[],
   ItemComponent: React.FunctionComponent<FieldGroupProps>,
   legend: string
-};
+}
 
 const FormCollection: React.FunctionComponent<Props> = ({
   collection,

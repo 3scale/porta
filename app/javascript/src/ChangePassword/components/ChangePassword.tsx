@@ -1,26 +1,27 @@
-import { createReactWrapper } from 'utilities'
-import { LoginPage, Form, ActionGroup, Button } from '@patternfly/react-core'
-import { PasswordField, PasswordConfirmationField, HiddenInputs, FlashMessages } from 'LoginPage'
-import { useFormState } from 'ChangePassword'
-import type { FlashMessage, InputProps } from 'Types'
-
-import 'LoginPage/assets/styles/loginPage.scss'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { ActionGroup, Button, Form, LoginPage } from '@patternfly/react-core'
+import { useFormState } from 'ChangePassword/components/ChangePasswordHooks'
+import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
+import { PasswordField, PasswordConfirmationField } from 'LoginPage/loginForms/FormGroups'
+import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
+import 'LoginPage/assets/styles/loginPage.scss'
+
+import type { FlashMessage, InputProps } from 'Types'
+import type { FunctionComponent } from 'react'
 
 type Props = {
   lostPasswordToken: string | null | undefined,
   url: string,
   errors?: FlashMessage[]
-};
+}
 
-const ChangePassword = (
-  {
-    lostPasswordToken,
-    url,
-    errors
-  }: Props
-): React.ReactElement => {
+const ChangePassword: FunctionComponent<Props> = ({
+  lostPasswordToken,
+  url,
+  errors
+}) => {
   const {
     isFormDisabled,
     onFormChange,
@@ -55,36 +56,34 @@ const ChangePassword = (
 
   return (
     <LoginPage
-      brandImgSrc={brandImg}
-      brandImgAlt='Red Hat 3scale API Management'
-      backgroundImgSrc={PF4DownstreamBG}
       backgroundImgAlt='Red Hat 3scale API Management'
+      backgroundImgSrc={PF4DownstreamBG}
+      brandImgAlt='Red Hat 3scale API Management'
+      brandImgSrc={brandImg}
       loginTitle='Change Password'
     >
-      {errors && <FlashMessages flashMessages={errors}/>}
+      {errors && <FlashMessages flashMessages={errors} />}
       <Form
-        action={url}
         noValidate
-        id='edit_user_2'
         acceptCharset='UTF-8'
+        action={url}
+        id='edit_user_2'
         method='post'
         onChange={onFormChange}
       >
-        <input type='hidden' name='_method' value='put' />
+        <input name='_method' type='hidden' value='put' />
         <HiddenInputs />
         <PasswordField inputProps={passwordProps} />
         <PasswordConfirmationField inputProps={passwordConfirmationProps} />
-        {lostPasswordToken &&
-          <input id='password_reset_token' type='hidden' name='password_reset_token' value={lostPasswordToken} />
-        }
+        {lostPasswordToken ? <input id='password_reset_token' name='password_reset_token' type='hidden' value={lostPasswordToken} /> : null}
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'
-            type='submit'
-            name='commit'
             isDisabled={isFormDisabled}
+            name='commit'
+            type='submit'
           >
-            Change Password
+          Change Password
           </Button>
         </ActionGroup>
       </Form>
@@ -92,6 +91,7 @@ const ChangePassword = (
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const ChangePasswordWrapper = (props: Props, containerId: string): void => createReactWrapper(<ChangePassword {...props} />, containerId)
 
 export { ChangePassword, ChangePasswordWrapper }

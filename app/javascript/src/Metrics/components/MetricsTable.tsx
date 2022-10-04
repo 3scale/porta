@@ -1,24 +1,20 @@
-
 import {
   Button,
   Divider,
   Pagination as PFPagination,
-  PaginationProps,
   PaginationVariant,
   Toolbar,
   ToolbarGroup,
   ToolbarItem
 } from '@patternfly/react-core'
-import {
-  Table,
-  TableHeader,
-  TableBody
-} from '@patternfly/react-table'
+import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import { CheckIcon } from '@patternfly/react-icons'
-import { ToolbarSearch } from 'Common'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
-import type { TabKey } from 'Metrics'
+import type { PaginationProps } from '@patternfly/react-core'
+import type { TabKey } from 'Metrics/types'
 import type { Metric } from 'Types'
+import type { FunctionComponent, ReactElement } from 'react'
 
 import './MetricsTable.scss'
 
@@ -29,18 +25,16 @@ type Props = {
   metrics: Metric[],
   metricsCount: number,
   createButton: React.ReactNode
-};
+}
 
-const MetricsTable = (
-  {
-    activeTabKey,
-    mappingRulesPath,
-    addMappingRulePath,
-    metrics,
-    metricsCount,
-    createButton
-  }: Props
-): React.ReactElement => {
+const MetricsTable: FunctionComponent<Props> = ({
+  activeTabKey,
+  mappingRulesPath,
+  addMappingRulePath,
+  metrics,
+  metricsCount,
+  createButton
+}) => {
   const url = new URL(window.location.href)
 
   const isActiveTabMetrics = activeTabKey === 'metrics'
@@ -56,7 +50,7 @@ const MetricsTable = (
   const tableRows = metrics.map(m => ({
     disableActions: false,
     cells: [
-      { title: <Button href={m.path} component="a" variant="link" isInline>{m.name}</Button> },
+      { title: <Button isInline component="a" href={m.path} variant="link">{m.name}</Button> },
       m.systemName,
       m.unit,
       m.description,
@@ -82,26 +76,23 @@ const MetricsTable = (
     window.location.replace(url.toString())
   }
 
-  const Pagination = ({
-    variant
-  }: {
-    variant?: PaginationProps['variant']
-  }) => {
+  // eslint-disable-next-line react/no-multi-comp
+  const Pagination = ({ variant }: Pick<PaginationProps, 'variant'>): ReactElement<PaginationProps> => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
     return (
       <PFPagination
         itemCount={metricsCount}
-        perPage={Number(perPage) || 20}
         page={Number(page)}
-        onPerPageSelect={selectPerPage}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onPageInput={(_ev, page) => goToPage(page)}
+        perPage={Number(perPage) || 20}
         perPageOptions={[10, 20].map(n => ({ title: String(n), value: n }))}
         variant={variant}
+        onFirstClick={(_ev, page) => goToPage(page)}
+        onLastClick={(_ev, page) => goToPage(page)}
+        onNextClick={(_ev, page) => goToPage(page)}
+        onPageInput={(_ev, page) => goToPage(page)}
+        onPerPageSelect={selectPerPage}
+        onPreviousClick={(_ev, page) => goToPage(page)}
       />
     )
   }
@@ -112,7 +103,7 @@ const MetricsTable = (
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarGroup> {/* TODO: add variant='filter-group' after upgrading @patternfly/react-core */}
           <ToolbarItem>
-            <ToolbarSearch placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`} name="query">
+            <ToolbarSearch name="query" placeholder={`Find a ${isActiveTabMetrics ? 'metric' : 'method'}`}>
               <input name="tab" type="hidden" value={activeTabKey} />
             </ToolbarSearch>
           </ToolbarItem>
@@ -131,7 +122,7 @@ const MetricsTable = (
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar id="bottom-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
+      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
         <Pagination variant={PaginationVariant.bottom} />
       </Toolbar>
     </>

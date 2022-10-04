@@ -1,6 +1,5 @@
 import { act } from 'react-dom/test-utils'
 import { mount, shallow } from 'enzyme'
-
 import { ServiceSourceForm } from 'NewService'
 
 const serviceDiscoveryAuthenticateUrl = 'my-url'

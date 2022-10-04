@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import type { Api } from 'Types'
 import type { AdminSection } from 'Users/types'
 
@@ -30,12 +31,13 @@ const ServicesFieldset: React.FunctionComponent<Props> = ({
         {services.map(service => (
           <ServiceCheckbox
             key={service.id}
-            service={service}
             checked={allServicesChecked || selectedServicesIds.includes(service.id)}
             disabled={allServicesChecked}
             selectedSections={selectedSections}
+            service={service}
             onChange={onServiceSelected}
-          />))}
+          />
+        ))}
       </ol>
     </fieldset>
   )
@@ -69,13 +71,13 @@ const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
     <li className='ServiceAccessList-item'>
       <label className='ServiceAccessList-label is-checked' htmlFor={`user_member_permission_service_ids_${id}`}>
         <input
+          checked={checked}
           className='user_member_permission_service_ids'
+          disabled={disabled}
           id={`user_member_permission_service_ids_${id}`}
           name='user[member_permission_service_ids][]'
           type='checkbox'
           value={id}
-          checked={checked}
-          disabled={disabled}
           onChange={() => onChange(id)}
         />
         <span className='ServiceAccessList-labelText'>{name}</span>

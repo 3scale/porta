@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 // TODO: Replace this component when patternfly-react implements it.
 
 import styles from '@patternfly/react-styles/css/components/Form/form'

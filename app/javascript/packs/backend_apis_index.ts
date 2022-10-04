@@ -1,7 +1,7 @@
 import { BackendsIndexPageWrapper } from 'BackendApis/components/IndexPage'
 import { safeFromJsonString } from 'utilities'
 
-import { Backend } from 'BackendApis/types'
+import type { Backend } from 'BackendApis/types'
 
 const containerId = 'backend-apis'
 

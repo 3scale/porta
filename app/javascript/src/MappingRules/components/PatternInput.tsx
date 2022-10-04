@@ -6,7 +6,7 @@ type Props = {
   validatePattern: (arg1: string) => void,
   validated: 'default' | 'success' | 'error' | undefined,
   helperTextInvalid: string
-};
+}
 
 const PatternInput = (
   {
@@ -19,18 +19,18 @@ const PatternInput = (
   return (
     <FormGroup
       isRequired
-      label="Pattern"
-      validated={validated}
       fieldId="proxy_rule_pattern"
       helperText={(
         <>Examples: <span className="pf-m-redhatmono-font">{'/my-path/{someid}, /collection/{id}?filter={value}'}</span></>
       )}
       helperTextInvalid={helperTextInvalid}
+      label="Pattern"
+      validated={validated}
     >
       <TextInput
-        type="text"
         id="proxy_rule_pattern"
         name="proxy_rule[pattern]"
+        type="text"
         value={pattern}
         onChange={validatePattern}
       />

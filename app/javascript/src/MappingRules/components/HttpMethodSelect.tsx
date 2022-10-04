@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react'
+import { useState } from 'react'
 import {
   FormGroup,
   Select,
@@ -6,11 +6,13 @@ import {
   SelectVariant
 } from '@patternfly/react-core'
 
+import type { FunctionComponent } from 'react'
+
 type Props = {
   httpMethod: string,
   httpMethods: Array<string>,
   setHttpMethod: (arg1: string) => void
-};
+}
 
 const HttpMethodSelect: FunctionComponent<Props> = ({
   httpMethod,
@@ -27,17 +29,17 @@ const HttpMethodSelect: FunctionComponent<Props> = ({
   return (
     <FormGroup
       isRequired
-      label="Verb"
       fieldId="proxy_rule_http_method"
+      label="Verb"
     >
-      <input type="hidden" name="proxy_rule[http_method]" value={httpMethod} id="proxy_rule_http_method" />
+      <input id="proxy_rule_http_method" name="proxy_rule[http_method]" type="hidden" value={httpMethod} />
       <Select
-        variant={SelectVariant.single}
         aria-label="Select a httpMethod"
-        onToggle={setIsExpanded}
-        onSelect={handleOnSelect}
-        selections={httpMethod}
         isExpanded={isExpanded}
+        selections={httpMethod}
+        variant={SelectVariant.single}
+        onSelect={handleOnSelect}
+        onToggle={setIsExpanded}
       >
         {httpMethods.map(v => <SelectOption key={v} value={v} />)}
       </Select>

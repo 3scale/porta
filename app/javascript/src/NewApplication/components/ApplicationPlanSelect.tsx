@@ -9,7 +9,7 @@ type Props = {
   product: Product | null,
   onSelect: (arg1: ApplicationPlan | null) => void,
   createApplicationPlanPath: string
-};
+}
 
 const ApplicationPlanSelect: React.FunctionComponent<Props> = ({
   appPlan,
@@ -23,7 +23,7 @@ const ApplicationPlanSelect: React.FunctionComponent<Props> = ({
   const hint = (
     <p className="hint">
       {"An application must subscribe to a product's application plan. No application plans exist for the selected product. "}
-      <Button component="a" variant="link" href={createApplicationPlanPath} isInline>
+      <Button isInline component="a" href={createApplicationPlanPath} variant="link">
         Create a new application plan
       </Button>
     </p>
@@ -31,16 +31,16 @@ const ApplicationPlanSelect: React.FunctionComponent<Props> = ({
 
   return (
     <Select
+      isRequired
+      fieldId="cinstance_plan_id"
+      hint={showHint ? hint : null}
+      isDisabled={product === null || !appPlans.length}
       item={appPlan}
       items={appPlans}
-      onSelect={onSelect}
       label="Application plan"
-      fieldId="cinstance_plan_id"
       name="cinstance[plan_id]"
       placeholderText="Select an application plan"
-      hint={showHint && hint}
-      isDisabled={product === null || !appPlans.length}
-      isRequired
+      onSelect={onSelect}
     />
   )
 }

@@ -2,15 +2,12 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": ["./tsconfig.json"],
     "ecmaVersion": 6,
     "ecmaFeatures": {
       "impliedStrict": true,
       "jsx": true
-    },
-    // "project": ["./tsconfig.json"],
-    // "sourceType": "module",
-    // "allowImportExportEverywhere": false,
-    // "codeFrame": false
+    }
   },
   "env": {
     "browser": true,
@@ -22,20 +19,71 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    // "plugin:react/all",
+    // "plugin:react/recommended",
     "plugin:react/jsx-runtime"
-    // "standard",
-    // "plugin:@typescript-eslint/recommended",
   ],
   "plugins": [
     "@typescript-eslint",
-    "react"
+    "react",
+    "import",
+    "jsx-expressions"
   ],
   "rules": {
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "no-console": ["warn", { "allow": ["error"] }],
-    "no-duplicate-imports": "error",
-    "@typescript-eslint/no-explicit-any": "off" // TODO: only temporary!!
+    "no-duplicate-imports": "off",
+    "sort-imports": "off",
+    "semi": "off",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/consistent-type-imports": 2,
+    "@typescript-eslint/no-duplicate-imports": "error",
+    "@typescript-eslint/no-explicit-any": "off", // TODO: only temporary!!
+    "react/prop-types": "off",
+    "react/hook-use-state": "error",
+    "react/no-array-index-key": "warn",
+    "react/no-multi-comp": "error",
+    "react/self-closing-comp": "error",
+    "react/jsx-boolean-value": "error",
+    "react/jsx-child-element-spacing": "warn",
+    "react/jsx-closing-bracket-location": "error",
+    "react/jsx-closing-tag-location": "error",
+    "react/jsx-curly-brace-presence": "error",
+    "react/jsx-curly-newline": ["error", { "multiline": "forbid", "singleline": "forbid" }],
+    "react/jsx-curly-spacing": ["error", { "when": "never" }],
+    "react/jsx-equals-spacing": ["error", "never"],
+    "react/jsx-first-prop-new-line": ["error", "multiline"],
+    "react/jsx-fragments": ["error", "syntax"],
+    "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
+    "react/jsx-no-constructed-context-values": "error",
+    "react/jsx-no-useless-fragment": "error",
+    "react/jsx-props-no-multi-spaces": "error",
+    "react/jsx-props-no-spreading": "warn",
+    "react/jsx-sort-props": ["error", {
+      "callbacksLast": true,
+      "shorthandFirst": true,
+      "reservedFirst": ["key"]
+    }],
+    "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }],
+    "react/jsx-wrap-multilines": ["error", {
+      "declaration": "parens-new-line",
+      "assignment": "parens-new-line",
+      "return": "parens-new-line",
+      "arrow": "parens-new-line",
+      "condition": "parens-new-line",
+      "logical": "parens-new-line"
+    }],
+    "import/order": ["error", {
+      "warnOnUnassignedImports": true,
+      "groups": ["builtin", "index", "parent", "internal", "external", "object", "type", "sibling"],
+      "newlines-between": "always"
+    }],
+    "import/newline-after-import": "error",
+    "import/no-relative-packages": "error",
+    "jsx-expressions/strict-logical-expressions": "error" // Instead of using "react/jsx-no-leaked-render"
   },
   "settings": {
     "react": {
@@ -43,6 +91,9 @@
     }
   },
   "ignorePatterns": [
-    "spec/javascripts/__mocks__/"
+    "jest.config.js",
+    "spec/javascripts/setupTests.ts",
+    "spec/javascripts/__mocks__/",
+    "app/javascript/src/Stats" // We better avoid touching this module, eslint may automatically fix some of the errors and break it.
   ]
 }

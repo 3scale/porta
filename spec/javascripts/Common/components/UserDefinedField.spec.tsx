@@ -1,7 +1,8 @@
 import { mount } from 'enzyme'
+import { UserDefinedField } from 'Common/components/UserDefinedField'
 
-import { UserDefinedField, Props } from 'Common/components/UserDefinedField'
-import { FieldDefinition } from 'Types'
+import type { Props } from 'Common/components/UserDefinedField'
+import type { FieldDefinition } from 'Types'
 
 const onChange = jest.fn()
 

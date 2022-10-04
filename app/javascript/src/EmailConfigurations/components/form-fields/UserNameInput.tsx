@@ -6,7 +6,7 @@ type Props = {
   setUserName: (arg1: string) => void,
   isRequired?: boolean,
   errors: string[]
-};
+}
 
 const UserNameInput = (
   {
@@ -15,22 +15,24 @@ const UserNameInput = (
     isRequired,
     errors
   }: Props
-): React.ReactElement => <FormGroup
-  isRequired={isRequired}
-  label="Username"
-  validated="default"
-  fieldId="email_configuration_user_name"
-  isValid={!errors.length}
-  helperTextInvalid={errors.toString()}
->
-  <TextInput
-    type="text"
-    id="email_configuration_user_name"
-    name="email_configuration[user_name]"
-    value={userName}
-    onChange={setUserName}
+): React.ReactElement => (
+  <FormGroup
+    fieldId="email_configuration_user_name"
+    helperTextInvalid={errors.toString()}
+    isRequired={isRequired}
     isValid={!errors.length}
-  />
-</FormGroup>
+    label="Username"
+    validated="default"
+  >
+    <TextInput
+      id="email_configuration_user_name"
+      isValid={!errors.length}
+      name="email_configuration[user_name]"
+      type="text"
+      value={userName}
+      onChange={setUserName}
+    />
+  </FormGroup>
+)
 
 export { UserNameInput, Props }

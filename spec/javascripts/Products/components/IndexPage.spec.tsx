@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
-
-import { IndexPage, Props } from 'Products/components/IndexPage'
+import { IndexPage } from 'Products/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
 
+import type { Props } from 'Products/components/IndexPage'
 import type { Product } from 'Products/types'
 
 const defaultProps: Props = {

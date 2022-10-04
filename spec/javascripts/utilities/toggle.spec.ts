@@ -1,4 +1,4 @@
-import { toggle, toggleState, recoverState, moveState } from 'utilities/toggle'
+import { moveState, recoverState, toggle, toggleState } from 'utilities/toggle'
 
 let icon: HTMLElement, article: HTMLElement
 

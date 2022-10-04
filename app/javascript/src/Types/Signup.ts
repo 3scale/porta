@@ -1,5 +1,5 @@
-import { AllHTMLAttributes } from 'react'
-import { FlashMessage } from 'Types'
+import type { AllHTMLAttributes } from 'react'
+import type { FlashMessage } from 'Types'
 
 export type SignupProps = {
   name?: string,
@@ -11,7 +11,7 @@ export type SignupProps = {
     username: string,
     errors?: FlashMessage[]
   }
-};
+}
 
 export type InputProps = {
   isRequired: boolean,
@@ -25,6 +25,6 @@ export type InputProps = {
   autoFocus?: AllHTMLAttributes<HTMLInputElement>['autoFocus'],
   ariaInvalid?: boolean,
   errorMessage?: string
-};
+}
 
 export type InputType = 'username' | 'email' | 'firstName' | 'lastName' | 'password' | 'passwordConfirmation'

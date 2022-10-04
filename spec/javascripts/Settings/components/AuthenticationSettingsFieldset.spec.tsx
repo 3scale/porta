@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme'
-
 import { AuthenticationSettingsFieldset } from 'Settings/components/AuthenticationSettingsFieldset'
 import { AUTHENTICATION_SETTINGS_DEFAULT } from 'Settings/defaults'
 

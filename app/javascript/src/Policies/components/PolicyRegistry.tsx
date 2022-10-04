@@ -11,7 +11,7 @@ type Props = {
     addPolicy: (arg1: RegistryPolicy) => ThunkAction,
     closePolicyRegistry: () => ThunkAction
   }
-};
+}
 
 const PolicyRegistry: React.FunctionComponent<Props> = ({
   items,
@@ -26,8 +26,8 @@ const PolicyRegistry: React.FunctionComponent<Props> = ({
     </header>
     <ul className="list-group">
       {items.filter(isNotApicastPolicy).map(p => (
-        <li className="Policy" key={p.name}>
-          <PolicyTile policy={p} onClick={() => addPolicy(p)} title="Add this Policy" />
+        <li key={p.name} className="Policy">
+          <PolicyTile policy={p} title="Add this Policy" onClick={() => addPolicy(p)} />
         </li>
       ))}
     </ul>

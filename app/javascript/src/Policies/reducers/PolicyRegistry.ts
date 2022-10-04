@@ -1,9 +1,9 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer } from 'Policies/util'
 
-import { RegistryPolicy } from 'Policies/types'
-import { FetchRegistrySuccessAction } from 'Policies/actions/PolicyRegistry'
-import { Reducer } from 'redux'
+import type { RegistryPolicy } from 'Policies/types'
+import type { FetchRegistrySuccessAction } from 'Policies/actions/PolicyRegistry'
+import type { Reducer } from 'redux'
 
 function updateRegistry (state: Array<RegistryPolicy>, action: FetchRegistrySuccessAction): Array<RegistryPolicy> {
   return [...action.payload]

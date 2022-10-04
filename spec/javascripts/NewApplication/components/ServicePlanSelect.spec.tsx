@@ -1,6 +1,9 @@
 
-import { ServicePlanSelect, Props } from 'NewApplication/components/ServicePlanSelect'
-import { mount, ReactWrapper } from 'enzyme'
+import { ServicePlanSelect } from 'NewApplication/components/ServicePlanSelect'
+import { mount } from 'enzyme'
+
+import type { Props } from 'NewApplication/components/ServicePlanSelect'
+import type { ReactWrapper } from 'enzyme'
 
 const defaultProps = {
   servicePlan: null,

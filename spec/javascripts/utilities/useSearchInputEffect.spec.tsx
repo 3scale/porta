@@ -1,11 +1,12 @@
-import { FunctionComponent } from 'react'
 import { mount } from 'enzyme'
-
 import { useSearchInputEffect } from 'utilities/useSearchInputEffect'
+
+import type { FunctionComponent } from 'react'
 
 const HookedComponent: FunctionComponent<{ inputRef: any, onSearch: jest.Mock }> = (props) => {
   useSearchInputEffect(props.inputRef, props.onSearch)
 
+  // eslint-disable-next-line react/no-unescaped-entities
   return <div>I'm Hooked!</div>
 }
 

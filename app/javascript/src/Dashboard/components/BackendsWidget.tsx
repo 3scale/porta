@@ -3,16 +3,17 @@ import {
   Card,
   CardActions,
   CardBody,
-  CardHeader,
   CardFooter,
-  Title,
-  DataList
+  CardHeader,
+  DataList,
+  Title
 } from '@patternfly/react-core'
 import { CubeIcon } from '@patternfly/react-icons'
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
-import { createReactWrapper } from 'utilities'
-
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import 'Dashboard/styles/dashboard.scss'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   newBackendPath: string,
@@ -29,26 +30,26 @@ type Props = {
     // eslint-disable-next-line camelcase
     updated_at: string
   }>
-};
+}
 
-const BackendsWidget = ({
+const BackendsWidget: FunctionComponent<Props> = ({
   newBackendPath,
   backendsPath,
   backends
-}: Props) => (
+}) => (
   <Card className="pf-c-card">
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
-        <CubeIcon/>
+        <CubeIcon />
         <Title headingLevel="h1" size="xl">
           Backends
         </Title>
         <CardActions>
           <Button
-            data-testid="dashboardCreateBackend-buttonLink"
             component="a"
-            variant="primary"
+            data-testid="dashboardCreateBackend-buttonLink"
             href={newBackendPath}
+            variant="primary"
           >
             Create Backend
           </Button>
@@ -60,17 +61,18 @@ const BackendsWidget = ({
     </CardHeader>
     <CardBody>
       <DataList aria-label="">
-        {backends.map(api => <APIDataListItem api={api} key={api.id}/>)}
+        {backends.map(api => <APIDataListItem key={api.id} api={api} />)}
       </DataList>
     </CardBody>
     <CardFooter>
-      <Button variant="link" component="a" isInline href={backendsPath}>
+      <Button isInline component="a" href={backendsPath} variant="link">
         Explore all Backends
       </Button>
     </CardFooter>
   </Card>
 )
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsWidget {...props} />, containerId)
 
 export { BackendsWidget, BackendsWidgetWrapper, Props }

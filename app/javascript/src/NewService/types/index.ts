@@ -11,7 +11,7 @@ export type ServiceFormTemplate = {
     system_name?: string[],
     description?: string[]
   }
-};
+}
 /* eslint-enable camelcase */
 
 export type FormProps = {
@@ -20,4 +20,4 @@ export type FormProps = {
   hasHiddenServiceDiscoveryInput?: boolean,
   submitText: string,
   children?: React.ReactNode
-};
+}

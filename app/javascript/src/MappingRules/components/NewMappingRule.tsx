@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ActionGroup,
   Button,
@@ -6,18 +6,18 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { CSRFToken, createReactWrapper } from 'utilities'
-import {
-  MetricInput,
-  PatternInput,
-  RedirectUrlInput,
-  IncrementByInput,
-  IsLastCheckbox,
-  PositionInput,
-  HttpMethodSelect
-} from 'MappingRules'
+import { HttpMethodSelect } from 'MappingRules/components/HttpMethodSelect'
+import { IncrementByInput } from 'MappingRules/components/IncrementByInput'
+import { IsLastCheckbox } from 'MappingRules/components/IsLastCheckbox'
+import { MetricInput } from 'MappingRules/components/MetricInput'
+import { PatternInput } from 'MappingRules/components/PatternInput'
+import { PositionInput } from 'MappingRules/components/PositionInput'
+import { RedirectUrlInput } from 'MappingRules/components/RedirectUrlInput'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { Metric } from 'Types'
+import type { FunctionComponent } from 'react'
 
 import './NewMappingRule.scss'
 
@@ -30,9 +30,9 @@ type Props = {
   methods: Array<Metric>,
   httpMethods: Array<string>,
   errors?: Error
-};
+}
 
-type Validated = 'success' | 'error' | 'default' | undefined;
+type Validated = 'success' | 'error' | 'default' | undefined
 
 const NewMappingRule: FunctionComponent<Props> = ({
   url,
@@ -42,18 +42,18 @@ const NewMappingRule: FunctionComponent<Props> = ({
   httpMethods,
   errors
 }) => {
-  const [httpMethod, setHttpMethod] = React.useState(httpMethods[0])
-  const [pattern, setPattern] = React.useState('')
-  const [patternValidated, setPatternValidated] = React.useState<Validated>('default')
-  const [helperTextInvalid, setHelperTextInvalid] = React.useState('')
-  const [metric, setMetric] = React.useState<Metric | null>(null)
-  const [redirectUrl, setRedirectUrl] = React.useState('')
-  const [increment, setIncrement] = React.useState(1)
-  const [isLast, setIsLast] = React.useState(false)
-  const [position, setPosition] = React.useState(0)
-  const [loading, setLoading] = React.useState(false)
+  const [httpMethod, setHttpMethod] = useState(httpMethods[0])
+  const [pattern, setPattern] = useState('')
+  const [patternValidated, setPatternValidated] = useState<Validated>('default')
+  const [helperTextInvalid, setHelperTextInvalid] = useState('')
+  const [metric, setMetric] = useState<Metric | null>(null)
+  const [redirectUrl, setRedirectUrl] = useState('')
+  const [increment, setIncrement] = useState(1)
+  const [isLast, setIsLast] = useState(false)
+  const [position, setPosition] = useState(0)
+  const [loading, setLoading] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (errors && errors.pattern) {
       setPatternValidated('error')
       setHelperTextInvalid(errors.pattern.slice().join())
@@ -75,10 +75,10 @@ const NewMappingRule: FunctionComponent<Props> = ({
   return (
     <PageSection variant={PageSectionVariants.light}>
       <Form
-        id="new_mapping_rule"
         acceptCharset="UTF-8"
-        method="post"
         action={url}
+        id="new_mapping_rule"
+        method="post"
         onSubmit={() => setLoading(true)}
         // isWidthLimited TODO: use when available instead of hardcoded css
       >
@@ -86,8 +86,8 @@ const NewMappingRule: FunctionComponent<Props> = ({
         <input name="utf8" type="hidden" value="✓" />
 
         <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
-        <PatternInput pattern={pattern} validatePattern={() => validatePattern} validated={patternValidated} helperTextInvalid={helperTextInvalid}/>
-        <MetricInput metric={metric} topLevelMetrics={topLevelMetrics} methods={methods} setMetric={setMetric} />
+        <PatternInput helperTextInvalid={helperTextInvalid} pattern={pattern} validatePattern={() => validatePattern} validated={patternValidated} />
+        <MetricInput methods={methods} metric={metric} setMetric={setMetric} topLevelMetrics={topLevelMetrics} />
         {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
         <IncrementByInput increment={increment} setIncrement={setIncrement} />
         <IsLastCheckbox isLast={isLast} setIsLast={setIsLast} />
@@ -95,10 +95,10 @@ const NewMappingRule: FunctionComponent<Props> = ({
 
         <ActionGroup>
           <Button
-            variant="primary"
-            type="submit"
-            isDisabled={!isFormComplete || loading}
             data-testid="newMappingRule-buttonSubmit"
+            isDisabled={!isFormComplete || loading}
+            type="submit"
+            variant="primary"
           >
             Create mapping rule
           </Button>
@@ -108,6 +108,7 @@ const NewMappingRule: FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const NewMappingRuleWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewMappingRule {...props} />, containerId)
 
 export { NewMappingRule, NewMappingRuleWrapper, Props }

@@ -5,7 +5,7 @@ type Props = {
   disabled?: boolean,
   onChange?: (event: React.SyntheticEvent<HTMLSelectElement>) => void,
   options: Array<string>
-};
+}
 
 const Select: React.FunctionComponent<Props> = ({
   name,
@@ -13,14 +13,16 @@ const Select: React.FunctionComponent<Props> = ({
   disabled,
   onChange,
   options
-}) => <select
-  required
-  name={name}
-  id={id}
-  disabled={disabled}
-  onChange={onChange}
->
-  { options.map((option) => <option key={option} value={option}>{option}</option>) }
-</select>
+}) => (
+  <select
+    required
+    disabled={disabled}
+    id={id}
+    name={name}
+    onChange={onChange}
+  >
+    { options.map((option) => <option key={option} value={option}>{option}</option>) }
+  </select>
+)
 
 export { Select }

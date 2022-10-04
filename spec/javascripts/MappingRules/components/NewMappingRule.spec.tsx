@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { NewMappingRule } from 'MappingRules/components/NewMappingRule'
 
-import { NewMappingRule, Props } from 'MappingRules/components/NewMappingRule'
+import type { Props } from 'MappingRules/components/NewMappingRule'
 
 const defaultProps: Props = {
   url: 'mapping_rules/new',

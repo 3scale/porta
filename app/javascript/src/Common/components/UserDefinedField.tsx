@@ -9,7 +9,7 @@ type Props = {
   value: string,
   onChange: (arg1: string) => void,
   validationErrors?: string[]
-};
+}
 
 const UserDefinedField = (
   {
@@ -35,32 +35,32 @@ const UserDefinedField = (
 
   return choices ? (
     <Select
-      label={label}
-      isRequired={required}
       fieldId={id}
-      name={name}
+      helperTextInvalid={validationErrors[0]}
+      isRequired={required}
+      isValid={isValid}
       item={item}
       items={choices.map(str => ({
         id: str,
         name: str
       }))}
-      isValid={isValid}
-      helperTextInvalid={validationErrors[0]}
+      label={label}
+      name={name}
       onSelect={handleOnSelect}
     />
   ) : (
     <FormGroup
-      label={label}
+      fieldId={id}
+      helperTextInvalid={validationErrors[0]}
       isRequired={required}
       isValid={isValid}
-      helperTextInvalid={validationErrors[0]}
-      fieldId={id}
+      label={label}
     >
       <TextInput
-        isValid={isValid}
-        type="text"
         id={id}
+        isValid={isValid}
         name={name}
+        type="text"
         value={value}
         onChange={onChange}
       />

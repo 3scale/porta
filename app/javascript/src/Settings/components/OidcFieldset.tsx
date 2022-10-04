@@ -1,8 +1,15 @@
-import { FunctionComponent, useState } from 'react'
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/no-multi-comp */
+import { useState } from 'react'
+import { Checkbox } from '@patternfly/react-core'
+import { TypeItemCombo } from 'Settings/components/Common/TypeItemCombo'
+import { FormCollection } from 'Settings/components/Common/FormCollection'
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
+import { FormLegend } from 'Settings/components/Common/FormLegend'
 
-import { Checkbox, CheckboxProps } from '@patternfly/react-core'
-import { FormCollection, FormFieldset, FormLegend, TypeItemCombo } from 'Settings/components/Common'
-import { TypeItemProps, FieldGroupProps } from 'Settings/types'
+import type { CheckboxProps } from '@patternfly/react-core'
+import type { FunctionComponent } from 'react'
+import type { FieldGroupProps, TypeItemProps } from 'Settings/types'
 
 const Basics: FunctionComponent<TypeItemProps> = (props) => (
   <TypeItemCombo {...props} legend='OIDC BASICS' />
@@ -18,9 +25,9 @@ const FlowItem: FunctionComponent<FieldGroupProps> = ({ name, label, checked }) 
   return (
     <Checkbox
       id={`service_proxy_attributes_oidc_configuration_attributes_${name}_input`}
-      name={`service[proxy_attributes][oidc_configuration_attributes][${name}]`}
-      label={label}
       isChecked={isChecked}
+      label={label}
+      name={`service[proxy_attributes][oidc_configuration_attributes][${name}]`}
       onChange={onChange}
     />
   )
@@ -35,7 +42,7 @@ type Props = {
   basicSettings: TypeItemProps,
   jwtSettings: TypeItemProps,
   flowSettings: FieldGroupProps[]
-};
+}
 
 const OidcFieldset: FunctionComponent<Props> = ({
   isServiceMesh,

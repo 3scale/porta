@@ -1,5 +1,4 @@
 import $ from 'jquery'
-
 import 'Dashboard/chart'
 
 export function widget (url) {

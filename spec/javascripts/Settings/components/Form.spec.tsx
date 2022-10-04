@@ -1,11 +1,12 @@
 import { shallow } from 'enzyme'
+import { Form } from 'Settings/components/Form'
+import { INTEGRATION_METHOD_DEFAULTS, SETTINGS_DEFAULT } from 'Settings/defaults'
 
-import { Form, Props } from 'Settings/components/Form'
-import { SETTINGS_DEFAULT, INTEGRATION_METHOD_DEFAULTS } from 'Settings/defaults'
+import type { Props } from 'Settings/components/Form'
 
 const defaultProps: Props = SETTINGS_DEFAULT
 
-const mountWrapper = (props: Partial<Props> = {}) => shallow(<Form { ...{ ...defaultProps, ...props } } />)
+const mountWrapper = (props: Partial<Props> = {}) => shallow(<Form {...{ ...defaultProps, ...props }} />)
 
 it('should render correctly', () => {
   const view = mountWrapper()

@@ -1,23 +1,17 @@
-import React from 'react'
-import { createReactWrapper } from 'utilities'
 import 'url-polyfill'
-
+import { Component } from 'react'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage } from '@patternfly/react-core'
-
-import {
-  ForgotCredentials,
-  Login3scaleForm,
-  AuthenticationProviders,
-  ProvidersProps,
-  FlashMessages
-} from 'LoginPage'
-
-import 'LoginPage/assets/styles/loginPage.scss'
-
+import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProviders'
+import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
+import { ForgotCredentials } from 'LoginPage/loginForms/ForgotCredentials'
+import { Login3scaleForm } from 'LoginPage/loginForms/Login3scaleForm'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
+import 'LoginPage/assets/styles/loginPage.scss'
 
-import { FlashMessage } from 'Types'
+import type { ProvidersProps } from 'LoginPage/loginForms/AuthenticationProviders'
+import type { FlashMessage } from 'Types'
 
 type Props = {
   authenticationProviders: Array<ProvidersProps>,
@@ -32,13 +26,13 @@ type Props = {
   session: {
     username: string | null | undefined
   }
-};
+}
 
 type State = {
   loginTitle: string
-};
+}
 
-class SimpleLoginPage extends React.Component<Props, State> {
+class SimpleLoginPage extends Component<Props, State> {
   constructor (props: Props) {
     super(props)
     this.state = {
@@ -57,19 +51,19 @@ class SimpleLoginPage extends React.Component<Props, State> {
     const show3scaleLoginForm = this.props.show3scaleLoginForm
     return (
       <>
-        { show3scaleLoginForm &&
-            <Login3scaleForm
-              providerSessionsPath={this.props.providerSessionsPath}
-              session={this.props.session}
-            />
-        }
-        { hasAuthenticationProviders &&
+        { show3scaleLoginForm && (
+          <Login3scaleForm
+            providerSessionsPath={this.props.providerSessionsPath}
+            session={this.props.session}
+          />
+        )}
+        { hasAuthenticationProviders && (
           <div className='providers-separator'>
             <AuthenticationProviders
               authenticationProviders={this.props.authenticationProviders}
             />
           </div>
-        }
+        )}
       </>
     )
   }
@@ -77,24 +71,22 @@ class SimpleLoginPage extends React.Component<Props, State> {
   render () {
     return (
       <LoginPage
-        brandImgSrc={brandImg}
-        brandImgAlt='Red Hat 3scale API Management'
-        backgroundImgSrc={PF4DownstreamBG}
         backgroundImgAlt='Red Hat 3scale API Management'
-        loginTitle={this.state.loginTitle}
+        backgroundImgSrc={PF4DownstreamBG}
+        brandImgAlt='Red Hat 3scale API Management'
+        brandImgSrc={brandImg}
         forgotCredentials={this.showForgotCredentials()}
-        // footer={null}
+        loginTitle={this.state.loginTitle}
+        // footer={null
       >
-        {
-          this.props.flashMessages &&
-          <FlashMessages flashMessages={this.props.flashMessages}/>
-        }
+        { this.props.flashMessages && <FlashMessages flashMessages={this.props.flashMessages} /> }
         { this.loginForm() }
       </LoginPage>
     )
   }
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const LoginPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<SimpleLoginPage {...props} />, containerId)
 
 export { SimpleLoginPage, LoginPageWrapper }

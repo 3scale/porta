@@ -1,7 +1,8 @@
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
+import { RoleRadioGroup } from 'Users/components/RoleRadioGroup'
 
-import { RoleRadioGroup, Props } from 'Users/components/RoleRadioGroup'
-
+import type { ReactWrapper } from 'enzyme'
+import type { Props } from 'Users/components/RoleRadioGroup'
 import type { Role } from 'Users/types'
 
 function getWrapper (testProps?: Partial<Props>) {

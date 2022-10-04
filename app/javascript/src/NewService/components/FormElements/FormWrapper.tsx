@@ -1,21 +1,22 @@
-import type { FormProps } from 'NewService/types'
 import { CSRFToken } from 'utilities'
 import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
 import { Button } from '@patternfly/react-core'
+
+import type { FormProps } from 'NewService/types'
 
 const FormWrapper = (props: FormProps): React.ReactElement => {
   const { id, formActionPath, hasHiddenServiceDiscoveryInput, submitText } = props
   return (
     <form
+      acceptCharset="UTF-8"
+      action={formActionPath}
       className='formtastic service'
       id={id}
-      action={formActionPath}
-      acceptCharset="UTF-8"
       method="post"
     >
-      <input name="utf8" type="hidden" value="✓"/>
+      <input name="utf8" type="hidden" value="✓" />
       <CSRFToken />
-      {hasHiddenServiceDiscoveryInput && <HiddenServiceDiscoveryInput />}
+      {hasHiddenServiceDiscoveryInput ? <HiddenServiceDiscoveryInput /> : null}
       <fieldset className="inputs" name="Service">
         <legend><span>Product</span></legend>
         <ol>
@@ -24,10 +25,12 @@ const FormWrapper = (props: FormProps): React.ReactElement => {
       </fieldset>
       <fieldset className="buttons">
         <Button
+          className="create"
           data-testid="newProductCreateProduct-buttonSubmit"
-          type="submit"
           name="commit"
-          className="create">{ submitText }</Button>
+          type="submit"
+        >{ submitText }
+        </Button>
       </fieldset>
     </form>
   )

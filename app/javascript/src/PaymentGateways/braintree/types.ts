@@ -9,7 +9,7 @@ export type BillingAddressData = {
   phone_number: string,
   state: string,
   zip: string
-};
+}
 
 export type HostedFieldsOptions = {
   styles: {
@@ -21,4 +21,4 @@ export type HostedFieldsOptions = {
       placeholder: string
     }
   }
-};
+}

@@ -1,9 +1,9 @@
 import { mount } from 'enzyme'
-
 import { PolicyRegistry } from 'Policies/components/PolicyRegistry'
 import { PolicyTile } from 'Policies/components/PolicyTile'
 import { HeaderButton } from 'Policies/components/HeaderButton'
-import { RegistryPolicy } from 'Policies/types'
+
+import type { RegistryPolicy } from 'Policies/types'
 
 function setup () {
   const policies: RegistryPolicy[] = [

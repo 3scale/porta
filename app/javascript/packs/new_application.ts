@@ -1,7 +1,8 @@
 import { NewApplicationFormWrapper } from 'NewApplication/components/NewApplicationForm'
 import { safeFromJsonString } from 'utilities/json-utils'
-import { Buyer, Product } from 'NewApplication/types'
-import { FieldDefinition } from 'Types'
+
+import type { Buyer, Product } from 'NewApplication/types'
+import type { FieldDefinition } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'new-application-form'

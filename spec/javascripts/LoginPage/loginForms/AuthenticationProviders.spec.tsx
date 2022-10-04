@@ -1,5 +1,4 @@
 import { mount } from 'enzyme'
-
 import { AuthenticationProviders } from 'LoginPage'
 
 const props = {

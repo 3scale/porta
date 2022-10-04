@@ -1,7 +1,11 @@
-
-import { FormCollection, FormFieldset, FormLegend, TextInputGroup } from 'Settings/components/Common'
+/* eslint-disable react/jsx-props-no-spreading */
+import { FormCollection } from 'Settings/components/Common/FormCollection'
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
+import { FormLegend } from 'Settings/components/Common/FormLegend'
+import { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
 import { OidcFieldset } from 'Settings/components/OidcFieldset'
-import { FieldGroupProps, TypeItemProps } from 'Settings/types'
+
+import type { FieldGroupProps, TypeItemProps } from 'Settings/types'
 
 const OIDC_AUTH_METHOD = 'oidc'
 const API_KEY_METHOD = '1'
@@ -17,7 +21,7 @@ type Props = {
     flowSettings: FieldGroupProps[],
     jwtSettings: TypeItemProps
   }
-};
+}
 
 const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
   isServiceMesh,
@@ -33,9 +37,9 @@ const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
     (!isServiceMesh || isOidc) && (
       <FormFieldset id='fieldset-AuthenticationSettings'>
         <FormLegend>Authentication Settings</FormLegend>
-        { isApiKey && <FormCollection collection={[apiKeySettings]} ItemComponent={TextInputGroup} legend='API KEY (USER_KEY) BASICS' /> }
-        { isAppIdKey && <FormCollection collection={appIdKeyPairSettings} ItemComponent={TextInputGroup} legend='APP_ID AND APP_KEY PAIR BASICS' /> }
-        { isOidc && <OidcFieldset {...oidcSettings} isServiceMesh={isServiceMesh} /> }
+        { isApiKey ? <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend='API KEY (USER_KEY) BASICS' /> : null }
+        { isAppIdKey ? <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend='APP_ID AND APP_KEY PAIR BASICS' /> : null }
+        { isOidc ? <OidcFieldset {...oidcSettings} isServiceMesh={isServiceMesh} /> : null }
       </FormFieldset>
     )
   ) as React.ReactElement // Hack: Shortcircuit is not supported yet. See: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18912

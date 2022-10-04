@@ -1,4 +1,4 @@
-import { notice, error } from 'utilities/alert'
+import { error, notice } from 'utilities/alert'
 
 const noticeSpy = jest.spyOn((global as any).$.flash, 'notice')
 const errorSpy = jest.spyOn((global as any).$.flash, 'error')

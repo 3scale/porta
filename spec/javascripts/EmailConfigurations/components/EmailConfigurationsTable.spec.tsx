@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { EmailConfigurationsTable } from 'EmailConfigurations/components/EmailConfigurationsTable'
 
-import { EmailConfigurationsTable, Props } from 'EmailConfigurations/components/EmailConfigurationsTable'
+import type { Props } from 'EmailConfigurations/components/EmailConfigurationsTable'
 
 const defaultProps = {
   emailConfigurations: [],

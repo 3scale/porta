@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { NewPage } from 'EmailConfigurations/components/NewPage'
 
-import { NewPage, Props } from 'EmailConfigurations/components/NewPage'
+import type { Props } from 'EmailConfigurations/components/NewPage'
 
 const defaultProps = {
   emailConfiguration: {

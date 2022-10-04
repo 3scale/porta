@@ -1,26 +1,24 @@
-
 import {
   Button,
   Divider,
-  OnPerPageSelect,
   Pagination as PFPagination,
-  PaginationProps,
   PaginationVariant,
   Toolbar,
   ToolbarGroup,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
-  sortable,
   Table,
-  TableHeader,
   TableBody,
-  ISortBy,
-  OnSort
+  TableHeader,
+  sortable
 } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
+import type { ISortBy, OnSort } from '@patternfly/react-table'
+import type { OnPerPageSelect, PaginationProps } from '@patternfly/react-core'
 import type { EmailConfiguration } from 'EmailConfigurations/types'
+import type { FunctionComponent, ReactElement } from 'react'
 
 import './EmailConfigurationsTable.scss'
 
@@ -28,15 +26,13 @@ type Props = {
   emailConfigurations: EmailConfiguration[],
   emailConfigurationsCount: number,
   newEmailConfigurationPath: string
-};
+}
 
-const EmailConfigurationsTable = (
-  {
-    emailConfigurations,
-    emailConfigurationsCount,
-    newEmailConfigurationPath
-  }: Props
-): React.ReactElement => {
+const EmailConfigurationsTable: FunctionComponent<Props> = ({
+  emailConfigurations,
+  emailConfigurationsCount,
+  newEmailConfigurationPath
+}) => {
   const url = new URL(window.location.href)
 
   const tableColumns = [
@@ -48,7 +44,7 @@ const EmailConfigurationsTable = (
   const tableRows = emailConfigurations.map(c => ({
     disableActions: false,
     cells: [
-      { title: <Button href={c.links.edit} component="a" variant="link" isInline>{c.email}</Button> },
+      { title: <Button isInline component="a" href={c.links.edit} variant="link">{c.email}</Button> },
       c.userName,
       c.updatedAt
     ]
@@ -75,26 +71,23 @@ const EmailConfigurationsTable = (
     window.location.replace(url.toString())
   }
 
-  const Pagination = ({
-    variant
-  }: {
-    variant?: PaginationProps['variant']
-  }) => {
+  // eslint-disable-next-line react/no-multi-comp
+  const Pagination = ({ variant }: Pick<PaginationProps, 'variant'>): ReactElement<PaginationProps> => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
     return (
       <PFPagination
         itemCount={emailConfigurationsCount}
-        perPage={Number(perPage) || 20}
         page={Number(page)}
-        onPerPageSelect={selectPerPage}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onPageInput={(_ev, page) => goToPage(page)}
+        perPage={Number(perPage) || 20}
         perPageOptions={[10, 20].map(n => ({ title: String(n), value: n }))}
         variant={variant}
+        onFirstClick={(_ev, page) => goToPage(page)}
+        onLastClick={(_ev, page) => goToPage(page)}
+        onNextClick={(_ev, page) => goToPage(page)}
+        onPageInput={(_ev, page) => goToPage(page)}
+        onPerPageSelect={selectPerPage}
+        onPreviousClick={(_ev, page) => goToPage(page)}
       />
     )
   }
@@ -105,14 +98,14 @@ const EmailConfigurationsTable = (
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarGroup> {/* TODO: add variant='filter-group' after upgrading @patternfly/react-core */}
           <ToolbarItem>
-            <ToolbarSearch placeholder="Find an email" name="query" />
+            <ToolbarSearch name="query" placeholder="Find an email" />
           </ToolbarItem>
           <ToolbarItem>
             <Button
-              href={newEmailConfigurationPath}
-              component="a"
-              variant="primary"
               isInline
+              component="a"
+              href={newEmailConfigurationPath}
+              variant="primary"
             >
               Add an Email configuration
             </Button>
@@ -130,7 +123,7 @@ const EmailConfigurationsTable = (
         <TableHeader />
         <TableBody />
       </Table>
-      <Toolbar id="bottom-toolbar" className="pf-c-toolbar pf-u-justify-content-space-between">
+      <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
         <Pagination variant={PaginationVariant.bottom} />
       </Toolbar>
     </>

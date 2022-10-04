@@ -1,8 +1,9 @@
-import { FunctionComponent } from 'react'
 import { shallow } from 'enzyme'
+import { FormCollection } from 'Settings/components/Common/FormCollection'
 
-import { FormCollection, Props } from 'Settings/components/Common/FormCollection'
-import { FieldGroupProps } from 'Settings/types'
+import type { FunctionComponent } from 'react'
+import type { Props } from 'Settings/components/Common/FormCollection'
+import type { FieldGroupProps } from 'Settings/types'
 
 it('should render correctly', () => {
   const GoodBand: FunctionComponent<FieldGroupProps> = ({ name }) => <span>{name} rocks!</span>

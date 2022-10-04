@@ -1,9 +1,10 @@
 import { mount } from 'enzyme'
-
 import { openSelectWithModal as openModal } from 'utilities/test-utils'
-import { SelectWithModal, Props } from 'Common/components/SelectWithModal'
+import { SelectWithModal } from 'Common/components/SelectWithModal'
 import { TableModal } from 'Common/components/TableModal'
-import { Record } from 'Types'
+
+import type { Props } from 'Common/components/SelectWithModal'
+import type { Record } from 'Types'
 
 const onSelect = jest.fn()
 const fetchItems = jest.fn()

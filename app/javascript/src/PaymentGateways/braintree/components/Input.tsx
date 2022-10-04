@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import type { FunctionComponent } from 'react'
 
 type Props = {
   id: string,
@@ -6,7 +6,7 @@ type Props = {
   name: string,
   value: string,
   onChange?: (event: React.SyntheticEvent<HTMLInputElement>) => void
-};
+}
 
 const Input: FunctionComponent<Props> = ({
   id,
@@ -14,14 +14,16 @@ const Input: FunctionComponent<Props> = ({
   name,
   value,
   onChange
-}) => <input
-  id={id}
-  required={required}
-  name={name}
-  value={value}
-  onChange={onChange}
-  className="col-md-6 form-control"
-  type="text"
-/>
+}) => (
+  <input
+    className="col-md-6 form-control"
+    id={id}
+    name={name}
+    required={required}
+    type="text"
+    value={value}
+    onChange={onChange}
+  />
+)
 
 export { Input, Props }

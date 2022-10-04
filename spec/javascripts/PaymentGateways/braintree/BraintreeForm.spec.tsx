@@ -1,9 +1,11 @@
 
-import { BraintreeForm, Props } from 'PaymentGateways/braintree/BraintreeForm'
+import { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
 import { mount } from 'enzyme'
-import { Client } from 'braintree-web'
 import * as hostedFields from 'braintree-web/hosted-fields'
 import * as validate from 'validate.js'
+
+import type { Client } from 'braintree-web'
+import type { Props } from 'PaymentGateways/braintree/BraintreeForm'
 
 jest.mock('braintree-web/hosted-fields')
 jest.spyOn(hostedFields, 'create').mockResolvedValue({

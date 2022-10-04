@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react'
-
-import { SortByDirection, ITransform } from '@patternfly/react-table'
+import { useEffect, useState } from 'react'
+import { SortByDirection } from '@patternfly/react-table'
+import { FancySelect } from 'Common/components/FancySelect'
+import { TableModal } from 'Common/components/TableModal'
+import { paginateCollection } from 'utilities/paginateCollection'
 import escapeRegExp from 'lodash.escaperegexp'
-import { FancySelect, TableModal } from 'Common'
-import { paginateCollection, Record } from 'utilities'
 
-import { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
+import type { Record } from 'utilities/patternfly-utils'
+import type { ITransform } from '@patternfly/react-table'
+import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
 
 import './SelectWithModal.scss'
 
@@ -26,31 +28,29 @@ type Props<T extends Record> = {
   footerLabel: string,
   helperTextInvalid?: string,
   fetchItems?: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
-};
+}
 
 const PER_PAGE = 5
 const MAX_ITEMS = 20
 
-const SelectWithModal = <T extends Record>(
-  {
-    label,
-    id,
-    name,
-    item,
-    items: initialItems,
-    itemsCount,
-    cells,
-    onSelect,
-    header,
-    isDisabled,
-    title,
-    placeholder,
-    searchPlaceholder,
-    footerLabel,
-    helperTextInvalid,
-    fetchItems
-  }: Props<T>
-): React.ReactElement => {
+const SelectWithModal = <T extends Record>({
+  label,
+  id,
+  name,
+  item,
+  items: initialItems,
+  itemsCount,
+  cells,
+  onSelect,
+  header,
+  isDisabled,
+  title,
+  placeholder,
+  searchPlaceholder,
+  footerLabel,
+  helperTextInvalid,
+  fetchItems
+}: Props<T>): React.ReactElement => {
   const [count, setCount] = useState(itemsCount)
   const [isLoading, setIsLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
@@ -134,38 +134,38 @@ const SelectWithModal = <T extends Record>(
   return (
     <>
       <FancySelect
-        label={label}
-        id={id}
-        name={name}
-        item={item || undefined}
-        items={initialItems.slice(0, MAX_ITEMS)}
-        onSelect={onSelect}
-        header={header}
         footer={shouldHaveModal ? {
           label: footerLabel,
           onClick: handleOnFooterClick
         } : undefined}
-        isDisabled={isDisabled}
-        placeholderText={placeholder}
+        header={header}
         helperTextInvalid={helperTextInvalid}
+        id={id}
+        isDisabled={isDisabled}
+        item={item || undefined}
+        items={initialItems.slice(0, MAX_ITEMS)}
+        label={label}
+        name={name}
+        placeholderText={placeholder}
+        onSelect={onSelect}
       />
 
       {shouldHaveModal && (
         <TableModal
-          title={title}
           cells={cells}
-          isOpen={modalOpen}
           isLoading={isLoading}
-          selectedItem={item}
-          pageItems={pageDictionary[page]}
+          isOpen={modalOpen}
           itemsCount={count}
-          onSelect={handleOnModalSelect}
-          onClose={handleOnModalClose}
           page={page}
-          setPage={handleModalOnSetPage}
-          onSearch={fetchItems ? setQuery : onLocalSearch}
+          pageItems={pageDictionary[page]}
           searchPlaceholder={searchPlaceholder}
+          selectedItem={item}
+          setPage={handleModalOnSetPage}
           sortBy={sortBy}
+          title={title}
+          onClose={handleOnModalClose}
+          onSearch={fetchItems ? setQuery : onLocalSearch}
+          onSelect={handleOnModalSelect}
         />
       )}
     </>

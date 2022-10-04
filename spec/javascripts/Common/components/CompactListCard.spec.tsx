@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { CompactListCard } from 'Common/components/CompactListCard'
 
-import { CompactListCard, Props } from 'Common/components/CompactListCard'
+import type { Props } from 'Common/components/CompactListCard'
 
 const onSearch = jest.fn()
 const setPage = jest.fn()

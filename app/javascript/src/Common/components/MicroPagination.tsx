@@ -8,7 +8,7 @@ type Props = {
   page: number,
   lastPage: number,
   setPage: (page: number) => void
-};
+}
 
 const MicroPagination = (
   {
@@ -22,11 +22,11 @@ const MicroPagination = (
 
   return (
     <div className="pf-c-pagination pf-c-pagination__micro">
-      <nav className="pf-c-pagination__nav" aria-label="Pagination">
-        <Button variant="plain" aria-label="Go to previous page" onClick={onPrevious} isDisabled={page === 1}>
+      <nav aria-label="Pagination" className="pf-c-pagination__nav">
+        <Button aria-label="Go to previous page" isDisabled={page === 1} variant="plain" onClick={onPrevious}>
           <AngleLeftIcon />
         </Button>
-        <Button variant="plain" aria-label="Go to next page" onClick={onNext} isDisabled={page === lastPage}>
+        <Button aria-label="Go to next page" isDisabled={page === lastPage} variant="plain" onClick={onNext}>
           <AngleRightIcon />
         </Button>
       </nav>

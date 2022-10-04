@@ -1,5 +1,4 @@
 import { render } from 'react-dom'
-
 import { Popover } from '@patternfly/react-core'
 
 import './SystemNamePopover.scss'
@@ -8,13 +7,11 @@ const Popopover: any = Popover // HACK: remove this after upgrading @patternfly/
 
 const SystemNamePopover: React.FunctionComponent = () => (
   <Popopover
-    maxWidth="420px"
     aria-label="system name info popover"
-    bodyContent={
-      <div style={{ textAlign: 'start' }}>The system name of methods and metrics includes a numeric string that identifies the backend they are mapped to. You cannot modify this backend identifier.</div>
-    }
+    bodyContent={<div style={{ textAlign: 'start' }}>The system name of methods and metrics includes a numeric string that identifies the backend they are mapped to. You cannot modify this backend identifier.</div>}
+    maxWidth="420px"
   >
-    <i className="fa fa-question-circle-o"/>
+    <i className="fa fa-question-circle-o" />
   </Popopover>
 )
 

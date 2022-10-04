@@ -17,7 +17,7 @@ export type CompactListItem = {
   name: string,
   href: string,
   description: string
-};
+}
 
 type Props = {
   columns: Array<string>,
@@ -29,7 +29,7 @@ type Props = {
   perPage?: number,
   searchInputPlaceholder?: string,
   tableAriaLabel?: string
-};
+}
 
 const PER_PAGE = 5
 
@@ -49,7 +49,7 @@ const CompactListCard: React.FunctionComponent<Props> = ({
 
   const rows = pageItems.map(i => ({
     cells: [
-      { title: <Button href={i.href} component="a" variant="link" isInline>{i.name}</Button> },
+      { title: <Button isInline component="a" href={i.href} variant="link">{i.name}</Button> },
       i.description
     ]
   }))
@@ -57,13 +57,13 @@ const CompactListCard: React.FunctionComponent<Props> = ({
   const header = (
     <InputGroup>
       <TextInput
-        type="search"
         aria-label="search for an item"
-        ref={searchInputRef}
         placeholder={searchInputPlaceholder}
+        ref={searchInputRef}
+        type="search"
       />
       {/* <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={onSearch} data-testid="search">  TODO: onSearch funcionaba con el evento del click??? */}
-      <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={() => onSearch()} data-testid="search">
+      <Button aria-label="search button for search input" data-testid="search" variant={ButtonVariant.control} onClick={() => onSearch()}>
         <SearchIcon />
       </Button>
     </InputGroup>
@@ -73,14 +73,14 @@ const CompactListCard: React.FunctionComponent<Props> = ({
     <Card>
       <CardBody>
         <Table
-          header={header}
           aria-label={tableAriaLabel}
           cells={columns}
+          header={header}
           rows={rows}
         >
           <TableBody />
         </Table>
-        <MicroPagination page={page} setPage={setPage} lastPage={lastPage} />
+        <MicroPagination lastPage={lastPage} page={page} setPage={setPage} />
       </CardBody>
     </Card>
   )

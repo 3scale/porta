@@ -1,5 +1,4 @@
 import { mount } from 'enzyme'
-
 import { SystemNamePopover } from 'Common/components/SystemNamePopover'
 
 const mountWrapper = () => mount(<SystemNamePopover />)

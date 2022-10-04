@@ -1,8 +1,10 @@
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
+import { SelectGroup } from 'Settings/components/Common/SelectGroup'
+import { Select } from '@patternfly/react-core'
 
-import { SelectGroup, Props } from 'Settings/components/Common/SelectGroup'
-import { Select, SelectOptionObject } from '@patternfly/react-core'
+import type { Props } from 'Settings/components/Common/SelectGroup'
+import type { SelectOptionObject } from '@patternfly/react-core'
 
 const defaultProps: Props = {
   name: 'jukebox',
@@ -26,7 +28,7 @@ const defaultProps: Props = {
   }
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<SelectGroup { ...{ ...defaultProps, ...props } } />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<SelectGroup {...{ ...defaultProps, ...props }} />)
 
 it('should render correctly', () => {
   const tree = mountWrapper()

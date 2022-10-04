@@ -1,7 +1,8 @@
-import { FunctionComponent, useRef } from 'react'
+import { useRef } from 'react'
 import { mount } from 'enzyme'
-
 import { useClickOutside } from 'utilities/useClickOutside'
+
+import type { FunctionComponent } from 'react'
 
 const HookedComponent: FunctionComponent<{ callback: jest.Mock}> = ({ callback }) => {
   const ref = useRef(null)

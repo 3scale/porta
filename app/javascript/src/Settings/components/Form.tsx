@@ -1,16 +1,15 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react'
-
-import {
-  FormCollection,
-  FormFieldset,
-  FormLegend,
-  TextInputGroup,
-  RadioFieldset
-} from 'Settings/components/Common'
 import { AuthenticationSettingsFieldset } from 'Settings/components/AuthenticationSettingsFieldset'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { SETTINGS_DEFAULT } from 'Settings/defaults'
-import { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeItemProps } from 'Settings/types'
+import { FormCollection } from 'Settings/components/Common/FormCollection'
+import { FormFieldset } from 'Settings/components/Common/FormFieldset'
+import { FormLegend } from 'Settings/components/Common/FormLegend'
+import { RadioFieldset } from 'Settings/components/Common/RadioFieldset'
+import { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
+
+import type { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeItemProps } from 'Settings/types'
 
 const SERVICE_MESH_INTEGRATION = 'service_mesh_istio'
 const PROXY_HOSTED_INTEGRATION = 'hosted'
@@ -58,24 +57,26 @@ const Form: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <RadioFieldset {...integrationMethod} onChange={onChange(setSelectedIntegrationMethod)} value={selectedIntegrationMethod} legend='Integration' />
-      { !isServiceMesh && <FormCollection collection={customProxyEndpoints} ItemComponent={TextInputGroup} legend='API gateway' /> }
-      <RadioFieldset {...authenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} value={selectedAuthenticationMethod} legend='Authentication' />
+      <RadioFieldset {...integrationMethod} legend='Integration' value={selectedIntegrationMethod} onChange={onChange(setSelectedIntegrationMethod)} />
+      { !isServiceMesh && <FormCollection ItemComponent={TextInputGroup} collection={customProxyEndpoints} legend='API gateway' /> }
+      <RadioFieldset {...authenticationMethod} legend='Authentication' value={selectedAuthenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} />
       <AuthenticationSettingsFieldset
-        isServiceMesh={isServiceMesh}
         authenticationMethod={selectedAuthenticationMethod}
+        isServiceMesh={isServiceMesh}
         {...authenticationSettings}
       />
-      { !isServiceMesh && <>
-        <RadioFieldset {...credentialsLocation} legend='Credentials Location' />
-        <FormCollection collection={security} ItemComponent={TextInputGroup} legend='Security' />
-        <FormFieldset id='fieldset-GatewayResponse'>
-          <FormLegend>Gateway Response</FormLegend>
-          {gatewayResponse.map(settings => (
-            <FormCollection key={settings.legend} collection={settings.collection} ItemComponent={TextInputGroup} legend={settings.legend} />
-          ))}
-        </FormFieldset>
-      </> }
+      { !isServiceMesh && (
+        <>
+          <RadioFieldset {...credentialsLocation} legend='Credentials Location' />
+          <FormCollection ItemComponent={TextInputGroup} collection={security} legend='Security' />
+          <FormFieldset id='fieldset-GatewayResponse'>
+            <FormLegend>Gateway Response</FormLegend>
+            {gatewayResponse.map(settings => (
+              <FormCollection key={settings.legend} ItemComponent={TextInputGroup} collection={settings.collection} legend={settings.legend} />
+            ))}
+          </FormFieldset>
+        </>
+      ) }
     </>
   )
 }

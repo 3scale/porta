@@ -1,24 +1,26 @@
 import {
   Button,
   Divider,
-  OnPerPageSelect,
   Pagination as PFPagination,
-  PaginationProps,
   PaginationVariant,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
-  sortable,
   Table,
-  TableHeader,
   TableBody,
-  OnSort,
-  ISortBy,
-  IActionsResolver
+  TableHeader,
+  sortable
 } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
-import type { Plan, Action } from 'Types'
+
+import type {
+  IActionsResolver,
+  ISortBy,
+  OnSort
+} from '@patternfly/react-table'
+import type { OnPerPageSelect, PaginationProps } from '@patternfly/react-core'
+import type { Action, Plan } from 'Types'
 
 import './PlansTable.scss'
 
@@ -31,7 +33,7 @@ export type Props = {
   count: number,
   searchHref: string,
   onAction: (action: Action) => void
-};
+}
 
 const PlansTable: React.FunctionComponent<Props> = ({
   columns,
@@ -44,8 +46,8 @@ const PlansTable: React.FunctionComponent<Props> = ({
   const tableRows = plans.map(p => ({
     disableActions: false,
     cells: [
-      { title: <Button href={p.editPath} component="a" variant="link" isInline>{p.name}</Button> },
-      { title: <Button href={p.contractsPath} component="a" variant="link" isInline>{p.contracts}</Button> },
+      { title: <Button isInline component="a" href={p.editPath} variant="link">{p.name}</Button> },
+      { title: <Button isInline component="a" href={p.contractsPath} variant="link">{p.contracts}</Button> },
       p.state
     ]
   }))
@@ -81,22 +83,23 @@ const PlansTable: React.FunctionComponent<Props> = ({
     window.location.href = url.toString()
   }
 
+  // eslint-disable-next-line react/no-multi-comp
   const Pagination = ({ variant }: { variant?: PaginationProps['variant'] }) => {
     const perPage = url.searchParams.get('per_page')
     const page = url.searchParams.get('page')
     return (
       <PFPagination
         itemCount={count}
-        perPage={Number(perPage) || 20}
         page={Number(page)}
-        onPerPageSelect={selectPerPage}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onPageInput={(_ev, page) => goToPage(page)}
+        perPage={Number(perPage) || 20}
         perPageOptions={[10, 20].map(n => ({ title: String(n), value: n }))}
         variant={variant}
+        onFirstClick={(_ev, page) => goToPage(page)}
+        onLastClick={(_ev, page) => goToPage(page)}
+        onNextClick={(_ev, page) => goToPage(page)}
+        onPageInput={(_ev, page) => goToPage(page)}
+        onPerPageSelect={selectPerPage}
+        onPreviousClick={(_ev, page) => goToPage(page)}
       />
     )
   }
@@ -112,7 +115,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
         </ToolbarItem>
       </Toolbar>
       <Divider />
-      <Table aria-label="Plans Table" actionResolver={actionResolver} cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
+      <Table actionResolver={actionResolver} aria-label="Plans Table" cells={tableColumns} rows={tableRows} sortBy={sortBy} onSort={onSort}>
         <TableHeader />
         <TableBody />
       </Table>

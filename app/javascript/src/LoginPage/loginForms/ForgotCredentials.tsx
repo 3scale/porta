@@ -6,8 +6,10 @@ const ForgotCredentials = (
   }: {
     requestPasswordResetPath: string
   }
-): React.ReactElement => <LoginMainFooterBandItem>
-  <a href={requestPasswordResetPath}>Forgot password?</a>
-</LoginMainFooterBandItem>
+): React.ReactElement => (
+  <LoginMainFooterBandItem>
+    <a href={requestPasswordResetPath}>Forgot password?</a>
+  </LoginMainFooterBandItem>
+)
 
 export { ForgotCredentials }

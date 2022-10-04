@@ -1,8 +1,10 @@
-import { FunctionComponent, useState } from 'react'
+import { useState } from 'react'
 import { Label } from 'NewService/components/FormElements'
+
+import type { FunctionComponent } from 'react'
 import type { ServiceFormTemplate } from 'NewService/types'
 
-type Props = ServiceFormTemplate;
+type Props = ServiceFormTemplate
 
 const ServiceManualListItems: FunctionComponent<Props> = ({
   service,
@@ -15,32 +17,32 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
 
   return (
     <>
-      <li id="service_name_input" className={`string required ${errors && errors.name ? 'error' : ''}`}>
+      <li className={`string required ${errors && errors.name ? 'error' : ''}`} id="service_name_input">
         <Label
+          required
           htmlFor='service_name'
           label='Name'
-          required
         />
-        <input onChange={onChange(setName)} value={name} maxLength={255} id="service_name" type="text" name="service[name]" autoFocus={true}/>
+        <input autoFocus id="service_name" maxLength={255} name="service[name]" type="text" value={name} onChange={onChange(setName)} />
         { !!errors.name && <p className="inline-errors">{errors.name}</p> }
       </li>
-      <li id="service_system_name_input" className={`string required ${errors && errors.system_name ? 'error' : ''}`}>
+      <li className={`string required ${errors && errors.system_name ? 'error' : ''}`} id="service_system_name_input">
         <Label
+          required
           htmlFor='service_system_name'
           label='System name'
-          required
         />
-        <input onChange={onChange(setSystemName)} value={systemName} maxLength={255} id="service_system_name" type="text" name="service[system_name]"/>
+        <input id="service_system_name" maxLength={255} name="service[system_name]" type="text" value={systemName} onChange={onChange(setSystemName)} />
         <p className={`${errors.system_name ? 'inline-errors' : 'inline-hints'}`}>
           Only ASCII letters, numbers, dashes and underscores are allowed.
         </p>
       </li>
-      <li id="service_description_input" className={`text optional ${errors && errors.description ? 'error' : ''}`}>
+      <li className={`text optional ${errors && errors.description ? 'error' : ''}`} id="service_description_input">
         <Label
           htmlFor='service_description'
           label='Description'
         />
-        <textarea onChange={onChange(setDescription)} value={description} rows={3} id="service_description" name="service[description]"></textarea>
+        <textarea id="service_description" name="service[description]" rows={3} value={description} onChange={onChange(setDescription)} />
         { !!errors.description && <p className="inline-errors">{errors.description}</p> }
       </li>
     </>

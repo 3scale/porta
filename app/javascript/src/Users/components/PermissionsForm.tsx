@@ -1,15 +1,14 @@
 import 'raf/polyfill'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
-
-import { FunctionComponent, useState } from 'react'
+import { useState } from 'react'
 import { RoleRadioGroup } from 'Users/components/RoleRadioGroup'
 import { FeaturesFieldset } from 'Users/components/FeaturesFieldset'
 import { ServicesFieldset } from 'Users/components/ServicesFieldset'
-
 import { canFeatureSetServicePermissions, toggleElementInCollection } from 'Users/utils'
 
-import type { Role, Feature, AdminSection } from 'Users/types'
+import type { FunctionComponent } from 'react'
+import type { AdminSection, Feature, Role } from 'Users/types'
 import type { Api } from 'Types'
 
 type Props = {
@@ -22,7 +21,7 @@ type Props = {
   },
   features: Feature[],
   services: Api[]
-};
+}
 
 /**
  * Represents the user's permissions form, also known as Administrative. It handles the user's Role and their access to different Services.
@@ -63,19 +62,20 @@ const PermissionsForm: FunctionComponent<Props> = ({
         {role === 'member' && (
           <li className='radio optional' id='user_member_permissions_input'>
             <FeaturesFieldset
+              areServicesVisible={areServicesVisible}
               features={features}
               selectedSections={selectedSections}
-              areServicesVisible={areServicesVisible}
               onAdminSectionSelected={onAdminSectionSelected}
             />
 
-            {areServicesVisible && (
+            {areServicesVisible ? (
               <ServicesFieldset
-                services={services}
                 selectedSections={selectedSections}
                 selectedServicesIds={selectedServicesIds}
+                services={services}
                 onServiceSelected={onServiceSelected}
-              />)}
+              />
+            ) : null}
           </li>
         )}
       </ol>

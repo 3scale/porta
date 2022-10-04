@@ -1,5 +1,7 @@
-import { render } from 'react-dom'
+/* eslint-disable react/jsx-props-no-spreading */
 import InlineChart from '../src/Stats/inlinechart/index'
+
+import { render } from 'react-dom'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('mini-charts')
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: currentChart.dataset.title,
       unitPluralized: chart.dataset.unitPluralized
     }
-    render(<InlineChart { ...props } />, currentChart)
+    render(<InlineChart {...props} />, currentChart)
   }
 
   allCharts.forEach(chart => {

@@ -4,13 +4,14 @@ import {
   CardBody,
   PageSection,
   PageSectionVariants,
-  Tabs,
-  Tab
+  Tab,
+  Tabs
 } from '@patternfly/react-core'
-import { MetricsTable, TabKey } from 'Metrics'
-import { FunctionComponent } from 'react'
+import { MetricsTable } from 'Metrics/components/MetricsTable'
 
-import { Metric } from 'Types'
+import type { FunctionComponent } from 'react'
+import type { TabKey } from 'Metrics/types'
+import type { Metric } from 'Types'
 
 import './IndexPage.scss'
 
@@ -21,7 +22,7 @@ type Props = {
   mappingRulesPath: string,
   addMappingRulePath: string,
   createMetricPath: string
-};
+}
 
 const IndexPage: FunctionComponent<Props> = ({
   metrics,
@@ -53,8 +54,8 @@ const IndexPage: FunctionComponent<Props> = ({
       </PageSection>
 
       <Tabs activeKey={activeTabKey} onSelect={handleTabClick}>
-        <Tab eventKey="methods" title="Methods"></Tab>
-        <Tab eventKey="metrics" title="Metrics"></Tab>
+        <Tab eventKey="methods" title="Methods" />
+        <Tab eventKey="metrics" title="Metrics" />
       </Tabs>
 
       <PageSection>
@@ -67,18 +68,19 @@ const IndexPage: FunctionComponent<Props> = ({
         <Card>
           <MetricsTable
             activeTabKey={activeTabKey}
-            mappingRulesPath={mappingRulesPath}
             addMappingRulePath={addMappingRulePath}
-            metrics={metrics}
-            metricsCount={metricsCount}
             createButton={(
               <Button
-                href={createMetricPath}
+                isInline
                 component="a"
+                href={createMetricPath}
                 variant="primary"
-                isInline>{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
+              >{`Add a ${isActiveTabMetrics ? 'metric' : 'method'}`}
               </Button>
             )}
+            mappingRulesPath={mappingRulesPath}
+            metrics={metrics}
+            metricsCount={metricsCount}
           />
         </Card>
       </PageSection>

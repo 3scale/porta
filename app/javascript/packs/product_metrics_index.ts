@@ -1,7 +1,7 @@
 import { ProductIndexPageWrapper } from 'Metrics/components/ProductIndexPage'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import { Metric } from 'Types'
+import type { Metric } from 'Types'
 
 const containerId = 'product-metrics-index-container'
 

@@ -1,28 +1,26 @@
-import React from 'react'
-
+import * as React from 'react'
 import {
-  HiddenInputs,
   EmailField,
+  HiddenInputs,
   validateSingleField
 } from 'LoginPage'
-
 import {
-  Form,
   ActionGroup,
-  Button
+  Button,
+  Form
 } from '@patternfly/react-core'
 
 export type Props = {
   providerLoginPath: string,
   providerPasswordPath: string
-};
+}
 
 type State = {
   email: string,
   validation: {
     email?: boolean
   }
-};
+}
 
 class RequestPasswordForm extends React.Component<Props, State> {
   state: State = {
@@ -30,12 +28,12 @@ class RequestPasswordForm extends React.Component<Props, State> {
     validation: {
       email: undefined
     }
-  };
+  }
 
   handleTextInputEmail: (arg1: string, arg2: React.SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
     const isValid = validateSingleField(event)
     this.setState({ email, validation: { email: isValid } })
-  };
+  }
 
   render () {
     const emailInputProps = {
@@ -52,18 +50,20 @@ class RequestPasswordForm extends React.Component<Props, State> {
     return (
       <Form
         noValidate
+        acceptCharset='UTF-8'
         action={this.props.providerPasswordPath}
         id='request_password'
-        acceptCharset='UTF-8'
         method='post'
       >
         <HiddenInputs isPasswordReset />
-        <EmailField inputProps={emailInputProps}/>
+        <EmailField inputProps={emailInputProps} />
         <ActionGroup>
-          <Button className='pf-c-button pf-m-primary pf-m-block'
-            type='submit'
+          <Button
+            className='pf-c-button pf-m-primary pf-m-block'
             isDisabled={formDisabled}
-          >Reset password</Button>
+            type='submit'
+          >Reset password
+          </Button>
           <a href={this.props.providerLoginPath}>Sign in</a>
         </ActionGroup>
       </Form>

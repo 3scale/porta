@@ -1,4 +1,5 @@
 import { ExclamationCircleIcon } from '@patternfly/react-icons'
+
 import type { FlashMessage } from 'Types'
 
 const FlashMessages = (
@@ -9,12 +10,15 @@ const FlashMessages = (
   }
 ): React.ReactElement => {
   const messagesList = flashMessages.map(message =>
-    <p key={message.message}
-      className={`pf-c-form__helper-text pf-m-${message.type}`}
-    >
-      <ExclamationCircleIcon />
-      {` ${message.message}`}
-    </p>
+    (
+      <p
+        key={message.message}
+        className={`pf-c-form__helper-text pf-m-${message.type}`}
+      >
+        <ExclamationCircleIcon />
+        {` ${message.message}`}
+      </p>
+    )
   )
   return (
     <div>

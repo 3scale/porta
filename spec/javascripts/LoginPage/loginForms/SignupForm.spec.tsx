@@ -1,8 +1,8 @@
-import { FormEvent } from 'react'
 import { mount } from 'enzyme'
-
 import { SignupForm } from 'LoginPage/loginForms/SignupForm'
-import { SignupProps as Props } from 'Types'
+
+import type { FormEvent } from 'react'
+import type { SignupProps as Props } from 'Types'
 
 const defaultProps = {
   user: {
@@ -14,7 +14,7 @@ const defaultProps = {
   path: 'bikini-bottom'
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount<SignupForm>(<SignupForm { ...{ ...defaultProps, ...props } } />)
+const mountWrapper = (props: Partial<Props> = {}) => mount<SignupForm>(<SignupForm {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

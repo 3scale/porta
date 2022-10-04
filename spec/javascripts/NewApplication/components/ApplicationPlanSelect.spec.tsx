@@ -1,8 +1,10 @@
 
-import { ApplicationPlanSelect, Props } from 'NewApplication/components/ApplicationPlanSelect'
-import { mount, ReactWrapper } from 'enzyme'
+import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
+import { mount } from 'enzyme'
 
-import { Product, ApplicationPlan } from 'NewApplication/types'
+import type { Props } from 'NewApplication/components/ApplicationPlanSelect'
+import type { ReactWrapper } from 'enzyme'
+import type { ApplicationPlan, Product } from 'NewApplication/types'
 
 const appPlan: ApplicationPlan = { id: 0, name: 'The Plan' }
 const createApplicationPlanPath = '/plans'

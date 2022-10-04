@@ -1,4 +1,4 @@
-import { State } from 'Policies/types'
+import type { State } from 'Policies/types'
 
 export const initialState: State = {
   registry: [],

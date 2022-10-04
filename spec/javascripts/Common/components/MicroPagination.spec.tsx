@@ -1,7 +1,9 @@
-import { mount, ReactWrapper } from 'enzyme'
-
-import { MicroPagination, Props } from 'Common/components/MicroPagination'
+import { mount } from 'enzyme'
+import { MicroPagination } from 'Common/components/MicroPagination'
 import { Button } from '@patternfly/react-core'
+
+import type { Props } from 'Common/components/MicroPagination'
+import type { ReactWrapper } from 'enzyme'
 
 const setPage = jest.fn()
 const lastPage = 5

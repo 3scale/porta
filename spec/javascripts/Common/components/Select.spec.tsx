@@ -1,8 +1,9 @@
 import { mount } from 'enzyme'
-
-import { Select, Props } from 'Common/components/Select'
+import { Select } from 'Common/components/Select'
 import { updateInput } from 'utilities/test-utils'
-import { Record } from 'Types'
+
+import type { Props } from 'Common/components/Select'
+import type { Record } from 'Types'
 
 const onSelect = jest.fn()
 const items = [

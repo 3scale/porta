@@ -55,7 +55,7 @@ function chartOptions (widget, data) {
         elementsToHide.stop().fadeOut(100)
         countLabelLink.toggleClass('DashboardWidget-link--infoOnly')
       },
-      onmouseout: function (_d) {
+      onmouseout: function () {
         countLabel.text(defaultCount)
         introLabel.text(defaultIntro)
 

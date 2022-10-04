@@ -1,19 +1,23 @@
-import { useState, useEffect, useRef, FunctionComponent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
-  BillingAddressData,
-  BraintreeUserFields,
-  BraintreeCardFields,
   BraintreeBillingAddressFields,
+  BraintreeCardFields,
   BraintreeSubmitFields,
-  createHostedFieldsInstance,
+  BraintreeUserFields,
   create3DSecureInstance,
-  validationConstraints,
+  createHostedFieldsInstance,
   hostedFieldOptions,
+  validationConstraints,
   veryfyCard
 } from 'PaymentGateways'
-import { Client, HostedFields, hostedFields, HostedFieldsTokenizePayload, ThreeDSecure, threeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
+import { hostedFields, threeDSecure } from 'braintree-web'
 import { CSRFToken } from 'utilities/CSRFToken'
 import validate from 'validate.js'
+
+import type { Client, HostedFields, HostedFieldsTokenizePayload, ThreeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
+import type {
+  BillingAddressData } from 'PaymentGateways'
+import type { FunctionComponent } from 'react'
 
 import './BraintreeCustomerForm.scss'
 
@@ -26,7 +30,7 @@ type Props = {
   formActionPath: string,
   countriesList: string,
   selectedCountryCode: string
-};
+}
 
 const BraintreeForm: FunctionComponent<Props> = ({
   braintreeClient,
@@ -119,37 +123,37 @@ const BraintreeForm: FunctionComponent<Props> = ({
 
   return (
     <form
-      id="customer_form"
-      className="form-horizontal customer"
       action={formActionPath}
+      className="form-horizontal customer"
+      id="customer_form"
       ref={formRef}
       onChange={validateForm}
     >
-      <input name="utf8" type="hidden" value="✓"/>
-      <CSRFToken/>
+      <input name="utf8" type="hidden" value="✓" />
+      <CSRFToken />
       <fieldset>
         <p className="required-fields">All fields marked with an asterisk ( * ) are mandatory</p>
         <BraintreeUserFields />
       </fieldset>
       <fieldset>
         <BraintreeCardFields />
-        {cardError && <p className="alert alert-danger">{cardError}</p>}
+        {cardError ? <p className="alert alert-danger">{cardError}</p> : null}
       </fieldset>
       <fieldset>
         <BraintreeBillingAddressFields
           billingAddressData={billingAddressData}
-          setBillingAddressData={setBillingAddressData}
-          selectedCountryCode={selectedCountryCode}
           countriesList={JSON.parse(countriesList)}
+          selectedCountryCode={selectedCountryCode}
+          setBillingAddressData={setBillingAddressData}
         />
       </fieldset>
       <fieldset>
         <BraintreeSubmitFields
-          onSubmitForm={onSubmit}
           isFormValid={isFormValid}
+          onSubmitForm={onSubmit}
         />
       </fieldset>
-      <input type="hidden" name="braintree[nonce]" id="braintree_nonce" value={braintreeNonceValue as string} /> {/* FIXME: braintreeNonceValue should be string | undefined */}
+      <input id="braintree_nonce" name="braintree[nonce]" type="hidden" value={braintreeNonceValue as string} /> {/* FIXME: braintreeNonceValue should be string | undefined */}
     </form>
   )
 }

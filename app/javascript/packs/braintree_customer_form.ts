@@ -1,6 +1,9 @@
-import { BillingAddressData, BraintreeFormWrapper, createBraintreeClient } from 'PaymentGateways'
-import { Client, client } from 'braintree-web'
+import { BraintreeFormWrapper, createBraintreeClient } from 'PaymentGateways'
+import { client } from 'braintree-web'
 import { safeFromJsonString } from 'utilities/json-utils'
+
+import type { Client } from 'braintree-web'
+import type { BillingAddressData } from 'PaymentGateways'
 
 const CONTAINER_ID = 'braintree-form-wrapper'
 

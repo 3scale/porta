@@ -1,6 +1,5 @@
 import $ from 'jquery'
-
-import { StatsResponseCodeSource, StatsResponseCodeChart } from 'Stats/provider/stats_response_codes'
+import { StatsResponseCodeChart, StatsResponseCodeSource } from 'Stats/provider/stats_response_codes'
 
 const metric = { system_name: '2XX' }
 const options = {

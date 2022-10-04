@@ -1,9 +1,9 @@
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer } from 'Policies/util'
 
-import { ChainPolicy } from 'Policies/types'
-import { SetOriginalPolicyChainAction } from 'Policies/actions/OriginalPolicyChain'
-import { Reducer } from 'redux'
+import type { ChainPolicy } from 'Policies/types'
+import type { SetOriginalPolicyChainAction } from 'Policies/actions/OriginalPolicyChain'
+import type { Reducer } from 'redux'
 
 function setOriginalPolicyChain (state: Array<ChainPolicy>, action: SetOriginalPolicyChainAction): Array<ChainPolicy> {
   return [...action.payload]

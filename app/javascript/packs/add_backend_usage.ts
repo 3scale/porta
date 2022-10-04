@@ -1,7 +1,7 @@
 import { AddBackendFormWrapper } from 'BackendApis/components/AddBackendForm'
 import { safeFromJsonString } from 'utilities'
 
-import { Backend } from 'Types'
+import type { Backend } from 'Types'
 
 const containerId = 'add-backend-form'
 

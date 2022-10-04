@@ -1,16 +1,18 @@
+/* eslint-disable react/no-multi-comp */
 import {
   FormGroup as PF4FormGroup,
-  TextInputProps,
   TextInput
 } from '@patternfly/react-core'
-import { FunctionComponent } from 'react'
+
+import type { TextInputProps } from '@patternfly/react-core'
+import type { FunctionComponent } from 'react'
 import type { InputProps } from 'Types'
 
 type Props = {
   type?: TextInputProps['type'],
   helperTextInvalid: string,
   inputProps: InputProps
-};
+}
 
 const helperTexts = {
   emailOrUsername: 'Email or username is mandatory',
@@ -32,44 +34,42 @@ const FormGroup: FunctionComponent<Props> = ({
 }) => {
   const { isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid } = inputProps
   return (
-    <>
-      <PF4FormGroup
+    <PF4FormGroup
+      fieldId={fieldId}
+      helperTextInvalid={helperTextInvalid}
+      isRequired={isRequired}
+      isValid={isValid}
+      label={label}
+    >
+      <TextInput
+        aria-invalid={ariaInvalid}
+        autoFocus={autoFocus}
+        id={fieldId}
         isRequired={isRequired}
-        label={label}
-        fieldId={fieldId}
-        helperTextInvalid={helperTextInvalid}
         isValid={isValid}
-      >
-        <TextInput
-          type={type}
-          name={name}
-          isRequired={isRequired}
-          id={fieldId}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          autoFocus={autoFocus}
-          isValid={isValid}
-          aria-invalid={ariaInvalid}
-        />
-      </PF4FormGroup>
-    </>
+        name={name}
+        type={type}
+        value={value}
+        onBlur={onBlur}
+        onChange={onChange}
+      />
+    </PF4FormGroup>
   )
 }
 
 const TextField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => (
   <FormGroup
-    type='text'
-    inputProps={inputProps}
     helperTextInvalid={helperTexts.emailOrUsername}
+    inputProps={inputProps}
+    type='text'
   />
 )
 
 const EmailField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => (
   <FormGroup
-    type='email'
-    inputProps={inputProps}
     helperTextInvalid={helperTexts.email}
+    inputProps={inputProps}
+    type='email'
   />
 )
 
@@ -77,9 +77,9 @@ const PasswordField: FunctionComponent<{ inputProps: InputProps }> = ({ inputPro
   const helperText = helperTexts.password
   return (
     <FormGroup
-      type='password'
-      inputProps={inputProps}
       helperTextInvalid={helperText}
+      inputProps={inputProps}
+      type='password'
     />
   )
 }
@@ -90,9 +90,9 @@ const PasswordConfirmationField: FunctionComponent<{ inputProps: InputProps }> =
   const helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage
   return (
     <FormGroup
-      type='password'
-      inputProps={inputProps}
       helperTextInvalid={helperText}
+      inputProps={inputProps}
+      type='password'
     />
   )
 }

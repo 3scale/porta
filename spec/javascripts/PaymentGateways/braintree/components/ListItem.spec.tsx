@@ -1,5 +1,7 @@
 import { mount } from 'enzyme'
-import { ListItem, Props } from 'PaymentGateways/braintree/components/ListItem'
+import { ListItem } from 'PaymentGateways/braintree/components/ListItem'
+
+import type { Props } from 'PaymentGateways/braintree/components/ListItem'
 
 const Child = () => {
   return <p id="child">Hi</p>

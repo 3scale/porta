@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
 
-import { TextInputGroup, Props } from 'Settings/components/Common/TextInputGroup'
+import type { Props } from 'Settings/components/Common/TextInputGroup'
 
 const defaultProps: Props = {
   name: 'dooz_kawa_chanson',
@@ -17,7 +18,7 @@ const defaultProps: Props = {
   onChange: undefined
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount(<TextInputGroup { ...{ ...defaultProps, ...props } } />)
+const mountWrapper = (props: Partial<Props> = {}) => mount(<TextInputGroup {...{ ...defaultProps, ...props }} />)
 
 it('should render correctly', () => {
   const view = mountWrapper()

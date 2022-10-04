@@ -1,6 +1,7 @@
+/* eslint-disable react/no-multi-comp */
 // TODO: Replace this component when updating patternfly-react.
 
-import { FunctionComponent, PropsWithChildren } from 'react'
+import type { FunctionComponent, PropsWithChildren } from 'react'
 
 import './HelperText.scss'
 

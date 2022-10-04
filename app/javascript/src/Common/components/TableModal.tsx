@@ -1,27 +1,28 @@
-import { useState, useEffect, useRef } from 'react'
-
+import { useEffect, useRef, useState } from 'react'
 import {
   Button,
-  Modal,
   InputGroup,
-  TextInput,
+  Modal,
   Pagination,
   Spinner,
+  TextInput,
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
 import {
   Table,
-  TableHeader,
   TableBody,
-  SortByDirection,
-  IRow,
-  ITransform,
-  IRowCell
+  TableHeader
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
 import { NoMatchFound } from 'Common'
 
+import type {
+  IRow,
+  IRowCell,
+  ITransform,
+  SortByDirection
+} from '@patternfly/react-table'
 import type { Record } from 'utilities'
 
 import './TableModal.scss'
@@ -49,7 +50,7 @@ type Props<T extends Record> = {
     index: number,
     direction: keyof typeof SortByDirection
   }
-};
+}
 
 const PER_PAGE_DEFAULT = 5
 
@@ -110,12 +111,12 @@ const TableModal = <T extends Record>(
   const pagination = (
     <Pagination
       className='pf-c-pagination__input-auto-width'
-      perPage={perPage}
+      isDisabled={isLoading}
       itemCount={itemsCount}
       page={page}
-      onSetPage={(_e, page) => setPage(page)}
+      perPage={perPage}
       widgetId="pagination-options-menu-top"
-      isDisabled={isLoading}
+      onSetPage={(_e, page) => setPage(page)}
     />
   )
 
@@ -136,19 +137,19 @@ const TableModal = <T extends Record>(
   const actions = [
     <Button
       key="Select"
-      variant="primary"
-      isDisabled={selected === null || isLoading}
-      onClick={onAccept}
       data-testid="select"
+      isDisabled={selected === null || isLoading}
+      variant="primary"
+      onClick={onAccept}
     >
       Select
     </Button>,
     <Button
       key="Cancel"
-      variant="secondary"
-      isDisabled={isLoading}
-      onClick={onCancel}
       data-testid="cancel"
+      isDisabled={isLoading}
+      variant="secondary"
+      onClick={onCancel}
     >
       Cancel
     </Button>
@@ -156,30 +157,30 @@ const TableModal = <T extends Record>(
 
   return (
     <Modal
+      isFooterLeftAligned
       isLarge
-      title={title}
-      isOpen={isOpen}
-      onClose={onCancel}
-      isFooterLeftAligned={true}
       actions={actions}
+      isOpen={isOpen}
+      title={title}
+      onClose={onCancel}
     >
       {/* Toolbar is a component in the css, but a layout in react, so the class names are mismatched (pf-c-toolbar vs pf-l-toolbar) Styling doesn't work, but if you change it to pf-c in the inspector, it works */}
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
         <ToolbarItem>
           <InputGroup>
             <TextInput
-              type="search"
               aria-label="search for an item"
-              ref={searchInputRef}
               isDisabled={isLoading || !onSearch}
               placeholder={searchPlaceholder}
+              ref={searchInputRef}
+              type="search"
             />
             <Button
-              variant="control"
               aria-label="search button for search input"
-              onClick={handleOnClickSearch}
               data-testid="search"
               isDisabled={isLoading || !onSearch}
+              variant="control"
+              onClick={handleOnClickSearch}
             >
               <SearchIcon />
             </Button>
@@ -192,11 +193,11 @@ const TableModal = <T extends Record>(
       {isLoading ? <Spinner size='xl' /> : rows.length === 0 ? <NoMatchFound /> : (
         <Table
           aria-label={title}
-          sortBy={sortBy}
-          onSelect={handleOnSelect}
           cells={cells}
           rows={rows}
           selectVariant='radio'
+          sortBy={sortBy}
+          onSelect={handleOnSelect}
         >
           <TableHeader />
           <TableBody />

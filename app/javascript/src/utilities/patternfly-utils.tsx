@@ -1,12 +1,13 @@
-
 import escapeRegExp from 'lodash.escaperegexp'
-import { SelectOption, SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import { SelectOption } from '@patternfly/react-core'
+
+import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
 
 export type Record = {
   id: number | string,
   name: string,
   description?: string
-};
+}
 
 export interface SelectOptionObject extends PFSelectOptionObject {
   id: string
@@ -34,12 +35,12 @@ export const toSelectOption = ({
 }: Props): React.ReactElement => (
   <SelectOption
     key={String(id)}
-    value={toSelectOptionObject({ id, name, description })}
     className={className}
+    data-description={description}
     // TODO: when we upgrade PF, use description prop directly
     // description={record.description}
-    data-description={description}
     isDisabled={disabled}
+    value={toSelectOptionObject({ id, name, description })}
   />
 )
 

@@ -3,7 +3,8 @@ import * as PolicyRegistry from 'Policies/actions/PolicyRegistry'
 import * as PolicyChain from 'Policies/actions/PolicyChain'
 import * as UISettings from 'Policies/actions/UISettings'
 import * as PolicyConfigActions from 'Policies/actions/PolicyConfig'
-import { PolicyConfig, RegistryPolicy, ChainPolicy } from 'Policies/types'
+
+import type { ChainPolicy, PolicyConfig, RegistryPolicy } from 'Policies/types'
 
 const policyConfig: PolicyConfig = {
   name: 'name',

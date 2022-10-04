@@ -1,9 +1,9 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+import { PlansTableCard } from 'Plans/components/PlansTableCard'
 
-import { PlansTableCard, Props } from 'Plans/components/PlansTableCard'
-
-import type { Plan, Action } from 'Types'
+import type { Props } from 'Plans/components/PlansTableCard'
+import type { Action, Plan } from 'Types'
 
 const fetch = jest.fn()
 fetch.mockResolvedValue({ status: 200 })

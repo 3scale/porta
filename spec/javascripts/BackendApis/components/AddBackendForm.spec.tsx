@@ -1,10 +1,12 @@
 import { act } from 'react-dom/test-utils'
-import { mount, ReactWrapper } from 'enzyme'
-
-import { AddBackendForm, Props } from 'BackendApis/components/AddBackendForm'
+import { mount } from 'enzyme'
+import { AddBackendForm } from 'BackendApis/components/AddBackendForm'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
+
+import type { Props } from 'BackendApis/components/AddBackendForm'
+import type { ReactWrapper } from 'enzyme'
 
 const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend', updatedAt: '' }
 const backendsPath = '/backends'

@@ -1,10 +1,12 @@
 import { act } from 'react-dom/test-utils'
-import { mount, ReactWrapper } from 'enzyme'
-
-import { NewBackendForm, Props } from 'BackendApis/components/NewBackendForm'
+import { mount } from 'enzyme'
+import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
 import { NameInput } from 'BackendApis/components/NameInput'
 import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInput'
 import { SystemNameInput } from 'BackendApis/components/SystemNameInput'
+
+import type { Props } from 'BackendApis/components/NewBackendForm'
+import type { ReactWrapper } from 'enzyme'
 
 const validNames = [
   'M',

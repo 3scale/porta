@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { FormGroup, Select, SelectOption } from '@patternfly/react-core'
 
-import { FormGroup, Select, SelectOption, SelectOptionObject } from '@patternfly/react-core'
-import { FieldGroupProps, FieldCatalogProps } from 'Settings/types'
+import type { SelectOptionObject } from '@patternfly/react-core'
+import type { FieldCatalogProps, FieldGroupProps } from 'Settings/types'
 
-type Props = FieldGroupProps & FieldCatalogProps;
+type Props = FieldGroupProps & FieldCatalogProps
 
 const SelectGroup: React.FunctionComponent<Props> = ({
   label,
@@ -20,14 +21,14 @@ const SelectGroup: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <FormGroup label={label} fieldId={`service_proxy_attributes_${name}_select`} helperText={hint}>
+    <FormGroup fieldId={`service_proxy_attributes_${name}_select`} helperText={hint} label={label}>
       <input name={`service[proxy_attributes][${name}]`} type='hidden' value={selectedValue} />
       <Select
-        selections={catalog[selectedValue]}
-        onToggle={setIsExpanded}
-        onSelect={onSelect}
-        isExpanded={isExpanded}
         id={`service_proxy_attributes_${name}_select`}
+        isExpanded={isExpanded}
+        selections={catalog[selectedValue]}
+        onSelect={onSelect}
+        onToggle={setIsExpanded}
       >
         {Object.keys(catalog).map(key => (
           <SelectOption key={catalog[key]} value={{ toString: () => catalog[key] }} />

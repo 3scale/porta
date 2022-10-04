@@ -3,7 +3,7 @@
 type ProductLink = {
   name: 'Edit' | 'Overview' | 'Analytics' | 'Applications' | 'ActiveDocs' | 'Integration',
   path: string
-};
+}
 
 export type Product = {
   id: number,
@@ -14,4 +14,4 @@ export type Product = {
   appsCount: number,
   backendsCount: number,
   unreadAlertsCount: number
-};
+}

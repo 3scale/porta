@@ -1,6 +1,5 @@
 import Form from 'react-jsonschema-form'
 import { Button } from '@patternfly/react-core'
-
 import { isNotApicastPolicy } from 'Policies/util'
 import { HeaderButton } from 'Policies/components/HeaderButton'
 
@@ -15,7 +14,7 @@ type Props = {
     closePolicyConfig: () => ThunkAction,
     updatePolicyConfig: (arg1: ChainPolicy) => UpdatePolicyConfigAction
   }
-};
+}
 
 const PolicyConfig: React.FunctionComponent<Props> = ({
   policy,
@@ -50,36 +49,36 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
         {`${version} - ${summary || ''}`}
       </p>
       <p className="PolicyConfiguration-description">{description}</p>
-      { isPolicyVisible &&
+      { isPolicyVisible && (
         <label className="Policy-status" htmlFor="policy-enabled">
           <input
+            checked={enabled}
             id="policy-enabled"
             name="policy-enabled"
             type="checkbox"
-            checked={enabled}
             onChange={togglePolicy}
           />
           Enabled
         </label>
-      }
-      { isPolicyVisible &&
+      )}
+      { isPolicyVisible && (
         <Form
           className="PolicyConfiguration-form"
-          schema={configuration}
           formData={data}
+          schema={configuration}
           onSubmit={onSubmit(policy)}
         >
           <Button className="btn-info" type="submit">Update Policy</Button>
         </Form>
-      }
-      { removable &&
+      )}
+      { removable && (
         <Button
           variant="danger"
           onClick={remove}
         >
           Remove
         </Button>
-      }
+      )}
     </section>
   )
 }

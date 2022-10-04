@@ -1,11 +1,11 @@
+import { useRef, useState } from 'react'
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
-import { createReactWrapper, useClickOutside } from 'utilities'
-
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { useClickOutside } from 'utilities/useClickOutside'
 import 'Navigation/styles/ContextSelector.scss'
 
+import type { FunctionComponent } from 'react'
 import type { Menu } from 'Types'
-import { FunctionComponent } from 'enzyme'
-import { useRef, useState } from 'react'
 
 type Props = {
   activeMenu: Menu,
@@ -13,7 +13,7 @@ type Props = {
   settingsLink: string,
   productsLink: string,
   backendsLink: string
-};
+}
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
 
@@ -43,19 +43,19 @@ const ContextSelector: FunctionComponent<Props> = ({
   }
 
   return (
-    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} ref={ref} data-quickstart-id="context-selector">
+    <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} data-quickstart-id="context-selector" ref={ref}>
       <a className="pf-c-context-selector__toggle " title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
         <ActiveMenuTitle activeMenu={activeMenu} />
       </a>
       {isOpen && (
         <div className="pf-c-context-selector__menu">
-          <ul id="context-menu" className="pf-c-context-selector__menu-list">
+          <ul className="pf-c-context-selector__menu-list" id="context-menu">
             <li>
               <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
                 <i className='fa fa-home header-context-selector__item-icon' />Dashboard
               </a>
             </li>
-            {audienceLink && (
+            {!!audienceLink && (
               <li>
                 <a className={getClassNamesForMenu('audience')} href={audienceLink}>
                   <i className='fa fa-bullseye header-context-selector__item-icon' />Audience
@@ -84,6 +84,7 @@ const ContextSelector: FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const ContextSelectorWrapper = (props: Props, containerId: string): void => createReactWrapper(<ContextSelector {...props} />, containerId)
 
 export { ContextSelector, ContextSelectorWrapper, Props }

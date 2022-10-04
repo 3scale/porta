@@ -1,16 +1,15 @@
 import {
-  policyChainMiddleware,
-  findRegistryPolicy,
   convertToChainPolicy,
+  findRegistryPolicy,
+  loadChain,
+  policyChainMiddleware,
   removePolicy,
-  updatePolicy,
-  loadChain
+  updatePolicy
 } from 'Policies/middleware/PolicyChain'
 import { loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
-
-import { PolicyChainMiddlewareAction, RegistryPolicy, ChainPolicy, PolicyConfig, Store } from 'Policies/types'
-
 import * as utils from 'Policies/util'
+
+import type { ChainPolicy, PolicyChainMiddlewareAction, PolicyConfig, RegistryPolicy, Store } from 'Policies/types'
 
 const policyConfig: PolicyConfig = {
   name: 'name',

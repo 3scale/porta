@@ -1,5 +1,6 @@
 import * as PolicyRegistry from 'Policies/actions/PolicyRegistry'
-import { RegistryPolicy } from 'Policies/types'
+
+import type { RegistryPolicy } from 'Policies/types'
 
 it('#loadRegistrySuccess should create an action', () => {
   const payload: RegistryPolicy[] = []

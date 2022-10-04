@@ -1,8 +1,9 @@
 import { mount } from 'enzyme'
-
-import { PolicyConfig, Props } from 'Policies/components/PolicyConfig'
+import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { HeaderButton } from 'Policies/components/HeaderButton'
-import { ChainPolicy } from 'Policies/types'
+
+import type { Props } from 'Policies/components/PolicyConfig'
+import type { ChainPolicy } from 'Policies/types'
 
 describe('PolicyConfig Component', () => {
   let consoleSpy: jest.SpyInstance

@@ -1,6 +1,8 @@
 
-import { PolicyList, Props } from 'Policies/components/PoliciesWidget'
+import { PolicyList } from 'Policies/components/PoliciesWidget'
 import { mount } from 'enzyme'
+
+import type { Props } from 'Policies/components/PoliciesWidget'
 
 it.todo('test PolicyWidget')
 

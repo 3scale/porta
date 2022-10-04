@@ -6,18 +6,18 @@ export type EmailConfiguration = {
   links: {
     edit: string
   }
-};
+}
 
 export type FormEmailConfiguration = {
   id?: number // Means it's updating not creating,
   email: string | null,
   userName: string | null,
   password: string | null
-};
+}
 
 export type FormErrors = {
   // eslint-disable-next-line camelcase
   user_name?: string[],
   email?: string[],
   password?: string[]
-};
+}

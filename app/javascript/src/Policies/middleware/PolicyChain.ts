@@ -1,8 +1,8 @@
 import { generateGuid } from 'Policies/util'
-import { loadChainSuccess, loadChainError, updatePolicyChain } from 'Policies/actions/PolicyChain'
+import { loadChainError, loadChainSuccess, updatePolicyChain } from 'Policies/actions/PolicyChain'
 import { setOriginalPolicyChain } from 'Policies/actions/OriginalPolicyChain'
 
-import type { ChainPolicy, RegistryPolicy, PolicyConfig, Dispatch, GetState, PolicyChainMiddlewareAction } from 'Policies/types'
+import type { ChainPolicy, Dispatch, GetState, PolicyChainMiddlewareAction, PolicyConfig, RegistryPolicy } from 'Policies/types'
 
 function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: PolicyConfig): RegistryPolicy | undefined {
   return registry.find(policy => (policy.name === storedPolicy.name && policy.version === storedPolicy.version))

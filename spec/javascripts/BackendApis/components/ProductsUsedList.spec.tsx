@@ -1,7 +1,8 @@
 import { mount } from 'enzyme'
+import { ProductsUsedListCard } from 'BackendApis/components/ProductsUsedListCard'
 
-import { ProductsUsedListCard, Props } from 'BackendApis/components/ProductsUsedListCard'
-import { CompactListItem } from 'Common/components/CompactListCard'
+import type { Props } from 'BackendApis/components/ProductsUsedListCard'
+import type { CompactListItem } from 'Common/components/CompactListCard'
 
 const defaultProps = {
   products: []

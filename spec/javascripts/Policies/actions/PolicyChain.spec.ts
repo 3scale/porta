@@ -1,5 +1,6 @@
 import * as PolicyChain from 'Policies/actions/PolicyChain'
-import { ChainPolicy, RegistryPolicy } from 'Policies/types'
+
+import type { ChainPolicy, RegistryPolicy } from 'Policies/types'
 
 const registryPolicy: RegistryPolicy = {
   name: 'name',

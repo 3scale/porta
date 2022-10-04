@@ -1,5 +1,7 @@
 import { mount } from 'enzyme'
-import { Input, Props } from 'PaymentGateways/braintree/components/Input'
+import { Input } from 'PaymentGateways/braintree/components/Input'
+
+import type { Props } from 'PaymentGateways/braintree/components/Input'
 
 const onChangeSPy = jest.fn()
 const props: Props = {

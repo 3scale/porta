@@ -1,5 +1,4 @@
 import { shallow } from 'enzyme'
-
 import { TypeItemCombo } from 'Settings/components/Common'
 
 it('should render correctly', () => {

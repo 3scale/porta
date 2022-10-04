@@ -1,7 +1,7 @@
 type ProductLink = {
   name: 'Edit' | 'Overview' | 'Analytics' | 'Methods and Metrics' | 'Mapping Rules',
   path: string
-};
+}
 
 export type Backend = {
   id: number,
@@ -11,4 +11,4 @@ export type Backend = {
   updatedAt: string,
   links: Array<ProductLink>,
   productsCount: number
-};
+}

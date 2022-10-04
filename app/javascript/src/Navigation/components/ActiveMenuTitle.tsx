@@ -1,14 +1,13 @@
 import 'core-js/es6/map'
 import 'core-js/es6/set'
-
 import 'Navigation/styles/ActiveMenuTitle.scss'
 
 import type { Menu } from 'Types'
-import { FunctionComponent } from 'enzyme'
+import type { FunctionComponent } from 'enzyme'
 
 type Props = {
   activeMenu: Menu
-};
+}
 
 const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
   const getIconAndText: () => [string, string] = () => {

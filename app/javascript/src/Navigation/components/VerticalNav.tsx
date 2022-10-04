@@ -1,6 +1,8 @@
-import { Nav, NavExpandable, NavItem, NavList, NavGroup, NavExpandableProps } from '@patternfly/react-core'
-import { createReactWrapper } from 'utilities'
+import { Nav, NavExpandable, NavGroup, NavItem, NavList } from '@patternfly/react-core'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import 'Navigation/styles/VerticalNav.scss'
+
+import type { NavExpandableProps } from '@patternfly/react-core'
 import type { Api } from 'Types'
 
 type Item = {
@@ -9,19 +11,19 @@ type Item = {
   path?: string,
   target?: string,
   itemOutOfDateConfig?: boolean
-};
+}
 
 type Section = Item & {
   items?: Item[],
   outOfDateConfig?: boolean
-};
+}
 
 type Props = {
   sections: Section[],
   activeSection?: string,
   activeItem?: string,
   currentApi?: Api
-};
+}
 
 const VerticalNav: React.FunctionComponent<Props> = ({
   sections,
@@ -31,8 +33,8 @@ const VerticalNav: React.FunctionComponent<Props> = ({
 }) => {
   const navSections = sections.map(({ id, title, path, items, outOfDateConfig }) => {
     return items
-      ? <NavSection title={title} isSectionActive={id === activeSection} activeItem={activeItem} items={items} key={title} outOfDateConfig={outOfDateConfig}/>
-      : <NavItem to={path} isActive={activeSection === id} key={title}>{title}</NavItem>
+      ? <NavSection key={title} activeItem={activeItem} isSectionActive={id === activeSection} items={items} outOfDateConfig={outOfDateConfig} title={title} />
+      : <NavItem key={title} isActive={activeSection === id} to={path}>{title}</NavItem>
   })
 
   return (
@@ -60,18 +62,18 @@ type NavSectionProps = {
   outOfDateConfig: Section['outOfDateConfig']
 }
 
-const NavSection: React.FunctionComponent<NavSectionProps> = ({ title, isSectionActive, activeItem, items, outOfDateConfig }) => {
-  return (
-    <NavExpandable title={title} isActive={isSectionActive} isExpanded={isSectionActive} className={outOfDateConfig ? 'outdated-config' : ''}>
-      {items.map(({ id, title, path, target, itemOutOfDateConfig }) => (
-        path
-          ? <NavItem to={path} isActive={isSectionActive && activeItem === id} target={target} key={title} className={itemOutOfDateConfig ? 'outdated-config' : ''}>{title}</NavItem>
-          : <NavGroup title={title} className='vertical-nav-label' key={title}></NavGroup>
-      ))}
-    </NavExpandable>
-  )
-}
+// eslint-disable-next-line react/no-multi-comp
+const NavSection: React.FunctionComponent<NavSectionProps> = ({ title, isSectionActive, activeItem, items, outOfDateConfig }) => (
+  <NavExpandable className={outOfDateConfig ? 'outdated-config' : ''} isActive={isSectionActive} isExpanded={isSectionActive} title={title}>
+    {items.map(({ id, title, path, target, itemOutOfDateConfig }) => (
+      path
+        ? <NavItem key={title} className={itemOutOfDateConfig ? 'outdated-config' : ''} isActive={isSectionActive && activeItem === id} target={target} to={path}>{title}</NavItem>
+        : <NavGroup key={title} className='vertical-nav-label' title={title} />
+    ))}
+  </NavExpandable>
+)
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const VerticalNavWrapper = (props: Props, containerId: string): void => createReactWrapper(<VerticalNav {...props} />, containerId)
 
 export { VerticalNav, VerticalNavWrapper, Props }

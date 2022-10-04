@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { BackendsUsedListCard } from 'Products/components/BackendsUsedListCard'
 
-import { BackendsUsedListCard, Props } from 'Products/components/BackendsUsedListCard'
+import type { Props } from 'Products/components/BackendsUsedListCard'
 
 const defaultProps: Props = {
   backends: []

@@ -1,10 +1,11 @@
 
 import { render } from 'enzyme'
+import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 
-import { ActiveMenuTitle, Props } from 'Navigation/components/ActiveMenuTitle'
-import { Menu } from 'Types'
+import type { Props } from 'Navigation/components/ActiveMenuTitle'
+import type { Menu } from 'Types'
 
-const renderWrapper = (props: Props) => render(<ActiveMenuTitle { ...props } />)
+const renderWrapper = (props: Props) => render(<ActiveMenuTitle {...props} />)
 
 it('should return the proper title depending on the current menu', () => {
   expect(renderWrapper({ activeMenu: 'dashboard' }).text()).toEqual('Dashboard')

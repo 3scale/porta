@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
-import { ToolbarSearch, Props } from 'Common/components/ToolbarSearch'
+import type { Props } from 'Common/components/ToolbarSearch'
 
 const defaultProps = {
   placeholder: ''
@@ -24,7 +25,7 @@ it('should have a placeholder', () => {
 it('should add more fields as children', () => {
   const wrapper = mount(
     <ToolbarSearch placeholder="">
-      <input type="hidden" name="foo" value="bar" />
+      <input name="foo" type="hidden" value="bar" />
     </ToolbarSearch>
   )
   expect(wrapper.find('[name="foo"]').exists()).toBe(true)

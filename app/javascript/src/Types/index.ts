@@ -8,13 +8,13 @@ export * from 'Types/Signup'
 export type Record = {
   id: number,
   name: string
-};
+}
 
 export type Action = {
   title: string,
   path: string,
   method: Method
-};
+}
 
 export type Plan = Record & {
   contracts: number,
@@ -22,20 +22,20 @@ export type Plan = Record & {
   actions: Action[],
   editPath: string,
   contractsPath: string
-};
+}
 
 export type Product = Record & {
   systemName: string,
   path?: string,
   appPlans: Record[]
-};
+}
 
 export type Backend = Record & {
   systemName: string,
   description?: string,
   privateEndpoint: string,
   updatedAt: string
-};
+}
 
 export type Metric = Record & {
   systemName: string,
@@ -44,7 +44,7 @@ export type Metric = Record & {
   description?: string,
   mapped?: boolean,
   updatedAt: string
-};
+}
 
 export type FieldDefinition = {
   hidden: boolean,
@@ -56,4 +56,4 @@ export type FieldDefinition = {
   hint?: string,
   readOnly: boolean,
   type: 'extra' | 'internal' | 'builtin'
-};
+}

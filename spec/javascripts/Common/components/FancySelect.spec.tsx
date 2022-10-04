@@ -1,7 +1,9 @@
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
+import { FancySelect } from 'Common/components/FancySelect'
 
-import { FancySelect, Props } from 'Common/components/FancySelect'
-import { Record } from 'Types'
+import type { ReactWrapper } from 'enzyme'
+import type { Props } from 'Common/components/FancySelect'
+import type { Record } from 'Types'
 
 const onSelect = jest.fn()
 
@@ -61,6 +63,7 @@ it('should have a default item selected', () => {
 })
 
 it('should have a helper text', () => {
+  // eslint-disable-next-line react/no-unescaped-entities
   const wrapper = mountWrapper({ helperText: <p>I'm helpful</p> })
   expect(wrapper.find('.pf-c-form__helper-text').children()).toMatchInlineSnapshot(`
     <p>

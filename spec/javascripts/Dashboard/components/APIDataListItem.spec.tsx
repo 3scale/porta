@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
+import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 
-import { APIDataListItem, Props } from 'Dashboard/components/APIDataListItem'
+import type { Props } from 'Dashboard/components/APIDataListItem'
 
 const defaultProps = {
   api: {

@@ -1,21 +1,20 @@
 import { useState } from 'react'
-
 import {
-  Form,
   ActionGroup,
   Button,
+  Form,
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-
 import { CSRFToken, createReactWrapper, notice } from 'utilities'
-
-import type { Backend } from 'Types'
-
-import './AddBackendForm.scss'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
+
+import type { FunctionComponent } from 'react'
+import type { Backend } from 'Types'
+
+import './AddBackendForm.scss'
 
 type Props = {
   backend: Backend | null,
@@ -27,17 +26,15 @@ type Props = {
     path?: Array<string>
   },
   backendsPath: string
-};
+}
 
-const AddBackendForm = (
-  {
-    backend: initialBackend,
-    backends,
-    url,
-    backendsPath,
-    inlineErrors
-  }: Props
-): React.ReactElement => {
+const AddBackendForm: FunctionComponent<Props> = ({
+  backend: initialBackend,
+  backends,
+  url,
+  backendsPath,
+  inlineErrors
+}) => {
   const [backend, setBackend] = useState<Backend | null>(initialBackend)
   const [updatedBackends, setUpdatedBackends] = useState(backends)
   const [path, setPath] = useState('')
@@ -57,10 +54,10 @@ const AddBackendForm = (
     <>
       <PageSection variant={PageSectionVariants.light}>
         <Form
-          id="new_backend_api_config"
           acceptCharset='UTF-8'
-          method='post'
           action={url}
+          id="new_backend_api_config"
+          method='post'
           onSubmit={() => setLoading(true)}
           // isWidthLimited TODO: use when available instead of hardcoded css
         >
@@ -70,24 +67,24 @@ const AddBackendForm = (
           <BackendSelect
             backend={backend}
             backends={updatedBackends}
-            onSelect={setBackend}
-            onCreateNewBackend={() => setIsModalOpen(true)}
-            searchPlaceholder="Find a backend"
             error={inlineErrors ? inlineErrors.backend_api_id && inlineErrors.backend_api_id[0] : undefined}
+            searchPlaceholder="Find a backend"
+            onCreateNewBackend={() => setIsModalOpen(true)}
+            onSelect={setBackend}
           />
 
           <PathInput
+            error={inlineErrors ? inlineErrors.path && inlineErrors.path[0] : undefined}
             path={path}
             setPath={setPath}
-            error={inlineErrors ? inlineErrors.path && inlineErrors.path[0] : undefined}
           />
 
           <ActionGroup>
             <Button
-              variant='primary'
-              type='submit'
-              isDisabled={!isFormComplete || loading}
               data-testid="addBackend-buttonSubmit"
+              isDisabled={!isFormComplete || loading}
+              type='submit'
+              variant='primary'
             >
               Add to product
             </Button>
@@ -97,14 +94,15 @@ const AddBackendForm = (
 
       <NewBackendModal
         backendsPath={backendsPath}
-        onClose={() => setIsModalOpen(false)}
         isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         onCreateBackend={handleOnCreateBackend}
       />
     </>
   )
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const AddBackendFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<AddBackendForm {...props} />, containerId)
 
 export { AddBackendForm, AddBackendFormWrapper, Props }

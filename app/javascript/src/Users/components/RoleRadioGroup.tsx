@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import ReactHtmlParser from 'react-html-parser'
 
 import type { Role } from 'Users/types'
@@ -18,17 +19,19 @@ type Props = {
 const RoleRadioGroup: React.FunctionComponent<Props> = ({
   selectedRole,
   onRoleChanged
-}) => <li className='radio optional' id='user_role_input'>
-  <fieldset>
-    <legend className='label'>
-      <label>Role</label>
-    </legend>
-    <ol>
-      <UserRole role='admin' label={ADMIN_LABEL} checked={selectedRole === 'admin'} onChange={onRoleChanged}/>
-      <UserRole role='member' label={MEMBER_LABEL} checked={selectedRole === 'member'} onChange={onRoleChanged}/>
-    </ol>
-  </fieldset>
-</li>
+}) => (
+  <li className='radio optional' id='user_role_input'>
+    <fieldset>
+      <legend className='label'>
+        <label>Role</label>
+      </legend>
+      <ol>
+        <UserRole checked={selectedRole === 'admin'} label={ADMIN_LABEL} role='admin' onChange={onRoleChanged} />
+        <UserRole checked={selectedRole === 'member'} label={MEMBER_LABEL} role='member' onChange={onRoleChanged} />
+      </ol>
+    </fieldset>
+  </li>
+)
 
 /**
  * A radio button that represents a user role.
@@ -53,13 +56,13 @@ const UserRole: React.FunctionComponent<UserRoleProps> = ({
   <li>
     <label htmlFor={`user_role_${role}`}>
       <input
+        checked={checked}
         className='roles_ids'
+        id={`user_role_${role}`}
         name='user[role]'
         type='radio'
-        id={`user_role_${role}`}
-        checked={checked}
         value={role}
-        onChange={() => onChange(role) }
+        onChange={() => onChange(role)}
       />
       { ReactHtmlParser(label) }
     </label>

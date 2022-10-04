@@ -1,8 +1,8 @@
-import { FormEvent } from 'react'
-
 import { mount } from 'enzyme'
+import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
 
-import { RequestPasswordForm, Props } from 'LoginPage/loginForms/RequestPasswordForm'
+import type { FormEvent } from 'react'
+import type { Props } from 'LoginPage/loginForms/RequestPasswordForm'
 
 const defaultProps = {
   flashMessages: [],
@@ -10,7 +10,7 @@ const defaultProps = {
   providerPasswordPath: 'password-path'
 }
 
-const mountWrapper = (props: Partial<Props> = {}) => mount<RequestPasswordForm>(<RequestPasswordForm { ...{ ...defaultProps, ...props } } />)
+const mountWrapper = (props: Partial<Props> = {}) => mount<RequestPasswordForm>(<RequestPasswordForm {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

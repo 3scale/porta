@@ -1,5 +1,5 @@
-import { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeItemProps } from 'Settings/types'
-import { Props } from './components/Form'
+import type { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeItemProps } from 'Settings/types'
+import type { Props } from './components/Form'
 
 const INTEGRATION_METHOD_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
   value: 'hosted',

@@ -1,14 +1,15 @@
-import { FunctionComponent, useEffect, useState } from 'react'
-
-import { FormWrapper, ErrorMessage, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
-import { fetchData } from 'utilities'
-
+/* eslint-disable react/jsx-props-no-spreading */
+import { useEffect, useState } from 'react'
+import { ErrorMessage, FormWrapper, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
+import { fetchData } from 'utilities/fetchData'
 import { PROJECTS_PATH } from 'NewService'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   formActionPath: string,
   setLoadingProjects: (loading: boolean) => void
-};
+}
 
 const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   formActionPath,
@@ -46,9 +47,9 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
 
   return (
     <>
-      {fetchErrorMessage && <ErrorMessage fetchErrorMessage={fetchErrorMessage}/>}
+      {fetchErrorMessage ? <ErrorMessage fetchErrorMessage={fetchErrorMessage} /> : null}
       <FormWrapper {...formProps}>
-        <ServiceDiscoveryListItems {...listItemsProps}/>
+        <ServiceDiscoveryListItems {...listItemsProps} />
       </FormWrapper>
     </>
   )

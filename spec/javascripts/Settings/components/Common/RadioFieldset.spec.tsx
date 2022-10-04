@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme'
+import { RadioFieldset } from 'Settings/components/Common/RadioFieldset'
 
-import { RadioFieldset, Props } from 'Settings/components/Common/RadioFieldset'
+import type { Props } from 'Settings/components/Common/RadioFieldset'
 
 it('should render correctly', () => {
   const props: Props = {

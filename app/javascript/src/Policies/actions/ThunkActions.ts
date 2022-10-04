@@ -1,17 +1,16 @@
-import { UIComponent, uiComponentTransition } from 'Policies/actions/UISettings'
+import { uiComponentTransition } from 'Policies/actions/UISettings'
 import { fetchRegistry, loadRegistrySuccess } from 'Policies/actions/PolicyRegistry'
-
 import {
   addPolicyToChain,
-  removePolicy,
-  updatePolicyInChain,
   fetchChain,
-  loadChain
+  loadChain,
+  removePolicy,
+  updatePolicyInChain
 } from 'Policies/actions/PolicyChain'
-
 import { updatePolicyConfig } from 'Policies/actions/PolicyConfig'
 
-import { RegistryPolicy, ChainPolicy, PolicyConfig, ThunkAction, Dispatch } from 'Policies/types'
+import type { UIComponent } from 'Policies/actions/UISettings'
+import type { ChainPolicy, Dispatch, PolicyConfig, RegistryPolicy, ThunkAction } from 'Policies/types'
 
 const chain: UIComponent = 'chain'
 const registry: UIComponent = 'registry'

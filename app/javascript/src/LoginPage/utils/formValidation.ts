@@ -16,7 +16,7 @@ const constraintsTypes = {
   }
 }
 
-type HTMLForm = HTMLFormElement | Record<any, any> | null;
+type HTMLForm = HTMLFormElement | Record<any, any> | null
 
 const validateForm = (form: HTMLForm, constraints: Record<any, any>): undefined | {
   string: Array<string>

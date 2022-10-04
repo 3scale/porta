@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
-import { PolicyChain, SortableList, SortableItem, DragHandle } from 'Policies/components/PolicyChain'
-import { ChainPolicy } from 'Policies/types'
+import { DragHandle, PolicyChain, SortableItem, SortableList } from 'Policies/components/PolicyChain'
+
+import type { ChainPolicy } from 'Policies/types'
 
 const policies: ChainPolicy[] = [
   { uuid: '1', removable: true, enabled: true, name: 'cors', humanName: 'CORS', summary: 'CORS', description: ['CORS headers'], version: '1.0.0', configuration: {}, $schema: '{}' },
