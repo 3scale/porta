@@ -229,6 +229,8 @@ group :test do
   gem "n_plus_one_control"
   gem 'ruby-prof'
   gem 'with_env'
+
+  gem 'pdf-inspector', require: 'pdf/inspector'
 end
 
 group :development, :test do

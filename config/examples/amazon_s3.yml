@@ -1,9 +1,16 @@
+default: &default {}
+
+s3: &s3
+  access_key_id:     "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
+  secret_access_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
+  bucket:            "<%= ENV['AWS_BUCKET'] %>"
+  region:            "<%= ENV['AWS_REGION'] %>"
+  hostname:          "<%= ENV['AWS_HOSTNAME'] %>"
+  protocol:          "<%= ENV['AWS_PROTOCOL'] %>"
+  force_path_style:  <%= ENV['AWS_PATH_STYLE'].presence || false %>
+
 development:
-  access_key_id:     access_key_id
-  secret_access_key: secret_access_key
-  bucket:            dev-my-s3-bucket
-  region:            "us-east-1"
-  force_path_style:  false
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
 
 test: &test
   access_key_id: invalid
@@ -11,8 +18,8 @@ test: &test
   bucket: test-my-s3-bucket
   region: "us-east-1"
 
+preview:
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
+
 production:
-  access_key_id: invalid
-  secret_access_key: invalid
-  bucket: prod-my-s3-bucket
-  region: "us-east-1"
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
