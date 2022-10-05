@@ -1,13 +1,15 @@
 default: &default {}
 
 s3: &s3
-  access_key_id:     "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
+  access_key_id: "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
   secret_access_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
-  bucket:            "<%= ENV['AWS_BUCKET'] %>"
-  region:            "<%= ENV['AWS_REGION'] %>"
-  hostname:          "<%= ENV['AWS_HOSTNAME'] %>"
-  protocol:          "<%= ENV['AWS_PROTOCOL'] %>"
-  force_path_style:  <%= ENV['AWS_PATH_STYLE'].presence || false %>
+  role_arn: "<%= ENV['AWS_ROLE_ARN'] %>"
+  web_identity_token_file: "<%= ENV['AWS_WEB_IDENTITY_TOKEN_FILE'] %>"
+  bucket: "<%= ENV['AWS_BUCKET'] %>"
+  region: "<%= ENV['AWS_REGION'] %>"
+  hostname: "<%= ENV['AWS_HOSTNAME'] %>"
+  protocol: "<%= ENV['AWS_PROTOCOL'] %>"
+  force_path_style: <%= ENV['AWS_PATH_STYLE'].presence || false %>
 
 preview:
   <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
