@@ -22,7 +22,7 @@ describe('FormFieldset', () => {
 
   it('should render form fieldset with custom class names', () => {
     const view = mount(
-      <FormFieldset className='extra-class another-class'>
+      <FormFieldset className="extra-class another-class">
         <input id="input-id" />
       </FormFieldset>
     )

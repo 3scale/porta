@@ -7,17 +7,17 @@ import 'Policies/styles/policies.scss'
 
 import type { Action, PolicyConfig, RegistryPolicy } from 'Policies/types'
 
-type PoliciesProps = {
+type Props = {
   registry: RegistryPolicy[],
   chain: PolicyConfig[],
   serviceId: string
 }
 
-const PoliciesWrapper = ({ registry, chain, serviceId }: PoliciesProps, elementId: string): void => {
+const PoliciesWrapper = ({ registry, chain, serviceId }: Props, elementId: string): void => {
   const store = configureStore(initialState)
   store.dispatch(populateChainFromConfigs(serviceId, chain, registry) as unknown as Action)
 
   return createReactWrapper(<Root store={store} />, elementId)
 }
 
-export { PoliciesWrapper }
+export { PoliciesWrapper, Props }

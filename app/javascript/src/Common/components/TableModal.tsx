@@ -42,7 +42,7 @@ type Props<T extends Record> = {
   isOpen?: boolean,
   isLoading?: boolean,
   page: number,
-  setPage: (arg1: number) => void,
+  setPage: (page: number) => void,
   onSearch: (term: string) => void,
   searchPlaceholder?: string,
   perPage?: number,
@@ -108,7 +108,7 @@ const TableModal = <T extends Record>({
 
   const pagination = (
     <Pagination
-      className='pf-c-pagination__input-auto-width'
+      className="pf-c-pagination__input-auto-width"
       isDisabled={isLoading}
       itemCount={itemsCount}
       page={page}
@@ -188,12 +188,12 @@ const TableModal = <T extends Record>({
           {pagination}
         </ToolbarItem>
       </Toolbar>
-      {isLoading ? <Spinner size='xl' /> : rows.length === 0 ? <NoMatchFound /> : (
+      {isLoading ? <Spinner size="xl" /> : rows.length === 0 ? <NoMatchFound /> : (
         <Table
           aria-label={title}
           cells={cells}
           rows={rows}
-          selectVariant='radio'
+          selectVariant="radio"
           sortBy={sortBy}
           onSelect={handleOnSelect}
         >

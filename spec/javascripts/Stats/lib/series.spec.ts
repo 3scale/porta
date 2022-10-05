@@ -33,7 +33,7 @@ describe('StatsSeries', () => {
     statsSerie.getData(stateOptions).then(response => {
       expect(JSON.stringify(response)).toBe(
         JSON.stringify({
-          columns: [ [ 'x', '2006-11-16T23:00:00', '2006-11-17T23:00:00' ], [ 'Bond, James Bond', 42 ] ],
+          columns: [['x', '2006-11-16T23:00:00', '2006-11-17T23:00:00'], ['Bond, James Bond', 42]],
           unload: true,
           _period: {
             granularity: 'day',

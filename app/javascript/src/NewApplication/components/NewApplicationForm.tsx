@@ -128,13 +128,13 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   return (
     <PageSection variant={PageSectionVariants.light}>
       <Form
-        acceptCharset='UTF-8'
+        acceptCharset="UTF-8"
         action={url}
-        method='post'
+        method="post"
         onSubmit={() => setLoading(true)}
       >
         <CSRFToken />
-        <input name='utf8' type='hidden' value='✓' />
+        <input name="utf8" type="hidden" value="✓" />
 
         {buyers ? (
           <BuyerSelect
@@ -192,8 +192,8 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
         <ActionGroup>
           <Button
             isDisabled={!isFormComplete || loading}
-            type='submit'
-            variant='primary'
+            type="submit"
+            variant="primary"
           >
               Create application
           </Button>

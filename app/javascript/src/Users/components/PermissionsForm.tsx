@@ -52,7 +52,7 @@ const PermissionsForm: FunctionComponent<Props> = ({
   const areServicesVisible = canFeatureSetServicePermissions(selectedSections)
 
   return (
-    <fieldset className='inputs' name='Administrative'>
+    <fieldset className="inputs" name="Administrative">
       <legend>Administrative</legend>
       <ol>
         <RoleRadioGroup
@@ -61,7 +61,7 @@ const PermissionsForm: FunctionComponent<Props> = ({
         />
 
         {role === 'member' && (
-          <li className='radio optional' id='user_member_permissions_input'>
+          <li className="radio optional" id="user_member_permissions_input">
             <FeaturesFieldset
               areServicesVisible={areServicesVisible}
               features={features}

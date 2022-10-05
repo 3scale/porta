@@ -12,8 +12,8 @@ type Props = {
 }
 
 const Provider: FunctionComponent<ProvidersProps> = ({ authorizeURL, humanKind }) => (
-  <p className='login-provider'>
-    <a className='login-provider-link' href={authorizeURL}>
+  <p className="login-provider">
+    <a className="login-provider-link" href={authorizeURL}>
       <KeyIcon />{' Authenticate through '}
       <LessThanIcon /><GreaterThanIcon />{humanKind}
     </a>
@@ -28,7 +28,7 @@ const AuthenticationProviders: FunctionComponent<Props> = (props) => {
   )
 
   return (
-    <div className='providers-list'>
+    <div className="providers-list">
       {providersList}
     </div>
   )

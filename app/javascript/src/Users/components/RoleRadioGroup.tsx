@@ -20,14 +20,14 @@ const RoleRadioGroup: React.FunctionComponent<Props> = ({
   selectedRole,
   onRoleChanged
 }) => (
-  <li className='radio optional' id='user_role_input'>
+  <li className="radio optional" id="user_role_input">
     <fieldset>
-      <legend className='label'>
+      <legend className="label">
         <label>Role</label>
       </legend>
       <ol>
-        <UserRole checked={selectedRole === 'admin'} label={ADMIN_LABEL} role='admin' onChange={onRoleChanged} />
-        <UserRole checked={selectedRole === 'member'} label={MEMBER_LABEL} role='member' onChange={onRoleChanged} />
+        <UserRole checked={selectedRole === 'admin'} label={ADMIN_LABEL} role="admin" onChange={onRoleChanged} />
+        <UserRole checked={selectedRole === 'member'} label={MEMBER_LABEL} role="member" onChange={onRoleChanged} />
       </ol>
     </fieldset>
   </li>
@@ -57,10 +57,10 @@ const UserRole: React.FunctionComponent<UserRoleProps> = ({
     <label htmlFor={`user_role_${role}`}>
       <input
         checked={checked}
-        className='roles_ids'
+        className="roles_ids"
         id={`user_role_${role}`}
-        name='user[role]'
-        type='radio'
+        name="user[role]"
+        type="radio"
         value={role}
         onChange={() => onChange(role)}
       />

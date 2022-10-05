@@ -12,15 +12,15 @@ import type { FunctionComponent } from 'react'
 import type { FieldGroupProps, TypeItemProps } from 'Settings/types'
 
 const Basics: FunctionComponent<TypeItemProps> = (props) => (
-  <TypeItemCombo {...props} legend='OIDC BASICS' />
+  <TypeItemCombo {...props} legend="OIDC BASICS" />
 )
 
 const JsonWebToken: FunctionComponent<TypeItemProps> = (props) => (
-  <TypeItemCombo {...props} legend='JSON Web Token (JWT) Claim with ClientID' />
+  <TypeItemCombo {...props} legend="JSON Web Token (JWT) Claim with ClientID" />
 )
 
 const FlowItem: FunctionComponent<FieldGroupProps> = ({ name, label, checked }) => {
-  const [ isChecked, setIsChecked ] = useState(checked)
+  const [isChecked, setIsChecked] = useState(checked)
   const onChange: CheckboxProps['onChange'] = (check) => setIsChecked(check)
   return (
     <Checkbox
@@ -34,7 +34,7 @@ const FlowItem: FunctionComponent<FieldGroupProps> = ({ name, label, checked }) 
 }
 
 const AuthorizationFlow: FunctionComponent<{ collection: FieldGroupProps[] }> = (props) => (
-  <FormCollection {...props} ItemComponent={FlowItem} legend='OIDC Authorization flow' />
+  <FormCollection {...props} ItemComponent={FlowItem} legend="OIDC Authorization flow" />
 )
 
 type Props = {
@@ -50,7 +50,7 @@ const OidcFieldset: FunctionComponent<Props> = ({
   jwtSettings,
   flowSettings
 }) => (
-  <FormFieldset id='fieldset-Oidc'>
+  <FormFieldset id="fieldset-Oidc">
     <FormLegend>OPENID CONNECT (OIDC)</FormLegend>
     <Basics {...basicSettings} />
     { !isServiceMesh && <AuthorizationFlow collection={flowSettings} /> }

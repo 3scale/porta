@@ -36,26 +36,35 @@ const PASSWORD_ATTRS = {
   label: 'Password'
 }
 
+// TODO: resolve this react/require-optimization
+// eslint-disable-next-line react/require-optimization
 class Login3scaleForm extends React.Component<Props, State> {
-  state: State = {
-    username: this.props.session.username || '',
-    password: '',
-    validation: {
-      username: this.props.session.username ? true : undefined,
-      password: undefined
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      username: this.props.session.username || '',
+      password: '',
+      validation: {
+        username: this.props.session.username ? true : undefined,
+        password: undefined
+      }
     }
   }
 
-  handleInputChange: (arg1: string, arg2: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
+  handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = validateSingleField(event)
-    const validation = {
-      ...this.state.validation,
-      [event.currentTarget.name]: isValid
-    }
-    this.setState({
-      [event.currentTarget.name]: value,
-      validation
-    } as State)
+
+    this.setState((prevState) => {
+      const validation = {
+        ...prevState.validation,
+        [event.currentTarget.name]: isValid
+      }
+
+      return {
+        [event.currentTarget.name]: value,
+        validation
+      } as State
+    })
   }
 
   render () {
@@ -84,11 +93,11 @@ class Login3scaleForm extends React.Component<Props, State> {
     return (
       <Form
         noValidate
-        acceptCharset='UTF-8'
+        acceptCharset="UTF-8"
         action={this.props.providerSessionsPath}
         autoComplete="off"
-        id='new_session'
-        method='post'
+        id="new_session"
+        method="post"
       >
         <HiddenInputs />
         {/* <TextField inputProps={usernameInputProps} autoComplete="off"/> TODO: verify autocomplete did nothing */}
@@ -97,9 +106,9 @@ class Login3scaleForm extends React.Component<Props, State> {
         <PasswordField inputProps={passwordInputProps} />
         <ActionGroup>
           <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+            className="pf-c-button pf-m-primary pf-m-block"
             isDisabled={formDisabled}
-            type='submit'
+            type="submit"
           > Sign in
           </Button>
         </ActionGroup>

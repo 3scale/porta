@@ -1,4 +1,3 @@
-
 import type { ChainPolicy } from 'Policies/types'
 
 type Props = {
@@ -12,12 +11,12 @@ const PolicyChainHiddenInput: React.FunctionComponent<Props> = ({ policies }) =>
 
   return (
     <input
-      id='proxy[policies_config]'
-      name='proxy[policies_config]'
-      type='hidden'
+      id="proxy[policies_config]"
+      name="proxy[policies_config]"
+      type="hidden"
       value={data}
     />
   )
 }
 
-export { PolicyChainHiddenInput }
+export { PolicyChainHiddenInput, Props }

@@ -1,3 +1,4 @@
+import type { FunctionComponent } from "react"
 
 type Props = {
   name: string,
@@ -7,7 +8,7 @@ type Props = {
   options: Array<string>
 }
 
-const Select: React.FunctionComponent<Props> = ({
+const Select: FunctionComponent<Props> = ({
   name,
   id,
   disabled,
@@ -25,4 +26,4 @@ const Select: React.FunctionComponent<Props> = ({
   </select>
 )
 
-export { Select }
+export { Select, Props }

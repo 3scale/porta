@@ -55,7 +55,7 @@ const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
         <i className={`fa ${icon}` + ' header-context-selector__toggle-text-icon'} />
         {text}
       </span>
-      <i className='fa fa-chevron-down  pf-c-context-selector__toggle-icon' />
+      <i className="fa fa-chevron-down  pf-c-context-selector__toggle-icon" />
     </>
   )
 }

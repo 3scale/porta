@@ -4,6 +4,7 @@ import { ServiceManualForm } from 'NewService/components/ServiceManualForm'
 import { ServiceSourceForm } from 'NewService/components/ServiceSourceForm'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
+import type { FunctionComponent } from 'react'
 import type { Api } from 'Types/Api'
 import type { ServiceFormTemplate } from 'NewService/types'
 
@@ -17,7 +18,7 @@ type Props = {
   backendApis: Api[]
 }
 
-const NewServiceForm = (props: Props): React.ReactElement => {
+const NewServiceForm: FunctionComponent<Props> = (props) => {
   const { template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
     providerAdminServiceDiscoveryServicesPath, adminServicesPath, backendApis } = props
 

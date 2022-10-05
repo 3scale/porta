@@ -1,17 +1,17 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
 
+import type { FunctionComponent } from 'react'
+import type { TextInputProps } from '@patternfly/react-core'
+
 type Props = {
-  redirectUrl: string,
+  redirectUrl: TextInputProps['value'],
   setRedirectUrl: (arg1: string) => void
 }
 
-const RedirectUrlInput = (
-  {
-    redirectUrl,
-    setRedirectUrl
-  }: Props
-): React.ReactElement => (
+const RedirectUrlInput: FunctionComponent<Props> = ({
+  redirectUrl,
+  setRedirectUrl
+}) => (
   <FormGroup
     fieldId="proxy_rule_redirect_url"
     label="Redirect URL"

@@ -85,7 +85,7 @@ const IndexPage: React.FunctionComponent<Props> = ({
         itemCount={productsCount}
         page={Number(page)}
         perPage={Number(perPage) || 20}
-        perPageOptions={[ { title: '10', value: 10 }, { title: '20', value: 20 } ]}
+        perPageOptions={[{ title: '10', value: 10 }, { title: '20', value: 20 }]}
         variant={variant}
         widgetId="pagination-options-menu-top"
         onFirstClick={(_ev, page) => goToPage(page)}

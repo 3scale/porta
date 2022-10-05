@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useState } from 'react'
-import { ErrorMessage, FormWrapper, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import { fetchData } from 'utilities/fetchData'
 import { PROJECTS_PATH } from 'NewService'
+import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
+import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
+import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
 
 import type { FunctionComponent } from 'react'
 

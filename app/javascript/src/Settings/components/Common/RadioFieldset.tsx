@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react'
 import { Radio } from '@patternfly/react-core'
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'
@@ -29,6 +28,7 @@ const RadioFieldset: React.FunctionComponent<Props> = ({
 }) => {
   const [selectedOnChange, setSelectedOnChange] = useSelectedOnChange(value as string, onChange)
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <FormFieldset id={`fieldset-${name}`} {...props} >
       <FormLegend>{legend}</FormLegend>
       {Object.keys(catalog).map(key => (

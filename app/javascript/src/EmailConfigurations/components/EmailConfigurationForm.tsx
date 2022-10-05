@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import {
   ActionGroup,
@@ -6,15 +5,16 @@ import {
   Form
 } from '@patternfly/react-core'
 import { CSRFToken } from 'utilities/CSRFToken'
-
-import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
-
 import {
   EmailInput,
+  UserNameInput,
   PasswordInput,
-  PasswordRepeatInput,
-  UserNameInput
-} from './form-fields'
+  PasswordRepeatInput
+} from 'EmailConfigurations/components/form-fields'
+
+import type { FunctionComponent } from 'react'
+import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
+
 import './EmailConfigurationForm.scss'
 
 type Props = {
@@ -24,14 +24,12 @@ type Props = {
   errors?: FormErrors
 }
 
-const EmailConfigurationForm = (
-  {
-    url,
-    emailConfiguration,
-    isUpdate = false,
-    errors = {}
-  }: Props
-): React.ReactElement => {
+const EmailConfigurationForm: FunctionComponent<Props> = ({
+  url,
+  emailConfiguration,
+  isUpdate = false,
+  errors = {}
+}) => {
   const FORM_ID = 'email-configuration-form'
   const [email, setEmail] = useState<string>(emailConfiguration.email || '')
   const [userName, setUserName] = useState<string>(emailConfiguration.userName || '')

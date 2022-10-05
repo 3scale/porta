@@ -8,7 +8,7 @@ import { EmailField } from 'LoginPage/loginForms/FormGroups'
 import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 import { validateSingleField } from 'LoginPage/utils/formValidation'
 
-export type Props = {
+type Props = {
   providerLoginPath: string,
   providerPasswordPath: string
 }
@@ -20,15 +20,20 @@ type State = {
   }
 }
 
+// TODO: resolve this react/require-optimization
+// eslint-disable-next-line react/require-optimization
 class RequestPasswordForm extends React.Component<Props, State> {
-  state: State = {
-    email: '',
-    validation: {
-      email: undefined
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      email: '',
+      validation: {
+        email: undefined
+      }
     }
   }
 
-  handleTextInputEmail: (arg1: string, arg2: React.SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
+  handleTextInputEmail: (text: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
     const isValid = validateSingleField(event)
     this.setState({ email, validation: { email: isValid } })
   }
@@ -48,19 +53,20 @@ class RequestPasswordForm extends React.Component<Props, State> {
     return (
       <Form
         noValidate
-        acceptCharset='UTF-8'
+        acceptCharset="UTF-8"
         action={this.props.providerPasswordPath}
-        id='request_password'
-        method='post'
+        id="request_password"
+        method="post"
       >
         <HiddenInputs isPasswordReset />
         <EmailField inputProps={emailInputProps} />
         <ActionGroup>
           <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+            className="pf-c-button pf-m-primary pf-m-block"
             isDisabled={formDisabled}
-            type='submit'
-          >Reset password
+            type="submit"
+          >
+            Reset password
           </Button>
           <a href={this.props.providerLoginPath}>Sign in</a>
         </ActionGroup>
@@ -69,6 +75,4 @@ class RequestPasswordForm extends React.Component<Props, State> {
   }
 }
 
-export {
-  RequestPasswordForm
-}
+export { RequestPasswordForm, Props }

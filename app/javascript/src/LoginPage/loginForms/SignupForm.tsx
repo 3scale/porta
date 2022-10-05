@@ -43,23 +43,28 @@ const INPUT_LABELS: Record<InputType, string> = {
   passwordConfirmation: 'Password confirmation'
 } as const
 
+// TODO: resolve this react/require-optimization
+// eslint-disable-next-line react/require-optimization
 class SignupForm extends React.Component<Props, State> {
-  state = {
-    [INPUT_NAMES.username]: this.props.user.username,
-    [INPUT_NAMES.email]: this.props.user.email,
-    [INPUT_NAMES.firstName]: this.props.user.firstname,
-    [INPUT_NAMES.lastName]: this.props.user.lastname,
-    [INPUT_NAMES.password]: '',
-    [INPUT_NAMES.passwordConfirmation]: '',
-    validation: {
-      [INPUT_NAMES.username]: this.props.user.username ? true : undefined,
-      [INPUT_NAMES.email]: this.props.user.email ? true : undefined,
-      [INPUT_NAMES.firstName]: true,
-      [INPUT_NAMES.lastName]: true,
-      [INPUT_NAMES.password]: undefined,
-      [INPUT_NAMES.passwordConfirmation]: undefined
-    }
-  } as State
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      [INPUT_NAMES.username]: this.props.user.username,
+      [INPUT_NAMES.email]: this.props.user.email,
+      [INPUT_NAMES.firstName]: this.props.user.firstname,
+      [INPUT_NAMES.lastName]: this.props.user.lastname,
+      [INPUT_NAMES.password]: '',
+      [INPUT_NAMES.passwordConfirmation]: '',
+      validation: {
+        [INPUT_NAMES.username]: this.props.user.username ? true : undefined,
+        [INPUT_NAMES.email]: this.props.user.email ? true : undefined,
+        [INPUT_NAMES.firstName]: true,
+        [INPUT_NAMES.lastName]: true,
+        [INPUT_NAMES.password]: undefined,
+        [INPUT_NAMES.passwordConfirmation]: undefined
+      }
+    } as State
+  }
 
   getInputProps = (name: InputType, isRequired: boolean): InputProps => {
     return {
@@ -75,15 +80,18 @@ class SignupForm extends React.Component<Props, State> {
 
   handleInputChange: (arg1: string, arg2: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
-    const validation = {
-      ...this.state.validation,
-      [event.currentTarget.name]: isValid
-    } as const
 
-    this.setState({
-      [event.currentTarget.name]: value,
-      validation
-    } as State)
+    this.setState((prevState: State) => {
+      const validation = {
+        ...prevState.validation,
+        [event.currentTarget.name]: isValid
+      } as const
+
+      return {
+        [event.currentTarget.name]: value,
+        validation
+      } as State
+    })
   }
 
   render () {
@@ -99,10 +107,10 @@ class SignupForm extends React.Component<Props, State> {
     return (
       <Form
         noValidate
-        acceptCharset='UTF-8'
+        acceptCharset="UTF-8"
         action={this.props.path}
-        id='signup_form'
-        method='post'
+        id="signup_form"
+        method="post"
       >
         <HiddenInputs />
         <TextField inputProps={usernameInputProps} />
@@ -114,11 +122,12 @@ class SignupForm extends React.Component<Props, State> {
 
         <ActionGroup>
           <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+            className="pf-c-button pf-m-primary pf-m-block"
             isDisabled={formDisabled}
             name="commit"
-            type='submit'
-          >Sign up
+            type="submit"
+          >
+            Sign up
           </Button>
         </ActionGroup>
       </Form>

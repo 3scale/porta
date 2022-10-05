@@ -1,17 +1,17 @@
 import { CSRFToken } from 'utilities/CSRFToken'
-import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
+import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
 import { Button } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
-import type { FormProps } from 'NewService/types'
+import type { FormProps as Props } from 'NewService/types'
 
-const FormWrapper: FunctionComponent<FormProps> = (props) => {
+const FormWrapper: FunctionComponent<Props> = (props) => {
   const { id, formActionPath, hasHiddenServiceDiscoveryInput, submitText } = props
   return (
     <form
       acceptCharset="UTF-8"
       action={formActionPath}
-      className='formtastic service'
+      className="formtastic service"
       id={id}
       method="post"
     >
@@ -37,4 +37,4 @@ const FormWrapper: FunctionComponent<FormProps> = (props) => {
   )
 }
 
-export { FormWrapper }
+export { FormWrapper, Props }

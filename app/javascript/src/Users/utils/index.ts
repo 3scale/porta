@@ -10,9 +10,7 @@ const FEATURE_NAMES: Partial<Record<Feature, string>> = {
   policy_registry: 'Create, read, update and delete:'
 }
 
-const FEATURE_NAMES_DESCRIPTION_ITEMS: {
-  [key: string]: Array<string>
-} = {
+const FEATURE_NAMES_DESCRIPTION_ITEMS: Record<string, string[]> = {
   partners: [
     'developer <strong>accounts</strong></span>',
     '<strong>applications</strong> of <em>selected API products</em>'

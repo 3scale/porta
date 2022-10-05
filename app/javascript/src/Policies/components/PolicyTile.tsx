@@ -1,4 +1,3 @@
-
 import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 
 type Props = {

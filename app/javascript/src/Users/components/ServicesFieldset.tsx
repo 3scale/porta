@@ -13,7 +13,7 @@ type Props = {
   services?: Api[],
   selectedSections?: AdminSection[],
   selectedServicesIds?: number[],
-  onServiceSelected: (arg1: number) => void
+  onServiceSelected: (id: number) => void
 }
 
 const ServicesFieldset: React.FunctionComponent<Props> = ({
@@ -56,7 +56,7 @@ type ServiceCheckboxProps = {
   selectedSections: AdminSection[],
   checked: boolean,
   disabled: boolean,
-  onChange: (arg1: number) => void
+  onChange: (value: number) => void
 }
 
 const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
@@ -68,19 +68,19 @@ const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
   const { id, name } = service
 
   return (
-    <li className='ServiceAccessList-item'>
-      <label className='ServiceAccessList-label is-checked' htmlFor={`user_member_permission_service_ids_${id}`}>
+    <li className="ServiceAccessList-item">
+      <label className="ServiceAccessList-label is-checked" htmlFor={`user_member_permission_service_ids_${id}`}>
         <input
           checked={checked}
-          className='user_member_permission_service_ids'
+          className="user_member_permission_service_ids"
           disabled={disabled}
           id={`user_member_permission_service_ids_${id}`}
-          name='user[member_permission_service_ids][]'
-          type='checkbox'
+          name="user[member_permission_service_ids][]"
+          type="checkbox"
           value={id}
           onChange={() => onChange(id)}
         />
-        <span className='ServiceAccessList-labelText'>{name}</span>
+        <span className="ServiceAccessList-labelText">{name}</span>
       </label>
     </li>
   )

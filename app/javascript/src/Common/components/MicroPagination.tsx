@@ -1,6 +1,7 @@
-
 import { Button } from '@patternfly/react-core'
 import { AngleLeftIcon, AngleRightIcon } from '@patternfly/react-icons'
+
+import type { FunctionComponent } from 'react'
 
 import './MicroPagination.scss'
 
@@ -10,13 +11,11 @@ type Props = {
   setPage: (page: number) => void
 }
 
-const MicroPagination = (
-  {
-    page,
-    lastPage,
-    setPage
-  }: Props
-): React.ReactElement => {
+const MicroPagination: FunctionComponent<Props> = ({
+  page,
+  lastPage,
+  setPage
+}) => {
   const onPrevious = () => setPage(page - 1)
   const onNext = () => setPage(page + 1)
 

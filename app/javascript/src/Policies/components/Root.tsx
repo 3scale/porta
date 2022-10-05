@@ -1,4 +1,3 @@
-
 import { Provider } from 'react-redux'
 import PoliciesWidget from 'Policies/components/PoliciesWidget'
 
@@ -14,5 +13,4 @@ const Root: React.FunctionComponent<Props> = ({ store }) => (
   </Provider>
 )
 
-export default Root
-export { Props }
+export { Root as default, Props }

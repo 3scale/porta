@@ -7,6 +7,7 @@ import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInp
 import { connect } from 'react-redux'
 import { isPolicyChainChanged } from 'Policies/util'
 
+import type { FunctionComponent } from 'react'
 import type { Dispatch } from 'redux'
 import type { ChainPolicy, IPoliciesActions, RegistryPolicy, State, UIState } from 'Policies/types'
 
@@ -31,14 +32,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   boundActionCreators: bindActionCreators(actions, dispatch)
 })
 
-const PolicyList = ({
+const PolicyList: FunctionComponent<Props> = ({
   registry,
   chain,
   originalChain,
   policyConfig,
   ui,
   boundActionCreators
-}: Props) => {
+}) => {
   const chainActions = {
     openPolicyRegistry: boundActionCreators.openPolicyRegistry,
     editPolicy: boundActionCreators.openPolicyForm,
@@ -81,5 +82,4 @@ const PoliciesWidget = connect(
   mapDispatchToProps
 )(PolicyList)
 
-export default PoliciesWidget
-export { PolicyList, Props }
+export { PoliciesWidget as default, PolicyList, Props }

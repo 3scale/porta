@@ -56,15 +56,15 @@ const AddBackendForm: FunctionComponent<Props> = ({
     <>
       <PageSection variant={PageSectionVariants.light}>
         <Form
-          acceptCharset='UTF-8'
+          acceptCharset="UTF-8"
           action={url}
           id="new_backend_api_config"
-          method='post'
+          method="post"
           onSubmit={() => setLoading(true)}
           // isWidthLimited TODO: use when available instead of hardcoded css
         >
           <CSRFToken />
-          <input name='utf8' type='hidden' value='✓' />
+          <input name="utf8" type="hidden" value="✓" />
 
           <BackendSelect
             backend={backend}
@@ -85,8 +85,8 @@ const AddBackendForm: FunctionComponent<Props> = ({
             <Button
               data-testid="addBackend-buttonSubmit"
               isDisabled={!isFormComplete || loading}
-              type='submit'
-              variant='primary'
+              type="submit"
+              variant="primary"
             >
               Add to product
             </Button>

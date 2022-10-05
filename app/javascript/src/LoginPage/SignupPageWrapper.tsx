@@ -11,9 +11,9 @@ import type { SignupProps as Props } from 'Types'
 
 const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
   <LoginPage
-    backgroundImgAlt='Red Hat 3scale API Management'
+    backgroundImgAlt="Red Hat 3scale API Management"
     backgroundImgSrc={PF4DownstreamBG}
-    brandImgAlt='Red Hat 3scale API Management'
+    brandImgAlt="Red Hat 3scale API Management"
     brandImgSrc={brandImg}
     loginTitle={`Signup to ${String(name)}`}
     // footer={null}

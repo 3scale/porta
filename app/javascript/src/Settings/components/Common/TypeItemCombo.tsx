@@ -24,4 +24,4 @@ const TypeItemCombo: React.FunctionComponent<Props> = ({
   </FormFieldset>
 )
 
-export { TypeItemCombo }
+export { TypeItemCombo, Props }

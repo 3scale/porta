@@ -52,29 +52,29 @@ const ContextSelector: FunctionComponent<Props> = ({
           <ul className="pf-c-context-selector__menu-list" id="context-menu">
             <li>
               <a className={getClassNamesForMenu('dashboard')} href={DASHBOARD_PATH}>
-                <i className='fa fa-home header-context-selector__item-icon' />Dashboard
+                <i className="fa fa-home header-context-selector__item-icon" />Dashboard
               </a>
             </li>
             {!!audienceLink && (
               <li>
                 <a className={getClassNamesForMenu('audience')} href={audienceLink}>
-                  <i className='fa fa-bullseye header-context-selector__item-icon' />Audience
+                  <i className="fa fa-bullseye header-context-selector__item-icon" />Audience
                 </a>
               </li>
             )}
             <li>
               <a className={getClassNamesForMenu('products')} href={productsLink}>
-                <i className='fa fa-cubes header-context-selector__item-icon' />Products
+                <i className="fa fa-cubes header-context-selector__item-icon" />Products
               </a>
             </li>
             <li>
               <a className={getClassNamesForMenu('backend_api')} href={backendsLink}>
-                <i className='fa fa-cube header-context-selector__item-icon' />Backends
+                <i className="fa fa-cube header-context-selector__item-icon" />Backends
               </a>
             </li>
             <li>
               <a className={getClassNamesForMenu('account')} href={settingsLink}>
-                <i className='fa fa-cog header-context-selector__item-icon' />Account Settings
+                <i className="fa fa-cog header-context-selector__item-icon" />Account Settings
               </a>
             </li>
           </ul>

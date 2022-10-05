@@ -61,7 +61,7 @@ const TextField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }
   <FormGroup
     helperTextInvalid={helperTexts.emailOrUsername}
     inputProps={inputProps}
-    type='text'
+    type="text"
   />
 )
 
@@ -69,7 +69,7 @@ const EmailField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps 
   <FormGroup
     helperTextInvalid={helperTexts.email}
     inputProps={inputProps}
-    type='email'
+    type="email"
   />
 )
 
@@ -79,20 +79,20 @@ const PasswordField: FunctionComponent<{ inputProps: InputProps }> = ({ inputPro
     <FormGroup
       helperTextInvalid={helperText}
       inputProps={inputProps}
-      type='password'
+      type="password"
     />
   )
 }
 
 const PasswordConfirmationField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => {
   const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
-  const errorMessage = inputProps.errorMessage as 'isMandatory' | 'mustMatch'
+  const errorMessage = inputProps.errorMessage as keyof typeof helperTexts['passwordConfirmation']
   const helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage
   return (
     <FormGroup
       helperTextInvalid={helperText}
       inputProps={inputProps}
-      type='password'
+      type="password"
     />
   )
 }

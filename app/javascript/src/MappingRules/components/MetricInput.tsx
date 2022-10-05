@@ -26,9 +26,9 @@ const MetricInput: FunctionComponent<Props> = ({
   topLevelMetrics,
   methods
 }) => {
-  const [checked, setChecked] = useState<'method' | 'metric'>('method')
+  const [checked, setChecked] = useState<RadioOptionProps['type']>('method')
 
-  const handleOnRadioChange = (radio: 'method' | 'metric') => {
+  const handleOnRadioChange = (radio: RadioOptionProps['type']) => {
     setChecked(radio)
     handleOnSelect(null)
   }

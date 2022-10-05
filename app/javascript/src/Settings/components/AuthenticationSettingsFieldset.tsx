@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { FormCollection } from 'Settings/components/Common/FormCollection'
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 import { FormLegend } from 'Settings/components/Common/FormLegend'
@@ -35,10 +34,11 @@ const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
   const isAppIdKey = authenticationMethod === APP_ID_KEY_METHOD
   return (
     (!isServiceMesh || isOidc) && (
-      <FormFieldset id='fieldset-AuthenticationSettings'>
+      <FormFieldset id="fieldset-AuthenticationSettings">
         <FormLegend>Authentication Settings</FormLegend>
-        { isApiKey && <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend='API KEY (USER_KEY) BASICS' /> }
-        { isAppIdKey && <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend='APP_ID AND APP_KEY PAIR BASICS' /> }
+        { isApiKey && <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend="API KEY (USER_KEY) BASICS" /> }
+        { isAppIdKey && <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend="APP_ID AND APP_KEY PAIR BASICS" /> }
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         { isOidc && <OidcFieldset {...oidcSettings} isServiceMesh={isServiceMesh} /> }
       </FormFieldset>
     )

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Label, Select } from 'NewService/components/FormElements'
 import { fetchData } from 'utilities/fetchData'
 import { BASE_PATH } from 'NewService'
+import { Label } from 'NewService/components/FormElements/Label'
+import { Select } from 'NewService/components/FormElements/Select'
 
 import type { FunctionComponent } from 'react'
 
@@ -40,26 +41,26 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
     <>
       <li className="string required" id="service_name_input">
         <Label
-          htmlFor='service_namespace'
-          label='Namespace'
+          htmlFor="service_namespace"
+          label="Namespace"
         />
         <Select
           disabled={loading}
-          id='service_namespace'
-          name='service[namespace]'
+          id="service_namespace"
+          name="service[namespace]"
           options={projects}
           onChange={e => { fetchServices(e.currentTarget.value) }}
         />
       </li>
       <li>
         <Label
-          htmlFor='service_name'
-          label='Name'
+          htmlFor="service_name"
+          label="Name"
         />
         <Select
           disabled={loading}
-          id='service_name'
-          name='service[name]'
+          id="service_name"
+          name="service[name]"
           options={services}
         />
       </li>
@@ -67,4 +68,4 @@ const ServiceDiscoveryListItems: FunctionComponent<Props> = (props) => {
   )
 }
 
-export { ServiceDiscoveryListItems }
+export { ServiceDiscoveryListItems, Props }

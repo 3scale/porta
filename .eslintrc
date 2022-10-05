@@ -6,7 +6,7 @@
     "ecmaVersion": 6,
     "ecmaFeatures": {
       "impliedStrict": true,
-      "jsx": true
+      "jsxPragma": null // for @typescript/eslint-parser
     }
   },
   "env": {
@@ -14,19 +14,13 @@
     "node": true,
     "jest": true
   },
-  "globals": {
-    "$": "readonly"
-  },
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    // "plugin:react/all",
-    // "plugin:react/recommended",
-    "plugin:react/jsx-runtime"
+    "plugin:react/all",
+    // "eslint:recommended",
+    // "plugin:@typescript-eslint/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
-    "react",
     "import",
     "jsx-expressions"
   ],
@@ -38,36 +32,35 @@
     "semi": "off",
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "object-curly-spacing": ["error", "always"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "array-bracket-spacing": ["error", "never"],
+
     "@typescript-eslint/semi": ["error", "never"],
     "@typescript-eslint/consistent-type-imports": 2,
     "@typescript-eslint/no-duplicate-imports": "error",
     "@typescript-eslint/no-explicit-any": "off", // TODO: only temporary!!
-    "react/prop-types": "off",
-    "react/hook-use-state": "error",
-    "react/no-array-index-key": "warn",
-    "react/no-multi-comp": "error",
-    "react/self-closing-comp": "error",
-    "react/jsx-boolean-value": "error",
-    "react/jsx-child-element-spacing": "warn",
-    "react/jsx-closing-bracket-location": "error",
-    "react/jsx-closing-tag-location": "error",
-    "react/jsx-curly-brace-presence": "error",
+
+    // RULES ADDED AFTER EXTENDING 'ALL'
+    "react/destructuring-assignment": "off",
+    "react/forbid-component-props": "off",
+    "react/function-component-definition": "off",
     "react/jsx-curly-newline": ["error", { "multiline": "forbid", "singleline": "forbid" }],
-    "react/jsx-curly-spacing": ["error", { "when": "never" }],
-    "react/jsx-equals-spacing": ["error", "never"],
-    "react/jsx-first-prop-new-line": ["error", "multiline"],
-    "react/jsx-fragments": ["error", "syntax"],
+    "react/jsx-filename-extension": [2, { "extensions": [".jsx", ".tsx"] }],
+    "react/jsx-handler-names": "off",
+    "react/jsx-indent-props": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-max-depth": "off",
     "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
-    "react/jsx-no-constructed-context-values": "error",
-    "react/jsx-no-useless-fragment": "error",
-    "react/jsx-props-no-multi-spaces": "error",
-    "react/jsx-props-no-spreading": "warn",
-    "react/jsx-sort-props": ["error", {
+    "react/jsx-newline": "off",
+    "react/jsx-no-bind": "off",
+    "react/jsx-no-leaked-render": "off",
+    "react/jsx-no-literals": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-sort-props": [2, {
       "callbacksLast": true,
       "shorthandFirst": true,
       "reservedFirst": ["key"]
     }],
-    "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }],
     "react/jsx-wrap-multilines": ["error", {
       "declaration": "parens-new-line",
       "assignment": "parens-new-line",
@@ -76,6 +69,10 @@
       "condition": "parens-new-line",
       "logical": "parens-new-line"
     }],
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+
     "import/order": ["error", {
       "warnOnUnassignedImports": true,
       "groups": ["builtin", "index", "parent", "internal", "external", "object", "type", "sibling"],
@@ -83,7 +80,8 @@
     }],
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
-    "jsx-expressions/strict-logical-expressions": "error" // Instead of using "react/jsx-no-leaked-render"
+
+    "jsx-expressions/strict-logical-expressions": "error" // Replaces rule "react/jsx-no-leaked-render"
   },
   "settings": {
     "react": {

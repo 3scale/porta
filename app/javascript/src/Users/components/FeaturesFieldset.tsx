@@ -34,9 +34,9 @@ const FeaturesFieldset: React.FunctionComponent<Props> = ({
 
   return (
     <fieldset>
-      <legend className='label'>This member user can:</legend>
+      <legend className="label">This member user can:</legend>
       <ol className={featuresListClassName}>
-        <input name='user[member_permission_ids][]' type='hidden' />
+        <input name="user[member_permission_ids][]" type="hidden" />
         {features.map(feature => (
           <FeatureCheckbox key={feature} checked={selectedSections.includes(feature)} value={feature} onChange={onAdminSectionSelected} />
         ))}
@@ -86,8 +86,8 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
           checked={checked}
           className={featureCheckboxClassName}
           id={`user_member_permission_ids_${value}`}
-          name='user[member_permission_ids][]'
-          type='checkbox'
+          name="user[member_permission_ids][]"
+          type="checkbox"
           value={value}
           onChange={() => onChange(value)}
         />
@@ -114,18 +114,18 @@ const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = (
 }) => {
   // if service feature access checkbox is unchecked
   // at least blank service_ids array has to be sent
-  const blankServiceIdsInput = checked ? null : <input name='user[member_permission_service_ids][]' type='hidden' />
+  const blankServiceIdsInput = checked ? null : <input name="user[member_permission_service_ids][]" type="hidden" />
 
   return (
-    <li className='FeatureAccessList-item FeatureAccessList-item--services FeatureAccessList--services'>
-      <label htmlFor='user_member_permission_ids_services'>
+    <li className="FeatureAccessList-item FeatureAccessList-item--services FeatureAccessList--services">
+      <label htmlFor="user_member_permission_ids_services">
         <input
           checked={checked}
-          className='user_member_permission_ids'
-          id='user_member_permission_ids_services'
-          name='user[member_permission_service_ids]'
-          type='checkbox'
-          value=''
+          className="user_member_permission_ids"
+          id="user_member_permission_ids_services"
+          name="user[member_permission_service_ids]"
+          type="checkbox"
+          value=""
           onChange={() => onChange('services')}
         />
         All current and future existing API products

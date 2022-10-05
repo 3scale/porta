@@ -72,7 +72,7 @@ describe('ChartManager', () => {
 
   it('should set the correct state when updating series total', () => {
     chartManager._updateSeriesTotal(data)
-    expect(statsState.setState).toHaveBeenCalledWith({ seriesTotal: 111 }, [ 'seriesTotal' ], false)
+    expect(statsState.setState).toHaveBeenCalledWith({ seriesTotal: 111 }, ['seriesTotal'], false)
   })
 
   // Todo: Implementation depends a lot on jQuery, testing without jQuery may require a refactor

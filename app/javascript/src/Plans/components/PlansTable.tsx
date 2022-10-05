@@ -126,4 +126,4 @@ const PlansTable: React.FunctionComponent<Props> = ({
   )
 }
 
-export { PlansTable }
+export { PlansTable, Props }

@@ -13,8 +13,8 @@ const SelectGroup: React.FunctionComponent<Props> = ({
   value,
   catalog
 }) => {
-  const [ selectedValue, setSelectedValue ] = useState(value)
-  const [ isExpanded, setIsExpanded ] = useState(false)
+  const [selectedValue, setSelectedValue] = useState(value)
+  const [isExpanded, setIsExpanded] = useState(false)
   const onSelect = (_e: any, selection: string | SelectOptionObject) => {
     setIsExpanded(false)
     setSelectedValue((selection as SelectOptionObject & { key: string }).key)
@@ -22,7 +22,7 @@ const SelectGroup: React.FunctionComponent<Props> = ({
 
   return (
     <FormGroup fieldId={`service_proxy_attributes_${name}_select`} helperText={hint} label={label}>
-      <input name={`service[proxy_attributes][${name}]`} type='hidden' value={selectedValue} />
+      <input name={`service[proxy_attributes][${name}]`} type="hidden" value={selectedValue} />
       <Select
         id={`service_proxy_attributes_${name}_select`}
         isExpanded={isExpanded}

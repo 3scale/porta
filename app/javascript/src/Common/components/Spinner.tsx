@@ -1,9 +1,6 @@
-import './Spinner.scss'
+import type { SpinnerProps as Props } from '@patternfly/react-core'
 
-type Props = {
-  size?: 'sm' | 'md' | 'lg' | 'xl',
-  className?: string
-}
+import './Spinner.scss'
 
 const Spinner: React.FunctionComponent<Props> = ({ size = 'md', className = '' }) => {
   const classParameters = `pf-c-spinner pf-m-${size} ${className}`

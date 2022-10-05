@@ -43,8 +43,8 @@ const Form: React.FunctionComponent<Props> = ({
   security,
   gatewayResponse
 }) => {
-  const [ selectedIntegrationMethod, setSelectedIntegrationMethod ] = useState(integrationMethod.value)
-  const [ selectedAuthenticationMethod, setSelectedAuthenticationMethod ] = useState(authenticationMethod.value)
+  const [selectedIntegrationMethod, setSelectedIntegrationMethod] = useState(integrationMethod.value)
+  const [selectedAuthenticationMethod, setSelectedAuthenticationMethod] = useState(authenticationMethod.value)
   const onChange = (setState: (arg1: ((arg1: string) => string) | string) => void) => (_checked: string, e: React.SyntheticEvent<HTMLButtonElement>) => setState(e.currentTarget.value)
   const isServiceMesh = selectedIntegrationMethod === SERVICE_MESH_INTEGRATION
   const isProxyHosted = selectedIntegrationMethod === PROXY_HOSTED_INTEGRATION
@@ -57,9 +57,9 @@ const Form: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <RadioFieldset {...integrationMethod} legend='Integration' value={selectedIntegrationMethod} onChange={onChange(setSelectedIntegrationMethod)} />
-      { !isServiceMesh && <FormCollection ItemComponent={TextInputGroup} collection={customProxyEndpoints} legend='API gateway' /> }
-      <RadioFieldset {...authenticationMethod} legend='Authentication' value={selectedAuthenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} />
+      <RadioFieldset {...integrationMethod} legend="Integration" value={selectedIntegrationMethod} onChange={onChange(setSelectedIntegrationMethod)} />
+      { !isServiceMesh && <FormCollection ItemComponent={TextInputGroup} collection={customProxyEndpoints} legend="API gateway" /> }
+      <RadioFieldset {...authenticationMethod} legend="Authentication" value={selectedAuthenticationMethod} onChange={onChange(setSelectedAuthenticationMethod)} />
       <AuthenticationSettingsFieldset
         authenticationMethod={selectedAuthenticationMethod}
         isServiceMesh={isServiceMesh}
@@ -67,9 +67,9 @@ const Form: React.FunctionComponent<Props> = ({
       />
       { !isServiceMesh && (
         <>
-          <RadioFieldset {...credentialsLocation} legend='Credentials Location' />
-          <FormCollection ItemComponent={TextInputGroup} collection={security} legend='Security' />
-          <FormFieldset id='fieldset-GatewayResponse'>
+          <RadioFieldset {...credentialsLocation} legend="Credentials Location" />
+          <FormCollection ItemComponent={TextInputGroup} collection={security} legend="Security" />
+          <FormFieldset id="fieldset-GatewayResponse">
             <FormLegend>Gateway Response</FormLegend>
             {gatewayResponse.map(settings => (
               <FormCollection key={settings.legend} ItemComponent={TextInputGroup} collection={settings.collection} legend={settings.legend} />

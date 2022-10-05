@@ -68,7 +68,7 @@ describe('when role is "member"', () => {
   const findFeatures = () => wrapper.find('input[type="checkbox"][name="user[member_permission_ids][]"]') as ReactWrapper
   const FEATURES: Feature[] = ['portal', 'finance', 'settings', 'policy_registry']
   const FEATURES_FOR_SERVICES: Feature[] = ['partners', 'monitoring', 'plans']
-  const allFeatures: Feature[] = [ ...FEATURES, ...FEATURES_FOR_SERVICES ]
+  const allFeatures: Feature[] = [...FEATURES, ...FEATURES_FOR_SERVICES]
 
   beforeEach(() => {
     getWrapper({

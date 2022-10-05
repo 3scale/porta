@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toJsonString = (val: any): string => JSON.stringify(val, null, 2)
+const toJsonString = (val: unknown): string => JSON.stringify(val, null, 2)
 
 const fromJsonString = <T>(json: string): T => JSON.parse(json)
 

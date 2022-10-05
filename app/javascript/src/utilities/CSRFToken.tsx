@@ -1,4 +1,3 @@
-
 type Props = {
   win?: Window
 }
@@ -12,7 +11,7 @@ const CSRFToken = ({ win = window }: Props) => {
   return (
     <input
       name={getMetaContent('csrf-param')}
-      type='hidden'
+      type="hidden"
       value={getMetaContent('csrf-token')}
     />
   )

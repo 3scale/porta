@@ -21,11 +21,11 @@ const RequestPassword: FunctionComponent<Props> = ({
   providerPasswordPath
 }) => (
   <LoginPage
-    backgroundImgAlt='Red Hat 3scale API Management'
+    backgroundImgAlt="Red Hat 3scale API Management"
     backgroundImgSrc={PF4DownstreamBG}
-    brandImgAlt='Red Hat 3scale API Management'
+    brandImgAlt="Red Hat 3scale API Management"
     brandImgSrc={brandImg}
-    loginTitle='Request Password'
+    loginTitle="Request Password"
   >
     {flashMessages && <FlashMessages flashMessages={flashMessages} />}
     <RequestPasswordForm

@@ -1,9 +1,10 @@
+// FIXME: Label requires children, I suspect it's being passed in prop label instead.
 import { useState } from 'react'
 import { ListItem, Label } from '@patternfly/react-core'
 import { Input } from 'PaymentGateways/braintree/components/Input'
 
-import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 import type { ChangeEventHandler, FunctionComponent } from 'react'
+import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 
 type Props = {
   countriesList: Array<string[]>,
@@ -39,10 +40,10 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
         <ListItem id="customer_credit_card_billing_address_company_input">
           <Label
             required
-            children={undefined}
             htmlFor="customer_credit_card_billing_address_company"
             label="Company"
-          />
+          >{}
+          </Label>
           <Input
             required
             id="customer_credit_card_billing_address_company"
@@ -54,10 +55,10 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
         <ListItem id="customer_credit_card_billing_address_street_address_input">
           <Label
             required
-            children={undefined}
             htmlFor="customer_credit_card_billing_address_street_address"
             label="Street address"
-          />
+          >{}
+          </Label>
           <Input
             required
             id="customer_credit_card_billing_address_street_address"
@@ -69,10 +70,10 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
         <ListItem id="customer_credit_card_billing_address_postal_code_input">
           <Label
             required
-            children={undefined}
             htmlFor="customer_credit_card_billing_address_postal_code"
             label="ZIP / Postal Code"
-          />
+          >{}
+          </Label>
           <Input
             required
             id="customer_credit_card_billing_address_postal_code"
@@ -84,10 +85,10 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
         <ListItem id="customer_credit_card_billing_address_locality_input">
           <Label
             required
-            children={undefined}
             htmlFor="customer_credit_card_billing_address_locality"
             label="City"
-          />
+          >{}
+          </Label>
           <Input
             required
             id="customer_credit_card_billing_address_locality"
@@ -98,10 +99,10 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_region_input">
           <Label
-            children={undefined}
             htmlFor="customer_credit_card_billing_address_region"
             label="State/Region"
-          />
+          >{}
+          </Label>
           <Input
             id="customer_credit_card_billing_address_region"
             // maxLength="3" TODO: not doing anything, is it needed?
@@ -116,10 +117,10 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
         <ListItem id="customer_credit_card_billing_address_country_name_input">
           <Label
             required
-            children={undefined}
             htmlFor="customer_credit_card_billing_address_country_name"
             label="Country"
-          />
+          >{}
+          </Label>
           <select
             required
             className="form-control col-md-6"
@@ -145,4 +146,4 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
   )
 }
 
-export { BraintreeBillingAddressFields }
+export { BraintreeBillingAddressFields, Props }

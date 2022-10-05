@@ -7,6 +7,7 @@ import { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/Braintr
 import { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFields'
 import { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
 import { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
 import type { Client, HostedFields, HostedFieldsTokenizePayload, ThreeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
@@ -151,4 +152,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
   )
 }
 
-export { BraintreeForm, Props }
+// eslint-disable-next-line react/jsx-props-no-spreading
+const BraintreeFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<BraintreeForm {...props} />, containerId)
+
+export { BraintreeForm, BraintreeFormWrapper, Props }

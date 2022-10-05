@@ -1,17 +1,17 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
 
+import type { FunctionComponent } from 'react'
+import type { TextInputProps } from '@patternfly/react-core'
+
 type Props = {
-  position: number,
-  setPosition: (arg1: number) => void
+  position: TextInputProps['value'],
+  setPosition: (position: number) => void
 }
 
-const PositionInput = (
-  {
-    position,
-    setPosition
-  }: Props
-): React.ReactElement => (
+const PositionInput: FunctionComponent<Props> = ({
+  position,
+  setPosition
+}) => (
   <FormGroup
     isRequired
     className="pf-c-form__group-narrow"
@@ -24,7 +24,7 @@ const PositionInput = (
       name="proxy_rule[position]"
       type="number"
       value={position}
-      onChange={() => setPosition}
+      onChange={(value) => setPosition(Number(value))}
     />
   </FormGroup>
 )

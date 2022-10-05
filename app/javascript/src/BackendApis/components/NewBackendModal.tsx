@@ -59,7 +59,7 @@ const NewBackendModal: FunctionComponent<Props> = ({
       <Title className="with-spinner" headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
         Create backend
       </Title>
-      {isLoading && <Spinner className='pf-u-ml-md' size='md' />}
+      {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
     </>
   )
 

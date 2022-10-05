@@ -14,6 +14,7 @@ const BraintreeSubmitFields: FunctionComponent<Props> = ({
       <button
         className="btn btn-primary pull-right"
         disabled={!isFormValid}
+        type="submit"
         onClick={onSubmitForm}
       >
         Save details

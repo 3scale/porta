@@ -49,7 +49,6 @@ const NewMappingRule: FunctionComponent<Props> = ({
   const [metric, setMetric] = useState<Metric | null>(null)
   const [redirectUrl, setRedirectUrl] = useState('')
   const [increment, setIncrement] = useState(1)
-  const [isLast, setIsLast] = useState(false)
   const [position, setPosition] = useState(0)
   const [loading, setLoading] = useState(false)
 
@@ -90,7 +89,7 @@ const NewMappingRule: FunctionComponent<Props> = ({
         <MetricInput methods={methods} metric={metric} setMetric={setMetric} topLevelMetrics={topLevelMetrics} />
         {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
         <IncrementByInput increment={increment} setIncrement={setIncrement} />
-        <IsLastCheckbox isLast={isLast} setIsLast={setIsLast} />
+        <IsLastCheckbox isLast={false} /> {/* TODO: check what this component does and why isLas is always false */}
         <PositionInput position={position} setPosition={setPosition} />
 
         <ActionGroup>

@@ -61,7 +61,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
   billingAddressDetails,
   successUrl,
   isCreditCardStored
-}): React.ReactElement => {
+}) => {
   const formRef = useRef<HTMLFormElement | null>(null)
   const [cardErrorMessage, setCardErrorMessage] = useState<string | undefined>(undefined)
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
@@ -104,7 +104,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
   }
 
   return (
-    <div className='well StripeElementsForm'>
+    <div className="well StripeElementsForm">
       <EditCreditCardDetails
         isStripeFormVisible={isStripeFormVisible}
         onToogleVisibility={toogleVisibility}

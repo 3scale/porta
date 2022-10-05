@@ -56,32 +56,32 @@ const ChangePassword: FunctionComponent<Props> = ({
 
   return (
     <LoginPage
-      backgroundImgAlt='Red Hat 3scale API Management'
+      backgroundImgAlt="Red Hat 3scale API Management"
       backgroundImgSrc={PF4DownstreamBG}
-      brandImgAlt='Red Hat 3scale API Management'
+      brandImgAlt="Red Hat 3scale API Management"
       brandImgSrc={brandImg}
-      loginTitle='Change Password'
+      loginTitle="Change Password"
     >
       {errors && <FlashMessages flashMessages={errors} />}
       <Form
         noValidate
-        acceptCharset='UTF-8'
+        acceptCharset="UTF-8"
         action={url}
-        id='edit_user_2'
-        method='post'
+        id="edit_user_2"
+        method="post"
         onChange={onFormChange}
       >
-        <input name='_method' type='hidden' value='put' />
+        <input name="_method" type="hidden" value="put" />
         <HiddenInputs />
         <PasswordField inputProps={passwordProps} />
         <PasswordConfirmationField inputProps={passwordConfirmationProps} />
-        {!!lostPasswordToken && <input id='password_reset_token' name='password_reset_token' type='hidden' value={lostPasswordToken} />}
+        {!!lostPasswordToken && <input id="password_reset_token" name="password_reset_token" type="hidden" value={lostPasswordToken} />}
         <ActionGroup>
           <Button
-            className='pf-c-button pf-m-primary pf-m-block'
+            className="pf-c-button pf-m-primary pf-m-block"
             isDisabled={isFormDisabled}
-            name='commit'
-            type='submit'
+            name="commit"
+            type="submit"
           >
           Change Password
           </Button>

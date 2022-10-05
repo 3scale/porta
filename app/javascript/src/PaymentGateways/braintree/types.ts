@@ -12,13 +12,9 @@ export type BillingAddressData = {
 }
 
 export type HostedFieldsOptions = {
-  styles: {
-    [key: string]: string | Record<any, any>
-  },
-  fields: {
-    [key: string]: {
-      selector: string,
-      placeholder: string
-    }
-  }
+  styles: Record<string, string | Record<any, any>>,
+  fields: Record<string, {
+    selector: string,
+    placeholder: string
+  }>
 }

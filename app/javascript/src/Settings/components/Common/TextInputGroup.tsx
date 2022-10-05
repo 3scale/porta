@@ -13,7 +13,7 @@ const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({
   readOnly = false,
   inputType = 'text'
 }) => {
-  const [ inputValue, setInputValue ] = useState(value)
+  const [inputValue, setInputValue] = useState(value)
   const onChange = (value: string) => setInputValue(value)
   return (
     <FormGroup fieldId={`service_proxy_attributes_${name}_input`} helperText={hint} label={label}>

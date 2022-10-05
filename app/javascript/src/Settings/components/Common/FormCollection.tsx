@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 import { FormLegend } from 'Settings/components/Common/FormLegend'
 
@@ -14,13 +13,12 @@ const FormCollection: React.FunctionComponent<Props> = ({
   collection,
   ItemComponent,
   legend
-}) => {
-  return (
-    <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
-      <FormLegend>{legend}</FormLegend>
-      { collection.map(itemProps => <ItemComponent {...itemProps} key={itemProps.name} />) }
-    </FormFieldset>
-  )
-}
+}) => (
+  <FormFieldset id={`fieldset-${legend.replace(/\s+/g, '')}`}>
+    <FormLegend>{legend}</FormLegend>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    { collection.map(itemProps => <ItemComponent {...itemProps} key={itemProps.name} />) }
+  </FormFieldset>
+)
 
 export { FormCollection, Props }

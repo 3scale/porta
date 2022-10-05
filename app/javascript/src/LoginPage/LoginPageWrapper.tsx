@@ -16,11 +16,11 @@ import type { FlashMessage } from 'Types'
 type Props = {
   authenticationProviders: Array<ProvidersProps>,
   flashMessages?: Array<FlashMessage>,
-  providerAdminDashboardPath: string,
-  providerLoginPath: string,
+  // providerAdminDashboardPath: string, // TODO: check what was it for!?
+  // providerLoginPath: string, // TODO: check what was it for!?
   providerSessionsPath: string,
   providerRequestPasswordResetPath: string,
-  redirectUrl: string,
+  // redirectUrl: string, // TODO: check what was it for!?
   show3scaleLoginForm: boolean,
   disablePasswordReset: boolean,
   session: {
@@ -32,6 +32,8 @@ type State = {
   loginTitle: string
 }
 
+// TODO: resolve this react/require-optimization
+// eslint-disable-next-line react/require-optimization
 class SimpleLoginPage extends Component<Props, State> {
   constructor (props: Props) {
     super(props)
@@ -58,7 +60,7 @@ class SimpleLoginPage extends Component<Props, State> {
           />
         )}
         { hasAuthenticationProviders && (
-          <div className='providers-separator'>
+          <div className="providers-separator">
             <AuthenticationProviders
               authenticationProviders={this.props.authenticationProviders}
             />
@@ -71,13 +73,13 @@ class SimpleLoginPage extends Component<Props, State> {
   render () {
     return (
       <LoginPage
-        backgroundImgAlt='Red Hat 3scale API Management'
+        backgroundImgAlt="Red Hat 3scale API Management"
         backgroundImgSrc={PF4DownstreamBG}
-        brandImgAlt='Red Hat 3scale API Management'
+        brandImgAlt="Red Hat 3scale API Management"
         brandImgSrc={brandImg}
         forgotCredentials={this.showForgotCredentials()}
         loginTitle={this.state.loginTitle}
-        // footer={null
+        // footer={null} TODO: check what it did
       >
         { this.props.flashMessages && <FlashMessages flashMessages={this.props.flashMessages} /> }
         { this.loginForm() }

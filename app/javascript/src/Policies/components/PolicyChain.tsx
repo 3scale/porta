@@ -69,7 +69,7 @@ const PolicyChain: React.FunctionComponent<Props> = ({
     <section className="PolicyChain">
       <header>
         <h2>Policy Chain</h2>
-        <HeaderButton type='add' onClick={actions.openPolicyRegistry}>
+        <HeaderButton type="add" onClick={actions.openPolicyRegistry}>
           Add policy
         </HeaderButton>
       </header>
@@ -88,5 +88,6 @@ export {
   PolicyChain,
   SortableList,
   SortableItem,
-  DragHandle
+  DragHandle,
+  Props
 }

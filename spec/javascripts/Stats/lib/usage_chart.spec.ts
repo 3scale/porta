@@ -41,6 +41,6 @@ describe('StatsUsageChart', () => {
   })
 
   it('should have the right grouped data', () => {
-    expect(JSON.stringify((chart.chartOptions().data as any).groups)).toBe(JSON.stringify([ [ 'marvin', 'trillian', 'zaphod' ] ]))
+    expect(JSON.stringify((chart.chartOptions().data as any).groups)).toBe(JSON.stringify([['marvin', 'trillian', 'zaphod']]))
   })
 })

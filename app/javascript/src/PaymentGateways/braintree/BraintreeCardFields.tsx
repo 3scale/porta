@@ -51,4 +51,4 @@ const BraintreeCardFields: FunctionComponent = () => {
   )
 }
 
-export { BraintreeCardFields }
+export { BraintreeCardFields, Props }

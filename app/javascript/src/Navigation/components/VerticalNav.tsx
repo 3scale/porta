@@ -68,7 +68,7 @@ const NavSection: React.FunctionComponent<NavSectionProps> = ({ title, isSection
     {items.map(({ id, title, path, target, itemOutOfDateConfig }) => (
       path
         ? <NavItem key={title} className={itemOutOfDateConfig ? 'outdated-config' : ''} isActive={isSectionActive && activeItem === id} target={target} to={path}>{title}</NavItem>
-        : <NavGroup key={title} className='vertical-nav-label' title={title} />
+        : <NavGroup key={title} className="vertical-nav-label" title={title} />
     ))}
   </NavExpandable>
 )

@@ -1,10 +1,11 @@
+import type { FunctionComponent } from "react"
 
-const HiddenServiceDiscoveryInput = (): React.ReactElement => (
+const HiddenServiceDiscoveryInput: FunctionComponent = () => (
   <input
-    id='service_source'
-    name='service[source]'
-    type='hidden'
-    value='discover'
+    id="service_source"
+    name="service[source]"
+    type="hidden"
+    value="discover"
   />
 )
 
