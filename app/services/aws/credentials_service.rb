@@ -29,9 +29,7 @@ module Aws
       if valid_credentials_with(iam_credentials, IAM_KEYS)
         iam_credentials
       elsif valid_credentials_with(sts_credentials, STS_KEYS)
-        raise TokenNotFoundError, "web_identity_token_file was not found" unless web_identity_token_file_exists?
-
-        { credentials: Aws::AssumeRoleWebIdentityCredentials.new(sts_credentials) }
+        sts_temporary_security_credentials
       else
         raise AuthenticationTypeError, "Either #{IAM_KEYS} or #{STS_KEYS} must be provided."
       end
@@ -50,6 +48,12 @@ module Aws
 
     def web_identity_token_file_exists?
       File.exist?(sts_credentials[:web_identity_token_file])
+    end
+
+    def sts_temporary_security_credentials
+      raise TokenNotFoundError, "web_identity_token_file was not found" unless web_identity_token_file_exists?
+
+      { credentials: Aws::AssumeRoleWebIdentityCredentials.new(sts_credentials) }
     end
 
     def iam_credentials
