@@ -1,6 +1,5 @@
-
 import { Button } from '@patternfly/react-core'
-import { Select } from 'Common'
+import { Select } from 'Common/components/Select'
 
 import type { ApplicationPlan, Product } from 'NewApplication/types'
 
@@ -33,7 +32,7 @@ const ApplicationPlanSelect: React.FunctionComponent<Props> = ({
     <Select
       isRequired
       fieldId="cinstance_plan_id"
-      hint={showHint ? hint : null}
+      hint={showHint && hint}
       isDisabled={product === null || !appPlans.length}
       item={appPlan}
       items={appPlans}

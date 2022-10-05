@@ -1,15 +1,12 @@
-import * as React from 'react'
-import {
-  HiddenInputs,
-  PasswordField,
-  TextField,
-  validateSingleField
-} from 'LoginPage'
+import React from 'react'
 import {
   ActionGroup,
   Button,
   Form
 } from '@patternfly/react-core'
+import { TextField, PasswordField } from 'LoginPage/loginForms/FormGroups'
+import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
+import { validateSingleField } from 'LoginPage/utils/formValidation'
 
 type Props = {
   providerSessionsPath: string,
@@ -94,9 +91,9 @@ class Login3scaleForm extends React.Component<Props, State> {
         method='post'
       >
         <HiddenInputs />
-        {/* <TextField inputProps={usernameInputProps} autoComplete="off"/> */}
+        {/* <TextField inputProps={usernameInputProps} autoComplete="off"/> TODO: verify autocomplete did nothing */}
         <TextField inputProps={usernameInputProps} />
-        {/* <PasswordField inputProps={passwordInputProps} autoComplete="off"/> */}
+        {/* <PasswordField inputProps={passwordInputProps} autoComplete="off"/> TODO: verify autocomplete did nothing */}
         <PasswordField inputProps={passwordInputProps} />
         <ActionGroup>
           <Button
@@ -111,6 +108,4 @@ class Login3scaleForm extends React.Component<Props, State> {
   }
 }
 
-export {
-  Login3scaleForm
-}
+export { Login3scaleForm, Props }

@@ -37,9 +37,9 @@ const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
     (!isServiceMesh || isOidc) && (
       <FormFieldset id='fieldset-AuthenticationSettings'>
         <FormLegend>Authentication Settings</FormLegend>
-        { isApiKey ? <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend='API KEY (USER_KEY) BASICS' /> : null }
-        { isAppIdKey ? <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend='APP_ID AND APP_KEY PAIR BASICS' /> : null }
-        { isOidc ? <OidcFieldset {...oidcSettings} isServiceMesh={isServiceMesh} /> : null }
+        { isApiKey && <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend='API KEY (USER_KEY) BASICS' /> }
+        { isAppIdKey && <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend='APP_ID AND APP_KEY PAIR BASICS' /> }
+        { isOidc && <OidcFieldset {...oidcSettings} isServiceMesh={isServiceMesh} /> }
       </FormFieldset>
     )
   ) as React.ReactElement // Hack: Shortcircuit is not supported yet. See: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18912

@@ -1,4 +1,4 @@
-import { BuyerLogic } from 'Logic'
+import { BuyerLogic } from 'Logic/BuyerLogic'
 
 import type { Buyer, Product, ServicePlan } from 'NewApplication/types'
 

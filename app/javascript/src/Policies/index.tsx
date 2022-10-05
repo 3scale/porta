@@ -1,9 +1,8 @@
-
 import Root from 'Policies/components/Root'
 import configureStore from 'Policies/store/configureStore'
 import { initialState } from 'Policies/reducers/initialState'
 import { populateChainFromConfigs } from 'Policies/actions'
-import { createReactWrapper } from 'utilities'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import 'Policies/styles/policies.scss'
 
 import type { Action, PolicyConfig, RegistryPolicy } from 'Policies/types'

@@ -1,6 +1,5 @@
-
 import { sortable } from '@patternfly/react-table'
-import { fetchPaginatedProducts } from 'NewApplication/data'
+import { fetchPaginatedProducts } from 'NewApplication/data/Products'
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 
 import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
@@ -50,4 +49,4 @@ const ProductSelect: React.FunctionComponent<Props> = ({
   )
 }
 
-export { ProductSelect }
+export { ProductSelect, Props }

@@ -1,7 +1,7 @@
-
-import { ProductSelect } from 'NewApplication'
+import { ProductSelect } from 'NewApplication/components/ProductSelect'
 import { mount } from 'enzyme'
 
+import type { Props } from 'NewApplication/components/ProductSelect'
 import type { Product } from 'NewApplication/types'
 
 const product: Product = {
@@ -15,7 +15,7 @@ const product: Product = {
   defaultAppPlan: null
 }
 const products = [product]
-const props = {
+const props: Props = {
   product,
   products,
   productsCount: products.length,

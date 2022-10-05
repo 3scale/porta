@@ -1,8 +1,10 @@
 import { mount } from 'enzyme'
-import { ChangePassword } from 'ChangePassword'
+import { ChangePassword } from 'ChangePassword/components/ChangePassword'
+
+import type { Props } from 'ChangePassword/components/ChangePassword'
 
 it('should render itself', () => {
-  const props = {
+  const props: Props = {
     lostPasswordToken: 'foo',
     url: 'foo/bar',
     errors: []
@@ -12,7 +14,7 @@ it('should render itself', () => {
 })
 
 it('should render with server side errors when present', () => {
-  const props = {
+  const props: Props = {
     lostPasswordToken: 'foo',
     url: 'foo/bar',
     errors: [{ type: 'error', message: 'Ooops!' }]

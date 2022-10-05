@@ -4,18 +4,11 @@ import {
   Select as PF4Select,
   SelectVariant
 } from '@patternfly/react-core'
-import { Spinner } from 'Common'
-import {
-  handleOnFilter,
-  toSelectOption,
-  toSelectOptionObject
-} from 'utilities'
+import { Spinner } from 'Common/components/Spinner'
+import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/patternfly-utils'
 
-import type {
-  Record,
-  SelectOptionObject } from 'utilities'
-import type {
-  SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import type { Record, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import './Select.scss'
 
@@ -38,26 +31,24 @@ type Props<T extends Record> = {
   isRequired?: boolean
 }
 
-const Select = <T extends Record>(
-  {
-    item,
-    items,
-    onSelect,
-    label,
-    ariaLabel,
-    fieldId,
-    name,
-    isClearable = true,
-    placeholderText = '',
-    hint,
-    isValid = true,
-    helperText,
-    helperTextInvalid,
-    isDisabled = false,
-    isLoading = false,
-    isRequired = false
-  }: Props<T>
-): React.ReactElement => {
+const Select = <T extends Record>({
+  item,
+  items,
+  onSelect,
+  label,
+  ariaLabel,
+  fieldId,
+  name,
+  isClearable = true,
+  placeholderText = '',
+  hint,
+  isValid = true,
+  helperText,
+  helperTextInvalid,
+  isDisabled = false,
+  isLoading = false,
+  isRequired = false
+}: Props<T>): React.ReactElement => {
   const [expanded, setExpanded] = useState(false)
 
   const handleSelect = (_e: any, option: string | PFSelectOptionObject) => {
@@ -83,8 +74,8 @@ const Select = <T extends Record>(
       isValid={isValid}
       label={label}
     >
-      {isLoading ? <Spinner className="pf-u-ml-md" size="md" /> : null}
-      {item ? <input name={name} type="hidden" value={item.id > -1 ? item.id : ''} /> : null}
+      {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
+      {item && <input name={name} type="hidden" value={item.id > -1 ? item.id : ''} />}
       <PF4Select
         aria-label={ariaLabel}
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}

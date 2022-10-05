@@ -1,16 +1,15 @@
 import { ExclamationCircleIcon } from '@patternfly/react-icons'
 
+import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
 
-const FlashMessages = (
-  {
-    flashMessages
-  }: {
-    flashMessages: Array<FlashMessage>
-  }
-): React.ReactElement => {
-  const messagesList = flashMessages.map(message =>
-    (
+type Props = {
+  flashMessages: Array<FlashMessage>
+}
+
+const FlashMessages: FunctionComponent<Props> = ({ flashMessages }) => (
+  <div>
+    {flashMessages.map(message => (
       <p
         key={message.message}
         className={`pf-c-form__helper-text pf-m-${message.type}`}
@@ -18,13 +17,8 @@ const FlashMessages = (
         <ExclamationCircleIcon />
         {` ${message.message}`}
       </p>
-    )
-  )
-  return (
-    <div>
-      {messagesList}
-    </div>
-  )
-}
+    ))}
+  </div>
+)
 
-export { FlashMessages }
+export { FlashMessages, Props }

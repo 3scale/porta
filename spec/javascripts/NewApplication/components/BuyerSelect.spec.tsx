@@ -1,6 +1,7 @@
-
-import { BuyerSelect } from 'NewApplication'
+import { BuyerSelect } from 'NewApplication/components/BuyerSelect'
 import { mount } from 'enzyme'
+
+import type { Props } from 'NewApplication/components/BuyerSelect'
 
 const buyer = {
   id: 0,
@@ -12,7 +13,7 @@ const buyer = {
   multipleAppsAllowed: false
 }
 const buyers = [buyer]
-const props = {
+const props: Props = {
   buyer,
   buyers,
   buyersCount: buyers.length,

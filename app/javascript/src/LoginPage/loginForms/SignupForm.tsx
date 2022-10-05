@@ -1,18 +1,14 @@
-import * as React from 'react'
+import React from 'react'
 import {
   ActionGroup,
   Button,
   Form
 } from '@patternfly/react-core'
-import {
-  EmailField,
-  HiddenInputs,
-  PasswordField,
-  TextField,
-  validateSingleField
-} from 'LoginPage'
+import { TextField, EmailField, PasswordField } from 'LoginPage/loginForms/FormGroups'
+import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
+import { validateSingleField } from 'LoginPage/utils/formValidation'
 
-import type { InputProps, InputType, SignupProps } from 'Types'
+import type { InputProps, InputType, SignupProps as Props } from 'Types'
 
 type InputNames = 'user[username]' | 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password]' | 'user[password_confirmation]'
 
@@ -47,7 +43,7 @@ const INPUT_LABELS: Record<InputType, string> = {
   passwordConfirmation: 'Password confirmation'
 } as const
 
-class SignupForm extends React.Component<SignupProps, State> {
+class SignupForm extends React.Component<Props, State> {
   state = {
     [INPUT_NAMES.username]: this.props.user.username,
     [INPUT_NAMES.email]: this.props.user.email,
@@ -90,7 +86,7 @@ class SignupForm extends React.Component<SignupProps, State> {
     } as State)
   }
 
-  render (): React.ReactElement {
+  render () {
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
 
     const usernameInputProps = this.getInputProps('username', true)
@@ -130,6 +126,4 @@ class SignupForm extends React.Component<SignupProps, State> {
   }
 }
 
-export {
-  SignupForm
-}
+export { SignupForm, Props }

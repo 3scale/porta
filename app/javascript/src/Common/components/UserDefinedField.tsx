@@ -1,7 +1,7 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
-import { Select } from 'Common'
+import { Select } from 'Common/components/Select'
 
+import type { FunctionComponent } from 'react'
 import type { FieldDefinition } from 'Types'
 
 type Props = {
@@ -11,14 +11,12 @@ type Props = {
   validationErrors?: string[]
 }
 
-const UserDefinedField = (
-  {
-    fieldDefinition,
-    value,
-    onChange,
-    validationErrors = []
-  }: Props
-): React.ReactElement => {
+const UserDefinedField: FunctionComponent<Props> = ({
+  fieldDefinition,
+  value,
+  onChange,
+  validationErrors = []
+}) => {
   const { id, label, required, name, choices } = fieldDefinition
 
   const item = value ? { id: value, name: value } : null

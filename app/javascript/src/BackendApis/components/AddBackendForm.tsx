@@ -6,7 +6,9 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import { CSRFToken, createReactWrapper, notice } from 'utilities'
+import { CSRFToken } from 'utilities/CSRFToken'
+import { createReactWrapper } from 'utilities/createReactWrapper'
+import { notice } from 'utilities/alert'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'

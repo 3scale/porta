@@ -7,9 +7,9 @@ import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
 import { SignupForm } from 'LoginPage/loginForms/SignupForm'
 
 import type { FunctionComponent } from 'react'
-import type { SignupProps } from 'Types'
+import type { SignupProps as Props } from 'Types'
 
-const SignupPage: FunctionComponent<SignupProps> = ({ user, name, path }) => (
+const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
   <LoginPage
     backgroundImgAlt='Red Hat 3scale API Management'
     backgroundImgSrc={PF4DownstreamBG}
@@ -24,6 +24,6 @@ const SignupPage: FunctionComponent<SignupProps> = ({ user, name, path }) => (
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const SignupPageWrapper = (props: SignupProps, containerId: string): void => createReactWrapper(<SignupPage {...props} />, containerId)
+const SignupPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<SignupPage {...props} />, containerId)
 
 export { SignupPage, SignupPageWrapper, Props }

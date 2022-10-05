@@ -15,7 +15,7 @@ import {
   TableHeader
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
-import { NoMatchFound } from 'Common'
+import { NoMatchFound } from 'Common/components/NoMatchFound'
 
 import type {
   IRow,
@@ -23,7 +23,7 @@ import type {
   ITransform,
   SortByDirection
 } from '@patternfly/react-table'
-import type { Record } from 'utilities'
+import type { Record } from 'utilities/patternfly-utils'
 
 import './TableModal.scss'
 
@@ -54,25 +54,23 @@ type Props<T extends Record> = {
 
 const PER_PAGE_DEFAULT = 5
 
-const TableModal = <T extends Record>(
-  {
-    title,
-    isOpen,
-    isLoading = false,
-    selectedItem,
-    pageItems = [],
-    itemsCount,
-    onSelect,
-    onClose,
-    cells,
-    perPage = PER_PAGE_DEFAULT,
-    page,
-    setPage,
-    onSearch,
-    searchPlaceholder,
-    sortBy
-  }: Props<T>
-): React.ReactElement => {
+const TableModal = <T extends Record>({
+  title,
+  isOpen,
+  isLoading = false,
+  selectedItem,
+  pageItems = [],
+  itemsCount,
+  onSelect,
+  onClose,
+  cells,
+  perPage = PER_PAGE_DEFAULT,
+  page,
+  setPage,
+  onSearch,
+  searchPlaceholder,
+  sortBy
+}: Props<T>): React.ReactElement => {
   const [selected, setSelected] = useState<T | null>(selectedItem)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
 

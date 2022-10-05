@@ -1,9 +1,11 @@
 import { act } from 'react-dom/test-utils'
 import { mount, shallow } from 'enzyme'
-import { ServiceSourceForm } from 'NewService'
+import { ServiceSourceForm } from 'NewService/components/ServiceSourceForm'
+
+import type { Props } from 'NewService/components/ServiceSourceForm'
 
 const serviceDiscoveryAuthenticateUrl = 'my-url'
-const props = {
+const props: Props = {
   isServiceDiscoveryUsable: true,
   serviceDiscoveryAuthenticateUrl,
   handleFormsVisibility: jest.fn(),

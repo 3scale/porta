@@ -4,17 +4,10 @@ import {
   Select,
   SelectVariant
 } from '@patternfly/react-core'
-import {
-  handleOnFilter,
-  toSelectOption,
-  toSelectOptionObject
-} from 'utilities'
+import { toSelectOption, toSelectOptionObject, handleOnFilter } from 'utilities/patternfly-utils'
 
-import type {
-  SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
-import type {
-  Record,
-  SelectOptionObject } from 'utilities'
+import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import type { Record, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import './FancySelect.scss'
 
@@ -106,7 +99,7 @@ const FancySelect = <T extends Record>({
       isValid={!helperTextInvalid}
       label={label}
     >
-      {name && item ? <input name={name} type="hidden" value={item.id} /> : null}
+      {!!name && item && <input name={name} type="hidden" value={item.id} />}
       <Select
         isGrouped
         aria-labelledby={id}
@@ -114,7 +107,7 @@ const FancySelect = <T extends Record>({
         isDisabled={isDisabled}
         isExpanded={expanded}
         placeholderText={placeholderText}
-        selections={item ? toSelectOptionObject(item) : null}
+        selections={item && toSelectOptionObject(item)}
         variant={SelectVariant.typeahead}
         onClear={() => onSelect(null)}
         onFilter={handleOnFilter<T>(items, getSelectOptionsForItems)}

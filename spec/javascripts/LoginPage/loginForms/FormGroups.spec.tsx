@@ -1,24 +1,10 @@
 import { mount } from 'enzyme'
-import { EmailField, PasswordField, TextField } from 'LoginPage'
+import { TextField, PasswordField, EmailField } from 'LoginPage/loginForms/FormGroups'
 
-import type { AllHTMLAttributes } from 'react'
-
-export type InputProps = {
-  isRequired: boolean,
-  label: string,
-  fieldId: string,
-  isValid?: boolean,
-  name: string,
-  value: string,
-  onChange?: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void,
-  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  autoFocus?: AllHTMLAttributes<HTMLInputElement>['autoFocus'],
-  ariaInvalid?: boolean,
-  errorMessage?: string
-}
+import type { InputProps } from 'Types'
 
 describe('TextField', () => {
-  const textFieldInputProps = {
+  const textFieldInputProps: InputProps = {
     isRequired: true,
     isValid: true,
     name: 'text',

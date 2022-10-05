@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Label, Select } from 'NewService/components/FormElements'
-import { fetchData } from 'utilities'
+import { fetchData } from 'utilities/fetchData'
 import { BASE_PATH } from 'NewService'
 
 import type { FunctionComponent } from 'react'

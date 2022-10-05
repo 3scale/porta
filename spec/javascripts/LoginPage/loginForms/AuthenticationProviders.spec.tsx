@@ -1,7 +1,9 @@
 import { mount } from 'enzyme'
-import { AuthenticationProviders } from 'LoginPage'
+import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProviders'
 
-const props = {
+import type { Props } from 'LoginPage/loginForms/AuthenticationProviders'
+
+const props: Props = {
   authenticationProviders: [
     {
       authorizeURL: 'fake-provider-1',

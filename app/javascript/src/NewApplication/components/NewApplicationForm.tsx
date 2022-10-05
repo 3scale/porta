@@ -163,7 +163,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
             isDisabled={!buyer || !product || !servicePlan}
             isPlanContracted={isServiceSubscribedToBuyer}
             servicePlan={servicePlan}
-            servicePlans={product ? product.servicePlans : null}
+            servicePlans={product && product.servicePlans}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
             onSelect={setServicePlan}
           />

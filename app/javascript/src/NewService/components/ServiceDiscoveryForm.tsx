@@ -47,7 +47,7 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
 
   return (
     <>
-      {fetchErrorMessage ? <ErrorMessage fetchErrorMessage={fetchErrorMessage} /> : null}
+      {!!fetchErrorMessage && <ErrorMessage fetchErrorMessage={fetchErrorMessage} />}
       <FormWrapper {...formProps}>
         <ServiceDiscoveryListItems {...listItemsProps} />
       </FormWrapper>

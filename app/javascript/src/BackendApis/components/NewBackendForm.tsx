@@ -5,7 +5,7 @@ import { NameInput } from 'BackendApis/components/NameInput'
 import { SystemNameInput } from 'BackendApis/components/SystemNameInput'
 import { DescriptionInput } from 'BackendApis/components/DescriptionInput'
 import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInput'
-import { CSRFToken } from 'utilities'
+import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FunctionComponent } from 'react'
 

@@ -69,14 +69,14 @@ const PermissionsForm: FunctionComponent<Props> = ({
               onAdminSectionSelected={onAdminSectionSelected}
             />
 
-            {areServicesVisible ? (
+            {areServicesVisible && (
               <ServicesFieldset
                 selectedSections={selectedSections}
                 selectedServicesIds={selectedServicesIds}
                 services={services}
                 onServiceSelected={onServiceSelected}
               />
-            ) : null}
+            )}
           </li>
         )}
       </ol>

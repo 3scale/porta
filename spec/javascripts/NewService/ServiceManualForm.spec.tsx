@@ -1,8 +1,10 @@
 import { mount, shallow } from 'enzyme'
-import { ServiceManualForm } from 'NewService'
+import { ServiceManualForm } from 'NewService/components/ServiceManualForm'
 import { FormWrapper, ServiceManualListItems } from 'NewService/components/FormElements'
 
-const props = {
+import type { Props } from 'NewService/components/ServiceManualForm'
+
+const props: Props = {
   backendApis: [],
   template: {
     service: {

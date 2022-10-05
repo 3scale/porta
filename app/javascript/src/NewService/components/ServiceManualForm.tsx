@@ -26,6 +26,4 @@ const ServiceManualForm = (props: Props): React.ReactElement => {
   )
 }
 
-export {
-  ServiceManualForm
-}
+export { ServiceManualForm, Props }

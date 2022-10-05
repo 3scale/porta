@@ -1,7 +1,9 @@
 import { mount } from 'enzyme'
-import { SimpleLoginPage } from 'LoginPage'
+import { SimpleLoginPage } from 'LoginPage/LoginPageWrapper'
 
-const props = {
+import type { Props } from 'LoginPage/LoginPageWrapper'
+
+const props: Props = {
   authenticationProviders: [],
   providerAdminDashboardPath: 'provider-admin-path',
   providerLoginPath: 'provider-login-path',

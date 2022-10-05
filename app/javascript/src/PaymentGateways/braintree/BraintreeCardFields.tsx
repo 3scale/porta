@@ -1,4 +1,5 @@
-import { Label, ListItem } from 'PaymentGateways'
+import { Label } from 'PaymentGateways/braintree/components/Label'
+import { ListItem } from 'PaymentGateways/braintree/components/ListItem'
 
 import type { FunctionComponent } from 'react'
 

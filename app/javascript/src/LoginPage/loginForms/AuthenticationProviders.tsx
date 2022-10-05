@@ -11,13 +11,7 @@ type Props = {
   authenticationProviders: Array<ProvidersProps>
 }
 
-const Provider: FunctionComponent<{
-  authorizeURL: string,
-  humanKind: string
-}> = ({
-  authorizeURL,
-  humanKind
-}) => (
+const Provider: FunctionComponent<ProvidersProps> = ({ authorizeURL, humanKind }) => (
   <p className='login-provider'>
     <a className='login-provider-link' href={authorizeURL}>
       <KeyIcon />{' Authenticate through '}
@@ -27,7 +21,7 @@ const Provider: FunctionComponent<{
 )
 
 // eslint-disable-next-line react/no-multi-comp
-const AuthenticationProviders = (props: Props): React.ReactElement => {
+const AuthenticationProviders: FunctionComponent<Props> = (props) => {
   const { authenticationProviders } = props
   const providersList = authenticationProviders.map(
     provider => <Provider key={provider.humanKind} authorizeURL={provider.authorizeURL} humanKind={provider.humanKind} />
@@ -40,4 +34,4 @@ const AuthenticationProviders = (props: Props): React.ReactElement => {
   )
 }
 
-export { AuthenticationProviders }
+export { AuthenticationProviders, Props }

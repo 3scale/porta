@@ -54,4 +54,4 @@ const ServiceSourceForm: FunctionComponent<Props> = (props) => {
   )
 }
 
-export { ServiceSourceForm }
+export { ServiceSourceForm, Props }

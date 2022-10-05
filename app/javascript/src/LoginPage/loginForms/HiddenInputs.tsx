@@ -1,21 +1,17 @@
-import { CSRFToken } from 'utilities'
+import { CSRFToken } from 'utilities/CSRFToken'
 
-const HiddenInputs = (
-  {
-    isPasswordReset = false
-  }: {
-    isPasswordReset?: boolean
-  }
-): React.ReactElement => {
-  return (
-    <>
-      <input name="utf8" type="hidden" value="✓" />
-      {isPasswordReset ? <input name="_method" type="hidden" value="delete" /> : null}
-      <CSRFToken />
-    </>
-  )
+import type { FunctionComponent } from 'react'
+
+type Props = {
+  isPasswordReset?: boolean
 }
 
-export {
-  HiddenInputs
-}
+const HiddenInputs: FunctionComponent<Props> = ({ isPasswordReset = false }) => (
+  <>
+    <input name="utf8" type="hidden" value="✓" />
+    {isPasswordReset && <input name="_method" type="hidden" value="delete" />}
+    <CSRFToken />
+  </>
+)
+
+export { HiddenInputs, Props }

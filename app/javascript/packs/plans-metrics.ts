@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll<HTMLElement>('th.backend_api_metric_title')
     .forEach(th => {
       const { collapsible, metrics } = th.dataset
-      const ids = safeFromJsonString(metrics)
+      const ids = safeFromJsonString<string[]>(metrics) || []
 
       if (collapsible) {
         th.classList.add('collapsible')

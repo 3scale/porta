@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import { CSRFToken } from 'utilities'
+import { CSRFToken } from 'utilities/CSRFToken'
 
 it('should render itself correctly', () => {
   const windowMock = {

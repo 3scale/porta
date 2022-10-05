@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Input, Label, ListItem } from 'PaymentGateways'
+import { ListItem } from 'PaymentGateways/braintree/components/ListItem'
+import { Label } from 'PaymentGateways/braintree/components/Label'
+import { Input } from 'PaymentGateways/braintree/components/Input'
 
 import type { FunctionComponent } from 'react'
 

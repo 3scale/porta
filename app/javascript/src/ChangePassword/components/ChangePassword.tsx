@@ -75,7 +75,7 @@ const ChangePassword: FunctionComponent<Props> = ({
         <HiddenInputs />
         <PasswordField inputProps={passwordProps} />
         <PasswordConfirmationField inputProps={passwordConfirmationProps} />
-        {lostPasswordToken ? <input id='password_reset_token' name='password_reset_token' type='hidden' value={lostPasswordToken} /> : null}
+        {!!lostPasswordToken && <input id='password_reset_token' name='password_reset_token' type='hidden' value={lostPasswordToken} />}
         <ActionGroup>
           <Button
             className='pf-c-button pf-m-primary pf-m-block'

@@ -1,23 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  BraintreeBillingAddressFields,
-  BraintreeCardFields,
-  BraintreeSubmitFields,
-  BraintreeUserFields,
-  create3DSecureInstance,
-  createHostedFieldsInstance,
-  hostedFieldOptions,
-  validationConstraints,
-  veryfyCard
-} from 'PaymentGateways'
+import validate from 'validate.js'
 import { hostedFields, threeDSecure } from 'braintree-web'
 import { CSRFToken } from 'utilities/CSRFToken'
-import validate from 'validate.js'
+import { validationConstraints, createHostedFieldsInstance, hostedFieldOptions, create3DSecureInstance, veryfyCard } from 'PaymentGateways/braintree/braintree'
+import { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/BraintreeBillingAddressFields'
+import { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFields'
+import { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
+import { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
 
-import type { Client, HostedFields, HostedFieldsTokenizePayload, ThreeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
-import type {
-  BillingAddressData } from 'PaymentGateways'
 import type { FunctionComponent } from 'react'
+import type { Client, HostedFields, HostedFieldsTokenizePayload, ThreeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
+import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 
 import './BraintreeCustomerForm.scss'
 
@@ -137,7 +130,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
       </fieldset>
       <fieldset>
         <BraintreeCardFields />
-        {cardError ? <p className="alert alert-danger">{cardError}</p> : null}
+        {!!cardError && <p className="alert alert-danger">{cardError}</p>}
       </fieldset>
       <fieldset>
         <BraintreeBillingAddressFields

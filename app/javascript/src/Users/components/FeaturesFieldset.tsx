@@ -92,7 +92,7 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
           onChange={() => onChange(value)}
         />
         { ReactHtmlParser(getFeatureName(value)) }
-        { descriptionItems ? <LabelDescriptionItems descriptionItems={descriptionItems} /> : null }
+        { descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
       </label>
     </li>
   )

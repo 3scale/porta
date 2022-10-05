@@ -22,7 +22,7 @@
         }
       }
     ],
-    "@babel/preset-typescript",
-    "@babel/react"
+    "@babel/react",
+    "@babel/preset-typescript"
   ]
 }

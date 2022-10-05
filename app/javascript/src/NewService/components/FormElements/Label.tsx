@@ -8,7 +8,7 @@ const Label = (props: Props): React.ReactElement => {
   const { htmlFor, label, required } = props
   return (
     <label htmlFor={htmlFor}>{label}
-      {required ? <abbr title="required">*</abbr> : null}
+      {required && <abbr title="required">*</abbr>}
     </label>
   )
 }

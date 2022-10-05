@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme'
-import { HiddenInputs } from 'LoginPage'
+import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 
 it('should render itself', () => {
   const wrapper = shallow(<HiddenInputs />)

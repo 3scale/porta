@@ -1,14 +1,12 @@
-import * as React from 'react'
-import {
-  EmailField,
-  HiddenInputs,
-  validateSingleField
-} from 'LoginPage'
+import React from 'react'
 import {
   ActionGroup,
   Button,
   Form
 } from '@patternfly/react-core'
+import { EmailField } from 'LoginPage/loginForms/FormGroups'
+import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
+import { validateSingleField } from 'LoginPage/utils/formValidation'
 
 export type Props = {
   providerLoginPath: string,

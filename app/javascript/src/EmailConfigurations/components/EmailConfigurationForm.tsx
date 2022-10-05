@@ -90,14 +90,14 @@ const EmailConfigurationForm = (
     >
       <CSRFToken />
       <input name="utf8" type="hidden" value="✓" />
-      {isUpdate ? <input name="_method" type="hidden" value="put" /> : null}
+      {isUpdate && <input name="_method" type="hidden" value="put" />}
 
       <EmailInput email={email} errors={emailErrors} isRequired={!isUpdate} setEmail={setEmail} />
       <UserNameInput errors={userNameErrors} isRequired={!isUpdate} setUserName={setUserName} userName={userName} />
       <PasswordInput errors={passwordErrors} isRequired={!isUpdate} password={password} setPassword={setPassword} />
       <PasswordRepeatInput
         errors={passwordRepeatErrors}
-        isDisabled={isUpdate ? password === emailConfiguration.password : null}
+        isDisabled={isUpdate && password === emailConfiguration.password}
         isRequired={!isUpdate}
         password={passwordRepeat}
         setPassword={setPasswordRepeat}

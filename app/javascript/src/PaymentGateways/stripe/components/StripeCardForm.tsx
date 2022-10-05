@@ -125,7 +125,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
             options={CARD_OPTIONS}
             onChange={validateCardElement}
           />
-          {cardErrorMessage ? <CreditCardErrors>{cardErrorMessage}</CreditCardErrors> : null}
+          {!!cardErrorMessage && <CreditCardErrors>{cardErrorMessage}</CreditCardErrors>}
         </fieldset>
         <fieldset>
           <div className="form-group">
