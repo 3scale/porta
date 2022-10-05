@@ -8,46 +8,58 @@ module Aws
       end
     end
 
-    attr_reader :params
+    AuthenticationTypeError = Class.new(StandardError)
+    TokenNotFoundError = Class.new(StandardError)
 
-    ROLE_SESSION_NAME = '3scale-porta'
+    DEFAULT_ROLE_SESSION_NAME = '3scale-porta'
+    IAM_KEYS = %i[access_key_id secret_access_key].freeze
+    STS_KEYS = %i[region role_arn role_session_name web_identity_token_file].freeze
 
     def initialize(params)
       @params = params
     end
 
-    # @return [Hash] Depending on the available connections, this method may return:
-    # When STS credentials are available: { credentials: Aws::STS::Types::AssumeRoleWithWebIdentityResponse };
-    # When STS credentials are not available: { web_identity_token_file: 'foo', role_arn: 'bar' };
-    # When no configurations are available: An empy Hash{};
+    # Returns either IAM or STS credentials to be used on calls to S3
+    #
+    # @param [Hash] Hash containing AWS credentials related keys
+    # @return [Hash<Symbol, String>] with access_key_id and secret_access_key when IAM credentials are provided
+    # @return [Hash<Symbol, Aws::AssumeRoleWebIdentityCredentials>] when STS credentials are provided
+    # @raise [AuthenticationTypeError] if not enough params are provided
     def call
-      if sts_params.any? && sts_params.all? { |_key, value| value.present? } && web_identity_token_file_exists?
-        { credentials: sts_credentials }
-      else
+      if valid_credentials_with(iam_credentials, IAM_KEYS)
         iam_credentials
+      elsif valid_credentials_with(sts_credentials, STS_KEYS)
+        raise TokenNotFoundError, "web_identity_token_file was not found" unless web_identity_token_file_exists?
+
+        { credentials: Aws::AssumeRoleWebIdentityCredentials.new(sts_credentials) }
+      else
+        raise AuthenticationTypeError, "Either #{IAM_KEYS} or #{STS_KEYS} must be provided."
       end
     end
 
     private
 
-    def iam_credentials
-      params.slice(:access_key_id, :secret_access_key)
-    end
+    attr_reader :params
 
-    def sts_credentials
-      Aws::AssumeRoleWebIdentityCredentials.new(
-        web_identity_token_file: sts_params[:web_identity_token_file],
-        role_arn: sts_params[:role_arn],
-        role_session_name: params[:role_session_name].presence || ROLE_SESSION_NAME
-      )
-    end
+    def valid_credentials_with(credentials, keys)
+      return false if credentials.empty?
+      return false if keys.difference(credentials.keys).any?
 
-    def sts_params
-      params.slice(:web_identity_token_file, :role_arn)
+      credentials.all? { |_key, value| value.present? }
     end
 
     def web_identity_token_file_exists?
-      File.exist?(sts_params[:web_identity_token_file])
+      File.exist?(sts_credentials[:web_identity_token_file])
+    end
+
+    def iam_credentials
+      @iam_credentials ||= params.slice(*IAM_KEYS)
+    end
+
+    def sts_credentials
+      @sts_credentials ||= params.slice(*STS_KEYS).tap do |credentials|
+        credentials[:role_session_name] ||= DEFAULT_ROLE_SESSION_NAME
+      end
     end
   end
 end
