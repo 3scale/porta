@@ -10,7 +10,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   test '#call returns STS credentials when available' do
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(
       web_identity_token_file: params_for_sts_credentials[:web_identity_token_file],
-      role_arn: params_for_sts_credentials[:role_name],
+      role_arn: params_for_sts_credentials[:role_arn],
       role_session_name: params_for_sts_credentials[:role_session_name]
     ).returns(assume_role_response)
 
@@ -20,7 +20,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   test '#call uses a default role session name for STS credentials if not provided' do
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(
       web_identity_token_file: params_for_sts_credentials[:web_identity_token_file],
-      role_arn: params_for_sts_credentials[:role_name],
+      role_arn: params_for_sts_credentials[:role_arn],
       role_session_name: '3scale-porta'
     ).returns(assume_role_response)
 
@@ -55,13 +55,13 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
       access_key_id: 'access_key_id',
       secret_access_key: 'secret_access_key',
       web_identity_token_file: '/path/to/token',
-      role_name: 'ROLE_NAME',
+      role_arn: 'ROLE_arn',
       role_session_name: 'role_session_name'
     }
   end
 
   def params_for_sts_credentials
-    full_params.slice(:web_identity_token_file, :role_name, :role_session_name)
+    full_params.slice(:web_identity_token_file, :role_arn, :role_session_name)
   end
 
   def assume_role_response

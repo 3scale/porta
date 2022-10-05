@@ -18,7 +18,7 @@ module Aws
 
     # @return [Hash] Depending on the available connections, this method may return:
     # When STS credentials are available: { credentials: Aws::STS::Types::AssumeRoleWithWebIdentityResponse };
-    # When STS credentials are not available: { web_identity_token_file: 'foo', role_name: 'bar' };
+    # When STS credentials are not available: { web_identity_token_file: 'foo', role_arn: 'bar' };
     # When no configurations are available: An empy Hash{};
     def call
       if sts_params.any? && sts_params.all? { |_key, value| value.present? } && web_identity_token_file_exists?
@@ -37,13 +37,13 @@ module Aws
     def sts_credentials
       Aws::AssumeRoleWebIdentityCredentials.new(
         web_identity_token_file: sts_params[:web_identity_token_file],
-        role_arn: sts_params[:role_name],
+        role_arn: sts_params[:role_arn],
         role_session_name: params[:role_session_name].presence || ROLE_SESSION_NAME
       )
     end
 
     def sts_params
-      params.slice(:web_identity_token_file, :role_name)
+      params.slice(:web_identity_token_file, :role_arn)
     end
 
     def web_identity_token_file_exists?
