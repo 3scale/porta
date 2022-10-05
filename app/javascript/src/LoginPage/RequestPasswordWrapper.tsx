@@ -38,4 +38,4 @@ const RequestPassword: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const RequestPasswordWrapper = (props: Props, containerId: string): void => createReactWrapper(<RequestPassword {...props} />, containerId)
 
-export { RequestPassword, RequestPasswordWrapper }
+export { RequestPassword, RequestPasswordWrapper, Props }

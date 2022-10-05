@@ -52,4 +52,4 @@ const NewServiceForm = (props: Props): React.ReactElement => {
 // eslint-disable-next-line react/jsx-props-no-spreading
 const NewServiceFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewServiceForm {...props} />, containerId)
 
-export { NewServiceForm, NewServiceFormWrapper }
+export { NewServiceForm, NewServiceFormWrapper, Props }

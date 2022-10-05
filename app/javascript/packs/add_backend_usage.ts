@@ -1,5 +1,5 @@
 import { AddBackendFormWrapper } from 'BackendApis/components/AddBackendForm'
-import { safeFromJsonString } from 'utilities'
+import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { Backend } from 'Types'
 
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
 
   if (!container) {
-    return
+    throw new Error('The target ID was not found: ' + containerId)
   }
 
   const { dataset } = container

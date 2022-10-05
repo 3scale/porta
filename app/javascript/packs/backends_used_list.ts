@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById(containerId)
 
   if (!container) {
-    return
+    throw new Error('The target ID was not found: ' + containerId)
   }
 
   const { backends } = container.dataset

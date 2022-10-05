@@ -1,6 +1,6 @@
 import { Component, createRef } from 'react'
 import c3 from 'c3'
-import { fetchData } from 'utilities'
+import { fetchData } from 'utilities/fetchData'
 import 'core-js/es6/promise'
 import 'url-polyfill'
 import moment from 'moment'

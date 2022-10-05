@@ -1,6 +1,8 @@
 import { loadStripe } from '@stripe/stripe-js'
 import 'PaymentGateways/stripe/styles/stripe.scss'
 
+import type { PaymentIntent, Stripe, StripeCardElement } from '@stripe/stripe-js'
+
 const style = {
   base: {
     color: '#32325d',
@@ -19,22 +21,22 @@ const style = {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const dataset = document.querySelector('.stripe-form').dataset
-  const stripePublishableKey = dataset.publishableKey
-  const clientSecret = dataset.clientSecret
-  const form = document.querySelector('#payment-form')
-  const callbackForm = document.querySelector('#payment-callback-form')
-  const payButton = document.querySelector('#submit-payment')
-  const cardError = document.querySelector('#card-error')
-  const errorMsg = document.querySelector('#card-error')
-  const spinner = document.querySelector('#spinner')
-  const buttonText = document.querySelector('#button-text')
+  const dataset = (document.querySelector('.stripe-form') as HTMLElement).dataset
+  const stripePublishableKey = dataset.publishableKey || ''
+  const clientSecret = dataset.clientSecret || ''
+  const form = document.querySelector('#payment-form') as HTMLFormElement
+  const callbackForm = document.querySelector('#payment-callback-form') as HTMLFormElement
+  const payButton = document.querySelector('#submit-payment') as HTMLButtonElement
+  const cardError = document.querySelector('#card-error') as HTMLElement
+  const errorMsg = document.querySelector('#card-error') as HTMLElement
+  const spinner = document.querySelector('#spinner') as HTMLElement
+  const buttonText = document.querySelector('#button-text') as HTMLElement
 
-  const stripe = await loadStripe(stripePublishableKey)
+  const stripe = await loadStripe(stripePublishableKey) as Stripe
   const elements = stripe.elements()
   const card = elements.create('card', { style })
 
-  const payWithCard = (stripe, card, clientSecret) => {
+  const payWithCard = (stripe: Stripe, card: StripeCardElement, clientSecret: string) => {
     setLoading(true)
     stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -49,18 +51,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
   }
 
-  const orderComplete = (paymentIntent) => {
+  const orderComplete = (paymentIntent: PaymentIntent) => {
     Object.keys(paymentIntent).forEach(key => {
       const hiddenField = document.createElement('input')
       hiddenField.type = 'hidden'
       hiddenField.name = `payment_intent[${key}]`
-      hiddenField.value = paymentIntent[key]
+      hiddenField.value = (paymentIntent as any)[key]
       callbackForm.appendChild(hiddenField)
     })
     callbackForm.submit()
   }
 
-  const showError = (errorMsgText) => {
+  const showError = (errorMsgText = '') => {
     setLoading(false)
     errorMsg.textContent = errorMsgText
     setTimeout(() => {
@@ -68,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 4000)
   }
 
-  const setLoading = (isLoading) => {
+  const setLoading = (isLoading: boolean) => {
     payButton.disabled = isLoading
     spinner.classList.toggle('hidden', !isLoading)
     buttonText.classList.toggle('hidden', isLoading)

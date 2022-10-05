@@ -12,9 +12,9 @@ import type { FlashMessage, InputProps } from 'Types'
 import type { FunctionComponent } from 'react'
 
 type Props = {
-  lostPasswordToken: string | null | undefined,
+  lostPasswordToken: string | null,
   url: string,
-  errors?: FlashMessage[]
+  errors: FlashMessage[]
 }
 
 const ChangePassword: FunctionComponent<Props> = ({
@@ -94,4 +94,4 @@ const ChangePassword: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const ChangePasswordWrapper = (props: Props, containerId: string): void => createReactWrapper(<ChangePassword {...props} />, containerId)
 
-export { ChangePassword, ChangePasswordWrapper }
+export { ChangePassword, ChangePasswordWrapper, Props }

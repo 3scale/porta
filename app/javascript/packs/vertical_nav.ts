@@ -1,11 +1,12 @@
 import { VerticalNavWrapper as VerticalNav } from 'Navigation/components/VerticalNav'
-import { safeFromJsonString } from 'utilities'
+import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('vertical-nav-wrapper')
+  const containerId = 'vertical-nav-wrapper'
+  const container = document.getElementById(containerId)
 
   if (!container) {
-    return
+    throw new Error('The target ID was not found: ' + containerId)
   }
 
   const { activeItem, activeSection, currentApi, sections } = container.dataset
@@ -14,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     sections: safeFromJsonString(sections) || [],
     activeSection,
     activeItem,
-    currentApi: safeFromJsonString(currentApi) },
-  'vertical-nav-wrapper'
-  )
+    currentApi: safeFromJsonString(currentApi)
+  }, containerId)
 })

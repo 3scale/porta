@@ -89,4 +89,4 @@ class SimpleLoginPage extends Component<Props, State> {
 // eslint-disable-next-line react/jsx-props-no-spreading
 const LoginPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<SimpleLoginPage {...props} />, containerId)
 
-export { SimpleLoginPage, LoginPageWrapper }
+export { SimpleLoginPage, LoginPageWrapper, Props }

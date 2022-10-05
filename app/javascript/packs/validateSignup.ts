@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } as const
   // Fields 'password' and 'password_confirmation' are optional (can be disabled)
   const isPasswordRequired = document.querySelectorAll('input[type="password"]').length > 0
-  const passwordFields = isPasswordRequired ? {
+  const passwordFields = isPasswordRequired && {
     'account[user][password]': {
       presence: true,
       length: { minimum: 1 }
@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
       presence: true,
       equality: 'account[user][password]'
     }
-  } : null
+  }
 
   const captchaRequired: boolean = document.querySelector('.g-recaptcha') !== null
-  const captchaFields = captchaRequired ? {
+  const captchaFields = captchaRequired && {
     'captchaChecked': {
       presence: true,
       length: { minimum: 1 }
     }
-  } : null
+  }
 
   const constraints = Object.assign({}, mandatoryFields, passwordFields, captchaFields)
 

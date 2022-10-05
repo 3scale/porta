@@ -6,6 +6,7 @@ import { RoleRadioGroup } from 'Users/components/RoleRadioGroup'
 import { FeaturesFieldset } from 'Users/components/FeaturesFieldset'
 import { ServicesFieldset } from 'Users/components/ServicesFieldset'
 import { canFeatureSetServicePermissions, toggleElementInCollection } from 'Users/utils'
+import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
 import type { AdminSection, Feature, Role } from 'Users/types'
@@ -83,4 +84,7 @@ const PermissionsForm: FunctionComponent<Props> = ({
   )
 }
 
-export { PermissionsForm, Props }
+// eslint-disable-next-line react/jsx-props-no-spreading
+const PermissionsFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<PermissionsForm {...props} />, containerId)
+
+export { PermissionsForm, PermissionsFormWrapper, Props }

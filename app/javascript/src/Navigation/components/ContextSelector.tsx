@@ -9,7 +9,7 @@ import type { Menu } from 'Types'
 
 type Props = {
   activeMenu: Menu,
-  audienceLink: string,
+  audienceLink?: string,
   settingsLink: string,
   productsLink: string,
   backendsLink: string
