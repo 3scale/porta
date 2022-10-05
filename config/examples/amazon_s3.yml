@@ -1,27 +1,25 @@
+default: &default {}
+
+s3: &s3
+  access_key_id:     "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
+  secret_access_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
+  bucket:            "<%= ENV['AWS_BUCKET'] %>"
+  region:            "<%= ENV['AWS_REGION'] %>"
+  hostname:          "<%= ENV['AWS_HOSTNAME'] %>"
+  protocol:          "<%= ENV['AWS_PROTOCOL'] %>"
+  force_path_style:  <%= ENV['AWS_PATH_STYLE'].presence || false %>
+
 development:
-  access_key_id:     access_key_id
-  secret_access_key: secret_access_key
-  bucket:            dev-my-s3-bucket
-  region:            "us-east-1"
-  force_path_style:  false
-  web_identity_token_file: ""
-  role_name: ""
-  role_session_name: ""
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
 
 test: &test
   access_key_id: invalid
   secret_access_key: invalid
   bucket: test-my-s3-bucket
   region: "us-east-1"
-  web_identity_token_file: ""
-  role_name: ""
-  role_session_name: ""
+
+preview:
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
 
 production:
-  access_key_id: invalid
-  secret_access_key: invalid
-  bucket: prod-my-s3-bucket
-  region: "us-east-1"
-  web_identity_token_file: /path/to/token
-  role_name: ROLE_ARN
-  role_session_name: ROLE_SESSION_NAME
+  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
