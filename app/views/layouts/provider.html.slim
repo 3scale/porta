@@ -6,6 +6,9 @@ html[lang="en" class="pf-m-redhat-font"]
       = content_for?(:title) ? yield(:title) : default_title
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
+    // Is this the entrypoint of the app?
+    javascript:
+        window.rails_asset_host = "#{rails_asset_host_url}";
     = javascript_pack_tag 'PF4Styles/base'
     = render 'provider/theme'
     = render 'provider/analytics'

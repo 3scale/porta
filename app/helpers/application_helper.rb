@@ -364,4 +364,14 @@ module ApplicationHelper
     return unless service
     service.pending_affecting_changes?
   end
+
+  #TODO: Tests pending for this
+  def rails_asset_host_url
+    asset_host_enabled = Rails.configuration.asset_host.present?
+    asset_host_url = Rails.configuration.three_scale.asset_host.presence
+
+    return '' unless asset_host_enabled && asset_host_url
+
+    "#{request.protocol}#{asset_host_url}"
+  end
 end
