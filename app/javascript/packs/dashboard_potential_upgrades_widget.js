@@ -1,3 +1,5 @@
+// @flow
+
 import { PotentialUpgradesWidgetWrapper } from 'Dashboard/components/PotentialUpgradesWidget'
 import { safeFromJsonString } from 'utilities'
 
