@@ -146,7 +146,7 @@ class MessageTest < ActiveSupport::TestCase
     assert_valid message
   end
 
-  test 'A message without require a subject is not valid' do
+  test 'A message without a subject is not valid' do
     message = FactoryBot.build(:message, subject: nil, sender: FactoryBot.create(:simple_account))
     assert_not message.valid?
     assert_includes message.errors[:subject], "can't be blank"
