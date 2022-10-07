@@ -10,16 +10,19 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   test '#call returns IAM credentials when available' do
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
 
-    assert Aws::CredentialsService.call(iam_auth_params), {
-      access_key_id: iam_auth_params[:access_key_id],
-      secret_access_key: iam_auth_params[:secret_access_key]
-    }
+    assert Aws::CredentialsService.call(iam_auth_params), iam_auth_params
   end
 
   test '#call returns STS credentials when available' do
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(assume_role_response)
 
     assert Aws::CredentialsService.call(sts_auth_params), { credentials: assume_role_response }
+  end
+
+  test '#call returns IAM credentials when both authentication types are  available' do
+    Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
+
+    assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
 
   test '#call uses a default role session name for STS credentials if not provided' do
