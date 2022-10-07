@@ -8,8 +8,11 @@ module Aws
       end
     end
 
-    AuthenticationTypeError = Class.new(StandardError)
-    TokenNotFoundError = Class.new(StandardError)
+    class AuthenticationTypeError < StandardError
+    end
+
+    class TokenNotFoundError < StandardError
+    end
 
     DEFAULT_ROLE_SESSION_NAME = '3scale-porta'
     IAM_KEYS = %i[access_key_id secret_access_key].freeze
