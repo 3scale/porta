@@ -79,4 +79,4 @@ const NewAccountsWidget = ({ chartData, newAccountsTotal, hasHistory, links, per
 
 const NewAccountsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewAccountsWidget {...props} />, containerId)
 
-export { NewAccountsWidgetWrapper }
+export { NewAccountsWidget, NewAccountsWidgetWrapper }
