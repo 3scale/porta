@@ -43,5 +43,25 @@ class Buyers::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_active_menu(:buyers)
   end
 
+  test 'do not update invoice if year is invalid' do
+    @invoice = FactoryBot.create(:invoice,
+                                 :buyer_account => @buyer,
+                                 :provider_account => @provider_account)
+    Invoice.any_instance.stubs(:find).returns(@invoice)
+
+    period = '0008-12'
+    put admin_buyers_account_invoice_path(@buyer, @invoice), params: { invoice: { period: period } }
+
+    assert_response :success
+    assert_template 'buyers/invoices/edit'
+
+    page = Nokogiri::HTML::Document.parse(response.body)
+    period_input = page.at("input[@id='invoice_period']")
+    assert_equal period, period_input['value']
+    error_element = period_input.next_element
+    assert_equal 'inline-errors', error_element['class']
+    assert_equal 'Year must be between 1980 and 2100', error_element.text
+  end
+
   # class MasterOnPremisesTest < ActionDispatch::IntegrationTest
 end

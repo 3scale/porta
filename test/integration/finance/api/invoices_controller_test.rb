@@ -152,6 +152,18 @@ class Finance::Api::InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_contains JSON.parse(response.body)['errors']['period'], 'Billing period format should be YYYY-MM'
   end
 
+  test '#create with invalid month in period' do
+    post api_invoices_path, params: invoice_params.merge(period: '0007-13'), headers: { accept: Mime[:json] }
+    assert_response 422
+    assert_contains JSON.parse(response.body)['errors']['period'], 'Billing period format should be YYYY-MM'
+  end
+
+  test '#create with invalid year in period' do
+    post api_invoices_path, params: invoice_params.merge(period: '0007-12'), headers: { accept: Mime[:json] }
+    assert_response 422
+    assert_contains JSON.parse(response.body)['errors']['period'], 'Billing period format should be YYYY-MM'
+  end
+
   test '#update states' do
     put api_invoice_path(invoice), params: invoice_params, headers: { accept: Mime[:json] }
     assert_response :success

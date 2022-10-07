@@ -13,6 +13,8 @@ class Invoice < ApplicationRecord
   MAX_CHARGE_RETRIES = 3
   DECIMALS   = 2
   CHARGE_PRECISION   = 2
+  MIN_YEAR = 1980
+  MAX_YEAR = 2100
 
   enum creation_type: {manual: 'manual', background: 'background'}
 
@@ -45,7 +47,9 @@ class Invoice < ApplicationRecord
   attr_accessible :provider_account, :buyer_account, :friendly_id, :period
 
   validates :provider_account, :buyer_account, :friendly_id, presence: true
+
   validates :period, presence: { :message => 'Billing period format should be YYYY-MM' }
+  validate :year_valid?
 
   validates :friendly_id, format: { with: /\A\d{4}(-\d{2})?-\d{8}\Z/,
                                     message: 'format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX',
@@ -611,5 +615,16 @@ class Invoice < ApplicationRecord
     run_after_commit do
       InvoiceMessenger.successfully_charged(self).deliver
     end
+  end
+
+  private
+
+  def year_valid?
+    return if self[:period].nil?
+
+    year = self[:period].year
+    return if year <= MAX_YEAR && year >= MIN_YEAR
+
+    errors.add :period, :invalid_year, { min_year: MIN_YEAR, max_year: MAX_YEAR }
   end
 end
