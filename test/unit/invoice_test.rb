@@ -116,6 +116,19 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_equal '2015-00000008', invoice.friendly_id
   end
 
+  test 'validates invoice invalid year' do
+    @invoice.update(period: Month.new(Time.zone.local(0007, 12, 1)))
+
+    assert_not @invoice.valid?
+    assert_includes @invoice.errors[:period], 'Year must be between 1980 and 2100'
+  end
+
+  test 'validates invoice invalid month' do
+    assert_raises ArgumentError do
+      @invoice.update(period: Month.new(Time.zone.local(2022, 13, 1)))
+    end
+  end
+
   class AutoFriendlyIdTest < ActiveSupport::TestCase
 
     def setup

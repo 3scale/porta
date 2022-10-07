@@ -40,7 +40,7 @@ class Buyers::InvoicesController < Buyers::BaseController
   def update
     @invoice = @account.invoices.find(params[:id])
 
-    if @invoice.update_attributes(params[:invoice])
+    if @invoice.update(params[:invoice])
       redirect_to admin_buyers_account_invoice_url(@account, @invoice), notice: 'Invoice was successfully updated.'
     else
       render :edit
