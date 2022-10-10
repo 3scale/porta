@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  Pagination as PFPagination,
   PaginationVariant,
   Toolbar,
   ToolbarItem
@@ -12,19 +11,15 @@ import {
   TableHeader,
   sortable
 } from '@patternfly/react-table'
+import { Pagination } from 'Common/components/Pagination'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
-import type {
-  IActionsResolver,
-  ISortBy,
-  OnSort
-} from '@patternfly/react-table'
-import type { OnPerPageSelect, PaginationProps } from '@patternfly/react-core'
+import type { IActionsResolver, ISortBy, OnSort } from '@patternfly/react-table'
 import type { Action, Plan } from 'Types'
 
 import './PlansTable.scss'
 
-export type Props = {
+type Props = {
   columns: Array<{
     attribute: string,
     title: string
@@ -72,38 +67,6 @@ const PlansTable: React.FunctionComponent<Props> = ({
     window.location.replace(url.toString())
   }
 
-  const selectPerPage: OnPerPageSelect = (_event, selectedPerPage) => {
-    url.searchParams.set('per_page', String(selectedPerPage))
-    url.searchParams.delete('page')
-    window.location.href = url.toString()
-  }
-
-  const goToPage = (page: any) => {
-    url.searchParams.set('page', page)
-    window.location.href = url.toString()
-  }
-
-  // eslint-disable-next-line react/no-multi-comp
-  const Pagination = ({ variant }: { variant?: PaginationProps['variant'] }) => {
-    const perPage = url.searchParams.get('per_page')
-    const page = url.searchParams.get('page')
-    return (
-      <PFPagination
-        itemCount={count}
-        page={Number(page)}
-        perPage={Number(perPage) || 20}
-        perPageOptions={[10, 20].map(n => ({ title: String(n), value: n }))}
-        variant={variant}
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPageInput={(_ev, page) => goToPage(page)}
-        onPerPageSelect={selectPerPage}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-      />
-    )
-  }
-
   return (
     <>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
@@ -111,7 +74,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
           <ToolbarSearch placeholder="Find a plan" />
         </ToolbarItem>
         <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-          <Pagination />
+          <Pagination itemCount={count} />
         </ToolbarItem>
       </Toolbar>
       <Divider />
@@ -120,7 +83,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
         <TableBody />
       </Table>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between">
-        <Pagination variant={PaginationVariant.bottom} />
+        <Pagination itemCount={count} variant={PaginationVariant.bottom} />
       </Toolbar>
     </>
   )

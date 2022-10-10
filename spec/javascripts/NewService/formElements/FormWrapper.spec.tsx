@@ -1,5 +1,6 @@
 import { mount, shallow } from 'enzyme'
-import { FormWrapper, HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
+import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
+import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
 
 const submitText = 'Add API'
 const props = {

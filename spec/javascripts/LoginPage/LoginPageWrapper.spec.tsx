@@ -5,11 +5,11 @@ import type { Props } from 'LoginPage/LoginPageWrapper'
 
 const props: Props = {
   authenticationProviders: [],
-  providerAdminDashboardPath: 'provider-admin-path',
-  providerLoginPath: 'provider-login-path',
+  // providerAdminDashboardPath: 'provider-admin-path',
+  // providerLoginPath: 'provider-login-path',
   providerRequestPasswordResetPath: 'password-path',
   providerSessionsPath: 'sessions-path',
-  redirectUrl: 'redirect-url',
+  // redirectUrl: 'redirect-url',
   show3scaleLoginForm: true,
   disablePasswordReset: false,
   session: { username: '' }

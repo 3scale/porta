@@ -3,7 +3,6 @@ import {
   Divider,
   Level,
   LevelItem,
-  Pagination as PFPagination,
   PageSection,
   PageSectionVariants,
   PaginationVariant,
@@ -11,13 +10,12 @@ import {
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
+import { Pagination } from 'Common/components/Pagination'
 import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-import type { PaginationProps } from '@patternfly/react-core'
 import type { Product } from 'Products/types'
-import type { ReactElement } from 'react'
 
 import './IndexPage.scss'
 
@@ -63,40 +61,6 @@ const IndexPage: React.FunctionComponent<Props> = ({
     onClick: (_event: any, rowId: any) => linkToPage(rowId, i)
   }))
 
-  const url = new URL(window.location.href)
-
-  const selectPerPage = (_event: any, selectedPerPage: any) => {
-    url.searchParams.set('per_page', selectedPerPage)
-    url.searchParams.delete('page')
-    window.location.replace(url.toString())
-  }
-
-  const goToPage = (page: any) => {
-    url.searchParams.set('page', page)
-    window.location.replace(url.toString())
-  }
-
-  // eslint-disable-next-line react/no-multi-comp
-  const Pagination = ({ variant }: Pick<PaginationProps, 'variant'>): ReactElement<PaginationProps> => {
-    const perPage = url.searchParams.get('per_page')
-    const page = url.searchParams.get('page')
-    return (
-      <PFPagination
-        itemCount={productsCount}
-        page={Number(page)}
-        perPage={Number(perPage) || 20}
-        perPageOptions={[{ title: '10', value: 10 }, { title: '20', value: 20 }]}
-        variant={variant}
-        widgetId="pagination-options-menu-top"
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPerPageSelect={selectPerPage}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-      />
-    )
-  }
-
   return (
     <PageSection id="products-index-page" variant={PageSectionVariants.light}>
       <Level>
@@ -116,7 +80,7 @@ const IndexPage: React.FunctionComponent<Props> = ({
           <ToolbarSearch placeholder="Find a product" />
         </ToolbarItem>
         <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-          <Pagination />
+          <Pagination itemCount={productsCount} />
         </ToolbarItem>
       </Toolbar>
       <Table actions={tableActions} aria-label="Products Table" cells={tableColumns} rows={tableRows}>
@@ -125,7 +89,7 @@ const IndexPage: React.FunctionComponent<Props> = ({
       </Table>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
         <ToolbarItem>
-          <Pagination variant={PaginationVariant.bottom} />
+          <Pagination itemCount={productsCount} variant={PaginationVariant.bottom} />
         </ToolbarItem>
       </Toolbar>
     </PageSection>

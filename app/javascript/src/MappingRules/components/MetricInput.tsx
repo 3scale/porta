@@ -43,7 +43,8 @@ const MetricInput: FunctionComponent<Props> = ({
     { title: 'Last updated', propName: 'updatedAt' }
   ]
 
-  // eslint-disable-next-line react/no-multi-comp
+  // FIXME: fix these lint errors
+  // eslint-disable-next-line react/no-multi-comp, react/no-unstable-nested-components
   const RadioOption: FunctionComponent<RadioOptionProps> = ({
     type,
     label,

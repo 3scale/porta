@@ -1,6 +1,6 @@
 import { act } from 'react-dom/test-utils'
 import { mount, render, shallow } from 'enzyme'
-import { ServiceDiscoveryListItems } from 'NewService/components/FormElements'
+import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 import * as utils from 'utilities/fetchData'
 import { BASE_PATH } from 'NewService'
 

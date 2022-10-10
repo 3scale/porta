@@ -1,5 +1,5 @@
 import { mount, shallow } from 'enzyme'
-import { Select } from 'NewService/components/FormElements'
+import { Select } from 'NewService/components/FormElements/Select'
 
 const options = ['project_01', 'project_02']
 const props = {

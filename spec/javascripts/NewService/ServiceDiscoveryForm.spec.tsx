@@ -1,8 +1,10 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { ServiceDiscoveryForm } from 'NewService/components/ServiceDiscoveryForm'
-import { ErrorMessage, FormWrapper, ServiceDiscoveryListItems } from 'NewService/components/FormElements'
 import * as utils from 'utilities/fetchData'
+import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
+import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
+import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 
 import type { Props } from 'NewService/components/ServiceDiscoveryForm'
 

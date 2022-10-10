@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import { ErrorMessage } from 'NewService/components/FormElements'
+import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
 
 const props = {
   fetchErrorMessage: 'it failed'

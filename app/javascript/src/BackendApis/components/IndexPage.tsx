@@ -3,7 +3,6 @@ import {
   Divider,
   Level,
   LevelItem,
-  Pagination as PFPagination,
   PageSection,
   PageSectionVariants,
   PaginationVariant,
@@ -11,13 +10,13 @@ import {
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
+import { Pagination } from 'Common/components/Pagination'
 import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
-import type { FunctionComponent, ReactElement } from 'react'
+import type { FunctionComponent } from 'react'
 import type { IActions } from '@patternfly/react-table'
-import type { OnPerPageSelect, PaginationProps } from '@patternfly/react-core'
 import type { Backend } from 'BackendApis/types'
 
 import './IndexPage.scss'
@@ -62,40 +61,6 @@ const IndexPage: FunctionComponent<Props> = ({
     onClick: (_event, rowId) => linkToPage(rowId, i)
   }))
 
-  const url = new URL(window.location.href)
-
-  const selectPerPage: OnPerPageSelect = (_event, selectedPerPage) => {
-    url.searchParams.set('per_page', String(selectedPerPage))
-    url.searchParams.delete('page')
-    window.location.replace(url.toString())
-  }
-
-  const goToPage = (page: any) => {
-    url.searchParams.set('page', page)
-    window.location.replace(url.toString())
-  }
-
-  // eslint-disable-next-line react/no-multi-comp
-  const Pagination = ({ variant }: Pick<PaginationProps, 'variant'>): ReactElement<PaginationProps> => {
-    const perPage = url.searchParams.get('per_page')
-    const page = url.searchParams.get('page')
-    return (
-      <PFPagination
-        itemCount={backendsCount}
-        page={Number(page)}
-        perPage={Number(perPage) || 20}
-        perPageOptions={[{ title: '10', value: 10 }, { title: '20', value: 20 }]}
-        variant={variant}
-        widgetId="pagination-options-menu-top"
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPerPageSelect={selectPerPage}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-      />
-    )
-  }
-
   return (
     <PageSection id="backend-apis-index-page" variant={PageSectionVariants.light}>
       <Level>
@@ -116,7 +81,7 @@ const IndexPage: FunctionComponent<Props> = ({
         </ToolbarItem>
         {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
         <ToolbarItem>
-          <Pagination />
+          <Pagination itemCount={backendsCount} />
         </ToolbarItem>
       </Toolbar>
       <Table actions={tableActions} aria-label="Backend APIs Table" cells={tableColumns} rows={tableRows}>
@@ -126,7 +91,7 @@ const IndexPage: FunctionComponent<Props> = ({
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
         {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
         <ToolbarItem>
-          <Pagination variant={PaginationVariant.bottom} />
+          <Pagination itemCount={backendsCount} variant={PaginationVariant.bottom}    />
         </ToolbarItem>
       </Toolbar>
     </PageSection>

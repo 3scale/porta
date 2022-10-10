@@ -10,7 +10,7 @@ import { safeFromJsonString } from 'utilities/json-utils'
 import type { FunctionComponent } from 'react'
 import type { Action, Plan } from 'Types'
 
-export type Props = {
+type Props = {
   columns: Array<{
     attribute: string,
     title: string

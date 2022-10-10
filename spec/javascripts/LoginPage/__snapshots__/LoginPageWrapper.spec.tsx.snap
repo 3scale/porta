@@ -4,11 +4,8 @@ exports[`should not render reset password button when disablePasswordReset is tr
 <SimpleLoginPage
   authenticationProviders={Array []}
   disablePasswordReset={true}
-  providerAdminDashboardPath="provider-admin-path"
-  providerLoginPath="provider-login-path"
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
-  redirectUrl="redirect-url"
   session={
     Object {
       "username": "",
@@ -442,11 +439,8 @@ exports[`should render Login form and Authentication providers when available 1`
     ]
   }
   disablePasswordReset={false}
-  providerAdminDashboardPath="provider-admin-path"
-  providerLoginPath="provider-login-path"
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
-  redirectUrl="redirect-url"
   session={
     Object {
       "username": "",
@@ -1108,11 +1102,8 @@ exports[`should render itself 1`] = `
 <SimpleLoginPage
   authenticationProviders={Array []}
   disablePasswordReset={false}
-  providerAdminDashboardPath="provider-admin-path"
-  providerLoginPath="provider-login-path"
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
-  redirectUrl="redirect-url"
   session={
     Object {
       "username": "",
@@ -1572,11 +1563,8 @@ exports[`should render reset password button when disablePasswordReset is false 
 <SimpleLoginPage
   authenticationProviders={Array []}
   disablePasswordReset={false}
-  providerAdminDashboardPath="provider-admin-path"
-  providerLoginPath="provider-login-path"
   providerRequestPasswordResetPath="password-path"
   providerSessionsPath="sessions-path"
-  redirectUrl="redirect-url"
   session={
     Object {
       "username": "",

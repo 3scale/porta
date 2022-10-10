@@ -27,8 +27,8 @@
   "rules": {
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "no-console": ["warn", { "allow": ["error"] }],
-    "no-duplicate-imports": "off",
-    "sort-imports": "off",
+    "no-duplicate-imports": "off", // Replaced by @typescript-eslint/no-duplicate-imports
+    "sort-imports": "off", // Replaced by import/order
     "semi": "off",
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "object-curly-spacing": ["error", "always"],
@@ -36,11 +36,10 @@
     "array-bracket-spacing": ["error", "never"],
 
     "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/no-unused-vars": 2,
     "@typescript-eslint/consistent-type-imports": 2,
     "@typescript-eslint/no-duplicate-imports": "error",
-    "@typescript-eslint/no-explicit-any": "off", // TODO: only temporary!!
 
-    // RULES ADDED AFTER EXTENDING 'ALL'
     "react/destructuring-assignment": "off",
     "react/forbid-component-props": "off",
     "react/function-component-definition": "off",
@@ -81,7 +80,13 @@
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
 
-    "jsx-expressions/strict-logical-expressions": "error" // Replaces rule "react/jsx-no-leaked-render"
+    "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render"
+
+    // TODO: only temporary for development
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/no-set-state": "off",
+    "react/no-unescaped-entities": "off",
+    "react/jsx-child-element-spacing": "off"
   },
   "settings": {
     "react": {

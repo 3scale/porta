@@ -23,7 +23,7 @@ const defaultProps: Props = {
   addMappingRulePath: '',
   metrics,
   metricsCount,
-  createButton: <button>Add a metric</button>
+  createButton: <button type="button">Add a metric</button>
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)

@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements'
+import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
 
 it('should render itself properly', () => {
   const wrapper = mount(<HiddenServiceDiscoveryInput />)

@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme'
-import { ServiceManualListItems } from 'NewService/components/FormElements'
+import { ServiceManualListItems } from 'NewService/components/FormElements/ServiceManualListItems'
 
 it('should render required form fields', () => {
   const props = {

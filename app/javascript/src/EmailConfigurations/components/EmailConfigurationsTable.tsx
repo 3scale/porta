@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  Pagination as PFPagination,
   PaginationVariant,
   Toolbar,
   ToolbarGroup,
@@ -13,12 +12,12 @@ import {
   TableHeader,
   sortable
 } from '@patternfly/react-table'
+import { Pagination } from 'Common/components/Pagination'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
 import type { ISortBy, OnSort } from '@patternfly/react-table'
-import type { OnPerPageSelect, PaginationProps } from '@patternfly/react-core'
 import type { EmailConfiguration } from 'EmailConfigurations/types'
-import type { FunctionComponent, ReactElement } from 'react'
+import type { FunctionComponent } from 'react'
 
 import './EmailConfigurationsTable.scss'
 
@@ -60,38 +59,6 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
     window.location.replace(url.toString())
   }
 
-  const selectPerPage: OnPerPageSelect = (_event, selectedPerPage) => {
-    url.searchParams.set('per_page', String(selectedPerPage))
-    url.searchParams.delete('page')
-    window.location.replace(url.toString())
-  }
-
-  const goToPage = (page: number) => {
-    url.searchParams.set('page', String(page))
-    window.location.replace(url.toString())
-  }
-
-  // eslint-disable-next-line react/no-multi-comp
-  const Pagination = ({ variant }: Pick<PaginationProps, 'variant'>): ReactElement<PaginationProps> => {
-    const perPage = url.searchParams.get('per_page')
-    const page = url.searchParams.get('page')
-    return (
-      <PFPagination
-        itemCount={emailConfigurationsCount}
-        page={Number(page)}
-        perPage={Number(perPage) || 20}
-        perPageOptions={[10, 20].map(n => ({ title: String(n), value: n }))}
-        variant={variant}
-        onFirstClick={(_ev, page) => goToPage(page)}
-        onLastClick={(_ev, page) => goToPage(page)}
-        onNextClick={(_ev, page) => goToPage(page)}
-        onPageInput={(_ev, page) => goToPage(page)}
-        onPerPageSelect={selectPerPage}
-        onPreviousClick={(_ev, page) => goToPage(page)}
-      />
-    )
-  }
-
   // TODO: wrap toolbar items in a ToolbarContent once PF upgraded
   return (
     <>
@@ -113,7 +80,7 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
         </ToolbarGroup>
         <ToolbarGroup>
           <ToolbarItem> {/* TODO: add alignment={{ default: 'alignRight' }} after upgrading @patternfly/react-core */}
-            <Pagination />
+            <Pagination itemCount={emailConfigurationsCount} />
           </ToolbarItem>
         </ToolbarGroup>
       </Toolbar>
@@ -124,7 +91,7 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
         <TableBody />
       </Table>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
-        <Pagination variant={PaginationVariant.bottom} />
+        <Pagination itemCount={emailConfigurationsCount} variant={PaginationVariant.bottom} />
       </Toolbar>
     </>
   )

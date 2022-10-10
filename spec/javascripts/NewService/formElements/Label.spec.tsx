@@ -1,5 +1,5 @@
 import { mount } from 'enzyme'
-import { Label } from 'NewService/components/FormElements'
+import { Label } from 'NewService/components/FormElements/Label'
 
 const props = {
   htmlFor: 'label',
