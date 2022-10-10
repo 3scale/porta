@@ -37,7 +37,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
     if @message.valid?
       enqueue_message
     else
-      flash[:error] = 'Please fill subject.'
+      flash[:error] = @message.errors.full_messages.to_sentence
       redirect_to admin_messages_new_path
     end
   end
