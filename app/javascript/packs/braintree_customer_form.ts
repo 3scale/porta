@@ -1,5 +1,5 @@
 import { createBraintreeClient } from 'PaymentGateways/braintree/braintree'
-import { BraintreeFormWrapper } from 'PaymentGateways/braintree/BraintreeFormWrapper'
+import { BraintreeFormWrapper } from 'PaymentGateways/braintree/BraintreeForm'
 import { client } from 'braintree-web'
 import { safeFromJsonString } from 'utilities/json-utils'
 

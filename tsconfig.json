@@ -18,6 +18,7 @@
   },
   "include": ["app/javascript", "**/*.spec.ts", "**/*.spec.tsx"], // FIXME: should not include tests but VSCode needs it
   "exclude": [
+    "app/packs/PF4Styles",
     "node_modules",
     "public"
   ],
