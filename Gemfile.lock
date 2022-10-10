@@ -243,8 +243,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     colorize (0.8.1)
-    commonmarker (0.21.0)
-      ruby-enum (~> 0.5)
+    commonmarker (0.23.6)
     compass (1.0.3)
       chunky_png (~> 1.2)
       compass-core (~> 1.0.2)
@@ -698,8 +697,6 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 0.87.0)
-    ruby-enum (0.7.2)
-      i18n
     ruby-oci8 (2.2.6.1)
     ruby-openid (2.9.2)
     ruby-plsql (0.8.0)
