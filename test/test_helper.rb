@@ -25,7 +25,6 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'minitest/unit'
 
 require 'rails/test_help'
-require 'active_support/testing/time_helpers'
 require "paperclip/matchers"
 
 require File.expand_path('../lib/developer_portal/test/test_helper.rb', __dir__)
@@ -82,8 +81,6 @@ Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |file| require file }
 
 include TestHelpers::XmlAssertions
 include TestHelpers::SectionsPermissions
-
-include ActiveSupport::Testing::TimeHelpers
 
 ActiveJobUniquenessTestHelper.active_job_uniqueness_test_mode!
 

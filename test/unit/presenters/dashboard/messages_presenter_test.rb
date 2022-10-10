@@ -8,10 +8,6 @@ class Dashboard::MessagesPresenterTest < Draper::TestCase
     travel_to(DateTime.now.midday)
   end
 
-  def teardown
-    travel_back
-  end
-
   def test_render_no_messages
     html = html_from_presenter(MessageRecipient.none)
 

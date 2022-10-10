@@ -636,10 +636,6 @@ class OnCreationTest < ActiveSupport::TestCase
     @cinstance = Cinstance.create(plan: plan)
   end
 
-  def teardown
-    travel_back
-  end
-
   test 'set setup_fee and trial from plan' do
     assert_equal Time.zone.local(1942,1,4,15,20), @cinstance.trial_period_expires_at
     assert_equal 42.42, @cinstance.setup_fee

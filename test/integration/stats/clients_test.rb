@@ -14,10 +14,6 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
     Stats::Base.storage.flushdb
   end
 
-  def teardown
-    travel_back
-  end
-
   test 'usage with invalid period' do
     login! @provider_account
     get usage_stats_api_applications_path(@cinstance, format: :json), params: { :period => 'XSScript', :metric_name => @metric.system_name }

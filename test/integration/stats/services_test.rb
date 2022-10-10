@@ -14,10 +14,6 @@ class Stats::ServicesTest < ActionDispatch::IntegrationTest
     provider_login_with @provider_account.admins.first.username, 'supersecret'
   end
 
-  def teardown
-    travel_back
-  end
-
   test 'usage_response_code with no data as json' do
     travel_to(Time.utc(2009, 12, 4, 11, 12))
     plan = FactoryBot.create(:application_plan, issuer: @provider_account.default_service)

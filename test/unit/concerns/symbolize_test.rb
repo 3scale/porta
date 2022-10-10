@@ -16,14 +16,6 @@ class SymbolizeTest < ActiveSupport::TestCase
     end
   end
 
-  def setup
-    freeze_time
-  end
-
-  def teardown
-    travel_back
-  end
-
   def test_symbolization
     usage = UsageLimit.new(period: 'year')
     assert_equal :year, usage.period
