@@ -11,9 +11,6 @@ module Aws
     class AuthenticationTypeError < StandardError
     end
 
-    class TokenNotFoundError < StandardError
-    end
-
     DEFAULT_ROLE_SESSION_NAME = '3scale-porta'
     IAM_KEYS = %i[access_key_id secret_access_key].freeze
     STS_KEYS = %i[region role_arn role_session_name web_identity_token_file].freeze
@@ -29,9 +26,9 @@ module Aws
     # @return [Hash<Symbol, Aws::AssumeRoleWebIdentityCredentials>] when STS credentials are provided
     # @raise [AuthenticationTypeError] if not enough params are provided
     def call
-      if valid_credentials_with(iam_credentials, IAM_KEYS)
-        iam_credentials
-      elsif valid_credentials_with(sts_credentials, STS_KEYS)
+      if valid_params_with(iam_params, IAM_KEYS)
+        iam_params
+      elsif valid_params_with(sts_params, STS_KEYS)
         sts_temporary_security_credentials
       else
         raise AuthenticationTypeError, "Either #{IAM_KEYS} or #{STS_KEYS} must be provided."
@@ -42,29 +39,23 @@ module Aws
 
     attr_reader :params
 
-    def valid_credentials_with(credentials, keys)
+    def valid_params_with(credentials, keys)
       return false if credentials.empty?
       return false if keys.difference(credentials.keys).any?
 
       credentials.all? { |_key, value| value.present? }
     end
 
-    def web_identity_token_file_exists?
-      File.exist?(sts_credentials[:web_identity_token_file])
-    end
-
     def sts_temporary_security_credentials
-      raise TokenNotFoundError, "web_identity_token_file was not found" unless web_identity_token_file_exists?
-
-      { credentials: Aws::AssumeRoleWebIdentityCredentials.new(sts_credentials) }
+      { credentials: Sts::AssumeRoleWebIdentityService.call(sts_params) }
     end
 
-    def iam_credentials
-      @iam_credentials ||= params.slice(*IAM_KEYS)
+    def iam_params
+      @iam_params ||= params.slice(*IAM_KEYS)
     end
 
-    def sts_credentials
-      @sts_credentials ||= params.slice(*STS_KEYS).tap do |credentials|
+    def sts_params
+      @sts_params ||= params.slice(*STS_KEYS).tap do |credentials|
         credentials[:role_session_name] ||= DEFAULT_ROLE_SESSION_NAME
       end
     end

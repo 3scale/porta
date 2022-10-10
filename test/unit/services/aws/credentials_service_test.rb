@@ -3,31 +3,27 @@
 require 'test_helper'
 
 class Aws::CredentialsServiceTest < ActiveSupport::TestCase
-  setup do
-    File.stubs(:exist?).returns(true)
-  end
-
   test '#call returns IAM credentials when available' do
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
+    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).never
 
     assert Aws::CredentialsService.call(iam_auth_params), iam_auth_params
   end
 
   test '#call returns STS credentials when available' do
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(assume_role_response)
+    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).with(sts_auth_params).returns(assume_role_response)
 
     assert Aws::CredentialsService.call(sts_auth_params), { credentials: assume_role_response }
   end
 
   test '#call returns IAM credentials when both authentication types are  available' do
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
+    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).never
 
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
 
   test '#call uses a default role session name for STS credentials if not provided' do
-    Aws::AssumeRoleWebIdentityCredentials
-      .expects(:new)
+    Aws::Sts::AssumeRoleWebIdentityService
+      .expects(:call)
       .with(sts_auth_params.merge(role_session_name: '3scale-porta'))
       .returns(assume_role_response)
 
@@ -37,11 +33,12 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call raises an error if the web_identity_token_file does not exist' do
+    token_not_found_error = Aws::Sts::AssumeRoleWebIdentityService::TokenNotFoundError
     File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
 
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).never
+    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).raises(token_not_found_error)
 
-    assert_raises(Aws::CredentialsService::TokenNotFoundError) do
+    assert_raises(token_not_found_error) do
       Aws::CredentialsService.call(sts_auth_params)
     end
   end
