@@ -5,6 +5,7 @@ s3: &s3
   secret_access_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
   role_arn: "<%= ENV['AWS_ROLE_ARN'] %>"
   web_identity_token_file: "<%= ENV['AWS_WEB_IDENTITY_TOKEN_FILE'] %>"
+  role_session_name: <%= ENV['AWS_ROLE_SESSION_NAME'].presence || '3scale-porta' %>
   bucket: "<%= ENV['AWS_BUCKET'] %>"
   region: "<%= ENV['AWS_REGION'] %>"
   hostname: "<%= ENV['AWS_HOSTNAME'] %>"

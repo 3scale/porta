@@ -11,7 +11,6 @@ module Aws
     class AuthenticationTypeError < StandardError
     end
 
-    DEFAULT_ROLE_SESSION_NAME = '3scale-porta'
     IAM_KEYS = %i[access_key_id secret_access_key].freeze
     STS_KEYS = %i[region role_arn role_session_name web_identity_token_file].freeze
 
@@ -55,9 +54,7 @@ module Aws
     end
 
     def sts_params
-      @sts_params ||= params.slice(*STS_KEYS).tap do |credentials|
-        credentials[:role_session_name] ||= DEFAULT_ROLE_SESSION_NAME
-      end
+      @sts_params ||= params.slice(*STS_KEYS)
     end
   end
 end

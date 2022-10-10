@@ -21,17 +21,6 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
 
-  test '#call uses a default role session name for STS credentials if not provided' do
-    Aws::Sts::AssumeRoleWebIdentityService
-      .expects(:call)
-      .with(sts_auth_params.merge(role_session_name: '3scale-porta'))
-      .returns(assume_role_response)
-
-    assert Aws::CredentialsService.call(
-      sts_auth_params.except(:role_session_name)
-    ), { credentials: assume_role_response }
-  end
-
   test '#call raises an error if the web_identity_token_file does not exist' do
     token_not_found_error = Aws::Sts::AssumeRoleWebIdentityService::TokenNotFoundError
     File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
