@@ -10,9 +10,9 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call returns STS credentials when available' do
-    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).with(sts_auth_params).returns(assume_role_response)
+    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).with(sts_auth_params).returns(sts_credentials)
 
-    assert Aws::CredentialsService.call(sts_auth_params), { credentials: assume_role_response }
+    assert Aws::CredentialsService.call(sts_auth_params), { credentials: sts_credentials }
   end
 
   test '#call returns IAM credentials when both authentication types are  available' do
@@ -59,7 +59,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
     full_params.slice(:region, :role_arn, :role_session_name, :web_identity_token_file)
   end
 
-  def assume_role_response
-    @assume_role_response ||= Aws::STS::Types::AssumeRoleWithWebIdentityResponse.new
+  def sts_credentials
+    @sts_credentials ||= Aws::Credentials.new(nil, nil)
   end
 end

@@ -27,12 +27,11 @@ module Aws
       attr_reader :params
 
       def cached_call
-        cached_value = ::Rails.cache.read(cache_key)
+        cached_value = rails_cache.read(cache_key)
         return cached_value if cached_value.present?
 
         sts_response = yield
-
-        ::Rails.cache.write(cache_key, sts_response, expires_in: cache_expires_in(sts_response.expiration))
+        rails_cache.fetch(cache_key, expires_in: cache_expires_in(sts_response.expiration)) { sts_response.credentials }
       end
 
       def cache_expires_in(expiration_datetime)
@@ -40,7 +39,15 @@ module Aws
       end
 
       def cache_key
-        "sts/#{params[:role_session_name]}/#{params[:web_identity_token_file]}/#{params[:role_arn]}/#{params[:region]}"
+        @cache_key ||= "sts/"\
+          "#{params[:role_session_name]}/"\
+          "#{params[:web_identity_token_file]&.remove('/')}/"\
+          "#{params[:role_arn]}/"\
+          "#{params[:region]}"
+      end
+
+      def rails_cache
+        @rails_cache ||= ::Rails.cache
       end
 
       def web_identity_token_file_exists?
