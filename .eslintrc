@@ -22,7 +22,7 @@
   "plugins": [
     "@typescript-eslint",
     "import",
-    "jsx-expressions"
+    // "jsx-expressions"
   ],
   "rules": {
     "indent": ["error", 2, { "SwitchCase": 1 }],
@@ -80,7 +80,7 @@
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
 
-    "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render"
+    // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render"
 
     // TODO: only temporary for development
     "@typescript-eslint/no-explicit-any": "off",
