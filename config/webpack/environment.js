@@ -40,7 +40,7 @@ environment.loaders.append('yaml', {
 /* The CDN url must be hardcoded at settings.yml:asset_host during assets compilation in order to get static assets
  * like CSS files point to the CDN. Otherwise, the assets are generated with relative paths and are not loaded from
  * the CDN, even when settings.yml:asset_host is set during runtime. We don't want to have to provide any CDN url when
- * building porta docker images in order to get the assets correctly precompiled. To avoid that, this trick assumes
+ * building porta container images in order to get the assets correctly precompiled. To avoid that, this trick assumes
  * the assets are generated with relative paths (settings.yml:asset_host = null during compilation time). The next code
  * is executed by webpack when compiling the assets, and sets the variable `postTransformPublicPath` to an arrow
  * function which will prepend the CDN url in runtime.
