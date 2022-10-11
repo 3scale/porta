@@ -9,40 +9,30 @@ class Aws::Sts::AssumeRoleWebIdentityServiceTest < ActiveSupport::TestCase
     assume_role_response.stubs(:credentials).returns(sts_credentials)
   end
 
-  test '#call calls AWS to get an instance of STS credentials' do
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(assume_role_response)
-
-    assert Aws::Sts::AssumeRoleWebIdentityService.call(sts_auth_params), sts_credentials
+  test '#config sets params' do
+    assert(
+      assume_role_web_identity_service_instance.config(sts_auth_params).as_json['params'].keys.sort,
+      ['region', 'role_arn', 'role_session_name', 'web_identity_token_file']
+    )
   end
 
-  test '#call caches the AWS response when it is successful' do
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(assume_role_response)
-
-    Rails.cache.expects(:fetch)
-      .with(sts_cache_key, expires_in: 1.minute.seconds)
-      .returns(assume_role_response)
-
-    assert Aws::Sts::AssumeRoleWebIdentityService.call(sts_auth_params), sts_credentials
+  test '#config returns self' do
+    assert assume_role_web_identity_service_instance.config(sts_auth_params), assume_role_web_identity_service_instance
   end
 
-  test '#call does not cache the AWS response when it fails' do
-    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).raises(invalid_token_error)
-
-    Rails.cache.expects(:fetch).never
-
-    assert_raises(invalid_token_error.class) do
-      Aws::Sts::AssumeRoleWebIdentityService.call(sts_auth_params)
-    end
-
-    assert_nil Rails.cache.read(sts_cache_key)
-  end
-
-  test '#call raises an error if the web_identity_token_file does not exist' do
+  test '#config raises an error if the web_identity_token_file does not exist' do
     File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
 
     assert_raises(Aws::Sts::AssumeRoleWebIdentityService::TokenNotFoundError) do
-      Aws::Sts::AssumeRoleWebIdentityService.call(sts_auth_params)
+      assume_role_web_identity_service_instance.config(sts_auth_params)
     end
+  end
+
+  test '#identity_credentials calls AWS to get an instance of STS credentials' do
+    Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(assume_role_response)
+    assume_role_web_identity_service_instance.config(sts_auth_params)
+
+    assert assume_role_web_identity_service_instance.identity_credentials, sts_credentials
   end
 
   private
@@ -64,15 +54,11 @@ class Aws::Sts::AssumeRoleWebIdentityServiceTest < ActiveSupport::TestCase
     @sts_credentials ||= Aws::Credentials.new(nil, nil)
   end
 
-  def sts_cache_key
-    "sts/"\
-    "#{sts_auth_params[:role_session_name]}/"\
-    "#{sts_auth_params[:web_identity_token_file]&.remove('/')}/"\
-    "#{sts_auth_params[:role_arn]}/"\
-    "#{sts_auth_params[:region]}"
-  end
-
   def invalid_token_error
     @invalid_token_error ||= Aws::STS::Errors::InvalidIdentityToken.new(nil, 'error')
+  end
+
+  def assume_role_web_identity_service_instance
+    Aws::Sts::AssumeRoleWebIdentityService.instance
   end
 end

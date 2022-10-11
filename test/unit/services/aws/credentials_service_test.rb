@@ -4,19 +4,26 @@ require 'test_helper'
 
 class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   test '#call returns IAM credentials when available' do
-    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).never
+    assume_role_web_identity_service_instance.expects(:identity_credentials).never
 
     assert Aws::CredentialsService.call(iam_auth_params), iam_auth_params
   end
 
   test '#call returns STS credentials when available' do
-    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).with(sts_auth_params).returns(sts_credentials)
+    assume_role_web_identity_service_instance
+      .expects(:config)
+      .with(sts_auth_params)
+      .returns(assume_role_web_identity_service_instance)
+
+    assume_role_web_identity_service_instance
+      .expects(:identity_credentials)
+      .returns(sts_credentials)
 
     assert Aws::CredentialsService.call(sts_auth_params), { credentials: sts_credentials }
   end
 
-  test '#call returns IAM credentials when both authentication types are  available' do
-    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).never
+  test '#call returns IAM credentials when both authentication types are available' do
+    assume_role_web_identity_service_instance.expects(:identity_credentials).never
 
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
@@ -25,7 +32,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
     token_not_found_error = Aws::Sts::AssumeRoleWebIdentityService::TokenNotFoundError
     File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
 
-    Aws::Sts::AssumeRoleWebIdentityService.expects(:call).raises(token_not_found_error)
+    assume_role_web_identity_service_instance.expects(:config).raises(token_not_found_error)
 
     assert_raises(token_not_found_error) do
       Aws::CredentialsService.call(sts_auth_params)
@@ -61,5 +68,9 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
 
   def sts_credentials
     @sts_credentials ||= Aws::Credentials.new(nil, nil)
+  end
+
+  def assume_role_web_identity_service_instance
+    Aws::Sts::AssumeRoleWebIdentityService.instance
   end
 end

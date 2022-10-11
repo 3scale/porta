@@ -46,7 +46,11 @@ module Aws
     end
 
     def sts_temporary_security_credentials
-      { credentials: Sts::AssumeRoleWebIdentityService.call(sts_params) }
+      { credentials: assume_role_web_identity_service.identity_credentials }
+    end
+
+    def assume_role_web_identity_service
+      @assume_role_web_identity_service ||= Sts::AssumeRoleWebIdentityService.instance.config(params)
     end
 
     def iam_params
