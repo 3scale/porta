@@ -3,10 +3,6 @@
 // Disabling all weak-type checks since this file is a workaround for missing types
 /* eslint-disable flowtype/no-weak-types */
 
-declare module 'core-js/fn/symbol' {
-
-}
-
 declare module 'swagger-ui-react' {
   declare module.exports: any;
 }

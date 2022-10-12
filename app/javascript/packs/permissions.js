@@ -1,5 +1,3 @@
-import 'core-js/es7/array'
-
 import React from 'react'
 import { render } from 'react-dom'
 

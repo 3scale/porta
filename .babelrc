@@ -1,27 +1,10 @@
 {
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-transform-runtime",
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-transform-template-literals",
-    "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-transform-destructuring"
+    "@babel/plugin-transform-runtime"
   ],
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "useBuiltIns": "entry",
-        "corejs": "2",
-        "targets": {
-          "node": "current",
-          "ie": "11",
-          "firefox": "67",
-          "chrome": "75",
-          "edge": "44"
-        }
-      }
-    ],
+    "@babel/preset-env",
     "@babel/react",
     "@babel/flow"
   ]

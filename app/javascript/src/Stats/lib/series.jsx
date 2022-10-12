@@ -1,4 +1,3 @@
-import 'core-js/fn/array/find'
 import Moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import { HITS_METRIC } from 'Stats/lib/metric'
