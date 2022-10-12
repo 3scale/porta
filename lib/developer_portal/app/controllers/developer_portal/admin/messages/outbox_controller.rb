@@ -32,10 +32,9 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
     redirect_to admin_messages_outbox_index_path
   end
 
-
   def create
     if @message.valid?
-      enqueue_message
+      enqueue_message_and_respond
     else
       flash[:error] = @message.errors.full_messages.to_sentence
       redirect_to admin_messages_new_path
@@ -44,7 +43,7 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
 
   private
 
-  def enqueue_message
+  def enqueue_message_and_respond
     @message.enqueue! :to => current_account.provider_account.id
     respond_to do |format|
       format.html do
