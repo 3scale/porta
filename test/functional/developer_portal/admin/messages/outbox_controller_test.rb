@@ -40,21 +40,17 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     assert assigned_drop_variables.include?('pagination')
   end
 
-  test "will create messages with only subject and not body" do
+  test "Not Creates invalid message" do
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-
-    msg = Message.new
-    msg.sender_id = buyer.id
-    msg.subject = "I am subject"
-    assert msg.valid?
+    res = post :create, params: { message: { subject: nil, :body => "message with nil subject" }, :to => buyer.id }
+    assert msg = Message.last
+    assert_not_includes "message with nil subject", msg.body
   end
 
-  test "will not create messages with only body and no subject" do
+  test "Creates valid message" do
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-
-    msg = Message.new
-    msg.sender_id = buyer.id
-    msg.body = "I am body"
-    assert_not msg.valid?
+    res = post :create, params: { message: { subject: "Valid Message", :body => "message with subject" }, :to => buyer.id }
+    assert msg = Message.last
+    assert "message with subject", msg.body
   end
 end
