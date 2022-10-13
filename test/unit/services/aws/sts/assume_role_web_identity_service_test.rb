@@ -11,7 +11,7 @@ class Aws::Sts::AssumeRoleWebIdentityServiceTest < ActiveSupport::TestCase
 
   test '#config sets params' do
     assert(
-      assume_role_web_identity_service_instance.config(sts_auth_params).as_json['params'].keys.sort,
+      assume_role_web_identity_service_instance.config(sts_auth_params).send(:params).keys.sort,
       ['region', 'role_arn', 'role_session_name', 'web_identity_token_file']
     )
   end
