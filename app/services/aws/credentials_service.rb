@@ -28,7 +28,7 @@ module Aws
       if valid_params_with(iam_params, IAM_KEYS)
         iam_params
       elsif valid_params_with(sts_params, STS_KEYS)
-        sts_temporary_security_credentials
+        sts_params
       else
         raise AuthenticationTypeError, "Either #{IAM_KEYS} or #{STS_KEYS} must be provided."
       end
@@ -45,7 +45,7 @@ module Aws
       credentials.all? { |_key, value| value.present? }
     end
 
-    def sts_temporary_security_credentials
+    def sts_params
       { credentials: assume_role_web_identity_service.identity_credentials }
     end
 

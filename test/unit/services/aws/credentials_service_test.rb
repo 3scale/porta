@@ -28,17 +28,6 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
 
-  test '#call raises an error if the web_identity_token_file does not exist' do
-    token_not_found_error = Aws::Sts::AssumeRoleWebIdentityService::TokenNotFoundError
-    File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
-
-    assume_role_web_identity_service_instance.expects(:config).raises(token_not_found_error)
-
-    assert_raises(token_not_found_error) do
-      Aws::CredentialsService.call(sts_auth_params)
-    end
-  end
-
   test '#call raises an error if not enough credential params are present' do
     assert_raises(Aws::CredentialsService::AuthenticationTypeError) do
       Aws::CredentialsService.call(full_params.except(:access_key_id, :role_arn))
