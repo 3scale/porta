@@ -42,14 +42,18 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
 
   test "Not Creates invalid message" do
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-    res = post :create, params: { message: { subject: nil, :body => "message with nil subject" }, :to => buyer.id }
+    post :create, params: { message: { subject: nil, :body => "message with nil subject" }, :to => buyer.id }
+
+    MessageWorker.drain
     assert msg = Message.last
     assert_not_includes "message with nil subject", msg.body
   end
 
   test "Creates valid message" do
     buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-    res = post :create, params: { message: { subject: "Valid Message", :body => "message with subject" }, :to => buyer.id }
+    post :create, params: { message: { subject: "Valid Message", :body => "message with subject" }, :to => buyer.id }
+
+    MessageWorker.drain
     assert msg = Message.last
     assert "message with subject", msg.body
   end
