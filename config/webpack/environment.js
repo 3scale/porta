@@ -49,8 +49,7 @@ environment.loaders.append('yaml', {
  * will refer to fonts or images using an absolute URL, in this case we don't want to implement the trick that prepends
  * the CDN url, that would generate incorrect urls with duplicated domain name.
  *
- * TODO: Link to the PR
- * TODO: Link to the github link where this solution comes from
+ * https://github.com/3scale/porta/pull/3072
  */
 if(!process.env.WEBPACKER_ASSET_HOST) {
   const { output } = environment.config;
