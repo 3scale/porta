@@ -65,7 +65,7 @@ class CMS::S3Test < ActiveSupport::TestCase
     assert_not CMS::S3.options[:use_fips_endpoint]
   end
 
-  test "#credentials returns nil when not CMS::S3 is not enabled" do
+  test "#credentials returns nil when CMS::S3 is not enabled" do
     CMS::S3.stubs(:enabled?).returns(:false)
 
     assert CMS::S3.credentials, nil
