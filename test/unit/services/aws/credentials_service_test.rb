@@ -4,18 +4,18 @@ require 'test_helper'
 
 class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   test '#call returns IAM credentials when available' do
-    assume_role_web_identity_service_instance.expects(:identity_credentials).never
+    assume_role_web_identity_instance.expects(:identity_credentials).never
 
     assert Aws::CredentialsService.call(iam_auth_params), iam_auth_params
   end
 
   test '#call returns STS credentials when available' do
-    assume_role_web_identity_service_instance
-      .expects(:config)
-      .with(sts_auth_params)
-      .returns(assume_role_web_identity_service_instance)
+    assume_role_web_identity_instance.web_identity_token_file = sts_auth_params[:web_identity_token_file]
+    assume_role_web_identity_instance.role_arn = sts_auth_params[:role_arn]
+    assume_role_web_identity_instance.role_session_name = sts_auth_params[:role_session_name]
+    assume_role_web_identity_instance.region = sts_auth_params[:region]
 
-    assume_role_web_identity_service_instance
+    assume_role_web_identity_instance
       .expects(:identity_credentials)
       .returns(sts_credentials)
 
@@ -23,11 +23,10 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call returns IAM credentials when both authentication types are available' do
-    assume_role_web_identity_service_instance.expects(:identity_credentials).never
+    assume_role_web_identity_instance.expects(:identity_credentials).never
 
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
-
   test '#call raises an error if not enough credential params are present' do
     assert_raises(Aws::CredentialsService::AuthenticationTypeError) do
       Aws::CredentialsService.call(full_params.except(:access_key_id, :role_arn))
@@ -59,7 +58,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
     @sts_credentials ||= Aws::Credentials.new(nil, nil)
   end
 
-  def assume_role_web_identity_service_instance
-    Aws::Sts::AssumeRoleWebIdentityService.instance
+  def assume_role_web_identity_instance
+    CMS::STS::AssumeRoleWebIdentity.instance
   end
 end

@@ -46,11 +46,7 @@ module Aws
     end
 
     def sts_credetials
-      { credentials: assume_role_web_identity_service.identity_credentials }
-    end
-
-    def assume_role_web_identity_service
-      @assume_role_web_identity_service ||= Sts::AssumeRoleWebIdentityService.instance.config(params)
+      { credentials: ::Rails.application.config.sts_client.identity_credentials }
     end
 
     def iam_params
