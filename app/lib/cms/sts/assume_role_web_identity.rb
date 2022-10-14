@@ -25,8 +25,6 @@ module CMS
 
       private
 
-      attr_reader :params
-
       def validate_configuration
         raise TokenNotFoundError, "web_identity_token_file was not found" unless web_identity_token_file_exists?
       end
