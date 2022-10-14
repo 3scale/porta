@@ -27,6 +27,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
 
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end
+
   test '#call raises an error if not enough credential params are present' do
     assert_raises(Aws::CredentialsService::AuthenticationTypeError) do
       Aws::CredentialsService.call(full_params.except(:access_key_id, :role_arn))
