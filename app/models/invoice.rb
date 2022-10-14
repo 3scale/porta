@@ -49,7 +49,8 @@ class Invoice < ApplicationRecord
   validates :provider_account, :buyer_account, :friendly_id, presence: true
 
   validates :period, presence: { :message => 'Billing period format should be YYYY-MM' }
-  validate :year_valid?
+
+  validate :period_range_valid?, if: -> { period.present? && will_save_change_to_period? }
 
   validates :friendly_id, format: { with: /\A\d{4}(-\d{2})?-\d{8}\Z/,
                                     message: 'format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX',
@@ -619,12 +620,14 @@ class Invoice < ApplicationRecord
 
   private
 
-  def year_valid?
+  # Allowed range for the invoice period is:
+  # - from: creation date of the buyer
+  # - to: current or the following month - allowing to issue invoices for the future month
+  def period_range_valid?
     return if self[:period].nil?
 
-    year = self[:period].year
-    return if year <= MAX_YEAR && year >= MIN_YEAR
+    return if self[:period].between?(buyer.created_at.to_date.beginning_of_month, Time.zone.now + 1.month)
 
-    errors.add :period, :invalid_year, { min_year: MIN_YEAR, max_year: MAX_YEAR }
+    errors.add(:period, :invalid_range)
   end
 end
