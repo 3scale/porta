@@ -3,23 +3,21 @@
 require 'test_helper'
 
 class Aws::CredentialsServiceTest < ActiveSupport::TestCase
-  def setup
-    @assume_role_web_identity_instance ||= CMS::STS::AssumeRoleWebIdentity.instance
-  end
-
   test '#call returns IAM credentials when available' do
-    @assume_role_web_identity_instance.expects(:identity_credentials).never
+    CMS::STS::AssumeRoleWebIdentity.instance.expects(:identity_credentials).never
 
     assert Aws::CredentialsService.call(iam_auth_params), iam_auth_params
   end
 
   test '#call returns STS credentials when available' do
-    @assume_role_web_identity_instance.web_identity_token_file = sts_auth_params[:web_identity_token_file]
-    @assume_role_web_identity_instance.role_arn = sts_auth_params[:role_arn]
-    @assume_role_web_identity_instance.role_session_name = sts_auth_params[:role_session_name]
-    @assume_role_web_identity_instance.region = sts_auth_params[:region]
+    CMS::STS::AssumeRoleWebIdentity.tap do |sts_client|
+      sts_client.region = sts_auth_params[:region]
+      sts_client.role_arn = sts_auth_params[:role_arn]
+      sts_client.role_session_name = sts_auth_params[:role_session_name]
+      sts_client.web_identity_token_file = sts_auth_params[:web_identity_token_file]
+    end
 
-    @assume_role_web_identity_instance
+    CMS::STS::AssumeRoleWebIdentity.instance
       .expects(:identity_credentials)
       .returns(sts_credentials)
 
@@ -27,7 +25,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call returns IAM credentials when both authentication types are available' do
-    @assume_role_web_identity_instance.expects(:identity_credentials).never
+    CMS::STS::AssumeRoleWebIdentity.instance.expects(:identity_credentials).never
 
     assert Aws::CredentialsService.call(full_params), iam_auth_params
   end

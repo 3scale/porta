@@ -4,8 +4,6 @@ require 'test_helper'
 
 class CMS::STS::AssumeRoleWebIdentityTest < ActiveSupport::TestCase
   setup do
-    @assume_role_web_identity_instance ||= CMS::STS::AssumeRoleWebIdentity.instance
-
     File.stubs(:exist?).returns(true)
     assume_role_response.class.any_instance.stubs(:expiration).returns(1.minute.from_now)
     assume_role_response.stubs(:credentials).returns(sts_credentials)
@@ -18,23 +16,25 @@ class CMS::STS::AssumeRoleWebIdentityTest < ActiveSupport::TestCase
   test '#identity_credentials raises an error if the web_identity_token_file does not exist' do
     File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
 
-    @assume_role_web_identity_instance.instance_variable_set('@identity_credentials', nil)
-    @assume_role_web_identity_instance.web_identity_token_file = sts_auth_params[:web_identity_token_file]
+    CMS::STS::AssumeRoleWebIdentity.instance.instance_variable_set('@identity_credentials', nil)
+    CMS::STS::AssumeRoleWebIdentity.web_identity_token_file = sts_auth_params[:web_identity_token_file]
 
     assert_raises(CMS::STS::AssumeRoleWebIdentity::TokenNotFoundError) do
-      @assume_role_web_identity_instance.identity_credentials
+      CMS::STS::AssumeRoleWebIdentity.instance.identity_credentials
     end
   end
 
   test '#identity_credentials calls AWS to get an instance of STS credentials' do
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(assume_role_response)
 
-    @assume_role_web_identity_instance.web_identity_token_file = sts_auth_params[:web_identity_token_file]
-    @assume_role_web_identity_instance.role_arn = sts_auth_params[:role_arn]
-    @assume_role_web_identity_instance.role_session_name = sts_auth_params[:role_session_name]
-    @assume_role_web_identity_instance.region = sts_auth_params[:region]
+    CMS::STS::AssumeRoleWebIdentity.tap do |sts_client|
+      sts_client.region = sts_auth_params[:region]
+      sts_client.role_arn = sts_auth_params[:role_arn]
+      sts_client.role_session_name = sts_auth_params[:role_session_name]
+      sts_client.web_identity_token_file = sts_auth_params[:web_identity_token_file]
+    end
 
-    assert @assume_role_web_identity_instance.identity_credentials, sts_credentials
+    assert CMS::STS::AssumeRoleWebIdentity.instance.identity_credentials, sts_credentials
   end
 
   private

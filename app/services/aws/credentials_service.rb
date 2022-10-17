@@ -46,7 +46,7 @@ module Aws
     end
 
     def sts_credetials
-      { credentials: ::Rails.application.config.sts_client.identity_credentials }
+      { credentials: ::Rails.application.config.sts_client.instance.identity_credentials }
     end
 
     def iam_params

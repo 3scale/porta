@@ -4,8 +4,8 @@ module CMS
   module STS
     class AssumeRoleWebIdentity
       include Singleton
-      # :reek:Attribute
-      attr_accessor :region, :role_arn, :role_session_name, :web_identity_token_file
+
+      class_attribute :region, :role_arn, :role_session_name, :web_identity_token_file
 
       class TokenNotFoundError < StandardError
       end

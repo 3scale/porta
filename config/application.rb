@@ -262,7 +262,7 @@ module System
     end
 
     initializer :config_sts_client, after: :load_configs do
-      config.sts_client = CMS::STS::AssumeRoleWebIdentity.instance.tap do |sts_client|
+      config.sts_client = CMS::STS::AssumeRoleWebIdentity.tap do |sts_client|
         sts_client.region = config.s3[:region]
         sts_client.role_arn = config.s3[:role_arn]
         sts_client.role_session_name = config.s3[:role_session_name]
