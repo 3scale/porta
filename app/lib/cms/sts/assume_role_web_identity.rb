@@ -12,7 +12,7 @@ module CMS
 
       def identity_credentials
         @identity_credentials ||= begin
-          validate_configuration
+          check_token_presence
 
           Aws::AssumeRoleWebIdentityCredentials.new(
             region: region,
@@ -25,7 +25,7 @@ module CMS
 
       private
 
-      def validate_configuration
+      def check_token_presence
         raise TokenNotFoundError, "web_identity_token_file was not found" unless web_identity_token_file_exists?
       end
 
