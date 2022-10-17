@@ -261,15 +261,6 @@ module System
       config.three_scale.oauth2 = config_for(:oauth2)
     end
 
-    initializer :config_sts_client, after: :load_configs do
-      config.sts_client = CMS::STS::AssumeRoleWebIdentity.tap do |sts_client|
-        sts_client.region = config.s3[:region]
-        sts_client.role_arn = config.s3[:role_arn]
-        sts_client.role_session_name = config.s3[:role_session_name]
-        sts_client.web_identity_token_file = config.s3[:web_identity_token_file]
-      end
-    end
-
     initializer :log_formatter, after: :initialize_logger do
       config.log_formatter = System::ErrorReporting::LogFormatter.new
       (config.logger || Rails.logger).formatter = config.log_formatter

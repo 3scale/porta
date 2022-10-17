@@ -10,16 +10,14 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call returns STS credentials when available' do
-    CMS::STS::AssumeRoleWebIdentity.tap do |sts_client|
-      sts_client.region = sts_auth_params[:region]
-      sts_client.role_arn = sts_auth_params[:role_arn]
-      sts_client.role_session_name = sts_auth_params[:role_session_name]
-      sts_client.web_identity_token_file = sts_auth_params[:web_identity_token_file]
-    end
+    Rails.application.config.stubs(:s3).returns(
+      region: sts_auth_params[:region],
+      role_arn: sts_auth_params[:role_arn],
+      role_session_name: sts_auth_params[:role_session_name],
+      web_identity_token_file: sts_auth_params[:web_identity_token_file]
+    )
 
-    CMS::STS::AssumeRoleWebIdentity.instance
-      .expects(:identity_credentials)
-      .returns(sts_credentials)
+    CMS::STS::AssumeRoleWebIdentity.instance.expects(:identity_credentials).returns(sts_credentials)
 
     assert Aws::CredentialsService.call(sts_auth_params), { credentials: sts_credentials }
   end

@@ -5,8 +5,6 @@ module CMS
     class AssumeRoleWebIdentity
       include Singleton
 
-      class_attribute :region, :role_arn, :role_session_name, :web_identity_token_file
-
       class TokenNotFoundError < StandardError
       end
 
@@ -15,10 +13,10 @@ module CMS
           check_token_presence
 
           Aws::AssumeRoleWebIdentityCredentials.new(
-            region: region,
-            role_arn: role_arn,
-            role_session_name: role_session_name,
-            web_identity_token_file: web_identity_token_file
+            region: config[:region],
+            role_arn: config[:role_arn],
+            role_session_name: config[:role_session_name],
+            web_identity_token_file: config[:web_identity_token_file]
           )
         end
       end
@@ -30,7 +28,11 @@ module CMS
       end
 
       def web_identity_token_file_exists?
-        ::File.exist?(web_identity_token_file)
+        ::File.exist?(config[:web_identity_token_file])
+      end
+
+      def config
+        @config ||= Rails.application.config.s3.symbolize_keys
       end
     end
   end
