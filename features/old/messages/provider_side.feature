@@ -20,19 +20,11 @@ Feature: Provider side messages
   Scenario: Sending a message
     Given account "bob" has no messages
 
-    And I go to the provider dashboard
-    And I navigate to the accounts page
-    And I follow "bob"
-    And I follow "Send message"
-    Then the "To" field should be fixed to "bob"
+    And I am on the outbox compose page
     When I fill in "Subject" with "Party tonite!"
     And I fill in "Body" with "You are invited to my party."
     And I press "Send"
-    Then I should see the flash notice "Message was sent."
-    And account "bob" should have 0 messages
-    Then a message should be sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Party tonite!" and body "You are invited to my party."
-    When I follow "Dashboard"
-    And I follow "0 Messages"
+    Then I should see link "Compose Message"
     And I follow "Sent messages"
     Then I should see message to "bob" with subject "Party tonite!"
     When I follow "Party tonite!"
