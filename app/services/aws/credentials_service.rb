@@ -2,11 +2,7 @@
 
 module Aws
   class CredentialsService
-    class << self
-      def call(params = {})
-        new(params).call
-      end
-    end
+    include Callable
 
     class AuthenticationTypeError < StandardError
     end
