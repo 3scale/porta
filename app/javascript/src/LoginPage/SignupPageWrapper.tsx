@@ -16,7 +16,6 @@ const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
     brandImgAlt="Red Hat 3scale API Management"
     brandImgSrc={brandImg}
     loginTitle={`Signup to ${String(name)}`}
-    // footer={null}
   >
     {user.errors && <FlashMessages flashMessages={user.errors} />}
     <SignupForm path={path} user={user} />

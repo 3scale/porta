@@ -19,7 +19,7 @@ type Item = Record & {
 type Props<T extends Record> = {
   item: T | undefined,
   items: T[],
-  onSelect: (arg1: T | null) => void,
+  onSelect: (selected: T | null) => void,
   label: string,
   id: string,
   header: string,
@@ -74,8 +74,8 @@ const FancySelect = <T extends Record>({
     }
   }
 
-  const getSelectOptionsForItems = (items: Array<T>) => {
-    const selectItems: Array<Item> = [headerItem]
+  const getSelectOptionsForItems = (items: T[]) => {
+    const selectItems: Item[] = [headerItem]
 
     if (items.length === 0) {
       selectItems.push(emptyItem)

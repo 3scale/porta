@@ -58,12 +58,7 @@ const fieldsPristineTemplate: FieldErrorsPristineState = {
 }
 const extractFirstErrorMessage = (errorMessageArray: string[]): string => errorMessageArray[0]
 const isFieldValid = (errorMessageArray: string[]): boolean => !errorMessageArray.length
-const isPassConfirmLongEnough = (
-  {
-    [PASSWORD]: pass,
-    [PASSWORD_CONFIRMATION]: conf
-  }: FieldState
-): boolean => conf.length >= pass.length
+const isPassConfirmLongEnough = ({ [PASSWORD]: pass, [PASSWORD_CONFIRMATION]: conf }: FieldState): boolean => conf.length >= pass.length
 
 type FormInput = {
   value: string,
@@ -109,15 +104,13 @@ const useFormState = (): IUseFormState => {
     setFieldErrors(({ ...fieldErrors, ...validationErrors }))
   }
 
-  const buildFieldProps = (fieldName: string) => (
-    {
-      value: fieldValues[fieldName],
-      isValid: isFieldValid(fieldErrors[fieldName]),
-      errorMessage: extractFirstErrorMessage(fieldErrors[fieldName]),
-      onChange: onFieldChange(fieldName),
-      onBlur: onFieldBlur(fieldName)
-    }
-  )
+  const buildFieldProps = (fieldName: string) => ({
+    value: fieldValues[fieldName],
+    isValid: isFieldValid(fieldErrors[fieldName]),
+    errorMessage: extractFirstErrorMessage(fieldErrors[fieldName]),
+    onChange: onFieldChange(fieldName),
+    onBlur: onFieldBlur(fieldName)
+  })
 
   return {
     isFormDisabled,

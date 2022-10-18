@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderChart (chart: HTMLElement) {
     const currentChart = chart.querySelector('.inline-chart-container') as HTMLElement
-    const props = {
-      endPoint: currentChart.dataset.endpoint as string,
-      metricName: currentChart.dataset.metricName as string,
-      title: currentChart.dataset.title as string,
-      unitPluralized: chart.dataset.unitPluralized as string
-    }
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    render(<InlineChart {...props} />, currentChart)
+    render((
+      <InlineChart
+        endPoint={currentChart.dataset.endpoint as string}
+        metricName={currentChart.dataset.metricName as string}
+        title={currentChart.dataset.title as string}
+        unitPluralized={chart.dataset.unitPluralized as string}
+      />
+    ), currentChart)
   }
 
   allCharts.forEach(chart => {

@@ -1,17 +1,13 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   systemName: string,
-  setSystemName: (arg1: string) => void
+  setSystemName: (systemName: string) => void
 }
 
-const SystemNameInput = (
-  {
-    systemName,
-    setSystemName
-  }: Props
-): React.ReactElement => (
+const SystemNameInput: FunctionComponent<Props> = ({ systemName, setSystemName }) => (
   <FormGroup
     fieldId="backend_api_system_name"
     helperText="Only ASCII letters, numbers, dashes, and underscores are allowed."

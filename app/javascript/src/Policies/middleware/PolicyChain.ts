@@ -4,7 +4,7 @@ import { setOriginalPolicyChain } from 'Policies/actions/OriginalPolicyChain'
 
 import type { ChainPolicy, Dispatch, GetState, PolicyChainMiddlewareAction, PolicyConfig, RegistryPolicy } from 'Policies/types'
 
-function findRegistryPolicy (registry: Array<RegistryPolicy>, storedPolicy: PolicyConfig): RegistryPolicy | undefined {
+function findRegistryPolicy (registry: RegistryPolicy[], storedPolicy: PolicyConfig): RegistryPolicy | undefined {
   return registry.find(policy => (policy.name === storedPolicy.name && policy.version === storedPolicy.version))
 }
 
@@ -19,11 +19,11 @@ function convertToChainPolicy (registryPolicy: RegistryPolicy, storedPolicy: Pol
   }
 }
 
-function removePolicy (chain: Array<ChainPolicy>, policy: ChainPolicy): Array<ChainPolicy> {
+function removePolicy (chain: ChainPolicy[], policy: ChainPolicy): ChainPolicy[] {
   return chain.filter(pol => pol.uuid !== policy.uuid)
 }
 
-const updatePolicy = (chain: Array<ChainPolicy>, policyConfig: ChainPolicy): Array<ChainPolicy> => {
+const updatePolicy = (chain: ChainPolicy[], policyConfig: ChainPolicy): ChainPolicy[] => {
   return chain.map(policy => (policy.uuid === policyConfig.uuid) ? policyConfig : policy)
 }
 
@@ -32,12 +32,12 @@ const loadChain = ({
   policiesConfig,
   dispatch
 }: {
-  registry: Array<RegistryPolicy>,
-  policiesConfig: Array<PolicyConfig>,
+  registry: RegistryPolicy[],
+  policiesConfig: PolicyConfig[],
   dispatch: Dispatch
 }) => {
   let errors = 0
-  const updatedChain: Array<ChainPolicy> = []
+  const updatedChain: ChainPolicy[] = []
   policiesConfig.forEach(storedPolicy => {
     const foundRegistryPolicy = findRegistryPolicy(registry, storedPolicy)
     foundRegistryPolicy

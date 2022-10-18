@@ -32,17 +32,17 @@ export type ThunkAction = ReduxThunkAction<void, State, void, Action>
 export interface IPoliciesActions {
   openPolicyRegistry: () => ThunkAction;
   closePolicyRegistry: () => ThunkAction;
-  openPolicyForm: (arg1: ChainPolicy) => ThunkAction;
+  openPolicyForm: (policy: ChainPolicy) => ThunkAction;
   closePolicyForm: () => ThunkAction;
-  sortPolicyChain: (arg1: Array<ChainPolicy>) => SortPolicyChainAction;
-  submitPolicyForm: (arg1: ChainPolicy) => ThunkAction;
-  updatePolicyConfig: (arg1: ChainPolicy) => UpdatePolicyConfigAction;
-  removePolicyFromChain: (arg1: ChainPolicy) => ThunkAction;
-  addPolicyFromRegistry: (arg1: RegistryPolicy) => ThunkAction;
+  sortPolicyChain: (policies: ChainPolicy[]) => SortPolicyChainAction;
+  submitPolicyForm: (policy: ChainPolicy) => ThunkAction;
+  updatePolicyConfig: (policy: ChainPolicy) => UpdatePolicyConfigAction;
+  removePolicyFromChain: (policy: ChainPolicy) => ThunkAction;
+  addPolicyFromRegistry: (registryPolicy: RegistryPolicy) => ThunkAction;
   populateChainFromConfigs: (
     serviceId: string,
-    configs?: Array<PolicyConfig>,
-    registry?: Array<RegistryPolicy>,
+    configs?: PolicyConfig[],
+    registry?: RegistryPolicy[],
   ) => ThunkAction;
 }
 

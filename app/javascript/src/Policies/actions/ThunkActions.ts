@@ -20,7 +20,7 @@ const policyConfig: UIComponent = 'policyConfig'
  * Takes the @proxy.policies_config and @registry_policies from rails as props and
  * populates State's chain, originalChain and registry
  */
-export const loadSavedPolicies = (policiesConfig: Array<PolicyConfig>, registry: Array<RegistryPolicy>): ThunkAction => {
+export const loadSavedPolicies = (policiesConfig: PolicyConfig[], registry: RegistryPolicy[]): ThunkAction => {
   return (dispatch: Dispatch) => {
     dispatch(loadRegistrySuccess(registry))
     dispatch(loadChain(policiesConfig))
@@ -34,8 +34,8 @@ export const loadSavedPolicies = (policiesConfig: Array<PolicyConfig>, registry:
  */
 export const populateChainFromConfigs = (
   serviceId: string,
-  policiesConfig?: Array<PolicyConfig>,
-  registry?: Array<RegistryPolicy>
+  policiesConfig?: PolicyConfig[],
+  registry?: RegistryPolicy[]
 ): ThunkAction => {
   return (dispatch: Dispatch) => {
     if (registry && policiesConfig) {

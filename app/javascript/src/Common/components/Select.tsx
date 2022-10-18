@@ -15,7 +15,7 @@ import './Select.scss'
 type Props<T extends Record> = {
   item: T | null,
   items: T[],
-  onSelect: (arg1: T | null) => void,
+  onSelect: (selected: T | null) => void,
   label: React.ReactNode,
   ariaLabel?: string,
   fieldId: string,

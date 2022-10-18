@@ -1,13 +1,13 @@
-// FIXME: Label requires children, I suspect it's being passed in prop label instead.
 import { useState } from 'react'
-import { ListItem, Label } from '@patternfly/react-core'
+import { ListItem } from 'PaymentGateways/braintree/components/ListItem'
+import { Label } from 'PaymentGateways/braintree/components/Label'
 import { Input } from 'PaymentGateways/braintree/components/Input'
 
 import type { ChangeEventHandler, FunctionComponent } from 'react'
 import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 
 type Props = {
-  countriesList: Array<string[]>,
+  countriesList: string[][],
   billingAddressData: BillingAddressData,
   setBillingAddressData: (obj: BillingAddressData) => void,
   selectedCountryCode: string
@@ -42,8 +42,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             htmlFor="customer_credit_card_billing_address_company"
             label="Company"
-          >{}
-          </Label>
+          />
           <Input
             required
             id="customer_credit_card_billing_address_company"
@@ -57,8 +56,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             htmlFor="customer_credit_card_billing_address_street_address"
             label="Street address"
-          >{}
-          </Label>
+          />
           <Input
             required
             id="customer_credit_card_billing_address_street_address"
@@ -72,8 +70,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             htmlFor="customer_credit_card_billing_address_postal_code"
             label="ZIP / Postal Code"
-          >{}
-          </Label>
+          />
           <Input
             required
             id="customer_credit_card_billing_address_postal_code"
@@ -87,8 +84,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             htmlFor="customer_credit_card_billing_address_locality"
             label="City"
-          >{}
-          </Label>
+          />
           <Input
             required
             id="customer_credit_card_billing_address_locality"
@@ -101,11 +97,9 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
           <Label
             htmlFor="customer_credit_card_billing_address_region"
             label="State/Region"
-          >{}
-          </Label>
+          />
           <Input
             id="customer_credit_card_billing_address_region"
-            // maxLength="3" TODO: not doing anything, is it needed?
             name="customer[credit_card][billing_address][region]"
             value={billingAddressData.state}
             onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'state')}
@@ -119,8 +113,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             htmlFor="customer_credit_card_billing_address_country_name"
             label="Country"
-          >{}
-          </Label>
+          />
           <select
             required
             className="form-control col-md-6"
@@ -130,15 +123,11 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             onChange={onSelectCountry}
           >
             <option value="" />
-            { countriesList.map(country => (
-              <option
-                key={country[1]}
-                value={country[1]}
-              >
+            {countriesList.map(country => (
+              <option key={country[1]} value={country[1]}>
                 {country[0]}
               </option>
-            )
-            )}
+            ))}
           </select>
         </ListItem>
       </ul>

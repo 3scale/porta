@@ -145,7 +145,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
           id="stripe_payment_method_id"
           name="stripe[payment_method_id]"
           type="hidden"
-          value={stripePaymentMethodId ? stripePaymentMethodId.toString() : undefined}
+          value={stripePaymentMethodId?.toString()}
         />
         <CSRFToken />
       </form>

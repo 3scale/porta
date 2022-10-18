@@ -27,8 +27,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   name = INPUT_NAME_QUERY,
   children
 }) => {
-  // const query = new URL(window.location).searchParams.get(name) TODO: check this is the same
-  const query = new URL(window.location.toString()).searchParams.get(name)
+  const query = new URL(window.location.href).searchParams.get(name)
   const [searchText, setSearchText] = useState<string>(query || '')
   const [showPopover, setShowPopover] = useState<boolean>(false)
 
@@ -76,7 +75,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
     onSubmitSearch((e.currentTarget as HTMLInputElement).value)
   }
 
-  const Popopover: any = Popover // HACK: remove this after upgrading @patternfly/react-core
+  const Popopover: any = Popover // HACK: remove this after upgrading to @patternfly/react-core 4
 
   return (
     <Form
@@ -90,7 +89,6 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
         <input name={INPUT_NAME_UTF8} type="hidden" value="✓" />
         {children}
         <TextInput
-          // HACK: remove this ugly casting after upgrading to @patternfly/react-core 4
           aria-label="Search"
           autoComplete="off"
           name={name}

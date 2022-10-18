@@ -16,7 +16,7 @@ type Props<T extends Record> = {
   id: string,
   name: string,
   item: T | null,
-  items: Array<T>,
+  items: T[],
   itemsCount: number,
   cells: Array<{ title: string, propName: keyof T, transforms?: ITransform[] }>,
   onSelect: (t: T | null) => void,
@@ -109,7 +109,7 @@ const SelectWithModal = <T extends Record>({
     }
   }, [query])
 
-  const setSearchResults = (items: Array<T>, count: number) => {
+  const setSearchResults = (items: T[], count: number) => {
     setPageDictionary(paginateCollection(items, PER_PAGE))
     setCount(count)
     setPage(1)

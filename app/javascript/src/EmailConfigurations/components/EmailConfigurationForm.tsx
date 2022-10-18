@@ -5,12 +5,10 @@ import {
   Form
 } from '@patternfly/react-core'
 import { CSRFToken } from 'utilities/CSRFToken'
-import {
-  EmailInput,
-  UserNameInput,
-  PasswordInput,
-  PasswordRepeatInput
-} from 'EmailConfigurations/components/form-fields'
+import { EmailInput } from 'EmailConfigurations/components/form-fields/EmailInput'
+import { PasswordInput } from 'EmailConfigurations/components/form-fields/PasswordInput'
+import { PasswordRepeatInput } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
+import { UserNameInput } from 'EmailConfigurations/components/form-fields/UserNameInput'
 
 import type { FunctionComponent } from 'react'
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'

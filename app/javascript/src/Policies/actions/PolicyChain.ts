@@ -19,9 +19,9 @@ export function removePolicy (policy: ChainPolicy): RemovePolicyFromChainAction 
 }
 
 export type SortPolicyChainAction = Action<'SORT_POLICY_CHAIN'> & {
-  payload: Array<ChainPolicy>
+  payload: ChainPolicy[]
 }
-export function sortPolicyChain (payload: Array<ChainPolicy>): SortPolicyChainAction {
+export function sortPolicyChain (payload: ChainPolicy[]): SortPolicyChainAction {
   return { type: 'SORT_POLICY_CHAIN', payload }
 }
 
@@ -33,23 +33,23 @@ export function updatePolicyInChain (policyConfig: ChainPolicy): UpdatePolicyInC
 }
 
 export type UpdatePolicyChainAction = Action<'UPDATE_POLICY_CHAIN'> & {
-  payload: Array<ChainPolicy>
+  payload: ChainPolicy[]
 }
-export function updatePolicyChain (payload: Array<ChainPolicy>): UpdatePolicyChainAction {
+export function updatePolicyChain (payload: ChainPolicy[]): UpdatePolicyChainAction {
   return { type: 'UPDATE_POLICY_CHAIN', payload }
 }
 
 export type LoadChainAction = Action<'LOAD_CHAIN'> & {
-  policiesConfig: Array<PolicyConfig>
+  policiesConfig: PolicyConfig[]
 }
-export function loadChain (policiesConfig: Array<PolicyConfig>): LoadChainAction {
+export function loadChain (policiesConfig: PolicyConfig[]): LoadChainAction {
   return { type: 'LOAD_CHAIN', policiesConfig }
 }
 
 export type LoadChainSuccessAction = Action<'LOAD_CHAIN_SUCCESS'> & {
-  payload: Array<ChainPolicy>
+  payload: ChainPolicy[]
 }
-export function loadChainSuccess (payload: Array<ChainPolicy>): LoadChainSuccessAction {
+export function loadChainSuccess (payload: ChainPolicy[]): LoadChainSuccessAction {
   return { type: 'LOAD_CHAIN_SUCCESS', payload }
 }
 
@@ -61,7 +61,7 @@ export function loadChainError (payload: Record<any, any>): LoadChainErrorAction
 }
 
 export type FetchChainSuccessAction = Action<'FETCH_CHAIN_SUCCESS'> & {
-  payload: Array<ChainPolicy>
+  payload: ChainPolicy[]
 }
 export type FetchChainErrorAction = Action<'FETCH_CHAIN_ERROR'> & {
   payload: Record<any, any>

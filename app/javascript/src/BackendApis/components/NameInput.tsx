@@ -1,17 +1,13 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   name: string,
   setName: (name: string) => void
 }
 
-const NameInput = (
-  {
-    name,
-    setName
-  }: Props
-): React.ReactElement => (
+const NameInput: FunctionComponent<Props> = ({ name, setName }) => (
   <FormGroup
     isRequired
     fieldId="backend_api_name"

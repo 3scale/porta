@@ -66,19 +66,17 @@ class SignupForm extends React.Component<Props, State> {
     } as State
   }
 
-  getInputProps = (name: InputType, isRequired: boolean): InputProps => {
-    return {
-      isRequired,
-      name: INPUT_NAMES[name],
-      fieldId: INPUT_IDS[name],
-      label: INPUT_LABELS[name],
-      isValid: this.state.validation[INPUT_NAMES[name]],
-      value: this.state[INPUT_NAMES[name]] as string,
-      onChange: this.handleInputChange
-    }
-  }
+  getInputProps = (name: InputType, isRequired: boolean): InputProps => ({
+    isRequired,
+    name: INPUT_NAMES[name],
+    fieldId: INPUT_IDS[name],
+    label: INPUT_LABELS[name],
+    isValid: this.state.validation[INPUT_NAMES[name]],
+    value: this.state[INPUT_NAMES[name]] as string,
+    onChange: this.handleInputChange
+  })
 
-  handleInputChange: (arg1: string, arg2: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
+  handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
 
     this.setState((prevState: State) => {

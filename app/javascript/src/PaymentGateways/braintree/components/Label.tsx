@@ -11,10 +11,7 @@ const Label: FunctionComponent<Props> = ({
   label,
   required
 }) => (
-  <label
-    className="col-md-4 control-label"
-    htmlFor={htmlFor}
-  >
+  <label className="col-md-4 control-label" htmlFor={htmlFor}>
     {`${label}${required ? ' *' : ''}`}
   </label>
 )

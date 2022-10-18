@@ -7,7 +7,7 @@ import type { FieldDefinition } from 'Types'
 type Props = {
   fieldDefinition: FieldDefinition,
   value: string,
-  onChange: (arg1: string) => void,
+  onChange: (value: string) => void,
   validationErrors?: string[]
 }
 

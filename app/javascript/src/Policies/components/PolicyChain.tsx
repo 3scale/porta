@@ -15,8 +15,8 @@ type Props = {
   chain: Array<ChainPolicy>,
   actions: {
     openPolicyRegistry: () => ThunkAction,
-    editPolicy: (arg1: ChainPolicy, arg2: number) => ThunkAction,
-    sortPolicyChain: (arg1: Array<ChainPolicy>) => SortPolicyChainAction
+    editPolicy: (policy: ChainPolicy, index: number) => ThunkAction,
+    sortPolicyChain: (policies: ChainPolicy[]) => SortPolicyChainAction
   }
 }
 

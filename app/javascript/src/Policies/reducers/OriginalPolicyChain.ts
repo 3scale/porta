@@ -5,12 +5,12 @@ import type { ChainPolicy } from 'Policies/types'
 import type { SetOriginalPolicyChainAction } from 'Policies/actions/OriginalPolicyChain'
 import type { Reducer } from 'redux'
 
-function setOriginalPolicyChain (state: Array<ChainPolicy>, action: SetOriginalPolicyChainAction): Array<ChainPolicy> {
+function setOriginalPolicyChain (state: ChainPolicy[], action: SetOriginalPolicyChainAction): ChainPolicy[] {
   return [...action.payload]
 }
 
 // TODO: use combineReducers instead of createReducer
-const OriginalChainReducer: Reducer<Array<ChainPolicy>> = createReducer<Array<ChainPolicy>>(initialState.originalChain, {
+const OriginalChainReducer: Reducer<ChainPolicy[]> = createReducer<ChainPolicy[]>(initialState.originalChain, {
   'SET_ORIGINAL_POLICY_CHAIN': setOriginalPolicyChain
 })
 

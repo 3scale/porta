@@ -45,7 +45,7 @@ const Form: React.FunctionComponent<Props> = ({
 }) => {
   const [selectedIntegrationMethod, setSelectedIntegrationMethod] = useState(integrationMethod.value)
   const [selectedAuthenticationMethod, setSelectedAuthenticationMethod] = useState(authenticationMethod.value)
-  const onChange = (setState: (arg1: ((arg1: string) => string) | string) => void) => (_checked: string, e: React.SyntheticEvent<HTMLButtonElement>) => setState(e.currentTarget.value)
+  const onChange = (setState: (cb: ((value: string) => string) | string) => void) => (_checked: string, e: React.SyntheticEvent<HTMLButtonElement>) => setState(e.currentTarget.value)
   const isServiceMesh = selectedIntegrationMethod === SERVICE_MESH_INTEGRATION
   const isProxyHosted = selectedIntegrationMethod === PROXY_HOSTED_INTEGRATION
   const isProxyUrlsReadOnly = !isProxyCustomUrlActive && isProxyHosted

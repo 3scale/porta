@@ -6,7 +6,7 @@ import type { ApplicationPlan, Product } from 'NewApplication/types'
 type Props = {
   appPlan: ApplicationPlan | null,
   product: Product | null,
-  onSelect: (arg1: ApplicationPlan | null) => void,
+  onSelect: (appPlan: ApplicationPlan | null) => void,
   createApplicationPlanPath: string
 }
 

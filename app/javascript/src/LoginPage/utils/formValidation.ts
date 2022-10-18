@@ -19,14 +19,14 @@ const constraintsTypes = {
 type HTMLForm = HTMLFormElement | Record<any, any> | null
 
 const validateForm = (form: HTMLForm, constraints: Record<any, any>): undefined | {
-  string: Array<string>
+  string: string[]
 } => {
   return validate(form, constraints)
 }
 
 const validateSingleField = (event: React.SyntheticEvent<HTMLInputElement>): boolean => {
   const { value, type } = event.currentTarget
-  const fieldError: undefined | Array<string> = validate.single(value, constraintsTypes[type as keyof typeof constraintsTypes])
+  const fieldError: undefined | string[] = validate.single(value, constraintsTypes[type as keyof typeof constraintsTypes])
   return !fieldError
 }
 

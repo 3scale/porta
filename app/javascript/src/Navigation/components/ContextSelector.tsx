@@ -2,10 +2,11 @@ import { useRef, useState } from 'react'
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { useClickOutside } from 'utilities/useClickOutside'
-import 'Navigation/styles/ContextSelector.scss'
 
 import type { FunctionComponent } from 'react'
 import type { Menu } from 'Types'
+
+import './ContextSelector.scss'
 
 type Props = {
   activeMenu: Menu,

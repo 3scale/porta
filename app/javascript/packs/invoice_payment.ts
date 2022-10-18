@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   card.mount('#card-element')
   card.on('change', event => {
     payButton.disabled = !event.complete
-    cardError.textContent = event.error ? event.error.message : ''
+    cardError.textContent = event.error?.message || ''
   })
   form.addEventListener('submit', function (event) {
     event.preventDefault()

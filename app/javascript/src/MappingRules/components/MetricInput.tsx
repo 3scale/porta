@@ -9,7 +9,7 @@ import './MetricInput.scss'
 
 type Props = {
   metric: Metric | null,
-  setMetric: (arg1: Metric | null) => void,
+  setMetric: (metric: Metric | null) => void,
   topLevelMetrics: Array<Metric>,
   methods: Array<Metric>
 }

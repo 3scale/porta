@@ -9,6 +9,6 @@ export type Backend = {
   systemName: string,
   privateEndpoint: string,
   updatedAt: string,
-  links: Array<ProductLink>,
+  links: ProductLink[],
   productsCount: number
 }

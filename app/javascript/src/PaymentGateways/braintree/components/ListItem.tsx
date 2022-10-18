@@ -4,14 +4,8 @@ type Props = PropsWithChildren<{
   id: string,
 }>
 
-const ListItem: FunctionComponent<Props> = ({
-  id,
-  children
-}) => (
-  <li
-    className="string optional form-group"
-    id={id}
-  >
+const ListItem: FunctionComponent<Props> = ({ id, children }) => (
+  <li className="string optional form-group" id={id}>
     {children}
   </li>
 )

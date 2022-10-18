@@ -7,7 +7,7 @@ import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 type Props = {
   items: Array<RegistryPolicy>,
   actions: {
-    addPolicy: (arg1: RegistryPolicy) => ThunkAction,
+    addPolicy: (policy: RegistryPolicy) => ThunkAction,
     closePolicyRegistry: () => ThunkAction
   }
 }

@@ -1,9 +1,10 @@
 import 'core-js/es6/map'
 import 'core-js/es6/set'
-import 'Navigation/styles/ActiveMenuTitle.scss'
 
+import type { FunctionComponent } from 'react'
 import type { Menu } from 'Types'
-import type { FunctionComponent } from 'enzyme'
+
+import './ActiveMenuTitle.scss'
 
 type Props = {
   activeMenu: Menu

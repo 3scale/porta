@@ -13,7 +13,7 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
   const [name, setName] = useState(service.name)
   const [systemName, setSystemName] = useState(service.system_name)
   const [description, setDescription] = useState(service.description)
-  const onChange = (fn: (arg1: ((arg1: any | string) => any | string) | any | string) => void) => (e: any) => fn(e.currentTarget.value)
+  const onChange = (fn: (cb: ((value: any | string) => any | string) | any | string) => void) => (e: any) => fn(e.currentTarget.value)
 
   return (
     <>

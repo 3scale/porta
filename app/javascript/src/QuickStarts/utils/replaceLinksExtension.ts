@@ -1,10 +1,7 @@
 /**
  * This extension replaces all 'expression' from the quickstart HTML with a link made from 'href' and 'text'.
  */
-const replaceLinksExtension = (links: string[][]): {
-  type: string,
-  filter: (arg1: string) => string
-} => ({
+const replaceLinksExtension = (links: string[][]) => ({
   type: 'output',
   filter: (html: string): string => {
     const filteredHtml = links.reduce((_html, link) => {

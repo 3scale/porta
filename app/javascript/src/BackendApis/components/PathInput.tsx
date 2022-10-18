@@ -1,19 +1,14 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   error?: string,
   path: string,
-  setPath: (arg1: string) => void
+  setPath: (path: string) => void
 }
 
-const PathInput = (
-  {
-    error,
-    path,
-    setPath
-  }: Props
-): React.ReactElement => (
+const PathInput: FunctionComponent<Props> = ({ error, path, setPath }) => (
   <FormGroup
     fieldId="backend_api_config_path"
     helperTextInvalid={error}

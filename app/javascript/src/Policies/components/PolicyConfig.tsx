@@ -9,10 +9,10 @@ import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 type Props = {
   policy: ChainPolicy,
   actions: {
-    submitPolicyConfig: (arg1: ChainPolicy) => ThunkAction,
-    removePolicyFromChain: (arg1: ChainPolicy) => ThunkAction,
+    submitPolicyConfig: (policy: ChainPolicy) => ThunkAction,
+    removePolicyFromChain: (policy: ChainPolicy) => ThunkAction,
     closePolicyConfig: () => ThunkAction,
-    updatePolicyConfig: (arg1: ChainPolicy) => UpdatePolicyConfigAction
+    updatePolicyConfig: (policy: ChainPolicy) => UpdatePolicyConfigAction
   }
 }
 
@@ -49,7 +49,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
         {`${version} - ${summary || ''}`}
       </p>
       <p className="PolicyConfiguration-description">{description}</p>
-      { isPolicyVisible && (
+      {isPolicyVisible && (
         <label className="Policy-status" htmlFor="policy-enabled">
           <input
             checked={enabled}
@@ -61,7 +61,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
           Enabled
         </label>
       )}
-      { isPolicyVisible && (
+      {isPolicyVisible && (
         <Form
           className="PolicyConfiguration-form"
           formData={data}
@@ -71,7 +71,7 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
           <Button className="btn-info" type="submit">Update Policy</Button>
         </Form>
       )}
-      { removable && (
+      {removable && (
         <Button
           variant="danger"
           onClick={remove}

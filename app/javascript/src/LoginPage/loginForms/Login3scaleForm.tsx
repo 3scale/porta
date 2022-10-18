@@ -101,9 +101,7 @@ class Login3scaleForm extends React.Component<Props, State> {
         method="post"
       >
         <HiddenInputs />
-        {/* <TextField inputProps={usernameInputProps} autoComplete="off"/> TODO: verify autocomplete did nothing */}
         <TextField inputProps={usernameInputProps} />
-        {/* <PasswordField inputProps={passwordInputProps} autoComplete="off"/> TODO: verify autocomplete did nothing */}
         <PasswordField inputProps={passwordInputProps} />
         <ActionGroup>
           <Button

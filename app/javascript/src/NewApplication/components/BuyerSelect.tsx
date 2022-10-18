@@ -9,7 +9,7 @@ type Props = {
   buyer: Buyer | null,
   buyers: Buyer[],
   buyersCount: number,
-  onSelectBuyer: (arg1: Buyer | null) => void,
+  onSelectBuyer: (buyer: Buyer | null) => void,
   buyersPath?: string,
   isDisabled?: boolean
 }

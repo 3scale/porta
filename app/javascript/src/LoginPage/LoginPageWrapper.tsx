@@ -16,11 +16,8 @@ import type { FlashMessage } from 'Types'
 type Props = {
   authenticationProviders: Array<ProvidersProps>,
   flashMessages?: Array<FlashMessage>,
-  // providerAdminDashboardPath: string, // TODO: check what was it for!?
-  // providerLoginPath: string, // TODO: check what was it for!?
   providerSessionsPath: string,
   providerRequestPasswordResetPath: string,
-  // redirectUrl: string, // TODO: check what was it for!?
   show3scaleLoginForm: boolean,
   disablePasswordReset: boolean,
   session: {
@@ -32,7 +29,7 @@ type State = {
   loginTitle: string
 }
 
-// TODO: resolve this react/require-optimization
+// TODO: make this a function component
 // eslint-disable-next-line react/require-optimization
 class SimpleLoginPage extends Component<Props, State> {
   constructor (props: Props) {
@@ -79,7 +76,6 @@ class SimpleLoginPage extends Component<Props, State> {
         brandImgSrc={brandImg}
         forgotCredentials={this.showForgotCredentials()}
         loginTitle={this.state.loginTitle}
-        // footer={null} TODO: check what it did
       >
         { this.props.flashMessages && <FlashMessages flashMessages={this.props.flashMessages} /> }
         { this.loginForm() }

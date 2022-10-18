@@ -11,7 +11,7 @@ import type { FunctionComponent } from 'react'
 type Props = {
   httpMethod: string,
   httpMethods: Array<string>,
-  setHttpMethod: (arg1: string) => void
+  setHttpMethod: (httpMethod: string) => void
 }
 
 const HttpMethodSelect: FunctionComponent<Props> = ({

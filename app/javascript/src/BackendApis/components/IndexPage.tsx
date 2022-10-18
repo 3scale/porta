@@ -79,7 +79,6 @@ const IndexPage: FunctionComponent<Props> = ({
         <ToolbarItem>
           <ToolbarSearch placeholder="Find a backend" />
         </ToolbarItem>
-        {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
         <ToolbarItem>
           <Pagination itemCount={backendsCount} />
         </ToolbarItem>
@@ -89,7 +88,6 @@ const IndexPage: FunctionComponent<Props> = ({
         <TableBody />
       </Table>
       <Toolbar className="pf-c-toolbar pf-u-justify-content-space-between" id="bottom-toolbar">
-        {/* <ToolbarItem align={{ default: 'alignRight' }}> TODO: did align do anything? */}
         <ToolbarItem>
           <Pagination itemCount={backendsCount} variant={PaginationVariant.bottom}    />
         </ToolbarItem>

@@ -1,19 +1,14 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   privateEndpoint: string,
-  setPrivateEndpoint: (arg1: string) => void,
+  setPrivateEndpoint: (privateEndpoint: string) => void,
   errors?: Array<string>
 }
 
-const PrivateEndpointInput = (
-  {
-    privateEndpoint,
-    setPrivateEndpoint,
-    errors = []
-  }: Props
-): React.ReactElement => (
+const PrivateEndpointInput: FunctionComponent<Props> = ({ privateEndpoint,setPrivateEndpoint,errors = [] }) => (
   <FormGroup
     isRequired
     fieldId="backend_api_private_endpoint"

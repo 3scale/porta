@@ -1,21 +1,20 @@
-
 import { FormGroup, TextInput } from '@patternfly/react-core'
+
+import type { FunctionComponent } from 'react'
 
 type Props = {
   userName: string,
-  setUserName: (arg1: string) => void,
+  setUserName: (userName: string) => void,
   isRequired?: boolean,
   errors: string[]
 }
 
-const UserNameInput = (
-  {
-    userName,
-    setUserName,
-    isRequired,
-    errors
-  }: Props
-): React.ReactElement => (
+const UserNameInput: FunctionComponent<Props> = ({
+  userName,
+  setUserName,
+  isRequired,
+  errors
+}) => (
   <FormGroup
     fieldId="email_configuration_user_name"
     helperTextInvalid={errors.toString()}

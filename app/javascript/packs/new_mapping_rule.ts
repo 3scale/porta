@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     topLevelMetrics: safeFromJsonString(topLevelMetrics) || [],
     methods: safeFromJsonString(methods) || [],
     isProxyProEnabled: isProxyProEnabled !== undefined,
-    httpMethods: safeFromJsonString<Array<string>>(httpMethods) || [],
+    httpMethods: safeFromJsonString<string[]>(httpMethods) || [],
     errors: safeFromJsonString(errors)
   }, CONTAINER_ID)
 })

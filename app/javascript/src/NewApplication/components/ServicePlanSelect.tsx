@@ -6,7 +6,7 @@ import type { ServicePlan } from 'NewApplication/types'
 type Props = {
   servicePlan: ServicePlan | null,
   servicePlans: ServicePlan[] | null,
-  onSelect: (arg1: ServicePlan | null) => void,
+  onSelect: (servicePlan: ServicePlan | null) => void,
   isPlanContracted: boolean,
   serviceSubscriptionsPath: string,
   createServicePlanPath: string,

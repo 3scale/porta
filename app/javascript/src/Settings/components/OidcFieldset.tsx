@@ -53,8 +53,8 @@ const OidcFieldset: FunctionComponent<Props> = ({
   <FormFieldset id="fieldset-Oidc">
     <FormLegend>OPENID CONNECT (OIDC)</FormLegend>
     <Basics {...basicSettings} />
-    { !isServiceMesh && <AuthorizationFlow collection={flowSettings} /> }
-    { !isServiceMesh && <JsonWebToken {...jwtSettings} /> }
+    {!isServiceMesh && <AuthorizationFlow collection={flowSettings} />}
+    {!isServiceMesh && <JsonWebToken {...jwtSettings} />}
   </FormFieldset>
 )
 

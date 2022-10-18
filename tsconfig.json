@@ -13,14 +13,12 @@
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
-    "allowJs": true,
+    "allowJs": false,
     "downlevelIteration": true // TODO: either use this or target ES6
   },
-  "include": ["app/javascript", "**/*.spec.ts", "**/*.spec.tsx"], // FIXME: should not include tests but VSCode needs it
-  "exclude": [
-    "app/packs/PF4Styles",
-    "node_modules",
-    "public"
+  "include": [
+    "app/javascript/**/*",
+    "spec/javascripts/**/*"
   ],
   "compileOnSave": false
 }

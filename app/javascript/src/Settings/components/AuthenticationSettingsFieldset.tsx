@@ -27,7 +27,7 @@ const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
   authenticationMethod,
   apiKeySettings,
   appIdKeyPairSettings,
-  oidcSettings
+  oidcSettings: { basicSettings, flowSettings, jwtSettings }
 }) => {
   const isOidc = authenticationMethod === OIDC_AUTH_METHOD
   const isApiKey = authenticationMethod === API_KEY_METHOD
@@ -36,10 +36,9 @@ const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
     (!isServiceMesh || isOidc) && (
       <FormFieldset id="fieldset-AuthenticationSettings">
         <FormLegend>Authentication Settings</FormLegend>
-        { isApiKey && <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend="API KEY (USER_KEY) BASICS" /> }
-        { isAppIdKey && <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend="APP_ID AND APP_KEY PAIR BASICS" /> }
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        { isOidc && <OidcFieldset {...oidcSettings} isServiceMesh={isServiceMesh} /> }
+        {isApiKey && <FormCollection ItemComponent={TextInputGroup} collection={[apiKeySettings]} legend="API KEY (USER_KEY) BASICS" />}
+        {isAppIdKey && <FormCollection ItemComponent={TextInputGroup} collection={appIdKeyPairSettings} legend="APP_ID AND APP_KEY PAIR BASICS" />}
+        {isOidc && <OidcFieldset basicSettings={basicSettings} flowSettings={flowSettings} isServiceMesh={isServiceMesh} jwtSettings={jwtSettings} />}
       </FormFieldset>
     )
   ) as React.ReactElement // Hack: Shortcircuit is not supported yet. See: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18912

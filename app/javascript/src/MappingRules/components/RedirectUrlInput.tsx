@@ -5,7 +5,7 @@ import type { TextInputProps } from '@patternfly/react-core'
 
 type Props = {
   redirectUrl: TextInputProps['value'],
-  setRedirectUrl: (arg1: string) => void
+  setRedirectUrl: (redirectUrl: string) => void
 }
 
 const RedirectUrlInput: FunctionComponent<Props> = ({

@@ -36,9 +36,7 @@ type Props = {
   buyersCount?: number,
   buyersPath?: string,
   definedFields?: FieldDefinition[],
-  validationErrors: {
-    [key: string]: string[] | undefined
-  },
+  validationErrors: Record<string, string[] | undefined>
   error?: string
 }
 
@@ -173,7 +171,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
           appPlan={appPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(
             ':id',
-            product ? String(product.id) : ''
+            product?.id.toString() || ''
           )}
           product={product}
           onSelect={setAppPlan}
@@ -195,7 +193,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
             type="submit"
             variant="primary"
           >
-              Create application
+            Create application
           </Button>
         </ActionGroup>
       </Form>

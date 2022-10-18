@@ -9,7 +9,8 @@ type CheckEvent = React.SyntheticEvent<HTMLButtonElement>
 
 type Props = FieldGroupProps & FieldCatalogProps
 
-// FIXME: WTF is this? Refactor and make it properly
+// TODO: Refactor this, use proper hook without conditionals. Need to remove spread props from Form and don't propagate
+// props that are constants (from Settings/defaults)
 const useSelectedOnChange = (value: string, onChange: undefined | ((value: string, event: React.SyntheticEvent<HTMLButtonElement>) => void)) => (
   typeof onChange === 'function'
     ? [value, onChange]

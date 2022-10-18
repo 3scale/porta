@@ -18,19 +18,19 @@ type Props = {
   backendApis: Api[]
 }
 
-const NewServiceForm: FunctionComponent<Props> = (props) => {
-  const { template, isServiceDiscoveryAccessible, isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl,
-    providerAdminServiceDiscoveryServicesPath, adminServicesPath, backendApis } = props
-
+const NewServiceForm: FunctionComponent<Props> = ({
+  template,
+  isServiceDiscoveryAccessible,
+  isServiceDiscoveryUsable,
+  serviceDiscoveryAuthenticateUrl,
+  providerAdminServiceDiscoveryServicesPath,
+  adminServicesPath,
+  backendApis
+}) => {
   const [formMode, setFormMode] = useState('manual')
   const [loadingProjects, setLoadingProjects] = useState(false)
 
-  const handleFormsVisibility = (event: React.SyntheticEvent<HTMLInputElement>) =>
-    setFormMode(event.currentTarget.value)
-
-  const formToRender = () => formMode === 'manual'
-    ? <ServiceManualForm backendApis={backendApis} formActionPath={adminServicesPath} template={template} />
-    : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />
+  const handleFormsVisibility = (event: React.SyntheticEvent<HTMLInputElement>) => setFormMode(event.currentTarget.value)
 
   return (
     <>
@@ -44,7 +44,9 @@ const NewServiceForm: FunctionComponent<Props> = (props) => {
             serviceDiscoveryAuthenticateUrl={serviceDiscoveryAuthenticateUrl}
           />
         )}
-        {formToRender()}
+        {formMode === 'manual'
+          ? <ServiceManualForm backendApis={backendApis} formActionPath={adminServicesPath} template={template} />
+          : <ServiceDiscoveryForm formActionPath={providerAdminServiceDiscoveryServicesPath} setLoadingProjects={setLoadingProjects} />}
       </div>
     </>
   )

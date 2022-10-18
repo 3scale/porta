@@ -33,11 +33,11 @@ export function getFeatureName (feature: Feature): string {
   throw new Error(`${feature} is not a known feature`)
 }
 
-export function getFeatureNameDescription (feature: Feature): Array<string> {
+export function getFeatureNameDescription (feature: Feature): string[] {
   return FEATURE_NAMES_DESCRIPTION_ITEMS[feature]
 }
 
-export function canFeatureSetServicePermissions (features: AdminSection | Array<AdminSection>): boolean {
+export function canFeatureSetServicePermissions (features: AdminSection | AdminSection[]): boolean {
   if (typeof features === 'string') {
     return FEATURES_GRANTING_SERVICE_ACCESS.includes(features)
   } else {

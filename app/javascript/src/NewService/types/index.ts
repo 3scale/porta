@@ -1,5 +1,3 @@
-
-/* eslint-disable camelcase */
 export type ServiceFormTemplate = {
   service: {
     name: string,
@@ -12,7 +10,6 @@ export type ServiceFormTemplate = {
     description?: string[]
   }
 }
-/* eslint-enable camelcase */
 
 export type FormProps = {
   id: string,

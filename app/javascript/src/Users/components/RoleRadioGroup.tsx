@@ -13,7 +13,7 @@ const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API prod
  */
 type Props = {
   selectedRole: Role,
-  onRoleChanged: (arg1: Role) => void
+  onRoleChanged: (role: Role) => void
 }
 
 const RoleRadioGroup: React.FunctionComponent<Props> = ({

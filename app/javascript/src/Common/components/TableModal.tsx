@@ -32,7 +32,7 @@ type Props<T extends Record> = {
   selectedItem: T | null,
   pageItems?: T[],
   itemsCount: number,
-  onSelect: (arg1: T | null) => void,
+  onSelect: (selected: T | null) => void,
   onClose: () => void,
   cells: Array<{
     title: string,

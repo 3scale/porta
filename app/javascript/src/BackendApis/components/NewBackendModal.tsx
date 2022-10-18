@@ -17,7 +17,7 @@ type Props = {
   backendsPath: string,
   isOpen?: boolean,
   onClose: () => void,
-  onCreateBackend: (arg1: Backend) => void
+  onCreateBackend: (backend: Backend) => void
 }
 
 const NewBackendModal: FunctionComponent<Props> = ({
@@ -29,9 +29,7 @@ const NewBackendModal: FunctionComponent<Props> = ({
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState()
 
-  const handleOnAjaxComplete = (_event: any, xhr: {
-    responseText: string
-  }, status: string) => {
+  const handleOnAjaxComplete = (_event: any, xhr: { responseText: string }, status: string) => {
     setIsLoading(false)
 
     if (status === 'success') {
@@ -44,9 +42,7 @@ const NewBackendModal: FunctionComponent<Props> = ({
   }
 
   useEffect(() => {
-    const jq = $ as any // HACK: remove this after finding the right typings
-    // eslint-disable-next-line no-console
-    console.log('jQuery', $().jquery) // TODO: verify version of jquery and use .live or .on accordingly
+    const jq = $ as any // HACK: jQuery is 1.8.2 here but we're using 3.5 in our package.json
     jq('form#new_backend_api_config')
       // TODO: jquery-ujs is deprecated, in rails 5 we should use rails-ujs. However, the former is broadly used so it's not trivial.
       .live('ajax:send', () => setIsLoading(true))

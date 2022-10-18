@@ -4,7 +4,7 @@ import type { FunctionComponent } from 'react'
 
 type Props = {
   description: string,
-  setDescription: (arg1: string) => void
+  setDescription: (description: string) => void
 }
 
 const DescriptionInput: FunctionComponent<Props> = ({

@@ -20,6 +20,7 @@ const BraintreeCardFields: FunctionComponent = () => (
         />
         <div className="col-md-6 col-md-offset-4 inline-hints">Incorrect card number. Specify a valid credit card number</div>
       </ListItem>
+
       <ListItem id="customer_credit_card_cvv_input">
         <Label
           required
@@ -31,8 +32,8 @@ const BraintreeCardFields: FunctionComponent = () => (
           data-name="customer[credit_card][cvv]"
           id="customer_credit_card_cvv"
         />
-
       </ListItem>
+
       <ListItem id="customer_credit_card_expiration_date_input">
         <Label
           required

@@ -35,6 +35,7 @@ const FormGroup: FunctionComponent<Props> = ({
   const { isRequired, label, fieldId, isValid, name, value, onChange, onBlur, autoFocus, ariaInvalid } = inputProps
   return (
     <PF4FormGroup
+      autoComplete="off"
       fieldId={fieldId}
       helperTextInvalid={helperTextInvalid}
       isRequired={isRequired}
@@ -43,6 +44,7 @@ const FormGroup: FunctionComponent<Props> = ({
     >
       <TextInput
         aria-invalid={ariaInvalid}
+        autoComplete="off"
         autoFocus={autoFocus}
         id={fieldId}
         isRequired={isRequired}

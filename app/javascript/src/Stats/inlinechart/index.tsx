@@ -11,7 +11,7 @@ type Props = {
   metricName: string,
   title: string,
   unitPluralized: string
-};
+}
 
 type State = {
   loading: boolean,
@@ -20,21 +20,21 @@ type State = {
   values: Array<number>,
   unit: string,
   unitPluralized: string
-};
+}
 
 type RefObject = {
   current: null | HTMLDivElement
-};
+}
 
 type DataMetric = {
   unit: string
-};
+}
 
 type Data = {
   metric: DataMetric,
   total: number,
   values: Array<number>
-};
+}
 
 class InlineChart extends Component<Props, State> {
   c3ChartContainer: RefObject;

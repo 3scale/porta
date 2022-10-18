@@ -20,7 +20,7 @@ type Props = {
   features: Feature[],
   selectedSections?: AdminSection[],
   areServicesVisible?: boolean,
-  onAdminSectionSelected: (arg1: AdminSection) => void
+  onAdminSectionSelected: (section: AdminSection) => void
 }
 
 const FeaturesFieldset: React.FunctionComponent<Props> = ({
@@ -67,7 +67,7 @@ const LabelDescriptionItems: FunctionComponent<{ descriptionItems: Array<string>
 type FeatureCheckboxProps = {
   value: Feature,
   checked?: boolean,
-  onChange: (arg1: Feature) => void
+  onChange: (feature: Feature) => void
 }
 
 const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
@@ -105,7 +105,7 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
  */
 type AllServicesCheckboxProps = {
   checked?: boolean,
-  onChange: (arg1: 'services') => void
+  onChange: (value: 'services') => void
 }
 
 const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = ({

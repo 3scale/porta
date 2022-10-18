@@ -9,7 +9,7 @@ type Props = {
   product: Product | null,
   products: Product[],
   productsCount: number,
-  onSelectProduct: (arg1: Product | null) => void,
+  onSelectProduct: (product: Product | null) => void,
   productsPath?: string,
   isDisabled?: boolean
 }

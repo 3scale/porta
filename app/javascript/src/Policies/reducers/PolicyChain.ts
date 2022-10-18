@@ -16,20 +16,20 @@ function createChainPolicy (policy: RegistryPolicy): ChainPolicy {
   return { ...policy, humanName: policy.humanName, enabled: true, removable: true, uuid: generateGuid() }
 }
 
-function addPolicy (state: Array<ChainPolicy>, action: AddPolicyToChainAction): Array<ChainPolicy> {
+function addPolicy (state: ChainPolicy[], action: AddPolicyToChainAction): ChainPolicy[] {
   return state.concat([createChainPolicy(action.policy)])
 }
 
-function updateChain (_state: Array<ChainPolicy>, action: UpdatePolicyChainAction): Array<ChainPolicy> {
+function updateChain (_state: ChainPolicy[], action: UpdatePolicyChainAction): ChainPolicy[] {
   return action.payload
 }
 
-function updatePolicies (state: Array<ChainPolicy>, action: UpdateChainPolicies): Array<ChainPolicy> {
+function updatePolicies (state: ChainPolicy[], action: UpdateChainPolicies): ChainPolicy[] {
   return [...action.payload]
 }
 
 // TODO: use combineReducers instead of createReducer
-const ChainReducer: Reducer<Array<ChainPolicy>> = createReducer<Array<ChainPolicy>>(initialState.chain, {
+const ChainReducer: Reducer<ChainPolicy[]> = createReducer<ChainPolicy[]>(initialState.chain, {
   'ADD_POLICY_TO_CHAIN': addPolicy,
   'SORT_POLICY_CHAIN': updatePolicies,
   'LOAD_CHAIN_SUCCESS': updatePolicies,

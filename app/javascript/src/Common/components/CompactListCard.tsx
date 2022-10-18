@@ -1,4 +1,3 @@
-
 import {
   Button,
   ButtonVariant,
@@ -20,12 +19,12 @@ export type CompactListItem = {
 }
 
 type Props = {
-  columns: Array<string>,
-  items: Array<CompactListItem>,
+  columns: string[],
+  items: CompactListItem[],
   searchInputRef: { current: HTMLInputElement | null },
   onSearch: (term?: string) => void,
   page: number,
-  setPage: (arg1: number) => void,
+  setPage: (page: number) => void,
   perPage?: number,
   searchInputPlaceholder?: string,
   tableAriaLabel?: string
@@ -62,7 +61,6 @@ const CompactListCard: React.FunctionComponent<Props> = ({
         ref={searchInputRef}
         type="search"
       />
-      {/* <Button variant={ButtonVariant.control} aria-label="search button for search input" onClick={onSearch} data-testid="search">  TODO: onSearch funcionaba con el evento del click??? */}
       <Button aria-label="search button for search input" data-testid="search" variant={ButtonVariant.control} onClick={() => onSearch()}>
         <SearchIcon />
       </Button>
