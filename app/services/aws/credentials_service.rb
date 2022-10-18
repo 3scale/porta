@@ -12,7 +12,7 @@ module Aws
     end
 
     IAM_KEYS = %i[access_key_id secret_access_key].freeze
-    STS_KEYS = %i[region role_arn role_session_name web_identity_token_file].freeze
+    STS_KEYS = %i[role_arn role_session_name web_identity_token_file].freeze
 
     def initialize(params)
       @params = params
