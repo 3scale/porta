@@ -94,11 +94,12 @@ p
   = form.actions do
     = form.commit_button 'Save credit card'
 
+/ TODO: All is duplicated. Move this into a pack and use braintree from node_modules
 script src="https://js.braintreegateway.com/web/3.69.0/js/client.min.js"
 script src="https://js.braintreegateway.com/web/3.69.0/js/hosted-fields.min.js"
 javascript:
-  var $form = $('#new_customer');
-  var submit = document.querySelector('input[type="submit"]');
+  const form = document.querySelector('form#new_customer');
+  const submit = document.querySelector('button[type="submit"]');
 
   if (typeof braintree !== 'undefined') {
     braintree.client.create({
@@ -147,17 +148,16 @@ javascript:
         }
 
         submit.removeAttribute('disabled');
-
-        $form.on('submit', function(event) {
+        form.addEventListener('submit', function(event) {
           event.preventDefault();
+          event.stopPropagation();
           hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
             if (tokenizeErr) {
               console.error(tokenizeErr);
               return;
             }
-
-            $('#braintree_nonce').val(payload['nonce']);
-            $form.get(0).submit();
+            document.querySelector('input#braintree_nonce').setAttribute('value', payload.nonce);
+            form.submit();
           });
         });
       });
