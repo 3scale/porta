@@ -64,4 +64,55 @@ class CMS::S3Test < ActiveSupport::TestCase
     assert CMS::S3.options[:endpoint]
     assert_not CMS::S3.options[:use_fips_endpoint]
   end
+
+  test "#credentials returns nil when CMS::S3 is not enabled" do
+    CMS::S3.stubs(:enabled?).returns(false)
+
+    assert_nil CMS::S3.credentials
+  end
+
+  test "#credentials calls Aws::CredentialsService with the correct arguments" do
+    Aws::CredentialsService.expects(:call).with(CMS::S3.send(:config))
+
+    CMS::S3.credentials
+  end
+
+  test "#role_arn returns nil when CMS::S3 is not enabled" do
+    CMS::S3.stubs(:enabled?).returns(false)
+
+    assert_nil CMS::S3.role_arn
+  end
+
+  test "#role_arn returns the correct config data" do
+    role_arn = 'some:arn'
+    CMS::S3.stubs(:config).returns(role_arn: role_arn)
+
+    assert_equal CMS::S3.role_arn, role_arn
+  end
+
+  test "#role_session_name returns nil when CMS::S3 is not enabled" do
+    CMS::S3.stubs(:enabled?).returns(false)
+
+    assert_nil CMS::S3.role_session_name
+  end
+
+  test "#role_session_name returns the correct config data" do
+    role_session_name = 'some-session-name'
+    CMS::S3.stubs(:config).returns(role_session_name: role_session_name)
+
+    assert_equal CMS::S3.role_session_name, role_session_name
+  end
+
+  test "#web_identity_token_file returns nil when CMS::S3 is not enabled" do
+    CMS::S3.stubs(:enabled?).returns(false)
+
+    assert_nil CMS::S3.web_identity_token_file
+  end
+
+  test "#web_identity_token_file returns the correct config data" do
+    web_identity_token_file = 'path/to/token'
+    CMS::S3.stubs(:config).returns(web_identity_token_file: web_identity_token_file)
+
+    assert_equal CMS::S3.web_identity_token_file, web_identity_token_file
+  end
 end
