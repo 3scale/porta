@@ -5,12 +5,13 @@ class CallableTest < ActiveSupport::TestCase
   class DummyCallableClass
     include Callable
 
-    def initialize(args)
+    def initialize(args, &block)
       @args = args
+      @block = block
     end
 
     def call
-      @args
+      @block.present? ? @block.call : @args
     end
   end
 
@@ -26,5 +27,9 @@ class CallableTest < ActiveSupport::TestCase
     arguments = { foo: 'foo', bar: 'bar' }
 
     assert_equal DummyCallableClass.call(arguments), arguments
+  end
+
+  test '.call accepts a block' do
+    assert_equal DummyCallableClass.call(nil) { 1 + 1 }, 2
   end
 end

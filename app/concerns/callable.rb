@@ -8,8 +8,8 @@ module Callable
   end
 
   class_methods do
-    def call(*args)
-      new(*args).call
+    def call(*args, &block)
+      new(*args, &block).call
     end
   end
 end
