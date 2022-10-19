@@ -46,9 +46,11 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   def enqueue_message_and_respond
     @message.enqueue! :to => recipient_ids
 
+    @notice = 'Message was sent.'
+
     respond_to do |format|
       format.html do
-        flash[:notice] = 'Message was sent.'
+        flash[:notice] = @notice
         redirect_to provider_admin_messages_root_path
       end
 
