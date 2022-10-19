@@ -66,9 +66,9 @@ class CMS::S3Test < ActiveSupport::TestCase
   end
 
   test "#credentials returns nil when CMS::S3 is not enabled" do
-    CMS::S3.stubs(:enabled?).returns(:false)
+    CMS::S3.stubs(:enabled?).returns(false)
 
-    assert CMS::S3.credentials, nil
+    assert_equal CMS::S3.credentials, nil
   end
 
   test "#credentials calls Aws::CredentialsService with the correct arguments" do
@@ -78,9 +78,9 @@ class CMS::S3Test < ActiveSupport::TestCase
   end
 
   test "#role_arn returns nil when CMS::S3 is not enabled" do
-    CMS::S3.stubs(:enabled?).returns(:false)
+    CMS::S3.stubs(:enabled?).returns(false)
 
-    assert CMS::S3.role_arn, nil
+    assert_equal CMS::S3.role_arn, nil
   end
 
   test "#role_arn returns the correct config data" do
@@ -91,9 +91,9 @@ class CMS::S3Test < ActiveSupport::TestCase
   end
 
   test "#role_session_name returns nil when CMS::S3 is not enabled" do
-    CMS::S3.stubs(:enabled?).returns(:false)
+    CMS::S3.stubs(:enabled?).returns(false)
 
-    assert CMS::S3.role_session_name, nil
+    assert_equal CMS::S3.role_session_name, nil
   end
 
   test "#role_session_name returns the correct config data" do
@@ -104,9 +104,9 @@ class CMS::S3Test < ActiveSupport::TestCase
   end
 
   test "#web_identity_token_file returns nil when CMS::S3 is not enabled" do
-    CMS::S3.stubs(:enabled?).returns(:false)
+    CMS::S3.stubs(:enabled?).returns(false)
 
-    assert CMS::S3.web_identity_token_file, nil
+    assert_equal CMS::S3.web_identity_token_file, nil
   end
 
   test "#web_identity_token_file returns the correct config data" do
