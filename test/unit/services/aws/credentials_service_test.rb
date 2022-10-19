@@ -6,7 +6,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   test '#call returns IAM credentials when available' do
     CMS::STS::AssumeRoleWebIdentity.instance.expects(:identity_credentials).never
 
-    assert Aws::CredentialsService.call(iam_auth_params), iam_auth_params
+    assert_equal Aws::CredentialsService.call(iam_auth_params), iam_auth_params
   end
 
   test '#call returns STS credentials when available' do
@@ -19,13 +19,13 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
 
     CMS::STS::AssumeRoleWebIdentity.instance.expects(:identity_credentials).returns(sts_credentials)
 
-    assert Aws::CredentialsService.call(sts_auth_params), { credentials: sts_credentials }
+    assert_equal Aws::CredentialsService.call(sts_auth_params), { credentials: sts_credentials }
   end
 
   test '#call returns IAM credentials when both authentication types are available' do
     CMS::STS::AssumeRoleWebIdentity.instance.expects(:identity_credentials).never
 
-    assert Aws::CredentialsService.call(full_params), iam_auth_params
+    assert_equal Aws::CredentialsService.call(full_params), iam_auth_params
   end
 
   test '#call raises an error if not enough credential params are present' do
