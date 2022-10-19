@@ -31,3 +31,5 @@ declare module 'braintree-web/hosted-fields';
 
 // TODO: when we use a official release of Quickstarts we can remove this workaround
 declare module '@patternfly/quickstarts/dist/quickstarts-full.es';
+
+declare var __webpack_public_path__: string
