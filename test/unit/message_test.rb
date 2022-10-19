@@ -141,11 +141,6 @@ class MessageTest < ActiveSupport::TestCase
     assert_equal 1, message.errors[:sender_id].size
   end
 
-  test 'A message require a subject' do
-    message = FactoryBot.build(:message, subject: "I am subject", sender: FactoryBot.create(:simple_account))
-    assert_valid message
-  end
-
   test 'A message without a subject is not valid' do
     message = FactoryBot.build(:message, subject: nil, sender: FactoryBot.create(:simple_account))
     assert_not message.valid?
@@ -174,25 +169,6 @@ class MessageTest < ActiveSupport::TestCase
     buyer_sent_message.restore_for!(provider)
     assert_not provider_received_message.reload.hidden?
   end
-
-  test "will create messages with only subject and not body" do
-    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-
-    msg = Message.new
-    msg.sender_id = buyer.id
-    msg.subject = "I am subject"
-    assert msg.valid?
-  end
-
-  test "will not create messages with only body and no subject" do
-    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
-
-    msg = Message.new
-    msg.sender_id = buyer.id
-    msg.body = "I am body"
-    assert_not msg.valid?
-  end
-
 end
 
 class MessageBeforeBeingCreatedTest < ActiveSupport::TestCase

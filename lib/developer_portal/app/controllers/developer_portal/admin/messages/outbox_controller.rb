@@ -45,9 +45,10 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
 
   def enqueue_message_and_respond
     @message.enqueue! :to => current_account.provider_account.id
+    @notice = 'Message was sent.'
     respond_to do |format|
       format.html do
-        flash[:notice] = 'Message was sent.'
+        flash[:notice] = @notice
         redirect_to admin_messages_root_path
       end
       format.js
