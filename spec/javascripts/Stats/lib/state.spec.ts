@@ -9,7 +9,7 @@ describe('StatsState', () => {
   const fakeStore = {
     getStateFromURL: jest.fn(),
     save
-  } as unknown as StatsStore
+  } as unknown as typeof StatsStore
 
   const stubbedState = {
     dateRange: {
@@ -19,13 +19,13 @@ describe('StatsState', () => {
       },
       granularity: 'day'
     }
-  } as unknown as StatsStore
+  } as unknown as typeof StatsStore
 
   const StubbedStore = {
     getStateFromURL () {
       return stubbedState
     }
-  } as unknown as StatsStore
+  } as unknown as typeof StatsStore
 
   it('should save the right state when calling setState', () => {
     const statsState = new StatsState(fakeStore)

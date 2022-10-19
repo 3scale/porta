@@ -30,7 +30,7 @@ describe('StatsSeries', () => {
     const stateOptions = {}
     const statsSerie = new StatsSeries([source])
 
-    statsSerie.getData(stateOptions).then(response => {
+    statsSerie.getData(stateOptions).then((response: any) => {
       expect(JSON.stringify(response)).toBe(
         JSON.stringify({
           columns: [['x', '2006-11-16T23:00:00', '2006-11-17T23:00:00'], ['Bond, James Bond', 42]],

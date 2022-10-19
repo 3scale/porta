@@ -168,12 +168,14 @@ exports[`should not render reset password button when disablePasswordReset is tr
                           type="text"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
                             isRequired={true}
                             label="Email or Username"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -193,6 +195,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={true}
                                 id="session_username"
                                 isRequired={true}
@@ -203,6 +206,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={true}
                                   className=""
                                   id="session_username"
@@ -220,6 +224,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={true}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -268,12 +273,14 @@ exports[`should not render reset password button when disablePasswordReset is tr
                           type="password"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
                             isRequired={true}
                             label="Password"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -293,6 +300,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={false}
                                 id="session_password"
                                 isRequired={true}
@@ -303,6 +311,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={false}
                                   className=""
                                   id="session_password"
@@ -320,6 +329,7 @@ exports[`should not render reset password button when disablePasswordReset is tr
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={false}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -607,12 +617,14 @@ exports[`should render Login form and Authentication providers when available 1`
                           type="text"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
                             isRequired={true}
                             label="Email or Username"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -632,6 +644,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={true}
                                 id="session_username"
                                 isRequired={true}
@@ -642,6 +655,7 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={true}
                                   className=""
                                   id="session_username"
@@ -659,6 +673,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={true}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -707,12 +722,14 @@ exports[`should render Login form and Authentication providers when available 1`
                           type="password"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
                             isRequired={true}
                             label="Password"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -732,6 +749,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={false}
                                 id="session_password"
                                 isRequired={true}
@@ -742,6 +760,7 @@ exports[`should render Login form and Authentication providers when available 1`
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={false}
                                   className=""
                                   id="session_password"
@@ -759,6 +778,7 @@ exports[`should render Login form and Authentication providers when available 1`
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={false}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -1270,12 +1290,14 @@ exports[`should render itself 1`] = `
                           type="text"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
                             isRequired={true}
                             label="Email or Username"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -1295,6 +1317,7 @@ exports[`should render itself 1`] = `
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={true}
                                 id="session_username"
                                 isRequired={true}
@@ -1305,6 +1328,7 @@ exports[`should render itself 1`] = `
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={true}
                                   className=""
                                   id="session_username"
@@ -1322,6 +1346,7 @@ exports[`should render itself 1`] = `
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={true}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -1370,12 +1395,14 @@ exports[`should render itself 1`] = `
                           type="password"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
                             isRequired={true}
                             label="Password"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -1395,6 +1422,7 @@ exports[`should render itself 1`] = `
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={false}
                                 id="session_password"
                                 isRequired={true}
@@ -1405,6 +1433,7 @@ exports[`should render itself 1`] = `
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={false}
                                   className=""
                                   id="session_password"
@@ -1422,6 +1451,7 @@ exports[`should render itself 1`] = `
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={false}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -1731,12 +1761,14 @@ exports[`should render reset password button when disablePasswordReset is false 
                           type="text"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_username"
                             helperTextInvalid="Email or username is mandatory"
                             isRequired={true}
                             label="Email or Username"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -1756,6 +1788,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={true}
                                 id="session_username"
                                 isRequired={true}
@@ -1766,6 +1799,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={true}
                                   className=""
                                   id="session_username"
@@ -1783,6 +1817,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={true}
                                     className="pf-c-form-control"
                                     disabled={false}
@@ -1831,12 +1866,14 @@ exports[`should render reset password button when disablePasswordReset is false 
                           type="password"
                         >
                           <FormGroup
+                            autoComplete="off"
                             fieldId="session_password"
                             helperTextInvalid="Password is mandatory"
                             isRequired={true}
                             label="Password"
                           >
                             <div
+                              autoComplete="off"
                               className="pf-c-form__group"
                             >
                               <label
@@ -1856,6 +1893,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                 </span>
                               </label>
                               <ForwardRef
+                                autoComplete="off"
                                 autoFocus={false}
                                 id="session_password"
                                 isRequired={true}
@@ -1866,6 +1904,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                               >
                                 <TextInputBase
                                   aria-label={null}
+                                  autoComplete="off"
                                   autoFocus={false}
                                   className=""
                                   id="session_password"
@@ -1883,6 +1922,7 @@ exports[`should render reset password button when disablePasswordReset is false 
                                   <input
                                     aria-invalid={false}
                                     aria-label={null}
+                                    autoComplete="off"
                                     autoFocus={false}
                                     className="pf-c-form-control"
                                     disabled={false}

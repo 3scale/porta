@@ -1,13 +1,11 @@
 import $ from 'jquery'
 import { StatsStore } from 'Stats/lib/store'
 
-import type { StatsState } from 'Stats/lib/state'
-
 describe('StatsStore', () => {
   class FakeHistory {
-    state!: StatsState
+    state!: typeof StatsStore
 
-    pushState (state: StatsState) {
+    pushState (state: typeof StatsStore) {
       this.state = state
     }
   }

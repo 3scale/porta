@@ -6,7 +6,7 @@ describe('StatsApplicationsSelector', () => {
   const userSelectedState = {
     state: { selectedApplicationId: '42' },
     setState: jest.fn()
-  } as unknown as StatsState
+  } as unknown as typeof StatsState
 
   const applicationGroups = {
     'Dumplings': [{ id: 666, name: 'Wan Tun App' }, { id: 42, name: 'Pierogi App' }],

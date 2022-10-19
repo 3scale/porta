@@ -11,18 +11,18 @@ describe('StatsMenu', () => {
   ]
 
   class FakeHistory {
-    state!: StatsState['State']
+    state!: typeof StatsState['State']
 
-    pushState (state: StatsState['State']) {
+    pushState (state: typeof StatsState['State']) {
       this.state = state
     }
   }
 
   class FakeState {
-    store: StatsStore
-    state: Partial<StatsState['State']>
+    store: typeof StatsStore
+    state: Partial<typeof StatsState['State']>
 
-    constructor (store: StatsStore) {
+    constructor (store: typeof StatsStore) {
       this.store = store
       this.state = {
         dateRange: {
@@ -44,7 +44,7 @@ describe('StatsMenu', () => {
       return this.state
     }
 
-    setState (state: StatsState['state']) {
+    setState (state: typeof StatsState['state']) {
       this.state = Object.assign({}, this.state, state)
     }
   }

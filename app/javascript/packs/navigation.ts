@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   addClickEventToCollection(togglers, function (e) {
     e.stopPropagation()
-    toggleNavigation(e.currentTarget)
+    toggleNavigation(e.currentTarget as EventTarget)
     e.preventDefault()
   })
 

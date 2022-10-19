@@ -47,6 +47,9 @@ describe('CustomMetricSource', () => {
   }
 
   class CustomMetricSource extends StatsMetricsSource {
+    constructor({ id, details }: { id: number, details: any }) {
+      super({ id, details })
+    }
     get url () { return 'http://example.com/api' as any }
   }
 

@@ -1,6 +1,10 @@
 import { StatsSourceCollector } from 'Stats/lib/source_collector'
 
-class TestStatsSourceCollector extends StatsSourceCollector {}
+class TestStatsSourceCollector extends StatsSourceCollector {
+  constructor({ id, metrics }: { id: number, metrics: []}) {
+    super({ id, metrics })
+  }
+}
 
 describe('StatsSourceCollector', () => {
   const options = {
@@ -65,7 +69,7 @@ describe('StatsSourceCollector', () => {
       }
     }
 
-    class ChildSourceCollector extends StatsSourceCollector {
+    class ChildSourceCollector extends TestStatsSourceCollector {
       static get Source () {
         return StubbedSource as any
       }
@@ -73,7 +77,7 @@ describe('StatsSourceCollector', () => {
 
     const selectedMetrics = [{ id: 7, systemName: 'bond' }]
 
-    const childSourceCollector = new ChildSourceCollector({ id: 42, metrics: {} })
+    const childSourceCollector = new ChildSourceCollector({ id: 42, metrics: [] })
     const sources = childSourceCollector.buildSources(42, selectedMetrics)
 
     expect(sources[0] instanceof StubbedSource).toBe(true)

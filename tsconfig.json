@@ -8,17 +8,20 @@
     "module": "ES6",
     "strict": true,
     "sourceMap": true,
-    "target": "es5",
+    "target": "ES6",
     "jsx": "react-jsx",
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
     "allowJs": false,
-    "downlevelIteration": true // TODO: either use this or target ES6
   },
   "include": [
-    "app/javascript/**/*",
-    "spec/javascripts/**/*"
+    "app/javascript/src/Stats/**/*.jsx", // This module is too complex to properly migrate it to TS
+    "app/javascript",
+    "spec/javascripts"
+  ],
+  "exclude": [
+    "app/javascript/packs/PF4Styles"
   ],
   "compileOnSave": false
 }

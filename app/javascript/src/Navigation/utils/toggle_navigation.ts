@@ -10,17 +10,17 @@ function hideAllToggleable (selector = allToggleableElements) {
   $(selector).toggleClass(toggleEnabledClass, false)
 }
 
-function toggleElements ($elements, klass = toggleEnabledClass, state) {
+function toggleElements ($elements: JQuery<EventTarget>[], klass = toggleEnabledClass, state: boolean) {
   for (let i = 0; i < $elements.length; i++) {
     $elements[i].toggleClass(klass, state)
   }
 }
 
-function focusSearchInput ($element) {
+function focusSearchInput ($element: JQuery<EventTarget>) {
   $element.find('input').filter(':visible:first').focus()
 }
 
-function toggleNavigation (element) {
+function toggleNavigation (element: EventTarget) {
   const $element = $(element)
   const $list = $element.siblings(toggleableContentClass)
   const state = $list.hasClass(toggleEnabledClass)

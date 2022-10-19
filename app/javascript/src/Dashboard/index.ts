@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import 'Dashboard/chart'
 
-export function widget (url) {
+export function widget (url: string) {
   $.ajax({
     url: url,
     dataType: 'script',

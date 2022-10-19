@@ -20,6 +20,10 @@ declare global {
     analytics: {
       trackLink: (container: HTMLElement, msg: string) => void
     }
+    dashboardWidget: {
+      loadAudienceWidget: (widgetPath: string) => void
+    }
+    renderChartWidget: (widget: any, data: any) => void
   }
 
   interface JQueryStatic {

@@ -3,14 +3,16 @@ import moment from 'moment'
 import numeral from 'numeral'
 import c3 from 'c3'
 
-export function render (widget, data) {
+import type { MomentInput, MomentInputObject } from 'moment'
+
+export function render (widget: any, data: any) {
   let options = chartOptions(widget, data)
   $('[data-chart]', widget).each(function (_, chart) {
-    return c3.generate($.extend(true, {}, options, { bindto: chart }))
+    c3.generate(($ as any).extend(true, {}, options, { bindto: chart }))
   })
 }
 
-function chartOptions (widget, data) {
+function chartOptions (widget: string, data: any) {
   let $widget = $(widget)
   let values = timeline(data.values)
   let seriesData = [['date', ...values[0]], ['hits', ...values[1]]]
@@ -43,10 +45,10 @@ function chartOptions (widget, data) {
       xFormat: '%Y-%m-%dT%H:%M:%S.%LZ',
       type: 'bar',
       columns: seriesData,
-      color: function (color, d) {
+      color: function (color: string, d: { index: number }) {
         return (d.index && d.index === lastSerieIndex - 1) ? 'transparent' : '#DFDFDF'
       },
-      onmouseover: function (d) {
+      onmouseover: function (d: any) {
         let value = numeral(d.value).format('0.[0]a').toUpperCase()
         let timestamp = Date.parse(d.x)
         countLabel.text(value)
@@ -68,22 +70,20 @@ function chartOptions (widget, data) {
 
 /**
  * Converts object where keys are string dates to array with real date objects
- * @param {Object} data
- * @returns {Array}
  */
-function timeline (data) {
+function timeline (data: MomentInputObject) {
   let dates = Object.keys(data)
-  let x = []
-  let y = []
+  let x: string[] = []
+  let y: string[] = []
 
   dates.forEach(date => {
     x.push(moment.utc(date).toISOString())
-    y.push(data[date].value)
+    y.push((data as any)[date].value)
   })
   return [x, y]
 }
 
-function getIntroLabel (timestamp) {
+function getIntroLabel (timestamp: MomentInput) {
   if (moment().isSame(timestamp, 'day')) {
     return 'today'
   } else {
