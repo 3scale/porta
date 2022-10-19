@@ -21,17 +21,11 @@ class Provider::Admin::Messages::OutboxController < FrontendController
 
   def create
     @message = messages.build(message_params)
-    @message.enqueue! :to => recipient_ids
-
-    @notice = 'Message was sent.'
-
-    respond_to do |format|
-      format.html do
-        flash[:notice] = @notice
-        redirect_to provider_admin_messages_root_path
-      end
-
-      format.js
+    if @message.valid?
+      enqueue_message_and_respond
+    else
+      flash[:error] = @message.errors.full_messages.to_sentence
+      redirect_to new_provider_admin_messages_outbox_path
     end
   end
 
@@ -48,6 +42,21 @@ class Provider::Admin::Messages::OutboxController < FrontendController
   end
 
   private
+
+  def enqueue_message_and_respond
+    @message.enqueue! :to => recipient_ids
+
+    @notice = 'Message was sent.'
+
+    respond_to do |format|
+      format.html do
+        flash[:notice] = @notice
+        redirect_to provider_admin_messages_root_path
+      end
+
+      format.js
+    end
+  end
 
   def recipients
     if mass_message?

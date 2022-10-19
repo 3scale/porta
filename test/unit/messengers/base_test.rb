@@ -110,7 +110,7 @@ class BaseTest < ActiveSupport::TestCase
     master = Account.master
     messenger = DemoMessenger.new
 
-    messenger.message(sender: @provider_account, to: master)
+    messenger.message(sender: @provider_account, to: master, subject: "I am subject")
     assert_equal master, messenger.template_source
 
     messenger.message(sender: master, to: @provider_account)

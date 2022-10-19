@@ -22,3 +22,4 @@ Feature: Outbox messages
     And I press "Send"
     Then I should see "Compose"
     And I am on the outbox compose page
+

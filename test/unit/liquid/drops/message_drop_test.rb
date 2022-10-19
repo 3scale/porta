@@ -40,19 +40,4 @@ class Liquid::Drops::MessageDropTest < ActiveSupport::TestCase
     @message.update_attributes(body: 'b' * 20, subject: nil)
     assert_equal "#{'b' * 12}...", @drop.subject
   end
-
-  # This test is really strange .. why would we have messages without body or subject ...
-  test '#subject blank' do
-    @message.update!(subject: nil, body: nil)
-    assert_equal  '(no subject)', @drop.subject
-
-    @message.update!(subject: nil, body: '')
-    assert_equal  '(no subject)', @drop.subject
-
-    @message.update!(subject: '', body: '')
-    assert_equal  '(no subject)', @drop.subject
-
-    @message.update!(subject: '', body: nil)
-    assert_equal  '(no subject)', @drop.subject
-  end
 end

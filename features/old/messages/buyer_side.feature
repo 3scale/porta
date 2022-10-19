@@ -36,25 +36,6 @@ Feature: Buyer side messages
     When I follow "Inbox"
     Then I should see read message from "foo.3scale.localhost" with subject "How are you doing?"
 
-  Scenario: Receiving a message without subject
-    Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "" and body "Just checking if everything is allright"
-    When I go to the dashboard
-    And I follow "Messages 1"
-    Then I should see unread message from "foo.3scale.localhost" with subject "Just checkin..."
-    When I follow "Just checkin..."
-    Then I should see "Just checking if everything is allright"
-    When I follow "Inbox"
-    Then I should see read message from "foo.3scale.localhost" with subject "Just checkin..."
-
-  Scenario: Receiving a message without subject nor body
-    Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "" and body ""
-    When I go to the dashboard
-    And I follow "Messages 1"
-    Then I should see unread message from "foo.3scale.localhost" with subject "(no subject)"
-    When I follow "(no subject)"
-    When I follow "Inbox"
-    Then I should see read message from "foo.3scale.localhost" with subject "(no subject)"
-
   Scenario: Repling to a message
     Given a message sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Wassup?" and body "Everything OK?"
 
