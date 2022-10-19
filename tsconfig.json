@@ -1,19 +1,24 @@
 {
   "compilerOptions": {
-    "baseUrl": "./app/javascript/src",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["ES6", "DOM"],
-    "module": "ES6",
+    // Type Checking
     "strict": true,
-    "sourceMap": true,
-    "target": "ES6",
-    "jsx": "react-jsx",
+
+    // Modules
+    "baseUrl": "./app/javascript/src",
+    "module": "ES6",
     "moduleResolution": "Node",
-    "esModuleInterop": true,
     "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
-    "allowJs": false,
+
+    // Emit
+    "declaration": false,
+    "sourceMap": true,
+
+    // Interop Constraints
+    "esModuleInterop": true, // TODO: Investigate if we can remove this to improve bundle size
+
+    // Language and Environment
+    "jsx": "react-jsx",
+    "target": "ES6",
   },
   "include": [
     "app/javascript/src/Stats/**/*.jsx", // This module is too complex to properly migrate it to TS
