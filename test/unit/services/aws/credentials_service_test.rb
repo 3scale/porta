@@ -10,7 +10,7 @@ class Aws::CredentialsServiceTest < ActiveSupport::TestCase
   end
 
   test '#call returns STS credentials when available' do
-    Rails.application.config.stubs(:s3).returns(
+    CMS::S3.stubs(:config).returns(
       region: sts_auth_params[:region],
       role_arn: sts_auth_params[:role_arn],
       role_session_name: sts_auth_params[:role_session_name],

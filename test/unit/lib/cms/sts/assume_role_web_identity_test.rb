@@ -14,11 +14,8 @@ class CMS::STS::AssumeRoleWebIdentityTest < ActiveSupport::TestCase
   end
 
   test '#identity_credentials raises an error if the web_identity_token_file does not exist' do
-    Rails.application.config.stubs(:s3).returns(web_identity_token_file: sts_auth_params[:web_identity_token_file])
-
-    Rails.env.stubs(:AWS_WEB_IDENTITY_TOKEN_FILE).returns(sts_auth_params[:web_identity_token_file])
+    CMS::S3.stubs(:config).returns(web_identity_token_file: sts_auth_params[:web_identity_token_file])
     File.stubs(:exist?).with(sts_auth_params[:web_identity_token_file]).returns(false)
-
     CMS::STS::AssumeRoleWebIdentity.instance.instance_variable_set('@identity_credentials', nil)
 
     assert_raises(CMS::STS::AssumeRoleWebIdentity::TokenNotFoundError) do
@@ -27,7 +24,7 @@ class CMS::STS::AssumeRoleWebIdentityTest < ActiveSupport::TestCase
   end
 
   test '#identity_credentials calls AWS to get an instance of STS credentials' do
-    Rails.application.config.stubs(:s3).returns(
+    CMS::S3.stubs(:config).returns(
       region: sts_auth_params[:region],
       role_arn: sts_auth_params[:role_arn],
       role_session_name: sts_auth_params[:role_session_name],

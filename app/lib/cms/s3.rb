@@ -48,6 +48,18 @@ module CMS
       config[:protocol].presence || 'https' if enabled?
     end
 
+    def role_arn
+      config[:role_arn] if enabled?
+    end
+
+    def role_session_name
+      config[:role_session_name] if enabled?
+    end
+
+    def web_identity_token_file
+      config[:web_identity_token_file] if enabled?
+    end
+
     def options
       return unless enabled?
 

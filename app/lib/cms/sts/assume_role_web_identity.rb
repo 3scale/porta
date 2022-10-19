@@ -13,10 +13,10 @@ module CMS
           check_token_presence
 
           Aws::AssumeRoleWebIdentityCredentials.new(
-            region: config[:region],
-            role_arn: config[:role_arn],
-            role_session_name: config[:role_session_name],
-            web_identity_token_file: config[:web_identity_token_file]
+            region: S3.region,
+            role_arn: S3.role_arn,
+            role_session_name: S3.role_session_name,
+            web_identity_token_file: S3.web_identity_token_file
           )
         end
       end
@@ -28,11 +28,7 @@ module CMS
       end
 
       def web_identity_token_file_exists?
-        ::File.exist?(config[:web_identity_token_file])
-      end
-
-      def config
-        @config ||= Rails.application.config.s3.symbolize_keys
+        ::File.exist?(S3.web_identity_token_file)
       end
     end
   end
