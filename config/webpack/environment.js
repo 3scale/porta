@@ -45,22 +45,16 @@ environment.loaders.append('yaml', {
  * is executed by webpack when compiling the assets, and sets the variable `postTransformPublicPath` to an arrow
  * function which will prepend the CDN url in runtime.
  *
- * WEBPACKER_ASSET_HOST contains the value of settings.yml:asset_host in compilation time. When not null, the assets
- * will refer to fonts or images using an absolute URL, in this case we don't want to implement the trick that prepends
- * the CDN url, that would generate incorrect urls with duplicated domain name.
- *
  * https://github.com/3scale/porta/pull/3072
  */
-if(!process.env.WEBPACKER_ASSET_HOST) {
-  const { output } = environment.config;
-  const { publicPath } = output;
-  const fileLoader = environment.loaders.get('file');
+const { output } = environment.config;
+const { publicPath } = output;
+const fileLoader = environment.loaders.get('file');
 
-  output.publicPath = '';
-  Object.assign(fileLoader.use[0].options, {
-    publicPath,
-    postTransformPublicPath: (p) => `window.rails_asset_host + ${p}`
-  });
-}
+output.publicPath = '';
+Object.assign(fileLoader.use[0].options, {
+  publicPath,
+  postTransformPublicPath: (p) => `window.rails_asset_host + ${p}`
+});
 
 module.exports = environment
