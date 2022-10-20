@@ -6,7 +6,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline --link-duplicates",
+    "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline",
     "clean": "rm -rf node_modules/ && yarn cache clean",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "jest": "jest"
