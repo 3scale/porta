@@ -20,7 +20,7 @@ class Provider::Admin::DashboardsController < FrontendController
 
   include DashboardTimeRange
   helper_method :current_range, :previous_range, :new_accounts_presenter, :potential_upgrades_presenter,
-    :backend_apis_presenter, :products_presenter
+                :backend_apis_presenter, :products_presenter
 
   private
 

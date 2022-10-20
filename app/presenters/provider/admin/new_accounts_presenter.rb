@@ -20,25 +20,33 @@ class Provider::Admin::NewAccountsPresenter
         previous: previous_accounts
       },
       newAccountsTotal: new_accounts.values.sum { |value| value[:value] },
-      hasHistory: has_history?,
-      links: {
-        previousRangeAdminBuyersAccount: {
-          url: admin_buyers_accounts_path(search: { created_within: [previous_range.first, previous_range.last] }),
-          value: has_history? ? number_to_percentage(number_to_human(percentual_change), precision: 0) : "0"
-        },
-        currentRangeAdminBuyersAccount: {
-          url: admin_buyers_accounts_path(search: { created_within: [current_range.first, current_range.last] })
-        },
-        lastDayInRangeAdminBuyersAccount: {
-          url: admin_buyers_accounts_path(search: { created_within: [current_range.last, current_range.last] }),
-          value: number_to_human(current_range_sum_value)
-        }
-      },
+      hasHistory: history?,
+      links: new_accounts_links,
       percentualChange: percentual_change
     }
   end
 
   private
+
+  def new_accounts_links
+    last_day_on_current_range = current_range.last
+
+    {
+      previousRangeAdminBuyersAccount: {
+        url: admin_buyers_accounts_path(search: { created_within: [previous_range.first, previous_range.last] }),
+        value: history? ? number_to_percentage(number_to_human(percentual_change), precision: 0) : "0"
+      },
+      currentRangeAdminBuyersAccount: {
+        url: admin_buyers_accounts_path(search: { created_within: [current_range.first, last_day_on_current_range] })
+      },
+      lastDayInRangeAdminBuyersAccount: {
+        url: admin_buyers_accounts_path(
+          search: { created_within: [last_day_on_current_range, last_day_on_current_range] }
+        ),
+        value: number_to_human(current_range_sum_value)
+      }
+    }
+  end
 
   def completed_chart_data
     current_data_keys = new_accounts.keys
@@ -51,23 +59,23 @@ class Provider::Admin::NewAccountsPresenter
   end
 
   def percentual_change
-    ((current_sum.to_f - previous_sum.to_f) / previous_sum.to_f) * 100
+    ((current_sum - previous_sum) / previous_sum) * 100
   end
 
   def current_sum
-    completed_chart_data.values.sum { |chart_data| chart_data[:value] }
+    completed_chart_data.values.sum { |chart_data| chart_data[:value] }.to_f
   end
 
   def previous_sum
-    previous_accounts.values.sum { |chart_data| chart_data[:value] }
+    previous_accounts.values.sum { |chart_data| chart_data[:value] }.to_f
   end
 
   def current_range_sum_value
     incompleted_chart_data.values.sum { |chart_data| chart_data[:value] }
   end
 
-  def has_history?
-    previous_accounts.values.sum { |value| value[:value] } > 0
+  def history?
+    previous_accounts.values.sum { |value| value[:value] }.positive?
   end
 
   def new_accounts

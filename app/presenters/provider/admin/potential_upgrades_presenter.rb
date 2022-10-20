@@ -14,7 +14,7 @@ class Provider::Admin::PotentialUpgradesPresenter
   def dashboard_widget_data
     {
       violations: current_violations,
-      incorrectSetUp: (!is_set_up_correctly? && current_account.accessible_services.any?),
+      incorrectSetUp: (!set_up_correctly? && current_account.accessible_services.any?),
       links: {
         adminServiceApplicationPlans: any_services? ? admin_service_application_plans_path(service) : '',
         settingsAdminService: any_services? ? settings_admin_service_path(service, anchor: 'web_provider') : ''
@@ -32,19 +32,24 @@ class Provider::Admin::PotentialUpgradesPresenter
     current_account.accessible_services.any?
   end
 
-  def is_set_up_correctly?
-    usage_limits = current_account
-      .application_plans.joins(:usage_limits)
-      .grouping { issuer_id }.unscope(:order)
-      .references(:usage_limits).select { id }.count
-
+  # smells like :reek:NestedIterators because of the double any?
+  def set_up_correctly?
     usage_notifications = current_user.accessible_services.pluck(:id, :notification_settings).to_h
 
     usage_notifications.any? do |service_id, settings|
-      web_provider = settings && settings[:web_provider] || []
+      web_provider = settings.to_h.fetch(:web_provider, [])
 
-      usage_limits.key?(service_id) && web_provider.any?{ |level| level >= Alert::VIOLATION_LEVEL }
+      usage_limits.key?(service_id) && web_provider.any? { |level| level >= Alert::VIOLATION_LEVEL }
     end
+  end
+
+  def usage_limits
+    current_account
+      .application_plans.joins(:usage_limits)
+      .grouping { issuer_id }
+      .unscope(:order)
+      .references(:usage_limits)
+      .count(:id)
   end
 
   def current_violations
