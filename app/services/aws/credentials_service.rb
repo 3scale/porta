@@ -35,7 +35,7 @@ module Aws
     attr_reader :params
 
     def valid_params_with(credentials, keys)
-      return false if credentials.empty? || keys.difference(credentials.keys).any?
+      return false if credentials.empty? || (keys - credentials.keys).any?
 
       credentials.all? { |_key, value| value.present? }
     end
