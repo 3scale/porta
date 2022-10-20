@@ -1,5 +1,3 @@
-import '@babel/polyfill'
-import 'core-js/es7/object'
 import { SignupPageWrapper } from 'LoginPage/SignupPageWrapper'
 import { safeFromJsonString } from 'utilities/json-utils'
 

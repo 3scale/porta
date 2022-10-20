@@ -146,3 +146,4 @@ config/cable.yml
 .pnp.*
 package-lock.json
 *.orig
+yarn-error.log

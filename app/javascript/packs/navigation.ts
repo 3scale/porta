@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 import { hideAllToggleable, toggleNavigation } from 'Navigation/utils/toggle_navigation'
 
 document.addEventListener('DOMContentLoaded', () => {

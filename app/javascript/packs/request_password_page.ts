@@ -1,5 +1,3 @@
-import '@babel/polyfill'
-import 'core-js/es7/object'
 import { RequestPasswordWrapper as RequestPassword } from 'LoginPage/RequestPasswordWrapper'
 import { safeFromJsonString } from 'utilities/json-utils'
 
