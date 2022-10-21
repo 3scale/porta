@@ -14,7 +14,7 @@ ensure
 end
 
 def access_user_sessions
-  UserSession.where("revoked_at is null").each {|session| session.update({ accessed_at: Time.zone.now} ) }
+  UserSession.where('revoked_at is null').each { |session| session.update({ accessed_at: Time.zone.now }) }
 end
 
 Given /^the year is (\d+)$/ do |year|

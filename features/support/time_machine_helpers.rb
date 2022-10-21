@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
 module TimeMachineHelpers
+
+  # This method no only moves time to a particular point, it also simulates all scheduled events in the middle.
+  # This is useful for testing cases like removing a user, when the user is not really removed until a month later by
+  # a job that takes care of it. This kind of behavior can be tested this way:
+  #
+  # 1. Remove the user
+  # 2. time_machine 1 month from now
+  # 3. Assert the user has been effectively removed
   def time_machine(till)
-    travel_to(Time.zone.now)
+    freeze_time
 
     while Time.zone.now < till
       travel_to(1.day.from_now)
@@ -17,8 +25,9 @@ module TimeMachineHelpers
   private
 
   def run_jobs
-    run(ThreeScale::Jobs::MONTH) if Time.zone.now == Time.zone.now.beginning_of_month
-    run(ThreeScale::Jobs::WEEK) if Time.zone.now == Time.zone.now.beginning_of_week
+    now = Time.zone.now
+    run(ThreeScale::Jobs::MONTH) if now == now.beginning_of_month
+    run(ThreeScale::Jobs::WEEK) if now == now.beginning_of_week
     run(ThreeScale::Jobs::DAILY)
     run(ThreeScale::Jobs::BILLING)
   end
