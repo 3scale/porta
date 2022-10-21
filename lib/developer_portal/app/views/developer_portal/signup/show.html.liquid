@@ -91,10 +91,10 @@
     </div>
   </div>
 </div>
-{{ 'validateSignup.js' | javascript_include_tag }}
+{{ 'validate_signup.js' | javascript_include_tag }}
 <script type="text/javascript">
   document.querySelector('input:not([type="hidden"])').focus()
-  
+
   const inputCaptcha = document.querySelector('#captchaChecked')
   function onCaptchaSuccess () {
     inputCaptcha.value = 'ok'
