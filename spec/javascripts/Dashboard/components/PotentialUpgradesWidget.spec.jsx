@@ -2,11 +2,10 @@
 
 import React from 'react'
 
-import { PotentialUpgradesWidget } from 'Dashboard/components/PotentialUpgradesWidget'
+import { PotentialUpgradesWidget, Props } from 'Dashboard/components/PotentialUpgradesWidget'
 import { mount } from 'enzyme'
 
-let props
-const defaultProps = {
+const defaultProps: Props = {
   violations: [
     {
       id: 1,
@@ -23,7 +22,7 @@ const defaultProps = {
   }
 }
 
-const mountWrapper = (props) => mount(<PotentialUpgradesWidget {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Props) => mount(<PotentialUpgradesWidget {...{ ...defaultProps, ...props }}/>)
 
 it('should render', () => {
   const wrapper = mountWrapper(defaultProps)
@@ -43,7 +42,7 @@ describe('when the setup is incorrect', () => {
 describe('when the setup is correct', () => {
   describe('and there are violations', () => {
     it('should render a list of violations', () => {
-      let props = { ...defaultProps, incorrectSetUp: false }
+      let props: Props = { ...defaultProps, incorrectSetUp: false }
       const wrapper = mountWrapper(props)
 
       expect(wrapper.find('.DashboardWidgetList').exists()).toBe(true)
@@ -52,7 +51,7 @@ describe('when the setup is correct', () => {
   })
 
   describe('and there are no violations', () => {
-    let props = { ...defaultProps, incorrectSetUp: false, violations: 0 }
+    let props: Props = { ...defaultProps, incorrectSetUp: false, violations: 0 }
     const wrapper = mountWrapper(props)
 
     it('should render a default message', () => {

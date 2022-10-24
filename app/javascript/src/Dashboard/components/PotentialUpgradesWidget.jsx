@@ -15,7 +15,7 @@ type Violation = {
   url: string
 }
 
-type Props = {
+export type Props = {
   violations: [Violation],
   incorrectSetUp: boolean,
   links: {

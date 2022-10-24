@@ -12,12 +12,12 @@ type ChartValues = {
   formatted_value: string
 }
 
-type Props = {
+export type Props = {
   chartData: {
-    values: Map<Date, ChartValues>,
-    complete: Map<Date, ChartValues>,
-    incomplete: Map<Date, ChartValues>,
-    previous: Map<Date, ChartValues>
+    values: Record<string, ChartValues>,
+    complete: Record<string, ChartValues>,
+    incomplete: Record<string, ChartValues>,
+    previous: Record<string, ChartValues>
   },
   newAccountsTotal: number,
   hasHistory: boolean,
