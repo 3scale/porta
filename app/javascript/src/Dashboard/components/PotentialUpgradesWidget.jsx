@@ -76,4 +76,4 @@ const PotentialUpgradesWidget = ({ violations, incorrectSetUp, links }: Props): 
 
 const PotentialUpgradesWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<PotentialUpgradesWidget {...props} />, containerId)
 
-export { PotentialUpgradesWidgetWrapper }
+export { PotentialUpgradesWidget, PotentialUpgradesWidgetWrapper }
