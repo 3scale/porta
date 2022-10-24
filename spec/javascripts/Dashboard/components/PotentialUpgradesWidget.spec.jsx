@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-// import { ProductSelect } from 'NewApplication'
 import { PotentialUpgradesWidget } from 'Dashboard/components/PotentialUpgradesWidget'
 import { mount } from 'enzyme'
 
