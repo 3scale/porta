@@ -5,7 +5,6 @@ import React from 'react'
 import { NewAccountsWidget } from 'Dashboard/components/NewAccountsWidget'
 import { mount } from 'enzyme'
 
-let props
 const defaultProps = {
   chartData: {
     values: {
@@ -51,30 +50,47 @@ const mountWrapper = (props) => mount(<NewAccountsWidget {...{ ...defaultProps, 
 
 it('should render', () => {
   const wrapper = mountWrapper(defaultProps)
+
   expect(wrapper.exists()).toBe(true)
 })
 
 describe('when there is historical data', () => {
-  const wrapper = mountWrapper(defaultProps)
+  describe('and the percentual change is positive', () => {
+    it('should render past data', () => {
+      const wrapper = mountWrapper(defaultProps)
 
-  it('should render past data', () => {
-    expect(wrapper.find('.DashboardWidget-link.u-plus').exists()).toBe(true)
+      expect(wrapper.find('.DashboardWidget-link.u-plus').exists()).toBe(true)
+    })
+  })
+
+  describe('and the percentual change is negative or 0', () => {
+    it('should render past data', () => {
+      let props = { ...defaultProps, percentualChange: 0 }
+      const wrapper = mountWrapper(props)
+
+      expect(wrapper.find('.DashboardWidget-link.u-minus').exists()).toBe(true)
+    })
   })
 
   it('should render past data label', () => {
+    const wrapper = mountWrapper(defaultProps)
+
     expect(wrapper.text().includes('vs. previous 30 days')).toBe(true)
   })
 })
 
 describe('when there is no historical data', () => {
-  props = { ...defaultProps, hasHistory: false }
-  const wrapper = mountWrapper(props)
-
   it('should render current data', () => {
+    let props = { ...defaultProps, hasHistory: false }
+    const wrapper = mountWrapper(props)
+
     expect(wrapper.find('.DashboardWidget-link--today').exists()).toBe(true)
   })
 
   it('should render current data label', () => {
+    let props = { ...defaultProps, hasHistory: false }
+    const wrapper = mountWrapper(props)
+
     expect(wrapper.text().includes('today')).toBe(true)
   })
 })

@@ -27,32 +27,32 @@ const mountWrapper = (props) => mount(<PotentialUpgradesWidget {...{ ...defaultP
 
 it('should render', () => {
   const wrapper = mountWrapper(defaultProps)
+
   expect(wrapper.exists()).toBe(true)
 })
 
 describe('when the setup is incorrect', () => {
-  const wrapper = mountWrapper(defaultProps)
-
   it('should render incorrect setup messages', () => {
+    const wrapper = mountWrapper(defaultProps)
+
     expect(wrapper.text().includes('In order to show Potential Upgrades, add 1 or more usage limits to')).toBe(true)
     expect(wrapper.text().includes('Web Alerts for Admins of this Account of 100%')).toBe(true)
   })
 })
 
 describe('when the setup is correct', () => {
-  const correctSetUpProps = { ...defaultProps, incorrectSetUp: false }
-
   describe('and there are violations', () => {
-    const wrapper = mountWrapper(correctSetUpProps)
-
     it('should render a list of violations', () => {
+      let props = { ...defaultProps, incorrectSetUp: false }
+      const wrapper = mountWrapper(props)
+
       expect(wrapper.find('.DashboardWidgetList').exists()).toBe(true)
       expect(wrapper.find('.DashboardWidgetList-item').exists()).toBe(true)
     })
   })
 
   describe('and there are no violations', () => {
-    props = { ...correctSetUpProps, violations: 0 }
+    let props = { ...defaultProps, incorrectSetUp: false, violations: 0 }
     const wrapper = mountWrapper(props)
 
     it('should render a default message', () => {
