@@ -65,7 +65,7 @@ describe('when there is historical data', () => {
 
   describe('and the percentual change is negative or 0', () => {
     it('should render past data', () => {
-      let props: Props = { ...defaultProps, percentualChange: 0 }
+      const props: Props = { ...defaultProps, percentualChange: 0 }
       const wrapper = mountWrapper(props)
 
       expect(wrapper.find('.DashboardWidget-link.u-minus').exists()).toBe(true)
@@ -81,14 +81,14 @@ describe('when there is historical data', () => {
 
 describe('when there is no historical data', () => {
   it('should render current data', () => {
-    let props: Props = { ...defaultProps, hasHistory: false }
+    const props: Props = { ...defaultProps, hasHistory: false }
     const wrapper = mountWrapper(props)
 
     expect(wrapper.find('.DashboardWidget-link--today').exists()).toBe(true)
   })
 
   it('should render current data label', () => {
-    let props: Props = { ...defaultProps, hasHistory: false }
+    const props: Props = { ...defaultProps, hasHistory: false }
     const wrapper = mountWrapper(props)
 
     expect(wrapper.text().includes('today')).toBe(true)

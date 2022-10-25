@@ -42,7 +42,7 @@ describe('when the setup is incorrect', () => {
 describe('when the setup is correct', () => {
   describe('and there are violations', () => {
     it('should render a list of violations', () => {
-      let props: Props = { ...defaultProps, incorrectSetUp: false }
+      const props: Props = { ...defaultProps, incorrectSetUp: false }
       const wrapper = mountWrapper(props)
 
       expect(wrapper.find('.DashboardWidgetList').exists()).toBe(true)
@@ -51,10 +51,10 @@ describe('when the setup is correct', () => {
   })
 
   describe('and there are no violations', () => {
-    let props: Props = { ...defaultProps, incorrectSetUp: false, violations: 0 }
-    const wrapper = mountWrapper(props)
-
     it('should render a default message', () => {
+      const props: Props = { ...defaultProps, incorrectSetUp: false, violations: 0 }
+      const wrapper = mountWrapper(props)
+
       expect(wrapper.text().includes('No Potential Upgrades. Yet…')).toBe(true)
     })
   })
