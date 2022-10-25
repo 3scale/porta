@@ -7,6 +7,7 @@ ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
+    VARNISH_SCL=rh-varnish5 \
     NODEJS_SCL=rh-nodejs12
 
 WORKDIR /opt/system
@@ -22,9 +23,12 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-c
               mysql \
               postgresql10 postgresql10-devel postgresql10-libs \
               file \
-              rh-nodejs12 \
+              $NODEJS_SCL \
+              $VARNISH_SCL-jemalloc \
     && yum install -y epel-release \
-    && yum -y clean all
+    && yum -y clean all \
+    && printf /opt/rh/rh-varnish5/root/lib64 > /etc/ld.so.conf.d/jemalloc.conf \
+    && ldconfig && ldconfig -p | grep jemalloc
 
 # Install sphinx search
 RUN if [ "`uname -m`" == "x86_64" ]; then \
