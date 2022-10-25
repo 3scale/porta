@@ -2,5 +2,7 @@
 
 <%= cms_form_for(@group) do |f| %>
   <%= render 'form', :f => f %>
-  <%= f.actions :commit %>
+  <%= f.actions do %>
+    <%= f.commit_button %>
+  <% end %>
 <% end %>
