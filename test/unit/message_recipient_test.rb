@@ -18,7 +18,7 @@ class MessageRecipientTest < ActiveSupport::TestCase
     @outbox = []
 
     3.times do |i|
-      Timecop.freeze((i+1).days.ago) do
+      travel_to((i+1).days.ago) do
         @outbox << deliver_message
       end
     end

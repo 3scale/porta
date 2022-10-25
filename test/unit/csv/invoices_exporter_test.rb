@@ -28,7 +28,7 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
   end
 
   test '#to_csv' do
-    Timecop.freeze(Time.utc(2009, 6, 25)) do
+    travel_to(Time.utc(2009, 6, 25)) do
       exporter = Csv::InvoicesExporter.new(@provider, period: 'this_month', data: 'invoices')
       csv = exporter.to_csv
       lines = csv.lines.map(&:strip)
@@ -55,7 +55,7 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
       assert_equal data2.join(','), lines[4]
     end
 
-    Timecop.freeze(Time.utc(1964, 12, 25)) do
+    travel_to(Time.utc(1964, 12, 25)) do
       exporter = Csv::InvoicesExporter.new(@provider, period: 'this_year', data: 'invoices')
       csv = exporter.to_csv
       lines = csv.lines.map(&:strip)
@@ -73,7 +73,7 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
   end
 
   test '#to_csv when buyer_account is nil' do
-    Timecop.freeze(Time.utc(2009, 6, 25)) do
+    travel_to(Time.utc(2009, 6, 25)) do
       @invoice_one.issue_and_pay_if_free!
       @invoice_one.pay!
       @buyer.destroy!

@@ -144,7 +144,7 @@ class ContractTest < ActiveSupport::TestCase
 
   test 'bill plan change with bad period due to time zone' do
     Time.zone = 'CET'
-    Timecop.freeze(Date.parse('2018-01-17')) do
+    travel_to(Date.parse('2018-01-17')) do
       provider = FactoryBot.create(:simple_provider)
       contract = FactoryBot.create(:simple_cinstance, trial_period_expires_at: nil)
       other_plan = FactoryBot.create(:simple_application_plan, service: contract.service, cost_per_month: 3100.0)

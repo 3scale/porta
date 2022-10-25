@@ -53,7 +53,7 @@ class CMS::FileTest < ActiveSupport::TestCase
     file.provider.update_attribute(:timezone, pacific.name)
 
     Time.use_zone pacific do
-      Timecop.freeze(Time.utc(2012)) do
+      travel_to(Time.utc(2012)) do
         file.attachment = hypnotoad
 
         assert_equal Time.zone.now, file.attachment_updated_at

@@ -18,7 +18,7 @@ class Finance::BillingServiceTest < ActionDispatch::IntegrationTest
 
   test 'enqueues with now implicit' do
     now = Time.utc(2018, 1, 16, 8)
-    Timecop.freeze(now) do
+    travel_to(now) do
       BillingWorker.expects(:enqueue).with(@provider, now, nil).returns(true)
       assert Finance::BillingService.async_call(@provider)
     end

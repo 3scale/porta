@@ -801,7 +801,6 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.9)
-    timecop (0.9.1)
     to_regexp (0.2.1)
     tomlrb (2.0.1)
     ts-datetime-delta (2.0.2)
@@ -1036,7 +1035,6 @@ DEPENDENCIES
   swagger-ui_rails2!
   thin
   thinking-sphinx (~> 5.4.0)
-  timecop (~> 0.9)
   ts-datetime-delta
   uglifier
   unicorn

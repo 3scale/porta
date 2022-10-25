@@ -16,14 +16,6 @@ class SymbolizeTest < ActiveSupport::TestCase
     end
   end
 
-  def setup
-    Timecop.freeze
-  end
-
-  def teardown
-    Timecop.return
-  end
-
   def test_symbolization
     usage = UsageLimit.new(period: 'year')
     assert_equal :year, usage.period
@@ -50,21 +42,19 @@ class SymbolizeTest < ActiveSupport::TestCase
   end
 
   test '#changes is symbolized but not #previous_changes' do
-    Timecop.freeze(Time.zone.now.round) do
-      usage = UsageLimit.new
-      usage.period = 'hour'
-      assert_equal({'period' => [nil, :hour]}, usage.changes)
-      usage.save!
+    usage = UsageLimit.new
+    usage.period = 'hour'
+    assert_equal({'period' => [nil, :hour]}, usage.changes)
+    usage.save!
 
-      usage.reload
-      assert_equal({}, usage.changes)
-      usage.period = 'day'
-      assert_equal({'period' => [:hour, :day]}, usage.changes)
+    usage.reload
+    assert_equal({}, usage.changes)
+    usage.period = 'day'
+    assert_equal({'period' => [:hour, :day]}, usage.changes)
 
-      usage.save!
-      # FIXME: sadly previous_changes are not symbolized (yet)
-      assert_equal({'period' => ['hour', 'day']}, usage.previous_changes)
-    end
+    usage.save!
+    # FIXME: sadly previous_changes are not symbolized (yet)
+    assert_equal({'period' => ['hour', 'day']}, usage.previous_changes)
   end
 
   test 'does not symbolizes other attribute' do

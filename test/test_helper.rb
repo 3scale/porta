@@ -70,7 +70,6 @@ class ActiveSupport::TestCase
 
   def teardown
     User.current = nil
-    Timecop.return
   end
 end
 

@@ -29,7 +29,7 @@ class ThreeScale::SsoTest < ActiveSupport::TestCase
     coder = ThreeScale::SSO::Encryptor.new ThreeScale::SSO.generate_sso_key
     token = coder.encrypt_token "user_id"
 
-    Timecop.travel(15.minutes.from_now) do
+    travel_to(15.minutes.from_now) do
       assert_raise(ThreeScale::SSO::ValidationError) { coder.extract! token }
     end
   end
@@ -38,7 +38,7 @@ class ThreeScale::SsoTest < ActiveSupport::TestCase
     coder = ThreeScale::SSO::Encryptor.new ThreeScale::SSO.generate_sso_key, 60
     token = coder.encrypt_token "user_id"
 
-    Timecop.travel(3.minutes.from_now) do
+    travel_to(3.minutes.from_now) do
       assert_raise(ThreeScale::SSO::ValidationError) { coder.extract! token }
     end
   end

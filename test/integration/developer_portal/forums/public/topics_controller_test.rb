@@ -29,7 +29,7 @@ class DeveloperPortal::TopicsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'User cannot edit his topics after the first day' do
-    Timecop.freeze(1.day.ago) { forum_topic }
+    travel_to(1.day.ago) { forum_topic }
 
     put forum_topic_path(forum_topic)
 
