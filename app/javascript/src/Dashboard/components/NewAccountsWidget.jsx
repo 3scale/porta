@@ -6,11 +6,21 @@ import { useState, useEffect } from 'react'
 import { createReactWrapper } from 'utilities'
 import { render as renderChartWidget } from 'Dashboard/chart'
 import { Spinner } from 'Common'
-import type { Record } from 'Types'
 
 type ChartValues = {
   value: number,
   formatted_value: string
+}
+
+type ChartValuesByDate = {
+  [key: string]: ChartValues
+}
+
+type ChartData = {
+  values: ChartValuesByDate,
+  complete?: ChartValuesByDate,
+  incomplete?: ChartValuesByDate,
+  previous?: ChartValuesByDate
 }
 
 type PreviousRangeAdminBuyersAccount = {
@@ -34,12 +44,7 @@ type Links = {
 }
 
 export type Props = {
-  chartData: {
-    values: Record<string, ChartValues>,
-    complete: Record<string, ChartValues>,
-    incomplete: Record<string, ChartValues>,
-    previous: Record<string, ChartValues>
-  },
+  chartData: ChartData,
   newAccountsTotal: number,
   hasHistory: boolean,
   links: Links,
