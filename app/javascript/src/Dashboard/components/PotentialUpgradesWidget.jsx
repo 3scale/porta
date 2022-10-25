@@ -1,13 +1,11 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import { createReactWrapper } from 'utilities'
 import pluralize from 'pluralize'
 
-import 'Dashboard/styles/dashboard.scss'
-
-type Violation = {
+export type Violation = {
   id: number,
   account_id: number,
   account_name: string,
@@ -15,16 +13,18 @@ type Violation = {
   url: string
 }
 
-export type Props = {
-  violations: [Violation],
-  incorrectSetUp: boolean,
-  links: {
-    adminServiceApplicationPlans: string,
-    settingsAdminService: string
-  }
+export type Links = {
+  adminServiceApplicationPlans: string,
+  settingsAdminService: string
 }
 
-const IncorrectSetUpMessages = ({ links }: {links: Props.links}) => (
+export type Props = {
+  violations: Array<Violation>,
+  incorrectSetUp: boolean,
+  links: Links
+}
+
+const IncorrectSetUpMessages = ({ links }: {links: Links}) => (
   <div>
     <p>
       In order to show Potential Upgrades, add 1 or more usage limits to your <a href={links.adminServiceApplicationPlans}>Application Plans</a>.
@@ -35,7 +35,7 @@ const IncorrectSetUpMessages = ({ links }: {links: Props.links}) => (
   </div>
 )
 
-const ViolationsList = ({ violations }: {violations: Props.violations}): React.Node => {
+const ViolationsList = ({ violations }: {violations: Array<Violation>}): React.Node => {
   const violationsList = violations.map(
     violation => <PotentialUpgradeWidgetItem violation={violation} key={violation.account_id}/>
   )

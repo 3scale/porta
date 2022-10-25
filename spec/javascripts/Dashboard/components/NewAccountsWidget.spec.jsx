@@ -2,8 +2,10 @@
 
 import React from 'react'
 
-import { NewAccountsWidget, Props } from 'Dashboard/components/NewAccountsWidget'
+import { NewAccountsWidget } from 'Dashboard/components/NewAccountsWidget'
 import { mount } from 'enzyme'
+
+import type { Props } from 'Dashboard/components/NewAccountsWidget'
 
 const defaultProps: Props = {
   chartData: {

@@ -3,6 +3,8 @@
 import { PotentialUpgradesWidgetWrapper } from 'Dashboard/components/PotentialUpgradesWidget'
 import { safeFromJsonString } from 'utilities'
 
+import type { Props } from 'Dashboard/components/PotentialUpgradesWidget'
+
 const containerId = 'potential-upgrades-widget'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { violations, incorrectSetUp, links } = safeFromJsonString(container.dataset.potentialUpgradesWidget)
+  const { violations, incorrectSetUp, links } = safeFromJsonString<Props>(container.dataset.potentialUpgradesWidget)
 
   PotentialUpgradesWidgetWrapper({
     violations,

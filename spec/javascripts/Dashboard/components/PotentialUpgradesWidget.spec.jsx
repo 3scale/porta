@@ -2,8 +2,10 @@
 
 import React from 'react'
 
-import { PotentialUpgradesWidget, Props } from 'Dashboard/components/PotentialUpgradesWidget'
+import { PotentialUpgradesWidget } from 'Dashboard/components/PotentialUpgradesWidget'
 import { mount } from 'enzyme'
+
+import type { Props } from 'Dashboard/components/PotentialUpgradesWidget'
 
 const defaultProps: Props = {
   violations: [
@@ -52,7 +54,7 @@ describe('when the setup is correct', () => {
 
   describe('and there are no violations', () => {
     it('should render a default message', () => {
-      const props: Props = { ...defaultProps, incorrectSetUp: false, violations: 0 }
+      const props: Props = { ...defaultProps, incorrectSetUp: false, violations: [] }
       const wrapper = mountWrapper(props)
 
       expect(wrapper.text().includes('No Potential Upgrades. Yet…')).toBe(true)

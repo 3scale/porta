@@ -1,15 +1,36 @@
 // @flow
 
-import React, { useState, useEffect } from 'react'
+import * as React from 'react'
+import { useState, useEffect } from 'react'
 
 import { createReactWrapper } from 'utilities'
 import { render as renderChartWidget } from 'Dashboard/chart'
 import { Spinner } from 'Common'
-import 'Dashboard/styles/dashboard.scss'
+import type { Record } from 'Types'
 
 type ChartValues = {
   value: number,
   formatted_value: string
+}
+
+type PreviousRangeAdminBuyersAccount = {
+  url: string,
+  value: string
+}
+
+type CurrentRangeAdminBuyersAccount = {
+  url: string
+}
+
+type LastDayInRangeAdminBuyersAccount = {
+  url: string,
+  value: string
+}
+
+type Links = {
+  previousRangeAdminBuyersAccount: PreviousRangeAdminBuyersAccount,
+  currentRangeAdminBuyersAccount: CurrentRangeAdminBuyersAccount,
+  lastDayInRangeAdminBuyersAccount: LastDayInRangeAdminBuyersAccount
 }
 
 export type Props = {
@@ -21,23 +42,11 @@ export type Props = {
   },
   newAccountsTotal: number,
   hasHistory: boolean,
-  links: {
-    previousRangeAdminBuyersAccount: {
-      url: string,
-      value: string
-    },
-    currentRangeAdminBuyersAccount: {
-      url: string
-    },
-    lastDayInRangeAdminBuyersAccount: {
-      url: string,
-      value: string
-    }
-  },
+  links: Links,
   percentualChange: number
 }
 
-const NewAccountsWidgetTitle = ({ currentRangeAdminBuyersAccount, newAccountsTotal }: { currentRangeAdminBuyersAccount: Props.links.currentRangeAdminBuyersAccount, newAccountsTotal: number }) => (
+const NewAccountsWidgetTitle = ({ currentRangeAdminBuyersAccount, newAccountsTotal }: { currentRangeAdminBuyersAccount: CurrentRangeAdminBuyersAccount, newAccountsTotal: number }) => (
   <h1 className="DashboardWidget-title">
     <a className="DashboardWidget-link" href={currentRangeAdminBuyersAccount.url}>
       <strong data-title-count="true">{newAccountsTotal}</strong> Signups
@@ -45,7 +54,7 @@ const NewAccountsWidgetTitle = ({ currentRangeAdminBuyersAccount, newAccountsTot
   </h1>
 )
 
-const NewAccountsWidgetPercentageInfo = ({ hasHistory, percentualChange, previousRangeAdminBuyersAccount, lastDayInRangeAdminBuyersAccount }: { hasHistory: boolean, percentualChange: number, previousRangeAdminBuyersAccount: Props.links.previousRangeAdminBuyersAccount, lastDayInRangeAdminBuyersAccount: Props.links.lastDayInRangeAdminBuyersAccount }) => (
+const NewAccountsWidgetPercentageInfo = ({ hasHistory, percentualChange, previousRangeAdminBuyersAccount, lastDayInRangeAdminBuyersAccount }: { hasHistory: boolean, percentualChange: number, previousRangeAdminBuyersAccount: PreviousRangeAdminBuyersAccount, lastDayInRangeAdminBuyersAccount: LastDayInRangeAdminBuyersAccount }) => (
   <div className="DashboardWidget-percentageInfo" data-toggle-visibility="true">
     {
       hasHistory
