@@ -10,7 +10,7 @@ class CMS::Group < ApplicationRecord
   validates :name, :provider, presence: true, length: { maximum: 255 }
   validates :name, uniqueness: { scope: [:provider_id] }
 
-  has_many :group_sections, :class_name => 'CMS::GroupSection'
+  has_many :group_sections, :class_name => 'CMS::GroupSection', dependent: :delete_all
   has_many :sections, :class_name => 'CMS::Section', :through => :group_sections
 
   has_many :permissions, :class_name => 'CMS::Permission'
