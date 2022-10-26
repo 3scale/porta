@@ -4,7 +4,8 @@ class DashboardWidgetPresenterTest < Draper::TestCase
   def setup
     Draper::ViewContext.controller = Provider::Admin::Dashboard::WidgetController.new
 
-    @widget = DashboardWidgetPresenter.new(:new_accounts)
+    @service = FactoryBot.build_stubbed(:service)
+    @widget = DashboardWidgetPresenter.new(:service_navigations, service_id: @service)
   end
 
   def test_value
@@ -24,10 +25,10 @@ class DashboardWidgetPresenterTest < Draper::TestCase
   end
 
   def test_url
-    assert_equal 'http://test.host/p/admin/dashboard/new_accounts', @widget.url
+    assert_equal "http://test.host/p/admin/dashboard/service/#{@service.id}/navigations", @widget.url
   end
 
   def test_path
-    assert_equal '/p/admin/dashboard/new_accounts', @widget.path
+    assert_equal "/p/admin/dashboard/service/#{@service.id}/navigations", @widget.path
   end
 end
