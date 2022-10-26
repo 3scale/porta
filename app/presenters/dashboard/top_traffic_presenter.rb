@@ -16,7 +16,6 @@ module Dashboard
     delegate :as_json, :each, :present?, to: :current_items
 
     def current_items
-      binding.pry
       @_current_items ||= begin
 
         top_traffic_query = TopTrafficQuery.new(stats_client)
