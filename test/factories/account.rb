@@ -240,6 +240,7 @@ FactoryBot.define do
     end
   end
 
+  # A simple buyer with an old creation date, useful for invoice tests where the period refers to old dates
   factory(:old_simple_buyer, parent: :simple_buyer) do
     created_at { Time.zone.local(1960, 1, 1) }
   end
