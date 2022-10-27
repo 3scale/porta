@@ -18,16 +18,14 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   def setup
-    @provider = FactoryBot.create(:simple_provider, created_at: Time.zone.local(2000,1,1))
-    @buyer = FactoryBot.create(:simple_buyer,
-                               provider_account: @provider,
-                               created_at: Time.zone.local(2000,1,1))
+    @provider = FactoryBot.create(:simple_provider)
+    @buyer = FactoryBot.create(:old_simple_buyer, provider_account: @provider)
 
     @invoice = FactoryBot.create(:invoice,
-                                 period: Month.new(Time.zone.local(2021, 1, 1)),
-                                 provider_account: @provider,
-                                 buyer_account: @buyer,
-                                 friendly_id: '0000-00-00000001')
+                                  period: Month.new(Time.zone.local(1984, 1, 1)),
+                                  provider_account: @provider,
+                                  buyer_account: @buyer,
+                                  friendly_id: '0000-00-00000001')
     @billing = Finance::BackgroundBilling.new(@invoice)
   end
 
@@ -55,9 +53,9 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'have period, period_start and period_end' do
-    @invoice.update_attribute(:period, Month.new(Time.utc(2021, 4, 23)))
-    assert_equal Time.utc(2021, 4, 1).to_date, @invoice.period_start
-    assert_equal Time.utc(2021, 4, 1).end_of_month.to_date, @invoice.period_end
+    @invoice.update_attribute(:period, Month.new(Time.utc(1986, 4, 23)))
+    assert_equal Time.utc(1986, 4, 1).to_date, @invoice.period_start
+    assert_equal Time.utc(1986, 4, 1).end_of_month.to_date, @invoice.period_end
   end
 
   test 'have no due_on and issued_on date on creation' do
@@ -100,7 +98,7 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'skips validation of default friendly_id' do
-    invoice = FactoryBot.build(:invoice, period: Month.new(Time.zone.local(2021, 1, 1)),
+    invoice = FactoryBot.build(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
                                           provider_account: @provider,
                                           buyer_account: @buyer)
 
@@ -142,15 +140,15 @@ class InvoiceTest < ActiveSupport::TestCase
   class AutoFriendlyIdTest < ActiveSupport::TestCase
 
     def setup
-      @provider = FactoryBot.create(:simple_provider, created_at: Time.zone.local(2000,1,1))
-      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, created_at: Time.zone.local(2000,1,1))
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:old_simple_buyer, provider_account: @provider)
     end
 
     test 'gets sequential friendly_ids after saved' do
       @provider.billing_strategy = FactoryBot.create(:prepaid_billing, numbering_period: 'monthly')
-      @provider.billing_strategy.create_invoice_counter('2021-01')
+      @provider.billing_strategy.create_invoice_counter('1984-01')
 
-      invoice = FactoryBot.build(:invoice, period: Month.new(Time.zone.local(2021, 1, 1)),
+      invoice = FactoryBot.build(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
                                             provider_account: @provider,
                                             buyer_account: @buyer)
 
@@ -158,13 +156,13 @@ class InvoiceTest < ActiveSupport::TestCase
 
       invoice.save!
 
-      assert_equal '2021-01-00000001', invoice.friendly_id
+      assert_equal '1984-01-00000001', invoice.friendly_id
 
-      subsequent_invoice = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(2021, 1, 1)),
+      subsequent_invoice = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)),
                                                         provider_account: @provider,
                                                         buyer_account: @buyer)
 
-      assert_equal '2021-01-00000002', subsequent_invoice.friendly_id
+      assert_equal '1984-01-00000002', subsequent_invoice.friendly_id
     end
   end
 
@@ -272,7 +270,7 @@ class InvoiceTest < ActiveSupport::TestCase
   # TODO: remove - use open? instead
   test 'have current? method' do
     freeze_time do
-      invoice_one = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(2021, 1, 1)), provider_account: @provider, buyer_account: @buyer)
+      invoice_one = FactoryBot.create(:invoice, period: Month.new(Time.zone.local(1984, 1, 1)), provider_account: @provider, buyer_account: @buyer)
       invoice_two = FactoryBot.create(:invoice, provider_account: @provider, buyer_account: @buyer)
 
       refute invoice_one.current?
@@ -353,33 +351,33 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_raises(Invoice::InvalidInvoiceStateException) { @invoice.charge! }
   end
 
-  def setup_2005_and_2022_invoices
+  def setup_1964_and_2009_invoices
     @invoice_one = FactoryBot.create(:invoice,
-                                     buyer_account: @buyer,
-                                     provider_account: @provider,
-                                     period: Month.new(Time.utc(2022, 6, 1)))
+                                      buyer_account: @buyer,
+                                      provider_account: @provider,
+                                      period: Month.new(Time.utc(2009, 6, 1)))
 
     @invoice_two = FactoryBot.create(:invoice,
-                                     provider_account: @provider,
-                                     buyer_account: @buyer,
-                                     period: Month.new(Time.utc(2005, 10, 1)))
+                                      provider_account: @provider,
+                                      buyer_account: @buyer,
+                                      period: Month.new(Time.utc(1964, 10, 1)))
   end
 
-  private :setup_2005_and_2022_invoices
+  private :setup_1964_and_2009_invoices
 
   test 'find only "old ones" with #before scope' do
-    setup_2005_and_2022_invoices
-    assert_equal 0, Invoice.before(Time.utc(2005, 10, 2)).count
+    setup_1964_and_2009_invoices
+    assert_equal 0, Invoice.before(Time.utc(1964, 10, 2)).count
   end
 
   test 'find_by_month' do
-    setup_2005_and_2022_invoices
-    assert_equal @invoice_one, Invoice.find_by_month('2022-06')
-    assert_equal @invoice_two, Invoice.find_by_month('2005-10')
+    setup_1964_and_2009_invoices
+    assert_equal @invoice_one, Invoice.find_by_month('2009-06')
+    assert_equal @invoice_two, Invoice.find_by_month('1964-10')
   end
 
   test 'opened_by_buyer' do
-    setup_2005_and_2022_invoices
+    setup_1964_and_2009_invoices
     assert_equal @invoice_one, Invoice.opened_by_buyer(@buyer)
   end
 
@@ -548,8 +546,8 @@ class InvoiceTest < ActiveSupport::TestCase
   class CounterUpdateTest < ActiveSupport::TestCase
 
     def setup
-      @provider = FactoryBot.create(:simple_provider, created_at: Time.zone.local(2000,1,1))
-      @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, created_at: Time.zone.local(2000,1,1))
+      @provider = FactoryBot.create(:simple_provider)
+      @buyer = FactoryBot.create(:old_simple_buyer, provider_account: @provider)
 
       invoice_period = Month.new(Time.zone.local(2018, 1, 1))
 
@@ -572,10 +570,10 @@ class InvoiceTest < ActiveSupport::TestCase
 
     test 'jumps the counter when friendly id jumps' do
       invoice = FactoryBot.create(:invoice,
-                                  period: Month.new(Time.zone.local(2018, 1, 1)),
-                                  provider_account: @provider,
-                                  buyer_account: @buyer,
-                                  friendly_id: '2018-00000008').reload
+                                    period: Month.new(Time.zone.local(2018, 1, 1)),
+                                    provider_account: @provider,
+                                    buyer_account: @buyer,
+                                    friendly_id: '2018-00000008').reload
 
       assert_equal 8, invoice.counter.invoice_count
 

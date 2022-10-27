@@ -239,4 +239,9 @@ FactoryBot.define do
       Account.stubs(:find_by_domain).with(account.internal_domain).returns(account)
     end
   end
+
+  factory(:old_simple_buyer, parent: :simple_buyer) do
+    created_at { Time.zone.local(1960, 1, 1) }
+  end
+
 end

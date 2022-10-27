@@ -4,7 +4,7 @@ class Csv::InvoicesExporterTest < ActiveSupport::TestCase
 
   def setup
     @provider = FactoryBot.create(:simple_provider, org_name: 'FunkyTech', domain: 'funky-tech.com')
-    @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider, org_legaladdress: 'Null street')
+    @buyer = FactoryBot.create(:old_simple_buyer, provider_account: @provider, org_legaladdress: 'Null street')
 
     @invoice_one = FactoryBot.create(:invoice,
                                       buyer_account: @buyer,
