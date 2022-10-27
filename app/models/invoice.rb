@@ -13,8 +13,6 @@ class Invoice < ApplicationRecord
   MAX_CHARGE_RETRIES = 3
   DECIMALS   = 2
   CHARGE_PRECISION   = 2
-  MIN_YEAR = 1980
-  MAX_YEAR = 2100
 
   enum creation_type: {manual: 'manual', background: 'background'}
 
