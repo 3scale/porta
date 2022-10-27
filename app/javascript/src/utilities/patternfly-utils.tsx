@@ -1,29 +1,30 @@
 import escapeRegExp from 'lodash.escaperegexp'
 import { SelectOption } from '@patternfly/react-core'
 
-import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
+import type { SelectOptionObject as PFSelectOptionObject, SelectOptionProps } from '@patternfly/react-core'
 
-export type Record = {
-  id: number | string,
-  name: string,
-  description?: string
+// TODO: IRecord is duplicated
+export interface IRecord {
+  id: number | string;
+  name: string;
+  description?: string;
 }
 
 export interface SelectOptionObject extends PFSelectOptionObject {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 // TODO: check removing id and name is correct
-export const toSelectOptionObject = (item: Record): SelectOptionObject => ({
+export const toSelectOptionObject = (item: IRecord): SelectOptionObject => ({
   id: String(item.id),
   name: item.name,
   toString: () => item.name
 })
 
-type Props = Record & {
-  disabled?: boolean,
-  className?: string
+export interface ISelectOption extends IRecord {
+  disabled?: boolean;
+  className?: string;
 }
 
 export const toSelectOption = ({
@@ -32,7 +33,7 @@ export const toSelectOption = ({
   description,
   disabled = false,
   className
-}: Props): React.ReactElement => (
+}: ISelectOption): React.ReactElement<SelectOptionProps> => (
   <SelectOption
     key={String(id)}
     className={className}
@@ -47,11 +48,11 @@ export const toSelectOption = ({
 /**
  * It creates a callback that's to be passed to a PF4 select of variant "typeahead"
  */
-export const handleOnFilter = <T extends Record>(
+export const handleOnFilter = <T extends IRecord>(
   items: T[],
-  getSelectOptionsForItems?: (items: T[]) => React.ReactElement[]
+  getSelectOptionsForItems?: (items: T[]) => React.ReactElement<SelectOptionProps>[]
 ) => {
-  return (e: React.SyntheticEvent<HTMLInputElement>) => {
+  return (e: React.SyntheticEvent<HTMLInputElement>): React.ReactElement<SelectOptionProps>[] => {
     const { value } = e.currentTarget
     const term = new RegExp(escapeRegExp(value), 'i')
 

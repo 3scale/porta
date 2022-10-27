@@ -2,8 +2,8 @@ import { LoginMainFooterBandItem } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  requestPasswordResetPath: string
+interface Props {
+  requestPasswordResetPath: string;
 }
 
 const ForgotCredentials: FunctionComponent<Props> = ({ requestPasswordResetPath }) => (

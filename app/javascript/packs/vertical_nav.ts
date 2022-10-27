@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const { activeItem, activeSection, currentApi, sections } = container.dataset
 
   VerticalNav({
-    sections: safeFromJsonString(sections) || [],
+    sections: safeFromJsonString(sections) ?? [],
     activeSection,
     activeItem,
     currentApi: safeFromJsonString(currentApi)

@@ -1,7 +1,6 @@
 import { hideAllToggleable, toggleNavigation } from 'Navigation/utils/toggle_navigation'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const store = window.localStorage
   const togglers = document.getElementsByClassName('u-toggler') as HTMLCollectionOf<HTMLElement>
   const vertNavTogglers = document.getElementsByClassName('vert-nav-toggle') as HTMLCollectionOf<HTMLElement>
   const eventOptions = {
@@ -16,20 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.body.addEventListener('click', (e: any /* Event of some sort */) => {
-    if (e.target.type !== 'search') {
+  document.body.addEventListener('click', (e: Event) => {
+    if ((e.target as HTMLInputElement).type !== 'search') {
       hideAllToggleable()
     }
   }, eventOptions)
 
-  addClickEventToCollection(togglers, function (e) {
+  addClickEventToCollection(togglers, function (e: Event) {
     e.stopPropagation()
-    toggleNavigation(e.currentTarget as EventTarget)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: can we safely assume the target is there? Also, why currentTarget here but target above?
+    toggleNavigation(e.currentTarget!)
     e.preventDefault()
   })
 
   addClickEventToCollection(vertNavTogglers, function () {
-    const shouldVertNavCollapse = !JSON.parse(store.isVerticalNavCollapsed || false)
+    const store = window.localStorage
+    // @ts-expect-error FIXME: should or should not? Figure it out
+    const shouldVertNavCollapse = !JSON.parse((store.isVerticalNavCollapsed as string) || false)
 
     document.querySelector('.vertical-nav')
       ?.classList

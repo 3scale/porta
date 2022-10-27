@@ -1,4 +1,3 @@
-import 'url-polyfill'
 import { Component } from 'react'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage } from '@patternfly/react-core'
@@ -10,56 +9,56 @@ import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
 import 'LoginPage/assets/styles/loginPage.scss'
 
+import type { ReactNode } from 'react'
 import type { ProvidersProps } from 'LoginPage/loginForms/AuthenticationProviders'
 import type { FlashMessage } from 'Types'
 
-type Props = {
-  authenticationProviders: Array<ProvidersProps>,
-  flashMessages?: Array<FlashMessage>,
-  providerSessionsPath: string,
-  providerRequestPasswordResetPath: string,
-  show3scaleLoginForm: boolean,
-  disablePasswordReset: boolean,
+interface Props {
+  authenticationProviders?: ProvidersProps[];
+  flashMessages?: FlashMessage[];
+  providerSessionsPath: string;
+  providerRequestPasswordResetPath: string;
+  show3scaleLoginForm: boolean;
+  disablePasswordReset: boolean;
   session: {
-    username: string | null | undefined
-  }
+    username: string | null | undefined;
+  };
 }
 
-type State = {
-  loginTitle: string
+interface State {
+  loginTitle: string;
 }
 
-// TODO: make this a function component
-// eslint-disable-next-line react/require-optimization
+// eslint-disable-next-line react/require-optimization -- TODO: make this a function component
 class SimpleLoginPage extends Component<Props, State> {
-  constructor (props: Props) {
+  public constructor (props: Props) {
     super(props)
     this.state = {
       loginTitle: 'Log in to your account'
     }
   }
 
-  showForgotCredentials () {
+  private showForgotCredentials () {
     const { disablePasswordReset, providerRequestPasswordResetPath, show3scaleLoginForm } = this.props
     const showResetPasswordLink = show3scaleLoginForm && !disablePasswordReset
     return showResetPasswordLink && <ForgotCredentials requestPasswordResetPath={providerRequestPasswordResetPath} />
   }
 
-  loginForm () {
+  private loginForm () {
     const hasAuthenticationProviders = this.props.authenticationProviders
     const show3scaleLoginForm = this.props.show3scaleLoginForm
     return (
       <>
-        { show3scaleLoginForm && (
+        {show3scaleLoginForm && (
           <Login3scaleForm
             providerSessionsPath={this.props.providerSessionsPath}
             session={this.props.session}
           />
         )}
-        { hasAuthenticationProviders && (
+        {hasAuthenticationProviders && (
           <div className="providers-separator">
             <AuthenticationProviders
-              authenticationProviders={this.props.authenticationProviders}
+              authenticationProviders={hasAuthenticationProviders}
             />
           </div>
         )}
@@ -67,7 +66,8 @@ class SimpleLoginPage extends Component<Props, State> {
     )
   }
 
-  render () {
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public render (): ReactNode {
     return (
       <LoginPage
         backgroundImgAlt="Red Hat 3scale API Management"
@@ -77,14 +77,14 @@ class SimpleLoginPage extends Component<Props, State> {
         forgotCredentials={this.showForgotCredentials()}
         loginTitle={this.state.loginTitle}
       >
-        { this.props.flashMessages && <FlashMessages flashMessages={this.props.flashMessages} /> }
-        { this.loginForm() }
+        {this.props.flashMessages && <FlashMessages flashMessages={this.props.flashMessages} />}
+        {this.loginForm()}
       </LoginPage>
     )
   }
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const LoginPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<SimpleLoginPage {...props} />, containerId)
+const LoginPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<SimpleLoginPage {...props} />, containerId) }
 
 export { SimpleLoginPage, LoginPageWrapper, Props }

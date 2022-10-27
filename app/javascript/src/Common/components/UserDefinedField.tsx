@@ -4,11 +4,11 @@ import { Select } from 'Common/components/Select'
 import type { FunctionComponent } from 'react'
 import type { FieldDefinition } from 'Types'
 
-type Props = {
-  fieldDefinition: FieldDefinition,
-  value: string,
-  onChange: (value: string) => void,
-  validationErrors?: string[]
+interface Props {
+  fieldDefinition: FieldDefinition;
+  value: string;
+  onChange: (value: string) => void;
+  validationErrors?: string[];
 }
 
 const UserDefinedField: FunctionComponent<Props> = ({
@@ -21,11 +21,11 @@ const UserDefinedField: FunctionComponent<Props> = ({
 
   const item = value ? { id: value, name: value } : null
 
-  const handleOnSelect = (i: null | {
-    description?: string,
-    id: number | string,
-    name: string
-  }) => onChange(i !== null ? i.name : '')
+  const handleOnSelect = (i: {
+    description?: string;
+    id: number | string;
+    name: string;
+  } | null) => { onChange(i !== null ? i.name : '') }
 
   const isValid = validationErrors.length === 0
   // TODO: 'isValid' prop is deprecated, when PF4 is up-to-date replace it with:

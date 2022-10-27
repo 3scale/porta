@@ -1,35 +1,35 @@
-import type { compose } from "redux"
-
-export {}
+/* eslint-disable @typescript-eslint/naming-convention */
+import type SwaggerUI from 'swagger-ui'
+import type { compose } from 'redux'
 
 declare global {
   interface Window {
-    $: JQueryStatic
-    statsUsage: any
-    statsDaysOfWeek: any
-    statsHoursOfDay: any
-    statsTopApps: any
-    statsApplication: any
-    statsResponseCodes: any
-    SwaggerUI: (args: any, serviceEndpoint: string) => void
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: typeof compose
-    serviceInitialize: any
+    $: JQueryStatic;
+    statsUsage: unknown;
+    statsDaysOfWeek: unknown;
+    statsHoursOfDay: unknown;
+    statsTopApps: unknown;
+    statsApplication: unknown;
+    statsResponseCodes: unknown;
+    SwaggerUI: (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) => void;
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+    serviceInitialize: unknown;
     Stats: {
-      statsApplication: any
-    }
+      statsApplication: unknown;
+    };
     analytics: {
-      trackLink: (container: HTMLElement, msg: string) => void
-    }
+      trackLink: (container: HTMLElement, msg: string) => void;
+    };
     dashboardWidget: {
-      loadAudienceWidget: (widgetPath: string) => void
-    }
-    renderChartWidget: (widget: any, data: any) => void
+      loadAudienceWidget: (widgetPath: string) => void;
+    };
+    renderChartWidget: (widget: string, data: unknown) => void;
   }
 
   interface JQueryStatic {
     flash: {
-      notice: (msg: string) => void
-      error: (msg: string) => void
-    }
+      notice: (msg: string) => void;
+      error: (msg: string) => void;
+    };
   }
 }

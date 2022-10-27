@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment -- FIXME */
 import { PoliciesWrapper as PoliciesWidget } from 'Policies'
 
 document.addEventListener('DOMContentLoaded', () => {

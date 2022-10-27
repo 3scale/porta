@@ -4,7 +4,7 @@ import { useClickOutside } from 'utilities/useClickOutside'
 
 import type { FunctionComponent } from 'react'
 
-const HookedComponent: FunctionComponent<{ callback: jest.Mock}> = ({ callback }) => {
+const HookedComponent: FunctionComponent<{ callback: jest.Mock }> = ({ callback }) => {
   const ref = useRef(null)
   useClickOutside(ref, callback)
 
@@ -26,13 +26,12 @@ it('should and and remove a mousedown event listener', () => {
 })
 
 it.skip('should call the callback when clicked outside', async () => {
-  const callback = jest.fn()
+  // const callback = jest.fn()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const wrapper = mount(
-    <div id="container">
-      <HookedComponent callback={callback} />
-      <span>TODO: Click here and expect callback to be called</span>
-    </div>
-  )
+  // const wrapper = mount(
+  //   <div id="container">
+  //     <HookedComponent callback={callback} />
+  //     <span>TODO: Click here and expect callback to be called</span>
+  //   </div>
+  // )
 })

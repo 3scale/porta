@@ -1,5 +1,4 @@
-/* eslint-disable react/no-multi-comp */
-// TODO: Replace this component when updating patternfly-react.
+/* eslint-disable react/no-multi-comp -- TODO: Replace this components when updating patternfly-react. */
 
 import type { FunctionComponent, PropsWithChildren } from 'react'
 

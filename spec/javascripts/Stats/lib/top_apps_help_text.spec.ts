@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsTopAppsHelpText } from 'Stats/provider/stats_top_apps'
 
 describe('StatsTopAppsHelpText', () => {

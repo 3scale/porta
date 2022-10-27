@@ -9,10 +9,10 @@ import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
 
-type Props = {
-  flashMessages: Array<FlashMessage>,
-  providerLoginPath: string,
-  providerPasswordPath: string
+interface Props {
+  flashMessages?: FlashMessage[];
+  providerLoginPath: string;
+  providerPasswordPath: string;
 }
 
 const RequestPassword: FunctionComponent<Props> = ({
@@ -36,6 +36,6 @@ const RequestPassword: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const RequestPasswordWrapper = (props: Props, containerId: string): void => createReactWrapper(<RequestPassword {...props} />, containerId)
+const RequestPasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<RequestPassword {...props} />, containerId) }
 
 export { RequestPassword, RequestPasswordWrapper, Props }

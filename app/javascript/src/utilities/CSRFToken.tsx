@@ -1,8 +1,10 @@
-type Props = {
-  win?: Window
+import type { ReactElement } from 'react'
+
+interface Props {
+  win?: Window;
 }
 
-const CSRFToken = ({ win = window }: Props) => {
+const CSRFToken = ({ win = window }: Props): ReactElement => {
   function getMetaContent (metaName: string) {
     const meta = win.document.querySelector<HTMLMetaElement>(`head > meta[name~=${metaName}][content]`)
     return meta ? meta.content : undefined
@@ -17,4 +19,4 @@ const CSRFToken = ({ win = window }: Props) => {
   )
 }
 
-export { CSRFToken }
+export { CSRFToken, Props }

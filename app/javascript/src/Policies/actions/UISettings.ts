@@ -1,25 +1,25 @@
 import type { Action } from 'redux'
 
-export type UIComponent = 'chain' | 'registry' | 'policyConfig'
+export type UIComponent = 'chain' | 'policyConfig' | 'registry'
 
 export type ShowUIComponentAction = Action<'SHOW_UI_COMPONENT'> & {
-  component: UIComponent
+  component: UIComponent;
 }
 export function showUiComponent (component: UIComponent): ShowUIComponentAction {
   return { type: 'SHOW_UI_COMPONENT', component }
 }
 
 export type HideUIComponentAction = Action<'HIDE_UI_COMPONENT'> & {
-  component: UIComponent
+  component: UIComponent;
 }
 export function hideUiComponent (component: UIComponent): HideUIComponentAction {
   return { type: 'HIDE_UI_COMPONENT', component }
 }
 
 export type UIComponentTransitionAction = Action<'UI_COMPONENT_TRANSITION'> & {
-  hide: UIComponent,
-  show: UIComponent
+  hide: UIComponent;
+  show: UIComponent;
 }
-export function uiComponentTransition ({ hide, show }: { hide: UIComponent, show: UIComponent }): UIComponentTransitionAction {
+export function uiComponentTransition ({ hide, show }: { hide: UIComponent; show: UIComponent }): UIComponentTransitionAction {
   return { type: 'UI_COMPONENT_TRANSITION', hide, show }
 }

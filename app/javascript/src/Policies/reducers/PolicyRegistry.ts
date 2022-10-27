@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { initialState } from 'Policies/reducers/initialState'
 import { createReducer } from 'Policies/util'
 

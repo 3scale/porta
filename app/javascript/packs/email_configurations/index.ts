@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = container
 
-  const emailConfigurations = safeFromJsonString<EmailConfiguration[]>(dataset.emailConfigurations) || []
-  const emailConfigurationsCount = safeFromJsonString<number>(dataset.emailConfigurationsCount) || 0
-  const newEmailConfigurationPath = dataset.newEmailConfigurationPath || ''
+  const emailConfigurations = safeFromJsonString<EmailConfiguration[]>(dataset.emailConfigurations) ?? []
+  const emailConfigurationsCount = safeFromJsonString<number>(dataset.emailConfigurationsCount) ?? 0
+  const newEmailConfigurationPath = dataset.newEmailConfigurationPath ?? ''
 
   IndexPageWrapper({
     emailConfigurations,

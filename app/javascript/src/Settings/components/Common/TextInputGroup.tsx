@@ -14,7 +14,6 @@ const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({
   inputType = 'text'
 }) => {
   const [inputValue, setInputValue] = useState(value)
-  const onChange = (value: string) => setInputValue(value)
   return (
     <FormGroup fieldId={`service_proxy_attributes_${name}_input`} helperText={hint} label={label}>
       <TextInput
@@ -24,7 +23,7 @@ const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({
         placeholder={placeholder}
         type={inputType}
         value={isDefaultValue ? defaultValue : inputValue}
-        onChange={onChange}
+        onChange={setInputValue}
       />
     </FormGroup>
   )

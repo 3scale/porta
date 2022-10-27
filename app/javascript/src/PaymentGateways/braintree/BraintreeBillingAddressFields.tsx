@@ -6,11 +6,11 @@ import { Input } from 'PaymentGateways/braintree/components/Input'
 import type { ChangeEventHandler, FunctionComponent } from 'react'
 import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 
-type Props = {
-  countriesList: string[][],
-  billingAddressData: BillingAddressData,
-  setBillingAddressData: (obj: BillingAddressData) => void,
-  selectedCountryCode: string
+interface Props {
+  countriesList: string[][];
+  billingAddressData: BillingAddressData;
+  setBillingAddressData: (obj: BillingAddressData) => void;
+  selectedCountryCode: string;
 }
 
 const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
@@ -48,7 +48,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             id="customer_credit_card_billing_address_company"
             name="customer[credit_card][billing_address][company]"
             value={billingAddressData.company}
-            onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'company')}
+            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'company') }}
           />
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_street_address_input">
@@ -62,7 +62,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             id="customer_credit_card_billing_address_street_address"
             name="customer[credit_card][billing_address][street_address]"
             value={billingAddressData.address1}
-            onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'address1')}
+            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'address1') }}
           />
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_postal_code_input">
@@ -76,7 +76,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             id="customer_credit_card_billing_address_postal_code"
             name="customer[credit_card][billing_address][postal_code]"
             value={billingAddressData.zip}
-            onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'zip')}
+            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'zip') }}
           />
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_locality_input">
@@ -90,7 +90,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             id="customer_credit_card_billing_address_locality"
             name="customer[credit_card][billing_address][locality]"
             value={billingAddressData.city}
-            onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'city')}
+            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'city') }}
           />
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_region_input">
@@ -102,7 +102,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             id="customer_credit_card_billing_address_region"
             name="customer[credit_card][billing_address][region]"
             value={billingAddressData.state}
-            onChange={(e) => onChangeBillingAddressData(e.currentTarget.value, 'state')}
+            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'state') }}
           />
           <div className="col-md-6 col-md-offset-4">
             The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. <strong>If unsure, leave blank</strong>

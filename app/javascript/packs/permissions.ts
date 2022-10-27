@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const initialState = safeFromJsonString<Props['initialState']>(container.dataset.state)
-  const services = safeFromJsonString<Props['services']>(container.dataset.services) || []
-  const features = safeFromJsonString<Props['features']>(container.dataset.features) || []
+  const services = safeFromJsonString<Props['services']>(container.dataset.services) ?? []
+  const features = safeFromJsonString<Props['features']>(container.dataset.features) ?? []
 
   PermissionsFormWrapper({ features, initialState, services }, containerId)
 })

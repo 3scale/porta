@@ -1,20 +1,20 @@
 import { Button } from '@patternfly/react-core'
 import { Select } from 'Common/components/Select'
 
-import type { ServicePlan } from 'NewApplication/types'
+import type { Plan } from 'NewApplication/types'
 
-type Props = {
-  servicePlan: ServicePlan | null,
-  servicePlans: ServicePlan[] | null,
-  onSelect: (servicePlan: ServicePlan | null) => void,
-  isPlanContracted: boolean,
-  serviceSubscriptionsPath: string,
-  createServicePlanPath: string,
-  isDisabled?: boolean
+interface Props {
+  servicePlan: Plan | null;
+  servicePlans: Plan[] | null;
+  onSelect: (servicePlan: Plan | null) => void;
+  isPlanContracted: boolean;
+  serviceSubscriptionsPath: string;
+  createServicePlanPath: string;
+  isDisabled?: boolean;
 }
 
 const ServicePlanSelect: React.FunctionComponent<Props> = ({
-  isDisabled,
+  isDisabled = false,
   isPlanContracted,
   servicePlans,
   servicePlan,
@@ -49,7 +49,7 @@ const ServicePlanSelect: React.FunctionComponent<Props> = ({
       isDisabled={isDisabled || isPlanContracted}
       isRequired={!isPlanContracted}
       item={servicePlan}
-      items={servicePlans || []}
+      items={servicePlans ?? []}
       label="Service plan"
       name="cinstance[service_plan_id]"
       placeholderText="Select a service plan"

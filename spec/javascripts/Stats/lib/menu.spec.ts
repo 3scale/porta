@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { StatsMenu } from 'Stats/lib/menu'
 import { StatsStore } from 'Stats/lib/store'
 import { StatsState } from 'Stats/lib/state'
@@ -20,6 +25,7 @@ describe('StatsMenu', () => {
 
   class FakeState {
     store: typeof StatsStore
+
     state: Partial<typeof StatsState['State']>
 
     constructor (store: typeof StatsStore) {
@@ -64,7 +70,7 @@ describe('StatsMenu', () => {
     })
 
     it('should render HTML', () => {
-      const element = document.querySelector('#menu') as Element
+      const element = document.querySelector('#menu')!
 
       expect(element.querySelectorAll('ol > li a[data-number][data-unit]')).toHaveLength(4)
       expect(element.querySelectorAll('select > option')).toHaveLength(3)
@@ -72,22 +78,22 @@ describe('StatsMenu', () => {
     })
 
     it('should set the right period state', () => {
-      const periodLink = document.querySelector('#menu .period-24-hour') as HTMLButtonElement
+      const periodLink = document.querySelector<HTMLButtonElement>('#menu .period-24-hour')!
       periodLink.click()
 
-      expect(menu.statsState!.state.dateRange.granularity).toBe('hour')
-      expect(menu.statsState!.state.dateRange.period.number).toBe(24)
+      expect(menu.statsState.state.dateRange.granularity).toBe('hour')
+      expect(menu.statsState.state.dateRange.period.number).toBe(24)
     })
 
     it('should set the right granularity when selected', () => {
-      const menuElement = document.querySelector('#menu') as Element
-      const select = menuElement.querySelector('select') as HTMLSelectElement
+      const menuElement = document.querySelector('#menu')!
+      const select = menuElement.querySelector('select')!
       select.querySelectorAll('option')[2].selected = true
 
       const event = new Event('change')
       select.dispatchEvent(event)
 
-      expect(menu.statsState!.state.dateRange.granularity).toBe('month')
+      expect(menu.statsState.state.dateRange.granularity).toBe('month')
     })
   })
 
@@ -109,7 +115,7 @@ describe('StatsMenu', () => {
 
       menu.render()
 
-      const periodLink = document.querySelector('#menu .period-24-hour') as HTMLButtonElement
+      const periodLink = document.querySelector<HTMLButtonElement>('#menu .period-24-hour')!
 
       periodLink.click()
 
@@ -128,9 +134,9 @@ describe('StatsMenu', () => {
       const menu = new StatsMenu({ statsState, periods: PERIODS, container: '#menu' })
 
       menu.render()
-      menu.statsState!.store.getStateFromURL()
+      menu.statsState.store.getStateFromURL()
 
-      const statsMenu = document.querySelector('.StatsMenu') as Element
+      const statsMenu = document.querySelector('.StatsMenu')!
 
       expect(statsMenu.querySelector('.StatsMenu-customLink--since')!.innerHTML).toBe('08/01/2015')
       expect(statsMenu.querySelector('.StatsMenu-customLink--until')!.innerHTML).toBe('08/10/2015')

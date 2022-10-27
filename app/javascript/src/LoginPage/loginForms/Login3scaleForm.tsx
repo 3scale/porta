@@ -8,20 +8,22 @@ import { TextField, PasswordField } from 'LoginPage/loginForms/FormGroups'
 import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 import { validateSingleField } from 'LoginPage/utils/formValidation'
 
-type Props = {
-  providerSessionsPath: string,
+import type { ReactNode } from 'react'
+
+interface Props {
+  providerSessionsPath: string;
   session: {
-    username: string | null | undefined
-  }
+    username: string | null | undefined;
+  };
 }
 
-type State = {
-  username: string,
-  password: string,
+interface State {
+  username: string;
+  password: string;
   validation: {
-    username?: boolean,
-    password?: boolean
-  }
+    username?: boolean;
+    password?: boolean;
+  };
 }
 
 const USERNAME_ATTRS = {
@@ -39,10 +41,10 @@ const PASSWORD_ATTRS = {
 // TODO: resolve this react/require-optimization
 // eslint-disable-next-line react/require-optimization
 class Login3scaleForm extends React.Component<Props, State> {
-  constructor(props: Props) {
+  public constructor (props: Props) {
     super(props)
     this.state = {
-      username: this.props.session.username || '',
+      username: this.props.session.username ?? '',
       password: '',
       validation: {
         username: this.props.session.username ? true : undefined,
@@ -51,24 +53,20 @@ class Login3scaleForm extends React.Component<Props, State> {
     }
   }
 
-  handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
+  public handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = validateSingleField(event)
-    const { name } = event.currentTarget
-
-    this.setState((prevState) => {
-      const validation = {
-        ...prevState.validation,
-        [name]: isValid
-      }
-
-      return {
-        [name]: value,
-        validation
-      } as State
-    })
+    const validation = {
+      // eslint-disable-next-line react/no-access-state-in-setstate -- FIXME: properly type this method
+      ...this.state.validation,
+      [event.currentTarget.name]: isValid
+    }
+    this.setState({
+      [event.currentTarget.name]: value,
+      validation
+    } as unknown as State)
   }
 
-  render () {
+  public render (): ReactNode {
     const { username, password, validation } = this.state
     const usernameInputProps = {
       isRequired: true,
@@ -90,7 +88,7 @@ class Login3scaleForm extends React.Component<Props, State> {
       onChange: this.handleInputChange,
       autoFocus: Boolean(username)
     } as const
-    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
+    const formDisabled = Object.values(this.state.validation).some(value => !value)
     return (
       <Form
         noValidate

@@ -1,4 +1,7 @@
+// TODO: remove or refactor this. It is not used.
 import validate from 'validate.js'
+
+import type { FormEvent } from 'react'
 
 const constraintsTypes = {
   text: {
@@ -16,17 +19,13 @@ const constraintsTypes = {
   }
 }
 
-type HTMLForm = HTMLFormElement | Record<any, any> | null
-
-const validateForm = (form: HTMLForm, constraints: Record<any, any>): undefined | {
-  string: string[]
-} => {
-  return validate(form, constraints)
+const validateForm = (form: unknown, constraints: unknown): Record<string, string[]> | undefined => {
+  return validate(form, constraints) as Record<string, string[]>
 }
 
-const validateSingleField = (event: React.SyntheticEvent<HTMLInputElement>): boolean => {
+const validateSingleField = (event: FormEvent<HTMLInputElement>): boolean => {
   const { value, type } = event.currentTarget
-  const fieldError: undefined | string[] = validate.single(value, constraintsTypes[type as keyof typeof constraintsTypes])
+  const fieldError = validate.single(value, constraintsTypes[type as keyof typeof constraintsTypes]) as (string[] | undefined)
   return !fieldError
 }
 

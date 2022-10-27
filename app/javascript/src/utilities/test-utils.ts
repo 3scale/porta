@@ -6,27 +6,27 @@
 
 import type { ReactWrapper } from 'enzyme'
 
-function selectOption<T> (wrapper: ReactWrapper<T>, name: string) {
+function selectOption (wrapper: ReactWrapper<unknown>, name: string): void {
   openSelect(wrapper)
   wrapper.find('.pf-c-select__menu-item')
     .findWhere(node => node.type() === 'button' && node.text() === name)
     .simulate('click')
 }
 
-function openSelect<T> (wrapper: ReactWrapper<T>) {
+function openSelect (wrapper: ReactWrapper<unknown>): void {
   wrapper.find('Select button.pf-c-select__toggle-button').simulate('click')
 }
 
-function openSelectWithModal<T> (wrapper: ReactWrapper<T>) {
-  // HACK: suppress error logs during this step cause wrapping it inside act() makes the test fail
+function openSelectWithModal (wrapper: ReactWrapper<unknown>): void {
+  // HACK: This function should be called inside act(). However, that makes the test fail so suppress error logs instead.
   jest.spyOn(console, 'error').mockImplementationOnce(() => '')
 
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
 }
 
-function closeSelectWithModal<T> (wrapper: ReactWrapper<T>) {
-  wrapper.find(`.pf-c-modal-box`).find('.pf-c-button[aria-label="Close"]').simulate('click')
+function closeSelectWithModal (wrapper: ReactWrapper<unknown>): void {
+  wrapper.find('.pf-c-modal-box').find('.pf-c-button[aria-label="Close"]').simulate('click')
 }
 
 /**
@@ -36,42 +36,52 @@ function closeSelectWithModal<T> (wrapper: ReactWrapper<T>) {
  * @example
  * mockLocation('https://example.org)
  * expect(window.location).toHaveBeenCalledWith(...)
- * @param {string} href - the URL to be expected
+ * @param href The URL to be expected
  */
-function mockLocation (href: string) {
+function mockLocation (href: string): void {
   const location = { href: href, toString: () => href, replace: jest.fn() } as unknown as Location
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- HACK: to be able to delete location
   delete (window as any).location
   window.location = location
 }
 
 /**
  * In a form, checks if the submit button is disabled
- * @param {ReactWrapper} wrapper - The enzyme react wrapper, must target a form
- * @return {boolean}
+ * @param wrapper - The enzyme react wrapper
  */
-function isSubmitDisabled<T> (wrapper: ReactWrapper<T>): boolean {
+function isSubmitDisabled (wrapper: ReactWrapper<unknown>): boolean {
   return Boolean(wrapper.update().find('button.pf-m-primary[type="submit"]').prop('disabled'))
 }
 
 /**
  * Updates the value of an HTML input.
- * @param {ReactWrapper} wrapper - The enzyme react wrapper
- * @param {string} value - The text value to put in the input
- * @param {string | ReactWrapper | void} input - Can be either the input Node or a CSS selector. Otherwise the first input element found will be used.
+ * @param wrapper The enzyme react wrapper
+ * @param value The text value to put in the input
+ * @param selectorOrWrapper Can be either the input Node or a CSS selector. Otherwise the first input element found will be used.
  */
-function updateInput<T> (
-  wrapper: ReactWrapper<T>,
+function updateInput (
+  wrapper: ReactWrapper<unknown>,
   value: string,
-  input: string | ReactWrapper = 'input'
-) {
-  const _input = typeof input === 'string' ? wrapper.find(input).at(0) : input
-  const node: HTMLInputElement = _input.getDOMNode()
+  selectorOrWrapper: ReactWrapper | string = 'input'
+): void {
+  const input = typeof selectorOrWrapper === 'string' ? wrapper.find(selectorOrWrapper).at(0) : selectorOrWrapper
+  const node: HTMLInputElement = input.getDOMNode()
 
   node.value = value
-  _input.update()
-  _input.simulate('change')
+  input.update()
+  input.simulate('change')
+}
+
+/**
+ * Asserts existence (or absence) of a list of form group elements
+ * TODO: should find based on input name: input[type="hidden"][name="${name}"]
+ * @param wrapper The enzyme react wrapper
+ * @param inputs Array of objects containing target ids and their presence
+ */
+function assertInputs (wrapper: ReactWrapper<unknown>, inputs: { id: string; present: boolean }[]): void {
+  const formGroups = wrapper.find('.pf-c-form__group')
+  inputs.forEach(({ id, present }) => { expect(formGroups.exists(`[htmlFor="${id}"]`)).toEqual(present) })
 }
 
 export {
@@ -81,5 +91,6 @@ export {
   closeSelectWithModal,
   mockLocation,
   isSubmitDisabled,
-  updateInput
+  updateInput,
+  assertInputs
 }

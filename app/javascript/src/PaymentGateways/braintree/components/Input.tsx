@@ -1,11 +1,11 @@
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  id: string,
-  required?: boolean,
-  name: string,
-  value: string,
-  onChange?: (event: React.SyntheticEvent<HTMLInputElement>) => void
+interface Props {
+  id: string;
+  required?: boolean;
+  name: string;
+  value: string;
+  onChange?: (event: React.SyntheticEvent<HTMLInputElement>) => void;
 }
 
 const Input: FunctionComponent<Props> = ({

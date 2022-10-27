@@ -19,15 +19,15 @@ import type { Action, Plan } from 'Types'
 
 import './PlansTable.scss'
 
-type Props = {
-  columns: Array<{
-    attribute: string,
-    title: string
-  }>,
-  plans: Plan[],
-  count: number,
-  searchHref: string,
-  onAction: (action: Action) => void
+interface Props {
+  columns: {
+    attribute: string;
+    title: string;
+  }[];
+  plans: Plan[];
+  count: number;
+  searchHref: string;
+  onAction: (action: Action) => void;
 }
 
 const PlansTable: React.FunctionComponent<Props> = ({
@@ -48,9 +48,10 @@ const PlansTable: React.FunctionComponent<Props> = ({
   }))
 
   const actionResolver: IActionsResolver = (_rowData, { rowIndex }) =>
-    plans[rowIndex as number].actions.map(a => ({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- safe to assume rowIndex is a number
+    plans[rowIndex!].actions.map(a => ({
       title: a.title,
-      onClick: () => onAction(a)
+      onClick: () => { onAction(a) }
     }))
 
   const url = new URL(window.location.href)
@@ -58,7 +59,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
   const sortParam = url.searchParams.get('sort')
   const sortBy: ISortBy = {
     index: columns.findIndex(c => c.attribute === sortParam),
-    direction: (url.searchParams.get('direction') as 'asc' | 'desc' | undefined) || 'desc'
+    direction: (url.searchParams.get('direction') ?? 'desc') as ISortBy['direction']
   }
 
   const onSort: OnSort = (_event, index, direction) => {

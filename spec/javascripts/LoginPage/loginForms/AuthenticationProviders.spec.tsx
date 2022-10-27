@@ -4,16 +4,14 @@ import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProv
 import type { Props } from 'LoginPage/loginForms/AuthenticationProviders'
 
 const props: Props = {
-  authenticationProviders: [
-    {
-      authorizeURL: 'fake-provider-1',
-      humanKind: 'Fake human kind 1'
+  authenticationProviders: [{
+    authorizeURL: 'fake-provider-1',
+    humanKind: 'Fake human kind 1'
 
-    }, {
-      authorizeURL: 'fake-provider-2',
-      humanKind: 'Fake human kind 2'
-    }
-  ]
+  }, {
+    authorizeURL: 'fake-provider-2',
+    humanKind: 'Fake human kind 2'
+  }]
 }
 
 it('should render itself', () => {

@@ -32,43 +32,44 @@ const loadChain = ({
   policiesConfig,
   dispatch
 }: {
-  registry: RegistryPolicy[],
-  policiesConfig: PolicyConfig[],
-  dispatch: Dispatch
-}) => {
+  registry: RegistryPolicy[];
+  policiesConfig: PolicyConfig[];
+  dispatch: Dispatch;
+}): void => {
   let errors = 0
   const updatedChain: ChainPolicy[] = []
   policiesConfig.forEach(storedPolicy => {
     const foundRegistryPolicy = findRegistryPolicy(registry, storedPolicy)
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     foundRegistryPolicy
       ? updatedChain.push(convertToChainPolicy(foundRegistryPolicy, storedPolicy))
       : errors++
   })
   if (errors > 0) {
-    dispatch(loadChainError({})) // TODO: Define what to do with errors (unlikely now, just undefined path returned by Array.find)
+    void dispatch(loadChainError({})) // TODO: Define what to do with errors (unlikely now, just undefined path returned by Array.find)
   }
 
-  dispatch(setOriginalPolicyChain(updatedChain))
-  dispatch(loadChainSuccess(updatedChain))
+  void dispatch(setOriginalPolicyChain(updatedChain))
+  void dispatch(loadChainSuccess(updatedChain))
 }
 
 const policyChainMiddleware = ({
   dispatch,
   getState
 }: {
-  dispatch: Dispatch,
-  getState: GetState
-}) => (next: Dispatch) => (action: PolicyChainMiddlewareAction) => {
+  dispatch: Dispatch;
+  getState: GetState;
+}) => (next: Dispatch) => (action: PolicyChainMiddlewareAction): unknown => {
   const state = getState()
   switch (action.type) {
     case 'LOAD_CHAIN':
       loadChain({ registry: state.registry, policiesConfig: action.policiesConfig, dispatch })
       break
     case 'REMOVE_POLICY_FROM_CHAIN':
-      dispatch(updatePolicyChain(removePolicy(state.chain, action.policy)))
+      void dispatch(updatePolicyChain(removePolicy(state.chain, action.policy)))
       break
     case 'UPDATE_POLICY_IN_CHAIN':
-      dispatch(updatePolicyChain(updatePolicy(state.chain, action.policyConfig)))
+      void dispatch(updatePolicyChain(updatePolicy(state.chain, action.policyConfig)))
       break
     default:
       return next(action)

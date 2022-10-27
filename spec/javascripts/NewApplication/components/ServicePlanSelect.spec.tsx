@@ -1,4 +1,3 @@
-
 import { ServicePlanSelect } from 'NewApplication/components/ServicePlanSelect'
 import { mount } from 'enzyme'
 
@@ -17,7 +16,7 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ServicePlanSelect {...{ ...defaultProps, ...props }} />)
 
-const expectToBeDisabled = (wrapper: ReactWrapper, isDisabled = true) => {
+const expectToBeDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true) => {
   expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)
   expect(wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled).toBe(isDisabled)
   expect(wrapper.find('button.pf-c-select__toggle-button').props().disabled).toBe(isDisabled)

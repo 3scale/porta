@@ -11,10 +11,10 @@ import type { EmailConfiguration } from 'EmailConfigurations/types'
 
 import './IndexPage.scss'
 
-type Props = {
-  emailConfigurations: EmailConfiguration[],
-  emailConfigurationsCount: number,
-  newEmailConfigurationPath: string
+interface Props {
+  emailConfigurations: EmailConfiguration[];
+  emailConfigurationsCount: number;
+  newEmailConfigurationPath: string;
 }
 
 const IndexPage: FunctionComponent<Props> = ({
@@ -40,6 +40,6 @@ const IndexPage: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const IndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
+const IndexPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<IndexPage {...props} />, containerId) }
 
 export { IndexPage, IndexPageWrapper, Props }

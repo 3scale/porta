@@ -14,10 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const containerDataset = container.dataset
 
   StripeFormWrapper({
-    stripePublishableKey: containerDataset.stripePublishableKey || '',
-    setupIntentSecret: containerDataset.setupIntentSecret || '',
-    billingAddressDetails: safeFromJsonString(containerDataset.billingAddress) as Props['billingAddressDetails'],
-    successUrl: containerDataset.successUrl || '',
+    stripePublishableKey: containerDataset.stripePublishableKey ?? '',
+    setupIntentSecret: containerDataset.setupIntentSecret ?? '',
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: we can assume it's there, but that doesn't make it right
+    billingAddressDetails: safeFromJsonString<Props['billingAddressDetails']>(containerDataset.billingAddress)!,
+    successUrl: containerDataset.successUrl ?? '',
     isCreditCardStored: containerDataset.creditCardStored === 'true'
   }, containerId)
 })

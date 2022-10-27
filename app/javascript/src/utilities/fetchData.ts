@@ -5,6 +5,6 @@ export function fetchData<T> (url: string): Promise<T> {
         throw new Error(response.statusText)
       }
 
-      return response.json()
+      return response.json() as Promise<T>
     })
 }

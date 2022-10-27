@@ -3,9 +3,9 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 import type { TextInputProps } from '@patternfly/react-core'
 
-type Props = {
-  position: TextInputProps['value'],
-  setPosition: (position: number) => void
+interface Props {
+  position: TextInputProps['value'];
+  setPosition: (position: number) => void;
 }
 
 const PositionInput: FunctionComponent<Props> = ({
@@ -24,7 +24,7 @@ const PositionInput: FunctionComponent<Props> = ({
       name="proxy_rule[position]"
       type="number"
       value={position}
-      onChange={(value) => setPosition(Number(value))}
+      onChange={(value) => { setPosition(Number(value)) }}
     />
   </FormGroup>
 )

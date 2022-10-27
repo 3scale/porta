@@ -2,9 +2,9 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  increment: number,
-  setIncrement: (value: number) => void
+interface Props {
+  increment: number;
+  setIncrement: (value: number) => void;
 }
 
 const IncrementByInput: FunctionComponent<Props> = ({
@@ -23,7 +23,7 @@ const IncrementByInput: FunctionComponent<Props> = ({
       name="proxy_rule[delta]"
       type="number"
       value={increment}
-      onChange={(value) => setIncrement(Number(value))}
+      onChange={(value) => { setIncrement(Number(value)) }}
     />
   </FormGroup>
 )

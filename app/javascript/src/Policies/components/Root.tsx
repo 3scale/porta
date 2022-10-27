@@ -3,8 +3,8 @@ import PoliciesWidget from 'Policies/components/PoliciesWidget'
 
 import type { Store } from 'Policies/types'
 
-type Props = {
-  store: Store,
+interface Props {
+  store: Store;
 }
 
 const Root: React.FunctionComponent<Props> = ({ store }) => (

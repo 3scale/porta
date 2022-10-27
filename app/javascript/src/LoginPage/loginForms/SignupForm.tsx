@@ -8,9 +8,10 @@ import { TextField, EmailField, PasswordField } from 'LoginPage/loginForms/FormG
 import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 import { validateSingleField } from 'LoginPage/utils/formValidation'
 
+import type { ReactNode } from 'react'
 import type { InputProps, InputType, SignupProps as Props } from 'Types'
 
-type InputNames = 'user[username]' | 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password]' | 'user[password_confirmation]'
+type InputNames = 'user[email]' | 'user[first_name]' | 'user[last_name]' | 'user[password_confirmation]' | 'user[password]' | 'user[username]'
 
 type Validation = Record<InputNames, boolean | undefined>
 
@@ -43,10 +44,9 @@ const INPUT_LABELS: Record<InputType, string> = {
   passwordConfirmation: 'Password confirmation'
 } as const
 
-// TODO: resolve this react/require-optimization
-// eslint-disable-next-line react/require-optimization
+// eslint-disable-next-line react/require-optimization -- TODO: resolve this react/require-optimization
 class SignupForm extends React.Component<Props, State> {
-  constructor(props: Props) {
+  public constructor (props: Props) {
     super(props)
     this.state = {
       [INPUT_NAMES.username]: this.props.user.username,
@@ -66,17 +66,17 @@ class SignupForm extends React.Component<Props, State> {
     } as State
   }
 
-  getInputProps = (name: InputType, isRequired: boolean): InputProps => ({
+  private readonly getInputProps = (name: InputType, isRequired: boolean): InputProps => ({
     isRequired,
     name: INPUT_NAMES[name],
     fieldId: INPUT_IDS[name],
     label: INPUT_LABELS[name],
     isValid: this.state.validation[INPUT_NAMES[name]],
-    value: this.state[INPUT_NAMES[name]] as string,
+    value: this.state[INPUT_NAMES[name]],
     onChange: this.handleInputChange
   })
 
-  handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
+  private readonly handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
 
     this.setState((prevState: State) => {
@@ -92,7 +92,8 @@ class SignupForm extends React.Component<Props, State> {
     })
   }
 
-  render () {
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public render (): ReactNode {
     const formDisabled = Object.values(this.state.validation).some(value => value !== true)
 
     const usernameInputProps = this.getInputProps('username', true)

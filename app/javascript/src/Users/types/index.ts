@@ -1,4 +1,4 @@
-export type Feature = 'portal' | 'finance' | 'settings' | 'partners' | 'monitoring' | 'plans' | 'policy_registry'
+export type Feature = 'finance' | 'monitoring' | 'partners' | 'plans' | 'policy_registry' | 'portal' | 'settings'
 
 export type AdminSection = Feature | 'services'
 

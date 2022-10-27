@@ -11,16 +11,16 @@ import 'LoginPage/assets/styles/loginPage.scss'
 import type { FlashMessage, InputProps } from 'Types'
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  lostPasswordToken: string | null,
-  url: string,
-  errors: FlashMessage[]
+interface Props {
+  lostPasswordToken?: string | null;
+  url?: string;
+  errors?: FlashMessage[];
 }
 
 const ChangePassword: FunctionComponent<Props> = ({
-  lostPasswordToken,
-  url,
-  errors
+  lostPasswordToken = null,
+  url = '',
+  errors = []
 }) => {
   const {
     isFormDisabled,
@@ -62,7 +62,7 @@ const ChangePassword: FunctionComponent<Props> = ({
       brandImgSrc={brandImg}
       loginTitle="Change Password"
     >
-      {errors && <FlashMessages flashMessages={errors} />}
+      {errors.length && <FlashMessages flashMessages={errors} />}
       <Form
         noValidate
         acceptCharset="UTF-8"
@@ -92,6 +92,6 @@ const ChangePassword: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ChangePasswordWrapper = (props: Props, containerId: string): void => createReactWrapper(<ChangePassword {...props} />, containerId)
+const ChangePasswordWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePassword {...props} />, containerId) }
 
 export { ChangePassword, ChangePasswordWrapper, Props }

@@ -26,7 +26,7 @@ it('should work', () => {
   const value = 'foo'
   const wrapper = mountWrapper()
 
-  act(() => wrapper.find(DescriptionInput).props().setDescription(value))
+  act(() => { wrapper.find(DescriptionInput).props().setDescription(value) })
 
   wrapper.update()
   expect(setDescription).toHaveBeenCalledWith(value)

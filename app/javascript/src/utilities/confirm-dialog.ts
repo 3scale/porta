@@ -1,3 +1,3 @@
-export function confirm (message: string): Promise<boolean> {
+export function waitConfirm (message: string): Promise<boolean> {
   return Promise.resolve(window.confirm(message))
 }

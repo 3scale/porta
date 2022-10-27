@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading -- FIXME: remove this spreading */
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 import { FormLegend } from 'Settings/components/Common/FormLegend'
 import { SelectGroup } from 'Settings/components/Common/SelectGroup'
@@ -6,10 +6,10 @@ import { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
 
 import type { FieldCatalogProps, FieldGroupProps } from 'Settings/types'
 
-type Props = {
-  type: FieldCatalogProps & FieldGroupProps,
-  item: FieldGroupProps,
-  legend: string
+interface Props {
+  type: FieldCatalogProps & FieldGroupProps;
+  item: FieldGroupProps;
+  legend: string;
 }
 
 const TypeItemCombo: React.FunctionComponent<Props> = ({

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { AdminSection, Feature } from 'Users/types'
 
 const FEATURE_NAMES: Partial<Record<Feature, string>> = {
@@ -27,13 +28,14 @@ const FEATURES_GRANTING_SERVICE_ACCESS = ['partners', 'monitoring', 'plans']
 
 export function getFeatureName (feature: Feature): string {
   if (feature in FEATURE_NAMES) {
-    return FEATURE_NAMES[feature] as string
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+    return FEATURE_NAMES[feature]!
   }
 
   throw new Error(`${feature} is not a known feature`)
 }
 
-export function getFeatureNameDescription (feature: Feature): string[] {
+export function getFeatureNameDescription (feature: Feature): string[] | undefined {
   return FEATURE_NAMES_DESCRIPTION_ITEMS[feature]
 }
 

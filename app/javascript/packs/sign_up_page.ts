@@ -5,9 +5,9 @@ import type { Props } from 'LoginPage/SignupPageWrapper'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'pf-login-page-container'
-  const PFLoginPageContainer = document.getElementById(containerId)
+  const container = document.getElementById(containerId)
 
-  if (!PFLoginPageContainer) {
+  if (!container) {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     oldLoginWrapper.parentNode.removeChild(oldLoginWrapper)
   }
 
-  const signupPageProps = safeFromJsonString<Props>(PFLoginPageContainer.dataset.signupProps) as Props
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+  const signupPageProps = safeFromJsonString<Props>(container.dataset.signupProps)!
   SignupPageWrapper(signupPageProps, 'pf-login-page-container')
 })

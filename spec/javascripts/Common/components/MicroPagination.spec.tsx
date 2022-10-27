@@ -15,8 +15,8 @@ const defaultProps = {
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<MicroPagination {...{ ...defaultProps, ...props }} />)
-const previousPageButton = (wrapper: ReactWrapper) => wrapper.find(Button).first()
-const nextPageButton = (wrapper: ReactWrapper) => wrapper.find(Button).last()
+const previousPageButton = (wrapper: ReactWrapper<unknown>) => wrapper.find(Button).first()
+const nextPageButton = (wrapper: ReactWrapper<unknown>) => wrapper.find(Button).last()
 
 afterEach(() => jest.resetAllMocks())
 

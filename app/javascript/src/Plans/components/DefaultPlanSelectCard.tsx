@@ -12,14 +12,14 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FunctionComponent } from 'react'
-import type { Record as Plan } from 'Types'
+import type { IRecord as Plan } from 'Types'
 
 import './DefaultPlanSelectCard.scss'
 
-type Props = {
-  plans: Array<Plan>,
-  initialDefaultPlan: Plan | null,
-  path: string
+interface Props {
+  plans: Plan[];
+  initialDefaultPlan: Plan | null;
+  path: string;
 }
 
 const DefaultPlanSelectCard: FunctionComponent<Props> = ({
@@ -77,6 +77,6 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const DefaultPlanSelectCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId)
+const DefaultPlanSelectCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<DefaultPlanSelectCard {...props} />, containerId) }
 
 export { DefaultPlanSelectCard, DefaultPlanSelectCardWrapper, Props }

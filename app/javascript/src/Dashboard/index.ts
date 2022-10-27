@@ -1,8 +1,8 @@
 import $ from 'jquery'
 import 'Dashboard/chart'
 
-export function widget (url: string) {
-  $.ajax({
+export function widget (url: string): void {
+  void $.ajax({
     url: url,
     dataType: 'script',
     cache: true
@@ -13,7 +13,6 @@ export function widget (url: string) {
       return
     }
 
-    let exception = new Error(`Failed to load ${url} with ${error} (${status})`)
-    throw exception
+    throw new Error(`Failed to load ${url} with ${error} (${status})`)
   })
 }

@@ -4,7 +4,7 @@ import styles from '@patternfly/react-styles/css/components/Form/form'
 import { css } from '@patternfly/react-styles'
 
 type Props = React.FieldsetHTMLAttributes<HTMLFieldSetElement> & {
-  isInline?: boolean
+  isInline?: boolean;
 }
 
 const FormFieldset: React.FunctionComponent<Props> = ({ children, className = '', isInline = false, ...props }) => (

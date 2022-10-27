@@ -1,7 +1,7 @@
 import type { ChainPolicy } from 'Policies/types'
 
-type Props = {
-  policies: ChainPolicy[]
+interface Props {
+  policies: ChainPolicy[];
 }
 
 const PolicyChainHiddenInput: React.FunctionComponent<Props> = ({ policies }) => {

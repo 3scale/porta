@@ -1,6 +1,6 @@
-import { mount, render } from 'enzyme'
+import { mount } from 'enzyme'
 import { EmailConfigurationForm } from 'EmailConfigurations/components/EmailConfigurationForm'
-import { isSubmitDisabled, updateInput } from 'utilities/test-utils'
+import { assertInputs, isSubmitDisabled, updateInput } from 'utilities/test-utils'
 
 import type { Props } from 'EmailConfigurations/components/EmailConfigurationForm'
 
@@ -16,7 +16,6 @@ const defaultProps = {
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
-const renderWrapper = (props: Partial<Props> = {}) => render(<EmailConfigurationForm {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
@@ -24,16 +23,13 @@ it('should render itself', () => {
 })
 
 it('should render all fields', () => {
-  const inputs = [
-    'email_configuration_email',
-    'email_configuration_user_name',
-    'email_configuration_password',
-    'email_configuration_password_repeat'
-  ]
-
-  const html = renderWrapper().find('.pf-c-form__group').toString()
-
-  inputs.forEach(name => expect(html).toMatch(name))
+  const wrapper = mountWrapper()
+  assertInputs(wrapper, [
+    { id: 'email_configuration_email', present: true },
+    { id: 'email_configuration_user_name', present: true },
+    { id: 'email_configuration_password', present: true },
+    { id: 'email_configuration_password_repeat', present: true }
+  ])
 })
 
 describe('when the server returns some errors', () => {

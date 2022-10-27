@@ -1,14 +1,14 @@
-type ProductLink = {
-  name: 'Edit' | 'Overview' | 'Analytics' | 'Methods and Metrics' | 'Mapping Rules',
-  path: string
+interface ProductLink {
+  name: 'Analytics' | 'Edit' | 'Mapping Rules' | 'Methods and Metrics' | 'Overview';
+  path: string;
 }
 
-export type Backend = {
-  id: number,
-  name: string,
-  systemName: string,
-  privateEndpoint: string,
-  updatedAt: string,
-  links: ProductLink[],
-  productsCount: number
+export interface Backend {
+  id: number;
+  name: string;
+  systemName: string;
+  privateEndpoint: string;
+  updatedAt: string;
+  links: ProductLink[];
+  productsCount: number;
 }

@@ -10,7 +10,7 @@ import type { Props } from 'PaymentGateways/braintree/BraintreeForm'
 jest.mock('braintree-web/hosted-fields')
 jest.spyOn(hostedFields, 'create').mockResolvedValue({
   getState: () => ({ fields: {} }),
-  on: (event: string, fn: any) => {
+  on: (event: string, fn: () => void) => {
     if (event === 'validityChange') {
       fn()
     }
@@ -72,6 +72,7 @@ it('should enable submit button when form is valid', async () => {
   jest.spyOn(validate, 'validate')
     .mockReturnValueOnce(undefined)
 
+  // eslint-disable-next-line @typescript-eslint/await-thenable
   const wrapper = await mount(<BraintreeForm {...props} />)
   wrapper.update()
   expect(wrapper.find('.btn-primary').prop('disabled')).toEqual(false)

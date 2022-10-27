@@ -19,10 +19,10 @@ import type { Product } from 'Products/types'
 
 import './IndexPage.scss'
 
-type Props = {
-  newProductPath: string,
-  products: Array<Product>,
-  productsCount: number
+interface Props {
+  newProductPath: string;
+  products: Product[];
+  productsCount: number;
 }
 
 const IndexPage: React.FunctionComponent<Props> = ({
@@ -51,14 +51,14 @@ const IndexPage: React.FunctionComponent<Props> = ({
     ]
   }))
 
-  const linkToPage = (rowId: any, actionNumber: number) => {
+  const linkToPage = (rowId: number, actionNumber: number) => {
     const { path } = products[rowId].links[actionNumber]
     window.location.href = path
   }
 
   const tableActions = ['Edit', 'Overview', 'Analytics', 'Applications', 'ActiveDocs', 'Integration'].map((title, i) => ({
     title,
-    onClick: (_event: any, rowId: any) => linkToPage(rowId, i)
+    onClick: (_e: unknown, rowId: number) => { linkToPage(rowId, i) }
   }))
 
   return (
@@ -97,6 +97,6 @@ const IndexPage: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ProductsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
+const ProductsIndexPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<IndexPage {...props} />, containerId) }
 
 export { IndexPage, ProductsIndexPageWrapper, Props }

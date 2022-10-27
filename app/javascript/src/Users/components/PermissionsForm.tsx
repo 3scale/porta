@@ -1,6 +1,3 @@
-import 'raf/polyfill'
-import 'core-js/es6/map'
-import 'core-js/es6/set'
 import { useState } from 'react'
 import { RoleRadioGroup } from 'Users/components/RoleRadioGroup'
 import { FeaturesFieldset } from 'Users/components/FeaturesFieldset'
@@ -12,16 +9,16 @@ import type { FunctionComponent } from 'react'
 import type { AdminSection, Feature, Role } from 'Users/types'
 import type { Api } from 'Types'
 
-type Props = {
+interface Props {
   initialState?: {
-    role?: Role,
-    // eslint-disable-next-line camelcase
-    admin_sections?: AdminSection[],
-    // eslint-disable-next-line camelcase
-    member_permission_service_ids?: number[]
-  },
-  features: Feature[],
-  services: Api[]
+    role?: Role;
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    admin_sections?: AdminSection[];
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    member_permission_service_ids?: number[];
+  };
+  features: Feature[];
+  services: Api[];
 }
 
 /**
@@ -35,9 +32,9 @@ const PermissionsForm: FunctionComponent<Props> = ({
   features,
   services
 }) => {
-  const [role, setRole] = useState(initialState.role || 'admin')
-  const [selectedSections, setSelectedSections] = useState(initialState.admin_sections || [])
-  const [selectedServicesIds, setSelectedServicesIds] = useState(initialState.member_permission_service_ids || [])
+  const [role, setRole] = useState(initialState.role ?? 'admin')
+  const [selectedSections, setSelectedSections] = useState(initialState.admin_sections ?? [])
+  const [selectedServicesIds, setSelectedServicesIds] = useState(initialState.member_permission_service_ids ?? [])
 
   const onAdminSectionSelected = (section: AdminSection) => {
     const newSections = toggleElementInCollection(section, selectedSections)
@@ -85,6 +82,6 @@ const PermissionsForm: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const PermissionsFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<PermissionsForm {...props} />, containerId)
+const PermissionsFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<PermissionsForm {...props} />, containerId) }
 
 export { PermissionsForm, PermissionsFormWrapper, Props }

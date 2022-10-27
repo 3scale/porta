@@ -1,18 +1,20 @@
 import type { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeItemProps } from 'Settings/types'
 import type { Props } from './components/Form'
 
-const INTEGRATION_METHOD_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
+const INTEGRATION_METHOD_DEFAULTS: FieldCatalogProps & FieldGroupProps = {
   value: 'hosted',
   name: 'deployment_option',
   label: '',
   catalog: {
     hosted: 'APIcast 3scale managed',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     self_managed: 'APIcast self-managed',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     service_mesh_istio: 'Istio'
   }
 }
 
-const AUTHENTICATION_METHOD_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
+const AUTHENTICATION_METHOD_DEFAULTS: FieldCatalogProps & FieldGroupProps = {
   value: '1',
   name: 'proxy_authentication_method',
   label: '',
@@ -116,7 +118,7 @@ const OIDC_SETTINGS_DEFAULTS = {
   jwtSettings: OIDC_JWT_SETTINGS_DEFAULTS
 }
 
-const CREDENTIALS_LOCATION_DEFAULTS: FieldGroupProps & FieldCatalogProps = {
+const CREDENTIALS_LOCATION_DEFAULTS: FieldCatalogProps & FieldGroupProps = {
   value: 'headers',
   name: 'credentials_location',
   label: '',

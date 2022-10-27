@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { shallow } from 'enzyme'
 import { TypeItemCombo } from 'Settings/components/Common/TypeItemCombo'
 

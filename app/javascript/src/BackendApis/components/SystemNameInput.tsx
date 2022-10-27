@@ -2,9 +2,9 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  systemName: string,
-  setSystemName: (systemName: string) => void
+interface Props {
+  systemName: string;
+  setSystemName: (systemName: string) => void;
 }
 
 const SystemNameInput: FunctionComponent<Props> = ({ systemName, setSystemName }) => (

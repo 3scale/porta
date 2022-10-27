@@ -17,13 +17,13 @@ import type { FunctionComponent } from 'react'
 
 import './MetricsTable.scss'
 
-type Props = {
-  activeTabKey: TabKey,
-  mappingRulesPath: string,
-  addMappingRulePath: string,
-  metrics: Metric[],
-  metricsCount: number,
-  createButton: React.ReactNode
+interface Props {
+  activeTabKey: TabKey;
+  mappingRulesPath: string;
+  addMappingRulePath: string;
+  metrics: Metric[];
+  metricsCount: number;
+  createButton: React.ReactNode;
 }
 
 const MetricsTable: FunctionComponent<Props> = ({

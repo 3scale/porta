@@ -23,7 +23,7 @@ const BraintreeUserFields: FunctionComponent = () => {
           id="customer_first_name"
           name="customer[first_name]"
           value={firstName}
-          onChange={(e) => setFirstName(e.currentTarget.value)}
+          onChange={(e) => { setFirstName(e.currentTarget.value) }}
         />
       </ListItem>
       <ListItem id="customer_last_name_input">
@@ -37,7 +37,7 @@ const BraintreeUserFields: FunctionComponent = () => {
           id="customer_last_name"
           name="customer[last_name]"
           value={lastName}
-          onChange={(e) => setLastName(e.currentTarget.value)}
+          onChange={(e) => { setLastName(e.currentTarget.value) }}
         />
       </ListItem>
       <ListItem id="customer_phone_input">
@@ -50,7 +50,7 @@ const BraintreeUserFields: FunctionComponent = () => {
           id="customer_phone"
           name="customer[phone]"
           value={phone}
-          onChange={(e) => setPhone(e.currentTarget.value)}
+          onChange={(e) => { setPhone(e.currentTarget.value) }}
         />
       </ListItem>
     </ul>

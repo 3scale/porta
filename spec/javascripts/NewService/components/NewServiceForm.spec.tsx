@@ -1,8 +1,7 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 import { NewServiceForm } from 'NewService/components/NewServiceForm'
-// Children components that use hooks cause some nasty warnings in the log. Mocking them
-// prevents react-dom.development from complaining.
+// Children components that use hooks cause some nasty warnings in the log. Mocking them prevents react-dom.development from complaining.
 import * as FOO from 'NewService/components/ServiceDiscoveryForm'
 
 import type { FormEvent } from 'react'
@@ -32,7 +31,7 @@ const props = {
 it('should render itself', () => {
   const wrapper = mount(<NewServiceForm {...props} />)
   expect(wrapper.find('#new_service_source').exists()).toEqual(true)
-  expect(wrapper.find(`input[name='source']`).length).toEqual(2)
+  expect(wrapper.find('input[name=\'source\']').length).toEqual(2)
 })
 
 it('should render the correct form depending on which mode is selected', () => {

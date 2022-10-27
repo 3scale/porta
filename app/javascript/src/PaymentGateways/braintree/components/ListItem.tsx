@@ -1,7 +1,7 @@
 import type { FunctionComponent, PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
-  id: string,
+  id: string;
 }>
 
 const ListItem: FunctionComponent<Props> = ({ id, children }) => (

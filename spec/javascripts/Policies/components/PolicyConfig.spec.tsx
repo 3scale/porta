@@ -6,31 +6,27 @@ import type { Props } from 'Policies/components/PolicyConfig'
 import type { ChainPolicy } from 'Policies/types'
 
 describe('PolicyConfig Component', () => {
-  let consoleSpy: jest.SpyInstance
-
-  beforeAll(() => {
-    /**
-     * DISABLING CONSOLE.WARN TO HIDE THIS MESSAGE FROM 'react-jsonschema-form' UNTIL WE UPGRADE to '@rjsf/core'. See https://react-jsonschema-form.readthedocs.io/en/latest/#installation
-     *
-     * console.warn
-     * Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.
-     *
-     * * Move data fetching code or side effects to componentDidUpdate.
-     * * If you're updating state whenever props change, refactor your code to use memoization techniques or move it to static getDerivedStateFromProps. Learn more at: https://fb.me/react-derived-state
-     * * Rename componentWillReceiveProps to UNSAFE_componentWillReceiveProps to suppress this warning in non-strict mode. In React 17.x, only the UNSAFE_ name will work. To rename all deprecated lifecycles to their new names, you can run `npx react-codemod rename-unsafe-lifecycles` in your project source folder.
-     *
-     * Please update the following components: Form
-     *
-     *   at printWarning (node_modules/react-dom/cjs/react-dom.development.js:88:30)
-     *   at warn (node_modules/react-dom/cjs/react-dom.development.js:51:5)
-     *   at Object.<anonymous>.ReactStrictModeWarnings.flushPendingUnsafeLifecycleWarnings (node_modules/react-dom/cjs/react-dom.development.js:11377:7)
-     *   at flushRenderPhaseStrictModeWarningsInDEV (node_modules/react-dom/cjs/react-dom.development.js:23112:31)
-     *   at commitRootImpl (node_modules/react-dom/cjs/react-dom.development.js:22396:3)
-     *   at unstable_runWithPriority (node_modules/scheduler/cjs/scheduler.development.js:653:12)
-     *   at runWithPriority$1 (node_modules/react-dom/cjs/react-dom.development.js:11039:10)
-     */
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => '')
-  })
+  /**
+   * DISABLING CONSOLE.WARN TO HIDE THIS MESSAGE FROM 'react-jsonschema-form' UNTIL WE UPGRADE to '@rjsf/core'. See https://react-jsonschema-form.readthedocs.io/en/latest/#installation
+   *
+   * console.warn
+   * Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.
+   *
+   * * Move data fetching code or side effects to componentDidUpdate.
+   * * If you're updating state whenever props change, refactor your code to use memoization techniques or move it to static getDerivedStateFromProps. Learn more at: https://fb.me/react-derived-state
+   * * Rename componentWillReceiveProps to UNSAFE_componentWillReceiveProps to suppress this warning in non-strict mode. In React 17.x, only the UNSAFE_ name will work. To rename all deprecated lifecycles to their new names, you can run `npx react-codemod rename-unsafe-lifecycles` in your project source folder.
+   *
+   * Please update the following components: Form
+   *
+   *   at printWarning (node_modules/react-dom/cjs/react-dom.development.js:88:30)
+   *   at warn (node_modules/react-dom/cjs/react-dom.development.js:51:5)
+   *   at Object.<anonymous>.ReactStrictModeWarnings.flushPendingUnsafeLifecycleWarnings (node_modules/react-dom/cjs/react-dom.development.js:11377:7)
+   *   at flushRenderPhaseStrictModeWarningsInDEV (node_modules/react-dom/cjs/react-dom.development.js:23112:31)
+   *   at commitRootImpl (node_modules/react-dom/cjs/react-dom.development.js:22396:3)
+   *   at unstable_runWithPriority (node_modules/scheduler/cjs/scheduler.development.js:653:12)
+   *   at runWithPriority$1 (node_modules/react-dom/cjs/react-dom.development.js:11039:10)
+   */
+  const consoleSpy: jest.SpyInstance = jest.spyOn(console, 'warn').mockImplementation(() => '')
 
   afterAll(() => {
     consoleSpy.mockRestore()
@@ -140,6 +136,7 @@ describe('PolicyConfig Component', () => {
   it('should submit the form and call the submit action', () => {
     const { policyConfigWrapper, props } = setup()
     const policyConfigFormProps = policyConfigWrapper.find('.PolicyConfiguration-form').first().props()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     policyConfigFormProps.onSubmit!({ formData: {}, schema: {} } as any)
     expect(props.actions.submitPolicyConfig).toHaveBeenCalledTimes(1)
   })

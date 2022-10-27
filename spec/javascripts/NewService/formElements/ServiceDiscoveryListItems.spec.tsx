@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/require-await -- There are some async process inside this component that needs
+to run, adding async to the act callback is a trick to allow them to finish */
 import { act } from 'react-dom/test-utils'
 import { mount, render, shallow } from 'enzyme'
-import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
+import { BASE_PATH, ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 import * as utils from 'utilities/fetchData'
-import { BASE_PATH } from 'NewService'
 
 import type { ReactWrapper } from 'enzyme'
 import type { FormEvent } from 'react'

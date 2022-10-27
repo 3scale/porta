@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   ProductsIndexPageWrapper({
     newProductPath,
-    products: safeFromJsonString<Product[]>(products) || [],
-    productsCount: safeFromJsonString<number>(productsCount) || 0
+    products: safeFromJsonString<Product[]>(products) ?? [],
+    productsCount: safeFromJsonString<number>(productsCount) ?? 0
   }, containerId)
 })

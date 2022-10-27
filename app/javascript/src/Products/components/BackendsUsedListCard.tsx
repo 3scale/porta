@@ -5,8 +5,8 @@ import { useSearchInputEffect } from 'utilities/useSearchInputEffect'
 
 import type { CompactListItem } from 'Common/components/CompactListCard'
 
-type Props = {
-  backends: Array<CompactListItem>
+interface Props {
+  backends: CompactListItem[];
 }
 
 const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
@@ -39,6 +39,6 @@ const BackendsUsedListCard: React.FunctionComponent<Props> = ({ backends }) => {
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const BackendsUsedListCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsUsedListCard {...props} />, containerId)
+const BackendsUsedListCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BackendsUsedListCard {...props} />, containerId) }
 
 export { BackendsUsedListCard, BackendsUsedListCardWrapper, Props }

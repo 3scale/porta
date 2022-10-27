@@ -12,10 +12,10 @@ import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/typ
 
 import './NewPage.scss'
 
-type Props = {
-  url: string,
-  emailConfiguration: FormEmailConfiguration,
-  errors?: FormErrors
+interface Props {
+  url: string;
+  emailConfiguration: FormEmailConfiguration;
+  errors?: FormErrors;
 }
 
 const NewPage: FunctionComponent<Props> = ({
@@ -43,6 +43,6 @@ const NewPage: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const NewPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewPage {...props} />, containerId)
+const NewPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewPage {...props} />, containerId) }
 
 export { NewPage, NewPageWrapper, Props }

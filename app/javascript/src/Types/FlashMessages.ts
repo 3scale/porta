@@ -1,4 +1,4 @@
-export type FlashMessage = {
-  type: string,
-  message: string
+export interface FlashMessage {
+  type: string;
+  message: string;
 }

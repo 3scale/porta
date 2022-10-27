@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading -- FIXME: remove all the spreading */
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
 import { ServiceManualListItems } from 'NewService/components/FormElements/ServiceManualListItems'
 
@@ -6,10 +6,10 @@ import type { FunctionComponent } from 'react'
 import type { FormProps, ServiceFormTemplate } from 'NewService/types'
 import type { Api } from 'Types/Api'
 
-type Props = {
-  template: ServiceFormTemplate,
-  formActionPath: string,
-  backendApis: Api[]
+interface Props {
+  template: ServiceFormTemplate;
+  formActionPath: string;
+  backendApis: Api[];
 }
 
 const ServiceManualForm: FunctionComponent<Props> = (props) => {

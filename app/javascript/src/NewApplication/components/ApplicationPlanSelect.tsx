@@ -1,13 +1,13 @@
 import { Button } from '@patternfly/react-core'
 import { Select } from 'Common/components/Select'
 
-import type { ApplicationPlan, Product } from 'NewApplication/types'
+import type { Plan, Product } from 'NewApplication/types'
 
-type Props = {
-  appPlan: ApplicationPlan | null,
-  product: Product | null,
-  onSelect: (appPlan: ApplicationPlan | null) => void,
-  createApplicationPlanPath: string
+interface Props {
+  appPlan: Plan | null;
+  product: Product | null;
+  onSelect: (appPlan: Plan | null) => void;
+  createApplicationPlanPath: string;
 }
 
 const ApplicationPlanSelect: React.FunctionComponent<Props> = ({

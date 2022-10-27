@@ -25,7 +25,7 @@ describe('StatsApplicationsTable', () => {
     ]
     applicationsTable.render()
 
-    const table = document.querySelector('table#applications_table') as Element
+    const table = document.querySelector('table#applications_table')!
     const application = table.querySelectorAll<HTMLAnchorElement>('.StatsApplicationsTable-application')[0]
     const account = table.querySelectorAll<HTMLAnchorElement>('.StatsApplicationsTable-account')[0]
     // TODO: how did this line ever get to master?

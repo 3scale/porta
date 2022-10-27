@@ -21,18 +21,16 @@ import type { FunctionComponent } from 'react'
 
 import './NewMappingRule.scss'
 
-type Error = Record<string, string[]>
-
-type Props = {
-  url: string,
-  isProxyProEnabled?: boolean,
-  topLevelMetrics: Array<Metric>,
-  methods: Array<Metric>,
-  httpMethods: Array<string>,
-  errors?: Error
+interface Props {
+  url: string;
+  isProxyProEnabled?: boolean;
+  topLevelMetrics: Metric[];
+  methods: Metric[];
+  httpMethods: string[];
+  errors?: Record<string, string[]>;
 }
 
-type Validated = 'success' | 'error' | 'default' | undefined
+type Validated = 'default' | 'error' | 'success' | undefined
 
 const NewMappingRule: FunctionComponent<Props> = ({
   url,
@@ -53,7 +51,7 @@ const NewMappingRule: FunctionComponent<Props> = ({
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (errors && errors.pattern) {
+    if (errors?.pattern) {
       setPatternValidated('error')
       setHelperTextInvalid(errors.pattern.slice().join())
     }
@@ -78,7 +76,7 @@ const NewMappingRule: FunctionComponent<Props> = ({
         action={url}
         id="new_mapping_rule"
         method="post"
-        onSubmit={() => setLoading(true)}
+        onSubmit={() => { setLoading(true) }}
         // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />
@@ -108,6 +106,6 @@ const NewMappingRule: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const NewMappingRuleWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewMappingRule {...props} />, containerId)
+const NewMappingRuleWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewMappingRule {...props} />, containerId) }
 
 export { NewMappingRule, NewMappingRuleWrapper, Props }

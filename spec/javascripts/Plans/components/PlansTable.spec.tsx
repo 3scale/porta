@@ -1,9 +1,10 @@
 import { mount } from 'enzyme'
 import { PlansTable } from 'Plans/components/PlansTable'
 
+import type { Plan } from 'Types'
 import type { Props } from 'Plans/components/PlansTable'
 
-const plans: Array<never> = []
+const plans: Plan[] = []
 const defaultProps: Props = {
   columns: [],
   onAction: jest.fn(),

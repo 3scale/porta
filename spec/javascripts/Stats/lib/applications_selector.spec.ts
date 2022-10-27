@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { StatsApplicationsSelector } from 'Stats/lib/applications_selector'
 
 import type { StatsState } from 'Stats/lib/state'
@@ -25,7 +27,7 @@ describe('StatsApplicationsSelector', () => {
   })
 
   it('should render the right applications selector', () => {
-    const selector = document.querySelector('#selector-container .StatsApplicationSelector') as Element
+    const selector = document.querySelector('#selector-container .StatsApplicationSelector')!
     expect(selector.innerHTML).toEqual(
       '<optgroup label="Dumplings"><option value="666">Wan Tun App</option><option value="42">Pierogi App</option></optgroup>' +
       '<optgroup label="Empanadas"><option value="7">Argenta</option></optgroup>'
@@ -38,7 +40,7 @@ describe('StatsApplicationsSelector', () => {
 
   it('should set the application id on the state when changing the dropdown and default metric', () => {
     jest.spyOn(userSelectedState, 'setState')
-    const select = document.querySelector('.StatsApplicationSelector') as HTMLInputElement
+    const select = document.querySelector<HTMLInputElement>('.StatsApplicationSelector')!
     const event = new Event('change')
     select.value = '666'
     select.dispatchEvent(event)

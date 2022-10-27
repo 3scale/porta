@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await -- This is required for the "simulate click" part. Otherwise the tests won't pass */
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 import { PlansTableCard } from 'Plans/components/PlansTableCard'
@@ -5,9 +6,9 @@ import { PlansTableCard } from 'Plans/components/PlansTableCard'
 import type { Props } from 'Plans/components/PlansTableCard'
 import type { Action, Plan } from 'Types'
 
-const fetch = jest.fn()
-fetch.mockResolvedValue({ status: 200 })
-global.fetch = fetch
+const mockedFetch = jest.fn()
+mockedFetch.mockResolvedValue({ status: 200 })
+global.fetch = mockedFetch
 
 const consoleSpy = jest.fn()
 console.error = consoleSpy
@@ -53,7 +54,7 @@ it('should be able to copy a plan', async () => {
       .simulate('click')
   })
 
-  expect(fetch).toHaveBeenCalledWith('/copy', expect.objectContaining({ method: 'POST' }))
+  expect(mockedFetch).toHaveBeenCalledWith('/copy', expect.objectContaining({ method: 'POST' }))
 })
 
 it('should be able to publish a plan', async () => {
@@ -67,7 +68,7 @@ it('should be able to publish a plan', async () => {
       .simulate('click')
   })
 
-  expect(fetch).toHaveBeenCalledWith('/publish', expect.objectContaining({ method: 'POST' }))
+  expect(mockedFetch).toHaveBeenCalledWith('/publish', expect.objectContaining({ method: 'POST' }))
 })
 
 it('should be able to hide a plan', async () => {
@@ -81,7 +82,7 @@ it('should be able to hide a plan', async () => {
       .simulate('click')
   })
 
-  expect(fetch).toHaveBeenCalledWith('/hide', expect.objectContaining({ method: 'POST' }))
+  expect(mockedFetch).toHaveBeenCalledWith('/hide', expect.objectContaining({ method: 'POST' }))
 })
 
 it('should be able to delete a plan after user confirmation', async () => {
@@ -98,7 +99,7 @@ it('should be able to delete a plan after user confirmation', async () => {
       .simulate('click')
   })
 
-  expect(fetch).toHaveBeenCalledWith('/delete', expect.objectContaining({ method: 'DELETE' }))
+  expect(mockedFetch).toHaveBeenCalledWith('/delete', expect.objectContaining({ method: 'DELETE' }))
 })
 
 it('should log an error if an action is unknown', () => {

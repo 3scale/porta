@@ -12,15 +12,15 @@ import type { FunctionComponent } from 'react'
 
 import './NoMatchFound.scss'
 
-type Props = {
-  onClearFiltersClick?: () => void
+interface Props {
+  onClearFiltersClick?: () => void;
 }
 
 const NoMatchFound: FunctionComponent<Props> = ({
   onClearFiltersClick
 }) => (
   <EmptyState>
-    <EmptyStateIcon icon={SearchIcon} />
+    <EmptyStateIcon icon={SearchIcon as FunctionComponent} />
     <Title headingLevel="h4" size="lg">
       No results found
     </Title>

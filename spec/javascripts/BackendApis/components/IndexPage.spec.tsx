@@ -41,7 +41,7 @@ it('should render a table with backends', () => {
 
 it('should have a paginated table', () => {
   const backendsCount = 10
-  mockLocation(`href://foo.bar/metrics?per_page=2&page=2`)
+  mockLocation('href://foo.bar/metrics?per_page=2&page=2')
   const wrapper = mountWrapper({ backendsCount })
   const pagination = wrapper.find('.pf-c-pagination').first()
 

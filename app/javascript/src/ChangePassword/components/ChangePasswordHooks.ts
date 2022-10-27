@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import validate from 'validate.js' // TODO: including this since validateSingleField and validateForm from LoginPage/utils/formValidation screams for a refactor
 
-type ValidatorName = 'presence' | 'length' | 'equality'
-type ValidatorOption = {
-  message: string,
-  minimum?: number,
-  attribute?: string
+import type { ValidationErrors } from 'Types'
+
+type ValidatorName = 'equality' | 'length' | 'presence'
+interface ValidatorOption {
+  message: string;
+  minimum?: number;
+  attribute?: string;
 }
 type Constraints = Record<string, Partial<Record<ValidatorName, ValidatorOption>>>
 type FieldState = Record<string, string>
-type ValidationErrors = Record<string, string[]>
-type FieldErrorsState = ValidationErrors
 type FieldErrorsPristineState = Record<string, boolean>
 
 const PASSWORD = 'user[password]'
@@ -47,7 +47,7 @@ const fieldsTemplate: FieldState = {
   [PASSWORD_CONFIRMATION]: ''
 }
 
-const fieldErrorsTemplate: FieldErrorsState = {
+const fieldErrorsTemplate: ValidationErrors = {
   [PASSWORD]: [],
   [PASSWORD_CONFIRMATION]: []
 }
@@ -60,19 +60,19 @@ const extractFirstErrorMessage = (errorMessageArray: string[]): string => errorM
 const isFieldValid = (errorMessageArray: string[]): boolean => !errorMessageArray.length
 const isPassConfirmLongEnough = ({ [PASSWORD]: pass, [PASSWORD_CONFIRMATION]: conf }: FieldState): boolean => conf.length >= pass.length
 
-type FormInput = {
-  value: string,
-  isValid: boolean,
-  errorMessage: string,
-  onChange: (value: string) => void,
-  onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void
+interface FormInput {
+  value: string;
+  isValid: boolean;
+  errorMessage: string;
+  onChange: (value: string) => void;
+  onBlur: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-type IUseFormState = {
-  isFormDisabled: boolean,
-  onFormChange: (e: React.FormEvent<HTMLFormElement>) => void,
-  password: FormInput,
-  passwordConfirmation: FormInput
+interface IUseFormState {
+  isFormDisabled: boolean;
+  onFormChange: (e: React.FormEvent<HTMLFormElement>) => void;
+  password: FormInput;
+  passwordConfirmation: FormInput;
 }
 
 const useFormState = (): IUseFormState => {
@@ -82,11 +82,11 @@ const useFormState = (): IUseFormState => {
   const [areFieldsPristine, setAreFieldsPristine] = useState(fieldsPristineTemplate)
 
   const onFormChange: React.FormEventHandler<HTMLFormElement> = (event: React.FormEvent<HTMLFormElement>) => {
-    const validationErrors: ValidationErrors = validate(event.currentTarget, validationConstraints)
+    const validationErrors = validate(event.currentTarget, validationConstraints) as ValidationErrors
     const visibleErrors = !!validationErrors && Object.keys(validationErrors)
       .filter(key => !areFieldsPristine[key])
       .filter(key => !(key === PASSWORD_CONFIRMATION) || isPassConfirmLongEnough(fieldValues))
-      .reduce<Record<string, any>>((errors, key) => ({ ...errors, [key]: validationErrors[key] }), {})
+      .reduce<ValidationErrors>((errors, key) => ({ ...errors, [key]: validationErrors[key] }), {})
     setFieldErrors(visibleErrors ? { ...fieldErrorsTemplate, ...visibleErrors } : fieldErrorsTemplate)
     setIsFormDisabled(!!validationErrors)
   }
@@ -97,10 +97,10 @@ const useFormState = (): IUseFormState => {
   }
 
   const onFieldBlur = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const validationErrors: ValidationErrors = validate(
+    const validationErrors = (validate(
       { ...fieldValues, [fieldName]: event.currentTarget.value },
       { [fieldName]: validationConstraints[fieldName] }
-    ) || { [fieldName]: [] }
+    ) || { [fieldName]: [] }) as ValidationErrors
     setFieldErrors(({ ...fieldErrors, ...validationErrors }))
   }
 

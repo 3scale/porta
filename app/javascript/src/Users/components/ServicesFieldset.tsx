@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import type { Api } from 'Types'
 import type { AdminSection } from 'Users/types'
 
@@ -9,11 +8,11 @@ import type { AdminSection } from 'Users/types'
  * @param {number[]}        selectedServicesIds - Ids of the services that are selected for the user.
  * @param {Function}        onServiceSelected   - A callback function triggered when any service is selected.
  */
-type Props = {
-  services?: Api[],
-  selectedSections?: AdminSection[],
-  selectedServicesIds?: number[],
-  onServiceSelected: (id: number) => void
+interface Props {
+  services?: Api[];
+  selectedSections?: AdminSection[];
+  selectedServicesIds?: number[];
+  onServiceSelected: (id: number) => void;
 }
 
 const ServicesFieldset: React.FunctionComponent<Props> = ({
@@ -22,7 +21,7 @@ const ServicesFieldset: React.FunctionComponent<Props> = ({
   selectedServicesIds = [],
   onServiceSelected
 }) => {
-  const servicesListClassName = `ServiceAccessList`
+  const servicesListClassName = 'ServiceAccessList'
   const allServicesChecked = !selectedSections.includes('services')
 
   return (
@@ -51,14 +50,15 @@ const ServicesFieldset: React.FunctionComponent<Props> = ({
  * @param {boolean}         disabled          - Whether the checkbox is disabled or not.
  * @param {Function}        onChange          - A callback function triggered when the checkbox is selected.
  */
-type ServiceCheckboxProps = {
-  service: Api,
-  selectedSections: AdminSection[],
-  checked: boolean,
-  disabled: boolean,
-  onChange: (value: number) => void
+interface ServiceCheckboxProps {
+  service: Api;
+  selectedSections: AdminSection[];
+  checked: boolean;
+  disabled: boolean;
+  onChange: (value: number) => void;
 }
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
   service = {} as Api,
   checked,
@@ -78,7 +78,7 @@ const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
           name="user[member_permission_service_ids][]"
           type="checkbox"
           value={id}
-          onChange={() => onChange(id)}
+          onChange={() => {onChange(id)}} // FIXME: make eslint complain here about the curly w/o space
         />
         <span className="ServiceAccessList-labelText">{name}</span>
       </label>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { Button } from '@patternfly/react-core'
 import { PlusIcon, TimesIcon } from '@patternfly/react-icons'
 
@@ -6,20 +5,16 @@ import type { FunctionComponent } from 'react'
 import type { ThunkAction } from 'Policies/types/Actions'
 
 type ButtonType = 'add' | 'cancel'
-type Props = {
-  type: ButtonType,
-  onClick: () => ThunkAction,
-  children?: React.ReactNode
+interface Props {
+  type: ButtonType;
+  onClick: () => ThunkAction;
+  children?: React.ReactNode;
 }
 
 const classNames: Record<ButtonType, string> = {
   add: 'PolicyChain-addPolicy',
   cancel: 'PolicyChain-addPolicy--cancel'
 }
-
-const Icon: FunctionComponent<{ type: ButtonType }> = ({ type }) => (
-  type === 'add' ? <PlusIcon /> : <TimesIcon />
-)
 
 const HeaderButton: FunctionComponent<Props> = ({
   type,
@@ -35,6 +30,11 @@ const HeaderButton: FunctionComponent<Props> = ({
   >
     {children}
   </Button>
+)
+
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
+const Icon: FunctionComponent<{ type: ButtonType }> = ({ type }) => (
+  type === 'add' ? <PlusIcon /> : <TimesIcon />
 )
 
 export { HeaderButton }

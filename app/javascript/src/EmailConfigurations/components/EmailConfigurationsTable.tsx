@@ -21,10 +21,10 @@ import type { FunctionComponent } from 'react'
 
 import './EmailConfigurationsTable.scss'
 
-type Props = {
-  emailConfigurations: EmailConfiguration[],
-  emailConfigurationsCount: number,
-  newEmailConfigurationPath: string
+interface Props {
+  emailConfigurations: EmailConfiguration[];
+  emailConfigurationsCount: number;
+  newEmailConfigurationPath: string;
 }
 
 const EmailConfigurationsTable: FunctionComponent<Props> = ({
@@ -51,7 +51,7 @@ const EmailConfigurationsTable: FunctionComponent<Props> = ({
 
   const sortBy: ISortBy = {
     index: 2, // updated_at by default
-    direction: (url.searchParams.get('direction') as 'asc' | 'desc' | undefined) || 'desc'
+    direction: (url.searchParams.get('direction') as ISortBy['direction']) ?? 'desc'
   }
 
   const onSort: OnSort = (_event, _index, direction) => {

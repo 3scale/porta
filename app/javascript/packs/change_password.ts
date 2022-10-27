@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { lostPasswordToken = null, url = '', errors = [] } = safeFromJsonString<Props>(changePasswordContainer.dataset.changePasswordProps) as Props
+  const { lostPasswordToken, url, errors } = safeFromJsonString<Props>(changePasswordContainer.dataset.changePasswordProps) ?? {}
 
   ChangePasswordWrapper({
     lostPasswordToken,

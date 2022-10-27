@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+// FIXME: we need to properly type this
 import $ from 'jquery'
 import moment from 'moment'
 import numeral from 'numeral'
@@ -5,24 +11,24 @@ import c3 from 'c3'
 
 import type { MomentInput, MomentInputObject } from 'moment'
 
-export function render (widget: any, data: any) {
-  let options = chartOptions(widget, data)
+export function render (widget: string, data: unknown): void {
+  const options = chartOptions(widget, data)
   $('[data-chart]', widget).each(function (_, chart) {
     c3.generate(($ as any).extend(true, {}, options, { bindto: chart }))
   })
 }
 
 function chartOptions (widget: string, data: any) {
-  let $widget = $(widget)
-  let values = timeline(data.values)
-  let seriesData = [['date', ...values[0]], ['hits', ...values[1]]]
-  let countLabel = $widget.find('[data-title-count]')
-  let lastSerieIndex = seriesData[1].length - 1
-  let introLabel = $widget.find('[data-title-intro]')
-  let elementsToHide = $widget.find('[data-toggle-visibility]')
-  let countLabelLink = countLabel.closest('a')
-  let defaultCount = countLabel.text()
-  let defaultIntro = introLabel.text()
+  const $widget = $(widget)
+  const values = timeline(data.values)
+  const seriesData = [['date', ...values[0]], ['hits', ...values[1]]]
+  const countLabel = $widget.find('[data-title-count]')
+  const lastSerieIndex = seriesData[1].length - 1
+  const introLabel = $widget.find('[data-title-intro]')
+  const elementsToHide = $widget.find('[data-toggle-visibility]')
+  const countLabelLink = countLabel.closest('a')
+  const defaultCount = countLabel.text()
+  const defaultIntro = introLabel.text()
 
   return {
     axis: {
@@ -49,8 +55,8 @@ function chartOptions (widget: string, data: any) {
         return (d.index && d.index === lastSerieIndex - 1) ? 'transparent' : '#DFDFDF'
       },
       onmouseover: function (d: any) {
-        let value = numeral(d.value).format('0.[0]a').toUpperCase()
-        let timestamp = Date.parse(d.x)
+        const value = numeral(d.value).format('0.[0]a').toUpperCase()
+        const timestamp = Date.parse(d.x)
         countLabel.text(value)
         introLabel.text(getIntroLabel(timestamp))
 
@@ -72,9 +78,9 @@ function chartOptions (widget: string, data: any) {
  * Converts object where keys are string dates to array with real date objects
  */
 function timeline (data: MomentInputObject) {
-  let dates = Object.keys(data)
-  let x: string[] = []
-  let y: string[] = []
+  const dates = Object.keys(data)
+  const x: string[] = []
+  const y: string[] = []
 
   dates.forEach(date => {
     x.push(moment.utc(date).toISOString())

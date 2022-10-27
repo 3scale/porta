@@ -1,12 +1,11 @@
-
 import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
 import { mount } from 'enzyme'
 
 import type { Props } from 'NewApplication/components/ApplicationPlanSelect'
 import type { ReactWrapper } from 'enzyme'
-import type { ApplicationPlan, Product } from 'NewApplication/types'
+import type { Plan, Product } from 'NewApplication/types'
 
-const appPlan: ApplicationPlan = { id: 0, name: 'The Plan' }
+const appPlan: Plan = { id: 0, name: 'The Plan' }
 const createApplicationPlanPath = '/plans'
 const defaultProps = {
   product: null,
@@ -17,7 +16,7 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ApplicationPlanSelect {...{ ...defaultProps, ...props }} />)
 
-const expectToBeDisabled = (wrapper: ReactWrapper, isDisabled = true) => {
+const expectToBeDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true) => {
   expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)
   expect(wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled).toBe(isDisabled)
   expect(wrapper.find('button.pf-c-select__toggle-button').props().disabled).toBe(isDisabled)

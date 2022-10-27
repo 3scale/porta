@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ajax, ajaxJSON, fetchPaginated } from 'utilities/ajax'
 
-const fetch = jest.fn()
-global.fetch = fetch
+const mockedFetch = jest.fn()
+global.fetch = mockedFetch
 
-beforeEach(() => { fetch.mockClear() })
+beforeEach(() => { mockedFetch.mockClear() })
 
 describe('#ajax', () => {
   it('should make a request with the correct options', () => {
     const params = new URLSearchParams()
 
-    ajax('url', {
+    void ajax('url', {
       method: 'GET',
       body: params
     })
 
-    expect(fetch).toHaveBeenCalledWith('url', {
+    expect(mockedFetch).toHaveBeenCalledWith('url', {
       method: 'GET',
       body: params,
       headers: {
@@ -30,12 +31,12 @@ describe('#ajaxJSON', () => {
   it('should make a request with the correct options', () => {
     const params = new URLSearchParams()
 
-    ajaxJSON('url', {
+    void ajaxJSON('url', {
       method: 'POST',
       body: params
     })
 
-    expect(fetch).toHaveBeenCalledWith('url', {
+    expect(mockedFetch).toHaveBeenCalledWith('url', {
       method: 'POST',
       body: params,
       headers: {
@@ -50,13 +51,13 @@ describe('#ajaxJSON', () => {
 describe('#fetchPaginated', () => {
   const items = [{ id: 1, name: 'name' }]
 
-  fetch.mockResolvedValue({
-    json: () => Promise.resolve({ count: items.length, items: JSON.stringify(items) })
+  mockedFetch.mockResolvedValue({
+    json: async () => Promise.resolve({ count: items.length, items: JSON.stringify(items) })
   })
 
   it('should make the proper request', () => {
-    fetchPaginated('url', { page: 1, perPage: 20 })
-    expect(fetch).toHaveBeenCalledWith('url?page=1&per_page=20', {
+    void fetchPaginated('url', { page: 1, perPage: 20 })
+    expect(mockedFetch).toHaveBeenCalledWith('url?page=1&per_page=20', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
@@ -67,8 +68,8 @@ describe('#fetchPaginated', () => {
   })
 
   it('should make a search request', () => {
-    fetchPaginated('url', { page: 2, perPage: 10, query: 'foo' })
-    expect(fetch).toHaveBeenCalledWith('url?page=2&per_page=10&search%5Bquery%5D=foo&utf8=%E2%9C%93', {
+    void fetchPaginated('url', { page: 2, perPage: 10, query: 'foo' })
+    expect(mockedFetch).toHaveBeenCalledWith('url?page=2&per_page=10&search%5Bquery%5D=foo&utf8=%E2%9C%93', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
@@ -80,7 +81,7 @@ describe('#fetchPaginated', () => {
 
   it('should fetch some items', async () => {
     const res = await fetchPaginated('url', { page: 2, perPage: 10 })
-    expect(fetch).toHaveBeenCalledWith('url?page=2&per_page=10', {
+    expect(mockedFetch).toHaveBeenCalledWith('url?page=2&per_page=10', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',

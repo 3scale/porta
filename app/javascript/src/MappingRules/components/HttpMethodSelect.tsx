@@ -6,12 +6,13 @@ import {
   SelectVariant
 } from '@patternfly/react-core'
 
+import type { SelectOptionObject } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  httpMethod: string,
-  httpMethods: Array<string>,
-  setHttpMethod: (httpMethod: string) => void
+interface Props {
+  httpMethod: string;
+  httpMethods: string[];
+  setHttpMethod: (httpMethod: string) => void;
 }
 
 const HttpMethodSelect: FunctionComponent<Props> = ({
@@ -21,9 +22,9 @@ const HttpMethodSelect: FunctionComponent<Props> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const handleOnSelect = (_e: any, value: any) => {
+  const handleOnSelect = (_e: unknown, value: SelectOptionObject | string) => {
     setIsExpanded(false)
-    setHttpMethod(value)
+    setHttpMethod(value as string)
   }
 
   return (

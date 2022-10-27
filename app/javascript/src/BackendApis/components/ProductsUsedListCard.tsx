@@ -5,8 +5,8 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { CompactListItem } from 'Common/components/CompactListCard'
 
-type Props = {
-  products: Array<CompactListItem>
+interface Props {
+  products: CompactListItem[];
 }
 
 const ProductsUsedListCard: React.FunctionComponent<Props> = ({ products }) => {
@@ -39,6 +39,6 @@ const ProductsUsedListCard: React.FunctionComponent<Props> = ({ products }) => {
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ProductsUsedListCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsUsedListCard {...props} />, containerId)
+const ProductsUsedListCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ProductsUsedListCard {...props} />, containerId) }
 
 export { ProductsUsedListCard, ProductsUsedListCardWrapper, Props }

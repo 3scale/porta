@@ -12,12 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     oldLoginWrapper.removeChild(oldLoginPage)
   }
 
-  const PFLoginPageContainer = document.getElementById(containerId)
+  const container = document.getElementById(containerId)
 
-  if (!PFLoginPageContainer) {
+  if (!container) {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const loginPageProps = safeFromJsonString<Props>(PFLoginPageContainer.dataset.loginProps) as Props
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+  const loginPageProps = safeFromJsonString<Props>(container.dataset.loginProps)!
   LoginPageWrapper(loginPageProps, containerId)
 })

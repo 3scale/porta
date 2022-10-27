@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import {
   FormGroup as PF4FormGroup,
   TextInput
@@ -8,10 +7,10 @@ import type { TextInputProps } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 import type { InputProps } from 'Types'
 
-type Props = {
-  type?: TextInputProps['type'],
-  helperTextInvalid: string,
-  inputProps: InputProps
+interface Props {
+  type?: TextInputProps['type'];
+  helperTextInvalid: string;
+  inputProps: InputProps;
 }
 
 const helperTexts = {
@@ -59,6 +58,7 @@ const FormGroup: FunctionComponent<Props> = ({
   )
 }
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const TextField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => (
   <FormGroup
     helperTextInvalid={helperTexts.emailOrUsername}
@@ -67,6 +67,7 @@ const TextField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }
   />
 )
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const EmailField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => (
   <FormGroup
     helperTextInvalid={helperTexts.email}
@@ -75,6 +76,7 @@ const EmailField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps 
   />
 )
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const PasswordField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => {
   const helperText = helperTexts.password
   return (
@@ -86,9 +88,11 @@ const PasswordField: FunctionComponent<{ inputProps: InputProps }> = ({ inputPro
   )
 }
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const PasswordConfirmationField: FunctionComponent<{ inputProps: InputProps }> = ({ inputProps }) => {
   const defaultErrorMessage = helperTexts.passwordConfirmation.isMandatory
   const errorMessage = inputProps.errorMessage as keyof typeof helperTexts['passwordConfirmation']
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME: properly type errorMessage
   const helperText = errorMessage ? helperTexts.passwordConfirmation[errorMessage] : defaultErrorMessage
   return (
     <FormGroup

@@ -1,20 +1,20 @@
-export type BillingAddressData = {
-  address: string,
-  address1: string,
-  address2: string,
-  city: string,
-  company: string,
-  country: string,
-  // eslint-disable-next-line camelcase
-  phone_number: string,
-  state: string,
-  zip: string
+export interface BillingAddressData {
+  address: string;
+  address1: string;
+  address2: string;
+  city: string;
+  company: string;
+  country: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  phone_number: string;
+  state: string;
+  zip: string;
 }
 
-export type HostedFieldsOptions = {
-  styles: Record<string, string | Record<any, any>>,
+export interface HostedFieldsOptions {
+  styles: Record<string, Record<string, unknown> | string>;
   fields: Record<string, {
-    selector: string,
-    placeholder: string
-  }>
+    selector: string;
+    placeholder: string;
+  }>;
 }

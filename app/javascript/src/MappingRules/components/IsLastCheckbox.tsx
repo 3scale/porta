@@ -2,8 +2,8 @@ import { Checkbox, FormGroup } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  isLast: boolean
+interface Props {
+  isLast: boolean;
 }
 
 const IsLastCheckbox: FunctionComponent<Props> = ({ isLast }) => (

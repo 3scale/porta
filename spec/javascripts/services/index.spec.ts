@@ -24,12 +24,12 @@ describe('Services index', () => {
   })
 
   it('attaches the click event to the title-toggle element', () => {
-    const widget = document.body.querySelector('#widget_1')
-    const toggle: HTMLElement = widget!.querySelector('#title_1') as HTMLElement
+    const widget = document.body.querySelector('#widget_1')!
+    const toggle = widget.querySelector<HTMLElement>('#title_1')!
 
-    expect(widget!.classList.contains('is-closed')).toBe(true)
+    expect(widget.classList.contains('is-closed')).toBe(true)
     index.initialize()
-    toggle!.click()
-    expect(widget!.classList.contains('is-closed')).toBe(false)
+    toggle.click()
+    expect(widget.classList.contains('is-closed')).toBe(false)
   })
 })

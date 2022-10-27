@@ -1,23 +1,23 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading -- FIXME: remove all the spreading */
 import { useEffect, useState } from 'react'
 import { fetchData } from 'utilities/fetchData'
-import { PROJECTS_PATH } from 'NewService'
 import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
-import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
+import { BASE_PATH, ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  formActionPath: string,
-  setLoadingProjects: (loading: boolean) => void
+const PROJECTS_PATH = `${BASE_PATH}/projects.json`
+
+interface Props {
+  formActionPath: string;
+  setLoadingProjects: (loading: boolean) => void;
 }
 
 const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   formActionPath,
   setLoadingProjects
 }) => {
-  // Don't use named imports so that useState can be mocked in specs
   const [projects, setProjects] = useState<string[]>([])
   const [fetchErrorMessage, setFetchErrorMessage] = useState('')
 
@@ -25,10 +25,9 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
     setLoadingProjects(true)
 
     try {
-      const projects = await fetchData<string[]>(PROJECTS_PATH)
-      setProjects(projects)
-    } catch (error: any) {
-      setFetchErrorMessage(error.message)
+      setProjects(await fetchData<string[]>(PROJECTS_PATH))
+    } catch (error: unknown) {
+      setFetchErrorMessage((error as Error).message)
     } finally {
       setLoadingProjects(false)
     }
@@ -37,7 +36,7 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   const listItemsProps = { projects, onError: setFetchErrorMessage } as const
 
   useEffect(() => {
-    fetchProjects()
+    void fetchProjects()
   }, [])
 
   const formProps = {

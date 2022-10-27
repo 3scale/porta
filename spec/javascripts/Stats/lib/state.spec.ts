@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/unbound-method */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
 import MockDate from 'mockdate'
 import { CustomRangeDate, PeriodRangeDate, StatsState } from 'Stats/lib/state'

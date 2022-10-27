@@ -21,10 +21,10 @@ import type { Backend } from 'BackendApis/types'
 
 import './IndexPage.scss'
 
-type Props = {
-  newBackendPath: string,
-  backends: Array<Backend>,
-  backendsCount: number
+interface Props {
+  newBackendPath: string;
+  backends: Backend[];
+  backendsCount: number;
 }
 
 const IndexPage: FunctionComponent<Props> = ({
@@ -44,8 +44,7 @@ const IndexPage: FunctionComponent<Props> = ({
     cells: [
       { title: <Button isInline component="a" href={tableRow.links[1].path} variant="link">{tableRow.name}</Button> },
       tableRow.systemName,
-      // eslint-disable-next-line react/jsx-key
-      <span className="api-table-timestamp">{tableRow.updatedAt}</span>,
+      <span key={tableRow.systemName} className="api-table-timestamp">{tableRow.updatedAt}</span>,
       tableRow.privateEndpoint,
       tableRow.productsCount
     ]
@@ -58,7 +57,7 @@ const IndexPage: FunctionComponent<Props> = ({
 
   const tableActions: IActions = ['Edit', 'Overview', 'Analytics', 'Methods and Metrics', 'Mapping Rules'].map((title, i) => ({
     title,
-    onClick: (_event, rowId) => linkToPage(rowId, i)
+    onClick: (_event, rowId) => { linkToPage(rowId, i) }
   }))
 
   return (
@@ -97,6 +96,6 @@ const IndexPage: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const BackendsIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<IndexPage {...props} />, containerId)
+const BackendsIndexPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<IndexPage {...props} />, containerId) }
 
 export { IndexPage, BackendsIndexPageWrapper, Props }

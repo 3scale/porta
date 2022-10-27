@@ -2,11 +2,11 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  userName: string,
-  setUserName: (userName: string) => void,
-  isRequired?: boolean,
-  errors: string[]
+interface Props {
+  userName: string;
+  setUserName: (userName: string) => void;
+  isRequired?: boolean;
+  errors: string[];
 }
 
 const UserNameInput: FunctionComponent<Props> = ({

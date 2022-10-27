@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = container
   const { searchHref = '' } = dataset
-  const columns = safeFromJsonString<Props['columns']>(dataset.columns) || []
-  const count = safeFromJsonString<number>(dataset.count) || 0
-  const plans = safeFromJsonString<Props['plans']>(dataset.plans) || []
+  const columns = safeFromJsonString<Props['columns']>(dataset.columns) ?? []
+  const count = safeFromJsonString<number>(dataset.count) ?? 0
+  const plans = safeFromJsonString<Props['plans']>(dataset.plans) ?? []
 
   PlansTableCardWrapper({
     columns,

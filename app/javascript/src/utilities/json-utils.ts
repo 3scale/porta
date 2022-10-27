@@ -1,6 +1,6 @@
 const toJsonString = (val: unknown): string => JSON.stringify(val, null, 2)
 
-const fromJsonString = <T>(json: string): T => JSON.parse(json)
+const fromJsonString = <T>(json: string): T => JSON.parse(json) as T
 
 const safeFromJsonString = <T>(json?: string): T | undefined => {
   if (json === undefined) {

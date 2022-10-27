@@ -1,9 +1,9 @@
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  htmlFor: string,
-  label: string,
-  required?: boolean
+interface Props {
+  htmlFor: string;
+  label: string;
+  required?: boolean;
 }
 
 const Label: FunctionComponent<Props> = ({

@@ -1,7 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/lines-between-class-members */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { StatsSourceCollector } from 'Stats/lib/source_collector'
 
 class TestStatsSourceCollector extends StatsSourceCollector {
-  constructor({ id, metrics }: { id: number, metrics: []}) {
+  constructor ({ id, metrics }: { id: number; metrics: [] }) {
     super({ id, metrics })
   }
 }
@@ -31,7 +40,7 @@ describe('StatsSourceCollector', () => {
 
   it('should throw error on url getter', () => {
     expect(() => {
-      sourceCollector.url // eslint-disable-line no-unused-expressions
+      sourceCollector.url
     }).toThrow(new Error('It should implement url getter in subclasses.'))
   })
 
@@ -63,7 +72,7 @@ describe('StatsSourceCollector', () => {
       id: number
       details: any
 
-      constructor ({ id, details }: { id: number, details: any }) {
+      constructor ({ id, details }: { id: number; details: any }) {
         this.id = id
         this.details = details
       }

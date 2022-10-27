@@ -133,7 +133,9 @@ exports[`should not render reset password button when disablePasswordReset is tr
                         />
                         <CSRFToken>
                           <input
+                            name="mocked-csrf-param"
                             type="hidden"
+                            value="mocked-csrf-token"
                           />
                         </CSRFToken>
                       </HiddenInputs>
@@ -582,7 +584,9 @@ exports[`should render Login form and Authentication providers when available 1`
                         />
                         <CSRFToken>
                           <input
+                            name="mocked-csrf-param"
                             type="hidden"
+                            value="mocked-csrf-token"
                           />
                         </CSRFToken>
                       </HiddenInputs>
@@ -1255,7 +1259,9 @@ exports[`should render itself 1`] = `
                         />
                         <CSRFToken>
                           <input
+                            name="mocked-csrf-param"
                             type="hidden"
+                            value="mocked-csrf-token"
                           />
                         </CSRFToken>
                       </HiddenInputs>
@@ -1726,7 +1732,9 @@ exports[`should render reset password button when disablePasswordReset is false 
                         />
                         <CSRFToken>
                           <input
+                            name="mocked-csrf-param"
                             type="hidden"
+                            value="mocked-csrf-token"
                           />
                         </CSRFToken>
                       </HiddenInputs>

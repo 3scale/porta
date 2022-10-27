@@ -11,35 +11,60 @@
   },
   "env": {
     "browser": true,
-    "node": true,
     "jest": true
   },
   "extends": [
     "plugin:react/all",
-    // "eslint:recommended",
-    // "plugin:@typescript-eslint/recommended"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/all",
+    "./eslint-naming-conventions.json"
+    // "plugin:@typescript-eslint/recommended" // Updates some rules from eslint:recommended
   ],
   "plugins": [
     "@typescript-eslint",
     "import",
-    // "jsx-expressions"
+    // "jsx-expressions" // TODO: requires node 12
   ],
+  "overrides": [{
+    "files": ["spec/javascripts/**"],
+    "plugins": ["jest"],
+    "rules": {
+      // Turn the original rule off *only* for test files only
+      "@typescript-eslint/unbound-method": "off",
+      "jest/unbound-method": "error",
+    },
+  }],
   "rules": {
-    "indent": ["error", 2, { "SwitchCase": 1 }],
+    // Override eslint:recommended
+    "array-callback-return": "error",
+    "no-duplicate-imports": "off", // Disabled in favor of @typescript-eslint/no-duplicate-imports
     "no-console": ["warn", { "allow": ["error"] }],
-    "no-duplicate-imports": "off", // Replaced by @typescript-eslint/no-duplicate-imports
-    "sort-imports": "off", // Replaced by import/order
-    "semi": "off",
+    "sort-imports": "off", // Disabled in favor of import/order
+    "semi": "off", // Disabled in favor of @typescript-eslint/semi
     "no-multiple-empty-lines": ["error", { "max": 1 }],
-    "object-curly-spacing": ["error", "always"],
     "jsx-quotes": ["error", "prefer-double"],
     "array-bracket-spacing": ["error", "never"],
-
+    // Override plugin:@typescript-eslint/all
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true }],
+    "@typescript-eslint/indent": ["error", 2, { "SwitchCase": 1 }],
+    "@typescript-eslint/prefer-readonly-parameter-types": "off",
+    "@typescript-eslint/no-extra-parens": "off",
+    "@typescript-eslint/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-type-alias": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-magic-numbers": "off",
+    "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/promise-function-async": "off",
+    // "@typescript-eslint/no-implicit-any-catch": "off", TODO: disable this rule, it is already handled by Typescript via setting useUnknownInCatchVariables
+    // Override plugin:@typescript-eslint/recommended
     "@typescript-eslint/semi": ["error", "never"],
     "@typescript-eslint/no-unused-vars": 2,
     "@typescript-eslint/consistent-type-imports": 2,
     "@typescript-eslint/no-duplicate-imports": "error",
-
+    // Override plugin:react/all
     "react/destructuring-assignment": "off",
     "react/forbid-component-props": "off",
     "react/function-component-definition": "off",
@@ -68,10 +93,13 @@
       "condition": "parens-new-line",
       "logical": "parens-new-line"
     }],
+    "react/jsx-child-element-spacing": "warn",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
-
+    "react/no-set-state": "off",
+    "react/no-unescaped-entities": "warn",
+    // From plugin import
     "import/order": ["error", {
       "warnOnUnassignedImports": true,
       "groups": ["builtin", "index", "parent", "internal", "external", "object", "type", "sibling"],
@@ -79,14 +107,8 @@
     }],
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
-
-    // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render"
-
-    // TODO: only temporary for development
-    "@typescript-eslint/no-explicit-any": "off",
-    "react/no-set-state": "off",
-    "react/no-unescaped-entities": "off",
-    "react/jsx-child-element-spacing": "off"
+    // From plugin jsx-expressions
+    // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render" // TODO: requires node 12
   },
   "settings": {
     "react": {

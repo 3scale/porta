@@ -6,13 +6,13 @@ import { isActiveTab } from 'utilities/isActiveTab'
 import type { FunctionComponent } from 'react'
 import type { Metric } from 'Types'
 
-type Props = {
-  applicationPlansPath: string,
-  addMappingRulePath: string,
-  createMetricPath: string,
-  mappingRulesPath: string,
-  metrics: Array<Metric>,
-  metricsCount: number
+interface Props {
+  applicationPlansPath: string;
+  addMappingRulePath: string;
+  createMetricPath: string;
+  mappingRulesPath: string;
+  metrics: Metric[];
+  metricsCount: number;
 }
 
 const ProductIndexPage: FunctionComponent<Props> = ({
@@ -52,6 +52,6 @@ const ProductIndexPage: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ProductIndexPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductIndexPage {...props} />, containerId)
+const ProductIndexPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ProductIndexPage {...props} />, containerId) }
 
 export { ProductIndexPage, ProductIndexPageWrapper, Props }

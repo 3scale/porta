@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const requestPageProps = safeFromJsonString<Props>(container.dataset.requestProps) as Props
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+  const requestPageProps = safeFromJsonString<Props>(container.dataset.requestProps)!
   RequestPassword(requestPageProps, containerId)
 })

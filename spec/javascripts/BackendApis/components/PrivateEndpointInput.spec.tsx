@@ -26,7 +26,7 @@ it('should work', () => {
   const value = 'foo'
   const wrapper = mountWrapper()
 
-  act(() => wrapper.find(PrivateEndpointInput).props().setPrivateEndpoint(value))
+  act(() => { wrapper.find(PrivateEndpointInput).props().setPrivateEndpoint(value) })
 
   wrapper.update()
   expect(setPrivateEndpoint).toHaveBeenCalledWith(value)

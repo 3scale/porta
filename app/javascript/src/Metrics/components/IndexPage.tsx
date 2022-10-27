@@ -15,13 +15,13 @@ import type { Metric } from 'Types'
 
 import './IndexPage.scss'
 
-type Props = {
-  metrics: Array<Metric>,
-  metricsCount: number,
-  infoCard: React.ReactNode,
-  mappingRulesPath: string,
-  addMappingRulePath: string,
-  createMetricPath: string
+interface Props {
+  metrics: Metric[];
+  metricsCount: number;
+  infoCard: React.ReactNode;
+  mappingRulesPath: string;
+  addMappingRulePath: string;
+  createMetricPath: string;
 }
 
 const IndexPage: FunctionComponent<Props> = ({
@@ -36,7 +36,7 @@ const IndexPage: FunctionComponent<Props> = ({
   const isActiveTabMetrics = url.searchParams.get('tab') === 'metrics'
   const activeTabKey: TabKey = isActiveTabMetrics ? 'metrics' : 'methods'
 
-  const handleTabClick = (_event: any, tabKey: string | number) => {
+  const handleTabClick = (_event: unknown, tabKey: number | string) => {
     if (tabKey !== 'metrics' && tabKey !== 'methods') {
       throw new Error('invalid tab key')
     }

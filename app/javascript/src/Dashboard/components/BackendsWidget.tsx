@@ -15,21 +15,21 @@ import 'Dashboard/styles/dashboard.scss'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  newBackendPath: string,
-  backendsPath: string,
-  backends: Array<{
-    id: number,
-    link: string,
-    links: Array<{
-      name: string,
-      path: string
-    }>,
-    name: string,
-    type: string,
-    // eslint-disable-next-line camelcase
-    updated_at: string
-  }>
+interface Props {
+  newBackendPath: string;
+  backendsPath: string;
+  backends: {
+    id: number;
+    link: string;
+    links: {
+      name: string;
+      path: string;
+    }[];
+    name: string;
+    type: string;
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    updated_at: string;
+  }[];
 }
 
 const BackendsWidget: FunctionComponent<Props> = ({
@@ -73,6 +73,6 @@ const BackendsWidget: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const BackendsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<BackendsWidget {...props} />, containerId)
+const BackendsWidgetWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BackendsWidget {...props} />, containerId) }
 
 export { BackendsWidget, BackendsWidgetWrapper, Props }

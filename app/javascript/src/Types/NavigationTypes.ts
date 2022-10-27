@@ -1,1 +1,1 @@
-export type Menu = 'dashboard' | 'personal' | 'account' | 'audience' | 'buyers' | 'finance' | 'cms' | 'site' | 'settings' | 'apis' | 'applications' | 'active_docs' | 'serviceadmin' | 'monitoring' | 'backend_api' | 'products' | 'backend_apis' | 'quickstarts'
+export type Menu = 'account' | 'active_docs' | 'apis' | 'applications' | 'audience' | 'backend_api' | 'backend_apis' | 'buyers' | 'cms' | 'dashboard' | 'finance' | 'monitoring' | 'personal' | 'products' | 'quickstarts' | 'serviceadmin' | 'settings' | 'site'

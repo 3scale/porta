@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { newProductPath, productsPath, products } = safeFromJsonString<Props>(container.dataset.productsWidget) as Props
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: we need to give some default values or something
+  const { newProductPath, productsPath, products } = safeFromJsonString<Props>(container.dataset.productsWidget)!
 
   ProductsWidgetWrapper({
     newProductPath,

@@ -1,3 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/unbound-method */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-invalid-this */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
 import { StatsMetricsSource } from 'Stats/lib/metrics_source'
 
@@ -29,7 +38,7 @@ describe('StatsMetricsSource', () => {
 
   it('should throw error when call url directly', () => {
     expect(() => {
-      source.url // eslint-disable-line no-unused-expressions
+      source.url
     }).toThrow(new Error('It should implement url getter in subclasses.'))
   })
 })
@@ -47,9 +56,10 @@ describe('CustomMetricSource', () => {
   }
 
   class CustomMetricSource extends StatsMetricsSource {
-    constructor({ id, details }: { id: number, details: any }) {
+    constructor ({ id, details }: { id: number; details: any }) {
       super({ id, details })
     }
+
     get url () { return 'http://example.com/api' as any }
   }
 

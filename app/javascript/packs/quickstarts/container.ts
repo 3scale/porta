@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { links, renderCatalog } = container.dataset
   const parsedRenderCatalog = safeFromJsonString<boolean>(renderCatalog)
-  const willRenderQuickStartContainer = getActiveQuickstart() || parsedRenderCatalog
+  const willRenderQuickStartContainer = getActiveQuickstart() ?? parsedRenderCatalog
 
   if (!willRenderQuickStartContainer) {
     container.remove()
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   QuickStartContainer({
-    links: safeFromJsonString<Array<[string, string, string]>>(links) || [],
+    links: safeFromJsonString<[string, string, string][]>(links) ?? [],
     renderCatalog: parsedRenderCatalog
   }, containerId)
 

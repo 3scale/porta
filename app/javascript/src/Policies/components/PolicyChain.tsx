@@ -11,23 +11,25 @@ import type { SortEndHandler } from 'react-sortable-hoc'
 import type { ChainPolicy, ThunkAction } from 'Policies/types'
 import type { SortPolicyChainAction } from 'Policies/actions/PolicyChain'
 
-type Props = {
-  chain: Array<ChainPolicy>,
+interface Props {
+  chain: ChainPolicy[];
   actions: {
-    openPolicyRegistry: () => ThunkAction,
-    editPolicy: (policy: ChainPolicy, index: number) => ThunkAction,
-    sortPolicyChain: (policies: ChainPolicy[]) => SortPolicyChainAction
-  }
+    openPolicyRegistry: () => ThunkAction;
+    editPolicy: (policy: ChainPolicy, index: number) => ThunkAction;
+    sortPolicyChain: (policies: ChainPolicy[]) => SortPolicyChainAction;
+  };
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- This is adhoc componnet
 const DragHandle = SortableHandle(() => <div className="Policy-sortHandle"><i className="fa fa-sort" /></div>)
 
-type SortableItemProps = {
-  value: ChainPolicy,
-  editPolicy: Props['actions']['editPolicy'],
-  index: number
+interface SortableItemProps {
+  value: ChainPolicy;
+  editPolicy: Props['actions']['editPolicy'];
+  index: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- TODO: remove this extra component.
 const SortableItem = SortableElement<SortableItemProps>(({ value, editPolicy, index }: SortableItemProps) => {
   const edit = () => editPolicy(value, index)
   return (
@@ -38,11 +40,12 @@ const SortableItem = SortableElement<SortableItemProps>(({ value, editPolicy, in
   )
 })
 
-type SortableListProps = {
-  items: Props['chain'],
-  editPolicy: Props['actions']['editPolicy']
+interface SortableListProps {
+  items: Props['chain'];
+  editPolicy: Props['actions']['editPolicy'];
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention -- TODO: remove this extra component.
 const SortableList = SortableContainer<SortableListProps>(({ items, editPolicy }: SortableListProps) => (
   <ul className="list-group">
     {items.map((policy, index) => (

@@ -1,6 +1,6 @@
 import * as patternflyUtils from 'utilities/patternfly-utils'
 
-import type { ReactElement } from 'react'
+import type { IRecord } from 'utilities/patternfly-utils'
 
 const item = { id: 10, name: 'The item', description: 'A standard item object' }
 
@@ -45,10 +45,10 @@ it('#handleOnFilter should work', () => {
     { id: 1, name: 'One item', description: '' },
     { id: 2, name: 'Another item', description: '' }
   ]
-  const onFilter = patternflyUtils.handleOnFilter(items)
+  const onFilter = patternflyUtils.handleOnFilter<IRecord>(items)
 
-  const filter = (value: string) => onFilter({ currentTarget: { value } } as React.SyntheticEvent<HTMLInputElement>)
-    .map((el: ReactElement) => el.props.value)
+  const filter = (value: string): any[] => onFilter({ currentTarget: { value } } as React.SyntheticEvent<HTMLInputElement>)
+    .map((el) => el.props.value)
 
   expect(filter('one')).toMatchInlineSnapshot(`
     Array [

@@ -2,13 +2,13 @@ import { GreaterThanIcon, KeyIcon, LessThanIcon } from '@patternfly/react-icons'
 
 import type { FunctionComponent } from 'react'
 
-export type ProvidersProps = {
-  authorizeURL: string,
-  humanKind: string
+export interface ProvidersProps {
+  authorizeURL: string;
+  humanKind: string;
 }
 
-type Props = {
-  authenticationProviders: Array<ProvidersProps>
+interface Props {
+  authenticationProviders: ProvidersProps[];
 }
 
 const Provider: FunctionComponent<ProvidersProps> = ({ authorizeURL, humanKind }) => (
@@ -20,7 +20,7 @@ const Provider: FunctionComponent<ProvidersProps> = ({ authorizeURL, humanKind }
   </p>
 )
 
-// eslint-disable-next-line react/no-multi-comp
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const AuthenticationProviders: FunctionComponent<Props> = (props) => {
   const { authenticationProviders } = props
   const providersList = authenticationProviders.map(

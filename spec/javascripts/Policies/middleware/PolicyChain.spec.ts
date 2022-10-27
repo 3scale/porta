@@ -36,7 +36,8 @@ const chainPolicy: ChainPolicy = {
   removable: true
 }
 
-const validPolicy: PolicyConfig = { name: 'echo', version: 'builtin', configuration: { config: 'bond' }, enabled: true }
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any -- FIXME: who knows why this is not a valid configuration...
+const validPolicy: PolicyConfig = { name: 'echo', version: 'builtin', configuration: { config: 'bond' } as any, enabled: true }
 const wrongPolicy: PolicyConfig = { name: 'foo', version: 'builtin', configuration: {}, enabled: true }
 
 const create = () => {
@@ -65,13 +66,13 @@ describe('#policyChainMiddleware', () => {
 
   it('Passes through non of middleware actions', () => {
     const action = { type: 'TEST' }
-    invoke(action as PolicyChainMiddlewareAction)
+    void invoke(action as PolicyChainMiddlewareAction)
 
     expect(next).toHaveBeenCalledWith(action)
   })
 
   it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action', () => {
-    invoke({ type: 'LOAD_CHAIN', policiesConfig: [validPolicy] })
+    void invoke({ type: 'LOAD_CHAIN', policiesConfig: [validPolicy] })
 
     expect(store.dispatch.mock.calls[0][0].type).toBe('SET_ORIGINAL_POLICY_CHAIN')
     expect(store.dispatch.mock.calls[0][0].payload[0].data).toEqual(validPolicy.configuration)
@@ -81,13 +82,13 @@ describe('#policyChainMiddleware', () => {
   })
 
   it('Dispatches LOAD_CHAIN_ERROR action', () => {
-    invoke({ type: 'LOAD_CHAIN', policiesConfig: [wrongPolicy] })
+    void invoke({ type: 'LOAD_CHAIN', policiesConfig: [wrongPolicy] })
 
     expect(store.dispatch).toHaveBeenCalledWith(loadChainError({}))
   })
 
   it('Dispatches SET_ORIGINAL_POLICY_CHAIN and LOAD_CHAIN_SUCCESS action only with valid policies', () => {
-    invoke({ type: 'LOAD_CHAIN', policiesConfig: [wrongPolicy, validPolicy] })
+    void invoke({ type: 'LOAD_CHAIN', policiesConfig: [wrongPolicy, validPolicy] })
 
     expect(store.dispatch).toHaveBeenCalledWith(loadChainError({}))
     expect(store.dispatch).toHaveBeenCalledWith({ type: 'SET_ORIGINAL_POLICY_CHAIN', payload: [expect.objectContaining({ name: 'echo' })] })
@@ -95,13 +96,13 @@ describe('#policyChainMiddleware', () => {
   })
 
   it('Dispatches the correct update when REMOVE_POLICY_FROM_CHAIN', () => {
-    invoke({ type: 'REMOVE_POLICY_FROM_CHAIN', policy: chainPolicy })
+    void invoke({ type: 'REMOVE_POLICY_FROM_CHAIN', policy: chainPolicy })
 
     expect(store.dispatch).toHaveBeenCalledWith(updatePolicyChain([]))
   })
 
   it('Dispatches the correct update when UPDATE_POLICY_IN_CHAIN', () => {
-    invoke({ type: 'UPDATE_POLICY_IN_CHAIN', policyConfig: chainPolicy })
+    void invoke({ type: 'UPDATE_POLICY_IN_CHAIN', policyConfig: chainPolicy })
 
     expect(store.dispatch).toHaveBeenCalledWith(updatePolicyChain([chainPolicy]))
   })

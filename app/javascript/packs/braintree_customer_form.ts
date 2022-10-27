@@ -8,6 +8,7 @@ import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 
 const CONTAINER_ID = 'braintree-form-wrapper'
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById(CONTAINER_ID)
   if (!container) {
@@ -15,8 +16,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const { clientToken, threeDSecureEnabled, formActionPath, countriesList, selectedCountryCode } = container.dataset as Record<string, string>
-  const billingAddress = safeFromJsonString<BillingAddressData>(container.dataset.billingAddress) as BillingAddressData
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: too much assumption here
+  const billingAddress = safeFromJsonString<BillingAddressData>(container.dataset.billingAddress)!
   for (const key in billingAddress) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME
     if (billingAddress[key as keyof BillingAddressData] === null) {
       billingAddress[key as keyof BillingAddressData] = ''
     }

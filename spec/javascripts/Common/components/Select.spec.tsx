@@ -3,7 +3,7 @@ import { Select } from 'Common/components/Select'
 import { updateInput } from 'utilities/test-utils'
 
 import type { Props } from 'Common/components/Select'
-import type { Record } from 'Types'
+import type { IRecord } from 'Types'
 
 const onSelect = jest.fn()
 const items = [
@@ -11,7 +11,7 @@ const items = [
   { id: 101, name: 'Budd Lightyear' },
   { id: 102, name: 'Troll' }
 ]
-const defaultProps: Props<Record> = {
+const defaultProps: Props<IRecord> = {
   item: null,
   items,
   onSelect,
@@ -30,7 +30,7 @@ const defaultProps: Props<Record> = {
   isRequired: undefined
 }
 
-const mountWrapper = (props: Partial<Props<Record>> = {}) => mount(<Select {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props<IRecord>> = {}) => mount(<Select {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => jest.resetAllMocks())
 
@@ -72,7 +72,7 @@ it('should filter via typeahead', () => {
 
 it('should be aria-labelled', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find(`[aria-label="${defaultProps.ariaLabel}"]`).exists()).toBe(true)
+  expect(wrapper.find(`[aria-label="${defaultProps.ariaLabel!}"]`).exists()).toBe(true)
 })
 
 it('should show a spinner when loading', () => {

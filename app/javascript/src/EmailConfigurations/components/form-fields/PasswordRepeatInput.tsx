@@ -2,12 +2,12 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  password: string,
-  setPassword: (password: string) => void,
-  errors: string[],
-  isRequired?: boolean,
-  isDisabled?: boolean
+interface Props {
+  password: string;
+  setPassword: (password: string) => void;
+  errors: string[];
+  isRequired?: boolean;
+  isDisabled?: boolean;
 }
 
 const PasswordRepeatInput: FunctionComponent<Props> = ({

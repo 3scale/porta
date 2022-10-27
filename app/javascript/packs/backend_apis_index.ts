@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   BackendsIndexPageWrapper({
     newBackendPath,
-    backends: safeFromJsonString<Backend[]>(backends) || [],
-    backendsCount: safeFromJsonString<number>(backendsCount) || 0
+    backends: safeFromJsonString<Backend[]>(backends) ?? [],
+    backendsCount: safeFromJsonString<number>(backendsCount) ?? 0
   }, containerId)
 })

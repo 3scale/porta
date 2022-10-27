@@ -1,6 +1,6 @@
 import { BuyerLogic } from 'Logic/BuyerLogic'
 
-import type { Buyer, Product, ServicePlan } from 'NewApplication/types'
+import type { Buyer, Product, Plan } from 'NewApplication/types'
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -15,7 +15,7 @@ const buyer: Buyer = {
   contractedProducts: [],
   multipleAppsAllowed: false
 }
-const plan: ServicePlan = { id: 10, name: 'The Plan' } as ServicePlan
+const plan: Plan = { id: 10, name: 'The Plan' } as Plan
 const product: Product = { id: 1, name: 'The Product' } as Product
 
 describe('getContractedServicePlan', () => {

@@ -49,6 +49,6 @@ describe('toggleElementInCollection', () => {
 
 describe('getFeatureName', () => {
   it('should return a descriptive name for a provided Feature', () => {
-    FEATURES.forEach(feature => expect(typeof getFeatureName(feature)).toBe('string'))
+    FEATURES.forEach(feature => { expect(typeof getFeatureName(feature)).toBe('string') })
   })
 })

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsTopAppsSourceCollector } from 'Stats/lib/top_apps_source_collector'
 
 describe('StatsTopAppsSourceCollector', () => {

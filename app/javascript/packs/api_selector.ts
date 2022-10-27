@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { activeMenu, audienceLink, settingsLink, productsLink, backendsLink } = apiSelector.dataset
+  const { activeMenu, audienceLink, settingsLink = '', productsLink = '', backendsLink = '' } = apiSelector.dataset
 
   ContextSelectorWrapper({
     activeMenu: activeMenu as Menu,
-    audienceLink: audienceLink as string,
-    settingsLink: settingsLink as string,
-    productsLink: productsLink as string,
-    backendsLink: backendsLink as string
+    audienceLink,
+    settingsLink,
+    productsLink,
+    backendsLink
   }, containerId)
 })

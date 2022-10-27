@@ -8,15 +8,16 @@ import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInpu
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FunctionComponent } from 'react'
+import type { ValidationErrors } from 'Types'
 
-type Props = {
-  action: string,
-  onCancel: () => void,
-  isLoading?: boolean,
+interface Props {
+  action: string;
+  onCancel: () => void;
+  isLoading?: boolean;
   errors?: {
-    // eslint-disable-next-line camelcase
-    private_endpoint: Array<string>
-  }
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    private_endpoint: string[];
+  };
 }
 
 const VALIDATION_CONSTRAINTS = {
@@ -38,7 +39,7 @@ const NewBackendForm: FunctionComponent<Props> = ({
   const [description, setDescription] = useState('')
   const [privateEndpoint, setPrivateEndpoint] = useState('')
 
-  const validationErrors = validate({ name, systemName, privateEndpoint }, VALIDATION_CONSTRAINTS)
+  const validationErrors = validate({ name, systemName, privateEndpoint }, VALIDATION_CONSTRAINTS) as ValidationErrors
 
   return (
     <Form

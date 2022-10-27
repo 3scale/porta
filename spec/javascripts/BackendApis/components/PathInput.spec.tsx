@@ -26,7 +26,7 @@ it('should work', () => {
   const value = 'foo'
   const wrapper = mountWrapper()
 
-  act(() => wrapper.find(PathInput).props().setPath(value))
+  act(() => { wrapper.find(PathInput).props().setPath(value) })
 
   wrapper.update()
   expect(setPath).toHaveBeenCalledWith(value)

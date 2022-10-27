@@ -1,11 +1,11 @@
-import type { FunctionComponent } from "react"
+import type { FunctionComponent } from 'react'
 
-type Props = {
-  name: string,
-  id: string,
-  disabled?: boolean,
-  onChange?: (event: React.SyntheticEvent<HTMLSelectElement>) => void,
-  options: string[]
+interface Props {
+  name: string;
+  id: string;
+  disabled?: boolean;
+  onChange?: (event: React.SyntheticEvent<HTMLSelectElement>) => void;
+  options: string[];
 }
 
 const Select: FunctionComponent<Props> = ({

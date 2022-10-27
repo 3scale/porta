@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-props-no-spreading -- FIXME: remove this spreading */
 import { useState } from 'react'
 import { AuthenticationSettingsFieldset } from 'Settings/components/AuthenticationSettingsFieldset'
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -14,23 +14,23 @@ import type { FieldCatalogProps, FieldGroupProps, LegendCollectionProps, TypeIte
 const SERVICE_MESH_INTEGRATION = 'service_mesh_istio'
 const PROXY_HOSTED_INTEGRATION = 'hosted'
 
-type Props = {
-  isProxyCustomUrlActive: boolean,
-  integrationMethod: FieldGroupProps & FieldCatalogProps,
-  authenticationMethod: FieldGroupProps & FieldCatalogProps,
-  proxyEndpoints: FieldGroupProps[],
+interface Props {
+  isProxyCustomUrlActive: boolean;
+  integrationMethod: FieldCatalogProps & FieldGroupProps;
+  authenticationMethod: FieldCatalogProps & FieldGroupProps;
+  proxyEndpoints: FieldGroupProps[];
   authenticationSettings: {
-    appIdKeyPairSettings: FieldGroupProps[],
-    apiKeySettings: FieldGroupProps,
+    appIdKeyPairSettings: FieldGroupProps[];
+    apiKeySettings: FieldGroupProps;
     oidcSettings: {
-      basicSettings: TypeItemProps,
-      flowSettings: FieldGroupProps[],
-      jwtSettings: TypeItemProps
-    }
-  },
-  credentialsLocation: FieldGroupProps & FieldCatalogProps,
-  security: FieldGroupProps[],
-  gatewayResponse: LegendCollectionProps[]
+      basicSettings: TypeItemProps;
+      flowSettings: FieldGroupProps[];
+      jwtSettings: TypeItemProps;
+    };
+  };
+  credentialsLocation: FieldCatalogProps & FieldGroupProps;
+  security: FieldGroupProps[];
+  gatewayResponse: LegendCollectionProps[];
 }
 
 const Form: React.FunctionComponent<Props> = ({
@@ -45,7 +45,7 @@ const Form: React.FunctionComponent<Props> = ({
 }) => {
   const [selectedIntegrationMethod, setSelectedIntegrationMethod] = useState(integrationMethod.value)
   const [selectedAuthenticationMethod, setSelectedAuthenticationMethod] = useState(authenticationMethod.value)
-  const onChange = (setState: (cb: ((value: string) => string) | string) => void) => (_checked: string, e: React.SyntheticEvent<HTMLButtonElement>) => setState(e.currentTarget.value)
+  const onChange = (setState: (cb: string | ((value: string) => string)) => void) => (_checked: string, e: React.SyntheticEvent<HTMLButtonElement>) => { setState(e.currentTarget.value) }
   const isServiceMesh = selectedIntegrationMethod === SERVICE_MESH_INTEGRATION
   const isProxyHosted = selectedIntegrationMethod === PROXY_HOSTED_INTEGRATION
   const isProxyUrlsReadOnly = !isProxyCustomUrlActive && isProxyHosted
@@ -81,6 +81,7 @@ const Form: React.FunctionComponent<Props> = ({
   )
 }
 
-const FormWrapper = (settings: Props = SETTINGS_DEFAULT, elementId: string) => createReactWrapper(<Form {...settings} />, elementId)
+// eslint-disable-next-line @typescript-eslint/default-param-last -- Why is settings even treated as optional
+const FormWrapper = (settings: Props = SETTINGS_DEFAULT, elementId: string): void => { createReactWrapper(<Form {...settings} />, elementId) }
 
 export { Form, FormWrapper, Props }

@@ -2,8 +2,8 @@ import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  isPasswordReset?: boolean
+interface Props {
+  isPasswordReset?: boolean;
 }
 
 const HiddenInputs: FunctionComponent<Props> = ({ isPasswordReset = false }) => (

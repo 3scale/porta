@@ -1,7 +1,7 @@
 import { DefaultPlanSelectCardWrapper } from 'Plans/components/DefaultPlanSelectCard'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Record as Plan } from 'Types'
+import type { IRecord as Plan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'default_plan'
@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const plans = safeFromJsonString<Plan[]>(dataset.plans) || []
-  const initialDefaultPlan = safeFromJsonString<Plan>(dataset.currentPlan) || null
-  const path = dataset.path || ''
+  const plans = safeFromJsonString<Plan[]>(dataset.plans) ?? []
+  const initialDefaultPlan = safeFromJsonString<Plan>(dataset.currentPlan) ?? null
+  const path = dataset.path ?? ''
 
   DefaultPlanSelectCardWrapper({
     initialDefaultPlan,

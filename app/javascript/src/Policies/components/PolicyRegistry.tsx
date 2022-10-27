@@ -4,12 +4,12 @@ import { HeaderButton } from 'Policies/components/HeaderButton'
 
 import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 
-type Props = {
-  items: Array<RegistryPolicy>,
+interface Props {
+  items: RegistryPolicy[];
   actions: {
-    addPolicy: (policy: RegistryPolicy) => ThunkAction,
-    closePolicyRegistry: () => ThunkAction
-  }
+    addPolicy: (policy: RegistryPolicy) => ThunkAction;
+    closePolicyRegistry: () => ThunkAction;
+  };
 }
 
 const PolicyRegistry: React.FunctionComponent<Props> = ({

@@ -1,43 +1,35 @@
 import { useState } from 'react'
-import {
-  FormGroup,
-  Select,
-  SelectVariant
-} from '@patternfly/react-core'
+import { FormGroup, Select, SelectVariant } from '@patternfly/react-core'
 import { toSelectOption, toSelectOptionObject, handleOnFilter } from 'utilities/patternfly-utils'
 
-import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
-import type { Record, SelectOptionObject } from 'utilities/patternfly-utils'
+import type { ReactElement } from 'react'
+import type { SelectOptionObject as PFSelectOptionObject, SelectOptionProps } from '@patternfly/react-core'
+import type { IRecord, SelectOptionObject, ISelectOption } from 'utilities/patternfly-utils'
 
 import './FancySelect.scss'
 
-type Item = Record & {
-  disabled?: boolean,
-  className?: string
-}
-
-type Props<T extends Record> = {
-  item: T | undefined,
-  items: T[],
-  onSelect: (selected: T | null) => void,
-  label: string,
-  id: string,
-  header: string,
-  isDisabled?: boolean,
-  name?: string,
-  helperText?: React.ReactNode,
-  helperTextInvalid?: string,
-  placeholderText?: string,
+interface Props<T extends IRecord> {
+  item: T | undefined;
+  items: T[];
+  onSelect: (selected: T | null) => void;
+  label: string;
+  id: string;
+  header: string;
+  isDisabled?: boolean;
+  name?: string;
+  helperText?: React.ReactNode;
+  helperTextInvalid?: string;
+  placeholderText?: string;
   footer?: {
-    label: string,
-    onClick: () => void
-  }
+    label: string;
+    onClick: () => void;
+  };
 }
 
 const emptyItem = { id: -1, name: 'No results found', disabled: true, privateEndpoint: '' } as const
 const FOOTER_ID = 'footer_id'
 
-const FancySelect = <T extends Record>({
+const FancySelect = <T extends IRecord>({
   item,
   items,
   onSelect,
@@ -50,14 +42,14 @@ const FancySelect = <T extends Record>({
   helperTextInvalid,
   placeholderText,
   footer
-}: Props<T>) => {
+}: Props<T>): ReactElement => {
   const [expanded, setExpanded] = useState(false)
 
   const headerItem = { id: 'header', name: header, disabled: true, className: 'pf-c-select__menu-item--group-name' } as const
   // TODO: Remove after upgrading @patternfly/react-core, see https://www.patternfly.org/v4/components/select#view-more
   const footerItem = footer && { id: FOOTER_ID, name: footer.label, className: 'pf-c-select__menu-item--sticky-footer' }
 
-  const handleOnSelect = (_e: any, _option: string | PFSelectOptionObject) => {
+  const handleOnSelect = (_e: unknown, _option: PFSelectOptionObject | string) => {
     setExpanded(false)
 
     const option = (_option as SelectOptionObject)
@@ -74,13 +66,14 @@ const FancySelect = <T extends Record>({
     }
   }
 
-  const getSelectOptionsForItems = (items: T[]) => {
-    const selectItems: Item[] = [headerItem]
+  // TODO: seems like this function should be moved to patternfly-utils
+  const getSelectOptionsForItems = (forItems: T[]): React.ReactElement<SelectOptionProps>[] => {
+    const selectItems: ISelectOption[] = [headerItem]
 
-    if (items.length === 0) {
+    if (forItems.length === 0) {
       selectItems.push(emptyItem)
     } else {
-      selectItems.push(...items.map(i => ({ ...i, className: 'pf-c-select__menu-item-description' })))
+      selectItems.push(...forItems.map(i => ({ ...i, className: 'pf-c-select__menu-item-description' })))
     }
 
     if (footerItem) {
@@ -109,10 +102,10 @@ const FancySelect = <T extends Record>({
         placeholderText={placeholderText}
         selections={item && toSelectOptionObject(item)}
         variant={SelectVariant.typeahead}
-        onClear={() => onSelect(null)}
+        onClear={() => { onSelect(null) }}
         onFilter={handleOnFilter<T>(items, getSelectOptionsForItems)}
         onSelect={handleOnSelect}
-        onToggle={() => setExpanded(!expanded)}
+        onToggle={() => { setExpanded(!expanded) }}
       >
         {getSelectOptionsForItems(items)}
       </Select>

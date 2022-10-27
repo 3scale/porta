@@ -3,11 +3,11 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 import type { FormGroupProps, TextInputProps } from '@patternfly/react-core'
 
-type Props = {
-  pattern: TextInputProps['pattern'],
-  validatePattern: (pattern: string) => void,
-  validated: FormGroupProps['validated'],
-  helperTextInvalid: FormGroupProps['helperTextInvalid']
+interface Props {
+  pattern: TextInputProps['pattern'];
+  validatePattern: (pattern: string) => void;
+  validated: FormGroupProps['validated'];
+  helperTextInvalid: FormGroupProps['helperTextInvalid'];
 }
 
 const PatternInput: FunctionComponent<Props> = ({

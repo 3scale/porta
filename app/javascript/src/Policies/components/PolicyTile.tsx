@@ -1,9 +1,9 @@
 import type { RegistryPolicy, ThunkAction } from 'Policies/types'
 
-type Props = {
-  policy: RegistryPolicy,
-  title?: string,
-  onClick: () => ThunkAction
+interface Props {
+  policy: RegistryPolicy;
+  title?: string;
+  onClick: () => ThunkAction;
 }
 
 const PolicyTile: React.FunctionComponent<Props> = ({

@@ -2,11 +2,11 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  email: string,
-  setEmail: (email: string) => void,
-  isRequired?: boolean,
-  errors: string[]
+interface Props {
+  email: string;
+  setEmail: (email: string) => void;
+  isRequired?: boolean;
+  errors: string[];
 }
 
 const EmailInput: FunctionComponent<Props> = ({

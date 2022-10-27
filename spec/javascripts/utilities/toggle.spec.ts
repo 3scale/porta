@@ -1,6 +1,7 @@
 import { moveState, recoverState, toggle, toggleState } from 'utilities/toggle'
 
-let icon: HTMLElement, article: HTMLElement
+let icon: HTMLElement
+let article: HTMLElement
 
 beforeEach(() => {
   localStorage.clear()

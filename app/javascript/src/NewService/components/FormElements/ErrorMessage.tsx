@@ -1,7 +1,7 @@
-import type { FunctionComponent } from "react"
+import type { FunctionComponent } from 'react'
 
-type Props = {
-  fetchErrorMessage: string
+interface Props {
+  fetchErrorMessage: string;
 }
 
 const ErrorMessage: FunctionComponent<Props> = ({ fetchErrorMessage }) => (

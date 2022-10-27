@@ -6,11 +6,11 @@ import 'ActiveDocs/swagger-ui-3-patch.scss'
 
 const accountDataUrl = '/api_docs/account_data.json'
 
-window.SwaggerUI = (args: any, serviceEndpoint: string) => {
-  const responseInterceptor = (response: any) => autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
+window.SwaggerUI = (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) => {
+  const responseInterceptor = (response: SwaggerUI.Response) => autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
 
   SwaggerUI({
     ...args,
     responseInterceptor
-  })
+  } as SwaggerUI.SwaggerUIOptions)
 }

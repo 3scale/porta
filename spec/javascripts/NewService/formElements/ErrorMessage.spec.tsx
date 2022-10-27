@@ -11,7 +11,7 @@ it('should render itself', () => {
 })
 
 it('should render correct error message', () => {
-  const msg = `Sorry, your request has failed with the error: it failed`
+  const msg = 'Sorry, your request has failed with the error: it failed'
   const wrapper = mount(<ErrorMessage {...props} />)
   expect(wrapper.find('.errorMessage').text()).toEqual(msg)
 })

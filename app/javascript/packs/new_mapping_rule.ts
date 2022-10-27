@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   NewMappingRuleWrapper({
     url,
-    topLevelMetrics: safeFromJsonString(topLevelMetrics) || [],
-    methods: safeFromJsonString(methods) || [],
+    topLevelMetrics: safeFromJsonString(topLevelMetrics) ?? [],
+    methods: safeFromJsonString(methods) ?? [],
     isProxyProEnabled: isProxyProEnabled !== undefined,
-    httpMethods: safeFromJsonString<string[]>(httpMethods) || [],
+    httpMethods: safeFromJsonString<string[]>(httpMethods) ?? [],
     errors: safeFromJsonString(errors)
   }, CONTAINER_ID)
 })

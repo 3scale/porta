@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { newBackendPath, backendsPath, backends } = safeFromJsonString<Props>(container.dataset.backendsWidget) as Props
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: we need some default values or something
+  const { newBackendPath, backendsPath, backends } = safeFromJsonString<Props>(container.dataset.backendsWidget)!
 
   BackendsWidgetWrapper({
     newBackendPath,

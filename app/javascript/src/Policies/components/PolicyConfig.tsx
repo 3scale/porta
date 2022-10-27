@@ -6,14 +6,14 @@ import { HeaderButton } from 'Policies/components/HeaderButton'
 import type { ThunkAction, ChainPolicy } from 'Policies/types'
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 
-type Props = {
-  policy: ChainPolicy,
+interface Props {
+  policy: ChainPolicy;
   actions: {
-    submitPolicyConfig: (policy: ChainPolicy) => ThunkAction,
-    removePolicyFromChain: (policy: ChainPolicy) => ThunkAction,
-    closePolicyConfig: () => ThunkAction,
-    updatePolicyConfig: (policy: ChainPolicy) => UpdatePolicyConfigAction
-  }
+    submitPolicyConfig: (policy: ChainPolicy) => ThunkAction;
+    removePolicyFromChain: (policy: ChainPolicy) => ThunkAction;
+    closePolicyConfig: () => ThunkAction;
+    updatePolicyConfig: (policy: ChainPolicy) => UpdatePolicyConfigAction;
+  };
 }
 
 const PolicyConfig: React.FunctionComponent<Props> = ({
@@ -23,9 +23,9 @@ const PolicyConfig: React.FunctionComponent<Props> = ({
   const { submitPolicyConfig, removePolicyFromChain, closePolicyConfig, updatePolicyConfig } = actions
   const { humanName, version, summary, description, enabled, configuration, data, removable } = policy
 
-  const onSubmit = (policy: ChainPolicy) => {
-    return ({ formData, schema }: { formData: ChainPolicy['data'], schema: ChainPolicy['configuration'] }) => {
-      submitPolicyConfig({ ...policy, configuration: schema, data: formData })
+  const onSubmit = (chainPolicy: ChainPolicy) => {
+    return ({ formData, schema }: { formData: ChainPolicy['data']; schema: ChainPolicy['configuration'] }) => {
+      submitPolicyConfig({ ...chainPolicy, configuration: schema, data: formData })
     }
   }
   const togglePolicy = (event: React.ChangeEvent<HTMLInputElement>) => {

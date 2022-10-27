@@ -3,7 +3,7 @@ import { TableModal } from 'Common/components/TableModal'
 import { updateInput } from 'utilities/test-utils'
 
 import type { Props } from 'Common/components/TableModal'
-import type { Record } from 'Types'
+import type { IRecord } from 'Types'
 
 const onSelect = jest.fn()
 const onClose = jest.fn()
@@ -12,9 +12,9 @@ const onSearch = jest.fn()
 
 const cells = [
   { title: 'Name', propName: 'name' }
-] as Props<Record>['cells']
+] as Props<IRecord>['cells']
 
-const defaultProps: Props<Record> = {
+const defaultProps: Props<IRecord> = {
   title: 'My Table',
   selectedItem: null,
   pageItems: undefined,
@@ -32,7 +32,7 @@ const defaultProps: Props<Record> = {
   sortBy: { index: 1, direction: 'desc' }
 }
 
-const mountWrapper = (props: Partial<Props<Record>> = {}) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
+const mountWrapper = (props: Partial<Props<IRecord>> = {}) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
 
 afterEach(() => jest.resetAllMocks())
 

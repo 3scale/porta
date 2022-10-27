@@ -23,38 +23,38 @@ import type {
   ITransform,
   SortByDirection
 } from '@patternfly/react-table'
-import type { Record } from 'utilities/patternfly-utils'
+import type { IRecord } from 'utilities/patternfly-utils'
 
 import './TableModal.scss'
 
-type Props<T extends Record> = {
-  title: string,
-  selectedItem: T | null,
-  pageItems?: T[],
-  itemsCount: number,
-  onSelect: (selected: T | null) => void,
-  onClose: () => void,
-  cells: Array<{
-    title: string,
-    propName: keyof T,
-    transforms?: ITransform[]
-  }>,
-  isOpen?: boolean,
-  isLoading?: boolean,
-  page: number,
-  setPage: (page: number) => void,
-  onSearch: (term: string) => void,
-  searchPlaceholder?: string,
-  perPage?: number,
+interface Props<T extends IRecord> {
+  title: string;
+  selectedItem: T | null;
+  pageItems?: T[];
+  itemsCount: number;
+  onSelect: (selected: T | null) => void;
+  onClose: () => void;
+  cells: {
+    title: string;
+    propName: keyof T;
+    transforms?: ITransform[];
+  }[];
+  isOpen?: boolean;
+  isLoading?: boolean;
+  page: number;
+  setPage: (page: number) => void;
+  onSearch: (term: string) => void;
+  searchPlaceholder?: string;
+  perPage?: number;
   sortBy: {
-    index: number,
-    direction: keyof typeof SortByDirection
-  }
+    index: number;
+    direction: keyof typeof SortByDirection;
+  };
 }
 
 const PER_PAGE_DEFAULT = 5
 
-const TableModal = <T extends Record>({
+const TableModal = <T extends IRecord>({
   title,
   isOpen,
   isLoading = false,
@@ -76,6 +76,7 @@ const TableModal = <T extends Record>({
 
   // FIXME: this should really be done by useSearchInputEffect. The ref won't work though. searchInputRef.current is defined only after the first search even though the effect won't be trigger
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME: is onSearch really never undefined?
     if (searchInputRef.current && onSearch) {
       const { current } = searchInputRef
 
@@ -96,7 +97,7 @@ const TableModal = <T extends Record>({
     setSelected(selectedItem)
   }, [selectedItem])
 
-  const handleOnSelect = (_e: any, _i: any, rowId: number) => {
+  const handleOnSelect = (_e: unknown, _i: unknown, rowId: number) => {
     setSelected(pageItems[rowId])
   }
 
@@ -106,6 +107,7 @@ const TableModal = <T extends Record>({
     }
   }
 
+  // TODO: can we use Common/components/Pagination.tsx here?
   const pagination = (
     <Pagination
       className="pf-c-pagination__input-auto-width"
@@ -114,7 +116,7 @@ const TableModal = <T extends Record>({
       page={page}
       perPage={perPage}
       widgetId="pagination-options-menu-top"
-      onSetPage={(_e, page) => setPage(page)}
+      onSetPage={(_e, p) => { setPage(p) }}
     />
   )
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsCSVLink } from 'Stats/lib/csv_link'
 
 describe('StatsCSVLink', () => {
@@ -41,7 +42,7 @@ describe('StatsCSVLink', () => {
 
   it('should render correctly', () => {
     csvLink.update(data)
-    const link = document.querySelector('#csv_link a') as HTMLAnchorElement
+    const link = document.querySelector<HTMLAnchorElement>('#csv_link a')!
 
     expect(link).toBeDefined()
     expect(link.innerHTML).toEqual('Download CSV')

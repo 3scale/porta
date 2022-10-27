@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const newServiceFormProps = safeFromJsonString<Props>(newServiceWrapper.dataset.newServiceData) as Props
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+  const newServiceFormProps = safeFromJsonString<Props>(newServiceWrapper.dataset.newServiceData)!
 
   NewServiceFormWrapper(newServiceFormProps, containerId)
 })

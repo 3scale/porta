@@ -4,12 +4,12 @@ import { SelectWithModal } from 'Common/components/SelectWithModal'
 import { TableModal } from 'Common/components/TableModal'
 
 import type { Props } from 'Common/components/SelectWithModal'
-import type { Record } from 'Types'
+import type { IRecord } from 'Types'
 
 const onSelect = jest.fn()
 const fetchItems = jest.fn()
 
-type CrewMember = Record & { role: string }
+type CrewMember = IRecord & { role: string }
 
 const cells = [
   { propName: 'name', title: 'Name' },
@@ -119,9 +119,7 @@ describe('with more than 20 items', () => {
     openModal(wrapper)
     const ths = wrapper.find('table th')
 
-    cells.forEach(c => (
-      expect(ths.find(`[data-label="${c.title}"]`).exists()).toBe(true)
-    ))
+    cells.forEach(c => { expect(ths.find(`[data-label="${c.title}"]`).exists()).toBe(true) })
   })
 
   // FIXME: simulate change
@@ -143,6 +141,7 @@ describe('with more than 20 items', () => {
       itemsCount: 30
     }
 
+    // eslint-disable-next-line @typescript-eslint/require-await -- Component does some async process but adding await make the test actually fail
     it('should fetch more items', async () => {
       fetchItems.mockResolvedValue({ items, count: 30 })
       const wrapper = mountWrapper(props)

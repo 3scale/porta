@@ -1,13 +1,10 @@
-import 'core-js/es6/map'
-import 'core-js/es6/set'
-
 import type { FunctionComponent } from 'react'
 import type { Menu } from 'Types'
 
 import './ActiveMenuTitle.scss'
 
-type Props = {
-  activeMenu: Menu
+interface Props {
+  activeMenu: Menu;
 }
 
 const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
@@ -40,7 +37,7 @@ const ActiveMenuTitle: FunctionComponent<Props> = ({ activeMenu }) => {
       case 'backend_apis':
         return ['fa-cube', 'Backends']
 
-      case 'quickstarts': // FIXME: ContextSelector should probably hide or something
+      case 'quickstarts':
         return ['', '--']
 
       default:

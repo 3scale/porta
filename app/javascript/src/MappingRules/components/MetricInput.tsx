@@ -7,17 +7,17 @@ import type { Metric } from 'Types'
 
 import './MetricInput.scss'
 
-type Props = {
-  metric: Metric | null,
-  setMetric: (metric: Metric | null) => void,
-  topLevelMetrics: Array<Metric>,
-  methods: Array<Metric>
+interface Props {
+  metric: Metric | null;
+  setMetric: (metric: Metric | null) => void;
+  topLevelMetrics: Metric[];
+  methods: Metric[];
 }
 
-type RadioOptionProps = {
-  type: 'metric' | 'method',
-  label: string,
-  items: Array<Metric>
+interface RadioOptionProps {
+  type: 'method' | 'metric';
+  label: string;
+  items: Metric[];
 }
 
 const MetricInput: FunctionComponent<Props> = ({
@@ -33,18 +33,17 @@ const MetricInput: FunctionComponent<Props> = ({
     handleOnSelect(null)
   }
 
-  const handleOnSelect = (metric: Metric | null) => {
-    setMetric(metric)
+  const handleOnSelect = (selected: Metric | null) => {
+    setMetric(selected)
   }
 
-  const cells: { title: string, propName: keyof Metric }[] = [
+  const cells: { title: string; propName: keyof Metric }[] = [
     { title: 'Name', propName: 'name' },
     { title: 'System name', propName: 'systemName' },
     { title: 'Last updated', propName: 'updatedAt' }
   ]
 
-  // FIXME: fix these lint errors
-  // eslint-disable-next-line react/no-multi-comp, react/no-unstable-nested-components
+  // eslint-disable-next-line react/no-multi-comp, react/no-unstable-nested-components -- FIXME: fix these lint errors
   const RadioOption: FunctionComponent<RadioOptionProps> = ({
     type,
     label,
@@ -56,7 +55,7 @@ const MetricInput: FunctionComponent<Props> = ({
         isChecked={checked === type}
         label={label}
         name="radio-1"
-        onChange={() => handleOnRadioChange(type)}
+        onChange={() => { handleOnRadioChange(type) }}
       />
       {checked === type && (
         <SelectWithModal

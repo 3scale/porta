@@ -8,30 +8,30 @@ import { Spinner } from 'Common/components/Spinner'
 import { handleOnFilter, toSelectOption, toSelectOptionObject } from 'utilities/patternfly-utils'
 
 import type { SelectOptionObject as PFSelectOptionObject } from '@patternfly/react-core'
-import type { Record, SelectOptionObject } from 'utilities/patternfly-utils'
+import type { IRecord, SelectOptionObject } from 'utilities/patternfly-utils'
 
 import './Select.scss'
 
-type Props<T extends Record> = {
-  item: T | null,
-  items: T[],
-  onSelect: (selected: T | null) => void,
-  label: React.ReactNode,
-  ariaLabel?: string,
-  fieldId: string,
-  name: string,
-  isClearable?: boolean,
-  placeholderText?: string,
-  hint?: React.ReactNode,
-  isValid?: boolean,
-  helperText?: string,
-  helperTextInvalid?: string,
-  isDisabled?: boolean,
-  isLoading?: boolean,
-  isRequired?: boolean
+interface Props<T extends IRecord> {
+  item: T | null;
+  items: T[];
+  onSelect: (selected: T | null) => void;
+  label: React.ReactNode;
+  ariaLabel?: string;
+  fieldId: string;
+  name: string;
+  isClearable?: boolean;
+  placeholderText?: string;
+  hint?: React.ReactNode;
+  isValid?: boolean;
+  helperText?: string;
+  helperTextInvalid?: string;
+  isDisabled?: boolean;
+  isLoading?: boolean;
+  isRequired?: boolean;
 }
 
-const Select = <T extends Record>({
+const Select = <T extends IRecord>({
   item,
   items,
   onSelect,
@@ -51,11 +51,11 @@ const Select = <T extends Record>({
 }: Props<T>): React.ReactElement => {
   const [expanded, setExpanded] = useState(false)
 
-  const handleSelect = (_e: any, option: string | PFSelectOptionObject) => {
+  const handleSelect = (_e: unknown, option: PFSelectOptionObject | string) => {
     setExpanded(false)
 
     const selected = items.find(i => i.id.toString() === (option as SelectOptionObject).id)
-    onSelect(selected || null)
+    onSelect(selected ?? null)
   }
 
   const handleOnClear = () => {
@@ -75,6 +75,7 @@ const Select = <T extends Record>({
       label={label}
     >
       {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
+      {/* TODO: id should be treated as a string */}
       {item && <input name={name} type="hidden" value={item.id > -1 ? item.id : ''} />}
       <PF4Select
         aria-label={ariaLabel}
@@ -83,12 +84,12 @@ const Select = <T extends Record>({
         isDisabled={isDisabled}
         isExpanded={expanded}
         placeholderText={placeholderText}
-        selections={(item && toSelectOptionObject(item)) || undefined}
+        selections={item ? toSelectOptionObject(item) : undefined}
         variant={SelectVariant.typeahead}
         onClear={handleOnClear}
         onFilter={handleOnFilter(items)}
         onSelect={handleSelect}
-        onToggle={() => setExpanded(!expanded)}
+        onToggle={() => { setExpanded(!expanded) }}
       >
         {items.map(toSelectOption)}
       </PF4Select>

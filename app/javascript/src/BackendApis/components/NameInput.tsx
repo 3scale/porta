@@ -2,9 +2,9 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  name: string,
-  setName: (name: string) => void
+interface Props {
+  name: string;
+  setName: (name: string) => void;
 }
 
 const NameInput: FunctionComponent<Props> = ({ name, setName }) => (
@@ -19,7 +19,7 @@ const NameInput: FunctionComponent<Props> = ({ name, setName }) => (
       name="backend_api[name]"
       type="text"
       value={name}
-      onChange={(value) => setName(value)}
+      onChange={(value) => { setName(value) }}
     />
   </FormGroup>
 )

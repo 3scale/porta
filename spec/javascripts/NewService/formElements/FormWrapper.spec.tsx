@@ -17,13 +17,13 @@ it('should render itself', () => {
 
 it('should render an empty input', () => {
   const wrapper = shallow(<FormWrapper {...props} />)
-  const input = wrapper.find(`input[name="utf8"][type='hidden']`)
+  const input = wrapper.find('input[name="utf8"][type=\'hidden\']')
   expect(input.exists()).toBe(true)
 })
 
 it('should render submit button with proper text', () => {
   const wrapper = mount(<FormWrapper {...props} />)
-  const button = wrapper.find(`button[type='submit']`)
+  const button = wrapper.find('button[type=\'submit\']')
   expect(button.exists()).toBe(true)
   expect(button.text()).toEqual(submitText)
 })

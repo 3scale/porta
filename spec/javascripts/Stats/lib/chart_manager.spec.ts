@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/unbound-method */
+/* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
 import { StatsChartManager } from 'Stats/lib/chart_manager'
 
@@ -47,7 +49,7 @@ describe('ChartManager', () => {
   })
 
   it('should render chart with metrics selector and all series', (done) => {
-    chartManager.renderChart().then(() => {
+    void chartManager.renderChart().then(() => {
       expect(chart.render).toHaveBeenCalled()
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hits', 'Hots'] })
       done()
@@ -57,14 +59,14 @@ describe('ChartManager', () => {
   it('should render chart with stored selected series', (done) => {
     jest.spyOn(chartManager, '_getStoredSelectedSeries')
       .mockImplementation(() => 'Hots')
-    chartManager.renderChart().then(() => {
+    void chartManager.renderChart().then(() => {
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hots'] })
       done()
     })
   })
 
   it('should update chart calling chart.update with data', (done) => {
-    chartManager.updateChart().then(() => {
+    void chartManager.updateChart().then(() => {
       expect(chart.update).toHaveBeenCalledWith(data)
       done()
     })

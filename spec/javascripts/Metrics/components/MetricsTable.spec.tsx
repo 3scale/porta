@@ -38,7 +38,7 @@ it('should render itself', () => {
 })
 
 it('should have a paginated table', () => {
-  mockLocation(`href://foo.bar/metrics?per_page=2&page=2`)
+  mockLocation('href://foo.bar/metrics?per_page=2&page=2')
   const wrapper = mountWrapper()
   const pagination = wrapper.find('.pf-c-pagination').first()
 

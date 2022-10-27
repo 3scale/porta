@@ -4,7 +4,7 @@ import { FormGroup, Select, SelectOption } from '@patternfly/react-core'
 import type { SelectOptionObject } from '@patternfly/react-core'
 import type { FieldCatalogProps, FieldGroupProps } from 'Settings/types'
 
-type Props = FieldGroupProps & FieldCatalogProps
+type Props = FieldCatalogProps & FieldGroupProps
 
 const SelectGroup: React.FunctionComponent<Props> = ({
   label,
@@ -15,7 +15,7 @@ const SelectGroup: React.FunctionComponent<Props> = ({
 }) => {
   const [selectedValue, setSelectedValue] = useState(value)
   const [isExpanded, setIsExpanded] = useState(false)
-  const onSelect = (_e: any, selection: string | SelectOptionObject) => {
+  const onSelect = (_e: unknown, selection: SelectOptionObject | string) => {
     setIsExpanded(false)
     setSelectedValue((selection as SelectOptionObject & { key: string }).key)
   }

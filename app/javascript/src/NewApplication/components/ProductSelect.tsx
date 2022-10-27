@@ -5,13 +5,13 @@ import { SelectWithModal } from 'Common/components/SelectWithModal'
 import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 import type { Product } from 'NewApplication/types'
 
-type Props = {
-  product: Product | null,
-  products: Product[],
-  productsCount: number,
-  onSelectProduct: (product: Product | null) => void,
-  productsPath?: string,
-  isDisabled?: boolean
+interface Props {
+  product: Product | null;
+  products: Product[];
+  productsCount: number;
+  onSelectProduct: (product: Product | null) => void;
+  productsPath?: string;
+  isDisabled?: boolean;
 }
 
 const ProductSelect: React.FunctionComponent<Props> = ({

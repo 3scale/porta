@@ -8,22 +8,23 @@ import { EmailField } from 'LoginPage/loginForms/FormGroups'
 import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 import { validateSingleField } from 'LoginPage/utils/formValidation'
 
-type Props = {
-  providerLoginPath: string,
-  providerPasswordPath: string
+import type { ReactNode } from 'react'
+
+interface Props {
+  providerLoginPath: string;
+  providerPasswordPath: string;
 }
 
-type State = {
-  email: string,
+interface State {
+  email: string;
   validation: {
-    email?: boolean
-  }
+    email?: boolean;
+  };
 }
 
-// TODO: resolve this react/require-optimization
-// eslint-disable-next-line react/require-optimization
+// eslint-disable-next-line react/require-optimization -- TODO: resolve this react/require-optimization
 class RequestPasswordForm extends React.Component<Props, State> {
-  constructor(props: Props) {
+  public constructor (props: Props) {
     super(props)
     this.state = {
       email: '',
@@ -33,12 +34,13 @@ class RequestPasswordForm extends React.Component<Props, State> {
     }
   }
 
-  handleTextInputEmail: (text: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
+  private readonly handleTextInputEmail: (text: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (email, event) => {
     const isValid = validateSingleField(event)
     this.setState({ email, validation: { email: isValid } })
   }
 
-  render () {
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public render (): ReactNode {
     const emailInputProps = {
       isRequired: true,
       name: 'email',
@@ -49,7 +51,7 @@ class RequestPasswordForm extends React.Component<Props, State> {
       onChange: this.handleTextInputEmail,
       autoFocus: true
     } as const
-    const formDisabled = Object.values(this.state.validation).some(value => value !== true)
+    const formDisabled = Object.values(this.state.validation).some(value => !value)
     return (
       <Form
         noValidate

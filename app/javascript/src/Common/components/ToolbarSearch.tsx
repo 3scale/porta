@@ -12,10 +12,10 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import './ToolbarSearch.scss'
 
-type Props = {
-  placeholder: string,
-  name?: string,
-  children?: React.ReactNode
+interface Props {
+  placeholder: string;
+  name?: string;
+  children?: React.ReactNode;
 }
 
 const FORM_ID = 'toolbar-search-form'
@@ -28,7 +28,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   children
 }) => {
   const query = new URL(window.location.href).searchParams.get(name)
-  const [searchText, setSearchText] = useState<string>(query || '')
+  const [searchText, setSearchText] = useState<string>(query ?? '')
   const [showPopover, setShowPopover] = useState<boolean>(false)
 
   const inputRef = useRef<HTMLInputElement>()
@@ -47,7 +47,8 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
   }, [searchText])
 
   const onSubmitSearch = (value: string) => {
-    const form = document.forms.namedItem(FORM_ID) as HTMLFormElement
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- The form is rendered is this very component
+    const form = document.forms.namedItem(FORM_ID)!
 
     const inputClearedBeforeAnySearch = !query && value.length === 0
     const inputCleared = value.length === 0
@@ -75,7 +76,8 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
     onSubmitSearch((e.currentTarget as HTMLInputElement).value)
   }
 
-  const Popopover: any = Popover // HACK: remove this after upgrading to @patternfly/react-core 4
+  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any -- HACK: Popover return method is incompatible. Need to upgrade @patternfly/react-core
+  const Popopover: any = Popover
 
   return (
     <Form
@@ -83,7 +85,7 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
       id={FORM_ID}
       method="get"
       role="search"
-      onSubmit={e => e.preventDefault()}
+      onSubmit={e => { e.preventDefault() }}
     >
       <InputGroup>
         <input name={INPUT_NAME_UTF8} type="hidden" value="✓" />
@@ -102,12 +104,12 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
           aria-label="search minimum length"
           bodyContent={<div>To search, type at least 3 characters.</div>}
           isVisible={showPopover}
-          shouldClose={() => setShowPopover(false)}
+          shouldClose={() => { setShowPopover(false) }}
         >
           <Button
             aria-label="search button for search input"
             variant={ButtonVariant.control}
-            onClick={() => onSubmitSearch(searchText)}
+            onClick={() => { onSubmitSearch(searchText) }}
           >
             <SearchIcon />
           </Button>
@@ -118,6 +120,6 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ToolbarSearchWrapper = (props: Props, containerId: string): void => createReactWrapper(<ToolbarSearch {...props} />, containerId)
+const ToolbarSearchWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ToolbarSearch {...props} />, containerId) }
 
 export { ToolbarSearch, ToolbarSearchWrapper, Props }

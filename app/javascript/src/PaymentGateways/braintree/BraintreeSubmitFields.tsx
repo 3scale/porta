@@ -1,8 +1,8 @@
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  onSubmitForm: (event: React.MouseEvent<HTMLButtonElement>) => Promise<unknown> | undefined,
-  isFormValid: boolean
+interface Props {
+  onSubmitForm: (event: React.MouseEvent<HTMLButtonElement>) => Promise<unknown> | undefined;
+  isFormValid: boolean;
 }
 
 const BraintreeSubmitFields: FunctionComponent<Props> = ({

@@ -1,10 +1,10 @@
-import type { FunctionComponent } from "react"
+import type { FunctionComponent } from 'react'
 
-type Props = {
-  isServiceDiscoveryUsable: boolean,
-  serviceDiscoveryAuthenticateUrl: string,
-  handleFormsVisibility: (event: React.SyntheticEvent<HTMLInputElement>) => void,
-  loadingProjects: boolean
+interface Props {
+  isServiceDiscoveryUsable: boolean;
+  serviceDiscoveryAuthenticateUrl: string;
+  handleFormsVisibility: (event: React.SyntheticEvent<HTMLInputElement>) => void;
+  loadingProjects: boolean;
 }
 
 const ServiceSourceForm: FunctionComponent<Props> = (props) => {

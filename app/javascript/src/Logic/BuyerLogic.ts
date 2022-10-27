@@ -1,18 +1,14 @@
-import type { Buyer, Product, ServicePlan } from 'NewApplication/types'
+import type { Buyer, Product, Plan } from 'NewApplication/types'
 
 class BuyerLogic {
-  buyer: Buyer
+  public constructor (private readonly buyer: Buyer) {}
 
-  constructor (buyer: Buyer) {
-    this.buyer = buyer
-  }
-
-  getContractedServicePlan (product: Product): ServicePlan | null {
+  public getContractedServicePlan (product: Product): Plan | null {
     const contract = this.buyer.contractedProducts.find(p => p.id === product.id)
-    return (contract && contract.withPlan) || null
+    return contract?.withPlan ?? null
   }
 
-  isSubscribedTo (product: Product): boolean {
+  public isSubscribedTo (product: Product): boolean {
     return this.buyer.contractedProducts.some(p => p.id === product.id)
   }
 }

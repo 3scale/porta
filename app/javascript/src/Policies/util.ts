@@ -8,11 +8,13 @@ function isNotApicastPolicy (policy: { name: string }): boolean {
 // TODO: refactor Action types, create a common interface and remove 'any' from here
 function createReducer<S> (
   initialState: S,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- FIXME
   handlers: Record<string, (state: S, actions?: any) => S>
 ): Reducer<S> {
+  // eslint-disable-next-line @typescript-eslint/default-param-last
   return function reducer (state = initialState, action) {
-    if (Object.prototype.hasOwnProperty.call(handlers, action.type)) {
-      return handlers[action.type](state, action)
+    if (Object.prototype.hasOwnProperty.call(handlers, action.type as string)) {
+      return handlers[action.type as string](state, action)
     }
 
     return state

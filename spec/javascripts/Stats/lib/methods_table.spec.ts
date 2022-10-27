@@ -21,11 +21,11 @@ describe('StatsMethodsTable', () => {
     ]
     methodsTable.render()
 
-    const table = document.querySelector('table.StatsMethodsTable') as HTMLTableElement
-    const nameCell = table.querySelector('.StatsMethodsTable-name') as HTMLTableCellElement
-    const sinceCell = table.querySelector('.StatsMethodsTable-since') as HTMLTableCellElement
-    const untilCell = table.querySelector('.StatsMethodsTable-until') as HTMLTableCellElement
-    const totalCell = table.querySelector('.StatsMethodsTable-total') as HTMLTableCellElement
+    const table = document.querySelector('table.StatsMethodsTable')!
+    const nameCell = table.querySelector('.StatsMethodsTable-name')!
+    const sinceCell = table.querySelector('.StatsMethodsTable-since')!
+    const untilCell = table.querySelector('.StatsMethodsTable-until')!
+    const totalCell = table.querySelector('.StatsMethodsTable-total')!
 
     expect(nameCell.innerHTML).toEqual('Charles Bukowski')
     expect(sinceCell.innerHTML).toEqual('16 Aug 1920 00:00:00 PST')

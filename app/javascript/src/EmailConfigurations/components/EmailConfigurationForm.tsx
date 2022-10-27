@@ -10,16 +10,16 @@ import { PasswordInput } from 'EmailConfigurations/components/form-fields/Passwo
 import { PasswordRepeatInput } from 'EmailConfigurations/components/form-fields/PasswordRepeatInput'
 import { UserNameInput } from 'EmailConfigurations/components/form-fields/UserNameInput'
 
-import type { FunctionComponent } from 'react'
+import type { FunctionComponent, FormEvent } from 'react'
 import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/types'
 
 import './EmailConfigurationForm.scss'
 
-type Props = {
-  url: string,
-  emailConfiguration: FormEmailConfiguration,
-  isUpdate?: boolean,
-  errors?: FormErrors
+interface Props {
+  url: string;
+  emailConfiguration: FormEmailConfiguration;
+  isUpdate?: boolean;
+  errors?: FormErrors;
 }
 
 const EmailConfigurationForm: FunctionComponent<Props> = ({
@@ -29,15 +29,15 @@ const EmailConfigurationForm: FunctionComponent<Props> = ({
   errors = {}
 }) => {
   const FORM_ID = 'email-configuration-form'
-  const [email, setEmail] = useState<string>(emailConfiguration.email || '')
-  const [userName, setUserName] = useState<string>(emailConfiguration.userName || '')
-  const [password, setPassword] = useState<string>(emailConfiguration.password || '')
+  const [email, setEmail] = useState<string>(emailConfiguration.email ?? '')
+  const [userName, setUserName] = useState<string>(emailConfiguration.userName ?? '')
+  const [password, setPassword] = useState<string>(emailConfiguration.password ?? '')
   const [passwordRepeat, setPasswordRepeat] = useState<string>('')
 
-  const emailErrors = errors.email || []
-  const userNameErrors = errors.user_name || []
-  const passwordErrors = errors.password || []
-  const passwordRepeatErrors: Array<string> = []
+  const emailErrors = errors.email ?? []
+  const userNameErrors = errors.user_name ?? []
+  const passwordErrors = errors.password ?? []
+  const passwordRepeatErrors: string[] = []
 
   // TODO: Implement more validations but let the server do the job when possible
 
@@ -53,18 +53,20 @@ const EmailConfigurationForm: FunctionComponent<Props> = ({
     isFormValid = password.length > 0 && passwordRepeat === password
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Form defined in this very component
+  const getForm = () => document.forms.namedItem(FORM_ID)!
+
   const handleOnDelete = () => {
     if (window.confirm('Are you sure?')) {
-      const form = document.forms.namedItem(FORM_ID) as HTMLFormElement
-      (form.elements.namedItem('_method') as HTMLInputElement).value = 'delete'
+      const form = getForm()
+      ;(form.elements.namedItem('_method') as HTMLInputElement).value = 'delete'
 
       form.submit()
     }
   }
 
   const handleOnUpdate = () => {
-    const form = document.forms.namedItem(FORM_ID) as HTMLFormElement
-    form.submit()
+    getForm().submit()
   }
 
   const buttons = isUpdate ? (
@@ -82,7 +84,7 @@ const EmailConfigurationForm: FunctionComponent<Props> = ({
       action={url}
       id={FORM_ID}
       method="post"
-      onSubmit={isUpdate ? (e: any) => e.preventDefault() : undefined}
+      onSubmit={isUpdate ? (e: FormEvent<HTMLFormElement>) => { e.preventDefault() } : undefined}
     >
       <CSRFToken />
       <input name="utf8" type="hidden" value="✓" />

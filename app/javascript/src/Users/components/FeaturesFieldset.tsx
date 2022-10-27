@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import ReactHtmlParser from 'react-html-parser'
 import {
   canFeatureSetServicePermissions,
@@ -16,11 +15,11 @@ import type { AdminSection, Feature } from 'Users/types'
  * @param {boolean}         areServicesVisible      - Whether or not the fieldset with all services is visible.
  * @param {function}        onAdminSectionSelected  - A callback function triggered when a feature is checked or unchecked.
  */
-type Props = {
-  features: Feature[],
-  selectedSections?: AdminSection[],
-  areServicesVisible?: boolean,
-  onAdminSectionSelected: (section: AdminSection) => void
+interface Props {
+  features: Feature[];
+  selectedSections?: AdminSection[];
+  areServicesVisible?: boolean;
+  onAdminSectionSelected: (section: AdminSection) => void;
 }
 
 const FeaturesFieldset: React.FunctionComponent<Props> = ({
@@ -50,9 +49,9 @@ const FeaturesFieldset: React.FunctionComponent<Props> = ({
 
 /**
  * A list describing member permissions for each label.
- * @param {Array} descriptionItems - An array of strings containing the description of the label.
  */
-const LabelDescriptionItems: FunctionComponent<{ descriptionItems: Array<string> }> = ({ descriptionItems }) => (
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
+const LabelDescriptionItems: FunctionComponent<{ descriptionItems: string[] }> = ({ descriptionItems }) => (
   <ul className="FeatureAccessList-item--labelDescription">
     {descriptionItems.map(item => <li key={item}>{ReactHtmlParser(item)}</li>)}
   </ul>
@@ -64,12 +63,13 @@ const LabelDescriptionItems: FunctionComponent<{ descriptionItems: Array<string>
  * @param {boolean}   checked   - Whether or not this checkbox is selected.
  * @param {Function}  onChange  - A callback function triggered when its value changes.
  */
-type FeatureCheckboxProps = {
-  value: Feature,
-  checked?: boolean,
-  onChange: (feature: Feature) => void
+interface FeatureCheckboxProps {
+  value: Feature;
+  checked?: boolean;
+  onChange: (feature: Feature) => void;
 }
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
   value,
   checked,
@@ -89,10 +89,10 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
           name="user[member_permission_ids][]"
           type="checkbox"
           value={value}
-          onChange={() => onChange(value)}
+          onChange={() => { onChange(value) }}
         />
-        { ReactHtmlParser(getFeatureName(value)) }
-        { descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} /> }
+        {ReactHtmlParser(getFeatureName(value))}
+        {descriptionItems && <LabelDescriptionItems descriptionItems={descriptionItems} />}
       </label>
     </li>
   )
@@ -103,11 +103,12 @@ const FeatureCheckbox: React.FunctionComponent<FeatureCheckboxProps> = ({
  * @param {boolean}   checked   - Whether the checkbox is selected.
  * @param {Function}  onChange  - A callback function triggered when the checkbox value changes.
  */
-type AllServicesCheckboxProps = {
-  checked?: boolean,
-  onChange: (value: 'services') => void
+interface AllServicesCheckboxProps {
+  checked?: boolean;
+  onChange: (value: 'services') => void;
 }
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = ({
   checked,
   onChange
@@ -126,7 +127,7 @@ const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = (
           name="user[member_permission_service_ids]"
           type="checkbox"
           value=""
-          onChange={() => onChange('services')}
+          onChange={() => { onChange('services') }}
         />
         All current and future existing API products
       </label>

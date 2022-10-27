@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = container
   const { addMappingRulePath = '', createMetricPath = '', mappingRulesPath = '' } = dataset
-  const metrics = safeFromJsonString<Metric[]>(dataset.metrics) || []
-  const metricsCount = safeFromJsonString<number>(dataset.metricsCount) || metrics.length
+  const metrics = safeFromJsonString<Metric[]>(dataset.metrics) ?? []
+  const metricsCount = safeFromJsonString<number>(dataset.metricsCount) ?? metrics.length
 
   BackendAPIIndexPageWrapper({
     addMappingRulePath,

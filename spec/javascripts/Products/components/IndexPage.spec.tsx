@@ -42,7 +42,7 @@ it('should render a table with products', () => {
 
 it('should have a paginated table', () => {
   const productsCount = 10
-  mockLocation(`href://foo.bar/metrics?per_page=2&page=2`)
+  mockLocation('href://foo.bar/metrics?per_page=2&page=2')
   const wrapper = mountWrapper({ productsCount })
   const pagination = wrapper.find('.pf-c-pagination').first()
 

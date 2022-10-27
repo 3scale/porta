@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsMetrics } from 'Stats/lib/metrics_list'
 
 describe('StatsMetrics', () => {
@@ -13,7 +14,7 @@ describe('StatsMetrics', () => {
   })
 
   it('should get the correct list of metrics', (done) => {
-    StatsMetrics.getMetrics('/cool/url/').then((metrics: any) => {
+    void StatsMetrics.getMetrics('/cool/url/').then((metrics: any) => {
       expect(JSON.stringify(metrics)).toEqual(
         '{"metrics":[{"id":1,"name":"Awesome Metric","serviceId":1,"systemName":"awesome_metric","isMethod":false,"isHits":false},{"id":2,"serviceId":1,"systemName":"amazing_metric","isMethod":false,"isHits":false}]}'
       )

@@ -1,10 +1,15 @@
 import { mount } from 'enzyme'
-import { CSRFToken } from 'utilities/CSRFToken'
+
+import type { FunctionComponent } from 'react'
+import type { Props } from 'utilities/CSRFToken'
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+const CSRFToken = jest.requireActual('utilities/CSRFToken').CSRFToken as FunctionComponent<Props>
 
 it('should render itself correctly', () => {
   const windowMock = {
     document: {
-      querySelector: (query: string) => {
+      querySelector: (query: string): unknown => {
         switch (query) {
           case 'head > meta[name~=csrf-param][content]':
             return { content: 'authenticity_token' }
@@ -24,7 +29,7 @@ it('should render itself correctly', () => {
 it('should return undefined values when csrf-param meta tag is not present', () => {
   const windowMock = {
     document: {
-      querySelector: (query: string) => {
+      querySelector: (query: string): unknown => {
         switch (query) {
           case 'head > meta[name~=csrf-param][content]':
             return undefined

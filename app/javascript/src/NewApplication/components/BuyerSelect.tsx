@@ -5,13 +5,13 @@ import { SelectWithModal } from 'Common/components/SelectWithModal'
 import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 import type { Buyer } from 'NewApplication/types'
 
-type Props = {
-  buyer: Buyer | null,
-  buyers: Buyer[],
-  buyersCount: number,
-  onSelectBuyer: (buyer: Buyer | null) => void,
-  buyersPath?: string,
-  isDisabled?: boolean
+interface Props {
+  buyer: Buyer | null;
+  buyers: Buyer[];
+  buyersCount: number;
+  onSelectBuyer: (buyer: Buyer | null) => void;
+  buyersPath?: string;
+  isDisabled?: boolean;
 }
 
 const BuyerSelect: React.FunctionComponent<Props> = ({

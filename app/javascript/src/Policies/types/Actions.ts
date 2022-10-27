@@ -20,12 +20,12 @@ import type {
 import type { UpdatePolicyConfigAction } from 'Policies/actions/PolicyConfig'
 import type { ChainPolicy, PolicyConfig, RegistryPolicy, State } from 'Policies/types'
 
-type PolicyChainAction = AddPolicyToChainAction | SortPolicyChainAction | LoadChainSuccessAction | LoadChainErrorAction | UpdatePolicyChainAction
-type PolicyRegistryAction = FetchRegistrySuccessAction | FetchRegistryErrorAction | LoadRegistrySuccessAction
+type PolicyChainAction = AddPolicyToChainAction | LoadChainErrorAction | LoadChainSuccessAction | SortPolicyChainAction | UpdatePolicyChainAction
+type PolicyRegistryAction = FetchRegistryErrorAction | FetchRegistrySuccessAction | LoadRegistrySuccessAction
 type PolicyConfigAction = UpdatePolicyConfigAction
 
-export type PolicyChainMiddlewareAction = UpdatePolicyInChainAction | RemovePolicyFromChainAction | LoadChainAction
-export type Action = PolicyConfigAction | PolicyRegistryAction | PolicyChainAction | UIComponentTransitionAction | PolicyChainMiddlewareAction | SetOriginalPolicyChainAction
+export type PolicyChainMiddlewareAction = LoadChainAction | RemovePolicyFromChainAction | UpdatePolicyInChainAction
+export type Action = PolicyChainAction | PolicyChainMiddlewareAction | PolicyConfigAction | PolicyRegistryAction | SetOriginalPolicyChainAction | UIComponentTransitionAction
 
 export type ThunkAction = ReduxThunkAction<void, State, void, Action>
 

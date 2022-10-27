@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
 import { SelectGroup } from 'Settings/components/Common/SelectGroup'
@@ -40,6 +41,7 @@ it('should change the hidden input value as expected', () => {
   const selectProps = tree.find(Select).props()
   expect(tree.find('input[type="hidden"]').prop('value')).toBe('nick_cave')
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   act(() => { selectProps.onSelect!({} as any, { key: 'massive_attack', toString: jest.fn() } as SelectOptionObject & { key: string }) })
   tree.update()
 

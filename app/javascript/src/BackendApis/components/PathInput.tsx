@@ -2,10 +2,10 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  error?: string,
-  path: string,
-  setPath: (path: string) => void
+interface Props {
+  error?: string;
+  path: string;
+  setPath: (path: string) => void;
 }
 
 const PathInput: FunctionComponent<Props> = ({ error, path, setPath }) => (

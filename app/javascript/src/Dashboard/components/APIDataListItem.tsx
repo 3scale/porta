@@ -12,23 +12,24 @@ import {
 } from '@patternfly/react-core'
 import { useClickOutside } from 'utilities/useClickOutside'
 
-type Props = {
+import type { FunctionComponent } from 'react'
+
+interface Props {
   api: {
-    id: number,
-    link: string,
-    links: Array<{
-      name: string,
-      path: string
-    }>,
-    name: string,
-    type: string,
-    // eslint-disable-next-line camelcase
-    updated_at: string
-  }
+    id: number;
+    link: string;
+    links: {
+      name: string;
+      path: string;
+    }[];
+    name: string;
+    type: string;
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    updated_at: string;
+  };
 }
 
-const APIDataListItem = ({ api }: Props) => {
-  const { id, name, updated_at: updatedAt, link, links } = api
+const APIDataListItem: FunctionComponent<Props> = ({ api: { id, name, updated_at: updatedAt, link, links } }) => {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -38,7 +39,7 @@ const APIDataListItem = ({ api }: Props) => {
     }
   }, [ref])
 
-  useClickOutside(ref, () => setIsOpen(false))
+  useClickOutside(ref, () => { setIsOpen(false) })
 
   useEffect(() => {
     if (isOpen) {
@@ -72,14 +73,14 @@ const APIDataListItem = ({ api }: Props) => {
             <Dropdown
               isPlain
               className="dashboard-list-item-action"
-              dropdownItems={links.map(({ name, path }) => (
-                <DropdownItem key={name} href={path}>{name}</DropdownItem>
+              dropdownItems={links.map(({ name: n, path }) => (
+                <DropdownItem key={n} href={path}>{n}</DropdownItem>
               ))}
               id="actions-menu"
               isOpen={isOpen}
               position={DropdownPosition.right}
-              toggle={<KebabToggle id={id.toString()} />}
-              onClick={() => setIsOpen(!isOpen)}
+              toggle={<KebabToggle id={String(id)} />}
+              onClick={() => { setIsOpen(!isOpen) }}
             />
           </div>
         </DataListAction>

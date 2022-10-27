@@ -5,35 +5,35 @@ import { TableModal } from 'Common/components/TableModal'
 import { paginateCollection } from 'utilities/paginateCollection'
 import escapeRegExp from 'lodash.escaperegexp'
 
-import type { Record } from 'utilities/patternfly-utils'
+import type { IRecord } from 'utilities/patternfly-utils'
 import type { ITransform } from '@patternfly/react-table'
 import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
 
 import './SelectWithModal.scss'
 
-type Props<T extends Record> = {
-  label: string,
-  id: string,
-  name: string,
-  item: T | null,
-  items: T[],
-  itemsCount: number,
-  cells: Array<{ title: string, propName: keyof T, transforms?: ITransform[] }>,
-  onSelect: (t: T | null) => void,
-  header: string,
-  isDisabled?: boolean,
-  title: string,
-  placeholder: string,
-  searchPlaceholder?: string,
-  footerLabel: string,
-  helperTextInvalid?: string,
-  fetchItems?: (params: FetchItemsRequestParams) => FetchItemsResponse<T>
+interface Props<T extends IRecord> {
+  label: string;
+  id: string;
+  name: string;
+  item: T | null;
+  items: T[];
+  itemsCount: number;
+  cells: { title: string; propName: keyof T; transforms?: ITransform[] }[];
+  onSelect: (t: T | null) => void;
+  header: string;
+  isDisabled?: boolean;
+  title: string;
+  placeholder: string;
+  searchPlaceholder?: string;
+  footerLabel: string;
+  helperTextInvalid?: string;
+  fetchItems?: (params: FetchItemsRequestParams) => FetchItemsResponse<T>;
 }
 
 const PER_PAGE = 5
 const MAX_ITEMS = 20
 
-const SelectWithModal = <T extends Record>({
+const SelectWithModal = <T extends IRecord>({
   label,
   id,
   name,
@@ -68,7 +68,7 @@ const SelectWithModal = <T extends Record>({
     setModalOpen(true)
   }
 
-  const handleOnModalSelect = (selected: null | T) => {
+  const handleOnModalSelect = (selected: T | null) => {
     setModalOpen(false)
     onSelect(selected)
     // FIXME: search input is cleared on modal close even though the items are filtered. This is a bit confusing,
@@ -88,11 +88,14 @@ const SelectWithModal = <T extends Record>({
       setIsLoading(true)
 
       fetchItems({ page, perPage: PER_PAGE })
-        .then(({ items: newItems, count }) => {
+        .then(({ items: newItems, count: newCount }) => {
           setPageDictionary({ ...pageDictionary, [page]: newItems })
-          setCount(count)
+          setCount(newCount)
         })
-        .finally(() => setIsLoading(false))
+        .catch(() => {
+          // TODO
+        })
+        .finally(() => { setIsLoading(false) })
     }
   }, [page, shouldHaveModal, modalOpen])
 
@@ -104,19 +107,25 @@ const SelectWithModal = <T extends Record>({
     if (isOnMount) {
       setIsOnMount(false)
     } else {
-      fetchItems({ page: 1, perPage: 20, query }) // perPage 20 to get 4 pages
-        .then(({ items: fetchedItems, count }) => setSearchResults(fetchedItems, count))
+      // perPage 20 to get 4 pages
+      fetchItems({ page: 1, perPage: 20, query })
+        .then(({ items: fetchedItems, count: newCount }) => {
+          setSearchResults(fetchedItems, newCount)
+        })
+        .catch(() => {
+          // TODO
+        })
     }
   }, [query])
 
-  const setSearchResults = (items: T[], count: number) => {
+  const setSearchResults = (items: T[], newCount: number) => {
     setPageDictionary(paginateCollection(items, PER_PAGE))
-    setCount(count)
+    setCount(newCount)
     setPage(1)
   }
 
-  const handleModalOnSetPage = (page: number) => {
-    setPage(page)
+  const handleModalOnSetPage = (newPage: number) => {
+    setPage(newPage)
   }
 
   const handleOnModalClose = () => {
@@ -142,7 +151,7 @@ const SelectWithModal = <T extends Record>({
         helperTextInvalid={helperTextInvalid}
         id={id}
         isDisabled={isDisabled}
-        item={item || undefined}
+        item={item ?? undefined}
         items={initialItems.slice(0, MAX_ITEMS)}
         label={label}
         name={name}

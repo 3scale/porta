@@ -10,14 +10,15 @@ import { NewBackendForm } from 'BackendApis/components/NewBackendForm'
 
 import type { FunctionComponent } from 'react'
 import type { Backend } from 'Types'
+import type { Props as NewBackendFormProps } from 'BackendApis/components/NewBackendForm'
 
 import './NewBackendModal.scss'
 
-type Props = {
-  backendsPath: string,
-  isOpen?: boolean,
-  onClose: () => void,
-  onCreateBackend: (backend: Backend) => void
+interface Props {
+  backendsPath: string;
+  isOpen?: boolean;
+  onClose: () => void;
+  onCreateBackend: (backend: Backend) => void;
 }
 
 const NewBackendModal: FunctionComponent<Props> = ({
@@ -27,25 +28,23 @@ const NewBackendModal: FunctionComponent<Props> = ({
   onCreateBackend
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState()
+  const [errors, setErrors] = useState<NewBackendFormProps['errors']>()
 
-  const handleOnAjaxComplete = (_event: any, xhr: { responseText: string }, status: string) => {
+  const handleOnAjaxComplete = (_event: unknown, xhr: { responseText: string }, status: string) => {
     setIsLoading(false)
 
     if (status === 'success') {
-      const backend = JSON.parse(xhr.responseText)
-      onCreateBackend(backend)
+      onCreateBackend(JSON.parse(xhr.responseText) as Backend)
     } else if (status === 'error') {
-      const errors = JSON.parse(xhr.responseText)
-      setErrors(errors)
+      setErrors(JSON.parse(xhr.responseText) as NewBackendFormProps['errors'])
     }
   }
 
   useEffect(() => {
-    const jq = $ as any // HACK: jQuery is 1.8.2 here but we're using 3.5 in our package.json
-    jq('form#new_backend_api_config')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any -- FIXME: jQuery used here is 1.8.2 but in our node_modules is 3.5
+    ($ as any)('form#new_backend_api_config')
       // TODO: jquery-ujs is deprecated, in rails 5 we should use rails-ujs. However, the former is broadly used so it's not trivial.
-      .live('ajax:send', () => setIsLoading(true))
+      .live('ajax:send', () => { setIsLoading(true) })
       .live('ajax:complete', handleOnAjaxComplete)
     // No need for cleanup
   }, [])

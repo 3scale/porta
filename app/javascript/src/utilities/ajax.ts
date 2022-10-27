@@ -1,14 +1,15 @@
-export type Method = 'GET' | 'POST' | 'DELETE'
+/* eslint-disable @typescript-eslint/naming-convention */
+export type Method = 'DELETE' | 'GET' | 'POST'
 
-type FetchOptions = { method: Method, body?: URLSearchParams, signal?: AbortSignal }
+interface FetchOptions { method: Method; body?: URLSearchParams; signal?: AbortSignal }
 type FetchFunction = (url: string, opts: FetchOptions) => Promise<Response>
 
-export type FetchItemsRequestParams = { page: number, perPage: number, query?: string }
-export type FetchItemsResponse<T> = Promise<{ items: T[], count: number }>
+export interface FetchItemsRequestParams { page: number; perPage: number; query?: string }
+export type FetchItemsResponse<T> = Promise<{ items: T[]; count: number }>
 
 const _ajax = (headers: Record<string, string>) => {
   const meta = document.querySelector('meta[name="csrf-token"]')
-  const token = (meta && meta.getAttribute('content')) || ''
+  const token: string = meta?.getAttribute('content') ?? ''
 
   return function (url: string, { method, body, signal }: FetchOptions) {
     return fetch(url, {
@@ -23,7 +24,7 @@ const _ajax = (headers: Record<string, string>) => {
 const ajax: FetchFunction = _ajax({ 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' })
 const ajaxJSON: FetchFunction = _ajax({ 'Content-Type': 'application/json; charset=UTF-8' })
 
-function fetchPaginated<T> (path: string, params: FetchItemsRequestParams): FetchItemsResponse<T> {
+async function fetchPaginated<T> (path: string, params: FetchItemsRequestParams): FetchItemsResponse<T> {
   const { page, perPage, query = '' } = params
 
   const searchParams = new URLSearchParams({
@@ -39,9 +40,9 @@ function fetchPaginated<T> (path: string, params: FetchItemsRequestParams): Fetc
   const url = `${path}?${searchParams.toString()}`
 
   return ajaxJSON(url, { method: 'GET' }).then(data => data.json())
-    .then(({ count, items }) => ({
+    .then(({ count, items }: { count: number; items: string }) => ({
       count,
-      items: JSON.parse(items)
+      items: JSON.parse(items) as T[]
     }))
 }
 

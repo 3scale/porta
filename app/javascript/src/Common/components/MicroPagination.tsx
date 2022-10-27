@@ -5,10 +5,10 @@ import type { FunctionComponent } from 'react'
 
 import './MicroPagination.scss'
 
-type Props = {
-  page: number,
-  lastPage: number,
-  setPage: (page: number) => void
+interface Props {
+  page: number;
+  lastPage: number;
+  setPage: (page: number) => void;
 }
 
 const MicroPagination: FunctionComponent<Props> = ({
@@ -16,8 +16,8 @@ const MicroPagination: FunctionComponent<Props> = ({
   lastPage,
   setPage
 }) => {
-  const onPrevious = () => setPage(page - 1)
-  const onNext = () => setPage(page + 1)
+  const onPrevious = () => { setPage(page - 1) }
+  const onNext = () => { setPage(page + 1) }
 
   return (
     <div className="pf-c-pagination pf-c-pagination__micro">

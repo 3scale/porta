@@ -1,10 +1,10 @@
 import { mount } from 'enzyme'
 import { useSearchInputEffect } from 'utilities/useSearchInputEffect'
 
-import type { FunctionComponent } from 'react'
+import type { FunctionComponent, MutableRefObject } from 'react'
 
-const HookedComponent: FunctionComponent<{ inputRef: any, onSearch: jest.Mock }> = (props) => {
-  useSearchInputEffect(props.inputRef, props.onSearch)
+const HookedComponent: FunctionComponent<{ inputRef: unknown; onSearch: jest.Mock }> = (props) => {
+  useSearchInputEffect(props.inputRef as MutableRefObject<HTMLInputElement>, props.onSearch)
 
   // eslint-disable-next-line react/no-unescaped-entities
   return <div>I'm Hooked!</div>
@@ -37,7 +37,7 @@ it('should do stuff', () => {
   const inputRef = {
     current: {
       value: 'looking for something',
-      addEventListener: (type: string, cb: any) => {
+      addEventListener: (type: string, cb: unknown): void => {
         if (type === 'input') {
           listenToClearButton = cb
         } else if (type === 'keydown') {
@@ -53,17 +53,17 @@ it('should do stuff', () => {
   mount(<HookedComponent inputRef={inputRef} onSearch={onSearch} />)
 
   // Simulate input events
-  listenToClearButton!({ inputType: 'anything' })
+  listenToClearButton({ inputType: 'anything' })
   expect(onSearch).not.toHaveBeenCalled()
 
-  listenToClearButton!({ inputType: undefined })
+  listenToClearButton({ inputType: undefined })
   expect(onSearch).toHaveBeenCalledWith()
 
   onSearch.mockClear()
   // Simulate keydown events
-  listenToKeyDown!({ key: 'Not Enter' })
+  listenToKeyDown({ key: 'Not Enter' })
   expect(onSearch).not.toHaveBeenCalled()
 
-  listenToKeyDown!({ key: 'Enter' })
+  listenToKeyDown({ key: 'Enter' })
   expect(onSearch).toHaveBeenCalledWith('looking for something')
 })

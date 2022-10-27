@@ -10,13 +10,13 @@ import { Select as SelectFormGroup } from 'Common/components/Select'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CSRFToken } from 'utilities/CSRFToken'
 
-import type { Record as Plan } from 'Types'
+import type { IRecord as Plan } from 'Types'
 
 import './ChangePlanSelectCard.scss'
 
-type Props = {
-  applicationPlans: Plan[],
-  path: string
+interface Props {
+  applicationPlans: Plan[];
+  path: string;
 }
 
 const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
@@ -66,6 +66,6 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ChangePlanSelectCardWrapper = (props: Props, containerId: string): void => createReactWrapper(<ChangePlanSelectCard {...props} />, containerId)
+const ChangePlanSelectCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePlanSelectCard {...props} />, containerId) }
 
 export { ChangePlanSelectCard, ChangePlanSelectCardWrapper, Props }

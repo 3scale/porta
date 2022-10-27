@@ -1,19 +1,18 @@
-/* eslint-disable react/no-multi-comp */
 import ReactHtmlParser from 'react-html-parser'
 
 import type { Role } from 'Users/types'
 
 const ADMIN_LABEL = 'Admin (full access)'
-const MEMBER_LABEL = `Member (limited access, <strong>cannot create new API products  or API backends</strong>)`
+const MEMBER_LABEL = 'Member (limited access, <strong>cannot create new API products  or API backends</strong>)'
 
 /**
  * A radio group to select the user's role: Admin or Member.
  * @param {Role}      selectedRole  - The radio button currently selected.
  * @param {Function}  onRoleChanged - A callback function triggered when the selected value changes.
  */
-type Props = {
-  selectedRole: Role,
-  onRoleChanged: (role: Role) => void
+interface Props {
+  selectedRole: Role;
+  onRoleChanged: (role: Role) => void;
 }
 
 const RoleRadioGroup: React.FunctionComponent<Props> = ({
@@ -40,13 +39,14 @@ const RoleRadioGroup: React.FunctionComponent<Props> = ({
  * @param {boolean}   checked   - Whether it is selected or not.
  * @param {Function}  onChange  - A callback function triggered when selected.
  */
-type UserRoleProps = {
-  role: Role,
-  label: string,
-  checked: boolean,
-  onChange: (role: Role) => void
+interface UserRoleProps {
+  role: Role;
+  label: string;
+  checked: boolean;
+  onChange: (role: Role) => void;
 }
 
+// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const UserRole: React.FunctionComponent<UserRoleProps> = ({
   role,
   label,
@@ -62,7 +62,7 @@ const UserRole: React.FunctionComponent<UserRoleProps> = ({
         name="user[role]"
         type="radio"
         value={role}
-        onChange={() => onChange(role)}
+        onChange={() => { onChange(role) }}
       />
       { ReactHtmlParser(label) }
     </label>

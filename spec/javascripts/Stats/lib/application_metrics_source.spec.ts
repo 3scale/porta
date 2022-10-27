@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { StatsApplicationMetricsSource } from 'Stats/lib/application_metrics_source'
 
 class TestStatsApplicationMetricsSource extends StatsApplicationMetricsSource {
-  constructor({ id }:{id: number}) {
+  constructor ({ id }: { id: number }) {
     super({ id })
   }
 }

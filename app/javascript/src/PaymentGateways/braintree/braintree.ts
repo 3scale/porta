@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { Client, HostedFields, ThreeDSecure } from 'braintree-web'
 import type { HostedFieldsFieldDataFields, HostedFieldsTokenizePayload } from 'braintree-web/modules/hosted-fields'
-import type { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions, ThreeDSecureVerifyPayload } from 'braintree-web/modules/three-d-secure'
+import type { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions } from 'braintree-web/modules/three-d-secure'
 import type { HostedFieldsOptions, BillingAddressData } from 'PaymentGateways/braintree/types'
 
 const validationConstraints = {
@@ -74,19 +75,20 @@ const hostedFieldOptions = {
   }
 }
 
-const createBraintreeClient = (client: Client, clientToken: string) => {
+const createBraintreeClient = (client: Client, clientToken: string): Promise<unknown> => {
   return client.create({ authorization: clientToken })
     .then((clientInstance) => clientInstance)
-    .catch(error => console.error(error))
+    .catch(error => { console.error(error) })
 }
 
 const createHostedFieldsInstance = (
   hostedFields: HostedFields,
   clientInstance: Client,
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- FIXME: We really need to fix this mess.
   hostedFieldOptions: HostedFieldsOptions,
   setIsCardValid: (cardValid: boolean) => void,
   setCardError: (err: string | null) => void
-) => {
+): Promise<unknown> => {
   return hostedFields.create({
     ...hostedFieldOptions,
     client: clientInstance
@@ -97,37 +99,38 @@ const createHostedFieldsInstance = (
         const cardValid = Object.keys(state.fields).every((key) => state.fields[key as keyof HostedFieldsFieldDataFields].isValid)
         setIsCardValid(cardValid)
       })
-      hostedFieldsInstance.on('focus', () => setCardError(null))
+      hostedFieldsInstance.on('focus', () => { setCardError(null) })
       return hostedFieldsInstance
     })
-    .catch(error => console.error(error))
+    .catch(error => { console.error(error) })
 }
-const create3DSecureInstance = (threeDSecure: ThreeDSecure, clientInstance: Client) => {
+const create3DSecureInstance = (threeDSecure: ThreeDSecure, clientInstance: Client): Promise<unknown> => {
   return threeDSecure.create({
     version: 2,
     client: clientInstance
   })
     .then(threeDSecureInstance => threeDSecureInstance)
-    .catch(error => console.error(error))
+    .catch(error => { console.error(error) })
 }
 
 const veryfyCard = (
   threeDSecureInstance: ThreeDSecure,
   payload: HostedFieldsTokenizePayload,
   billingAddress: BillingAddressData
-): Promise<ThreeDSecureVerifyPayload> => {
+): Promise<unknown> => {
   const options: ThreeDSecureVerifyOptions = {
     nonce: payload.nonce,
     bin: payload.details.bin,
     challengeRequested: true,
     amount: 0.0,
     billingAddress,
-    onLookupComplete: (_data: ThreeDSecureVerificationData, next: () => void) => next() // From https://github.com/DefinitelyTyped/DefinitelyTyped/pull/61818/commits/8411fba432567e70b1cd6bf7c79a88e7dd9a6aee
-  } as any // TODO: 2 things wrong with this:
-  // - Types must be outdated, onLookupComplete is missing from ThreeDSecureVerifyOptions.
-  // - billingAddress is completely wrong?? BillingAddressData (custom) vs. ThreeDSecureBillingAddress (what takes verifyCard)
+    onLookupComplete: (_data: ThreeDSecureVerificationData, next: () => void) => { next() } // From https://github.com/DefinitelyTyped/DefinitelyTyped/pull/61818/commits/8411fba432567e70b1cd6bf7c79a88e7dd9a6aee
+  } as ThreeDSecureVerifyOptions /* TODO: 2 things wrong with this:
+                                    - Types must be outdated, onLookupComplete is missing from ThreeDSecureVerifyOptions.
+                                    - billingAddress is completely wrong?? BillingAddressData (custom) vs. ThreeDSecureBillingAddress (what takes verifyCard) */
   return threeDSecureInstance.verifyCard(options)
     .then(response => response)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- FIXME: this is a sensitive piece of code so better refactor this return later
     .catch(error => error)
 }
 

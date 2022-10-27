@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
 import { BackendsUsedListCard } from 'Products/components/BackendsUsedListCard'
 
+import type { CompactListItem } from 'Common/components/CompactListCard'
 import type { Props } from 'Products/components/BackendsUsedListCard'
 
 const defaultProps: Props = {
@@ -8,7 +9,7 @@ const defaultProps: Props = {
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<BackendsUsedListCard {...{ ...defaultProps, ...props }} />)
-const mockBackends = (count: number) => new Array(count).fill({}).map((i, j) => ({ name: `Backend ${j}`, description: `backend_${j}`, href: `/backends/${j}` }))
+const mockBackends = (count: number): CompactListItem[] => new Array(count).fill({}).map((i, j) => ({ name: `Backend ${j}`, description: `backend_${j}`, href: `/backends/${j}` }))
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -36,8 +37,8 @@ it('should be paginated and have 5 items per page', () => {
 
 // FIXME: input not receiving change event
 it.skip('should be filterable by name', () => {
-  const Items = mockBackends(10)
-  const wrapper = mountWrapper({ backends: Items })
+  const items = mockBackends(10)
+  const wrapper = mountWrapper({ backends: items })
 
   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
   wrapper.find('.pf-c-input-group button').last().simulate('click')
@@ -48,8 +49,8 @@ it.skip('should be filterable by name', () => {
 
 // FIXME: input not receiving change event
 it.skip('should search when pressing Enter', () => {
-  const Items = mockBackends(10)
-  const wrapper = mountWrapper({ backends: Items })
+  const items = mockBackends(10)
+  const wrapper = mountWrapper({ backends: items })
 
   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
   wrapper.find('input[type="search"]').simulate('keydown', { key: 'Enter' })

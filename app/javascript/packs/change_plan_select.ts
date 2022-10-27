@@ -1,7 +1,7 @@
 import { ChangePlanSelectCardWrapper } from 'Plans/components/ChangePlanSelectCard'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Record as Plan } from 'Types'
+import type { IRecord as Plan } from 'Types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'change_plan_select'
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const { dataset } = container
-  const applicationPlans = safeFromJsonString<Plan[]>(dataset.applicationPlans) || []
-  const path: string = dataset.path || ''
+  const applicationPlans = safeFromJsonString<Plan[]>(dataset.applicationPlans) ?? []
+  const path: string = dataset.path ?? ''
 
   ChangePlanSelectCardWrapper({
     applicationPlans,

@@ -12,10 +12,10 @@ import type { FormEmailConfiguration, FormErrors } from 'EmailConfigurations/typ
 
 import './EditPage.scss'
 
-type Props = {
-  url: string,
-  emailConfiguration: FormEmailConfiguration,
-  errors?: FormErrors
+interface Props {
+  url: string;
+  emailConfiguration: FormEmailConfiguration;
+  errors?: FormErrors;
 }
 
 const EditPage: FunctionComponent<Props> = ({
@@ -44,6 +44,6 @@ const EditPage: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const EditPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<EditPage {...props} />, containerId)
+const EditPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<EditPage {...props} />, containerId) }
 
 export { EditPage, EditPageWrapper, Props }

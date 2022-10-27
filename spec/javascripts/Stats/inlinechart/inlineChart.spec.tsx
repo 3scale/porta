@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/promise-function-async */
 import { mount } from 'enzyme'
 import c3 from 'c3'
 import * as utils from 'utilities/fetchData'
@@ -59,7 +62,7 @@ it('should render HTML markup', () => {
 })
 
 it('should fetch data from componentDidMount', async () => {
-  wrapper.instance().componentDidMount!()
+  void wrapper.instance().componentDidMount()
   expect(fetchMock).toHaveBeenCalled()
 })
 

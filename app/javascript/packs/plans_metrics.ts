@@ -2,15 +2,15 @@ import { safeFromJsonString } from 'utilities/json-utils'
 
 document.addEventListener('DOMContentLoaded', () => {
   function toggleMetricVisibility (id: string) {
-    (document.getElementById(`metric_${id}`) as HTMLElement)
-      .classList
+    document.getElementById(`metric_${id}`)
+      ?.classList
       .toggle('hidden')
   }
 
   document.querySelectorAll<HTMLElement>('th.backend_api_metric_title')
     .forEach(th => {
       const { collapsible, metrics } = th.dataset
-      const ids = safeFromJsonString<string[]>(metrics) || []
+      const ids = safeFromJsonString<string[]>(metrics) ?? []
 
       if (collapsible) {
         th.classList.add('collapsible')
@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const caret = document.createElement('i')
         caret.classList.add('fa', 'fa-caret-down')
 
-        const span = th.querySelector('span') as HTMLSpanElement
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+        const span = th.querySelector('span')!
         span.insertBefore(caret, span.firstChild)
         span.addEventListener('click', toggleBackendAPI)
 

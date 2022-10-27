@@ -31,11 +31,11 @@ it('should render itself', () => {
 
 it('should enable submit button only when form is filled', () => {
   const wrapper = mountWrapper()
-  const isSubmitButtonDisabled = (wrapper: ReactWrapper) => wrapper.find('button[data-testid="addBackend-buttonSubmit"]').prop('disabled')
+  const isSubmitButtonDisabled = (w: ReactWrapper<unknown>) => w.find('button[data-testid="addBackend-buttonSubmit"]').prop('disabled')
   expect(isSubmitButtonDisabled(wrapper)).toBe(true)
 
   act(() => {
-    wrapper.find(BackendSelect).props().onSelect!(null)
+    wrapper.find(BackendSelect).props().onSelect(null)
     wrapper.find(PathInput).props().setPath('')
   })
   wrapper.update()
@@ -67,11 +67,11 @@ it('should open/close a modal with a form to create a new backend', () => {
   const wrapper = mountWrapper()
   expect(wrapper.find(NewBackendModal).prop('isOpen')).toBe(false)
 
-  act(() => wrapper.find('button[data-testid="newBackendCreateBackend-buttonLink"]').props().onClick!(undefined as any))
+  act(() => { wrapper.find('button[data-testid="newBackendCreateBackend-buttonLink"]').props().onClick!(undefined as unknown as React.MouseEvent) })
   wrapper.update()
   expect(wrapper.find(NewBackendModal).prop('isOpen')).toBe(true)
 
-  act(() => wrapper.find('button[data-testid="cancel"]').props().onClick!(undefined as any))
+  act(() => { wrapper.find('button[data-testid="cancel"]').props().onClick!(undefined as unknown as React.MouseEvent) })
   wrapper.update()
   expect(wrapper.find(NewBackendModal).prop('isOpen')).toBe(false)
 })
@@ -80,7 +80,7 @@ it('should select the new backend when created', () => {
   const wrapper = mountWrapper()
   const newBackend = { id: 1, name: 'New backend', privateEndpoint: 'example.org', systemName: 'new_backend', updatedAt: '' }
 
-  act(() => wrapper.find(NewBackendModal).props().onCreateBackend(newBackend))
+  act(() => { wrapper.find(NewBackendModal).props().onCreateBackend(newBackend) })
 
   wrapper.update()
   expect(wrapper.find(BackendSelect).prop('backend')).toBe(newBackend)

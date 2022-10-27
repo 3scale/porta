@@ -10,16 +10,17 @@ const OIDC_AUTH_METHOD = 'oidc'
 const API_KEY_METHOD = '1'
 const APP_ID_KEY_METHOD = '2'
 
-type Props = {
-  isServiceMesh: boolean,
-  authenticationMethod: string, // TODO: use exact types
-  apiKeySettings: FieldGroupProps,
-  appIdKeyPairSettings: FieldGroupProps[],
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+interface Props {
+  isServiceMesh: boolean;
+  authenticationMethod: string; // TODO: use exact types
+  apiKeySettings: FieldGroupProps;
+  appIdKeyPairSettings: FieldGroupProps[];
   oidcSettings: {
-    basicSettings: TypeItemProps,
-    flowSettings: FieldGroupProps[],
-    jwtSettings: TypeItemProps
-  }
+    basicSettings: TypeItemProps;
+    flowSettings: FieldGroupProps[];
+    jwtSettings: TypeItemProps;
+  };
 }
 
 const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({

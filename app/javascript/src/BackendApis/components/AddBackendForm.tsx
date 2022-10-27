@@ -8,7 +8,7 @@ import {
 } from '@patternfly/react-core'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { notice } from 'utilities/alert'
+import { notice } from 'utilities/flash'
 import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
@@ -18,16 +18,16 @@ import type { Backend } from 'Types'
 
 import './AddBackendForm.scss'
 
-type Props = {
-  backend: Backend | null,
-  backends: Backend[],
-  url: string,
-  inlineErrors: null | {
-    // eslint-disable-next-line camelcase
-    backend_api_id?: Array<string>,
-    path?: Array<string>
-  },
-  backendsPath: string
+interface Props {
+  backend: Backend | null;
+  backends: Backend[];
+  url: string;
+  inlineErrors: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    backend_api_id?: string[];
+    path?: string[];
+  } | null;
+  backendsPath: string;
 }
 
 const AddBackendForm: FunctionComponent<Props> = ({
@@ -45,11 +45,11 @@ const AddBackendForm: FunctionComponent<Props> = ({
 
   const isFormComplete = backend !== null
 
-  const handleOnCreateBackend = (backend: Backend) => {
+  const handleOnCreateBackend = (newBackend: Backend) => {
     notice('Backend created')
     setIsModalOpen(false)
-    setBackend(backend)
-    setUpdatedBackends([backend, ...updatedBackends])
+    setBackend(newBackend)
+    setUpdatedBackends([newBackend, ...updatedBackends])
   }
 
   return (
@@ -60,7 +60,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
           action={url}
           id="new_backend_api_config"
           method="post"
-          onSubmit={() => setLoading(true)}
+          onSubmit={() => { setLoading(true) }}
           // isWidthLimited TODO: use when available instead of hardcoded css
         >
           <CSRFToken />
@@ -69,14 +69,14 @@ const AddBackendForm: FunctionComponent<Props> = ({
           <BackendSelect
             backend={backend}
             backends={updatedBackends}
-            error={inlineErrors ? inlineErrors.backend_api_id && inlineErrors.backend_api_id[0] : undefined}
+            error={inlineErrors?.backend_api_id?.[0]}
             searchPlaceholder="Find a backend"
-            onCreateNewBackend={() => setIsModalOpen(true)}
+            onCreateNewBackend={() => { setIsModalOpen(true) }}
             onSelect={setBackend}
           />
 
           <PathInput
-            error={inlineErrors ? inlineErrors.path && inlineErrors.path[0] : undefined}
+            error={inlineErrors?.path?.[0]}
             path={path}
             setPath={setPath}
           />
@@ -97,7 +97,7 @@ const AddBackendForm: FunctionComponent<Props> = ({
       <NewBackendModal
         backendsPath={backendsPath}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => { setIsModalOpen(false) }}
         onCreateBackend={handleOnCreateBackend}
       />
     </>
@@ -105,6 +105,6 @@ const AddBackendForm: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const AddBackendFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<AddBackendForm {...props} />, containerId)
+const AddBackendFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<AddBackendForm {...props} />, containerId) }
 
 export { AddBackendForm, AddBackendFormWrapper, Props }

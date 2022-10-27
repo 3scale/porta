@@ -6,13 +6,13 @@ import type { Backend } from 'Types'
 
 import './BackendSelect.scss'
 
-type Props = {
-  backend: Backend | null,
-  backends: Backend[],
-  onCreateNewBackend: () => void,
-  error?: string,
-  searchPlaceholder?: string,
-  onSelect: (backend: Backend | null) => void
+interface Props {
+  backend: Backend | null;
+  backends: Backend[];
+  onCreateNewBackend: () => void;
+  error?: string;
+  searchPlaceholder?: string;
+  onSelect: (backend: Backend | null) => void;
 }
 
 const BackendSelect: React.FunctionComponent<Props> = ({
@@ -23,7 +23,7 @@ const BackendSelect: React.FunctionComponent<Props> = ({
   searchPlaceholder,
   error
 }) => {
-  const cells: { title: string, propName: keyof Backend }[] = [
+  const cells: { title: string; propName: keyof Backend }[] = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },
     { title: 'Last updated', propName: 'updatedAt' }

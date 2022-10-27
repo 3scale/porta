@@ -11,13 +11,13 @@ import type { FunctionComponent } from 'react'
 import type { Dispatch } from 'redux'
 import type { ChainPolicy, IPoliciesActions, RegistryPolicy, State, UIState } from 'Policies/types'
 
-type Props = {
-  registry: Array<RegistryPolicy>,
-  chain: Array<ChainPolicy>,
-  originalChain: Array<ChainPolicy>,
-  policyConfig: ChainPolicy,
-  ui: UIState,
-  boundActionCreators: IPoliciesActions
+interface Props {
+  registry: RegistryPolicy[];
+  chain: ChainPolicy[];
+  originalChain: ChainPolicy[];
+  policyConfig: ChainPolicy;
+  ui: UIState;
+  boundActionCreators: IPoliciesActions;
 }
 
 const mapStateToProps = (state: State) => ({

@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import validate from 'validate.js'
 import { hostedFields, threeDSecure } from 'braintree-web'
 import { CSRFToken } from 'utilities/CSRFToken'
-import { validationConstraints, createHostedFieldsInstance, hostedFieldOptions, create3DSecureInstance, veryfyCard } from 'PaymentGateways/braintree/braintree'
+import {
+  validationConstraints,
+  createHostedFieldsInstance,
+  hostedFieldOptions,
+  create3DSecureInstance,
+  veryfyCard as verifyCard
+} from 'PaymentGateways/braintree/braintree'
 import { BraintreeBillingAddressFields } from 'PaymentGateways/braintree/BraintreeBillingAddressFields'
 import { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFields'
 import { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
@@ -11,19 +17,20 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
 import type { Client, HostedFields, HostedFieldsTokenizePayload, ThreeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
+import type { ThreeDSecureInfo } from 'braintree-web/modules/three-d-secure'
 import type { BillingAddressData } from 'PaymentGateways/braintree/types'
 
 import './BraintreeCustomerForm.scss'
 
 const CC_ERROR_MESSAGE = 'An error occurred, please review your CC details or try later.'
 
-type Props = {
-  braintreeClient: Client,
-  billingAddress: BillingAddressData,
-  threeDSecureEnabled: boolean,
-  formActionPath: string,
-  countriesList: string,
-  selectedCountryCode: string
+interface Props {
+  braintreeClient: Client;
+  billingAddress: BillingAddressData;
+  threeDSecureEnabled: boolean;
+  formActionPath: string;
+  countriesList: string;
+  selectedCountryCode: string;
 }
 
 const BraintreeForm: FunctionComponent<Props> = ({
@@ -39,17 +46,16 @@ const BraintreeForm: FunctionComponent<Props> = ({
   const [braintreeNonceValue, setBraintreeNonceValue] = useState<string | null>('')
   const [billingAddressData, setBillingAddressData] = useState<BillingAddressData>(billingAddress)
   const [isCardValid, setIsCardValid] = useState(false)
-  const [formErrors, setFormErrors] = useState(validate(formRef, validationConstraints))
+  const [formErrors, setFormErrors] = useState<unknown>(validate(formRef, validationConstraints))
   const [cardError, setCardError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const isFormValid = isCardValid && !formErrors && !isLoading
 
   useEffect(() => {
     const getHostedFieldsInstance = async () => {
-      const HFInstance = await createHostedFieldsInstance(hostedFields, braintreeClient, hostedFieldOptions, setIsCardValid, setCardError)
-      setHostedFieldsInstance(HFInstance as HostedFields)
+      setHostedFieldsInstance(await createHostedFieldsInstance(hostedFields, braintreeClient, hostedFieldOptions, setIsCardValid, setCardError) as HostedFields)
     }
-    getHostedFieldsInstance()
+    void getHostedFieldsInstance()
   }, [])
 
   useEffect(() => {
@@ -60,13 +66,13 @@ const BraintreeForm: FunctionComponent<Props> = ({
 
   const get3DSecureError = (response: ThreeDSecureVerifyPayload) => {
     const { threeDSecureInfo } = response
-    const { status: message = null } = threeDSecureInfo as any // TODO: Types must be outdated, status is missing from ThreeDSecureInfo
-    return message && message.match(/authenticate_(attempt_)?successful/) ? null : CC_ERROR_MESSAGE
+    const { status: message = null } = threeDSecureInfo as (ThreeDSecureInfo & { status: string }) // HACK: Types must be outdated, status is missing from ThreeDSecureInfo
+    return message?.match(/authenticate_(attempt_)?successful/) ? null : CC_ERROR_MESSAGE
   }
 
   const get3DSecureNonce = async (payload: HostedFieldsTokenizePayload) => {
     const threeDSecureInstance = await create3DSecureInstance(threeDSecure, braintreeClient) as ThreeDSecure
-    const response = await veryfyCard(threeDSecureInstance, payload, billingAddressData)
+    const response = await verifyCard(threeDSecureInstance, payload, billingAddressData) as ThreeDSecureVerifyPayload
 
     const error = get3DSecureError(response)
     const nonce = response.nonce || null
@@ -86,8 +92,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
   }
 
   const validateForm = (event: React.SyntheticEvent<HTMLFormElement>) => {
-    const validationErrors = validate(event.currentTarget, validationConstraints)
-    setFormErrors(validationErrors)
+    setFormErrors(validate(event.currentTarget, validationConstraints))
   }
 
   const handleCardError = (error: string) => {
@@ -101,15 +106,16 @@ const BraintreeForm: FunctionComponent<Props> = ({
     if (hostedFieldsInstance) {
       setIsLoading(true)
       const payload = await hostedFieldsInstance.tokenize()
-        .then(payload => payload)
-        .catch(error => console.error(error)) as HostedFieldsTokenizePayload
+        .catch(error => { console.error(error) })
 
+      // @ts-expect-error tokenize() expects an error, yet payload is assumed to be present. TODO: Fix this mess.
       const response3Dsecure = threeDSecureEnabled ? await get3DSecureNonce(payload) : null
-      if (response3Dsecure && response3Dsecure.error) {
+      if (response3Dsecure?.error) {
         handleCardError(response3Dsecure.error)
         return
       }
-      const nonce = response3Dsecure ? response3Dsecure.nonce : payload.nonce
+      // @ts-expect-error cascade previous TODO.
+      const nonce = (response3Dsecure ? response3Dsecure.nonce : payload.nonce) as string | null
       setBraintreeNonceValue(nonce)
       setIsLoading(false)
     }
@@ -136,7 +142,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
       <fieldset>
         <BraintreeBillingAddressFields
           billingAddressData={billingAddressData}
-          countriesList={JSON.parse(countriesList)}
+          countriesList={JSON.parse(countriesList) as string[][]}
           selectedCountryCode={selectedCountryCode}
           setBillingAddressData={setBillingAddressData}
         />
@@ -147,12 +153,13 @@ const BraintreeForm: FunctionComponent<Props> = ({
           onSubmitForm={onSubmit}
         />
       </fieldset>
-      <input id="braintree_nonce" name="braintree[nonce]" type="hidden" value={braintreeNonceValue as string} /> {/* FIXME: braintreeNonceValue should be string | undefined */}
+      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: braintreeNonceValue should be string | undefined, not null */}
+      <input id="braintree_nonce" name="braintree[nonce]" type="hidden" value={braintreeNonceValue!} />
     </form>
   )
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const BraintreeFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<BraintreeForm {...props} />, containerId)
+const BraintreeFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BraintreeForm {...props} />, containerId) }
 
 export { BraintreeForm, BraintreeFormWrapper, Props }

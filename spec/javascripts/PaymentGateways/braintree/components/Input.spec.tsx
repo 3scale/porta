@@ -12,13 +12,15 @@ const props: Props = {
   onChange: onChangeSPy
 }
 
+const mountWrapper = () => mount<Props>(<Input {...props} />)
+
 it('should render properly', () => {
-  const wrapper = mount(<Input {...props} />)
+  const wrapper = mountWrapper()
   expect(wrapper.exists()).toBe(true)
 })
 
 it('should render with right props', () => {
-  const wrapper = mount(<Input {...props} />)
+  const wrapper = mountWrapper()
   expect(wrapper.props().id).toEqual('my-id')
   expect(wrapper.props().required).toEqual(true)
   expect(wrapper.props().name).toEqual('username')
@@ -26,8 +28,8 @@ it('should render with right props', () => {
 })
 
 it('should call onChange method', () => {
-  const event = { currentTarget: { value: 'Magic Johnson' } }
-  const wrapper = mount(<Input {...props} />)
-  wrapper.props().onChange(event)
+  const event = { currentTarget: { value: 'Magic Johnson' } } as React.SyntheticEvent<HTMLInputElement>
+  const wrapper = mountWrapper()
+  wrapper.props().onChange!(event)
   expect(onChangeSPy).toHaveBeenCalledWith(event)
 })

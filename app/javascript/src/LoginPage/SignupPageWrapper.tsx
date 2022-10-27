@@ -23,6 +23,6 @@ const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const SignupPageWrapper = (props: Props, containerId: string): void => createReactWrapper(<SignupPage {...props} />, containerId)
+const SignupPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<SignupPage {...props} />, containerId) }
 
 export { SignupPage, SignupPageWrapper, Props }

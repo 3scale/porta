@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
 import { StatsResponseCodeChart, StatsResponseCodeSource } from 'Stats/provider/stats_response_codes'
 
@@ -66,8 +69,7 @@ describe('StatsResponseCodeChart', () => {
 
     chart.showData(false)
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore FIXME: why toContainText is not recognized?
+    // @ts-expect-error FIXME: why toContainText is not recognized?
     expect(noDataMessage).toContainText('No data \'ere mate!')
   })
 

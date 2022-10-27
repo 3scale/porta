@@ -1,5 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/default-param-last */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* TODO: this module needs to be properly typed !!! */
+
 import { fetchData } from 'utilities/fetchData'
 
+import type SwaggerUI from 'swagger-ui'
 import type { AccountData } from 'Types/SwaggerTypes'
 
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
@@ -14,13 +27,13 @@ const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
   const xDataKey = param[X_DATA_ATTRIBUTE] as keyof typeof X_DATA_PARAMS_DESCRIPTIONS
   const autocompleteData = accountData[xDataKey]
   const paramHasAutocompleteData = autocompleteData && autocompleteData.length > 0 &&
-    autocompleteData.every(param => param.name !== '')
+    autocompleteData.every(p => p.name !== '')
 
   return paramHasAutocompleteData
     ? {
       ...param,
-      examples: autocompleteData.reduce((examples, item) => (
-        [...examples, { summary: item.name, value: item.value }] as any
+      examples: autocompleteData.reduce<{ summary: string; value: string }[]>((examples, item) => (
+        [...examples, { summary: item.name, value: item.value }]
       ), [{ summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-' }])
     }
     : param
@@ -41,22 +54,22 @@ const injectAutocompleteToCommonParameters = (parameters: any[], accountData: Ac
 )
 
 const injectParametersToPath = (
-  path: any,
+  path: Record<string, unknown>,
   commonParameters: any[] | null | undefined = [],
   accountData: AccountData
-): any => (Object.keys(path).reduce<Record<string, any>>((updatedPath, item) => {
+): any => (Object.keys(path).reduce<Record<string, unknown>>((updatedPath, item) => {
   updatedPath[item] = (item === 'parameters' && commonParameters)
     ? injectAutocompleteToCommonParameters(commonParameters, accountData)
     : injectParametersToPathOperation(path[item], accountData)
   return updatedPath
 }, {}))
 
-const injectAutocompleteToResponseBody = (responseBody: any | string, accountData: AccountData): any | string => {
+const injectAutocompleteToResponseBody = (responseBody: string | { paths?: Record<string, any> }, accountData: AccountData): any | string => {
   const res = (typeof responseBody !== 'string' && responseBody.paths && accountData) ? {
     ...responseBody,
     paths: Object.keys(responseBody.paths).reduce<Record<string, any>>((paths, path) => {
-      const commonParameters = responseBody.paths[path].parameters
-      paths[path] = injectParametersToPath(responseBody.paths[path], commonParameters, accountData)
+      const commonParameters = responseBody.paths![path].parameters
+      paths[path] = injectParametersToPath(responseBody.paths![path], commonParameters, accountData)
       return paths
     }, {})
   } : responseBody
@@ -77,16 +90,25 @@ const injectServerToResponseBody = (responseBody: any | string, serviceEndpoint:
   }
 }
 
-export const autocompleteOAS3 = async (response: any, accountDataUrl: string, serviceEndpoint: string): Promise<any> => {
+export interface Response extends SwaggerUI.Response {
+  body: {
+    servers: unknown;
+    paths: any;
+  };
+  data: string;
+  text: string;
+}
+
+export const autocompleteOAS3 = async (response: SwaggerUI.Response, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
   const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 
-  let body
+  let body = undefined
   try {
     body = data.results
       ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
       : bodyWithServer
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error)
     body = bodyWithServer
   }

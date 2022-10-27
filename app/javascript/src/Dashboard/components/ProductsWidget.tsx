@@ -15,21 +15,21 @@ import 'Dashboard/styles/dashboard.scss'
 
 import type { FunctionComponent } from 'react'
 
-type Props = {
-  newProductPath: string,
-  productsPath: string,
-  products: Array<{
-    id: number,
-    link: string,
-    links: Array<{
-      name: string,
-      path: string
-    }>,
-    name: string,
-    type: string,
-    // eslint-disable-next-line camelcase
-    updated_at: string
-  }>
+interface Props {
+  newProductPath: string;
+  productsPath: string;
+  products: {
+    id: number;
+    link: string;
+    links: {
+      name: string;
+      path: string;
+    }[];
+    name: string;
+    type: string;
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- Comes from rails like that
+    updated_at: string;
+  }[];
 }
 
 const ProductsWidget: FunctionComponent<Props> = ({
@@ -73,6 +73,6 @@ const ProductsWidget: FunctionComponent<Props> = ({
 )
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ProductsWidgetWrapper = (props: Props, containerId: string): void => createReactWrapper(<ProductsWidget {...props} />, containerId)
+const ProductsWidgetWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ProductsWidget {...props} />, containerId) }
 
 export { ProductsWidget, ProductsWidgetWrapper, Props }

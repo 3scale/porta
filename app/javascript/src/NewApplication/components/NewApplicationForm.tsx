@@ -6,7 +6,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
-import * as flash from 'utilities/alert'
+import * as flash from 'utilities/flash'
 import { UserDefinedField } from 'Common/components/UserDefinedField'
 import { BuyerLogic } from 'Logic/BuyerLogic'
 import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
@@ -17,27 +17,27 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FieldDefinition } from 'Types'
-import type { ApplicationPlan, Buyer, Product, ServicePlan } from 'NewApplication/types'
+import type { Plan, Buyer, Product } from 'NewApplication/types'
 
 import './NewApplicationForm.scss'
 
-type Props = {
-  createApplicationPath: string,
-  createApplicationPlanPath: string,
-  createServicePlanPath: string,
-  serviceSubscriptionsPath: string,
-  product?: Product,
-  products?: Product[],
-  productsCount?: number,
-  productsPath?: string,
-  servicePlansAllowed?: boolean,
-  buyer?: Buyer,
-  buyers?: Buyer[],
-  buyersCount?: number,
-  buyersPath?: string,
-  definedFields?: FieldDefinition[],
-  validationErrors: Record<string, string[] | undefined>
-  error?: string
+interface Props {
+  createApplicationPath: string;
+  createApplicationPlanPath: string;
+  createServicePlanPath: string;
+  serviceSubscriptionsPath: string;
+  product?: Product;
+  products?: Product[];
+  productsCount?: number;
+  productsPath?: string;
+  servicePlansAllowed?: boolean;
+  buyer?: Buyer;
+  buyers?: Buyer[];
+  buyersCount?: number;
+  buyersPath?: string;
+  definedFields?: FieldDefinition[];
+  validationErrors: Record<string, string[] | undefined>;
+  error?: string;
 }
 
 const NewApplicationForm: React.FunctionComponent<Props> = ({
@@ -54,53 +54,49 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
   products,
   productsCount = 0,
   productsPath,
-  definedFields,
+  definedFields = [],
   validationErrors,
   error
 }) => {
-  const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer || null)
-  const [product, setProduct] = useState<Product | null>(defaultProduct || null)
-  const [servicePlan, setServicePlan] = useState<ServicePlan | null>(null)
-  const [appPlan, setAppPlan] = useState<ApplicationPlan | null>(defaultProduct?.defaultAppPlan || null)
+  const [buyer, setBuyer] = useState<Buyer | null>(defaultBuyer ?? null)
+  const [product, setProduct] = useState<Product | null>(defaultProduct ?? null)
+  const [servicePlan, setServicePlan] = useState<Plan | null>(null)
+  const [appPlan, setAppPlan] = useState<Plan | null>(defaultProduct?.defaultAppPlan ?? null)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const definedFieldsInitialState = definedFields ? definedFields.reduce<Record<string, any>>((state, field) => {
+  const definedFieldsInitialState = definedFields.reduce<Record<string, ''>>((state, field) => {
     state[field.id] = ''
     return state
-  }, {}) : {}
-  const [definedFieldsState, setDefinedFieldsState] = useState<{
-    [key: string]: string
-  }>(definedFieldsInitialState)
+  }, {})
+  const [definedFieldsState, setDefinedFieldsState] = useState<Record<string, string>>(definedFieldsInitialState)
   const handleOnDefinedFieldChange = (id: string) => (value: string) => {
     setDefinedFieldsState(state => ({ ...state, [id]: value }))
   }
 
   const resetServicePlan = () => {
-    let plan = null
+    let plan: Plan | null = null
 
     if (buyer && product) {
       const contractedServicePlan = new BuyerLogic(buyer).getContractedServicePlan(product)
-      plan = contractedServicePlan || product.defaultServicePlan || product.servicePlans[0] || null
+      plan = contractedServicePlan ?? product.defaultServicePlan ?? product.servicePlans[0]
     }
 
     setServicePlan(plan)
   }
 
   const resetAppPlan = () => {
-    let plan = null
+    let plan: Plan | null = null
 
     if (product) {
       // FIXME: when there is no default plan and buyer cannot select plan, it will be null and disabled.
-      plan = product.defaultAppPlan || null
+      plan = product.defaultAppPlan
     }
 
     setAppPlan(plan)
   }
 
   useEffect(() => {
-    const product = defaultProduct || null
-
-    setProduct(product)
+    setProduct(defaultProduct ?? null)
     resetServicePlan()
     resetAppPlan()
   }, [buyer])
@@ -114,9 +110,10 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
 
   const isServiceSubscribedToBuyer = Boolean(buyer && product && new BuyerLogic(buyer).isSubscribedTo(product))
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME
   const buyerValid = buyer && (buyer.id !== undefined || buyer !== null)
   const servicePlanValid = !servicePlansAllowed || servicePlan
-  const definedFieldsValid = !definedFields || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
+  const definedFieldsValid = definedFields.length === 0 || definedFields.every(f => !f.required || definedFieldsState[f.id] !== '')
   const isFormComplete = Boolean(buyer && product && servicePlanValid && appPlan && buyerValid && definedFieldsValid)
 
   if (error) {
@@ -129,7 +126,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
         acceptCharset="UTF-8"
         action={url}
         method="post"
-        onSubmit={() => setLoading(true)}
+        onSubmit={() => { setLoading(true) }}
       >
         <CSRFToken />
         <input name="utf8" type="hidden" value="✓" />
@@ -139,10 +136,11 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
             buyer={buyer}
             buyers={buyers}
             buyersCount={buyersCount}
-            buyersPath={buyersPath ? buyersPath : `${buyersPath}.json`}
+            buyersPath={buyersPath && `${buyersPath}.json`}
             onSelectBuyer={setBuyer}
           />
-        ) : <input name="account_id" type="hidden" value={(defaultBuyer as Buyer).id} />}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Either 'buyers' or 'defaultBuyer' is always defined
+        ) : <input name="account_id" type="hidden" value={defaultBuyer!.id} />}
 
         {products && (
           <ProductSelect
@@ -150,7 +148,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
             product={product}
             products={products}
             productsCount={productsCount}
-            productsPath={productsPath ? productsPath : `${productsPath}.json`}
+            productsPath={productsPath && `${productsPath}.json`}
             onSelectProduct={setProduct}
           />
         )}
@@ -161,7 +159,7 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
             isDisabled={!buyer || !product || !servicePlan}
             isPlanContracted={isServiceSubscribedToBuyer}
             servicePlan={servicePlan}
-            servicePlans={product && product.servicePlans}
+            servicePlans={product ? product.servicePlans : null}
             serviceSubscriptionsPath={buyer ? serviceSubscriptionsPath.replace(':id', String(buyer.id)) : ''}
             onSelect={setServicePlan}
           />
@@ -171,13 +169,13 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
           appPlan={appPlan}
           createApplicationPlanPath={createApplicationPlanPath.replace(
             ':id',
-            product?.id.toString() || ''
+            product?.id.toString() ?? ''
           )}
           product={product}
           onSelect={setAppPlan}
         />
 
-        {definedFields && definedFields.map(f => (
+        {definedFields.map(f => (
           <UserDefinedField
             key={f.id}
             fieldDefinition={f}
@@ -202,6 +200,6 @@ const NewApplicationForm: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const NewApplicationFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewApplicationForm {...props} />, containerId)
+const NewApplicationFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewApplicationForm {...props} />, containerId) }
 
 export { NewApplicationForm, NewApplicationFormWrapper, Props }

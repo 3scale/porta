@@ -8,14 +8,14 @@ import type { FunctionComponent } from 'react'
 import type { Api } from 'Types/Api'
 import type { ServiceFormTemplate } from 'NewService/types'
 
-type Props = {
-  template: ServiceFormTemplate,
-  isServiceDiscoveryAccessible: boolean,
-  isServiceDiscoveryUsable: boolean,
-  serviceDiscoveryAuthenticateUrl: string,
-  providerAdminServiceDiscoveryServicesPath: string,
-  adminServicesPath: string,
-  backendApis: Api[]
+interface Props {
+  template: ServiceFormTemplate;
+  isServiceDiscoveryAccessible: boolean;
+  isServiceDiscoveryUsable: boolean;
+  serviceDiscoveryAuthenticateUrl: string;
+  providerAdminServiceDiscoveryServicesPath: string;
+  adminServicesPath: string;
+  backendApis: Api[];
 }
 
 const NewServiceForm: FunctionComponent<Props> = ({
@@ -30,7 +30,7 @@ const NewServiceForm: FunctionComponent<Props> = ({
   const [formMode, setFormMode] = useState('manual')
   const [loadingProjects, setLoadingProjects] = useState(false)
 
-  const handleFormsVisibility = (event: React.SyntheticEvent<HTMLInputElement>) => setFormMode(event.currentTarget.value)
+  const handleFormsVisibility = (event: React.SyntheticEvent<HTMLInputElement>) => { setFormMode(event.currentTarget.value) }
 
   return (
     <>
@@ -53,6 +53,6 @@ const NewServiceForm: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const NewServiceFormWrapper = (props: Props, containerId: string): void => createReactWrapper(<NewServiceForm {...props} />, containerId)
+const NewServiceFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewServiceForm {...props} />, containerId) }
 
 export { NewServiceForm, NewServiceFormWrapper, Props }

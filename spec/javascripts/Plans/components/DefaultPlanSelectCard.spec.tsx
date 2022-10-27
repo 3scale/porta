@@ -3,6 +3,7 @@ import { DefaultPlanSelectCard } from 'Plans/components/DefaultPlanSelectCard'
 import { Select } from 'Common/components/Select'
 import { openSelect, selectOption } from 'utilities/test-utils'
 
+import type { IRecord } from 'Types'
 import type { Props } from 'Plans/components/DefaultPlanSelectCard'
 
 const plan = { id: 1, name: 'My Plan' }
@@ -55,7 +56,7 @@ it('should disabled the button when clearing select', () => {
 it('should disable the button when the default plan is selected', () => {
   const initialDefaultPlan = { id: 5, name: 'Default plan' } as const
   const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
-  const isButtonDisabled = (disabled: boolean) => expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(disabled)
+  const isButtonDisabled = (disabled: boolean) => { expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(disabled) }
 
   isButtonDisabled(true)
 
@@ -69,14 +70,8 @@ it('should disable the button when the default plan is selected', () => {
 it('should disable the plan option when plan already selected', () => {
   const initialDefaultPlan = { id: 5, name: 'Default plan' } as const
   const wrapper = mountWrapper({ plans: [...plans, initialDefaultPlan], initialDefaultPlan })
-  const option = (plan: {
-    id: number,
-    name: string
-  }) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
-  const isOptionDisabled = (plan: {
-    id: number,
-    name: string
-  }, disabled: boolean) => expect(option(plan).prop('className').includes('pf-m-disabled')).toBe(disabled)
+  const option = (plan: IRecord) => wrapper.find('.pf-c-select__menu-item').findWhere(node => node.type() === 'button' && node.text() === plan.name)
+  const isOptionDisabled = (plan: IRecord, disabled: boolean) => { expect(option(plan).prop('className').includes('pf-m-disabled')).toBe(disabled) }
 
   openSelect(wrapper)
   isOptionDisabled(initialDefaultPlan, true)

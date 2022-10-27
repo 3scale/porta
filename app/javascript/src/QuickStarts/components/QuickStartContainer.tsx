@@ -9,9 +9,9 @@ import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import './QuickStartContainer.scss'
 
-type Props = {
-  links: Array<[string, string, string]>,
-  renderCatalog?: boolean
+interface Props {
+  links: [string, string, string][];
+  renderCatalog?: boolean;
 }
 
 const CATALOG_CONTAINER_ID = 'quick-start-catalog-page-wrapper'
@@ -24,8 +24,8 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
   const [allQuickStartStates, setAllQuickStartStates] = useLocalStorage('quickstarts', {})
 
   const markdown = {
-    // eslint-disable-next-line react/no-multi-comp, react/jsx-no-useless-fragment
-    renderExtension: () => <></>, // TODO: remove this when bug is fixed
+    // eslint-disable-next-line react/no-multi-comp, react/jsx-no-useless-fragment -- TODO: remove this when bug is fixed
+    renderExtension: () => <></>,
     extensions: [replaceLinksExtension(links)]
   } as const
 
@@ -59,6 +59,6 @@ const QuickStartContainer: React.FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const QuickStartContainerWrapper = (props: Props, containerId: string): void => createReactWrapper(<QuickStartContainer {...props} />, containerId)
+const QuickStartContainerWrapper = (props: Props, containerId: string): void => { createReactWrapper(<QuickStartContainer {...props} />, containerId) }
 
 export { QuickStartContainer, QuickStartContainerWrapper }

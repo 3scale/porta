@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import $ from 'jquery'
 import { StatsStore } from 'Stats/lib/store'
 

@@ -1,4 +1,4 @@
-export type AccountData = Record<string, Array<{
-  name: string,
-  value: string
-}>>
+export type AccountData = Record<string, {
+  name: string;
+  value: string;
+}[]>

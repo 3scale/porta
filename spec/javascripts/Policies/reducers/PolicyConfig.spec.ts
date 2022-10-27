@@ -2,6 +2,7 @@ import PolicyConfigReducer from 'Policies/reducers/PolicyConfig'
 import { initialState } from 'Policies/reducers/initialState'
 
 import type { ChainPolicy } from 'Policies/types'
+import type { JSONSchema6 } from 'json-schema'
 
 const schema = {
   properties: {
@@ -10,7 +11,7 @@ const schema = {
       description: 'HTTP status code to be returned'
     }
   }
-}
+} as JSONSchema6
 
 describe('PolicyConfigReducer', () => {
   it('should return the initial state', () => {

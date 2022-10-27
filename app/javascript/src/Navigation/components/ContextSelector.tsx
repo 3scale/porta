@@ -8,12 +8,12 @@ import type { Menu } from 'Types'
 
 import './ContextSelector.scss'
 
-type Props = {
-  activeMenu: Menu,
-  audienceLink?: string,
-  settingsLink: string,
-  productsLink: string,
-  backendsLink: string
+interface Props {
+  activeMenu: Menu;
+  audienceLink?: string;
+  settingsLink: string;
+  productsLink: string;
+  backendsLink: string;
 }
 
 const DASHBOARD_PATH = '/p/admin/dashboard'
@@ -27,14 +27,14 @@ const ContextSelector: FunctionComponent<Props> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
-  useClickOutside(ref, () => setIsOpen(false))
+  useClickOutside(ref, () => { setIsOpen(false) })
 
   function getClassNamesForMenu (menu: Menu): string {
     const isDashboardSelected = menu === 'dashboard' && activeMenu === 'dashboard'
-    const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].indexOf(activeMenu) !== -1)
-    const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].indexOf(activeMenu) !== -1)
-    const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].indexOf(activeMenu) !== -1)
-    const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].indexOf(activeMenu) !== -1)
+    const isAudienceSelected = menu === 'audience' && (['buyers', 'finance', 'cms', 'site'].includes(activeMenu))
+    const isProductsSelected = menu === 'products' && (['serviceadmin', 'monitoring', 'products'].includes(activeMenu))
+    const isBackendsSelected = menu === 'backend_api' && (['backend_api', 'backend_apis'].includes(activeMenu))
+    const isSettingsSelected = menu === 'account' && (['account', 'personal', 'active_docs'].includes(activeMenu))
 
     if (isDashboardSelected || isAudienceSelected || isProductsSelected || isBackendsSelected || isSettingsSelected) {
       return 'pf-c-context-selector__menu-list-item current-context'
@@ -45,7 +45,7 @@ const ContextSelector: FunctionComponent<Props> = ({
 
   return (
     <div className={`pf-c-context-selector header-context-selector ${isOpen ? ' pf-m-expanded' : ''}`} data-quickstart-id="context-selector" ref={ref}>
-      <a className="pf-c-context-selector__toggle " title="Context Selector" onClick={() => setIsOpen(!isOpen)}>
+      <a className="pf-c-context-selector__toggle " title="Context Selector" onClick={() => { setIsOpen(!isOpen) }}>
         <ActiveMenuTitle activeMenu={activeMenu} />
       </a>
       {isOpen && (
@@ -86,6 +86,6 @@ const ContextSelector: FunctionComponent<Props> = ({
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const ContextSelectorWrapper = (props: Props, containerId: string): void => createReactWrapper(<ContextSelector {...props} />, containerId)
+const ContextSelectorWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ContextSelector {...props} />, containerId) }
 
 export { ContextSelector, ContextSelectorWrapper, Props }

@@ -3,8 +3,8 @@ import { ExclamationCircleIcon } from '@patternfly/react-icons'
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
 
-type Props = {
-  flashMessages: Array<FlashMessage>
+interface Props {
+  flashMessages: FlashMessage[];
 }
 
 const FlashMessages: FunctionComponent<Props> = ({ flashMessages }) => (
