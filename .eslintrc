@@ -6,7 +6,7 @@
     "ecmaVersion": 6,
     "ecmaFeatures": {
       "impliedStrict": true,
-      "jsxPragma": null // for @typescript/eslint-parser
+      "jsxPragma": null // Required by @typescript/eslint-parser
     }
   },
   "env": {
@@ -17,13 +17,12 @@
     "plugin:react/all",
     "eslint:recommended",
     "plugin:@typescript-eslint/all",
-    "./eslint-naming-conventions.json"
-    // "plugin:@typescript-eslint/recommended" // Updates some rules from eslint:recommended
+    "./eslint-naming-conventions.json",
   ],
   "plugins": [
     "@typescript-eslint",
     "import",
-    // "jsx-expressions" // TODO: requires node 12
+    // "jsx-expressions" // TODO: requires eslint 8
   ],
   "overrides": [{
     "files": ["spec/javascripts/**"],
@@ -44,6 +43,8 @@
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "jsx-quotes": ["error", "prefer-double"],
     "array-bracket-spacing": ["error", "never"],
+    // "eslint array-bracket-newline": ["error", { "multiline": true }], // TODO: requires eslint 8
+
     // Override plugin:@typescript-eslint/all
     "@typescript-eslint/object-curly-spacing": ["error", "always"],
     "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true }],
@@ -58,12 +59,13 @@
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/promise-function-async": "off",
-    // "@typescript-eslint/no-implicit-any-catch": "off", TODO: disable this rule, it is already handled by Typescript via setting useUnknownInCatchVariables
+
     // Override plugin:@typescript-eslint/recommended
     "@typescript-eslint/semi": ["error", "never"],
     "@typescript-eslint/no-unused-vars": 2,
     "@typescript-eslint/consistent-type-imports": 2,
     "@typescript-eslint/no-duplicate-imports": "error",
+
     // Override plugin:react/all
     "react/destructuring-assignment": "off",
     "react/forbid-component-props": "off",
@@ -99,6 +101,7 @@
     "react/require-default-props": "off",
     "react/no-set-state": "off",
     "react/no-unescaped-entities": "warn",
+
     // From plugin import
     "import/order": ["error", {
       "warnOnUnassignedImports": true,
@@ -107,8 +110,9 @@
     }],
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
+
     // From plugin jsx-expressions
-    // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render" // TODO: requires node 12
+    // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render" // TODO: requires eslint 8
   },
   "settings": {
     "react": {
