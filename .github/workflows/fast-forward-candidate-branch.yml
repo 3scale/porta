@@ -1,30 +1,26 @@
-name: Fast-forward dev or stable branch to a SHA1
+name: Fast-forward master to managed-services
 on:
-  workflow_dispatch:
-    inputs:
-      release:
-        description: 'The release version number (e.g, 2.11)'
-        required: true
-      ref:
-        description: 'The SHA1 or branch name the dev or stable branch will point to. The output branch will be 3scale-{release}-{branch_suffix}'
-        required: true
-        default: master
-      branch_suffix:
-        description: 'The branch suffix can be `dev|stable`. The output branch will be 3scale-{release}-{branch_suffix}'
-        required: true
-        default: dev
+  schedule:
+    - cron: '0 7 * * 4'
 
 jobs:
   fast-forward:
     runs-on: ubuntu-latest
+    env:
+      FROM_BRANCH: "master"
+      TO_BRANCH: "managed-services"
+      PERIOD_DAYS: 21 # Days
+      STARTING_AT: "2022-10-27 00:00:00"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.ref }}
+          ref: ${{ env.FROM_BRANCH }}
           fetch-depth: 0
           token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
       - run: |
-          export branch="3scale-${{ github.event.inputs.release }}-${{ github.event.inputs.branch_suffix }}"
-          git checkout ${branch} && git pull ||  git checkout -b ${branch}
-          git merge ${{ github.event.inputs.ref }} --ff-only
-          git push origin ${branch}
+          if [ $(($(($(date -d 00:00:00 +%s) - $(date -d "${{ env.STARTING_AT }}" +%s))) % $((60 * 60 * 24 * ${{ env.PERIOD_DAYS }})))) == 0 ]; then
+            git fetch origin ${{ env.FROM_BRANCH }}:${{ env.TO_BRANCH }}
+            git push origin ${{ env.TO_BRANCH }}
+          else
+            echo "Nothing to do"
+          fi
