@@ -6,12 +6,12 @@ class Provider::Admin::DashboardsHelperTest < ActionView::TestCase
   def setup
     stubs(icon: '<i></i>')
   end
-  
+
   test 'dashboard_navigation_link creates basic link' do
     assert_equal '<a class="DashboardNavigation-link" href="/path">Link</a>',
       dashboard_navigation_link('Link', '/path')
   end
-  
+
   test 'dashboard_navigation_link can add an icon using options' do
     assert_equal '<a class="DashboardNavigation-link" href="/path">Link <i></i></a>',
       dashboard_navigation_link('Link', '/path', { icon_name: 'foo', icon_append_name: true })
@@ -53,5 +53,4 @@ class Provider::Admin::DashboardsHelperTest < ActionView::TestCase
     assert " (#{link.html_safe})", safe_link
     assert safe_link.html_safe?
   end
-
 end

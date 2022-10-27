@@ -44,10 +44,6 @@ When (/^I search for "([^"]*)" using the (products|backends) search bar/) do |qu
   search_bar.send_keys query
 end
 
-When 'All Dashboard widgets are loaded' do
-  DashboardWidgetPresenter.any_instance.stubs(:loaded?).returns(true)
-end
-
 Given "{int} products and {int} backend apis" do |products, backends|
   FactoryBot.create_list(:service, products, account: @provider)
   FactoryBot.create_list(:backend_api, backends, account: @provider)

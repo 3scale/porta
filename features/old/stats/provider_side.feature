@@ -11,7 +11,6 @@ Feature: Provider stats
     And provider "foo.3scale.localhost" has multiple applications enabled
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And all the rolling updates features are off
-    And All Dashboard widgets are loaded
 
   @javascript
   Scenario: Stats access
