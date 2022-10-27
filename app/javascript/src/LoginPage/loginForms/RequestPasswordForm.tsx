@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import {
   ActionGroup,
   Button,
@@ -24,7 +24,7 @@ interface State {
 }
 
 // eslint-disable-next-line react/require-optimization -- TODO: resolve this react/require-optimization
-class RequestPasswordForm extends React.Component<Props, State> {
+class RequestPasswordForm extends Component<Props, State> {
   public constructor (props: Props) {
     super(props)
     this.state = {

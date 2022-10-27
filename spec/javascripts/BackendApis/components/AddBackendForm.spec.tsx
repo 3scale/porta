@@ -6,8 +6,8 @@ import { BackendSelect } from 'BackendApis/components/BackendSelect'
 import { PathInput } from 'BackendApis/components/PathInput'
 import { NewBackendModal } from 'BackendApis/components/NewBackendModal'
 
-import type { Props } from 'BackendApis/components/AddBackendForm'
 import type { ReactWrapper } from 'enzyme'
+import type { Props } from 'BackendApis/components/AddBackendForm'
 
 const backend = { id: 0, name: 'backend', privateEndpoint: 'example.org', systemName: 'backend', updatedAt: '' }
 const backendsPath = '/backends'
@@ -90,6 +90,7 @@ it('should select the new backend when created', () => {
 it('should be able to have a default backend selected', () => {
   const wrapper = mountWrapper({ backend })
 
+  // TODO: type find() or instance() properly
   expect((wrapper.find('BackendSelect .pf-c-select__toggle-typeahead').instance() as any).value).toEqual(backend.name)
 })
 

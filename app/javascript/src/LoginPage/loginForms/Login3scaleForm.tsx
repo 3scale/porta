@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import {
   ActionGroup,
   Button,
@@ -41,7 +41,7 @@ const PASSWORD_ATTRS = {
 
 // TODO: resolve this react/require-optimization
 // eslint-disable-next-line react/require-optimization
-class Login3scaleForm extends React.Component<Props, State> {
+class Login3scaleForm extends Component<Props, State> {
   public constructor (props: Props) {
     super(props)
     this.state = {

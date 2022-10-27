@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { StatsUsageChart } from 'Stats/lib/usage_chart'
 
 describe('StatsUsageChart', () => {

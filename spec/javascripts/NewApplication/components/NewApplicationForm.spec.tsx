@@ -188,12 +188,12 @@ describe('when in Service context', () => {
 
     it('should render buyer, app plan and service plan selects', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, [
+      expect(assertInputs(wrapper, [
         { id: 'account_id', present: true },
         { id: 'cinstance_service_plan_id', present: true },
         { id: 'cinstance_plan_id', present: true },
         { id: 'product', present: false }
-      ])
+      ])).toEqual(true)
     })
 
     describe('when the selected buyer is subscribed to the current product', () => {
@@ -348,12 +348,12 @@ describe('when in Service context', () => {
 
     it('should render buyer and app plan selects', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, [
+      expect(assertInputs(wrapper, [
         { id: 'account_id', present: true },
         { id: 'cinstance_service_plan_id', present: false },
         { id: 'cinstance_plan_id', present: true },
         { id: 'product', present: false }
-      ])
+      ])).toEqual(true)
     })
   })
 })
@@ -481,12 +481,12 @@ describe('when in Account context', () => {
 
     it('should render product and app plan selects', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, [
+      expect(assertInputs(wrapper, [
         { id: 'account_id', present: false },
         { id: 'cinstance_service_plan_id', present: false },
         { id: 'cinstance_plan_id', present: true },
         { id: 'product', present: true }
-      ])
+      ])).toEqual(true)
     })
 
     it('should enable submit button without a service plan being selected', () => {
@@ -508,12 +508,12 @@ describe('when in Account context', () => {
 
     it('should render product, app plan and service plan selects', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, [
+      expect(assertInputs(wrapper, [
         { id: 'account_id', present: false },
         { id: 'cinstance_service_plan_id', present: true },
         { id: 'cinstance_plan_id', present: true },
         { id: 'product', present: true }
-      ])
+      ])).toEqual(true)
     })
 
     it.todo('should not show a service plan hints if a product is not yet selected?')
@@ -666,7 +666,8 @@ describe('when in Account context', () => {
 
     it('should render all inputs', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, definedFields.map(field => ({ id: field.name, present: true })))
+      const inputs = definedFields.map(field => ({ id: field.name, present: true }))
+      expect(assertInputs(wrapper, inputs)).toEqual(true)
     })
 
     it('should be able to submit only when form is complete', () => {
@@ -802,12 +803,12 @@ describe('when in Audience context', () => {
 
     it('should render buyer, product and app plan selects', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, [
+      expect(assertInputs(wrapper, [
         { id: 'account_id', present: true },
         { id: 'cinstance_service_plan_id', present: false },
         { id: 'cinstance_plan_id', present: true },
         { id: 'product', present: true }
-      ])
+      ])).toEqual(true)
     })
   })
 
@@ -818,12 +819,12 @@ describe('when in Audience context', () => {
 
     it('should render all selects', () => {
       const wrapper = mountWrapper(props)
-      assertInputs(wrapper, [
+      expect(assertInputs(wrapper, [
         { id: 'account_id', present: true },
         { id: 'cinstance_service_plan_id', present: true },
         { id: 'cinstance_plan_id', present: true },
         { id: 'product', present: true }
-      ])
+      ])).toEqual(true)
     })
 
     describe('when the selected buyer is subscribed to the selected product', () => {

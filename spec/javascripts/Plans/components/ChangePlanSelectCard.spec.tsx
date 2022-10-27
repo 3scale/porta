@@ -62,12 +62,12 @@ it('should disable the plan already selected', () => {
 })
 
 // FIXME: input not receiving change event
-it.skip('should be able to filter by name', () => {
-  const wrapper = mountWrapper()
-  openSelect(wrapper)
-  expect(wrapper.find('SelectOption')).toHaveLength(2)
+it.todo('should be able to filter by name')
+//   const wrapper = mountWrapper()
+//   openSelect(wrapper)
+//   expect(wrapper.find('SelectOption')).toHaveLength(2)
 
-  wrapper.find('input[type="text"]').simulate('change', { target: { value: 'another' } })
-  wrapper.update()
-  expect(wrapper.find('SelectOption')).toHaveLength(1)
-})
+//   wrapper.find('input[type="text"]').simulate('change', { target: { value: 'another' } })
+//   wrapper.update()
+//   expect(wrapper.find('SelectOption')).toHaveLength(1)
+// })

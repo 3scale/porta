@@ -79,9 +79,9 @@ function updateInput (
  * @param wrapper The enzyme react wrapper
  * @param inputs Array of objects containing target ids and their presence
  */
-function assertInputs (wrapper: ReactWrapper<unknown>, inputs: { id: string; present: boolean }[]): void {
+function assertInputs (wrapper: ReactWrapper<unknown>, inputs: { id: string; present: boolean }[]): boolean {
   const formGroups = wrapper.find('.pf-c-form__group')
-  inputs.forEach(({ id, present }) => { expect(formGroups.exists(`[htmlFor="${id}"]`)).toEqual(present) })
+  return inputs.every(({ id, present }) => formGroups.exists(`[htmlFor="${id}"]`) == present)
 }
 
 export {

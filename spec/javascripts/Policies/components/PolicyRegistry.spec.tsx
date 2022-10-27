@@ -43,13 +43,13 @@ it('should render subcomponents', () => {
   expect(policyList.find('.Policy').length).toBe(3)
 })
 
-it.skip('should not render apicast policy', () => {
-  const { registryWrapper } = setup()
-  const policyRegistryItems = registryWrapper.find('PolicyRegistryItem') // FIXME: does not exist!
-  policyRegistryItems.forEach(policyRegistryItem => {
-    expect((policyRegistryItem as any).props().value.name).not.toEqual('apicast')
-  })
-})
+it.todo('should not render apicast policy')
+//   const { registryWrapper } = setup()
+//   const policyRegistryItems = registryWrapper.find('PolicyRegistryItem') // FIXME: does not exist!
+//   policyRegistryItems.forEach(policyRegistryItem => {
+//     expect((policyRegistryItem as any).props().value.name).not.toEqual('apicast')
+//   })
+// })
 
 it('should have a close button', () => {
   const { registryWrapper, props } = setup()

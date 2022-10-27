@@ -32,7 +32,7 @@ describe('StatsAverageMetricsSource', () => {
     })
   })
 
-  describe.skip('StatsAverageMetricsSource Integration', () => {
+  describe('StatsAverageMetricsSource Integration', () => {
     it.todo('should get the correct average data')
   })
 })

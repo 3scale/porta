@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/promise-function-async */
+/* eslint-disable import/no-named-as-default-member */
+
 import { mount } from 'enzyme'
 import c3 from 'c3'
 
@@ -40,7 +40,7 @@ const props = {
 }
 
 beforeEach(() => {
-  wrapper = mount(<InlineChart {...props} />)
+  wrapper = mount<InlineChart, Props, State>(<InlineChart {...props} />)
 })
 
 afterEach(() => {

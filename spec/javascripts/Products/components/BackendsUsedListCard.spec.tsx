@@ -37,25 +37,25 @@ it('should be paginated and have 5 items per page', () => {
 })
 
 // FIXME: input not receiving change event
-it.skip('should be filterable by name', () => {
-  const items = mockBackends(10)
-  const wrapper = mountWrapper({ backends: items })
+it.todo('should be filterable by name')
+//   const items = mockBackends(10)
+//   const wrapper = mountWrapper({ backends: items })
 
-  wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
-  wrapper.find('.pf-c-input-group button').last().simulate('click')
-  wrapper.update()
+//   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
+//   wrapper.find('.pf-c-input-group button').last().simulate('click')
+//   wrapper.update()
 
-  expect(wrapper.find('tbody tr').length).toEqual(2)
-})
+//   expect(wrapper.find('tbody tr').length).toEqual(2)
+// })
 
 // FIXME: input not receiving change event
-it.skip('should search when pressing Enter', () => {
-  const items = mockBackends(10)
-  const wrapper = mountWrapper({ backends: items })
+it.todo('should search when pressing Enter')
+//   const items = mockBackends(10)
+//   const wrapper = mountWrapper({ backends: items })
 
-  wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
-  wrapper.find('input[type="search"]').simulate('keydown', { key: 'Enter' })
-  wrapper.update()
+//   wrapper.find('input[type="search"]').simulate('change', { target: { value: '1' } })
+//   wrapper.find('input[type="search"]').simulate('keydown', { key: 'Enter' })
+//   wrapper.update()
 
-  expect(wrapper.find('tbody tr').length).toEqual(2)
-})
+//   expect(wrapper.find('tbody tr').length).toEqual(2)
+// })

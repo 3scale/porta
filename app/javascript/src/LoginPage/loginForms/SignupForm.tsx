@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import {
   ActionGroup,
   Button,
@@ -46,7 +46,7 @@ const INPUT_LABELS: Record<InputType, string> = {
 } as const
 
 // eslint-disable-next-line react/require-optimization -- TODO: resolve this react/require-optimization
-class SignupForm extends React.Component<Props, State> {
+class SignupForm extends Component<Props, State> {
   public constructor (props: Props) {
     super(props)
     this.state = {

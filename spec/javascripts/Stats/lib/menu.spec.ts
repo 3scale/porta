@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { StatsMenu } from 'Stats/lib/menu'
 import { StatsStore } from 'Stats/lib/store'
 import { StatsState } from 'Stats/lib/state'

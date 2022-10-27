@@ -17,15 +17,15 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ServicePlanSelect {...{ ...defaultProps, ...props }} />)
 
-const expectToBeDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true) => {
-  expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)
-  expect(wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled).toBe(isDisabled)
-  expect(wrapper.find('button.pf-c-select__toggle-button').props().disabled).toBe(isDisabled)
+const isDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true): boolean => {
+  return wrapper.exists('.pf-c-select .pf-m-disabled') === isDisabled
+    && wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled === isDisabled
+    && wrapper.find('button.pf-c-select__toggle-button').props().disabled === isDisabled
 }
 
 it('should be disabled', () => {
   const wrapper = mountWrapper({ isDisabled: true })
-  expectToBeDisabled(wrapper)
+  expect(isDisabled(wrapper)).toEqual(true)
 })
 
 describe('when plan is contracted', () => {
@@ -33,7 +33,7 @@ describe('when plan is contracted', () => {
 
   it('should show a hint and be disabled', () => {
     const wrapper = mountWrapper(props)
-    expectToBeDisabled(wrapper)
+    expect(isDisabled(wrapper)).toEqual(true)
     expect(wrapper.find('.hint').exists()).toBe(true)
     expect(wrapper.find('.hint').find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
   })
@@ -45,7 +45,7 @@ describe('when plan is not contracted', () => {
 
     it('should show a hint', () => {
       const wrapper = mountWrapper(props)
-      expectToBeDisabled(wrapper, false)
+      expect(isDisabled(wrapper, false)).toEqual(true)
       expect(wrapper.find('.hint').exists()).toBe(true)
       expect(wrapper.find('.hint').find('a').exists()).toBe(false)
     })
@@ -56,7 +56,7 @@ describe('when plan is not contracted', () => {
 
     it('should show a hint and a link to create a new plan', () => {
       const wrapper = mountWrapper(props)
-      expectToBeDisabled(wrapper, false)
+      expect(isDisabled(wrapper, false)).toEqual(true)
       expect(wrapper.find('.hint').exists()).toBe(true)
       expect(wrapper.find('.hint').find('a').prop('href')).toEqual(props.createServicePlanPath)
     })
@@ -67,7 +67,7 @@ describe('when plan is not contracted', () => {
 
     it('should show a hint and a link to create a new plan', () => {
       const wrapper = mountWrapper(props)
-      expectToBeDisabled(wrapper, false)
+      expect(isDisabled(wrapper, false)).toEqual(true)
       expect(wrapper.find('.hint').exists()).toBe(true)
       expect(wrapper.find('.hint').find('a').exists()).toBe(false)
     })

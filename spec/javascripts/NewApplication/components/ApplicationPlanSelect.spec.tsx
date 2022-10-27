@@ -17,10 +17,10 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ApplicationPlanSelect {...{ ...defaultProps, ...props }} />)
 
-const expectToBeDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true) => {
-  expect(wrapper.find('.pf-c-select .pf-m-disabled').exists()).toBe(isDisabled)
-  expect(wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled).toBe(isDisabled)
-  expect(wrapper.find('button.pf-c-select__toggle-button').props().disabled).toBe(isDisabled)
+const isDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true): boolean => {
+  return wrapper.find('.pf-c-select .pf-m-disabled').exists() === isDisabled
+    && wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled === isDisabled
+    && wrapper.find('button.pf-c-select__toggle-button').props().disabled === isDisabled
 }
 
 describe('when no product selected', () => {
@@ -28,7 +28,7 @@ describe('when no product selected', () => {
 
   it('should be disabled when no product is selected', () => {
     const wrapper = mountWrapper(props)
-    expectToBeDisabled(wrapper)
+    expect(isDisabled(wrapper)).toEqual(true)
   })
 })
 
@@ -47,7 +47,7 @@ describe('when a product is selected', () => {
 
   it('should not be disabled', () => {
     const wrapper = mountWrapper(props)
-    expectToBeDisabled(wrapper, false)
+    expect(isDisabled(wrapper, false)).toEqual(true)
   })
 
   describe('and the product has some application plans', () => {
@@ -55,7 +55,7 @@ describe('when a product is selected', () => {
 
     it('should not be disabled', () => {
       const wrapper = mountWrapper(props)
-      expectToBeDisabled(wrapper, false)
+      expect(isDisabled(wrapper, false)).toEqual(true)
     })
   })
 
@@ -71,7 +71,7 @@ describe('when a product is selected', () => {
 
     it('should be disabled', () => {
       const wrapper = mountWrapper(props)
-      expectToBeDisabled(wrapper)
+      expect(isDisabled(wrapper)).toEqual(true)
     })
   })
 })

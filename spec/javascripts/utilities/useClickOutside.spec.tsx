@@ -26,13 +26,13 @@ it('should and and remove a mousedown event listener', () => {
   expect(removeEventListener).toHaveBeenCalledTimes(1)
 })
 
-it.skip('should call the callback when clicked outside', async () => {
-  // const callback = jest.fn()
+it.todo('should call the callback when clicked outside')
+//   const callback = jest.fn()
 
-  // const wrapper = mount(
-  //   <div id="container">
-  //     <HookedComponent callback={callback} />
-  //     <span>TODO: Click here and expect callback to be called</span>
-  //   </div>
-  // )
-})
+//   const wrapper = mount(
+//     <div id="container">
+//       <HookedComponent callback={callback} />
+//       <span>TODO: Click here and expect callback to be called</span>
+//     </div>
+//   )
+// })

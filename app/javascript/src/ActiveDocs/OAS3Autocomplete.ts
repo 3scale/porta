@@ -12,7 +12,7 @@
 
 import { fetchData } from 'utilities/fetchData'
 
-import type SwaggerUI from 'swagger-ui'
+import type { Response as SwaggerUIResponse } from 'swagger-ui'
 import type { AccountData } from 'Types/SwaggerTypes'
 
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
@@ -90,7 +90,7 @@ const injectServerToResponseBody = (responseBody: any | string, serviceEndpoint:
   }
 }
 
-export interface Response extends SwaggerUI.Response {
+export interface Response extends SwaggerUIResponse {
   body: {
     servers: unknown;
     paths: any;
@@ -99,7 +99,7 @@ export interface Response extends SwaggerUI.Response {
   text: string;
 }
 
-export const autocompleteOAS3 = async (response: SwaggerUI.Response, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
+export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
   const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 

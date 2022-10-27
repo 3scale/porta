@@ -5,16 +5,16 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // FIXME: we need to properly type this
 import $ from 'jquery'
-import moment from 'moment'
+import moment, { utc } from 'moment'
 import numeral from 'numeral'
-import c3 from 'c3'
+import { generate } from 'c3'
 
 import type { MomentInput, MomentInputObject } from 'moment'
 
 export function render (widget: string, data: unknown): void {
   const options = chartOptions(widget, data)
   $('[data-chart]', widget).each(function (_, chart) {
-    c3.generate(($ as any).extend(true, {}, options, { bindto: chart }))
+    generate(($ as any).extend(true, {}, options, { bindto: chart }))
   })
 }
 
@@ -83,7 +83,7 @@ function timeline (data: MomentInputObject) {
   const y: string[] = []
 
   dates.forEach(date => {
-    x.push(moment.utc(date).toISOString())
+    x.push(utc(date).toISOString())
     y.push((data as any)[date].value)
   })
   return [x, y]

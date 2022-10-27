@@ -36,7 +36,6 @@ const chainPolicy: ChainPolicy = {
   removable: true
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- FIXME: who knows why this is not a valid configuration...
 const validPolicy: PolicyConfig = { name: 'echo', version: 'builtin', configuration: { config: 'bond' } as any, enabled: true }
 const wrongPolicy: PolicyConfig = { name: 'foo', version: 'builtin', configuration: {}, enabled: true }
 

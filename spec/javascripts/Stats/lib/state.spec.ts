@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import $ from 'jquery'
 import MockDate from 'mockdate'
 

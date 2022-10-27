@@ -26,7 +26,6 @@ it('should render itself', () => {
 })
 
 it.todo('should render a table with the given columns')
-// it('should render a table with Name, Applications and State', () => {
 //   const wrapper = mountWrapper()
 //   expect(wrapper.find('th')).toMatchSnapshot()
 // })

@@ -105,5 +105,3 @@ export function toggle (ident: string, classList: DOMTokenList, element: Element
 
   return function () { element.removeEventListener('click', handler) }
 }
-
-export default toggle

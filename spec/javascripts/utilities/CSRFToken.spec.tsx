@@ -4,7 +4,6 @@ import type { Props } from 'utilities/CSRFToken'
 
 import type { FunctionComponent } from 'react'
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const CSRFToken = jest.requireActual('utilities/CSRFToken').CSRFToken as FunctionComponent<Props>
 
 it('should render itself correctly', () => {

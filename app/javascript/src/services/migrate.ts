@@ -41,5 +41,3 @@ export function migrate (): void {
     }
   }
 }
-
-export default migrate

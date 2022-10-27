@@ -25,12 +25,12 @@ it('should render itself', () => {
 
 it('should render all fields', () => {
   const wrapper = mountWrapper()
-  assertInputs(wrapper, [
+  expect(assertInputs(wrapper, [
     { id: 'email_configuration_email', present: true },
     { id: 'email_configuration_user_name', present: true },
     { id: 'email_configuration_password', present: true },
     { id: 'email_configuration_password_repeat', present: true }
-  ])
+  ])).toEqual(true)
 })
 
 describe('when the server returns some errors', () => {
