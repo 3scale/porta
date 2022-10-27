@@ -12,7 +12,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
     @bs = @provider.billing_strategy
     @bs.numbering_period = 'monthly'
 
-    @buyer = FactoryBot.create(:buyer_account)
+    @buyer = FactoryBot.create(:old_simple_buyer)
   end
 
   test 'add_cost' do
@@ -173,7 +173,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
     second_provider = FactoryBot.create(:provider_with_billing)
     second_provider.billing_strategy.numbering_period = 'monthly'
-    second_buyer = FactoryBot.create(:buyer_account)
+    second_buyer = FactoryBot.create(:old_simple_buyer)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer,
                                               :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer,
@@ -206,7 +206,7 @@ class Finance::BillingStrategyTest < ActiveSupport::TestCase
 
     second_provider = FactoryBot.create(:provider_with_billing)
     second_provider.billing_strategy.update_attribute(:numbering_period, 'yearly')
-    second_buyer = FactoryBot.create(:buyer_account)
+    second_buyer = FactoryBot.create(:old_simple_buyer)
     invoice_other_buyer = @bs.create_invoice!(:buyer_account => second_buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
     invoice_other_provider = second_provider.billing_strategy.create_invoice!(:buyer_account => @buyer, :period => Month.new(Time.zone.local(1984, 1, 1)))
 

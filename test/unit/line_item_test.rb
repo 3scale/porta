@@ -14,11 +14,14 @@ class LineItemTest < ActiveSupport::TestCase
     provider_account_one = FactoryBot.create(:provider_with_billing)
     provider_account_two = FactoryBot.create(:provider_with_billing)
 
+    buyer_account_one = FactoryBot.create(:old_simple_buyer)
+    buyer_account_two = FactoryBot.create(:old_simple_buyer)
+
     provider_account_one.billing_strategy.update(currency: 'EUR')
     provider_account_two.billing_strategy.update(currency: 'USD')
 
-    invoice_one = FactoryBot.create(:invoice, provider_account: provider_account_one)
-    invoice_two = FactoryBot.create(:invoice, provider_account: provider_account_two)
+    invoice_one = FactoryBot.create(:invoice, provider_account: provider_account_one, buyer_account: buyer_account_one)
+    invoice_two = FactoryBot.create(:invoice, provider_account: provider_account_two, buyer_account: buyer_account_two)
 
     line_item_one = invoice_one.line_items.new(cost: 10)
     line_item_two = invoice_two.line_items.new(cost: 42)
