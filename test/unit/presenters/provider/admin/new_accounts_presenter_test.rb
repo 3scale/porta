@@ -15,23 +15,23 @@ class Provider::Admin::NewAccountsPresenterTest < ActiveSupport::TestCase
     presenter = Provider::Admin::NewAccountsPresenter.new(current_account: provider)
 
     data = presenter.dashboard_widget_data
-    assert data.key? :chartData
-    assert data[:chartData].key? :values
-    assert data[:chartData].key? :complete
-    assert data[:chartData].key? :incomplete
-    assert data[:chartData].key? :previous
-    assert data.key? :newAccountsTotal
-    assert data.key? :hasHistory
-    assert data.key? :links
-    assert data[:links].key? :previousRangeAdminBuyersAccount
-    assert data[:links][:previousRangeAdminBuyersAccount].key? :url
-    assert data[:links][:previousRangeAdminBuyersAccount].key? :value
-    assert data[:links].key? :currentRangeAdminBuyersAccount
-    assert data[:links][:currentRangeAdminBuyersAccount].key? :url
-    assert data[:links].key? :lastDayInRangeAdminBuyersAccount
-    assert data[:links][:lastDayInRangeAdminBuyersAccount].key? :url
-    assert data[:links][:lastDayInRangeAdminBuyersAccount].key? :value
-    assert data.key? :percentualChange
+    assert data.key?(:chartData)
+    assert data[:chartData].key?(:values)
+    assert data[:chartData].key?(:complete)
+    assert data[:chartData].key?(:incomplete)
+    assert data[:chartData].key?(:previous)
+    assert data.key?(:newAccountsTotal)
+    assert data.key?(:hasHistory)
+    assert data.key?(:links)
+    assert data[:links].key?(:previousRangeAdminBuyersAccount)
+    assert data[:links][:previousRangeAdminBuyersAccount].key?(:url)
+    assert data[:links][:previousRangeAdminBuyersAccount].key?(:value)
+    assert data[:links].key?(:currentRangeAdminBuyersAccount)
+    assert data[:links][:currentRangeAdminBuyersAccount].key?(:url)
+    assert data[:links].key?(:lastDayInRangeAdminBuyersAccount)
+    assert data[:links][:lastDayInRangeAdminBuyersAccount].key?(:url)
+    assert data[:links][:lastDayInRangeAdminBuyersAccount].key?(:value)
+    assert data.key?(:percentualChange)
   end
 
   test '#dashboard_widget_data calls NewAccountsQuery with the correct arguments' do

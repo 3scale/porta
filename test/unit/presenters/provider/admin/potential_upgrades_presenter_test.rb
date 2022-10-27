@@ -17,11 +17,11 @@ class Provider::Admin::PotentialUpgradesPresenterTest < ActiveSupport::TestCase
     presenter = Provider::Admin::PotentialUpgradesPresenter.new(current_account: provider, current_user: user)
 
     data = presenter.dashboard_widget_data
-    assert data.key? :violations
-    assert data.key? :incorrectSetUp
-    assert data.key? :links
-    assert data[:links].key? :adminServiceApplicationPlans
-    assert data[:links].key? :settingsAdminService
+    assert data.key?(:violations)
+    assert data.key?(:incorrectSetUp)
+    assert data.key?(:links)
+    assert data[:links].key?(:adminServiceApplicationPlans)
+    assert data[:links].key?(:settingsAdminService)
   end
 
   test '#dashboard_widget_data calls UsageLimitViolationsQuery with the correct arguments' do
