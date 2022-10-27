@@ -59,7 +59,7 @@ it('should be able to select an item', () => {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   wrapper.find('.pf-c-select__menu li button').filterWhere(n => n.text().includes(targetItem.name)).simulate('click')
 
-  expect(onSelect).toBeCalledWith(targetItem)
+  expect(onSelect).toHaveBeenCalledWith(targetItem)
 })
 
 describe('with 20 items or less', () => {
@@ -101,7 +101,7 @@ describe('with more than 20 items', () => {
 
     openModal(wrapper)
     expect(wrapper.find(TableModal).props().isOpen).toBe(true)
-    expect(onSelect).toBeCalledTimes(0)
+    expect(onSelect).toHaveBeenCalledTimes(0)
   })
 
   it('should be able to select an option from the modal', () => {
@@ -124,14 +124,14 @@ describe('with more than 20 items', () => {
   })
 
   // FIXME: simulate change
-  it.skip('should be able to search an item by name', () => {
-    const wrapper = mountWrapper(props)
+  it.todo('should be able to search an item by name')
+  //   const wrapper = mountWrapper(props)
 
-    openModal(wrapper)
-    wrapper.find('input[type="search"]').simulate('change', { value: 'pepe' })
-    expect(fetchItems).toHaveBeenCalledTimes(1)
-    expect(fetchItems).toHaveBeenCalledWith(expect.objectContaining({ query: 'pepe' }))
-  })
+  //   openModal(wrapper)
+  //   wrapper.find('input[type="search"]').simulate('change', { value: 'pepe' })
+  //   expect(fetchItems).toHaveBeenCalledTimes(1)
+  //   expect(fetchItems).toHaveBeenCalledWith(expect.objectContaining({ query: 'pepe' }))
+  // })
 
   // FIXME: simulate change not working, also this might be tricky to implement
   it.todo('should not clear search input after closing modal')

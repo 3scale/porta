@@ -1,8 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { StatsMenu } from 'Stats/lib/menu'
 import { StatsStore } from 'Stats/lib/store'
 import { StatsState } from 'Stats/lib/state'
@@ -16,19 +12,19 @@ describe('StatsMenu', () => {
   ]
 
   class FakeHistory {
-    state!: typeof StatsState['State']
+    private state: unknown
 
-    pushState (state: typeof StatsState['State']) {
+    public pushState (state: unknown) {
       this.state = state
     }
   }
 
   class FakeState {
-    store: typeof StatsStore
+    private readonly store: { save: (save: unknown) => void }
 
-    state: Partial<typeof StatsState['State']>
+    private state: unknown
 
-    constructor (store: typeof StatsStore) {
+    public constructor (store: { save: (save: unknown) => void }) {
       this.store = store
       this.state = {
         dateRange: {
@@ -41,16 +37,16 @@ describe('StatsMenu', () => {
       }
     }
 
-    set dateRange (date) {
+    public set dateRange (date) {
       this.state = date
       this.store.save(date)
     }
 
-    get dateRange () {
+    public get dateRange () {
       return this.state
     }
 
-    setState (state: typeof StatsState['state']) {
+    public setState (state: typeof StatsState['state']) {
       this.state = Object.assign({}, this.state, state)
     }
   }

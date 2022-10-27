@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
 
 import { StatsChartManager } from 'Stats/lib/chart_manager'
@@ -43,33 +42,29 @@ const data = {
 }
 
 describe('ChartManager', () => {
-  beforeEach((done) => {
-    jest.spyOn(chartManager, '_getChartData')
+  beforeEach(() => {
+    return jest.spyOn(chartManager, '_getChartData')
       .mockResolvedValue(data)
-    done()
   })
 
-  it('should render chart with metrics selector and all series', (done) => {
-    void chartManager.renderChart().then(() => {
+  it('should render chart with metrics selector and all series', () => {
+    return chartManager.renderChart().then(() => {
       expect(chart.render).toHaveBeenCalled()
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hits', 'Hots'] })
-      done()
     })
   })
 
-  it('should render chart with stored selected series', (done) => {
+  it('should render chart with stored selected series', () => {
     jest.spyOn(chartManager, '_getStoredSelectedSeries')
       .mockImplementation(() => 'Hots')
-    void chartManager.renderChart().then(() => {
+    return chartManager.renderChart().then(() => {
       expect(chart.render).toHaveBeenCalledWith({ data, selectedSeries: ['Hots'] })
-      done()
     })
   })
 
-  it('should update chart calling chart.update with data', (done) => {
-    void chartManager.updateChart().then(() => {
+  it('should update chart calling chart.update with data', () => {
+    return chartManager.updateChart().then(() => {
       expect(chart.update).toHaveBeenCalledWith(data)
-      done()
     })
   })
 

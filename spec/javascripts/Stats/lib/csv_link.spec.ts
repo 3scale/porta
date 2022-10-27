@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsCSVLink } from 'Stats/lib/csv_link'
 
 describe('StatsCSVLink', () => {

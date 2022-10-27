@@ -38,7 +38,7 @@ describe('fetchProjects', () => {
     fetch.mockClear()
   })
 
-  it('should render an error when fetching projects is unsuccessful', done => {
+  it('should render an error when fetching projects is unsuccessful', () => {
     const msg = 'Something went wrong'
     fetch.mockImplementation(() => { throw new Error(msg) })
 
@@ -46,20 +46,18 @@ describe('fetchProjects', () => {
 
     expect(wrapper.find(ErrorMessage).exists()).toBe(true)
     expect(wrapper.find(ErrorMessage).text()).toContain(msg)
-
-    done()
   })
 
-  it('should fetch projects when first redendered', done => {
+  it('should fetch projects when first redendered', () => {
     const projects = [{ name: 'project_00' }]
     fetch.mockResolvedValue(projects)
 
     const setState = jest.fn(val => {
       expect(val).toEqual(projects)
-      done()
     })
     const useState = jest.spyOn(React, 'useState')
       // @ts-expect-error TODO: we should not test Reacts useState but the component's state
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       .mockImplementationOnce((init: any) => [init, setState])
 
     mount(<ServiceDiscoveryForm {...props} />)

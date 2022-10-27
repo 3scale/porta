@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsMetric } from 'Stats/lib/metric'
 
 describe('StatsMetric', () => {

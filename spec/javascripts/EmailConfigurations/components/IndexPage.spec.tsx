@@ -20,7 +20,7 @@ it('should render itself', () => {
 it('should have a button to create a new email configuration', () => {
   const newEmailConfigurationPath = 'p/admin/email_configurations/new'
   const wrapper = mountWrapper({ newEmailConfigurationPath })
-  expect(wrapper.exists(`a[href="${newEmailConfigurationPath}"]`))
+  expect(wrapper.exists(`a[href="${newEmailConfigurationPath}"]`)).toEqual(true)
 })
 
 describe('when there are no email configurations', () => {

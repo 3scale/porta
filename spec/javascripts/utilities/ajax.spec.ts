@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { ajax, ajaxJSON, fetchPaginated } from 'utilities/ajax'
 
 const mockedFetch = jest.fn()

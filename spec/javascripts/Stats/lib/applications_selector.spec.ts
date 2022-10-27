@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { StatsApplicationsSelector } from 'Stats/lib/applications_selector'
 

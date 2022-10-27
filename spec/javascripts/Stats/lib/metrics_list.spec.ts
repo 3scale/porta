@@ -1,24 +1,21 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsMetrics } from 'Stats/lib/metrics_list'
 
 describe('StatsMetrics', () => {
-  beforeEach((done) => {
-    jest.spyOn(StatsMetrics, '_makeRequest')
+  beforeEach(() => {
+    return jest.spyOn(StatsMetrics, '_makeRequest')
       .mockResolvedValue({
         metrics: [
           { metric: { id: 1, service_id: 1, friendly_name: 'Awesome Metric', system_name: 'awesome_metric' } },
           { metric: { id: 2, service_id: 1, firendly_name: 'Amazing Metric', system_name: 'amazing_metric' } }
         ]
       })
-    done()
   })
 
-  it('should get the correct list of metrics', (done) => {
-    void StatsMetrics.getMetrics('/cool/url/').then((metrics: any) => {
+  it('should get the correct list of metrics', () => {
+    return StatsMetrics.getMetrics('/cool/url/').then((metrics: unknown) => {
       expect(JSON.stringify(metrics)).toEqual(
         '{"metrics":[{"id":1,"name":"Awesome Metric","serviceId":1,"systemName":"awesome_metric","isMethod":false,"isHits":false},{"id":2,"serviceId":1,"systemName":"amazing_metric","isMethod":false,"isHits":false}]}'
       )
-      done()
     })
   })
 

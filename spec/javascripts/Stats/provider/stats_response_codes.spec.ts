@@ -1,9 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/naming-convention */
-import $ from 'jquery'
-
-import { StatsResponseCodeChart, StatsResponseCodeSource } from 'Stats/provider/stats_response_codes'
+import { StatsResponseCodeSource } from 'Stats/provider/stats_response_codes'
 
 const metric = { system_name: '2XX' }
 const options = {
@@ -38,50 +33,49 @@ describe('StatsResponseCodeChart', () => {
   })
 
   it.todo('Update Chart tests')
+  it.todo('shows no data message when no data available')
+  //   const fakeState = {
+  //     state: {
+  //       code: '2XX, 4XX',
+  //       dateRange: {
+  //         since: '1986-07-29T16:00:00+00:00',
+  //         until: '1986-07-28T16:00:00+00:00',
+  //         granularity: 'hour'
+  //       }
+  //     }
+  //   }
+  //   const chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
+  //   const data = {
+  //     columns: [
+  //       [
+  //         'x',
+  //         '2016-08-21T07:00:00'
+  //       ],
+  //       [
+  //         'Hits',
+  //         0
+  //       ]
+  //     ],
+  //     unload: true,
+  //     _totalValues: 0
+  //   }
+  //   chart.render({ noDataMessageContainer: '#no-data', data })
+  //   const noDataMessage = $(chart.noDataMessageContainer)
 
-  it.skip('shows no data message when no data available', () => {
-    const fakeState = {
-      state: {
-        code: '2XX, 4XX',
-        dateRange: {
-          since: '1986-07-29T16:00:00+00:00',
-          until: '1986-07-28T16:00:00+00:00',
-          granularity: 'hour'
-        }
-      }
-    }
-    const chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
-    const data = {
-      columns: [
-        [
-          'x',
-          '2016-08-21T07:00:00'
-        ],
-        [
-          'Hits',
-          0
-        ]
-      ],
-      unload: true,
-      _totalValues: 0
-    }
-    chart.render({ noDataMessageContainer: '#no-data', data })
-    const noDataMessage = $(chart.noDataMessageContainer)
+  //   chart.showData(false)
 
-    chart.showData(false)
+  //   // @ts-expect-error FIXME: why toContainText is not recognized?
+  //   expect(noDataMessage).toContainText('No data \'ere mate!')
+  // })
 
-    // @ts-expect-error FIXME: why toContainText is not recognized?
-    expect(noDataMessage).toContainText('No data \'ere mate!')
-  })
+  it.todo('should call setState with the right args when updateFromSeries')
+  //   const fakeState = jasminecreateSpyObj('fakeState', ['setState'])
+  //   const chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
+  //   const series = '2XX, 4XX'
+  //   const topics = ['cure']
 
-  it.skip('should call setState with the right args when updateFromSeries', () => {
-    const fakeState = jasmine.createSpyObj('fakeState', ['setState'])
-    const chart = new StatsResponseCodeChart({ container: '#chart', statsState: fakeState })
-    const series = '2XX, 4XX'
-    const topics = ['cure']
+  //   chart.updateFromSeries(series, topics)
 
-    chart.updateFromSeries(series, topics)
-
-    expect(fakeState.setState).toHaveBeenCalledWith({ code: series }, topics)
-  })
+  //   expect(fakeState.setState).toHaveBeenCalledWith({ code: series }, topics)
+  // })
 })

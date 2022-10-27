@@ -26,15 +26,6 @@
     "import",
     // "jsx-expressions" // TODO: requires eslint 8
   ],
-  "overrides": [{
-    "files": ["spec/javascripts/**"],
-    "plugins": ["jest"],
-    "rules": {
-      // Turn the original rule off for test files only
-      "@typescript-eslint/unbound-method": "off",
-      "jest/unbound-method": "error",
-    },
-  }],
   "rules": {
     // Override eslint:recommended
     "array-callback-return": "error",

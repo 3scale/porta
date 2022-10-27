@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
 import { Select } from '@patternfly/react-core'

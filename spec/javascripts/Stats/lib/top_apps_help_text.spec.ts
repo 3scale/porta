@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsTopAppsHelpText } from 'Stats/provider/stats_top_apps'
 
 describe('StatsTopAppsHelpText', () => {
@@ -13,6 +12,7 @@ describe('StatsTopAppsHelpText', () => {
     const dayPeriod = { _topAppsSelectionPeriod: { since: '2017-01-01T00:00:00+00:00', until: '2017-01-01T23:59:59+00:00', name: 'day' } }
 
     helpText.update(dayPeriod)
+    expect(document.querySelector('.Stats-message--notice')!.innerHTML).toBe('Top Applications are determined from usage data between midnight 12/31/2016 and midnight 01/01/2017')
   })
 
   it('should display the correct selected period: week', () => {

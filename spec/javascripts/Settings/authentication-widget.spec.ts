@@ -9,8 +9,8 @@ it('#toggle should call a function with an element', () => {
   AuthenticationWidget.toggle(fnFactory)(true)(element)
   AuthenticationWidget.toggle(fnFactory)(false)(element)
 
-  expect(fnFactory).nthCalledWith(1, true)
-  expect(fnFactory).nthCalledWith(2, false)
+  expect(fnFactory).toHaveBeenNthCalledWith(1, true)
+  expect(fnFactory).toHaveBeenNthCalledWith(2, false)
   expect(fn).toHaveBeenCalledWith(element)
 })
 

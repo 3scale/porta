@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { StatsSeries } from 'Stats/lib/series'
 
 describe('StatsSeries', () => {
@@ -6,8 +5,8 @@ describe('StatsSeries', () => {
     data: jest.fn()
   }
 
-  beforeEach((done) => {
-    jest.spyOn(source, 'data')
+  beforeEach(() => {
+    return jest.spyOn(source, 'data')
       .mockResolvedValue({
         metric: {
           id: 7,
@@ -24,14 +23,13 @@ describe('StatsSeries', () => {
         total: 42,
         values: [42]
       })
-    done()
   })
 
-  it('should get the correct data', (done) => {
+  it('should get the correct data', () => {
     const stateOptions = {}
     const statsSerie = new StatsSeries([source])
 
-    void statsSerie.getData(stateOptions).then((response: any) => {
+    return statsSerie.getData(stateOptions).then((response: unknown) => {
       expect(JSON.stringify(response)).toBe(
         JSON.stringify({
           columns: [['x', '2006-11-16T23:00:00', '2006-11-17T23:00:00'], ['Bond, James Bond', 42]],
@@ -45,7 +43,6 @@ describe('StatsSeries', () => {
           _totalValues: 42
         })
       )
-      done()
     })
   })
 })

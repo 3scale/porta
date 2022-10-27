@@ -31,7 +31,7 @@ describe('getContractedServicePlan', () => {
     expect(logic.getContractedServicePlan(product)).toEqual(null)
   })
 
-  it('should return null when product is not contracted ', () => {
+  it('should return null when product is not contracted', () => {
     const logic = new BuyerLogic({ ...buyer, contractedProducts: [{ id: 999, name: 'The Other product', withPlan: plan }] })
 
     expect(logic.getContractedServicePlan(product)).toEqual(null)

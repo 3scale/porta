@@ -101,7 +101,7 @@ describe('when in Service context', () => {
       const wrapper = mountWrapper(props)
       expect(isSubmitDisabled(wrapper)).toEqual(true)
 
-      expect(() => { selectApplicationPlan(wrapper, appPlans[0]) } ).toThrowError('the select is disabled')
+      expect(() => { selectApplicationPlan(wrapper, appPlans[0]) } ).toThrow('the select is disabled')
       expect(isSubmitDisabled(wrapper)).toEqual(true)
     })
   })
@@ -400,7 +400,7 @@ describe('when in Account context', () => {
       selectProduct(wrapper, productWithNoAppPlans)
       expect(isSubmitDisabled(wrapper)).toEqual(true)
 
-      expect(() => { selectApplicationPlan(wrapper, appPlans[0]) }).toThrowError('the select is disabled')
+      expect(() => { selectApplicationPlan(wrapper, appPlans[0]) }).toThrow('the select is disabled')
       expect(isSubmitDisabled(wrapper)).toEqual(true)
     })
   })

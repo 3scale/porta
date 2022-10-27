@@ -51,7 +51,7 @@ it('should select an item', () => {
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   wrapper.find('.pf-c-select__menu li button').filterWhere(n => n.text().includes(targetItem.name)).simulate('click')
 
-  expect(onSelect).toBeCalledWith(targetItem)
+  expect(onSelect).toHaveBeenCalledWith(targetItem)
 })
 
 it('should have a default item selected', () => {
@@ -82,7 +82,7 @@ describe('with a sticky footer link', () => {
     expandSelect(wrapper)
 
     const footerOption = wrapper.find('button.pf-c-select__menu-item--sticky-footer')
-    expect(footerOption.exists())
+    expect(footerOption.exists()).toEqual(true)
     expect(footerOption.text()).toEqual(footer.label)
 
     footerOption.simulate('click')
