@@ -61,7 +61,7 @@ it('should render HTML markup', () => {
   expect(wrapper.find('.inline-chart-graph').length).toEqual(1)
 })
 
-it('should fetch data from componentDidMount', async () => {
+it('should fetch data from componentDidMount', () => {
   void wrapper.instance().componentDidMount()
   expect(fetchMock).toHaveBeenCalled()
 })
