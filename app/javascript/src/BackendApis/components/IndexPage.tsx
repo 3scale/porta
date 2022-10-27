@@ -1,3 +1,4 @@
+import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import {
   Button,
   Divider,
@@ -10,8 +11,8 @@ import {
   Toolbar,
   ToolbarItem
 } from '@patternfly/react-core'
+
 import { Pagination } from 'Common/components/Pagination'
-import { Table, TableBody, TableHeader } from '@patternfly/react-table'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 

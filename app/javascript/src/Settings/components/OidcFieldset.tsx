@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading -- FIXME */
 import { useState } from 'react'
 import { Checkbox } from '@patternfly/react-core'
+
 import { TypeItemCombo } from 'Settings/components/Common/TypeItemCombo'
 import { FormCollection } from 'Settings/components/Common/FormCollection'
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'

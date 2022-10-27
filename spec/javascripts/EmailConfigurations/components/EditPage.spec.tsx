@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { EditPage } from 'EmailConfigurations/components/EditPage'
 
 import type { Props } from 'EmailConfigurations/components/EditPage'

@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { RedirectUrlInput } from 'MappingRules/components/RedirectUrlInput'
 
 import type { Props } from 'MappingRules/components/RedirectUrlInput'

@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { ProductsWidget } from 'Dashboard/components/ProductsWidget'
 
 import type { Props } from 'Dashboard/components/ProductsWidget'

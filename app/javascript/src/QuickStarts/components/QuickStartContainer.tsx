@@ -3,6 +3,7 @@ import {
   QuickStartCatalogPage,
   useLocalStorage
 } from '@patternfly/quickstarts/dist/quickstarts-full.es'
+
 import quickStarts from 'QuickStarts/templates'
 import replaceLinksExtension from 'QuickStarts/utils/replaceLinksExtension'
 import { createReactWrapper } from 'utilities/createReactWrapper'

@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { HeaderButton } from 'Policies/components/HeaderButton'
 

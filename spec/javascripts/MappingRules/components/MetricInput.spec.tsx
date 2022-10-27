@@ -1,5 +1,6 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+
 import { MetricInput } from 'MappingRules/components/MetricInput'
 
 import type { FormEvent } from 'react'

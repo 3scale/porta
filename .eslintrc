@@ -14,9 +14,11 @@
     "jest": true
   },
   "extends": [
-    "plugin:react/all",
     "eslint:recommended",
     "plugin:@typescript-eslint/all",
+    "plugin:react/all",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "./eslint-naming-conventions.json",
   ],
   "plugins": [
@@ -105,8 +107,17 @@
     // From plugin import
     "import/order": ["error", {
       "warnOnUnassignedImports": true,
-      "groups": ["builtin", "index", "parent", "internal", "external", "object", "type", "sibling"],
-      "newlines-between": "always"
+      "groups": [["builtin", "external"], "internal", "index", "object", "type", ["parent", "sibling"]],
+      "pathGroups": [{
+        "pattern": "utilities/**",
+        "group": "internal",
+        // "position": "after" // TODO: enable this once "distincGroup" is available to locate utilities at the bottom of this group
+      },{
+        "pattern": "**/*.scss",
+        "group": "sibling",
+      }],
+      "newlines-between": "always",
+      // "distinctGroup": "false" // TODO: config not yet available.
     }],
     "import/newline-after-import": "error",
     "import/no-relative-packages": "error",
@@ -117,6 +128,9 @@
   "settings": {
     "react": {
       "version": "detect" // React version. "detect" automatically picks the version you have installed.
+    },
+    "import/resolver": {
+      "typescript": true
     }
   },
   "ignorePatterns": [

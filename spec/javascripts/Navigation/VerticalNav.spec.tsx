@@ -1,4 +1,5 @@
 import { mount, render } from 'enzyme'
+
 import { VerticalNav } from 'Navigation/components/VerticalNav'
 
 const currentApi = {

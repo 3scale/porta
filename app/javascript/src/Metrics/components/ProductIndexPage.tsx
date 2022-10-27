@@ -1,6 +1,7 @@
+import { List, ListItem } from '@patternfly/react-core'
+
 import { IndexPage } from 'Metrics/components/IndexPage'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import { List, ListItem } from '@patternfly/react-core'
 import { isActiveTab } from 'utilities/isActiveTab'
 
 import type { FunctionComponent } from 'react'

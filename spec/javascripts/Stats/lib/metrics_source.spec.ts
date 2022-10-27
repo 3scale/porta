@@ -8,6 +8,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
+
 import { StatsMetricsSource } from 'Stats/lib/metrics_source'
 
 const source = new StatsMetricsSource({ id: 42, details: { id: 8, system_name: 'slartibarfast' } })

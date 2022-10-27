@@ -1,5 +1,6 @@
-import { ProductSelect } from 'NewApplication/components/ProductSelect'
 import { mount } from 'enzyme'
+
+import { ProductSelect } from 'NewApplication/components/ProductSelect'
 
 import type { Props } from 'NewApplication/components/ProductSelect'
 import type { Product } from 'NewApplication/types'

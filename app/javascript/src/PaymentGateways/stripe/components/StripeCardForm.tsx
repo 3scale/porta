@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+
 import { CSRFToken } from 'utilities/CSRFToken'
 
 import type { FormEventHandler, FunctionComponent, PropsWithChildren } from 'react'

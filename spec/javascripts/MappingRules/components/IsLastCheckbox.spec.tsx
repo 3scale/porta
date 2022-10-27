@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { IsLastCheckbox } from 'MappingRules/components/IsLastCheckbox'
 
 import type { Props } from 'MappingRules/components/IsLastCheckbox'

@@ -1,4 +1,5 @@
 import { mount, render } from 'enzyme'
+
 import { HeaderButton } from 'Policies/components/HeaderButton'
 
 it('should render itself', () => {

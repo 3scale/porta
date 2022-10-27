@@ -1,13 +1,15 @@
-import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage } from '@patternfly/react-core'
+
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
-import 'LoginPage/assets/styles/loginPage.scss'
 import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
 import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
 
 import type { FunctionComponent } from 'react'
 import type { FlashMessage } from 'Types'
+
+import 'LoginPage/assets/styles/loginPage.scss'
 
 interface Props {
   flashMessages?: FlashMessage[];

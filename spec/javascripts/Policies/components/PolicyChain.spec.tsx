@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { DragHandle, PolicyChain, SortableItem, SortableList } from 'Policies/components/PolicyChain'
 
 import type { ChainPolicy } from 'Policies/types'

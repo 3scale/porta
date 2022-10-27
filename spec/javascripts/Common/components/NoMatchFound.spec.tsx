@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
-import { NoMatchFound } from 'Common/components/NoMatchFound'
 import { Button } from '@patternfly/react-core'
+
+import { NoMatchFound } from 'Common/components/NoMatchFound'
 
 import type { Props } from 'Common/components/NoMatchFound'
 

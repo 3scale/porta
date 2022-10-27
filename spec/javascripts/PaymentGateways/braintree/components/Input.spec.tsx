@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { Input } from 'PaymentGateways/braintree/components/Input'
 
 import type { Props } from 'PaymentGateways/braintree/components/Input'

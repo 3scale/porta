@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { ChangePassword } from 'ChangePassword/components/ChangePassword'
 
 import type { Props } from 'ChangePassword/components/ChangePassword'

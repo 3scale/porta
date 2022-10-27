@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { PermissionsForm } from 'Users/components/PermissionsForm'
 
 import type { ReactWrapper } from 'enzyme'

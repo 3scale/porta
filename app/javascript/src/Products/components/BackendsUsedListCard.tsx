@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+
 import { CompactListCard } from 'Common/components/CompactListCard'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { useSearchInputEffect } from 'utilities/useSearchInputEffect'

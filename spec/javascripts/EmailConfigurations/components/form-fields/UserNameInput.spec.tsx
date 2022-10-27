@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { UserNameInput } from 'EmailConfigurations/components/form-fields/UserNameInput'
 
 import type { Props } from 'EmailConfigurations/components/form-fields/UserNameInput'

@@ -3,6 +3,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
+
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { EmailConfigurationsTable } from 'EmailConfigurations/components/EmailConfigurationsTable'
 

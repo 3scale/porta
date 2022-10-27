@@ -1,5 +1,6 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+
 import { NewServiceForm } from 'NewService/components/NewServiceForm'
 // Children components that use hooks cause some nasty warnings in the log. Mocking them prevents react-dom.development from complaining.
 import * as FOO from 'NewService/components/ServiceDiscoveryForm'

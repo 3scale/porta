@@ -1,5 +1,6 @@
-import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
 import { mount } from 'enzyme'
+
+import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
 
 import type { Props } from 'NewApplication/components/ApplicationPlanSelect'
 import type { ReactWrapper } from 'enzyme'

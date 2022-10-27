@@ -1,13 +1,15 @@
-import { createReactWrapper } from 'utilities/createReactWrapper'
 import { LoginPage } from '@patternfly/react-core'
+
+import { createReactWrapper } from 'utilities/createReactWrapper'
 import brandImg from 'LoginPage/assets/images/3scale_Logo_Reverse.png'
 import PF4DownstreamBG from 'LoginPage/assets/images/PF4DownstreamBG.svg'
-import 'LoginPage/assets/styles/loginPage.scss'
 import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
 import { SignupForm } from 'LoginPage/loginForms/SignupForm'
 
 import type { FunctionComponent } from 'react'
 import type { SignupProps as Props } from 'Types'
+
+import 'LoginPage/assets/styles/loginPage.scss'
 
 const SignupPage: FunctionComponent<Props> = ({ user, name, path }) => (
   <LoginPage

@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { HelperText, HelperTextItem } from 'Common/components/HelperText'
 
 const mountWrapper = () => mount((

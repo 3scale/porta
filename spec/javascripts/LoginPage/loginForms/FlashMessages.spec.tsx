@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { FlashMessages } from 'LoginPage/loginForms/FlashMessages'
 
 it('should render proper error message', () => {

@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { PatternInput } from 'MappingRules/components/PatternInput'
 
 import type { Props } from 'MappingRules/components/PatternInput'

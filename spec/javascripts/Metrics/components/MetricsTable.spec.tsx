@@ -1,5 +1,6 @@
 import { mount } from 'enzyme'
 import { CheckIcon } from '@patternfly/react-icons'
+
 import { MetricsTable } from 'Metrics/components/MetricsTable'
 import { mockLocation } from 'utilities/test-utils'
 

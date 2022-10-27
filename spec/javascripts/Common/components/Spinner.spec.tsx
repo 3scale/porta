@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { Spinner } from 'Common/components/Spinner'
 
 import type { Props } from 'Common/components/Spinner'

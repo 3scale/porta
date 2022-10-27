@@ -1,5 +1,6 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+
 import { NewApplicationForm } from 'NewApplication/components/NewApplicationForm'
 import { ApplicationPlanSelect } from 'NewApplication/components/ApplicationPlanSelect'
 import { UserDefinedField } from 'Common/components/UserDefinedField'

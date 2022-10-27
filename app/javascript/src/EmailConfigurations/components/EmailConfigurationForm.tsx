@@ -4,6 +4,7 @@ import {
   Button,
   Form
 } from '@patternfly/react-core'
+
 import { CSRFToken } from 'utilities/CSRFToken'
 import { EmailInput } from 'EmailConfigurations/components/form-fields/EmailInput'
 import { PasswordInput } from 'EmailConfigurations/components/form-fields/PasswordInput'

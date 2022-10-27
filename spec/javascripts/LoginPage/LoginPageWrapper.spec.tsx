@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { SimpleLoginPage } from 'LoginPage/LoginPageWrapper'
 
 import type { Props } from 'LoginPage/LoginPageWrapper'

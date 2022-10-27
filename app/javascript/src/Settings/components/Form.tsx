@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading -- FIXME: remove this spreading */
 import { useState } from 'react'
+
 import { AuthenticationSettingsFieldset } from 'Settings/components/AuthenticationSettingsFieldset'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { SETTINGS_DEFAULT } from 'Settings/defaults'

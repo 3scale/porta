@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
+
 import { StatsResponseCodeChart, StatsResponseCodeSource } from 'Stats/provider/stats_response_codes'
 
 const metric = { system_name: '2XX' }

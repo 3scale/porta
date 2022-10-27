@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { ContextSelector } from 'Navigation/components/ContextSelector'
 
 import type { Props } from 'Navigation/components/ContextSelector'

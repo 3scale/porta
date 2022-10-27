@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { SortByDirection } from '@patternfly/react-table'
+import escapeRegExp from 'lodash.escaperegexp'
+
 import { FancySelect } from 'Common/components/FancySelect'
 import { TableModal } from 'Common/components/TableModal'
 import { paginateCollection } from 'utilities/paginateCollection'
-import escapeRegExp from 'lodash.escaperegexp'
-
 import type { IRecord } from 'utilities/patternfly-utils'
-import type { ITransform } from '@patternfly/react-table'
 import type { FetchItemsRequestParams, FetchItemsResponse } from 'utilities/ajax'
+
+import type { ITransform } from '@patternfly/react-table'
 
 import './SelectWithModal.scss'
 

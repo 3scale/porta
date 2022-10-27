@@ -7,6 +7,7 @@ import {
   Tab,
   Tabs
 } from '@patternfly/react-core'
+
 import { MetricsTable } from 'Metrics/components/MetricsTable'
 
 import type { FunctionComponent } from 'react'

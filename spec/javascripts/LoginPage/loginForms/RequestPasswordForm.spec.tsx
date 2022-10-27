@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { RequestPasswordForm } from 'LoginPage/loginForms/RequestPasswordForm'
 
 import type { FormEvent } from 'react'

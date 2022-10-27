@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+
 import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 
 it('should render itself', () => {

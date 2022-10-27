@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { useSearchInputEffect } from 'utilities/useSearchInputEffect'
 
 import type { FunctionComponent, MutableRefObject } from 'react'

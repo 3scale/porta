@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FormGroup, Radio } from '@patternfly/react-core'
+
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 
 import type { FunctionComponent } from 'react'

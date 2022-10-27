@@ -9,11 +9,13 @@ import {
   Title
 } from '@patternfly/react-core'
 import CubesIcon from '@patternfly/react-icons/dist/js/icons/cubes-icon'
+
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import 'Dashboard/styles/dashboard.scss'
 
 import type { FunctionComponent } from 'react'
+
+import 'Dashboard/styles/dashboard.scss'
 
 interface Props {
   newProductPath: string;

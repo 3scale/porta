@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { UserDefinedField } from 'Common/components/UserDefinedField'
 
 import type { Props } from 'Common/components/UserDefinedField'

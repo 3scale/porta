@@ -1,5 +1,6 @@
-import InlineChart from 'Stats/inlinechart'
 import { render } from 'react-dom'
+
+import InlineChart from 'Stats/inlinechart'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'mini-charts'

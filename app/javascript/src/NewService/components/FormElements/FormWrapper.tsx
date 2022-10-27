@@ -1,6 +1,7 @@
+import { Button } from '@patternfly/react-core'
+
 import { CSRFToken } from 'utilities/CSRFToken'
 import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
-import { Button } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 import type { FormProps as Props } from 'NewService/types'

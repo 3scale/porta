@@ -1,6 +1,7 @@
 
-import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 import { mount } from 'enzyme'
+
+import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 
 import type { Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 

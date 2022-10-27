@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { ProductIndexPage } from 'Metrics/components/ProductIndexPage'
 
 import type { Props } from 'Metrics/components/ProductIndexPage'

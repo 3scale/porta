@@ -1,5 +1,6 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+
 import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInput'
 
 import type { Props } from 'BackendApis/components/PrivateEndpointInput'

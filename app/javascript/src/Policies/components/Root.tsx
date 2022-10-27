@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux'
+
 import PoliciesWidget from 'Policies/components/PoliciesWidget'
 
 import type { Store } from 'Policies/types'

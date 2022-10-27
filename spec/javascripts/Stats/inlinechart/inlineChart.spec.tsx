@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 import { mount } from 'enzyme'
 import c3 from 'c3'
+
 import * as utils from 'utilities/fetchData'
 import InlineChart from 'Stats/inlinechart'
 

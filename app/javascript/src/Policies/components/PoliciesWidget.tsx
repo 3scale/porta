@@ -1,10 +1,11 @@
 import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
 import * as actions from 'Policies/actions'
 import { PolicyConfig } from 'Policies/components/PolicyConfig'
 import { PolicyChain } from 'Policies/components/PolicyChain'
 import { PolicyRegistry } from 'Policies/components/PolicyRegistry'
 import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
-import { connect } from 'react-redux'
 import { isPolicyChainChanged } from 'Policies/util'
 
 import type { FunctionComponent } from 'react'

@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+
 import { RadioFieldset } from 'Settings/components/Common/RadioFieldset'
 
 import type { Props } from 'Settings/components/Common/RadioFieldset'

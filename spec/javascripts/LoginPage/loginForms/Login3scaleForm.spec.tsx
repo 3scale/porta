@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 import { Login3scaleForm } from 'LoginPage/loginForms/Login3scaleForm'
 

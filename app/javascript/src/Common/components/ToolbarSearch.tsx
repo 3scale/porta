@@ -8,6 +8,7 @@ import {
   TextInput
 } from '@patternfly/react-core'
 import { SearchIcon } from '@patternfly/react-icons'
+
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import './ToolbarSearch.scss'

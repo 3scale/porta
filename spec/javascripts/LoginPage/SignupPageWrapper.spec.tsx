@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { SignupPage } from 'LoginPage/SignupPageWrapper'
 
 import type { Props } from 'LoginPage/SignupPageWrapper'

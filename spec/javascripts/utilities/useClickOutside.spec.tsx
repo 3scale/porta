@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { mount } from 'enzyme'
+
 import { useClickOutside } from 'utilities/useClickOutside'
 
 import type { FunctionComponent } from 'react'

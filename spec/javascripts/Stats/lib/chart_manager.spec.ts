@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
+
 import { StatsChartManager } from 'Stats/lib/chart_manager'
 
 const statsState = {

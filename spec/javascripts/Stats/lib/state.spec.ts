@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import $ from 'jquery'
 import MockDate from 'mockdate'
+
 import { CustomRangeDate, PeriodRangeDate, StatsState } from 'Stats/lib/state'
 
 import type { StatsStore } from 'Stats/lib/store'

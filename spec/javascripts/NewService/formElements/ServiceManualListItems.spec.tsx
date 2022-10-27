@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { shallow } from 'enzyme'
+
 import { ServiceManualListItems } from 'NewService/components/FormElements/ServiceManualListItems'
 
 it('should render required form fields', () => {

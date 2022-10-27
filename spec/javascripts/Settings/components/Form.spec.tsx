@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+
 import { Form } from 'Settings/components/Form'
 import { INTEGRATION_METHOD_DEFAULTS, SETTINGS_DEFAULT } from 'Settings/defaults'
 

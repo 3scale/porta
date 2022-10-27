@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { FormFieldset } from 'Settings/components/Common/FormFieldset'
 
 describe('FormFieldset', () => {

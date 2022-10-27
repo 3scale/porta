@@ -1,7 +1,8 @@
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
-import { NameInput } from 'BackendApis/components/NameInput'
 import { TextInput } from '@patternfly/react-core'
+
+import { NameInput } from 'BackendApis/components/NameInput'
 
 import type { Props } from 'BackendApis/components/NameInput'
 

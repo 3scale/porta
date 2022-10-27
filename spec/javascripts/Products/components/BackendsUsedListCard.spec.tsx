@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { BackendsUsedListCard } from 'Products/components/BackendsUsedListCard'
 
 import type { CompactListItem } from 'Common/components/CompactListCard'

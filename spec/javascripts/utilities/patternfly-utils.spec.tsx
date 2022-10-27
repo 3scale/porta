@@ -1,5 +1,4 @@
 import * as patternflyUtils from 'utilities/patternfly-utils'
-
 import type { IRecord } from 'utilities/patternfly-utils'
 
 const item = { id: 10, name: 'The item', description: 'A standard item object' }

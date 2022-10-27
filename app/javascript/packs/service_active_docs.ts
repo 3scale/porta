@@ -1,6 +1,7 @@
 import SwaggerUI from 'swagger-ui'
-import { autocompleteOAS3 } from 'ActiveDocs/OAS3Autocomplete'
 import 'swagger-ui/dist/swagger-ui.css'
+
+import { autocompleteOAS3 } from 'ActiveDocs/OAS3Autocomplete'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'

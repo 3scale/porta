@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { IncrementByInput } from 'MappingRules/components/IncrementByInput'
 
 import type { Props } from 'MappingRules/components/IncrementByInput'

@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+
 import { OidcFieldset } from 'Settings/components/OidcFieldset'
 import { OIDC_SETTINGS_DEFAULTS } from 'Settings/defaults'
 

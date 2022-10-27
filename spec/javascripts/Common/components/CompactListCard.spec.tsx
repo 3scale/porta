@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { CompactListCard } from 'Common/components/CompactListCard'
 
 import type { Props } from 'Common/components/CompactListCard'

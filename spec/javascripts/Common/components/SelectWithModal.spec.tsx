@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { openSelectWithModal as openModal } from 'utilities/test-utils'
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 import { TableModal } from 'Common/components/TableModal'

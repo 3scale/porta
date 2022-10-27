@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { NewMappingRule } from 'MappingRules/components/NewMappingRule'
 
 import type { Props } from 'MappingRules/components/NewMappingRule'

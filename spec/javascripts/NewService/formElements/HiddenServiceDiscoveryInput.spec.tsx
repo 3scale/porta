@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
 
 it('should render itself properly', () => {

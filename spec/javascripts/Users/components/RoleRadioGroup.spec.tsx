@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { RoleRadioGroup } from 'Users/components/RoleRadioGroup'
 
 import type { Props } from 'Users/components/RoleRadioGroup'

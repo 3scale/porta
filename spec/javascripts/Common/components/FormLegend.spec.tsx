@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+
 import { FormLegend } from 'Settings/components/Common/FormLegend'
 
 it('FormLegend', () => {

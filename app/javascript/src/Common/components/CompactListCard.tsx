@@ -8,6 +8,7 @@ import {
 } from '@patternfly/react-core'
 import { Table, TableBody } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
+
 import { MicroPagination } from 'Common/components/MicroPagination'
 
 import './CompactListCard.scss'

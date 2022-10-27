@@ -1,5 +1,6 @@
 import Form from 'react-jsonschema-form'
 import { Button } from '@patternfly/react-core'
+
 import { isNotApicastPolicy } from 'Policies/util'
 import { HeaderButton } from 'Policies/components/HeaderButton'
 

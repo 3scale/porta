@@ -6,6 +6,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
+
 import * as flash from 'utilities/flash'
 import { UserDefinedField } from 'Common/components/UserDefinedField'
 import { BuyerLogic } from 'Logic/BuyerLogic'

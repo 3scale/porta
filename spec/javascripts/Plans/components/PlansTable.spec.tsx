@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { PlansTable } from 'Plans/components/PlansTable'
 
 import type { Plan } from 'Types'

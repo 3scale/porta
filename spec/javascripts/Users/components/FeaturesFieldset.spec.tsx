@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { FeaturesFieldset } from 'Users/components/FeaturesFieldset'
 
 import type { Props } from 'Users/components/FeaturesFieldset'

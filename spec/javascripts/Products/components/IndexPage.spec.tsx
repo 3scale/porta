@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { IndexPage } from 'Products/components/IndexPage'
 import { mockLocation } from 'utilities/test-utils'
 

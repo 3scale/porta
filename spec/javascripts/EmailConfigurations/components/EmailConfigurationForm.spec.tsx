@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { EmailConfigurationForm } from 'EmailConfigurations/components/EmailConfigurationForm'
 import { assertInputs, isSubmitDisabled, updateInput } from 'utilities/test-utils'
 

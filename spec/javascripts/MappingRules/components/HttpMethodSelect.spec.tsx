@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { HttpMethodSelect } from 'MappingRules/components/HttpMethodSelect'
 
 import type { Props } from 'MappingRules/components/HttpMethodSelect'

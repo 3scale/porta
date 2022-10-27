@@ -12,6 +12,7 @@ import {
   TableHeader,
   sortable
 } from '@patternfly/react-table'
+
 import { Pagination } from 'Common/components/Pagination'
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 

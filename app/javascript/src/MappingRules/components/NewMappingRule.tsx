@@ -6,6 +6,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
+
 import { HttpMethodSelect } from 'MappingRules/components/HttpMethodSelect'
 import { IncrementByInput } from 'MappingRules/components/IncrementByInput'
 import { IsLastCheckbox } from 'MappingRules/components/IsLastCheckbox'

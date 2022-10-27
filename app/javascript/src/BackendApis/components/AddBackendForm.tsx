@@ -6,6 +6,7 @@ import {
   PageSection,
   PageSectionVariants
 } from '@patternfly/react-core'
+
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { notice } from 'utilities/flash'

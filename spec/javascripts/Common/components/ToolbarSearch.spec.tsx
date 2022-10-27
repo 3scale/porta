@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { ToolbarSearch } from 'Common/components/ToolbarSearch'
 
 import type { Props } from 'Common/components/ToolbarSearch'

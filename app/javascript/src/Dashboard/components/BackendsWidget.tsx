@@ -9,11 +9,13 @@ import {
   Title
 } from '@patternfly/react-core'
 import { CubeIcon } from '@patternfly/react-icons'
+
 import { APIDataListItem } from 'Dashboard/components/APIDataListItem'
 import { createReactWrapper } from 'utilities/createReactWrapper'
-import 'Dashboard/styles/dashboard.scss'
 
 import type { FunctionComponent } from 'react'
+
+import 'Dashboard/styles/dashboard.scss'
 
 interface Props {
   newBackendPath: string;

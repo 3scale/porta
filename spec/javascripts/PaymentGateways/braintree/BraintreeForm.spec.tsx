@@ -1,8 +1,9 @@
 
-import { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
 import { mount } from 'enzyme'
 import * as hostedFields from 'braintree-web/hosted-fields'
 import * as validate from 'validate.js'
+
+import { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
 
 import type { Client } from 'braintree-web'
 import type { Props } from 'PaymentGateways/braintree/BraintreeForm'

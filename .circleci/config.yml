@@ -488,7 +488,7 @@ jobs:
       - run:
           name: Eslint
           command: |
-            yarn lint
+            yarn ci:lint
       - store_artifacts:
           path: doc/licenses
           destination: licenses

@@ -2,6 +2,7 @@
 to run, adding async to the act callback is a trick to allow them to finish */
 import { act } from 'react-dom/test-utils'
 import { mount, render, shallow } from 'enzyme'
+
 import { BASE_PATH, ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
 import * as utils from 'utilities/fetchData'
 

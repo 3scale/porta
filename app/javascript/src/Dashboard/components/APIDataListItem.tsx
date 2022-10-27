@@ -10,6 +10,7 @@ import {
   DropdownPosition,
   KebabToggle
 } from '@patternfly/react-core'
+
 import { useClickOutside } from 'utilities/useClickOutside'
 
 import type { FunctionComponent } from 'react'

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import validate from 'validate.js'
 import { hostedFields, threeDSecure } from 'braintree-web'
+
 import { CSRFToken } from 'utilities/CSRFToken'
 import {
   validationConstraints,

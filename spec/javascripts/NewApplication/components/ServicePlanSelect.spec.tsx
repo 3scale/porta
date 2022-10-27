@@ -1,5 +1,6 @@
-import { ServicePlanSelect } from 'NewApplication/components/ServicePlanSelect'
 import { mount } from 'enzyme'
+
+import { ServicePlanSelect } from 'NewApplication/components/ServicePlanSelect'
 
 import type { Props } from 'NewApplication/components/ServicePlanSelect'
 import type { ReactWrapper } from 'enzyme'

@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { AuthenticationProviders } from 'LoginPage/loginForms/AuthenticationProviders'
 
 import type { Props } from 'LoginPage/loginForms/AuthenticationProviders'

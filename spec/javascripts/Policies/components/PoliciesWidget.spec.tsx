@@ -1,6 +1,7 @@
 
-import { PolicyList } from 'Policies/components/PoliciesWidget'
 import { mount } from 'enzyme'
+
+import { PolicyList } from 'Policies/components/PoliciesWidget'
 
 import type { Props } from 'Policies/components/PoliciesWidget'
 

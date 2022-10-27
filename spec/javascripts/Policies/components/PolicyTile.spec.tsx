@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { PolicyTile } from 'Policies/components/PolicyTile'
 
 import type { Props } from 'Policies/components/PolicyTile'

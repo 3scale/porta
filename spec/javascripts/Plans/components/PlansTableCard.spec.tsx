@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await -- This is required for the "simulate click" part. Otherwise the tests won't pass */
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+
 import { PlansTableCard } from 'Plans/components/PlansTableCard'
 
 import type { Props } from 'Plans/components/PlansTableCard'

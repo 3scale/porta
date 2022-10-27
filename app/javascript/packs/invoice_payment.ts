@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- FIXME: good luck with that */
 
 import { loadStripe } from '@stripe/stripe-js'
-import 'PaymentGateways/stripe/components/StripeFormWrapper.scss'
 
 import type { PaymentIntent, Stripe, StripeCardElement } from '@stripe/stripe-js'
+
+import 'PaymentGateways/stripe/components/StripeFormWrapper.scss'
 
 const style = {
   base: {

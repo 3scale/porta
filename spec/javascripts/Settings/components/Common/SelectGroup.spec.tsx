@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
-import { SelectGroup } from 'Settings/components/Common/SelectGroup'
 import { Select } from '@patternfly/react-core'
+
+import { SelectGroup } from 'Settings/components/Common/SelectGroup'
 
 import type { Props } from 'Settings/components/Common/SelectGroup'
 import type { SelectOptionObject } from '@patternfly/react-core'

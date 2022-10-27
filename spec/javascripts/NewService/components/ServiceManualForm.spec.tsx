@@ -1,4 +1,5 @@
 import { mount, shallow } from 'enzyme'
+
 import { ServiceManualForm } from 'NewService/components/ServiceManualForm'
 import { ServiceManualListItems } from 'NewService/components/FormElements/ServiceManualListItems'
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'

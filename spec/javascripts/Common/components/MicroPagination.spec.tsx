@@ -1,6 +1,7 @@
 import { mount } from 'enzyme'
-import { MicroPagination } from 'Common/components/MicroPagination'
 import { Button } from '@patternfly/react-core'
+
+import { MicroPagination } from 'Common/components/MicroPagination'
 
 import type { Props } from 'Common/components/MicroPagination'
 import type { ReactWrapper } from 'enzyme'

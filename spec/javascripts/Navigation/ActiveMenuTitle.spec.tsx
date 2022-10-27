@@ -1,5 +1,6 @@
 
 import { render } from 'enzyme'
+
 import { ActiveMenuTitle } from 'Navigation/components/ActiveMenuTitle'
 
 import type { Props } from 'Navigation/components/ActiveMenuTitle'

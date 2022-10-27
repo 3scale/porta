@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { FormGroup, Select, SelectVariant } from '@patternfly/react-core'
+
 import { toSelectOption, toSelectOptionObject, handleOnFilter } from 'utilities/patternfly-utils'
+import type { IRecord, SelectOptionObject, ISelectOption } from 'utilities/patternfly-utils'
 
 import type { ReactElement } from 'react'
 import type { SelectOptionObject as PFSelectOptionObject, SelectOptionProps } from '@patternfly/react-core'
-import type { IRecord, SelectOptionObject, ISelectOption } from 'utilities/patternfly-utils'
 
 import './FancySelect.scss'
 

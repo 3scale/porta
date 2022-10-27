@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Card } from '@patternfly/react-core'
+
 import { PlansTable } from 'Plans/components/PlansTable'
 import * as flash from 'utilities/flash'
 import { ajax } from 'utilities/ajax'

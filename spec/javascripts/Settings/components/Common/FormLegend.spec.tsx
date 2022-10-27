@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { FormLegend } from 'Settings/components/Common/FormLegend'
 
 import type { Props } from 'Settings/components/Common/FormLegend'

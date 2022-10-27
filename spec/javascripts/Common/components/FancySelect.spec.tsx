@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { FancySelect } from 'Common/components/FancySelect'
 
 import type { ReactWrapper } from 'enzyme'

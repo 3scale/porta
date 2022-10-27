@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme'
+
 import { FormCollection } from 'Settings/components/Common/FormCollection'
 
 import type { FunctionComponent } from 'react'

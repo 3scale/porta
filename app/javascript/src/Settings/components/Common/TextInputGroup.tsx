@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FormGroup, TextInput } from '@patternfly/react-core'
+
 import { FieldGroupProps } from 'Settings/types'
 
 const TextInputGroup: React.FunctionComponent<FieldGroupProps> = ({

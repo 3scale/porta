@@ -8,8 +8,8 @@
   "scripts": {
     "install:safe": "yarn install --frozen-lockfile --check-files --prefer-offline",
     "clean": "rm -rf node_modules/ && yarn cache clean",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx . --quiet",
-    "jest": "jest"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "ci:lint": "eslint --ext .js,.jsx,.ts,.tsx . --quiet"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -43,8 +43,9 @@
     "enzyme-adapter-react-16": "^1.10.0",
     "enzyme-to-json": "^3.4.2",
     "eslint": "7.32.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "npm:eslint-plugin-i",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.1.3",
     "eslint-plugin-react": "^7.21.0",
     "file-loader": "^1.1.6",

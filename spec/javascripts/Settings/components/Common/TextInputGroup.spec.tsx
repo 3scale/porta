@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { TextInputGroup } from 'Settings/components/Common/TextInputGroup'
 
 import type { Props } from 'Settings/components/Common/TextInputGroup'

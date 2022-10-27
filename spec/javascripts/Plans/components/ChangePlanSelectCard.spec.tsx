@@ -1,9 +1,10 @@
 import { mount } from 'enzyme'
-import { ChangePlanSelectCard } from 'Plans/components/ChangePlanSelectCard'
 import { Select } from '@patternfly/react-core'
-import { openSelect } from 'utilities/test-utils'
 
+import { ChangePlanSelectCard } from 'Plans/components/ChangePlanSelectCard'
+import { openSelect } from 'utilities/test-utils'
 import type { SelectOptionObject } from 'utilities/patternfly-utils'
+
 import type { Props } from 'Plans/components/ChangePlanSelectCard'
 
 const plan = { id: 0, name: 'I am a plan' }

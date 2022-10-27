@@ -1,5 +1,6 @@
 
 import { mount } from 'enzyme'
+
 import { PolicyChainHiddenInput } from 'Policies/components/PolicyChainHiddenInput'
 
 import type { ChainPolicy } from 'Policies/types'

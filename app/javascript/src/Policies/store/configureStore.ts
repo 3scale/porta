@@ -2,6 +2,7 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant'
 import thunk from 'redux-thunk'
 import { apiMiddleware } from 'redux-api-middleware'
+
 import { policyChainMiddleware } from 'Policies/middleware/PolicyChain'
 import rootReducer from 'Policies/reducers'
 

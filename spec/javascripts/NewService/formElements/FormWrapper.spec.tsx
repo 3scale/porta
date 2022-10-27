@@ -1,4 +1,5 @@
 import { mount, shallow } from 'enzyme'
+
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
 import { HiddenServiceDiscoveryInput } from 'NewService/components/FormElements/HiddenServiceDiscoveryInput'
 

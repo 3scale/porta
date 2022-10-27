@@ -4,6 +4,7 @@ import {
   SortableHandle,
   arrayMove
 } from 'react-sortable-hoc'
+
 import { PolicyTile } from 'Policies/components/PolicyTile'
 import { HeaderButton } from 'Policies/components/HeaderButton'
 

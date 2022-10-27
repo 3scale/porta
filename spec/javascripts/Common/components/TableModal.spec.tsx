@@ -1,4 +1,5 @@
 import { mount } from 'enzyme'
+
 import { TableModal } from 'Common/components/TableModal'
 import { updateInput } from 'utilities/test-utils'
 

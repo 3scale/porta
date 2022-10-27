@@ -15,7 +15,9 @@ import {
   TableHeader
 } from '@patternfly/react-table'
 import { SearchIcon } from '@patternfly/react-icons'
+
 import { NoMatchFound } from 'Common/components/NoMatchFound'
+import type { IRecord } from 'utilities/patternfly-utils'
 
 import type {
   IRow,
@@ -23,7 +25,6 @@ import type {
   ITransform,
   SortByDirection
 } from '@patternfly/react-table'
-import type { IRecord } from 'utilities/patternfly-utils'
 
 import './TableModal.scss'
 

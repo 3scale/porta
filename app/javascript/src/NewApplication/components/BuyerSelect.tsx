@@ -1,4 +1,5 @@
 import { sortable } from '@patternfly/react-table'
+
 import { fetchPaginatedBuyers } from 'NewApplication/data/Buyers'
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 
