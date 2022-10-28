@@ -16,7 +16,7 @@ class PriceInput < Formtastic::Inputs::NumberInput
   end
 
   def input_html_options
-    super.merge(value: value, min: 0, step: 0.01)
+    super.merge({ value: value, min: 0, step: 0.01 })
   end
 
   private

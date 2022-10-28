@@ -92,7 +92,7 @@ class Finance::ChargingTest < ActiveSupport::TestCase
         @buyer_account.save!
 
 
-        Timecop.travel(3.years.from_now) do
+        travel_to(3.years.from_now) do
           @provider_account.payment_gateway.class.any_instance.expects(:purchase)
           .with(10000, @buyer_account.credit_card_auth_code, has_key(:order_id))
           .returns(stub('response', :success? => false, :authorization => '1234',

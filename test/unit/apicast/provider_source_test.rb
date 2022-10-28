@@ -9,7 +9,7 @@ class Apicast::ProviderSourceTest < ActiveSupport::TestCase
   def test_attributes_for_proxy
     time = 10.days.ago.utc
 
-    Timecop.freeze(time) do
+    travel_to(time) do
       assert attributes = @source.attributes_for_proxy
 
       assert_equal time.iso8601, attributes[:timestamp]

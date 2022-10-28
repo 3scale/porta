@@ -32,22 +32,28 @@ class DeveloperPortal::Admin::Messages::OutboxController < DeveloperPortal::Base
     redirect_to admin_messages_outbox_index_path
   end
 
-
   def create
+    if @message.valid?
+      enqueue_message_and_respond
+    else
+      flash[:error] = @message.errors.full_messages.to_sentence
+      redirect_to admin_messages_new_path
+    end
+  end
+
+  private
+
+  def enqueue_message_and_respond
     @message.enqueue! :to => current_account.provider_account.id
     @notice = 'Message was sent.'
-
     respond_to do |format|
       format.html do
         flash[:notice] = @notice
         redirect_to admin_messages_root_path
       end
-
       format.js
     end
   end
-
-  private
 
   def build_message
     @message = current_account.messages.build((message_params[:message] || {}).merge(:origin => "web"))

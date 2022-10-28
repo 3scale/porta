@@ -257,7 +257,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         provider.settings.allow_finance!
         provider.reload.billing_strategy.update_attribute(:prepaid, true)
 
-        Timecop.freeze(Date.new(2001,1,25)) do
+        travel_to(Date.new(2001,1,25)) do
           put change_plan_provider_admin_application_path(cinstance), params: { cinstance: { plan_id: new_plan.id } }
         end
 

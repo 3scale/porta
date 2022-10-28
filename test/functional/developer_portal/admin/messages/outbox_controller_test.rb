@@ -39,4 +39,22 @@ class DeveloperPortal::Admin::Messages::OutboxControllerTest < DeveloperPortal::
     assert assigned_drop_variables.include?('messages')
     assert assigned_drop_variables.include?('pagination')
   end
+
+  test "not creates invalid message" do
+    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+    post :create, params: { message: { subject: nil, :body => "message with nil subject" }, :to => buyer.id }
+
+    MessageWorker.drain
+    assert msg = Message.last
+    assert_not_equal "message with nil subject", msg.body
+  end
+
+  test "creates valid message" do
+    buyer = FactoryBot.create :buyer_account, :provider_account => @provider
+    post :create, params: { message: { subject: "Valid Message", :body => "message with subject" }, :to => buyer.id }
+
+    MessageWorker.drain
+    assert msg = Message.last
+    assert_equal "message with subject", msg.body
+  end
 end

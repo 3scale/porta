@@ -21,4 +21,15 @@ fi
 # Exporting all bundler environment
 export ${BUNDLER_ENV}
 
+if ldconfig -p | grep jemalloc; then
+  LD_PRELOAD="$LD_PRELOAD":$(ldconfig -p | grep jemalloc | head -1 | awk '{ print $1 }')
+  export LD_PRELOAD
+elif ldconfig -p | grep libautohbw; then
+  # AUTO_HBW_SIZE is just a big number to avoit it ever reached
+  # MEMKIND_HEAP_MANAGER=JEMALLOC is the default anyway but goot for reader
+  # MEMKIND_HBW_NODES=0 just to prevent warning log
+  HBWLIB=$(ldconfig -p | grep libautohbw | head -1 | awk '{ print $1 }')
+  export LD_PRELOAD="$LD_PRELOAD":$HBWLIB AUTO_HBW_SIZE=10T AUTO_HBW_LOG=-2 MEMKIND_HBW_NODES=0 MEMKIND_HEAP_MANAGER=JEMALLOC
+fi
+
 exec bundle exec "$@"

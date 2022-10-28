@@ -10,7 +10,7 @@ class Csv::MessagesExporterTest < ActiveSupport::TestCase
 
   def create_message_for(provider, date = Time.utc(2011,1,1))
     msg = 0
-    Timecop.freeze(date) do
+    travel_to(date) do
       ActionMailer::Base.deliveries = []
       message = Message.create!(:sender => provider, :to => [provider],
                           :subject => 'hello', :body => "what's up?")
@@ -20,7 +20,7 @@ class Csv::MessagesExporterTest < ActiveSupport::TestCase
   end
 
   test 'to_csv' do
-    Timecop.freeze(Time.utc(2011,1,1)) do
+    travel_to(Time.utc(2011,1,1)) do
       buyer = FactoryBot.create(:buyer_account,
                              org_name: 'Eater',
                              provider_account: @provider)

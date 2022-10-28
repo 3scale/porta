@@ -69,7 +69,7 @@ module Abilities
       topic = FactoryBot.create(:topic, forum: @forum)
       owner = Ability.new(topic.user)
 
-      Timecop.travel(2.days.from_now) do
+      travel_to(2.days.from_now) do
         assert_not owner.can?(:update, topic)
         assert_not owner.can?(:destroy, topic)
       end
@@ -93,7 +93,7 @@ module Abilities
       assert admin.can?(:manage, topic_two)
 
       topic_three = FactoryBot.create(:topic, forum: @forum, user: provider_user)
-      Timecop.travel(2.days.from_now) do
+      travel_to(2.days.from_now) do
         assert admin.can?(:manage, topic_three)
       end
     end
@@ -122,7 +122,7 @@ module Abilities
 
       post_author = Ability.new(post.user)
 
-      Timecop.travel(2.days.from_now) do
+      travel_to(2.days.from_now) do
         assert_not post_author.can?(:update, post)
         assert_not post_author.can?(:destroy, post)
       end
@@ -160,7 +160,7 @@ module Abilities
       assert admin.can?(:manage, post_two)
 
       post_three = FactoryBot.create(:post, topic: topic, user: provider_user)
-      Timecop.travel(2.days.from_now) do
+      travel_to(2.days.from_now) do
         assert admin.can?(:manage, post_three)
       end
     end

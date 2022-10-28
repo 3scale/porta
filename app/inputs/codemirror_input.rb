@@ -14,6 +14,6 @@ class CodemirrorInput
   end
 
   def input_html_options
-    super.merge(options.slice(:value), class: 'mousetrap')
+    super.merge(options.slice(:value)).merge({ class: 'mousetrap' })
   end
 end

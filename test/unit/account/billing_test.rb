@@ -79,7 +79,7 @@ class Account::BillingTest < ActiveSupport::TestCase
   end
 
   should 'return current year and month on credit_card_expires_on_with_default if no credit card is stored' do
-    Timecop.freeze(Time.zone.local(2009, 8, 12)) do
+    travel_to(Time.zone.local(2009, 8, 12)) do
       account = FactoryBot.build(:simple_account)
       assert_equal Date.new(2009, 8, 1), account.credit_card_expires_on_with_default
     end

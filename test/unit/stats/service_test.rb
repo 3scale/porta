@@ -2,7 +2,6 @@ require 'test_helper'
 
 class Stats::ServiceTest < ActiveSupport::TestCase
   def setup
-    Timecop.return
     # TestHelpers::Time::set_format("%a, %e %B %Y %k:%M")
     @provider_account = FactoryBot.create(:provider_account)
     @service = @provider_account.first_service!
@@ -40,7 +39,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
   end
 
   test 'Service#usage accepts time range as :period only' do
-    Timecop.freeze(@zone.local(2009, 12, 4, 17, 25)) do
+    travel_to(@zone.local(2009, 12, 4, 17, 25)) do
       data = Stats::Service.new(@service).usage(:metric => @metric,
                                                 :period => :month,
                                                 :timezone => @zone.name)
@@ -58,7 +57,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
                                               :timezone => @zone.name)
 
 
-    Time.freeze do
+    freeze_time do
       assert_equal @zone.local(2009, 12, 4, 22),             data[:period][:since]
       assert_equal @zone.local(2009, 12, 8, 18).end_of_hour, data[:period][:until]
     end
@@ -71,7 +70,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
       :granularity => :hour,
       :timezone => @zone.name)
 
-    Time.freeze do
+    freeze_time do
       assert_equal @zone.local(2009, 12, 4, 22),             data[:period][:since]
       assert_equal @zone.local(2009, 12, 8, 18).end_of_hour, data[:period][:until]
     end
@@ -84,7 +83,7 @@ class Stats::ServiceTest < ActiveSupport::TestCase
       :granularity => 6.hours,
       :timezone => @zone.name)
 
-    Time.freeze do
+    freeze_time do
       assert_equal @zone.local(2009, 12, 4, 18),             data[:period][:since]
       assert_equal @zone.local(2009, 12, 8, 23).end_of_hour, data[:period][:until]
     end
@@ -281,10 +280,10 @@ class Stats::ServiceTest < ActiveSupport::TestCase
     plan = FactoryBot.create( :application_plan, :issuer => @service)
 
     # fake data
-    Timecop.freeze(@zone.local(2009, 11, 19)) { FactoryBot.create(:cinstance, :plan => plan) }
-    Timecop.freeze(@zone.local(2009, 12,  4)) { FactoryBot.create(:cinstance, :plan => plan) }
-    Timecop.freeze(@zone.local(2009, 12, 22)) { FactoryBot.create(:cinstance, :plan => plan) }
-    Timecop.freeze(@zone.local(2010,  1,  3)) { FactoryBot.create(:cinstance, :plan => plan) }
+    travel_to(@zone.local(2009, 11, 19)) { FactoryBot.create(:cinstance, :plan => plan) }
+    travel_to(@zone.local(2009, 12,  4)) { FactoryBot.create(:cinstance, :plan => plan) }
+    travel_to(@zone.local(2009, 12, 22)) { FactoryBot.create(:cinstance, :plan => plan) }
+    travel_to(@zone.local(2010,  1,  3)) { FactoryBot.create(:cinstance, :plan => plan) }
 
     source = Stats::Service.new(@service)
 

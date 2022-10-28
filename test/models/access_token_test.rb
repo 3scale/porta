@@ -114,13 +114,13 @@ class AccessTokenTest < ActiveSupport::TestCase
     expected_updated_at = -1
 
     # Need to round it because database do not retain usec neither nsec
-    Timecop.freeze(5.months.ago.round) do
+    travel_to(5.months.ago.round) do
       expected_created_at = Time.zone.now
       access_token.save!
     end
 
     # Need to round it because database do not retain usec neither nsec
-    Timecop.freeze(5.hours.ago.round) do
+    travel_to(5.hours.ago.round) do
       expected_updated_at = Time.zone.now
       access_token.update!(name: 'updated name')
     end
@@ -168,7 +168,7 @@ class AccessTokenTest < ActiveSupport::TestCase
 
     initial_updated_at = access_token.updated_at
 
-    Timecop.freeze(1.day.from_now.utc.round) do
+    travel_to(1.day.from_now.utc.round) do
       assert_difference(Audited.audit_class.method(:count)) do
         AccessToken.with_synchronous_auditing do
           access_token.update!(name: 'updated-name')

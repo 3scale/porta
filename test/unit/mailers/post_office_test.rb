@@ -10,7 +10,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification has a header to locate the message' do
-    message = Message.create! sender: @provider, to: [@buyer]
+    message = Message.create! sender: @provider, to: [@buyer], subject: "I am subject"
 
     notification = PostOffice.message_notification(message, message.recipients.first)
     header = Mail::Header.new(notification.header.encoded)
@@ -20,7 +20,7 @@ class PostOfficeTest < ActionMailer::TestCase
   end
 
   test 'message_notification is graceful when recipient account is deleted' do
-    message = Message.create! sender: @provider, to: [@buyer]
+    message = Message.create! sender: @provider, to: [@buyer], subject: "I am subject"
     @buyer.destroy!
     message.reload
 

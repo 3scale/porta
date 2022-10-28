@@ -55,7 +55,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
   test '#notify_entitlements trial plan' do
     @provider_account.buy! @trial_plan
 
-    Timecop.freeze do
+    freeze_time do
       AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
       AccountMailer.expects(:support_entitlements_revoked).never
 
@@ -66,7 +66,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
   test '#notify_entitlements paid to trial' do
     @provider_account.buy! @trial_plan
 
-    Timecop.freeze do
+    freeze_time do
       AccountMailer.expects(:support_entitlements_assigned).never
       AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
 
@@ -78,7 +78,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
   test '#notify_entitlements free to trial' do
     @provider_account.buy! @trial_plan
 
-    Timecop.freeze do
+    freeze_time do
       AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
       AccountMailer.expects(:support_entitlements_revoked).never
 
@@ -114,7 +114,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
   test '#notify_entitlements paid to free' do
     @provider_account.buy! @free_plan
 
-    Timecop.freeze do
+    freeze_time do
       AccountMailer.expects(:support_entitlements_assigned).never
       AccountMailer.expects(:support_entitlements_revoked).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
 
@@ -172,7 +172,7 @@ class SupportEntitlementsServiceTest < ActiveSupport::TestCase
   test '#notify_entitlements without invoice' do
     @provider_account.buy! @paid_plan
 
-    Timecop.freeze do
+    freeze_time do
       AccountMailer.expects(:support_entitlements_assigned).with(@provider_account, effective_since: Time.now.utc).returns(mock(deliver_later: true))
       AccountMailer.expects(:support_entitlements_revoked).never
 

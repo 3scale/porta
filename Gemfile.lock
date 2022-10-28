@@ -508,6 +508,8 @@ GEM
       ast (~> 2.4.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
+    pdf-inspector (1.0.2)
+      pdf-reader (>= 0.9.0)
     pdf-reader (0.9.3)
       Ascii85 (>= 0.9)
     pg (0.21.0)
@@ -799,7 +801,6 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.9)
-    timecop (0.9.1)
     to_regexp (0.2.1)
     tomlrb (2.0.1)
     ts-datetime-delta (2.0.2)
@@ -912,7 +913,7 @@ DEPENDENCIES
   codemirror-rails (~> 5.6)
   coffee-rails (~> 4.2)
   colorize
-  commonmarker
+  commonmarker (~> 0.21.0)
   compass-rails (~> 3.0.2)
   cucumber (~> 7.0)
   cucumber-rails (~> 2.4.0)
@@ -968,6 +969,7 @@ DEPENDENCIES
   oauth2 (~> 1.4)
   open_id_authentication
   paperclip (~> 6.0)
+  pdf-inspector
   pg (~> 0.21.0)
   pisoni (~> 1.29)
   prawn-core!
@@ -1033,7 +1035,6 @@ DEPENDENCIES
   swagger-ui_rails2!
   thin
   thinking-sphinx (~> 5.4.0)
-  timecop (~> 0.9)
   ts-datetime-delta
   uglifier
   unicorn
