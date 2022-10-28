@@ -26,7 +26,6 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
     rescue ActiveRecord::RecordNotFound
       # Returning 204 to acknowledge reception even for payments we don't care about
       # https://issues.redhat.com/browse/THREESCALE-6851
-      Rails.logger.info("Acknowledging reception: '#{stripe_event.id}'")
       return head(:no_content)
     end
 
