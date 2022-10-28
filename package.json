@@ -36,7 +36,6 @@
     "@typescript-eslint/eslint-plugin": "^4",
     "@typescript-eslint/parser": "4",
     "babel-loader": "8.2.5",
-    "canvas": "^2.5.0",
     "css-loader": "^2.1.1",
     "empty": "^0.10.1",
     "enzyme": "^3.3.0",
