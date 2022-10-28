@@ -79,18 +79,16 @@ class SignupForm extends Component<Props, State> {
 
   private readonly handleInputChange: (value: string, event: React.SyntheticEvent<HTMLInputElement>) => void = (value, event) => {
     const isValid = event.currentTarget.required ? validateSingleField(event) : true
+    const validation = {
+      // eslint-disable-next-line react/no-access-state-in-setstate -- FIXME
+      ...this.state.validation,
+      [event.currentTarget.name]: isValid
+    }
 
-    this.setState((prevState: State) => {
-      const validation = {
-        ...prevState.validation,
-        [event.currentTarget.name]: isValid
-      } as const
-
-      return {
-        [event.currentTarget.name]: value,
-        validation
-      } as State
-    })
+    this.setState({
+      [event.currentTarget.name]: value,
+      validation
+    } as State)
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
