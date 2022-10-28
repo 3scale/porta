@@ -84,7 +84,7 @@ const NewMappingRule: FunctionComponent<Props> = ({
         <input name="utf8" type="hidden" value="✓" />
 
         <HttpMethodSelect httpMethod={httpMethod} httpMethods={httpMethods} setHttpMethod={setHttpMethod} />
-        <PatternInput helperTextInvalid={helperTextInvalid} pattern={pattern} validatePattern={() => validatePattern} validated={patternValidated} />
+        <PatternInput helperTextInvalid={helperTextInvalid} pattern={pattern} validatePattern={validatePattern} validated={patternValidated} />
         <MetricInput methods={methods} metric={metric} setMetric={setMetric} topLevelMetrics={topLevelMetrics} />
         {isProxyProEnabled && <RedirectUrlInput redirectUrl={redirectUrl} setRedirectUrl={setRedirectUrl} />}
         <IncrementByInput increment={increment} setIncrement={setIncrement} />
