@@ -123,12 +123,22 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_includes @invoice.errors[:period], 'Billing period format should be YYYY-MM'
   end
 
-  test 'validates invoice invalid year' do
-    period = Month.new(Time.zone.local(0007, 12, 1))
+  test 'validates invoice year - invalid if earlier than buyer creation date' do
+    period = Month.new(Time.zone.local(1959, 12, 1))
     @invoice.update(period: period)
 
     assert_not @invoice.valid?
     assert_includes @invoice.errors[:period], 'must be between the account creation date and one month from now'
+  end
+
+  test 'validates invoice year - invalid if later than 1 month from now' do
+    travel_to(Date.new(2022,10,27)) do
+      period = Month.new(Time.zone.local(2022, 12, 1))
+      @invoice.update(period: period)
+
+      assert_not @invoice.valid?
+      assert_includes @invoice.errors[:period], 'must be between the account creation date and one month from now'
+    end
   end
 
   test 'validates invoice invalid month' do
