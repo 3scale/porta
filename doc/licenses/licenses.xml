@@ -13730,16 +13730,6 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>url-polyfill</packageName>
-        <version>1.1.12</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
         <packageName>use</packageName>
         <version>3.1.1</version>
         <licenses>
