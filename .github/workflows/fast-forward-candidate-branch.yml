@@ -1,26 +1,25 @@
-name: Fast-forward master to managed-services
+name: Fast-forward between branches
 on:
-  schedule:
-    - cron: '0 7 * * 4'
+  workflow_call:
+    inputs:
+      from_branch:
+        description: 'The branch name to fast-forward from'
+        default: 'master'
+        type: string
+      to_branch:
+        description: 'The branch name to fast-forward to'
+        default: 'managed-services'
+        type: string
 
 jobs:
   fast-forward:
     runs-on: ubuntu-latest
-    env:
-      FROM_BRANCH: "master"
-      TO_BRANCH: "managed-services"
-      PERIOD_DAYS: 21 # Days
-      STARTING_AT: "2022-10-27 00:00:00"
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ env.FROM_BRANCH }}
+          ref: ${{ github.event.inputs.from_branch }}
           fetch-depth: 0
           token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
       - run: |
-          if [ $(($(($(date -d 00:00:00 +%s) - $(date -d "${{ env.STARTING_AT }}" +%s))) % $((60 * 60 * 24 * ${{ env.PERIOD_DAYS }})))) == 0 ]; then
-            git fetch origin ${{ env.FROM_BRANCH }}:${{ env.TO_BRANCH }}
-            git push origin ${{ env.TO_BRANCH }}
-          else
-            echo "Nothing to do"
-          fi
+          git fetch origin ${{ github.event.inputs.from_branch }}:${{ github.event.inputs.to_branch }}
+          git push origin ${{ github.event.inputs.to_branch }}
