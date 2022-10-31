@@ -48,4 +48,24 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     assert_select 'title', "Inbox - Index | Red Hat 3scale API Management"
     assert_select '#export-to-csv', false, 'Export all Messages'
   end
+
+  test 'Prevent sending reply without subject' do
+    login_as(@admin)
+    reply = @message.reply
+    reply.update_attributes(body: 'Reply Body', subject: nil)
+
+    MessageWorker.drain
+    assert msg = Message.last
+    assert_not_equal "Reply Body", msg.body
+  end
+
+  test 'Allow sending reply with subject' do
+    login_as(@admin)
+    reply = @message.reply
+    reply.update_attributes(body: 'Reply Body', subject: 'Reply Subject')
+
+    MessageWorker.drain
+    assert msg = Message.last
+    assert_equal "Reply Subject", msg.subject
+  end
 end
