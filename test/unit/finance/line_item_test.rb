@@ -5,7 +5,7 @@ module Finance
 
     def setup
       @provider = FactoryBot.create(:simple_provider)
-      @buyer = FactoryBot.create(:simple_buyer, :provider_account => @provider)
+      @buyer = FactoryBot.create(:old_simple_buyer, :provider_account => @provider)
 
       @invoice = FactoryBot.create(:invoice,
                                 :period => Month.new(Time.zone.local(1984, 1, 1)),
