@@ -2,8 +2,8 @@ name: Fast forward manually
 on:
   workflow_dispatch:
     inputs:
-      from_branch:
-        description: 'The branch name to fast-forward from'
+      ref:
+        description: 'The branch name or commit to fast-forward from'
         required: true
         default: 'master'
       to_branch:

@@ -2,8 +2,8 @@ name: Fast-forward between branches
 on:
   workflow_call:
     inputs:
-      from_branch:
-        description: 'The branch name to fast-forward from'
+      ref:
+        description: 'The branch name or commit to fast-forward from'
         default: 'master'
         type: string
       to_branch:
@@ -17,9 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.from_branch }}
+          ref: ${{ github.event.inputs.ref }}
           fetch-depth: 0
           token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
       - run: |
-          git fetch origin ${{ github.event.inputs.from_branch }}:${{ github.event.inputs.to_branch }}
+          git fetch origin ${{ github.event.inputs.ref }}:${{ github.event.inputs.to_branch }}
           git push origin ${{ github.event.inputs.to_branch }}
