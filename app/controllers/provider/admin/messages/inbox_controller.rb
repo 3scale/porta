@@ -23,11 +23,7 @@ class Provider::Admin::Messages::InboxController < FrontendController
     reply.attributes = message_params
 
     if reply.valid?
-      reply.save!
-      reply.deliver!
-
-      flash[:notice] = 'Reply was sent.'
-      redirect_to action: :index
+      send_reply(reply)
     else
       flash[:error] = reply.errors.full_messages.to_sentence
       redirect_to provider_admin_messages_inbox_path(@message)
@@ -42,5 +38,13 @@ class Provider::Admin::Messages::InboxController < FrontendController
 
   def find_message
     @message = current_account.received_messages.find(params.require(:id)).decorate
+  end
+
+  def send_reply(reply)
+    reply.save!
+    reply.deliver!
+
+    flash[:notice] = 'Reply was sent.'
+    redirect_to action: :index
   end
 end
