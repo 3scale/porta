@@ -26,38 +26,20 @@ module CMS
       false
     end
 
-    def bucket
-      config.fetch(:bucket) if enabled?
-    end
-
-    def region
-      config.fetch(:region) if enabled?
-    end
-
     def credentials
       return unless enabled?
 
-      Aws::CredentialsService.call(config)
-    end
-
-    def hostname
-      config[:hostname].presence if enabled?
+      CMS::AwsCredentials.instance.credentials
     end
 
     def protocol
       config[:protocol].presence || 'https' if enabled?
     end
 
-    def role_arn
-      config[:role_arn] if enabled?
-    end
-
-    def role_session_name
-      config[:role_session_name] if enabled?
-    end
-
-    def web_identity_token_file
-      config[:web_identity_token_file] if enabled?
+    %i[web_identity_token_file role_session_name role_arn hostname bucket region access_key_id secret_access_key].each do |param|
+      define_method(param) do
+        config[param] if enabled?
+      end
     end
 
     def options
@@ -76,9 +58,11 @@ module CMS
       opts
     end
 
+    # see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/ClientStubs.html
     def stub!
       @config ||= { bucket: 'test', access_key_id: 'key', secret_access_key: 'secret', region: 'us-east-1' }
       Aws.config[:s3] = { stub_responses: true }
+      Aws.config[:sts] = { stub_responses: true }
       enable!
     end
 

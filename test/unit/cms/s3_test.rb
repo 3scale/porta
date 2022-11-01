@@ -71,8 +71,8 @@ class CMS::S3Test < ActiveSupport::TestCase
     assert_nil CMS::S3.credentials
   end
 
-  test "#credentials calls Aws::CredentialsService with the correct arguments" do
-    Aws::CredentialsService.expects(:call).with(CMS::S3.send(:config))
+  test "#credentials calls Aws::CredentialsService" do
+    CMS::AwsCredentials.instance.expects(:credentials)
 
     CMS::S3.credentials
   end
