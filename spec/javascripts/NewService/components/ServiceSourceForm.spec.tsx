@@ -15,19 +15,19 @@ const props: Props = {
 
 it('should render itself', () => {
   const wrapper = mount(<ServiceSourceForm {...props} />)
-  expect(wrapper.find(ServiceSourceForm).exists()).toEqual(true)
+  expect(wrapper.exists(ServiceSourceForm)).toEqual(true)
 })
 
 it('should render all possible sources for the new service', () => {
   const wrapper = shallow(<ServiceSourceForm {...props} />)
 
   const manual = wrapper.find('[htmlFor="source_manual"]')
-  expect(manual.exists()).toBe(true)
+  expect(manual.exists()).toEqual(true)
   expect(manual.find('input').prop('type')).toBe('radio')
   expect(manual.text()).toBe('Define manually')
 
   const discovery = wrapper.find('[htmlFor="source_discover"]')
-  expect(discovery.exists()).toBe(true)
+  expect(discovery.exists()).toEqual(true)
   expect(discovery.find('input').prop('type')).toBe('radio')
   expect(discovery.text()).toBe('Import from OpenShift')
 })
@@ -45,10 +45,10 @@ it('should render a spinner when loading projects', () => {
   const wrapper = shallow(<ServiceSourceForm {...props} />)
 
   wrapper.setProps({ loadingProjects: true })
-  expect(wrapper.find('.fa-spinner').exists()).toBe(true)
+  expect(wrapper.exists('.fa-spinner')).toEqual(true)
 
   wrapper.setProps({ loadingProjects: false })
-  expect(wrapper.find('.fa-spinner').exists()).toBe(false)
+  expect(wrapper.exists('.fa-spinner')).toEqual(false)
 })
 
 it('should render a link to authenticate when Service Discovery is not usable', () => {
@@ -57,10 +57,10 @@ it('should render a link to authenticate when Service Discovery is not usable', 
   act(() => {
     wrapper.setProps({ isServiceDiscoveryUsable: false })
   })
-  expect(wrapper.find(`a[href="${serviceDiscoveryAuthenticateUrl}"]`).exists()).toBe(true)
+  expect(wrapper.exists(`a[href="${serviceDiscoveryAuthenticateUrl}"]`)).toEqual(true)
 
   act(() => {
     wrapper.setProps({ isServiceDiscoveryUsable: true })
   })
-  expect(wrapper.find(`a[href="${serviceDiscoveryAuthenticateUrl}"]`).exists()).toBe(false)
+  expect(wrapper.exists(`a[href="${serviceDiscoveryAuthenticateUrl}"]`)).toEqual(false)
 })

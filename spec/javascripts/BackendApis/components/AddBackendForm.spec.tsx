@@ -21,60 +21,56 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<AddBackendForm {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should enable submit button only when form is filled', () => {
   const wrapper = mountWrapper()
   const isSubmitButtonDisabled = (w: ReactWrapper<unknown>) => w.find('button[data-testid="addBackend-buttonSubmit"]').prop('disabled')
-  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  expect(isSubmitButtonDisabled(wrapper)).toEqual(true)
 
   act(() => {
     wrapper.find(BackendSelect).props().onSelect(null)
     wrapper.find(PathInput).props().setPath('')
   })
   wrapper.update()
-  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  expect(isSubmitButtonDisabled(wrapper)).toEqual(true)
 
   act(() => {
     wrapper.find(BackendSelect).props().onSelect(backend)
     wrapper.find(PathInput).props().setPath('')
   })
   wrapper.update()
-  expect(isSubmitButtonDisabled(wrapper)).toBe(false)
+  expect(isSubmitButtonDisabled(wrapper)).toEqual(false)
 
   act(() => {
     wrapper.find(BackendSelect).props().onSelect(null)
     wrapper.find(PathInput).props().setPath('/path')
   })
   wrapper.update()
-  expect(isSubmitButtonDisabled(wrapper)).toBe(true)
+  expect(isSubmitButtonDisabled(wrapper)).toEqual(true)
 
   act(() => {
     wrapper.find(BackendSelect).props().onSelect(backend)
     wrapper.find(PathInput).props().setPath('/path')
   })
   wrapper.update()
-  expect(isSubmitButtonDisabled(wrapper)).toBe(false)
+  expect(isSubmitButtonDisabled(wrapper)).toEqual(false)
 })
 
 it('should open/close a modal with a form to create a new backend', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find(NewBackendModal).prop('isOpen')).toBe(false)
+  expect(wrapper.find(NewBackendModal).prop('isOpen')).toEqual(false)
 
   act(() => { wrapper.find('button[data-testid="newBackendCreateBackend-buttonLink"]').props().onClick!(undefined as unknown as React.MouseEvent) })
   wrapper.update()
-  expect(wrapper.find(NewBackendModal).prop('isOpen')).toBe(true)
+  expect(wrapper.find(NewBackendModal).prop('isOpen')).toEqual(true)
 
   act(() => { wrapper.find('button[data-testid="cancel"]').props().onClick!(undefined as unknown as React.MouseEvent) })
   wrapper.update()
-  expect(wrapper.find(NewBackendModal).prop('isOpen')).toBe(false)
+  expect(wrapper.find(NewBackendModal).prop('isOpen')).toEqual(false)
 })
 
 it('should select the new backend when created', () => {

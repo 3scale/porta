@@ -45,11 +45,11 @@ const defaultProps: Props<CrewMember> = {
 
 const mountWrapper = (props: Partial<Props<CrewMember>> = {}) => mount(<SelectWithModal {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
+beforeEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should be able to select an item', () => {
@@ -77,7 +77,7 @@ describe('with 20 items or less', () => {
 
   it('should not be able to show a modal', () => {
     const wrapper = mountWrapper(props)
-    expect(wrapper.exists(TableModal)).toBe(false)
+    expect(wrapper.exists(TableModal)).toEqual(false)
   })
 })
 
@@ -97,10 +97,10 @@ describe('with more than 20 items', () => {
   it('should be able to show a modal', () => {
     const wrapper = mountWrapper(props)
 
-    expect(wrapper.find(TableModal).props().isOpen).toBe(false)
+    expect(wrapper.find(TableModal).props().isOpen).toEqual(false)
 
     openModal(wrapper)
-    expect(wrapper.find(TableModal).props().isOpen).toBe(true)
+    expect(wrapper.find(TableModal).props().isOpen).toEqual(true)
     expect(onSelect).toHaveBeenCalledTimes(0)
   })
 
@@ -120,7 +120,7 @@ describe('with more than 20 items', () => {
     openModal(wrapper)
     const ths = wrapper.find('table th')
 
-    cells.forEach(c => { expect(ths.find(`[data-label="${c.title}"]`).exists()).toBe(true) })
+    expect(cells.every(c => ths.exists(`[data-label="${c.title}"]`))).toEqual(true)
   })
 
   // FIXME: simulate change
@@ -167,7 +167,7 @@ describe('with no items', () => {
     expect(items.length).toEqual(2)
 
     const emptyItem = items.last()
-    expect(emptyItem.prop('isDisabled')).toBe(true)
+    expect(emptyItem.prop('isDisabled')).toEqual(true)
     expect(emptyItem.text()).toEqual('No results found')
   })
 })

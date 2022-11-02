@@ -10,39 +10,39 @@ describe('isPolicyChainChanged', () => {
     const newChain = [...[], ...chain]
     const changed = isPolicyChainChanged(chain, newChain)
 
-    expect(changed).toBe(false)
+    expect(changed).toEqual(false)
   })
 
   it('should detect a change when a new policy is added', () => {
     const newChain = [...chain, policy01]
     const changed = isPolicyChainChanged(newChain, chain)
 
-    expect(changed).toBe(true)
+    expect(changed).toEqual(true)
   })
 
   it('should detect a change when policies are rearranged', () => {
     const changed = isPolicyChainChanged([policy00, policy01], [policy01, policy00])
 
-    expect(changed).toBe(true)
+    expect(changed).toEqual(true)
   })
 
   it('should detect a change when a policy is updated', () => {
     const newChain = [{ ...policy00, data: { allow_origin: '123 123 123' } }]
     const changed = isPolicyChainChanged(newChain, chain)
 
-    expect(changed).toBe(true)
+    expect(changed).toEqual(true)
   })
 })
 
 describe('isNotApicastPolicy', () => {
   it('should detect if an apicast policy', () => {
     const apicastPolicy = { ...policy00, name: 'apicast' }
-    expect(isNotApicastPolicy(apicastPolicy)).toBe(false)
+    expect(isNotApicastPolicy(apicastPolicy)).toEqual(false)
   })
 
   it('should detect if not an apicast policy', () => {
     const otherPolicy = { ...policy00, name: 'any-but-apicast' }
-    expect(isNotApicastPolicy(otherPolicy)).toBe(true)
+    expect(isNotApicastPolicy(otherPolicy)).toEqual(true)
   })
 })
 

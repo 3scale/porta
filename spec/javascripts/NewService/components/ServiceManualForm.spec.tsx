@@ -28,10 +28,10 @@ it('should render itself', () => {
 
 it('should render `FormWrapper` child', () => {
   const wrapper = mount(<ServiceManualForm {...props} />)
-  expect(wrapper.find(FormWrapper).exists()).toEqual(true)
+  expect(wrapper.exists(FormWrapper)).toEqual(true)
 })
 
 it('should render `ServiceManualListItems` child', () => {
   const wrapper = mount(<ServiceManualForm {...props} />)
-  expect(wrapper.find(ServiceManualListItems).exists()).toEqual(true)
+  expect(wrapper.exists(ServiceManualListItems)).toEqual(true)
 })

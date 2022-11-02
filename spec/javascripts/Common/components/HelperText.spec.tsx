@@ -12,8 +12,6 @@ const mountWrapper = () => mount((
   </HelperText>
 ))
 
-afterEach(() => jest.resetAllMocks())
-
 it('should render correctly', () => {
   const wrapper = mountWrapper()
   expect(wrapper.find(HelperTextItem).text()).toEqual('Hello test')

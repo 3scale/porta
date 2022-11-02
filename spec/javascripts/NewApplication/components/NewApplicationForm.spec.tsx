@@ -410,7 +410,7 @@ describe('when in Account context', () => {
 
     it('should not render a link to create an application plan', () => {
       const wrapper = mountWrapper({ ...props, products: [productWithAppPlans] })
-      const findHint = () => wrapper.find(`ApplicationPlanSelect .hint a[href="${defaultProps.createApplicationPlanPath}"]`).exists()
+      const findHint = () => wrapper.exists(`ApplicationPlanSelect .hint a[href="${defaultProps.createApplicationPlanPath}"]`)
       expect(findHint()).toEqual(false)
       selectProduct(wrapper, productWithAppPlans)
       expect(findHint()).toEqual(false)

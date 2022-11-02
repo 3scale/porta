@@ -10,9 +10,5 @@
 
 // const mountWrapper = (props: Partial<Props> = {}) => shallow(<QuickStartContainer {...{ ...defaultProps, ...props }} />)
 
-// afterEach(() => {
-//   jest.resetAllMocks()
-// })
-
 // FIXME: importing @patternfly/quickstarts/dist/quickstarts-full.es messes up jest
 it.todo('should work')

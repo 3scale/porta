@@ -13,11 +13,7 @@ const defaultProps: Props = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PatternInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })

@@ -23,12 +23,12 @@ it('should render itself', () => {
 
 it('should render `FormWrapper` child', () => {
   const wrapper = shallow(<ServiceDiscoveryForm {...props} />)
-  expect(wrapper.find(FormWrapper).exists()).toEqual(true)
+  expect(wrapper.exists(FormWrapper)).toEqual(true)
 })
 
 it('should render `ServiceDiscoveryListItems` child', () => {
   const wrapper = shallow(<ServiceDiscoveryForm {...props} />)
-  expect(wrapper.find(ServiceDiscoveryListItems).exists()).toEqual(true)
+  expect(wrapper.exists(ServiceDiscoveryListItems)).toEqual(true)
 })
 
 describe('fetchProjects', () => {
@@ -44,7 +44,7 @@ describe('fetchProjects', () => {
 
     const wrapper = mount(<ServiceDiscoveryForm {...props} />)
 
-    expect(wrapper.find(ErrorMessage).exists()).toBe(true)
+    expect(wrapper.exists(ErrorMessage)).toEqual(true)
     expect(wrapper.find(ErrorMessage).text()).toContain(msg)
   })
 

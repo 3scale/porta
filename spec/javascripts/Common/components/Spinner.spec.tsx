@@ -11,9 +11,7 @@ const defaultProps: Props = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<Spinner {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists(Spinner)).toBe(true)
+  expect(wrapper.exists(Spinner)).toEqual(true)
 })

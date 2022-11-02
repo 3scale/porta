@@ -14,7 +14,7 @@ it('should work', () => {
 
     <footer>[click-me-link]</footer>
   `
-  const newHTML: string = replaceLinksExtension(links).filter(html)
+  const newHTML = replaceLinksExtension(links).filter(html)
 
   expect(newHTML).toMatch(`
     <h1>Create Mapping rules</h1>

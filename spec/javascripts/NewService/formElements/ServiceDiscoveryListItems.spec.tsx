@@ -16,7 +16,7 @@ const props = { projects, onError }
 
 it('should render itself', () => {
   const wrapper = shallow(<ServiceDiscoveryListItems {...props} />)
-  expect(wrapper.find('#service_name_input').exists()).toEqual(true)
+  expect(wrapper.exists('#service_name_input')).toEqual(true)
 })
 
 it('should render a field to select a project', () => {
@@ -80,11 +80,11 @@ describe('fetchServices', () => {
       wrapper = mount(<ServiceDiscoveryListItems {...props} />)
       // Assert selects are disabled right after fetch starts
       wrapper.update()
-      expect(wrapper.find('select').everyWhere(n => n.prop('disabled') === true)).toBe(true)
+      expect(wrapper.find('select').everyWhere(n => n.prop('disabled') === true)).toEqual(true)
     })
 
     // Assert selects are not disabled after fetched
     wrapper!.update()
-    expect(wrapper!.find('select').everyWhere(n => n.prop('disabled') === false)).toBe(true)
+    expect(wrapper!.find('select').everyWhere(n => n.prop('disabled') === false)).toEqual(true)
   })
 })

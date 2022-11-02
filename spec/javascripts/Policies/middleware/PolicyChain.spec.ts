@@ -149,13 +149,13 @@ describe('#convertToChainPolicy', () => {
       ...policyConfig,
       name: 'no_apicast'
     }
-    expect(convertToChainPolicy(registryPolicy, noApicastPolicyConfig).removable).toBe(true)
+    expect(convertToChainPolicy(registryPolicy, noApicastPolicyConfig).removable).toEqual(true)
 
     const apicastPolicyConfig: PolicyConfig = {
       ...policyConfig,
       name: 'apicast'
     }
-    expect(convertToChainPolicy(registryPolicy, apicastPolicyConfig).removable).toBe(false)
+    expect(convertToChainPolicy(registryPolicy, apicastPolicyConfig).removable).toEqual(false)
   })
 })
 

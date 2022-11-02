@@ -13,14 +13,12 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PasswordRepeatInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+beforeEach(() => setPassword.mockReset())
 
 it('should not be submitted', () => {
   const wrapper = mountWrapper()
   const input = wrapper.find('input[name="email_configuration[password]"]')
-  expect(input.exists()).toBe(false)
+  expect(input.exists()).toEqual(false)
 })
 
 it('should work', () => {

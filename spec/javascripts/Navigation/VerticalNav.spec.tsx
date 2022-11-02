@@ -32,9 +32,9 @@ it('should display sections', () => {
 
 it('should display all sections closed by default', () => {
   const wrapper = mount(<VerticalNav sections={sections} />)
-  expect(wrapper.find('.pf-m-expanded').exists()).toBe(false)
+  expect(wrapper.exists('.pf-m-expanded')).toEqual(false)
 
   wrapper.setProps({ sections, activeSection: '0', activeItem: '0' })
   wrapper.update()
-  expect(wrapper.find('.pf-m-expanded').exists()).toBe(true)
+  expect(wrapper.exists('.pf-m-expanded')).toEqual(true)
 })

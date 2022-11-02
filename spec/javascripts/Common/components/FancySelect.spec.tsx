@@ -37,11 +37,9 @@ const mountWrapper = (props: Partial<Props<CrewMember>> = {}) => mount(<FancySel
 
 const expandSelect = (wrapper: ReactWrapper<unknown>) => wrapper.find('.pf-c-select__toggle-button').simulate('click')
 
-afterEach(() => jest.resetAllMocks())
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should select an item', () => {
@@ -59,7 +57,7 @@ it('should have a default item selected', () => {
   const wrapper = mountWrapper({ item: targetItem })
 
   const input = wrapper.find(`input[name="${NAME}"]`)
-  expect(input.exists()).toBe(true)
+  expect(input.exists()).toEqual(true)
   expect(input.prop('value')).toBe(targetItem.id)
 })
 
@@ -99,7 +97,7 @@ describe('with no items', () => {
     expect(items.length).toEqual(2)
 
     const emptyItem = items.last()
-    expect(emptyItem.prop('isDisabled')).toBe(true)
+    expect(emptyItem.prop('isDisabled')).toEqual(true)
     expect(emptyItem.text()).toEqual('No results found')
   })
 })

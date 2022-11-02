@@ -9,25 +9,22 @@ const defaultProps: Props = { selectedRole: 'member', onRoleChanged: jest.fn() }
 const mountWrapper = (props: Partial<Props> = {}) => mount(<RoleRadioGroup {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
-  expect(mountWrapper().find(RoleRadioGroup).exists()).toBe(true)
+  const wrapper = mountWrapper()
+  expect(wrapper.exists(RoleRadioGroup)).toEqual(true)
 })
 
 const ROLES = ['member', 'admin']
 
 it('should render a radio button for each Role', () => {
-  ROLES.forEach(role => {
-    expect(mountWrapper()
-      .find(`input[value="${role}"]`)
-      .find('input[name="user[role]"]')
-      .exists()).toBe(true)
-  })
+  const wrapper = mountWrapper()
+  expect(ROLES.every(r => wrapper.exists(`input[value="${r}"][name="user[role]"]`))).toEqual(true)
 })
 
 it('should render the selected role', () => {
   const selectedRole: Role = 'admin'
   const wrapper = mountWrapper({ selectedRole })
 
-  expect(wrapper.find(`input[value="${selectedRole}"]`).prop('checked')).toBe(true)
+  expect(wrapper.find(`input[value="${selectedRole}"]`).prop('checked')).toEqual(true)
 })
 
 it('should call onChanged event with the proper value', () => {

@@ -33,12 +33,12 @@ describe('PolicyChain', () => {
   }
   it('should render self', () => {
     const { chainWrapper } = setup()
-    expect(chainWrapper.find('section').hasClass('PolicyChain')).toBe(true)
+    expect(chainWrapper.find('section').hasClass('PolicyChain')).toEqual(true)
   })
 
   it('should render subcomponents', () => {
     const { chainWrapper } = setup()
-    expect(chainWrapper.find(SortableList).exists()).toBe(true)
+    expect(chainWrapper.exists(SortableList)).toEqual(true)
     expect(chainWrapper.find(SortableItem).length).toBe(2)
   })
 })
@@ -70,18 +70,18 @@ describe('SortableList', () => {
 
   it('should render self correctly and subcomponents', () => {
     const { sortableListWrapper, firstSortableItem } = setup()
-    expect(sortableListWrapper.find('ul').hasClass('list-group')).toBe(true)
+    expect(sortableListWrapper.find('ul').hasClass('list-group')).toEqual(true)
 
-    expect(firstSortableItem.find('li').hasClass('Policy')).toBe(true)
+    expect(firstSortableItem.find('li').hasClass('Policy')).toEqual(true)
     expect(firstSortableItem.find('.Policy-version-and-summary').text()).toBe('1.0.0 - CORS')
-    expect(firstSortableItem.find(DragHandle).exists()).toBe(true)
+    expect(firstSortableItem.exists(DragHandle)).toEqual(true)
   })
 
   it('should show correctly disabled policies', () => {
     const { sortableListWrapper } = setup()
     const lastSortableItem = sortableListWrapper.find(SortableItem).last()
 
-    expect(lastSortableItem.find('li').hasClass('Policy--disabled')).toBe(true)
+    expect(lastSortableItem.find('li').hasClass('Policy--disabled')).toEqual(true)
   })
 
   it('should call editPolicy when edit button is clicked', () => {

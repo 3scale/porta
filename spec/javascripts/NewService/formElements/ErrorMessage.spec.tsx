@@ -8,7 +8,7 @@ const props = {
 
 it('should render itself', () => {
   const wrapper = mount(<ErrorMessage {...props} />)
-  expect(wrapper.find('.errorMessage').exists()).toEqual(true)
+  expect(wrapper.exists('.errorMessage')).toEqual(true)
 })
 
 it('should render correct error message', () => {

@@ -13,9 +13,7 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<EmailInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+beforeEach(() => setEmail.mockReset())
 
 it('should work', () => {
   const value = 'hello@ollivanders.co.uk'

@@ -22,26 +22,22 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<CompactListCard {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should not render a table header', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('th').exists()).toBe(false)
+  expect(wrapper.exists('th')).toEqual(false)
 })
 
 it('should render each row with a link to the item overview page and a description', () => {
   const wrapper = mountWrapper()
   const rows = wrapper.find('table td')
-  expect(rows.findWhere(n => n.text() === item.name).exists()).toBe(true)
-  expect(rows.find(`a[href="${item.href}"]`).exists()).toBe(true)
-  expect(rows.findWhere(n => n.text() === item.description).exists()).toBe(true)
+  expect(rows.findWhere(n => n.text() === item.name).exists()).toEqual(true)
+  expect(rows.exists(`a[href="${item.href}"]`)).toEqual(true)
+  expect(rows.findWhere(n => n.text() === item.description).exists()).toEqual(true)
 })
 
 it('should trigger search when clicking the search button', () => {

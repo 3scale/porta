@@ -78,7 +78,7 @@ const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
           name="user[member_permission_service_ids][]"
           type="checkbox"
           value={id}
-          onChange={() => {onChange(id)}} // FIXME: make eslint complain here about the curly w/o space
+          onChange={() => { onChange(id) }}
         />
         <span className="ServiceAccessList-labelText">{name}</span>
       </label>

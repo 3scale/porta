@@ -19,7 +19,7 @@ const mountWrapper = (props: Partial<Props> = {}) => mount<SignupForm>(<SignupFo
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('#signup_form').exists()).toEqual(true)
+  expect(wrapper.exists('#signup_form')).toEqual(true)
 })
 
 it('should render six Form Groups', () => {

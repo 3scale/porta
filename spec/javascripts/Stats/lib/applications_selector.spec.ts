@@ -33,7 +33,7 @@ describe('StatsApplicationsSelector', () => {
   })
 
   it('should have the correct application selected', () => {
-    expect(document.querySelector<any>('.StatsApplicationSelector option[value="42"]')!.selected).toBe(true)
+    expect(document.querySelector<any>('.StatsApplicationSelector option[value="42"]')!.selected).toEqual(true)
   })
 
   it('should set the application id on the state when changing the dropdown and default metric', () => {

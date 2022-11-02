@@ -12,8 +12,8 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(
 
 it('should render correctly', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists('.pf-c-form__legend')).toBe(true)
+  expect(wrapper.exists('.pf-c-form__legend')).toEqual(true)
 
   wrapper.setProps({ className: 'banana' })
-  expect(wrapper.exists('.pf-c-form__legend.banana')).toBe(true)
+  expect(wrapper.exists('.pf-c-form__legend.banana')).toEqual(true)
 })

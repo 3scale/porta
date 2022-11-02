@@ -27,5 +27,5 @@ const props: Props = {
 
 it('should render', () => {
   const wrapper = mount(<ProductSelect {...props} />)
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })

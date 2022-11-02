@@ -18,12 +18,13 @@ const defaultProps: Props = {
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ServicesFieldset {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
-  expect(mountWrapper().find(ServicesFieldset).exists()).toBe(true)
+  const wrapper = mountWrapper()
+  expect(wrapper.exists(ServicesFieldset)).toEqual(true)
 })
 
 it('should render a checkbox for each service', () => {
   SERVICES.forEach(service => {
-    expect(mountWrapper().find(`input#user_member_permission_service_ids_${service.id}`).exists()).toBe(true)
+    expect(mountWrapper().exists(`input#user_member_permission_service_ids_${service.id}`)).toEqual(true)
   })
 })
 

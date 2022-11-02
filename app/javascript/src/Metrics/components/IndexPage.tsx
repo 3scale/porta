@@ -10,6 +10,7 @@ import {
 
 import { MetricsTable } from 'Metrics/components/MetricsTable'
 
+import type { TabsProps } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 import type { TabKey } from 'Metrics/types'
 import type { Metric } from 'Types'
@@ -37,11 +38,8 @@ const IndexPage: FunctionComponent<Props> = ({
   const isActiveTabMetrics = url.searchParams.get('tab') === 'metrics'
   const activeTabKey: TabKey = isActiveTabMetrics ? 'metrics' : 'methods'
 
-  const handleTabClick = (_event: unknown, tabKey: number | string) => {
-    if (tabKey !== 'metrics' && tabKey !== 'methods') {
-      throw new Error('invalid tab key')
-    }
-    url.searchParams.set('tab', tabKey as TabKey)
+  const handleTabClick: TabsProps['onSelect'] = (_event, tabKey) => {
+    url.searchParams.set('tab', String(tabKey))
     url.searchParams.delete('query')
     url.searchParams.delete('page')
     url.searchParams.delete('utf8')

@@ -40,15 +40,14 @@ const IndexPage: React.FunctionComponent<Props> = ({
     'Unread alerts'
   ]
 
-  const tableRows = products.map(tableRow => ({
+  const tableRows = products.map(p => ({
     cells: [
-      { title: <Button isInline component="a" href={tableRow.links[1].path} variant="link">{tableRow.name}</Button> },
-      tableRow.systemName,
-      // eslint-disable-next-line react/jsx-key
-      <span className="api-table-timestamp">{tableRow.updatedAt}</span>,
-      tableRow.appsCount,
-      tableRow.backendsCount,
-      tableRow.unreadAlertsCount
+      { title: <Button isInline component="a" href={p.links[1].path} variant="link">{p.name}</Button> },
+      p.systemName,
+      <span key={p.systemName} className="api-table-timestamp">{p.updatedAt}</span>,
+      p.appsCount,
+      p.backendsCount,
+      p.unreadAlertsCount
     ]
   }))
 

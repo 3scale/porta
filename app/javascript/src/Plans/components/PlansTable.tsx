@@ -49,7 +49,7 @@ const PlansTable: React.FunctionComponent<Props> = ({
   }))
 
   const actionResolver: IActionsResolver = (_rowData, { rowIndex }) =>
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- safe to assume rowIndex is a number
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- safe to assume rowIndex is not undefined
     plans[rowIndex!].actions.map(a => ({
       title: a.title,
       onClick: () => { onAction(a) }

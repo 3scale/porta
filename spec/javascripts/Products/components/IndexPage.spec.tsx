@@ -16,13 +16,13 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...d
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a link to the New Product page', () => {
   const newProductPath = 'services/new'
   const wrapper = mountWrapper({ newProductPath })
-  expect(wrapper.find(`a[href="${newProductPath}"]`).exists()).toBe(true)
+  expect(wrapper.exists(`a[href="${newProductPath}"]`)).toEqual(true)
 })
 
 it('should render a table with products', () => {

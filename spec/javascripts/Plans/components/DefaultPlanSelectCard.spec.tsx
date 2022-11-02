@@ -19,7 +19,7 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<DefaultPlanSelectCar
 
 it('should render', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a helper text', () => {
@@ -51,7 +51,7 @@ it('should disabled the button when clearing select', () => {
   const wrapper = mountWrapper()
   wrapper.find('.pf-c-select__toggle-clear').simulate('click')
 
-  expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(true)
+  expect(wrapper.find('button[type="submit"]').prop('disabled')).toEqual(true)
 })
 
 it('should disable the button when the default plan is selected', () => {

@@ -18,7 +18,7 @@ const defaultProps = {
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ApplicationPlanSelect {...{ ...defaultProps, ...props }} />)
 
 const isDisabled = (wrapper: ReactWrapper<unknown>, isDisabled = true): boolean => {
-  return wrapper.find('.pf-c-select .pf-m-disabled').exists() === isDisabled
+  return wrapper.exists('.pf-c-select .pf-m-disabled') === isDisabled
     && wrapper.find('input.pf-c-select__toggle-typeahead').props().disabled === isDisabled
     && wrapper.find('button.pf-c-select__toggle-button').props().disabled === isDisabled
 }
@@ -65,7 +65,7 @@ describe('when a product is selected', () => {
     it('should show a hint with a link to create a plan', () => {
       const wrapper = mountWrapper(props)
       const hint = wrapper.find('.hint')
-      expect(hint.exists()).toBe(true)
+      expect(hint.exists()).toEqual(true)
       expect(hint.find('a').props().href).toEqual(createApplicationPlanPath)
     })
 

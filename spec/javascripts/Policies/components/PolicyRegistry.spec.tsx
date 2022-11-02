@@ -33,13 +33,13 @@ function setup () {
 
 it('should render self', () => {
   const { registryWrapper } = setup()
-  expect(registryWrapper.exists('.PolicyRegistry')).toBe(true)
+  expect(registryWrapper.exists('.PolicyRegistry')).toEqual(true)
 })
 
 it('should render subcomponents', () => {
   const { registryWrapper } = setup()
   const policyList = registryWrapper.find('ul')
-  expect(policyList.hasClass('list-group')).toBe(true)
+  expect(policyList.hasClass('list-group')).toEqual(true)
   expect(policyList.find('.Policy').length).toBe(3)
 })
 
@@ -54,7 +54,7 @@ it.todo('should not render apicast policy')
 it('should have a close button', () => {
   const { registryWrapper, props } = setup()
   const closeRegistryButton = registryWrapper.find(HeaderButton)
-  expect(closeRegistryButton.find('.PolicyChain-addPolicy--cancel').exists()).toBe(true)
+  expect(closeRegistryButton.exists('.PolicyChain-addPolicy--cancel')).toEqual(true)
   closeRegistryButton.simulate('click')
   expect(props.actions.closePolicyRegistry.mock.calls.length).toBe(1)
 })

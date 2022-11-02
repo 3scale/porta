@@ -10,17 +10,15 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ToolbarSearch {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a placeholder', () => {
   const placeholder = 'Find something'
   const wrapper = mountWrapper({ placeholder })
-  expect(wrapper.find(`input[placeholder="${placeholder}"]`).exists()).toBe(true)
+  expect(wrapper.exists(`input[placeholder="${placeholder}"]`)).toEqual(true)
 })
 
 it('should add more fields as children', () => {
@@ -29,5 +27,5 @@ it('should add more fields as children', () => {
       <input name="foo" type="hidden" value="bar" />
     </ToolbarSearch>
   )
-  expect(wrapper.find('[name="foo"]').exists()).toBe(true)
+  expect(wrapper.exists('[name="foo"]')).toEqual(true)
 })

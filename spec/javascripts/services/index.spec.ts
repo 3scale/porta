@@ -27,9 +27,9 @@ describe('Services index', () => {
     const widget = document.body.querySelector('#widget_1')!
     const toggle = widget.querySelector<HTMLElement>('#title_1')!
 
-    expect(widget.classList.contains('is-closed')).toBe(true)
+    expect(widget.classList.contains('is-closed')).toEqual(true)
     index.initialize()
     toggle.click()
-    expect(widget.classList.contains('is-closed')).toBe(false)
+    expect(widget.classList.contains('is-closed')).toEqual(false)
   })
 })

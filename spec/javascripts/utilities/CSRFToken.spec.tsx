@@ -21,7 +21,7 @@ it('should render itself correctly', () => {
   }
   const wrapper = mount(<CSRFToken win={windowMock as Window} />)
 
-  expect(wrapper.find(CSRFToken).exists()).toBe(true)
+  expect(wrapper.exists(CSRFToken)).toEqual(true)
   expect(wrapper.find('input').prop('name')).toBe('authenticity_token')
   expect(wrapper.find('input').prop('value')).toBe('=42=')
 })
@@ -41,7 +41,7 @@ it('should return undefined values when csrf-param meta tag is not present', () 
   }
   const wrapper = mount(<CSRFToken win={windowMock as Window} />)
 
-  expect(wrapper.find(CSRFToken).exists()).toBe(true)
+  expect(wrapper.exists(CSRFToken)).toEqual(true)
   expect(wrapper.find('input').prop('name')).toBeUndefined()
   expect(wrapper.find('input').prop('value')).toBeUndefined()
 })

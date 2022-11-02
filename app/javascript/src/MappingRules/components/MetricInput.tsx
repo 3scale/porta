@@ -3,6 +3,7 @@ import { FormGroup, Radio } from '@patternfly/react-core'
 
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 
+import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 import type { FunctionComponent } from 'react'
 import type { Metric } from 'Types'
 
@@ -38,7 +39,7 @@ const MetricInput: FunctionComponent<Props> = ({
     setMetric(selected)
   }
 
-  const cells: { title: string; propName: keyof Metric }[] = [
+  const cells: SelectWithModalProps<Metric>['cells'] = [
     { title: 'Name', propName: 'name' },
     { title: 'System name', propName: 'systemName' },
     { title: 'Last updated', propName: 'updatedAt' }

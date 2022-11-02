@@ -41,7 +41,7 @@ afterEach(() => {
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should be able to copy a plan', async () => {

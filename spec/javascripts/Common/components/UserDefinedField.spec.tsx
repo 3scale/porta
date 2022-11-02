@@ -18,19 +18,21 @@ const fieldDefinition: FieldDefinition = {
   readOnly: false,
   type: 'extra'
 }
+
 const defaultProps = {
   fieldDefinition,
   onChange,
-  value: ''
+  value: '',
+  validationErrors: undefined
 }
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<UserDefinedField {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
+afterEach(() => onChange.mockReset())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 describe('where it does not have choices', () => {
@@ -38,7 +40,7 @@ describe('where it does not have choices', () => {
 
   it('should render a text input', () => {
     const wrapper = mountWrapper({ fieldDefinition: field })
-    expect(wrapper.find('input[type="text"]').exists()).toBe(true)
+    expect(wrapper.exists('input[type="text"]')).toEqual(true)
   })
 })
 
@@ -47,6 +49,6 @@ describe('where it has choices', () => {
 
   it('should render a select', () => {
     const wrapper = mountWrapper({ fieldDefinition: field })
-    expect(wrapper.find('.pf-c-select').exists()).toBe(true)
+    expect(wrapper.exists('.pf-c-select')).toEqual(true)
   })
 })

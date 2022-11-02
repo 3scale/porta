@@ -9,9 +9,12 @@ const FEATURE_NAMES: Partial<Record<Feature, string>> = {
   monitoring: 'Access & query <strong>analytics</strong> of:',
   plans: 'Create, read, update and delete:',
   policy_registry: 'Create, read, update and delete:'
-}
+} as const
 
-const FEATURE_NAMES_DESCRIPTION_ITEMS: Record<string, string[]> = {
+const FEATURE_NAMES_DESCRIPTION_ITEMS: Record<Feature, string[] | undefined> = {
+  portal: undefined,
+  finance: undefined,
+  settings: undefined,
   partners: [
     'developer <strong>accounts</strong></span>',
     '<strong>applications</strong> of <em>selected API products</em>'
@@ -28,7 +31,7 @@ const FEATURES_GRANTING_SERVICE_ACCESS = ['partners', 'monitoring', 'plans']
 
 export function getFeatureName (feature: Feature): string {
   if (feature in FEATURE_NAMES) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: we assume feature is a Feature, either remove this check or type it as string instead
     return FEATURE_NAMES[feature]!
   }
 

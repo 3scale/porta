@@ -7,19 +7,19 @@ const FEATURES: Feature[] = ['portal', 'finance', 'settings', 'partners', 'monit
 
 describe('canFeatureSetServicePermissions', () => {
   it('should return whether or not service permissions are available', () => {
-    expect(canFeatureSetServicePermissions('portal')).toBe(false)
-    expect(canFeatureSetServicePermissions('finance')).toBe(false)
-    expect(canFeatureSetServicePermissions('settings')).toBe(false)
-    expect(canFeatureSetServicePermissions('policy_registry')).toBe(false)
+    expect(canFeatureSetServicePermissions('portal')).toEqual(false)
+    expect(canFeatureSetServicePermissions('finance')).toEqual(false)
+    expect(canFeatureSetServicePermissions('settings')).toEqual(false)
+    expect(canFeatureSetServicePermissions('policy_registry')).toEqual(false)
 
-    expect(canFeatureSetServicePermissions('partners')).toBe(true)
-    expect(canFeatureSetServicePermissions('monitoring')).toBe(true)
-    expect(canFeatureSetServicePermissions('plans')).toBe(true)
+    expect(canFeatureSetServicePermissions('partners')).toEqual(true)
+    expect(canFeatureSetServicePermissions('monitoring')).toEqual(true)
+    expect(canFeatureSetServicePermissions('plans')).toEqual(true)
 
-    expect(canFeatureSetServicePermissions(['portal', 'finance', 'settings'])).toBe(false)
+    expect(canFeatureSetServicePermissions(['portal', 'finance', 'settings'])).toEqual(false)
 
-    expect(canFeatureSetServicePermissions(['portal', 'partners'])).toBe(true)
-    expect(canFeatureSetServicePermissions(['plans', 'partners'])).toBe(true)
+    expect(canFeatureSetServicePermissions(['portal', 'partners'])).toEqual(true)
+    expect(canFeatureSetServicePermissions(['plans', 'partners'])).toEqual(true)
   })
 })
 

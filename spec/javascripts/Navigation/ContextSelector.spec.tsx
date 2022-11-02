@@ -21,7 +21,8 @@ const defaultProps = {
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ContextSelector {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
-  expect(mountWrapper().find(ContextSelector).exists()).toEqual(true)
+  const wrapper = mountWrapper()
+  expect(wrapper.exists(ContextSelector)).toEqual(true)
 })
 
 it('should have Dashboard, Audience, Products, Backends and Settings', () => {
@@ -85,14 +86,14 @@ it('should highlight the selected context', () => {
 it('should display the current api', () => {
   const wrapper = mountWrapper({ activeMenu: 'serviceadmin' })
 
-  expect(wrapper.find('.fa-cubes').exists()).toBe(true)
+  expect(wrapper.exists('.fa-cubes')).toEqual(true)
   expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')
 
   wrapper.setProps({ activeMenu: 'monitoring' })
-  expect(wrapper.find('.fa-cubes').exists()).toBe(true)
+  expect(wrapper.exists('.fa-cubes')).toEqual(true)
   expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Products')
 
   wrapper.setProps({ activeMenu: 'backend_api' })
-  expect(wrapper.find('.fa-cube').exists()).toBe(true)
+  expect(wrapper.exists('.fa-cube')).toEqual(true)
   expect(wrapper.find('.pf-c-context-selector__toggle').text()).toContain('Backends')
 })

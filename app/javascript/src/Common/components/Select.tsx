@@ -77,7 +77,8 @@ const Select = <T extends IRecord>({
     >
       {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
       {/* TODO: id should be treated as a string */}
-      {item && <input name={name} type="hidden" value={item.id > -1 ? item.id : ''} />}
+      {/* TODO: should it be `value={item.id > -1 ? item.id : ''}`? */}
+      {item && <input name={name} type="hidden" value={item.id} />}
       <PF4Select
         aria-label={ariaLabel}
         className={isClearable ? '' : 'pf-m-select__toggle-clear-hidden'}

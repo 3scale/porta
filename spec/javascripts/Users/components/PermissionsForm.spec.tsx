@@ -11,34 +11,34 @@ const defaultProps: Props = { features: [], services: [] }
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PermissionsForm {...{ ...defaultProps, ...props }} />)
 
 it('should render itself', () => {
-  expect(mountWrapper().find(PermissionsForm).exists()).toBe(true)
+  expect(mountWrapper().exists(PermissionsForm)).toEqual(true)
 })
 
 it('should have a legend with a the name of the form', () => {
   const legend = mountWrapper().find('legend').findWhere(n => n.text() === 'Administrative')
-  expect(legend.exists()).toBe(true)
+  expect(legend.exists()).toEqual(true)
 })
 
 it('should do nothing if selecting the same role twice', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('input#user_role_admin').props().checked).toBe(true)
-  expect(wrapper.find('input#user_role_member').props().checked).toBe(false)
+  expect(wrapper.find('input#user_role_admin').props().checked).toEqual(true)
+  expect(wrapper.find('input#user_role_member').props().checked).toEqual(false)
 
   wrapper.find('input#user_role_admin').simulate('change')
 
-  expect(wrapper.find('input#user_role_admin').props().checked).toBe(true)
-  expect(wrapper.find('input#user_role_member').props().checked).toBe(false)
+  expect(wrapper.find('input#user_role_admin').props().checked).toEqual(true)
+  expect(wrapper.find('input#user_role_member').props().checked).toEqual(false)
 })
 
 it('should be able to change the role', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('input#user_role_admin').prop('checked')).toBe(true)
-  expect(wrapper.find('input#user_role_member').prop('checked')).toBe(false)
+  expect(wrapper.find('input#user_role_admin').prop('checked')).toEqual(true)
+  expect(wrapper.find('input#user_role_member').prop('checked')).toEqual(false)
 
   wrapper.find('input#user_role_member').simulate('change')
 
-  expect(wrapper.find('input#user_role_admin').prop('checked')).toBe(false)
-  expect(wrapper.find('input#user_role_member').prop('checked')).toBe(true)
+  expect(wrapper.find('input#user_role_admin').prop('checked')).toEqual(false)
+  expect(wrapper.find('input#user_role_member').prop('checked')).toEqual(true)
 })
 
 describe('when role is "admin"', () => {
@@ -49,8 +49,8 @@ describe('when role is "admin"', () => {
   })
 
   it('should render nothing more', () => {
-    expect(wrapper.find('RoleRadioGroup').exists()).toBe(true)
-    expect(wrapper.find('#user_member_permissions_input').exists()).toBe(false)
+    expect(wrapper.exists('RoleRadioGroup')).toEqual(true)
+    expect(wrapper.exists('#user_member_permissions_input')).toEqual(false)
   })
 })
 
@@ -76,13 +76,13 @@ describe('when role is "member"', () => {
       <input id="user_member_permission_ids_portal" />,
       <input id="user_member_permission_ids_finance" />,
       <input id="user_member_permission_ids_settings" />
-    ])).toBe(true)
+    ])).toEqual(true)
 
     expect(wrapper.containsAllMatchingElements([
       <input id="user_member_permission_ids_partners" />,
       <input id="user_member_permission_ids_monitoring" />,
       <input id="user_member_permission_ids_plans" />
-    ])).toBe(false)
+    ])).toEqual(false)
 
     wrapper.setProps({
       initialState: { role: 'member' as Role },
@@ -93,27 +93,27 @@ describe('when role is "member"', () => {
       <input id="user_member_permission_ids_partners" />,
       <input id="user_member_permission_ids_monitoring" />,
       <input id="user_member_permission_ids_plans" />
-    ])).toBe(true)
+    ])).toEqual(true)
 
     expect(wrapper.containsAllMatchingElements([
       <input id="user_member_permission_ids_portal" />,
       <input id="user_member_permission_ids_finance" />,
       <input id="user_member_permission_ids_settings" />
-    ])).toBe(false)
+    ])).toEqual(false)
   })
 
   it('should have no checked features by default', () => {
     const wrapper = mountWrapper(props)
     expect(findFeatures(wrapper)).toHaveLength(allFeatures.length)
-    expect(findFeatures(wrapper).some({ checked: true })).toBe(false)
+    expect(findFeatures(wrapper).some({ checked: true })).toEqual(false)
   })
 
   it('should be able to select features', () => {
     const wrapper = mountWrapper(props)
-    expect(findFeatures(wrapper).every({ checked: false })).toBe(true)
+    expect(findFeatures(wrapper).every({ checked: false })).toEqual(true)
 
     findFeatures(wrapper).at(0).simulate('change')
-    expect(findFeatures(wrapper).at(0).prop('checked')).toBe(true)
+    expect(findFeatures(wrapper).at(0).prop('checked')).toEqual(true)
 
     findFeatures(wrapper).at(0).simulate('change')
     expect(findFeatures(wrapper).find({ checked: true })).toHaveLength(0)
@@ -129,22 +129,22 @@ describe('when role is "member"', () => {
 
     // Features granting services access
     FEATURES_FOR_SERVICES.forEach(feature => {
-      expect(findFeatures(wrapper).some({ checked: true })).toBe(false)
-      expect(wrapper.find('user_member_permission_ids_services').exists()).toBe(false)
+      expect(findFeatures(wrapper).some({ checked: true })).toEqual(false)
+      expect(wrapper.exists('user_member_permission_ids_services')).toEqual(false)
 
       findFeatures(wrapper).find(`#user_member_permission_ids_${feature}`).simulate('change')
-      expect(wrapper.find('#user_member_permission_ids_services').exists()).toBe(true)
+      expect(wrapper.exists('#user_member_permission_ids_services')).toEqual(true)
 
       findFeatures(wrapper).find(`#user_member_permission_ids_${feature}`).simulate('change')
     })
 
     // Features NOT granting services access
     FEATURES.forEach(feature => {
-      expect(findFeatures(wrapper).some({ checked: true })).toBe(false)
-      expect(wrapper.find('user_member_permission_ids_services').exists()).toBe(false)
+      expect(findFeatures(wrapper).some({ checked: true })).toEqual(false)
+      expect(wrapper.exists('user_member_permission_ids_services')).toEqual(false)
 
       findFeatures(wrapper).find(`#user_member_permission_ids_${feature}`).simulate('change')
-      expect(wrapper.find('#user_member_permission_ids_services').exists()).toBe(false)
+      expect(wrapper.exists('#user_member_permission_ids_services')).toEqual(false)
 
       findFeatures(wrapper).find(`#user_member_permission_ids_${feature}`).simulate('change')
     })
@@ -161,12 +161,12 @@ describe('when role is "member"', () => {
     it('should render all services enabled', () => {
       const wrapper = mountWrapper(props)
       expect(wrapper.find('ServiceCheckbox')).toHaveLength(SERVICES.length)
-      expect(wrapper.find('ServiceCheckbox').everyWhere(n => !n.prop('disabled'))).toBe(true)
+      expect(wrapper.find('ServiceCheckbox').everyWhere(n => !n.prop('disabled'))).toEqual(true)
     })
 
     it('should render "services" checkbox unchecked', () => {
       const wrapper = mountWrapper(props)
-      expect(wrapper.find('AllServicesCheckbox').prop('checked')).toBe(false)
+      expect(wrapper.find('AllServicesCheckbox').prop('checked')).toEqual(false)
     })
 
     it('should render all services included in "selectedServicesIds" checked', () => {
@@ -175,25 +175,25 @@ describe('when role is "member"', () => {
         services: SERVICES as Api[]
       })
 
-      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toBe(true)
-      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).prop('checked')).toBe(false)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toEqual(true)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).prop('checked')).toEqual(false)
     })
 
     it('should check and uncheck services when clicked', () => {
       const wrapper = mountWrapper(props)
-      expect(wrapper.find('ServiceCheckbox').find('input[type="checkbox"]').every({ checked: false })).toBe(true)
+      expect(wrapper.find('ServiceCheckbox').find('input[type="checkbox"]').every({ checked: false })).toEqual(true)
 
       wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).simulate('change')
-      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toBe(true)
-      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).prop('checked')).toBe(false)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toEqual(true)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).prop('checked')).toEqual(false)
 
       wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).simulate('change')
-      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toBe(true)
-      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).prop('checked')).toBe(true)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).prop('checked')).toEqual(true)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${SERVICES[1].id}`).prop('checked')).toEqual(true)
 
       wrapper.find(`input#user_member_permission_service_ids_${SERVICES[0].id}`).simulate('change')
-      expect(wrapper.find(`input#user_member_permission_service_ids_${0}`).prop('checked')).toBe(false)
-      expect(wrapper.find(`input#user_member_permission_service_ids_${1}`).prop('checked')).toBe(true)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${0}`).prop('checked')).toEqual(false)
+      expect(wrapper.find(`input#user_member_permission_service_ids_${1}`).prop('checked')).toEqual(true)
     })
   })
 
@@ -205,13 +205,13 @@ describe('when role is "member"', () => {
 
     it('should render AllServicesCheckbox checked', () => {
       const wrapper = mountWrapper(props)
-      expect(wrapper.find('input[name="user[member_permission_service_ids]"]').prop('checked')).toBe(true)
+      expect(wrapper.find('input[name="user[member_permission_service_ids]"]').prop('checked')).toEqual(true)
     })
 
     it('should render all services checked and disabled', () => {
       const wrapper = mountWrapper(props)
       expect(wrapper.find('input[name="user[member_permission_service_ids][]"]')).toHaveLength(SERVICES.length)
-      expect(wrapper.find('input[name="user[member_permission_service_ids][]"]').every({ checked: true, disabled: true })).toBe(true)
+      expect(wrapper.find('input[name="user[member_permission_service_ids][]"]').every({ checked: true, disabled: true })).toEqual(true)
     })
   })
 })

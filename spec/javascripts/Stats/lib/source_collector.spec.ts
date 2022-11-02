@@ -80,7 +80,7 @@ describe('StatsSourceCollector', () => {
     const childSourceCollector = new ChildSourceCollector({ id: 42, metrics: [] })
     const sources = childSourceCollector.buildSources(42, selectedMetrics)
 
-    expect(sources[0] instanceof StubbedSource).toBe(true)
+    expect(sources[0] instanceof StubbedSource).toEqual(true)
     expect(JSON.stringify(sources))
       .toEqual('[{"id":42,"details":{"id":7,"systemName":"bond"}}]')
   })

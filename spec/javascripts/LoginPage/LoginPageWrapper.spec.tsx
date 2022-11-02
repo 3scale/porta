@@ -48,6 +48,6 @@ it('should render only Authenticaction providers when enforce SSO is enabled', (
     authenticationProviders: [{ authorizeURL: 'url-1', humanKind: 'Human 1' }, { authorizeURL: 'url-2', humanKind: 'Human 2' }]
   }
   const wrapper = mount(<SimpleLoginPage {...propsEnforceSSO} />)
-  expect(wrapper.find('form#new_session').exists()).toBe(false)
-  expect(wrapper.find('.login-provider-link').exists()).toBe(true)
+  expect(wrapper.exists('form#new_session')).toEqual(false)
+  expect(wrapper.exists('.login-provider-link')).toEqual(true)
 })

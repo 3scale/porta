@@ -13,19 +13,19 @@ const props: Props = {
 
 it('should render itself with right props', () => {
   const wrapper = mount(<Login3scaleForm {...props} />)
-  expect(wrapper.find('form#new_session').exists()).toEqual(true)
+  expect(wrapper.exists('form#new_session')).toEqual(true)
   expect(wrapper.props().providerSessionsPath).toEqual('sessions-path')
 })
 
 it('should render HTML form markup', () => {
   const wrapper = mount(<Login3scaleForm {...props} />)
-  expect(wrapper.find('input#session_username').exists()).toEqual(true)
-  expect(wrapper.find('input#session_password').exists()).toEqual(true)
+  expect(wrapper.exists('input#session_username')).toEqual(true)
+  expect(wrapper.exists('input#session_password')).toEqual(true)
 })
 
 it('should render HiddenInputs component', () => {
   const wrapper = mount(<Login3scaleForm {...props} />)
-  expect(wrapper.find(HiddenInputs).exists()).toEqual(true)
+  expect(wrapper.exists(HiddenInputs)).toEqual(true)
 })
 
 describe('username', () => {
@@ -60,8 +60,8 @@ describe('username', () => {
   it('should autofocus username input when username is not passed as param', () => {
     const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...props} />)
 
-    expect(wrapper.find('input#session_username').props().autoFocus).toBe(true)
-    expect(wrapper.find('input#session_password').props().autoFocus).toBe(false)
+    expect(wrapper.find('input#session_username').props().autoFocus).toEqual(true)
+    expect(wrapper.find('input#session_password').props().autoFocus).toEqual(false)
   })
 })
 
@@ -97,7 +97,7 @@ describe('password', () => {
   it('should autofocus password input when username is passed as param', () => {
     const propsUsernameParams = { ...props, session: { username: 'bob' } } as const
     const wrapper = mount<Login3scaleForm>(<Login3scaleForm {...propsUsernameParams} />)
-    expect(wrapper.find('input#session_password').props().autoFocus).toBe(true)
-    expect(wrapper.find('input#session_username').props().autoFocus).toBe(false)
+    expect(wrapper.find('input#session_password').props().autoFocus).toEqual(true)
+    expect(wrapper.find('input#session_username').props().autoFocus).toEqual(false)
   })
 })

@@ -4,7 +4,7 @@ import { HeaderButton } from 'Policies/components/HeaderButton'
 
 it('should render itself', () => {
   const wrapper = mount(<HeaderButton type="add" onClick={jest.fn()} />)
-  expect(wrapper.find(HeaderButton).exists()).toBe(true)
+  expect(wrapper.exists(HeaderButton)).toEqual(true)
 })
 
 it('should handle clicks', () => {

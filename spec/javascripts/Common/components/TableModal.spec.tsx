@@ -35,11 +35,11 @@ const defaultProps: Props<IRecord> = {
 
 const mountWrapper = (props: Partial<Props<IRecord>> = {}) => mount(<TableModal {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
+beforeEach(() => jest.resetAllMocks())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should be hidden by default', () => {
@@ -67,8 +67,8 @@ describe('when is open', () => {
     const searchInput = wrapper.find('.pf-c-toolbar').at(0).find('input[type="search"]')
     const searchButton = wrapper.find('.pf-c-toolbar').at(0).find('button[data-testid="search"]')
 
-    expect(searchInput.prop('disabled')).toBe(false)
-    expect(searchButton.prop('disabled')).toBe(false)
+    expect(searchInput.prop('disabled')).toEqual(false)
+    expect(searchButton.prop('disabled')).toEqual(false)
 
     updateInput(wrapper, 'foo', searchInput)
     searchButton.simulate('click')
@@ -91,7 +91,7 @@ describe('when is open', () => {
 
     it('should render an empty message', () => {
       const wrapper = mountWrapper(props)
-      expect(wrapper.find('NoMatchFound').exists()).toBe(true)
+      expect(wrapper.exists('NoMatchFound')).toEqual(true)
     })
   })
 
@@ -129,12 +129,12 @@ describe('when is open', () => {
 
       it('should enable select button after an item is picked', () => {
         const wrapper = mountWrapper(props)
-        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(true)
+        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toEqual(true)
 
         const radio = wrapper.find('tbody tr').first().find('input')
         radio.simulate('change', { currentTarget: { checked: true } })
 
-        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(false)
+        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toEqual(false)
       })
     })
 
@@ -147,7 +147,7 @@ describe('when is open', () => {
 
       it('should not disable select button', () => {
         const wrapper = mountWrapper(props)
-        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toBe(false)
+        expect(wrapper.find('button[data-testid="select"]').prop('disabled')).toEqual(false)
       })
 
       it('should be able to select an item', () => {

@@ -3,6 +3,7 @@ import { PlusCircleIcon } from '@patternfly/react-icons'
 
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 
+import type { Props as SelectWithModalProps } from 'Common/components/SelectWithModal'
 import type { Backend } from 'Types'
 
 import './BackendSelect.scss'
@@ -24,7 +25,7 @@ const BackendSelect: React.FunctionComponent<Props> = ({
   searchPlaceholder,
   error
 }) => {
-  const cells: { title: string; propName: keyof Backend }[] = [
+  const cells: SelectWithModalProps<Backend>['cells'] = [
     { title: 'Name', propName: 'name' },
     { title: 'Private Base URL', propName: 'privateEndpoint' },
     { title: 'Last updated', propName: 'updatedAt' }

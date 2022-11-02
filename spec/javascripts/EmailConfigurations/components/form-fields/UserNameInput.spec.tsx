@@ -13,9 +13,7 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<UserNameInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+beforeEach(() => setUserName.mockReset())
 
 it('should work', () => {
   const value = 'ollivanders_wands'

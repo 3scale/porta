@@ -34,7 +34,7 @@ describe('when plan is contracted', () => {
   it('should show a hint and be disabled', () => {
     const wrapper = mountWrapper(props)
     expect(isDisabled(wrapper)).toEqual(true)
-    expect(wrapper.find('.hint').exists()).toBe(true)
+    expect(wrapper.exists('.hint')).toEqual(true)
     expect(wrapper.find('.hint').find('a').prop('href')).toEqual(props.serviceSubscriptionsPath)
   })
 })
@@ -46,8 +46,8 @@ describe('when plan is not contracted', () => {
     it('should show a hint', () => {
       const wrapper = mountWrapper(props)
       expect(isDisabled(wrapper, false)).toEqual(true)
-      expect(wrapper.find('.hint').exists()).toBe(true)
-      expect(wrapper.find('.hint').find('a').exists()).toBe(false)
+      expect(wrapper.exists('.hint')).toEqual(true)
+      expect(wrapper.find('.hint').exists('a')).toEqual(false)
     })
   })
 
@@ -57,7 +57,7 @@ describe('when plan is not contracted', () => {
     it('should show a hint and a link to create a new plan', () => {
       const wrapper = mountWrapper(props)
       expect(isDisabled(wrapper, false)).toEqual(true)
-      expect(wrapper.find('.hint').exists()).toBe(true)
+      expect(wrapper.exists('.hint')).toEqual(true)
       expect(wrapper.find('.hint').find('a').prop('href')).toEqual(props.createServicePlanPath)
     })
   })
@@ -68,8 +68,8 @@ describe('when plan is not contracted', () => {
     it('should show a hint and a link to create a new plan', () => {
       const wrapper = mountWrapper(props)
       expect(isDisabled(wrapper, false)).toEqual(true)
-      expect(wrapper.find('.hint').exists()).toBe(true)
-      expect(wrapper.find('.hint').find('a').exists()).toBe(false)
+      expect(wrapper.exists('.hint')).toEqual(true)
+      expect(wrapper.find('.hint').exists('a')).toEqual(false)
     })
   })
 })

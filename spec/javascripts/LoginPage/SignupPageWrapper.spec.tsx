@@ -21,12 +21,12 @@ const props: Props = {
 
 it('should render itself', () => {
   const wrapper = mount(<SignupPage {...props} />)
-  expect(wrapper.find('.pf-c-login').exists()).toEqual(true)
+  expect(wrapper.exists('.pf-c-login')).toEqual(true)
 })
 
 it('should render <SignupForm/> child component', () => {
   const wrapper = mount(<SignupPage {...props} />)
-  expect(wrapper.find('SignupForm').exists()).toEqual(true)
+  expect(wrapper.exists('SignupForm')).toEqual(true)
 })
 
 it('should render error messages', () => {

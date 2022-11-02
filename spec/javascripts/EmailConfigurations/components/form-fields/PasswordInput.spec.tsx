@@ -13,9 +13,7 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PasswordInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
+beforeEach(() => setPassword.mockReset())
 
 it('should work', () => {
   const value = '$DragonHeartsstring1909'

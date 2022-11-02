@@ -33,11 +33,11 @@ const defaultProps: Props<IRecord> = {
 
 const mountWrapper = (props: Partial<Props<IRecord>> = {}) => mount(<Select {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
+beforeEach(() => onSelect.mockReset())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a hidden input for the selected item', () => {
@@ -73,28 +73,28 @@ it('should filter via typeahead', () => {
 
 it('should be aria-labelled', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find(`[aria-label="${defaultProps.ariaLabel!}"]`).exists()).toBe(true)
+  expect(wrapper.exists(`[aria-label="${defaultProps.ariaLabel!}"]`)).toEqual(true)
 })
 
 it('should show a spinner when loading', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('Spinner').exists()).toBe(false)
+  expect(wrapper.exists('Spinner')).toEqual(false)
 
   wrapper.setProps({ isLoading: true })
-  expect(wrapper.find('Spinner').exists()).toBe(true)
+  expect(wrapper.exists('Spinner')).toEqual(true)
 })
 
 it('should clear the selection only when clearable', () => {
   const wrapper = mountWrapper({ item: items[0], isClearable: false })
   const clearButton = () => wrapper.find('[aria-label="Clear all"]')
 
-  expect(wrapper.find('.pf-m-select__toggle-clear-hidden').exists()).toBe(true)
+  expect(wrapper.exists('.pf-m-select__toggle-clear-hidden')).toEqual(true)
   // Note the button is still on the DOM, since it's rendered by Patternfly, but hidden by .pf-m-select__toggle-clear-hidden
   clearButton().simulate('click')
   expect(onSelect).not.toHaveBeenCalled()
 
   wrapper.setProps({ item: items[0], isClearable: true })
-  expect(wrapper.find('.pf-m-select__toggle-clear-hidden').exists()).toBe(false)
+  expect(wrapper.exists('.pf-m-select__toggle-clear-hidden')).toEqual(false)
   clearButton().simulate('click')
   expect(onSelect).toHaveBeenCalledWith(null)
 })

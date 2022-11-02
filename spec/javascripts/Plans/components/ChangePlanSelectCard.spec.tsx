@@ -15,13 +15,9 @@ const defaultProps: Props = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<ChangePlanSelectCard {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should be able to select a plan', () => {
@@ -35,17 +31,17 @@ it('should be able to select a plan', () => {
 
 it('should have a disabled button', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(true)
+  expect(wrapper.find('button[type="submit"]').prop('disabled')).toEqual(true)
 })
 
 it('should enable the button when a plan is selected', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(true)
+  expect(wrapper.find('button[type="submit"]').prop('disabled')).toEqual(true)
 
   openSelect(wrapper)
   wrapper.find('SelectOption button').first().simulate('click')
 
-  expect(wrapper.find('button[type="submit"]').prop('disabled')).toBe(false)
+  expect(wrapper.find('button[type="submit"]').prop('disabled')).toEqual(false)
 })
 
 it('should disable the plan already selected', () => {

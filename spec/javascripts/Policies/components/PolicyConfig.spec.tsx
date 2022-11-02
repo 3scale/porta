@@ -94,12 +94,12 @@ describe('PolicyConfig Component', () => {
 
   it('should render self', () => {
     const { policyConfigWrapper } = setup()
-    expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toBe(true)
+    expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toEqual(true)
     expect(policyConfigWrapper.find('.PolicyConfiguration-name').text()).toBe('Caching policy')
     expect(policyConfigWrapper.find('.PolicyConfiguration-version-and-summary').text()).toBe('builtin - Caching')
     expect(policyConfigWrapper.find('.PolicyConfiguration-description').text())
       .toBe('Configures a cache for the authentication calls against the 3scale')
-    expect(policyConfigWrapper.find('#policy-enabled').prop('checked')).toBe(true)
+    expect(policyConfigWrapper.find('#policy-enabled').prop('checked')).toEqual(true)
   })
 
   it('should render correctly the form with the schema given', () => {
@@ -112,7 +112,7 @@ describe('PolicyConfig Component', () => {
   it('should have a close button', () => {
     const { policyConfigWrapper, props } = setup()
     const closeConfigButton = policyConfigWrapper.find(HeaderButton)
-    expect(closeConfigButton.exists('.PolicyChain-addPolicy--cancel')).toBe(true)
+    expect(closeConfigButton.exists('.PolicyChain-addPolicy--cancel')).toEqual(true)
     expect(closeConfigButton.text()).toBe('Cancel')
 
     closeConfigButton.props().onClick()
@@ -122,7 +122,7 @@ describe('PolicyConfig Component', () => {
   it('should have a remove button', () => {
     const { policyConfigWrapper, props } = setup()
     const removePolicyButton = policyConfigWrapper.find('.pf-c-button.pf-m-danger')
-    expect(removePolicyButton.exists()).toBe(true)
+    expect(removePolicyButton.exists()).toEqual(true)
 
     removePolicyButton.simulate('click')
     expect(props.actions.removePolicyFromChain).toHaveBeenCalledTimes(1)
@@ -180,7 +180,7 @@ describe('PolicyConfig APIcast policy', () => {
 
   it('should display the APIcast policy name and summary', () => {
     const { policyConfigWrapper } = setup()
-    expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toBe(true)
+    expect(policyConfigWrapper.find('section').hasClass('PolicyConfiguration')).toEqual(true)
     expect(policyConfigWrapper.find('.PolicyConfiguration-name').text()).toBe('APIcast')
     expect(policyConfigWrapper.find('.PolicyConfiguration-version-and-summary').text()).toBe('builtin - Main function...')
   })
@@ -188,6 +188,6 @@ describe('PolicyConfig APIcast policy', () => {
   it('should hide the APIcast policy form', () => {
     const { policyConfigWrapper } = setup()
 
-    expect(policyConfigWrapper.find('Form').exists()).toBe(false)
+    expect(policyConfigWrapper.exists('Form')).toEqual(false)
   })
 })

@@ -22,20 +22,16 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<BackendSelect {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a button to create a new backend', () => {
   const wrapper = mountWrapper()
 
   const button = wrapper.find('button[data-testid="newBackendCreateBackend-buttonLink"]')
-  expect(button.exists()).toBe(true)
+  expect(button.exists()).toEqual(true)
 
   button.simulate('click')
   expect(onCreateNewBackend).toHaveBeenCalledTimes(1)

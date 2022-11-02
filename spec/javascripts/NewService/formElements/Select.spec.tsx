@@ -11,12 +11,12 @@ const props = {
 
 it('should render itself properly', () => {
   const wrapper = mount(<Select {...props} />)
-  expect(wrapper.find(Select).exists()).toEqual(true)
+  expect(wrapper.exists(Select)).toEqual(true)
 })
 
 it('should render a select with options', () => {
   const wrapper = mount(<Select {...props} />)
-  expect(wrapper.find('select').exists()).toEqual(true)
+  expect(wrapper.exists('select')).toEqual(true)
 
   for (const option of options) {
     expect(wrapper.exists(`option[value="${option}"]`)).toEqual(true)

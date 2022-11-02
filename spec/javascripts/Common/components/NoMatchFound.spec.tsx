@@ -5,25 +5,27 @@ import { NoMatchFound } from 'Common/components/NoMatchFound'
 
 import type { Props } from 'Common/components/NoMatchFound'
 
-const onClearFiltersClick = jest.fn()
-const defaultProps = {}
+const defaultProps = {
+  onClearFiltersClick: undefined
+}
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<NoMatchFound {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => jest.resetAllMocks())
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should not render a button', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists(Button)).toBe(false)
+  expect(wrapper.exists(Button)).toEqual(false)
 })
 
 describe('with an All Filter Clear button', () => {
+  const onClearFiltersClick = jest.fn()
   const props = { onClearFiltersClick }
+
+  afterEach(() => onClearFiltersClick.mockReset())
 
   it('should render a button', () => {
     const wrapper = mountWrapper(props)

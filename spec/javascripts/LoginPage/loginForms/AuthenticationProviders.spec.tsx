@@ -17,7 +17,7 @@ const props: Props = {
 
 it('should render itself', () => {
   const wrapper = mount(<AuthenticationProviders {...props} />)
-  expect(wrapper.find('.providers-list').exists()).toEqual(true)
+  expect(wrapper.exists('.providers-list')).toEqual(true)
   expect(wrapper.find('.login-provider').length).toEqual(2)
   expect(wrapper.find('.login-provider-link').length).toEqual(2)
 

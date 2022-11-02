@@ -43,7 +43,7 @@ const props: Props = {
 
 it('should render properly', () => {
   const wrapper = mount(<BraintreeForm {...props} />)
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should render submit button disabled by default', () => {

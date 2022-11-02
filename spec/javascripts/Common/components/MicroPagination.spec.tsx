@@ -19,11 +19,11 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<MicroPagination {...
 const previousPageButton = (wrapper: ReactWrapper<unknown>) => wrapper.find(Button).first()
 const nextPageButton = (wrapper: ReactWrapper<unknown>) => wrapper.find(Button).last()
 
-afterEach(() => jest.resetAllMocks())
+beforeEach(() => setPage.mockReset())
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 describe('when on the first page', () => {
@@ -32,7 +32,7 @@ describe('when on the first page', () => {
   it('should not be able to go to the previous page', () => {
     const wrapper = mountWrapper(props)
     const button = previousPageButton(wrapper)
-    expect(button.props().isDisabled).toBe(true)
+    expect(button.props().isDisabled).toEqual(true)
 
     button.simulate('click')
     expect(setPage).not.toHaveBeenCalled()
@@ -41,7 +41,7 @@ describe('when on the first page', () => {
   it('should be able to go to the next page', () => {
     const wrapper = mountWrapper(props)
     const button = nextPageButton(wrapper)
-    expect(button.props().isDisabled).toBe(false)
+    expect(button.props().isDisabled).toEqual(false)
 
     button.simulate('click')
     expect(setPage).toHaveBeenCalledWith(2)
@@ -54,7 +54,7 @@ describe('when on the last page', () => {
   it('should be able to go to the previous page', () => {
     const wrapper = mountWrapper(props)
     const button = previousPageButton(wrapper)
-    expect(button.props().isDisabled).toBe(false)
+    expect(button.props().isDisabled).toEqual(false)
 
     button.simulate('click')
     expect(setPage).toHaveBeenCalledWith(lastPage - 1)
@@ -63,7 +63,7 @@ describe('when on the last page', () => {
   it('should not be able to go to the next page', () => {
     const wrapper = mountWrapper(props)
     const button = nextPageButton(wrapper)
-    expect(button.props().isDisabled).toBe(true)
+    expect(button.props().isDisabled).toEqual(true)
 
     button.simulate('click')
     expect(setPage).not.toHaveBeenCalled()

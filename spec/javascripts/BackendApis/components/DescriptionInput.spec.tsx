@@ -14,13 +14,9 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<DescriptionInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should work', () => {

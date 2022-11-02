@@ -17,7 +17,7 @@ describe('TextField', () => {
 
   it('should render TextField form group', () => {
     const wrapper = mount(<TextField inputProps={textFieldInputProps} />)
-    expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
+    expect(wrapper.exists('.pf-c-form__group')).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
     expect(wrapper.find('label').text()).toMatch('Text Field')
@@ -26,13 +26,13 @@ describe('TextField', () => {
     expect(wrapper.find('input').props().type).toEqual('text')
     expect(wrapper.find('input').props().value).toEqual('Bob Sponge')
 
-    expect(wrapper.find('.pf-m-error').exists()).toEqual(false)
+    expect(wrapper.exists('.pf-m-error')).toEqual(false)
   })
 
   it('should render an error message if not valid', () => {
     const invalidFieldProps = { ...textFieldInputProps, isValid: false } as const
     const wrapper = mount(<TextField inputProps={invalidFieldProps} />)
-    expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
+    expect(wrapper.exists('.pf-m-error')).toEqual(true)
   })
 })
 
@@ -48,7 +48,7 @@ describe('PasswordField', () => {
   } as const
   it('should render PasswordField form group', () => {
     const wrapper = mount(<PasswordField inputProps={passwordFieldInputProps} />)
-    expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
+    expect(wrapper.exists('.pf-c-form__group')).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
     expect(wrapper.find('label').text()).toMatch('Password')
@@ -57,13 +57,13 @@ describe('PasswordField', () => {
     expect(wrapper.find('input').props().type).toEqual('password')
     expect(wrapper.find('input').props().value).toEqual('12345678')
 
-    expect(wrapper.find('.pf-m-error').exists()).toEqual(false)
+    expect(wrapper.exists('.pf-m-error')).toEqual(false)
   })
 
   it('should render an error message if not valid', () => {
     const invalidFieldProps = { ...passwordFieldInputProps, isValid: false } as const
     const wrapper = mount(<PasswordField inputProps={invalidFieldProps} />)
-    expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
+    expect(wrapper.exists('.pf-m-error')).toEqual(true)
   })
 })
 
@@ -79,7 +79,7 @@ describe('EmailField', () => {
   } as const
   it('should render EmailField form group', () => {
     const wrapper = mount(<EmailField inputProps={emailFieldInputProps} />)
-    expect(wrapper.find('.pf-c-form__group').exists()).toEqual(true)
+    expect(wrapper.exists('.pf-c-form__group')).toEqual(true)
 
     expect(wrapper.find('label').length).toEqual(1)
     expect(wrapper.find('label').text()).toMatch('Email')
@@ -88,12 +88,12 @@ describe('EmailField', () => {
     expect(wrapper.find('input').props().type).toEqual('email')
     expect(wrapper.find('input').props().value).toEqual('bob@sponge.com')
 
-    expect(wrapper.find('.pf-m-error').exists()).toEqual(false)
+    expect(wrapper.exists('.pf-m-error')).toEqual(false)
   })
 
   it('should render an error message if not valid', () => {
     const invalidFieldProps = { ...emailFieldInputProps, isValid: false } as const
     const wrapper = mount(<EmailField inputProps={invalidFieldProps} />)
-    expect(wrapper.find('.pf-m-error').exists()).toEqual(true)
+    expect(wrapper.exists('.pf-m-error')).toEqual(true)
   })
 })

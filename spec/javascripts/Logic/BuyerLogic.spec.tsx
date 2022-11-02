@@ -2,10 +2,6 @@ import { BuyerLogic } from 'Logic/BuyerLogic'
 
 import type { Buyer, Product, Plan } from 'NewApplication/types'
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 const buyer: Buyer = {
   id: 0,
   name: 'Mr. Buyer',

@@ -4,7 +4,7 @@ import { HiddenInputs } from 'LoginPage/loginForms/HiddenInputs'
 
 it('should render itself', () => {
   const wrapper = shallow(<HiddenInputs />)
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should render 1 input hidden fields when password reset is false', () => {

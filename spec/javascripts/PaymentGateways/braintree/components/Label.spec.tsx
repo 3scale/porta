@@ -12,7 +12,7 @@ const props: Props = {
 
 it('should render properly', () => {
   const wrapper = mount(<Label {...props} />)
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should render label', () => {

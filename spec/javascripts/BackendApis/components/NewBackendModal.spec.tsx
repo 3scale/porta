@@ -13,13 +13,9 @@ const defaultProps = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<NewBackendModal {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 // This component is really hard to test via JS since it uses jQuery and jquery-ujs.

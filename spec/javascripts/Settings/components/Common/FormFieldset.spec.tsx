@@ -14,10 +14,10 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(
 
 it('should render correctly', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists('#child')).toBe(true)
+  expect(wrapper.exists('#child')).toEqual(true)
 })
 
 it('should render a class', () => {
   const wrapper = mountWrapper({ className: 'pepe banana' })
-  expect(wrapper.exists('.pepe.banana')).toBe(true)
+  expect(wrapper.exists('.pepe.banana')).toEqual(true)
 })

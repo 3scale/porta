@@ -14,7 +14,7 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<IndexPage {...{ ...d
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a button to create a new email configuration', () => {

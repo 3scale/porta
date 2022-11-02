@@ -15,12 +15,12 @@ const props: Props = {
 
 it('should render properly', () => {
   const wrapper = mount(<ListItem {...props} />)
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should render without children', () => {
   const wrapper = mount(<ListItem {...props} />)
-  expect(wrapper.find('#child').exists()).toBe(false)
+  expect(wrapper.exists('#child')).toEqual(false)
 })
 
 it('should render children', () => {
@@ -29,5 +29,5 @@ it('should render children', () => {
       <Child />
     </ListItem>
   )
-  expect(wrapper.find('#child').exists()).toBe(true)
+  expect(wrapper.exists('#child')).toEqual(true)
 })

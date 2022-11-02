@@ -29,13 +29,9 @@ const defaultProps: Props = {
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<MetricsTable {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should have a paginated table', () => {
@@ -72,7 +68,7 @@ describe('for metrics without mapping rule', () => {
       <a href={`${addMappingRulePath}?metric_id=${metric.id}`}>
         Add a mapping rule
       </a>
-    )).toBe(true)
+    )).toEqual(true)
   })
 })
 
@@ -88,6 +84,6 @@ describe('for metrics with a mapping rule', () => {
       <a href={mappingRulesPath}>
         <CheckIcon />
       </a>
-    )).toBe(true)
+    )).toEqual(true)
   })
 })

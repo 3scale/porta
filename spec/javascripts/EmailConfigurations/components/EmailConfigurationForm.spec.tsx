@@ -20,7 +20,7 @@ const mountWrapper = (props: Partial<Props> = {}) => mount(<EmailConfigurationFo
 
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should render all fields', () => {
@@ -74,7 +74,7 @@ describe('when some fields are returned by the server', () => {
 describe('when it is new page form', () => {
   it('should enable submit the form only when password is confirmed', () => {
     const wrapper = mountWrapper()
-    expect(isSubmitDisabled(wrapper)).toBe(true)
+    expect(isSubmitDisabled(wrapper)).toEqual(true)
 
     updateInput(wrapper, '$DragonHeartsstring1909', 'input[name="email_configuration[password]"]')
     expect(isSubmitDisabled(wrapper)).toEqual(true)
@@ -131,6 +131,6 @@ describe('when it is edit page form', () => {
     const wrapper = mountWrapper(props)
 
     const deleteButton = wrapper.find('button.pf-m-danger[type="submit"]')
-    expect(deleteButton.prop('disabled')).toBe(false)
+    expect(deleteButton.prop('disabled')).toEqual(false)
   })
 })

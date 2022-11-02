@@ -28,8 +28,8 @@ const defaultProps: Props = {
 
 it('should render properly', () => {
   const wrapper = mount(<StripeElementsForm {...defaultProps} />)
-  expect(wrapper.find('.StripeElementsForm').exists()).toEqual(true)
-  expect(wrapper.find('#stripe-form').exists()).toEqual(true)
+  expect(wrapper.exists('.StripeElementsForm')).toEqual(true)
+  expect(wrapper.exists('#stripe-form')).toEqual(true)
 })
 
 it('should enable submit button when form is complete and valid', () => {
@@ -47,7 +47,7 @@ describe('A credit card is stored', () => {
 
   it('should render properly', () => {
     const wrapper = mount(<StripeElementsForm {...props} />)
-    expect(wrapper.find('#stripe-form').hasClass('hidden')).toBe(true)
+    expect(wrapper.find('#stripe-form').hasClass('hidden')).toEqual(true)
   })
 })
 
@@ -56,6 +56,6 @@ describe('No credit card is stored', () => {
 
   it('should render properly', () => {
     const wrapper = mount(<StripeElementsForm {...props} />)
-    expect(wrapper.find('#stripe-form').hasClass('hidden')).toBe(false)
+    expect(wrapper.find('#stripe-form').hasClass('hidden')).toEqual(false)
   })
 })

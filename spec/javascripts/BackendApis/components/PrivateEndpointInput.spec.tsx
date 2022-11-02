@@ -5,27 +5,22 @@ import { PrivateEndpointInput } from 'BackendApis/components/PrivateEndpointInpu
 
 import type { Props } from 'BackendApis/components/PrivateEndpointInput'
 
-const setPrivateEndpoint = jest.fn()
-
 const defaultProps = {
   privateEndpoint: '',
-  setPrivateEndpoint
+  setPrivateEndpoint: jest.fn()
 } as const
 
 const mountWrapper = (props: Partial<Props> = {}) => mount(<PrivateEndpointInput {...{ ...defaultProps, ...props }} />)
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
 it('should render itself', () => {
   const wrapper = mountWrapper()
-  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.exists()).toEqual(true)
 })
 
 it('should work', () => {
   const value = 'foo'
-  const wrapper = mountWrapper()
+  const setPrivateEndpoint = jest.fn()
+  const wrapper = mountWrapper({ setPrivateEndpoint })
 
   act(() => { wrapper.find(PrivateEndpointInput).props().setPrivateEndpoint(value) })
 
