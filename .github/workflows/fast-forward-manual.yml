@@ -13,5 +13,5 @@ on:
 
 jobs:
   call-ff:
-    uses: ./.github/workflows/fast-forward-candidate-branch.yml
+    uses: ./.github/workflows/fast-forward-branch.yml
     secrets: inherit

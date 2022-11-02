@@ -20,5 +20,5 @@ jobs:
     name: Call the job
     needs: check
     if: ${{ needs.check.outputs.RUN_TODAY == 1 }}
-    uses: ./.github/workflows/fast-forward-candidate-branch.yml
+    uses: ./.github/workflows/fast-forward-branch.yml
     secrets: inherit
