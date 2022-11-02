@@ -11,7 +11,7 @@ class SphinxIndexationWorker < ApplicationJob
     Rails.logger.info "SphinxIndexationWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
-  def perform(model, id=nil)
+  def perform(model, id)
     indices_for_model(model).each do |index|
       instance = index.scope.find_by(model.primary_key => id)
 
