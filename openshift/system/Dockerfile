@@ -2,17 +2,24 @@ FROM quay.io/centos7/ruby-26-centos7
 
 USER root
 
+ENV RUBY_MAJOR_VERSION=2 \
+    RUBY_MINOR_VERSION=6
+
+ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
+    RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
+
 ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
-    NODEJS_SCL=rh-nodejs12
+    NODEJS_SCL=rh-nodejs12 \
+    RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}"
 
 WORKDIR /opt/system
 
-RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-candidate_x86_64_os_.skip_if_unavailable=true \
+RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-candidate_x86_64_os_.skip_if_unavailable=true \
     && rpm -Uvh https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
     && yum -y update \
     && yum remove -y postgresql \
@@ -27,7 +34,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-c
               $VARNISH_SCL-jemalloc \
     && yum install -y epel-release \
     && yum -y clean all \
-    && printf /opt/rh/rh-varnish5/root/lib64 > /etc/ld.so.conf.d/jemalloc.conf \
+    && scl enable $VARNISH_SCL -- printf '$LIBRARY_PATH' | cut -d: -f1 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
 
 # Install sphinx search
@@ -46,16 +53,16 @@ ADD vendor/active-docs/*.gemspec vendor/active-docs/
 ADD Gemfile* ./
 ADD Rakefile ./
 
-COPY openshift/system/contrib/scl_enable ./etc/
+COPY openshift/system/contrib/scl_enable /opt/app-root/etc/
 
-ENV BASH_ENV=/opt/system/etc/scl_enable \
-    ENV=/opt/system/etc/scl_enable \
-    PROMPT_COMMAND=". /opt/system/etc/scl_enable" \
+ENV BASH_ENV=/opt/app-root/etc/scl_enable \
+    ENV=/opt/app-root/etc/scl_enable \
+    PROMPT_COMMAND=". /opt/app-root/etc/scl_enable" \
     RAILS_ENV=production \
     SAFETY_ASSURED=1
 
 RUN export ${BUNDLER_ENV} >/dev/null\
-    && source /opt/system/etc/scl_enable \
+    && source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-10/bin/pg_config \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
@@ -69,7 +76,7 @@ ADD yarn.lock ./
 ADD openshift/system/config/* ./config/
 
 RUN export ${BUNDLER_ENV} >/dev/null \
-    && source /opt/system/etc/scl_enable \
+    && source /opt/app-root/etc/scl_enable \
     && bundle exec rake tmp:create \
     && mkdir -p public/assets db/sphinx \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
