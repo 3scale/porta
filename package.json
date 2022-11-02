@@ -76,7 +76,7 @@
     "@patternfly/react-icons": "^3.14.18",
     "@patternfly/react-styles": "^4.8.2",
     "@patternfly/react-table": "^4.18.14",
-    "@rails/webpacker": "^4.3.0",
+    "@rails/webpacker": "4.3.0",
     "@stripe/react-stripe-js": "^1.10.0",
     "@stripe/stripe-js": "^1.34.0",
     "bootstrap-sass": "^3.4.1",

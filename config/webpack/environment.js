@@ -10,7 +10,7 @@ environment.loaders.delete('moduleSass')
 
 environment.loaders.append('ts', {
   test: /.(ts|tsx)$/,
-  include: path.resolve(__dirname, '../../app/javascript'),
+  options: {},
   loader: 'ts-loader'
 })
 
