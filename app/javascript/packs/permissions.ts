@@ -1,5 +1,3 @@
-import 'core-js/es7/array'
-
 import { PermissionsFormWrapper } from 'Users/components/PermissionsForm'
 import { safeFromJsonString } from 'utilities/json-utils'
 

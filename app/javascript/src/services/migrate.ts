@@ -1,6 +1,3 @@
-import 'core-js/fn/array/includes'
-import 'core-js/fn/array/find'
-
 import { setState } from 'utilities/toggle'
 
 const store = window.localStorage
