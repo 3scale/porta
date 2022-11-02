@@ -1,4 +1,4 @@
-# Manual setup on Fedora (34)
+# Manual setup on Fedora (36)
 
 ## Language and runtime version management
 
