@@ -12,21 +12,21 @@ class Aws::AwsCredentialsTest < ActiveSupport::TestCase
   end
 
   test 'returns IAM credentials when available' do
-    iam_params!
+    use_iam
     CMS::AwsCredentials.instance.expects(:sts_credentials).never
 
     assert_equal iam_auth_params, CMS::AwsCredentials.instance.credentials
   end
 
   test 'returns STS credentials when available' do
-    sts_params!
+    use_sts
     CMS::AwsCredentials.instance.expects(:sts_credentials).returns(sts_credentials)
 
     assert_equal({ credentials: sts_credentials }, CMS::AwsCredentials.instance.credentials)
   end
 
   test 'returns IAM credentials when both authentication types are available' do
-    full_params!
+    use_full_params
     CMS::AwsCredentials.instance.expects(:sts_credentials).never
 
     assert_equal iam_auth_params, CMS::AwsCredentials.instance.credentials
@@ -41,30 +41,19 @@ class Aws::AwsCredentialsTest < ActiveSupport::TestCase
   end
 
   test 'is a singleton' do
-    assert CMS::AwsCredentials.ancestors.include?(Singleton), true
+    assert CMS::AwsCredentials <= Singleton
   end
 
   test 'raises an error if the web_identity_token_file does not exist' do
-    sts_params!
+    use_sts
 
-    assert_raises(CMS::AwsCredentials::TokenNotFoundError) do
+    assert_raises(Aws::Errors::MissingWebIdentityTokenFile) do
       CMS::AwsCredentials.instance.credentials
     end
   end
 
-  test 'calls AWS to get an instance of STS credentials' do
-    sts_params!
-
-    CMS::S3.stub!
-
-    with_fake_token do
-      assert_instance_of Aws::AssumeRoleWebIdentityCredentials, CMS::AwsCredentials.instance.send(:sts_credentials)
-      assert_operator CMS::AwsCredentials.instance.send(:sts_credentials).client.api_requests.size, :>, 0
-    end
-  end
-
   test 'STS credentials are created with correct parameters' do
-    sts_params!
+    use_sts
     File.stubs(:exist?).with(full_params[:web_identity_token_file]).returns(true)
 
     Aws::AssumeRoleWebIdentityCredentials.expects(:new).with(sts_auth_params).returns(sts_credentials)
@@ -92,15 +81,15 @@ class Aws::AwsCredentialsTest < ActiveSupport::TestCase
     full_params.slice(:region, *CMS::AwsCredentials::STS_KEYS)
   end
 
-  def iam_params!
+  def use_iam
     CMS::S3.stubs(:config).returns(full_params.except(*CMS::AwsCredentials::STS_KEYS))
   end
 
-  def sts_params!
+  def use_sts
     CMS::S3.stubs(:config).returns(full_params.except(*CMS::AwsCredentials::IAM_KEYS))
   end
 
-  def full_params!
+  def use_full_params
     CMS::S3.stubs(:config).returns(full_params)
   end
 

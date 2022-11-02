@@ -36,7 +36,7 @@ module CMS
       config[:protocol].presence || 'https' if enabled?
     end
 
-    %i[web_identity_token_file role_session_name role_arn hostname bucket region access_key_id secret_access_key].each do |param|
+    %i[access_key_id bucket hostname region role_arn role_session_name secret_access_key web_identity_token_file].each do |param|
       define_method(param) do
         config[param] if enabled?
       end

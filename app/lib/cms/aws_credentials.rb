@@ -7,9 +7,6 @@ module CMS
     class AuthenticationTypeError < StandardError
     end
 
-    class TokenNotFoundError < StandardError
-    end
-
     IAM_KEYS = %i[access_key_id secret_access_key].freeze
     STS_KEYS = %i[role_arn role_session_name web_identity_token_file].freeze
 
@@ -36,8 +33,6 @@ module CMS
     end
 
     def sts_credentials
-      raise TokenNotFoundError, "web_identity_token_file was not found" unless token_file_exists?
-
       Aws::AssumeRoleWebIdentityCredentials.new(
         region: S3.region,
         role_arn: S3.role_arn,
@@ -48,10 +43,6 @@ module CMS
 
     def iam_params
       IAM_KEYS.map { |key| [key, S3.public_send(key)] }.to_h
-    end
-
-    def token_file_exists?
-      ::File.exist?(S3.web_identity_token_file)
     end
   end
 end
