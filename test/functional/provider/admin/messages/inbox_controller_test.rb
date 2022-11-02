@@ -49,23 +49,23 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     assert_select '#export-to-csv', false, 'Export all Messages'
   end
 
-  test 'Prevent sending reply without subject' do
+  test "creates valid reply" do
     login_as(@admin)
-    reply = @message.reply
-    reply.update_attributes(body: 'Reply Body', subject: nil)
+    post :reply, params: { message: { subject: "Valid Message", :body => "message with subject" }, id: @message.id }
 
     MessageWorker.drain
-    assert msg = Message.last
-    assert_not_equal "Reply Body", msg.body
+    msg = Message.last
+    assert "sent" msg.state
+    assert_equal "message with subject", msg.body
   end
 
-  test 'Allow sending reply with subject' do
+  test "not creates invalid message" do
     login_as(@admin)
-    reply = @message.reply
-    reply.update_attributes(body: 'Reply Body', subject: 'Reply Subject')
+    post :reply, params: { message: { subject: nil, body: "message with nil subject" }, id: @message.id }
 
     MessageWorker.drain
-    assert msg = Message.last
-    assert_equal "Reply Subject", msg.subject
+    msg = Message.last
+    assert_not_equal "message with nil subject", msg.body
   end
+
 end
