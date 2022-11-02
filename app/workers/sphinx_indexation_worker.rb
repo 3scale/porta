@@ -12,12 +12,6 @@ class SphinxIndexationWorker < ApplicationJob
   end
 
   def perform(model, id=nil)
-    # this is temporary just one version to drain queue from old jobs, please delete this conditional block
-    unless model.is_a? Class
-      id = model.id
-      model = model.class
-    end
-
     indices_for_model(model).each do |index|
       instance = index.scope.find_by(model.primary_key => id)
 
