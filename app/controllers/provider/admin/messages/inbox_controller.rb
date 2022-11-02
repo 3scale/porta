@@ -41,8 +41,8 @@ class Provider::Admin::Messages::InboxController < FrontendController
   end
 
   def send_reply(reply)
-    reply.save!
-    reply.deliver!
+    reply.save
+    reply.deliver
 
     flash[:notice] = 'Reply was sent.'
     redirect_to action: :index
