@@ -4403,7 +4403,7 @@
       </dependency>
           <dependency>
         <packageName>debug</packageName>
-        <version>4.3.4</version>
+        <version>4.3.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -8536,16 +8536,6 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>nan</packageName>
-        <version>2.16.0</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
         <packageName>nanoid</packageName>
         <version>2.1.11</version>
         <licenses>
@@ -12219,7 +12209,7 @@
       </dependency>
           <dependency>
         <packageName>signal-exit</packageName>
-        <version>3.0.7</version>
+        <version>3.0.3</version>
         <licenses>
                       <license>
               <name>ISC</name>
