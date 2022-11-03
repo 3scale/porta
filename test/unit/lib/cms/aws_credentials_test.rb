@@ -96,13 +96,4 @@ class Aws::AwsCredentialsTest < ActiveSupport::TestCase
   def sts_credentials
     @sts_credentials ||= Aws::Credentials.new(nil, nil)
   end
-
-  def with_fake_token
-    FakeFS do
-      FakeFS::FileSystem.clone(Gem.loaded_specs['aws-partitions'].full_gem_path)
-      FileUtils.mkdir_p(File.dirname(full_params[:web_identity_token_file]))
-      File.write(full_params[:web_identity_token_file], "akhsdkjfskdfjkdshfkjd")
-      yield
-    end
-  end
 end
