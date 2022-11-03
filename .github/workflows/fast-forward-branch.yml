@@ -1,0 +1,25 @@
+name: Fast-forward between branches
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: 'The branch name or commit to fast-forward from'
+        default: 'master'
+        type: string
+      to_branch:
+        description: 'The branch name to fast-forward to'
+        default: 'managed-services'
+        type: string
+
+jobs:
+  fast-forward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.FF_CANDIDATE_BRANCH_PAT_TOKEN }}
+      - run: |
+          git fetch origin ${{ github.event.inputs.ref }}:${{ github.event.inputs.to_branch }}
+          git push origin ${{ github.event.inputs.to_branch }}
