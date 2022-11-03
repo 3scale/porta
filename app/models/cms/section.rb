@@ -35,7 +35,7 @@ class CMS::Section < ApplicationRecord
 
   validate :not_own_child
 
-  has_many :group_sections, :class_name => 'CMS::GroupSection', dependent: :delete_all
+  has_many :group_sections, :class_name => 'CMS::GroupSection'
   has_many :groups, :class_name => 'CMS::Group', :through => :group_sections
 
   before_save :strip_trailing_slashes
