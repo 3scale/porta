@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 EXTRA_CONFIGS_DIR=${EXTRA_CONFIGS_DIR:-/opt/system-extra-configs}
 BASE_CONFIGS_DIR=${BASE_CONFIGS:-/opt/system/config}
 
