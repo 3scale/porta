@@ -19,21 +19,11 @@ git clone https://github.com/3scale/porta.git
 
 [Manual setup on Fedora](./fedora-manual-setup.md)
 
-## Rails cache
-
-Rails cache is enabled by default for development, and uses a memcached instance that must be listening at `localhost:11211`.
-However, you might need to disable it in your environment. It can be switched off by updating `config/cache_store.yml` to this:
-
-```bash
-development:
-  - :null_store
-```
-
 ## Setup Database
 
 The database need to be created and initialized. To do so run:
 
-```
+```sh
 bundle exec rake db:setup
 ```
 
@@ -41,7 +31,7 @@ This command will seed the application with the multi-tenant, a buyer and a deve
 
 It's also possible to have a custom setup by means of environment variables. These can be found at `db/seed.rb` although here are the most often used ones:
 
-```bash
+```sh
 MASTER_PASSWORD=p               # Multi-tenant account password
 USER_PASSWORD=p                 # Buyer account password
 ADMIN_ACCESS_TOKEN=secret       # Admin access token
@@ -50,7 +40,7 @@ APICAST_ACCESS_TOKEN=secret     # Apicast access token
 
 > To set the database up from scratch again, use `db:reset` to drop and create it:
 >
-> ```bash
+> ```sh
 > bundle exec rake db:reset
 > ```
 
@@ -58,7 +48,7 @@ APICAST_ACCESS_TOKEN=secret     # Apicast access token
 
 Install all dependencies:
 ```
-$ bundle && yarn
+bundle && yarn
 ```
 
 And the rails server up by running the following command:
@@ -69,15 +59,27 @@ $ env UNICORN_WORKERS=2 rails server -b 0.0.0.0 # Runs the server, available at 
 
 > The number of unicorn workers is variable and sometimes it will need more than 2. In case the server is slow or start suffering from timeouts, try restarting porta with a higher number like 8.
 
+## Sphinx server
+
+Some models are indexed by [Sphinx](http://sphinxsearch.com/) (see app/indices). The search server needs to be running in the background to enable searching through these models. Start it in a separate terminal by running:
+
+```sh
+bundle exec rake ts:configure ts:start
+```
+
+> By default, it will work with **mysql@5.7**
+<!-- TODO: add necessary steps to change DB -->
+
 ## Asset compilation
 
 On development, assets are compiled on automatically everytime a page is requested to rails. To avoid the uptime we recommend running webpack-dev-server in a second terminal:
-```
-$ bundle exec rake webpack:dev
+
+```sh
+bundle exec rake webpack:dev
 ```
 
 > This process consumes a lot of memory. In case of an OOM error, consider increasing node's available memory depending to your own machine's total memory:
-> ```bash
+> ```sh
 > $ export NODE_OPTIONS='--max-old-space-size=2048' # Don't use your total RAM, leave some room for other uses!
 > ```
 
