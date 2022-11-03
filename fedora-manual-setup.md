@@ -94,7 +94,7 @@ bundle install
 > bundle config build.eventmachine --with-cppflags="-I/usr/include/openssl/"
 > ```
 
-## Yarn (1.x)
+### Yarn (1.x)
 
 To manage our JavaScript packages we use [Yarn](https://classic.yarnpkg.com/lang/en/). It is recommended to install it with NPM:
 
