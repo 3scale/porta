@@ -55,7 +55,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
 
     MessageWorker.drain
     msg = Message.last
-    assert "sent" msg.state
+    assert "sent", msg.state
     assert_equal "message with subject", msg.body
   end
 
