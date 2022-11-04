@@ -137,8 +137,6 @@ Gemfile.local
 # IDE local settings
 .vscode
 
-config/cable.yml
-
 # Yarn
 .yarn/cache
 .yarn/unplugged
