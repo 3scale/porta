@@ -35,18 +35,18 @@ sudo dnf install sphinx chromedriver postgresql-devel mysql-devel ImageMagick  I
 
 ### Database
 
-The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). We recommend running MySQL in a [Docker](https://www.docker.com/) container:
+The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). We recommend running MySQL in a [Podman](https://podman.io/) container:
 
 ```sh
-docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
+podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
 ```
 
 ### Redis
 
-[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running Redis in a [Docker](https://www.docker.com/) container:
+[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running Redis in a [Podman](https://podman.io/) container:
 
 ```
-docker run -d -p 6379:6379 redis
+podman run -d -p 6379:6379 redis
 ```
 
 Alternatively, it can be run directly on your machine with `dnf`:
@@ -58,10 +58,10 @@ sudo systemctl restart redis
 
 ### Rails cache (Memcached)
 
-If available, Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Docker](https://www.docker.com/) container:
+If available, Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Podman](https://podman.io/)~~~~ container:
 
 ```
-docker run -d -p 11211:11211 memcached
+podman run -d -p 11211:11211 memcached
 ```
 
 Alternatively, it can be installed directly on your machine:

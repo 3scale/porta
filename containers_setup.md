@@ -1,6 +1,6 @@
-## Setup with Docker
+## Setup with containers
 
-We provide a dockerized environment that you can use to run the test suite or to run this project locally on your machine, without needing to install anything on your host OS (e.g. if you are not planning to do long term development work).
+We provide a containerized environment that you can use to run the test suite or to run this project locally on your machine, without needing to install anything on your host OS (e.g. if you are not planning to do long term development work).
 
 The project relies on a [`Makefile`](https://www.gnu.org/software/make/manual/html_node/Introduction.html) for its build process. Check a complete list of available tasks by running:
 
@@ -20,7 +20,7 @@ All the sources and dependencies for this project will be in place, making it po
 
 ### Running the application
 
-It's also possible to run the application by using only Docker. Firstly, set up the database by running `dev-setup` from your terminal:
+It's also possible to run the application by using only containers. Firstly, set up the database by running `dev-setup` from your terminal:
 
 ```
 MASTER_PASSWORD=<master_password> USER_PASSWORD=<user_password> make dev-setup
