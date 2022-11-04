@@ -21,15 +21,15 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
 
   # Undocumented endpoint used for update callbacks of async-authorized payment transactions (mostly due to SCA regulations)
   def create
-    begin
-      service = Finance::StripePaymentIntentUpdateService.new(current_account, stripe_event)
+    service = begin
+      Finance::StripePaymentIntentUpdateService.new(current_account, stripe_event)
     rescue ActiveRecord::RecordNotFound
       # Returning 204 to acknowledge reception even for payments we don't care about
       # https://issues.redhat.com/browse/THREESCALE-6851
-      return head(:no_content)
+      nil
     end
 
-    return head(:no_content) if service.call
+    return head(:no_content) if service.blank? || service.call
 
     exception = StripeCallbackError.new('Cannot update Stripe payment intent')
     report_error(exception, event: stripe_event, payment_intent: service.payment_intent)
