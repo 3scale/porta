@@ -9,9 +9,9 @@ git clone https://github.com/3scale/porta.git
 ```
 
 ## Setup
-#### Docker
+#### Containers
 
-[Setup with Docker](./docker_setup.md)
+[Setup with containers](./containers_setup.md)
 
 #### Manual setup
 
