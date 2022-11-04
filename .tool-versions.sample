@@ -1,3 +1,3 @@
 ruby 2.6.10
-nodejs 12.22.12
-python 3.10.7 2.7.18 # Meant for M1 macs
+nodejs 10.19.0
+python 2.7.18
