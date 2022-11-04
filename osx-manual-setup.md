@@ -2,7 +2,7 @@
 
 ### Homebrew
 
-To add all required missing package, make sure you have [Homebrew](https://brew.sh/) installed in your machine.
+To add all required missing package, make sure [Homebrew](https://brew.sh/) is installed in your machine.
 
 ### Languages and runtime versions management
 
@@ -18,7 +18,7 @@ brew install asdf
 > echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
 > ```
 
-Then link the provided `.tool-versions.sample` file to make sure you use the supported versions. Otherwise the app could throw unexpected errors.
+Then link the provided `.tool-versions.sample` file to make sure the supported versions are used. Otherwise the app could throw unexpected errors.
 
 ```
 ln -s .tool-versions.sample .tool-versions
@@ -36,12 +36,13 @@ asdf plugin add nodejs
 asdf install
 ```
 
-> For M1 macs you may need to install and run node through Rosetta 2:
-> ```
-> arch -x86_64 asdf install nodejs 10.19.0
-> ```
+* **Macs with M1** require installing and running node through Rosetta 2:
 
-### Python (only M1 macs)
+  ```
+  arch -x86_64 asdf install nodejs 10.19.0
+  ```
+
+### Python (only macs with M1)
 
 The project requires Python 2.7.18. However, it is not included anymore in Apple macs with Silicon. We recommend to handle Python installation with `asdf`:
 
@@ -59,7 +60,7 @@ Install Xcode from the App Store. Then run the following command from your termi
 xcode-select -—install
 ```
 
-> Older versions of Xcode are available at [Apple's developer site](https://developer.apple.com/download/all/?q=xcode).
+* In **Macs with M1**, recent versions of xcode are incompatible with older versions of ruby. You need to install Command Line Tools for Xcode 13.4. The installation file can be found at https://developer.apple.com/download/all/?q=command%20line%20tools%2013.4. It may be required to reboot your machine after installing it.
 
 ### Dependencies
 
@@ -68,15 +69,15 @@ brew install chromedriver imagemagick@6 gs pkg-config openssl geckodriver sphinx
 brew link imagemagick@6
 ```
 
-For M1 macs you will also need:
+* **Macs with M1** also require de following:
 
-```
-brew install pixman cairo pango
-```
+  ```
+  brew install pixman cairo pango
+  ```
 
 ### Database
 
-The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). We recommend running MySQL in a [Docker](https://www.docker.com/) container by simply running:
+The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). We recommend running MySQL in a [Docker](https://www.docker.com/) container:
 
 ```sh
 docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
@@ -96,13 +97,13 @@ brew services start postgresql@14
 
 ### Redis
 
-[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend using a [Docker](https://www.docker.com/) container:
+[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running Redis in a [Docker](https://www.docker.com/) container:
 
 ```
 docker run -d -p 6379:6379 redis
 ```
 
-Alternatively, you can run Redis directly on your machine with Homebrew:
+Alternatively, it be run directly on your machine with Homebrew:
 
 ```
 brew install redis
@@ -111,19 +112,25 @@ brew services start redis
 
 ### Rails cache (Memcached)
 
-If available, Redis will use [Memcached](https://www.memcached.org) for caching. This is optional yet recommended:
+If available, Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Docker](https://www.docker.com/) container:
+
+```
+docker run -d -p 11211:11211 memcached
+```
+
+Alternatively, it can be run directly on your machine with Homebrew:
 
 ```
 brew install memcached
 brew services start memcached
 ```
 
-Rails cache is enabled by default for development. However, it can be switched off by updating `config/cache_store.yml`:
-
-```yml
-development:
-  - :null_store
-```
+> Rails cache is enabled by default for development. However, it can be switched off by updating `config/cache_store.yml`:
+>
+> ```yml
+> development:
+>   - :null_store
+> ```
 
 ### Bundler
 
@@ -153,7 +160,7 @@ bundle install
 > ld: library not found for -lssl
 > ```
 >
-> you can fix it setting the flags:
+> Try to fix it adding the following config:
 >
 > ```sh
 > bundle config --local build.mysql2 --with-ldflags="-L$(brew --prefix openssl)/lib" --with-cppflags="-I$(brew --prefix openssl)/include"
