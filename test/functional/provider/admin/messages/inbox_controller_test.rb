@@ -51,7 +51,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
 
   test "creates valid reply" do
     login_as(@admin)
-    post :reply, params: { message: { subject: "Valid Message", :body => "message with subject" }, id: @message.id }
+    post :reply, params: { message: { subject: "Valid Message", body: "message with subject" }, id: @message.id }
 
     MessageWorker.drain
     msg = Message.last
