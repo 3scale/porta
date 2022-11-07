@@ -16,7 +16,7 @@ class ServiceNotDeletedTest < ActionDispatch::IntegrationTest
   def test_not_deleted
     @provider.settings.allow_multiple_services!
 
-    perform_enqueued_jobs(except: [IndexProxyRuleWorker, SphinxIndexationWorker]) do
+    perform_enqueued_jobs(except: [SphinxIndexationWorker]) do
       (ENV['BRUTOFORCE'].present? ? 2000 : 1).times do |i|
         service_name = "service foo #{i}"
         post admin_api_services_path, params: { provider_key: @provider.api_key, format: :json, name: service_name }
