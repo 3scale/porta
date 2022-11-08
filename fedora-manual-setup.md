@@ -58,7 +58,7 @@ sudo systemctl restart redis
 
 ### Rails cache (Memcached)
 
-If available, Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Podman](https://podman.io/) container:
+If available, Rails and Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Podman](https://podman.io/) container:
 
 ```
 podman run -d -p 11211:11211 memcached
