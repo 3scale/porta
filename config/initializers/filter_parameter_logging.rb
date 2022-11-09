@@ -6,5 +6,4 @@ Rails.application.config.filter_parameters += %i[activation_code cms_token credi
                                                  credit_card_authorize_net_payment_profile_token credit_card_expires_on
                                                  credit_card_partial_number crypted_password janrain_api_key lost_password_token
                                                  password password_digest payment_gateway_options payment_service_reference salt
-                                                 site_access_code sso_key user_key access_token invitation_token encoded_token
-                                                 encoded_key variation_key]
+                                                 site_access_code sso_key user_key access_token]
