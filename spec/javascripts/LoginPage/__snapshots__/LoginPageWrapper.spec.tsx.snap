@@ -1,0 +1,2069 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should not render reset password button when disablePasswordReset is true 1`] = `
+<SimpleLoginPage
+  authenticationProviders={Array []}
+  disablePasswordReset={true}
+  providerRequestPasswordResetPath="password-path"
+  providerSessionsPath="sessions-path"
+  session={
+    Object {
+      "username": "",
+    }
+  }
+  show3scaleLoginForm={true}
+>
+  <LoginPage
+    backgroundImgAlt="Red Hat 3scale API Management"
+    backgroundImgSrc=""
+    brandImgAlt="Red Hat 3scale API Management"
+    brandImgSrc=""
+    forgotCredentials={false}
+    loginTitle="Log in to your account"
+  >
+    <Login
+      className=""
+      footer={
+        <LoginFooter>
+          <p>
+            
+          </p>
+          <List />
+        </LoginFooter>
+      }
+      header={
+        <LoginHeader
+          headerBrand={
+            <React.Fragment>
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              />
+            </React.Fragment>
+          }
+        />
+      }
+    >
+      <div
+        className="pf-c-login"
+      >
+        <div
+          className="pf-c-login__container"
+        >
+          <LoginHeader
+            headerBrand={
+              <React.Fragment>
+                <Brand
+                  alt="Red Hat 3scale API Management"
+                  src=""
+                />
+              </React.Fragment>
+            }
+          >
+            <header
+              className="pf-c-login__header"
+            >
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              >
+                <img
+                  alt="Red Hat 3scale API Management"
+                  className="pf-c-brand"
+                  src=""
+                />
+              </Brand>
+            </header>
+          </LoginHeader>
+          <main
+            className="pf-c-login__main"
+          >
+            <LoginMainHeader
+              title="Log in to your account"
+            >
+              <header
+                className="pf-c-login__main-header"
+              >
+                <Title
+                  headingLevel="h2"
+                  size="3xl"
+                >
+                  <h2
+                    className="pf-c-title pf-m-3xl"
+                  >
+                    Log in to your account
+                  </h2>
+                </Title>
+              </header>
+            </LoginMainHeader>
+            <LoginMainBody>
+              <div
+                className="pf-c-login__main-body"
+              >
+                <Login3scaleForm
+                  providerSessionsPath="sessions-path"
+                  session={
+                    Object {
+                      "username": "",
+                    }
+                  }
+                >
+                  <Form
+                    acceptCharset="UTF-8"
+                    action="sessions-path"
+                    autoComplete="off"
+                    id="new_session"
+                    method="post"
+                    noValidate={true}
+                  >
+                    <form
+                      acceptCharset="UTF-8"
+                      action="sessions-path"
+                      autoComplete="off"
+                      className="pf-c-form"
+                      id="new_session"
+                      method="post"
+                      noValidate={true}
+                    >
+                      <HiddenInputs>
+                        <input
+                          name="utf8"
+                          type="hidden"
+                          value="✓"
+                        />
+                        <CSRFToken>
+                          <input
+                            name="mocked-csrf-param"
+                            type="hidden"
+                            value="mocked-csrf-token"
+                          />
+                        </CSRFToken>
+                      </HiddenInputs>
+                      <TextField
+                        inputProps={
+                          Object {
+                            "autoFocus": true,
+                            "fieldId": "session_username",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Email or Username",
+                            "name": "username",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Email or username is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": true,
+                              "fieldId": "session_username",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Email or Username",
+                              "name": "username",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="text"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_username"
+                            helperTextInvalid="Email or username is mandatory"
+                            isRequired={true}
+                            label="Email or Username"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_username"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Email or Username
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={true}
+                                id="session_username"
+                                isRequired={true}
+                                name="username"
+                                onChange={[Function]}
+                                type="text"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={true}
+                                  className=""
+                                  id="session_username"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="username"
+                                  onChange={[Function]}
+                                  type="text"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={true}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_username"
+                                    name="username"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="text"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </TextField>
+                      <PasswordField
+                        inputProps={
+                          Object {
+                            "autoFocus": false,
+                            "fieldId": "session_password",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Password",
+                            "name": "password",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Password is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": false,
+                              "fieldId": "session_password",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Password",
+                              "name": "password",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="password"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_password"
+                            helperTextInvalid="Password is mandatory"
+                            isRequired={true}
+                            label="Password"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_password"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Password
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={false}
+                                id="session_password"
+                                isRequired={true}
+                                name="password"
+                                onChange={[Function]}
+                                type="password"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={false}
+                                  className=""
+                                  id="session_password"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="password"
+                                  onChange={[Function]}
+                                  type="password"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={false}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_password"
+                                    name="password"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="password"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </PasswordField>
+                      <ActionGroup>
+                        <div
+                          className="pf-c-form__group pf-m-action"
+                        >
+                          <div
+                            className="pf-c-form__actions"
+                          >
+                            <Component
+                              className="pf-c-button pf-m-primary pf-m-block"
+                              isDisabled={true}
+                              type="submit"
+                            >
+                              <ComponentWithOuia
+                                component={[Function]}
+                                componentProps={
+                                  Object {
+                                    "children": " Sign in",
+                                    "className": "pf-c-button pf-m-primary pf-m-block",
+                                    "isDisabled": true,
+                                    "type": "submit",
+                                  }
+                                }
+                                consumerContext={null}
+                              >
+                                <Button
+                                  className="pf-c-button pf-m-primary pf-m-block"
+                                  isDisabled={true}
+                                  ouiaContext={
+                                    Object {
+                                      "isOuia": false,
+                                      "ouiaId": null,
+                                    }
+                                  }
+                                  type="submit"
+                                >
+                                  <button
+                                    aria-disabled={null}
+                                    aria-label={null}
+                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    disabled={true}
+                                    tabIndex={null}
+                                    type="submit"
+                                  >
+                                     Sign in
+                                  </button>
+                                </Button>
+                              </ComponentWithOuia>
+                            </Component>
+                          </div>
+                        </div>
+                      </ActionGroup>
+                    </form>
+                  </Form>
+                </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={Array []}
+                  >
+                    <div
+                      className="providers-list"
+                    />
+                  </AuthenticationProviders>
+                </div>
+              </div>
+            </LoginMainBody>
+          </main>
+          <LoginFooter>
+            <footer
+              className="pf-c-login__footer"
+            >
+              <p />
+              <List>
+                <ul
+                  className="pf-c-list"
+                />
+              </List>
+            </footer>
+          </LoginFooter>
+        </div>
+      </div>
+    </Login>
+  </LoginPage>
+</SimpleLoginPage>
+`;
+
+exports[`should render Login form and Authentication providers when available 1`] = `
+<SimpleLoginPage
+  authenticationProviders={
+    Array [
+      Object {
+        "authorizeURL": "url-1",
+        "humanKind": "Human 1",
+      },
+      Object {
+        "authorizeURL": "url-2",
+        "humanKind": "Human 2",
+      },
+    ]
+  }
+  disablePasswordReset={false}
+  providerRequestPasswordResetPath="password-path"
+  providerSessionsPath="sessions-path"
+  session={
+    Object {
+      "username": "",
+    }
+  }
+  show3scaleLoginForm={true}
+>
+  <LoginPage
+    backgroundImgAlt="Red Hat 3scale API Management"
+    backgroundImgSrc=""
+    brandImgAlt="Red Hat 3scale API Management"
+    brandImgSrc=""
+    forgotCredentials={
+      <ForgotCredentials
+        requestPasswordResetPath="password-path"
+      />
+    }
+    loginTitle="Log in to your account"
+  >
+    <Login
+      className=""
+      footer={
+        <LoginFooter>
+          <p>
+            
+          </p>
+          <List />
+        </LoginFooter>
+      }
+      header={
+        <LoginHeader
+          headerBrand={
+            <React.Fragment>
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              />
+            </React.Fragment>
+          }
+        />
+      }
+    >
+      <div
+        className="pf-c-login"
+      >
+        <div
+          className="pf-c-login__container"
+        >
+          <LoginHeader
+            headerBrand={
+              <React.Fragment>
+                <Brand
+                  alt="Red Hat 3scale API Management"
+                  src=""
+                />
+              </React.Fragment>
+            }
+          >
+            <header
+              className="pf-c-login__header"
+            >
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              >
+                <img
+                  alt="Red Hat 3scale API Management"
+                  className="pf-c-brand"
+                  src=""
+                />
+              </Brand>
+            </header>
+          </LoginHeader>
+          <main
+            className="pf-c-login__main"
+          >
+            <LoginMainHeader
+              title="Log in to your account"
+            >
+              <header
+                className="pf-c-login__main-header"
+              >
+                <Title
+                  headingLevel="h2"
+                  size="3xl"
+                >
+                  <h2
+                    className="pf-c-title pf-m-3xl"
+                  >
+                    Log in to your account
+                  </h2>
+                </Title>
+              </header>
+            </LoginMainHeader>
+            <LoginMainBody>
+              <div
+                className="pf-c-login__main-body"
+              >
+                <Login3scaleForm
+                  providerSessionsPath="sessions-path"
+                  session={
+                    Object {
+                      "username": "",
+                    }
+                  }
+                >
+                  <Form
+                    acceptCharset="UTF-8"
+                    action="sessions-path"
+                    autoComplete="off"
+                    id="new_session"
+                    method="post"
+                    noValidate={true}
+                  >
+                    <form
+                      acceptCharset="UTF-8"
+                      action="sessions-path"
+                      autoComplete="off"
+                      className="pf-c-form"
+                      id="new_session"
+                      method="post"
+                      noValidate={true}
+                    >
+                      <HiddenInputs>
+                        <input
+                          name="utf8"
+                          type="hidden"
+                          value="✓"
+                        />
+                        <CSRFToken>
+                          <input
+                            name="mocked-csrf-param"
+                            type="hidden"
+                            value="mocked-csrf-token"
+                          />
+                        </CSRFToken>
+                      </HiddenInputs>
+                      <TextField
+                        inputProps={
+                          Object {
+                            "autoFocus": true,
+                            "fieldId": "session_username",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Email or Username",
+                            "name": "username",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Email or username is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": true,
+                              "fieldId": "session_username",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Email or Username",
+                              "name": "username",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="text"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_username"
+                            helperTextInvalid="Email or username is mandatory"
+                            isRequired={true}
+                            label="Email or Username"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_username"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Email or Username
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={true}
+                                id="session_username"
+                                isRequired={true}
+                                name="username"
+                                onChange={[Function]}
+                                type="text"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={true}
+                                  className=""
+                                  id="session_username"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="username"
+                                  onChange={[Function]}
+                                  type="text"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={true}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_username"
+                                    name="username"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="text"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </TextField>
+                      <PasswordField
+                        inputProps={
+                          Object {
+                            "autoFocus": false,
+                            "fieldId": "session_password",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Password",
+                            "name": "password",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Password is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": false,
+                              "fieldId": "session_password",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Password",
+                              "name": "password",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="password"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_password"
+                            helperTextInvalid="Password is mandatory"
+                            isRequired={true}
+                            label="Password"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_password"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Password
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={false}
+                                id="session_password"
+                                isRequired={true}
+                                name="password"
+                                onChange={[Function]}
+                                type="password"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={false}
+                                  className=""
+                                  id="session_password"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="password"
+                                  onChange={[Function]}
+                                  type="password"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={false}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_password"
+                                    name="password"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="password"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </PasswordField>
+                      <ActionGroup>
+                        <div
+                          className="pf-c-form__group pf-m-action"
+                        >
+                          <div
+                            className="pf-c-form__actions"
+                          >
+                            <Component
+                              className="pf-c-button pf-m-primary pf-m-block"
+                              isDisabled={true}
+                              type="submit"
+                            >
+                              <ComponentWithOuia
+                                component={[Function]}
+                                componentProps={
+                                  Object {
+                                    "children": " Sign in",
+                                    "className": "pf-c-button pf-m-primary pf-m-block",
+                                    "isDisabled": true,
+                                    "type": "submit",
+                                  }
+                                }
+                                consumerContext={null}
+                              >
+                                <Button
+                                  className="pf-c-button pf-m-primary pf-m-block"
+                                  isDisabled={true}
+                                  ouiaContext={
+                                    Object {
+                                      "isOuia": false,
+                                      "ouiaId": null,
+                                    }
+                                  }
+                                  type="submit"
+                                >
+                                  <button
+                                    aria-disabled={null}
+                                    aria-label={null}
+                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    disabled={true}
+                                    tabIndex={null}
+                                    type="submit"
+                                  >
+                                     Sign in
+                                  </button>
+                                </Button>
+                              </ComponentWithOuia>
+                            </Component>
+                          </div>
+                        </div>
+                      </ActionGroup>
+                    </form>
+                  </Form>
+                </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={
+                      Array [
+                        Object {
+                          "authorizeURL": "url-1",
+                          "humanKind": "Human 1",
+                        },
+                        Object {
+                          "authorizeURL": "url-2",
+                          "humanKind": "Human 2",
+                        },
+                      ]
+                    }
+                  >
+                    <div
+                      className="providers-list"
+                    >
+                      <Provider
+                        authorizeURL="url-1"
+                        humanKind="Human 1"
+                        key="Human 1"
+                      >
+                        <p
+                          className="login-provider"
+                        >
+                          <a
+                            className="login-provider-link"
+                            href="url-1"
+                          >
+                            <KeyIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 512 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"
+                                  transform=""
+                                />
+                              </svg>
+                            </KeyIcon>
+                             Authenticate through 
+                            <LessThanIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 384 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M365.46 357.74L147.04 255.89l218.47-101.88c16.02-7.47 22.95-26.51 15.48-42.53l-13.52-29C360 66.46 340.96 59.53 324.94 67L18.48 209.91a32.014 32.014 0 0 0-18.48 29v34.24c0 12.44 7.21 23.75 18.48 29l306.31 142.83c16.06 7.49 35.15.54 42.64-15.52l13.56-29.08c7.49-16.06.54-35.15-15.53-42.64z"
+                                  transform=""
+                                />
+                              </svg>
+                            </LessThanIcon>
+                            <GreaterThanIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 384 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M365.52 209.85L59.22 67.01c-16.06-7.49-35.15-.54-42.64 15.52L3.01 111.61c-7.49 16.06-.54 35.15 15.52 42.64L236.96 256.1 18.49 357.99C2.47 365.46-4.46 384.5 3.01 400.52l13.52 29C24 445.54 43.04 452.47 59.06 445l306.47-142.91a32.003 32.003 0 0 0 18.48-29v-34.23c-.01-12.45-7.21-23.76-18.49-29.01z"
+                                  transform=""
+                                />
+                              </svg>
+                            </GreaterThanIcon>
+                            Human 1
+                          </a>
+                        </p>
+                      </Provider>
+                      <Provider
+                        authorizeURL="url-2"
+                        humanKind="Human 2"
+                        key="Human 2"
+                      >
+                        <p
+                          className="login-provider"
+                        >
+                          <a
+                            className="login-provider-link"
+                            href="url-2"
+                          >
+                            <KeyIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 512 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"
+                                  transform=""
+                                />
+                              </svg>
+                            </KeyIcon>
+                             Authenticate through 
+                            <LessThanIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 384 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M365.46 357.74L147.04 255.89l218.47-101.88c16.02-7.47 22.95-26.51 15.48-42.53l-13.52-29C360 66.46 340.96 59.53 324.94 67L18.48 209.91a32.014 32.014 0 0 0-18.48 29v34.24c0 12.44 7.21 23.75 18.48 29l306.31 142.83c16.06 7.49 35.15.54 42.64-15.52l13.56-29.08c7.49-16.06.54-35.15-15.53-42.64z"
+                                  transform=""
+                                />
+                              </svg>
+                            </LessThanIcon>
+                            <GreaterThanIcon
+                              color="currentColor"
+                              noVerticalAlign={false}
+                              size="sm"
+                              title={null}
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 384 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M365.52 209.85L59.22 67.01c-16.06-7.49-35.15-.54-42.64 15.52L3.01 111.61c-7.49 16.06-.54 35.15 15.52 42.64L236.96 256.1 18.49 357.99C2.47 365.46-4.46 384.5 3.01 400.52l13.52 29C24 445.54 43.04 452.47 59.06 445l306.47-142.91a32.003 32.003 0 0 0 18.48-29v-34.23c-.01-12.45-7.21-23.76-18.49-29.01z"
+                                  transform=""
+                                />
+                              </svg>
+                            </GreaterThanIcon>
+                            Human 2
+                          </a>
+                        </p>
+                      </Provider>
+                    </div>
+                  </AuthenticationProviders>
+                </div>
+              </div>
+            </LoginMainBody>
+            <LoginMainFooter
+              forgotCredentials={
+                <ForgotCredentials
+                  requestPasswordResetPath="password-path"
+                />
+              }
+              signUpForAccountMessage={null}
+              socialMediaLoginContent={null}
+            >
+              <div
+                className="pf-c-login__main-footer"
+              >
+                <div
+                  className="pf-c-login__main-footer-band"
+                >
+                  <ForgotCredentials
+                    requestPasswordResetPath="password-path"
+                  >
+                    <LoginMainFooterBandItem>
+                      <p
+                        className="pf-c-login__main-footer-band-item"
+                      >
+                        <a
+                          href="password-path"
+                        >
+                          Forgot password?
+                        </a>
+                      </p>
+                    </LoginMainFooterBandItem>
+                  </ForgotCredentials>
+                </div>
+              </div>
+            </LoginMainFooter>
+          </main>
+          <LoginFooter>
+            <footer
+              className="pf-c-login__footer"
+            >
+              <p />
+              <List>
+                <ul
+                  className="pf-c-list"
+                />
+              </List>
+            </footer>
+          </LoginFooter>
+        </div>
+      </div>
+    </Login>
+  </LoginPage>
+</SimpleLoginPage>
+`;
+
+exports[`should render itself 1`] = `
+<SimpleLoginPage
+  authenticationProviders={Array []}
+  disablePasswordReset={false}
+  providerRequestPasswordResetPath="password-path"
+  providerSessionsPath="sessions-path"
+  session={
+    Object {
+      "username": "",
+    }
+  }
+  show3scaleLoginForm={true}
+>
+  <LoginPage
+    backgroundImgAlt="Red Hat 3scale API Management"
+    backgroundImgSrc=""
+    brandImgAlt="Red Hat 3scale API Management"
+    brandImgSrc=""
+    forgotCredentials={
+      <ForgotCredentials
+        requestPasswordResetPath="password-path"
+      />
+    }
+    loginTitle="Log in to your account"
+  >
+    <Login
+      className=""
+      footer={
+        <LoginFooter>
+          <p>
+            
+          </p>
+          <List />
+        </LoginFooter>
+      }
+      header={
+        <LoginHeader
+          headerBrand={
+            <React.Fragment>
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              />
+            </React.Fragment>
+          }
+        />
+      }
+    >
+      <div
+        className="pf-c-login"
+      >
+        <div
+          className="pf-c-login__container"
+        >
+          <LoginHeader
+            headerBrand={
+              <React.Fragment>
+                <Brand
+                  alt="Red Hat 3scale API Management"
+                  src=""
+                />
+              </React.Fragment>
+            }
+          >
+            <header
+              className="pf-c-login__header"
+            >
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              >
+                <img
+                  alt="Red Hat 3scale API Management"
+                  className="pf-c-brand"
+                  src=""
+                />
+              </Brand>
+            </header>
+          </LoginHeader>
+          <main
+            className="pf-c-login__main"
+          >
+            <LoginMainHeader
+              title="Log in to your account"
+            >
+              <header
+                className="pf-c-login__main-header"
+              >
+                <Title
+                  headingLevel="h2"
+                  size="3xl"
+                >
+                  <h2
+                    className="pf-c-title pf-m-3xl"
+                  >
+                    Log in to your account
+                  </h2>
+                </Title>
+              </header>
+            </LoginMainHeader>
+            <LoginMainBody>
+              <div
+                className="pf-c-login__main-body"
+              >
+                <Login3scaleForm
+                  providerSessionsPath="sessions-path"
+                  session={
+                    Object {
+                      "username": "",
+                    }
+                  }
+                >
+                  <Form
+                    acceptCharset="UTF-8"
+                    action="sessions-path"
+                    autoComplete="off"
+                    id="new_session"
+                    method="post"
+                    noValidate={true}
+                  >
+                    <form
+                      acceptCharset="UTF-8"
+                      action="sessions-path"
+                      autoComplete="off"
+                      className="pf-c-form"
+                      id="new_session"
+                      method="post"
+                      noValidate={true}
+                    >
+                      <HiddenInputs>
+                        <input
+                          name="utf8"
+                          type="hidden"
+                          value="✓"
+                        />
+                        <CSRFToken>
+                          <input
+                            name="mocked-csrf-param"
+                            type="hidden"
+                            value="mocked-csrf-token"
+                          />
+                        </CSRFToken>
+                      </HiddenInputs>
+                      <TextField
+                        inputProps={
+                          Object {
+                            "autoFocus": true,
+                            "fieldId": "session_username",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Email or Username",
+                            "name": "username",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Email or username is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": true,
+                              "fieldId": "session_username",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Email or Username",
+                              "name": "username",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="text"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_username"
+                            helperTextInvalid="Email or username is mandatory"
+                            isRequired={true}
+                            label="Email or Username"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_username"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Email or Username
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={true}
+                                id="session_username"
+                                isRequired={true}
+                                name="username"
+                                onChange={[Function]}
+                                type="text"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={true}
+                                  className=""
+                                  id="session_username"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="username"
+                                  onChange={[Function]}
+                                  type="text"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={true}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_username"
+                                    name="username"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="text"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </TextField>
+                      <PasswordField
+                        inputProps={
+                          Object {
+                            "autoFocus": false,
+                            "fieldId": "session_password",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Password",
+                            "name": "password",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Password is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": false,
+                              "fieldId": "session_password",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Password",
+                              "name": "password",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="password"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_password"
+                            helperTextInvalid="Password is mandatory"
+                            isRequired={true}
+                            label="Password"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_password"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Password
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={false}
+                                id="session_password"
+                                isRequired={true}
+                                name="password"
+                                onChange={[Function]}
+                                type="password"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={false}
+                                  className=""
+                                  id="session_password"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="password"
+                                  onChange={[Function]}
+                                  type="password"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={false}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_password"
+                                    name="password"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="password"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </PasswordField>
+                      <ActionGroup>
+                        <div
+                          className="pf-c-form__group pf-m-action"
+                        >
+                          <div
+                            className="pf-c-form__actions"
+                          >
+                            <Component
+                              className="pf-c-button pf-m-primary pf-m-block"
+                              isDisabled={true}
+                              type="submit"
+                            >
+                              <ComponentWithOuia
+                                component={[Function]}
+                                componentProps={
+                                  Object {
+                                    "children": " Sign in",
+                                    "className": "pf-c-button pf-m-primary pf-m-block",
+                                    "isDisabled": true,
+                                    "type": "submit",
+                                  }
+                                }
+                                consumerContext={null}
+                              >
+                                <Button
+                                  className="pf-c-button pf-m-primary pf-m-block"
+                                  isDisabled={true}
+                                  ouiaContext={
+                                    Object {
+                                      "isOuia": false,
+                                      "ouiaId": null,
+                                    }
+                                  }
+                                  type="submit"
+                                >
+                                  <button
+                                    aria-disabled={null}
+                                    aria-label={null}
+                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    disabled={true}
+                                    tabIndex={null}
+                                    type="submit"
+                                  >
+                                     Sign in
+                                  </button>
+                                </Button>
+                              </ComponentWithOuia>
+                            </Component>
+                          </div>
+                        </div>
+                      </ActionGroup>
+                    </form>
+                  </Form>
+                </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={Array []}
+                  >
+                    <div
+                      className="providers-list"
+                    />
+                  </AuthenticationProviders>
+                </div>
+              </div>
+            </LoginMainBody>
+            <LoginMainFooter
+              forgotCredentials={
+                <ForgotCredentials
+                  requestPasswordResetPath="password-path"
+                />
+              }
+              signUpForAccountMessage={null}
+              socialMediaLoginContent={null}
+            >
+              <div
+                className="pf-c-login__main-footer"
+              >
+                <div
+                  className="pf-c-login__main-footer-band"
+                >
+                  <ForgotCredentials
+                    requestPasswordResetPath="password-path"
+                  >
+                    <LoginMainFooterBandItem>
+                      <p
+                        className="pf-c-login__main-footer-band-item"
+                      >
+                        <a
+                          href="password-path"
+                        >
+                          Forgot password?
+                        </a>
+                      </p>
+                    </LoginMainFooterBandItem>
+                  </ForgotCredentials>
+                </div>
+              </div>
+            </LoginMainFooter>
+          </main>
+          <LoginFooter>
+            <footer
+              className="pf-c-login__footer"
+            >
+              <p />
+              <List>
+                <ul
+                  className="pf-c-list"
+                />
+              </List>
+            </footer>
+          </LoginFooter>
+        </div>
+      </div>
+    </Login>
+  </LoginPage>
+</SimpleLoginPage>
+`;
+
+exports[`should render reset password button when disablePasswordReset is false 1`] = `
+<SimpleLoginPage
+  authenticationProviders={Array []}
+  disablePasswordReset={false}
+  providerRequestPasswordResetPath="password-path"
+  providerSessionsPath="sessions-path"
+  session={
+    Object {
+      "username": "",
+    }
+  }
+  show3scaleLoginForm={true}
+>
+  <LoginPage
+    backgroundImgAlt="Red Hat 3scale API Management"
+    backgroundImgSrc=""
+    brandImgAlt="Red Hat 3scale API Management"
+    brandImgSrc=""
+    forgotCredentials={
+      <ForgotCredentials
+        requestPasswordResetPath="password-path"
+      />
+    }
+    loginTitle="Log in to your account"
+  >
+    <Login
+      className=""
+      footer={
+        <LoginFooter>
+          <p>
+            
+          </p>
+          <List />
+        </LoginFooter>
+      }
+      header={
+        <LoginHeader
+          headerBrand={
+            <React.Fragment>
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              />
+            </React.Fragment>
+          }
+        />
+      }
+    >
+      <div
+        className="pf-c-login"
+      >
+        <div
+          className="pf-c-login__container"
+        >
+          <LoginHeader
+            headerBrand={
+              <React.Fragment>
+                <Brand
+                  alt="Red Hat 3scale API Management"
+                  src=""
+                />
+              </React.Fragment>
+            }
+          >
+            <header
+              className="pf-c-login__header"
+            >
+              <Brand
+                alt="Red Hat 3scale API Management"
+                src=""
+              >
+                <img
+                  alt="Red Hat 3scale API Management"
+                  className="pf-c-brand"
+                  src=""
+                />
+              </Brand>
+            </header>
+          </LoginHeader>
+          <main
+            className="pf-c-login__main"
+          >
+            <LoginMainHeader
+              title="Log in to your account"
+            >
+              <header
+                className="pf-c-login__main-header"
+              >
+                <Title
+                  headingLevel="h2"
+                  size="3xl"
+                >
+                  <h2
+                    className="pf-c-title pf-m-3xl"
+                  >
+                    Log in to your account
+                  </h2>
+                </Title>
+              </header>
+            </LoginMainHeader>
+            <LoginMainBody>
+              <div
+                className="pf-c-login__main-body"
+              >
+                <Login3scaleForm
+                  providerSessionsPath="sessions-path"
+                  session={
+                    Object {
+                      "username": "",
+                    }
+                  }
+                >
+                  <Form
+                    acceptCharset="UTF-8"
+                    action="sessions-path"
+                    autoComplete="off"
+                    id="new_session"
+                    method="post"
+                    noValidate={true}
+                  >
+                    <form
+                      acceptCharset="UTF-8"
+                      action="sessions-path"
+                      autoComplete="off"
+                      className="pf-c-form"
+                      id="new_session"
+                      method="post"
+                      noValidate={true}
+                    >
+                      <HiddenInputs>
+                        <input
+                          name="utf8"
+                          type="hidden"
+                          value="✓"
+                        />
+                        <CSRFToken>
+                          <input
+                            name="mocked-csrf-param"
+                            type="hidden"
+                            value="mocked-csrf-token"
+                          />
+                        </CSRFToken>
+                      </HiddenInputs>
+                      <TextField
+                        inputProps={
+                          Object {
+                            "autoFocus": true,
+                            "fieldId": "session_username",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Email or Username",
+                            "name": "username",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Email or username is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": true,
+                              "fieldId": "session_username",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Email or Username",
+                              "name": "username",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="text"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_username"
+                            helperTextInvalid="Email or username is mandatory"
+                            isRequired={true}
+                            label="Email or Username"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_username"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Email or Username
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={true}
+                                id="session_username"
+                                isRequired={true}
+                                name="username"
+                                onChange={[Function]}
+                                type="text"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={true}
+                                  className=""
+                                  id="session_username"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="username"
+                                  onChange={[Function]}
+                                  type="text"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={true}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_username"
+                                    name="username"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="text"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </TextField>
+                      <PasswordField
+                        inputProps={
+                          Object {
+                            "autoFocus": false,
+                            "fieldId": "session_password",
+                            "isRequired": true,
+                            "isValid": undefined,
+                            "label": "Password",
+                            "name": "password",
+                            "onChange": [Function],
+                            "value": "",
+                          }
+                        }
+                      >
+                        <FormGroup
+                          helperTextInvalid="Password is mandatory"
+                          inputProps={
+                            Object {
+                              "autoFocus": false,
+                              "fieldId": "session_password",
+                              "isRequired": true,
+                              "isValid": undefined,
+                              "label": "Password",
+                              "name": "password",
+                              "onChange": [Function],
+                              "value": "",
+                            }
+                          }
+                          type="password"
+                        >
+                          <FormGroup
+                            autoComplete="off"
+                            fieldId="session_password"
+                            helperTextInvalid="Password is mandatory"
+                            isRequired={true}
+                            label="Password"
+                          >
+                            <div
+                              autoComplete="off"
+                              className="pf-c-form__group"
+                            >
+                              <label
+                                className="pf-c-form__label"
+                                htmlFor="session_password"
+                              >
+                                <span
+                                  className="pf-c-form__label-text"
+                                >
+                                  Password
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="pf-c-form__label-required"
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <ForwardRef
+                                autoComplete="off"
+                                autoFocus={false}
+                                id="session_password"
+                                isRequired={true}
+                                name="password"
+                                onChange={[Function]}
+                                type="password"
+                                value=""
+                              >
+                                <TextInputBase
+                                  aria-label={null}
+                                  autoComplete="off"
+                                  autoFocus={false}
+                                  className=""
+                                  id="session_password"
+                                  innerRef={null}
+                                  isDisabled={false}
+                                  isReadOnly={false}
+                                  isRequired={true}
+                                  isValid={true}
+                                  name="password"
+                                  onChange={[Function]}
+                                  type="password"
+                                  validated="default"
+                                  value=""
+                                >
+                                  <input
+                                    aria-invalid={false}
+                                    aria-label={null}
+                                    autoComplete="off"
+                                    autoFocus={false}
+                                    className="pf-c-form-control"
+                                    disabled={false}
+                                    id="session_password"
+                                    name="password"
+                                    onChange={[Function]}
+                                    readOnly={false}
+                                    required={true}
+                                    type="password"
+                                    value=""
+                                  />
+                                </TextInputBase>
+                              </ForwardRef>
+                            </div>
+                          </FormGroup>
+                        </FormGroup>
+                      </PasswordField>
+                      <ActionGroup>
+                        <div
+                          className="pf-c-form__group pf-m-action"
+                        >
+                          <div
+                            className="pf-c-form__actions"
+                          >
+                            <Component
+                              className="pf-c-button pf-m-primary pf-m-block"
+                              isDisabled={true}
+                              type="submit"
+                            >
+                              <ComponentWithOuia
+                                component={[Function]}
+                                componentProps={
+                                  Object {
+                                    "children": " Sign in",
+                                    "className": "pf-c-button pf-m-primary pf-m-block",
+                                    "isDisabled": true,
+                                    "type": "submit",
+                                  }
+                                }
+                                consumerContext={null}
+                              >
+                                <Button
+                                  className="pf-c-button pf-m-primary pf-m-block"
+                                  isDisabled={true}
+                                  ouiaContext={
+                                    Object {
+                                      "isOuia": false,
+                                      "ouiaId": null,
+                                    }
+                                  }
+                                  type="submit"
+                                >
+                                  <button
+                                    aria-disabled={null}
+                                    aria-label={null}
+                                    className="pf-c-button pf-m-primary pf-c-button pf-m-primary pf-m-block"
+                                    disabled={true}
+                                    tabIndex={null}
+                                    type="submit"
+                                  >
+                                     Sign in
+                                  </button>
+                                </Button>
+                              </ComponentWithOuia>
+                            </Component>
+                          </div>
+                        </div>
+                      </ActionGroup>
+                    </form>
+                  </Form>
+                </Login3scaleForm>
+                <div
+                  className="providers-separator"
+                >
+                  <AuthenticationProviders
+                    authenticationProviders={Array []}
+                  >
+                    <div
+                      className="providers-list"
+                    />
+                  </AuthenticationProviders>
+                </div>
+              </div>
+            </LoginMainBody>
+            <LoginMainFooter
+              forgotCredentials={
+                <ForgotCredentials
+                  requestPasswordResetPath="password-path"
+                />
+              }
+              signUpForAccountMessage={null}
+              socialMediaLoginContent={null}
+            >
+              <div
+                className="pf-c-login__main-footer"
+              >
+                <div
+                  className="pf-c-login__main-footer-band"
+                >
+                  <ForgotCredentials
+                    requestPasswordResetPath="password-path"
+                  >
+                    <LoginMainFooterBandItem>
+                      <p
+                        className="pf-c-login__main-footer-band-item"
+                      >
+                        <a
+                          href="password-path"
+                        >
+                          Forgot password?
+                        </a>
+                      </p>
+                    </LoginMainFooterBandItem>
+                  </ForgotCredentials>
+                </div>
+              </div>
+            </LoginMainFooter>
+          </main>
+          <LoginFooter>
+            <footer
+              className="pf-c-login__footer"
+            >
+              <p />
+              <List>
+                <ul
+                  className="pf-c-list"
+                />
+              </List>
+            </footer>
+          </LoginFooter>
+        </div>
+      </div>
+    </Login>
+  </LoginPage>
+</SimpleLoginPage>
+`;

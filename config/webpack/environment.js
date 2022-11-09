@@ -1,14 +1,18 @@
 const { environment } = require('@rails/webpacker')
+const path = require('path')
 
 // Add global webpack configs here
-
-const babelLoader = environment.loaders.get('babel')
-babelLoader.test = /\.jsx?|.spec.js?$/
 
 environment.loaders.delete('css')
 environment.loaders.delete('moduleCss')
 environment.loaders.delete('sass')
 environment.loaders.delete('moduleSass')
+
+environment.loaders.append('ts', {
+  test: /.(ts|tsx)$/,
+  options: {},
+  loader: 'ts-loader'
+})
 
 environment.loaders.append('null', {
   test: /\.css$/,
@@ -34,6 +38,7 @@ environment.loaders.append('style', {
 environment.loaders.append('yaml', {
   test: /\.ya?ml$/,
   use: 'yaml-loader',
+  include: path.resolve(__dirname, '../../app/javascript'),
   type: 'json'
 })
 
