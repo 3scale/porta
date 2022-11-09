@@ -249,6 +249,8 @@ group :development, :test do
   # for `rake doc:liquid:generate` and similar
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
   gem 'unicorn-rails'
+
+  gem 'rswag'
 end
 
 gem 'webpacker', '5.4.4'
