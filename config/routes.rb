@@ -16,6 +16,8 @@ end
 
 Rails.application.routes.draw do
 
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   constraints PortConstraint.new(PrometheusExporterPort.call) do
     require 'sidekiq/prometheus/exporter'
     require 'yabeda/prometheus/mmap'
