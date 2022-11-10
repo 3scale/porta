@@ -30,7 +30,7 @@ exclude_patterns:
   - "**/node_modules/"
   - "**/vendor/*"
   - "app/assets/images/**/*"
-  - "app/javascript/src/*/*/*.spec.*"
+  - "app/javascript
   - "assets/bundles/*.js"
   - "bin/webpack*"
   - "cdn/*"
