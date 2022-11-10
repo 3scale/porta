@@ -16,15 +16,7 @@ plugins:
   reek:
     enabled: true
   eslint:
-    enabled: true
-    channel: "eslint-7" # Should match the one in package.json
-    config:
-      config: .eslintrc
-      extensions:
-      - .ts
-      - .tsx
-      - .js
-      - .jsx
+    enabled: false
   csslint:
     enabled: false
   coffeelint:
