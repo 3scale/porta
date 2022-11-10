@@ -55,6 +55,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
 
     MessageWorker.drain
     msg = Message.last
+    
     assert_equal flash[:notice], 'Reply was sent.'
     assert 'sent', msg.state
     assert_equal 'message with subject', msg.body
@@ -65,7 +66,7 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     post :reply, params: { message: { subject: nil, body: 'message with nil subject' }, id: @message.id }
 
     MessageWorker.drain
-    msg = Message.find_by(id: @message.message_id)
+    msg = Message.last
     assert_not_equal 'message with nil subject', msg.body
   end
 end
