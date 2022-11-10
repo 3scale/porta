@@ -26,7 +26,7 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksController < Finance::Api::
     rescue ActiveRecord::RecordNotFound
       # Returning 204 to acknowledge reception even for payments we don't care about.
       #
-      # There are some clients who are using their Stripe account not only for 3Scale,
+      # There are some clients who are using their Stripe account not only for 3scale,
       # but also for other services they provide. When they receive any payment, Stripe
       # will call all webhooks, no matter where the payment comes from, and we'll
       # receive a call for a payment not managed by us. Stripe expects us to return 204
