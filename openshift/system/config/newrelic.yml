@@ -1,8 +1,0 @@
-base: &default
-  monitor_mode: false
-
-production:
-  <<: *default
-
-preview:
-  <<: *default
