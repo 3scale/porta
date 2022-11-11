@@ -31,10 +31,6 @@ test: &test
   pid_file:           <%= Rails.root.join("log/searchd.test#{ENV['TEST_ENV_NUMBER']}.pid") %>
   hard_retry_count: 5
 
-preview:
-  <<: *sphinx
-  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
-
 production:
   <<: *sphinx
   address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
