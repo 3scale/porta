@@ -4,11 +4,6 @@ module ThreeScale
   module Analytics
     extend self
 
-    attr_reader :config, :credentials
-
-    @config = ThreeScale.config.fetch(:web_analytics).freeze
-    @credentials = ThreeScale::Analytics::Credentials.new(@config)
-
     # @param [User] user
     def user_tracking(user, **options)
       UserTracking.new(user, **options)
