@@ -7,7 +7,6 @@ module ThreeScale
       delegate :google_async_tag,
                :twitter_remarketing, :twitter_conversion,
                :adwords, :prog_web,
-               :mixpanel,
                :munchkin,
                to: :@config
 

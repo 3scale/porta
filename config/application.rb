@@ -177,8 +177,6 @@ module System
 
     config.three_scale.web_analytics = ActiveSupport::OrderedOptions.new
     config.three_scale.tracking = ActiveSupport::OrderedOptions.new
-    config.three_scale.mixpanel = ActiveSupport::OrderedOptions.new
-    config.three_scale.mixpanel.merge!(config_for(:mixpanel).symbolize_keys)
     config.three_scale.core.merge!(config_for(:core).symbolize_keys)
     config.three_scale.web_analytics.merge!(config_for(:web_analytics).deep_symbolize_keys)
 
