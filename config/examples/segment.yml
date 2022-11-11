@@ -1,5 +1,5 @@
 base: &default
-  enabled: true
+  enabled: false
   stub: false
   write_key: 'null'
 

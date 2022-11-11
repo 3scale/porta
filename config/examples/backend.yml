@@ -1,17 +1,17 @@
+base: &default
+  host: <%= ENV.fetch('BACKEND_HOST', 'localhost:3001') %>
+
 development:
-  host: localhost:3001
+  <<: *default
   max_tries: 1
   timeout: 1
   open_timeout: 1
 
 test:
-  host: localhost:3001
-
-preview:
-  host: localhost:3001
+  <<: *default
 
 production:
-  host: <%= ENV.fetch('BACKEND_HOST', 'localhost:3001') %>
+  <<: *default
   secure: <%= ENV.fetch('BACKEND_SECURE', '1') == '1' %>
   persistent: <%= ENV.fetch('BACKEND_PERSISTENT', '1') == '1' %>
   timeout: <%= ENV.fetch('BACKEND_TIMEOUT', 3) %>

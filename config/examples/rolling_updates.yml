@@ -30,6 +30,4 @@ test:
   apicast_per_service: true
   new_notification_system: true
 
-preview:
-
 production:

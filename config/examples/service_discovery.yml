@@ -15,20 +15,10 @@ default: &base
 
 development:
   <<: *base
-  server_host:
-  bearer_token:
 
 test:
   <<: *base
-  server_host:
-  bearer_token:
 
 production:
   <<: *base
-  server_host:
-  bearer_token:
 
-preview:
-  <<: *base
-  server_host:
-  bearer_token:

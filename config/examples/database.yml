@@ -6,16 +6,17 @@ default: &DEFAULT
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
   statement_limit: <%= ENV.fetch('ORACLE_STATEMENT_LIMIT', 250) %>
 
-production:
-  <<: *DEFAULT
-  url: <%= "#{ENV['DATABASE_URL']}production" %>
-
 development:
   <<: *DEFAULT
 
 test:
   <<: *DEFAULT
   url: <%= "#{ENV['DATABASE_URL']}test" %>
+
+production:
+  <<: *DEFAULT
+  url: <%= "#{ENV['DATABASE_URL']}production" %>
+
 <% when /^postgresql/ %>
 default: &DEFAULT
   adapter: postgresql
@@ -24,26 +25,22 @@ default: &DEFAULT
   encoding: unicode
   variables:
     timezone: 'UTC'
-
-production:
-  <<: *DEFAULT
-
 development:
   <<: *DEFAULT
 
 test:
   <<: *DEFAULT
   url: <%= "#{ENV['DATABASE_URL']}#{ENV['TEST_ENV_NUMBER']}" %>
+
+production:
+  <<: *DEFAULT
+
 <% else; db_host = ENV.fetch('DB_PORT_3306_TCP_ADDR') { ENV['DB_PORT'] ? 'db' : ENV['DB_HOST'] } || '127.0.0.1' %>
 default: &DEFAULT
   adapter: mysql2
   encoding: utf8
   collation: utf8_bin
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 25) %>
-
-production:
-  <<: *DEFAULT
-  url: <%= ENV.fetch('DATABASE_URL', "mysql2://root:@#{db_host}:3306/3scale_system_production") %>
 
 development:
   <<: *DEFAULT
@@ -52,4 +49,8 @@ development:
 test:
   <<: *DEFAULT
   url: <%= ENV.fetch('DATABASE_URL', "mysql2://root:@#{db_host}:3306/3scale_system_test") %><%=ENV['TEST_ENV_NUMBER']%>
+
+production:
+  <<: *DEFAULT
+  url: <%= ENV.fetch('DATABASE_URL', "mysql2://root:@#{db_host}:3306/3scale_system_production") %>
 <% end %>

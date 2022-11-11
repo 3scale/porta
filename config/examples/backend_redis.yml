@@ -1,25 +1,10 @@
-# Configuration for Redis. Separate per each environment.
-#
-# Accepted options are:
-#
-# servers       list of servers (hostname:port) to connect to. The first one is the master, the
-#               others are used for failover (no sharding yet).
-# db            database to use. A number from 0 to 10 (default is 0)
-# timeout
-# password
-# thread_safe
 base: &base
   url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/0') %>"
+  timeout: "<%= ENV['REDIS_BACKEND_TIMEOUT'] || '1' %>"
   pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
-
-production:
-  <<: *base
-
-preview:
-  <<: *base
 
 development:
   <<: *base
@@ -27,3 +12,7 @@ development:
 test:
   <<: *base
   db: <%= 2 + ENV['TEST_ENV_NUMBER'].to_i %>
+
+production:
+  <<: *base
+

@@ -6,17 +6,13 @@ base: &base
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>
 
-production:
-  <<: *base
-  url: "<%= ENV.fetch('REDIS_URL', 'redis://localhost/3') %>"
-
-preview:
-  <<: *base
-  url: "<%= ENV.fetch('REDIS_URL', 'redis://localhost/3') %>"
-
 development:
   <<: *base
 
 test:
   <<: *base
   db: <%= 2 + ENV['TEST_ENV_NUMBER'].to_i %>
+
+production:
+  <<: *base
+  url: "<%= ENV.fetch('REDIS_URL', 'redis://localhost/3') %>"
