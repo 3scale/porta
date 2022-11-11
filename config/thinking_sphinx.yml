@@ -30,14 +30,11 @@ test: &test
   indices_location:   <%= Rails.root.join("db/sphinx/test#{ENV['TEST_ENV_NUMBER']}") %>
   pid_file:           <%= Rails.root.join("log/searchd.test#{ENV['TEST_ENV_NUMBER']}.pid") %>
   hard_retry_count: 5
-  binlog_path: ''
 
 preview:
   <<: *sphinx
-  binlog_path: ''
   address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
 
 production:
   <<: *sphinx
-  binlog_path: ''
   address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
