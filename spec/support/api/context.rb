@@ -3,9 +3,6 @@ shared_context "api", api: true do
   include_context "naming helpers"
   include_context "representers"
   include_context "serialization format"
-
-  before { Timecop.scale(3600) }
-  after { Timecop.scale(1) }
 end
 
 shared_context "representers" do

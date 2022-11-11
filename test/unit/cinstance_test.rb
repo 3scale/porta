@@ -6,9 +6,6 @@ require 'test_helper'
 # Finished in 170.63189s
 # 87 tests, 160 assertions, 0 failures, 0 errors, 0 skips
 class CinstanceTest < ActiveSupport::TestCase
-  def teardown
-    Timecop.return
-  end
 
   test 'deleted cinstance have #to_xml working' do
     @cinstance = FactoryBot.create(:cinstance)
@@ -23,61 +20,47 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'Cinstance.live_at returns cinstances live at given time' do
     cinstance_one = FactoryBot.create(:cinstance)
+    cinstance_two = travel_to(1.year.ago) { FactoryBot.create(:cinstance) }
 
-    Timecop.travel(1.year.ago)
-    cinstance_two = FactoryBot.create(:cinstance)
-
-    Timecop.return
     assert_does_not_contain Cinstance.live_at(6.months.ago), cinstance_one
     assert_contains Cinstance.live_at(6.months.ago), cinstance_two
   end
 
   test 'Cinstance.live_at returns cinstances live in given period' do
     cinstance_one = FactoryBot.create(:cinstance)
+    cinstance_two = travel_to(1.year.ago) { FactoryBot.create(:cinstance) }
 
-    Timecop.travel(1.year.ago)
-    cinstance_two = FactoryBot.create(:cinstance)
-
-    Timecop.return
     assert_does_not_contain Cinstance.live_at(100.years.ago..1.month.ago), cinstance_one
     assert_contains Cinstance.live_at(100.years.ago..1.month.ago), cinstance_two
   end
 
   test 'Cinstance.live returns live cinstances' do
-    Timecop.travel(1.year.ago)
-    cinstance = FactoryBot.create(:cinstance)
+    cinstance = travel_to(1.year.ago) { FactoryBot.create(:cinstance) }
 
-    Timecop.return
     assert_contains Cinstance.live, cinstance
   end
 
   test 'Cinstance.live returns deprecated cinstances' do
     plan = FactoryBot.create(:application_plan, cancellation_period: 1.month)
 
-    Timecop.travel(1.year.ago)
-    cinstance = FactoryBot.create(:cinstance, plan: plan)
+    cinstance = travel_to(1.year.ago) { FactoryBot.create(:cinstance, plan: plan) }
 
-    Timecop.return
     cinstance.deprecate!
 
     assert_contains Cinstance.live, cinstance
   end
 
   test 'Cinstance.live does not return suspended cinstances' do
-    Timecop.travel(6.months.ago)
-    cinstance = FactoryBot.create(:cinstance)
+    cinstance = travel_to(6.months.ago) { FactoryBot.create(:cinstance) }
 
-    Timecop.return
     cinstance.suspend!
 
     assert_does_not_contain Cinstance.live, cinstance
   end
 
   test 'Cinstance.live does not return destroyed cinstances' do
-    Timecop.travel(6.months.ago)
-    cinstance = FactoryBot.create(:cinstance)
+    cinstance = travel_to(6.months.ago) { FactoryBot.create(:cinstance) }
 
-    Timecop.return
     cinstance.destroy
 
     assert_does_not_contain Cinstance.live, cinstance
@@ -117,7 +100,7 @@ class CinstanceTest < ActiveSupport::TestCase
     pending_cinstance = FactoryBot.create(:application, :as_pending)
 
     destroyed_pending_cinstance = FactoryBot.create(:application, :as_pending)
-    Timecop.freeze(1.hour.ago) { destroyed_pending_cinstance.destroy }
+    travel_to(1.hour.ago) { destroyed_pending_cinstance.destroy }
 
     live_cinstance = FactoryBot.create(:cinstance)
 
@@ -131,7 +114,7 @@ class CinstanceTest < ActiveSupport::TestCase
     pending_cinstance = FactoryBot.create(:application, :as_pending)
 
     destroyed_live_cinstance = FactoryBot.create(:cinstance)
-    Timecop.freeze(1.hour.ago) { destroyed_live_cinstance.destroy }
+    travel_to(1.hour.ago) { destroyed_live_cinstance.destroy }
 
     assert_contains         Cinstance.by_state(:live), live_cinstance
     assert_does_not_contain Cinstance.by_state(:live), pending_cinstance
@@ -221,14 +204,12 @@ class CinstanceTest < ActiveSupport::TestCase
     plan = FactoryBot.create(:application_plan)
     cinstances = []
 
-    Timecop.freeze(1.month.ago)
-
-    6.times do
-      Timecop.freeze(1.day.from_now)
-      cinstances << FactoryBot.create(:cinstance, plan: plan)
+    travel_to(1.month.ago) do
+      6.times do
+        travel_to(1.day.from_now)
+        cinstances << FactoryBot.create(:cinstance, plan: plan)
+      end
     end
-
-    Timecop.return
 
     assert_equal([cinstances[5], cinstances[4], cinstances[3], cinstances[2], cinstances[1]],
                  plan.cinstances.latest)
@@ -297,13 +278,13 @@ class CinstanceTest < ActiveSupport::TestCase
   end
 
   test 'Cinstance.notify_about_expired_trial_periods does not send anything if plan is free' do
-    Timecop.travel(2009, 11, 4) do
+    travel_to(Date.new(2009, 11, 4)) do
       provider_account = FactoryBot.create(:provider_account)
       plan = FactoryBot.create(:application_plan, issuer: provider_account.first_service!, trial_period_days: 30, cost_per_month: 0)
       FactoryBot.create(:cinstance, plan: plan)
     end
 
-    Timecop.travel(2009, 11, 24) do
+    travel_to(Date.new(2009, 11, 24)) do
       CinstanceMessenger.expects(:expired_trial_period_notification).never
       Cinstance.notify_about_expired_trial_periods
     end
@@ -503,7 +484,7 @@ class CinstanceTest < ActiveSupport::TestCase
 
   test 'archive as deleted' do
     plan = FactoryBot.create(:application_plan)
-    Timecop.freeze(Time.utc(2009, 12, 22)) { FactoryBot.create(:cinstance, plan: plan) }
+    travel_to(Time.utc(2009, 12, 22)) { FactoryBot.create(:cinstance, plan: plan) }
     cinstance = plan.cinstances.last
     cinstance_id = cinstance.id
 
@@ -651,7 +632,7 @@ end
 class OnCreationTest < ActiveSupport::TestCase
   def setup
     plan = FactoryBot.create(:application_plan, setup_fee: 42.42, trial_period_days: 3)
-    Timecop.freeze(Time.zone.local(1942,1,1,15,20))
+    travel_to(Time.zone.local(1942,1,1,15,20))
     @cinstance = Cinstance.create(plan: plan)
   end
 

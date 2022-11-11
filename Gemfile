@@ -166,7 +166,7 @@ group :development do
 
   gem 'yard', require: false
 
-  gem 'rubocop', '~> 0.92', require: false
+  gem 'rubocop', '1.31', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
 end
@@ -209,7 +209,6 @@ group :test do
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
 
   gem 'shoulda', '~> 4.0'
-  gem 'timecop', '~> 0.9'
 
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
   gem 'minitest', '5.10.3'

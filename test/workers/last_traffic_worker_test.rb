@@ -2,7 +2,7 @@ require 'test_helper'
 
 class LastTrafficWorkerTest < SimpleMiniTest
   def test_perform
-    Timecop.freeze do
+    freeze_time do
       last_traffic = LastTraffic.new(provider)
       LastTraffic.stubs(new: last_traffic)
       last_traffic.expects(:sent_traffic_on).with(Time.now).returns(Date.today)

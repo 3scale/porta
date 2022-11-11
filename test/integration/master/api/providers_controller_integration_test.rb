@@ -206,7 +206,7 @@ class Master::Api::ProvidersControllerIntegrationTest < ActionDispatch::Integrat
     user     = FactoryBot.create(:member, account: master_account, admin_sections: ['partners'])
     token    = FactoryBot.create(:access_token, owner: user, scopes: 'account_management')
 
-    Timecop.freeze do
+    freeze_time do
       delete master_api_provider_path(provider, access_token: token.value, format: :json)
       assert_response :ok
       assert_equal '', response.body

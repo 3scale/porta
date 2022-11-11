@@ -2,8 +2,8 @@ require 'rails_helper'
 
 resource "SSOToken" do
 
-  before { Timecop.freeze }
-  after { Timecop.return }
+  before { freeze_time }
+  after { travel_back }
 
   let(:user_id) { provider.managed_users.first.id }
   let(:expires_in) { 60 }

@@ -12,15 +12,17 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: "rubocop-0-92"
+    channel: "rubocop-1-31"
   reek:
     enabled: true
   eslint:
     enabled: true
-    channel: "eslint-6"
+    channel: "eslint-7" # Should match the one in package.json
     config:
       config: .eslintrc
       extensions:
+      - .ts
+      - .tsx
       - .js
       - .jsx
   csslint:
@@ -56,4 +58,3 @@ exclude_patterns:
   - "app/javascript/src/*/*/*.spec.*"
   - "bin/webpack*"
   - "**/node_modules/"
-  - "**/flow-typed"

@@ -15,7 +15,7 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
   end
 
   def create_buyer_for(provider, date = Time.utc(2011,1,1))
-    Timecop.freeze(date) do
+    travel_to(date) do
       buyer = FactoryBot.create(:buyer_account,
                              provider_account: provider)
 
@@ -27,7 +27,7 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
   end
 
   def create_app_for(buyer, date = Time.utc(2011,1,1))
-    Timecop.freeze(date) do
+    travel_to(date) do
       service = FactoryBot.create :service, :account => buyer.provider_account
 
       plan = FactoryBot.create :application_plan, :issuer => service, :name => 'Plan of the Escape'
@@ -51,7 +51,7 @@ class Csv::ApplicationsExporterTest < ActiveSupport::TestCase
   end
 
   test 'to_csv' do
-    Timecop.freeze(Time.utc(2011,1,1)) do
+    travel_to(Time.utc(2011,1,1)) do
       cinstance = @provider.services.order(:id).second.cinstances.first!
       cinstance.update_attributes(first_daily_traffic_at: '2016-03-03 00:00:00 UTC')
       exporter = Csv::ApplicationsExporter.new(@provider, {data: 'applications'})

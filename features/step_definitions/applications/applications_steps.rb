@@ -9,6 +9,15 @@ Given "{buyer} has application {string} with extra fields:" do |buyer, app_name,
   cinstance.save!
 end
 
+Given "{buyer} has application {string} with plan {string}" do |buyer, name, plan_name|
+  plan = ApplicationPlan.find_by!(name: plan_name)
+  assert buyer.provider_account.application_plans.include?(plan)
+  FactoryBot.create(:cinstance, :user_account => buyer,
+                    plan:  plan,
+                    name:  name)
+end
+
+
 Given "{buyer} has application {string} with description {string}" do |buyer, name, description|
   plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
   FactoryBot.create(:cinstance, :user_account => buyer,
@@ -57,9 +66,10 @@ Given "{buyer} has {int} application(s)" do |buyer, number|
 
   number.to_i.times do |index|
     FactoryBot.create(:cinstance, :user_account => buyer,
-                        :plan         => plan,
-                        :name         => "App #{index + 1}",
-                        :description  => "Yet another app")
+                        plan:         plan,
+                        name:         "App #{index + 1}",
+                        description:  "Yet another app",
+                        created_at: (number.to_i-index).seconds.ago) #Ensure applications are not created at the same second
   end
 end
 

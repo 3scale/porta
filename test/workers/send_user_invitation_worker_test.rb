@@ -4,7 +4,7 @@ require 'test_helper'
 
 class SendUserInvitationWorkerTest < ActiveJob::TestCase
   def test_provider_mailer_perform
-    Timecop.freeze(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00')) do
+    travel_to(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00')) do
       ProviderInvitationMailer.any_instance.expects(:invitation).once
 
       provider_account = FactoryBot.create(:provider_account)
@@ -17,7 +17,7 @@ class SendUserInvitationWorkerTest < ActiveJob::TestCase
   end
 
   def test_buyer_mailer_perform
-    Timecop.freeze(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00')) do
+    travel_to(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00')) do
       InvitationMailer.any_instance.expects(:invitation).once
 
       buyer_account = FactoryBot.create(:buyer_account)

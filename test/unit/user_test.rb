@@ -297,7 +297,7 @@ class UserTest < ActiveSupport::TestCase
       # so something like:
       # Time.now.to_f #=> 1512012308.293877
       # will be saved in DB as 1512012308
-      Timecop.freeze(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00'))
+      travel_to(Time.zone.parse('2017-11-23 03:25:08 UTC +00:00'))
 
       provider_account = FactoryBot.create(:simple_provider)
 
@@ -500,7 +500,7 @@ class UserTest < ActiveSupport::TestCase
   #   test 'generates session_token' do
   #     user = FactoryBot.create(:user)
   #
-  #     Timecop.freeze(2009, 11, 22, 14, 30, 12) do
+  #     travel_to(2009, 11, 22, 14, 30, 12) do
   #       user.generate_session_token!
   #
   #       assert_not_nil user.session_token
@@ -527,7 +527,7 @@ class UserTest < ActiveSupport::TestCase
   #     user = FactoryBot.create(:user)
   #     user.generate_session_token!
   #
-  #     Timecop.travel(1.minute.from_now) do
+  #     travel_to(1.minute.from_now) do
   #       assert_nil User.authenticate_by_session_token(user.session_token)
   #     end
   #   end

@@ -138,7 +138,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
         subject.timestamp = 10.seconds.ago.to_f.to_s
         assert_equal 1, subject.spam_probability
 
-        Timecop.freeze do
+        freeze_time do
           check = subject.spam_protection.check(:timestamp)
           subject.timestamp = check.encode(5.seconds.ago.to_f)
           assert_equal 0.5, subject.spam_probability.round(2)

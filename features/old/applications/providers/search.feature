@@ -8,18 +8,17 @@ Feature: Providers's applications searching, sorting and filtering
     And provider "foo.3scale.localhost" has multiple applications enabled
     And provider "foo.3scale.localhost" has "finance" switch visible
     And a default application plan of provider "foo.3scale.localhost"
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
-    And a buyer "jane" signed up to provider "foo.3scale.localhost"
 
     And the provider "foo.3scale.localhost" has following application plans:
       | Name      | Cost per month | Setup fee |
       | Cheap     | 0              | 0         |
       | Expensive | 100            | 10        |
 
-    And the provider "foo.3scale.localhost" has the following applications:
-      | Buyer | Name    | Plan      |
-      | bob   | BobApp  | Cheap     |
-      | jane  | JaneApp | Expensive |
+    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+    And buyer "bob" has application "BobApp" with plan "Cheap"
+    And 1 minute passes
+    And a buyer "jane" signed up to provider "foo.3scale.localhost"
+    And buyer "jane" has application "JaneApp" with plan "Expensive"
 
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And I am logged in as provider "foo.3scale.localhost"
