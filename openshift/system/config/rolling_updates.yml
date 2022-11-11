@@ -1,4 +1,4 @@
-base: &default
+production:
   old_charts: false
   new_provider_documentation: false
   proxy_pro: false
@@ -19,9 +19,3 @@ base: &default
   proxy_private_base_path: true
   service_mesh_integration: true
   api_as_product: true
-
-production:
-  <<: *default
-
-preview:
-  <<: *default

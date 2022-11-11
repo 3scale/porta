@@ -1,10 +1,4 @@
-base: &default
+production:
   enabled: false
   stub: false
   write_key: true
-
-preview:
-  <<: *default
-
-production:
-  <<: *default

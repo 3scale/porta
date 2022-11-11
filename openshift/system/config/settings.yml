@@ -1,4 +1,4 @@
-base: &default
+production:
   superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
   apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
   secure_cookie: true
@@ -45,9 +45,3 @@ base: &default
   # deprecated: use payments.yaml to configure payments instead
   active_merchant_logging: false
   billing_canaries:
-
-preview:
-  <<: *default
-
-production:
-  <<: *default
