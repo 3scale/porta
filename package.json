@@ -79,7 +79,6 @@
     "@rails/webpacker": "5.4.3",
     "@stripe/react-stripe-js": "^1.10.0",
     "@stripe/stripe-js": "^1.34.0",
-    "babel-loader": "^8.0.6",
     "bootstrap-sass": "^3.4.1",
     "braintree-web": "^3.70.0",
     "c3": "^0.4.11",
