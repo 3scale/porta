@@ -1,15 +1,15 @@
-cors: &default
-  enabled: false
+production:
+  enabled: true
   allow:
-    - origins: '*'
-      resources:
-        - !ruby/regexp /\.(?:woff2?|otf|ttf|svg|eot)$/
-      headers: 'x-requested-with'
-      methods: :get
-      max_age: 3628800
-      credentials: false
+  - origins: '*'
+    resources:
+    - !ruby/regexp /\.(?:woff2?|otf|ttf|svg|eot)$/
+    headers: 'x-requested-with'
+    methods: :get
+    max_age: 3628800
+    credentials: false
   exclude:
-    - path_prefix: /p/signup
+  - path_prefix: /p/signup
 
 development:
   <<: *default
