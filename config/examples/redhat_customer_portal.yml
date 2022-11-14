@@ -2,7 +2,7 @@ base: &default
   enabled: <%= ENV.fetch('RH_CUSTOMER_PORTAL_ENABLED', false) %>
   client_id: <%= ENV.fetch('RH_CUSTOMER_PORTAL_CLIENT_ID', '3scale') %>
   client_secret: <%= ENV['RH_CUSTOMER_PORTAL_CLIENT_SECRET'] %>
-  realm: <%= ENV.fetch('RH_CUSTOMER_PORTAL_REALM', 'implicit') %>
+  realm: <%= ENV.fetch('RH_CUSTOMER_PORTAL_REALM', 'https://sso.example.com/auth/realms/example') %>
   flow: <%= ENV.fetch('RH_CUSTOMER_PORTAL_FLOW', 'implicit') %>
   entitlements_notifications_enabled: <%= ENV.fetch('RH_SUPPORT_ENTITLEMENTS_NOTIFICATIONS', '1') == '1' %>
   assign_entitlements_email: <%= ENV.fetch('RH_ASSIGN_ENTITLEMENTS_EMAIL', 'assign.entitlements@example.com') %>
