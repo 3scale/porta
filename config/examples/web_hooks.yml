@@ -3,8 +3,8 @@ base: &default
   sanitized_url: <%= ENV.fetch('WEBHOOK_SANITIZED_URL', 'http://127.0.0.1/') %>
 
 development:
+  <<: *default
   perform_deliveries: true
-  sanitized_url: 'http://localhost/ping'
 
 test:
   <<: *default
