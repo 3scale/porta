@@ -99,12 +99,6 @@ module ThreeScale::SpamProtection
 
         template.controller.request.session
       end
-
-      def mark_possible_spam
-        return false unless protector.spam?
-
-        session_store.mark_possible_spam
-      end
     end
 
     def form(form)
