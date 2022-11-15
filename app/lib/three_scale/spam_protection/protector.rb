@@ -62,7 +62,7 @@ module ThreeScale::SpamProtection
       end
 
       def captcha_needed?
-        captcha_required? || possible_spam?
+        captcha_required? || marked_as_possible_spam?
       end
 
       def enabled?
@@ -98,10 +98,6 @@ module ThreeScale::SpamProtection
         return {} if template&.controller.blank?
 
         template.controller.request.session
-      end
-
-      def possible_spam?
-        http_method.get? ? marked_as_possible_spam? : mark_possible_spam
       end
 
       def mark_possible_spam
