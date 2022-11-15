@@ -7,14 +7,13 @@ Given "{provider_or_buyer} has last digits of credit card number {string} and {e
   account.save!
 end
 
-
 Given /^buyer "([^\"]*)" has valid credit card(?: with (no money|lots of money))?(?: details)?$/ do |buyer_name,balance|
-  buyer = Account.find_by_org_name!(buyer_name)
+  buyer = Account.find_by!(org_name: buyer_name)
 
   buyer.credit_card_expires_on_year = 2.years.from_now.year
   buyer.credit_card_expires_on_month = 2.years.from_now.month
 
-  balance = (balance == 'no money') ? '2' : '1'
+  balance = balance == 'no money' ? '2' : '1'
   buyer.credit_card_auth_code = "valid_if_ends_with_one_#{balance}"
 
   buyer.save!
@@ -28,9 +27,8 @@ Given /^the payment gateway will fail on (authorize|store)$/ do |operation|
   ActiveMerchant::Billing::BogusGateway.will_fail!(operation)
 end
 
-
 When /^I select ("[^\"]*") from Country/ do |country|
-  step %{I select "#{country}" from "account_billing_address_country"}
+  step %(I select "#{country}" from "account_billing_address_country")
 end
 
 Then /^I should see the legal terms link linking to path "([^\"]*)"$/ do |path|
