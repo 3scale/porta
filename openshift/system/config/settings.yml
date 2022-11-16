@@ -6,7 +6,6 @@ production:
   apicast_oauth: true
   apicast_custom_url: true
   apicast_configuration_driven: true
-  active_docs_url:
   active_docs_proxy_disabled: true
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
   events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>

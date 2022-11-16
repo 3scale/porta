@@ -5,7 +5,6 @@ base: &default
   force_ssl: <%= ENV.fetch('FORCE_SSL', '1') == '1' %>
   apicast_oauth: <%= ENV.fetch('ENABLE_APICAST_OAUTH', '0') == '1' %>
   apicast_custom_url: <%= ENV.fetch('ENABLE_APICAST_CUSTOM_URL', '0') == '1' %>
-  active_docs_url: <%= ENV.fetch('ACTIVE_DOCS_URL', "https://support-staging.#{superdomain}") %>
   active_docs_proxy_disabled: false
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
   daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
