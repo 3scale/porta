@@ -1,5 +1,5 @@
 base: &default
-  enabled: <%= ENV.fetch('RH_CUSTOMER_PORTAL_ENABLED', false) %>
+  enabled: <%= ENV.fetch('RH_CUSTOMER_PORTAL_ENABLED', '0') == '1' %>
   client_id: <%= ENV.fetch('RH_CUSTOMER_PORTAL_CLIENT_ID', '3scale') %>
   client_secret: <%= ENV['RH_CUSTOMER_PORTAL_CLIENT_SECRET'] %>
   realm: <%= ENV.fetch('RH_CUSTOMER_PORTAL_REALM', 'https://sso.example.com/auth/realms/example') %>
