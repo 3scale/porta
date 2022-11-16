@@ -1,7 +1,7 @@
 production:
   test_api_hosts:
-   - echo-api.3scale.net
-   - hello-world-api.3scale.net
+    - echo-api.3scale.net
+    - hello-world-api.3scale.net
   ignore_test_failures: []
   backend_endpoint: <%= ENV.fetch('APICAST_BACKEND_ROOT_ENDPOINT', 'http://backend-listener:3000') %>
   sandbox_endpoint: 'https://%{system_name}-%{tenant_name}-apicast-staging.<%=ENV.fetch('THREESCALE_SUPERDOMAIN', '3scale.net')%>:%{port}'
