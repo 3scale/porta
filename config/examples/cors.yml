@@ -1,4 +1,4 @@
-production:
+base: &default
   enabled: true
   allow:
   - origins: '*'
@@ -19,4 +19,3 @@ test:
 
 production:
   <<: *default
-  enabled: true

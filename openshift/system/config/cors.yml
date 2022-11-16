@@ -10,4 +10,3 @@ production:
     credentials: false
   exclude:
   - path_prefix: /p/signup
-

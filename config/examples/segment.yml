@@ -8,11 +8,7 @@ development:
 
 test:
   <<: *default
-  enabled: false
   stub: true
-
-preview:
-  <<: *default
 
 production:
   <<: *default
