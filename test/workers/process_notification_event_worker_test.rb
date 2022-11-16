@@ -21,7 +21,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     provider     = FactoryBot.create(:simple_provider)
     event        = Invoices::InvoicesToReviewEvent.create_and_publish!(provider)
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
-    user         = FactoryBot.create(:simple_admin, account: provider)
+    user         = FactoryBot.create(:simple_admin, state: :active, account: provider)
 
     user.create_notification_preferences!(preferences: { invoices_to_review: true })
 
