@@ -59,20 +59,13 @@ Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^"]*)" (?:of|for) (?
   create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
 end
 
-Given "{buyer} signed up for plan(s) {}" do |buyer, lst|
-  lst.each do |name|
-    name = name.strip.delete('"')
-    sign_up(buyer, name)
-  end
-end
-
 Given /^the buyer signed up for provider's paid (application|service|account) plan$/ do |plan_type|
   plan = instance_variable_get("@paid_#{plan_type}_plan")
   sign_up(@buyer, plan.name)
 end
 
-Given /^the buyer signed up for plan "([^"]*)"$/ do |plan_name|
-  sign_up(@buyer, plan_name)
+Given "{buyer} signed up for plan {string}" do |buyer, plan_name|
+  sign_up(buyer, plan_name)
 end
 
 Given /^the buyer changed to plan "([^"]*)"$/ do |plan_name|
