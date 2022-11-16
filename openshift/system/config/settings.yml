@@ -5,7 +5,6 @@ production:
   force_ssl: true
   apicast_oauth: true
   apicast_custom_url: true
-  apicast_configuration_driven: true
   active_docs_proxy_disabled: true
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
   events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
@@ -14,6 +13,9 @@ production:
   recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
   user_session_ttl: <%= ENV.fetch('USER_SESSION_TTL', 2.weeks) %>
+  impersonation_admin:
+    username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
+    domain: <%= ENV.fetch('IMPERSONATION_ADMIN_DOMAIN', '3scale.net') %>
 
   # System Emails
   noreply_email: <%= ENV.fetch('NOREPLY_EMAIL', "no-reply@#{superdomain}") %>
@@ -21,9 +23,6 @@ production:
   sales_email: <%= ENV.fetch('SALES_EMAIL', "sales@#{superdomain}") %>
   notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', "#{superdomain} Notification <no-reply@#{superdomain}>") %>
   sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', "sysadmin@#{superdomain}") %>
-  impersonation_admin:
-    username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
-    domain: <%= ENV.fetch('IMPERSONATION_ADMIN_DOMAIN', '3scale.net') %>
 
   readonly_custom_domains_settings: false
   report_traffic: false

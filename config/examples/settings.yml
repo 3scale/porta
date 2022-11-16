@@ -7,12 +7,9 @@ base: &default
   apicast_custom_url: <%= ENV.fetch('ENABLE_APICAST_CUSTOM_URL', '0') == '1' %>
   active_docs_proxy_disabled: false
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
-  daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
-  readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '1') == '1' %>
-  bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
-  bugsnag_release_stage: <%= ENV.fetch('BUGSNAG_RELEASE_STAGE', Rails.env) %>
-  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
   events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
+  onpremises_api_docs_version: false
+  onpremises: false
   recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
   user_session_ttl: <%= ENV.fetch('USER_SESSION_TTL', 2.weeks) %>
@@ -31,19 +28,27 @@ base: &default
   hide_basic_switches: false
   tenant_mode: <%= ENV.fetch('TENANT_MODE', 'multitenant') %>
   db_secret: <%= ENV.fetch('DB_SECRET', 'db_secret') %>
-  onpremises_api_docs_version: false
+
   assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
+
   email_sanitizer:
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
-    to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
-  onpremises: false
-  apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
-  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
-  access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
+    to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
+
+  janitor_worker_enabled: true
 
   # deprecated: use payments.yaml to configure payments instead
   active_merchant_logging: <%= ENV.fetch('ACTIVE_MERCHANT_LOGGING', false) %>
   billing_canaries:
+
+  daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
+  readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '1') == '1' %>
+
+  access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
+  bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
+  bugsnag_release_stage: <%= ENV.fetch('BUGSNAG_RELEASE_STAGE', Rails.env) %>
+  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
 
 development:
   <<: *default
@@ -59,11 +64,6 @@ test:
   secure_cookie: false
   force_ssl: false
   report_traffic: false
-
-preview:
-  <<: *default
-  report_traffic: false
-  access_code: <%= ENV.fetch('ACCESS_CODE', 'access_code') %>
 
 production:
   <<: *default
