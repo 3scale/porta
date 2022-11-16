@@ -115,7 +115,7 @@ class ApiDocs::ServicesController < FrontendController
   def show
     system_name = params[:id].to_sym
     api_file = (api_files.fetch(system_name) { raise ActiveRecord::RecordNotFound }).dup
-    api_file['apis'] = exclude_forbidden_endpoints(api_file['apis'])
+    # api_file['apis'] = exclude_forbidden_endpoints(api_file['apis'])
 
     render json: api_file
   end
