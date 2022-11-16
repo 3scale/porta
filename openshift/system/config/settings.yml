@@ -20,7 +20,6 @@ production:
   support_email: <%= ENV.fetch('SUPPORT_EMAIL', "#{superdomain} Support <support@#{superdomain}>") %>
   sales_email: <%= ENV.fetch('SALES_EMAIL', "sales@#{superdomain}") %>
   notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', "#{superdomain} Notification <no-reply@#{superdomain}>") %>
-  golive_email: <%= ENV.fetch('GOLIVE_EMAIL', "golive@#{superdomain}") %>
   sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', "sysadmin@#{superdomain}") %>
   impersonation_admin:
     username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>

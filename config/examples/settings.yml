@@ -25,7 +25,6 @@ base: &default
   support_email: <%= ENV.fetch('SUPPORT_EMAIL', '3scale Notifier <no-reply@example.com>') %>
   sales_email: <%= ENV.fetch('SALES_EMAIL', 'sales@example.com') %>
   notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', '3scale Notification <no-reply@example.com>') %>
-  golive_email: <%= ENV.fetch('GOLIVE_EMAIL', 'golive@example.com') %>
   sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', 'sysadmin@example.com') %>
 
   report_traffic: false
