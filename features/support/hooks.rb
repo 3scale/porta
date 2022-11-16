@@ -68,7 +68,7 @@ Before '@javascript' do
   @javascript = true
 end
 
-After do |scenario|
+After do |scenario| # rubocop:disable Metrics/BlockLength
   next unless scenario.failed? # we don't care about working scenarios
   next unless scenario.respond_to?(:feature) # example rows dont have feature
 
@@ -185,7 +185,7 @@ Before '@braintree' do
       .to_return(status: 200, body: '', headers: {})
 end
 
-Before '@stripe' do
+Before '@stripe' do # rubocop:disable Metrics/BlockLength
   customer_response_body = <<~JSON.strip
     {
       "id": "cus_IiIMv3fS4LCHwE",
