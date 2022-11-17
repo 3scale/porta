@@ -24,7 +24,7 @@ class Provider::Admin::CMS::GroupsController < Provider::Admin::CMS::BaseControl
   end
 
   def create
-    @group = current_account.provided_groups.build(params[:cms_group])
+    @group = current_account.provided_groups.build(sections_params)
 
     if @group.save
       flash[:info] = 'Group created.'

@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should be able to render a "cancel" button variant 1`] = `
+<button
+  class="pf-c-button pf-m-link PolicyChain-addPolicy--cancel"
+  type="button"
+>
+  <span
+    class="pf-c-button__icon"
+  >
+    <svg
+      aria-hidden="true"
+      fill="currentColor"
+      height="1em"
+      role="img"
+      style="vertical-align:-0.125em"
+      viewBox="0 0 352 512"
+      width="1em"
+    >
+      <path
+        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+        transform=""
+      />
+    </svg>
+  </span>
+  <span
+    class="pf-c-button__text"
+  />
+</button>
+`;
+
+exports[`should be able to render an "add" button variant 1`] = `
+<button
+  class="pf-c-button pf-m-link PolicyChain-addPolicy"
+  type="button"
+>
+  <span
+    class="pf-c-button__icon"
+  >
+    <svg
+      aria-hidden="true"
+      fill="currentColor"
+      height="1em"
+      role="img"
+      style="vertical-align:-0.125em"
+      viewBox="0 0 448 512"
+      width="1em"
+    >
+      <path
+        d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+        transform=""
+      />
+    </svg>
+  </span>
+  <span
+    class="pf-c-button__text"
+  />
+</button>
+`;

@@ -1,0 +1,24 @@
+name: Scheduled fast-forward from master to managed-services
+on:
+  schedule:
+    - cron: '0 10 * * THU'
+
+jobs:
+  check:
+    env:
+      PERIOD_DAYS: 21
+      STARTING_AT: "2022-10-27 00:00:00"
+    runs-on: ubuntu-latest
+    name: Decide whether it should call the job today
+    outputs:
+      RUN_TODAY: ${{ steps.check.outputs.RUN_TODAY }}
+    steps:
+      - id: check
+        run: |
+          echo "RUN_TODAY=$(($(($(($(date -d 00:00:00 +%s) - $(date -d '${{ env.STARTING_AT }}' +%s))) % $((60 * 60 * 24 * ${{ env.PERIOD_DAYS }} )))) == 0 ))" >> $GITHUB_OUTPUT
+  call:
+    name: Call the job
+    needs: check
+    if: ${{ needs.check.outputs.RUN_TODAY == 1 }}
+    uses: ./.github/workflows/fast-forward-branch.yml
+    secrets: inherit

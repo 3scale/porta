@@ -11,13 +11,7 @@ class SphinxIndexationWorker < ApplicationJob
     Rails.logger.info "SphinxIndexationWorker#perform raised #{exception.class} with message #{exception.message}"
   end
 
-  def perform(model, id=nil)
-    # this is temporary just one version to drain queue from old jobs, please delete this conditional block
-    unless model.is_a? Class
-      id = model.id
-      model = model.class
-    end
-
+  def perform(model, id)
     indices_for_model(model).each do |index|
       instance = index.scope.find_by(model.primary_key => id)
 

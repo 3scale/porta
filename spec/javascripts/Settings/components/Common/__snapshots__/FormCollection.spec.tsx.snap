@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+<FormFieldset
+  id="fieldset-SomeGoodBands"
+>
+  <FormLegend>
+    Some Good Bands
+  </FormLegend>
+  <GoodBand
+    key="The Rolling Stones"
+    name="The Rolling Stones"
+  />
+  <GoodBand
+    key="The Brian Jonestown Massacre"
+    name="The Brian Jonestown Massacre"
+  />
+  <GoodBand
+    key="Radiohead"
+    name="Radiohead"
+  />
+  <GoodBand
+    key="Blur"
+    name="Blur"
+  />
+  <GoodBand
+    key="The Clash"
+    name="The Clash"
+  />
+</FormFieldset>
+`;

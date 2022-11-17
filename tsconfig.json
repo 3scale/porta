@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "strict": true,
+    "useUnknownInCatchVariables": true,
+
+    // Modules
+    "baseUrl": "./app/javascript/src",
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
+
+    // Emit
+    "declaration": false,
+    "sourceMap": true,
+
+    // Interop Constraints
+    "esModuleInterop": true, // TODO: Investigate if we can remove this to improve bundle size
+
+    // Language and Environment
+    "jsx": "react-jsx",
+    "target": "ES6",
+  },
+  "include": [
+    "app/javascript/src/Stats/**/*.jsx", // This module is too complex to properly migrate it to TS
+    "app/javascript",
+    "spec/javascripts"
+  ],
+  "exclude": [
+    "app/javascript/packs/PF4Styles"
+  ],
+  "compileOnSave": false
+}
