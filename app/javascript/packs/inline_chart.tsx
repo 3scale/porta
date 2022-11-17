@@ -16,12 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentChart = chart.querySelector<HTMLElement>('.inline-chart-container')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- TODO: need to give some default values or something here
     const { endpoint, metricName, title } = currentChart!.dataset
+    const { unitPluralized } = chart.dataset
     render((
       <InlineChart
         endPoint={endpoint as unknown as string}
         metricName={metricName as unknown as string}
         title={title as unknown as string}
-        unitPluralized={chart.dataset.unitPluralized as unknown as string}
+        unitPluralized={unitPluralized as unknown as string}
       />
     ), currentChart)
   }
