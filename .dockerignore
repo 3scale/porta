@@ -6,7 +6,6 @@
 .bin
 cookbooks
 node_modules
-flow-typed
 assets/jspm_packages/*/*
 vendor/bundle
 .vagrant
@@ -48,7 +47,6 @@ log/*
 **/*.swp
 **/.*
 !.eslintrc
-!.flowconfig
 !.babelrc
 !.ruby-version.sample
 !Gemfile*

@@ -20,6 +20,7 @@ Feature: CMS groups
        And I press "Create"
       Then I should be on the groups page
        And I should see "le java enterprisers"
+       And I should see "nothing-to-see-here"
 
       When I follow "Delete" and I confirm dialog box
       Then I should see "Group deleted"

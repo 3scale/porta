@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render required form fields 1`] = `
+<Fragment>
+  <li
+    className="string required "
+    id="service_name_input"
+  >
+    <Label
+      htmlFor="service_name"
+      label="Name"
+      required={true}
+    />
+    <input
+      autoFocus={true}
+      id="service_name"
+      maxLength={255}
+      name="service[name]"
+      onChange={[Function]}
+      type="text"
+      value="New API"
+    />
+  </li>
+  <li
+    className="string required "
+    id="service_system_name_input"
+  >
+    <Label
+      htmlFor="service_system_name"
+      label="System name"
+      required={true}
+    />
+    <input
+      id="service_system_name"
+      maxLength={255}
+      name="service[system_name]"
+      onChange={[Function]}
+      type="text"
+      value="new_api"
+    />
+    <p
+      className="inline-hints"
+    >
+      Only ASCII letters, numbers, dashes and underscores are allowed.
+    </p>
+  </li>
+  <li
+    className="text optional "
+    id="service_description_input"
+  >
+    <Label
+      htmlFor="service_description"
+      label="Description"
+    />
+    <textarea
+      id="service_description"
+      name="service[description]"
+      onChange={[Function]}
+      rows={3}
+      value="A brand new API"
+    />
+  </li>
+</Fragment>
+`;
+
+exports[`should render required form fields with errors 1`] = `
+<Fragment>
+  <li
+    className="string required error"
+    id="service_name_input"
+  >
+    <Label
+      htmlFor="service_name"
+      label="Name"
+      required={true}
+    />
+    <input
+      autoFocus={true}
+      id="service_name"
+      maxLength={255}
+      name="service[name]"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+    <p
+      className="inline-errors"
+    >
+      Can't be blank
+    </p>
+  </li>
+  <li
+    className="string required error"
+    id="service_system_name_input"
+  >
+    <Label
+      htmlFor="service_system_name"
+      label="System name"
+      required={true}
+    />
+    <input
+      id="service_system_name"
+      maxLength={255}
+      name="service[system_name]"
+      onChange={[Function]}
+      type="text"
+      value="new api"
+    />
+    <p
+      className="inline-errors"
+    >
+      Only ASCII letters, numbers, dashes and underscores are allowed.
+    </p>
+  </li>
+  <li
+    className="text optional "
+    id="service_description_input"
+  >
+    <Label
+      htmlFor="service_description"
+      label="Description"
+    />
+    <textarea
+      id="service_description"
+      name="service[description]"
+      onChange={[Function]}
+      rows={3}
+      value="A brand new API"
+    />
+  </li>
+</Fragment>
+`;

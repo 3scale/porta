@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should have Dashboard, Audience, Products, Backends and Settings 1`] = `
+<ContextSelector
+  activeMenu=""
+  audienceLink="/audience"
+  backendsLink="/backends"
+  productsLink="/products"
+  settingsLink="/settings"
+>
+  <div
+    className="pf-c-context-selector header-context-selector  pf-m-expanded"
+    data-quickstart-id="context-selector"
+  >
+    <a
+      className="pf-c-context-selector__toggle "
+      onClick={[Function]}
+      title="Context Selector"
+    >
+      <ActiveMenuTitle
+        activeMenu=""
+      >
+        <span
+          className="pf-c-context-selector__toggle-text"
+        >
+          <i
+            className="fa  header-context-selector__toggle-text-icon"
+          />
+        </span>
+        <i
+          className="fa fa-chevron-down  pf-c-context-selector__toggle-icon"
+        />
+      </ActiveMenuTitle>
+    </a>
+    <div
+      className="pf-c-context-selector__menu"
+    >
+      <ul
+        className="pf-c-context-selector__menu-list"
+        id="context-menu"
+      >
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/p/admin/dashboard"
+          >
+            <i
+              className="fa fa-home header-context-selector__item-icon"
+            />
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/audience"
+          >
+            <i
+              className="fa fa-bullseye header-context-selector__item-icon"
+            />
+            Audience
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/products"
+          >
+            <i
+              className="fa fa-cubes header-context-selector__item-icon"
+            />
+            Products
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/backends"
+          >
+            <i
+              className="fa fa-cube header-context-selector__item-icon"
+            />
+            Backends
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/settings"
+          >
+            <i
+              className="fa fa-cog header-context-selector__item-icon"
+            />
+            Account Settings
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ContextSelector>
+`;
+
+exports[`should not have Audience if not provided 1`] = `
+<ContextSelector
+  activeMenu=""
+  backendsLink="/backends"
+  productsLink="/products"
+  settingsLink="/settings"
+>
+  <div
+    className="pf-c-context-selector header-context-selector  pf-m-expanded"
+    data-quickstart-id="context-selector"
+  >
+    <a
+      className="pf-c-context-selector__toggle "
+      onClick={[Function]}
+      title="Context Selector"
+    >
+      <ActiveMenuTitle
+        activeMenu=""
+      >
+        <span
+          className="pf-c-context-selector__toggle-text"
+        >
+          <i
+            className="fa  header-context-selector__toggle-text-icon"
+          />
+        </span>
+        <i
+          className="fa fa-chevron-down  pf-c-context-selector__toggle-icon"
+        />
+      </ActiveMenuTitle>
+    </a>
+    <div
+      className="pf-c-context-selector__menu"
+    >
+      <ul
+        className="pf-c-context-selector__menu-list"
+        id="context-menu"
+      >
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/p/admin/dashboard"
+          >
+            <i
+              className="fa fa-home header-context-selector__item-icon"
+            />
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/products"
+          >
+            <i
+              className="fa fa-cubes header-context-selector__item-icon"
+            />
+            Products
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/backends"
+          >
+            <i
+              className="fa fa-cube header-context-selector__item-icon"
+            />
+            Backends
+          </a>
+        </li>
+        <li>
+          <a
+            className="pf-c-context-selector__menu-list-item"
+            href="/settings"
+          >
+            <i
+              className="fa fa-cog header-context-selector__item-icon"
+            />
+            Account Settings
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ContextSelector>
+`;

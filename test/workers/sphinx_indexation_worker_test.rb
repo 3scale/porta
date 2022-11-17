@@ -11,13 +11,11 @@ class SphinxIndexationWorkerTest < ActiveSupport::TestCase
     callback = ThinkingSphinx::RealTime.callback_for(:account)
     assert callback
 
-    ThinkingSphinx::RealTime.expects(callback_for: callback).twice
-    callback.expects(:after_commit).twice.with(Equals.new(account))
+    ThinkingSphinx::RealTime.expects(callback_for: callback)
+    callback.expects(:after_commit).with(Equals.new(account))
     ThinkingSphinx::Test.rt_run do
       perform_enqueued_jobs only: SphinxIndexationWorker do
         SphinxIndexationWorker.perform_later(account.class, account.id)
-        # remove this once we remove backward compatibility from SphinxIndexationWorker
-        SphinxIndexationWorker.perform_later(account)
       end
     end
   end

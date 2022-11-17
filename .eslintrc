@@ -1,95 +1,134 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": false
+    "project": ["./tsconfig.json"],
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "impliedStrict": true,
+      "jsxPragma": null // Required by @typescript/eslint-parser
+    }
   },
   "env": {
     "browser": true,
-    "node": true,
     "jest": true
   },
-  "globals": {
-    "$": true
-  },
-  "extends": "standard",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/all",
+    "plugin:react/all",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "./eslint-naming-conventions.json",
+  ],
   "plugins": [
-    "flowtype",
-    "react"
+    "@typescript-eslint",
+    "import",
+    // "jsx-expressions" // TODO: requires eslint 8
   ],
   "rules": {
-    "no-console": [
-      "warn",
-      {
-        "allow": [
-          "error"
-        ]
-      }
-    ],
-    "no-duplicate-imports": 0,
-    "react/sort-comp": [
-      2,
-      {
-        "order": [
-          "type-annotations",
-          "static-methods",
-          "life-cycle",
-          "everything-else",
-          "render"
-        ]
-      }
-    ],
-    "react/no-unused-prop-types": 0,
-    "react/jsx-uses-react": 2,
-    "react/jsx-uses-vars": 2,
-    "react/react-in-jsx-scope": 2,
-    "flowtype/boolean-style": [
-      2,
-      "boolean"
-    ],
-    "flowtype/define-flow-type": 1,
-    "flowtype/generic-spacing": [
-      2,
-      "never"
-    ],
-    "flowtype/no-primitive-constructor-types": 2,
-    "flowtype/no-weak-types": 1,
-    "flowtype/object-type-delimiter": [
-      2,
-      "comma"
-    ],
-    "flowtype/require-valid-file-annotation": 2,
-    "flowtype/space-after-type-colon": [
-      2,
-      "always"
-    ],
-    "flowtype/space-before-generic-bracket": [
-      2,
-      "never"
-    ],
-    "flowtype/space-before-type-colon": [
-      2,
-      "never"
-    ],
-    "flowtype/union-intersection-spacing": [
-      2,
-      "always"
-    ],
-    "flowtype/use-flow-type": 1,
-    "flowtype/valid-syntax": 1,
-    // Workaround to bypass error: TypeError: Cannot read property 'range' of null
-    // See: https://github.com/babel/babel-eslint/issues/681#issuecomment-420663038
-    // We should upgrade from babel-eslint (deprecated) to @babel/eslint-parser
-    "template-curly-spacing": "off",
-    "indent": "off"
+    // Override eslint:recommended
+    "object-curly-spacing": "off", // Disabled in favor of @typescript-eslint/object-curly-spacing
+    "array-callback-return": "error",
+    "no-duplicate-imports": "off", // Disabled in favor of @typescript-eslint/no-duplicate-imports
+    "no-console": ["warn", { "allow": ["error"] }],
+    "sort-imports": "off", // Disabled in favor of import/order
+    "semi": "off", // Disabled in favor of @typescript-eslint/semi
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "jsx-quotes": ["error", "prefer-double"],
+    "array-bracket-spacing": ["error", "never"],
+    // "eslint array-bracket-newline": ["error", { "multiline": true }], // TODO: requires eslint 8
+
+    // Override plugin:@typescript-eslint/all
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true }],
+    "@typescript-eslint/indent": ["error", 2, { "SwitchCase": 1 }],
+    "@typescript-eslint/prefer-readonly-parameter-types": "off",
+    "@typescript-eslint/no-extra-parens": "off",
+    "@typescript-eslint/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-type-alias": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-magic-numbers": "off",
+    "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/promise-function-async": "off",
+
+    // Override plugin:@typescript-eslint/recommended
+    "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/consistent-type-imports": 2,
+    "@typescript-eslint/no-duplicate-imports": "error",
+
+    // Override plugin:react/all
+    "react/destructuring-assignment": "off",
+    "react/forbid-component-props": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-curly-newline": ["error", { "multiline": "forbid", "singleline": "forbid" }],
+    "react/jsx-filename-extension": [2, { "extensions": [".jsx", ".tsx"] }],
+    "react/jsx-handler-names": "off",
+    "react/jsx-indent-props": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-max-depth": "off",
+    "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
+    "react/jsx-newline": "off",
+    "react/jsx-no-bind": "off",
+    "react/jsx-no-leaked-render": "off",
+    "react/jsx-no-literals": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-sort-props": [2, {
+      "callbacksLast": true,
+      "shorthandFirst": true,
+      "reservedFirst": ["key"]
+    }],
+    "react/jsx-wrap-multilines": ["error", {
+      "declaration": "parens-new-line",
+      "assignment": "parens-new-line",
+      "return": "parens-new-line",
+      "arrow": "parens-new-line",
+      "condition": "parens-new-line",
+      "logical": "parens-new-line"
+    }],
+    "react/jsx-child-element-spacing": "warn",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+    "react/no-set-state": "off",
+    "react/no-unescaped-entities": "warn",
+
+    // From plugin import
+    "import/order": ["error", {
+      "warnOnUnassignedImports": true,
+      "groups": [["builtin", "external"], "internal", "index", "object", "type", ["parent", "sibling"]],
+      "pathGroups": [{
+        "pattern": "utilities/**",
+        "group": "internal",
+        // "position": "after" // TODO: enable this once "distincGroup" is available to locate utilities at the bottom of this group
+      },{
+        "pattern": "**/*.scss",
+        "group": "sibling",
+      }],
+      "newlines-between": "always",
+      // "distinctGroup": "false" // TODO: config not yet available.
+    }],
+    "import/newline-after-import": "error",
+    "import/no-relative-packages": "error",
+
+    // From plugin jsx-expressions
+    // "jsx-expressions/strict-logical-expressions": "error", // Replaces rule "react/jsx-no-leaked-render" // TODO: requires eslint 8
   },
   "settings": {
     "react": {
-      "version": "detect"
+      "version": "detect" // React version. "detect" automatically picks the version you have installed.
     },
-    "flowtype": {
-      "onlyFilesWithFlowAnnotation": true
+    "import/resolver": {
+      "typescript": true
     }
-  }
+  },
+  "ignorePatterns": [
+    "jest.config.js",
+    "spec/javascripts/setupTests.ts",
+    "spec/javascripts/__mocks__/",
+    "app/javascript/src/Stats" // We better avoid touching this module, eslint may automatically fix some of the errors and break it.
+  ]
 }

@@ -48,4 +48,25 @@ class Provider::Admin::Messages::InboxControllerTest < ActionController::TestCas
     assert_select 'title', "Inbox - Index | Red Hat 3scale API Management"
     assert_select '#export-to-csv', false, 'Export all Messages'
   end
+
+  test 'creates valid reply' do
+    login_as(@admin)
+    post :reply, params: { message: { subject: "Valid Message", body: "message with subject" }, id: @message.id }
+
+    MessageWorker.drain
+    msg = Message.last
+    
+    assert_equal flash[:notice], 'Reply was sent.'
+    assert 'sent', msg.state
+    assert_equal 'message with subject', msg.body
+  end
+
+  test 'not creates invalid message' do
+    login_as(@admin)
+    post :reply, params: { message: { subject: nil, body: 'message with nil subject' }, id: @message.id }
+
+    MessageWorker.drain
+    msg = Message.last
+    assert_not_equal 'message with nil subject', msg.body
+  end
 end
