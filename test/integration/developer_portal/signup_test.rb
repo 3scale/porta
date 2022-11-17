@@ -26,6 +26,44 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  def test_create_spam_protected_always
+    @provider.settings.update_attributes(spam_protection_level: :captcha)
+    DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
+
+    post signup_path(account: {
+                       promo_code: '12345',
+                       org_name:   'alaska',
+                       user: {
+                         email:    'foo@example.edu',
+                         username: 'supertramp',
+                         password: 'westisthebest'
+                       }
+                     })
+
+    assert_response :success
+    user = @provider.buyer_users.find_by(email: 'foo@example.edu')
+    assert_nil user
+  end
+
+  def test_create_spam_protected_suspicious_only
+    @provider.settings.update_attributes(spam_protection_level: :auto)
+    DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
+
+    post signup_path(account: {
+                       promo_code: '12345',
+                       org_name:   'alaska',
+                       user: {
+                         email:    'foo@example.edu',
+                         username: 'supertramp',
+                         password: 'westisthebest'
+                       }
+                     })
+
+    assert_response :success
+    user = @provider.buyer_users.find_by(email: 'foo@example.edu')
+    assert_nil user
+  end
+
   def test_signup_with_oauth_if_account_requires_approval
     @provider.settings.update_attributes(account_approval_required: true) # rubocop:disable Rails/ActiveRecordAliases) This method is being overriden
 
