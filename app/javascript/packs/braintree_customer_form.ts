@@ -16,19 +16,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     throw new Error('The target ID was not found: ' + CONTAINER_ID)
   }
 
-  const { clientToken, formActionPath, countriesList, selectedCountryCode, threeDSecureEnabled } = container.dataset as Record<string, string> // FIXME: We should not assume this attributes are present
-  const billingAddress = {
-    address: '',
-    address1: '',
-    address2: '',
-    city: '',
-    company: '',
-    country: '',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    phone_number: '',
-    state: '',
-    zip: '',
-    ...safeFromJsonString<Partial<BillingAddressData>>(container.dataset.billingAddress)
+  const { clientToken, threeDSecureEnabled, formActionPath, countriesList, selectedCountryCode } = container.dataset as Record<string, string>
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: too much assumption here
+  const billingAddress = safeFromJsonString<BillingAddressData>(container.dataset.billingAddress)!
+  for (const key in billingAddress) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME
+    if (billingAddress[key as keyof BillingAddressData] === null) {
+      billingAddress[key as keyof BillingAddressData] = ''
+    }
   }
   const braintreeClient = await createBraintreeClient(client, clientToken) as Client
 
