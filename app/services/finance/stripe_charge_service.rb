@@ -3,12 +3,17 @@
 class Finance::StripeChargeService
   PAYMENT_INTENT_SUCCEEDED = 'succeeded'
   PAYMENT_INTENT_REQUIRES_CONFIRMATION = 'requires_confirmation'
+  PAYMENT_DESCRIPTION = 'API services'
 
   def initialize(gateway, payment_method_id:, invoice: nil, gateway_options: {})
     @gateway = gateway
     @payment_method_id = payment_method_id
     @invoice = invoice
     @gateway_options = gateway_options
+
+    # As per Indian regulations the Payment intents should have a description,
+    # see https://stripe.com/docs/india-accept-international-payments#valid-charges
+    @gateway_options[:description] = charge_description
   end
 
   attr_reader :gateway, :payment_method_id, :invoice, :gateway_options
@@ -47,7 +52,7 @@ class Finance::StripeChargeService
 
   def confirm_payment_intent(payment_intent)
     # Passing the gateway option `off_session: false` will cause a `requires_action` status on the payment intent in cases where otherwise it would be `requires_payment_method`.
-    # This happens even when the payment intent has been originally created with `off_session: true` – i.e. Stripe allows us to turn an "off_session" payment intent into an "on_session" one.
+    # This happens even when the payment intent has been originally created with `off_session: true` - i.e. Stripe allows us to turn an "off_session" payment intent into an "on_session" one.
     # Along with the `requires_action` status, the param `next_action.use_stripe_sdk.stripe_js` holds the next-step link to get the transaction authenticated
     response = gateway.confirm_intent(payment_intent.reference, payment_method_id, gateway_options)
 
@@ -74,5 +79,11 @@ class Finance::StripeChargeService
     response_params = response.params
     payment_intent_data = (response.success? ? response_params : response_params.dig('error', Stripe::PaymentIntent::OBJECT_NAME)) || {}
     payment_intent_data if payment_intent_data['object'] == Stripe::PaymentIntent::OBJECT_NAME
+  end
+
+  def charge_description
+    return PAYMENT_DESCRIPTION if invoice.blank?
+
+    "#{invoice&.from&.name} #{PAYMENT_DESCRIPTION} #{invoice&.friendly_id}".strip
   end
 end

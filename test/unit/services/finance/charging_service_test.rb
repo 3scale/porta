@@ -98,7 +98,8 @@ module Finance
       end
 
       def payment_gateway_options
-        { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx', endpoint_secret: 'some-secret' }
+        { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc', publishable_key: 'pk_test_TYooMQauvdEDq54NiTphI7jx',
+          endpoint_secret: 'some-secret', description: Finance::StripeChargeService::PAYMENT_DESCRIPTION }
       end
     end
   end
