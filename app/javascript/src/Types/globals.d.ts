@@ -23,7 +23,7 @@ declare global {
     dashboardWidget: {
       loadAudienceWidget: (widgetPath: string) => void;
     };
-    renderChartWidget: (widget: string, data: unknown) => void;
+    renderChartWidget: (widget: HTMLElement, data: unknown) => void;
   }
 
   interface JQueryStatic {

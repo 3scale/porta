@@ -1,9 +1,6 @@
-// @flow
-
-import React from 'react'
+import { mount } from 'enzyme'
 
 import { PotentialUpgradesWidget } from 'Dashboard/components/PotentialUpgradesWidget'
-import { mount } from 'enzyme'
 
 import type { Props } from 'Dashboard/components/PotentialUpgradesWidget'
 
@@ -11,9 +8,9 @@ const defaultProps: Props = {
   violations: [
     {
       id: 1,
-      account_id: 1,
-      account_name: 'Account Name',
-      alerts_count: 10,
+      accountId: 1,
+      accountName: 'Account Name',
+      alertsCount: 10,
       url: '/apiconfig/alerts?search%5Baccount_id%5D=1&search%5Blevel%5D=100&search%5Btimestamp%5D%5B%5D=2022-09-24&search%5Btimestamp%5D%5B%5D=2022-10-24'
     }
   ],
@@ -24,7 +21,7 @@ const defaultProps: Props = {
   }
 }
 
-const mountWrapper = (props: Props) => mount(<PotentialUpgradesWidget {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Props) => mount(<PotentialUpgradesWidget {...{ ...defaultProps, ...props }} />)
 
 it('should render', () => {
   const wrapper = mountWrapper(defaultProps)

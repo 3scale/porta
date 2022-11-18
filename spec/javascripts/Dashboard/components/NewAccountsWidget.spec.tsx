@@ -1,33 +1,30 @@
-// @flow
-
-import React from 'react'
+import { mount } from 'enzyme'
 
 import { NewAccountsWidget } from 'Dashboard/components/NewAccountsWidget'
-import { mount } from 'enzyme'
 
 import type { Props } from 'Dashboard/components/NewAccountsWidget'
 
 const defaultProps: Props = {
   chartData: {
     values: {
-      '2022-01-01': { value: 0, formatted_value: '0' },
-      '2022-01-02': { value: 1, formatted_value: '1' },
-      '2022-01-03': { value: 1, formatted_value: '1' }
+      '2022-01-01': { value: 0, formattedValue: '0' },
+      '2022-01-02': { value: 1, formattedValue: '1' },
+      '2022-01-03': { value: 1, formattedValue: '1' }
     },
     complete: {
-      '2022-01-01': { value: 0, formatted_value: '0' },
-      '2022-01-02': { value: 1, formatted_value: '1' },
-      '2022-01-03': { value: 1, formatted_value: '1' }
+      '2022-01-01': { value: 0, formattedValue: '0' },
+      '2022-01-02': { value: 1, formattedValue: '1' },
+      '2022-01-03': { value: 1, formattedValue: '1' }
     },
     incomplete: {
-      '2022-01-01': { value: 0, formatted_value: '0' },
-      '2022-01-02': { value: 1, formatted_value: '1' },
-      '2022-01-03': { value: 1, formatted_value: '1' }
+      '2022-01-01': { value: 0, formattedValue: '0' },
+      '2022-01-02': { value: 1, formattedValue: '1' },
+      '2022-01-03': { value: 1, formattedValue: '1' }
     },
     previous: {
-      '2022-01-01': { value: 0, formatted_value: '0' },
-      '2022-01-02': { value: 1, formatted_value: '1' },
-      '2022-01-03': { value: 1, formatted_value: '1' }
+      '2022-01-01': { value: 0, formattedValue: '0' },
+      '2022-01-02': { value: 1, formattedValue: '1' },
+      '2022-01-03': { value: 1, formattedValue: '1' }
     }
   },
   newAccountsTotal: 10,
@@ -48,7 +45,7 @@ const defaultProps: Props = {
   percentualChange: 50
 }
 
-const mountWrapper = (props: Props) => mount(<NewAccountsWidget {...{ ...defaultProps, ...props }}/>)
+const mountWrapper = (props: Props) => mount(<NewAccountsWidget {...{ ...defaultProps, ...props }} />)
 
 it('should render', () => {
   const wrapper = mountWrapper(defaultProps)
