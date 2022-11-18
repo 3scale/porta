@@ -43,7 +43,7 @@ base: &default
   billing_canaries:
 
   daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
-  readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '1') == '1' %>
+  readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '0') == '1' %>
 
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
   bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
