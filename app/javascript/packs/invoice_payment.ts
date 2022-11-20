@@ -6,26 +6,33 @@ import type { PaymentIntent, Stripe, StripeCardElement } from '@stripe/stripe-js
 
 import 'PaymentGateways/stripe/components/StripeFormWrapper.scss'
 
-const style = {
-  base: {
-    color: '#32325d',
-    fontFamily: 'Arial, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#32325d'
+const CARD_OPTIONS = {
+  iconStyle: 'solid',
+  style: {
+    base: {
+      iconColor: '#8898AA',
+      color: 'black',
+      fontWeight: 300,
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      fontSize: '19px',
+      '::placeholder': {
+        color: '#3f454c'
+      }
+    },
+    invalid: {
+      iconColor: '#e85746',
+      color: '#e85746'
     }
   },
-  invalid: {
-    fontFamily: 'Arial, sans-serif',
-    color: '#fa755a',
-    iconColor: '#fa755a'
+  classes: {
+    focus: 'is-focused',
+    empty: 'is-empty'
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 document.addEventListener('DOMContentLoaded', async () => {
-  const dataset = document.querySelector<HTMLElement>('.stripe-form')!.dataset
+  const dataset = document.querySelector<HTMLElement>('.StripeElementsForm')!.dataset
   const { stripePublishableKey = '', clientSecret = '' } = dataset
   const form = document.querySelector('#payment-form')!
   const callbackForm = document.querySelector<HTMLFormElement>('#payment-callback-form')!
@@ -33,19 +40,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cardError = document.querySelector('#card-error')!
   const errorMsg = document.querySelector('#card-error')!
   const spinner = document.querySelector('#spinner')!
-  const buttonText = document.querySelector('#button-text')!
+  const cardholderNameInput = document.querySelector('#cardholder-name')!
+  const billingAddress = JSON.parse(dataset.billingAddress)
 
   const stripe = await loadStripe(stripePublishableKey)!
   const elements = stripe!.elements()
-  const card = elements.create('card', { style })
+  const card = elements.create('card', CARD_OPTIONS)
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  const payWithCard = (stripe: Stripe, card: StripeCardElement, clientSecret: string) => {
+  const payWithCard = (stripe: Stripe, card: StripeCardElement, clientSecret: string, cardholderName: string) => {
     setLoading(true)
     void stripe.confirmCardPayment(clientSecret, {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
       payment_method: {
-        card: card
+        card: card,
+        billing_details: {
+          address: billingAddress,
+          name: cardholderName
+        }
       }
     }).then(function (result) {
       if (result.error) {
@@ -79,7 +91,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const setLoading = (isLoading: boolean) => {
     payButton.disabled = isLoading
     spinner.classList.toggle('hidden', !isLoading)
-    buttonText.classList.toggle('hidden', isLoading)
   }
 
   payButton.disabled = true
@@ -91,6 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', function (event) {
     event.preventDefault()
     // @ts-expect-error FIXME: we can't simply assume stripe instance will be there
-    payWithCard(stripe, card, clientSecret)
+    payWithCard(stripe, card, clientSecret, cardholderNameInput.value)
   })
 })

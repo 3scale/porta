@@ -48,6 +48,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
   const [stripePaymentMethodId, setStripePaymentMethodId] = useState<PaymentMethod | string | null>('')
   const [formComplete, setFormComplete] = useState(false)
+  const cardholderNameInputRef = useRef<HTMLInputElement | null>(null)
 
   const stripe = useStripe()
   const elements = useElements()
@@ -69,7 +70,8 @@ const StripeCardForm: FunctionComponent<Props> = ({
         card: elements.getElement(CardElement)!,
         // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
         billing_details: {
-          address: billingAddressDetails
+          address: billingAddressDetails,
+          name: cardholderNameInputRef.current?.value
         }
       }
     })
@@ -91,7 +93,7 @@ const StripeCardForm: FunctionComponent<Props> = ({
     <div className="well StripeElementsForm">
       <EditCreditCardDetails
         isStripeFormVisible={isStripeFormVisible}
-        onToogleVisibility={toggleVisibility}
+        onToggleVisibility={toggleVisibility}
       />
       <form
         acceptCharset="UTF-8"
@@ -104,11 +106,21 @@ const StripeCardForm: FunctionComponent<Props> = ({
       >
         <fieldset>
           <legend>Credit card details</legend>
-          <CardElement
-            className="col-md-12"
-            options={CARD_OPTIONS}
-            onChange={validateCardElement}
-          />
+          <div className="form-element col-md-12">
+            <CardElement
+              options={CARD_OPTIONS}
+              className="col-md-12"
+              onChange={validateCardElement}
+            />
+          </div>
+          <div className="form-element col-md-12">
+            <input
+              type="text"
+              id="cardholder-name"
+              placeholder="Cardholder's name (optional)"
+              ref={cardholderNameInputRef}
+            />
+          </div>
           {!!cardErrorMessage && <CreditCardErrors>{cardErrorMessage}</CreditCardErrors>}
         </fieldset>
         <fieldset>
@@ -138,16 +150,16 @@ const StripeCardForm: FunctionComponent<Props> = ({
 }
 
 interface EditCreditCardDetailsProps {
-  onToogleVisibility: () => void;
+  onToggleVisibility: () => void;
   isStripeFormVisible: boolean;
 }
 
 // eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
 const EditCreditCardDetails: FunctionComponent<EditCreditCardDetailsProps> = ({
-  onToogleVisibility,
+  onToggleVisibility,
   isStripeFormVisible
 }) => (
-  <a className="editCardButton" onClick={onToogleVisibility}>
+  <a className="editCardButton" onClick={onToggleVisibility}>
     <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`} />
     <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
   </a>

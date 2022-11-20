@@ -1,11 +1,8 @@
-// scss-lint:disable IdSelector
 $white: white;
-$stripe-form-border-color: rgba(50, 50, 93, .1);
-$stripe-form-button-box-shadow-color: rgba(0, 0, 0, .07);
-$stripe-form-result-color:  rgb(89, 111, 214);
+$black: black;
 $stripe-form-card-error-color: rgb(105, 115, 134);
-$stripe-form-button-bg-color: #5469d4;
-$stripe-form-spinner-color: #5469d4;
+$stripe-form-input-placeholder-color: #3f454c;
+$stripe-form-font-family: "Helvetica Neue", Helvetica, sans-serif;
 
 .StripeElementsForm {
 
@@ -30,32 +27,35 @@ $stripe-form-spinner-color: #5469d4;
   .cardErrors {
     margin: 1rem;
   }
-}
-
-.stripe-form {
-  form {
-    align-self: center;
-    border-radius: 7px;
-    min-width: 500px;
-    padding: 40px;
-  }
 
   input {
-    background: $white;
-    border: 1px solid $stripe-form-border-color;
-    border-radius: 6px;
-    font-size: 16px;
-    height: 44px;
-    margin-bottom: 6px;
-    padding: 12px;
+    background-color: transparent;
+    border: 0;
+    color: $black;
+    font-family: $stripe-form-font-family;
+    font-size: 19px;
+    font-weight: 300;
     width: 100%;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: $stripe-form-input-placeholder-color;
+    font-style: normal;
+  }
+
+  .form-element + .form-element {
+    margin-top: 6px;
   }
 
   .hidden {
     display: none;
   }
 
-  #card-error {
+  .card-error {
     color: $stripe-form-card-error-color;
     font-size: 13px;
     line-height: 17px;
@@ -63,97 +63,4 @@ $stripe-form-spinner-color: #5469d4;
     text-align: left;
   }
 
-  #card-element {
-    background: $white;
-    border: 1px solid stripe-form-border-color;
-    border-radius: 4px 4px 0 0;
-    height: 44px;
-    padding: 12px;
-    width: 100%;
-  }
-
-  #payment-request-button {
-    margin-bottom: 32px;
-  }
-
-  button {
-    background: $stripe-form-button-bg-color;
-    border: 0;
-    border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 5.5px 0 $stripe-form-button-box-shadow-color;
-    color: $white;
-    cursor: pointer;
-    display: block;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 12px 16px;
-    transition: all .2s ease;
-    width: 100%;
-  }
-
-  button:hover {
-    filter: contrast(115%);
-  }
-
-  button:disabled {
-    cursor: default;
-    opacity: .5;
-  }
-
-  .spinner,
-  .spinner::before,
-  .spinner::after {
-    border-radius: 50%;
-  }
-
-  .spinner {
-    box-shadow: inset 0 0 0 2px;
-    color: $white;
-    font-size: 22px;
-    height: 20px;
-    margin: 0 auto;
-    position: relative;
-    text-indent: -99999px;
-    transform: translateZ(0);
-    width: 20px;
-  }
-
-  .spinner::before,
-  .spinner::after {
-    content: '';
-    position: absolute;
-  }
-
-  .spinner::before {
-    animation: loading 2s infinite ease 1.5s;
-    background: $stripe-form-spinner-color;
-    border-radius: 20.4px 0 0 20.4px;
-    height: 20.4px;
-    left: -.2px;
-    top: -.2px;
-    transform-origin: 10.4px 10.2px;
-    width: 10.4px;
-  }
-
-  .spinner::after {
-    animation: loading 2s infinite ease;
-    background: $stripe-form-spinner-color;
-    border-radius: 0 10.2px 10.2px 0;
-    height: 10.2px;
-    left: 10.2px;
-    top: -.1px;
-    transform-origin: 0 10.2px;
-    width: 10.4px;
-  }
-
-  @keyframes loading {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 }
