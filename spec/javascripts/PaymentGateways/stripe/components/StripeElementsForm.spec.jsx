@@ -1,5 +1,11 @@
-
+import React from 'react'
+import { act } from 'react-dom/test-utils'
+import { CardElement } from '@stripe/react-stripe-js'
 import { mount } from 'enzyme'
+
+import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+
+import type { Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 
 import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 
@@ -26,36 +32,37 @@ const defaultProps: Props = {
 * we should update this tests when the issue is updated
 */
 
+const mountWrapper = (props: $Shape<Props> = {}) => mount(<StripeElementsForm { ...{ ...defaultProps, ...props } } />)
+
 it('should render properly', () => {
-  const wrapper = mount(<StripeElementsForm {...defaultProps} />)
-  expect(wrapper.exists('.StripeElementsForm')).toEqual(true)
+  const wrapper = mountWrapper()
+  expect(wrapper.exists(StripeElementsForm)).toEqual(true)
   expect(wrapper.exists('#stripe-form')).toEqual(true)
 })
 
 it('should enable submit button when form is complete and valid', () => {
-  const wrapper = mount(<StripeElementsForm {...defaultProps} />)
+  const wrapper = mountWrapper()
   expect(wrapper.find('#stripe-submit').prop('disabled')).toEqual(true)
 
-  // TODO: this should be possible without mocking the whole component
-  // wrapper.find('CardElement').simulate('change', { complete: true })
-  // wrapper.update()
-  // expect(wrapper.find('#stripe-submit').prop('disabled')).toEqual(false)
+  act(() => { wrapper.find(CardElement).props().onChange({ complete: true }) })
+  wrapper.update()
+  expect(wrapper.find('#stripe-submit').prop('disabled')).toEqual(false)
 })
 
 describe('A credit card is stored', () => {
-  const props = { ...defaultProps, isCreditCardStored: true }
+  const props = { isCreditCardStored: true }
 
   it('should render properly', () => {
-    const wrapper = mount(<StripeElementsForm {...props} />)
-    expect(wrapper.find('#stripe-form').hasClass('hidden')).toEqual(true)
+    const wrapper = mountWrapper(props)
+    expect(wrapper.find('#stripe-form').hasClass('hidden')).toBe(true)
   })
 })
 
 describe('No credit card is stored', () => {
-  const props = { ...defaultProps, isCreditCardStored: false }
+  const props = { isCreditCardStored: false }
 
   it('should render properly', () => {
-    const wrapper = mount(<StripeElementsForm {...props} />)
-    expect(wrapper.find('#stripe-form').hasClass('hidden')).toEqual(false)
+    const wrapper = mountWrapper(props)
+    expect(wrapper.find('#stripe-form').hasClass('hidden')).toBe(false)
   })
 })
