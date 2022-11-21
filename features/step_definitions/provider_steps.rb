@@ -225,6 +225,7 @@ And(/^the provider has a buyer with application$/) do
   step %(a service plan "Gold" of provider "#{@provider.internal_domain}")
   step 'a buyer "bob" signed up to service plan "Gold"'
   step 'buyer "bob" has application "Alexisonfire" with description "Slightly less awesome widget"'
+  @buyer = Account.last
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|

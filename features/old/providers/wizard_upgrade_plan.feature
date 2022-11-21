@@ -1,3 +1,4 @@
+@braintree
 Feature: Wizard Billing information
   In order to provider my billing information
   As a provider
@@ -9,7 +10,6 @@ Feature: Wizard Billing information
     And current domain is the admin domain of provider "foo.3scale.localhost"
     And provider "master" has billing enabled
     And provider "master" has testing credentials for braintree
-    And Braintree is stubbed to accept credit card
     And Braintree is stubbed for wizard
     And I log in as provider "foo.3scale.localhost"
   Given master provider has the following fields defined for "Account":

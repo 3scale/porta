@@ -1,3 +1,5 @@
+# TODO: re-write this
+@braintree
 Feature: Provider Payment Details
   In order to pay to our master
 
@@ -5,7 +7,6 @@ Feature: Provider Payment Details
     Given a provider "foo.3scale.localhost"
     And provider "master" manages payments with "braintree_blue"
     And provider "master" has testing credentials for braintree
-    And Braintree is stubbed to accept credit card for buyer
 
   Scenario: Upload logo
     Given master provider has the following fields defined for "Account":

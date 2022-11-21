@@ -20,9 +20,9 @@ Feature: Buyer signup
       And the users should receive the service contract created notification email
 
   # This is the default behaviour for new providers as of 05-07-2016
+  @braintree
   Scenario: Signup forces to fill in credit card for paid plan
     Given the provider is charging its buyers
-    And Braintree is stubbed to accept credit card
     And has a buyer with application plan
     And application plan is paid
     And the provider has credit card on signup feature in automatic mode
@@ -46,9 +46,9 @@ Feature: Buyer signup
     Then I should be on the homepage
 
   # This is the behaviour for existing providers as of 05-07-2016
+  @braintree
   Scenario: Signup require to fill in credit card on paid plan if switch is enabled
     And the provider is charging its buyers
-    And Braintree is stubbed to accept credit card
 
     And has a buyer with application plan
     And application plan is paid

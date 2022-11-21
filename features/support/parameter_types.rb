@@ -20,13 +20,15 @@ ParameterType(
 
 ParameterType(
   name: 'provider_or_buyer',
-  regexp: /(provider|buyer) "([^"]*)"/,
+  regexp: /(?:(provider|buyer) "([^"]*)"|the provider)/,
   transformer: ->(type, name) {
     case type
-    when 'provider' then
+    when 'provider'
       provider_by_name(name)
-    when 'buyer' then
+    when 'buyer'
       Account.buyers.find_by!(name: name)
+    else
+      @provider
     end
   }
 )
@@ -118,8 +120,8 @@ ParameterType(
 ParameterType(
   name: 'buyer',
   type: Account,
-  regexp: /buyer "([^"]*)"/,
-  transformer: ->(org_name) { Account.buyers.find_by!(org_name: org_name) }
+  regexp: /buyer "([^"]*)"|the buyer/,
+  transformer: ->(org_name) { org_name.present? ? Account.buyers.find_by!(org_name: org_name) : @buyer }
 )
 
 ParameterType(
@@ -365,4 +367,16 @@ ParameterType(
   name: 'switch',
   regexp: /"(.+?)"(?: switch)?/,
   transformer: ->(name) { name }
+)
+
+ParameterType(
+  name: 'valid',
+  regexp: /valid|invalid/,
+  transformer: ->(value) { value == 'valid' }
+)
+
+ParameterType(
+  name: 'has',
+  regexp: /has|has already|has not|has not yet/,
+  transformer: ->(value) { ['has', 'has already'].include?(value) }
 )

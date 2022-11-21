@@ -1,11 +1,22 @@
 module CreditCardHelpers
   def customer_hash
     {
-      id: 123, first_name: 'asd', last_name: 'zxc',
-      credit_cards: [{ expiration_year: '2018', expiration_month: '12', last_4: '1111' }],
-      addresses: [{ company: 'foo', street_address: 'street',
-                    locality: 'bcn', country_name: 'cat',
-                    region: 'foo', postal_code: '708080' }],
+      id: 123,
+      first_name: 'asd',
+      last_name: 'zxc',
+      credit_cards: [{
+        expiration_year: '2018',
+        expiration_month: '12',
+        last_4: '1111'
+      }],
+      addresses: [{
+        company: 'foo',
+        street_address: 'street',
+        locality: 'bcn',
+        country_name: 'cat',
+        region: 'foo',
+        postal_code: '708080'
+      }],
       phone: 979797979
     }
   end

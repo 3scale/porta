@@ -74,7 +74,7 @@ Feature: Prepaid billing of a buyer
    Then I should have 1 invoice on 23th January 2009
     And I see my invoice from "January, 2009" is "Unpaid"
 
-   Given buyer "zoidberg" has valid credit card
+   Given buyer "zoidberg" has a valid credit card
    Then I should have 1 invoice on 24th January 2009
     And I see my invoice from "January, 2009" is "Paid"
 

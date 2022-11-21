@@ -178,7 +178,7 @@ Then /^I should not see the timezone field$/ do
 end
 
 
-Given('the provider has a buyer') do
+Given('a buyer signs up to the provider') do
   step %'the current domain is #{@provider.external_domain}'
 
   visit signup_path
@@ -248,6 +248,7 @@ And /^application plan is paid$/ do
   step 'plan "Metal" has monthly fee of 100'
 end
 
+# TODO: this does the same as "the buyer logs in to the provider". DRY it.
 When(/^the buyer logs in$/) do
   steps %(
     And the current domain is foo.3scale.localhost
@@ -276,4 +277,17 @@ end
 
 When(/^as a developer$/) do
   step 'the current domain is foo.3scale.localhost'
+end
+
+When "the buyer is reviewing their account details" do
+  visit path_to('the account page')
+end
+
+Given "a buyer logged in to a provider" do
+  steps %(
+    Given a provider exists
+    And the provider has a default paid application plan
+    And a buyer signed up to the provider
+    And the buyer logs in to the provider
+  )
 end

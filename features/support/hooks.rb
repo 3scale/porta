@@ -181,8 +181,13 @@ After do |scenario|
 end
 
 Before '@braintree' do
-  stub_request(:delete, %r{@sandbox.braintreegateway.com/merchants/.+/customers/valid_code})
-      .to_return(status: 200, body: '', headers: {})
+  stub_request(:delete, "https://api.sandbox.braintreegateway.com/merchants/my-payment-gw-mid/customers/valid_code").to_return(status: 200)
+
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:customer_id_mismatch?).returns(false)
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:create_customer_data).returns(braintree_customer) # This skips sending post braintree API customers
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:authorization).returns('mocked_authorization') # This skips sending post braintree API client_token
+  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:confirm).returns(successful_braintree_result)
 end
 
 Before '@stripe' do # rubocop:disable Metrics/BlockLength

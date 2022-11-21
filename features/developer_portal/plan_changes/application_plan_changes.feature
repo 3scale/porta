@@ -31,7 +31,7 @@ Feature: Application Plan Change
     And I press "Request Plan Change"
     Then I should see "A request to change your application plan has been sent."
 
-    Given the buyer has valid credit card with lots of money
+    Given the buyer has a valid credit card
     And I go to my application page
     And I want to change the plan of my application to paid
 
@@ -50,13 +50,13 @@ Feature: Application Plan Change
     Then I should be at url for the braintree credit card details page
 
   # This is the default behaviour for new provider as of 05-07-2016
+  @braintree
   Scenario: Change plan workflow with credit card required with wizard
     Given the provider service allows to change application plan with credit card required
     And the provider is charging
     And the provider has testing credentials for braintree
     And the provider has "finance" switch visible
 
-    And Braintree is stubbed to accept credit card for buyer
     And the provider has all the templates setup
 
     And I want to change the plan of my application to paid
@@ -72,13 +72,13 @@ Feature: Application Plan Change
     And a message should be sent from buyer to provider with plan change details from free to paid
 
   # This is the behaviour for existing provider as of 05-07-2016
+  @braintree
   Scenario: Change plan workflow with credit card required without wizard
     Given the provider service allows to change application plan with credit card required
     And the provider is charging
     And the provider has testing credentials for braintree
     And the provider has "finance" switch visible
 
-    And Braintree is stubbed to accept credit card for buyer
     And the provider has all the templates setup
 
     And provider has opt-out for credit card workflow on plan changes
