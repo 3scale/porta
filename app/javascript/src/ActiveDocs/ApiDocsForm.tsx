@@ -49,6 +49,8 @@ const ApiDocsForm: FunctionComponent<Props> = ({
   const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultskipSwaggerValidations)
   // const [loading, setLoading] = useState(false)
 
+  const isDisabled = !name || !apiJsonSpec
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We're sure this is safe
     const textarea = document.getElementById('api_docs_service_body')! as HTMLTextAreaElement
@@ -108,7 +110,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
         <ActionGroup>
           <Button
             // data-testid="newBackendCreateBackend-buttonSubmit"
-            // isDisabled={validationErrors !== undefined || isLoading}
+            isDisabled={isDisabled}
             type="submit"
             variant="primary"
           >
