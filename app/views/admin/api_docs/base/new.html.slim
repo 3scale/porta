@@ -1,3 +1,6 @@
+- content_for :javascripts do
+  = javascript_include_tag 'provider/codemirror'
+
 - content_for :sublayout_title, 'ActiveDocs'
 
 div id="api-docs-container" data=@api_docs_service

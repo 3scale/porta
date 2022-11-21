@@ -12,13 +12,13 @@ const DescriptionInput: FunctionComponent<Props> = ({
   setDescription
 }) => (
   <FormGroup
-    fieldId="api_docs_description"
+    fieldId="api_docs_service_description"
     label="Description"
     validated="default"
   >
     <TextArea
-      id="api_docs_description"
-      name="api_docs[description]"
+      id="api_docs_service_description"
+      name="api_docs_service[description]"
       value={description}
       onChange={setDescription}
     />

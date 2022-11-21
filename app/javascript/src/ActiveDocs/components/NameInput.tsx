@@ -10,13 +10,13 @@ interface Props {
 const NameInput: FunctionComponent<Props> = ({ name, setName }) => (
   <FormGroup
     isRequired
-    fieldId="api_docs_name"
+    fieldId="api_docs_service_name"
     label="Name"
     validated="default"
   >
     <TextInput
-      id="api_docs_name"
-      name="api_docs[name]"
+      id="api_docs_service_name"
+      name="api_docs_service[name]"
       type="text"
       value={name}
       onChange={(value) => { setName(value) }}

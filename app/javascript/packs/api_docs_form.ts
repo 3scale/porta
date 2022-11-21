@@ -1,5 +1,5 @@
 import { ApiDocsFormWrapper } from 'ActiveDocs/ApiDocsForm'
-import { safeFromJsonString } from 'utilities/json-utils'
+// import { safeFromJsonString } from 'utilities/json-utils'
 
 // import type { Backend } from 'Types'
 
@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { dataset } = container
+  // const { dataset } = container
+
+  // const apiDocsObject = {
+    
+  // }
   // const { url = '', backendsPath = '', backendApiId } = dataset
 
   // const backends = safeFromJsonString<Backend[]>(dataset.backends) ?? []
@@ -20,10 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // const inlineErrors = safeFromJsonString(dataset.inlineErrors) || null
 
   ApiDocsFormWrapper({
-      name,
-      systemName,
-      publish,
-      description,
-      apiJsonSpec
+    name: '',
+    systemName: '',
+    isPublished: false,
+    description: '',
+    service: '',
+    apiJsonSpec: '',
+    skipSwaggerValidations: false,
+    url: '/apiconfig/services/2/api_docs'
   }, containerId)
 })

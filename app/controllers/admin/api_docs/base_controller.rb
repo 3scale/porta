@@ -19,6 +19,7 @@ class Admin::ApiDocs::BaseController < FrontendController
     if @api_docs_service.save
       redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: 'ActiveDocs Spec was successfully saved.')
     else
+      flash[:error] = 'Something went wrong.'
       render :new
     end
   end
