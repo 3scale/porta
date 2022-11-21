@@ -32,11 +32,15 @@ module CMS
       CMS::AwsCredentials.instance.credentials
     end
 
+    def hostname
+      config[:hostname].presence if enabled?
+    end
+
     def protocol
       config[:protocol].presence || 'https' if enabled?
     end
 
-    %i[access_key_id bucket hostname region role_arn role_session_name secret_access_key web_identity_token_file].each do |param|
+    %i[access_key_id bucket region role_arn role_session_name secret_access_key web_identity_token_file].each do |param|
       define_method(param) do
         config[param] if enabled?
       end
