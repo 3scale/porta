@@ -22,7 +22,8 @@ interface Props {
   name: string;
   systemName: string;
   isPublished: boolean;
-  service: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  service?: { service_id: number };
   description: string;
   apiJsonSpec: string;
   skipSwaggerValidations: boolean;
@@ -42,34 +43,27 @@ const ApiDocsForm: FunctionComponent<Props> = ({
   const [name, setName] = useState<string>(defaultname)
   const [systemName, setSystemName] = useState<string>(defaultsystemName)
   const [isPublished, setIsPublished] = useState<boolean>(defaultisPublished)
-  const [description, setDescription] = useState<string>(defaultservice)
-  const [service, setService] = useState(defaultdescription)
+  // const [service, setService] = useState(defaultservice)
+  const [description, setDescription] = useState(defaultdescription)
   const [apiJsonSpec, setApiJsonSpec] = useState(defaultapiJsonSpec)
   const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultskipSwaggerValidations)
   // const [loading, setLoading] = useState(false)
-
-  const handleIsPublished = (pp: boolean) => {
-    setIsPublished(!pp)
-  }
-
-  const handleSkipSwaggerValidations = (skSw: boolean) => {
-    setSkipSwaggerValidations(!skSw)
-  }
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We're sure this is safe
     const textarea = document.getElementById('api_docs_service_body')! as HTMLTextAreaElement
     const editor = window.CodeMirror.fromTextArea(textarea, {
-      // matchBrackets: true,
-      // autoCloseBrackets: true,
+      // @ts-expect-error TS is complaining, TODO: check @types/codemirror version so it matches with codemirror version
+      matchBrackets: true,
+      autoCloseBrackets: true,
       mode: 'application/json',
       lineWrapping: true,
       lineNumbers: true,
       theme: 'neat'
     })
     $(textarea).on('change', function (){ editor.setValue(textarea.value) })
-  }, [apiJsonSpec])
-  
+  }, [])
+
   return (
     <PageSection variant={PageSectionVariants.light}>
       <Form
@@ -85,7 +79,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <NameInput name={name} setName={setName} />
 
-        <SystemNameInput setSystemName={setSystemName} systemName={systemName} />
+        <SystemNameInput isDisabled={defaultservice !== undefined} setSystemName={setSystemName} systemName={systemName} />
 
         <Checkbox 
           aria-label="Is Published"
@@ -93,12 +87,12 @@ const ApiDocsForm: FunctionComponent<Props> = ({
           isChecked={isPublished}
           label="Publish?"
           name="api_docs_service[published]"
-          onClick={() => { handleIsPublished(isPublished) }}
+          onChange={setIsPublished}
         />
 
         <DescriptionInput description={description} setDescription={setDescription} />
-          
-        <ServiceInput service={service} setService={setService} />
+
+        {/* <ServiceInput service={service} setService={setService} /> */}
 
         <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} setApiJsonSpec={setApiJsonSpec} />
 
@@ -108,7 +102,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
           isChecked={skipSwaggerValidations}
           label="Skip swagger validations"
           name="api_docs_service[skip_swagger_validations]"
-          onClick={() => { handleSkipSwaggerValidations(skipSwaggerValidations) }}
+          onChange={setSkipSwaggerValidations}
         />
 
         <ActionGroup>
@@ -118,7 +112,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
             type="submit"
             variant="primary"
           >
-              Create Spec
+            { defaultservice === undefined ? 'Create spec' : 'Update spec' }
           </Button>
         </ActionGroup>
       </Form>

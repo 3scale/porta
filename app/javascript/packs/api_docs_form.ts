@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     systemName: '',
     isPublished: false,
     description: '',
-    service: '',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    service: { service_id: 2 },
     apiJsonSpec: '',
     skipSwaggerValidations: false,
     url: '/apiconfig/services/2/api_docs'

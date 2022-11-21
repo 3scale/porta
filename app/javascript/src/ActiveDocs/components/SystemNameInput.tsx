@@ -3,11 +3,12 @@ import { FormGroup, TextInput, Alert } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 
 interface Props {
+  isDisabled?: boolean;
   systemName: string;
   setSystemName: (systemName: string) => void;
 }
 
-const SystemNameInput: FunctionComponent<Props> = ({ systemName, setSystemName }) => (
+const SystemNameInput: FunctionComponent<Props> = ({ isDisabled = false, systemName, setSystemName }) => (
   <FormGroup
     fieldId="api_docs_service_system_name"
     helperText="Only ASCII letters, numbers, dashes and underscores are allowed."
@@ -16,6 +17,7 @@ const SystemNameInput: FunctionComponent<Props> = ({ systemName, setSystemName }
   >
     <TextInput
       id="api_docs_service_system_name"
+      isDisabled={isDisabled}
       name="api_docs_service[system_name]"
       type="text"
       value={systemName}
