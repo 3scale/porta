@@ -14,4 +14,7 @@ on:
 jobs:
   call-ff:
     uses: ./.github/workflows/fast-forward-branch.yml
+    with:
+      ref: ${{ github.event.inputs.ref }}
+      to_branch: ${{ github.event.inputs.to_branch }}
     secrets: inherit
