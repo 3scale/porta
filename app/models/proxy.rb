@@ -424,8 +424,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     @provider ||= self.service&.account
   end
 
+  # FIXME: This is not right, and needs to be fixed and managed at the configuration level
   PROXY_ENV = {
     preview: 'pre.',
+    staging: '',
     production: ''
   }.freeze
 

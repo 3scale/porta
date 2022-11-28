@@ -34,7 +34,7 @@ base: &default
   onpremises_api_docs_version: true
   assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
   email_sanitizer:
-    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
+    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %> # potentially add staging
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
   onpremises: true
   janitor_worker_enabled: true

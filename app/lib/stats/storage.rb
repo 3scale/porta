@@ -66,7 +66,7 @@ module Stats
 
         rslt
       rescue RuntimeError => e # "no such key" for example
-        System::ErrorReporting.report_error(e) if Rails.env.production?
+        System::ErrorReporting.report_error(e) if Rails.env.production? # TODO: fix this
         ActiveSupport::OrderedHash.new
       end
     end

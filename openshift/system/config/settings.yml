@@ -37,7 +37,7 @@ base: &default
   zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
 
   email_sanitizer:
-    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
+    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %> # potentially add staging
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
 
   janitor_worker_enabled: true

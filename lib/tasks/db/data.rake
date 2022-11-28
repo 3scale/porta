@@ -68,7 +68,7 @@ namespace :db do
     end
 
     def confirm_production_kill
-      if Rails.env.production? && ENV['FORCE'].blank?
+      if Rails.env.production? && ENV['FORCE'].blank? # This is probably OK
         abort "Are you sure you want to kill your PRODUCTION DATABASE? " +
               "If yes, run this task with parameter FORCE=true."
       end

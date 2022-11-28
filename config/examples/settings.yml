@@ -34,10 +34,10 @@ base: &default
   onpremises_api_docs_version: false
   assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
   email_sanitizer:
-    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
+    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %> # potentially add staging
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
   onpremises: false
-  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
+  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'staging,production') %>
   apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
   zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>

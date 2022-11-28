@@ -19,7 +19,7 @@ ActiveSupport.on_load(:active_record) do
       if User.current && !tenant_id
         exception = MissingTenantIdError.new(User.current)
 
-        if Rails.env.production?
+        if Rails.env.production? # TODO: fix this
           System::ErrorReporting.report_error(exception)
         elsif Thread.current[:multitenant]
           raise(exception)

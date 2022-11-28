@@ -11,7 +11,7 @@ ActiveSupport.on_load(:active_record) do
 end
 
 # If you precompile assets before deploying to production, use this line
-Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
+Bundler.require(*Rails.groups(:assets => %w[development production preview staging test]))
 # If you want your assets lazily compiled in production, use this line
 # Bundler.require(:default, :assets, Rails.env)
 
@@ -223,7 +223,7 @@ module System
     config.three_scale.payments.enabled = false
     config.three_scale.payments.merge!(payment_settings)
     config.three_scale.payments.merge!(try_config_for(:payments) || {})
-    config.three_scale.payments.active_merchant_mode ||= Rails.env.production? ? :production : :test
+    config.three_scale.payments.active_merchant_mode ||= Rails.env.production? ? :production : :test # TODO: fix this
 
     email_sanitizer_configs = (three_scale.delete(:email_sanitizer) || {}).symbolize_keys
     config.three_scale.email_sanitizer.merge!(email_sanitizer_configs)
