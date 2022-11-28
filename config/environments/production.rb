@@ -31,11 +31,6 @@ Rails.application.configure do
   config.assets.js_compressor = Uglifier.new(harmony: true)
   # config.assets.css_compressor = :sass
 
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
-
-  # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
-
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
@@ -53,13 +48,6 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
-
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
-
-  # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -95,6 +83,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Use the lowest log level to ensure availability of diagnostic information
+  # when problems arise.
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info').downcase.to_sym
 
 
@@ -102,6 +93,7 @@ Rails.application.configure do
   config.action_dispatch.ip_spoofing_check = false
 
   # we precompile in production
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
   config.assets.compress = true
   config.assets.digest = ENV.fetch('DISABLE_DIGEST', '0') != '1'
@@ -119,7 +111,10 @@ Rails.application.configure do
       asset_host
     end
   end
+  # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
+
+  # Prepend all log lines with the following tags.
   # do not change the tags withotu updating logstash rules
   # https://github.com/3scale/puppet/blob/ac161671aee2019eefa87b51b150cb78fcb417e9/modules/logstash/templates/config/system-mt/filter.erb
   config.log_tags = [ :uuid, :host, :remote_ip ]
