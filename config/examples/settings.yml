@@ -39,7 +39,7 @@ base: &default
   onpremises: false
   error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
   apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
-  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
 
   # deprecated: use payments.yaml to configure payments instead
