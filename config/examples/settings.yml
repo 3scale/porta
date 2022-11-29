@@ -40,7 +40,7 @@ base: &default
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
   onpremises: false
   apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
-  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
 
   # deprecated: use payments.yaml to configure payments instead
