@@ -63,9 +63,15 @@ When /^I fill in the signup fields as "([^"]*)"$/ do |name|
   click_on 'Sign up'
 end
 
-When /^I fill in the invalid signup fields$/ do
+When /^I fill in the invalid signup fields( in a non-suspicious way)?$/ do |non_suspicious|
+  step %(15 seconds pass) if non_suspicious
   step %(I fill in "Email" with "invalid email")
   step %(I press "Sign up")
+end
+
+When /^I suspiciously fill in the signup fields as "([^"]*)"$/ do |name|
+  fill_in("confirmation", :with => "1")
+  step %(I fill in the signup fields as "#{name}")
 end
 
 When /^I complete the signup process$/ do
