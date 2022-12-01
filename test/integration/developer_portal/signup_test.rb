@@ -29,7 +29,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   # A post request can't be sent directly to the controller bypassing the form
   # when the spam protection is always enabled.
   def test_create_spam_protected_always
-    @provider.settings.update_attributes(spam_protection_level: :captcha)
+    @provider.settings.update(spam_protection_level: :captcha)
     DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
 
     post signup_path(account: {
@@ -50,7 +50,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   # A post request can't be sent directly to the controller bypassing the form
   # when the spam protection is set to suspicious only.
   def test_create_spam_protected_suspicious_only
-    @provider.settings.update_attributes(spam_protection_level: :auto)
+    @provider.settings.update(spam_protection_level: :auto)
     DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
 
     post signup_path(account: {
