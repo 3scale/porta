@@ -108,17 +108,17 @@ const StripeCardForm: FunctionComponent<Props> = ({
           <legend>Credit card details</legend>
           <div className="form-element col-md-12">
             <CardElement
-              options={CARD_OPTIONS}
               className="col-md-12"
+              options={CARD_OPTIONS}
               onChange={validateCardElement}
             />
           </div>
           <div className="form-element col-md-12">
             <input
-              type="text"
               id="cardholder-name"
               placeholder="Cardholder's name (optional)"
               ref={cardholderNameInputRef}
+              type="text"
             />
           </div>
           {!!cardErrorMessage && <CreditCardErrors>{cardErrorMessage}</CreditCardErrors>}

@@ -1,11 +1,9 @@
-// @flow
-
 import React from 'react'
 import { mount } from 'enzyme'
 
 import { StripeCardForm } from 'PaymentGateways/stripe/components/StripeCardForm'
 
-import type { StripeCardFormProps as Props } from 'PaymentGateways/stripe/components/StripeCardForm'
+import type { Props } from 'PaymentGateways/stripe/components/StripeCardForm'
 
 const defaultProps = {
   setupIntentSecret: 'efgh',
@@ -21,7 +19,7 @@ const defaultProps = {
   isCreditCardStored: false
 }
 
-const mountWrapper = (props: $Shape<Props> = {}) => mount((<StripeCardForm { ...{ ...defaultProps, ...props } } />))
+const mountWrapper = (props: Partial<Props> = {}) => mount((<StripeCardForm {...{ ...defaultProps, ...props }} />))
 
 it('should have cardholder name input', () => {
   const wrapper = mountWrapper()

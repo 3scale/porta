@@ -2,11 +2,14 @@
 
 import { loadStripe } from '@stripe/stripe-js'
 
-import type { PaymentIntent, Stripe, StripeCardElement } from '@stripe/stripe-js'
+import { safeFromJsonString } from 'utilities/json-utils'
+
+import type { PaymentIntent, Stripe, StripeCardElement, StripeCardElementOptions } from '@stripe/stripe-js'
+import type { BillingAddressData } from 'PaymentGateways/stripe/types'
 
 import 'PaymentGateways/stripe/components/StripeFormWrapper.scss'
 
-const CARD_OPTIONS = {
+const CARD_OPTIONS: StripeCardElementOptions = {
   iconStyle: 'solid',
   style: {
     base: {
@@ -33,7 +36,7 @@ const CARD_OPTIONS = {
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 document.addEventListener('DOMContentLoaded', async () => {
   const dataset = document.querySelector<HTMLElement>('.StripeElementsForm')!.dataset
-  const { stripePublishableKey = '', clientSecret = '' } = dataset
+  const { stripePublishableKey = '', clientSecret = '', billingAddress = '' } = dataset
   const form = document.querySelector('#payment-form')!
   const callbackForm = document.querySelector<HTMLFormElement>('#payment-callback-form')!
   const payButton = document.querySelector<HTMLButtonElement>('#submit-payment')!
@@ -41,7 +44,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const errorMsg = document.querySelector('#card-error')!
   const spinner = document.querySelector('#spinner')!
   const cardholderNameInput = document.querySelector('#cardholder-name')!
-  const billingAddress = JSON.parse(dataset.billingAddress)
+
+  const billingAddressData: BillingAddressData = {
+    line1: '',
+    line2: '',
+    city: '',
+    state: '',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    postal_code: '',
+    country: '',
+    ...safeFromJsonString<Partial<BillingAddressData>>(billingAddress)
+  }
 
   const stripe = await loadStripe(stripePublishableKey)!
   const elements = stripe!.elements()
@@ -54,8 +67,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
       payment_method: {
         card: card,
+        // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
         billing_details: {
-          address: billingAddress,
+          address: billingAddressData,
           name: cardholderName
         }
       }
@@ -102,6 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', function (event) {
     event.preventDefault()
     // @ts-expect-error FIXME: we can't simply assume stripe instance will be there
-    payWithCard(stripe, card, clientSecret, cardholderNameInput.value)
+    payWithCard(stripe, card, clientSecret, (cardholderNameInput.value ?? '') as string)
   })
 })
