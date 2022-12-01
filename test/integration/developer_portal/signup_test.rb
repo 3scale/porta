@@ -26,6 +26,8 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  # A post request can't be sent directly to the controller bypassing the form
+  # when the spam protection is always enabled.
   def test_create_spam_protected_always
     @provider.settings.update_attributes(spam_protection_level: :captcha)
     DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
@@ -40,11 +42,13 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
                        }
                      })
 
-    assert_response :success
+    # The user wasn't created, so the spam protection worked
     user = @provider.buyer_users.find_by(email: 'foo@example.edu')
     assert_nil user
   end
 
+  # A post request can't be sent directly to the controller bypassing the form
+  # when the spam protection is set to suspicious only.
   def test_create_spam_protected_suspicious_only
     @provider.settings.update_attributes(spam_protection_level: :auto)
     DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
@@ -59,7 +63,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
                        }
                      })
 
-    assert_response :success
+    # The user wasn't created, so the spam protection worked
     user = @provider.buyer_users.find_by(email: 'foo@example.edu')
     assert_nil user
   end
