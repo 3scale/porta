@@ -11,47 +11,60 @@ import {
 import { NameInput } from 'ActiveDocs/components/NameInput'
 import { SystemNameInput } from 'ActiveDocs/components/SystemNameInput'
 import { DescriptionInput } from 'ActiveDocs/components/DescriptionInput'
-// import { ServiceInput } from 'ActiveDocs/components/ServiceInput'
+import { ServiceSelect } from 'ActiveDocs/components/ServiceSelect'
 import { ApiJsonSpecInput } from 'ActiveDocs/components/ApiJsonSpecInput'
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 
 import type { FunctionComponent } from 'react'
+import type { IRecord as Service } from 'Types'
 
 import './ApiDocsForm.scss'
 
 interface Props {
   name: string;
   systemName: string;
-  isPublished: boolean;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  service?: { service_id: number };
+  published: boolean;
+  serviceId?: number;
+  collection?: Service[];
   description: string;
   apiJsonSpec: string;
   skipSwaggerValidations: boolean;
   url: string;
+  errors: {
+    name?: string[];
+    body?: string[];
+    systemName?: string[];
+    description?: string[];
+  };
 }
 
 const ApiDocsForm: FunctionComponent<Props> = ({
-  name: defaultname,
-  systemName: defaultsystemName,
-  isPublished: defaultisPublished,
-  service: defaultservice,
+  name: defaultName,
+  systemName: defaultSystemName,
+  published: defaultPublished,
+  serviceId: defaultServiceId,
+  collection: defaultCollection,
   description: defaultdescription,
-  apiJsonSpec: defaultapiJsonSpec,
+  apiJsonSpec: defaultApiJsonSpec,
   skipSwaggerValidations: defaultskipSwaggerValidations,
-  url
+  url,
+  errors
 }) => {
-  const [name, setName] = useState<string>(defaultname)
-  const [systemName, setSystemName] = useState<string>(defaultsystemName)
-  const [isPublished, setIsPublished] = useState<boolean>(defaultisPublished)
-  // const [service, setService] = useState(defaultservice)
+  const [name, setName] = useState<string>(defaultName)
+  const [systemName, setSystemName] = useState<string>(defaultSystemName)
+  const [published, setPublished] = useState<boolean>(defaultPublished)
   const [description, setDescription] = useState(defaultdescription)
-  const [apiJsonSpec, setApiJsonSpec] = useState(defaultapiJsonSpec)
+  const [apiJsonSpec, setApiJsonSpec] = useState(defaultApiJsonSpec)
   const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultskipSwaggerValidations)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- service, defaultCollection and defaultServiceId are always defined when isUpdate
+  const [service, setService] = useState<Service>(defaultCollection!.find((s) => s.id === defaultServiceId)!)
   // const [loading, setLoading] = useState(false)
 
-  const isDisabled = !name || !apiJsonSpec
+  console.log({ name, defaultName, errors, defaultCollection })
+
+  // const isDisabled = !name // || !apiJsonSpec
+  const isUpdate = defaultServiceId !== undefined
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We're sure this is safe
@@ -80,25 +93,26 @@ const ApiDocsForm: FunctionComponent<Props> = ({
       >
         <CSRFToken />
         <input name="utf8" type="hidden" value="✓" />
+        {isUpdate && <input name="_method" type="hidden" value="put" />}
 
-        <NameInput name={name} setName={setName} />
+        <NameInput errors={errors.name} name={name} setName={setName} />
 
-        <SystemNameInput isDisabled={defaultservice !== undefined} setSystemName={setSystemName} systemName={systemName} />
+        <SystemNameInput errors={errors.systemName} isDisabled={defaultServiceId !== undefined} setSystemName={setSystemName} systemName={systemName} />
 
         <Checkbox 
           aria-label="Is Published"
           id="api_docs_service_published_input"
-          isChecked={isPublished}
+          isChecked={published}
           label="Publish?"
           name="api_docs_service[published]"
-          onChange={setIsPublished}
+          onChange={setPublished}
         />
 
-        <DescriptionInput description={description} setDescription={setDescription} />
+        <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
 
-        {/* <ServiceInput service={service} setService={setService} /> */}
+        {isUpdate && defaultCollection && <ServiceSelect service={service} services={defaultCollection} setService={setService} />}
 
-        <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} setApiJsonSpec={setApiJsonSpec} />
+        <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
         <Checkbox 
           aria-label="Skip swagger validation"
@@ -112,11 +126,11 @@ const ApiDocsForm: FunctionComponent<Props> = ({
         <ActionGroup>
           <Button
             // data-testid="newBackendCreateBackend-buttonSubmit"
-            isDisabled={isDisabled}
+            // isDisabled={isDisabled}
             type="submit"
             variant="primary"
           >
-            { defaultservice === undefined ? 'Create spec' : 'Update spec' }
+            { isUpdate ? 'Update spec' : 'Create spec' }
           </Button>
         </ActionGroup>
       </Form>

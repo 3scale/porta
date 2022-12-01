@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class Admin::ApiDocs::BaseController < FrontendController
+  include Admin::ApiDocsHelper
+
   before_action :deny_on_premises_for_master
   before_action :authorize_api_docs
   before_action :find_api_docs, only: %i[show preview toggle_visible edit update destroy]
   before_action :new_service_id_permitted, only: %i[create update]
+  helper_method :api_docs_service_data
 
   def index
     @api_docs_services = accessible_api_docs_services.page(params[:page]).includes(:service)
@@ -19,7 +22,6 @@ class Admin::ApiDocs::BaseController < FrontendController
     if @api_docs_service.save
       redirect_to(preview_admin_api_docs_service_path(@api_docs_service), notice: 'ActiveDocs Spec was successfully saved.')
     else
-      flash[:error] = 'Something went wrong.'
       render :new
     end
   end
@@ -131,5 +133,30 @@ class Admin::ApiDocs::BaseController < FrontendController
 
   def authorize_api_docs
     authorize! :manage, :plans
+  end
+
+  def api_docs_service_data
+    data = {
+      name: @api_docs_service.name || '',
+      systemName: @api_docs_service.system_name || '',
+      published: @api_docs_service.published,
+      description: @api_docs_service.description || '',
+      body: @api_docs_service.body || '',
+      skipSwaggerValidations: @api_docs_service.skip_swagger_validations,
+      errors: @api_docs_service.errors.messages.deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym }
+    }
+    
+    if @api_docs_service.new_record? 
+      data[:url] = create_api_docs_service_path(@api_docs_service.service)
+    else 
+      data[:url] = update_api_docs_service_path(@api_docs_service)
+    end
+    
+    unless @api_docs_service.new_record? && @api_docs_service.service_id.present?
+      data[:serviceId] = @api_docs_service.service_id
+      data[:collection] = current_user.accessible_services.as_json(only: %i[id name], root: false)
+    end
+
+    data
   end
 end

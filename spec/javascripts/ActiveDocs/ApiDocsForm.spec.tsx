@@ -14,12 +14,18 @@ window.CodeMirror = mockMirror
 const defaultProps: Props = {
   name: '',
   systemName: '',
-  isPublished: false,
-  service: undefined,
+  published: false,
+  serviceId: undefined,
+  collection: undefined,
   description: '',
   apiJsonSpec: '',
   skipSwaggerValidations: false,
-  url: ''
+  url: '',
+  errors: {
+    name: undefined,
+    systemName: undefined,
+    body: undefined
+  }
 }
 
 const mountWrapper = (props?: Partial<Props>) => mount(<ApiDocsForm {...{ ...defaultProps, ...props }} />)

@@ -1,7 +1,24 @@
 import { ApiDocsFormWrapper } from 'ActiveDocs/ApiDocsForm'
-// import { safeFromJsonString } from 'utilities/json-utils'
+import { safeFromJsonString } from 'utilities/json-utils'
 
-// import type { Backend } from 'Types'
+import type { IRecord as Service } from 'Types'
+
+interface ApiDocsService {
+  name: string;
+  published: boolean;
+  description: string;
+  serviceId?: number;
+  collection?: Service[];
+  systemName: string;
+  body: string;
+  skipSwaggerValidations: boolean;
+  errors: {
+    name?: string[];
+    body?: string[];
+    systemName?: string[];
+  };
+  url: string;
+}
 
 const containerId = 'api-docs-container'
 
@@ -12,26 +29,35 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  // const { dataset } = container
+  const { dataset } = container
 
-  // const apiDocsObject = {
-    
-  // }
-  // const { url = '', backendsPath = '', backendApiId } = dataset
+  const service = safeFromJsonString<ApiDocsService>(dataset.service) ?? {} as ApiDocsService
 
-  // const backends = safeFromJsonString<Backend[]>(dataset.backends) ?? []
-  // const backend = backends.find(b => String(b.id) === backendApiId) ?? null
-  // const inlineErrors = safeFromJsonString(dataset.inlineErrors) || null
+  const { 
+    name, 
+    published, 
+    systemName,
+    description, 
+    serviceId, 
+    collection, 
+    body,
+    errors,
+    skipSwaggerValidations,
+    url
+  } = service
+
+  console.log({ service })
 
   ApiDocsFormWrapper({
-    name: '',
-    systemName: '',
-    isPublished: false,
-    description: '',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    service: { service_id: 2 },
-    apiJsonSpec: '',
-    skipSwaggerValidations: false,
-    url: '/apiconfig/services/2/api_docs'
+    name,
+    systemName,
+    errors,
+    published,
+    description,
+    serviceId,
+    collection,
+    apiJsonSpec: body,
+    skipSwaggerValidations,
+    url
   }, containerId)
 })
