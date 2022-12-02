@@ -69,7 +69,7 @@ When /^I fill in the invalid signup fields( in a non-suspicious way)?$/ do |non_
   step %(I press "Sign up")
 end
 
-When /^I suspiciously fill in the signup fields as "([^"]*)"$/ do |name|
+When "I suspiciously fill in the signup fields as {string}" do |name|
   fill_in("confirmation", :with => "1")
   step %(I fill in the signup fields as "#{name}")
 end
