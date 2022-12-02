@@ -277,3 +277,8 @@ end
 When(/^as a developer$/) do
   step 'the current domain is foo.3scale.localhost'
 end
+
+When "the buyer wants to sign up" do
+  step 'the current domain is foo.3scale.localhost'
+  step 'I go to the sign up page'
+end

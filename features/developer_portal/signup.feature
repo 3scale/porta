@@ -1,4 +1,3 @@
-@javascript
 Feature: Buyer signup
   I want to signup as a buyer
   Background:
@@ -6,6 +5,7 @@ Feature: Buyer signup
     And master has a application plan "enterprise"
     And the provider account allows signups
 
+  @javascript
   Scenario: Signup creates account created event
     And there are no events
     When a buyer signs up
@@ -20,6 +20,7 @@ Feature: Buyer signup
       And the users should receive the service contract created notification email
 
   # This is the default behaviour for new providers as of 05-07-2016
+  @javascript
   Scenario: Signup forces to fill in credit card for paid plan
     Given the provider is charging its buyers
     And Braintree is stubbed to accept credit card
@@ -33,6 +34,7 @@ Feature: Buyer signup
     And I should be warned to complete my signup
 
   # This is the behaviour for existing providers as of 05-07-2016
+  @javascript
   Scenario: Signup does not require to fill in credit card on paid plan
     And the provider is charging its buyers
 
@@ -46,6 +48,7 @@ Feature: Buyer signup
     Then I should be on the homepage
 
   # This is the behaviour for existing providers as of 05-07-2016
+  @javascript
   Scenario: Signup require to fill in credit card on paid plan if switch is enabled
     And the provider is charging its buyers
     And Braintree is stubbed to accept credit card
@@ -63,3 +66,10 @@ Feature: Buyer signup
 
     Then I should be on the edit credit card details page
     And I should be warned to complete my signup
+
+  @recaptcha
+  Scenario: Spam protection detects suspicious behavior
+    Given the provider has spam protection set to suspicious only
+    When the buyer wants to sign up
+    Then the buyer doesn't need to pass the captcha after signup form is filled wrong
+    But the buyer will need to pass the captcha after signup form is filled in too quickly

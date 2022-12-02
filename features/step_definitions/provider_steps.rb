@@ -175,6 +175,10 @@ Given(/^a master admin with extra fields is logged in/) do
   FactoryBot.create(:fields_definition, account: @master, target: 'Account', name: 'account_extra_field')
 end
 
+Given "the provider has spam protection set to suspicious only" do
+  step %(provider "#{@provider.org_name}" has "spam protection level" set to "auto")
+end
+
 When /^new form to create a tenant is filled and submitted$/ do
   @username = 'usernamepro'
   fill_and_submit_form_to_create_tenant(username: @username)

@@ -160,3 +160,15 @@ Then(/^I should see a correct and un-editable admin portal subdomain$/) do
   should have_xpath portal
   assert_equal 'hello-monster-admin', find(:xpath, portal).value
 end
+
+Then "the buyer doesn't need to pass the captcha after signup form is filled wrong" do
+  step %(15 seconds pass)
+  step %(I fill in "Email" with "invalid email")
+  step %(I press "Sign up")
+  step %(I should not see the captcha)
+end
+
+Then "the buyer will need to pass the captcha after signup form is filled in too quickly" do
+  step %(I suspiciously fill in the signup fields as "hugo")
+  step %(I should see the captcha)
+end

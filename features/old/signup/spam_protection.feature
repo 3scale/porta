@@ -24,15 +24,6 @@ Feature: Spam protection for buyer signup
      And I fill in the signup fields as "hugo"
      And I should not see the captcha
 
-  Scenario: Captcha is set to auto
-    Given provider "foo.3scale.localhost" has "spam protection level" set to "auto"
-    When I go to the sign up page
-    Then I should not see the captcha
-    And I fill in the invalid signup fields in a non-suspicious way
-    And I should not see the captcha
-    And I suspiciously fill in the signup fields as "hugo"
-    And I should see the captcha
-
   Scenario: Captcha is forced
     Given provider "foo.3scale.localhost" has "spam protection level" set to "captcha"
     When I go to the sign up page
