@@ -6,6 +6,17 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   include System::UrlHelpers.cms_url_helpers
   include UserDataHelpers
 
+  ACCOUNT_EMAIL = 'foo@example.edu'
+  ACCOUNT = {
+    promo_code: '12345',
+    org_name:   'alaska',
+    user: {
+      email:    ACCOUNT_EMAIL,
+      username: 'supertramp',
+      password: 'westisthebest'
+    }
+  }.freeze
+
   def setup
     @provider = FactoryBot.create(:provider_account)
 
@@ -13,15 +24,7 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
   end
 
   def test_create
-    post signup_path(account: {
-      promo_code: '12345',
-      org_name:   'alaska',
-      user: {
-        email:    'foo@example.edu',
-        username: 'supertramp',
-        password: 'westisthebest'
-      }
-    })
+    post signup_path(account: ACCOUNT)
 
     assert_response :redirect
   end
@@ -32,18 +35,10 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     @provider.settings.update(spam_protection_level: :captcha)
     DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
 
-    post signup_path(account: {
-                       promo_code: '12345',
-                       org_name:   'alaska',
-                       user: {
-                         email:    'foo@example.edu',
-                         username: 'supertramp',
-                         password: 'westisthebest'
-                       }
-                     })
+    post signup_path(account: ACCOUNT)
 
     # The user wasn't created, so the spam protection worked
-    user = @provider.buyer_users.find_by(email: 'foo@example.edu')
+    user = @provider.buyer_users.find_by(email: ACCOUNT_EMAIL)
     assert_nil user
   end
 
@@ -53,18 +48,10 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     @provider.settings.update(spam_protection_level: :auto)
     DeveloperPortal::SignupController.any_instance.stubs(:verify_captcha).returns(false)
 
-    post signup_path(account: {
-                       promo_code: '12345',
-                       org_name:   'alaska',
-                       user: {
-                         email:    'foo@example.edu',
-                         username: 'supertramp',
-                         password: 'westisthebest'
-                       }
-                     })
+    post signup_path(account: ACCOUNT)
 
     # The user wasn't created, so the spam protection worked
-    user = @provider.buyer_users.find_by(email: 'foo@example.edu')
+    user = @provider.buyer_users.find_by(email: ACCOUNT_EMAIL)
     assert_nil user
   end
 
@@ -72,19 +59,16 @@ class DeveloperPortal::SignupTest < ActionDispatch::IntegrationTest
     @provider.settings.update_attributes(account_approval_required: true) # rubocop:disable Rails/ActiveRecordAliases) This method is being overriden
 
     @auth = FactoryBot.create(:authentication_provider, published: true, account: @provider)
-    stub_user_data({uid: '12345', email: 'foo@example.edu', email_verified: true}, stubbed_method: :authenticate!)
+    stub_user_data({uid: '12345', email: ACCOUNT_EMAIL, email_verified: true}, stubbed_method: :authenticate!)
 
     post session_path(system_name: @auth.system_name, code: 'alaska')
     assert_redirected_to signup_path
 
     post signup_path, params: {
-      account: {
-        org_name: 'alaska',
-        user: { email: 'foo@example.edu', username: 'supertramp' }
-      }
+      account: ACCOUNT
     }
 
-    user = @provider.buyer_users.find_by!(email: 'foo@example.edu')
+    user = @provider.buyer_users.find_by!(email: ACCOUNT_EMAIL)
     assert user.active?
     assert_not user.can_login?
     assert_redirected_to success_signup_path
