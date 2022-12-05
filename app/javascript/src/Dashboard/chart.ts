@@ -11,14 +11,14 @@ import { generate } from 'c3'
 
 import type { MomentInput, MomentInputObject } from 'moment'
 
-export function render (widget: string, data: unknown): void {
+export function render (widget: HTMLElement, data: unknown): void {
   const options = chartOptions(widget, data)
   $('[data-chart]', widget).each(function (_, chart) {
     generate(($ as any).extend(true, {}, options, { bindto: chart }))
   })
 }
 
-function chartOptions (widget: string, data: any) {
+function chartOptions (widget: HTMLElement, data: any) {
   const $widget = $(widget)
   const values = timeline(data.values)
   const seriesData = [['date', ...values[0]], ['hits', ...values[1]]]

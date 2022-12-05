@@ -68,15 +68,17 @@ const NewAccountsWidget: FunctionComponent<Props> = ({
   percentualChange = 0
 }) => {
   const [isLoading, setIsLoading] = useState(true)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const chartWidget = document.querySelector<HTMLElement>('#dashboard-widget-new_accounts')!
 
   useEffect(() => {
-    renderChartWidget(document.getElementById('dashboard-widget-new_accounts'), chartData)
+    renderChartWidget(chartWidget, chartData)
     setIsLoading(false)
   }, [])
 
   return (
     <article className="DashboardWidget" id="dashboard-widget-new_accounts">
-      {isLoading && <Spinner isSVG className="pf-u-ml-md DashboardWidget-spinner" size="md" />}
+      {isLoading && <Spinner className="pf-u-ml-md DashboardWidget-spinner" size="md" />}
       <div data-chart className="Dashboard-chart c3" />
       <header className="DashboardWidget-badge">
         <h1 className="DashboardWidget-title">
