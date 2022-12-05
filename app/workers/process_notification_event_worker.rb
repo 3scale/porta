@@ -43,7 +43,7 @@ class ProcessNotificationEventWorker
     end
 
     parallelize do
-      provider.users.but_impersonation_admin.find_each do |user|
+      provider.users.active.but_impersonation_admin.find_each do |user|
         UserNotificationWorker.perform_async(user.id, event.event_id, event.system_name)
       end
     end

@@ -48,6 +48,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             id="customer_credit_card_billing_address_company"
             name="customer[credit_card][billing_address][company]"
+            // @ts-expect-error FIXME
             value={billingAddressData.company}
             onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'company') }}
           />
@@ -62,6 +63,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             id="customer_credit_card_billing_address_street_address"
             name="customer[credit_card][billing_address][street_address]"
+            // @ts-expect-error FIXME
             value={billingAddressData.address1}
             onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'address1') }}
           />
@@ -76,6 +78,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             id="customer_credit_card_billing_address_postal_code"
             name="customer[credit_card][billing_address][postal_code]"
+            // @ts-expect-error FIXME
             value={billingAddressData.zip}
             onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'zip') }}
           />
@@ -90,6 +93,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             id="customer_credit_card_billing_address_locality"
             name="customer[credit_card][billing_address][locality]"
+            // @ts-expect-error FIXME
             value={billingAddressData.city}
             onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'city') }}
           />
@@ -102,6 +106,7 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
           <Input
             id="customer_credit_card_billing_address_region"
             name="customer[credit_card][billing_address][region]"
+            // @ts-expect-error FIXME
             value={billingAddressData.state}
             onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'state') }}
           />

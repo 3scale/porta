@@ -38,7 +38,7 @@ module CMS
 
     %i[access_key_id bucket hostname region role_arn role_session_name secret_access_key web_identity_token_file].each do |param|
       define_method(param) do
-        config[param] if enabled?
+        config[param].presence if enabled?
       end
     end
 

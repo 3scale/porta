@@ -17,12 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   const { clientToken, threeDSecureEnabled, formActionPath, countriesList, selectedCountryCode } = container.dataset as Record<string, string>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: too much assumption here
-  const billingAddress = safeFromJsonString<BillingAddressData>(container.dataset.billingAddress)!
+
+  const billingAddress = safeFromJsonString<BillingAddressData>(container.dataset.billingAddress) ?? {}
   for (const key in billingAddress) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME
-    if (billingAddress[key as keyof BillingAddressData] === null) {
-      billingAddress[key as keyof BillingAddressData] = ''
+    // @ts-expect-error FIXME
+    if (billingAddress[key] === null) {
+      // @ts-expect-error FIXME
+      billingAddress[key] = ''
     }
   }
   const braintreeClient = await createBraintreeClient(client, clientToken) as Client
