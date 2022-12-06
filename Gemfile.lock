@@ -61,7 +61,7 @@ GIT
     swagger-ui_rails (0.1.7)
 
 GIT
-  remote: https://github.com/mikz/httpclient.git
+  remote: https://github.com/3scale/httpclient.git
   revision: fec23fb32fb899b87a8b2c94e2d2069b6b4c633c
   branch: ssl-env-cert
   specs:
