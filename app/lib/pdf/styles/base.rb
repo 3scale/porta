@@ -2,36 +2,68 @@
 
 module Pdf::Styles
   class Base
-    def tags
-      { domain: { color: "#999", font_weight: :bold, font_size: 14 },
-        period: { font_size: 6.mm },
-        date: { font_size: 5.mm, color: "999999", font_weight: :bold },
-        subtitle: { font_size: 4.mm, font_weight: :bold, color: "555" },
-        table: {
-          header: { style: :bold, size: 3.5.mm, color: "ffffff" },
-          cell: { size: 3.mm, style: :bold, color: "222222" }
+    delegate :fetch, to: :styles
+
+    alias [] fetch
+
+    private
+
+    # @return [Hash] with default options for Prawn text, boxes, tables, font, etc.
+    def styles
+      return @style_hash if @style_hash
+
+      @style_hash = {
+        domain: { color: "909090", styles: [:bold], size: 14 },
+        period: { size: 6.mm },
+        date: { size: 5.mm, color: "999999", styles: [:bold] },
+        subtitle: { size: 4.mm, style: :bold },
+        header: {
+          size: 3.5.mm,
+          font_style: :bold,
         },
-        small: { font_size: 3.5.mm, color: "555" },
-        red: { color: 'red' },
-        green: { color: 'green' },
-        b: { style: :bold }
+        table: {
+          position: :left,
+          width: Pdf::Printer::TABLE_FULL_WIDTH,
+          cell_style: {
+            padding: 1.2.mm,
+            borders: %i[left right top bottom],
+            border_width: 0.2.mm,
+          },
+          header: true,
+        },
+        small: { size: 3.5.mm, color: "505050" },
+        red: { text_color: 'ff0000' },
+        green: { text_color: '006400' },
+        font: "Liberation Sans",
+        font_family: {
+          "Liberation Sans" => {
+            normal: "#{liberation_dir}/LiberationSans-Regular.ttf",
+            bold: "#{liberation_dir}/LiberationSans-Bold.ttf",
+          }
+        },
       }
+      freeze_style_hash
     end
 
-    def table_style
-      {
-        position: :left,
-        width: 187.5.mm,
-        cell_style: {
-          padding: 1.2.mm,
-          borders: [:left, :right, :top, :bottom],
-          border_width: 0.2.mm
-        }
-      }
+    def freeze_style_hash(struct = styles)
+      struct.freeze.tap do
+        if struct.respond_to? :each_value
+          struct.each_value { |value| freeze_style_hash(value) }
+        elsif struct.respond_to? :each
+          struct.each { |value| freeze_style_hash(value) }
+        end
+      end
     end
 
-    def font
-      Rails.root.join('app', 'lib', 'pdf', 'fonts', 'arial.ttf').to_s
+    private
+
+    def liberation_dir
+      %w[
+      /usr/share/fonts/liberation
+      /usr/share/fonts/liberation-sans
+      ].find do |path|
+        File.directory? path
+      end
     end
   end
 end
