@@ -248,7 +248,6 @@ group :development, :test do
   gem 'source2swagger', git: 'https://github.com/3scale/source2swagger'
   gem 'unicorn-rails'
 
-  gem 'rswag'
 end
 
 gem 'webpacker', '~> 4'
