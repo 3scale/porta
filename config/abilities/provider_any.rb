@@ -1,7 +1,8 @@
-# here we define abilities for all users of provider account, for members use
-# provider_member.rb
-Ability.define do |user|
-  if user && user.account.provider?
+# frozen_string_literal: true
+
+# here we define abilities for all users of provider account, for members use provider_member.rb
+Ability.define do |user| # rubocop:disable Metrics/BlockLength
+  if user&.account&.provider?
     account = user.account
 
     account.settings.switches.each do |switch, value|
@@ -17,17 +18,15 @@ Ability.define do |user|
     cannot :update_permissions, User, &:admin?
 
     # Can't destroy or update role of himself.
-    cannot [:destroy, :update_role], user
+    cannot %i[destroy update_role], user
 
     # Services
-    can [:read, :show, :edit, :update], Service, user.accessible_services.where_values_hash
+    can %i[read show edit update], Service, user.accessible_services.where_values_hash
 
     #
     # Events
     #
-    if user.has_permission?(:finance)
-      can [:show], BillingRelatedEvent
-    end
+    can [:show], BillingRelatedEvent if user.has_permission?(:finance)
 
     if user.has_permission?(:partners)
       can [:show], AccountRelatedEvent do |event|
@@ -47,7 +46,7 @@ Ability.define do |user|
     end
 
     can [:show], Reports::CsvDataExportEvent do |event|
-      user.admin? && event.recipient.try!(:id) == user.id
+      user.admin? && event.recipient&.id == user.id
     end
 
     can :admin, :social_logins if account.settings.branding.visible?
@@ -75,13 +74,13 @@ Ability.define do |user|
     end
 
     can :reply, Topic do |topic|
-      forum = topic.forum || topic.category.try!(:forum)
+      forum = topic.forum || topic.category&.forum
       forum.account == account
     end
 
     if account.provider_can_use?(:new_notification_system)
-      can [:show, :edit, :update], NotificationPreferences, user_id: user.id
-      can [:show, :update], NotificationPreferences, &:new_record?
+      can %i[show edit update], NotificationPreferences, user_id: user.id
+      can %i[show update], NotificationPreferences, &:new_record?
     end
 
     if account.partner?
@@ -101,8 +100,6 @@ Ability.define do |user|
 
     can :manage, AccessToken, owner_id: user.id
 
-    if can?(:manage, :partners) && can?(:manage, account)
-      can :export, :data
-    end
+    can :export, :data if can?(:manage, :partners) && can?(:manage, account)
   end
 end
