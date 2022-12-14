@@ -41,8 +41,11 @@ Ability.define do |user|
     end
 
     if user.has_permission?(:monitoring)
-      can [:show], AlertRelatedEvent
+      can [:show], AlertRelatedEvent do |event|
+        user.has_access_to_service?(event.try(:service))
+      end
     end
+
     can [:show], Reports::CsvDataExportEvent do |event|
       user.admin? && event.recipient.try!(:id) == user.id
     end
