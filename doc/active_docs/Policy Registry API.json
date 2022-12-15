@@ -1,16 +1,18 @@
 {
-  "basePath": "",
-  "apis": [
+   "openapi": "3.0.1",
+  "info": {
+    "version": "1.0"
+  },
+  "servers": [
     {
-      "path": "/admin/api/registry/policies.json",
-      "responseClass": "policy",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "APIcast Policy Registry List",
-          "description": "List the APIcast Policies",
-          "group": "apicast_policies",
-          "parameters": [
+      "url": "/"
+    }
+  ],
+  "paths":{
+    "/admin/api/registry/policies.json":{
+      "get":{
+        "summary": "APIcast Policy Registry List",
+        "parameters": [
             {
               "name": "access_token",
               "description": "A personal Access Token",
@@ -19,20 +21,17 @@
               "paramType": "query",
               "threescale_name": "access_token"
             }
-          ]
+          ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
         }
-      ]
-    },
-    {
-      "path": "/admin/api/registry/policies.json",
-      "responseClass": "policy",
-      "operations": [
-        {
-          "httpMethod": "POST",
-          "summary": "APIcast Policy Registry Create",
-          "description": "Creates an APIcast Policy",
-          "group": "apicast_policies",
-          "parameters": [
+      },
+      "post":{
+        "summary": "APIcast Policy Registry Create",
+        "parameters": [
             {
               "name": "access_token",
               "description": "A personal Access Token",
@@ -62,20 +61,20 @@
               "dataType": "string",
               "paramType": "query"
             }
-          ]
+          ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
         }
-      ]
+      }
     },
-    {
-      "path": "/admin/api/registry/policies/{id}.json",
-      "responseClass": "policy",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "APIcast Policy Registry Read",
-          "description": "Returns the APIcast policy by ID",
-          "group": "apicast_policies",
-          "parameters": [
+    "/admin/api/registry/policies/{id}.json": {
+      "get" :{
+        "summary": "APIcast Policy Registry Read",
+        "description": "Returns the APIcast policy by ID",
+        "parameters": [
             {
               "name": "access_token",
               "description": "A personal Access Token",
@@ -91,20 +90,19 @@
               "required": true,
               "paramType": "path"
             }
-          ]
+          ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
         }
-      ]
-    },
-    {
-      "path": "/admin/api/registry/policies/{id}.json",
-      "responseClass": "policy",
-      "operations": [
-        {
-          "httpMethod": "PUT",
-          "summary": "APIcast Policy Registry Update",
-          "description": "Updates an APIcast Policy",
-          "group": "apicast_policies",
-          "parameters": [
+
+      },
+      "put": {
+        "summary": "APIcast Policy Registry Update",
+        "description": "Updates an APIcast Policy",
+        "parameters": [
             {
               "name": "access_token",
               "description": "A personal Access Token",
@@ -141,14 +139,16 @@
               "dataType": "string",
               "paramType": "query"
             }
-          ]
-        },
-        {
-          "httpMethod": "DELETE",
-          "summary": "APIcast Policy Registry Delete",
-          "description": "Deletes an APIcast policy by ID",
-          "group": "apicast_policies",
-          "parameters": [
+          ],
+         "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "parameters": [
             {
               "name": "access_token",
               "description": "A personal Access Token",
@@ -164,9 +164,15 @@
               "required": true,
               "paramType": "path"
             }
-          ]
+          ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
         }
-      ]
-    }
-  ]
+
+      }
+    }  
+  }   
 }
