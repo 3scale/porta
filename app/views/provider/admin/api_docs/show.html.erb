@@ -13,12 +13,42 @@
   <p class="InfoBox InfoBox--notice"><%= link_to 'Create an access token', provider_admin_user_access_tokens_path %> to authenticate against the Account Management API, the Analytics API and the Billing API.</p>
 <% end %>
 
-<div class='api-docs-wrap' id = "api-docs-wrap"></div>
+<div class='api-docs-wrap' id = "analytics-api-docs-wrap"></div>
+<div class='api-docs-wrap' id = "billing-api-docs-wrap"></div>
+<div class='api-docs-wrap' id = "service-management-api-docs-wrap"></div>
+<div class='api-docs-wrap' id = "account-management-api-docs-wrap"></div>
+<div class='api-docs-wrap' id = "policy-registry-api-docs-wrap"></div>
+
 
 <script type="text/javascript">
   (function () {
     var url = "/api_docs/services/analytics_api.json";
     var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
-    SwaggerUI({ url: url, dom_id: "#api-docs-wrap" }, serviceEndpoint);
+    SwaggerUI({ url: url, dom_id: "#analytics-api-docs-wrap" }, serviceEndpoint);
+  }());
+
+  (function () {
+    var url = "/api_docs/services/billing_api.json";
+    var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
+    SwaggerUI({ url: url, dom_id: "#billing-api-docs-wrap" }, serviceEndpoint);
+  }());
+
+  (function () {
+    var url = "/api_docs/services/service_management_api.json";
+    var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
+    SwaggerUI({ url: url, dom_id: "#service-management-api-docs-wrap" }, serviceEndpoint);
+  }());
+
+  (function () {
+    var url = "/api_docs/services/account_management_api.json";
+    var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
+    SwaggerUI({ url: url, dom_id: "#account-management-api-docs-wrap" }, serviceEndpoint);
+  }());
+
+
+  (function () {
+    var url = "/api_docs/services/policy_registry_api.json";
+    var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
+    SwaggerUI({ url: url, dom_id: "#policy-registry-api-docs-wrap" }, serviceEndpoint);
   }());
 </script>
