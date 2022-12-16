@@ -236,7 +236,7 @@ group :development, :test do
   gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'license_finder', '~> 6.12.0'
+  gem 'license_finder', '~> 7.0.1'
 
   gem 'pry-byebug', '>= 3.7.0'
   gem 'pry-doc', '>= 0.8', require: false
