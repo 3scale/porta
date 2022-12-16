@@ -47,9 +47,15 @@ def provider_by_name(name)
 end
 
 ParameterType(
-  name: 'prepaid_or_postpaid',
-  regexp: /(prepaid|postpaid)?/,
-  transformer: ->(mode = nil) { mode }
+  name: 'billing_mode',
+  regexp: /(prepaid|postpaid)/,
+  transformer: ->(mode) {
+    if mode == 'prepaid'
+      'Finance::PrepaidBillingStrategy'
+    else
+      'Finance::PostpaidBillingStrategy'
+    end
+  }
 )
 
 ParameterType(
@@ -109,11 +115,12 @@ ParameterType(
 ParameterType(
   name: 'provider',
   type: Account,
-  regexp: /provider "([^"]*)"|(master) provider|provider (master)|the provider/,
-  # TODO check this .present? condition
+  regexp: /the provider|provider "([^"]*)"|((?:the )?master )?provider/,
   transformer: ->(*args) do
-    name = args.map(&:presence).compact.first
-    name.present? ? provider_by_name(name) : @provider
+    return provider_by_name('master') if args[1].present?
+
+    name = args[0].presence
+    name ? provider_by_name(name) : @provider
   end
 )
 
@@ -262,9 +269,14 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'expiration_date',
-  regexp: /expiration date (\w+, *\d+|\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))/,
-  transformer: ->(date) { Date.parse(date) }
+  name: 'payment_gateway',
+  regexp: /braintree|stripe/,
+  transformer: ->(value) {
+    case value
+    when 'braintree' then :braintree_blue
+    when 'stripe' then :stripe
+    end
+  }
 )
 
 ParameterType(
@@ -358,9 +370,9 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'month',
+  name: 'date_month',
   regexp: /\w+, *\d+/,
-  transformer: ->(date) { date }
+  transformer: ->(date) { Date.parse(date) }
 )
 
 ParameterType(
@@ -377,6 +389,12 @@ ParameterType(
 
 ParameterType(
   name: 'has',
-  regexp: /has|has already|has not|has not yet/,
+  regexp: /has|has already|has not|has not yet|don't have/,
   transformer: ->(value) { ['has', 'has already'].include?(value) }
+)
+
+ParameterType(
+  name: 'can',
+  regexp: /can|can't|cannot/,
+  transformer: ->(value) { value == 'can' }
 )

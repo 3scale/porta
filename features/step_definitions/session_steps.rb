@@ -88,6 +88,10 @@ When /^I try to log in as (provider )?"([^"]*)"$/ do |provider,username|
 end
 
 When /^I try to log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,username, password|
+  try_log_in(provider, username, password)
+end
+
+def try_log_in(provider, username, password)
   # TODO: simplify and DRY
   path = if provider
            provider_login_path
@@ -149,4 +153,10 @@ end
 Then /^I should not be logged in$/ do
   # HAX: Check the logout link is not present. Don't know how to check this in a more explicit way.
   step 'I should not see link to logout'
+end
+
+When "the user logs in" do
+  visit '#session-menu'
+  click_link 'Sign Out' || 'Log Out'
+  try_log_in(@provider, @user.username, 'supersecret')
 end

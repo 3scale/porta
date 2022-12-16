@@ -139,17 +139,3 @@ Then /^I should see (\d+) applications$/ do |number|
   # Find which column is "Applications"
   index = all('table#buyer_accounts thead th').index { |node| node.text == 'Applications' }
 end
-
-Given "the admin is reviewing one of their buyer's details" do
-  visit admin_buyers_account_path(@provider.buyers.first)
-end
-
-Then "they should see the credit card {is} stored" do |stored|
-  within '#finance-status' do
-    if stored
-      assert_text /Credit Card details are on file. Card expires in: \w+ \d/
-    else
-      assert_text 'Credit Card details are not stored'
-    end
-  end
-end

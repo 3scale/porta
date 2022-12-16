@@ -5,9 +5,8 @@ Feature: On paid plans
   I want to charge my customers the right amounts even if there is a free trial
 
   Background:
-    Given a provider "planet.express.com" with billing enabled
-      And provider "planet.express.com" is charging
-      And provider "planet.express.com" has "finance" switch visible
+    Given a provider "planet.express.com"
+      And provider "planet.express.com" is charging its buyers
       Given an application plan "Rocket" of provider "planet.express.com"
 
   Scenario: I have to pay monthly and setup fee when the trial is over

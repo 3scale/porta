@@ -3,8 +3,8 @@ Feature: Billing with VAT
   I want to edit them and see them affecting invoice costs
 
 Background:
-  Given a provider "foo.3scale.localhost" with billing enabled
-    Given provider "foo.3scale.localhost" has "finance" switch visible
+  Given a provider exists
+    And the provider is charging its buyers
     And an application plan "best" of provider "foo.3scale.localhost" for 100 monthly
 
   @commit-transactions

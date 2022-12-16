@@ -34,7 +34,7 @@ module DeveloperPortal::Admin::Account
 
     def update_user_and_perform_action!(result)
       if braintree_blue_crypt.update_user(result)
-        # flash[:success] = 'Credit card details were successfully stored.'
+        flash[:success] = 'Credit card details were successfully stored.'
         redirect_to after_hosted_success_path, notice: 'Credit card details were successfully stored.'
       else
         flash[:notice] = 'Credit Card details could not be stored.'

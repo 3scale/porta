@@ -5,9 +5,7 @@ Feature: Invoice lifecycle
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" is fake charging
-      And provider "foo.3scale.localhost" has "finance" switch visible
-      And provider "foo.3scale.localhost" has valid payment gateway
+      And provider "foo.3scale.localhost" is charging its buyers
 
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And the time is 29th May 2009

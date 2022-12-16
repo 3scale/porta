@@ -5,8 +5,7 @@ Feature: Change plan
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" is charging
-      And provider "foo.3scale.localhost" has "finance" switch visible
+      And provider "foo.3scale.localhost" is charging its buyers
     Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31000000 monthly
       And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100000000 monthly
@@ -15,7 +14,7 @@ Feature: Change plan
   @commit-transactions
   Scenario: Paying a fee without change plan POSTPAID
     Given the time is 28th April 2009
-      And provider "foo.3scale.localhost" is charging
+      And provider "foo.3scale.localhost" is charging its buyers in postpaid mode
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
     When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"

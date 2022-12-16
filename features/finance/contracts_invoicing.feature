@@ -5,7 +5,8 @@ Feature: All kind of contracts are billed
   I want to be bill account, service and application contracts separately
 
   Background:
-    Given a provider with billing and finance enabled
+    Given a provider
+    And the provider is charging its buyers
     And the provider has one buyer
     And the provider has a paid application plan "Application Plan" of 100 per month
     And the provider has a paid service plan "Service Plan" of 31 per month

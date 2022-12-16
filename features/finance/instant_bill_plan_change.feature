@@ -5,7 +5,6 @@ Feature: Instant biling plan change feature
   Background:
     Given a provider with billing and finance enabled
     Given the provider service allows to change application plan directly
-    And the provider has prepaid billing enabled
     Given all the rolling updates features are off
     And I have instant_bill_plan_change feature enabled
     And the provider has one buyer

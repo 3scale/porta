@@ -42,8 +42,9 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
     'service' => 10,
     'account' => 1
   }
+  service = @service || @provider.default_service
   plan_name = (plan_name || default_plan_names[plan_type])
-  plan = create_plan plan_type.to_sym, name: plan_name, issuer: @service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
+  plan = create_plan plan_type.to_sym, name: plan_name, issuer: service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
 

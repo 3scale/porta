@@ -1,100 +1,102 @@
 # frozen_string_literal: true
 
-Given "{provider_or_buyer} has last digits of credit card number {string} and {expiration_date}" do |account, partial_number, expiration_date|
-  account.update!(credit_card_partial_number: partial_number,
-                  credit_card_auth_code: 'valid_code',
-                  credit_card_expires_on: expiration_date)
-end
-
-Given /^the payment gateway will fail on (authorize|store)$/ do |operation|
-  ActiveMerchant::Billing::BogusGateway.will_fail!(operation)
-end
-
 Then "links to Terms of service, Privacy and Refund policies should be visible" do
   assert find("#terms-link")[:href] =~ /#{current_account.provider_account.settings.cc_terms_path}\Z/
   assert find("#privacy-link")[:href] =~ /#{current_account.provider_account.settings.cc_privacy_path}\Z/
   assert find("#refunds-link")[:href] =~ /#{current_account.provider_account.settings.cc_refunds_path}\Z/
 end
 
-# TODO: there are too many steps for payment gateway, there should only be one to configure a provider. This one looks good.
-# Maybe these "all purpose" steps should be moved to the provider/ level instead of being under provider/admin/account
-Given "{provider} manages payments with {string}" do |provider, payment_gateway_type|
-  provider.update!(payment_gateway_type: payment_gateway_type.to_sym)
+Given "a(n) {valid} account" do |valid|
+  Account.any_instance.stubs(:valid?).returns(valid) # TODO: why is account not valid in the first place?
 end
 
-Given "the provider has unconfigured payment gateway" do
-  @provider.update!(payment_gateway_type: 'stripe',
-                    payment_gateway_options: { login: '3Scale' })
-end
-
-Given "{provider} has testing credentials for braintree" do |provider|
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
-  provider.update!(payment_gateway_type: :braintree_blue,
-                   payment_gateway_options: { :public_key => 'AnY-pUbLiC-kEy', :merchant_id => 'my-payment-gw-mid', :private_key => 'a1b2c3d4e5' })
-end
-
-Given "Braintree is stubbed for wizard" do
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:form_url).returns(hosted_success_provider_admin_account_braintree_blue_path(next_step: 'upgrade_plan'))
+Given "the master provider {has} configured a payment gateway" do |correct|
+  stub_braintree_configuration(correct: correct)
 end
 
 When "I fill in the braintree credit card form" do
-  fill_braintree_payment_details_form
+  fill_in_braintree_form
 end
 
 When "I fill in the braintree credit card iframe" do
   find(:css, '#braintree_nonce', visible: :hidden).set('some_braintree_nonce')
 end
 
-When "reviewing the provider's payment details" do
-  select_context 'Account Settings'
-  click_on 'Billing'
-  click_link 'Payment Details'
+When "(an admin is )reviewing the provider's payment details" do
+  visit edit_provider_admin_account_path
+  select_vertical_nav_section 'Payment Details'
 end
 
-When "an admin wants to add payment details" do
-  select_context 'Account Settings'
-  click_on 'Billing'
-  click_on 'Payment Details'
+Given "an admin has already set the provider's payment details" do
+  @provider.update!(
+    credit_card_partial_number: credit_card_example_data[:partial_number],
+    credit_card_expires_on_year: credit_card_example_data[:expiration_year],
+    credit_card_expires_on_month: credit_card_example_data[:expiration_month],
+    credit_card_auth_code: credit_card_example_data[:auth_code],
+    billing_address_first_name: billing_address_example_data[:first_name],
+    billing_address_last_name: billing_address_example_data[:last_name],
+    billing_address_phone: billing_address_example_data[:phone],
+    billing_address_name: billing_address_example_data[:name],
+    billing_address_address1: billing_address_example_data[:address1],
+    billing_address_city: billing_address_example_data[:city],
+    billing_address_country: billing_address_example_data[:country],
+    billing_address_state: billing_address_example_data[:state],
+    billing_address_zip: billing_address_example_data[:zip]
+  )
+end
+
+Then "the provider's payment details {can} be added" do |will_be_added|
   click_on 'Add Payment Details'
+
+  if will_be_added
+    fill_in_braintree_form
+    click_on 'Save'
+    assert_flash 'Credit card details were successfully stored.'
+    assert_provider_payment_details
+  else
+    assert_flash 'Invalid merchant id'
+    assert_equal provider_admin_account_braintree_blue_path, current_path
+  end
 end
 
-# Braintree only
-Given "the provider has already set payment details" do
-  # HACK: These are the fields consulted by Account::CreditCard#credit_card_stored?
-  @provider.update!(credit_card_partial_number: '1234', credit_card_auth_code: 'valid_code')
-end
+Then "the provider's payment details can be added only after completing account information" do
+  click_on 'Add Payment Details'
 
-Then "the provider's payment details can be added" do
-  fill_braintree_payment_details_form
-  click_on 'Save'
-  assert_braintree_payment_details
-  assert_flash 'Credit card details were successfully stored.'
+  assert_text 'Edit Account Details'
+  assert_match 'next_step=credit_card', current_url
+  assert_equal @provider.domain, find(:label, text: I18n.t('activerecord.attributes.account.org_name')).sibling('input').value
+  assert_equal 'UTC', find(:label, text: I18n.t('activerecord.attributes.account.timezone')).sibling('select').value
+  assert has_css?(:button, text: I18n.t('provider.admin.accounts.form.submit_button_next_step_label'))
 end
 
 Then "the admin can edit the provider's payment details" do
-  # FIXME: it should be possible to edit only certain fields without adding the credit card data again
+  stub_payment_gateway_authorization(:braintree_blue)
   click_on 'Edit'
-  fill_braintree_payment_details_form
+
+  new_billing_address = billing_address.merge({ company: 'Friendly Robot Company' })
+  fill_in_braintree_form(new_billing_address)
+
+  stub_payment_gateway_update(:braintree_blue, billing_address: new_billing_address)
   click_on 'Save'
-  assert_braintree_payment_details
+
+  within('section', text: 'Billing Address') do
+    find('dt', text: 'Company').assert_sibling('dd', text: 'Friendly Robot Company')
+  end
   assert_flash 'Credit card details were successfully stored.'
 end
 
-# Braintree only
 When /^the admin will add an? (in)?valid credit card$/ do |invalid|
-  PaymentGateways::BrainTreeBlueCrypt.any_instance
-                                     .stubs(:confirm)
-                                     .returns(invalid.present? ? failed_braintree_result : successful_braintree_result)
+  stub_payment_gateway_authorization(:braintree_blue, times: invalid ? 2 : 1)
+  stub_payment_gateway_update(:braintree_blue, success: !invalid)
 end
 
-Then "the provider's payment details can't be added" do
+But "there is a customer id mismatch" do
+  expect_braintree_customer_id_mismatch
+end
+
+Then "the provider's payment details can't be stored because the card number is invalid" do
   click_on 'Add Payment Details'
-  assert_flash 'invalid merchant id'
-  assert_equal provider_admin_account_braintree_blue_path, current_path
-end
-
-Then "the provider's payment details can't be stored" do
-  fill_braintree_payment_details_form
+  fill_in_braintree_form
   click_on 'Save credit card'
 
   assert_text 'Your payment details could not be saved'
@@ -102,15 +104,23 @@ Then "the provider's payment details can't be stored" do
   assert_flash 'Something went wrong and billing information could not be stored.'
 end
 
-Then "the provider's payment details are not accessible" do
-  select_context 'Account Settings'
-  within '.pf-c-page__sidebar' do
-    assert has_no_css?('li', text: 'Billing')
-  end
+Then "the provider's payment details can't be stored because something went wrong" do
+  click_on 'Add Payment Details'
+  fill_in_braintree_form
+  click_on 'Save credit card'
+
+  assert_flash 'Credit Card details could not be stored.'
 end
 
-Then "an admin can remove the provider's the payment details" do
-  click_link 'Remove Payment Details'
+Then "the provider's payment details are not accessible" do
+  visit edit_provider_admin_account_path
+  assert_not section_from_vertical_nav?('Billing')
+end
+
+Then "an admin can remove the provider's payment details" do
+  ActiveMerchant::Billing::Gateway.any_instance.expects(:threescale_unstore).returns(true)
+
+  click_on 'Remove Payment Details'
   accept_confirm('Are you sure?')
   assert_flash 'Your credit card was successfully removed'
 
@@ -119,25 +129,29 @@ Then "an admin can remove the provider's the payment details" do
   end
 end
 
-def fill_braintree_payment_details_form
-  fill_in("First name", with: "Bender", visible: true)
-  fill_in("Last name", with: "Rodriguez", visible: true)
-  fill_in("Company", with: "comp", visible: true)
-  fill_in("Street address", with: "C/LLacuna 162", visible: true)
-  fill_in("City", with: "Barcelona", visible: true)
-  fill_in("State/Region", with: "Catalonia", visible: true)
-  fill_in("ZIP / Postal Code", with: "08080", visible: true)
-  fill_in("Phone", with: "+34123123212", visible: true)
-  find_field("Country").find(:option, "Spain").select_option
-
-  # Simulates getClient and getHostedFields working in braintree_edit_form.ts
-  page.evaluate_script("document.querySelector('#braintree_nonce').value = 'some_braintree_nonce'")
-  page.evaluate_script("document.querySelector('button[type=\"submit\"]').disabled = false")
+Given "{provider} doesn't have billing address" do |provider|
+  provider.delete_billing_address
+  provider.save!
 end
 
-def assert_braintree_payment_details
-  assert_content 'Credit card number'
-  assert_content "XXXX-XXXX-XXXX-#{current_account.credit_card_partial_number}"
-  assert_content 'Expiration date'
-  assert_content current_account.credit_card_expires_on.strftime('%B %Y')
+def assert_provider_payment_details # rubocop:disable Metrics/AbcSize
+  within('section', text: 'Personal Details') do
+    find('dt', text: 'First Name').assert_sibling('dd', text: billing_address_example_data[:first_name])
+    find('dt', text: 'Last Name').assert_sibling('dd', text: billing_address_example_data[:last_name])
+    find('dt', text: 'Phone').assert_sibling('dd', text: billing_address_example_data[:phone])
+  end
+
+  within('section', text: 'Credit Card Details') do
+    find('dt', text: 'Credit card number').assert_sibling('dd', text: "XXXX-XXXX-XXXX-#{credit_card_example_data[:partial_number]}")
+    find('dt', text: 'Expiration date').assert_sibling('dd', text: buyer_credit_card_expiration_date.strftime('%B %Y'))
+  end
+
+  within('section', text: 'Billing Address') do
+    find('dt', text: 'Company').assert_sibling('dd', text: billing_address_example_data[:company])
+    find('dt', text: 'Address').assert_sibling('dd', text: billing_address_example_data[:street_address])
+    find('dt', text: 'Zip').assert_sibling('dd', text: billing_address_example_data[:postal_code])
+    find('dt', text: 'City').assert_sibling('dd', text: billing_address_example_data[:locality])
+    find('dt', text: 'State').assert_sibling('dd', text: billing_address_example_data[:region])
+    find('dt', text: 'Country').assert_sibling('dd', text: billing_address_example_data[:country_name])
+  end
 end

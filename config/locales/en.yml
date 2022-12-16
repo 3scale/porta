@@ -1032,6 +1032,7 @@ en:
         self_subdomain: Admin Portal
         state_region: State / Region
         self_domain: Admin domain
+        timezone: Time Zone
         vat_code: VAT Code
         po_number: PO Number
         telephone_number: Telephone Number
@@ -1094,6 +1095,10 @@ en:
 
       usage_limit:
         value: Max. value
+
+      user:
+        first_name: 'First name'
+        last_name: 'Last name'
 
       cms/legal_term:
         published: Text
