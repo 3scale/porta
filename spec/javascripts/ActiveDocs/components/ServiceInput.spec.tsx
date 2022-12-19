@@ -1,8 +1,8 @@
 import { mount } from 'enzyme'
 
-import { ServiceInput } from 'ActiveDocs/components/ServiceSelect'
+import { ServiceSelect } from 'ActiveDocs/components/ServiceSelect'
 
-const mountWrapper = () => mount(<ServiceInput service="" setService={jest.fn()} />)
+const mountWrapper = () => mount(<ServiceSelect service={{ id: 1, name: 'Pepe' }} services={[]} setService={jest.fn()} />)
 
 it('should render itself', () => {
   const wrapper = mountWrapper()

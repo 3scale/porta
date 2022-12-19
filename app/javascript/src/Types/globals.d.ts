@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type CodeMirror from 'codemirror'
 import type SwaggerUI from 'swagger-ui'
 import type { compose } from 'redux'
 
 declare global {
   interface Window {
     $: JQueryStatic;
+    CodeMirror: typeof CodeMirror;
     statsUsage: unknown;
     statsDaysOfWeek: unknown;
     statsHoursOfDay: unknown;
