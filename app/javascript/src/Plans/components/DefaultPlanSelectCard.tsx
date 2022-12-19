@@ -28,7 +28,7 @@ const DefaultPlanSelectCard: FunctionComponent<Props> = ({
   initialDefaultPlan,
   path: url
 }) => {
-  const NO_DEFAULT_PLAN: Plan = { id: '', name: 'No plan selected' } as const
+  const NO_DEFAULT_PLAN: Plan = { id: -1, name: 'No plan selected' } as const
 
   const [defaultPlan, setDefaultPlan] = useState<Plan | null>(initialDefaultPlan ?? NO_DEFAULT_PLAN)
 

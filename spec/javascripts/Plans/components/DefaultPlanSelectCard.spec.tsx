@@ -36,7 +36,7 @@ it('should have a "no default plan" option', () => {
 
   selectOption(wrapper, 'No plan selected')
 
-  expect(wrapper.find(Select).props().item!.id).toEqual('')
+  expect(wrapper.find(Select).props().item!.id).toEqual(-1)
 })
 
 it('should be able to select a plan', () => {
