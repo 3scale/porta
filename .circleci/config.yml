@@ -477,9 +477,9 @@ jobs:
       - checkout
       - *attach-to-workspace
       - run:
-          name: Licences check
+          name: Licenses check
           command: |
-            bundle exec rake ci:license_finder:run
+            bundle exec rake licenses:compliance
       - run:
           name: Swagger validation
           command: |

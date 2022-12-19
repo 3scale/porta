@@ -1,0 +1,5 @@
+---
+dependencies_file_dir: './doc/licenses'
+enabled_package_managers:
+  - bundler
+  - yarn
