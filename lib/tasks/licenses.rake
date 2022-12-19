@@ -23,12 +23,14 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
     end
 
     warn 'Checking license report is up to date...'
-    temp_report_path = Tempfile.new(report_path.to_s).path
-    license_finder_report(temp_report_path)
+    Tempfile.new(report_path.to_s) do |temp_file|
+      temp_report_path = temp_file.path
+      license_finder_report(temp_report_path)
 
-    unless identical?(report_path, temp_report_path)
-      warn '*** License report outdated. Please run "rails licenses:report" ***'
-      exit 1
+      unless identical?(report_path, temp_report_path)
+        warn '*** License report outdated. Please run "rails licenses:report" ***'
+        exit 1
+      end
     end
 
     warn 'License report up to date.'
