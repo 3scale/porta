@@ -48,12 +48,12 @@ environment.loaders.append('yaml', {
  * https://github.com/3scale/porta/pull/3072
  */
 const { output } = environment.config;
-const { publicPath } = output;
-const fileLoader = environment.loaders.get('file');
-
+const oldPublicPath = output.publicPath
 output.publicPath = '';
+
+const fileLoader = environment.loaders.get('file');
 Object.assign(fileLoader.use[0].options, {
-  publicPath,
+  publicPath: oldPublicPath,
   postTransformPublicPath: (p) => `window.rails_asset_host + ${p}`
 });
 
