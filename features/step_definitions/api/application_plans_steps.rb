@@ -10,6 +10,23 @@ When /^an admin selects a(?:n)? (hidden )?application plan as default$/ do |hidd
   assert_equal @plan, default_service.reload.default_application_plan
 end
 
+When "the default application plan is set" do
+  plan = FactoryBot.create(:application_plan, issuer: default_service)
+  default_service.default_application_plan = plan
+  default_service.save!
+end
+
+When "an admin unsets the default application plan" do
+  visit admin_service_application_plans_path(default_service)
+  select_default_plan_by_name "No plan selected"
+end
+
+Then "the service will not have the default plan set" do
+  visit admin_service_application_plans_path(default_service)
+  sleep 5
+  assert_equal('No plan selected', find('.pf-c-select input').value)
+end
+
 Then "any new application will use this plan" do
   FactoryBot.create(:buyer_account, provider_account: @provider)
 
