@@ -31,8 +31,8 @@ class ApplicationHelperTest < ActionView::TestCase
     attr_reader :request
 
     test 'asset host is not configured' do
-      Rails.configuration.asset_host = nil
-      Rails.configuration.three_scale.asset_host = @asset_host
+      Rails.configuration.expects(:asset_host).returns(nil)
+      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
 
       result = rails_asset_host_url
 
@@ -40,8 +40,8 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test "asset host is configured but it's value is empty" do
-      Rails.configuration.asset_host = -> {}
-      Rails.configuration.three_scale.asset_host = ''
+      Rails.configuration.expects(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.expects(:asset_host).returns('')
 
       result = rails_asset_host_url
 
@@ -49,8 +49,8 @@ class ApplicationHelperTest < ActionView::TestCase
     end
 
     test 'asset host is configured and has a proper value' do
-      Rails.configuration.asset_host = -> {}
-      Rails.configuration.three_scale.asset_host = @asset_host
+      Rails.configuration.expects(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
 
       result = rails_asset_host_url
 
