@@ -4,26 +4,28 @@ Feature: Asset host
   As master, provider or developer
   I want to load all assets from the configured CDN
 
-  Background:
-    Given a provider "foo.3scale.localhost"
-    And a buyer "bob" signed up to provider "foo.3scale.localhost"
+  Rule: Master
+    Background:
+      Given master is the provider
 
-  Scenario: Asset host not configured
-    When I am logged in as master admin on master domain
-    Then assets shouldn't be loaded from the asset host
+    Scenario: Asset host not configured
+      When master admin is logged in
+      Then assets shouldn't be loaded from the asset host
 
-  Scenario: Master dashboard with asset host configured
-    When the asset host is set to "cdn.3scale.localhost"
-    And I am logged in as master admin on master domain
-    Then assets should be loaded from the asset host
+    Scenario: Master dashboard with asset host configured
+      When the asset host is set to "cdn.3scale.localhost"
+      When master admin is logged in
+      Then assets should be loaded from the asset host
 
-  Scenario: Provider dashboard with asset host configured
-    When the asset host is set to "cdn.3scale.localhost"
-    Given current domain is the admin domain of provider "foo.3scale.localhost"
-    And I am logged in as provider "foo.3scale.localhost"
-    Then assets should be loaded from the asset host
+  Rule: Provider
+    Background:
+      Given the asset host is set to "cdn.3scale.localhost"
+      And a provider is logged in
+      And the provider has one buyer
 
-  Scenario: Developer portal with asset host configured
-    When the asset host is set to "cdn.3scale.localhost"
-    Given I log in as "bob" on foo.3scale.localhost
-    Then javascript assets should be loaded from the asset host
+    Scenario: Provider dashboard with asset host configured
+      Then assets should be loaded from the asset host
+
+    Scenario: Developer portal with asset host configured
+      When the buyer logs in to the provider
+      Then javascript assets should be loaded from the asset host
