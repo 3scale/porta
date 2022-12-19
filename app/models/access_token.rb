@@ -38,7 +38,7 @@ class AccessToken < ApplicationRecord
     private
 
     def non_public_scopes
-      %w(cms).freeze
+      %w[].freeze
     end
   end
 
