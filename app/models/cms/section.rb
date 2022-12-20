@@ -19,7 +19,8 @@ class CMS::Section < ApplicationRecord
   alias sections children
   alias section= parent=
 
-  validates :system_name, :provider, presence: true
+  validates :title, :provider, presence: true
+  validate :system_name_presence
   validates :parent_id, presence: { :unless => :root? }
 
   validates :title, uniqueness: { :scope => [:provider_id, :parent_id] }
@@ -199,6 +200,10 @@ class CMS::Section < ApplicationRecord
     if child_of?(self.id)
       errors.add(:base, "cannot be it's own ancestor")
     end
+  end
+
+  def system_name_presence
+    errors.add(:system_name) if system_name.blank? && title.present?
   end
 
   def strip_trailing_slashes
