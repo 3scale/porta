@@ -12,6 +12,11 @@ Feature: Application plans index page
     When an admin selects an application plan as default
     Then any new application will use this plan
 
+  Scenario: Unset the default application plan
+    Given the service has a default application plan
+    When an admin unsets the default application plan
+    Then the service will not have the default plan set
+
   Scenario: Hidden plans can be default
     When an admin selects a hidden application plan as default
     Then any new application will use this plan
@@ -49,11 +54,6 @@ Feature: Application plans index page
     When an admin publishes a plan from the application plans page
     Then the plan is published
     And a buyer will be able to use it for their applications
-
-  Scenario: Unset the default application plan
-    When the default application plan is set
-    And an admin unsets the default application plan
-    Then the service will not have the default plan set
 
   @search
   Scenario: Filtering and sorting application plans
