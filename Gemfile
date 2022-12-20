@@ -95,7 +95,7 @@ gem 'ransack', '2.4.1' # we can remove line when stop using ruby 2.4
 gem 'browser', '~> 5.0.0' # we can update to lts when we stop using ruby 2.4
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
-gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
+gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
