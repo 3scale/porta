@@ -203,7 +203,7 @@ class CMS::Section < ApplicationRecord
   end
 
   def system_name_presence
-    errors.add(:system_name) if system_name.blank? && title.present?
+    errors.add(:system_name, :blank) if system_name.blank? && title.present?
   end
 
   def strip_trailing_slashes
