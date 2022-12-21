@@ -13,7 +13,7 @@ Feature: Dev Portal Buyer Invoices
     And the buyer should receive some emails after a month
 
   Scenario: Provider has charging disabled
-    Given the provider has charging disabled
+    Given the provider has "finance" denied
     When the buyer is reviewing their account settings
     Then they should not be able to see any invoices
     And the buyer should receive no emails after a month

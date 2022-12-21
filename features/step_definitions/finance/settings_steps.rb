@@ -4,6 +4,10 @@ But "{provider} doesn't have a payment gateway set up" do |provider|
   provider.update!(payment_gateway_type: nil, payment_gateway_options: nil)
 end
 
+But "the provider's payment gateway is unconfigured" do
+  @provider.update!(payment_gateway_options: nil)
+end
+
 Given "they are reviewing the charging and gateway billing settings" do
   visit admin_finance_settings_path
 end
@@ -143,7 +147,7 @@ end
 
 def set_provider_charging_with(provider:, payment_gateway:, billing_enabled: true)
   provider.settings.allow_finance! if provider.settings.finance.denied?
-  provider.settings.show_finance! if provider.settings.finance.hidden?
+  # provider.settings.show_finance! if provider.settings.finance.hidden?
 
   provider.billing_strategy.update!(charging_enabled: billing_enabled, currency: 'EUR')
   # TODO: extract payment_gateway_options into a helper method and generate based on payment_gateway

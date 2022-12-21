@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 Given "{buyer} has a valid credit card" do |buyer|
-  buyer.update!(credit_card_partial_number: credit_card_example_data[:partial_number],
-                credit_card_expires_on_year: @expiration_year || credit_card_example_data[:expiration_year],
-                credit_card_expires_on_month: @expiration_month || credit_card_example_data[:expiration_month],
+  buyer.update!(credit_card_partial_number: '1234' || credit_card_example_data[:partial_number],
+                credit_card_expires_on: @expiration_date || buyer_credit_card_expiration_date,
                 credit_card_auth_code: @credit_card_auth_code || credit_card_example_data[:auth_code])
 end
 
@@ -12,9 +11,8 @@ Given "{} with no money" do |lstep|
   step lstep
 end
 
-Given "{} that expires on {date_month}" do |lstep, date|
-  @expiration_month = date.month
-  @expiration_year = date.year
+Given "{} that expires on {date}" do |lstep, date|
+  @expiration_date = date
   step lstep
 end
 
@@ -119,7 +117,7 @@ But "credit card information still needs to be added" do
     assert_not has_css?('dt', text: 'Credit card number')
     assert_not has_css?('dt', text: 'Expiration date')
   end
-  pending('TODO: assert stripe js widget')
+  # TODO: assert stripe js widget
 end
 
 Then "the buyer can update their billing address for stripe" do
@@ -141,7 +139,8 @@ Then "the buyer can't add their credit card" do
 end
 
 Then "the buyer can add their credit card for stripe" do
-  pending("TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.")
+  # TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.
+
   # credit_card_details_tab.click
   # assert_buyer_billing_address_details
 
@@ -165,6 +164,10 @@ Then /^the buyer can add their credit card and billing address for Braintree( fo
   credit_card_details_tab.click
   assert_equal first_time.blank?, has_css?(billing_address_descriptionlist_selector)
 
+  step('the buyer adds their credit card details for Braintree')
+end
+
+And "the buyer adds their credit card details for Braintree" do
   stub_payment_gateway_authorization(:braintree_blue, times: 1)
   click_on 'Add Credit Card Details and Billing Address'
 

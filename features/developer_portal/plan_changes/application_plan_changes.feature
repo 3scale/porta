@@ -74,20 +74,15 @@ Feature: Application Plan Change
     And I want to change the plan of my application to paid
     And I follow "enter your Credit Card details"
     Then I should be at url for the braintree credit card details page
-    And I follow "Add Credit Card Details and Billing Address"
-
-    When I fill in the braintree credit card form
-
-    And I press "Save details"
-    Then I should be at url for the braintree credit card details page
-    And I should see "Credit card details were successfully stored."
+    And the buyer adds their credit card details for Braintree
 
 
   # FIXME: Should we put an access denied or a better error message?
   Scenario: Change plan workflow with credit card required and payment gateway not configured
     Given the provider service allows to change application plan with credit card required
-    And the provider is charging its buyers
-    But the provider doesn't have a payment gateway set up
+    And the provider is charging its buyers with stripe
+    But the provider's payment gateway is unconfigured
+    And the provider has "finance" hidden
 
     And I want to change the plan of my application to paid
     And I follow "enter your Credit Card details"

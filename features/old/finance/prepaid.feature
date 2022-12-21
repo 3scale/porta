@@ -4,8 +4,9 @@ Feature: Prepaid billing of a buyer
   I want to be charged as soon as possible
 
  Background:
-  Given a provider exists
-    And the provider is charging its buyers in prepaid mode
+  Given a provider
+    And the provider is billing but not charging in prepaid mode
+    And provider "foo.3scale.localhost" has "finance" switch visible
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
     And an application plan "Variable" of provider "foo.3scale.localhost" for 200 monthly
     And pricing rules on plan "Variable":
@@ -62,6 +63,7 @@ Feature: Prepaid billing of a buyer
  Scenario: Bill and issue when the trial ends, charge when due
   Given the date is 1st January 2009
     And plan "Fixed" has trial period of 15 days
+    And the provider is charging its buyers
 
    When a buyer "zoidberg" signed up to application plan "Fixed" on 1st January 2009
     And I log in as "zoidberg" on foo.3scale.localhost

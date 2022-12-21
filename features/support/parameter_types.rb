@@ -48,7 +48,7 @@ end
 
 ParameterType(
   name: 'billing_mode',
-  regexp: /(prepaid|postpaid)/,
+  regexp: /(prepaid|postpaid|)/,
   transformer: ->(mode) {
     if mode == 'prepaid'
       'Finance::PrepaidBillingStrategy'
@@ -370,8 +370,8 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'date_month',
-  regexp: /\w+, *\d+/,
+  name: 'date',
+  regexp: /(\w{3,}( \d{2,}?)?, \d{4})/,
   transformer: ->(date) { Date.parse(date) }
 )
 

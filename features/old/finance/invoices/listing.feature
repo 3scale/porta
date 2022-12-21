@@ -5,8 +5,8 @@ Feature: Provider lists all invoices
 
   Background:
     # TODO: Create invoices directly from background
-    Given a provider is logged in
-      And the provider is charging its buyers
+    Given a provider
+      And the provider is billing but not charging
       And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
       And the date is 5th October 2010
       And a buyer "foobar" signed up to application plan "Fixed"

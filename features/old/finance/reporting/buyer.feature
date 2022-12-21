@@ -7,7 +7,8 @@ Feature: Billing Reporting
   # - IF the bill in a given month is Zero (for whatever reason) no email is sent.
 
   Background:
-    Given a provider exists
+    Given a provider "foo.3scale.localhost"
+      And the provider is charging its buyers
       And all the rolling updates features are off
       And the provider is charging its buyers
       And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
@@ -63,7 +64,7 @@ Feature: Billing Reporting
   Scenario: I should be warned 10 days before my credit card expires and never ever after
       Given the time is 16th May 2009
         And a buyer "broke" signed up to application plan "FreeAsInBeer"
-        And buyer "broke" has a valid credit card with no money that expires on May, 2009
+        And buyer "broke" has a valid credit card with no money that expires on May 27, 2009
 
        When the time flies to 17th May 2009
         And I act as "broke"

@@ -13,13 +13,13 @@ Feature: Admin Portal Buyer's Billing Status
     Then they should not see any billing status
 
   Scenario: Provider has charging disabled
-    Given the provider has charging disabled
+    Given the provider is billing but not charging
     When an admin is reviewing the buyer's account
     Then they should see the buyer is being billed monthly
     And monthly billing can be disabled
 
   Scenario: Provider has charging enabled but no payment gateway
-    Given the provider has charging enabled
+    Given the provider is charging its buyers
     But the provider doesn't have a payment gateway set up
     When an admin is reviewing the buyer's account
     Then they should see the buyer is being charged monthly
