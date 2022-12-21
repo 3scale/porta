@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 namespace :licenses do  # rubocop:disable Metrics/BlockLength
-  require 'license_finder'
-
   report_path = Rails.root.join('doc/licenses/licenses.xml')
 
   desc 'Generates a report with the dependencies and their licenses'
@@ -40,7 +38,10 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
   private
 
   def cli
-    @cli ||= LicenseFinder::CLI::Main.new
+    @cli ||= begin
+               require 'license_finder'
+               LicenseFinder::CLI::Main.new
+             end
   end
 
   def license_finder_report(path)
