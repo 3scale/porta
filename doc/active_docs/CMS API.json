@@ -1,4 +1,5 @@
 {
+  "basePath": "",
   "resourcePath": "/admin/api/cms/templates",
   "swaggerVersion": "1.1",
   "apiVersion": "1.0",
