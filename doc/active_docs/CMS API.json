@@ -181,34 +181,6 @@
               "dataType": "int",
               "required": true,
               "paramType": "path"
-            },
-            {
-              "name": "path",
-              "description": "URI of the file",
-              "paramType": "query"
-            },
-            {
-              "name": "section_id",
-              "description": "ID of a section (valid only for pages)",
-              "type": "int",
-              "paramType": "query",
-              "default": "root section id"
-            },
-            {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
-              "name": "attachment",
-              "paramType": "query"
-            },
-            {
-              "name": "downloadable",
-              "description": "Checked sets the content-disposition to attachment",
-              "type": "boolean",
-              "paramType": "query",
-              "default": "false"
             }
           ]
         }
