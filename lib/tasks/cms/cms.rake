@@ -210,6 +210,17 @@ namespace :cms do
         puts "\t++ Fixing pagination href in #{page.id}/shared/pagination"
       end
     end
+
+    desc 'Fixes empty titles in sections'
+    task :section_empty_titles => :environment do
+      CMS::Section.unscoped.where(title: ['', nil]).in_batches do |sections|
+        sections.each do |section|
+          title = section.system_name.presence || "Section #{section.id}"
+          section.update_column(:title, title)
+        end
+        sleep(0.01) # throttle
+      end
+    end
   end
 
   desc 'Reupload 3scale.js that were created because of #7503'
