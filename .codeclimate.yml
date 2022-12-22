@@ -12,7 +12,7 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: "rubocop-1-31"
+    channel: rubocop-1-39
   reek:
     enabled: true
   eslint:
