@@ -263,11 +263,6 @@
               "allowMultiple": false
             },
             {
-              "name": "system_name",
-              "description": "Human readable and unique identifier",
-              "paramType": "query"
-            },
-            {
               "name": "title",
               "description": "Title of the section",
               "paramType": "query"
@@ -342,11 +337,6 @@
               "dataType": "int",
               "required": true,
               "paramType": "path"
-            },
-            {
-              "name": "system_name",
-              "description": "Human readable and unique identifier",
-              "paramType": "query"
             },
             {
               "name": "title",
