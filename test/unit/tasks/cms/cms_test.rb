@@ -28,46 +28,27 @@ module Tasks
         @provider = FactoryBot.create(:provider_account)
       end
 
-      def test_fix_section_empty_titles_title_nil
-        section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: nil)
-        section.save!(validate: false)
+      [nil, ""].each do |empty_val|
+        define_method("test_fix_section_empty_titles_title_#{empty_val.nil? ? 'nil' : 'empty'}") do
+          section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: empty_val)
+          section.save!(validate: false)
 
-        execute_rake_task 'cms/cms.rake', 'cms:fix:section_empty_titles'
+          execute_rake_task 'cms/cms.rake', 'cms:fix:section_empty_titles'
 
-        section.reload
-        assert_equal section.system_name, section.title
-      end
+          section.reload
+          assert_equal section.system_name, section.title
+        end
 
-      def test_fix_section_empty_titles_title_empty
-        section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: '')
-        section.save!(validate: false)
+        define_method("test_fix_section_empty_titles_system_name_#{empty_val.nil? ? 'nil' : 'empty'}") do
+          section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: nil, system_name: empty_val)
+          section.save!(validate: false)
+          expected_title = "Section #{section.id}"
 
-        execute_rake_task 'cms/cms.rake', 'cms:fix:section_empty_titles'
+          execute_rake_task 'cms/cms.rake', 'cms:fix:section_empty_titles'
 
-        section.reload
-        assert_equal section.system_name, section.title
-      end
-
-      def test_fix_section_empty_titles_system_name_nil
-        section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: nil, system_name: nil)
-        section.save!(validate: false)
-        expected_title = "Section #{section.id}"
-
-        execute_rake_task 'cms/cms.rake', 'cms:fix:section_empty_titles'
-
-        section.reload
-        assert_equal expected_title, section.title
-      end
-
-      def test_fix_section_empty_titles_system_name_empty
-        section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: nil, system_name: '')
-        section.save!(validate: false)
-        expected_title = "Section #{section.id}"
-
-        execute_rake_task 'cms/cms.rake', 'cms:fix:section_empty_titles'
-
-        section.reload
-        assert_equal expected_title, section.title
+          section.reload
+          assert_equal expected_title, section.title
+        end
       end
 
       def test_fix_section_empty_titles_valid
