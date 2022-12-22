@@ -213,11 +213,9 @@ namespace :cms do
 
     desc 'Fixes empty titles in sections'
     task :section_empty_titles => :environment do
-      CMS::Section.unscoped.where(title: ['', nil]).in_batches do |sections|
-        sections.each do |section|
-          title = section.system_name.presence || "Section #{section.id}"
-          section.update_column(:title, title)
-        end
+      CMS::Section.unscoped.where(title: ['', nil]).find_each do |section|
+        title = section.system_name.presence || "Section #{section.id}"
+        section.update_column(:title, title)
         sleep(0.01) # throttle
       end
     end
