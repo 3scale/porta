@@ -30,16 +30,6 @@ class AccessToken < ApplicationRecord
       else value.to_s.to_sym
       end
     end
-
-    def public?
-      non_public_scopes.exclude?(value.to_s)
-    end
-
-    private
-
-    def non_public_scopes
-      %w[].freeze
-    end
   end
 
   class Scopes
@@ -59,11 +49,7 @@ class AccessToken < ApplicationRecord
 
     def visible_for(account)
       select_and_build do |scope|
-        if scope.public?
-          true
-        else
-          account.provider_can_use?("#{scope.value}_api")
-        end
+        account.provider_can_use?("#{scope.value}_api")
       end
     end
 
