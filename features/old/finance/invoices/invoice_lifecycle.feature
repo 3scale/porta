@@ -6,6 +6,7 @@ Feature: Invoice lifecycle
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" is charging its buyers
+      And provider "foo.3scale.localhost" has "finance" switch visible
 
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And the time is 29th May 2009

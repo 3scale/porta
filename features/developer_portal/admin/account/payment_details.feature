@@ -22,6 +22,7 @@ Feature: Dev Portal Buyer Payment Details
 
     Background:
       Given the provider is charging its buyers with stripe
+      And the provider has "finance" visible
 
     Scenario: Legal Links on Credit Card Details edit page on Enterprise
       Given the provider has the following settings:
@@ -80,6 +81,7 @@ Feature: Dev Portal Buyer Payment Details
 
     Background:
       Given the provider is charging its buyers with braintree
+      And the provider has "finance" visible
 
     Scenario: Legal Links on Credit Card Details edit page on Enterprise
       Given the provider has the following settings:

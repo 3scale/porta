@@ -6,6 +6,7 @@ Feature: Automatic billing with plan changes on PREPAID
   Background:
     Given a provider is logged in
     And the provider is charging its buyers in prepaid mode
+    And the provider has "finance" visible
     Given the provider service allows to change application plan directly
     And the provider has one buyer
     And the provider has a paid application plan "Paid" of 31 per month

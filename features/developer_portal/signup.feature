@@ -22,6 +22,7 @@ Feature: Buyer signup
   # This is the default behaviour for new providers as of 05-07-2016
   Scenario: Signup forces to fill in credit card for paid plan
     Given the provider is charging its buyers with braintree
+    And the provider has "finance" visible
     And has a buyer with application plan
     And application plan is paid
     And the provider has credit card on signup feature in automatic mode
@@ -47,6 +48,7 @@ Feature: Buyer signup
   # This is the behaviour for existing providers as of 05-07-2016
   Scenario: Signup require to fill in credit card on paid plan if switch is enabled
     And the provider is charging its buyers with braintree
+    And the provider has "finance" visible
 
     And has a buyer with application plan
     And application plan is paid

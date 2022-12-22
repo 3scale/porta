@@ -7,7 +7,8 @@ Feature: Postpaid billing
 
 Background:
   Given a provider "xyz.3scale.localhost"
-    And the provider is charging its buyers
+    And the provider is billing but not charging
+    And provider "xyz.3scale.localhost" has "finance" switch visible
   Given a default service of provider "xyz.3scale.localhost" has name "api"
     And a metric "transfer" of provider "xyz.3scale.localhost"
     And an application plan "Variable" of provider "xyz.3scale.localhost" for 200 monthly

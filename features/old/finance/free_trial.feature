@@ -7,6 +7,7 @@ Feature: On paid plans
   Background:
     Given a provider "planet.express.com"
       And provider "planet.express.com" is charging its buyers
+      And provider "planet.express.com" has "finance" switch visible
       Given an application plan "Rocket" of provider "planet.express.com"
 
   Scenario: I have to pay monthly and setup fee when the trial is over

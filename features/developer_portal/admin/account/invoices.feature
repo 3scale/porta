@@ -8,6 +8,7 @@ Feature: Dev Portal Buyer Invoices
 
   Scenario: Provider has charging enabled
     Given the provider is charging its buyers
+    And the provider has "finance" visible
     When the buyer is reviewing their account settings
     Then they should be able to see their invoices
     And the buyer should receive some emails after a month

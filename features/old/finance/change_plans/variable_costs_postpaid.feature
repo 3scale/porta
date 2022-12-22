@@ -7,6 +7,7 @@ Feature: Change plan
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" is charging its buyers in postpaid mode
+      And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on
     Given an application plan "CheapPlan" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "ExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly

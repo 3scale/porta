@@ -4,7 +4,8 @@ Feature: Variable cost on automatic billing
 
   Background:
     Given a provider exists
-    And the provider is charging its buyers
+    And the provider is billing but not charging
+    And the provider has "finance" visible
     Given all the rolling updates features are off
     And the provider has one buyer
     And the provider has a paid application plan "VariableOnly" of 0 per month

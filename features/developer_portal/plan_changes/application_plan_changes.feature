@@ -53,6 +53,7 @@ Feature: Application Plan Change
   Scenario: Change plan workflow with credit card required with wizard
     Given the provider service allows to change application plan with credit card required
     And the provider is charging its buyers with braintree
+    And the provider has "finance" switch visible
 
     And the provider has all the templates setup
 
@@ -66,6 +67,7 @@ Feature: Application Plan Change
   Scenario: Change plan workflow with credit card required without wizard
     Given the provider service allows to change application plan with credit card required
     And the provider is charging its buyers with braintree
+    And the provider has "finance" switch visible
 
     And the provider has all the templates setup
 

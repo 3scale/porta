@@ -136,18 +136,9 @@ Given "{provider} has testing credentials for braintree" do |provider|
   provider.update!(payment_gateway_type: :braintree_blue,
                    payment_gateway_options: { :public_key => 'AnY-pUbLiC-kEy', :merchant_id => 'my-payment-gw-mid', :private_key => 'a1b2c3d4e5' })
 end
-Given "a provider with billing and finance enabled" do
-  step 'a provider exists'
-  steps %(
-    And current domain is the admin domain of provider "#{@provider.internal_domain}"
-    And I log in as provider "#{@provider.internal_domain}"
-    And the provider is charging its buyers in prepaid mode
-  )
-end
 
 def set_provider_charging_with(provider:, payment_gateway:, billing_enabled: true)
   provider.settings.allow_finance! if provider.settings.finance.denied?
-  # provider.settings.show_finance! if provider.settings.finance.hidden?
 
   provider.billing_strategy.update!(charging_enabled: billing_enabled, currency: 'EUR')
   # TODO: extract payment_gateway_options into a helper method and generate based on payment_gateway

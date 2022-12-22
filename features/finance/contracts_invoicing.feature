@@ -7,6 +7,7 @@ Feature: All kind of contracts are billed
   Background:
     Given a provider
     And the provider is charging its buyers
+    And the provider has "finance" visible
     And the provider has one buyer
     And the provider has a paid application plan "Application Plan" of 100 per month
     And the provider has a paid service plan "Service Plan" of 31 per month

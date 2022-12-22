@@ -7,6 +7,7 @@ Feature: Change plan
   Background:
     Given a provider exists
       And the provider is charging its buyers
+      And provider "foo.3scale.localhost" has "finance" switch visible
     Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
