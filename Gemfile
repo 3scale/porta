@@ -166,7 +166,7 @@ group :development do
 
   gem 'yard', require: false
 
-  gem 'rubocop', '1.31', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
+  gem 'rubocop', '1.39', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
 end
