@@ -76,8 +76,7 @@ const Select = <T extends IRecord>({
       label={label}
     >
       {isLoading && <Spinner className="pf-u-ml-md" size="md" />}
-      {/* TODO: id should be treated as a string */}
-      {/* Controllers expect and empty string for some operations (such as unsetting the default plan) */}
+      {/* Controllers expect an empty string for some operations (such as unsetting the default plan) */}
       {item && <input name={name} type="hidden" value={item.id >= 0 ? item.id : ''} />}
       <PF4Select
         aria-label={ariaLabel}
