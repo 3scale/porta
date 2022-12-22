@@ -181,11 +181,15 @@ def default_service
 end
 
 def select_default_plan(plan)
-  select = find(:css, '#default_plan_card .pf-c-select')
-  select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
-  select.find('.pf-c-select__menu-item', text: plan.name).click
-  button = find(:css, '#default_plan_card .pf-c-button[type="submit"]')
-  button.click(wait: 5)
+  select_default_plan_by_name(plan.name)
+end
+
+def select_default_plan_by_name(name)
+  within('#default_plan_card .pf-c-select') do
+    find('.pf-c-button.pf-c-select__toggle-button').click unless current_scope[:class].include?('pf-m-expanded')
+    find('.pf-c-select__menu-item', text: name).click
+  end
+  find('#default_plan_card .pf-c-button[type="submit"]').click(wait: 5)
 end
 
 def delete_plan_from_table_action(plan)
