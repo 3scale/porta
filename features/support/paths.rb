@@ -222,10 +222,6 @@ World(Module.new do
     #
     when 'the new active docs page'
       new_admin_api_docs_service_path
-    when 'the provider active docs page'
-      admin_api_docs_services_path
-    when 'the edit active docs page'
-      edit_admin_api_docs_service_path(@provider.api_docs_services.first!)
     when 'the preview active docs page'
       preview_admin_api_docs_service_path(@provider.api_docs_services.first!)
 
@@ -236,9 +232,6 @@ World(Module.new do
     when 'the preview active docs page for a service'
       service = @provider.default_service
       preview_admin_service_api_doc_path(service, service.api_docs_services.first!)
-    when 'the edit active docs page for a service'
-      service = @provider.default_service
-      edit_admin_service_api_doc_path(service, service.api_docs_services.first!)
 
     when /(the )?API dashboard( page)?/
       admin_service_path provider_first_service!

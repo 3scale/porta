@@ -21,7 +21,7 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I )go to (.+)$/ do |page_name|
+When /^(?:|I |they )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
@@ -31,7 +31,7 @@ When /^(?:|I )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible
   end
 end
 
-When /^(?:|I )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
+When /^(?:|I |they )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
     click_link(link, exact: true, visible: !invisible)
   end
@@ -153,7 +153,7 @@ Then /^(?:|I )should see JSON:$/ do |expected_json|
   expected.should == actual
 end
 
-Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then /^(?:|I |they )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
   with_scope(selector) do
     if page.respond_to? :should
