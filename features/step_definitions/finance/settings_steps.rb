@@ -137,21 +137,6 @@ Given "{provider} has testing credentials for braintree" do |provider|
                    payment_gateway_options: { :public_key => 'AnY-pUbLiC-kEy', :merchant_id => 'my-payment-gw-mid', :private_key => 'a1b2c3d4e5' })
 end
 
-def set_provider_charging_with(provider:, payment_gateway:, billing_enabled: true)
-  provider.settings.allow_finance! if provider.settings.finance.denied?
-
-  provider.billing_strategy.update!(charging_enabled: billing_enabled, currency: 'EUR')
-  # TODO: extract payment_gateway_options into a helper method and generate based on payment_gateway
-  provider.update!(payment_gateway_type: payment_gateway,
-                   payment_gateway_options: { login: 'login',
-                                              password: 'password',
-                                              user: 'user',
-                                              merchant_id: 'merchant_id',
-                                              public_key: 'public_key',
-                                              private_key: 'private_key',
-                                              publishable_key: 'pk_test_51LuDq8H2pBu3kj9oWooGacO6Im2UbBvgCFYMo3eZsNf6EkJzLpZY4jgNFPO2sijRh4fvhfoqezEkaRBYoh1Wmn3b00V5Luq0X9' })
-end
-
 def within_credit_card_gatewat_card(&block)
   within(credit_card_gateway_card_selector) do
     yield block
@@ -168,8 +153,4 @@ def save_changes_and_confirm
       click_button 'Save changes'
     end
   end
-end
-
-def tested_invoice_date
-  Date.parse 'December, 2022'
 end

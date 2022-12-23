@@ -31,7 +31,7 @@ end
 
 Then(/^the provider should have credit card on signup switch (hidden|visible)/) do |status|
   # Right now this step is only used in scenarios using Braintree.
-  stub_payment_gateway_authorization(:braintree_blue, times: 1) if status == 'visible'
+  stub_braintree_authorization if status == 'visible'
   settings = @provider.settings
   assert settings.require_cc_on_signup.public_send("#{status}?"), ":require_cc_on_signup should be #{status}"
 end

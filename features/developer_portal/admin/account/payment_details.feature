@@ -30,7 +30,7 @@ Feature: Dev Portal Buyer Payment Details
         | cc_privacy_path | ipsum-privacy |
         | cc_refunds_path | dolor-refunds |
       When the buyer is reviewing their credit card details
-      Then the buyer should be able to see Terms of service, Privacy and Refund policies
+      Then they should see Terms of service, Privacy and Refund policies
 
     Scenario: Buyer adds billing information for the first time
       Given the buyer has not yet added their billing address
@@ -89,7 +89,7 @@ Feature: Dev Portal Buyer Payment Details
         | cc_privacy_path | ipsum-privacy |
         | cc_refunds_path | dolor-refunds |
       When the buyer is reviewing their credit card details
-      Then the buyer should be able to see Terms of service, Privacy and Refund policies
+      Then they should see Terms of service, Privacy and Refund policies
 
     @javascript
     Scenario: Buyer adds billing information for the first time

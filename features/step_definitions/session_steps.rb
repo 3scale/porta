@@ -87,27 +87,12 @@ When /^I try to log in as (provider )?"([^"]*)"$/ do |provider,username|
   end
 end
 
-When /^I try to log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,username, password|
-  try_log_in(provider, username, password)
+When "I try to log in as {string} with password {string}" do |username, password|
+  try_buyer_login(username, password)
 end
 
-def try_log_in(provider, username, password)
-  # TODO: simplify and DRY
-  path = if provider
-           provider_login_path
-         else
-           login_path
-         end
-
-  visit path
-
-  if provider
-    fill_in('Email or Username', :with => username)
-  else
-    fill_in('Username or Email', :with => username)
-  end
-  fill_in('Password', :with => password)
-  click_button('Sign in')
+When "I try log in as provider {string} with password {string}" do |username, password|
+  try_provider_login(username, password)
 end
 
 When /^I fill in the "([^"]*)" login data$/ do |username|

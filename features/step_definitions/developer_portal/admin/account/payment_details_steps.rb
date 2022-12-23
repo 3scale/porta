@@ -22,13 +22,13 @@ When "the buyer is reviewing their account settings" do
 end
 
 When "the buyer is reviewing their credit card details" do
-  stub_payment_gateway_authorization(:stripe, times: 1) if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
   visit admin_account_path
   credit_card_details_tab.click
 end
 
 When "the buyer enters the generic credit card details URL manually" do
-  stub_payment_gateway_authorization(:stripe, times: 1) if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
   visit admin_account_payment_details_path
 end
 
@@ -40,12 +40,6 @@ Then "the buyer can't add or update any billing information" do
   assert_raise(Capybara::ElementNotFound) { credit_card_details_tab }
   visit admin_account_payment_details_path
   assert_text 'Access Denied'
-end
-
-Then "the buyer should be able to see Terms of service, Privacy and Refund policies" do
-  assert find("#terms-link")[:href] =~ /#{current_account.provider_account.settings.cc_terms_path}\Z/
-  assert find("#privacy-link")[:href] =~ /#{current_account.provider_account.settings.cc_privacy_path}\Z/
-  assert find("#refunds-link")[:href] =~ /#{current_account.provider_account.settings.cc_refunds_path}\Z/
 end
 
 Given "the buyer {has} added their billing address" do |has_address|
@@ -77,7 +71,7 @@ Given "the buyer {has} added their credit card details" do |has_address|
 end
 
 Then "the buyer can see their billing information" do
-  stub_payment_gateway_authorization(:stripe, times: 1) if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
 
   credit_card_details_tab.click
   assert_buyer_billing_address_details
@@ -85,7 +79,7 @@ Then "the buyer can see their billing information" do
 end
 
 Then "the buyer can add their billing address for the first time for stripe" do
-  stub_payment_gateway_authorization(:stripe, times: 2)
+  stub_stripe_intent_setup(times: 2)
 
   credit_card_details_tab.click
   assert_not has_css?(billing_address_descriptionlist_selector)
@@ -99,7 +93,7 @@ Then "the buyer can add their billing address for the first time for stripe" do
 end
 
 Then "the buyer can't add an incomplete billing address for stripe" do
-  stub_payment_gateway_authorization(:stripe, times: 1)
+  stub_stripe_intent_setup
 
   credit_card_details_tab.click
 
@@ -121,7 +115,7 @@ But "credit card information still needs to be added" do
 end
 
 Then "the buyer can update their billing address for stripe" do
-  stub_payment_gateway_authorization(:stripe, times: 2)
+  stub_stripe_intent_setup(times: 2)
   credit_card_details_tab.click
   assert has_css?(billing_address_descriptionlist_selector)
 
@@ -168,12 +162,12 @@ Then /^the buyer can add their credit card and billing address for Braintree( fo
 end
 
 And "the buyer adds their credit card details for Braintree" do
-  stub_payment_gateway_authorization(:braintree_blue, times: 1)
+  stub_braintree_authorization
   click_on 'Add Credit Card Details and Billing Address'
 
   fill_in_braintree_form
 
-  stub_payment_gateway_update(:braintree_blue)
+  stub_successful_braintree_update
   click_on 'Save details'
 
   assert_flash 'CREDIT CARD DETAILS WERE SUCCESSFULLY STORED'
@@ -182,7 +176,7 @@ And "the buyer adds their credit card details for Braintree" do
 end
 
 Then "the buyer can update their credit card and billing address for Braintree" do
-  stub_payment_gateway_authorization(:braintree_blue, times: 1)
+  stub_braintree_authorization
   credit_card_details_tab.click
   assert has_css?(billing_address_descriptionlist_selector)
 
@@ -192,7 +186,7 @@ Then "the buyer can update their credit card and billing address for Braintree" 
 
   fill_in_braintree_form(new_billing_address)
 
-  stub_payment_gateway_update(:braintree_blue, billing_address: new_billing_address, credit_card: new_credit_card)
+  stub_successful_braintree_update(billing_address: new_billing_address, credit_card: new_credit_card)
   click_on 'Save details'
 
   assert_flash 'CREDIT CARD DETAILS WERE SUCCESSFULLY STORED'

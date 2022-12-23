@@ -1,38 +1,34 @@
 # frozen_string_literal: true
 
-module PaymentGatewayStubHelpers # rubocop:disable Metrics/ModuleLength
-  def stub_payment_gateway_authorization(payment_gateway_type, times: 1)
-    case payment_gateway_type
-    when :braintree_blue
-      braintree_crypt.stubs(:create_customer_data).returns(braintree_customer).times(times) # This would call find then either update or create customer, then returns customer object but it's ignored by controller. Mocking it skips sending post braintree API customers
-      braintree_crypt.stubs(:authorization).returns('mocked_authorization').times(times) # This skips sending post braintree API client_token
-    when :stripe
-      instance = mock
-      instance.stubs(:client_secret).returns(provider_stripe_client_secret_example)
-      stripe_crypt.expects(:create_stripe_setup_intent).returns(instance).times(times)
-    end
+module PaymentGatewayStubHelpers
+  def stub_braintree_authorization(times: 1)
+    braintree_crypt.stubs(:create_customer_data).returns(braintree_customer).times(times) # This would call find then either update or create customer, then returns customer object but it's ignored by controller. Mocking it skips sending post braintree API customers
+    braintree_crypt.stubs(:authorization).returns('mocked_authorization').times(times) # This skips sending post braintree API client_token
   end
 
-  def stub_payment_gateway_update(payment_gateway_type, billing_address: billing_address_example_data, credit_card: credit_card_example_data, success: true)
-    case payment_gateway_type
-    when :braintree_blue
-      if success
-        result = Braintree::SuccessfulResult.new(customer: braintree_customer(address: billing_address, credit_card: credit_card))
-
-        braintree_crypt.stubs(:confirm).returns(result).once
-        braintree_crypt.stubs(:customer_id_mismatch?).with(result).returns(false).once # Though ideal, we cannot stub update_user here since account would not updated with form values
-      else
-        braintree_crypt.stubs(:confirm).returns(Braintree::ErrorResult.new(:gateway, failed_braintree_hash)).once
-      end
-    end
+  def stub_stripe_intent_setup(times: 1)
+    instance = mock
+    instance.stubs(:client_secret).returns(provider_stripe_client_secret_example)
+    stripe_crypt.expects(:create_stripe_setup_intent).returns(instance).times(times)
   end
 
-  def stub_braintree_configuration(correct: true)
-    if correct
-      Braintree::Configuration.any_instance.stubs(:assert_has_access_token_or_keys).returns(true)
-    else
-      PaymentGateways::BrainTreeBlueCrypt.expects(:new).raises(Braintree::ConfigurationError).once
-    end
+  def stub_successful_braintree_update(billing_address: billing_address_example_data, credit_card: credit_card_example_data)
+    result = Braintree::SuccessfulResult.new(customer: braintree_customer(address: billing_address, credit_card: credit_card))
+
+    braintree_crypt.stubs(:confirm).returns(result).once
+    braintree_crypt.stubs(:customer_id_mismatch?).with(result).returns(false).once # Though ideal, we cannot stub update_user here since account would not updated with form values
+  end
+
+  def stub_wrong_braintree_update
+    braintree_crypt.stubs(:confirm).returns(Braintree::ErrorResult.new(:gateway, failed_braintree_hash)).once
+  end
+
+  def stub_braintree_correct_configuration
+    Braintree::Configuration.any_instance.stubs(:assert_has_access_token_or_keys).returns(true)
+  end
+
+  def stub_braintree_wrong_configuration
+    PaymentGateways::BrainTreeBlueCrypt.expects(:new).raises(Braintree::ConfigurationError).once
   end
 
   def expect_braintree_customer_id_mismatch

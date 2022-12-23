@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-Then "links to Terms of service, Privacy and Refund policies should be visible" do
+
+Then "they should see Terms of service, Privacy and Refund policies" do
   assert find("#terms-link")[:href] =~ /#{current_account.provider_account.settings.cc_terms_path}\Z/
   assert find("#privacy-link")[:href] =~ /#{current_account.provider_account.settings.cc_privacy_path}\Z/
   assert find("#refunds-link")[:href] =~ /#{current_account.provider_account.settings.cc_refunds_path}\Z/
@@ -11,7 +12,11 @@ Given "a(n) {valid} account" do |valid|
 end
 
 Given "the master provider {has} configured a payment gateway" do |correct|
-  stub_braintree_configuration(correct: correct)
+  if correct
+    stub_braintree_correct_configuration
+  else
+    stub_braintree_wrong_configuration
+  end
 end
 
 When "I fill in the braintree credit card form" do
@@ -70,13 +75,13 @@ Then "the provider's payment details can be added only after completing account 
 end
 
 Then "the admin can edit the provider's payment details" do
-  stub_payment_gateway_authorization(:braintree_blue)
+  stub_braintree_authorization
   click_on 'Edit'
 
   new_billing_address = billing_address.merge({ company: 'Friendly Robot Company' })
   fill_in_braintree_form(new_billing_address)
 
-  stub_payment_gateway_update(:braintree_blue, billing_address: new_billing_address)
+  stub_successful_braintree_update(billing_address: new_billing_address)
   click_on 'Save'
 
   within('section', text: 'Billing Address') do
@@ -86,8 +91,12 @@ Then "the admin can edit the provider's payment details" do
 end
 
 When /^the admin will add an? (in)?valid credit card$/ do |invalid|
-  stub_payment_gateway_authorization(:braintree_blue, times: invalid ? 2 : 1)
-  stub_payment_gateway_update(:braintree_blue, success: !invalid)
+  stub_braintree_authorization(times: invalid ? 2 : 1)
+  if invalid
+    stub_wrong_braintree_update
+  else
+    stub_successful_braintree_update
+  end
 end
 
 But "there is a customer id mismatch" do

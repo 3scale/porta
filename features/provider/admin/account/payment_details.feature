@@ -30,7 +30,7 @@ Feature: Provider Payment Details
         | cc_privacy_path | ipsum-privacy |
         | cc_refunds_path | dolor-refunds |
       When reviewing the provider's payment details
-      Then links to Terms of service, Privacy and Refund policies should be visible
+      Then they should see Terms of service, Privacy and Refund policies
 
     Scenario: Adding payment details
       Given the master provider has configured a payment gateway
