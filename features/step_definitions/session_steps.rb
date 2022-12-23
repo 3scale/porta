@@ -47,9 +47,9 @@ end
 
 When /^I log in as (provider )?"([^"]*)" with password "([^"]*)"$/ do |provider,username, password|
   if provider
-    step %(I try to log in as provider "#{username}" with password "#{password}")
+    try_provider_login(username, password)
   else
-    step %(I try to log in as "#{username}" with password "#{password}")
+    try_buyer_login(username, password)
   end
   step %(I should be logged in as "#{username}")
 end
@@ -78,20 +78,19 @@ When "I log in as {string} on the admin domain of {provider}" do |username, prov
   step %(I log in as provider "#{username}" on #{provider.internal_admin_domain})
 end
 
-
-When /^I try to log in as (provider )?"([^"]*)"$/ do |provider,username|
-  if provider
-    step %(I try to log in as provider "#{username}" with password "supersecret")
-  else
-    step %(I try to log in as "#{username}" with password "supersecret")
-  end
+When "I try to log in as {string}" do |username|
+  try_buyer_login(username, 'supersecret')
 end
 
 When "I try to log in as {string} with password {string}" do |username, password|
   try_buyer_login(username, password)
 end
 
-When "I try log in as provider {string} with password {string}" do |username, password|
+When "I try to log in as provider {string}" do |username|
+  try_provider_login(username, 'supersecret')
+end
+
+When "I try to log in as provider {string} with password {string}" do |username, password|
   try_provider_login(username, password)
 end
 
@@ -143,5 +142,5 @@ end
 When "the user logs in" do
   visit '#session-menu'
   click_link 'Sign Out' || 'Log Out'
-  try_log_in(@provider, @user.username, 'supersecret')
+  try_provider_login(@user.username, 'supersecret')
 end

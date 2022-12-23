@@ -57,7 +57,7 @@ Given "a master admin is reviewing the provider's account" do
   Capybara.app_host = Capybara.default_host = "http://#{Account.master.external_domain}"
   Capybara.always_include_port = true
 
-  try_log_in(true, Account.master.admins.first!.username, 'supersecret')
+  try_provider_login(Account.master.admins.first!.username, 'supersecret')
 
   visit admin_buyers_account_path(@provider)
 end
@@ -83,7 +83,7 @@ And "the provider should be able to access billing" do
   visit '/p/logout'
   set_current_domain @provider.external_admin_domain
   visit 'p/login'
-  try_log_in(@provider, @provider.admins.first.username, 'supersecret')
+  try_provider_login(@provider.admins.first.username, 'supersecret')
   click_on 'Billing'
   assert_text 'Earnings by Month'
   assert_equal admin_finance_root_path, current_path

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module LoginHelpers
-  def try_buyer_log_in(username, password)
+  def try_buyer_login(username, password)
     visit login_path
     fill_in('Username or Email', with: username)
     fill_in('Password', with: password)
