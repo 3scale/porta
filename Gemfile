@@ -257,9 +257,11 @@ gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production preview]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
-oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
-gem 'ruby-oci8', require: false, install_if: oracle
+group :oracle do
+  oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
+  gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
+  gem 'ruby-oci8', require: false, install_if: oracle
+end
 
 gem 'kubeclient'
 gem 'jsonpath', '1.0.5' # remove line after we stop supporting ruby 2.4
