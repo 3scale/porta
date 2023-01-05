@@ -1,9 +1,3 @@
-<%= stylesheet_link_tag 'active-docs/application.css' %>
-<%= javascript_tag do %>
-  window.enableApiDocsProxy = <%= Rails.configuration.three_scale.active_docs_proxy_disabled.blank? %>;
-<% end %>
-<%= javascript_include_tag 'active-docs/application.js' %>
-
 <%= javascript_pack_tag 'provider_active_docs.js' %>
 <% content_for :title do %>
   3scale API Documentation
