@@ -770,10 +770,20 @@ en:
   activemodel:
     attributes:
       customer:
-        first_name: First Name
-        last_name: Last Name
+        first_name: First name
+        last_name: Last name
+        phone: 'Phone'
       billing_address:
-        street_address: Street Address
+        name: Contact / Company Name
+        address1: Address
+        address2: Address (line 2)
+        street_address: Street address
+        postal_code: ZIP / Postal Code
+        zip: ZIP / Postal Code
+        locality: City
+        region: State/Region
+        country_name: Country
+        state: State
     errors:
       models:
         policies_config:
@@ -1095,10 +1105,6 @@ en:
 
       usage_limit:
         value: Max. value
-
-      user:
-        first_name: 'First name'
-        last_name: 'Last name'
 
       cms/legal_term:
         published: Text
