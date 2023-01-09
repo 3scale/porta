@@ -2,8 +2,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_template_id = { :name => "id", :description => "ID of the template", :dataType => "int", :required => true, :paramType => "path" }
 
-  ALLOWED_PARAMS = %i[type system_name title path draft section_id layout_name
-                      layout_id liquid_enabled handler content_type].freeze
+  ALLOWED_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type].freeze
 
   wrap_parameters :template, include: ALLOWED_PARAMS,
                              format: [:json, :xml, :multipart_form, :url_encoded_form]
@@ -58,9 +57,8 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
 
     if type && (collection = collections[type.to_sym])
       template = collection.new(cms_params)
-      if template.respond_to?(:section)
-        template.section ||= find_section
-      end
+      template.section ||= find_section if template.respond_to?(:section)
+      template.layout ||= find_layout if template.respond_to?(:layout)
       template.save
       respond_with(template)
     else
@@ -104,7 +102,12 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def update
     if @template.respond_to?(:section)
-      @template.section ||= find_section
+      section = find_section
+      @template.section = section if section.present?
+    end
+    if @template.respond_to?(:layout)
+      layout = find_layout
+      @template.layout = layout if layout.present?
     end
     @template.update_attributes(cms_template_params)
     respond_with(@template)
@@ -147,12 +150,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   def cms_template_params
-    attrs = params.require(:template).permit(*ALLOWED_PARAMS)
-
-    set_layout_by(:layout_name, :find_by_system_name, attrs)
-    set_layout_by(:layout_id, :find_by_id, attrs)
-
-    attrs
+    params.require(:template).permit(*ALLOWED_PARAMS)
   end
 
   private
@@ -170,12 +168,9 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     scope.find_by_id(params[:section_id]) || scope.find_by_system_name(params[:section_name]) || scope.root
   end
 
-  def set_layout_by(attr_name, finder, attrs)
-    if attrs.key?(attr_name)
-      attrs[:layout] = if name = attrs[attr_name].presence
-        current_account.layouts.send(finder,name)
-                       end
-    end
+  def find_layout
+    scope = current_account.layouts
+    scope.find_by_id(params[:layout_id]) || scope.find_by_system_name(params[:layout_name])
   end
 
 end
