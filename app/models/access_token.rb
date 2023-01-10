@@ -47,12 +47,6 @@ class AccessToken < ApplicationRecord
       end
     end
 
-    def visible_for(account)
-      select_and_build do |scope|
-        account.provider_can_use?("#{scope.value}_api")
-      end
-    end
-
     def keys
       scopes.map(&:key)
     end
@@ -155,7 +149,7 @@ class AccessToken < ApplicationRecord
   end
 
   def available_scopes
-    owner.allowed_access_token_scopes.visible_for(owner.account)
+    owner.allowed_access_token_scopes
   end
 
   def human_scopes
