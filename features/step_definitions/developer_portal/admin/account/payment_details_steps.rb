@@ -133,7 +133,7 @@ Then "the buyer can't add their credit card" do
 end
 
 Then "the buyer can add their credit card for stripe" do
-  # TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.
+  pending("TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.")
 
   # credit_card_details_tab.click
   # assert_buyer_billing_address_details
@@ -210,6 +210,7 @@ def billing_address_descriptionlist_selector
   '#billing_address'
 end
 
+# This smells of :reek:statementsTooManyStatements but we don't care
 def fill_in_buyer_stripe_form(obj = billing_address_example_data)
   fill_in('account[billing_address][name]', with: obj[:first_name])
   fill_in('account[billing_address][address1]', with: obj[:street_address])

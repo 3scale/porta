@@ -22,13 +22,15 @@ Then "they should see the buyer is being charged monthly" do
   end
 end
 
-Then "they should see the credit card {is} stored" do |stored|
+Then "they should see the credit card is stored" do
   within_billing_status_card do
-    if stored
-      assert_text "Credit Card details are on file. Card expires in: #{buyer_credit_card_expiration_date.strftime('%B %Y')}"
-    else
-      assert_text 'Credit Card details are not stored'
-    end
+    assert_text "Credit Card details are on file. Card expires in: #{buyer_credit_card_expiration_date.strftime('%B %Y')}"
+  end
+end
+
+Then "they should see the credit card is not stored" do
+  within_billing_status_card do
+    assert_text 'Credit Card details are not stored'
   end
 end
 

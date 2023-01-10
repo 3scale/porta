@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 Then "they should see Terms of service, Privacy and Refund policies" do
   assert find("#terms-link")[:href] =~ /#{current_account.provider_account.settings.cc_terms_path}\Z/
   assert find("#privacy-link")[:href] =~ /#{current_account.provider_account.settings.cc_privacy_path}\Z/
@@ -8,15 +7,15 @@ Then "they should see Terms of service, Privacy and Refund policies" do
 end
 
 Given "a(n) {valid} account" do |valid|
-  Account.any_instance.stubs(:valid?).returns(valid) # TODO: why is account not valid in the first place?
+  Account.any_instance.stubs(:valid?).returns(valid)
 end
 
-Given "the master provider {has} configured a payment gateway" do |correct|
-  if correct
-    stub_braintree_correct_configuration
-  else
-    stub_braintree_wrong_configuration
-  end
+Given "the master provider has not configured a payment gateway" do
+  stub_braintree_wrong_configuration
+end
+
+Given "the master provider has configured a payment gateway" do
+  stub_braintree_correct_configuration
 end
 
 When "I fill in the braintree credit card form" do
@@ -90,13 +89,14 @@ Then "the admin can edit the provider's payment details" do
   assert_flash 'Credit card details were successfully stored.'
 end
 
-When /^the admin will add an? (in)?valid credit card$/ do |invalid|
-  stub_braintree_authorization(times: invalid ? 2 : 1)
-  if invalid
-    stub_wrong_braintree_update
-  else
-    stub_successful_braintree_update
-  end
+When "the admin will add a valid credit card" do
+  stub_braintree_authorization(times: 1)
+  stub_successful_braintree_update
+end
+
+When "the admin will add an invalid credit card" do
+  stub_braintree_authorization(times: 2)
+  stub_wrong_braintree_update
 end
 
 But "there is a customer id mismatch" do
@@ -143,6 +143,7 @@ Given "{provider} doesn't have billing address" do |provider|
   provider.save!
 end
 
+# This smells of :reek:statementsTooManyStatements but we don't care
 def assert_provider_payment_details # rubocop:disable Metrics/AbcSize
   within('section', text: 'Personal Details') do
     find('dt', text: 'First Name').assert_sibling('dd', text: billing_address_example_data[:first_name])

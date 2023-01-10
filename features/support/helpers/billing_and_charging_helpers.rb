@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 module BillingAndChargingHelpers
-  def set_provider_charging_with(provider:, payment_gateway:, billing_enabled: true)
+  # This smells of :reek:sssBooleanParameter but we don't care
+  # FIXME: :reek:UtilityFunction
+  def set_provider_charging_with(provider:, payment_gateway:, charging_enabled: true)
     settings = provider.settings
     settings.allow_finance! if settings.finance.denied?
 
-    provider.billing_strategy.update!(charging_enabled: billing_enabled, currency: 'EUR')
+    provider.billing_strategy.update!(charging_enabled: charging_enabled, currency: 'EUR')
     # TODO: extract payment_gateway_options into a helper method and generate based on payment_gateway
     provider.update!(payment_gateway_type: payment_gateway,
                      payment_gateway_options: { login: 'login',

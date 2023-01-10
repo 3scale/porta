@@ -43,6 +43,7 @@ Feature: Dev Portal Buyer Payment Details
       When the buyer is reviewing their account details
       Then the buyer can't add their credit card
 
+    @wip
     Scenario: Buyer adds their credit card
       Given the buyer has already added their billing address
       But the buyer has not yet added their credit card details

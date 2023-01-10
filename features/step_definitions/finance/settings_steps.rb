@@ -75,7 +75,7 @@ And "only new invoices will change their id" do
 end
 
 Given "{provider} is billing but not charging" do |provider|
-  set_provider_charging_with(provider: provider, payment_gateway: :bogus, billing_enabled: false)
+  set_provider_charging_with(provider: provider, payment_gateway: :bogus, charging_enabled: false)
 end
 
 Given "{provider} is charging its buyers" do |provider|
@@ -128,13 +128,6 @@ end
 
 Given "master {is} billing tenants" do |master_billing_enabled|
   ThreeScale.stubs(master_billing_enabled?: master_billing_enabled)
-end
-
-# TODO: remove this step.
-Given "{provider} has testing credentials for braintree" do |provider|
-  PaymentGateways::BrainTreeBlueCrypt.any_instance.stubs(:find_customer).returns(nil)
-  provider.update!(payment_gateway_type: :braintree_blue,
-                   payment_gateway_options: { :public_key => 'AnY-pUbLiC-kEy', :merchant_id => 'my-payment-gw-mid', :private_key => 'a1b2c3d4e5' })
 end
 
 def within_credit_card_gatewat_card(&block)

@@ -41,8 +41,7 @@ Feature: Application Plan Change
 
   Scenario: Change plan workflow with credit card required without wizard
     Given the provider service allows to change application plan with credit card required
-    And the provider is charging its buyers
-    And the provider has testing credentials for braintree
+    And the provider is charging its buyers with braintree
 
     And I want to change the plan of my application to paid
 
