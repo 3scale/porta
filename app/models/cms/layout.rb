@@ -2,8 +2,6 @@ class CMS::Layout < CMS::Template
   self.search_type = 'layout'
   attr_accessible :system_name, :draft, :title
 
-  self.mass_assignment_sanitizer = :strict
-
   has_many :pages, :class_name => 'CMS::Page'
   validates :system_name, presence: true
   validate :yield_content_presence, :if => :is_main_layout?

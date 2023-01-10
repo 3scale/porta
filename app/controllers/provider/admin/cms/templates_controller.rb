@@ -31,7 +31,18 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
     @page.build_version if params[:version]
 
     if @page.save
-      success_update
+      msg = publish_or_hide_page_with_message
+      respond_to do |format|
+        format.html do
+          flash[:notice] = msg
+          redirect_to(action: :edit, id: @page.id)
+        end
+
+        format.js do
+          flash.now[:notice] = msg
+          render template: '/provider/admin/cms/templates/update'
+        end
+      end
     else
       respond_to do |format|
         format.html do
@@ -41,14 +52,6 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
         format.js { render template: '/provider/admin/cms/templates/update' }
       end
     end
-  rescue ActiveModel::MassAssignmentSecurity::Error => error
-    draft_error = DraftAttributeNotSavedError.new(error, @page, template_params)
-    System::ErrorReporting.report_error(draft_error)
-
-    @page.draft = template_params[:draft]
-    @page.save
-
-    success_update
   end
 
   # TODO: - deprecated? remove?
@@ -79,43 +82,6 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
   end
 
   private
-
-  def success_update
-    msg = publish_or_hide_page_with_message
-    respond_to do |format|
-      format.html do
-        flash[:notice] = msg
-        redirect_to(action: :edit, id: @page.id)
-      end
-
-      format.js do
-        flash.now[:notice] = msg
-        render template: '/provider/admin/cms/templates/update'
-      end
-    end
-  end
-
-  class DraftAttributeNotSavedError < StandardError
-    include Bugsnag::MetaData
-
-    attr_reader :original_exception
-
-    def initialize(original_exception, page, template_params)
-      @original_exception = original_exception
-
-      self.bugsnag_meta_data = {
-        template_params: template_params,
-        page: {
-          class_name:             page.class.name,
-          accessible_attributes:  page.class.accessible_attributes,
-          _accessible_attributes: page._accessible_attributes,
-          _protected_attributes:  page._protected_attributes,
-          attributes:             page.attributes,
-          errors:                 page.errors.messages
-        }
-      }
-    end
-  end
 
   def latest_update
     CMS::Sidebar.new(current_account).last_update
