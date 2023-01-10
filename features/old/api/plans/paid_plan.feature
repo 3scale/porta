@@ -9,8 +9,7 @@ Feature: Paid plan
     And an application plan "Foo" of provider "foo.3scale.localhost"
 
   Scenario: Billing allowed, all postpaid details valid
-    Given provider "foo.3scale.localhost" has billing enabled
-    And provider "foo.3scale.localhost" has valid payment gateway
+    Given provider "foo.3scale.localhost" is charging its buyers
 
     And current domain is the admin domain of provider "foo.3scale.localhost"
     When I log in as provider "foo.3scale.localhost"

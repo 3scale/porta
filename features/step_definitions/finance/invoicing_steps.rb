@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-Given "an invoice of {buyer} for {month}" do |buyer, month|
-  create_invoice buyer, month
+Given "an invoice of {buyer} for {date}" do |buyer, date|
+  create_invoice buyer, date
 end
 
-Given(/^I create a new invoice from the (?:API|UI) for this buyer for (\w+, *\d+) with:$/) do |month, items|
+Given "I create a new invoice from the API for this buyer for {date} with:" do |month, items|
   invoice = create_invoice @buyer, month, creation_type: :manual
   items.hashes.each do |item|
     Finance::AdminBilling.new(invoice).create_line_item!(item)
   end
 end
 
-Given "an issued invoice of {buyer} for {month}" do |buyer, month|
+Given "an issued invoice of {buyer} for {date}" do |buyer, month|
   invoice = create_invoice buyer, month
   invoice.issue_and_pay_if_free!
 end
 
-Given "an invoice of {buyer} for {month} with items(:)" do |buyer, month, items|
+Given "an invoice of {buyer} for {date} with items(:)" do |buyer, month, items|
   invoice = create_invoice buyer, month
   items.hashes.each { |item| invoice.line_items.create!(item) }
 end

@@ -5,9 +5,8 @@ Feature: Invoice lifecycle
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" is fake charging
+      And provider "foo.3scale.localhost" is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
-      And provider "foo.3scale.localhost" has valid payment gateway
 
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And the time is 29th May 2009
@@ -16,13 +15,13 @@ Feature: Invoice lifecycle
 
   @commit-transactions
   Scenario: Normal postpaid life-cycle
-    When buyer "alice" has valid credit card
+    When buyer "alice" has a valid credit card
      And I see my invoice from "May, 2009" is "Pending" on 3rd June 2009
      And I see my invoice from "May, 2009" is "Paid" on 5th June 2009
 
   @commit-transactions
   Scenario: All charging fails
-   Given buyer "alice" has valid credit card with no money
+   Given buyer "alice" has a valid credit card with no money
 
     When the time flies to 5th June 2009
     Then I see my invoice from "May, 2009" is "Unpaid"
