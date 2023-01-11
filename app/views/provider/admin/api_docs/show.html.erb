@@ -1,4 +1,8 @@
+<%= javascript_tag do %>
+  window.enableApiDocsProxy = <%= Rails.configuration.three_scale.active_docs_proxy_disabled.blank? %>;
+<% end %>
 <%= javascript_pack_tag 'provider_active_docs.js' %>
+<%= javascript_include_tag 'active-docs/application.js' %>
 <% content_for :title do %>
   3scale API Documentation
 <% end %>
@@ -7,11 +11,8 @@
   <p class="InfoBox InfoBox--notice"><%= link_to 'Create an access token', provider_admin_user_access_tokens_path %> to authenticate against the Account Management API, the Analytics API and the Billing API.</p>
 <% end %>
 
-<div class='api-docs-wrap' id = "analytics-api-docs"></div>
-<div class='api-docs-wrap' id = "billing-api-docs"></div>
-<div class='api-docs-wrap' id = "service-management-api-docs"></div>
-<div class='api-docs-wrap' id = "account-management-api-docs"></div>
-<div class='api-docs-wrap' id = "policy-registry-api-docs"></div>
+
+<div id="api-containers"></div>
 
 <script type="text/javascript">
   $(function () {
@@ -31,7 +32,8 @@
     path.forEach(function (url) {
     var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
     dom_name = url.substring(url.lastIndexOf('/') + 1).replace(/\.json/g, '').replace(/\_/g, '-');
-    SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name + '' + '-docs'}, serviceEndpoint);
+    $('#api-containers').append($(`<div class="api-docs-wrap" id="${dom_name}" ></div>`));
+    SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name }, serviceEndpoint);
     });
   });
 </script>
