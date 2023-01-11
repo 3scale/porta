@@ -280,3 +280,8 @@ Given "a buyer logged in to a provider" do
     And the buyer logs in to the provider
   )
 end
+
+When "the buyer wants to sign up" do
+  step 'the current domain is foo.3scale.localhost'
+  step 'I go to the sign up page'
+end
