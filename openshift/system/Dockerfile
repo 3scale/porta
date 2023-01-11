@@ -15,7 +15,8 @@ ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
     NODEJS_SCL=rh-nodejs12 \
-    RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}"
+    RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
+    GIT_SCL=rh-git227
 
 WORKDIR /opt/system
 
@@ -32,6 +33,7 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
               file \
               $NODEJS_SCL \
               $VARNISH_SCL-jemalloc \
+              $GIT_SCL \
     && yum install -y epel-release \
     && yum -y clean all \
     && scl enable $VARNISH_SCL -- printf '$LIBRARY_PATH' | cut -d: -f1 > /etc/ld.so.conf.d/jemalloc.conf \
