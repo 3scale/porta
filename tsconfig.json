@@ -7,7 +7,7 @@
     // Modules
     "baseUrl": "./app/javascript/src",
     "module": "ES6",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "typeRoots": ["app/javascript/src/Types", "./node_modules/@types"],
 
     // Emit

@@ -7,9 +7,7 @@ Feature: Wizard Billing information
   Given a provider "foo.3scale.localhost"
     And provider "foo.3scale.localhost" doesn't have billing address
     And current domain is the admin domain of provider "foo.3scale.localhost"
-    And provider "master" has billing enabled
-    And provider "master" has testing credentials for braintree
-    And Braintree is stubbed to accept credit card
+    And provider "master" is charging its buyers with braintree
     And Braintree is stubbed for wizard
     And I log in as provider "foo.3scale.localhost"
   Given master provider has the following fields defined for "Account":
@@ -34,10 +32,10 @@ Feature: Wizard Billing information
     And I press "Save and continue with payment details"
     And I should be on the provider braintree edit credit card details page
     When I fill in the following:
-      | First Name                | Pepe                    |
-      | Last Name                 | Ventura                 |
+      | First name                | Pepe                    |
+      | Last name                 | Ventura                 |
       | Company                   | comp                    |
-      | Street Address            | Calle Simpecado         |
+      | Street address            | Calle Simpecado         |
       | City                      | Sevilla                 |
       | ZIP / Postal Code         | 4242                    |
       | Phone                     | +2342342342             |

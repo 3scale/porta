@@ -5,14 +5,11 @@ Feature: Edit Invoice
   I Want to edit invoice
 
   Background:
-    Given a provider "foo.3scale.localhost" with billing enabled
-      And provider "foo.3scale.localhost" has "finance" switch allowed
+    Given a provider is logged in
+      And the provider is charging its buyers
       And a buyer "bob" signed up to provider "foo.3scale.localhost"
       And an invoice of buyer "bob" for January, 2011
       And an invoice of buyer "bob" for February, 2011
-
-    Given current domain is the admin domain of provider "foo.3scale.localhost"
-      And I am logged in as provider "foo.3scale.localhost"
 
   Scenario: Edit of invoice billing period fails
     When I am on the invoice "2011-01-00000001" page

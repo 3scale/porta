@@ -224,11 +224,15 @@ Given(/^the provider account allows signups$/) do
   step %(a default application plan "Base" of provider "#{@provider.internal_domain}")
 end
 
-And(/^the provider has a buyer with application$/) do
-  step %(an published application plan "Default" of provider "#{@provider.internal_domain}")
-  step %(a service plan "Gold" of provider "#{@provider.internal_domain}")
-  step 'a buyer "bob" signed up to service plan "Gold"'
-  step 'buyer "bob" has application "Alexisonfire" with description "Slightly less awesome widget"'
+And "the provider has a buyer with an application" do
+  application_plan = create_plan(:application, name: 'Default', issuer: @provider, published: true, default: true)
+  service_plan = create_plan(:service, name: 'Gold', issuer: @provider)
+
+  @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'The Buyer INC.')
+  @buyer.buy!(@provider.account_plans.default)
+  @buyer.buy!(service_plan)
+
+  FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|
@@ -255,27 +259,9 @@ When(/^the provider upgrades to plan "(.+?)"$/) do |name|
   @provider.force_upgrade_to_provider_plan!(plan)
 end
 
-When(/^the provider is charging its buyers$/) do
-  steps <<-GHERKIN
-  And provider "#{@provider.internal_domain}" has "finance" switch visible
-  And provider "#{@provider.internal_domain}" is charging
-  And provider "#{@provider.internal_domain}" manages payments with "braintree_blue"
-  GHERKIN
-end
-
 When(/I authenticate by Oauth2$/) do
   # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
   visit "/auth/#{@authentication_provider.system_name}/callback"
-end
-
-Given(/^a provider with billing and finance enabled$/) do
-  step 'a provider exists'
-  steps <<-GHERKIN
-  And current domain is the admin domain of provider "#{@provider.internal_domain}"
-  And provider "#{@provider.internal_domain}" has postpaid billing enabled
-  And provider "#{@provider.internal_domain}" has "finance" switch visible
-  And I log in as provider "#{@provider.internal_domain}"
-  GHERKIN
 end
 
 And(/^the provider has one buyer$/) do

@@ -34,7 +34,7 @@ base: &default
   db_secret:
 
   assets_cdn_host: <%= ENV.fetch('ASSETS_CDN_HOST', '') %>
-  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
 
   email_sanitizer:
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>

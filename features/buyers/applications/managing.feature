@@ -4,7 +4,7 @@ Feature: Applications management
 
   Background:
     Given a provider is logged in
-      And the provider has a buyer with application
+      And the provider has a buyer with an application
       And there are no events
 
   @wip
