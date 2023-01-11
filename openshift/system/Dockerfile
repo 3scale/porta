@@ -2,12 +2,20 @@ FROM quay.io/centos7/ruby-26-centos7
 
 USER root
 
+ENV RUBY_MAJOR_VERSION=2 \
+    RUBY_MINOR_VERSION=6
+
+ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
+    RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
+
 ARG BUNDLER_ENV
 ENV BUNDLER_ENV="${BUNDLER_ENV}" \
     TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
-    NODEJS_SCL=rh-nodejs12
+    NODEJS_SCL=rh-nodejs12 \
+    RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
+    GIT_SCL=rh-git227
 
 WORKDIR /opt/system
 
@@ -22,7 +30,8 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-rh-ruby26-rh-c
               mysql \
               postgresql10 postgresql10-devel postgresql10-libs \
               file \
-              rh-nodejs12 \
+              $NODEJS_SCL \
+              $GIT_SCL \
     && yum install -y epel-release \
     && yum -y clean all
 
