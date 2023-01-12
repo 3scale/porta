@@ -25,7 +25,7 @@ it('should return a weird object', () => {
       },
       "application": Object {
         "id": 11,
-        "link": "/apiconfig/services/22/applications/11",
+        "link": "/p/admin/applications/11",
         "name": "My Application",
       },
       "total": 100,
