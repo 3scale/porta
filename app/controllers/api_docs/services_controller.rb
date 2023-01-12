@@ -115,17 +115,16 @@ class ApiDocs::ServicesController < FrontendController
   def show
     system_name = params[:id].to_sym
     api_file = (api_files.fetch(system_name) { raise ActiveRecord::RecordNotFound }).dup
-    # api_file['apis'] = exclude_forbidden_endpoints(api_file['apis'])
+    api_file['paths'] = exclude_forbidden_endpoints(api_file['paths']) if master_on_premises?
 
     render json: api_file
   end
 
   private
 
-  def exclude_forbidden_endpoints(apis)
-    apis.select do |api|
-      path = api['path']
-      !master_on_premises? || path.exclude?('plan')
+  def exclude_forbidden_endpoints(paths)
+    paths.select do |url|
+      url.exclude?('plan')
     end
   end
 
