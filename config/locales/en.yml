@@ -62,7 +62,7 @@ en:
     stats: 'Analytics API'
     account_management: 'Account Management API'
     policy_registry: 'Policy Registry API'
-    cms: 'Developer Portal API'
+    cms: 'Developer Portal API (Tech Preview)'
     ro: 'Read Only'
     rw: 'Read & Write'
   notification_category_titles:
@@ -149,7 +149,7 @@ en:
           analytics_api: 'Analytics API'
           billing_api: 'Billing API'
           master_api: 'Master API'
-          cms_api: 'CMS API'
+          cms_api: 'Developer Portal API (Tech Preview)'
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
