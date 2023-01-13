@@ -55,7 +55,8 @@
             {
               "name": "path",
               "description": "URI of the file",
-              "paramType": "query"
+              "paramType": "query",
+              "required": true
             },
             {
               "name": "section_id",
@@ -71,7 +72,8 @@
             },
             {
               "name": "attachment",
-              "paramType": "query"
+              "paramType": "query",
+              "required": true
             },
             {
               "name": "downloadable",
@@ -182,34 +184,6 @@
               "dataType": "int",
               "required": true,
               "paramType": "path"
-            },
-            {
-              "name": "path",
-              "description": "URI of the file",
-              "paramType": "query"
-            },
-            {
-              "name": "section_id",
-              "description": "ID of a section (valid only for pages)",
-              "type": "int",
-              "paramType": "query",
-              "default": "root section id"
-            },
-            {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
-              "name": "attachment",
-              "paramType": "query"
-            },
-            {
-              "name": "downloadable",
-              "description": "Checked sets the content-disposition to attachment",
-              "type": "boolean",
-              "paramType": "query",
-              "default": "false"
             }
           ]
         }
@@ -264,14 +238,10 @@
               "allowMultiple": false
             },
             {
-              "name": "system_name",
-              "description": "Human readable and unique identifier",
-              "paramType": "query"
-            },
-            {
               "name": "title",
               "description": "Title of the section",
-              "paramType": "query"
+              "paramType": "query",
+              "required": true
             },
             {
               "name": "public",
@@ -343,11 +313,6 @@
               "dataType": "int",
               "required": true,
               "paramType": "path"
-            },
-            {
-              "name": "system_name",
-              "description": "Human readable and unique identifier",
-              "paramType": "query"
             },
             {
               "name": "title",

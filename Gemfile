@@ -166,9 +166,11 @@ group :development do
 
   gem 'yard', require: false
 
-  gem 'rubocop', '1.31', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
+  gem 'rubocop', '1.39', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
+
+  gem 'reek', '6.01', require: false # Should match codeclimate's stable version of Reek. See https://docs.codeclimate.com/docs/reek
 end
 
 
@@ -236,7 +238,7 @@ group :development, :test do
   gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'license_finder', '~> 6.12.0'
+  gem 'license_finder', '~> 7.0.1'
 
   gem 'pry-byebug', '>= 3.7.0'
   gem 'pry-doc', '>= 0.8', require: false

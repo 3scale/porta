@@ -178,7 +178,7 @@ Then /^I should not see the timezone field$/ do
 end
 
 
-Given('the provider has a buyer') do
+Given "a buyer signs up to the provider" do
   step %'the current domain is #{@provider.external_domain}'
 
   visit signup_path
@@ -236,6 +236,7 @@ And(/^has a buyer with (application|service) plan/) do |plan|
     step 'a application plan "Metal" of provider "foo.3scale.localhost"'
     step 'a buyer "Alexander" signed up to application plan "Metal"'
   end
+  @buyer = Account.find_by!(org_name: 'Alexander')
 end
 
 When(/^a buyer signs up/) do
@@ -246,17 +247,6 @@ end
 
 And /^application plan is paid$/ do
   step 'plan "Metal" has monthly fee of 100'
-end
-
-When(/^the buyer logs in$/) do
-  steps %(
-    And the current domain is foo.3scale.localhost
-    And I go to the login page
-    And I fill in "Username" with "Alexander"
-    And I fill in "Password" with "supersecret"
-    And I press "Sign in"
-    And I should be logged in as "Alexander"
-  )
 end
 
 When(/^the buyer logs in to the provider$/) do
@@ -276,4 +266,22 @@ end
 
 When(/^as a developer$/) do
   step 'the current domain is foo.3scale.localhost'
+end
+
+When "the buyer is reviewing their account details" do
+  visit path_to('the account page')
+end
+
+Given "a buyer logged in to a provider" do
+  steps %(
+    Given a provider exists
+    And the provider has a default paid application plan
+    And a buyer signed up to the provider
+    And the buyer logs in to the provider
+  )
+end
+
+When "the buyer wants to sign up" do
+  step 'the current domain is foo.3scale.localhost'
+  step 'I go to the sign up page'
 end

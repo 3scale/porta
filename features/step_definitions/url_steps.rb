@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 When /^the current domain is "?([^"\s]+)"?$/ do |domain|
-  @provider = Account.same_domain(domain).take
-  @domain = domain
-
-  Capybara.current_session.reset!
-
-  Capybara.app_host = Capybara.default_host = "http://#{domain}"
-  Capybara.always_include_port = true
+  set_current_domain(domain)
 end
 
 # Example:
@@ -72,4 +66,14 @@ end
 
 Then "the admin domain of {provider} should be {string}" do |provider, domain|
   assert provider.match_internal_admin_domain?(domain)
+end
+
+def set_current_domain(domain)
+  @provider = Account.same_domain(domain).take
+  @domain = domain
+
+  Capybara.current_session.reset!
+
+  Capybara.app_host = Capybara.default_host = "http://#{domain}"
+  Capybara.always_include_port = true
 end

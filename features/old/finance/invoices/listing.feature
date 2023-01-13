@@ -5,9 +5,8 @@ Feature: Provider lists all invoices
 
   Background:
     # TODO: Create invoices directly from background
-    Given a provider "foo.3scale.localhost" with billing enabled
-      And current domain is the admin domain of provider "foo.3scale.localhost"
-    Given provider "foo.3scale.localhost" has "finance" switch allowed
+    Given a provider
+      And the provider is billing but not charging
       And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
       And the date is 5th October 2010
       And a buyer "foobar" signed up to application plan "Fixed"
