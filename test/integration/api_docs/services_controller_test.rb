@@ -53,7 +53,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_equal ['host', 'apis'], index_result.keys
 
-      api_expected_names = ['Service Management API', 'Account Management API', 'Analytics API', 'Billing API', 'Policy Registry API', 'CMS API']
+      api_expected_names = ['Service Management API', 'Account Management API', 'Analytics API', 'Billing API', 'Policy Registry API', 'Developer Portal API (Tech Preview)']
       assert_same_elements api_expected_names, index_result['apis'].map { |api| api['name'] }
 
       index_result['apis'].each do |api|
@@ -114,8 +114,8 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def test_index_and_show
       expected_names = {
-        saas: ['Service Management API', 'Account Management API', 'Analytics API', 'Billing API', 'Master API', 'CMS API'],
-        onpremises: ['Service Management API', 'Account Management API', 'Analytics API', 'Master API', 'CMS API']
+        saas: ['Service Management API', 'Account Management API', 'Analytics API', 'Billing API', 'Master API', 'Developer Portal API (Tech Preview)'],
+        onpremises: ['Service Management API', 'Account Management API', 'Analytics API', 'Master API', 'Developer Portal API (Tech Preview)']
       }
 
       [true, false].each do |onpremises|
