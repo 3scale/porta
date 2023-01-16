@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory(:cms_template, :class => CMS::Template) do
     association :provider, :factory => :provider_account
+    sequence(:system_name) { |n| "template-#{n}" }
   end
 
   factory(:cms_layout, :parent => :cms_template, :class => CMS::Layout) do
@@ -15,7 +16,7 @@ FactoryBot.define do
   factory :cms_section, :class => CMS::Section do
     association :provider, :factory => :provider_account
     sequence(:title) { |n| "Section #{n}" }
-    sequence(:system_name) { |n| "sysname #{n}" }
+    sequence(:system_name) { |n| "sysname-#{n}" }
     partial_path { |section| "/#{section.title.parameterize}" }
     public { true }
   end

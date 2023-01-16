@@ -1,8 +1,6 @@
 class CMS::Partial < CMS::Template
   self.search_type = 'partial'
-  attr_accessible :system_name
 
-  validates :system_name, presence: true
   validate :system_name_rules
 
   def system_name_rules

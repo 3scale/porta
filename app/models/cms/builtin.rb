@@ -52,8 +52,6 @@ class CMS::Builtin < CMS::BasePage
     'accounts/invitee_signups/show' => full_path('accounts/invitee_signups/show.html.liquid')
   }.freeze
 
-  validates :system_name, presence: true
-
   attr_protected :liquid_enabled
 
   # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates

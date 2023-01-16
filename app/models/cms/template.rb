@@ -1,6 +1,6 @@
 class CMS::Template < ApplicationRecord
   include Symbolize
-
+  include CMS::SystemName
   include CMS::Filtering
 
   scope :with_draft, ->{ where(['draft IS NOT NULL'])}
@@ -8,7 +8,7 @@ class CMS::Template < ApplicationRecord
 
   scope :but, ->(*klasses) { where{ type.not_in klasses.map(&:to_s) } }
   scope :recents, -> { order(updated_at: :desc).where.has { updated_at != created_at } }
-  attr_accessible :provider, :draft, :liquid_enabled, :handler
+  attr_accessible :system_name, :provider, :draft, :liquid_enabled, :handler
 
   self.table_name = :cms_templates
 
@@ -16,8 +16,6 @@ class CMS::Template < ApplicationRecord
   has_many :versions, as: :template
 
   validates :provider, presence: true
-  validates :system_name, uniqueness: { :scope => [:provider_id, :type], :allow_blank => true },
-            format: { :with => /\A\w[\w\-\/_]+\z/, :allow_blank => true }, length: { maximum: 255 }
   validates :handler, inclusion: { in: CMS::Handler.available, allow_blank: false, allow_nil: true },
             length: { maximum: 255 }
   validates :options, length: { maximum: 65535 }
