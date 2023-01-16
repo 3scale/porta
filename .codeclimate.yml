@@ -12,17 +12,11 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: "rubocop-1-31"
+    channel: rubocop-1-39
   reek:
     enabled: true
   eslint:
-    enabled: true
-    channel: "eslint-6"
-    config:
-      config: .eslintrc
-      extensions:
-      - .js
-      - .jsx
+    enabled: false
   csslint:
     enabled: false
   coffeelint:
@@ -35,25 +29,24 @@ plugins:
   scss-lint:
     enabled: true
 exclude_patterns:
-  - "tmp/**/*"
+  - "**/node_modules/"
   - "**/vendor/*"
   - "app/assets/images/**/*"
-  - "public/images/**/*"
-  - "public/themes/**/*"
-  - "public/javascripts/vendor/*"
-  - "public/fancybox/*"
-  - "public/assets"
-  - "public/packs"
-  - 'lib/action_dispatch/rails5_ssl.rb'
-  - "lib/developer_portal/app/views/developer_portal/javascripts/*"
-  - "lib/developer_portal/app/views/developer_portal/css/*"
-  - "lib/developer_portal/app/assets/stylesheets/**/*"
+  - "app/javascript"
   - "assets/bundles/*.js"
+  - "bin/webpack*"
+  - "cdn/*"
+  - "lib/action_dispatch/rails5_ssl.rb"
+  - "lib/developer_portal/app/assets/stylesheets/**/*"
+  - "lib/developer_portal/app/views/developer_portal/css/*"
+  - "lib/developer_portal/app/views/developer_portal/javascripts/*"
+  - "public/assets"
+  - "public/fancybox/*"
+  - "public/images/**/*"
+  - "public/javascripts/vendor/*"
+  - "public/packs"
+  - "public/themes/**/*"
   - "spec/**/*"
   - "spec/**/**/*"
   - "test/**/*"
-  - "cdn/*"
-  - "app/javascript/src/*/*/*.spec.*"
-  - "bin/webpack*"
-  - "**/node_modules/"
-  - "**/flow-typed"
+  - "tmp/**/*"

@@ -11,6 +11,8 @@ base: &default
   daily_weekly_reports_pref: <%= ENV.fetch('ENABLE_DAILY_WEEKLY_REPORTS_PREF', '1') == '1' %>
   readonly_custom_domains_settings: <%= ENV.fetch('READONLY_CUSTOM_DOMAINS_SETTINGS', '1') == '1' %>
   bugsnag_api_key: <%= ENV['BUGSNAG_API_KEY'] %>
+  bugsnag_release_stage: <%= ENV.fetch('BUGSNAG_RELEASE_STAGE', Rails.env) %>
+  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
   events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
   recaptcha_public_key: <%= ENV.fetch('RECAPTCHA_PUBLIC_KEY', 'YOUR_RECAPTCHA_PUBLIC_KEY') %>
   recaptcha_private_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
@@ -37,9 +39,8 @@ base: &default
     enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'saniziter@example.com') %>
   onpremises: false
-  error_reporting_stages: <%= ENV.fetch('ERROR_REPORTING_STAGES', 'production') %>
   apicast_staging_url: <%= ENV.fetch('APICAST_STAGING_URL', 'apicast-staging:8090') %>
-  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATON_TOKEN', '') %>
+  zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
   access_code: <%= ENV.fetch('ACCESS_CODE', '') %>
 
   # deprecated: use payments.yaml to configure payments instead

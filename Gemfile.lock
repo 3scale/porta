@@ -15,6 +15,13 @@ GIT
       ci_reporter (~> 2.0)
 
 GIT
+  remote: https://github.com/3scale/httpclient.git
+  revision: 779beabd653afcd03c4468e0a69dc043f3bbb748
+  branch: ssl-env-cert
+  specs:
+    httpclient (2.8.3)
+
+GIT
   remote: https://github.com/3scale/json-schema.git
   revision: 26487618a68443e94d623bb585cb464b07d36702
   specs:
@@ -59,13 +66,6 @@ GIT
   branch: dev
   specs:
     swagger-ui_rails (0.1.7)
-
-GIT
-  remote: https://github.com/mikz/httpclient.git
-  revision: fec23fb32fb899b87a8b2c94e2d2069b6b4c633c
-  branch: ssl-env-cert
-  specs:
-    httpclient (2.8.3)
 
 PATH
   remote: lib/developer_portal
@@ -416,22 +416,23 @@ GEM
       jsonpath (~> 1.0)
       recursive-open-struct (~> 1.1, >= 1.1.1)
       rest-client (~> 2.0)
+    kwalify (0.7.2)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.7.0)
       launchy (~> 2.2)
-    license_finder (6.12.0)
+    license_finder (7.0.1)
       bundler
       rubyzip (>= 1, < 3)
-      thor (~> 1.0.1)
+      thor (~> 1.2)
       tomlrb (>= 1.3, < 2.1)
       with_env (= 1.1.0)
-      xml-simple (~> 1.1.5)
+      xml-simple (~> 1.1.9)
     liquid (3.0.6)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.18.0)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -504,7 +505,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.22.1)
-    parser (3.1.2.1)
+    parser (3.1.3.0)
       ast (~> 2.4.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
@@ -580,8 +581,8 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.3)
-      loofah (~> 2.3)
+    rails-html-sanitizer (1.4.4)
+      loofah (~> 2.19, >= 2.19.1)
     rails-observers (0.1.5)
       activemodel (>= 4.0)
     rails_event_store (0.9.0)
@@ -625,10 +626,14 @@ GEM
     redis-prescription (1.0.0)
     redlock (1.2.1)
       redis (>= 3.0.0, < 5.0)
+    reek (6.1.0)
+      kwalify (~> 0.7.0)
+      parser (~> 3.1.0)
+      rainbow (>= 2.0, < 4.0)
     reform (2.0.5)
       disposable (~> 0.1.11)
       uber (~> 0.0.11)
-    regexp_parser (2.6.0)
+    regexp_parser (2.6.1)
     representable (2.3.0)
       uber (~> 0.0.7)
     request_store (1.4.1)
@@ -680,16 +685,17 @@ GEM
       rspec (~> 3.0)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.31.0)
+    rubocop (1.39.0)
+      json (~> 2.3)
       parallel (~> 1.10)
-      parser (>= 3.1.0.0)
+      parser (>= 3.1.2.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.18.0, < 2.0)
+      rubocop-ast (>= 1.23.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.23.0)
+    rubocop-ast (1.24.0)
       parser (>= 3.1.1.0)
     rubocop-performance (1.8.1)
       rubocop (>= 0.87.0)
@@ -798,11 +804,11 @@ GEM
       joiner (>= 0.3.4)
       middleware (>= 0.1.0)
       riddle (~> 2.3)
-    thor (1.0.1)
+    thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.9)
     to_regexp (0.2.1)
-    tomlrb (2.0.1)
+    tomlrb (2.0.3)
     ts-datetime-delta (2.0.2)
       thinking-sphinx (>= 1.3.8)
     ttfunk (1.5.1)
@@ -856,7 +862,8 @@ GEM
     will_paginate (3.3.1)
     wisper (2.0.1)
     with_env (1.1.0)
-    xml-simple (1.1.8)
+    xml-simple (1.1.9)
+      rexml
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yabeda (0.8.0)
@@ -952,7 +959,7 @@ DEPENDENCIES
   kubeclient
   launchy
   letter_opener
-  license_finder (~> 6.12.0)
+  license_finder (~> 7.0.1)
   listen
   mail_view (~> 2.0.4)
   mechanize
@@ -997,6 +1004,7 @@ DEPENDENCIES
   redcarpet (~> 3.5.1)
   redis (~> 4.1.3)
   redis-namespace (~> 1.7.0)
+  reek (= 6.01)
   reform (~> 2.0.3)
   rest-client (~> 2.0.2)
   rmagick (~> 2.15.3)
@@ -1005,7 +1013,7 @@ DEPENDENCIES
   rspec-rails (~> 4.1)
   rspec_api_documentation
   rspec_junit_formatter
-  rubocop (= 1.31)
+  rubocop (= 1.39)
   rubocop-performance
   rubocop-rails
   ruby-oci8

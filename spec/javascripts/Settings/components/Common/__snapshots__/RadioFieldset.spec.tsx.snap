@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+<FormFieldset
+  id="fieldset-foo_fighters"
+  label="label"
+>
+  <FormLegend>
+    Foo Fighters
+  </FormLegend>
+  <Radio
+    className=""
+    id="service_method_foo_fighters_dave"
+    isChecked={false}
+    isDisabled={false}
+    isValid={true}
+    key="dave"
+    label="Grohl"
+    name="service[foo_fighters]"
+    onChange={[Function]}
+    value="dave"
+  />
+  <Radio
+    className=""
+    id="service_method_foo_fighters_pat"
+    isChecked={true}
+    isDisabled={false}
+    isValid={true}
+    key="pat"
+    label="Smear"
+    name="service[foo_fighters]"
+    onChange={[Function]}
+    value="pat"
+  />
+  <span>
+    My Hero
+  </span>
+</FormFieldset>
+`;

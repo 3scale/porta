@@ -7,7 +7,7 @@ Feature: Provider finance authorization
   Background:
     Given a provider "foo.3scale.localhost"
       And provider "foo.3scale.localhost" has Browser CMS activated
-      And provider "foo.3scale.localhost" has billing enabled
+      And provider "foo.3scale.localhost" has "finance" allowed
 
   Scenario Outline: Provider admin can access finance
    Given current domain is the admin domain of provider "foo.3scale.localhost"

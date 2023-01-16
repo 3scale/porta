@@ -22,11 +22,13 @@ class Provider::Admin::Messages::InboxController < FrontendController
     reply = @message.reply
     reply.attributes = message_params
 
-    reply.save!
-    reply.deliver!
-
-    flash[:notice] = 'Reply was sent.'
-    redirect_to action: :index
+    if reply.save && reply.deliver
+      flash[:notice] = 'Reply was sent.'
+      redirect_to action: :index
+    else
+      flash[:error] = reply.errors.full_messages.to_sentence
+      redirect_to provider_admin_messages_inbox_path(@message)
+    end
   end
 
   private

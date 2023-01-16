@@ -10,7 +10,7 @@ Feature: Billing Reporting Without Charging
   Background:
       Given a provider "not.charging"
         And all the rolling updates features are off
-        And provider "not.charging" is not charging
+        And provider "not.charging" is billing but not charging
         And an application plan "ToRuleTheWorld" of provider "not.charging" for 42000 monthly
         And admin of account "not.charging" has email "admin@not.charging"
 

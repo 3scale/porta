@@ -12,7 +12,7 @@ Feature: Render liquid templates from database
   Scenario Outline: Override pages
     Given provider "foo.3scale.localhost" has "account_plans" visible
     And provider "foo.3scale.localhost" has "finance" switch visible
-    And provider "foo.3scale.localhost" manages payments with "braintree_blue"
+    And provider "foo.3scale.localhost" is charging its buyers with braintree
     And a published account plan "Basic" of provider "foo.3scale.localhost"
     And a application plan "Pro" of provider "foo.3scale.localhost"
     And a buyer "bob" signed up to application plan "Pro"

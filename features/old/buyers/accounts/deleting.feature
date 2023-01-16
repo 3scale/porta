@@ -21,7 +21,7 @@ Feature: Deleting buyer account
 
 
   Scenario: Cannot delete account if there are unsettled invoices
-    Given provider "foo.3scale.localhost" has billing enabled
+    Given provider "foo.3scale.localhost" is charging its buyers
     Given an invoice of buyer "bob" for January, 2011 with items:
       | name   | cost |
       | Custom |   42 |

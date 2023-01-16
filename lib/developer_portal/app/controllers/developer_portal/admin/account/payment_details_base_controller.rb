@@ -1,3 +1,5 @@
+# TODO: DRY: refactor PaymentGateways controllers and reduce duplication
+
 class DeveloperPortal::Admin::Account::PaymentDetailsBaseController < DeveloperPortal::BaseController
   layout 'main_layout'
   skip_before_action :protect_access

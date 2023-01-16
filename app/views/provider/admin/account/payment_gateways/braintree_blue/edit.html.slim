@@ -62,7 +62,7 @@ p
   = form.inputs "Personal Details" do
     = form.input :first_name, required: true
     = form.input :last_name, required: true
-    = form.input :phone , label: "Phone", required: true
+    = form.input :phone, required: true
 
   = form.inputs "Credit Card Details" do
     ol
@@ -82,10 +82,10 @@ p
         = billing_address.input :company, required: true
         = billing_address.input :street_address, required: true
         = billing_address.input :extended_address, required: true
-        = billing_address.input :postal_code, label: "ZIP / Postal Code" , required: true
-        = billing_address.input :locality, label: "City", required: true
-        = billing_address.input :region, label: "State/Region" , required: true
-        = billing_address.input :country_name, label: "Country", as: :select,
+        = billing_address.input :postal_code , required: true
+        = billing_address.input :locality, required: true
+        = billing_address.input :region, required: true
+        = billing_address.input :country_name, as: :select,
           collection: merchant_countries, required: true,
           allow_blank: false, prompt: 'Select your country'
   = hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce'

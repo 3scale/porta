@@ -105,6 +105,7 @@
             "name": "path",
             "in": "query",
             "description": "URI of the file",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -128,6 +129,7 @@
           {
             "name": "attachment",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -278,45 +280,6 @@
             "schema": {
               "type": "integer",
               "format": "int32"
-            }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "URI of the file",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_id",
-            "in": "query",
-            "description": "ID of a section (valid only for pages)",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "tag_list",
-            "in": "query",
-            "description": "List of the tags",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "attachment",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "downloadable",
-            "in": "query",
-            "description": "Checked sets the content-disposition to attachment",
-            "schema": {
-              "type": "boolean"
             }
           }
         ],
@@ -549,17 +512,10 @@
             }
           },
           {
-            "name": "system_name",
-            "in": "query",
-            "description": "Human readable and unique identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "title",
             "in": "query",
             "description": "Title of the section",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -839,14 +795,6 @@
             "schema": {
               "type": "integer",
               "format": "int32"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "Human readable and unique identifier",
-            "schema": {
-              "type": "string"
             }
           },
           {

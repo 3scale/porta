@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+<TextInputGroup
+  defaultValue="Le Monstre"
+  hint="Enter your favourite Dooz Kawa tune"
+  label=""
+  name="dooz_kawa_chanson"
+  placeholder="You Favourite Dooz Kawa"
+  value="Me Faire La Belle"
+>
+  <FormGroup
+    fieldId="service_proxy_attributes_dooz_kawa_chanson_input"
+    helperText="Enter your favourite Dooz Kawa tune"
+    label=""
+  >
+    <div
+      className="pf-c-form__group"
+    >
+      <ForwardRef
+        id="service_proxy_attributes_dooz_kawa_chanson_input"
+        isReadOnly={false}
+        name="service[proxy_attributes][dooz_kawa_chanson]"
+        onChange={[Function]}
+        placeholder="You Favourite Dooz Kawa"
+        type="text"
+        value="Me Faire La Belle"
+      >
+        <TextInputBase
+          aria-label={null}
+          className=""
+          id="service_proxy_attributes_dooz_kawa_chanson_input"
+          innerRef={null}
+          isDisabled={false}
+          isReadOnly={false}
+          isRequired={false}
+          isValid={true}
+          name="service[proxy_attributes][dooz_kawa_chanson]"
+          onChange={[Function]}
+          placeholder="You Favourite Dooz Kawa"
+          type="text"
+          validated="default"
+          value="Me Faire La Belle"
+        >
+          <input
+            aria-invalid={false}
+            aria-label={null}
+            className="pf-c-form-control"
+            disabled={false}
+            id="service_proxy_attributes_dooz_kawa_chanson_input"
+            name="service[proxy_attributes][dooz_kawa_chanson]"
+            onChange={[Function]}
+            placeholder="You Favourite Dooz Kawa"
+            readOnly={false}
+            required={false}
+            type="text"
+            value="Me Faire La Belle"
+          />
+        </TextInputBase>
+      </ForwardRef>
+      <div
+        aria-live="polite"
+        className="pf-c-form__helper-text"
+        id="service_proxy_attributes_dooz_kawa_chanson_input-helper"
+      >
+        Enter your favourite Dooz Kawa tune
+      </div>
+    </div>
+  </FormGroup>
+</TextInputGroup>
+`;

@@ -8,9 +8,9 @@ Feature: Billing Reporting
 
   Background:
     Given a provider "foo.3scale.localhost"
+      And the provider is charging its buyers
       And all the rolling updates features are off
-      And provider "foo.3scale.localhost" is fake charging
-      And provider "foo.3scale.localhost" has valid payment gateway
+      And the provider is charging its buyers
       And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
       And an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
@@ -40,7 +40,7 @@ Feature: Billing Reporting
   Scenario: On paid plan, I WANT to get just 1 email: report about upcoming transaction
       Given the time is 27th May 2009
         And a buyer "rich" signed up to application plan "PaidAsInLunch"
-        And buyer "rich" has valid credit card
+        And buyer "rich" has a valid credit card
         And I act as "rich"
         And no emails have been sent
 
@@ -50,7 +50,7 @@ Feature: Billing Reporting
   Scenario: Me and my provider should be alarmed about failed payments
       Given the time is 27th May 2009
         And a buyer "broke" signed up to application plan "PaidAsInLunch"
-        And buyer "broke" has valid credit card with no money
+        And buyer "broke" has a valid credit card with no money
         And I act as "broke"
 
         When the time flies to 3rd June 2009
@@ -64,8 +64,7 @@ Feature: Billing Reporting
   Scenario: I should be warned 10 days before my credit card expires and never ever after
       Given the time is 16th May 2009
         And a buyer "broke" signed up to application plan "FreeAsInBeer"
-        And buyer "broke" has valid credit card with no money
-        And buyer "broke" has last digits of credit card number "1234" and expiration date 2009-05-27
+        And buyer "broke" has a valid credit card with no money that expires on May 27, 2009
 
        When the time flies to 17th May 2009
         And I act as "broke"
