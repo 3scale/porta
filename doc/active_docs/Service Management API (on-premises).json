@@ -1,0 +1,332 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://su1.3scale.net/"
+    }
+  ],
+  "paths": {
+    "/transactions/oauth_authorize.xml": {
+      "get": {
+        "summary": "Authorize (OAuth authentication mode pattern)",
+        "operationId": "oauth_authorize",
+        "parameters": [
+          {
+            "name": "service_token",
+            "in": "query",
+            "description": "Your service api key with 3scale (also known as service token).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "query",
+            "description": "Service id. Required.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "OAuth token used for authorizing if you don't use client_id with client_secret.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_id",
+            "in": "query",
+            "description": "Client Id (identifier of the application if the auth. pattern is OAuth, note that client_id == app_id)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referrer",
+            "in": "query",
+            "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usage",
+            "in": "query",
+            "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "redirect_url",
+            "in": "query",
+            "description": "Optional redirect URL for OAuth. Will be validated if sent.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "description": "Optional redirect URI for OAuth. This is the same as 'redirect_url', but if used you should expect a matching 'redirect_uri' response field.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transactions/authrep.xml": {
+      "get": {
+        "summary": "AuthRep (Authorize + Report for the API Key authentication pattern)",
+        "parameters": [
+          {
+            "name": "service_token",
+            "in": "query",
+            "description": "Your service api key with 3scale (also known as service token).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "query",
+            "description": "Service id. Required.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_key",
+            "in": "query",
+            "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referrer",
+            "in": "query",
+            "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usage",
+            "in": "query",
+            "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.",
+            "schema": {
+              "type": "ref"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transactions/oauth_authrep.xml": {
+      "get": {
+        "summary": "AuthRep (OAuth authentication mode pattern)",
+        "operationId": "oauth_authrep",
+        "parameters": [
+          {
+            "name": "service_token",
+            "in": "query",
+            "description": "Your service api key with 3scale (also known as service token).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "query",
+            "description": "Service id. Required.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "OAuth token used for authorizing if you don't use client_id with client_secret.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_id",
+            "in": "query",
+            "description": "Client Id (identifier of the application if the auth. pattern is OAuth, note that client_id == app_id)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referrer",
+            "in": "query",
+            "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usage",
+            "in": "query",
+            "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "redirect_url",
+            "in": "query",
+            "description": "Optional redirect URL for OAuth. Will be validated if sent.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "description": "Optional redirect URI for OAuth. This is the same as 'redirect_url', but if used you should expect a matching 'redirect_uri' response field.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transactions/authorize.xml": {
+      "get": {
+        "summary": "Authorize (API Key authentication pattern)",
+        "operationId": "authorize_user_key",
+        "parameters": [
+          {
+            "name": "service_token",
+            "in": "query",
+            "description": "Your service api key with 3scale (also known as service token).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "query",
+            "description": "Service id. Required.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_key",
+            "in": "query",
+            "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referrer",
+            "in": "query",
+            "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usage",
+            "in": "query",
+            "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
+            "schema": {
+              "type": "ref"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transactions.xml": {
+      "post": {
+        "summary": "Report (OAuth authentication pattern)",
+        "parameters": [
+          {
+            "name": "service_token",
+            "in": "query",
+            "description": "Your service api key with 3scale (also known as service token).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "query",
+            "description": "Service id. Required.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactions",
+            "in": "query",
+            "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
+            "required": true,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}
