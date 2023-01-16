@@ -6,12 +6,14 @@ it('should return a weird object', () => {
     application: {
       id: 11,
       name: 'My Application',
+      link: '/p/admin/applications/11',
       service: {
         id: 22
       },
       account: {
         id: 33,
-        name: 'My Account'
+        name: 'My Account',
+        link: '/buyers/accounts/33'
       }
     }
   })
