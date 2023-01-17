@@ -81,7 +81,7 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
   test '#usage returns nil if application data does not exist' do
     @dummy.instance_variable_set(:@cinstance, nil)
 
-    assert_equal(@dummy.usage(@options)[:application], nil)
+    assert_nil(@dummy.usage(@options)[:application])
   end
 
   test '#usage returns application data if it exists' do
@@ -101,7 +101,6 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
     @dummy.instance_variable_set(:@cinstance, cinstance)
 
     assert_equal(
-      @dummy.usage(@options)[:application],
       {
         id: 1,
         name: 'Application',
@@ -120,7 +119,8 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
         service: {
           id: 1
         }
-      }
+      },
+      @dummy.usage(@options)[:application]
     )
   end
 end
