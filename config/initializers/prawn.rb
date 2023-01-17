@@ -1,7 +1,4 @@
-# require 'prawn'
-# require 'prawn/format'
 require "prawn/measurement_extensions"
-require 'gruff'
 require "open-uri"
 
 module Prawn
