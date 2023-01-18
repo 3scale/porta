@@ -77,4 +77,50 @@ class Stats::Views::UsageTest < ActiveSupport::TestCase
     @dummy.expects(:usage_values_in_range).twice.returns([0])
     @dummy.usage(@options.merge(skip_change: false))
   end
+
+  test '#usage returns nil if application data does not exist' do
+    @dummy.instance_variable_set(:@cinstance, nil)
+
+    assert_nil(@dummy.usage(@options)[:application])
+  end
+
+  test '#usage returns application data if it exists' do
+    application_plan = FactoryBot.build_stubbed(:application_plan, id: 1, name: 'Application Plan')
+    account = FactoryBot.build_stubbed(:account, id: 1, name: 'Account')
+    service = FactoryBot.build_stubbed(:service, id: 1)
+    cinstance = FactoryBot.build_stubbed(
+      :cinstance,
+      id: 1,
+      name: 'Application',
+      state: 'live',
+      plan: application_plan,
+      user_account: account,
+      service: service
+    )
+
+    @dummy.instance_variable_set(:@cinstance, cinstance)
+
+    assert_equal(
+      {
+        id: 1,
+        name: 'Application',
+        state: 'live',
+        link: '/p/admin/applications/1',
+        description: nil,
+        plan: {
+          id: 1,
+          name: 'Application Plan'
+        },
+        account: {
+          id: 1,
+          name: 'Account',
+          link: '/buyers/accounts/1'
+        },
+        service: {
+          id: 1
+        }
+      },
+      @dummy.usage(@options)[:application]
+    )
+  end
 end
