@@ -23,8 +23,6 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
     && yum remove -y postgresql \
     && yum install -y epel-release \
     && yum -y install centos-release-scl-rh \
-              ImageMagick \
-              ImageMagick-devel \
               gd-devel \
               unixODBC-devel \
               mysql \
