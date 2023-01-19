@@ -70,7 +70,7 @@ module CMS
         assert_equal section.id.to_s, doc.xpath('/section/id').text
         assert_equal section.created_at.xmlschema, doc.xpath('/section/created_at').text
         assert_equal section.updated_at.xmlschema, doc.xpath('/section/updated_at').text
-        assert_equal section.parent_id.to_s, doc.xpath('/section/parent_id').text
+        assert_equal section.parent_id.to_s, doc.xpath('/section/parent/id').text
         assert_equal section.system_name, doc.xpath('/section/system_name').text
         assert_equal section.title, doc.xpath('/section/title').text
       end
@@ -102,7 +102,7 @@ module CMS
         assert_response :success
 
         doc = Nokogiri::XML::Document.parse(@response.body)
-        id = doc.xpath('//id').text
+        id = doc.xpath('/section/id').text
         section = @provider.sections.find(id.to_i)
 
         assert_equal 'Foo Bar Lol', section.title

@@ -49,11 +49,26 @@ class CMS::Section < ApplicationRecord
         xml.created_at created_at.xmlschema
         xml.updated_at updated_at.xmlschema
       end
-      x.partial_path partial_path
-      x.public public
       x.title title
-      x.parent_id parent_id
       x.system_name system_name
+      x.public !public.nil?
+      if options[:short]
+        x.parent_id parent_id
+      else
+        x.parent_ do |p|
+          p.id parent.id
+          p.title parent.title
+        end
+      end
+      x.partial_path partial_path
+      unless options[:short]
+        x.contents do |c|
+          pages.to_xml(builder: c, root: 'pages', short: true)
+          files.to_xml(builder: c, root: 'files', short: true)
+          builtins.to_xml(builder: c, root: 'builtins', short: true)
+          children.to_xml(builder: c, root: 'sections', short: true)
+        end
+      end
     end
 
     xml.to_xml
