@@ -218,7 +218,7 @@ module CMS
         assert_response :success
 
         doc = Nokogiri::XML::Document.parse(@response.body)
-        id = doc.xpath('//id').text
+        id = doc.xpath('/page/id').text
         page = @provider.pages.find(id.to_i)
 
         assert_equal 'Rake 5000', page.title

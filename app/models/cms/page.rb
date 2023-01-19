@@ -99,17 +99,22 @@ class CMS::Page < CMS::BasePage
       end
 
       x.title title
-      x.system_name system_name
+      section.to_xml(builder: x, root: 'section', short: true) unless options[:short]
       x.path(path) if respond_to?(:path)
-      x.hidden hidden?
-      x.layout layout_name
+      if options[:short]
+        x.layout_name layout_name
+      else
+        layout&.to_xml(builder: x, short: true) || x.layout
+      end
+      x.system_name system_name
       x.content_type content_type
+      x.liquid_enabled !liquid_enabled.nil?
       x.handler handler
-      x.liquid_enabled liquid_enabled
+      x.hidden hidden?
 
       unless options[:short]
-        x.draft draft
-        x.published published
+        x.draft { |node| node.cdata draft }
+        x.published { |node| node.cdata published }
       end
     end
 
