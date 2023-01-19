@@ -57,10 +57,14 @@ class CMS::File < ApplicationRecord
         xml.created_at created_at.xmlschema
         xml.updated_at updated_at.xmlschema
       end
-      x.section_id section_id
+      if options[:short]
+        x.section_id section_id
+      else
+        section.to_xml(builder:x, root: 'section', short: true)
+      end
       x.path path
+      x.downloadable !downloadable.nil?
       x.url url.to_s
-      x.tag_list tag_list
       x.title title
     end
 

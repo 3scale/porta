@@ -36,7 +36,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
       current_account.files
     end).paginate(page: params[:page] || 1, per_page: per_page)
 
-    respond_with files
+    respond_with(files, short: true)
   end
 
   ##~ op            = e.operations.add
