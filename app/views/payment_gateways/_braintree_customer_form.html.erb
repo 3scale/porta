@@ -1,17 +1,4 @@
-<% billing_address_data = current_account.has_billing_address? ? current_account.billing_address : nil %>
-<% selected_country_code = billing_address_data ? get_country_code(billing_address_data) : '' %>
-
-<div
-  id="braintree-form-wrapper"
-  data-form-action-path="<%= developer_portal.hosted_success_admin_account_braintree_blue_path %>"
-  data-three-d-secure-enabled="<%= site_account.payment_gateway_options[:three_ds_enabled] %>"
-  data-client-token="<%= client_token = j @braintree_authorization %>"
-  <% unless billing_address_data == nil %>
-    data-billing-address="<%= billing_address_data.to_json  %>"
-  <% end %>
-  data-countries-list="<%= merchant_countries.to_json %>"
-  data-selected-country-code="<%= selected_country_code %>"
-></div>
+<div id="braintree-form-wrapper" data-braintree-form="<%= braintree_form_data.to_json %>"></div>
 <%= javascript_pack_tag 'braintree_customer_form'%>
 
 <% unless @errors.blank? %>
