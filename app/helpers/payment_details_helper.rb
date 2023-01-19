@@ -23,10 +23,9 @@ module PaymentDetailsHelper
 
   def payment_details_path(merchant_account = site_account, url_params = {})
     payment_gateway_type = merchant_account.payment_gateway_type
-    return "" if ["bogus",""].include?(payment_gateway_type.to_s)
+    return '' if [:bogus, nil].include?(payment_gateway_type)
 
-    named_route = [:admin, :account, payment_gateway_type]
-    polymorphic_path(named_route, url_params)
+    polymorphic_path([:admin, :account, payment_gateway_type], url_params)
   end
 
   def edit_payment_details(merchant_account = site_account)
