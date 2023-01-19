@@ -31,7 +31,7 @@ module PaymentDetailsHelper
 
   def edit_payment_details(merchant_account = site_account)
     payment_gateway_type = merchant_account.payment_gateway_type
-    return "" if ["bogus",""].include?(payment_gateway_type.to_s)
+    return '' if [:bogus, nil].include?(payment_gateway_type)
 
     polymorphic_url([:edit, :admin, :account, payment_gateway_type])
   end
