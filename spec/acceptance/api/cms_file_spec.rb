@@ -10,6 +10,7 @@ resource 'CMS::File' do
 
     get '/admin/api/cms/files.:format', action: :index do
       let(:collection) { provider.files }
+      let(:serialized) { representer.send(serialization_format, short: true) }
     end
 
     get '/admin/api/cms/files/:id.:format', action: :show

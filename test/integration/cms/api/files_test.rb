@@ -116,7 +116,7 @@ module CMS
         assert_response :success
 
         doc = Nokogiri::XML(@response.body)
-        id = doc.xpath('//id').text
+        id = doc.xpath('/file/id').text
         file = @provider.files.find(id.to_i)
         assert_equal 'wide.jpg', file.title
       end

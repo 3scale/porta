@@ -8,6 +8,7 @@ resource 'CMS::Section' do
 
     get '/admin/api/cms/sections.:format', action: :index do
       let(:collection) { provider.sections.order(:id) }
+      let(:serialized) { representer.send(serialization_format, short: true) }
     end
 
     get '/admin/api/cms/sections/:id.:format', action: :show
