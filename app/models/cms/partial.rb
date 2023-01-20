@@ -28,8 +28,6 @@ class CMS::Partial < CMS::Template
 
       x.system_name system_name
       x.content_type content_type
-      x.handler handler
-      x.liquid_enabled liquid_enabled
 
       unless options[:short]
         x.draft draft
