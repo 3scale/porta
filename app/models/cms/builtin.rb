@@ -133,26 +133,7 @@ class CMS::Builtin < CMS::BasePage
   # CMS::Builtin::Page
   class Page < CMS::Builtin
     def to_xml(options = {})
-      xml = options[:builder] || Nokogiri::XML::Builder.new
-
-      xml.builtin_page do |x|
-        unless new_record?
-          xml.id id
-          xml.created_at created_at.xmlschema
-          xml.updated_at updated_at.xmlschema
-        end
-
-        # x.title title
-        x.system_name system_name
-        x.liquid_enabled liquid_enabled
-
-        unless options[:short]
-          x.draft draft
-          x.published published
-        end
-      end
-
-      xml.to_xml
+      super options.merge(root: :builtin_page)
     end
 
     def content_type
