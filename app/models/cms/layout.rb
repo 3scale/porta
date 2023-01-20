@@ -28,11 +28,10 @@ class CMS::Layout < CMS::Template
         xml.updated_at updated_at.xmlschema
       end
 
-      x.system_name system_name
-      x.content_type content_type
-      x.handler handler
-      x.liquid_enabled liquid_enabled
       x.title title
+      x.system_name system_name
+      x.liquid_enabled liquid_enabled
+      x.content_type content_type
 
       unless options[:short]
         x.draft draft
