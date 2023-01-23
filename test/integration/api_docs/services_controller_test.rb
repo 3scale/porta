@@ -62,7 +62,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
         assert_response :success
         assert show_result.has_key?('basePath')
-        assert show_result.has_key?('apis')
+        assert show_result.has_key?('paths')
       end
     end
 
@@ -88,7 +88,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
         # ignore stats endpoint
         name.to_s.match(name_or_path_regex) && name.to_s !~ /stats/
       }
-      assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['apis'].each_with_object(Set.new, &select_endpoints).length
+      assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['paths'].select{ |url| url.exclude?('stats') &&  url.include?('backend_')}.length
     end
   end
 
@@ -105,11 +105,11 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       select_endpoint = Proc.new { |api| api['path'] == '/admin/api/account_plans/{id}.xml' }
       ThreeScale.config.stubs(onpremises: false)
       get '/api_docs/services/account_management_api.json'
-      assert_not_empty JSON.parse(response.body)['apis'].select(&select_endpoint)
+      assert_not_empty JSON.parse(response.body)['paths'].keys
 
       ThreeScale.config.stubs(onpremises: true)
       get '/api_docs/services/account_management_api.json'
-      assert_empty JSON.parse(response.body)['apis'].select(&select_endpoint)
+      assert_empty JSON.parse(response.body)['paths'].select{ |url|  url.exclude?('admin')}
     end
 
     def test_index_and_show
@@ -135,7 +135,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
           assert_response :success
           assert show_result.has_key?('basePath')
-          assert show_result.has_key?('apis')
+          assert show_result.has_key?('paths')
         end
       end
     end
