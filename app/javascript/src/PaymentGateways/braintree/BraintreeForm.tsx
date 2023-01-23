@@ -30,7 +30,7 @@ interface Props {
   billingAddress: BillingAddressData;
   threeDSecureEnabled: boolean;
   formActionPath: string;
-  countriesList: string;
+  countriesList: [string, string][];
   selectedCountryCode: string;
 }
 
@@ -143,7 +143,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
       <fieldset>
         <BraintreeBillingAddressFields
           billingAddressData={billingAddressData}
-          countriesList={JSON.parse(countriesList) as string[][]}
+          countriesList={countriesList}
           selectedCountryCode={selectedCountryCode}
           setBillingAddressData={setBillingAddressData}
         />

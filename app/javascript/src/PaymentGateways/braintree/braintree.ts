@@ -123,6 +123,7 @@ const veryfyCard = (
     bin: payload.details.bin,
     challengeRequested: true,
     amount: 0.0,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     billingAddress,
     onLookupComplete: (_data: ThreeDSecureVerificationData, next: () => void) => { next() } // From https://github.com/DefinitelyTyped/DefinitelyTyped/pull/61818/commits/8411fba432567e70b1cd6bf7c79a88e7dd9a6aee
   } as ThreeDSecureVerifyOptions /* TODO: 2 things wrong with this:
