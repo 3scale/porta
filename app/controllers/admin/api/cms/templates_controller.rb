@@ -2,7 +2,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_template_id = { :name => "id", :description => "ID of the template", :dataType => "int", :required => true, :paramType => "path" }
 
-  ALLOWED_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type].freeze
+  ALLOWED_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type section_id section_name layout_id layout_name].freeze
 
   wrap_parameters :template, include: ALLOWED_PARAMS,
                              format: [:json, :xml, :multipart_form, :url_encoded_form]
@@ -48,22 +48,10 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def create
-    cms_params = cms_template_params
-    type = cms_params.delete('type')
-
-    collections = { page: current_account.pages,
-                    partial: current_account.partials,
-                    layout: current_account.layouts }
-
-    if type && (collection = collections[type.to_sym])
-      template = collection.new(cms_params)
-      template.section ||= find_section if template.respond_to?(:section)
-      template.layout ||= find_layout if template.respond_to?(:layout)
-      template.save
-      respond_with(template)
-    else
-      render_error "Unknown template type '#{type}'", status: :not_acceptable
-    end
+    template = Admin::Api::CMS::TemplateService::Create.call(current_account, cms_template_params)
+    respond_with(template)
+  rescue Admin::Api::CMS::TemplateService::UnknownTemplateTypeError => exception
+    render_error exception.message, status: :not_acceptable
   end
 
   ##~ e = sapi.apis.add
@@ -101,15 +89,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def update
-    if @template.respond_to?(:section)
-      section = find_section
-      @template.section = section if section.present?
-    end
-    if @template.respond_to?(:layout)
-      layout = find_layout
-      @template.layout = layout if layout.present?
-    end
-    @template.update_attributes(cms_template_params)
+    Admin::Api::CMS::TemplateService::Update.call(@template, current_account, cms_template_params)
     respond_with(@template)
   end
 
@@ -162,23 +142,4 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   def cms_templates
     current_account.templates.but(CMS::EmailTemplate, CMS::Builtin::LegalTerm).order(:id)
   end
-
-  def find_section
-    scope = current_account.sections
-
-    return scope.find_by(id: params[:section_id]) if params[:section_id].present?
-
-    return scope.find_by(system_name: params[:section_name]) if params[:section_name].present?
-
-    scope.root
-  end
-
-  def find_layout
-    scope = current_account.layouts
-
-    return scope.find_by(id: params[:layout_id]) if params[:layout_id].present?
-
-    scope.find_by(system_name: params[:layout_name]) if params[:layout_name].present?
-  end
-
 end
