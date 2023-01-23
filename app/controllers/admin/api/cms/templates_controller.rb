@@ -165,12 +165,20 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
 
   def find_section
     scope = current_account.sections
-    scope.find_by_id(params[:section_id]) || scope.find_by_system_name(params[:section_name]) || scope.root
+
+    return scope.find_by(id: params[:section_id]) if params[:section_id].present?
+
+    return scope.find_by(system_name: params[:section_name]) if params[:section_name].present?
+
+    scope.root
   end
 
   def find_layout
     scope = current_account.layouts
-    scope.find_by_id(params[:layout_id]) || scope.find_by_system_name(params[:layout_name])
+
+    return scope.find_by(id: params[:layout_id]) if params[:layout_id].present?
+
+    scope.find_by(system_name: params[:layout_name]) if params[:layout_name].present?
   end
 
 end
