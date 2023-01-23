@@ -22,10 +22,10 @@ module PaymentDetailsHelper
   end
 
   def payment_details_path(merchant_account = site_account, url_params = {})
-    payment_gateway_type = merchant_account.payment_gateway_type
-    return '' if [:bogus, nil].include?(payment_gateway_type)
+    return '' if merchant_account.unacceptable_payment_gateway?
 
-    polymorphic_path([:admin, :account, payment_gateway_type], url_params)
+    named_route = [:admin, :account, merchant_account.payment_gateway_type]
+    polymorphic_path(named_route, url_params)
   end
 
   # This smells of :reek:FeatureEnvy but it shouldn't

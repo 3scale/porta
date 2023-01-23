@@ -174,12 +174,10 @@ module Liquid
 
       desc "A page to enter credit card details. Differs depending on the payment gateway of your choice."
       def payment_details
-        type = provider.payment_gateway_type
-
-        if [ "bogus" ,""].include?(type.to_s)
+        if provider.unacceptable_payment_gateway?
           nil
         else
-          url = polymorphic_path([:admin, :account, type])
+          url = polymorphic_path([:admin, :account, provider.payment_gateway_type])
           ::Liquid::Drops::Url.new(url, 'Credit Card Details', 'payment_details')
         end
       end
