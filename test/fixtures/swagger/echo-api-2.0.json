@@ -30,7 +30,7 @@
               "parameters": [
                   {
                       "name": "user_key",
-                      "in": "query",
+                      "in": "header",
                       "description": "Your API access key",
                       "required": true,
                       "x-data-threescale-name": "user_keys",

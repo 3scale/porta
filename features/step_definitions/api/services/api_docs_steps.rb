@@ -9,21 +9,24 @@ When /^(?:they are|an admin is) reviewing the service's active docs$/ do
   visit admin_service_api_docs_path(@service)
 end
 
-And "submit the ActiveDocs form" do
+And "submit the ActiveDocs with {spec_version} form" do |swagger_version|
   fill_in('Name', with: 'ActiveDocsName')
-  fill_in_api_docs_service_body(FactoryBot.build(:api_docs_service).body)
+  fill_in_api_docs_service_body(spec_body_builder(swagger_version))
   click_on 'Create spec'
+  click_on 'Create spec' #TODO: Remove the second click hack
 end
 
 Then "they should see the new spec" do
+  api_doc_service = @service.api_docs_services.last
+
   assert_flash 'ActiveDocs Spec was successfully saved.'
-  assert_current_path preview_admin_service_api_doc_path(service_id: @service.id, id: @service.api_docs_services.last.id)
-  assert_text 'Preview Service Spec (2.0)'
+  assert_current_path preview_admin_service_api_doc_path(service_id: @service.id, id: api_doc_service.id)
+  assert_text "Preview Service Spec (#{api_doc_service.swagger_version})"
 end
 
-Given "a service with a spec" do
+Given "a service with a {spec_version} spec" do |swagger_version|
   @service = FactoryBot.create(:service, account: @provider)
-  @api_doc_service = @service.api_docs_services.build(name: "Echo", published: true, body: file_fixture('swagger/echo-api-2.0.json'))
+  @api_doc_service = @service.api_docs_services.build(name: "Echo", published: true, body: spec_body_builder(swagger_version))
   @api_doc_service.save
 end
 
@@ -45,13 +48,6 @@ When "they try to update the spec with valid data" do
   fill_in_api_docs_service_body(FactoryBot.build(:api_docs_service).body)
   check 'Skip swagger validations'
   click_on 'Update spec'
-end
-
-def fill_in_api_docs_service_body(value)
-  # HACK: fill_in('API JSON Spec', visible: :hidden, with: FactoryBot.build(:api_docs_service).body) doesn't work because capybara rises ElementNotInteractableError
-  page.execute_script("$('textarea#api_docs_service_body').css('display','')")
-  find('textarea#api_docs_service_body').set(value)
-  find('.pf-c-page__main-section').click # HACK: need to click outside to lose focus
 end
 
 Then "they should see the errors" do
@@ -94,85 +90,18 @@ Then "they can review the spec" do
   find('tr td', text: @api_doc_service.name).click
 end
 
-# Then /^the table should( not)? contain the API$/ do |negate|
-#   step "I should#{negate} see \"API\" within the table header"
-#   step "I should#{negate} see \"#{@provider.default_service.name}\" within the table body"
-# end
+Then "the swagger autocomplete should work for {string} with {string}" do |input_name, autocomplete|
+  find('span', text: /get/i).click
+  has_css?(".apidocs-param-tips.#{autocomplete}", visible: :hidden)
+  find("input[name=#{input_name}]").click
+  assert has_css?(".apidocs-param-tips.#{autocomplete}", visible: :visible)
+end
 
-# Then(/^the service selector is not in the form$/) do
-#   refute has_xpath?('//form//select[@id="api_docs_service_service_id"]')
-# end
-
-# Then(/^the api doc spec is saved with this service linked$/) do
-#   assert_selector('.flash-message--notice', text: /ActiveDocs Spec was successfully (saved|updated)./)
-# end
-
-# Then(/^the swagger autocomplete should work for "(.*?)" with "(.*?)"$/) do |input_name, autocomplete|
-#   click_on 'get'
-#   wait_for_requests
-#   assert_equal 1, evaluate_script("$('input[name=#{input_name}]').focus().length")
-#   assert_equal 1, evaluate_script("$('.apidocs-param-tips.#{autocomplete}:visible').length")
-# end
-
-# frozen_string_literal: true
-
-# Given(/^provider "(.*?)" has a swagger 1.0$/) do | org_name |
-#   provider = Account.providers.find_by org_name: org_name
-
-#   active_docs = provider.api_docs_services.build name: "Echo"
-#   active_docs.published = true
-#   active_docs.body = file_fixture('swagger/echo-api-1.0.json')
-#   assert active_docs.save
-# end
-
-# Given(/^provider "(.*?)" has the swagger example of signup$/) do |arg1|
-#   active_docs = @provider.api_docs_services.build name: "Echo"
-#   active_docs.published = true
-#   active_docs.body = file_fixture('swagger/echo-api-2.0.json')
-#   assert active_docs.save
-# end
-
-# Given(/^provider "(.*?)" has the oas3 simple example$/) do |arg1|
-#   active_docs = @provider.api_docs_services.build name: "Echo"
-#   active_docs.published = true
-#   active_docs.body = file_fixture('swagger/echo-api-3.0.json')
-#   assert active_docs.save
-# end
-
-# Then /I fill the JSON spec with a valid spec/ do
-#   fill_in "API JSON Spec", with: '{"apis": [{"path": "/admin/api/cms/templates.xml","operations": [{"httpMethod": "GET","summary": "List all templates","description": "List all templates","parameters": [{"name": "provider_key","description": "Your provider key","dataType": "string","required": true,"paramType": "path","allowMultiple": false}]}]}],"namespace": "CMS API","resourcePath": "/admin/api/cms/templates","swagrVersion": "1.1","apiVersion": "1.0"}'
-# end
-
-# Then(/^swagger should escape properly the curl string$/) do
-#   page.click_on 'get'
-#   page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
-#   page.click_button 'Try it out!'
-#   within '.block.curl' do
-#     within 'pre' do
-#       page.should have_content('Authorization: Oauth:"test"')
-#     end
-#   end
-# end
-
-# Then(/^swagger v3 should escape properly the curl string$/) do
-#   id = 'default' # Could be passed as arg
-#   section_id = "#operations-tag-#{id}"
-
-#   closed_section = find("#{section_id}[data-is-open='false']")
-#   closed_section.click
-
-#   method_id = "#operations-#{id}-get_"
-#   closed_method = find(method_id)
-#   closed_method.click
-
-#   within method_id do
-#     click_on 'Try it out'
-#     input_name = 'user_key'
-#     input = find("[data-param-name='#{input_name}'] input")
-#     input.set 'Authorization: Oauth:"test"'
-
-#     click_on 'Execute'
-
-#     find('textarea.curl').should have_content('-H Authorization: Oauth:\"test\"')
-#   end
-# end
+Then "swagger should escape properly the curl string" do
+  find('span', text: /get/i).click
+  assert find(:xpath, '//*[@name="user_key"]/..').has_sibling? 'td', text: 'header'
+  page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
+  page.click_button 'Try it out!'
+  curl_commmand = find_all('div', text: /curl/i).last
+  curl_commmand.has_text?('Authorization: Oauth:"test"')
+end
