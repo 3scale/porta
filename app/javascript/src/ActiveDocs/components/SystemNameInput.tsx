@@ -1,8 +1,10 @@
 import { FormGroup, TextInput, Alert } from '@patternfly/react-core'
 
+import { FormAlert } from 'ActiveDocs/components/FormAlert'
+
 import type { FunctionComponent } from 'react'
 
-import { FormAlert } from './FormAlert'
+import './SystemNameInput.scss'
 
 interface Props {
   isDisabled?: boolean;

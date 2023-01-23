@@ -3,6 +3,8 @@ import { FormGroup, TextArea } from '@patternfly/react-core'
 
 import type { FunctionComponent } from 'react'
 
+import './ApiJsonSpecInput.scss'
+
 interface Props {
   apiJsonSpec: string;
   setApiJsonSpec: (description: string) => void;
