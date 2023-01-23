@@ -28,13 +28,6 @@ module PaymentDetailsHelper
     polymorphic_path([:admin, :account, payment_gateway_type], url_params)
   end
 
-  def edit_payment_details(merchant_account = site_account)
-    payment_gateway_type = merchant_account.payment_gateway_type
-    return '' if [:bogus, nil].include?(payment_gateway_type)
-
-    polymorphic_url([:edit, :admin, :account, payment_gateway_type])
-  end
-
   # This smells of :reek:FeatureEnvy but it shouldn't
   def merchant_countries
     @merchant_countries ||= ActiveMerchant::Country::COUNTRIES.map { |country| [country[:name], country[:alpha2]] }.uniq
