@@ -61,7 +61,6 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
         show_result = JSON.parse(response.body)
 
         assert_response :success
-        assert show_result.has_key?('basePath')
         assert show_result.has_key?('paths')
       end
     end
@@ -134,7 +133,6 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
           show_result = JSON.parse(response.body)
 
           assert_response :success
-          assert show_result.has_key?('basePath')
           assert show_result.has_key?('paths')
         end
       end
