@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   ActionGroup,
   Button,
@@ -57,29 +57,10 @@ const ApiDocsForm: FunctionComponent<Props> = ({
   const [description, setDescription] = useState(defaultdescription)
   const [apiJsonSpec, setApiJsonSpec] = useState(defaultApiJsonSpec)
   const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultskipSwaggerValidations)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- service, defaultCollection and defaultServiceId are always defined when isUpdate
-  const [service, setService] = useState<Service>(defaultCollection!.find((s) => s.id === defaultServiceId)!)
-  // const [loading, setLoading] = useState(false)
+  const [service, setService] = useState<Service | undefined>(defaultCollection?.find((s) => s.id === defaultServiceId))
 
-  console.log({ name, defaultName, errors, defaultCollection })
-
-  // const isDisabled = !name // || !apiJsonSpec
+  const isDisabled = !name || !apiJsonSpec
   const isUpdate = defaultServiceId !== undefined
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We're sure this is safe
-    const textarea = document.getElementById('api_docs_service_body')! as HTMLTextAreaElement
-    const editor = window.CodeMirror.fromTextArea(textarea, {
-      // @ts-expect-error TS is complaining, TODO: check @types/codemirror version so it matches with codemirror version
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      mode: 'application/json',
-      lineWrapping: true,
-      lineNumbers: true,
-      theme: 'neat'
-    })
-    $(textarea).on('change', function (){ editor.setValue(textarea.value) })
-  }, [])
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -88,7 +69,6 @@ const ApiDocsForm: FunctionComponent<Props> = ({
         action={url}
         id="new_api_docs"
         method="post"
-        // onSubmit={() => { setLoading(true) }}
         // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />
@@ -110,7 +90,8 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
 
-        {isUpdate && defaultCollection && <ServiceSelect service={service} services={defaultCollection} setService={setService} />}
+        {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- service, defaultCollection and defaultServiceId are always defined when isUpdate */}
+        {isUpdate && defaultCollection && <ServiceSelect service={service!} services={defaultCollection} setService={setService} />}
 
         <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
@@ -125,8 +106,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <ActionGroup>
           <Button
-            // data-testid="newBackendCreateBackend-buttonSubmit"
-            // isDisabled={isDisabled}
+            isDisabled={isDisabled}
             type="submit"
             variant="primary"
           >

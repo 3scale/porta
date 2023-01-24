@@ -3,7 +3,7 @@ import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { IRecord as Service } from 'Types'
 
-interface ApiDocsService {
+interface ApiDocsServiceData {
   name: string;
   published: boolean;
   description: string;
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const { dataset } = container
 
-  const service = safeFromJsonString<ApiDocsService>(dataset.service) ?? {} as ApiDocsService
+  const service = safeFromJsonString<ApiDocsServiceData>(dataset.service) ?? {} as ApiDocsServiceData
 
   const { 
     name, 
@@ -45,8 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     skipSwaggerValidations,
     url
   } = service
-
-  console.log({ service })
 
   ApiDocsFormWrapper({
     name,

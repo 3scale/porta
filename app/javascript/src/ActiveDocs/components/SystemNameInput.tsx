@@ -34,7 +34,7 @@ const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = f
           </FormAlert>
         </>)}
       helperTextInvalid={errors}
-      label="SystemName"
+      label="System name"
       validated={validated}
     >
       <TextInput
