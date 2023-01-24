@@ -11,15 +11,15 @@ module Tasks
       end
 
       def test_fix_pagination_href
-        assert_equal true,  @page.published.include?('{{ part.link }}')
-        assert_equal false, @page.published.include?('{{ part.url }}')
+        assert_includes @page.published, '{{ part.link }}'
+        assert_not_includes @page.published, '{{ part.url }}'
 
         execute_rake_task 'cms/cms.rake', 'cms:fix:pagination_href'
 
         @page.reload
 
-        assert_equal true,  @page.published.include?('{{ part.url }}')
-        assert_equal false, @page.published.include?('{{ part.link }}')
+        assert_includes @page.published, '{{ part.url }}'
+        assert_not_includes @page.published, '{{ part.link }}'
       end
     end
 
