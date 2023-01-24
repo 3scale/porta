@@ -8,29 +8,44 @@ class Admin::Api::CMS::TemplateService
   def initialize(current_account, params)
     @params = params
     @current_account = current_account
-    @type = params.delete('type')
     @section_id = params.delete('section_id')
     @section_name = params.delete('section_name')
     @layout_id = params.delete('layout_id')
     @layout_name = params.delete('layout_name')
   end
 
-  attr_reader :current_account, :params, :type, :section_id, :section_name, :layout_id, :layout_name
+  attr_reader :current_account, :params, :section_id, :section_name, :layout_id, :layout_name
 
   class Create < Admin::Api::CMS::TemplateService
+
+    def initialize(current_account, params)
+      super current_account, params
+      @type = params.delete('type')&.to_sym
+    end
+
+    attr_reader :type
+
     def call
       collection = { page: current_account.pages,
                       partial: current_account.partials,
-                      layout: current_account.layouts }[type.to_sym]
+                      layout: current_account.layouts }[type]
 
       raise UnknownTemplateTypeError, "Unknown template type '#{type}'" unless type && collection
 
       template = collection.new(params)
-      template.section ||= find_section if template.respond_to?(:section)
-      template.layout ||= find_layout if template.respond_to?(:layout)
+      attach_section_layout(template)
       template.save
 
       template
+    end
+
+    private
+
+    def attach_section_layout(template)
+      return unless type == :page
+
+      template.section ||= find_section
+      template.layout ||= find_layout
     end
   end
 
@@ -38,22 +53,27 @@ class Admin::Api::CMS::TemplateService
     def initialize(template, current_account, params)
       super current_account, params
       @template = template
+      @type = template.class
     end
 
-    attr_reader :template
+    attr_reader :template, :type
 
     def call
-      if template.respond_to?(:section)
-        section = find_section
-        template.section = section if section.present?
-      end
-      if template.respond_to?(:layout)
-        layout = find_layout
-        template.layout = layout if layout.present?
-      end
+      attach_section_layout
       template.update(params)
 
       template
+    end
+
+    private
+
+    def attach_section_layout
+      return unless type == CMS::Page
+
+      section = find_section
+      template.section = section if section.present?
+      layout = find_layout
+      template.layout = layout if layout.present?
     end
   end
 
