@@ -265,7 +265,8 @@
             {
               "name": "title",
               "description": "Title of the section",
-              "paramType": "query"
+              "paramType": "query",
+              "required": true
             },
             {
               "name": "public",

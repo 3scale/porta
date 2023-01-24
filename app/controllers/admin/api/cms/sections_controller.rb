@@ -33,7 +33,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ op.group = "cms_sections"
   #
   ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query"
+  ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query", :required => true
   ##~ op.parameters.add :name => "public", :description => "Public or not", :default => "true", :type => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "parent_id", :description => "ID of a parent section", :paramType => "query", :default => "root section id", :type => "int"
   ##~ op.parameters.add :name => "partial_path", :description => "Path of the section", :paramType => "query"
