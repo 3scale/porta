@@ -40,8 +40,14 @@ When "they try to update the spec with invalid data" do
   click_on 'Update spec'
 end
 
+When "they try to update the spec with an invalid JSON spec" do
+  fill_in_api_docs_service_body('{"swagger": "foo"}')
+  click_on 'Update spec'
+end
+
 When "they try to update the spec with valid data" do
   find('#api_docs_service_name').set('NewActiveDocsName')
+  assert find('input[name="api_docs_service[system_name]"]').disabled?
   check 'Publish?'
   fill_in('Description', with: 'New description')
   pf4_select('New service', from: 'Service')
@@ -52,7 +58,11 @@ end
 
 Then "they should see the errors" do
   assert has_css?('#api_docs_service_name ~ .pf-m-error', text: "can't be blank")
-  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: "JSON Spec is invalid")
+  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_json'))
+end
+
+Then "they should see the swagger is invalid" do
+  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_swagger'))
 end
 
 Then "they should see the updated spec" do
