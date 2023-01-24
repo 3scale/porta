@@ -168,6 +168,35 @@ build-envs:
 
 commands: # reusable commands with parameters
 
+  notify_failure:
+    steps:
+      - run:
+          name: Notify Slack about tests failure
+          command: |
+            curl -X POST -H 'Content-type: application/json' \
+            --data \
+            "{ \
+              \"attachments\": [ \
+              { \
+                \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
+                \"color\": \"#CD0000\", \
+                \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
+                \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
+                \"title\": \"Job: $CIRCLE_JOB \", \
+                \"title_link\": \"$CIRCLE_BUILD_URL\", \
+                \"text\": \"$CIRCLE_BUILD_URL\", \
+                \"fields\": [ \
+                { \
+                  \"title\": \"Commit\", \
+                  \"value\": \"$CIRCLE_SHA1\", \
+                  \"short\": false \
+                } \
+                ] \
+              } \
+              ] \
+            }" $SLACK_WEBHOOK_SYSTEM
+          when: on_fail
+
   install-gem-dependencies:
     parameters:
       extra-deps:
@@ -230,6 +259,7 @@ commands: # reusable commands with parameters
             echo "bundle exec rspec --format progress ${TESTS}"
             bundle exec rspec --format progress ${TESTS}
       - upload-artifacts
+      - notify_failure
 
   cucumber-tests:
     parameters:
@@ -261,6 +291,7 @@ commands: # reusable commands with parameters
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
+      - notify_failure
 
   rails-tests:
     parameters:
@@ -282,6 +313,7 @@ commands: # reusable commands with parameters
             echo "bundle exec rake test:run  TESTOPTS=--verbose --verbose --trace TEST='${TESTS}'"
             bundle exec rake test:run TEST="${TESTS}" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
+      - notify_failure
 
   save-gem-cache:
     steps:
@@ -728,37 +760,6 @@ jobs:
               ] \
             }" $SLACK_WEBHOOK_SYSTEM
 
-  notify_failure:
-    docker:
-      - image: cimg/base:current
-    steps:
-      - run:
-          name: Notify Slack about tests failure
-          command: |
-            curl -X POST -H 'Content-type: application/json' \
-            --data \
-            "{ \
-              \"attachments\": [ \
-              { \
-                \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-                \"color\": \"#CD0000\", \
-                \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
-                \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-                \"title\": \"Job: $CIRCLE_JOB \", \
-                \"title_link\": \"$CIRCLE_BUILD_URL\", \
-                \"text\": \"$CIRCLE_BUILD_URL\", \
-                \"fields\": [ \
-                { \
-                  \"title\": \"Commit\", \
-                  \"value\": \"$CIRCLE_SHA1\", \
-                  \"short\": false \
-                } \
-                ] \
-              } \
-              ] \
-            }" $SLACK_WEBHOOK_SYSTEM
-          when: on_fail
-
   notify_success:
     docker:
       - image: cimg/base:current
@@ -837,14 +838,6 @@ workflows:
             - integration
             - functional
           <<: *only-master-filter
-      - notify_failure:
-          requires:
-            - rspec
-            - unit
-            - cucumber
-            - integration
-            - functional
-          <<: *only-master-filter
 
   postgres_build:
     jobs:
@@ -881,14 +874,6 @@ workflows:
           requires:
             - assets_precompile
       - notify_success:
-          requires:
-            - rspec-postgres
-            - unit-postgres
-            - cucumber-postgres
-            - integration-postgres
-            - functional-postgres
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - rspec-postgres
             - unit-postgres
@@ -951,15 +936,6 @@ workflows:
             - functional-oracle
           <<: *only-master-filter
 
-      - notify_failure:
-          requires:
-            - rspec-oracle
-            - unit-oracle
-            - cucumber-oracle
-            - integration-oracle
-            - functional-oracle
-          <<: *only-master-filter
-
   javascript_tests:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
@@ -985,11 +961,6 @@ workflows:
           requires:
             - dependencies_npm
       - notify_success:
-          requires:
-            - lint
-            - jest
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - lint
             - jest
@@ -1040,14 +1011,6 @@ workflows:
             - integration
             - functional
           <<: *only-master-filter
-      - notify_failure:
-          requires:
-            - rspec
-            - unit
-            - cucumber
-            - integration
-            - functional
-          <<: *only-master-filter
     <<: *nightly-trigger
 
   postgres_nightly_build_ruby26:
@@ -1084,14 +1047,6 @@ workflows:
           requires:
             - assets_precompile
       - notify_success:
-          requires:
-            - rspec-postgres
-            - unit-postgres
-            - cucumber-postgres
-            - integration-postgres
-            - functional-postgres
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - rspec-postgres
             - unit-postgres
@@ -1153,15 +1108,6 @@ workflows:
             - integration-oracle
             - functional-oracle
           <<: *only-master-filter
-
-      - notify_failure:
-          requires:
-            - rspec-oracle
-            - unit-oracle
-            - cucumber-oracle
-            - integration-oracle
-            - functional-oracle
-          <<: *only-master-filter
     <<: *nightly-trigger
 
   javascript_nightly_build_ruby26:
@@ -1186,11 +1132,6 @@ workflows:
           requires:
             - dependencies_npm
       - notify_success:
-          requires:
-            - lint
-            - jest
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - lint
             - jest
