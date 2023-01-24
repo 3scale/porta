@@ -37,6 +37,7 @@ interface Props {
     systemName?: string[];
     description?: string[];
   };
+  isUpdate: boolean;
 }
 
 const ApiDocsForm: FunctionComponent<Props> = ({
@@ -44,23 +45,23 @@ const ApiDocsForm: FunctionComponent<Props> = ({
   systemName: defaultSystemName,
   published: defaultPublished,
   serviceId: defaultServiceId,
-  collection: defaultCollection,
+  collection,
   description: defaultdescription,
   apiJsonSpec: defaultApiJsonSpec,
-  skipSwaggerValidations: defaultskipSwaggerValidations,
+  skipSwaggerValidations: defaultSkipSwaggerValidations,
   url,
-  errors
+  errors,
+  isUpdate
 }) => {
   const [name, setName] = useState<string>(defaultName)
   const [systemName, setSystemName] = useState<string>(defaultSystemName)
   const [published, setPublished] = useState<boolean>(defaultPublished)
   const [description, setDescription] = useState(defaultdescription)
   const [apiJsonSpec, setApiJsonSpec] = useState(defaultApiJsonSpec)
-  const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultskipSwaggerValidations)
-  const [service, setService] = useState<Service | undefined>(defaultCollection?.find((s) => s.id === defaultServiceId))
+  const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultSkipSwaggerValidations)
+  const [service, setService] = useState<Service | undefined>(collection?.find((s) => s.id === defaultServiceId) ?? collection?.[0])
 
   const isDisabled = !name || !apiJsonSpec
-  const isUpdate = defaultServiceId !== undefined
 
   return (
     <PageSection variant={PageSectionVariants.light}>
@@ -77,7 +78,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <NameInput errors={errors.name} name={name} setName={setName} />
 
-        <SystemNameInput errors={errors.systemName} isDisabled={defaultServiceId !== undefined} setSystemName={setSystemName} systemName={systemName} />
+        <SystemNameInput errors={errors.systemName} isDisabled={isUpdate} setSystemName={setSystemName} systemName={systemName} />
 
         <Checkbox 
           aria-label="Is Published"
@@ -90,8 +91,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
 
-        {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- service, defaultCollection and defaultServiceId are always defined when isUpdate */}
-        {isUpdate && defaultCollection && <ServiceSelect service={service!} services={defaultCollection} setService={setService} />}
+        { collection && <ServiceSelect service={service} services={collection} setService={setService} />}
 
         <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 

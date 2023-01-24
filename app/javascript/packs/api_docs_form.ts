@@ -18,6 +18,7 @@ interface ApiDocsServiceData {
     systemName?: string[];
   };
   url: string;
+  isUpdate: boolean;
 }
 
 const containerId = 'api-docs-container'
@@ -43,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     body,
     errors,
     skipSwaggerValidations,
-    url
+    url,
+    isUpdate
   } = service
 
   ApiDocsFormWrapper({
@@ -56,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     collection,
     apiJsonSpec: body,
     skipSwaggerValidations,
-    url
+    url,
+    isUpdate
   }, containerId)
 })
