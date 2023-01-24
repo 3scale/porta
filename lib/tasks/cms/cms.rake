@@ -213,7 +213,7 @@ namespace :cms do
 
     desc 'Fixes empty titles in sections'
     task :section_empty_titles => :environment do
-      CMS::Section.unscoped.where(title: ['', nil]).update_all("title = id")
+      CMS::Section.unscoped.where(title: ['', nil]).update_all("title = system_name")
     end
   end
 
