@@ -195,9 +195,6 @@ commands: # reusable commands with parameters
 
   clone-oracle-libraries:
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "aa:64:17:1e:6c:ab:2f:d2:ad:35:59:99:05:31:3e:87"
       - run:
           name: "Fetch oracle libraries"
           command: |
