@@ -1,51 +1,7 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Client, HostedFields, ThreeDSecure } from 'braintree-web'
 import type { HostedFieldsFieldDataFields, HostedFieldsTokenizePayload } from 'braintree-web/modules/hosted-fields'
 import type { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions } from 'braintree-web/modules/three-d-secure'
 import type { HostedFieldsOptions, BillingAddressData } from 'PaymentGateways/braintree/types'
-
-const validationConstraints = {
-  'customer[first_name]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[last_name]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[phone]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][company]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][street_address]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][postal_code]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][locality]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][country_name]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  }
-}
 
 const hostedFieldOptions = {
   styles: {
@@ -136,7 +92,6 @@ const veryfyCard = (
 }
 
 export {
-  validationConstraints,
   hostedFieldOptions,
   createBraintreeClient,
   createHostedFieldsInstance,
