@@ -134,7 +134,7 @@ module Pdf
 
     def graph_key_formatter(usage)
       if @period == :day
-        ->(point) { (point % 4).zero? ? sprintf("%02d:00", point.succ) : "" }
+        ->(point) { (point % 4).zero? ? sprintf("%02d:00", point) : "" }
       else
         since = Time.parse(usage.dig(:period, :since))
         granularity = usage.dig(:period, :granularity)
@@ -148,7 +148,7 @@ module Pdf
       return unless usage
 
       options = {
-        graph_title: "Traffic",
+        graph_title: "Traffic - #{usage.dig(:metric, :name)}",
         show_graph_title: true,
         key: false,
         area_fill: false,
