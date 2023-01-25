@@ -10,7 +10,7 @@ Feature: ActiveDocs
     Given an admin wants to add a spec to a new service
     When they are reviewing the service's active docs
     And follow "Create your first spec"
-    And submit the ActiveDocs with <swagger version> form
+    And submit the ActiveDocs form with <swagger version>
     Then they should see the new spec
 
     Examples:
@@ -18,6 +18,11 @@ Feature: ActiveDocs
       | Swagger 1.2     |
       | Swagger 2       |
       | OAS 3.0         |
+
+  Scenario: Index does not show the API column
+    Given a service with a Swagger 2 spec
+    When an admin is reviewing the service's active docs
+    Then the table should not contain a column for the service
 
   @javascript 
   Scenario Outline: Autocomplete 
@@ -48,7 +53,7 @@ Feature: ActiveDocs
     Given a service with a <swagger version> spec
     And an admin is reviewing the service's active docs
     When follow "Create a new spec"
-    And submit the ActiveDocs with <swagger version> form
+    And submit the ActiveDocs form with <swagger version>
     Then they should see the new spec
 
     Examples:

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-Given "an admin wants to add a spec to a new service" do
-  @service = FactoryBot.create(:service, account: @provider)
+Given /^an admin wants to add a spec to a new service(?: "(.*)")?$/ do |service_name|
+  @service = FactoryBot.create(:service, {account: @provider, name: service_name}.compact)
   assert_empty @service.api_docs_services
 end
 
@@ -9,11 +9,14 @@ When /^(?:they are|an admin is) reviewing the service's active docs$/ do
   visit admin_service_api_docs_path(@service)
 end
 
-And "submit the ActiveDocs with {spec_version} form" do |swagger_version|
+When /^(?:they are|an admin is) reviewing the developer portal's active docs$/ do
+  visit admin_api_docs_services_path
+end
+
+And "submit the ActiveDocs form with {spec_version}" do |swagger_version|
   fill_in('Name', with: 'ActiveDocsName')
   fill_in_api_docs_service_body(spec_body_builder(swagger_version))
   click_on 'Create spec'
-  click_on 'Create spec' #TODO: Remove the second click hack
 end
 
 Then "they should see the new spec" do
@@ -36,6 +39,8 @@ end
 
 When "they try to update the spec with invalid data" do
   fill_in('Name', with: '')
+  assert has_button?('Update spec', disabled: true)
+  fill_in('Name', with: 'Invalid')
   fill_in_api_docs_service_body('Invalid')
   click_on 'Update spec'
 end
@@ -46,18 +51,18 @@ When "they try to update the spec with an invalid JSON spec" do
 end
 
 When "they try to update the spec with valid data" do
+  @new_service = Service.find_by!(name: 'New service')
   find('#api_docs_service_name').set('NewActiveDocsName')
   assert find('input[name="api_docs_service[system_name]"]').disabled?
   check 'Publish?'
   fill_in('Description', with: 'New description')
-  pf4_select('New service', from: 'Service')
+  pf4_select(@new_service.name, from: 'Service')
   fill_in_api_docs_service_body(FactoryBot.build(:api_docs_service).body)
   check 'Skip swagger validations'
   click_on 'Update spec'
 end
 
 Then "they should see the errors" do
-  assert has_css?('#api_docs_service_name ~ .pf-m-error', text: "can't be blank")
   assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_json'))
 end
 
@@ -69,7 +74,7 @@ Then "they should see the updated spec" do
   assert has_css?('.operations', text: 'Hide')
   assert has_text?('My spec') # Comes from Factory
   assert_flash 'ActiveDocs Spec was successfully updated.'
-  assert_equal Service.find_by!(name: 'New service').id, @api_doc_service.reload.service_id
+  assert_equal @new_service.id, @api_doc_service.reload.service_id
 end
 
 Then "an admin can edit the spec" do
@@ -114,4 +119,14 @@ Then "swagger should escape properly the curl string" do
   page.click_button 'Try it out!'
   curl_commmand = find_all('div', text: /curl/i).last
   curl_commmand.has_text?('Authorization: Oauth:"test"')
+end
+
+Then "the table {should} contain a column for the service" do |should|
+  within 'table thead' do
+    assert_equal should, has_content?('API')
+  end
+
+  within 'table tbody' do
+    assert_equal should, has_content?(@service.name)
+  end
 end

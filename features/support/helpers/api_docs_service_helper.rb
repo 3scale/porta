@@ -7,9 +7,8 @@ module ApiDocsServiceHelper
   end
 
   def fill_in_api_docs_service_body(value)
-    # HACK: fill_in('API JSON Spec', visible: :hidden, with: FactoryBot.build(:api_docs_service).body) doesn't work because capybara rises ElementNotInteractableError
-    page.execute_script("$('textarea#api_docs_service_body').css('display','')")
-    find('textarea#api_docs_service_body').set(value)
+    page.execute_script "document.querySelector('.CodeMirror').CodeMirror.setValue(#{value.dump})"
+
     find('.pf-c-page__main-section').click # HACK: need to click outside to lose focus
   end
 
