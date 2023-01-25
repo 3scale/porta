@@ -47,11 +47,12 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
      "total"=>3,
      "application"=>
       {"name"=>@cinstance.name,
-       "plan"=>{"name"=>@cinstance.plan.name, "id"=>@cinstance.plan.id},
-       "id"=>@cinstance.id,
-       "account"=>{"name"=>@cinstance.user_account.org_name, "id"=>@cinstance.user_account.id},
-       "description"=>@cinstance.description,
-       "state"=>@cinstance.state,
+        "plan"=>{"name"=>@cinstance.plan.name, "id"=>@cinstance.plan.id},
+        "id"=>@cinstance.id,
+        "account"=>{"name"=>@cinstance.user_account.org_name, "link"=>"/buyers/accounts/#{@cinstance.user_account.id}", "id"=>@cinstance.user_account.id},
+        "description"=>@cinstance.description,
+        "state"=>@cinstance.state,
+        "link"=>"/p/admin/applications/#{@cinstance.id}",
        "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 21 + [2] + [0] * 7 + [1, 0],
      "previous_total" => 1,
@@ -90,9 +91,10 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
       {"name"=>@cinstance.name,
        "plan"=>{"name"=>@cinstance.plan.name, "id"=>@cinstance.plan.id},
        "id"=>@cinstance.id,
-       "account"=>{"name"=>@cinstance.user_account.org_name, "id"=>@cinstance.user_account.id},
+       "account"=>{"name"=>@cinstance.user_account.org_name, "link"=>"/buyers/accounts/#{@cinstance.user_account.id}", "id"=>@cinstance.user_account.id},
        "description"=>@cinstance.description,
        "state"=>@cinstance.state,
+       "link"=>"/p/admin/applications/#{@cinstance.id}",
        "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 21 + [2] + [0] * 7 + [1, 0]
 
@@ -112,9 +114,10 @@ class Stats::ClientsTest < ActionDispatch::IntegrationTest
       {"name"=>@cinstance.name,
        "plan"=>{"name"=>@cinstance.plan.name, "id"=>@cinstance.plan.id},
        "id"=>@cinstance.id,
-       "account"=>{"name"=>@cinstance.user_account.org_name, "id"=>@cinstance.user_account.id},
+       "account"=>{"name"=>@cinstance.user_account.org_name, "link"=>"/buyers/accounts/#{@cinstance.user_account.id}", "id"=>@cinstance.user_account.id},
        "description"=>@cinstance.description,
        "state"=>@cinstance.state,
+       "link"=>"/p/admin/applications/#{@cinstance.id}",
        "service"=>{"id"=>@cinstance.service_id}},
      "values"=> [0] * 29 + [1, 0]
   end

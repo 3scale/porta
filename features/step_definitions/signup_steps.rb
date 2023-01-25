@@ -63,9 +63,15 @@ When /^I fill in the signup fields as "([^"]*)"$/ do |name|
   click_on 'Sign up'
 end
 
-When /^I fill in the invalid signup fields$/ do
+When /^I fill in the invalid signup fields( in a non-suspicious way)?$/ do |non_suspicious|
+  step %(15 seconds pass) if non_suspicious
   step %(I fill in "Email" with "invalid email")
   step %(I press "Sign up")
+end
+
+When "I suspiciously fill in the signup fields as {string}" do |name|
+  fill_in("confirmation", :with => "1")
+  step %(I fill in the signup fields as "#{name}")
 end
 
 When /^I complete the signup process$/ do
@@ -153,4 +159,16 @@ Then(/^I should see a correct and un-editable admin portal subdomain$/) do
   portal = ReadonlyField.readonly_field('Admin Portal')
   should have_xpath portal
   assert_equal 'hello-monster-admin', find(:xpath, portal).value
+end
+
+Then "the buyer doesn't need to pass the captcha after signup form is filled wrong" do
+  step %(15 seconds pass)
+  step %(I fill in "Email" with "invalid email")
+  step %(I press "Sign up")
+  step %(I should not see the captcha)
+end
+
+Then "the buyer will need to pass the captcha after signup form is filled in too quickly" do
+  step %(I suspiciously fill in the signup fields as "hugo")
+  step %(I should see the captcha)
 end

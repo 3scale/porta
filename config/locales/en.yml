@@ -62,7 +62,7 @@ en:
     stats: 'Analytics API'
     account_management: 'Account Management API'
     policy_registry: 'Policy Registry API'
-    cms: 'Developer Portal API'
+    cms: 'Developer Portal API (Tech Preview)'
     ro: 'Read Only'
     rw: 'Read & Write'
   notification_category_titles:
@@ -149,7 +149,7 @@ en:
           analytics_api: 'Analytics API'
           billing_api: 'Billing API'
           master_api: 'Master API'
-          cms_api: 'CMS API'
+          cms_api: 'Developer Portal API (Tech Preview)'
       base:
         index:
           update_link_text: "Learn how to upgrade to Swagger 2"
@@ -770,10 +770,20 @@ en:
   activemodel:
     attributes:
       customer:
-        first_name: First Name
-        last_name: Last Name
+        first_name: First name
+        last_name: Last name
+        phone: 'Phone'
       billing_address:
-        street_address: Street Address
+        name: Contact / Company Name
+        address1: Address
+        address2: Address (line 2)
+        street_address: Street address
+        postal_code: ZIP / Postal Code
+        zip: ZIP / Postal Code
+        locality: City
+        region: State/Region
+        country_name: Country
+        state: State
     errors:
       models:
         policies_config:
@@ -1032,6 +1042,7 @@ en:
         self_subdomain: Admin Portal
         state_region: State / Region
         self_domain: Admin domain
+        timezone: Time Zone
         vat_code: VAT Code
         po_number: PO Number
         telephone_number: Telephone Number

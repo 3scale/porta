@@ -1,51 +1,7 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Client, HostedFields, ThreeDSecure } from 'braintree-web'
 import type { HostedFieldsFieldDataFields, HostedFieldsTokenizePayload } from 'braintree-web/modules/hosted-fields'
 import type { ThreeDSecureVerificationData, ThreeDSecureVerifyOptions } from 'braintree-web/modules/three-d-secure'
 import type { HostedFieldsOptions, BillingAddressData } from 'PaymentGateways/braintree/types'
-
-const validationConstraints = {
-  'customer[first_name]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[last_name]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[phone]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][company]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][street_address]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][postal_code]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][locality]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  },
-  'customer[credit_card][billing_address][country_name]': {
-    presence: {
-      message: '^isMandatory'
-    }
-  }
-}
 
 const hostedFieldOptions = {
   styles: {
@@ -123,6 +79,7 @@ const veryfyCard = (
     bin: payload.details.bin,
     challengeRequested: true,
     amount: 0.0,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     billingAddress,
     onLookupComplete: (_data: ThreeDSecureVerificationData, next: () => void) => { next() } // From https://github.com/DefinitelyTyped/DefinitelyTyped/pull/61818/commits/8411fba432567e70b1cd6bf7c79a88e7dd9a6aee
   } as ThreeDSecureVerifyOptions /* TODO: 2 things wrong with this:
@@ -135,7 +92,6 @@ const veryfyCard = (
 }
 
 export {
-  validationConstraints,
   hostedFieldOptions,
   createBraintreeClient,
   createHostedFieldsInstance,

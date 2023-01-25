@@ -5,7 +5,7 @@ Feature: Provider invoices for 3scale
 
   Background:
     Given the time is 1st May 2009
-      And provider "master" is charging
+      And provider "master" is charging its buyers
     Given an application plan "Base" of provider "master" for 0 monthly
       And an application plan "Mega" of provider "master" for 31 monthly
       And an application plan "Pro" of provider "master" for 3100 monthly

@@ -11,7 +11,7 @@ ActiveSupport.on_load(:active_record) do
 end
 
 # If you precompile assets before deploying to production, use this line
-Bundler.require(*Rails.groups(:assets => %w[development production preview test]))
+Bundler.require(*Rails.groups(:oracle, assets: %w[development production preview test]))
 # If you want your assets lazily compiled in production, use this line
 # Bundler.require(:default, :assets, Rails.env)
 
@@ -38,10 +38,6 @@ module System
     config.load_defaults 5.1
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
-    # Enable per-form CSRF tokens. Rails before 5.0 had false.
-    config.action_controller.per_form_csrf_tokens = false
-    # Enable origin-checking CSRF mitigation. Rails before had false.
-    config.action_controller.forgery_protection_origin_check = false
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
     config.action_view.form_with_generates_remote_forms = false
 
