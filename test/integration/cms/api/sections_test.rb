@@ -109,5 +109,56 @@ module CMS
       end
     end
 
+    class SystemNameTest < ActionDispatch::IntegrationTest
+      def setup
+        @provider = FactoryBot.create(:provider_account)
+        host! @provider.external_admin_domain
+      end
+
+      test 'create without title' do
+
+        post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml}
+
+        assert_response 422
+
+        doc = Nokogiri::XML::Document.parse(@response.body)
+        error = doc.xpath('//error').text
+
+        assert_match "Title can't be blank", error
+      end
+
+      test 'create with title but without system_name' do
+        expected_title = 'New Section'
+        expected_sysname = 'New Section'
+
+        post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml, title: expected_title}
+
+        assert_response :success
+
+        doc = Nokogiri::XML::Document.parse(@response.body)
+        title = doc.xpath('//title').text
+        sysname = doc.xpath('//system_name').text
+
+        assert_equal expected_title, title
+        assert_equal expected_sysname, sysname
+      end
+
+      test 'create with title and system_name' do
+        expected_title = 'New Section'
+        expected_sysname = 'new_section'
+
+        post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml,
+                                                    title: expected_title, system_name: expected_sysname }
+
+        assert_response :success
+
+        doc = Nokogiri::XML::Document.parse(@response.body)
+        title = doc.xpath('//title').text
+        sysname = doc.xpath('//system_name').text
+
+        assert_equal expected_title, title
+        assert_equal expected_sysname, sysname
+      end
+    end
   end
 end

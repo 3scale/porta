@@ -2,7 +2,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_section_id = { :name => "id", :description => "ID of the section", :dataType => "int", :required => true, :paramType => "path" }
 
-  wrap_parameters :section, include: [:title, :public, :parent_id, :partial_path]
+  wrap_parameters :section, include: [:title, :public, :parent_id, :partial_path, :system_name]
 
   before_action :find_section, only: [:show, :update, :destroy]
 
