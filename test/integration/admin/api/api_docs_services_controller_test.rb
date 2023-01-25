@@ -83,9 +83,17 @@ class Admin::Api::ApiDocsServicesControllerTest < ActionDispatch::IntegrationTes
       assert_equal old_system_name, api_docs_service.reload.system_name
     end
 
-    def test_update_invalid_params
+    def test_update_invalid_json
       old_body = api_docs_service.body
       put admin_api_active_doc_path(api_docs_service, format: :json, access_token: @token), params: update_params(body: '{apis: []}')
+      assert_response :unprocessable_entity
+      assert_contains JSON.parse(response.body).dig('errors', 'body'), 'Invalid JSON'
+      assert_equal old_body, api_docs_service.reload.body
+    end
+
+    def test_update_invalid_swagger
+      old_body = api_docs_service.body
+      put admin_api_active_doc_path(api_docs_service, format: :json, access_token: @token), params: update_params(body: '{"I am JSON": "Son of Jay"}')
       assert_response :unprocessable_entity
       assert_contains JSON.parse(response.body).dig('errors', 'body'), 'JSON Spec is invalid'
       assert_equal old_body, api_docs_service.reload.body
