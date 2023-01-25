@@ -196,6 +196,7 @@ commands: # reusable commands with parameters
               ] \
             }" $SLACK_WEBHOOK_SYSTEM
           when: on_fail
+          <<: *only-master-filter
 
   install-gem-dependencies:
     parameters:
