@@ -44,7 +44,7 @@ class Admin::Api::CMS::TemplateService
     def attach_section_layout(template)
       return unless type == :page
 
-      template.section ||= find_section
+      template.section ||= find_section || current_account.sections.root
       template.layout ||= find_layout
     end
   end
@@ -84,9 +84,7 @@ class Admin::Api::CMS::TemplateService
 
     return scope.find_by(id: section_id) if section_id.present?
 
-    return scope.find_by(system_name: section_name) if section_name.present?
-
-    scope.root
+    scope.find_by(system_name: section_name) if section_name.present?
   end
 
   def find_layout

@@ -133,7 +133,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
         put :update, params: { id: page.id, type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_equal @section, page.section
+        assert_equal @section, page.reload.section
       end
 
       def test_update_page_section_id
@@ -159,7 +159,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
         put :update, params: { id: page.id, type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_equal @layout, page.layout
+        assert_equal @layout, page.reload.layout
       end
 
       def test_update_page_layout_id
