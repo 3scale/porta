@@ -382,7 +382,6 @@ ParameterType(
 )
 
 ParameterType(
-<<<<<<< THREESCALE-8034-Improve-JSON-Spec-Validation
   name: 'spec_version',
   regexp: /Swagger 1.2|Swagger 2|OAS 3.0/,
   transformer: ->(version) do
@@ -392,7 +391,9 @@ ParameterType(
       'OAS 3.0' => '3.0'
     }[version]
   end
-=======
+)
+
+ParameterType(
   name: 'valid',
   regexp: /valid|invalid/,
   transformer: ->(value) { value == 'valid' }
@@ -408,5 +409,4 @@ ParameterType(
   name: 'can',
   regexp: /can|can't|cannot/,
   transformer: ->(value) { value == 'can' }
->>>>>>> master
 )
