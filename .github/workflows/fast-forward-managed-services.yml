@@ -21,4 +21,7 @@ jobs:
     needs: check
     if: ${{ needs.check.outputs.RUN_TODAY == 1 }}
     uses: ./.github/workflows/fast-forward-branch.yml
+    with:
+      ref: 'master'
+      to_branch: 'managed-services'
     secrets: inherit

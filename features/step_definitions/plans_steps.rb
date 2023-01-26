@@ -42,8 +42,9 @@ Given(/^the provider has a(nother|\ second|\ third)? (default )?paid (applicatio
     'service' => 10,
     'account' => 1
   }
+  service = @service || @provider.default_service
   plan_name = (plan_name || default_plan_names[plan_type])
-  plan = create_plan plan_type.to_sym, name: plan_name, issuer: @service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
+  plan = create_plan plan_type.to_sym, name: plan_name, issuer: service, cost: (cost || default_plan_costs[plan_type]), published: true, default: default.present?
   instance_variable_set("@paid_#{plan_type_name}_plan", plan)
 end
 
@@ -59,20 +60,13 @@ Given /^(?:a|an)( default)?( published)? (#{PLANS}) plan "([^"]*)" (?:of|for) (?
   create_plan type, :name => plan_name, :issuer => issuer, :cost => cost, :default => default, :published => published
 end
 
-Given "{buyer} signed up for plan(s) {}" do |buyer, lst|
-  lst.each do |name|
-    name = name.strip.delete('"')
-    sign_up(buyer, name)
-  end
-end
-
 Given /^the buyer signed up for provider's paid (application|service|account) plan$/ do |plan_type|
   plan = instance_variable_get("@paid_#{plan_type}_plan")
   sign_up(@buyer, plan.name)
 end
 
-Given /^the buyer signed up for plan "([^"]*)"$/ do |plan_name|
-  sign_up(@buyer, plan_name)
+Given "{buyer} signed up for plan {string}" do |buyer, plan_name|
+  sign_up(buyer, plan_name)
 end
 
 Given /^the buyer changed to plan "([^"]*)"$/ do |plan_name|
@@ -181,11 +175,15 @@ def default_service
 end
 
 def select_default_plan(plan)
-  select = find(:css, '#default_plan_card .pf-c-select')
-  select.find(:css, '.pf-c-button.pf-c-select__toggle-button').click unless select[:class].include?('pf-m-expanded')
-  select.find('.pf-c-select__menu-item', text: plan.name).click
-  button = find(:css, '#default_plan_card .pf-c-button[type="submit"]')
-  button.click(wait: 5)
+  select_default_plan_by_name(plan.name)
+end
+
+def select_default_plan_by_name(name)
+  within('#default_plan_card .pf-c-select') do
+    find('.pf-c-button.pf-c-select__toggle-button').click unless current_scope[:class].include?('pf-m-expanded')
+    find('.pf-c-select__menu-item', text: name).click
+  end
+  find('#default_plan_card .pf-c-button[type="submit"]').click(wait: 5)
 end
 
 def delete_plan_from_table_action(plan)

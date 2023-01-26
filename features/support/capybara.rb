@@ -89,7 +89,6 @@ end
 
 Capybara.register_driver :chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-  # options.add_argument('--auto-open-devtools-for-tabs')
   options.add_argument('--window-size=1280,2048')
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end

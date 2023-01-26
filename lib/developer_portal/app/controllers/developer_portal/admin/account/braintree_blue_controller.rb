@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DeveloperPortal::Admin::Account
   class BraintreeBlueController < PaymentDetailsBaseController
     def show

@@ -5,7 +5,8 @@ Feature: Show invoices from account's page (#16015909)
   I want to be able to list buyer's invoices from his account page if I've billing enabled
 
   Scenario: List the invoices
-    Given a provider "xyz.3scale.localhost" with prepaid billing enabled
+    Given a provider "xyz.3scale.localhost"
+      And provider "xyz.3scale.localhost" is charging its buyers in prepaid mode
       And an application plan "Fixed" of provider "xyz.3scale.localhost" for 0 monthly
       And a buyer "zoidberg" signed up to application plan "Fixed"
       And an invoice of buyer "zoidberg" for January, 2011
@@ -19,7 +20,8 @@ Feature: Show invoices from account's page (#16015909)
       And I should still be in the "Accounts" in the main menu
 
   Scenario: Don't show invoices when billing is not enabled
-    Given a provider "xyz.3scale.localhost" with billing disabled
+    Given a provider "xyz.3scale.localhost"
+      And provider "xyz.3scale.localhost" has "finance" denied
       And an application plan "Fixed" of provider "xyz.3scale.localhost" for 0 monthly
       And a buyer "zoidberg" signed up to application plan "Fixed"
 
@@ -30,7 +32,8 @@ Feature: Show invoices from account's page (#16015909)
     Then I should not see "Invoices"
 
   Scenario: Ability to add line items to opened invoice
-     Given a provider "xyz.3scale.localhost" with prepaid billing enabled
+     Given a provider "xyz.3scale.localhost"
+        And provider "xyz.3scale.localhost" is charging its buyers in prepaid mode
         And an application plan "Fixed" of provider "xyz.3scale.localhost" for 0 monthly
         And a buyer "zoidberg" signed up to application plan "Fixed"
         And an invoice of buyer "zoidberg" for January, 2011

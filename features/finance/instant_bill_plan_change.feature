@@ -3,9 +3,12 @@ Feature: Instant biling plan change feature
   As a provider I want to charge the variable cost on plan change
 
   Background:
-    Given a provider with billing and finance enabled
-    Given the provider service allows to change application plan directly
-    And the provider has prepaid billing enabled
+    Given a provider exists
+    And current domain is the admin domain of provider "foo.3scale.localhost"
+    And I log in as provider "foo.3scale.localhost"
+    And the provider is charging its buyers in prepaid mode
+    And the provider service allows to change application plan directly
+    And the provider has "finance" visible
     Given all the rolling updates features are off
     And I have instant_bill_plan_change feature enabled
     And the provider has one buyer

@@ -95,7 +95,7 @@ gem 'ransack', '2.4.1' # we can remove line when stop using ruby 2.4
 gem 'browser', '~> 5.0.0' # we can update to lts when we stop using ruby 2.4
 gem 'diff-lcs', '~> 1.2'
 gem 'hiredis', '~> 0.6.3'
-gem 'httpclient', github: 'mikz/httpclient', branch: 'ssl-env-cert'
+gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
 gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
@@ -166,9 +166,11 @@ group :development do
 
   gem 'yard', require: false
 
-  gem 'rubocop', '1.31', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
+  gem 'rubocop', '1.39', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
+
+  gem 'reek', '6.01', require: false # Should match codeclimate's stable version of Reek. See https://docs.codeclimate.com/docs/reek
 end
 
 
@@ -236,7 +238,7 @@ group :development, :test do
   gem 'bootsnap', '~> 1.4'
   gem 'colorize'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'license_finder', '~> 6.12.0'
+  gem 'license_finder', '~> 7.0.1'
 
   gem 'pry-byebug', '>= 3.7.0'
   gem 'pry-doc', '>= 0.8', require: false
@@ -255,9 +257,11 @@ gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production preview]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
-oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
-gem 'ruby-oci8', require: false, install_if: oracle
+group :oracle do
+  oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
+  gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
+  gem 'ruby-oci8', require: false, install_if: oracle
+end
 
 gem 'kubeclient'
 gem 'jsonpath', '1.0.5' # remove line after we stop supporting ruby 2.4

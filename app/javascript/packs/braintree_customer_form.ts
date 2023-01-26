@@ -5,7 +5,7 @@ import { BraintreeFormWrapper } from 'PaymentGateways/braintree/BraintreeForm'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { Client } from 'braintree-web'
-import type { BillingAddressData } from 'PaymentGateways/braintree/types'
+import type { BraintreeFormDataset } from 'PaymentGateways/braintree/types'
 
 const CONTAINER_ID = 'braintree-form-wrapper'
 
@@ -16,23 +16,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     throw new Error('The target ID was not found: ' + CONTAINER_ID)
   }
 
-  const { clientToken, threeDSecureEnabled, formActionPath, countriesList, selectedCountryCode } = container.dataset as Record<string, string>
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: too much assumption here
-  const billingAddress = safeFromJsonString<BillingAddressData>(container.dataset.billingAddress)!
-  for (const key in billingAddress) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- FIXME
-    if (billingAddress[key as keyof BillingAddressData] === null) {
-      billingAddress[key as keyof BillingAddressData] = ''
-    }
+  const data = safeFromJsonString<BraintreeFormDataset>(container.dataset.braintreeForm)
+
+  if (!data) {
+    throw new Error('Braintree data was not provided')
   }
+  const { billingAddress, clientToken, countriesList, formActionPath, threeDSecureEnabled, selectedCountryCode } = data
+
   const braintreeClient = await createBraintreeClient(client, clientToken) as Client
 
   BraintreeFormWrapper({
     braintreeClient,
     formActionPath: formActionPath,
     countriesList: countriesList,
-    selectedCountryCode: selectedCountryCode,
+    selectedCountryCode,
     billingAddress,
-    threeDSecureEnabled: threeDSecureEnabled === 'true'
+    threeDSecureEnabled
   }, CONTAINER_ID)
 })

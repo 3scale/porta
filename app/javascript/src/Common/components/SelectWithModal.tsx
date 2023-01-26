@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SortByDirection } from '@patternfly/react-table'
 import escapeRegExp from 'lodash.escaperegexp'
 
@@ -52,11 +52,12 @@ const SelectWithModal = <T extends IRecord>({
   helperTextInvalid,
   fetchItems
 }: Props<T>): React.ReactElement => {
+  let { current: isOnMount } = useRef(true)
+
   const [count, setCount] = useState(itemsCount)
   const [isLoading, setIsLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [page, setPage] = useState(1)
-  const [isOnMount, setIsOnMount] = useState(true)
   const [query, setQuery] = useState('')
   const [pageDictionary, setPageDictionary] = useState(() => paginateCollection(initialItems, PER_PAGE))
 
@@ -106,7 +107,7 @@ const SelectWithModal = <T extends IRecord>({
     }
 
     if (isOnMount) {
-      setIsOnMount(false)
+      isOnMount = false
     } else {
       // perPage 20 to get 4 pages
       fetchItems({ page: 1, perPage: 20, query })

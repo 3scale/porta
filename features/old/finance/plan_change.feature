@@ -5,13 +5,12 @@ Feature: Change plan
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" is charging
+    Given a provider exists
+      And the provider is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
     Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
       And an application plan "PaidAsInDiplomat" of provider "foo.3scale.localhost" for 3100 monthly
-    Given the current domain is foo.3scale.localhost
 
   Scenario: Change without billed cost
       Given the time is 5th May 2009
@@ -30,7 +29,7 @@ Feature: Change plan
 
   Scenario: Should not refund but bill upgrade on PREPAID billing
       Given the time is 25th April 2009
-        And provider "foo.3scale.localhost" has prepaid billing enabled
+        And the provider is charging its buyers in prepaid mode
         And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 25th April 2009
 
        When I log in as "stallman" on foo.3scale.localhost
@@ -45,7 +44,6 @@ Feature: Change plan
 
   Scenario: Paying a fee without change plan POSTPAID
     Given the time is 28th April 2009
-      And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 28th April 2009
     When I log in as "stallman" on foo.3scale.localhost on 15th June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"
@@ -57,7 +55,6 @@ Feature: Change plan
 
   Scenario: Trial period ends and no change plan POSTPAID
     Given plan "PaidAsInLunch" has trial period of 5 days
-      And provider "foo.3scale.localhost" is charging
     Given the time is 30 April 2009
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 30th April 2009
       When time flies to 3rd June 2009
@@ -70,7 +67,6 @@ Feature: Change plan
 
   Scenario: Change on trial causes no billing
     Given plan "PaidAsInLunch" has trial period of 15 days
-      And provider "foo.3scale.localhost" is charging
       And pricing rules on plan "PaidAsInLunch":
       | Metric | Cost per unit | Min | Max      |
       | hits   |           0.1 |   1 | infinity |

@@ -21,7 +21,7 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     provider     = FactoryBot.create(:simple_provider)
     event        = Invoices::InvoicesToReviewEvent.create_and_publish!(provider)
     notification = NotificationEvent.create_and_publish!(:invoices_to_review, event)
-    user         = FactoryBot.create(:simple_admin, account: provider)
+    user         = FactoryBot.create(:simple_admin, state: :active, account: provider)
 
     user.create_notification_preferences!(preferences: { invoices_to_review: true })
 
@@ -48,6 +48,29 @@ class ProcessNotificationEventWorkerTest < ActiveSupport::TestCase
     ProcessNotificationEventWorker::UserNotificationWorker.expects(:perform_async).never
 
     refute @worker.create_notifications(notification)
+  end
+
+  def test_only_send_notifications_for_active_users
+    provider = FactoryBot.create(:simple_provider)
+    system_name = 'application_created'
+    notification = NotificationEvent.create(system_name, CustomEvent.new(provider: provider))
+
+    ProcessNotificationEventWorker::UserNotificationWorker.expects(:perform_async).with(
+      FactoryBot.create(:simple_admin, state: :active, account: provider).id,
+      notification.event_id,
+      system_name
+    ).once
+
+    non_notifiable_user_states = User.state_machine.states.map(&:name) - [:active]
+    non_notifiable_user_states.each do |state|
+      ProcessNotificationEventWorker::UserNotificationWorker.expects(:perform_async).with(
+        FactoryBot.create(:user, state: state, account: provider).id,
+        notification.event_id,
+        system_name
+      ).never
+    end
+
+    Sidekiq::Testing.inline! { @worker.create_notifications(notification) }
   end
 
   def test_rescue_errors

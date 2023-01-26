@@ -8,7 +8,7 @@ Feature: Application Plan customization
     And plan "Pro" has "custom plans" enabled
 
     And a provider "foo.3scale.localhost" signed up to plan "Pro"
-    And provider "foo.3scale.localhost" has billing enabled
+    And provider "foo.3scale.localhost" is charging its buyers
 
     And an application plan "Basic" of provider "foo.3scale.localhost"
     And plan "Basic" has monthly fee of 1000
