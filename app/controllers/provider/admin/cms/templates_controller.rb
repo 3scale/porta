@@ -45,9 +45,7 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
       end
     else
       respond_to do |format|
-        format.html do
-          render :edit
-        end
+        format.html { render :edit }
 
         format.js { render template: '/provider/admin/cms/templates/update' }
       end
