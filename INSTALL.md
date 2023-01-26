@@ -72,7 +72,7 @@ bundle exec rake ts:configure ts:start
 
 ## Asset compilation
 
-In development, assets are compiled automatically when a page is requested from rails. To allow online updates when an asset file changes, start:
+In development, assets are compiled automatically on demand when a Rails page loads. If you want to use [live code reloading](https://guides.rubyonrails.org/webpacker.html#running-webpacker-in-development) you'll need to run:
 
 ```sh
 bundle exec rake webpack:dev
