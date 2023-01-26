@@ -27,7 +27,7 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
   def update
     @page ||= templates.find(params[:id])
 
-    @page.assign_attributes(template_params, without_protection: true)
+    @page.assign_attributes(template_params)
     @page.build_version if params[:version]
 
     if @page.save
