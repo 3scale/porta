@@ -5,22 +5,3 @@
 
 div id="api-docs-container" data-service=api_docs_service_data.to_json
   = javascript_pack_tag 'api_docs_form'
-
-/ = semantic_form_for @api_docs_service, url: update_api_docs_service_path(@api_docs_service), html: {id: 'edit-api-docs'} do |form|
-/   - commit_button_label = @api_docs_service.new_record? ? 'Create Spec' : 'Update Spec'
-
-/   = form.inputs do
-/     = form.input :name
-/     - if @api_docs_service.new_record?
-/       = form.input :system_name
-/     - else
-/       = form.input :system_name, input_html: { :disabled => true }
-/     = form.input :published, label: 'Publish?'
-/     = form.input :description, input_html: {rows: 3}
-/     - unless @api_docs_service.new_record? && @api_docs_service.service_id.present?
-/       = form.input :service_id, as: :select, collection: current_user.accessible_services
-/     = form.input :body, label: 'API JSON Spec', inline_errors: :list
-/     = form.semantic_errors :base_path
-/     = form.input :skip_swagger_validations, as: :boolean
-/   = form.actions do
-/     = form.commit_button commit_button_label
