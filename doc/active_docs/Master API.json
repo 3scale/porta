@@ -1,6 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
+    "title": "Master API",
+    "description": "API for managing tenants in 3scale master account.",
     "version": "1.0"
   },
   "servers": [

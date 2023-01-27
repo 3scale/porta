@@ -1,6 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
+    "title": "Account Management API",
+    "description": "API for managing 3scale Admin Portal objects, such as Accounts, Applications, Users, API products, gateway configurations etc.",
     "version": "1.0"
   },
   "servers": [
