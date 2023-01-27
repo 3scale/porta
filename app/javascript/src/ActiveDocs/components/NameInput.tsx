@@ -4,13 +4,12 @@ import { FormGroup, TextInput } from '@patternfly/react-core'
 import type { FunctionComponent } from 'react'
 
 interface Props {
+  errors?: string[];
   name: string;
   setName: (name: string) => void;
-  errors?: string[];
 }
 
-const NameInput: FunctionComponent<Props> = ({ name, setName, errors = [] }) => {    
-
+const NameInput: FunctionComponent<Props> = ({ errors = [], name, setName }) => {    
   const validated = errors.length ? 'error' : 'default'
 
   return (

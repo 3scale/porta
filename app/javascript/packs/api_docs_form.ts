@@ -1,25 +1,6 @@
 import { ApiDocsFormWrapper } from 'ActiveDocs/ApiDocsForm'
-import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { IRecord as Service } from 'Types'
-
-interface ApiDocsServiceData {
-  name: string;
-  published: boolean;
-  description: string;
-  serviceId?: number;
-  collection?: Service[];
-  systemName: string;
-  body: string;
-  skipSwaggerValidations: boolean;
-  errors: {
-    name?: string[];
-    body?: string[];
-    systemName?: string[];
-  };
-  url: string;
-  isUpdate: boolean;
-}
+import type { Props as ApiDocsServiceData } from 'ActiveDocs/ApiDocsForm'
 
 const containerId = 'api-docs-container'
 
@@ -30,35 +11,34 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const { dataset } = container
-
-  const service = safeFromJsonString<ApiDocsServiceData>(dataset.service) ?? {} as ApiDocsServiceData
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const service = JSON.parse(container.dataset.service!) as ApiDocsServiceData
 
   const { 
+    action,
+    apiJsonSpec,
+    collection, 
+    description, 
+    errors,
+    isUpdate,
     name, 
     published, 
-    systemName,
-    description, 
     serviceId, 
-    collection, 
-    body,
-    errors,
     skipSwaggerValidations,
-    url,
-    isUpdate
+    systemName
   } = service
 
   ApiDocsFormWrapper({
-    name,
-    systemName,
-    errors,
-    published,
-    description,
-    serviceId,
+    action,
+    apiJsonSpec,
     collection,
-    apiJsonSpec: body,
+    description,
+    errors,
+    isUpdate,
+    name,
+    published,
+    serviceId,
     skipSwaggerValidations,
-    url,
-    isUpdate
+    systemName
   }, containerId)
 })

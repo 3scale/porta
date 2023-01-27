@@ -22,44 +22,44 @@ import type { IRecord as Service } from 'Types'
 import './ApiDocsForm.scss'
 
 interface Props {
-  name: string;
-  systemName: string;
-  published: boolean;
-  serviceId?: number;
+  action: string;
+  apiJsonSpec: string;
   collection?: Service[];
   description: string;
-  apiJsonSpec: string;
-  skipSwaggerValidations: boolean;
-  url: string;
   errors: {
-    name?: string[];
     body?: string[];
-    systemName?: string[];
     description?: string[];
+    name?: string[];
+    systemName?: string[];
   };
   isUpdate: boolean;
+  name: string;
+  published: boolean;
+  serviceId?: number;
+  skipSwaggerValidations: boolean;
+  systemName: string;
 }
 
 const ApiDocsForm: FunctionComponent<Props> = ({
-  name: defaultName,
-  systemName: defaultSystemName,
-  published: defaultPublished,
-  serviceId: defaultServiceId,
+  action,
+  apiJsonSpec: defaultApiJsonSpec,
   collection,
   description: defaultdescription,
-  apiJsonSpec: defaultApiJsonSpec,
-  skipSwaggerValidations: defaultSkipSwaggerValidations,
-  url,
   errors,
-  isUpdate
+  isUpdate,
+  name: defaultName,
+  published: defaultPublished,
+  serviceId: defaultServiceId,
+  skipSwaggerValidations: defaultSkipSwaggerValidations,
+  systemName: defaultSystemName
 }) => {
-  const [name, setName] = useState<string>(defaultName)
-  const [systemName, setSystemName] = useState<string>(defaultSystemName)
-  const [published, setPublished] = useState<boolean>(defaultPublished)
-  const [description, setDescription] = useState(defaultdescription)
   const [apiJsonSpec, setApiJsonSpec] = useState(defaultApiJsonSpec)
+  const [description, setDescription] = useState(defaultdescription)
+  const [name, setName] = useState(defaultName)
+  const [published, setPublished] = useState(defaultPublished)
+  const [service, setService] = useState(collection?.find((s) => s.id === defaultServiceId) ?? collection?.[0])
   const [skipSwaggerValidations, setSkipSwaggerValidations] = useState(defaultSkipSwaggerValidations)
-  const [service, setService] = useState<Service | undefined>(collection?.find((s) => s.id === defaultServiceId) ?? collection?.[0])
+  const [systemName, setSystemName] = useState(defaultSystemName)
 
   const isDisabled = !name || !apiJsonSpec
 
@@ -67,10 +67,8 @@ const ApiDocsForm: FunctionComponent<Props> = ({
     <PageSection variant={PageSectionVariants.light}>
       <Form
         acceptCharset="UTF-8"
-        action={url}
-        id="new_api_docs"
+        action={action}
         method="post"
-        // isWidthLimited TODO: use when available instead of hardcoded css
       >
         <CSRFToken />
         <input name="utf8" type="hidden" value="✓" />
@@ -78,10 +76,14 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <NameInput errors={errors.name} name={name} setName={setName} />
 
-        <SystemNameInput errors={errors.systemName} isDisabled={isUpdate} setSystemName={setSystemName} systemName={systemName} />
+        <SystemNameInput 
+          errors={errors.systemName} 
+          isDisabled={isUpdate} 
+          setSystemName={setSystemName} 
+          systemName={systemName} 
+        />
 
         <Checkbox 
-          aria-label="Is Published"
           id="api_docs_service_published_input"
           isChecked={published}
           label="Publish?"
@@ -91,12 +93,11 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <DescriptionInput description={description} errors={errors.description} setDescription={setDescription} />
 
-        { collection && <ServiceSelect service={service} services={collection} setService={setService} />}
+        {collection && <ServiceSelect service={service} services={collection} setService={setService} />}
 
         <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
         <Checkbox 
-          aria-label="Skip swagger validation"
           id="api_docs_service_skip_swagger_validations"
           isChecked={skipSwaggerValidations}
           label="Skip swagger validations"
@@ -105,12 +106,8 @@ const ApiDocsForm: FunctionComponent<Props> = ({
         />
 
         <ActionGroup>
-          <Button
-            isDisabled={isDisabled}
-            type="submit"
-            variant="primary"
-          >
-            { isUpdate ? 'Update spec' : 'Create spec' }
+          <Button isDisabled={isDisabled} type="submit" variant="primary">
+            {isUpdate ? 'Update spec' : 'Create spec'}
           </Button>
         </ActionGroup>
       </Form>

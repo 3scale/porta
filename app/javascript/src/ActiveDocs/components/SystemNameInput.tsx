@@ -7,14 +7,13 @@ import type { FunctionComponent } from 'react'
 import './SystemNameInput.scss'
 
 interface Props {
-  isDisabled?: boolean;
-  systemName: string;
-  setSystemName: (systemName: string) => void;
   errors?: string[];
+  isDisabled?: boolean;
+  setSystemName: (systemName: string) => void;
+  systemName: string;
 }
 
-const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = false, systemName, setSystemName }) => {
-  
+const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = false, setSystemName, systemName }) => {
   const validated = errors.length ? 'error' : 'default'
 
   return (
@@ -32,7 +31,8 @@ const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = f
               variant="warning"
             />
           </FormAlert>
-        </>)}
+        </>
+      )}
       helperTextInvalid={errors}
       label="System name"
       validated={validated}
@@ -46,7 +46,6 @@ const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = f
         value={systemName}
         onChange={setSystemName}
       />
-
     </FormGroup>
   )
 }

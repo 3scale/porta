@@ -6,6 +6,6 @@ import './FormAlert.scss'
 
 export const FormAlert: FunctionComponent<PropsWithChildren> = ({ children }) => (
   <div className="pf-c-form__alert">
-    { children }
+    {children}
   </div>  
 )

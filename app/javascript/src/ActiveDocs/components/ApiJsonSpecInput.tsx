@@ -1,42 +1,28 @@
 import { FormGroup, TextArea } from '@patternfly/react-core'
+
+import { useCodeMirror } from 'ActiveDocs/useCodeMirror'
 // import { ExclamationCircleIcon } from '@patternfly/react-icons' add the icon when we upgrade to PF4
-import { useEffect } from 'react'
 
 import type { FunctionComponent } from 'react'
-import type { Editor } from 'codemirror'
 
 import './ApiJsonSpecInput.scss'
 
 interface Props {
   apiJsonSpec: string;
-  setApiJsonSpec: (description: string) => void;
   errors?: string[];
+  setApiJsonSpec: (description: string) => void;
 }
 
 const ApiJsonSpecInput: FunctionComponent<Props> = ({
   apiJsonSpec,
-  setApiJsonSpec,
-  errors = []
+  errors = [],
+  setApiJsonSpec
 }) => {
-  
+  const textAreaId = 'api_docs_service_body'
   const validated = errors.length ? 'error' : 'default'
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- We're sure this is safe
-    const textarea = document.getElementById('api_docs_service_body')! as HTMLTextAreaElement
-    const editor = window.CodeMirror.fromTextArea(textarea, {
-      // @ts-expect-error TS is complaining, TODO: check @types/codemirror version so it matches with codemirror version
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      mode: 'application/json',
-      lineWrapping: true,
-      lineNumbers: true,
-      theme: 'neat'
-    })
-    editor.setValue(apiJsonSpec)
-    editor.on('change', (instance: Editor): void => { setApiJsonSpec(instance.getDoc().getValue()) })
-  }, [])
-  
+  useCodeMirror(textAreaId, apiJsonSpec, setApiJsonSpec)
+
   return (
     <FormGroup
       isRequired
@@ -48,7 +34,7 @@ const ApiJsonSpecInput: FunctionComponent<Props> = ({
       validated={validated}
     >
       <TextArea
-        id="api_docs_service_body"
+        id={textAreaId}
         name="api_docs_service[body]"
         validated={validated}
       />

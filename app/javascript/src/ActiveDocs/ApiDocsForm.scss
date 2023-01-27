@@ -3,6 +3,6 @@
 .pf-c-page__main-section {
   form {
     // isWidthLimited isn't available in current version. See: https://github.com/patternfly/patternfly-react/blob/master/packages/react-core/src/components/Form/Form.tsx#L12
-    max-width: 600px;
+    max-width: 55rem; // comes from var(--pf-c-form--m-limit-width--MaxWidth) 
   }
 }

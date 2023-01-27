@@ -4,14 +4,14 @@ import type { FunctionComponent } from 'react'
 
 interface Props {
   description: string;
-  setDescription: (description: string) => void;
   errors?: string[];
+  setDescription: (description: string) => void;
 }
 
 const DescriptionInput: FunctionComponent<Props> = ({
   description,
-  setDescription,
-  errors = []
+  errors = [],
+  setDescription
 }) => {
   
   const validated = errors.length ? 'error' : 'default'

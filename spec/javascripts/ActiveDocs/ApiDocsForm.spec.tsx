@@ -1,41 +1,31 @@
-import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
+import { mount } from 'enzyme'
 
 import { ApiDocsForm } from 'ActiveDocs/ApiDocsForm'
-import { isSubmitDisabled } from 'utilities/test-utils'
 import { ApiJsonSpecInput } from 'ActiveDocs/components/ApiJsonSpecInput'
+import { isSubmitDisabled } from 'utilities/test-utils'
 import { NameInput } from 'ActiveDocs/components/NameInput'
 
 import type { Props } from 'ActiveDocs/ApiDocsForm'
 
-const mockMirror = {
-  fromTextArea: () => {
-    return {
-      setValue: jest.fn(),
-      on: jest.fn()
-    }
-  }
-}
-
-// @ts-expect-error Mocking CodeMirror
-window.CodeMirror = mockMirror
+jest.mock('ActiveDocs/useCodeMirror')
 
 const defaultProps: Props = {
-  name: '',
-  systemName: '',
-  published: false,
-  serviceId: undefined,
+  action: '',
+  apiJsonSpec: '',
   collection: undefined,
   description: '',
-  apiJsonSpec: '',
-  skipSwaggerValidations: false,
-  url: '',
   errors: {
+    body: undefined,
     name: undefined,
-    systemName: undefined,
-    body: undefined
+    systemName: undefined
   },
-  isUpdate: false
+  isUpdate: false,
+  name: '',
+  published: false,
+  serviceId: undefined,
+  skipSwaggerValidations: false,
+  systemName: ''
 }
 
 const mountWrapper = (props?: Partial<Props>) => mount(<ApiDocsForm {...{ ...defaultProps, ...props }} />)
@@ -115,17 +105,17 @@ describe('When is new record', () => {
 
 describe('When is update', () => {
   const updateProps = {
-    name: 'Echo', 
-    systemName: 'echo',
-    published: true,
-    serviceId: 2,
+    action: '/apiconfig/services/2/api_docs/1',
+    apiJsonSpec: '', //should we add an example spec somewhere?
     collection: [
       { id: 2, name: 'API' },
       { id: 6, name: 'Test' }
     ],
-    apiJsonSpec: '', //should we add an example spec somewhere?
-    url: '/apiconfig/services/2/api_docs/1',
-    isUpdate: true
+    isUpdate: true,
+    name: 'Echo', 
+    published: true,
+    serviceId: 2,
+    systemName: 'echo'
   }
 
   it('should have all the inputs', () => {

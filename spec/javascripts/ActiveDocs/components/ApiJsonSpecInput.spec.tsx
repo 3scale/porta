@@ -5,17 +5,7 @@ import { ApiJsonSpecInput } from 'ActiveDocs/components/ApiJsonSpecInput'
 
 import type { Props } from 'ActiveDocs/components/ApiJsonSpecInput'
 
-const mockMirror = {
-  fromTextArea: () => {
-    return {
-      setValue: jest.fn(),
-      on: jest.fn()
-    }
-  }
-}
-
-// @ts-expect-error Mocking CodeMirror
-window.CodeMirror = mockMirror
+jest.mock('ActiveDocs/useCodeMirror')
 
 const setApiJsonSpec = jest.fn()
 
