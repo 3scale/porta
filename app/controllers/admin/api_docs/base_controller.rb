@@ -134,30 +134,4 @@ class Admin::ApiDocs::BaseController < FrontendController
   def authorize_api_docs
     authorize! :manage, :plans
   end
-
-  def api_docs_service_data
-    data = {
-      name: @api_docs_service.name || '',
-      systemName: @api_docs_service.system_name || '',
-      published: @api_docs_service.published,
-      description: @api_docs_service.description || '',
-      body: @api_docs_service.body || '',
-      skipSwaggerValidations: @api_docs_service.skip_swagger_validations,
-      errors: @api_docs_service.errors.messages.deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym },
-      isUpdate: !@api_docs_service.new_record?
-    }
-
-    if @api_docs_service.new_record? 
-      data[:url] = create_api_docs_service_path(@api_docs_service.service)
-    else 
-      data[:url] = update_api_docs_service_path(@api_docs_service)
-    end
-
-    if !current_scope.is_a?(Service) || !@api_docs_service.new_record? 
-      data[:serviceId] = @api_docs_service.service_id
-      data[:collection] = current_user.accessible_services.as_json(only: %i[id name], root: false)
-    end
-
-    data
-  end
 end

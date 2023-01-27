@@ -72,7 +72,7 @@ end
 
 Then "they should see the updated spec" do
   assert has_css?('.operations', text: 'Hide')
-  assert has_text?('My spec') # Comes from Factory
+  assert has_text?('My spec')
   assert_flash 'ActiveDocs Spec was successfully updated.'
   assert_equal @new_service.id, @api_doc_service.reload.service_id
 end
@@ -118,7 +118,7 @@ Then "swagger should escape properly the curl string" do
   page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
   page.click_button 'Try it out!'
   curl_commmand = find_all('div', text: /curl/i).last
-  curl_commmand.has_text?('Authorization: Oauth:"test"')
+  assert curl_commmand.has_text?('Authorization: Oauth:"test"')
 end
 
 Then "the table {should} contain a column for the service" do |should|

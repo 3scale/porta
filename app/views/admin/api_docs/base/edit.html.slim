@@ -1,7 +1,1 @@
-- content_for :javascripts do
-  = javascript_include_tag 'provider/codemirror'
-
-- content_for :sublayout_title, 'ActiveDocs'
-
-div id="api-docs-container" data-service=api_docs_service_data.to_json
-  = javascript_pack_tag 'api_docs_form'
+= render partial: 'form'
