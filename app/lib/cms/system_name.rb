@@ -15,6 +15,6 @@ module CMS::SystemName
   protected
 
   def set_system_name
-    self.system_name = title&.parameterize if title && system_name.blank?
+    self.system_name ||= title.parameterize if title
   end
 end
