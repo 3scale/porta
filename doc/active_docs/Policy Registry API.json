@@ -1,6 +1,8 @@
 {
-   "openapi": "3.0.1",
+  "openapi": "3.0.1",
   "info": {
+    "title": "Policy Registry API",
+    "description": "API for managing the APIcast Policy Registry.",
     "version": "1.0"
   },
   "servers": [

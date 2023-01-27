@@ -1,6 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
+    "title": "Developer Portal API (Tech Preview)",
+    "description": "API for managing the templates, files and sections of the Developer Portal CMS",
     "version": "1.0"
   },
   "servers": [
