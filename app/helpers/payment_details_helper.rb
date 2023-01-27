@@ -55,15 +55,6 @@ module PaymentDetailsHelper
     }.to_json
   end
 
-  def get_country_code(country)
-    _label, code = merchant_countries.find {|label, code| label.downcase == country.to_s.downcase }
-    code
-  end
-
-  def selected_country_code
-    has_billing_address? ? get_country_code(billing_address.country) : ''
-  end
-
   def braintree_form_data
     {
       formActionPath: developer_portal.hosted_success_admin_account_braintree_blue_path,
