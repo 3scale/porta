@@ -112,13 +112,17 @@ Then "the swagger autocomplete should work for {string} with {string}" do |input
   assert has_css?(".apidocs-param-tips.#{autocomplete}", visible: :visible)
 end
 
-Then "swagger should escape properly the curl string" do
+Then "{spec_version} should escape properly the curl string" do |swagger_version|
   find('span', text: /get/i).click
   assert find(:xpath, '//*[@name="user_key"]/..').has_sibling? 'td', text: 'header'
   page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
   page.click_button 'Try it out!'
   curl_commmand = find_all('div', text: /curl/i).last
-  assert curl_commmand.has_text?('Authorization: Oauth:"test"')
+  if swagger_version == '1.2'
+    assert curl_commmand.has_text?('Authorization: Oauth:\"test\"')
+  else
+    assert curl_commmand.has_text?('Authorization: Oauth:"test"')
+  end
 end
 
 Then "the table {should} contain a column for the service" do |should|

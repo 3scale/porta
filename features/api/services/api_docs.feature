@@ -40,11 +40,11 @@ Feature: ActiveDocs
   Scenario Outline: Slashes generated curl command for header values
     Given a service with a <swagger version> spec
     When an admin is reviewing the spec
-    Then swagger should escape properly the curl string  
+    Then <swagger version> should escape properly the curl string  
 
     Examples:
       | swagger version |
-      # | Swagger 1.2     | Swagger 1.2 escapes differently
+      | Swagger 1.2     |
       | Swagger 2       |
       # | OAS 3.0         | Feature not implemented |
 

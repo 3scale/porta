@@ -18,6 +18,7 @@ module Admin::ApiDocsHelper
     base_url.gsub(%r{/$}, '').concat(admin_api_docs_service_path(api_docs_service, format: :json))
   end
 
+  # FIXME: this smells of :reek:FeatureEnvy so maybe move it to a presenter
   def api_docs_service_data(api_docs_service) # rubocop:disable Metrics/AbcSize
     data = {
       apiJsonSpec: api_docs_service.body || '',
