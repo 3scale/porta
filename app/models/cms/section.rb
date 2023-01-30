@@ -43,7 +43,7 @@ class CMS::Section < ApplicationRecord
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.section do |x|
+    xml.__send__(options.fetch(:root, :section)) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema
@@ -55,10 +55,7 @@ class CMS::Section < ApplicationRecord
       if options[:short]
         x.parent_id parent_id
       else
-        x.parent_ do |p|
-          p.id parent.id
-          p.title parent.title
-        end
+        parent&.to_xml(builder: x, root: 'parent_', short: true) || x.parent_
       end
       x.partial_path partial_path
       unless options[:short]
