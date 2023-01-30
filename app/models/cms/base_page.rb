@@ -47,7 +47,7 @@ class CMS::BasePage < CMS::Template
       end
       x.system_name system_name
       x.content_type content_type
-      x.liquid_enabled !liquid_enabled.nil?
+      x.liquid_enabled liquid_enabled?
       x.handler handler
       x.hidden hidden?
 

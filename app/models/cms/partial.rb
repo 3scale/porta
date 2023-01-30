@@ -16,6 +16,11 @@ class CMS::Partial < CMS::Template
     super.merge string: "#{system_name}"
   end
 
+  # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
+  def liquid_enabled?
+    true
+  end
+
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
@@ -28,6 +33,7 @@ class CMS::Partial < CMS::Template
 
       x.system_name system_name
       x.content_type content_type
+      x.liquid_enabled liquid_enabled?
 
       unless options[:short]
         x.draft { |node| node.cdata draft }

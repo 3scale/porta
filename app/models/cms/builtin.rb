@@ -122,7 +122,7 @@ class CMS::Builtin < CMS::BasePage
         end
 
         x.system_name system_name
-        x.liquid_enabled liquid_enabled
+        x.liquid_enabled liquid_enabled?
         x.layout layout_name
       end
 
@@ -171,11 +171,6 @@ class CMS::Builtin < CMS::BasePage
     private :destroy
     attr_readonly :system_name
     attr_protected :liquid_enabled
-
-    # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
-    def liquid_enabled?
-      true
-    end
 
     def self.filesystem_templates
       paths = ORIGINAL_PATHS

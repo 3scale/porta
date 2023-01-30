@@ -30,7 +30,7 @@ class CMS::Layout < CMS::Template
 
       x.title title
       x.system_name system_name
-      x.liquid_enabled liquid_enabled
+      x.liquid_enabled liquid_enabled?
       x.content_type content_type
 
       unless options[:short]
