@@ -451,7 +451,7 @@ jobs:
           name: Precompile assets
           command: |
             cp config/examples/*.yml config/
-            NODE_OPTIONS=--max-old-space-size=2048 bundle exec rake assets:precompile NODE_ENV=test RAILS_ENV=test
+            NODE_OPTIONS=--max-old-space-size=1536 bundle exec rake assets:precompile NODE_ENV=test RAILS_ENV=test
           environment:
             RAILS_GROUPS: assets
       - *save-assets-cache
