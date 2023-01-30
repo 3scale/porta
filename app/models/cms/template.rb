@@ -16,6 +16,7 @@ class CMS::Template < ApplicationRecord
   has_many :versions, as: :template
 
   validates :provider, presence: true
+  validates :system_name, uniqueness: { scope: %i[provider_id type], allow_blank: true }
   validates :handler, inclusion: { in: CMS::Handler.available, allow_blank: false, allow_nil: true },
             length: { maximum: 255 }
   validates :options, length: { maximum: 65535 }

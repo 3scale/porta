@@ -24,7 +24,6 @@ class CMS::Section < ApplicationRecord
   validates :parent_id, presence: { :unless => :root? }
 
   validates :title, uniqueness: { :scope => [:provider_id, :parent_id] }
-  validates :system_name, uniqueness: { :scope => [:provider_id] }, length: { maximum: 255 }
   validates :partial_path, :title, :type, length: { maximum: 255 }
 
   before_validation :set_partial_path, :on => :create

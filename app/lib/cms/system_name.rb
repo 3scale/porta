@@ -5,7 +5,7 @@ module CMS::SystemName
   extend ActiveSupport::Concern
 
   included do
-    validates :system_name, uniqueness: { scope: %i[provider_id type], allow_blank: true },
+    validates :system_name, uniqueness: { scope: %i[provider_id], allow_blank: true },
               format: { with: %r{\A\w[\w\-/_]+\z}, allow_blank: true }, length: { maximum: 255 },
               presence: true
 
