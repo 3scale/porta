@@ -25,11 +25,4 @@ declare global {
     };
     renderChartWidget: (widget: string, data: unknown) => void;
   }
-
-  interface JQueryStatic {
-    flash: {
-      notice: (msg: string) => void;
-      error: (msg: string) => void;
-    };
-  }
 }
