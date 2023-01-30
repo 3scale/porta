@@ -34,8 +34,8 @@ class CMS::Layout < CMS::Template
       x.content_type content_type
 
       unless options[:short]
-        x.draft draft
-        x.published published
+        x.draft { |node| node.cdata draft }
+        x.published { |node| node.cdata published }
       end
     end
 
