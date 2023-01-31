@@ -29,7 +29,7 @@ module Tasks
       end
 
       [nil, ""].each do |empty_val|
-        define_method("test_fix_section_empty_titles_title_#{empty_val.nil? ? 'nil' : 'empty'}") do
+        test "section titles are fixed for #{empty_val.inspect}" do
           section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: empty_val, system_name: 'system-name')
           section.save!(validate: false)
           expected_title = section.system_name
