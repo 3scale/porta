@@ -62,6 +62,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
         assert_response :success
         assert show_result.has_key?('paths')
+        assert_equal show_result["openapi"], "3.0.1"
       end
     end
 
@@ -134,6 +135,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
           assert_response :success
           assert show_result.has_key?('paths')
+          assert_equal show_result["openapi"], "3.0.1"
         end
       end
     end
