@@ -123,9 +123,7 @@ class ApiDocs::ServicesController < FrontendController
   private
 
   def exclude_forbidden_endpoints(paths)
-    paths.select do |url|
-      url.exclude?('plan')
-    end
+    paths.select { |url| url.exclude?('plan') }
   end
 
   def allowed_api?(api)
