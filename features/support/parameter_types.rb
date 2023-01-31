@@ -248,12 +248,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'buyer_group_of_provider',
-  regexp: /buyer group "([^"]*)" of provider "([^"]*)"/,
-  transformer: ->(name, provider_name) { name }
-)
-
-ParameterType(
   name: 'service_of_provider',
   regexp: /service "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(service_name, provider_name) do

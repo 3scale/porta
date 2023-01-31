@@ -5,15 +5,9 @@ Given "{buyer} has user key {string}" do |buyer, key|
   buyer.bought_cinstance.update!(user_key: key)
 end
 
-Then /^I should see (the application id of buyer "[^"]*")$/ do |value|
-  step %(I should see "#{value}")
-end
-
-
 Then "I should see {the_user_key_of_buyer}" do |value|
   step %(I should see "#{value}")
 end
-
 
 # API v2/multiple apps
 Then "I should see the ID of {application}" do |application|

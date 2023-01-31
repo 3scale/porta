@@ -23,10 +23,6 @@ Given(/^provider "(.*?)" has the oas3 simple example$/) do |arg1|
   assert active_docs.save
 end
 
-Then /I fill the JSON spec with a valid spec/ do
-  fill_in "API JSON Spec", with: '{"apis": [{"path": "/admin/api/cms/templates.xml","operations": [{"httpMethod": "GET","summary": "List all templates","description": "List all templates","parameters": [{"name": "provider_key","description": "Your provider key","dataType": "string","required": true,"paramType": "path","allowMultiple": false}]}]}],"namespace": "CMS API","resourcePath": "/admin/api/cms/templates","swagrVersion": "1.1","apiVersion": "1.0"}'
-end
-
 Then(/^swagger should escape properly the curl string$/) do
   page.click_on 'get'
   page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
@@ -35,29 +31,6 @@ Then(/^swagger should escape properly the curl string$/) do
     within 'pre' do
       page.should have_content('Authorization: Oauth:"test"')
     end
-  end
-end
-
-Then(/^swagger v3 should escape properly the curl string$/) do
-  id = 'default' # Could be passed as arg
-  section_id = "#operations-tag-#{id}"
-
-  closed_section = find("#{section_id}[data-is-open='false']")
-  closed_section.click
-
-  method_id = "#operations-#{id}-get_"
-  closed_method = find(method_id)
-  closed_method.click
-
-  within method_id do
-    click_on 'Try it out'
-    input_name = 'user_key'
-    input = find("[data-param-name='#{input_name}'] input")
-    input.set 'Authorization: Oauth:"test"'
-
-    click_on 'Execute'
-
-    find('textarea.curl').should have_content('-H Authorization: Oauth:\"test\"')
   end
 end
 

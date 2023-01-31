@@ -43,6 +43,7 @@ Feature: Dev Portal Buyer Payment Details
       When the buyer is reviewing their account details
       Then the buyer can't add their credit card
 
+    # TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.
     @wip
     Scenario: Buyer adds their credit card
       Given the buyer has already added their billing address
@@ -62,6 +63,7 @@ Feature: Dev Portal Buyer Payment Details
       When the buyer is reviewing their account settings
       Then the buyer can update their billing address for stripe
 
+    # TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.
     @wip
     Scenario: Buyer updates their credit card
       Given the buyer has already added their billing address

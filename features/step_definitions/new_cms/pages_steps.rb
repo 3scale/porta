@@ -32,12 +32,6 @@ Then "{cms_page} should have:" do |page, table|
   table.diff! [table.headers, actual]
 end
 
-
-When /^I visit to add a new page within section "([^\"]*)"$/ do | section_path |
-  section = Section.find_by_path section_path
-  visit new_cms_section_page_path(:section_id => section.id)
-end
-
 Then(/^preview draft link should link to "(.*?)"$/) do | path |
   popup = window_opened_by do
     find("#cms-preview-button").click_link("Preview")
