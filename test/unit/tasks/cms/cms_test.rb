@@ -41,7 +41,7 @@ module Tasks
         end
       end
 
-      def test_fix_section_empty_titles_valid_dont_change
+      test "sections with valid titles don't change" do
         title = 'valid_title'
         sysname = 'valid_system-name'
         section = FactoryBot.create(:cms_section, partial_path: '/', parent: @provider.sections.root, title: title, system_name: sysname)
