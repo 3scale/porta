@@ -78,7 +78,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       Logic::RollingUpdates.stubs(enabled?: true)
       select_endpoints = Proc.new do |api, collection_paths|
-        path = api['path']
+        path = api[0]
         collection_paths << path if path.match(name_or_path_regex)
       end
 
@@ -87,7 +87,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
         # ignore stats endpoint
         name.to_s.match(name_or_path_regex) && name.to_s !~ /stats/
       }
-      assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['paths'].select{ |url| url.exclude?('stats') &&  url.include?('backend_')}.length
+      assert_equal actual_backed_api_routes.length, JSON.parse(response.body)['paths'].each_with_object(Set.new, &select_endpoints).length
     end
   end
 
@@ -101,14 +101,14 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       ThreeScale.config.stubs(onpremises: true)
       get '/api_docs/services/account_management_api.json'
 
-      select_endpoint = Proc.new { |api| api['path'] == '/admin/api/account_plans/{id}.xml' }
+      select_endpoint = Proc.new { |api| api == '/admin/api/account_plans/{id}.xml' }
       ThreeScale.config.stubs(onpremises: false)
       get '/api_docs/services/account_management_api.json'
-      assert_not_empty JSON.parse(response.body)['paths'].keys
+      assert_not_empty JSON.parse(response.body)['paths'].select(&select_endpoint)
 
       ThreeScale.config.stubs(onpremises: true)
       get '/api_docs/services/account_management_api.json'
-      assert_empty JSON.parse(response.body)['paths'].select{ |url|  url.exclude?('admin')}
+      assert_empty JSON.parse(response.body)['paths'].select(&select_endpoint)
     end
 
     def test_index_and_show
