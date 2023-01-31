@@ -17,10 +17,6 @@ Then "the forum of {forum} should have category {string}" do |forum, name|
   assert_not_nil forum.categories.find_by!(name: name)
 end
 
-Then "the forum of {forum} should not have category {string}" do |forum, name|
-  assert_nil forum.categories.find_by!(name: name)
-end
-
 Then /^I should see category "([^"]*)" in the list$/ do |name|
   assert has_css?('table#categories td a', :text => name)
 end

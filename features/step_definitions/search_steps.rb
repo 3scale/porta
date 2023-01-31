@@ -2,14 +2,6 @@ Given /^Sphinx is offline$/ do
   ::ThinkingSphinx::Test.stop
 end
 
-When /^I search for "([^"]*)"$/ do |query|
-  step %(I fill in "query" with "#{query}")
-  within(".operations") do
-    step %(I press "Search")
-  end
-end
-
-
 When /^I search for:$/ do |table|
 
   within ".search" do

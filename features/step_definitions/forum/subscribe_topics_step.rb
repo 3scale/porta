@@ -37,10 +37,6 @@ Then /^I unsubscribe the topic$/ do
   click_button('Unsubscribe')
 end
 
-Then "the {user} should receive an email notifying of the new post" do |user|
-  step %{"#{user.email}" should receive an email with subject "New post in topic"}
-end
-
 Then "the {user} should not receive an email notifying of the new post" do |user|
   step %{"#{user.email}" should receive no email with subject "New post in topic"}
 end

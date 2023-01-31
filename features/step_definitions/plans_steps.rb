@@ -16,14 +16,6 @@ Given "a default published service plan {string} of {service_of_provider}" do |p
   create_plan :service, :name => plan_name, :issuer => service, :published => true, :default => true
 end
 
-Given "a published application plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :application, :name => plan_name, :issuer => service, :published => true
-end
-
-Given "a default published application plan {string} of {service_of_provider}" do |plan_name, service|
-  create_plan :application, :name => plan_name, :issuer => service, :published => true, :default => true
-end
-
 Given(/^the provider has a (default )?free application plan(?: "([^"]*)")?$/) do |default, plan_name|
   @free_application_plan ||= create_plan :application, name: plan_name || 'Copper', issuer: @service, published: true, default: default.present?
 end
