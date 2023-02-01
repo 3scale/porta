@@ -25,11 +25,11 @@ class PlanPresentersTest < ActiveSupport::TestCase
   end
 
   test '#default_plan_select_data' do
-    assert_equal [:plans, :"current-plan", :path], presenter.default_plan_select_data.keys # rubocop:disable Style/SymbolArray
+    assert_equal [:plans, :'current-plan', :path], presenter.default_plan_select_data.keys # rubocop:disable Style/SymbolArray
   end
 
   test '#plans_table_data' do
-    assert_equal [:columns, :plans, :count, :"search-href"], presenter.plans_table_data.keys # rubocop:disable Style/SymbolArray
+    assert_equal [:columns, :plans, :count, :'search-href'], presenter.plans_table_data.keys # rubocop:disable Style/SymbolArray
   end
 
   class Api::ApplicationPlansPresenterTest < PlanPresentersTest
@@ -55,7 +55,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Api::ApplicationPlansPresenter.new(service: service, collection: plans, params: params)
+      Api::ApplicationPlansPresenter.new(service: service, params: params)
     end
   end
 
@@ -83,7 +83,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Api::ServicePlansPresenter.new(service: service, collection: plans, params: params)
+      Api::ServicePlansPresenter.new(service: service, params: params)
     end
   end
 

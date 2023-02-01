@@ -3,15 +3,15 @@
 class PlansBasePresenter
   include System::UrlHelpers.system_url_helpers
 
-  def initialize(service:, collection:, params: {})
-    @service = service
+  # This smells of :reek:FeatureEnvy but we don't care
+  def initialize(collection:, params:)
     @collection = collection
     @pagination_params = { page: params[:page] || 1, per_page: params[:per_page] || 20 }
     @search = ThreeScale::Search.new(params[:search])
     @sorting_params = "plans.#{params[:sort].presence || 'name'} #{params[:direction].presence || 'asc'}"
   end
 
-  attr_reader :service, :collection, :pagination_params, :search, :sorting_params
+  attr_reader :collection, :pagination_params, :search, :sorting_params
 
   def paginated_table_plans
     @paginated_table_plans ||= plans.scope_search(search)
@@ -21,9 +21,9 @@ class PlansBasePresenter
 
   def default_plan_select_data
     {
-      'plans': plans.reorder(name: :asc).to_json(root: false, only: %i[id name]),
+      plans: plans.reorder(name: :asc).to_json(root: false, only: %i[id name]),
       'current-plan': current_plan,
-      'path': masterize_path
+      path: masterize_path
     }
   end
 
