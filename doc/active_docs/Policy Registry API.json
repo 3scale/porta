@@ -14,6 +14,7 @@
     "/admin/api/registry/policies.json":{
       "get":{
         "summary": "APIcast Policy Registry List",
+        "tags": ["Policies"],
         "parameters": [
             {
               "name": "access_token",
@@ -33,6 +34,7 @@
       },
       "post":{
         "summary": "APIcast Policy Registry Create",
+        "tags": ["Policies"],
         "parameters": [
             {
               "name": "access_token",
@@ -76,6 +78,7 @@
       "get" :{
         "summary": "APIcast Policy Registry Read",
         "description": "Returns the APIcast policy by ID",
+        "tags": ["Policies"],
         "parameters": [
             {
               "name": "access_token",
@@ -104,6 +107,7 @@
       "put": {
         "summary": "APIcast Policy Registry Update",
         "description": "Updates an APIcast Policy",
+        "tags": ["Policies"],
         "parameters": [
             {
               "name": "access_token",

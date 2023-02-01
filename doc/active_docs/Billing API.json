@@ -14,6 +14,7 @@
     "/api/accounts/{account_id}/invoices/{id}.xml": {
       "get": {
         "summary": "Invoice by Account",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -56,6 +57,7 @@
     "/api/invoices/{invoice_id}/line_items.xml": {
       "get": {
         "summary": "Invoice Line Items List",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -86,6 +88,7 @@
       },
       "post": {
         "summary": "Create Line Item for an Invoice",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -182,6 +185,7 @@
     "/api/invoices/{invoice_id}/payment_transactions.xml": {
       "get": {
         "summary": "Invoice Payment Transactions List",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -214,6 +218,7 @@
     "/api/invoices/{id}.xml": {
       "get": {
         "summary": "Invoice Read",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -244,6 +249,7 @@
       },
       "put": {
         "summary": "Invoice Update",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -292,6 +298,7 @@
     "/api/invoices/{id}/state.xml": {
       "put": {
         "summary": "Invoice Update state",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -333,6 +340,7 @@
     "/api/invoices/{invoice_id}/line_items/{id}.xml": {
       "delete": {
         "summary": "Delete Line Item of an Invoice",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -375,6 +383,7 @@
     "/api/invoices.xml": {
       "get": {
         "summary": "Invoice List",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -438,6 +447,7 @@
       },
       "post": {
         "summary": "Invoice Create",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",
@@ -478,6 +488,7 @@
     "/api/accounts/{account_id}/invoices.xml": {
       "get": {
         "summary": "Invoice List by Account",
+        "tags": ["Invoices"],
         "parameters": [
           {
             "name": "access_token",

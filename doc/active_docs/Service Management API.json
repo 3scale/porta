@@ -14,6 +14,7 @@
     "/transactions/oauth_authorize.xml": {
       "get": {
         "summary": "Authorize (OAuth authentication mode pattern)",
+        "tags": ["Authorization"],
         "operationId": "oauth_authorize",
         "parameters": [
           {
@@ -94,6 +95,7 @@
     "/transactions/authrep.xml": {
       "get": {
         "summary": "AuthRep (Authorize + Report for the API Key authentication pattern)",
+        "tags": ["Authorization"],
         "parameters": [
           {
             "name": "service_token",
@@ -158,6 +160,7 @@
     "/transactions/oauth_authrep.xml": {
       "get": {
         "summary": "AuthRep (OAuth authentication mode pattern)",
+        "tags": ["Authorization"],
         "operationId": "oauth_authrep",
         "parameters": [
           {
@@ -246,6 +249,7 @@
     "/transactions/authorize.xml": {
       "get": {
         "summary": "Authorize (API Key authentication pattern)",
+        "tags": ["Authorization"],
         "operationId": "authorize_user_key",
         "parameters": [
           {
@@ -303,6 +307,7 @@
     "/transactions.xml": {
       "post": {
         "summary": "Report (OAuth authentication pattern)",
+        "tags": ["Authorization"],
         "parameters": [
           {
             "name": "service_token",

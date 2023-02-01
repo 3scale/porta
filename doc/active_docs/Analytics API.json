@@ -14,6 +14,7 @@
     "/stats/backend_apis/{backend_api_id}/usage.json": {
       "get": {
         "summary": "Backend Traffic by Metric",
+        "tags": ["Stats"],
         "parameters": [
           {
             "name": "format",
@@ -279,6 +280,7 @@
     "/stats/services/{service_id}/usage.{format}": {
       "get": {
         "summary": "Service Traffic by Metric",
+        "tags": ["Stats"],
         "parameters": [
           {
             "name": "format",
@@ -545,6 +547,7 @@
     "/stats/services/{service_id}/top_applications.{format}": {
       "get": {
         "summary": "Service Top Applications",
+        "tags": ["Stats"],
         "parameters": [
           {
             "name": "format",
@@ -624,6 +627,7 @@
     "/stats/applications/{application_id}/usage.{format}": {
       "get": {
         "summary": "Application Traffic by Metric",
+        "tags": ["Stats"],
         "parameters": [
           {
             "name": "format",
