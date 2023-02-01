@@ -67,21 +67,14 @@ Given(/^a buyer signed up to the provider$/) do
   @application = @buyer.application_contracts.find_by_name!('TimeMachine')
 end
 
-Given "a freshly created buyer {string} signed up to {provider}" do |account_name, provider|
+Given "a pending buyer {string} signed up to {provider}" do |account_name, provider|
   buyer = FactoryBot.create(:buyer_account, :provider_account => provider,
-                  #buyer = FactoryBot.create(:account, :provider_account => provider,
                   :org_name => account_name,
                   :buyer => true)
   buyer.buy! provider.account_plans.default
-end
 
-Given /^a pending buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
-  step %(a freshly created buyer "#{account_name}" signed up to provider "#{provider_account_name}")
-
-  account = Account.find_by_org_name!(account_name)
-
-  account.make_pending!
-  assert account.pending?
+  buyer.make_pending!
+  assert buyer.pending?
 end
 
 Given /^an approved buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
