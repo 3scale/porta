@@ -19,7 +19,7 @@ end
 Given "{provider} has the following buyers with users:" do |provider, buyers|
   buyers = transform_table(buyers)
   buyers.hashes.each do | hash |
-    buyer = Account.find_by_org_name(hash['Account Name'])
+    buyer = provider.buyer_accounts.find_by(org_name: hash['Account Name'])
     unless buyer
       provider_account = Account.find_or_create_by(org_name: provider) do |acc|
         acc.org_name = hash['Account Name']

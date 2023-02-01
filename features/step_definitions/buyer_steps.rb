@@ -62,7 +62,7 @@ end
 
 Given(/^a buyer signed up to the provider$/) do
   step %(an approved buyer "John" signed up to provider "#{@provider.internal_domain}")
-  @buyer = Account.find_by_org_name!('John')
+  @buyer = @provider.buyer_accounts.find_by!(org_name: 'John')
   step 'buyer "John" has application "TimeMachine"'
   @application = @buyer.application_contracts.find_by_name!('TimeMachine')
 end
@@ -77,17 +77,17 @@ Given "a pending buyer {string} signed up to {provider}" do |account_name, provi
   assert buyer.pending?
 end
 
-Given /^an approved buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
-  step %(a pending buyer "#{account_name}" signed up to provider "#{provider_account_name}")
+Given "an approved buyer {string} signed up to {provider}" do |account_name, provider|
+  step %(a pending buyer "#{account_name}" signed up to provider "#{provider.org_name}")
 
-  @buyer = Account.find_by_org_name!(account_name)
+  @buyer = provider.buyer_accounts.find_by!(org_name: account_name)
   @buyer.approve! unless @buyer.approved?
 end
 
-Given /^a rejected buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
-  step %(a pending buyer "#{account_name}" signed up to provider "#{provider_account_name}")
+Given "a rejected buyer {string} signed up to {provider}" do |account_name, provider|
+  step %(a pending buyer "#{account_name}" signed up to provider "#{provider.org_name}")
 
-  account = Account.find_by_org_name!(account_name)
+  account = provider.buyer_accounts.find_by!(org_name: account_name)
   account.reject!
 end
 
@@ -97,7 +97,7 @@ Given /^a buyer "([^"]*)" signed up to plan "([^"]*)" without providing descript
   # The description is blank already, this is here just to protect us from the future's
   # changes.
 
-  account = Account.find_by_org_name!(account_name)
+  account = ApplicationPlan.find_by!(name: plan_name).provider_account.buyer_accounts.find_by!(org_name: account_name)
   assert account.bought_cinstance.description.blank?
 end
 
@@ -229,7 +229,7 @@ And(/^has a buyer with (application|service) plan/) do |plan|
     step 'a application plan "Metal" of provider "foo.3scale.localhost"'
     step 'a buyer "Alexander" signed up to application plan "Metal"'
   end
-  @buyer = Account.find_by!(org_name: 'Alexander')
+  @buyer = @provider.buyer_accounts.find_by!(org_name: 'Alexander')
 end
 
 When(/^a buyer signs up/) do
