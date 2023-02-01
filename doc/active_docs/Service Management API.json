@@ -11,16 +11,19 @@
     }
   ],
   "paths": {
-    "/transactions/oauth_authorize.xml": {
+    "/transactions/authorize.xml": {
       "get": {
-        "summary": "Authorize (OAuth authentication mode pattern)",
-        "tags": ["Authorization"],
-        "operationId": "oauth_authorize",
+        "summary": "Authorize (API Key and App ID / App Key authentication patterns)",
+        "operationId": "authorize",
+        "description": "Read-only operation to authorize an application in the API Key or App ID / App Key authentication pattern.\n\n**Either `user_key`, or `app_id` and `app_key` pair must be provided, according to the authentication pattern of the API.**\n\nIt is used to check if a particular application exists, is active and is within its usage limits. It can be optionally used to authenticate a call using an application key. It's possible to pass a 'predicted usage' to the authorize call. This can serve three purposes:\n1) To make sure an API call won't go over the limits before the call is made, if the usage of the call is known in advance. In this case, the estimated usage can be passed to the authorize call, and it will respond whether the actual API call is still within limit.\n2) To limit the authorization only to a subset of metrics. If usage is passed in, only the metrics listed in it will be checked against the limits. For example: There are two metrics defined: _searches_ and _updates_. _updates_ are already over limit, but _searches_ are not. In this case, the user should still be allowed to do a search call, but not an update one.\n3) If no usage is passed then any metric with a limit exceeded state will result in an _authorization_failed_ response.\n\n**Note:** Even if the predicted usage is passed in, authorize is still a **read-only** operation. You have to make the report call to report the usage.\n\nThe response can have an HTTP response code: `200` OK (if authorization is granted), `409` (if it's not granted, typically application over limits or keys missing, check 'reason' tag), `403` (for authentication errors, check 'error' tag) and `404` (not found).",
+        "tags": [
+          "API Key and App ID / App Key"
+        ],
         "parameters": [
           {
             "name": "service_token",
             "in": "query",
-            "description": "Your service api key with 3scale (also known as service token).",
+            "description": "Service token for the API service.",
             "required": true,
             "schema": {
               "type": "string"
@@ -29,16 +32,17 @@
           {
             "name": "service_id",
             "in": "query",
-            "description": "Service id. Required.",
+            "description": "Service ID.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
-            "name": "access_token",
+            "name": "user_key",
             "in": "query",
-            "description": "OAuth token used for authorizing if you don't use client_id with client_secret.",
+            "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key.",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -46,7 +50,16 @@
           {
             "name": "app_id",
             "in": "query",
-            "description": "Client Id (identifier of the application if the auth. pattern is OAuth, note that client_id == app_id)",
+            "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_key",
+            "in": "query",
+            "description": "App Key (shared secret of the application if the authentication pattern is App ID / App Key). The App Key is required if the application has one or more keys defined.",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -64,24 +77,10 @@
             "in": "query",
             "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
             "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "redirect_url",
-            "in": "query",
-            "description": "Optional redirect URL for OAuth. Will be validated if sent.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "redirect_uri",
-            "in": "query",
-            "description": "Optional redirect URI for OAuth. This is the same as 'redirect_url', but if used you should expect a matching 'redirect_uri' response field.",
-            "schema": {
-              "type": "string"
-            }
+              "$ref": "#/components/schemas/Usage"
+            },
+            "style": "deepObject",
+            "explode": true
           }
         ],
         "responses": {
@@ -94,13 +93,17 @@
     },
     "/transactions/authrep.xml": {
       "get": {
-        "summary": "AuthRep (Authorize + Report for the API Key authentication pattern)",
-        "tags": ["Authorization"],
+        "summary": "AuthRep (Authorize + Report for the API Key and App ID / App Key authentication patterns)",
+        "operationId": "authrep",
+        "description": "AuthRep is a 'one-shot' operation to authorize an application and report the associated transaction at the same time.\n\n**Either `user_key`, or `app_id` and `app_key` pair must be provided, according to the authentication pattern of the API.**\n\nThe main difference between this call and the regular authorize call is that usage will be reported if the authorization is successful. AuthRep is the most convenient way to integrate your API with the 3scale's Service Manangement API since it does a 1:1 mapping between a request to your API and a request to 3scale's API.\n\nIf you do not want to do a request to 3scale for each request to your API or batch the reports you should use the Authorize and Report methods instead.\n\nAuthrep is **not a read-only** operation and will increment the values if the authorization step is a success.",
+        "tags": [
+          "API Key and App ID / App Key"
+        ],
         "parameters": [
           {
             "name": "service_token",
             "in": "query",
-            "description": "Your service api key with 3scale (also known as service token).",
+            "description": "Service token for the API service.",
             "required": true,
             "schema": {
               "type": "string"
@@ -109,17 +112,34 @@
           {
             "name": "service_id",
             "in": "query",
-            "description": "Service id. Required.",
+            "description": "Service ID.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
             "name": "user_key",
             "in": "query",
-            "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)",
-            "required": true,
+            "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_id",
+            "in": "query",
+            "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_key",
+            "in": "query",
+            "description": "App Key (shared secret of the application if the authentication pattern is App ID / App Key). The App Key is required if the application has one or more keys defined.",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -137,15 +157,105 @@
             "in": "query",
             "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.",
             "schema": {
-              "type": "ref"
-            }
+              "$ref": "#/components/schemas/Usage"
+            },
+            "style": "deepObject",
+            "explode": true
           },
           {
             "name": "log",
             "in": "query",
-            "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+            "description": "Request Log allows to log status codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
             "schema": {
-              "type": "ref"
+              "$ref": "#/components/schemas/Log"
+            },
+            "style": "deepObject",
+            "explode": true
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/transactions/oauth_authorize.xml": {
+      "get": {
+        "summary": "Authorize (OAuth authentication mode pattern)",
+        "operationId": "authorizeOauth",
+        "description": "Read-only operation to authorize an application in the OAuth authentication pattern.\n\nWhen using this endpoint please pay attention at your handling of app_id and app_key parameters. If you don't specify an app_key, the endpoint assumes the app_id specified has already been authenticated by other means. If you specify the app_key parameter, even if it is empty, it will be checked against the application's keys. If you don't trust the app_id value you have, use app keys and specify one.\n\nThis calls returns extra data (secret and redirect_url) needed to power OAuth APIs. It's only available for users with OAuth enabled APIs.\n\nIt is used to check if a particular application exists, is active and is within its usage limits. It can be optionally used to authenticate a call using an application key. It's possible to pass a 'predicted usage' to the authorize call. This can serve three purposes:\n1) To make sure an API call won't go over the limits before the call is made, if the usage of the call is known in advance. In this case, the estimated usage can be passed to the authorize call, and it will respond whether the actual API call is still within limit.\n2) To limit the authorization only to a subset of metrics. If usage is passed in, only the metrics listed in it will be checked against the limits. For example: There are two metrics defined: _searches_ and _updates_. _updates_ are already over limit, but _searches_ are not. In this case, the user should still be allowed to do a search call, but not an update one.\n\n3) If no usage is passed then any metric with a limit exceeded state will result in an _authorization_failed_ response.\n\n**Note:** Even if the predicted usage is passed in, authorize is still a **read-only** operation. You have to make the report call to report the usage.\n\nThe response can have an HTTP response code: `200` OK (if authorization is granted), `409` (if it's not granted, typically application over limits or keys missing, check 'reason' tag), `403` (for authentication errors, check 'error' tag) and `404` (not found).",
+        "tags": [
+          "OAuth"
+        ],
+        "parameters": [
+          {
+            "name": "service_token",
+            "in": "query",
+            "description": "Service token for the API service.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "query",
+            "description": "Service ID.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "app_id",
+            "in": "query",
+            "description": "Client ID (identifier of the application if the authentication pattern is OAuth, note that client_id == app_id)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_key",
+            "in": "query",
+            "description": "App Key (shared secret of the application). The app key, if present, must match a key defined for the application. Note that empty values are considered invalid.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referrer",
+            "in": "query",
+            "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usage",
+            "in": "query",
+            "description": "Predicted usage. Actual usage will need to be reported with a report or an authrep call.",
+            "schema": {
+              "$ref": "#/components/schemas/Usage"
+            },
+            "style": "deepObject",
+            "explode": true
+          },
+          {
+            "name": "redirect_url",
+            "in": "query",
+            "description": "Optional redirect URL for OAuth. Will be validated if sent.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "description": "Optional redirect URI for OAuth. This is the same as 'redirect_url', but if used you should expect a matching 'redirect_uri' response field.",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -160,13 +270,16 @@
     "/transactions/oauth_authrep.xml": {
       "get": {
         "summary": "AuthRep (OAuth authentication mode pattern)",
-        "tags": ["Authorization"],
-        "operationId": "oauth_authrep",
+        "operationId": "authrepOauth",
+        "description": "AuthRep is a 'one-shot' operation to authorize an application and report the associated transaction at the same time in the OAuth authentication pattern.\n\nThe main difference between this call and the regular authorize call is that usage will be reported if the authorization is successful. Authrep is the most convenient way to integrate your API with the 3scale's Service Manangement API since it does a 1:1 mapping between a request to your API and a request to 3scale's API.\n\nIf you do not want to do a request to 3scale for each request to your API or batch the reports you should use the Authorize and Report methods instead.\n\nAuthrep is **not a read-only** operation and will increment the values if the authorization step is a success.\n\nWhen using this endpoint please pay attention at your handling of app_id and app_key parameters. If you don't specify an app_key, the endpoint assumes the app_id specified has already been authenticated by other means. If you specify the app_key parameter, even if it is empty, it will be checked against the application's keys. If you don't trust the app_id value you have, use app keys and specify one.\n\nThis call returns extra data (secret and redirect_url) needed to power OAuth APIs. It's only available for users with OAuth enabled APIs.",
+        "tags": [
+          "OAuth"
+        ],
         "parameters": [
           {
             "name": "service_token",
             "in": "query",
-            "description": "Your service api key with 3scale (also known as service token).",
+            "description": "Service token for the API service.",
             "required": true,
             "schema": {
               "type": "string"
@@ -175,24 +288,24 @@
           {
             "name": "service_id",
             "in": "query",
-            "description": "Service id. Required.",
+            "description": "Service ID.",
             "required": true,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "OAuth token used for authorizing if you don't use client_id with client_secret.",
-            "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
             "name": "app_id",
             "in": "query",
-            "description": "Client Id (identifier of the application if the auth. pattern is OAuth, note that client_id == app_id)",
+            "description": "Client ID (identifier of the application if the authentication pattern is OAuth, note that client_id == app_id)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app_key",
+            "in": "query",
+            "description": "App Key (shared secret of the application). The app key, if present, must match a key defined for the application. Note that empty values are considered invalid.",
             "schema": {
               "type": "string"
             }
@@ -210,16 +323,20 @@
             "in": "query",
             "description": "Usage will increment the metrics with the values passed. The value can be only a positive integer (e.g. 1, 50). Reporting usage[hits]=1 will increment the hits counter by +1.",
             "schema": {
-              "type": "ref"
-            }
+              "$ref": "#/components/schemas/Usage"
+            },
+            "style": "deepObject",
+            "explode": true
           },
           {
             "name": "log",
             "in": "query",
-            "description": "Request Log allows to log the requests/responses/status_codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
+            "description": "Request Log allows to log status codes of your API back to 3scale to maintain a log of the latest activity on your API. Request Logs are optional and not available in all 3scale plans.",
             "schema": {
-              "type": "ref"
-            }
+              "$ref": "#/components/schemas/Log"
+            },
+            "style": "deepObject",
+            "explode": true
           },
           {
             "name": "redirect_url",
@@ -246,73 +363,20 @@
         }
       }
     },
-    "/transactions/authorize.xml": {
-      "get": {
-        "summary": "Authorize (API Key authentication pattern)",
-        "tags": ["Authorization"],
-        "operationId": "authorize_user_key",
-        "parameters": [
-          {
-            "name": "service_token",
-            "in": "query",
-            "description": "Your service api key with 3scale (also known as service token).",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_id",
-            "in": "query",
-            "description": "Service id. Required.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "user_key",
-            "in": "query",
-            "description": "User Key (identifier and shared secret of the application if the auth. pattern is Api Key)",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "referrer",
-            "in": "query",
-            "description": "Referrer IP Address or Domain. Required only if referrer filtering is enabled. If special value '*' (wildcard) is passed, the referrer check is bypassed.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "usage",
-            "in": "query",
-            "description": "Predicted Usage. Actual usage will need to be reported with a report or an authrep.",
-            "schema": {
-              "type": "ref"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
     "/transactions.xml": {
       "post": {
-        "summary": "Report (OAuth authentication pattern)",
-        "tags": ["Authorization"],
+        "summary": "Report",
+        "operationId": "report",
+        "description": "Report the transactions to 3scale backend.\n\nThis operation updates the metrics passed in the usage parameter. You can send up to 1K transactions in a single POST request. Transactions are processed asynchronously by the 3scale's backend.\n\nTransactions from a single batch are reported only if all of them are valid. If there is an error in processing of at least one of them, none is reported.\n\nNote that a batch can only report transactions to the same service, `service_id` is at the same level as `service_token`. Multiple report calls will have to be issued to report transactions to different services.\n\nBe aware that reporting metrics that are limited at the time of reporting will have no effect.\n\nSupported Content-Type values for this POST call are: `application/x-www-form-urlencoded`.",
+        "tags": [
+          "API Key and App ID / App Key",
+          "OAuth"
+        ],
         "parameters": [
           {
             "name": "service_token",
             "in": "query",
-            "description": "Your service api key with 3scale (also known as service token).",
+            "description": "Service token for the API service.",
             "required": true,
             "schema": {
               "type": "string"
@@ -321,10 +385,10 @@
           {
             "name": "service_id",
             "in": "query",
-            "description": "Service id. Required.",
+            "description": "Service ID.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -332,13 +396,8 @@
             "in": "query",
             "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
             "required": true,
-            "style": "form",
-            "explode": false,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/components/schemas/Transaction"
             }
           }
         ],
@@ -351,5 +410,47 @@
       }
     }
   },
-  "components": {}
+  "components": {
+    "schemas": {
+      "Usage": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "example": {
+          "hits": 1
+        }
+      },
+      "Transaction": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "user_key": {
+              "type": "string"
+            },
+            "app_id": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}( \\d{2}:\\d{2})?$",
+              "example": "2022-02-01 22:15:31 -08:00"
+            },
+            "usage": {
+              "$ref": "#/components/schemas/Usage"
+            }
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": 200
+          }
+        }
+      }
+    }
+  }
 }
