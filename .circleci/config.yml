@@ -222,6 +222,7 @@ commands: # reusable commands with parameters
             BUNDLE_JOBS: 3
       - save-gem-cache
       - *persist-vendored-dependencies-to-workspace
+      - notify_failure
 
   clone-oracle-libraries:
     steps:
@@ -466,6 +467,7 @@ jobs:
           root: .
           paths:
             - ./node_modules
+      - notify_failure
 
   assets_precompile:
     resource_class: large
@@ -495,6 +497,7 @@ jobs:
             - ./public/packs-test
             - ./public/assets
             - ./config/*.yml
+      - notify_failure
 
   lint:
     parameters:
@@ -525,6 +528,7 @@ jobs:
       - store_artifacts:
           path: doc/active_docs
           destination: active_docs
+      - notify_failure
 
   jest:
     resource_class: medium+
@@ -542,6 +546,7 @@ jobs:
           command: |
             yarn jest --maxWorkers=3
       - *upload-coverage
+      - notify_failure
 
   unit:
     parallelism: 8
