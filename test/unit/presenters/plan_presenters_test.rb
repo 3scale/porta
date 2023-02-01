@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class PlanPresentersTest < ActiveSupport::TestCase
-  attr_reader :service, :plans
-
   test '#paginated_table_plans can be ordered' do
     assert_equal plans.reorder(name: :desc), presenter({ sort: 'name', direction: 'desc' }).paginated_table_plans
     assert_equal plans.reorder(name: :asc), presenter({ sort: 'name', direction: 'asc' }).paginated_table_plans
@@ -40,7 +38,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
       FactoryBot.create_list(:application_plan, 5, issuer: service)
 
       @plans = @service.application_plans
-                       .order(name: :asc)
+                       .reorder(name: :asc)
     end
 
     test '#paginated_table_plans can search' do
@@ -97,7 +95,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
       FactoryBot.create_list(:account_plan, 5, provider: provider)
 
       @plans = provider.account_plans
-                        .order(name: :asc)
+                        .reorder(name: :asc)
     end
 
     test '#paginated_table_plans can search' do
@@ -121,4 +119,8 @@ class PlanPresentersTest < ActiveSupport::TestCase
   def self.runnable_methods
     PlanPresentersTest == self ? [] : super
   end
+
+  private
+
+  attr_reader :service, :plans
 end
