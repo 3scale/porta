@@ -23,7 +23,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_per_page
   def index
     @sections = current_account.sections.page(params[:page] || 1).per_page(per_page)
-    respond_with @sections
+    respond_with(@sections, short: true)
   end
 
   ##~ op            = e.operations.add

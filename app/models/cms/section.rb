@@ -49,11 +49,11 @@ class CMS::Section < ApplicationRecord
         xml.created_at created_at.xmlschema
         xml.updated_at updated_at.xmlschema
       end
-      x.partial_path partial_path
-      x.public public
       x.title title
-      x.parent_id parent_id
       x.system_name system_name
+      x.public public
+      x.parent_id parent_id
+      x.partial_path partial_path
     end
 
     xml.to_xml
