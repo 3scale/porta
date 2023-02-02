@@ -372,35 +372,42 @@
           "API Key and App ID / App Key",
           "OAuth"
         ],
-        "parameters": [
-          {
-            "name": "service_token",
-            "in": "query",
-            "description": "Service token for the API service.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_id",
-            "in": "query",
-            "description": "Service ID.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "transactions",
-            "in": "query",
-            "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Transaction"
+        "requestBody": {
+          "description": "Transactions to be reported. There is a limit of 1000 transactions to be reported on a single request.",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "service_token": {
+                    "type": "string",
+                    "description": "Service token for the API service."
+                  },
+                  "service_id": {
+                    "type": "integer",
+                    "description": "Service ID."
+                  },
+                  "transactions": {
+                    "$ref": "#/components/schemas/Transactions"
+                  }
+                },
+                "required": [
+                  "service_token",
+                  "service_id",
+                  "transactions"
+                ]
+              },
+              "encoding": {
+                "transactions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -421,24 +428,37 @@
           "hits": 1
         }
       },
-      "Transaction": {
+      "Transactions": {
         "type": "array",
         "items": {
-          "properties": {
-            "user_key": {
-              "type": "string"
-            },
-            "app_id": {
-              "type": "string"
-            },
-            "timestamp": {
-              "type": "string",
-              "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}( \\d{2}:\\d{2})?$",
-              "example": "2022-02-01 22:15:31 -08:00"
-            },
-            "usage": {
-              "$ref": "#/components/schemas/Usage"
-            }
+          "$ref": "#/components/schemas/Transaction"
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "user_key": {
+            "type": "string",
+            "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key."
+          },
+          "app_id": {
+            "type": "string",
+            "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key)."
+          },
+          "timestamp": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}( [+-]\\d{2}:\\d{2})?$",
+            "description": "If passed, it should be the time when the transaction took place. Format: YYYY-MM-DD HH:MM:SS for UTC, add -HH:MM or +HH:MM for time offset. For instance, 2022-02-01 22:15:31 -08:00",
+            "example": "2022-02-01 22:15:31 -08:00"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/Usage"
+          }
+        },
+        "example": {
+          "user_key": "example",
+          "usage": {
+            "hits": 1
           }
         }
       },
