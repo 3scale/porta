@@ -54,6 +54,13 @@ class CMS::Section < ApplicationRecord
       x.public public
       x.parent_id parent_id
       x.partial_path partial_path
+      unless options[:short]
+        x.contents do |c|
+          [*pages, *files, *builtins, *children].each do |child|
+            c.__send__(CMS::XML::CLASS_TAG.call(child.class)) { |node| node.id child.id }
+          end
+        end
+      end
     end
 
     xml.to_xml
