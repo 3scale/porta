@@ -11,7 +11,6 @@ base: &default
   require_cc_on_signup: false
   apicast_per_service: true
   new_notification_system: true
-  cms_api: false
   apicast_v2: true
   forum: false
   published_service_plan_signup: true

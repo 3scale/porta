@@ -16,28 +16,29 @@ css:
   }
 
   .form-control {
-    display: block;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    font-size: 1rem;
+    border: 1px solid #d1d1d1;
+    color: #393f44;
+    background-color: #fff;
     width: 100%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.428571429;
-    color: #555555;
-    vertical-align: middle;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    - webkit - box - shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    padding: 0.375rem;
+    height: 2.25rem;
+    border-radius: 0.1875rem;
+    line-height: 1.5;
   }
 
-  .form-control:focus {
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+  .form-control.braintree-hosted-fields-focused {
+    outline: none !important;
+    border-color: #0088ce;
+    box-shadow: 0;
+    color: #0088ce;
+  }
+
+  fieldset#hosted-fields.braintree-hosted-fields-focused {
+    display: none;
   }
 
 h2
@@ -62,9 +63,14 @@ p
   = form.inputs "Personal Details" do
     = form.input :first_name, required: true
     = form.input :last_name, required: true
-    = form.input :phone , label: "Phone", required: true
+    = form.input :phone, required: true
 
-  = form.inputs "Credit Card Details" do
+  = form.inputs 'Credit Card Details', id: 'fake-fields' do
+    = form.input 'foo', label: 'Number', input_html: { disabled: true }
+    = form.input 'foo', label: 'Expiration Date (MM/YY)', input_html: { disabled: true }
+    = form.input 'foo', label: 'CVV', input_html: { disabled: true }
+
+  = form.inputs "Credit Card Details", id: 'hosted-fields', class: 'braintree-hosted-fields-hidden' do
     ol
       li.string.required#customer_credit_card_number_input
         label for="customer_credit_card_number" Number
@@ -82,17 +88,17 @@ p
         = billing_address.input :company, required: true
         = billing_address.input :street_address, required: true
         = billing_address.input :extended_address, required: true
-        = billing_address.input :postal_code, label: "ZIP / Postal Code" , required: true
-        = billing_address.input :locality, label: "City", required: true
-        = billing_address.input :region, label: "State/Region" , required: true
-        = billing_address.input :country_name, label: "Country", as: :select,
+        = billing_address.input :postal_code , required: true
+        = billing_address.input :locality, required: true
+        = billing_address.input :region, required: true
+        = billing_address.input :country_name, as: :select,
           collection: merchant_countries, required: true,
           allow_blank: false, prompt: 'Select your country'
   = hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce'
 
   = render partial: '/shared/legal_terms_for_cc_details'
   = form.actions do
-    = form.commit_button 'Save credit card'
+    = form.commit_button 'Save credit card', button_html: { disabled: true }
 
 / TODO: All is duplicated. Move this into a pack and use braintree from node_modules
 script src="https://js.braintreegateway.com/web/3.69.0/js/client.min.js"
@@ -100,10 +106,18 @@ script src="https://js.braintreegateway.com/web/3.69.0/js/hosted-fields.min.js"
 javascript:
   const form = document.querySelector('form#new_customer');
   const submit = document.querySelector('button[type="submit"]');
+  const hostedFieldset = document.querySelector('fieldset#hosted-fields')
+  const fakeFieldset = document.querySelector('fieldset#fake-fields')
 
-  if (typeof braintree !== 'undefined') {
+  if (!(form && submit && hostedFieldset && fakeFieldset)) {
+    throw new Error('Required elements not found')
+  }
+
+  const authorization = '#{@braintree_authorization}'
+
+  if (typeof braintree !== 'undefined' && authorization) {
     braintree.client.create({
-      authorization: '#{j @braintree_authorization}'
+      authorization
     }, function(clientErr, clientInstance) {
       if (clientErr) {
         console.error(clientErr);
@@ -147,7 +161,9 @@ javascript:
           return;
         }
 
-        submit.removeAttribute('disabled');
+        fakeFieldset.remove()
+        hostedFieldset.classList.remove('braintree-hosted-fields-focused')
+        submit.removeAttribute('disabled')
         form.addEventListener('submit', function(event) {
           event.preventDefault();
           event.stopPropagation();

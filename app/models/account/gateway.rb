@@ -81,6 +81,10 @@ module Account::Gateway
     save!
   end
 
+  def unacceptable_payment_gateway?
+    [:bogus, nil].include?(payment_gateway_type)
+  end
+
   def log_payment_gateway_change
     Rails.logger.info("[Notification][Payment Gateway Change]: Account #{org_name} has" +
                       "changed payment gateway to #{payment_gateway_type}")

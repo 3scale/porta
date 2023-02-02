@@ -91,6 +91,18 @@ When /^I navigate to the buyers service contracts page$/ do
 end
 
 When "I navigate to the Account Settings" do
-  find('#api_selector').click
-  step %(I follow "Account Settings")
+  select_context 'Account Settings'
+end
+
+private
+
+def context_selector
+  @context_selector ||= find('#api_selector')
+end
+
+def select_context(context)
+  context_selector.click
+  within(context_selector) do
+    click_link context
+  end
 end

@@ -20,16 +20,13 @@ jest.spyOn(hostedFields, 'create').mockResolvedValue({
 
 jest.mock('validate.js')
 
-const COUNTRIES_LIST = '[["Afghanistan","AF"],["Albania","AL"],["Algeria","DZ"],["Spain","ES"]]'
+const COUNTRIES_LIST: [string, string][] = [['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Spain', 'ES']]
 
 const props: Props = {
   braintreeClient: {} as Client,
   billingAddress: {
     company: 'Kserol',
-    address: '',
-    address1: 'Napols 182',
-    address2: '',
-    phone_number: '1234567890',
+    address: 'Napols 182',
     city: 'Barcelona',
     country: 'Spain',
     state: '',

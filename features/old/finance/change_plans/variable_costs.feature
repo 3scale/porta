@@ -6,7 +6,7 @@ Feature: Change plan
 
   Background:
     Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" is charging
+      And provider "foo.3scale.localhost" is charging its buyers
       And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on
     Given an application plan "CheapPlan" of provider "foo.3scale.localhost" for 0 monthly
@@ -22,7 +22,7 @@ Feature: Change plan
       @wip
   Scenario: Keeps price of the moment of the hit was done even if plan doesn't change.
     Given the time is 1st May 2009
-      And provider "foo.3scale.localhost" has prepaid billing enabled
+      And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
       And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
@@ -42,7 +42,7 @@ Feature: Change plan
 
   Scenario: Change plan with variable costs in both plans in the same month (PREPAID)
     Given the time is 1st May 2009
-      And provider "foo.3scale.localhost" has prepaid billing enabled
+      And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
       And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |
@@ -64,7 +64,7 @@ Feature: Change plan
 
   Scenario: Change plan with variable costs in both plans in the same month. Provider sees it the day after. Buyer end of month (PREPAID)
     Given the time is 1st May 2009
-      And provider "foo.3scale.localhost" has prepaid billing enabled
+      And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
       And a buyer "stallman" signed up to application plan "CheapPlan" on 1st May 2009
       And buyer "stallman" makes 1 service transactions with:
       | Metric   | Value |

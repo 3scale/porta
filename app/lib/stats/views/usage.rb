@@ -2,6 +2,11 @@
 module Stats
   module Views
     module Usage
+      extend ActiveSupport::Concern
+
+      included do
+        include System::UrlHelpers.system_url_helpers
+      end
 
       GRANULARITIES = {:year  => :month,
                        :month => :day,
@@ -30,18 +35,23 @@ module Stats
               }
 
         unless @cinstance.nil?
+          application_id = @cinstance.id
+          account_id = @cinstance.user_account.id
+
           result[:application] = {
-            :id    => @cinstance.id,
+            :id    => application_id,
             :name  => @cinstance.name,
             :state => @cinstance.state,
+            :link => provider_admin_application_path(application_id),
             :description => @cinstance.description,
             :plan => {
               :id   => @cinstance.plan.id,
               :name => @cinstance.plan.name
             },
             :account => {
-              :id    => @cinstance.user_account.id,
-              :name  => @cinstance.user_account.org_name
+              :id    => account_id,
+              :name  => @cinstance.user_account.org_name,
+              :link => admin_buyers_account_path(account_id)
             },
             service: {
               id: @cinstance.service_id
