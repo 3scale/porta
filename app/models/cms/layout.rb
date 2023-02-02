@@ -21,22 +21,18 @@ class CMS::Layout < CMS::Template
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.layout do |x|
+    xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema
         xml.updated_at updated_at.xmlschema
       end
-
-      x.system_name system_name
-      x.content_type content_type
-      x.handler handler
-      x.liquid_enabled liquid_enabled
       x.title title
-
+      x.system_name system_name
+      x.liquid_enabled liquid_enabled
       unless options[:short]
-        x.draft draft
-        x.published published
+        x.draft { |node| node.cdata draft }
+        x.published { |node| node.cdata published }
       end
     end
 
