@@ -51,7 +51,7 @@ class CMS::File < ApplicationRecord
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.file do |x|
+    xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema
@@ -59,9 +59,10 @@ class CMS::File < ApplicationRecord
       end
       x.section_id section_id
       x.path path
+      x.downloadable downloadable?
       x.url url.to_s
-      x.tag_list tag_list
       x.title title
+      x.content_type attachment.content_type
     end
 
     xml.to_xml
