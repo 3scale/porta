@@ -248,10 +248,6 @@ class CMS::Builtin < CMS::BasePage
       I18n.t("#{system_name}.title", scope: 'builtin_partials', default: (system_name || '').humanize)
     end
 
-    def to_xml(options = {})
-      super options.merge(root: :builtin_partial)
-    end
-
     protected
 
     def set_rails_view_path
