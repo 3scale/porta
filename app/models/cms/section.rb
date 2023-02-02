@@ -43,7 +43,7 @@ class CMS::Section < ApplicationRecord
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.section do |x|
+    xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema
