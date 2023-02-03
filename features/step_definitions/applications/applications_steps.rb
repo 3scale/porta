@@ -175,7 +175,7 @@ And(/^has an application$/) do
   step %{an application plan "#{plan_name}" of provider "#{@provider.internal_domain}"}
   step %{a buyer "#{buyer_name}" signed up to application plan "#{plan_name}"}
 
-  @application = Account.find_by_org_name!(buyer_name).bought_cinstance
+  @application = @provider.buyer_accounts.find_by!(org_name: buyer_name).bought_cinstance
 end
 
 Given(/^I'm on that application page$/) do

@@ -22,13 +22,13 @@ When "the buyer is reviewing their account settings" do
 end
 
 When "the buyer is reviewing their credit card details" do
-  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.reload.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
   visit admin_account_path
   credit_card_details_tab.click
 end
 
 When "the buyer enters the generic credit card details URL manually" do
-  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.reload.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
   visit admin_account_payment_details_path
 end
 
@@ -71,7 +71,7 @@ Given "the buyer {has} added their credit card details" do |has_address|
 end
 
 Then "the buyer can see their billing information" do
-  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.reload.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
 
   credit_card_details_tab.click
   assert_buyer_billing_address_details
