@@ -265,11 +265,17 @@ When "the buyer is reviewing their account details" do
   visit path_to('the account page')
 end
 
-Given "a buyer logged in to a provider" do
+Given "a buyer signed up to a provider" do
   steps %(
     Given a provider exists
     And the provider has a default paid application plan
     And a buyer signed up to the provider
+  )
+end
+
+Given "a buyer logged in to a provider" do
+  steps %(
+    Given a buyer signed up to a provider
     And the buyer logs in to the provider
   )
 end
