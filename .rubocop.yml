@@ -253,3 +253,6 @@ Lint/Debugger:
 
 Naming/RescuedExceptionsVariableName:
   PreferredName: exception
+
+Rails/RakeEnvironment:
+  Enabled: false
