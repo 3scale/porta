@@ -106,7 +106,7 @@ describe('When is new record', () => {
 describe('When is update', () => {
   const updateProps = {
     action: '/apiconfig/services/2/api_docs/1',
-    apiJsonSpec: '', //should we add an example spec somewhere?
+    apiJsonSpec: '',
     collection: [
       { id: 2, name: 'API' },
       { id: 6, name: 'Test' }

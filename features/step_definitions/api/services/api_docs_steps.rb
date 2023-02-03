@@ -118,11 +118,7 @@ Then "{spec_version} should escape properly the curl string" do |swagger_version
   page.fill_in 'user_key', with: 'Authorization: Oauth:"test"'
   page.click_button 'Try it out!'
   curl_commmand = find_all('div', text: /curl/i).last
-  if swagger_version == '1.2'
-    assert curl_commmand.has_text?('Authorization: Oauth:\"test\"')
-  else
-    assert curl_commmand.has_text?('Authorization: Oauth:"test"')
-  end
+  assert curl_commmand.has_text?(swagger_version == '1.2' ? 'Authorization: Oauth:\"test\"' : 'Authorization: Oauth:"test"')
 end
 
 Then "the table {should} contain a column for the service" do |should|
