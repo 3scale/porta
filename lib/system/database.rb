@@ -151,17 +151,9 @@ ActiveSupport.on_load(:active_record) do
 if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
     prepend(Module.new do
-
+      # Overwrites OracleEnhancedAdapter's create method to prevent Database manipulation using the SYSTEM user.
       def create
-        super
-        connection.execute "GRANT create trigger TO #{username}"
-        connection.execute "GRANT create procedure TO #{username}"
-      end
-
-      protected
-
-      def username
-        @config['username']
+        establish_connection(@config)
       end
     end)
   end

@@ -8,12 +8,7 @@ module System
 
       class << self
         def connection_config
-          spec = configuration_specification.config.dup
-          if oracle?
-            spec[:password] = ENV.fetch('ORACLE_SYSTEM_PASSWORD') {|key| raise KeyError, "Environment #{key} is mandatory"}
-            spec[:username] = 'SYSTEM'
-          end
-          spec
+          configuration_specification.config
         end
 
         def ready?
@@ -26,17 +21,10 @@ module System
         end
 
         def sql_for_readiness
-          if oracle?
-            <<~SQL
-              SELECT 1 FROM v$database WHERE cdb = 'NO' AND open_mode = 'READ WRITE'
-              UNION ALL
-              SELECT 1 FROM v$pdbs WHERE name COLLATE BINARY_CI = '#{connection_config[:database]}' AND open_mode = 'READ WRITE'
-            SQL
-          elsif mysql?
-            'SELECT 1'
-          else
-            'SELECT 1'
-          end
+          # We include "dummy" in the Oracle query to skip FAST DUAL and hit the database.
+          return 'SELECT 1, dummy FROM DUAL' if oracle?
+
+          'SELECT 1'
         end
       end
     end
