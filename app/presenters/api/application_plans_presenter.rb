@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 class Api::ApplicationPlansPresenter < PlansBasePresenter
-  def initialize(service:, collection:, params: {})
-    super(service: service, collection: collection, params: params)
+  def initialize(service:, params: {})
+    super(collection: service.application_plans, params: params)
+    @service = service
   end
 
   private
+
+  attr_reader :service
 
   def current_plan
     service.default_application_plan&.to_json(root: false, only: %i[id name]) || nil.to_json
