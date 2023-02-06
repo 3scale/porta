@@ -5,10 +5,14 @@ module ThreeScale
     def initialize(redis_config = {})
       raw_config = (redis_config || {}).symbolize_keys
       sentinels = raw_config.delete(:sentinels).presence
+      disable_client_id = raw_config.delete(:disable_client_id).presence
       raw_config.delete_if { |key, value| value.blank? }
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
       config.sentinels = parse_sentinels(sentinels) if sentinels
+
+      # Disable CLIENT SETNAME, for Redis instances that don't support CLIENT command
+      config.id = nil if disable_client_id
     end
 
     attr_reader :config
