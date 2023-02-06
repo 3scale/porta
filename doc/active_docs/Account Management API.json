@@ -2634,10 +2634,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/components/schemas/Permissions"
             }
           },
           {
@@ -2647,10 +2644,7 @@
             "style": "form",
             "explode": false,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/components/schemas/Permissions"
             }
           }
         ],
@@ -9935,5 +9929,14 @@
       }
     }
   },
-  "components": {}
+  "components": {
+    "schemas":{
+      "Permissions":{
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Permissions"
+        }
+      }
+    }
+  }
 }
