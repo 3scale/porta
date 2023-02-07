@@ -3,7 +3,7 @@ require 'test_helper'
 class Csv::BuyersExporterTest < ActiveSupport::TestCase
 
   def create_buyer_for(provider, date = Time.utc(2011,1,1))
-    Timecop.freeze(date) do
+    travel_to(date) do
       buyer = FactoryBot.create(:buyer_account,
                              provider_account: provider)
 
@@ -23,7 +23,7 @@ class Csv::BuyersExporterTest < ActiveSupport::TestCase
   end
 
   test 'to_csv' do
-    Timecop.freeze(Time.utc(2011,1,1)) do
+    travel_to(Time.utc(2011,1,1)) do
       buyer_without_admin_user = FactoryBot.create(:simple_buyer, provider_account: @provider)
 
       exporter = Csv::BuyersExporter.new(@provider)

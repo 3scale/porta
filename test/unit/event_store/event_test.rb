@@ -77,7 +77,7 @@ class EventStore::EventTest < ActiveSupport::TestCase
   end
 
   def test_stale
-    Timecop.freeze((EventStore::Event::TTL + 1.second).ago) do
+    travel_to((EventStore::Event::TTL + 1.second).ago) do
       FactoryBot.create(:service_token)
     end
 

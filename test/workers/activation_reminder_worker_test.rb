@@ -20,7 +20,7 @@ class ActivationReminderWorkerTest < ActiveSupport::TestCase
   end
 
   should "send a reminder 72 hours after signup" do
-    Timecop.freeze do
+    freeze_time do
       ActivationReminderWorker.enqueue(@user)
       assert_equal 1, ActivationReminderWorker.jobs.size
 

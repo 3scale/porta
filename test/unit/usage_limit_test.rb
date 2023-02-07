@@ -15,7 +15,7 @@ class UsageLimitTest < ActiveSupport::TestCase
   should_not allow_value('fake').for(:period)
 
   test 'period_range' do
-    Timecop.freeze(Time.zone.local(2009, 6, 11, 16, 45, 22)) do
+    travel_to(Time.zone.local(2009, 6, 11, 16, 45, 22)) do
       assert_equal Time.utc(2009, 6, 11, 16, 45, 22)..Time.utc(2009, 6, 11, 16, 45, 23),
                    UsageLimit.period_range(:second)
 

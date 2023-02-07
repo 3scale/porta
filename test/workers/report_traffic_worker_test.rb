@@ -16,7 +16,7 @@ class ReportTrafficWorkerTest < ActiveSupport::TestCase
   end
 
   test "enqueue" do
-    Timecop.freeze do
+    freeze_time do
       assert ReportTrafficWorker.enqueue(@account, @metric, @request, @response)
       args = [
         @account.id,
@@ -37,7 +37,7 @@ class ReportTrafficWorkerTest < ActiveSupport::TestCase
   end
 
   test "enqueue sends different response body depending on response code" do
-    Timecop.freeze do
+    freeze_time do
       failed_response = stub(status: 422, body: "invalid parameters")
       assert ReportTrafficWorker.enqueue(@account, @metric, @request, failed_response)
 
@@ -60,7 +60,7 @@ class ReportTrafficWorkerTest < ActiveSupport::TestCase
   end
 
   test "perform" do
-    Timecop.freeze do
+    freeze_time do
       response_attrs = { code: @response.status, length: @response.body.size }
       request_attrs  = {
         path:      @request.fullpath,

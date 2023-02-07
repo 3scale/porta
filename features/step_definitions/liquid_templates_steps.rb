@@ -25,7 +25,7 @@ end
 Given "a liquid template {string} of {provider} last updated {}" do |name, provider, time|
   template = provider.layouts.find_by_system_name(name) # I was having some issues with find_or_create
   template ||= provider.layouts.create!( :system_name => name )
-  Timecop.freeze(Time.zone.parse(time)) { template.touch }
+  safe_travel_to(Time.zone.parse(time)) { template.touch }
 end
 
 Then "liquid template {string} of {provider} should be modified" do |name, provider|

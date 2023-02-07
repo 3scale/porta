@@ -1,11 +1,11 @@
-global.fetch = () => {}
+global.fetch = jest.fn()
 
 const jQueryMock = () => $
 
 // rails flash
 jQueryMock.flash = {
-  notice: () => {},
-  error: () => {}
+  notice: jest.fn(),
+  error: jest.fn()
 }
 
 // rails ujs

@@ -27,7 +27,7 @@ class ImportCountriesServiceTest < ActiveSupport::TestCase
 
     test 'attributes for update' do
       now = Time.utc(2020, 2, 3, 8, 0)
-      Timecop.freeze(now) do
+      travel_to(now) do
         attributes = { name: 'Argentina', currency: 'ARS', updated_at: now }
         assert_equal attributes, country_data.attributes_for_update
       end
@@ -91,7 +91,7 @@ class ImportCountriesServiceTest < ActiveSupport::TestCase
 
   test 'updates countries that already exist' do
     now = Time.utc(2020, 2, 3, 16, 38)
-    Timecop.freeze(now) do |param|
+    travel_to(now) do |param|
       japan = Country.new(code: 'JP', name: 'Japan', currency: 'OTH')
 
       Country.stubs(find_by: nil)

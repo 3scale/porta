@@ -30,7 +30,7 @@ class SsoEnforceFlowTest < ActionDispatch::IntegrationTest
     get new_provider_admin_account_authentication_provider_path
     assert_response :success
     assert_equal 0, @provider.self_authentication_providers.count
-    Timecop.freeze(0.5.hour.ago) do
+    travel_to(0.5.hour.ago) do
       post provider_admin_account_authentication_providers_path(authentication_provider: { client_id: '1',
       client_secret: '2', site: 'http://alaska.eu.auth0.com', kind: 'auth0' })
       assert_response :redirect

@@ -1,6 +1,9 @@
 require 'test_helper'
 
 class ApiAuthentication::ByAuthenticationTokenTest < SimpleMiniTest
+  # This tests are transaction sensitive and need no transaction to be open
+  self.use_transactional_tests = false
+
   include ActiveSupport::Callbacks
   define_callbacks :action
   include ActiveSupport::Rescuable

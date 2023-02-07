@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+<FormFieldset
+  id="fieldset-Legendhasit!"
+>
+  <FormLegend>
+    Legend has it!
+  </FormLegend>
+  <SelectGroup
+    catalog={
+      Object {
+        "run_the_jewels_1": "Run The Jewels I",
+        "run_the_jewels_2": "Run The Jewels II",
+        "run_the_jewels_3": "Run The Jewels III",
+      }
+    }
+    label="Your RTJ favourite album"
+    name="run_the_jewels_album"
+    value="run_the_jewels_3"
+  />
+  <TextInputGroup
+    hint="Enter your favourite song from the album selected"
+    label="Your favourite song from the album above ^"
+    name="song_name"
+    placeholder="Oh Mama"
+    value="Thursday in the Danger Room"
+  />
+</FormFieldset>
+`;

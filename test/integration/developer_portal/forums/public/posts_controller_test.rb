@@ -19,7 +19,7 @@ class DeveloperPortal::PostsControllerTest < ActionDispatch::IntegrationTest
   attr_reader :buyer, :provider
 
   test 'user cannot edit his posts after the first day' do
-    Timecop.freeze(1.day.ago) { forum_post }
+    travel_to(1.day.ago) { forum_post }
 
     put forum_post_path(forum_post)
 

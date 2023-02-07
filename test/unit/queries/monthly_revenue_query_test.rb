@@ -3,7 +3,6 @@ require 'test_helper'
 class MonthlyRevenueQueryTest < ActiveSupport::TestCase
 
   def setup
-    Timecop.return
     @provider = FactoryBot.create(:simple_provider)
     @buyer = FactoryBot.create(:simple_buyer, provider_account: @provider)
 

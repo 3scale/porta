@@ -133,6 +133,8 @@ RSpec.configure do |config|
     junit = "tmp/junit/spec-#{[ENV['CIRCLE_NODE_INDEX'], Process.pid].compact.join('-')}/spec.xml"
     config.add_formatter RspecJunitFormatter, junit
   end
+
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 

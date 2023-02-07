@@ -1,1 +1,0 @@
-import '@stripe/stripe-js'

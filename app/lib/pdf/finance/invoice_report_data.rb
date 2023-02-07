@@ -7,6 +7,7 @@ class Pdf::Finance::InvoiceReportData
 
   LINE_ITEMS_HEADING = %w[Name Quantity Cost Charged].freeze
   DATE_FORMAT = "%e %B, %Y"
+  LOGO_ATTACHMENT_STYLE = :invoice
 
   delegate :name, :cost, :to => :@invoice
 
@@ -51,17 +52,13 @@ class Pdf::Finance::InvoiceReportData
     @invoice.buyer_account.bought_plan.name
   end
 
-  def logo
-    @logo_stream ||= open(@invoice.provider_account.profile.logo.url(:invoice))
-  rescue StandardError => e
-    # TODO: - uncomment complete exception!
-    # rescue OpenURI::HTTPError => e
-    Rails.logger.error "Failed to retrieve logo from: #{e.message}"
-    nil
-  end
+  def with_logo
+    raise ArgumentError, 'Calling #with_logo requires a block' unless block_given?
 
-  def logo?
-    @invoice.provider_account.profile.logo.file? && logo
+    io = logo_io
+    yield io
+  ensure
+    io&.close
   end
 
   def line_items
@@ -128,5 +125,27 @@ class Pdf::Finance::InvoiceReportData
 
       [total_without_vat, total_vat, total]
     end
+  end
+
+  def logo
+    @logo ||= @invoice.provider_account.profile.logo
+  end
+
+  # Depending on the storage option for the attachment:
+  # - retrieve either the full path of the local file, or the URL of the file in S3
+  # - read the file differently
+  def logo_io
+    case storage = logo.options[:storage].to_sym
+    when :filesystem
+      # read as binary file 'b'
+      File.open(logo.path(LOGO_ATTACHMENT_STYLE), 'rb')
+    when :s3
+      URI.open(logo.url(LOGO_ATTACHMENT_STYLE))
+    else
+      raise "Invalid attachment type #{storage}"
+    end
+  rescue StandardError => exception
+    Rails.logger.error "Failed to retrieve logo: #{exception.message}"
+    nil
   end
 end

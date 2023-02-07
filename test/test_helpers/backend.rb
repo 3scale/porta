@@ -115,7 +115,7 @@ module TestHelpers
     end
 
     def make_transaction_at(time, options)
-      Timecop.freeze(time) do
+      travel_to(time) do
         options = options.reverse_merge(:provider_account_id => @provider_account.id,
                                         :service_id => @service.id,
                                         :usage => {'hits' => 1},

@@ -147,7 +147,7 @@ gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.5.0'
 
 # for liquid docs on-fly generation
-gem 'commonmarker'
+gem 'commonmarker', '~> 0.21.0'
 gem 'escape_utils'
 gem 'github-markdown'
 gem 'html-pipeline'
@@ -166,7 +166,7 @@ group :development do
 
   gem 'yard', require: false
 
-  gem 'rubocop', '~> 0.92', require: false
+  gem 'rubocop', '1.31', require: false # Should match codeclimate's rubocop channel defined in .codeclimate.yml
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
 end
@@ -209,7 +209,6 @@ group :test do
   gem 'rspec-html-matchers', github: '3scale/rspec-html-matchers', branch: 'fix/rspec-3-with-xml-document', require: false
 
   gem 'shoulda', '~> 4.0'
-  gem 'timecop', '~> 0.9'
 
   gem 'ci_reporter_shell', github: '3scale/ci_reporter_shell', require: false
   gem 'minitest', '5.10.3'
@@ -229,6 +228,8 @@ group :test do
   gem "n_plus_one_control"
   gem 'ruby-prof'
   gem 'with_env'
+
+  gem 'pdf-inspector', require: 'pdf/inspector'
 end
 
 group :development, :test do
@@ -248,7 +249,7 @@ group :development, :test do
   gem 'unicorn-rails'
 end
 
-gem 'webpacker', '~> 4'
+gem 'webpacker', '5.4.3'
 
 gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production preview]

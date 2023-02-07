@@ -28,7 +28,7 @@ Feature: Provider side messages
     When I fill in "Subject" with "Party tonite!"
     And I fill in "Body" with "You are invited to my party."
     And I press "Send"
-    Then I should see the flash message "Message was sent"
+    Then I should see the flash message "Message was sent."
     And account "bob" should have 0 messages
     Then a message should be sent from provider "foo.3scale.localhost" to buyer "bob" with subject "Party tonite!" and body "You are invited to my party."
     When I follow "Dashboard"

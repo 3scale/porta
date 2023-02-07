@@ -161,4 +161,32 @@ class Account::ProviderDomainsTest < ActiveSupport::TestCase
     provider.domain = 'new.example.com'
     provider.save
   end
+
+  test 'special characters are replaced with hyphens in subdomain' do
+    provider = Account.new(name: 'test_2@s n#me') do |account|
+      account.provider = true
+    end
+    provider.generate_domains
+
+    assert_equal 'test-2-s-n-me', provider.subdomain
+  end
+
+  test 'all characters are set to lowercase in subdomain' do
+    provider = Account.new(name: 'Customer Name') do |account|
+      account.provider = true
+    end
+    provider.generate_domains
+
+    assert_equal 'customer-name', provider.subdomain
+  end
+
+  test 'subdomain should start and end with a alphanumeric character' do
+    provider = Account.new(name: '$-test-2__') do |account|
+      account.provider = true
+    end
+    provider.generate_domains
+
+    assert provider.valid?
+    assert_equal 'test-2', provider.subdomain
+  end
 end
