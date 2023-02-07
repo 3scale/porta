@@ -191,8 +191,8 @@ group :test do
   gem 'xpath', '~>3.2.0'
 
   gem 'chronic'
-  gem 'cucumber', '~> 7.0'
-  gem 'cucumber-rails', '~> 2.4.0', require: false
+  gem 'cucumber', '~> 8.0'
+  gem 'cucumber-rails', '~> 2.6.1', require: false
   gem 'email_spec', require: false
   gem 'fakefs', '~>0.18.0', require: 'fakefs/safe'
   gem 'launchy'
