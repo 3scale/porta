@@ -6,6 +6,7 @@
     <%- admin_domain = Account.is_admin_domain?(request.internal_host) -%>
     <%- master_domain = Account.is_master_domain?(request.internal_host) -%>
     <%- site_account ||= Account.master -%>
+    <%= rails_asset_url_tag %>
     <%= stylesheet_link_tag 'error' -%>
     <%= render 'provider/analytics' if admin_domain %>
   </head>
