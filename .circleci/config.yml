@@ -63,8 +63,7 @@ generate-assets-checksums: &generate-assets-checksums
 use-example-config-files: &use-example-config-files
   run:
     name: Copy example config files into place to be used by tests
-    command: |
-      cp config/examples/*.yml config/
+    command: cp config/examples/*.yml config/
 
 disable-internet-access: &disable-internet-access
   run:
@@ -118,8 +117,7 @@ oracle-db-container: &oracle-db-container
     ORACLE_SID: 'threescale'
     ORACLE_PDB: 'systempdbtest'
     ORACLE_PWD: 'threescalepass'
-  command: |
-    bash -c "sed -i.bak 's|2048|6144|g' /opt/oracle/dbca.rsp.tmpl && exec /opt/oracle/runOracle.sh"
+  command: bash -c "sed -i.bak 's|2048|6144|g' /opt/oracle/dbca.rsp.tmpl && exec /opt/oracle/runOracle.sh"
 
 memcached-container: &memcached-container
   image: memcached:1.5-alpine
@@ -447,13 +445,14 @@ jobs:
       - *attach-to-workspace
       - *generate-assets-checksums
       - *restore-assets-cache
+      - *use-example-config-files
       - run:
           name: Precompile assets
-          command: |
-            cp config/examples/*.yml config/
-            bundle exec rake assets:precompile NODE_ENV=test RAILS_ENV=test
+          command: bundle exec rake assets:precompile
           environment:
             RAILS_GROUPS: assets
+            RAILS_ENV: test
+            NODE_ENV: test
       - *save-assets-cache
       - persist_to_workspace:
           root: .
@@ -474,21 +473,43 @@ jobs:
       - checkout
       - *attach-to-workspace
       - run:
+          name: Eslint
+          command: yarn ci:lint
+
+  licenses:
+    parameters:
+      executor:
+        type: string
+        default: builder-ruby26
+    executor:
+      name: << parameters.executor >>
+    steps:
+      - checkout
+      - *attach-to-workspace
+      - *use-example-config-files
+      - run:
           name: Licenses check
-          command: |
-            bundle exec rake licenses:compliance
+          command: bundle exec rake licenses:compliance
+      - store_artifacts:
+          path: doc/licenses
+          destination: licenses
+
+  swagger:
+    parameters:
+      executor:
+        type: string
+        default: builder-ruby26
+    executor:
+      name: << parameters.executor >>
+    steps:
+      - checkout
+      - *attach-to-workspace
+      - *use-example-config-files
       - run:
           name: Swagger validation
           command: |
             bundle exec rake doc:swagger:validate:all
             bundle exec rake doc:swagger:generate:all
-      - run:
-          name: Eslint
-          command: |
-            yarn ci:lint
-      - store_artifacts:
-          path: doc/licenses
-          destination: licenses
       - store_artifacts:
           path: doc/active_docs
           destination: active_docs
@@ -506,8 +527,7 @@ jobs:
       - *attach-to-workspace
       - run:
           name: Jest specs
-          command: |
-            yarn jest --maxWorkers=3
+          command: yarn jest --maxWorkers=3
       - *upload-coverage
 
   unit:
@@ -916,7 +936,6 @@ workflows:
           requires:
             - deps_bundler_oracle
             - dependencies_npm
-
       - unit-oracle:
           requires:
             - deps_bundler_oracle
@@ -974,23 +993,30 @@ workflows:
       - dependencies_npm:
           requires:
             - manual_approval
-      - assets_precompile:
+      - licenses:
           requires:
             - dependencies_bundler
+      - swagger:
+          requires:
             - dependencies_npm
+            - dependencies_bundler
       - lint:
           requires:
-            - assets_precompile
+            - dependencies_npm
       - jest:
           requires:
             - dependencies_npm
       - notify_success:
           requires:
+            - licenses
+            - swagger
             - lint
             - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
+            - licenses
+            - swagger
             - lint
             - jest
           <<: *only-master-filter
@@ -1114,7 +1140,6 @@ workflows:
           requires:
             - deps_bundler_oracle
             - dependencies_npm
-
       - unit-oracle:
           executor: builder-with-oracle-ruby26
           context:
@@ -1153,7 +1178,6 @@ workflows:
             - integration-oracle
             - functional-oracle
           <<: *only-master-filter
-
       - notify_failure:
           requires:
             - rspec-oracle
@@ -1177,21 +1201,34 @@ workflows:
           requires:
             - dependencies_bundler
             - dependencies_npm
+      - licenses:
+          executor: builder-ruby26
+          requires:
+            - dependencies_bundler
+      - swagger:
+          executor: builder-ruby26
+          requires:
+            - dependencies_npm
+            - dependencies_bundler
       - lint:
           executor: builder-ruby26
           requires:
-            - assets_precompile
+            - dependencies_npm
       - jest:
           executor: builder-ruby26
           requires:
             - dependencies_npm
       - notify_success:
           requires:
+            - licenses
+            - swagger
             - lint
             - jest
           <<: *only-master-filter
       - notify_failure:
           requires:
+            - licenses
+            - swagger
             - lint
             - jest
           <<: *only-master-filter
