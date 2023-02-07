@@ -42,11 +42,15 @@ AfterStep('@pause') do
 end
 
 Before '@ignore-backend-alerts' do
-  step "I don't care about backend alert limits"
+  Service.any_instance.stubs(:alert_limits).returns([])
+  Service.any_instance.stubs(:create_alert_limits).returns([])
+  Service.any_instance.stubs(:delete_alert_limits).returns([])
 end
 
 After '@ignore-backend-alerts' do
-  step "I care about backend alert limits"
+  Service.any_instance.unstub(:alert_limits)
+  Service.any_instance.unstub(:create_alert_limits)
+  Service.any_instance.unstub(:delete_alert_limits)
 end
 
 Before '@recaptcha' do

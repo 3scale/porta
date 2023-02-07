@@ -21,7 +21,8 @@ class DeveloperPortal::BaseController < DeveloperPortal::ApplicationController
   end
 
   def finish_signup_for_paid_plan
-    return if unacceptable_payment_gateway?(site_account) || !require_credit_card_on_signup?
+    return if site_account.unacceptable_payment_gateway? || !require_credit_card_on_signup?
+
     redirect_to edit_payment_details_path
   end
 end

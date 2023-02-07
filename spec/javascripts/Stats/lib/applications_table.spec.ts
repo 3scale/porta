@@ -18,7 +18,7 @@ describe('StatsApplicationsTable', () => {
         application: {
           id: '13',
           name: 'Xiam',
-          link: '/apiconfig/services/5/application/13'
+          link: '/p/admin/applications/13'
         },
         total: 42
       }
@@ -32,7 +32,7 @@ describe('StatsApplicationsTable', () => {
     // let total = table.querySelectorAll('.StatsApplicationsTable-total').[0]
     const total = table.querySelectorAll('.StatsApplicationsTable-total')[0]
 
-    expect(application.href).toBe(`${window.location.origin}/apiconfig/services/5/application/13`)
+    expect(application.href).toBe(`${window.location.origin}/p/admin/applications/13`)
     expect(application.innerHTML).toBe('Xiam')
     expect(account.href).toBe(`${window.location.origin}/buyers/account/7`)
     expect(account.innerHTML).toBe('Chino')

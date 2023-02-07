@@ -2,9 +2,10 @@
 
 class Buyers::AccountPlansPresenter < PlansBasePresenter
   def initialize(collection:, params: {})
-    super(service: nil, collection: collection, params: params)
+    super(collection: collection, params: params)
   end
 
+  # This smells of :reek:NilCheck because it is nil check.
   def no_available_plans
     plans.default.nil? && plans.published.empty?
   end

@@ -24,17 +24,18 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
     && rpm -Uvh https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
     && yum -y update \
     && yum remove -y postgresql \
+    && yum install -y epel-release \
     && yum -y install centos-release-scl-rh \
               ImageMagick \
               ImageMagick-devel \
               unixODBC-devel \
               mysql \
-              postgresql10 postgresql10-devel postgresql10-libs \
+              llvm5.0-devel \
+              postgresql13 postgresql13-devel postgresql13-libs \
               file \
               $NODEJS_SCL \
               $VARNISH_SCL-jemalloc \
               $GIT_SCL \
-    && yum install -y epel-release \
     && yum -y clean all \
     && scl enable $VARNISH_SCL -- printf '$LIBRARY_PATH' | cut -d: -f1 > /etc/ld.so.conf.d/jemalloc.conf \
     && ldconfig && ldconfig -p | grep jemalloc
@@ -66,7 +67,7 @@ ENV BASH_ENV=/opt/app-root/etc/scl_enable \
 RUN export ${BUNDLER_ENV} >/dev/null\
     && source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
-    && bundle config build.pg --with-pg-config=/usr/pgsql-10/bin/pg_config \
+    && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/

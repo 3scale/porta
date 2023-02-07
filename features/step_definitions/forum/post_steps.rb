@@ -1,48 +1,5 @@
 # frozen_string_literal: true
 
-When /^I reply to topic "([^\"]*)" with "([^"]*)"$/ do |topic_title, body|
-  step %(I go to the "#{topic_title}" topic page)
-  step %(I fill in "Body" with "#{body}")
-  step %(I press "Post reply")
-end
-
-Then /^I should see the page to edit the post$/ do
-  response.should have_text(/Edit Post/)
-end
-
-Then /^I should not see the page to edit the post$/ do
-  response.should_not have_text(/Edit Post/)
-end
-
-Then /^I should be redirected to latest post for topic "(.*)"$/ do |topic_title|
-  topic = Topic.find_by_title! topic_title
-  response.should redirect_to(whitelabel_forum_topic_path(topic, :anchor => "post_#{topic.posts.last.id}"))
-  follow_redirect!
-end
-
-
-Then /^the post should not be destroyed$/ do
-  @post.reload.should_not be_nil
-end
-
-Then /^the post should be destroyed$/ do
-  expect { @post.reload }.to raise_error ActiveRecord::RecordNotFound
-end
-
-Then /^I should see post dates in the right date format$/ do
-  @topic.posts.each do |post|
-    response.should have_tag("p", /#{post.updated_at.to_s(:long)}/)
-  end
-end
-
-Then /^I should see "([^\"]*)" is the last post on the topic$/ do |text|
-  response.should have_tag('p', /#{text}/)
-end
-
-Then /^I should not see the post has been removed$/ do
-  response.body.should_not have_regexp /This post has been removed/
-end
-
 Given "{topic} has only one post" do |topic|
   topic.posts[1..-1].each(&:destroy)
   assert_equal 1, topic.posts.count
@@ -66,10 +23,6 @@ end
 
 Then "{topic} should not have post {string}" do |topic, body|
   assert_nil(topic.posts.to_a.find { |post| post.body == body })
-end
-
-Given "a post {string} under {topic}" do |body, topic|
-  FactoryBot.create(:post, :user => topic.user, :topic => topic, :body => body)
 end
 
 Given "{user} posted {string} {today} under {topic}" do |user, body, time, topic|

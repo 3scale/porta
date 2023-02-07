@@ -10,7 +10,6 @@ base: &default
   require_cc_on_signup: false
   apicast_per_service: true
   new_notification_system: true
-  cms_api: false
   forum: false
   policy_registry: true
   proxy_private_base_path: true

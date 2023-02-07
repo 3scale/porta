@@ -23,85 +23,11 @@ Given /^provider "([^"]*)" has Browser CMS (activated|deactivated)$/ do |provide
   end
 end
 
-
 Given "{provider} uses backend {backend_version} in his default service" do |provider, backend_version|
   service = provider.default_service
   service.backend_version = backend_version
   service.save!
 end
-
-
-When /^I press "([^"]*)" for config value "([^"]*)"$/ do |label, name|
-  widget = find(%(table#configs th:contains("#{name}") ~ td button:contains("#{label}")))
-  widget.click
-end
-
-When /^I fill in config value "([^"]*)" with "([^"]*)"$/ do |name, value|
-  field = find(%(table#configs th:contains("#{name}") ~ td input[type=text][name=value]))
-  field.set(value)
-end
-
-When /^I (check|uncheck) config value "([^"]*)"$/ do |action, name|
-  field = find(%(table#configs th:contains("#{name}") ~ td input[type=checkbox][name=value]))
-  field.set(action == 'check')
-  field.select_option #this is needed due some issues of capybara-webkit with checkboxes, should be ok for other drivers
-end
-
-When /^I select "([^"]*)" for config value "([^"]*)"$/ do |value, name|
-  field = find(%(table#configs th:contains("#{name}") ~ td select))
-  field.find(%(option:contains("#{value}"))).select_option
-end
-
-Then "{provider} should have config value {string} set to {string}" do |provider, name, value|
-  assert_equal value, provider.config[name]
-end
-
-Then "{provider} should have config value {string} set to {true}" do |provider, name, set|
-  assert_equal set, provider.config[name]
-end
-
-Then "{provider} should not have config value {string}" do |provider, name|
-  assert_nil provider.config[name]
-end
-
-Then /^I should see config value "([^"]*)" set to "([^"]*)"$/ do |name, value|
-  assert has_css?(%(table#configs th:contains("#{name}") ~ td input[type=text][name=value][value = "#{value}"]))
-end
-
-Then /^I should see config value "([^"]*)" set to (true|false)$/ do |name, value|
-  input = find(%(table#configs th:contains("#{name}") ~ td input[type=checkbox][name=value]))
-  assert_not_nil input
-
-  if value == 'true'
-    assert  input[:checked]
-  else
-    assert !input[:checked]
-  end
-end
-
-Then /^I should see config value "([^"]*)" has "([^"]*)" selected$/ do |name, value|
-  option = find(%(table#configs th:contains("#{name}") ~ td option[selected]))
-
-  assert_equal value.to_s, option.text
-end
-
-Then /^I should see config value "([^"]*)" has the blank option selected$/ do |name|
-  option = find(%(table#configs th:contains("#{name}") ~ td select option[selected]))
-  assert option[:value].blank?
-end
-
-Then /^I should not see config value "([^"]*)"$/ do |name|
-  assert has_no_css?(%(table#configs th:contains("#{name}")))
-end
-
-Then /^I should see button "([^"]*)" for config value "([^"]*)"$/ do |label, name|
-  assert has_css?(%(table#configs th:contains("#{name}") ~ td button:contains("#{label}")))
-end
-
-Then /^I should not see button "([^"]*)" for config value "([^"]*)"$/ do |label, name|
-  assert has_no_css?(%(table#configs th:contains("#{name}") ~ td button:contains("#{label}")))
-end
-
 
 Given "{provider} uses {authentication_strategy} authentication" do |provider, strategy|
   settings = provider.settings

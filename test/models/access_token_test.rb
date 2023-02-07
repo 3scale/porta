@@ -16,19 +16,6 @@ class AccessTokenTest < ActiveSupport::TestCase
     end
   end
 
-  def test_non_public_scopes
-    member.admin_sections = [:monitoring, :portal]
-    member.save!
-    @token.owner = member
-    @token.save!
-
-    Account.any_instance.expects(:provider_can_use?).with('cms_api').returns(false)
-    assert_equal ['stats'], @token.available_scopes.values
-
-    Account.any_instance.expects(:provider_can_use?).with('cms_api').returns(true)
-    assert_equal ['cms', 'stats'], @token.available_scopes.values
-  end
-
   def test_available_permissions
     assert_kind_of Hash, @token.available_permissions
   end

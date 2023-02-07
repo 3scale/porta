@@ -27,14 +27,6 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     refute account.provider_can_use?(:forum)
   end
 
-  def test_cms_api
-    account = FactoryBot.build_stubbed(:simple_account)
-
-    Rails.configuration.three_scale.rolling_updates.stubs(features: { cms_api: [account.id] })
-    assert account.provider_can_use?(:cms_api)
-    assert account.provider_can_use?('cms_api')
-  end
-
   def test_feature
     assert Logic::RollingUpdates.feature(:service_permissions)
 

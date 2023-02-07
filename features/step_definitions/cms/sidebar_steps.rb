@@ -4,7 +4,6 @@ When /^(.*) in the CMS sidebar$/ do |step|
   end
 end
 
-
 When /^I switch to (builtin|3scale) content$/ do |group|
   ensure_javascript
 
@@ -13,7 +12,6 @@ When /^I switch to (builtin|3scale) content$/ do |group|
     li.click
   end
 end
-
 
 When /^I choose builtin page "(.*?)"$/ do |system_name|
   css = "#cms-sidebar li[data-search=\"#{system_name}\"] a"

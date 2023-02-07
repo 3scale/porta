@@ -1,11 +1,11 @@
 Feature: Buyer signup
   I want to signup as a buyer
+
   Background:
     Given a provider exists
     And master has a application plan "enterprise"
     And the provider account allows signups
 
-  @javascript
   Scenario: Signup creates account created event
     And there are no events
     When a buyer signs up
@@ -20,7 +20,6 @@ Feature: Buyer signup
       And the users should receive the service contract created notification email
 
   # This is the default behaviour for new providers as of 05-07-2016
-  @javascript
   Scenario: Signup forces to fill in credit card for paid plan
     Given the provider is charging its buyers with braintree
     And the provider has "finance" visible
@@ -34,7 +33,6 @@ Feature: Buyer signup
     And I should be warned to complete my signup
 
   # This is the behaviour for existing providers as of 05-07-2016
-  @javascript
   Scenario: Signup does not require to fill in credit card on paid plan
     And the provider is charging its buyers with braintree
 
@@ -48,7 +46,6 @@ Feature: Buyer signup
     Then I should be on the homepage
 
   # This is the behaviour for existing providers as of 05-07-2016
-  @javascript
   Scenario: Signup require to fill in credit card on paid plan if switch is enabled
     And the provider is charging its buyers with braintree
     And the provider has "finance" visible
