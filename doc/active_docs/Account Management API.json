@@ -2628,7 +2628,7 @@
             }
           },
           {
-            "name": "allowed_service_ids",
+            "name": "allowed_service_ids[]",
             "in": "query",
             "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)",
             "style": "form",
@@ -2638,13 +2638,26 @@
             }
           },
           {
-            "name": "allowed_sections",
+            "name": "allowed_sections[]",
             "in": "query",
             "description": "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans), 'policy_registry'. To disable all sections, set the value to '[]'.",
             "style": "form",
             "explode": false,
             "schema": {
-              "$ref": "#/components/schemas/Permissions"
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "portal",
+                "finance",
+                "partners",
+                "monitoring",
+                "settings",
+                "plans",
+                "policy_registry"
+
+              ]
             }
           }
         ],
@@ -9932,10 +9945,7 @@
   "components": {
     "schemas":{
       "Permissions":{
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Permissions"
-        }
+        "type": "array"
       }
     }
   }
