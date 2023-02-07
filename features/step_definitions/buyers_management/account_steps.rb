@@ -2,7 +2,7 @@
 
 Given "{provider} has the following buyers:" do |provider, table|
   #TODO: dry this with buyer_steps Given /^these buyers signed up to (plan "[^"]*"):
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
+  table = parameterize_headers(table)
 
   table.hashes.each do |hash|
     step %{a buyer "#{hash[:name]}" signed up to provider "#{provider.org_name}"}

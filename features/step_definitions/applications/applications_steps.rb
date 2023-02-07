@@ -44,8 +44,7 @@ end
 
 Given "{buyer} has the following applications:" do |buyer, table|
   plan = buyer.provider_account.first_service!.plans.default
-
-  table.map_headers! { |header| header.downcase.gsub(/\s+/, '_') }
+  table = symbolize_headers(table)
   table.hashes.each do |hash|
     attributes = hash.symbolize_keys!.slice!(:state)
 
@@ -73,7 +72,7 @@ Given "{buyer} has {int} application(s)" do |buyer, number|
 end
 
 Given "the {provider} has the following applications:" do |provider, table|
-  transform_applications_table(table)
+  table = transform_applications_table(table)
   table.hashes.each do |row|
     assert provider.application_plans.include?(row[:plan]) if row[:plan]
     FactoryBot.create :cinstance, :user_account => row[:buyer],

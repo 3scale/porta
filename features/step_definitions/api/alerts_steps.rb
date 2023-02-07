@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Given /^I have following API alerts:$/ do |table|
-  symbolize_headers(table)
+  table = symbolize_headers(table)
   table.hashes.each do |hash|
     cinstance = Cinstance.find_by!(name: hash[:application])
     create_alert! cinstance, hash

@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 module Alerts
 
-  def symbolize_headers(table)
-    table.map_headers! { |header| header.downcase.gsub(/\s+/, '_').to_sym }
-  end
-
   def create_alert!(cinstance, hash)
     attributes = hash.slice(:timestamp, :message, :utilization, :level, :alert_id).merge(
       :cinstance => cinstance
@@ -32,8 +28,7 @@ module Alerts
 
     # two byte non breaking space :/
     nbsp = ' '
-    table.map_column!('Level') {|level| level.gsub(nbsp, ' ') }
-    table
+    table.map_column('Level') {|level| level.gsub(nbsp, ' ') }
   end
 
 end

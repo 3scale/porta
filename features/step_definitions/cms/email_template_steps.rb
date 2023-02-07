@@ -16,7 +16,7 @@ Given "{provider} has email template {string}" do |provider, system_name, conten
 end
 
 Given "I have following email template(s) of {provider}:" do |provider, table|
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
+  table = parameterize_headers(table)
   table.hashes.each do |attrs|
     attrs[:provider] = provider
     attrs[:updated_at] = Time.zone.now
