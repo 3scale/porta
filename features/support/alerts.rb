@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 module Alerts
 
   def create_alert!(cinstance, hash)
@@ -6,14 +7,12 @@ module Alerts
       :cinstance => cinstance
     )
 
-    Alert.create! [ attributes.merge(:account => cinstance.user_account),
-                    attributes.merge(:account => cinstance.service.account) ]
+    Alert.create! [attributes.merge(:account => cinstance.user_account),
+                   attributes.merge(:account => cinstance.service.account)]
   end
 
   def limit_alerts_table(state = nil)
-    scope = 'tr'
-    scope << "[data-state='#{state}']" if state.present?
-    scope << "[id*='alert']"
+    scope = state.present? ? "tr[data-state='#{state}'][id*='alert']" : "tr[id*='alert']"
 
     states = all("#limit_alerts tbody #{scope}")
     table = extract_table("#limit_alerts", "thead tr:not(.search), tbody #{scope}", "th, td")

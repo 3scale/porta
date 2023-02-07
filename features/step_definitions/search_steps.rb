@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given /^Sphinx is offline$/ do
   ::ThinkingSphinx::Test.stop
 end

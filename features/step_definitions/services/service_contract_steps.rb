@@ -6,7 +6,7 @@ Given "the following buyers with service subscriptions signed up to {provider}:"
     account = row[:name]
     row[:plans].each do |plan|
       contract = account.buy! plan
-      contract.update_attribute(:state,  row[:state]) if row[:state]
+      contract.update_attribute(:state, row[:state]) if row[:state] # rubocop:disable Rails/SkipsModelValidations
     end
   end
 end
@@ -25,7 +25,6 @@ end
 
 Given "a buyer {string} signed up to {service}" do |name, service|
   provider = service.account
-  step %{a buyer "#{name}" signed up to provider "#{provider.name}"}
-  step %{buyer "#{name}" subscribed service "#{service.name}"}
+  step %(a buyer "#{name}" signed up to provider "#{provider.name}")
+  step %(buyer "#{name}" subscribed service "#{service.name}")
 end
-

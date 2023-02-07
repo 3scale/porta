@@ -1,9 +1,11 @@
-Then(/^there should be a c3 chart with the following data:$/) do |table|
+# frozen_string_literal: true
+
+Then(/^there should be a c3 chart with the following data:$/) do |table| # rubocop:disable Metrics/BlockLength
   chart_selector = '.c3'
 
   page.should have_css(chart_selector)
-  page.should have_css(chart_selector + '.c3')
-  page.should_not have_css(chart_selector + '.is-loading')
+  page.should have_css("#{chart_selector}.c3")
+  page.should_not have_css("#{chart_selector}.is-loading")
 
   table = table.map_column('total', &:to_i)
   page.document.synchronize(Capybara.default_max_wait_time,

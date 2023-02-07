@@ -7,7 +7,7 @@
 
 module DataTableTransforms
   def transform_buyer_subscriptions_table(table, provider)
-    table.map_column(:plans) { |plans| plans.from_sentence.map { |plan| Plan.find_by!(name: plan) } }
+    table.map_column(:plans) { |plans| from_sentence_to_plans(plans) }
       .map_column(:name) { |name| FactoryBot.create(:buyer_account, provider_account: provider, org_name: name) }
       .map_headers(&:to_sym)
   end
@@ -36,6 +36,10 @@ module DataTableTransforms
 
   def symbolize_headers(table)
     table.map_headers { |header| header.parameterize.underscore.downcase.to_sym }
+  end
+
+  def from_sentence_to_plans(sentence)
+    sentence.from_sentence.map { |plan| Plan.find_by!(name: plan) }
   end
 end
 

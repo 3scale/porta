@@ -18,7 +18,7 @@ Then /^I should see (\d+) *(?:(read|unread))? API alerts?$/ do |number, state|
 end
 
 Then /^I should not see any(?: (read|unread))? API alerts$/ do |state|
-  step %{I should see 0 #{state} API alerts}
+  step %(I should see 0 #{state} API alerts)
 end
 
 When /^(.+?) for the (?:(\d) ?(?:st|nd|rd|th)) API alerts?$/ do |action, row|
