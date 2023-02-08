@@ -2,17 +2,17 @@
 
 Given "{provider} has the following buyers:" do |provider, table|
   #TODO: dry this with buyer_steps Given /^these buyers signed up to (plan "[^"]*"):
-  table = parameterize_headers(table)
+  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
 
   table.hashes.each do |hash|
-    step %(a buyer "#{hash[:name]}" signed up to provider "#{provider.org_name}")
+    step %{a buyer "#{hash[:name]}" signed up to provider "#{provider.org_name}"}
 
-    buyer = Account.buyers.find_by!(org_name: hash[:name])
+    buyer = Account.buyers.find_by_org_name!(hash[:name])
 
-    buyer.update_attribute :state, hash[:state] if hash[:state] # rubocop:disable Rails/SkipsModelValidations
-    buyer.update_attribute :created_at, Chronic.parse(hash[:created_at]) if hash[:created_at] # rubocop:disable Rails/SkipsModelValidations
-    buyer.update_attribute :country, Country.find_by!(name: hash[:country]) if hash[:country].present? # rubocop:disable Rails/SkipsModelValidations
-    buyer.bought_account_contract.change_plan!(provider.account_plans.find_by!(name: hash[:plan])) if hash[:plan]
+    buyer.update_attribute :state, hash[:state] if hash[:state]
+    buyer.update_attribute :created_at, Chronic.parse(hash[:created_at]) if hash[:created_at]
+    buyer.update_attribute :country, Country.find_by_name!(hash[:country]) if hash[:country].present?
+    buyer.bought_account_contract.change_plan!(provider.account_plans.find_by_name!(hash[:plan])) if hash[:plan]
   end
 end
 
@@ -31,7 +31,7 @@ end
 
 Then /^(.*) for (?:buyer|provider|account) "([^"]*)"$/ do |action, org_name|
   account = Account.find_by!(org_name: org_name)
-  within("##{dom_id(account)}") { step action }
+  within('#' + dom_id(account)) { step action }
 end
 
 Then /^I should see (?:only )?(\d+) buyers$/ do |number|
@@ -46,7 +46,7 @@ Then "I should not see button to reject {buyer}" do |buyer|
   assert has_no_css?(%(form[action = "#{reject_admin_buyers_account_path(buyer)}"][method = "post"]))
 end
 
-When /^I create new buyer account "([^"]*)"$/ do |name|
+When /^I create new buyer account "([^\"]*)"$/ do |name|
   user = FactoryBot.attributes_for(:user)
 
   step %(I go to the new buyer account page)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Given /^I have following API alerts:$/ do |table|
-  table = symbolize_headers(table)
+  symbolize_headers(table)
   table.hashes.each do |hash|
     cinstance = Cinstance.find_by!(name: hash[:application])
     create_alert! cinstance, hash
@@ -18,7 +18,7 @@ Then /^I should see (\d+) *(?:(read|unread))? API alerts?$/ do |number, state|
 end
 
 Then /^I should not see any(?: (read|unread))? API alerts$/ do |state|
-  step %(I should see 0 #{state} API alerts)
+  step %{I should see 0 #{state} API alerts}
 end
 
 When /^(.+?) for the (?:(\d) ?(?:st|nd|rd|th)) API alerts?$/ do |action, row|

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Given /^Sphinx is offline$/ do
   ::ThinkingSphinx::Test.stop
 end
@@ -7,7 +5,9 @@ end
 When /^I search for:$/ do |table|
 
   within ".search" do
-    search = parameterize_headers(table).hashes.first
+    table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
+
+    search = table.hashes.first
 
     fill_in('search_query', :with => search[:group_org]) if search[:group_org]
     fill_in('search_name', :with => search[:name]) if search[:name]
