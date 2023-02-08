@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module System
   module Database
     # Just adding another connection to the pool so we do not mess up with the primary connection
@@ -8,7 +10,12 @@ module System
 
       class << self
         def connection_config
-          configuration_specification.config
+          configuration_specification.config.dup.tap do |spec|
+            if oracle? && ENV.fetch('ORACLE_SYSTEM_PASSWORD', nil).present?
+              spec[:password] = ENV.fetch('ORACLE_SYSTEM_PASSWORD')
+              spec[:username] = 'SYSTEM'
+            end
+          end
         end
 
         def ready?
