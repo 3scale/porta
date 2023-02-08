@@ -1,6 +1,7 @@
 class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPortal::BaseController
   inherit_resources
 
+  before_action :current_password_verification, only: :update
   activate_menu :account, :personal_details
 
   defaults :singleton => true, :instance_name => 'user', :route_prefix => 'admin_account'
@@ -61,4 +62,16 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
     end
   end
 
+  def user_params
+    params.require(:user)
+  end
+
+  def current_password_verification
+    return true unless current_user.using_password?
+
+    unless current_user.authenticated?(user_params[:current_password])
+      flash.now[:error] = 'Current password is incorrect.'
+      render "developer_portal/user/show"
+    end
+  end
 end

@@ -11,20 +11,50 @@
       <div class="panel-body panel-footer">
         {% form 'user.personal_details', user, class: "form-horizontal" %}
           <fieldset>
+            <div class="header" style="display: flex; align-items: center;">
+              <span>USER INFORMATION</span>
+              <hr style="width: 75%" />
+            </div>
             {% for field in user.fields %}
               {% include 'field' with field %}
             {% endfor %}
           </fieldset>
 
           <fieldset>
+            <div class="section-header" style="display: flex; align-items: center;">
+              <span>PROVIDE YOUR CURRENT PASSWORD</span>
+              <hr style="width: 55%" />
+            </div>
+            <div class="form-group {{ user.errors.current_password | error_class: 'has-error' }}">
+              <label for="user_current_password" class="col-md-4 control-label">
+                Current Password
+              </label>
+              <div class="col-md-6">
+                <input
+                  id="user_current_password"
+                  name="user[current_password]"
+                  type="password"
+                  class="form-control">
+                {{ user.errors.current_password | inline_errors: 'help-block' }}
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <div class="section-header" style="display: flex; align-items: center;">
+              <span>CHANGE PASSWORD</span>
+              <hr style="width: 75%" />
+            </div>
             <div class="form-group {{ user.errors.password | error_class: 'has-error' }}">
               <label for="user_password_confirmation" class="col-md-4 control-label">
                 Password
               </label>
               <div class="col-md-6">
-                <input id="user_password"
-                       name="user[password]" type="password"
-                       class="form-control">
+                <input
+                  id="user_password"
+                  name="user[password]"
+                  type="password"
+                  class="form-control">
                 {{ user.errors.password | inline_errors: 'help-block' }}
               </div>
             </div>
@@ -35,10 +65,11 @@
                 Password confirmation
               </label>
               <div class="col-md-6">
-                <input id="user_password_confirmation"
-                       name="user[password_confirmation]"
-                       type="password"
-                       class="form-control" >
+                <input
+                  id="user_password_confirmation"
+                  name="user[password_confirmation]"
+                  type="password"
+                  class="form-control">
                 {{ user.errors.password_confirmation | inline_errors: 'help-block' }}
               </div>
             </div>
@@ -47,7 +78,11 @@
           <fieldset>
             <div class="form-group">
               <div class="col-md-10">
-                <input class="btn btn-primary pull-right" name="commit" type="submit" value="Update Personal Details">
+                <input
+                  class="btn btn-primary pull-right"
+                  name="commit"
+                  type="submit"
+                  value="Update Personal Details">
               </div>
             </div>
           </fieldset>
