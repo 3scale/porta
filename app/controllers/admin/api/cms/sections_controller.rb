@@ -4,8 +4,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
 
   wrap_parameters :section, include: [:title, :public, :parent_id, :partial_path]
 
-  before_action :find_section, only: %i[update destroy]
-  before_action :find_section_with_contents, only: %i[show]
+  before_action :find_section, only: %i[show update destroy]
 
   representer :entity => ::CMS::SectionRepresenter, :collection => ::CMS::SectionsRepresenter
 
@@ -24,7 +23,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_per_page
   def index
     @sections = current_account.sections.page(params[:page] || 1).per_page(per_page)
-    respond_with(@sections, short: true)
+    respond_with @sections
   end
 
   ##~ op            = e.operations.add
@@ -103,18 +102,9 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
 
   private
 
-  def find_section(contents: false)
-    q = current_account.sections
-    q = q.includes(:pages, :files, :builtins, :children) if contents
-    q = q.where(id: params[:id]).or(q.where(system_name: params[:id]))
-    q.load
+  def find_section
+    @section = current_account.sections.where(id: params[:id]).or(current_account.sections.where(system_name: params[:id])).first
 
-    raise ActiveRecord::RecordNotFound, "Couldn't find CMS::Section with id or system_name=#{params[:id]}" if q.empty?
-
-    @section = q.first
-  end
-
-  def find_section_with_contents
-    find_section(contents: true)
+    raise ActiveRecord::RecordNotFound, "Couldn't find CMS::Section with id or system_name=#{params[:id]}" if @section.blank?
   end
 end
