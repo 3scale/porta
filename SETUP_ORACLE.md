@@ -68,7 +68,7 @@ You need to have Docker installed and running. You also need to be able to [run 
 
 1. From this repository, do `make oracle-database` and wait to see *DATABASE IS READY TO USE!*.
 
-    2. This will create a new user to stablish regular connections with the Oracle Database. For that, Oracle's SYSTEM user must be used.
+    1. This will create a new user to stablish regular connections with the Oracle Database. For that, Oracle's SYSTEM user must be used.
         Alternatively, the `ORACLE_SYSTEM_PASSWORD` ENV variable might be omitted and, in this case, a valid user must be provided.
         To create such user and GRANT it the necessary permissions, you might do the following:
         ```
@@ -85,9 +85,9 @@ You need to have Docker installed and running. You also need to be able to [run 
         GRANT create procedure TO rails;
         ```
 
-3. Finally initialize the database with some seed data by running
+2. Finally initialize the database with some seed data by running
     ```
-    DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" NLS_LANG=AMERICAN_AMERICA.UTF8 USER_PASSWORD=123456 MASTER_PASSWORD=123456 MASTER_ACCESS_TOKEN=token bundle exec rake db:drop db:create db:setup
+    DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG=AMERICAN_AMERICA.UTF8 USER_PASSWORD=123456 MASTER_PASSWORD=123456 MASTER_ACCESS_TOKEN=token bundle exec rake db:drop db:create db:setup
     ```
 
 ## Troubleshooting
