@@ -2013,7 +2013,7 @@
       </dependency>
           <dependency>
         <packageName>addressable</packageName>
-        <version>2.8.1</version>
+        <version>2.8.0</version>
         <licenses>
                       <license>
               <name>Apache 2.0</name>
@@ -3763,7 +3763,7 @@
       </dependency>
           <dependency>
         <packageName>concurrent-ruby</packageName>
-        <version>1.2.0</version>
+        <version>1.1.10</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -4523,7 +4523,7 @@
       </dependency>
           <dependency>
         <packageName>diff-lcs</packageName>
-        <version>1.5.0</version>
+        <version>1.4.4</version>
         <licenses>
                       <license>
               <name>Artistic-2.0</name>
@@ -4929,7 +4929,7 @@
       </dependency>
           <dependency>
         <packageName>erubi</packageName>
-        <version>1.12.0</version>
+        <version>1.10.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -5329,7 +5329,7 @@
       </dependency>
           <dependency>
         <packageName>ffi</packageName>
-        <version>1.15.5</version>
+        <version>1.15.4</version>
         <licenses>
                       <license>
               <name>New BSD</name>
@@ -6453,7 +6453,7 @@
       </dependency>
           <dependency>
         <packageName>i18n</packageName>
-        <version>1.12.0</version>
+        <version>1.10.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10535,7 +10535,7 @@
       </dependency>
           <dependency>
         <packageName>public_suffix</packageName>
-        <version>5.0.1</version>
+        <version>4.0.7</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10745,7 +10745,7 @@
       </dependency>
           <dependency>
         <packageName>rack-test</packageName>
-        <version>2.0.2</version>
+        <version>1.1.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10805,7 +10805,7 @@
       </dependency>
           <dependency>
         <packageName>rails-html-sanitizer</packageName>
-        <version>1.5.0</version>
+        <version>1.4.4</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -13467,7 +13467,7 @@
       </dependency>
           <dependency>
         <packageName>tzinfo</packageName>
-        <version>1.2.11</version>
+        <version>1.2.9</version>
         <licenses>
                       <license>
               <name>MIT</name>
