@@ -1,23 +1,18 @@
-# -*- coding: utf-8 -*-
-module Alerts
+# frozen_string_literal: true
 
-  def symbolize_headers(table)
-    table.map_headers! { |header| header.downcase.gsub(/\s+/, '_').to_sym }
-  end
+module Alerts
 
   def create_alert!(cinstance, hash)
     attributes = hash.slice(:timestamp, :message, :utilization, :level, :alert_id).merge(
       :cinstance => cinstance
     )
 
-    Alert.create! [ attributes.merge(:account => cinstance.user_account),
-                    attributes.merge(:account => cinstance.service.account) ]
+    Alert.create! [attributes.merge(:account => cinstance.user_account),
+                   attributes.merge(:account => cinstance.service.account)]
   end
 
   def limit_alerts_table(state = nil)
-    scope = 'tr'
-    scope << "[data-state='#{state}']" if state.present?
-    scope << "[id*='alert']"
+    scope = state.present? ? "tr[data-state='#{state}'][id*='alert']" : "tr[id*='alert']"
 
     states = all("#limit_alerts tbody #{scope}")
     table = extract_table("#limit_alerts", "thead tr:not(.search), tbody #{scope}", "th, td")
@@ -32,8 +27,7 @@ module Alerts
 
     # two byte non breaking space :/
     nbsp = ' '
-    table.map_column!('Level') {|level| level.gsub(nbsp, ' ') }
-    table
+    table.map_column('Level') {|level| level.gsub(nbsp, ' ') }
   end
 
 end

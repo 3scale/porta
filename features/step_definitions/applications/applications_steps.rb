@@ -44,8 +44,7 @@ end
 
 Given "{buyer} has the following applications:" do |buyer, table|
   plan = buyer.provider_account.first_service!.plans.default
-
-  table.map_headers! { |header| header.downcase.gsub(/\s+/, '_') }
+  table = symbolize_headers(table)
   table.hashes.each do |hash|
     attributes = hash.symbolize_keys!.slice!(:state)
 
@@ -53,7 +52,7 @@ Given "{buyer} has the following applications:" do |buyer, table|
     cinstance.description = 'Blah blah' if cinstance.description.blank?
     cinstance.save!
 
-    cinstance.update_attribute(:state,  hash[:state]) if hash[:state]
+    cinstance.update_attribute(:state, hash[:state]) if hash[:state] # rubocop:disable Rails/SkipsModelValidations
   end
 
 end
@@ -73,7 +72,7 @@ Given "{buyer} has {int} application(s)" do |buyer, number|
 end
 
 Given "the {provider} has the following applications:" do |provider, table|
-  transform_applications_table(table)
+  table = transform_applications_table(table)
   table.hashes.each do |row|
     assert provider.application_plans.include?(row[:plan]) if row[:plan]
     FactoryBot.create :cinstance, :user_account => row[:buyer],
@@ -88,7 +87,7 @@ Given "{application} is suspended" do |application|
 end
 
 Given "{application} has extra field {string} blank" do |app, attr|
-  app.update_attribute(:extra_fields, {attr => nil})
+  app.update_attribute(:extra_fields, {attr => nil}) # rubocop:disable Rails/SkipsModelValidations
 end
 
 Given "{buyer} has no live applications" do |buyer|
@@ -159,8 +158,8 @@ And(/^has an application$/) do
   buyer_name = SecureRandom.uuid # Use Faker ? use FactoryBot.create to generate just he values?
   plan_name = SecureRandom.uuid
 
-  step %{an application plan "#{plan_name}" of provider "#{@provider.internal_domain}"}
-  step %{a buyer "#{buyer_name}" signed up to application plan "#{plan_name}"}
+  step %(an application plan "#{plan_name}" of provider "#{@provider.internal_domain}")
+  step %(a buyer "#{buyer_name}" signed up to application plan "#{plan_name}")
 
   @application = @provider.buyer_accounts.find_by!(org_name: buyer_name).bought_cinstance
 end

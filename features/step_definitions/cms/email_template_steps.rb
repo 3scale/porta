@@ -12,11 +12,11 @@ Then "the headers of {email_template} should be following:" do |template, table|
 end
 
 Given "{provider} has email template {string}" do |provider, system_name, content|
-  template = provider.email_templates.create(published: content, system_name: system_name)
+  provider.email_templates.create(published: content, system_name: system_name)
 end
 
 Given "I have following email template(s) of {provider}:" do |provider, table|
-  table.map_headers! {|header| header.parameterize.underscore.downcase.to_s }
+  table = parameterize_headers(table)
   table.hashes.each do |attrs|
     attrs[:provider] = provider
     attrs[:updated_at] = Time.zone.now

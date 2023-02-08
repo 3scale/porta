@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 
 Given "the following buyers with service subscriptions signed up to {provider}:" do |provider, table|
-  # table is a Cucumber::MultilineArgument::DataTable
-  table.map_column!(:plans) { |plans| plans.from_sentence.map{ |plan| Plan.find_by_name!(plan) } }
-  table.map_column!(:name) { |name| FactoryBot.create :buyer_account, :provider_account => provider, :org_name => name }
-  table.map_headers! { |header| header.to_sym }
+  table = transform_buyer_subscriptions_table(table, provider)
   table.hashes.each do |row|
     account = row[:name]
     row[:plans].each do |plan|
       contract = account.buy! plan
-      contract.update_attribute(:state,  row[:state]) if row[:state]
+      contract.update_attribute(:state, row[:state]) if row[:state] # rubocop:disable Rails/SkipsModelValidations
     end
   end
 end
@@ -28,7 +25,6 @@ end
 
 Given "a buyer {string} signed up to {service}" do |name, service|
   provider = service.account
-  step %{a buyer "#{name}" signed up to provider "#{provider.name}"}
-  step %{buyer "#{name}" subscribed service "#{service.name}"}
+  step %(a buyer "#{name}" signed up to provider "#{provider.name}")
+  step %(buyer "#{name}" subscribed service "#{service.name}")
 end
-
