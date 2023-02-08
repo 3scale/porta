@@ -6,6 +6,7 @@ import * as utils from 'utilities/fetchData'
 import { FormWrapper } from 'NewService/components/FormElements/FormWrapper'
 import { ErrorMessage } from 'NewService/components/FormElements/ErrorMessage'
 import { ServiceDiscoveryListItems } from 'NewService/components/FormElements/ServiceDiscoveryListItems'
+import { waitForPromises } from 'utilities/test-utils'
 
 import type { Props } from 'NewService/components/ServiceDiscoveryForm'
 
@@ -38,31 +39,28 @@ describe('fetchProjects', () => {
     fetch.mockClear()
   })
 
-  it('should render an error when fetching projects is unsuccessful', () => {
+  it('should render an error when fetching projects is unsuccessful', async () => {
     const msg = 'Something went wrong'
-    fetch.mockImplementation(() => { throw new Error(msg) })
+    fetch.mockRejectedValueOnce(Error(msg))
 
     const wrapper = mount(<ServiceDiscoveryForm {...props} />)
 
-    expect(wrapper.exists(ErrorMessage)).toEqual(true)
+    await waitForPromises(wrapper)
     expect(wrapper.find(ErrorMessage).text()).toContain(msg)
   })
 
-  it('should fetch projects when first redendered', () => {
-    const projects = [{ name: 'project_00' }]
-    fetch.mockResolvedValue(projects)
+  it('should fetch projects when first redendered', async () => {
+    const projects = ['project_00']
+    const services = ['service_00']
+    fetch.mockResolvedValueOnce(projects)
+    fetch.mockResolvedValueOnce(services)
 
-    const setState = jest.fn(val => {
-      expect(val).toEqual(projects)
-    })
-    const useState = jest.spyOn(React, 'useState')
-      // @ts-expect-error TODO: we should not test Reacts useState but the component's state
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      .mockImplementationOnce((init: any) => [init, setState])
+    const wrapper = mount(<ServiceDiscoveryForm {...props} />)
+    await waitForPromises(wrapper)
 
-    mount(<ServiceDiscoveryForm {...props} />)
-
-    expect(useState).toHaveBeenCalled()
-    expect(fetch).toHaveBeenCalled()
+    expect(wrapper.find('select#service_namespace option').length).toEqual(1)
+    expect(wrapper.find('select#service_namespace option').at(0).text()).toEqual(projects[0])
+    expect(wrapper.find('select#service_name option').length).toEqual(1)
+    expect(wrapper.find('select#service_name option').at(0).text()).toEqual(services[0])
   })
 })
