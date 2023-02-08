@@ -3,6 +3,7 @@ FROM quay.io/3scale/system-builder:ruby26-nodejs12
 ARG CUSTOM_DB=mysql
 
 ENV DISABLE_SPRING="true" \
+    ORACLE_SYSTEM_PASSWORD="threescalepass" \
     NLS_LANG="AMERICAN_AMERICA.UTF8" \
     TZ="UTC" \
     MASTER_PASSWORD="p" \

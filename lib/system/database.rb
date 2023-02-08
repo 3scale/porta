@@ -148,14 +148,25 @@ module System
 end
 
 ActiveSupport.on_load(:active_record) do
-if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
-  ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
-    prepend(Module.new do
-      # Overwrites OracleEnhancedAdapter's create method to prevent Database manipulation using the SYSTEM user.
-      def create
-        establish_connection(@config)
-      end
-    end)
+  if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
+      prepend(Module.new do
+        # If ORACLE_SYSTEM_PASSWORD is provided, Porta impersonates Oracle's SYSTEM user to create/update a non-SYSTEM
+        # user and grants it permissions. This is a behaviour that should preferably be used during development as
+        # the usage of Oracle's SYSTEM user grants the application more power than it should have in the first place.
+        # Alternatively, Porta should be provided with a non-SYSTEM user that has been granted the necessary
+        # permissions.
+        def create
+          if ENV['ORACLE_SYSTEM_PASSWORD'].present?
+            super
+            connection.execute "GRANT create trigger TO #{username}"
+            connection.execute "GRANT create procedure TO #{username}"
+          else
+            Rails.logger.warn('Since ORACLE_SYSTEM_PASSWORD was not provided, no new database will be created')
+            establish_connection(@config) # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
+          end
+        end
+      end)
+    end
   end
-end
 end
