@@ -10,9 +10,11 @@ module System
 
       class << self
         def connection_config
+          oracle_system_password = ENV['ORACLE_SYSTEM_PASSWORD']
+
           configuration_specification.config.dup.tap do |spec|
-            if oracle? && ENV.fetch('ORACLE_SYSTEM_PASSWORD', nil).present?
-              spec[:password] = ENV.fetch('ORACLE_SYSTEM_PASSWORD')
+            if oracle? && oracle_system_password.present?
+              spec[:password] = oracle_system_password
               spec[:username] = 'SYSTEM'
             end
           end
