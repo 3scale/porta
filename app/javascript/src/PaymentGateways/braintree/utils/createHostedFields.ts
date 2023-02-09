@@ -1,4 +1,4 @@
-import { hostedFields } from 'braintree-web'
+import { client, hostedFields } from 'braintree-web'
 
 import type { HostedFields } from 'braintree-web'
 import type { HostedFieldFieldOptions } from 'braintree-web/modules/hosted-fields'
@@ -30,6 +30,10 @@ const fields: HostedFieldFieldOptions = {
   }
 } as const
 
-const createHostedFields = (authorization: string): Promise<HostedFields> => hostedFields.create({ authorization, fields, styles })
+const createHostedFields = async (authorization: string): Promise<HostedFields> => (
+  client.create({ authorization }).then(() => ( // HACK: Instantiate client first to catch any authorization error. See https://github.com/braintree/braintree-web/issues/669.
+    hostedFields.create({ authorization, fields, styles }))
+  )
+)
 
 export { createHostedFields }
