@@ -139,7 +139,7 @@ module CMS
         HTML: '<html><body><p>This is a test</p></body></html>',
         CDATA: '<![CDATA[<html><body><p>This is a test</p></body></html>]]>'
       }.each do |name, published|
-        test "show a page with CDATA + #{name} content" do
+        test "show a page with #{name} inside the content" do
           page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool', published: published)
           get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :xml }
           assert_response :success
