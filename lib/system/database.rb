@@ -166,6 +166,12 @@ ActiveSupport.on_load(:active_record) do
             establish_connection(@config) # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
           end
         end
+
+        protected
+
+        def username
+          @config['username']
+        end
       end)
     end
   end
