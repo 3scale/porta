@@ -158,12 +158,13 @@ ActiveSupport.on_load(:active_record) do
         # permissions.
         def create
           if ENV['ORACLE_SYSTEM_PASSWORD'].present?
+            Rails.logger.warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
             super
             connection.execute "GRANT create trigger TO #{username}"
             connection.execute "GRANT create procedure TO #{username}"
           else
-            Rails.logger.warn('Since ORACLE_SYSTEM_PASSWORD was not provided, no new database will be created')
-            establish_connection(@config) # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
+            # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
+            establish_connection(@config)
           end
         end
 
