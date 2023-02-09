@@ -14,7 +14,9 @@
     "/admin/api/signup.xml": {
       "post": {
         "summary": "Signup Express (Account Create)",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -66,8 +68,7 @@
             "in": "query",
             "description": "ID of the account plan (if not assigned default will be used instead).",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -75,8 +76,7 @@
             "in": "query",
             "description": "ID of the service plan (if not assigned default will be used instead).",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -84,8 +84,7 @@
             "in": "query",
             "description": "ID of the application plan (if not assigned default will be used instead).",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -113,7 +112,9 @@
     "/admin/api/accounts.xml": {
       "get": {
         "summary": "Account List",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -143,7 +144,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -153,7 +153,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           }
@@ -169,7 +168,9 @@
     "/admin/api/accounts/{id}.xml": {
       "get": {
         "summary": "Account Read",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -186,8 +187,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -200,7 +200,9 @@
       },
       "put": {
         "summary": "Account Update",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -217,8 +219,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -268,7 +269,9 @@
       },
       "delete": {
         "summary": "Account Delete ",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -285,8 +288,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -301,7 +303,9 @@
     "/admin/api/accounts/find.xml": {
       "get": {
         "summary": "Account Find",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -333,7 +337,7 @@
             "in": "query",
             "description": "ID of the account user.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           },
           {
@@ -364,7 +368,9 @@
     "/admin/api/accounts/{account_id}/applications.xml": {
       "get": {
         "summary": "Application List",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -381,8 +387,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -395,7 +400,9 @@
       },
       "post": {
         "summary": "Application Create",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -412,8 +419,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -422,8 +428,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -522,7 +527,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}.xml": {
       "get": {
         "summary": "Application Read",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -539,8 +546,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -549,8 +555,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -563,7 +568,9 @@
       },
       "put": {
         "summary": "Application Update",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -580,8 +587,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -590,8 +596,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -657,7 +662,9 @@
       },
       "delete": {
         "summary": "Application Delete",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -674,8 +681,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -684,8 +690,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -700,7 +705,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}/accept.xml": {
       "put": {
         "summary": "Application Accept",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -717,8 +724,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -727,8 +733,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -743,7 +748,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}/change_plan.xml": {
       "put": {
         "summary": "Application Change Plan",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -760,8 +767,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -770,8 +776,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -780,8 +785,7 @@
             "description": "ID of the new application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -796,7 +800,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}/customize_plan.xml": {
       "put": {
         "summary": "Application Create Plan Customization",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -813,8 +819,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -823,8 +828,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -839,7 +843,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}/decustomize_plan.xml": {
       "put": {
         "summary": "Application Delete Plan Customization",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -856,8 +862,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -866,8 +871,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -882,7 +886,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}/resume.xml": {
       "put": {
         "summary": "Application Resume",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -899,8 +905,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -909,8 +914,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -925,7 +929,9 @@
     "/admin/api/accounts/{account_id}/applications/{id}/suspend.xml": {
       "put": {
         "summary": "Application Suspend",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -942,8 +948,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -952,8 +957,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -968,7 +972,9 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/keys.xml": {
       "get": {
         "summary": "Application Key List",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -985,8 +991,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -995,8 +1000,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1009,8 +1013,9 @@
       },
       "post": {
         "summary": "Application Key Create",
-        "tags": ["Account Applications"],
-        "operationId": "key_create",
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1027,8 +1032,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1037,8 +1041,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1062,7 +1065,9 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/keys/{key}.xml": {
       "delete": {
         "summary": "Application Key Delete",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1079,8 +1084,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1089,8 +1093,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1114,7 +1117,9 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/referrer_filters.xml": {
       "get": {
         "summary": "Application Referrer Filter List",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1131,8 +1136,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1141,8 +1145,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1155,7 +1158,9 @@
       },
       "post": {
         "summary": "Application Referrer Filter Create",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1172,8 +1177,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1182,8 +1186,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1207,7 +1210,9 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/referrer_filters/{id}.xml": {
       "delete": {
         "summary": "Application Referrer Filter Delete",
-        "tags": ["Account Applications"],
+        "tags": [
+          "Account Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1224,8 +1229,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1234,8 +1238,7 @@
             "description": "ID of the application.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1244,8 +1247,7 @@
             "description": "ID of referrer filter to be deleted.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1260,7 +1262,9 @@
     "/admin/api/accounts/{account_id}/messages.xml": {
       "post": {
         "summary": "Account Message",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1277,8 +1281,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1311,7 +1314,9 @@
     "/admin/api/accounts/{account_id}/plan.xml": {
       "get": {
         "summary": "Account Fetch Account Plan",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1328,8 +1333,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1344,7 +1348,9 @@
     "/admin/api/accounts/{account_id}/service_contracts.xml": {
       "get": {
         "summary": "Service Subscription List",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1361,8 +1367,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1377,7 +1382,9 @@
     "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
       "delete": {
         "summary": "Service Subscription Delete",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1394,8 +1401,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1404,8 +1410,7 @@
             "description": "ID of the service contract.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1420,7 +1425,9 @@
     "/admin/api/accounts/{id}/approve.xml": {
       "put": {
         "summary": "Account Approve",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1437,8 +1444,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1453,7 +1459,9 @@
     "/admin/api/accounts/{id}/change_plan.xml": {
       "put": {
         "summary": "Account Change Plan",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1470,8 +1478,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1480,8 +1487,7 @@
             "description": "ID of the target account plan",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1496,7 +1502,9 @@
     "/admin/api/accounts/{id}/credit_card.xml": {
       "put": {
         "summary": "Account Set Credit Card",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1513,8 +1521,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1630,7 +1637,9 @@
       },
       "delete": {
         "summary": "Account Delete Credit Card",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1647,8 +1656,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1663,7 +1671,9 @@
     "/admin/api/accounts/{id}/make_pending.xml": {
       "put": {
         "summary": "Account Reset to Pending",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1680,8 +1690,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1696,7 +1705,9 @@
     "/admin/api/accounts/{id}/reject.xml": {
       "put": {
         "summary": "Account Reject",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1713,8 +1724,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1729,7 +1739,9 @@
     "/admin/api/accounts/{account_id}/users.xml": {
       "get": {
         "summary": "User List",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1746,8 +1758,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1785,7 +1796,9 @@
       },
       "post": {
         "summary": "User Create",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1802,8 +1815,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1858,7 +1870,9 @@
     "/admin/api/accounts/{account_id}/users/{id}.xml": {
       "get": {
         "summary": "User Read",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1875,8 +1889,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1885,8 +1898,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1899,7 +1911,9 @@
       },
       "put": {
         "summary": "User Update",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1916,8 +1930,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1926,8 +1939,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1977,7 +1989,9 @@
       },
       "delete": {
         "summary": "User Delete",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -1994,8 +2008,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2004,8 +2017,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2020,7 +2032,9 @@
     "/admin/api/accounts/{account_id}/users/{id}/activate.xml": {
       "put": {
         "summary": "User Activate",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2037,8 +2051,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2047,8 +2060,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2063,7 +2075,9 @@
     "/admin/api/accounts/{account_id}/users/{id}/admin.xml": {
       "put": {
         "summary": "User change Role to Admin",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2080,8 +2094,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2090,8 +2103,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2106,7 +2118,9 @@
     "/admin/api/accounts/{account_id}/users/{id}/member.xml": {
       "put": {
         "summary": "User Change Role to Member",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2123,8 +2137,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2133,8 +2146,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2149,7 +2161,9 @@
     "/admin/api/accounts/{account_id}/users/{id}/suspend.xml": {
       "put": {
         "summary": "User Suspend",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2166,8 +2180,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2176,8 +2189,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2192,7 +2204,9 @@
     "/admin/api/accounts/{account_id}/users/{id}/unsuspend.xml": {
       "put": {
         "summary": "User Unsuspend",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2209,8 +2223,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2219,8 +2232,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2235,7 +2247,9 @@
     "/admin/api/users.xml": {
       "get": {
         "summary": "User List (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2281,7 +2295,9 @@
       },
       "post": {
         "summary": "User Create (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2344,7 +2360,9 @@
     "/admin/api/users/{id}.xml": {
       "get": {
         "summary": "User Read (provider account)",
-        "tags": ["Provider Users"],
+        "tags": [
+          "Provider Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2361,8 +2379,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2375,7 +2392,9 @@
       },
       "put": {
         "summary": "User Update (provider account)",
-        "tags": ["Provider Users"],
+        "tags": [
+          "Provider Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2392,8 +2411,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2443,7 +2461,9 @@
       },
       "delete": {
         "summary": "User Delete (provider account)",
-        "tags": ["Provider Users"],
+        "tags": [
+          "Provider Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2460,8 +2480,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2476,7 +2495,9 @@
     "/admin/api/users/{id}/activate.xml": {
       "put": {
         "summary": "User Activate (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2493,8 +2514,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2509,7 +2529,9 @@
     "/admin/api/users/{id}/admin.xml": {
       "put": {
         "summary": "User Change Role to Admin (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2526,8 +2548,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2542,7 +2563,9 @@
     "/admin/api/users/{id}/member.xml": {
       "put": {
         "summary": "User Change Role to Member (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2559,8 +2582,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2575,7 +2597,9 @@
     "/admin/api/users/{id}/permissions.xml": {
       "get": {
         "summary": "User Permissions Read",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2592,8 +2616,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2606,7 +2629,9 @@
       },
       "put": {
         "summary": "User Permissions Update",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2623,8 +2648,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2672,7 +2696,9 @@
     "/admin/api/users/{id}/suspend.xml": {
       "put": {
         "summary": "User Suspend (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2689,8 +2715,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2705,7 +2730,9 @@
     "/admin/api/users/{id}/unsuspend.xml": {
       "put": {
         "summary": "User Unsuspend (provider account)",
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2722,8 +2749,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2738,7 +2764,9 @@
     "/admin/api/users/{user_id}/access_tokens.json": {
       "post": {
         "summary": "Access Token Create",
-        "tags": ["Access Tokens"],
+        "tags": [
+          "Access Tokens"
+        ],
         "parameters": [
           {
             "name": "user_id",
@@ -2746,7 +2774,7 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           },
           {
@@ -2802,7 +2830,9 @@
     "/admin/api/account_plans.xml": {
       "get": {
         "summary": "Account Plan List",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2823,7 +2853,9 @@
       },
       "post": {
         "summary": "Account Plan Create",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2879,7 +2911,9 @@
     "/admin/api/account_plans/{account_plan_id}/features.xml": {
       "get": {
         "summary": "Account Plan Features List",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2896,8 +2930,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2912,7 +2945,9 @@
     "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
       "post": {
         "summary": "Account Plan Features Create",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2929,8 +2964,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2939,8 +2973,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2953,7 +2986,9 @@
       },
       "delete": {
         "summary": "Account Plan Features Delete",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -2970,8 +3005,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -2980,8 +3014,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -2996,7 +3029,9 @@
     "/admin/api/account_plans/{id}.xml": {
       "get": {
         "summary": "Account Plan Read",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3013,8 +3048,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3027,7 +3061,9 @@
       },
       "put": {
         "summary": "Account Plan Update",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3044,8 +3080,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3082,7 +3117,9 @@
       },
       "delete": {
         "summary": "Account Plan Delete",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3099,8 +3136,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3115,7 +3151,9 @@
     "/admin/api/account_plans/{id}/default.xml": {
       "put": {
         "summary": "Account Plan set to Default",
-        "tags": ["Account Plans"],
+        "tags": [
+          "Account Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3132,8 +3170,7 @@
             "description": "ID of the account plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3148,7 +3185,9 @@
     "/admin/api/active_docs.json": {
       "get": {
         "summary": "ActiveDocs Spec List",
-        "tags": ["Active Docs"],
+        "tags": [
+          "Active Docs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3169,7 +3208,9 @@
       },
       "post": {
         "summary": "ActiveDocs Spec Create",
-        "tags": ["Active Docs"],
+        "tags": [
+          "Active Docs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3202,8 +3243,7 @@
             "in": "query",
             "description": "Service ID of the ActiveDocs spec",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3251,7 +3291,9 @@
     "/admin/api/active_docs/{id}.json": {
       "get": {
         "summary": "ActiveDocs Spec Read",
-        "tags": ["Active Docs"],
+        "tags": [
+          "Active Docs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3268,8 +3310,7 @@
             "description": "ID of the ActiveDocs spec",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3282,7 +3323,9 @@
       },
       "put": {
         "summary": "ActiveDocs Spec Update",
-        "tags": ["Active Docs"],
+        "tags": [
+          "Active Docs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3299,8 +3342,7 @@
             "description": "ID of the ActiveDocs spec",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3316,8 +3358,7 @@
             "in": "query",
             "description": "Service ID of the ActiveDocs spec",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3362,7 +3403,9 @@
       },
       "delete": {
         "summary": "ActiveDocs Spec Delete",
-        "tags": ["Active Docs"],
+        "tags": [
+          "Active Docs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3379,8 +3422,7 @@
             "description": "ID of the ActiveDocs spec",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3395,7 +3437,9 @@
     "/admin/api/application_plans.xml": {
       "get": {
         "summary": "Application Plan List (all services)",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3418,7 +3462,9 @@
     "/admin/api/application_plans/{application_plan_id}/features.xml": {
       "get": {
         "summary": "Application Plan Feature List",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3435,8 +3481,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3449,7 +3494,9 @@
       },
       "post": {
         "summary": "Application Plan Feature Create",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3466,8 +3513,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3476,8 +3522,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3492,7 +3537,9 @@
     "/admin/api/application_plans/{application_plan_id}/features/{id}.xml": {
       "delete": {
         "summary": "Application Plan Feature Delete",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3509,8 +3556,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3519,8 +3565,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3535,8 +3580,9 @@
     "/admin/api/application_plans/{application_plan_id}/limits.xml": {
       "get": {
         "summary": "Limits List per Application Plan",
-        "tags": ["Application Plans"],
-        "operationId": "plan_limits",
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3553,7 +3599,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -3563,7 +3608,6 @@
             "description": "Number of results per page. Default and max is 50.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 50
             }
           },
@@ -3573,8 +3617,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3589,8 +3632,9 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits.xml": {
       "get": {
         "summary": "Limit List per Metric",
-        "tags": ["Application Plans"],
-        "operationId": "limits",
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3607,8 +3651,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3617,8 +3660,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3631,7 +3673,9 @@
       },
       "post": {
         "summary": "Limit Create",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3648,8 +3692,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3658,8 +3701,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3687,8 +3729,7 @@
             "description": "Value of the limit.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3703,7 +3744,9 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml": {
       "get": {
         "summary": "Limit Read",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3720,8 +3763,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3730,8 +3772,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3740,8 +3781,7 @@
             "description": "ID of the limit.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3754,7 +3794,9 @@
       },
       "put": {
         "summary": "Limit Update",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3771,8 +3813,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3781,8 +3822,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3791,8 +3831,7 @@
             "description": "ID of the limit.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3819,8 +3858,7 @@
             "in": "query",
             "description": "Value of the limit.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3833,7 +3871,9 @@
       },
       "delete": {
         "summary": "Limit Delete",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3850,8 +3890,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3860,8 +3899,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3870,8 +3908,7 @@
             "description": "ID of the limit.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3886,8 +3923,9 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules.xml": {
       "get": {
         "summary": "Pricing Rules List per Metric",
-        "tags": ["Application Plans"],
-        "operationId": "metric_pricing_rules",
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3904,8 +3942,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3914,8 +3951,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -3928,7 +3964,9 @@
       },
       "post": {
         "summary": "Pricing Rule Create",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -3945,8 +3983,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3955,8 +3992,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3964,8 +4000,7 @@
             "in": "query",
             "description": "From (min) hit",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3973,8 +4008,7 @@
             "in": "query",
             "description": "To (max) hit",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -3982,7 +4016,8 @@
             "in": "query",
             "description": "Cost per unit",
             "schema": {
-              "type": "ref"
+              "type": "number",
+              "format": "float"
             }
           }
         ],
@@ -3997,7 +4032,9 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules/{id}.json": {
       "delete": {
         "summary": "Pricing Rule Delete",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4014,8 +4051,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4024,8 +4060,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4034,8 +4069,7 @@
             "description": "ID of the pricing rule.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -4050,8 +4084,9 @@
     "/admin/api/application_plans/{application_plan_id}/pricing_rules.xml": {
       "get": {
         "summary": "Pricing Rules List per Application Plan",
-        "tags": ["Application Plans"],
-        "operationId": "pricing_rules",
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4068,8 +4103,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -4084,7 +4118,9 @@
     "/admin/api/services/{service_id}/application_plans.xml": {
       "get": {
         "summary": "Application Plan List",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4101,8 +4137,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -4115,7 +4150,9 @@
       },
       "post": {
         "summary": "Application Plan Create",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4132,8 +4169,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4158,7 +4194,8 @@
             "in": "query",
             "description": "Cost per month",
             "schema": {
-              "type": "ref"
+              "type": "number",
+              "format": "float"
             }
           },
           {
@@ -4166,7 +4203,8 @@
             "in": "query",
             "description": "Setup fee",
             "schema": {
-              "type": "ref"
+              "type": "number",
+              "format": "float"
             }
           },
           {
@@ -4174,7 +4212,7 @@
             "in": "query",
             "description": "Trial period days",
             "schema": {
-              "type": "ref"
+              "type": "integer"
             }
           },
           {
@@ -4190,7 +4228,11 @@
             "in": "query",
             "description": "State event of the application plan. It can be 'publish' or 'hide'",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "publish",
+                "hide"
+              ]
             }
           }
         ],
@@ -4205,7 +4247,9 @@
     "/admin/api/services/{service_id}/application_plans/{id}.xml": {
       "get": {
         "summary": "Application Plan Read",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4222,8 +4266,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4232,8 +4275,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -4246,7 +4288,9 @@
       },
       "put": {
         "summary": "Application Plan Update",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4263,8 +4307,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4273,8 +4316,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4298,7 +4340,8 @@
             "in": "query",
             "description": "Cost per month",
             "schema": {
-              "type": "ref"
+              "type": "number",
+              "format": "float"
             }
           },
           {
@@ -4306,7 +4349,8 @@
             "in": "query",
             "description": "Setup fee",
             "schema": {
-              "type": "ref"
+              "type": "number",
+              "format": "float"
             }
           },
           {
@@ -4314,7 +4358,7 @@
             "in": "query",
             "description": "Trial period days",
             "schema": {
-              "type": "ref"
+              "type": "integer"
             }
           },
           {
@@ -4335,7 +4379,9 @@
       },
       "delete": {
         "summary": "Application Plan Delete",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4352,8 +4398,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4362,8 +4407,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -4378,7 +4422,9 @@
     "/admin/api/services/{service_id}/application_plans/{id}/default.xml": {
       "put": {
         "summary": "Application Plan Set to Default",
-        "tags": ["Application Plans"],
+        "tags": [
+          "Application Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4395,8 +4441,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4405,8 +4450,7 @@
             "description": "ID of the application plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -4421,8 +4465,9 @@
     "/admin/api/applications.xml": {
       "get": {
         "summary": "Application List (all services)",
-        "tags": ["Service Applications"],
-        "operationId": "applications",
+        "tags": [
+          "Service Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4439,7 +4484,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -4449,7 +4493,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           },
@@ -4509,7 +4552,9 @@
     "/admin/api/applications/find.xml": {
       "get": {
         "summary": "Application Find",
-        "tags": ["Service Applications"],
+        "tags": [
+          "Service Applications"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4525,8 +4570,7 @@
             "in": "query",
             "description": "ID of the application.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -4565,7 +4609,9 @@
     "/admin/api/account/authentication_providers.xml": {
       "get": {
         "summary": "Authentication Providers Admin Portal List",
-        "tags": ["Admin Portal Authentication Providers"],
+        "tags": [
+          "Admin Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4586,7 +4632,9 @@
       },
       "post": {
         "summary": "Authentication Provider Admin Portal Create",
-        "tags": ["Admin Portal Authentication Providers"],
+        "tags": [
+          "Admin Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4674,7 +4722,9 @@
     "/admin/api/account/authentication_providers/{id}.xml": {
       "get": {
         "summary": "Authentication Provider Admin Portal Read",
-        "tags": ["Admin Portal Authentication Providers"],
+        "tags": [
+          "Admin Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4704,7 +4754,9 @@
       },
       "put": {
         "summary": "Authentication Provider Admin Portal Update",
-        "tags": ["Admin Portal Authentication Providers"],
+        "tags": [
+          "Admin Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4776,7 +4828,9 @@
     "/admin/api/authentication_providers.xml": {
       "get": {
         "summary": "Authentication Providers Developer Portal List",
-        "tags": ["Developer Portal Authentication Providers"],
+        "tags": [
+          "Developer Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4797,7 +4851,9 @@
       },
       "post": {
         "summary": "Authentication Provider Developer Portal Create",
-        "tags": ["Developer Portal Authentication Providers"],
+        "tags": [
+          "Developer Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4949,7 +5005,9 @@
     "/admin/api/authentication_providers/{id}.xml": {
       "get": {
         "summary": "Authentication Provider Read",
-        "tags": ["Developer Portal Authentication Providers"],
+        "tags": [
+          "Developer Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -4979,7 +5037,9 @@
       },
       "put": {
         "summary": "Authentication Provider Developer Portal Update",
-        "tags": ["Developer Portal Authentication Providers"],
+        "tags": [
+          "Developer Portal Authentication Providers"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5059,7 +5119,9 @@
     "/admin/api/backend_apis.json": {
       "get": {
         "summary": "Backend List",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5076,7 +5138,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -5086,7 +5147,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           }
@@ -5100,7 +5160,9 @@
       },
       "post": {
         "summary": "Backend Create",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5157,7 +5219,9 @@
     "/admin/api/backend_apis/{id}.json": {
       "get": {
         "summary": "Backend Read",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5174,8 +5238,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -5188,7 +5251,9 @@
       },
       "put": {
         "summary": "Backend Update",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5205,8 +5270,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5243,7 +5307,9 @@
       },
       "delete": {
         "summary": "Backend Delete",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5260,8 +5326,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -5276,7 +5341,9 @@
     "/admin/api/backend_apis/{backend_api_id}/mapping_rules.json": {
       "get": {
         "summary": "Backend Mapping Rules List",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5293,8 +5360,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5303,7 +5369,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -5313,7 +5378,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           }
@@ -5327,7 +5391,9 @@
       },
       "post": {
         "summary": "Backend Mapping Rule Create",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5344,8 +5410,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5372,8 +5437,7 @@
             "description": "Increase the metric by this delta.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5382,8 +5446,7 @@
             "description": "Metric ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5391,8 +5454,7 @@
             "in": "query",
             "description": "Mapping Rule position",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5400,7 +5462,7 @@
             "in": "query",
             "description": "Last matched Mapping Rule to process",
             "schema": {
-              "type": "ref"
+              "type": "boolean"
             }
           }
         ],
@@ -5415,7 +5477,9 @@
     "/admin/api/backend_apis/{backend_api_id}/mapping_rules/{id}.json": {
       "get": {
         "summary": "Backend Mapping Rules Read",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5432,8 +5496,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5442,8 +5505,7 @@
             "description": "Mapping Rule ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -5456,7 +5518,9 @@
       },
       "put": {
         "summary": "Backend Mapping Rule Update",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5473,8 +5537,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5483,8 +5546,7 @@
             "description": "Mapping Rule ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5508,8 +5570,7 @@
             "in": "query",
             "description": "Increase the metric by this delta.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5517,8 +5578,7 @@
             "in": "query",
             "description": "Metric ID.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5526,8 +5586,7 @@
             "in": "query",
             "description": "Mapping Rule position",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5535,7 +5594,7 @@
             "in": "query",
             "description": "Last matched Mapping Rule to process",
             "schema": {
-              "type": "ref"
+              "type": "boolean"
             }
           }
         ],
@@ -5548,7 +5607,9 @@
       },
       "delete": {
         "summary": "Backend Mapping Rule Delete",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5565,8 +5626,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5575,8 +5635,7 @@
             "description": "Mapping Rule ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -5591,7 +5650,9 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics.json": {
       "get": {
         "summary": "Backend Metric List",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5608,8 +5669,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5618,7 +5678,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -5628,7 +5687,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           }
@@ -5642,7 +5700,9 @@
       },
       "post": {
         "summary": "Backend Metric Create",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5659,8 +5719,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5694,7 +5753,7 @@
             "in": "query",
             "description": "Description of the metric.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -5709,7 +5768,9 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json": {
       "get": {
         "summary": "Backend Metric Read",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5726,8 +5787,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5736,8 +5796,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -5750,7 +5809,9 @@
       },
       "put": {
         "summary": "Backend Metric Update",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5767,8 +5828,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5777,8 +5837,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5802,7 +5861,7 @@
             "in": "query",
             "description": "Description of the metric.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -5815,7 +5874,9 @@
       },
       "delete": {
         "summary": "Backend Metric Delete",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5832,8 +5893,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5842,8 +5902,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -5858,7 +5917,9 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json": {
       "get": {
         "summary": "Backend Method List",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5875,8 +5936,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5885,8 +5945,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5895,7 +5954,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -5905,7 +5963,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           }
@@ -5919,7 +5976,9 @@
       },
       "post": {
         "summary": "Backend Method Create",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -5936,8 +5995,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5946,8 +6004,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -5981,7 +6038,7 @@
             "in": "query",
             "description": "Description of the metric.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -5996,7 +6053,9 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json": {
       "get": {
         "summary": "Backend Method Read",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6013,8 +6072,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6023,8 +6081,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6033,8 +6090,7 @@
             "description": "ID of the method.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6047,7 +6103,9 @@
       },
       "put": {
         "summary": "Backend Method Update",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6064,8 +6122,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6074,8 +6131,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6084,8 +6140,7 @@
             "description": "ID of the method.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6109,7 +6164,7 @@
             "in": "query",
             "description": "Description of the method.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -6122,7 +6177,9 @@
       },
       "delete": {
         "summary": "Backend Method Delete",
-        "tags": ["Backend APIs"],
+        "tags": [
+          "Backend APIs"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6139,8 +6196,7 @@
             "description": "ID of the Backend.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6149,8 +6205,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6159,8 +6214,7 @@
             "description": "ID of the method.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6175,7 +6229,9 @@
     "/admin/api/services/{service_id}/backend_usages.json": {
       "get": {
         "summary": "Backend Usage List",
-        "tags": ["Backends"],
+        "tags": [
+          "Backends"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6192,8 +6248,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6206,7 +6261,9 @@
       },
       "post": {
         "summary": "Backend Usage Create",
-        "tags": ["Backends"],
+        "tags": [
+          "Backends"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6223,8 +6280,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6241,8 +6297,7 @@
             "in": "query",
             "description": "Path of the Backend for this product.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6257,7 +6312,9 @@
     "/admin/api/services/{service_id}/backend_usages/{id}.json": {
       "get": {
         "summary": "Backend Usage Read",
-        "tags": ["Backends"],
+        "tags": [
+          "Backends"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6274,8 +6331,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6284,8 +6340,7 @@
             "description": "ID of the Backend Usage.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6298,7 +6353,9 @@
       },
       "put": {
         "summary": "Backend Usage Update",
-        "tags": ["Backends"],
+        "tags": [
+          "Backends"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6315,8 +6372,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6325,8 +6381,7 @@
             "description": "ID of the Backend Usage.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6334,8 +6389,7 @@
             "in": "query",
             "description": "Path of the Backend for this product.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6348,7 +6402,9 @@
       },
       "delete": {
         "summary": "Backend Usage Delete",
-        "tags": ["Backends"],
+        "tags": [
+          "Backends"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6365,8 +6421,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6375,8 +6430,7 @@
             "description": "ID of the Backend Usage.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6391,7 +6445,9 @@
     "/admin/api/features.xml": {
       "get": {
         "summary": "Account Features List",
-        "tags": ["Account Features"],
+        "tags": [
+          "Account Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6412,7 +6468,9 @@
       },
       "post": {
         "summary": "Account Feature Create",
-        "tags": ["Account Features"],
+        "tags": [
+          "Account Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6452,7 +6510,9 @@
     "/admin/api/features/{id}.xml": {
       "get": {
         "summary": "Account Feature Read",
-        "tags": ["Account Features"],
+        "tags": [
+          "Account Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6469,8 +6529,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6483,7 +6542,9 @@
       },
       "put": {
         "summary": "Account Feature Update",
-        "tags": ["Account Features"],
+        "tags": [
+          "Account Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6500,8 +6561,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -6523,7 +6583,9 @@
       },
       "delete": {
         "summary": "Account Feature Delete",
-        "tags": ["Account Features"],
+        "tags": [
+          "Account Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6540,8 +6602,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6556,7 +6617,9 @@
     "/admin/api/fields_definitions.json": {
       "get": {
         "summary": "Fields Definitions List",
-        "tags": ["Fields Definitions"],
+        "tags": [
+          "Fields Definitions"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6577,7 +6640,9 @@
       },
       "post": {
         "summary": "Fields Definition Create",
-        "tags": ["Fields Definitions"],
+        "tags": [
+          "Fields Definitions"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6591,11 +6656,11 @@
           {
             "name": "target",
             "in": "query",
-            "description": "Target entity of fields definition.",
+            "description": "Target entity of fields definition (use Cinstance for Application).",
             "required": true,
             "schema": {
               "type": "string",
-              "default": "account",
+              "default": "Account",
               "enum": [
                 "Account",
                 "User",
@@ -6670,7 +6735,9 @@
     "/admin/api/fields_definitions/{id}.json": {
       "get": {
         "summary": "Fields Definition Read",
-        "tags": ["Fields Definitions"],
+        "tags": [
+          "Fields Definitions"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6687,8 +6754,7 @@
             "description": "ID of the fields definition.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6701,7 +6767,9 @@
       },
       "put": {
         "summary": "Fields Definition Update",
-        "tags": ["Fields Definitions"],
+        "tags": [
+          "Fields Definitions"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6718,18 +6786,17 @@
             "description": "ID of the fields definition.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
             "name": "target",
             "in": "query",
-            "description": "Target entity of fields definition.",
+            "description": "Target entity of fields definition (use Cinstance for Application).",
             "required": true,
             "schema": {
               "type": "string",
-              "default": "account",
+              "default": "Account",
               "enum": [
                 "Account",
                 "User",
@@ -6774,7 +6841,7 @@
             "in": "query",
             "description": "Position of the fields definition.",
             "schema": {
-              "type": "ref"
+              "type": "integer"
             }
           },
           {
@@ -6800,7 +6867,9 @@
       },
       "delete": {
         "summary": "Fields Definition Delete",
-        "tags": ["Fields Definitions"],
+        "tags": [
+          "Fields Definitions"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6817,8 +6886,7 @@
             "description": "ID of the fields definition.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -6833,7 +6901,9 @@
     "/admin/api/objects/status.json": {
       "get": {
         "summary": "Object deletion status for objects that are deleted asynchronously",
-        "tags": ["Object Deletion Status"],
+        "tags": [
+          "Object Deletion Status"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -6874,7 +6944,9 @@
     "/admin/api/personal/access_tokens.json": {
       "get": {
         "summary": "Personal Access Token List",
-        "tags": ["Access Tokens"],
+        "tags": [
+          "Access Tokens"
+        ],
         "parameters": [
           {
             "name": "name",
@@ -6903,7 +6975,9 @@
       },
       "post": {
         "summary": "Personal Access Token Create",
-        "tags": ["Access Tokens"],
+        "tags": [
+          "Access Tokens"
+        ],
         "parameters": [
           {
             "name": "name",
@@ -6958,7 +7032,9 @@
     "/admin/api/personal/access_tokens/{id}.json": {
       "get": {
         "summary": "Personal Access Token Read",
-        "tags": ["Access Tokens"],
+        "tags": [
+          "Access Tokens"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -6966,7 +7042,7 @@
             "description": "ID or value of the access token.",
             "required": true,
             "schema": {
-              "type": "ref"
+              "type": "integer"
             }
           },
           {
@@ -6988,7 +7064,9 @@
       },
       "delete": {
         "summary": "Personal Access Token Delete",
-        "tags": ["Access Tokens"],
+        "tags": [
+          "Access Tokens"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -6996,7 +7074,7 @@
             "description": "ID or value of the access token.",
             "required": true,
             "schema": {
-              "type": "ref"
+              "type": "integer"
             }
           },
           {
@@ -7020,7 +7098,9 @@
     "/admin/api/policies.json": {
       "get": {
         "summary": "APIcast Policy Registry",
-        "tags": ["APIcast Policies"],
+        "tags": [
+          "APIcast Policies"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7043,7 +7123,9 @@
     "/admin/api/provider.xml": {
       "get": {
         "summary": "Provider Account Read",
-        "tags": ["Provider Account"],
+        "tags": [
+          "Provider Account"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7064,7 +7146,9 @@
       },
       "put": {
         "summary": "Provider Account Update",
-        "tags": ["Provider Account"],
+        "tags": [
+          "Provider Account"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7119,7 +7203,9 @@
     "/admin/api/service_plans.xml": {
       "get": {
         "summary": "Service Plan List (all services)",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7142,7 +7228,9 @@
     "/admin/api/service_plans/{service_plan_id}/features.xml": {
       "get": {
         "summary": "Service Plan Feature List",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7159,8 +7247,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7173,7 +7260,9 @@
       },
       "post": {
         "summary": "Service Plan Feature Add",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7190,8 +7279,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7200,8 +7288,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7216,7 +7303,9 @@
     "/admin/api/service_plans/{service_plan_id}/features/{id}.xml": {
       "delete": {
         "summary": "Service Plan Features Delete",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7233,8 +7322,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7243,8 +7331,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7259,7 +7346,9 @@
     "/admin/api/services.xml": {
       "get": {
         "summary": "Service List",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7276,7 +7365,6 @@
             "description": "Page in the paginated list. Defaults to 1.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 1
             }
           },
@@ -7286,7 +7374,6 @@
             "description": "Number of results per page. Default and max is 500.",
             "schema": {
               "type": "integer",
-              "format": "int32",
               "default": 500
             }
           }
@@ -7300,7 +7387,9 @@
       },
       "post": {
         "summary": "Service Create",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7377,7 +7466,9 @@
     "/admin/api/services/{id}.xml": {
       "get": {
         "summary": "Service Read",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7394,8 +7485,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7408,7 +7498,9 @@
       },
       "put": {
         "summary": "Service Update",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7425,8 +7517,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7492,7 +7583,9 @@
       },
       "delete": {
         "summary": "Service Delete",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7509,8 +7602,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7525,7 +7617,9 @@
     "/admin/api/services/{id}/service_plans.xml": {
       "get": {
         "summary": "Service Plan List",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7542,8 +7636,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7556,7 +7649,9 @@
       },
       "post": {
         "summary": "Service Plan Create",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7573,8 +7668,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7622,7 +7716,9 @@
     "/admin/api/services/{service_id}/metrics.xml": {
       "get": {
         "summary": "Service Metric List",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7639,8 +7735,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7653,7 +7748,9 @@
       },
       "post": {
         "summary": "Service Metric Create",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7670,8 +7767,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7713,7 +7809,7 @@
             "in": "query",
             "description": "Description of the metric.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -7728,8 +7824,9 @@
     "/admin/api/services/{service_id}/metrics/{id}.xml": {
       "get": {
         "summary": "Service Metric Read",
-        "tags": ["Services"],
-        "operationId": "service_metric",
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7746,8 +7843,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7756,8 +7852,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7770,7 +7865,9 @@
       },
       "put": {
         "summary": "Service Metric Update",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7787,8 +7884,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7797,8 +7893,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7822,7 +7917,7 @@
             "in": "query",
             "description": "Description of the metric.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -7835,7 +7930,9 @@
       },
       "delete": {
         "summary": "Service Metric Delete",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7852,8 +7949,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7862,8 +7958,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7878,7 +7973,9 @@
     "/admin/api/services/{service_id}/metrics/{metric_id}/methods.xml": {
       "get": {
         "summary": "Service Method List",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7895,8 +7992,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7905,8 +8001,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -7919,7 +8014,9 @@
       },
       "post": {
         "summary": "Service Method Create",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -7936,8 +8033,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7946,8 +8042,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -7981,7 +8076,7 @@
             "in": "query",
             "description": "Description of the method.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -7996,7 +8091,9 @@
     "/admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml": {
       "get": {
         "summary": "Service Method Read",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8013,8 +8110,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8023,8 +8119,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8033,8 +8128,7 @@
             "description": "ID of the method.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8047,7 +8141,9 @@
       },
       "put": {
         "summary": "Service Method Update",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8064,8 +8160,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8074,8 +8169,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8084,8 +8178,7 @@
             "description": "ID of the method.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8109,7 +8202,7 @@
             "in": "query",
             "description": "Description of the method.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -8122,7 +8215,9 @@
       },
       "delete": {
         "summary": "Service Method Delete",
-        "tags": ["Services"],
+        "tags": [
+          "Services"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8139,8 +8234,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8149,8 +8243,7 @@
             "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8159,8 +8252,7 @@
             "description": "ID of the method.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8175,7 +8267,9 @@
     "/admin/api/account/proxy_configs/{environment}.json": {
       "get": {
         "summary": "Proxy Configs List (Provider)",
-        "tags": ["Proxy Configs for Provider"],
+        "tags": [
+          "Proxy Configs for Provider"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8223,7 +8317,9 @@
     "/admin/api/services/{service_id}/proxy.xml": {
       "get": {
         "summary": "Proxy Read",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8240,8 +8336,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8254,7 +8349,9 @@
       },
       "patch": {
         "summary": "Proxy Update",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8271,8 +8368,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8336,8 +8432,7 @@
             "in": "query",
             "description": "Status code on failed authentication.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8361,8 +8456,7 @@
             "in": "query",
             "description": "Status code on missing authentication.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8386,8 +8480,7 @@
             "in": "query",
             "description": "Status code when no mapping rule is matched.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8403,8 +8496,7 @@
             "in": "query",
             "description": "Status code when usage limit exceeded.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8475,7 +8567,9 @@
     "/admin/api/services/{service_id}/proxy/deploy.xml": {
       "post": {
         "summary": "Proxy Deploy",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8492,8 +8586,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8508,7 +8601,9 @@
     "/admin/api/services/{service_id}/proxy/mapping_rules.xml": {
       "get": {
         "summary": "Proxy Mapping Rules List",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8525,8 +8620,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8539,7 +8633,9 @@
       },
       "post": {
         "summary": "Proxy Mapping Rule Create",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8556,8 +8652,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8584,8 +8679,7 @@
             "description": "Increase the metric by this delta.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8594,8 +8688,7 @@
             "description": "Metric ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8603,8 +8696,7 @@
             "in": "query",
             "description": "Mapping Rule position",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8612,7 +8704,7 @@
             "in": "query",
             "description": "Last matched Mapping Rule to process",
             "schema": {
-              "type": "ref"
+              "type": "boolean"
             }
           }
         ],
@@ -8627,7 +8719,9 @@
     "/admin/api/services/{service_id}/proxy/mapping_rules/{id}.xml": {
       "get": {
         "summary": "Proxy Mapping Rules Show",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8644,8 +8738,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8654,8 +8747,7 @@
             "description": "Mapping Rule ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8668,7 +8760,9 @@
       },
       "delete": {
         "summary": "Proxy Mapping Rule Delete",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8685,8 +8779,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8695,8 +8788,7 @@
             "description": "Mapping Rule ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8709,7 +8801,9 @@
       },
       "patch": {
         "summary": "Proxy Mapping Rule Update",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8726,8 +8820,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8736,8 +8829,7 @@
             "description": "Mapping Rule ID.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8761,8 +8853,7 @@
             "in": "query",
             "description": "Increase the metric by this delta.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8770,8 +8861,7 @@
             "in": "query",
             "description": "Metric ID.",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8779,8 +8869,7 @@
             "in": "query",
             "description": "Mapping Rule position",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8788,7 +8877,7 @@
             "in": "query",
             "description": "Last matched Mapping Rule to process",
             "schema": {
-              "type": "ref"
+              "type": "boolean"
             }
           }
         ],
@@ -8803,7 +8892,9 @@
     "/admin/api/services/{service_id}/proxy/oidc_configuration.xml": {
       "get": {
         "summary": "OIDC Configuration Show",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8820,8 +8911,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -8834,7 +8924,9 @@
       },
       "patch": {
         "summary": "OIDC Configuration Update",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8851,8 +8943,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8899,7 +8990,9 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}.json": {
       "get": {
         "summary": "Proxy Configs List (Service)",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8916,8 +9009,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8941,7 +9033,9 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}/latest.json": {
       "get": {
         "summary": "Proxy Config Show Latest",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -8958,8 +9052,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -8983,7 +9076,9 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}/{version}.json": {
       "get": {
         "summary": "Proxy Config Show",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9000,8 +9095,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9019,8 +9113,7 @@
             "description": "Version of the Proxy config.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9035,7 +9128,9 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}/{version}/promote.json": {
       "post": {
         "summary": "Proxy Config Promote",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9052,8 +9147,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9071,8 +9165,7 @@
             "description": "Version of the Proxy config.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9096,7 +9189,9 @@
     "/admin/api/services/{service_id}/proxy/policies.json": {
       "get": {
         "summary": "Proxy Policies Chain Show",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9113,8 +9208,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9127,7 +9221,9 @@
       },
       "put": {
         "summary": "Proxy Policies Chain Update",
-        "tags": ["Gateway"],
+        "tags": [
+          "Gateway"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9144,8 +9240,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9169,7 +9264,9 @@
     "/admin/api/services/{service_id}/service_plans/{id}.xml": {
       "get": {
         "summary": "Service Plan Read",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9186,8 +9283,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9196,8 +9292,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9210,7 +9305,9 @@
       },
       "put": {
         "summary": "Service Plan Update",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9227,8 +9324,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9237,8 +9333,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9275,7 +9370,9 @@
       },
       "delete": {
         "summary": "Service Plan Delete",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9292,8 +9389,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9302,8 +9398,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9318,7 +9413,9 @@
     "/admin/api/services/{service_id}/service_plans/{id}/default.xml": {
       "put": {
         "summary": "Service Plan Set to Default",
-        "tags": ["Service Plans"],
+        "tags": [
+          "Service Plans"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9335,8 +9432,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9345,8 +9441,7 @@
             "description": "ID of the service plan.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9361,7 +9456,9 @@
     "/admin/api/services/{service_id}/features.xml": {
       "get": {
         "summary": "Service Feature List",
-        "tags": ["Service Features"],
+        "tags": [
+          "Service Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9378,8 +9475,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9392,7 +9488,9 @@
       },
       "post": {
         "summary": "Service Feature Create",
-        "tags": ["Service Features"],
+        "tags": [
+          "Service Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9409,8 +9507,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9435,7 +9532,7 @@
             "in": "query",
             "description": "Description of the feature.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           },
           {
@@ -9467,7 +9564,9 @@
     "/admin/api/services/{service_id}/features/{id}.xml": {
       "get": {
         "summary": "Service Feature Read",
-        "tags": ["Service Features"],
+        "tags": [
+          "Service Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9484,8 +9583,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9494,8 +9592,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9508,7 +9605,9 @@
       },
       "put": {
         "summary": "Service Feature Update",
-        "tags": ["Service Features"],
+        "tags": [
+          "Service Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9525,8 +9624,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9535,8 +9633,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9552,7 +9649,7 @@
             "in": "query",
             "description": "Description of the feature.",
             "schema": {
-              "type": "ref"
+              "type": "string"
             }
           }
         ],
@@ -9565,7 +9662,9 @@
       },
       "delete": {
         "summary": "Service Feature Delete",
-        "tags": ["Service Features"],
+        "tags": [
+          "Service Features"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9582,8 +9681,7 @@
             "description": "ID of the service.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -9592,8 +9690,7 @@
             "description": "ID of the feature.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -9608,8 +9705,9 @@
     "/admin/api/settings.json": {
       "get": {
         "summary": "Settings Read",
-        "tags": ["Settings"],
-        "operationId": "service_metric",
+        "tags": [
+          "Settings"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9630,7 +9728,9 @@
       },
       "put": {
         "summary": "Settings Update",
-        "tags": ["Settings"],
+        "tags": [
+          "Settings"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9733,7 +9833,9 @@
     "/admin/api/webhooks.json": {
       "put": {
         "summary": "WebHooks Update",
-        "tags": ["Webhooks"],
+        "tags": [
+          "Webhooks"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9892,7 +9994,9 @@
     "/admin/api/webhooks/failures.xml": {
       "get": {
         "summary": "Webhooks List Failed Deliveries",
-        "tags": ["Webhooks"],
+        "tags": [
+          "Webhooks"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9913,7 +10017,9 @@
       },
       "delete": {
         "summary": "Webhooks Delete Failed Deliveries",
-        "tags": ["Webhooks"],
+        "tags": [
+          "Webhooks"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -9929,7 +10035,8 @@
             "in": "query",
             "description": "Only failed webhook deliveries whose time is less than or equal to the passed time are destroyed (if used).",
             "schema": {
-              "type": "ref"
+              "type": "string",
+              "format": "date-time"
             }
           }
         ],
