@@ -5,7 +5,6 @@ base: &base
   namespace: "<%= ENV['REDIS_NAMESPACE'] %>"
   sentinels: "<%= ENV['REDIS_SENTINEL_HOSTS'] %>"
   role: <%= ENV['REDIS_SENTINEL_ROLE'] %>
-  disable_client_id: <%= ENV.fetch('REDIS_DISABLE_CLIENT_ID', '0') == '1' %>
 
 production:
   <<: *base
