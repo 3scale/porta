@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.addEventListener('submit', (event: Event) => {
         event.preventDefault()
         event.stopPropagation()
+        submit.setAttribute('disabled', 'disabled')
 
         hostedFieldsInstance.tokenize()
           .then(payload => {
