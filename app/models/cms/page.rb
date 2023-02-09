@@ -30,6 +30,8 @@ class CMS::Page < CMS::BasePage
   before_save :mark_for_searchability
   after_initialize :set_default_values
 
+  has_data_tag :page
+
   def self.path(chunks, format = nil)
     path = Array(chunks).compact.join('/')
     path.prepend(root_path) unless path.start_with?(root_path)
@@ -91,7 +93,7 @@ class CMS::Page < CMS::BasePage
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
+    xml.__send__(self.class.data_tag) do |x|
       unless new_record?
         x.id id
         x.created_at created_at.xmlschema

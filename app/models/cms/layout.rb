@@ -10,6 +10,8 @@ class CMS::Layout < CMS::Template
 
   before_destroy :avoid_destruction
 
+  has_data_tag :layout
+
   def human_name
     title or I18n.t(system_name, :scope => [:cms, :layout], :default => system_name)
   end
@@ -21,7 +23,7 @@ class CMS::Layout < CMS::Template
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
+    xml.__send__(self.class.data_tag) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema

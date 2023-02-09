@@ -1,5 +1,6 @@
 class CMS::File < ApplicationRecord
   include CMS::Filtering
+  include CMS::DataTag
   include NormalizePathAttribute
   acts_as_taggable
   include Tagging
@@ -37,6 +38,8 @@ class CMS::File < ApplicationRecord
     file.attachment.extend(UTF8Attachment) if defined?(::Encoding)
   end
 
+  has_data_tag :file
+
   module UTF8Attachment
     def original_filename
       super.tap do |filename|
@@ -51,7 +54,7 @@ class CMS::File < ApplicationRecord
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
+    xml.__send__(self.class.data_tag) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema

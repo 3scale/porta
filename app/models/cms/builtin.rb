@@ -111,10 +111,12 @@ class CMS::Builtin < CMS::BasePage
       record.errors.add attr, :is_present if value.present?
     end
 
+    has_data_tag :builtin_page
+
     def to_xml(options = {})
       xml = options[:builder] || Nokogiri::XML::Builder.new
 
-      xml.builtin_page do |x|
+      xml.__send__(self.class.data_tag) do |x|
         unless new_record?
           xml.id id
           xml.created_at created_at.xmlschema
@@ -132,10 +134,13 @@ class CMS::Builtin < CMS::BasePage
 
   # CMS::Builtin::Page
   class Page < CMS::Builtin
+
+    has_data_tag :builtin_page
+
     def to_xml(options = {})
       xml = options[:builder] || Nokogiri::XML::Builder.new
 
-      xml.__send__(CMS::XML::CLASS_TAG.call(self.class)) do |x|
+      xml.__send__(self.class.data_tag) do |x|
         unless new_record?
           xml.id id
           xml.created_at created_at.xmlschema
@@ -187,6 +192,8 @@ class CMS::Builtin < CMS::BasePage
     private :destroy
     attr_readonly :system_name
     attr_protected :liquid_enabled
+
+    has_data_tag :builtin_partial
 
     # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
     def liquid_enabled?
