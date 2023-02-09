@@ -3,6 +3,8 @@ import { createHostedFields } from 'PaymentGateways/braintree/utils/createHosted
 
 import type { BraintreeError } from 'braintree-web'
 
+import 'PaymentGateways/braintree/BraintreeProviderForm.scss'
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector<HTMLFormElement>('form#new_customer')
   const submit = document.querySelector<HTMLButtonElement>('button[type="submit"]')
