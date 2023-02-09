@@ -30,10 +30,15 @@
              }
     });
     path.forEach(function (url) {
-    var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
-    dom_name = url.substring(url.lastIndexOf('/') + 1).replace(/\.json/g, '').replace(/\_/g, '-');
-    $('#api-containers').append($(`<div class="api-docs-wrap" id="${dom_name}" ></div>`));
-    SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name }, serviceEndpoint);
+      var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
+      dom_name = url.substring(url.lastIndexOf('/') + 1).replace(/\.json/g, '').replace(/\_/g, '-');
+      $('#api-containers').append($(`<div class="api-docs-wrap" id="${dom_name}" ></div>`));
+
+      if (dom_name == 'service-management-api') {
+        SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name});
+      } else {
+        SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name }, serviceEndpoint);
+      }
     });
   });
 </script>

@@ -41,7 +41,7 @@ class ApiDocs::ServicesController < FrontendController
 
     def json
       parsed_content = JSON.parse(file_content)
-      parsed_content['basePath'] = backend_base_host if backend_api?
+      parsed_content['servers'][0]['url'] = backend_base_host if backend_api?
 
       parsed_content
     end
