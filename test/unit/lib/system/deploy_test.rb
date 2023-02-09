@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class BasicInfoTest < ActiveSupport::TestCase
+class DeployTest < ActiveSupport::TestCase
   test 'default release is 2.x' do
     System::Deploy.load_info!
     assert_equal '2.x', System::Deploy.info.release

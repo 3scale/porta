@@ -4,14 +4,7 @@ module System
   module Deploy
     mattr_accessor :info
 
-    module BasicInfo
-      def as_json(*)
-        super.merge(rails: Rails::VERSION::STRING, env: ENV.to_hash)
-      end
-    end
-
     class Info
-      include BasicInfo
       attr_reader :revision, :deployed_at
       attr_reader :release
 
@@ -48,7 +41,6 @@ module System
     end
 
     class InvalidInfo
-      include BasicInfo
       attr_reader :release
 
       def initialize(error)
