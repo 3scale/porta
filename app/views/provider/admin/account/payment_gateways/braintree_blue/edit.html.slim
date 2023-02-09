@@ -70,7 +70,7 @@ p
     = form.input 'foo', label: 'Expiration Date (MM/YY)', input_html: { disabled: true }
     = form.input 'foo', label: 'CVV', input_html: { disabled: true }
 
-  = form.inputs "Credit Card Details", id: 'hosted-fields', class: 'braintree-hosted-fields-hidden' do
+  = form.inputs "Credit Card Details", id: 'hosted-fields', style: 'display: none;' do
     ol
       li.string.required#customer_credit_card_number_input
         label for="customer_credit_card_number" Number
@@ -100,82 +100,5 @@ p
   = form.actions do
     = form.commit_button 'Save credit card', button_html: { disabled: true }
 
-/ TODO: All is duplicated. Move this into a pack and use braintree from node_modules
-script src="https://js.braintreegateway.com/web/3.69.0/js/client.min.js"
-script src="https://js.braintreegateway.com/web/3.69.0/js/hosted-fields.min.js"
-javascript:
-  const form = document.querySelector('form#new_customer');
-  const submit = document.querySelector('button[type="submit"]');
-  const hostedFieldset = document.querySelector('fieldset#hosted-fields')
-  const fakeFieldset = document.querySelector('fieldset#fake-fields')
-
-  if (!(form && submit && hostedFieldset && fakeFieldset)) {
-    throw new Error('Required elements not found')
-  }
-
-  const authorization = '#{@braintree_authorization}'
-
-  if (typeof braintree !== 'undefined' && authorization) {
-    braintree.client.create({
-      authorization
-    }, function(clientErr, clientInstance) {
-      if (clientErr) {
-        console.error(clientErr);
-        return;
-      }
-
-      // This example shows Hosted Fields, but you can also use this
-      // client instance to create additional components here, such as:qa
-      // PayPal or Data Collector.
-
-      braintree.hostedFields.create({
-        client: clientInstance,
-        styles: {
-          'input': {
-            'font-size': '14px'
-          },
-          'input.invalid': {
-            'color': 'red'
-          },
-          'input.valid': {
-            'color': 'green'
-          }
-        },
-        fields: {
-          number: {
-            selector: '#customer_credit_card_number',
-            placeholder: '4111 1111 1111 1111'
-          },
-          cvv: {
-            selector: '#customer_credit_card_cvv',
-            placeholder: '123'
-          },
-          expirationDate: {
-            selector: '#customer_credit_card_expiration_date',
-            placeholder: 'MM/YY'
-          }
-        }
-      }, function(hostedFieldsErr, hostedFieldsInstance) {
-        if (hostedFieldsErr) {
-          console.error(hostedFieldsErr);
-          return;
-        }
-
-        fakeFieldset.remove()
-        hostedFieldset.classList.remove('braintree-hosted-fields-focused')
-        submit.removeAttribute('disabled')
-        form.addEventListener('submit', function(event) {
-          event.preventDefault();
-          event.stopPropagation();
-          hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
-            if (tokenizeErr) {
-              console.error(tokenizeErr);
-              return;
-            }
-            document.querySelector('input#braintree_nonce').setAttribute('value', payload.nonce);
-            form.submit();
-          });
-        });
-      });
-    })
-  }
+span#braintree_data data-client-token=braintree_authorization
+  = javascript_pack_tag 'braintree_provider_form'
