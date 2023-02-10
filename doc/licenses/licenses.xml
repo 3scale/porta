@@ -3502,16 +3502,6 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>codemirror</packageName>
-        <version>5.62.0</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
         <packageName>codemirror-rails</packageName>
         <version>5.16.0</version>
         <licenses>
