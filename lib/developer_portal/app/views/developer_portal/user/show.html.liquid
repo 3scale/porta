@@ -11,20 +11,18 @@
       <div class="panel-body panel-footer">
         {% form 'user.personal_details', user, class: "form-horizontal" %}
           <fieldset>
-            <div class="header" style="display: flex; align-items: center;">
-              <span>USER INFORMATION</span>
-              <hr style="width: 75%" />
-            </div>
+            <legend>
+              <span>User information</span>
+            </legend>
             {% for field in user.fields %}
               {% include 'field' with field %}
             {% endfor %}
           </fieldset>
 
           <fieldset>
-            <div class="section-header" style="display: flex; align-items: center;">
-              <span>PROVIDE YOUR CURRENT PASSWORD</span>
-              <hr style="width: 55%" />
-            </div>
+            <legend>
+              <span>Provide your current password</span>
+            </legend>
             <div class="form-group {{ user.errors.current_password | error_class: 'has-error' }}">
               <label for="user_current_password" class="col-md-4 control-label">
                 Current Password
@@ -41,10 +39,9 @@
           </fieldset>
 
           <fieldset>
-            <div class="section-header" style="display: flex; align-items: center;">
-              <span>CHANGE PASSWORD</span>
-              <hr style="width: 75%" />
-            </div>
+            <legend>
+              <span>Change password</span>
+            </legend>
             <div class="form-group {{ user.errors.password | error_class: 'has-error' }}">
               <label for="user_password_confirmation" class="col-md-4 control-label">
                 Password
