@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-When /^I navigate to the sent invitations page$/ do
-  click_link "Account"
-  click_link "Users"
-  click_link "Sent invitations"
-end
-
 When /^I navigate to the page of the partner "([^\"]*)"$/ do |partner|
   step 'I navigate to the accounts page'
   click_link partner
@@ -42,52 +36,19 @@ When /^I navigate to the forum my posts admin page$/ do
   click_link "My Threads"
 end
 
-When /^I navigate to my account edition page$/ do
-  click_link "Settings"
-  click_link "Edit"
-end
-
-When /^I navigate to the dashboard$/ do
-  click_link "Dashboard"
-end
-
-
-When /^I navigate to the plans admin page$/ do
-  click_link "Dashboard"
-  click_link "API"
-  click_link "Plans"
-end
-
-When /^I navigate to the plans page$/ do
-  click_link "Account"
-  click_link "Plans"
-end
-
-When /^I navigate to the API dashboard$/ do
-  click_link "Dashboard"
-  click_link "API"
-end
-
-When /^I navigate to the application "([^"]*)" of the partner "([^"]*)"$/ do |app, partner|
+When "I navigate to the {application} of the partner {string}" do |app, partner|
   step %(I navigate to the page of the partner "#{partner}")
-  step %(I follow the link to application "#{app}" in the applications widget)
+  within '#applications_widget' do
+    find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
+  end
 end
 
 When /^I navigate to the default application of the provider$/ do
   provider = Account.providers.first!
   app = provider.bought_cinstances.first!
-  step "I navigate to the application \"#{app.name}\" of the provider \"#{provider.internal_domain}\""
-end
-
-When /^I navigate to the application "([^"]*)" of the provider "([^"]*)"$/ do |app, partner|
-  step %(I navigate to the page of the partner "#{partner}")
+  step %(I navigate to the page of the partner "#{provider.org_name}")
   step 'I go to the applications admin page'
-  step %(I follow the link to application "#{app}")
-end
-
-When /^I navigate to the buyers service contracts page$/ do
-  step 'I navigate to the accounts page'
-  click_link 'Subscriptions'
+  find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
 end
 
 When "I navigate to the Account Settings" do

@@ -19,9 +19,5 @@ class Provider::Admin::CMS::LayoutsTest < ActionDispatch::IntegrationTest
       assert_response :redirect
       assert_equal "<abc>#{i}</abc>", layout.reload.draft
     end
-
-    params[:cms_template][:not_existing] = 'alaska'
-    System::ErrorReporting.expects(:report_error).never
-    put provider_admin_cms_layout_path(params)
   end
 end

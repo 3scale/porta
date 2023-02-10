@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-Then "{plan} should be the default" do |plan|
-  assert plan.master?
-end
-
 Given "{plan} is {default}" do |plan, default|
   unless default
     assert !default_plan?(plan)
@@ -14,14 +10,6 @@ end
 
 Given /^a default application plan of provider "([^"]*)"$/ do |provider_name|
   step %(a default application plan "Default" of provider "#{provider_name}")
-end
-
-Given(/^the provider has a default application plan$/) do
-  step "a default application plan of provider \"#{provider_or_master_name}\""
-end
-
-Given /^a default service plan of provider "([^"]*)"$/ do |provider_name|
-  step %(a default service plan "Default" of provider "#{provider_name}")
 end
 
 Given "{provider} has no default application plan" do |provider|
@@ -38,5 +26,3 @@ Given "{provider} has default service and account plan" do |provider|
   plans = service.service_plans
   plans.default!(plans.default_or_first || plans.first)
 end
-
-

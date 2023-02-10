@@ -1,23 +1,16 @@
-
 import { mount } from 'enzyme'
-import * as hostedFields from 'braintree-web/hosted-fields'
 import * as validate from 'validate.js'
 
 import { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
+import { waitForPromises } from 'utilities/test-utils'
+import * as braintree from 'PaymentGateways/braintree/braintree'
 
 import type { Client } from 'braintree-web'
 import type { Props } from 'PaymentGateways/braintree/BraintreeForm'
 
-jest.mock('braintree-web/hosted-fields')
-jest.spyOn(hostedFields, 'create').mockResolvedValue({
-  getState: () => ({ fields: {} }),
-  on: (event: string, fn: () => void) => {
-    if (event === 'validityChange') {
-      fn()
-    }
-  }
-})
-
+jest.mock('braintree-web/hosted-fields', () => ({
+  create: () => new Promise(jest.fn()) // Unresolved promise
+}))
 jest.mock('validate.js')
 
 const COUNTRIES_LIST: [string, string][] = [['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Spain', 'ES']]
@@ -57,21 +50,19 @@ it('should pre-fill billing address inputs when a value is provided', () => {
   expect(wrapper.find('select#customer_credit_card_billing_address_country_name').props().value).toEqual('ES')
 })
 
-console.error = jest.fn()
-
-// FIXME: Fix log error 'Warning: An update to BraintreeForm inside a test was not wrapped in act'
-// Using 'act' or other solutions like 'runAllImmediates' does not seem to be valid solutions. Instead, the component BraintreeForm
-// probably has to be refactored to reduce the number of async effects. Upgrading Enzyme to 3.10 is also irrelevant.
-// Refs:
-// - https://stackoverflow.com/q/55388587/5466997
-// - https://github.com/eps1lon/react-act-immediate/blob/4d61b67dc98dd8dd422a41d07b82e08a8031bded/src/index.test.js
-// - https://github.com/airbnb/enzyme/issues/2073
 it('should enable submit button when form is valid', async () => {
   jest.spyOn(validate, 'validate')
     .mockReturnValueOnce(undefined)
 
-  // eslint-disable-next-line @typescript-eslint/await-thenable
-  const wrapper = await mount(<BraintreeForm {...props} />)
-  wrapper.update()
-  expect(wrapper.find('.btn-primary').prop('disabled')).toEqual(false)
+  jest.spyOn(braintree, 'createHostedFieldsInstance')
+    .mockImplementationOnce((_hf, _client, _opts, setIsCardValid) => {
+      setIsCardValid(true)
+
+      return Promise.resolve({ tokenize: jest.fn() })
+    })
+
+  const wrapper = mount(<BraintreeForm {...props} />)
+
+  await waitForPromises(wrapper)
+  expect(wrapper.find('button[type="submit"]').props().disabled).toBeFalsy()
 })

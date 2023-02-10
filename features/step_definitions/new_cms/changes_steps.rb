@@ -26,8 +26,3 @@ Then /^the CMS page "(.*?)" should be reverted$/ do |name|
   page.draft.should be_nil
   cms_changes.should_not have_css("#cms_page_#{page.id}_change")
 end
-
-
-Given(/^there are no recent cms templates$/) do
-  CMS::Template.recents.update_all('created_at = updated_at')
-end

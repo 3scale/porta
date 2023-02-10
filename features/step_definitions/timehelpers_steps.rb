@@ -17,24 +17,10 @@ def access_user_sessions
   UserSession.where('revoked_at is null').each { |session| session.update({ accessed_at: Time.zone.now }) }
 end
 
-Given /^the year is (\d+)$/ do |year|
-  travel_to(Time.zone.now.change(:year => year.to_i))
-end
-
 Given /^the (?:date|time) is (.*)$/ do |time|
   time = Time.zone.parse(time)
   travel_to(time)
   access_user_sessions
-end
-
-Given(/^this happened (\d+) (hours|days?) ago$/) do |num, time_range|
-  time = num.to_i.public_send(time_range).ago
-  travel_to(time)
-  access_user_sessions
-end
-
-Given /^the current date is not conflicting in new year's boundaries$/ do
-  step "the date is 15 March 2011"
 end
 
 When /^(\d+) (second|minute|hour|day|week|month|year)s? pass(?:es)?$/ do |amount, period|
