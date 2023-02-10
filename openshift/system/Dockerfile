@@ -8,9 +8,7 @@ ENV RUBY_MAJOR_VERSION=2 \
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
     RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
 
-ARG BUNDLER_ENV
-ENV BUNDLER_ENV="${BUNDLER_ENV}" \
-    TZ=:/etc/localtime \
+ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
@@ -64,8 +62,7 @@ ENV BASH_ENV=/opt/app-root/etc/scl_enable \
     RAILS_ENV=production \
     SAFETY_ASSURED=1
 
-RUN export ${BUNDLER_ENV} >/dev/null\
-    && source /opt/app-root/etc/scl_enable \
+RUN source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
@@ -78,8 +75,7 @@ ADD package.json ./
 ADD yarn.lock ./
 ADD openshift/system/config/* ./config/
 
-RUN export ${BUNDLER_ENV} >/dev/null \
-    && source /opt/app-root/etc/scl_enable \
+RUN source /opt/app-root/etc/scl_enable \
     && bundle exec rake tmp:create \
     && mkdir -p public/assets db/sphinx \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
