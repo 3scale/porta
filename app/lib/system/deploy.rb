@@ -4,6 +4,13 @@ module System
   module Deploy
     mattr_accessor :info
 
+    # Provides information about the version of the code:
+    #   - revision: low-level version, that is used by BugSnag as app version
+    #   - release: customer-facing version, that is visible in the admin portal footer
+    #   - deployed_at: timestamp of the deployment
+    # The data is taken from the `.deploy_info` file in the root directory, but for SaaS the release
+    # is overridden with VERSION.
+    # The information is exposed via {MASTER_PORTAL}/deploy endpoint for logged-in users.
     class Info
       VERSION = '2.x'
       private_constant :VERSION
