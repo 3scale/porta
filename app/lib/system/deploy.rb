@@ -6,6 +6,7 @@ module System
 
     class Info
       VERSION = '2.x'
+      private_constant :VERSION
 
       attr_reader :revision, :deployed_at, :release
 
