@@ -106,7 +106,7 @@ module ThreeScale
         #  - ∞ other things that could go wrong ™
         def validate!
           return if @errors.include? :base
-          
+
           apis = @doc.fetch('apis', nil)
           unless apis.is_a?(Array)
             @errors.add(:base, :invalid_swagger)
