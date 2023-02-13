@@ -158,7 +158,7 @@ ActiveSupport.on_load(:active_record) do
         # permissions.
         def create
           if ENV['ORACLE_SYSTEM_PASSWORD'].present?
-            Logger.new(STDOUT).warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
+            Logger.new($stderr).warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
             super
             connection.execute "GRANT create trigger TO #{username}"
             connection.execute "GRANT create procedure TO #{username}"
