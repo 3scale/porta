@@ -4,10 +4,6 @@ require 'test_helper'
 
 module ThreeScale
   class RedisConfigTest < ActiveSupport::TestCase
-    setup do
-      @config = { url: 'redis://my-redis/1' }
-    end
-
     test '#db' do
       assert_equal 4, RedisConfig.new(db: 4).db
       assert_equal 3, RedisConfig.new(url: 'redis://my-redis/3').db
@@ -79,8 +75,15 @@ module ThreeScale
       assert_equal expected_sentinels, config.sentinels
     end
 
-    test 'sets redis client id to nil' do
-      config = RedisConfig.new(url: 'redis://localhost/1')
+    test 'sets redis client id to nil when id not provided' do
+      config = RedisConfig.new(url: 'redis://my-redis/1')
+
+      assert_nil config.id
+      assert config.key? :id
+    end
+
+    test 'sets redis client id to nil when id is set explicitly' do
+      config = RedisConfig.new(url: 'redis://my-redis/1', id: 'redis-client-name')
       assert_nil config.id
       assert config.key? :id
     end
