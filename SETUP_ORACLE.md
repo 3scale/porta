@@ -66,7 +66,7 @@ You need to have Docker installed and running. You also need to be able to [run 
 
 ## Run Oracle server
 
-1. From this repository, do `make oracle-database` and wait to see *DATABASE IS READY TO USE!*.
+1. From this repository, do `make oracle-database` and wait **_a little_**, or check `podman logs -f oracle-database` to see *DATABASE IS READY TO USE!* message.
 
     1. This will create a new user to stablish regular connections with the Oracle Database. For that, Oracle's SYSTEM user must be used.
     2. Alternatively, the `ORACLE_SYSTEM_PASSWORD` ENV variable might be omitted and, in this case, a valid user must be provided.
