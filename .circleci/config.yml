@@ -220,7 +220,6 @@ commands: # reusable commands with parameters
             BUNDLE_JOBS: 3
       - save-gem-cache
       - *persist-vendored-dependencies-to-workspace
-      - notify_failure
 
   clone-oracle-libraries:
     steps:
@@ -259,7 +258,6 @@ commands: # reusable commands with parameters
             echo "bundle exec rspec --format progress ${TESTS}"
             bundle exec rspec --format progress ${TESTS}
       - upload-artifacts
-      - notify_failure
 
   cucumber-tests:
     parameters:
@@ -291,7 +289,6 @@ commands: # reusable commands with parameters
       - store_artifacts:
           path: tmp/capybara
           destination: capybara
-      - notify_failure
 
   rails-tests:
     parameters:
@@ -313,7 +310,6 @@ commands: # reusable commands with parameters
             echo "bundle exec rake test:run  TESTOPTS=--verbose --verbose --trace TEST='${TESTS}'"
             bundle exec rake test:run TEST="${TESTS}" TESTOPTS=--verbose --verbose --trace
       - upload-artifacts
-      - notify_failure
 
   save-gem-cache:
     steps:
@@ -420,6 +416,7 @@ jobs:
       database: mysql
     steps:
       - install-gem-dependencies
+      - notify_failure
 
   deps_bundler_postgres:
     parameters:
@@ -431,6 +428,7 @@ jobs:
       database: postgresql
     steps:
       - install-gem-dependencies
+      - notify_failure
 
   deps_bundler_oracle:
     parameters:
@@ -444,6 +442,7 @@ jobs:
       - install-gem-dependencies:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   dependencies_npm:
     parameters:
@@ -511,6 +510,7 @@ jobs:
       - run:
           name: Eslint
           command: yarn ci:lint
+      - notify_failure
 
   licenses:
     parameters:
@@ -529,6 +529,7 @@ jobs:
       - store_artifacts:
           path: doc/licenses
           destination: licenses
+      - notify_failure
 
   swagger:
     parameters:
@@ -578,6 +579,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   unit-postgres:
     parallelism: 8
@@ -589,6 +591,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   unit-oracle:
     parallelism: 6
@@ -602,6 +605,7 @@ jobs:
       - rails-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   functional:
     parallelism: 2
@@ -613,6 +617,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   functional-postgres:
     parallelism: 2
@@ -624,6 +629,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   functional-oracle:
     parallelism: 2
@@ -637,6 +643,7 @@ jobs:
       - rails-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   integration:
     parallelism: 8
@@ -648,6 +655,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   integration-postgres:
     parallelism: 8
@@ -659,6 +667,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   integration-oracle:
     parallelism: 6
@@ -672,6 +681,7 @@ jobs:
       - rails-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   rspec:
     parallelism: 3
@@ -683,6 +693,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rspec-tests
+      - notify_failure
 
   rspec-postgres:
     parallelism: 3
@@ -694,6 +705,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rspec-tests
+      - notify_failure
 
   rspec-oracle:
     parallelism: 4
@@ -707,6 +719,7 @@ jobs:
       - rspec-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   cucumber:
     <<: *build-envs-mysql
@@ -719,6 +732,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - cucumber-tests
+      - notify_failure
 
   cucumber-postgres:
     <<: *build-envs-postgresql
@@ -731,6 +745,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - cucumber-tests
+      - notify_failure
 
   cucumber-oracle:
     <<: *build-envs-oracle
@@ -745,6 +760,7 @@ jobs:
       - cucumber-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   notify_start:
     docker:
