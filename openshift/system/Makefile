@@ -13,8 +13,6 @@ REMOTE_IMAGE := $(NAMESPACE)/$(LOCAL_IMAGE)
 
 DOCKERFILE := Dockerfile
 
-BUNDLER_ENV += $(foreach env,$(BUNDLER_ENVIRONMENTS),$(env)=$(value $(env)))
-
 all: help
 
 COMPOSE_PROJECT_NAME := openshift-$(PROJECT)
@@ -31,24 +29,21 @@ build: ## Build docker image. Accepts DOCKERFILE parameter. Name will be LOCAL_I
 	# But also mistakenly matches `**/.*` as any file with a dot anywhere.
 	# https://github.com/docker/docker-py/issues/1471
 	# @$(DOCKER_COMPOSE) build --pull system
-	docker build --build-arg BUNDLER_ENV="$(BUNDLER_ENV)" --file "$(DOCKERFILE)" --tag $(LOCAL_IMAGE) --pull ../..
+	docker build --file "$(DOCKERFILE)" --tag $(LOCAL_IMAGE) --pull ../..
 
 run: export LOCAL_IMAGE := $(LOCAL_IMAGE)
 run: export DOCKERFILE := $(DOCKERFILE)
-run: export BUNDLER_ENV := $(BUNDLER_ENV)
 run: $(DOCKER_COMPOSE)
 	$(DOCKER_COMPOSE) run --user=1002 --rm system $(CMD)
 
 up: export LOCAL_IMAGE := $(LOCAL_IMAGE)
 up: export DOCKERFILE := $(DOCKERFILE)
-up: export BUNDLER_ENV := $(BUNDLER_ENV)
 up: $(DOCKER_COMPOSE)
 up: ## Start everything
 	$(DOCKER_COMPOSE) up --abort-on-container-exit system
 
 setup: export LOCAL_IMAGE := $(LOCAL_IMAGE)
 setup: export DOCKERFILE := $(DOCKERFILE)
-setup: export BUNDLER_ENV := $(BUNDLER_ENV)
 setup: ## Run the database setup
 	$(DOCKER_COMPOSE) run --rm -e RAILS_LOG_LEVEL=error system rake db:drop db:setup
 
