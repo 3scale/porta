@@ -7,12 +7,6 @@ Given "an usage limit on {plan} for metric {string} with period {word} and value
   ul.save!
 end
 
-Then "I should see hourly usage limit of {int} for {metric}" do |value, metric|
-  within "##{dom_id(metric)}_slot #usage_limits_table" do
-    assert has_table_row_with_cells?('1 hour', value)
-  end
-end
-
 Then "I should see a usage limit of {int} for {metric_on_application_plan} per {string}" do |value, metric, period|
   within "##{dom_id(metric)}_slot #usage_limits_table" do
     assert has_table_row_with_cells?(period, value)
@@ -43,10 +37,6 @@ def refute_metric_within_usage_limits(metric)
   end
 end
 
-Then "I should see hourly usage limit for {metric}" do |metric|
-  assert_metric_within_usage_limits(metric)
-end
-
 Then "I should see hourly usage limit for {metric_on_application_plan}" do |metric|
   assert_metric_within_usage_limits(metric)
 end
@@ -68,11 +58,6 @@ end
 Then "{plan} should not have hourly usage limit for metric {string}" do |plan, metric_name|
   metric = plan.metrics.find_by_system_name!(metric_name)
   assert_nil plan.usage_limits.find_by_metric_id_and_period(metric.id, 'hour')
-end
-
-When "I {word} {string} for the hourly usage limit for {string}" do |action, label, metric|
-  usage_limit = metric.usage_limits.find_by_period('hour')
-  step %(I #{action} "#{label}" within "##{dom_id(usage_limit)}")
 end
 
 When "I {word} {string} for the hourly usage limit for {metric_on_application_plan}" do |action, label, metric|
@@ -103,7 +88,6 @@ And(/^limits hits of that plan to (\d+)$/) do |number|
 
   page.should have_content 'Usage Limit has been created'
 end
-
 
 Then(/^the plan should (not )?have visible usage limits$/) do |negate|
   @plan.should be

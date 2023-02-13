@@ -72,16 +72,11 @@ bundle exec rake ts:configure ts:start
 
 ## Asset compilation
 
-On development, assets are compiled on automatically everytime a page is requested to rails. To avoid the uptime we recommend running webpack-dev-server in a second terminal:
+In development, assets are compiled automatically on demand when a Rails page loads. If you want to use [live code reloading](https://guides.rubyonrails.org/webpacker.html#running-webpacker-in-development) you'll need to run:
 
 ```sh
 bundle exec rake webpack:dev
 ```
-
-> This process consumes a lot of memory. In case of an OOM error, consider increasing node's available memory depending to your own machine's total memory:
-> ```sh
-> $ export NODE_OPTIONS='--max-old-space-size=2048' # Don't use your total RAM, leave some room for other uses!
-> ```
 
 #### Environment variables
 

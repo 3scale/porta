@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import validate from 'validate.js'
 import { hostedFields, threeDSecure } from 'braintree-web'
 
 import { CSRFToken } from 'utilities/CSRFToken'
 import {
-  validationConstraints,
   createHostedFieldsInstance,
   hostedFieldOptions,
   create3DSecureInstance,
@@ -15,6 +13,7 @@ import { BraintreeCardFields } from 'PaymentGateways/braintree/BraintreeCardFiel
 import { BraintreeSubmitFields } from 'PaymentGateways/braintree/BraintreeSubmitFields'
 import { BraintreeUserFields } from 'PaymentGateways/braintree/BraintreeUserFields'
 import { createReactWrapper } from 'utilities/createReactWrapper'
+import { validateForm } from 'PaymentGateways/braintree/utils/formValidation'
 
 import type { FunctionComponent } from 'react'
 import type { Client, HostedFields, HostedFieldsTokenizePayload, ThreeDSecure, ThreeDSecureVerifyPayload } from 'braintree-web'
@@ -47,10 +46,11 @@ const BraintreeForm: FunctionComponent<Props> = ({
   const [braintreeNonceValue, setBraintreeNonceValue] = useState<string | null>('')
   const [billingAddressData, setBillingAddressData] = useState<BillingAddressData>(billingAddress)
   const [isCardValid, setIsCardValid] = useState(false)
-  const [formErrors, setFormErrors] = useState<unknown>(validate(formRef, validationConstraints))
   const [cardError, setCardError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const isFormValid = isCardValid && !formErrors && !isLoading
+
+  const billingAddressErrors = validateForm(billingAddressData)
+  const isFormValid = isCardValid && billingAddressErrors === undefined && !isLoading
 
   useEffect(() => {
     const getHostedFieldsInstance = async () => {
@@ -92,10 +92,6 @@ const BraintreeForm: FunctionComponent<Props> = ({
     }
   }
 
-  const validateForm = (event: React.SyntheticEvent<HTMLFormElement>) => {
-    setFormErrors(validate(event.currentTarget, validationConstraints))
-  }
-
   const handleCardError = (error: string) => {
     setCardError(error)
     clearHostedFields()
@@ -128,7 +124,6 @@ const BraintreeForm: FunctionComponent<Props> = ({
       className="form-horizontal customer"
       id="customer_form"
       ref={formRef}
-      onChange={validateForm}
     >
       <input name="utf8" type="hidden" value="✓" />
       <CSRFToken />

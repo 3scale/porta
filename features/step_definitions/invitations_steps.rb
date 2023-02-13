@@ -24,13 +24,13 @@ end
 
 When(/^I follow the link to signup in the invitation sent to "([^\"]*)"$/) do |address|
   open_email(address)
-  step 'I click the first link in the email'
+  click_first_link_in_email
 end
 
 When(/^I follow the link to signup provider "(.*?)" in the invitation sent to "(.*?)"$/) do |provider, address|
   open_email(address)
   step %(current domain is the admin domain of provider "#{provider}")
-  step 'I click the first link in the email'
+  click_first_link_in_email
 end
 
 # OPTIMIZE: this reads awful
@@ -46,25 +46,9 @@ When(/^I resend the invitation to "([^\"]*)"$/) do |email|
   click_link "resend-invitation-#{invitation.id}"
 end
 
-# When(/^I resend the invitation to "([^\"]*)"$/) do |email|
-#   invitation = Invitation.find_by_email email
-#   find("form[action~=/admin\/account\/invitations\/#{invitation.id}\/resend/] input[type='submit']").click_button
-# end
-
-When(/^I send an invitation$/) do
-  step 'I visit the page to invite users'
-  @invitee_email = 'mary@foo.3scale.localhost'
-  step %(I fill in "Send invitation to" with "#{@invitee_email}")
-  click_button 'Send'
-end
-
 When(/^I send "([^"]*)" an invitation to account "([^"]*)"$/) do |address, org_name|
   step %(I navigate to the page of the invitations of the partner "#{org_name}")
   step %(I send an invitation to "#{address}")
-end
-
-When(/^I request the url to invite users to "([^\"]*)"$/) do |provider|
-  visit "http://#{provider}/account/invitations/new"
 end
 
 When(/^I navigate to the page of the invitations of the partner "([^\"]*)"$/) do |_org_name|
@@ -112,10 +96,6 @@ Then(/^no invitation should be sent to "([^"]*)"$/) do |email|
   assert_nil find_latest_email(to: email)
 end
 
-Then(/^I should see the link to the partner invitations page$/) do
-  assert has_css?('a', text: 'Invitations')
-end
-
 Then(/^I should see the invitations page of the partner "([^\"]*)"$/) do |org_name|
   assert has_content?("Sent invitations for #{org_name}")
 end
@@ -133,17 +113,6 @@ Then(/^I should not see invitation for "([^"]*)"$/) do |email|
   assert has_no_css?('td', text: email)
 end
 
-Then(/^I should see buttons to resend the invitations$/) do
-  Invitation.all.each do |invitation|
-    assert page.has_css?('form', action: /admin\/account\/invitations\/#{invitation.id}\/resend/)
-  end
-end
-
-Then(/^I should see the button to resend the invitation to "([^\"]*)"$/) do |email|
-  unaccepted_invitation = Invitation.find_by_email email
-  response.should have_tag("a#resend-invitation-#{unaccepted_invitation.id}")
-end
-
 Then(/^I should be able to resend the invitation to "([^\"]*)"$/) do |email|
   assert have_css?("button#resend-invitation-#{Invitation.find_by_email(email).id}")
 end
@@ -154,10 +123,6 @@ end
 
 Then(/^I should see the invitation for "([^\"]*)" on top of the list$/) do |address|
   assert has_xpath?("//table[@id='invitations']/tbody/tr[1]/td[1]", text: /#{address}/)
-end
-
-Then(/^I should see the invitation sign up page$/) do
-  assert has_xpath?('//input[@value="Sign up"]')
 end
 
 Then(/^I should see an error saying an user with that email already exists$/) do

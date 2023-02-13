@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class PlanPresentersTest < ActiveSupport::TestCase
-  attr_reader :service, :plans
-
   test '#paginated_table_plans can be ordered' do
     assert_equal plans.reorder(name: :desc), presenter({ sort: 'name', direction: 'desc' }).paginated_table_plans
     assert_equal plans.reorder(name: :asc), presenter({ sort: 'name', direction: 'asc' }).paginated_table_plans
@@ -27,11 +25,11 @@ class PlanPresentersTest < ActiveSupport::TestCase
   end
 
   test '#default_plan_select_data' do
-    assert_equal [:plans, :"current-plan", :path], presenter.default_plan_select_data.keys # rubocop:disable Style/SymbolArray
+    assert_equal [:plans, :'current-plan', :path], presenter.default_plan_select_data.keys # rubocop:disable Style/SymbolArray
   end
 
   test '#plans_table_data' do
-    assert_equal [:columns, :plans, :count, :"search-href"], presenter.plans_table_data.keys # rubocop:disable Style/SymbolArray
+    assert_equal [:columns, :plans, :count, :'search-href'], presenter.plans_table_data.keys # rubocop:disable Style/SymbolArray
   end
 
   class Api::ApplicationPlansPresenterTest < PlanPresentersTest
@@ -40,7 +38,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
       FactoryBot.create_list(:application_plan, 5, issuer: service)
 
       @plans = @service.application_plans
-                       .order(name: :asc)
+                       .reorder(name: :asc)
     end
 
     test '#paginated_table_plans can search' do
@@ -57,7 +55,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Api::ApplicationPlansPresenter.new(service: service, collection: plans, params: params)
+      Api::ApplicationPlansPresenter.new(service: service, params: params)
     end
   end
 
@@ -85,7 +83,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
     end
 
     def presenter(params = {})
-      Api::ServicePlansPresenter.new(service: service, collection: plans, params: params)
+      Api::ServicePlansPresenter.new(service: service, params: params)
     end
   end
 
@@ -97,7 +95,7 @@ class PlanPresentersTest < ActiveSupport::TestCase
       FactoryBot.create_list(:account_plan, 5, provider: provider)
 
       @plans = provider.account_plans
-                        .order(name: :asc)
+                        .reorder(name: :asc)
     end
 
     test '#paginated_table_plans can search' do
@@ -121,4 +119,8 @@ class PlanPresentersTest < ActiveSupport::TestCase
   def self.runnable_methods
     PlanPresentersTest == self ? [] : super
   end
+
+  private
+
+  attr_reader :service, :plans
 end

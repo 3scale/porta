@@ -22,13 +22,13 @@ When "the buyer is reviewing their account settings" do
 end
 
 When "the buyer is reviewing their credit card details" do
-  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.reload.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
   visit admin_account_path
   credit_card_details_tab.click
 end
 
 When "the buyer enters the generic credit card details URL manually" do
-  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.reload.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
   visit admin_account_payment_details_path
 end
 
@@ -71,7 +71,7 @@ Given "the buyer {has} added their credit card details" do |has_address|
 end
 
 Then "the buyer can see their billing information" do
-  stub_stripe_intent_setup if @buyer.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
+  stub_stripe_intent_setup if @buyer.reload.provider_account.payment_gateway_type == :stripe # Only stripe need to be stubbed
 
   credit_card_details_tab.click
   assert_buyer_billing_address_details
@@ -132,27 +132,21 @@ Then "the buyer can't add their credit card" do
   assert_not has_css?('#stripe-form-wrapper')
 end
 
-Then "the buyer can add their credit card for stripe" do
-  pending("TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.")
+# Then "the buyer can add their credit card for stripe" do
+#   credit_card_details_tab.click
+#   assert_buyer_billing_address_details
 
-  # credit_card_details_tab.click
-  # assert_buyer_billing_address_details
+#   within_frame(find('[name^="__privateStripeFrame"]')) do
+#     fill_in('cardnumber', with: '4111111111111111')
+#     fill_in('exp-date', with: '1223')
+#     fill_in('cvc', with: '123')
+#     fill_in('postal', with: '12345')
+#   end
 
-  # within_frame(find('[name^="__privateStripeFrame"]')) do
-  #   fill_in('cardnumber', with: '4111111111111111')
-  #   fill_in('exp-date', with: '1223')
-  #   fill_in('cvc', with: '123')
-  #   fill_in('postal', with: '12345')
-  # end
-
-  # within('#stripe-form') do
-  #   click_on 'Save details'
-  # end
-end
-
-Then "the buyer can update their credit card" do
-  pending("TODO: When adding the credit card with the Stripe's widget, the browser make all kinds of requests to the actual API from Stripe. If we manage to mock this then it will be OK to test it.")
-end
+#   within('#stripe-form') do
+#     click_on 'Save details'
+#   end
+# end
 
 Then /^the buyer can add their credit card and billing address for Braintree( for the first time)?$/ do |first_time|
   credit_card_details_tab.click
