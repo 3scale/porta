@@ -168,33 +168,36 @@ commands: # reusable commands with parameters
 
   notify_failure:
     steps:
-      - run:
-          name: Notify Slack about tests failure
-          command: |
-            curl -X POST -H 'Content-type: application/json' \
-            --data \
-            "{ \
-              \"attachments\": [ \
-              { \
-                \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-                \"color\": \"#CD0000\", \
-                \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
-                \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-                \"title\": \"Job: $CIRCLE_JOB \", \
-                \"title_link\": \"$CIRCLE_BUILD_URL\", \
-                \"text\": \"$CIRCLE_BUILD_URL\", \
-                \"fields\": [ \
-                { \
-                  \"title\": \"Commit\", \
-                  \"value\": \"$CIRCLE_SHA1\", \
-                  \"short\": false \
-                } \
-                ] \
-              } \
-              ] \
-            }" $SLACK_WEBHOOK_SYSTEM
-          when: on_fail
-          <<: *only-master-filter
+      - when:
+          condition:
+            equal: [ master, << pipeline.git.branch >> ] # &only-master-filter won't work at step level
+          steps:
+            - run:
+                name: Notify Slack about tests failure
+                command: |
+                  curl -X POST -H 'Content-type: application/json' \
+                  --data \
+                  "{ \
+                    \"attachments\": [ \
+                    { \
+                      \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
+                      \"color\": \"#CD0000\", \
+                      \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
+                      \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
+                      \"title\": \"Job: $CIRCLE_JOB \", \
+                      \"title_link\": \"$CIRCLE_BUILD_URL\", \
+                      \"text\": \"$CIRCLE_BUILD_URL\", \
+                      \"fields\": [ \
+                      { \
+                        \"title\": \"Commit\", \
+                        \"value\": \"$CIRCLE_SHA1\", \
+                        \"short\": false \
+                      } \
+                      ] \
+                    } \
+                    ] \
+                  }" $SLACK_WEBHOOK_SYSTEM
+                when: on_fail
 
   install-gem-dependencies:
     parameters:
