@@ -10,7 +10,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
 
   liquify prefix: 'user'
 
-  before_action :current_password_verification, only: :update
+  before_action :verify_current_password, only: :update
 
   def show
     assign_user_drop
@@ -67,8 +67,8 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
     params.require(:user)
   end
 
-  def current_password_verification
-    return true unless current_user.using_password?
+  def verify_current_password
+    return unless current_user.using_password?
 
     unless current_user.authenticated?(user_params[:current_password])
       flash.now[:error] = 'Current password is incorrect.'
