@@ -6643,87 +6643,73 @@
         "tags": [
           "Fields Definitions"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "target",
-            "in": "query",
-            "description": "Target entity of fields definition (use Cinstance for Application).",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "Account",
-              "enum": [
-                "Account",
-                "User",
-                "Cinstance"
-              ]
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the fields definition to be created.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "label",
-            "in": "query",
-            "description": "The field title your developers will see.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "required",
-            "in": "query",
-            "description": "If 'true' the field will be required for developers.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "hidden",
-            "in": "query",
-            "description": "If 'true' the developers won't be able to see this field.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "read_only",
-            "in": "query",
-            "description": "If 'true' the developers won't be able to change this field.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "choices",
-            "in": "query",
-            "description": "The list of predefined options for this field, URL-encoded array.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+        "requestBody": {
+          "description": "Create Fields Definitions",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token.",
+                    "required": true
+                  },
+                  "target":{
+                    "type": "string",
+                    "description": "Target entity of fields definition (use Cinstance for Application).",
+                    "default": "Account",
+                      "enum": [
+                        "Account",
+                        "User",
+                        "Cinstance"
+                      ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the fields definition to be created."
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "The field title your developers will see."
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "description": "If 'true' the field will be required for developers."
+                  },
+                  "hidden": {
+                    "type": "boolean",
+                    "description": "If 'true' the developers won't be able to see this field."
+                  },
+                  "read_only": {
+                    "type": "boolean",
+                    "description": "If 'true' the developers won't be able to change this field."
+                  },
+                  "choices[]": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "name",
+                  "target",
+                  "label",
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
