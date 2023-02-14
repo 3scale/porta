@@ -5,7 +5,7 @@
 Go to [the official Oracle Instant Client Downloads site](https://www.oracle.com/database/technologies/instant-client/downloads.html) and install basic and SDK RPMs like this:
 
 ```
-sudo dnf install https://download.oracle.com/otn_software/linux/instantclient/214000/oracle-instantclient-basic-21.4.0.0.0-1.el8.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/214000/oracle-instantclient-devel-21.4.0.0.0-1.el8.x86_64.rpm
+sudo dnf install https://download.oracle.com/otn_software/linux/instantclient/1918000/oracle-instantclient19.18-basic-19.18.0.0.0-2.x86_64.rpm https://download.oracle.com/otn_software/linux/instantclient/1918000/oracle-instantclient19.18-devel-19.18.0.0.0-2.x86_64.rpm
 ```
 
 If you wish, you can also install SQLPLus client from same location as well.
@@ -24,7 +24,7 @@ sudoedit /etc/subgid # add line: myusername:10000:54330
 
 1. Run the script with sudo
 ```shell
-$ sudo ./script/oracle/install-instantclient-packages.sh 
+$ sudo ./script/oracle/install-instantclient-packages.sh
 ```
 
 2. Add following ENV variables to your system (`~/.profile` or `~/.zshrc`)
