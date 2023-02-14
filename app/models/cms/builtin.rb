@@ -147,6 +147,7 @@ class CMS::Builtin < CMS::BasePage
           xml.updated_at updated_at.xmlschema
         end
         x.title title
+        x.system_name system_name
         x.layout_id layout_id
         unless options[:short]
           x.draft { |node| node.cdata draft }
