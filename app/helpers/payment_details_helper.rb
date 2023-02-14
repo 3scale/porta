@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PaymentDetailsHelper
-  delegate :has_billing_address?, :billing_address, to: :current_account
+  delegate :billing_address, to: :current_account
 
   attr_reader :braintree_authorization
 
@@ -61,7 +61,7 @@ module PaymentDetailsHelper
       threeDSecureEnabled: site_account.payment_gateway_options[:three_ds_enabled],
       clientToken: braintree_authorization,
       countriesList: merchant_countries,
-      billingAddress: has_billing_address? ? billing_address_data : empty_billing_address_data
+      billingAddress: billing_address_data
     }
   end
 
@@ -77,19 +77,5 @@ module PaymentDetailsHelper
       state: billing_address[:state],
       zip: billing_address[:zip]
     }.transform_values { |value| value.presence || '' }
-  end
-
-  def empty_billing_address_data
-    {
-      firstName: '',
-      lastName: '',
-      address: '',
-      city: '',
-      country: '',
-      company: '',
-      phone: '',
-      state: '',
-      zip: ''
-    }
   end
 end

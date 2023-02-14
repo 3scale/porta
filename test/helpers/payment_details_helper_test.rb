@@ -28,7 +28,7 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
     stubs(:site_account).returns(mock(payment_gateway_options: { three_ds_enabled: true }))
     stubs(:merchant_countries).returns([])
     stubs(:braintree_authorization).returns('token')
-    stubs(:has_billing_address?).returns(false)
+    stubs(:billing_address).returns({})
 
     expected = {
       formActionPath: '/admin/account/braintree_blue/hosted_success',
@@ -87,14 +87,11 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
     assert_equal expected, billing_address_data
   end
 
-  test '#empty_billing_address_data' do
-    data = empty_billing_address_data
-    %i[firstName lastName address city country company phone state zip].each do |key|
-      assert_equal '', data[key]
-    end
-  end
-
   private
+
+  def empty_billing_address
+    %i[firstName lastName address city country company phone state zip].collect { |field| [field, ''] }.to_h
+  end
 
   def current_account
     FactoryBot.build(:simple_account)

@@ -1,68 +1,236 @@
 import { mount } from 'enzyme'
-import * as validate from 'validate.js'
+import { act } from 'react-dom/test-utils'
 
 import { BraintreeForm } from 'PaymentGateways/braintree/BraintreeForm'
+import * as useBraintreeHostedFields from 'PaymentGateways/braintree/utils/useBraintreeHostedFields'
+import * as formValidation from 'PaymentGateways/braintree/utils/formValidation'
 import { waitForPromises } from 'utilities/test-utils'
-import * as braintree from 'PaymentGateways/braintree/braintree'
 
-import type { Client } from 'braintree-web'
+import type { FormEvent } from 'react'
+import type { BraintreeError } from 'braintree-web'
 import type { Props } from 'PaymentGateways/braintree/BraintreeForm'
+import type { CustomHostedFields } from 'PaymentGateways/braintree/utils/useBraintreeHostedFields'
 
-jest.mock('braintree-web/hosted-fields', () => ({
-  create: () => new Promise(jest.fn()) // Unresolved promise
-}))
 jest.mock('validate.js')
 
-const COUNTRIES_LIST: [string, string][] = [['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Spain', 'ES']]
+const COUNTRIES_LIST = [['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Spain', 'ES']] as [string, string][]
 
-const props: Props = {
-  braintreeClient: {} as Client,
-  billingAddress: {
-    company: 'Kserol',
-    address: 'Napols 182',
-    city: 'Barcelona',
-    country: 'Spain',
-    state: '',
-    zip: '08013'
-  },
-  threeDSecureEnabled: true,
-  formActionPath: 'form-path',
-  countriesList: COUNTRIES_LIST,
-  selectedCountryCode: 'ES'
+const selectors = {
+  address: 'input[name="customer[credit_card][billing_address][street_address]"]',
+  city: 'input[name="customer[credit_card][billing_address][locality]"]',
+  company: 'input[name="customer[credit_card][billing_address][company]"]',
+  country: 'select[name="customer[credit_card][billing_address][country_name]"]',
+  firstName: 'input[name="customer[first_name]"]',
+  lastName: 'input[name="customer[last_name]"]',
+  phone: 'input[name="customer[phone]"]',
+  state: 'input[name="customer[credit_card][billing_address][region]"]',
+  zip: 'input[name="customer[credit_card][billing_address][postal_code]"]'
 }
 
-it('should render properly', () => {
-  const wrapper = mount(<BraintreeForm {...props} />)
-  expect(wrapper.exists()).toEqual(true)
+const defaultProps: Props = {
+  clientToken: '',
+  billingAddress: {
+    address: '',
+    city: '',
+    country: '',
+    firstName: '',
+    lastName: '',
+    company: '',
+    phone: '',
+    state: '',
+    zip: ''
+  },
+  threeDSecureEnabled: false,
+  formActionPath: '',
+  countriesList: COUNTRIES_LIST
+}
+
+const mountWrapper = (props: Partial<Props> = {}) => mount(<BraintreeForm {...{ ...defaultProps, ...props }} />)
+
+const hostedFields = { getNonce: jest.fn() } as unknown as CustomHostedFields
+const mockHostedFields = (args: ReturnType<typeof useBraintreeHostedFields.useBraintreeHostedFields>) => {
+  jest.spyOn(useBraintreeHostedFields, 'useBraintreeHostedFields').mockImplementation(() => args)
+}
+
+afterEach(() => {
+  jest.restoreAllMocks()
 })
 
-it('should render submit button disabled by default', () => {
-  const wrapper = mount(<BraintreeForm {...props} />)
-  expect(wrapper.find('.btn-primary').prop('disabled')).toEqual(true)
+describe('before instantiating hosted fields', () => {
+  beforeEach(() => {
+    mockHostedFields([undefined, undefined, true, false])
+  })
+
+  it('should render submit button disabled', () => {
+    const wrapper = mountWrapper()
+
+    expect(wrapper.find('button[type="submit"]').props().disabled).toBeTruthy()
+  })
+
+  it('should support default values', () => {
+    const billingAddress = {
+      firstName: 'Pepe',
+      lastName: 'Pepez',
+      phone: '555',
+      address: '123 Fake Street',
+      city: 'Springfield',
+      company: 'Illegal Fireworks Co.',
+      state: '',
+      country: 'United States',
+      zip: '80085'
+    }
+
+    const wrapper = mountWrapper({ billingAddress })
+
+    Object.keys(selectors).forEach((k) => {
+      expect(wrapper.find(selectors[k as keyof typeof selectors]).props().value).toEqual(billingAddress[k as keyof typeof selectors])
+    })
+  })
+
+  it('should render the countries list properly', () => {
+    const wrapper = mountWrapper()
+    expect(wrapper.find('[name="customer[credit_card][billing_address][country_name]"] option').map((n) => n.html()))
+      .toMatchInlineSnapshot(`
+        Array [
+          "<option disabled=\\"\\" value=\\"\\"></option>",
+          "<option>Afghanistan</option>",
+          "<option>Albania</option>",
+          "<option>Algeria</option>",
+          "<option>Spain</option>",
+        ]
+      `)
+  })
+
+  it('should disable submit button even if form is valid', () => {
+    jest.spyOn(formValidation, 'validateForm').mockReturnValue(undefined)
+    const wrapper = mountWrapper()
+    expect(wrapper.find('button[type="submit"]').props().disabled).toBeTruthy()
+  })
+
+  it('should disable credit card fields', () => {
+    const wrapper = mountWrapper()
+
+    const fieldset = wrapper.find('fieldset').at(1)
+    expect(fieldset.containsMatchingElement(<legend>Credit Card</legend>)).toEqual(true)
+    expect(fieldset.props().disabled).toBeTruthy()
+  })
 })
 
-it('should pre-fill billing address inputs when a value is provided', () => {
-  const wrapper = mount(<BraintreeForm {...props} />)
-  expect(wrapper.find('input#customer_credit_card_billing_address_company').props().value).toEqual('Kserol')
-  expect(wrapper.find('input#customer_credit_card_billing_address_street_address').props().value).toEqual('Napols 182')
-  expect(wrapper.find('input#customer_credit_card_billing_address_postal_code').props().value).toEqual('08013')
-  expect(wrapper.find('input#customer_credit_card_billing_address_locality').props().value).toEqual('Barcelona')
-  expect(wrapper.find('select#customer_credit_card_billing_address_country_name').props().value).toEqual('ES')
+describe('when hosted fields fail to instantiate', () => {
+  beforeEach(() => {
+    const error = { message: 'Error!' } as BraintreeError
+    mockHostedFields([undefined, error, false, false])
+
+    jest.spyOn(console, 'error').mockImplementation() // Silence console.error for this block
+  })
+
+  it('should disable the submit button', () => {
+    const wrapper = mountWrapper()
+    expect(wrapper.find('button[type="submit"]').props().disabled).toBeTruthy()
+  })
 })
 
-it('should enable submit button when form is valid', async () => {
-  jest.spyOn(validate, 'validate')
-    .mockReturnValueOnce(undefined)
-
-  jest.spyOn(braintree, 'createHostedFieldsInstance')
-    .mockImplementationOnce((_hf, _client, _opts, setIsCardValid) => {
-      setIsCardValid(true)
-
-      return Promise.resolve({ tokenize: jest.fn() })
+describe('after hosted fields instantiated', () => {
+  describe('and hosted fields are valid', () => {
+    beforeEach(() => {
+      jest.spyOn(hostedFields, 'getNonce').mockResolvedValue('nonce')
+      mockHostedFields([hostedFields, undefined, false, true])
     })
 
-  const wrapper = mount(<BraintreeForm {...props} />)
+    it('should disable submit button if billing address incorrect', () => {
+      jest.spyOn(formValidation, 'validateForm').mockReturnValueOnce({})
+      expect(mountWrapper().find('button[type="submit"]').props().disabled).toBeTruthy()
+    })
 
-  await waitForPromises(wrapper)
-  expect(wrapper.find('button[type="submit"]').props().disabled).toBeFalsy()
+    describe('and billing address is valid', () => {
+      beforeEach(() => {
+        jest.spyOn(formValidation, 'validateForm').mockReturnValueOnce(undefined)
+      })
+
+      it('should enable submit button', () => {
+        const wrapper = mountWrapper()
+        expect(wrapper.find('button[type="submit"]').props().disabled).toBeFalsy()
+      })
+
+      it.todo('should set the nonce before submitting')
+
+      it('should disable submit button while submitting', async () => {
+        const submit = jest.spyOn(HTMLFormElement.prototype, 'submit')
+        submit.mockImplementation(jest.fn())
+
+        const wrapper = mountWrapper()
+        expect(wrapper.find('button[type="submit"]').props().disabled).toBeFalsy()
+
+        wrapper.find('button[type="submit"]').simulate('click')
+        expect(wrapper.find('button[type="submit"]').props().disabled).toBeTruthy()
+
+        await waitForPromises(wrapper)
+        expect(submit).toHaveBeenCalledTimes(1)
+      })
+
+      it('should send all the fields for card verification', async () => {
+        jest.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(jest.fn())
+
+        const billingAddress = {
+          firstName: 'Pepe',
+          lastName: 'Pepez',
+          phone: '555',
+          address: '123 Fake Street',
+          city: 'Springfield',
+          company: 'Illegal Fireworks Co.',
+          state: '',
+          zip: '80085'
+        }
+
+        const getNonce = jest.spyOn(hostedFields, 'getNonce')
+        mockHostedFields([hostedFields, undefined, false, true])
+
+        const wrapper = mountWrapper()
+
+        act(() => {
+          for (const key in billingAddress) {
+            // @ts-expect-error Fuck
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            wrapper.find(selectors[key]).props().onChange!({ currentTarget: { value: billingAddress[key] } })
+          }
+
+          // IMPORTANT NOTE: select has a first empty option, so selectedIndex is +1 compared to countriesList
+          wrapper.find('select').props().onChange!({ currentTarget: { value: 'Spain', selectedIndex: 4 } as unknown as EventTarget } as FormEvent)
+        })
+
+        wrapper.find('button[type="submit"]').simulate('click')
+
+        expect(getNonce).toHaveBeenCalledWith(expect.objectContaining({ ...billingAddress, countryCodeAlpha2: 'ES' }))
+
+        await waitForPromises(wrapper)
+      })
+    })
+
+    describe('but card verification fails', () => {
+      it('should show an inline error after submitting', async () => {
+        jest.spyOn(hostedFields, 'getNonce').mockRejectedValue('WRONG')
+        mockHostedFields([hostedFields, undefined, false, true])
+        jest.spyOn(console, 'error').mockImplementation(jest.fn())
+
+        const wrapper = mountWrapper()
+        wrapper.find('button[type="submit"]').simulate('click')
+        expect(wrapper.exists('.alert.alert-danger')).toEqual(false)
+
+        await waitForPromises(wrapper)
+        expect(wrapper.find('.alert.alert-danger').text()).toEqual('An error occurred, please review your CC details or try later.')
+      })
+    })
+  })
+
+  describe('and hosted fields are invalid', () => {
+    beforeEach(() => {
+      jest.spyOn(hostedFields, 'getNonce').mockResolvedValue('nonce')
+      mockHostedFields([hostedFields, undefined, false, false])
+    })
+
+    it('should disable submit button regardless of billing address', () => {
+      jest.spyOn(formValidation, 'validateForm').mockReturnValueOnce(undefined)
+      expect(mountWrapper().find('button[type="submit"]').props().disabled).toBeTruthy()
+    })
+  })
 })
