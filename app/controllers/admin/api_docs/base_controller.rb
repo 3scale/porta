@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class Admin::ApiDocs::BaseController < FrontendController
-  include Admin::ApiDocsHelper
-
   before_action :deny_on_premises_for_master
   before_action :authorize_api_docs
   before_action :find_api_docs, only: %i[show preview toggle_visible edit update destroy]
   before_action :new_service_id_permitted, only: %i[create update]
-  helper_method :api_docs_service_data
+  helper_method :current_scope
 
   def index
     @api_docs_services = accessible_api_docs_services.page(params[:page]).includes(:service)
