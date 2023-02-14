@@ -86,12 +86,12 @@ function assertInputs (wrapper: ReactWrapper<unknown>, inputs: { id: string; pre
 /**
  * Use when mounting a component with promises or side effects, such as BraintreeForm#onSubmit
  */
-async function waitForPromises (wrapper: ReactWrapper<unknown>): Promise<void> {
+async function waitForPromises (wrapper?: ReactWrapper<unknown>): Promise<void> {
   await act(async () => {
     await new Promise((resolve) => setTimeout(resolve))
   })
 
-  wrapper.update()
+  wrapper?.update()
 }
 
 export {

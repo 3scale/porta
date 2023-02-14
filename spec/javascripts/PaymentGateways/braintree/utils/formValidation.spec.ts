@@ -25,14 +25,19 @@ describe('validateForm', () => {
       state: '',
       zip: ''
     })).toEqual({
-      address: ['Address is too short (minimum is 1 characters)'],
-      city: ['City is too short (minimum is 1 characters)'],
-      company: ['Company is too short (minimum is 1 characters)'],
-      country: ['Country is too short (minimum is 1 characters)'],
-      firstName: ['First name is too short (minimum is 1 characters)'],
-      lastName: ['Last name is too short (minimum is 1 characters)'],
-      phone: ['Phone is too short (minimum is 1 characters)'],
-      zip: ['Zip is too short (minimum is 1 characters)']
+      address: ['Address can\'t be blank'],
+      city: ['City can\'t be blank'],
+      company: ['Company can\'t be blank'],
+      country: ['Country can\'t be blank'],
+      firstName: ['First name can\'t be blank'],
+      lastName: ['Last name can\'t be blank'],
+      phone: ['Phone can\'t be blank'],
+      zip: ['Zip can\'t be blank']
     })
+  })
+
+  it('should not validate countryCodeAlpha2', () => {
+    expect(formValidation.validateForm({ countryCodeAlpha2: 'This is totally wrong' }))
+      .not.toMatchObject({ countryCodeAlpha2: expect.anything() })
   })
 })

@@ -1,26 +1,25 @@
-export interface BillingAddressData {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type BillingAddressData = {
+  firstName: string;
+  lastName: string;
   address: string;
   city: string;
-  company: string;
   country: string;
-  state: string;
+  company: string;
+  phone: string;
+  state: string; // ISO-3166-2 code
   zip: string;
+}
+
+// HACK: this type is a total hack. verifyCard requires this code, not the country name so we add it to billingAddress when a country is selected.
+export type BillingAddress = BillingAddressData & {
+  countryCodeAlpha2?: string;
 }
 
 export interface BraintreeFormDataset {
   billingAddress: BillingAddressData;
   clientToken: string;
   countriesList: [string, string][];
-  errors: unknown;
   formActionPath: string;
   threeDSecureEnabled: boolean;
-  selectedCountryCode: string;
-}
-
-export interface HostedFieldsOptions {
-  styles: Record<string, Record<string, unknown> | string>;
-  fields: Record<string, {
-    selector: string;
-    placeholder: string;
-  }>;
 }
