@@ -17,90 +17,72 @@
         "tags": [
           "Accounts"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "org_name",
-            "in": "query",
-            "description": "Organization Name of the developer account.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of the admin user (on the new developer account).",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "description": "Email of the admin user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Password of the admin user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "account_plan_id",
-            "in": "query",
-            "description": "ID of the account plan (if not assigned default will be used instead).",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "service_plan_id",
-            "in": "query",
-            "description": "ID of the service plan (if not assigned default will be used instead).",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "application_plan_id",
-            "in": "query",
-            "description": "ID of the application plan (if not assigned default will be used instead).",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+        "requestBody": {
+          "description": "Create Account",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "org_name": {
+                    "type": "string",
+                    "description": "Organization Name of the developer account."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "Username of the admin user (on the new developer account)."
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email of the admin user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password of the admin user."
+                  },
+                  "account_plan_id": {
+                    "type": "integer",
+                    "description": "ID of the account plan (if not assigned default will be used instead)."
+                  },
+                  "service_plan_id": {
+                    "type": "integer",
+                    "description": "ID of the service plan (if not assigned default will be used instead)."
+                  },
+                  "application_plan_id": {
+                    "type": "integer",
+                    "description": "ID of the application plan (if not assigned default will be used instead)."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "org_name",
+                  "username",
+                  "email",
+                  "password"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -205,61 +187,61 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
-            "description": "ID of the account.",
+            "description": "ID of the fields definition.",
             "required": true,
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "org_name",
-            "in": "query",
-            "description": "Organization name of the account.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "monthly_billing_enabled",
-            "in": "query",
-            "description": "Updates monthly billing status.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "monthly_charging_enabled",
-            "in": "query",
-            "description": "Updates monthly charging status.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+          }
+        ],
+        "requestBody": {
+          "description": "Update Accounts",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "org_name": {
+                    "type": "string",
+                    "description": "Organization name of the account."
+                  },
+                  "monthly_billing_enabled": {
+                    "type": "boolean",
+                    "description": "Updates monthly billing status."
+                  },
+                  "monthly_charging_enabled": {
+                    "type": "boolean",
+                    "description": "Updates monthly charging status."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1267,15 +1249,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -1283,26 +1256,43 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "body",
-            "in": "query",
-            "description": "Text to send",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "subject",
-            "in": "query",
-            "description": "Subject of the message",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Account Message",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "Text to send"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Subject of the message"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1430,24 +1420,42 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
-            "description": "ID of the account.",
+            "description": "ID of the fields definition.",
             "required": true,
             "schema": {
               "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "description": "Account Approve",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1464,15 +1472,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
@@ -1480,17 +1479,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "plan_id",
-            "in": "query",
-            "description": "ID of the target account plan",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Account Change Plan",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id":{
+                    "type": "integer",
+                    "description": "ID of the target account plan"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1507,15 +1529,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
@@ -1523,111 +1536,91 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "credit_card_token",
-            "in": "query",
-            "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "credit_card_authorize_net_payment_profile_token",
-            "in": "query",
-            "description": "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "credit_card_expiration_year",
-            "in": "query",
-            "description": "Year of expiration of credit card. Two digit number",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "credit_card_expiration_month",
-            "in": "query",
-            "description": "Month of expiration of credit card. Two digit number",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_name",
-            "in": "query",
-            "description": "Name of the person/company to bill",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_address",
-            "in": "query",
-            "description": "Address associated to the credit card",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_city",
-            "in": "query",
-            "description": "Billing address city",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_country",
-            "in": "query",
-            "description": "Billing address country",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_state",
-            "in": "query",
-            "description": "Billing address state",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_phone",
-            "in": "query",
-            "description": "Billing address phone",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "billing_address_zip",
-            "in": "query",
-            "description": "Billing address ZIP Code",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "credit_card_partial_number",
-            "in": "query",
-            "description": "Last four digits on the credit card",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Account Set Credit Card",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "credit_card_token":{
+                    "type": "string",
+                    "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
+                  },
+                  "credit_card_authorize_net_payment_profile_token": {
+                    "type": "string",
+                    "description": "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'"
+                  },
+                  "credit_card_expiration_year": {
+                    "type": "string",
+                    "description": "Year of expiration of credit card. Two digit number"
+                  },
+                  "credit_card_expiration_month": {
+                    "type": "string",
+                    "description": "Month of expiration of credit card. Two digit number"
+                  },
+                  "billing_address_name":{
+                    "type": "string",
+                    "description": "Name of the person/company to bill"
+                  },
+                  "billing_address_address": {
+                    "type": "string",
+                    "description": "Address associated to the credit card"
+                  },
+                  "billing_address_city": {
+                    "type": "string",
+                    "description": "Billing address city"
+                  },
+                  "billing_address_country": {
+                    "type": "string",
+                    "description": "Billing address country"
+                  },
+                  "billing_address_state": {
+                    "type": "string",
+                    "description": "Billing address state"
+                  },
+                  "billing_address_phone": {
+                    "type": "string",
+                    "description": "Billing address phone"
+                  },
+                  "billing_address_zip": {
+                    "type": "string",
+                    "description": "Billing address ZIP Code"
+                  },
+                  "credit_card_partial_number": {
+                    "type": "string",
+                    "description": "Last four digits on the credit card"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "id",
+                  "credit_card_token",
+                  "credit_card_expiration_year",
+                  "credit_card_expiration_month",
+                  "billing_address_name",
+                  "billing_address_address",
+                  "billing_address_city",
+                  "billing_address_country"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1676,15 +1669,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
@@ -1694,6 +1678,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Account Reset to Pending",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1710,24 +1721,42 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
-            "description": "ID of the account.",
+            "description": "ID of the fields definition.",
             "required": true,
             "schema": {
               "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "description": "Account Reject",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6756,6 +6785,17 @@
         "tags": [
               "Fields Definitions"
             ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the fields definition.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }    
+        ],
         "requestBody": {
           "description": "Update Fields Definitions",
           "required": true,
@@ -6768,10 +6808,6 @@
                         "type": "string",
                         "description": "A personal Access Token."
                     },
-                    "id": {
-                        "type": "integer",
-                        "description": "ID of the fields definition."
-                      },
                     "target":{
                       "type": "string",
                       "description": "Target entity of fields definition (use Cinstance for Application).",
@@ -6811,7 +6847,6 @@
                  },
                  "required": [
                     "access_token",
-                    "id",
                     "target"
                   ]
                 },
@@ -6826,11 +6861,11 @@
             }
           },
         "responses": {
-              "default": {
-                "description": "success",
-                "content": {}
-              }
-            }
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
     },
       "delete": {
         "summary": "Fields Definition Delete",
