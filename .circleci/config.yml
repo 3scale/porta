@@ -166,6 +166,39 @@ build-envs:
 
 commands: # reusable commands with parameters
 
+  notify_failure:
+    steps:
+      - when:
+          condition:
+            equal: [ master, << pipeline.git.branch >> ] # &only-master-filter won't work at step level
+          steps:
+            - run:
+                name: Notify Slack about tests failure
+                command: |
+                  curl -X POST -H 'Content-type: application/json' \
+                  --data \
+                  "{ \
+                    \"attachments\": [ \
+                    { \
+                      \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
+                      \"color\": \"#CD0000\", \
+                      \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
+                      \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
+                      \"title\": \"Job: $CIRCLE_JOB \", \
+                      \"title_link\": \"$CIRCLE_BUILD_URL\", \
+                      \"text\": \"$CIRCLE_BUILD_URL\", \
+                      \"fields\": [ \
+                      { \
+                        \"title\": \"Commit\", \
+                        \"value\": \"$CIRCLE_SHA1\", \
+                        \"short\": false \
+                      } \
+                      ] \
+                    } \
+                    ] \
+                  }" $SLACK_WEBHOOK_SYSTEM
+                when: on_fail
+
   install-gem-dependencies:
     parameters:
       extra-deps:
@@ -386,6 +419,7 @@ jobs:
       database: mysql
     steps:
       - install-gem-dependencies
+      - notify_failure
 
   deps_bundler_postgres:
     parameters:
@@ -397,6 +431,7 @@ jobs:
       database: postgresql
     steps:
       - install-gem-dependencies
+      - notify_failure
 
   deps_bundler_oracle:
     parameters:
@@ -410,6 +445,7 @@ jobs:
       - install-gem-dependencies:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   dependencies_npm:
     parameters:
@@ -431,6 +467,7 @@ jobs:
           root: .
           paths:
             - ./node_modules
+      - notify_failure
 
   assets_precompile:
     resource_class: large
@@ -461,6 +498,7 @@ jobs:
             - ./public/packs-test
             - ./public/assets
             - ./config/*.yml
+      - notify_failure
 
   lint:
     parameters:
@@ -475,6 +513,7 @@ jobs:
       - run:
           name: Eslint
           command: yarn ci:lint
+      - notify_failure
 
   licenses:
     parameters:
@@ -493,6 +532,7 @@ jobs:
       - store_artifacts:
           path: doc/licenses
           destination: licenses
+      - notify_failure
 
   swagger:
     parameters:
@@ -513,6 +553,7 @@ jobs:
       - store_artifacts:
           path: doc/active_docs
           destination: active_docs
+      - notify_failure
 
   jest:
     resource_class: medium+
@@ -529,6 +570,7 @@ jobs:
           name: Jest specs
           command: yarn jest --maxWorkers=3
       - *upload-coverage
+      - notify_failure
 
   unit:
     parallelism: 8
@@ -540,6 +582,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   unit-postgres:
     parallelism: 8
@@ -551,6 +594,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   unit-oracle:
     parallelism: 6
@@ -564,6 +608,7 @@ jobs:
       - rails-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   functional:
     parallelism: 2
@@ -575,6 +620,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   functional-postgres:
     parallelism: 2
@@ -586,6 +632,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   functional-oracle:
     parallelism: 2
@@ -599,6 +646,7 @@ jobs:
       - rails-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   integration:
     parallelism: 8
@@ -610,6 +658,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   integration-postgres:
     parallelism: 8
@@ -621,6 +670,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rails-tests
+      - notify_failure
 
   integration-oracle:
     parallelism: 6
@@ -634,6 +684,7 @@ jobs:
       - rails-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   rspec:
     parallelism: 3
@@ -645,6 +696,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rspec-tests
+      - notify_failure
 
   rspec-postgres:
     parallelism: 3
@@ -656,6 +708,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - rspec-tests
+      - notify_failure
 
   rspec-oracle:
     parallelism: 4
@@ -669,6 +722,7 @@ jobs:
       - rspec-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   cucumber:
     <<: *build-envs-mysql
@@ -681,6 +735,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - cucumber-tests
+      - notify_failure
 
   cucumber-postgres:
     <<: *build-envs-postgresql
@@ -693,6 +748,7 @@ jobs:
       name: << parameters.executor >>
     steps:
       - cucumber-tests
+      - notify_failure
 
   cucumber-oracle:
     <<: *build-envs-oracle
@@ -707,6 +763,7 @@ jobs:
       - cucumber-tests:
           extra-deps:
             - clone-oracle-libraries
+      - notify_failure
 
   notify_start:
     docker:
@@ -747,37 +804,6 @@ jobs:
               } \
               ] \
             }" $SLACK_WEBHOOK_SYSTEM
-
-  notify_failure:
-    docker:
-      - image: cimg/base:current
-    steps:
-      - run:
-          name: Notify Slack about tests failure
-          command: |
-            curl -X POST -H 'Content-type: application/json' \
-            --data \
-            "{ \
-              \"attachments\": [ \
-              { \
-                \"fallback\": \"Build failed on $CIRCLE_BRANCH, for $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.\", \
-                \"color\": \"#CD0000\", \
-                \"pretext\": \"Don't panic. Build failed on $CIRCLE_BRANCH !! \", \
-                \"author_name\": \"$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME\", \
-                \"title\": \"Job: $CIRCLE_JOB \", \
-                \"title_link\": \"$CIRCLE_BUILD_URL\", \
-                \"text\": \"$CIRCLE_BUILD_URL\", \
-                \"fields\": [ \
-                { \
-                  \"title\": \"Commit\", \
-                  \"value\": \"$CIRCLE_SHA1\", \
-                  \"short\": false \
-                } \
-                ] \
-              } \
-              ] \
-            }" $SLACK_WEBHOOK_SYSTEM
-          when: on_fail
 
   notify_success:
     docker:
@@ -857,14 +883,6 @@ workflows:
             - integration
             - functional
           <<: *only-master-filter
-      - notify_failure:
-          requires:
-            - rspec
-            - unit
-            - cucumber
-            - integration
-            - functional
-          <<: *only-master-filter
 
   postgres_build:
     jobs:
@@ -901,14 +919,6 @@ workflows:
           requires:
             - assets_precompile
       - notify_success:
-          requires:
-            - rspec-postgres
-            - unit-postgres
-            - cucumber-postgres
-            - integration-postgres
-            - functional-postgres
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - rspec-postgres
             - unit-postgres
@@ -970,15 +980,6 @@ workflows:
             - functional-oracle
           <<: *only-master-filter
 
-      - notify_failure:
-          requires:
-            - rspec-oracle
-            - unit-oracle
-            - cucumber-oracle
-            - integration-oracle
-            - functional-oracle
-          <<: *only-master-filter
-
   javascript_tests:
     jobs:
       - manual_approval: # <<< A job that will require manual approval in the CircleCI web application.
@@ -1007,13 +1008,6 @@ workflows:
           requires:
             - dependencies_npm
       - notify_success:
-          requires:
-            - licenses
-            - swagger
-            - lint
-            - jest
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - licenses
             - swagger
@@ -1066,14 +1060,6 @@ workflows:
             - integration
             - functional
           <<: *only-master-filter
-      - notify_failure:
-          requires:
-            - rspec
-            - unit
-            - cucumber
-            - integration
-            - functional
-          <<: *only-master-filter
     <<: *nightly-trigger
 
   postgres_nightly_build_ruby26:
@@ -1110,14 +1096,6 @@ workflows:
           requires:
             - assets_precompile
       - notify_success:
-          requires:
-            - rspec-postgres
-            - unit-postgres
-            - cucumber-postgres
-            - integration-postgres
-            - functional-postgres
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - rspec-postgres
             - unit-postgres
@@ -1178,14 +1156,6 @@ workflows:
             - integration-oracle
             - functional-oracle
           <<: *only-master-filter
-      - notify_failure:
-          requires:
-            - rspec-oracle
-            - unit-oracle
-            - cucumber-oracle
-            - integration-oracle
-            - functional-oracle
-          <<: *only-master-filter
     <<: *nightly-trigger
 
   javascript_nightly_build_ruby26:
@@ -1219,13 +1189,6 @@ workflows:
           requires:
             - dependencies_npm
       - notify_success:
-          requires:
-            - licenses
-            - swagger
-            - lint
-            - jest
-          <<: *only-master-filter
-      - notify_failure:
           requires:
             - licenses
             - swagger
