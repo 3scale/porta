@@ -385,16 +385,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -403,101 +394,86 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "plan_id",
-            "in": "query",
-            "description": "ID of the application plan.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the application to be created.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the application to be created.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "user_key",
-            "in": "query",
-            "description": "User Key (API Key) of the application to be created.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "application_id",
-            "in": "query",
-            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "application_key",
-            "in": "query",
-            "description": "App Key(s) or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "redirect_url",
-            "in": "query",
-            "description": "Redirect URL for the OAuth request.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "first_traffic_at",
-            "in": "query",
-            "description": "Timestamp of the first call made by the application.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "first_daily_traffic_at",
-            "in": "query",
-            "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On').",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+          }
+        ],
+        "requestBody": {
+          "description": "Application Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the application plan."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the application to be created."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the application to be created."
+                  },
+                  "user_key": {
+                    "type": "string",
+                    "description": "User Key (API Key) of the application to be created."
+                  },
+                  "application_id": {
+                    "type": "string",
+                    "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created."
+                  },
+                  "application_key[]": {
+                    "description": "App Key(s) or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "redirect_url": {
+                    "type": "string",
+                    "description": "Redirect URL for the OAuth request."
+                  },
+                  "first_traffic_at": {
+                    "type": "string",
+                    "description": "Timestamp of the first call made by the application."
+                  },
+                  "first_daily_traffic_at": {
+                    "type": "string",
+                    "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "plan_id",
+                  "name",
+                  "description"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -553,16 +529,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -580,61 +547,65 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the application.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the application.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "redirect_url",
-            "in": "query",
-            "description": "Redirect URL for the OAuth request.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "first_traffic_at",
-            "in": "query",
-            "description": "Timestamp of the first call made by the application.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "first_daily_traffic_at",
-            "in": "query",
-            "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On').",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+          }
+        ],
+        "requestBody": {
+          "description": "Application Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the application"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the application"
+                  },
+                  "redirect_url": {
+                    "type": "string",
+                    "description": "Redirect URL for the OAuth request."
+                  },
+                  "first_traffic_at": {
+                    "type": "string",
+                    "description": "Timestamp of the first call made by the application."
+                  },
+                  "first_daily_traffic_at": {
+                    "type": "string",
+                    "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
+                  },
+
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -690,16 +661,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -719,6 +681,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Application Accept",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -733,16 +722,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -760,17 +740,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "plan_id",
-            "in": "query",
-            "description": "ID of the new application plan.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Application Change Plan",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "plan_id": {
+                  "type": "integer",
+                  "description": "ID of the new application plan."
+                },
+                "required": [
+                  "access_token",
+                  "plan_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -785,16 +788,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -814,6 +808,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Application Create Plan Customization",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -828,16 +849,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -857,6 +869,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Application Delete Plan Customization",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -871,16 +910,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -900,6 +930,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Application Resume",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -914,16 +971,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -943,6 +991,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Application Suspend",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -998,16 +1073,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -1025,17 +1091,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "description": "app_key to be added",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Application Key Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "key": {
+                    "type": "string",
+                    "description": "app_key to be added"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "key"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -1143,16 +1232,7 @@
         "tags": [
           "Account Applications"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+         "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -1170,17 +1250,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "referrer_filter",
-            "in": "query",
-            "description": "Referrer filter to be created.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Application Referrer Filter Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "referrer_filter": {
+                    "type": "string",
+                    "description": "Referrer filter to be created."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "referrer_filter"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
