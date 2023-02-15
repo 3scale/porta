@@ -1113,7 +1113,7 @@
       </dependency>
           <dependency>
         <packageName>@braintree/browser-detection</packageName>
-        <version>1.12.0</version>
+        <version>1.14.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1164,6 +1164,16 @@
           <dependency>
         <packageName>@braintree/sanitize-url</packageName>
         <version>5.0.2</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
+        <packageName>@braintree/sanitize-url</packageName>
+        <version>6.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -2843,7 +2853,7 @@
       </dependency>
           <dependency>
         <packageName>braintree-web</packageName>
-        <version>3.79.1</version>
+        <version>3.90.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -5623,7 +5633,7 @@
       </dependency>
           <dependency>
         <packageName>framebus</packageName>
-        <version>5.1.2</version>
+        <version>5.2.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -6693,7 +6703,7 @@
       </dependency>
           <dependency>
         <packageName>inject-stylesheet</packageName>
-        <version>4.0.0</version>
+        <version>5.0.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10454,6 +10464,16 @@
                   </licenses>
       </dependency>
           <dependency>
+        <packageName>promise-polyfill</packageName>
+        <version>8.2.3</version>
+        <licenses>
+                      <license>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
+            </license>
+                  </licenses>
+      </dependency>
+          <dependency>
         <packageName>prop-types</packageName>
         <version>15.7.2</version>
         <licenses>
@@ -11685,7 +11705,7 @@
       </dependency>
           <dependency>
         <packageName>restricted-input</packageName>
-        <version>3.0.4</version>
+        <version>3.0.5</version>
         <licenses>
                       <license>
               <name>MIT</name>
