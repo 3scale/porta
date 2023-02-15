@@ -37,3 +37,23 @@ end
 Then 'I should see the password confirmation error' do
   %q{I should see error "doesn't match Password" for field "Password confirmation"}
 end
+
+When "the buyer wants to reset their password" do
+  step 'the current domain is foo.3scale.localhost'
+  step 'I go to the login page'
+  step 'I follow "Forgot password?"'
+end
+
+Then "the buyer doesn't need to pass the captcha after reset password form is filled wrong" do
+  step %(15 seconds pass)
+  step %(I fill in "Email" with "invalid email")
+  step %(I press "Send instructions")
+  step %(I should not see the captcha)
+end
+
+Then "the buyer will need to pass the captcha after reset password form is filled in too quickly" do
+  find('ol').find('#account_confirmation').set(1)
+  step %(I fill in "Email" with "zed@3scale.localhost")
+  step %(I press "Send instructions")
+  step %(I should see the captcha)
+end

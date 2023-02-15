@@ -46,11 +46,17 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
   end
 
   def buyer
-    @buyer ||= @provider.buyers.build
+    @buyer ||= @provider.buyers.build.tap do |account|
+      account.unflattened_attributes = spam_protection_params
+    end
   end
 
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def spam_protection_params
+    params.fetch(:account, {})
   end
 
   def find_user
