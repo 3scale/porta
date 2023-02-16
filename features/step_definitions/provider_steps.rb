@@ -38,7 +38,6 @@ Given(/^a provider "([^"]*)" with default plans$/) do |name|
   step %(application plan "Default" is default)
 end
 
-
 Given(/^the current provider is (.+?)$/) do |name|
   @provider = Account.providers.find_by_org_name!(name)
 end
@@ -82,7 +81,7 @@ Given(/^a provider signs up and activates his account$/) do
   email = open_email(user.email, with_subject: 'Account Activation')
   click_first_link_in_email(email)
 
-  step 'stub integration errors dashboard'
+  stub_integration_errors_dashboard
 
   within login_form do
     fill_in 'Email', with: user.email
@@ -110,12 +109,6 @@ def login_form
   find('#new_session')
 end
 
-Given('the provider has sample data') do
-  assert @provider, 'missing provider'
-
-  step %(provider "#{@provider.org_name}" creates sample data)
-end
-
 Given('a provider exists') do
   step 'a provider "foo.3scale.localhost"'
   @service ||= @provider.default_service
@@ -138,12 +131,6 @@ And('As a developer, I login through RH SSO') do
   GHERKIN
 end
 
-Given('stub integration errors dashboard') do
-  @provider.services.pluck(:id).each do |id|
-    stub_core_integration_errors(service_id: id)
-  end
-end
-
 Given(/^a provider( is logged in)?$/) do |login|
   setup_provider(login)
 end
@@ -156,7 +143,7 @@ end
 def setup_provider(login)
   step 'a provider "foo.3scale.localhost"'
   step 'current domain is the admin domain of provider "foo.3scale.localhost"'
-  step 'stub integration errors dashboard'
+  stub_integration_errors_dashboard
   step 'I log in as provider "foo.3scale.localhost"' if login
 
   @provider = Account.find_by_domain!('foo.3scale.localhost')
@@ -165,14 +152,18 @@ end
 Given(/^master admin( is logged in)?/) do |login|
   @master = @provider = Account.master
   admin = @provider.admins.first!
-  step 'the current domain is the master domain'
-  step 'stub integration errors dashboard'
+  step %(the current domain is "#{Account.master.external_domain}")
+  stub_integration_errors_dashboard
   step %(I log in as provider "#{admin.username}") if login
 end
 
 Given(/^a master admin with extra fields is logged in/) do
   step 'master admin is logged in'
   FactoryBot.create(:fields_definition, account: @master, target: 'Account', name: 'account_extra_field')
+end
+
+Given "the provider has spam protection set to suspicious only" do
+  step %(provider "#{@provider.org_name}" has "spam protection level" set to "auto")
 end
 
 When /^new form to create a tenant is filled and submitted$/ do
@@ -220,11 +211,15 @@ Given(/^the provider account allows signups$/) do
   step %(a default application plan "Base" of provider "#{@provider.internal_domain}")
 end
 
-And(/^the provider has a buyer with application$/) do
-  step %(an published application plan "Default" of provider "#{@provider.internal_domain}")
-  step %(a service plan "Gold" of provider "#{@provider.internal_domain}")
-  step 'a buyer "bob" signed up to service plan "Gold"'
-  step 'buyer "bob" has application "Alexisonfire" with description "Slightly less awesome widget"'
+And "the provider has a buyer with an application" do
+  application_plan = create_plan(:application, name: 'Default', issuer: @provider, published: true, default: true)
+  service_plan = create_plan(:service, name: 'Gold', issuer: @provider)
+
+  @buyer = FactoryBot.create(:buyer_account, provider_account: @provider, org_name: 'The Buyer INC.')
+  @buyer.buy!(@provider.account_plans.default)
+  @buyer.buy!(service_plan)
+
+  FactoryBot.create(:cinstance, user_account: @buyer, plan: application_plan, name: 'Test App')
 end
 
 When(/^the provider deletes the (account|application)(?: named "([^"]*)")?$/) do |account_or_service, account_or_application_name|
@@ -251,27 +246,9 @@ When(/^the provider upgrades to plan "(.+?)"$/) do |name|
   @provider.force_upgrade_to_provider_plan!(plan)
 end
 
-When(/^the provider is charging its buyers$/) do
-  steps <<-GHERKIN
-  And provider "#{@provider.internal_domain}" has "finance" switch visible
-  And provider "#{@provider.internal_domain}" is charging
-  And provider "#{@provider.internal_domain}" manages payments with "braintree_blue"
-  GHERKIN
-end
-
 When(/I authenticate by Oauth2$/) do
   # it works for Oauth2, which is for what is being used. In case it wants to be used to Auth0, it needs the state param
   visit "/auth/#{@authentication_provider.system_name}/callback"
-end
-
-Given(/^a provider with billing and finance enabled$/) do
-  step 'a provider exists'
-  steps <<-GHERKIN
-  And current domain is the admin domain of provider "#{@provider.internal_domain}"
-  And provider "#{@provider.internal_domain}" has postpaid billing enabled
-  And provider "#{@provider.internal_domain}" has "finance" switch visible
-  And I log in as provider "#{@provider.internal_domain}"
-  GHERKIN
 end
 
 And(/^the provider has one buyer$/) do
@@ -287,7 +264,7 @@ Given(/^master is the provider$/) do
   @provider = Account.master
   @service ||= @provider.default_service
   step 'the provider has multiple applications enabled'
-  step 'the provider has a default application plan'
+  step "a default application plan of provider \"#{provider_or_master_name}\""
 end
 
 Then(/^new tenant should be created$/) do

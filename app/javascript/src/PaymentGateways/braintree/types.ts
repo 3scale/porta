@@ -1,14 +1,20 @@
 export interface BillingAddressData {
-  address?: string;
-  address1?: string;
-  address2?: string;
-  city?: string;
-  company?: string;
-  country?: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  phone_number?: string;
-  state?: string;
-  zip?: string;
+  address: string;
+  city: string;
+  company: string;
+  country: string;
+  state: string;
+  zip: string;
+}
+
+export interface BraintreeFormDataset {
+  billingAddress: BillingAddressData;
+  clientToken: string;
+  countriesList: [string, string][];
+  errors: unknown;
+  formActionPath: string;
+  threeDSecureEnabled: boolean;
+  selectedCountryCode: string;
 }
 
 export interface HostedFieldsOptions {

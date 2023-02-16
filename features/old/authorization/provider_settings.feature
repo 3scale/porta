@@ -4,9 +4,9 @@ Feature: Provider settings authorization
   I want to control who can access the settings area
 
   Background:
-    Given a provider "foo.3scale.localhost"
+    Given a provider exists
+      And the provider is charging its buyers
       And provider "foo.3scale.localhost" has Browser CMS activated
-      And provider "foo.3scale.localhost" has billing enabled
 
   Scenario Outline: Provider admin can access settings
     Given current domain is the admin domain of provider "foo.3scale.localhost"

@@ -18,19 +18,6 @@ When /^I request the url of the '([^\']*)' page then I should see an exception$/
   requests.first.status_code.should == 403
 end
 
-#OPTIMIZE: remove exception from step signature and make it less code aware
-When /^I request the url of the '([^\']*)' page then I should see a "([^"]*)" exception$/ do |page, e|
-  -> { visit path_to("the #{page} page") }
-    .should raise_error(e.constantize)
-end
-
-
-#TODO: dry this with the other steps
-Then /^I request the url of the (page "[^\"]*") an exception should be raised$/ do |page|
-  -> { visit page.path }
-    .should raise_error(ActiveRecord::RecordNotFound)
-end
-
 When(/^I request the url of the "([^"]*)" page then I should see (\d+)$/) do |page_name, status|
   requests = inspect_requests do
     visit path_to("the #{page_name} page")

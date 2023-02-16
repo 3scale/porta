@@ -4,7 +4,8 @@ Feature: Create invoice
   I want to be able to create an invoice on demand
 
  Background:
-  Given a provider "foo.3scale.localhost" with prepaid billing enabled
+  Given a provider "foo.3scale.localhost"
+    And provider "foo.3scale.localhost" is charging its buyers in prepaid mode
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 0 monthly
     And a buyer "zoidberg" signed up to application plan "Fixed"
 

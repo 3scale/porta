@@ -5,8 +5,8 @@ Feature: Invoices of deleted account
 
  Background:
   Given the date is 25th January 2012
-  Given a provider "xyz.3scale.localhost" with prepaid billing enabled
-  Given provider "xyz.3scale.localhost" has "finance" switch allowed
+  Given a provider "xyz.3scale.localhost"
+  Given provider "xyz.3scale.localhost" is charging its buyers in prepaid mode
     And an application plan "Plan" of provider "xyz.3scale.localhost"
     And a buyer "bob" signed up to application plan "Plan"
   Given current domain is the admin domain of provider "xyz.3scale.localhost"

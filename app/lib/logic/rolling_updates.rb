@@ -234,16 +234,6 @@ module Logic
         end
       end
 
-      class CMSApi < Base
-        def enabled?
-          super || master?
-        end
-
-        def missing_config
-          false
-        end
-      end
-
       class ApicastV2 < Base
         def missing_config
           master?

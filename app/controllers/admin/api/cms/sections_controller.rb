@@ -4,7 +4,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
 
   wrap_parameters :section, include: [:title, :public, :parent_id, :partial_path]
 
-  before_action :find_section, only: [:show, :update, :destroy]
+  before_action :find_section, only: %i[show update destroy]
 
   representer :entity => ::CMS::SectionRepresenter, :collection => ::CMS::SectionsRepresenter
 
@@ -33,8 +33,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   ##~ op.group = "cms_sections"
   #
   ##~ op.parameters.add @parameter_access_token
-  ##~ op.parameters.add :name => "system_name", :description => "Human readable and unique identifier", :paramType => "query"
-  ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query"
+  ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query", :required => true
   ##~ op.parameters.add :name => "public", :description => "Public or not", :default => "true", :type => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "parent_id", :description => "ID of a parent section", :paramType => "query", :default => "root section id", :type => "int"
   ##~ op.parameters.add :name => "partial_path", :description => "Path of the section", :paramType => "query"
@@ -75,7 +74,6 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_section_id
-  ##~ op.parameters.add :name => "system_name", :description => "Human readable and unique identifier", :paramType => "query"
   ##~ op.parameters.add :name => "title", :description => "Title of the section", :paramType => "query"
   ##~ op.parameters.add :name => "public", :description => "Public or not", :default => "true", :type => "boolean", :paramType => "query"
   ##~ op.parameters.add :name => "parent_id", :description => "ID of a parent section", :paramType => "query", :default => "root section id", :type => "int"
@@ -103,9 +101,10 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   end
 
   private
-    def find_section
-      @section = current_account.sections.find_by_id(params[:id]) || current_account.sections.find_by_system_name(params[:id])
 
-      raise ActiveRecord::RecordNotFound.new("Couldn't find CMS::Section with id or system_name=#{params[:id]}") if @section.nil?
-    end
+  def find_section
+    @section = current_account.sections.where(id: params[:id]).or(current_account.sections.where(system_name: params[:id])).first
+
+    raise ActiveRecord::RecordNotFound, "Couldn't find CMS::Section with id or system_name=#{params[:id]}" if @section.blank?
+  end
 end

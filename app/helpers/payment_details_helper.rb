@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module PaymentDetailsHelper
+  delegate :has_billing_address?, :billing_address, to: :current_account
+
+  attr_reader :braintree_authorization
 
   def credit_card_terms_url
     url_for(site_account.settings.cc_terms_path)
@@ -19,33 +22,29 @@ module PaymentDetailsHelper
   end
 
   def payment_details_path(merchant_account = site_account, url_params = {})
-    return "" if ["bogus" ,""].include?(merchant_account.payment_gateway_type.to_s)
+    return '' if merchant_account.unacceptable_payment_gateway?
+
     named_route = [:admin, :account, merchant_account.payment_gateway_type]
     polymorphic_path(named_route, url_params)
   end
 
-  def edit_payment_details(merchant_account = site_account)
-    return "" if ["bogus" ,""].include?(merchant_account.payment_gateway_type.to_s)
-    polymorphic_url([:edit, :admin, :account, merchant_account.payment_gateway_type])
-  end
-
+  # This smells of :reek:FeatureEnvy but it shouldn't
   def merchant_countries
-    ActiveMerchant::Country::COUNTRIES.map{|c| [c[:name], c[:alpha2]] }
+    @merchant_countries ||= ActiveMerchant::Country::COUNTRIES.map { |country| [country[:name], country[:alpha2]] }.uniq
   end
 
   def payment_details_definition_list_item(name, account)
     value = account.public_send("billing_address_#{name}")
-    return unless value.present?
+    return if value.blank?
 
-    definition_list_item = content_tag :dt, name.to_s.titleize, class: 'u-dl-term'
-    definition_list_item += content_tag :dd, value.presence, class: 'u-dl-definition'
+    definition_list_item = tag.dt(name.to_s.titleize, class: 'u-dl-term')
+    definition_list_item += tag.dd(value.presence, class: 'u-dl-definition')
     definition_list_item
   end
 
   def stripe_billing_address_json
     return unless logged_in?
 
-    billing_address = current_account.billing_address
     {
       line1: billing_address.address1,
       line2: billing_address.address2,
@@ -56,9 +55,41 @@ module PaymentDetailsHelper
     }.to_json
   end
 
-  def get_country_code(billing_address_data)
-    _label, code = merchant_countries.find {|label, code| label.downcase == billing_address_data.country.to_s.downcase }
-    code
-  end 
+  def braintree_form_data
+    {
+      formActionPath: developer_portal.hosted_success_admin_account_braintree_blue_path,
+      threeDSecureEnabled: site_account.payment_gateway_options[:three_ds_enabled],
+      clientToken: braintree_authorization,
+      countriesList: merchant_countries,
+      billingAddress: has_billing_address? ? billing_address_data : empty_billing_address_data
+    }
+  end
 
+  def billing_address_data # rubocop:disable Metrics/AbcSize
+    {
+      firstName: current_account.billing_address_first_name,
+      lastName: current_account.billing_address_last_name,
+      address: billing_address[:address1],
+      city: billing_address[:city],
+      country: billing_address[:country],
+      company: billing_address[:company],
+      phone: billing_address[:phone_number],
+      state: billing_address[:state],
+      zip: billing_address[:zip]
+    }.transform_values { |value| value.presence || '' }
+  end
+
+  def empty_billing_address_data
+    {
+      firstName: '',
+      lastName: '',
+      address: '',
+      city: '',
+      country: '',
+      company: '',
+      phone: '',
+      state: '',
+      zip: ''
+    }
+  end
 end

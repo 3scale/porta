@@ -1,45 +1,3 @@
-css:
-  .form-control:- moz -placeholder {
-    color: #999999;
-  }
-
-  .form-control::-moz-placeholder {
-    color: #999999;
-  }
-
-  .form-control:- ms - input -placeholder {
-    color: #999999;
-  }
-
-  .form-control::-webkit-input-placeholder {
-    color: #999999;
-  }
-
-  .form-control {
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.428571429;
-    color: #555555;
-    vertical-align: middle;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    - webkit - box - shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  }
-
-  .form-control:focus {
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-  }
-
 h2
   = site_account.org_name
   |  Payment Details
@@ -62,9 +20,14 @@ p
   = form.inputs "Personal Details" do
     = form.input :first_name, required: true
     = form.input :last_name, required: true
-    = form.input :phone , label: "Phone", required: true
+    = form.input :phone, required: true
 
-  = form.inputs "Credit Card Details" do
+  = form.inputs 'Credit Card Details', id: 'fake-fields' do
+    = form.input 'foo', label: 'Number', input_html: { disabled: true }
+    = form.input 'foo', label: 'Expiration Date (MM/YY)', input_html: { disabled: true }
+    = form.input 'foo', label: 'CVV', input_html: { disabled: true }
+
+  = form.inputs "Credit Card Details", id: 'hosted-fields', style: 'display: none;' do
     ol
       li.string.required#customer_credit_card_number_input
         label for="customer_credit_card_number" Number
@@ -82,84 +45,17 @@ p
         = billing_address.input :company, required: true
         = billing_address.input :street_address, required: true
         = billing_address.input :extended_address, required: true
-        = billing_address.input :postal_code, label: "ZIP / Postal Code" , required: true
-        = billing_address.input :locality, label: "City", required: true
-        = billing_address.input :region, label: "State/Region" , required: true
-        = billing_address.input :country_name, label: "Country", as: :select,
+        = billing_address.input :postal_code , required: true
+        = billing_address.input :locality, required: true
+        = billing_address.input :region, required: true
+        = billing_address.input :country_name, as: :select,
           collection: merchant_countries, required: true,
           allow_blank: false, prompt: 'Select your country'
   = hidden_field_tag 'braintree[nonce]', nil, id: 'braintree_nonce'
 
   = render partial: '/shared/legal_terms_for_cc_details'
   = form.actions do
-    = form.commit_button 'Save credit card'
+    = form.commit_button 'Save credit card', button_html: { disabled: true }
 
-/ TODO: All is duplicated. Move this into a pack and use braintree from node_modules
-script src="https://js.braintreegateway.com/web/3.69.0/js/client.min.js"
-script src="https://js.braintreegateway.com/web/3.69.0/js/hosted-fields.min.js"
-javascript:
-  const form = document.querySelector('form#new_customer');
-  const submit = document.querySelector('button[type="submit"]');
-
-  if (typeof braintree !== 'undefined') {
-    braintree.client.create({
-      authorization: '#{j @braintree_authorization}'
-    }, function(clientErr, clientInstance) {
-      if (clientErr) {
-        console.error(clientErr);
-        return;
-      }
-
-      // This example shows Hosted Fields, but you can also use this
-      // client instance to create additional components here, such as:qa
-      // PayPal or Data Collector.
-
-      braintree.hostedFields.create({
-        client: clientInstance,
-        styles: {
-          'input': {
-            'font-size': '14px'
-          },
-          'input.invalid': {
-            'color': 'red'
-          },
-          'input.valid': {
-            'color': 'green'
-          }
-        },
-        fields: {
-          number: {
-            selector: '#customer_credit_card_number',
-            placeholder: '4111 1111 1111 1111'
-          },
-          cvv: {
-            selector: '#customer_credit_card_cvv',
-            placeholder: '123'
-          },
-          expirationDate: {
-            selector: '#customer_credit_card_expiration_date',
-            placeholder: 'MM/YY'
-          }
-        }
-      }, function(hostedFieldsErr, hostedFieldsInstance) {
-        if (hostedFieldsErr) {
-          console.error(hostedFieldsErr);
-          return;
-        }
-
-        submit.removeAttribute('disabled');
-        form.addEventListener('submit', function(event) {
-          event.preventDefault();
-          event.stopPropagation();
-          hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
-            if (tokenizeErr) {
-              console.error(tokenizeErr);
-              return;
-            }
-            document.querySelector('input#braintree_nonce').setAttribute('value', payload.nonce);
-            form.submit();
-          });
-        });
-      });
-    })
-  }
+span#braintree_data data-client-token=braintree_authorization
+  = javascript_pack_tag 'braintree_provider_form'
