@@ -50,7 +50,7 @@ class Admin::Api::CMS::TemplateService
   end
 
   class Update < Admin::Api::CMS::TemplateService
-    def initialize(template, current_account, params)
+    def initialize(current_account, params, template)
       super current_account, params
       @template = template
       @resource_class = template.class

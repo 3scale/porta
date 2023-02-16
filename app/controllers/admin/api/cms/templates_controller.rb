@@ -89,7 +89,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def update
-    Admin::Api::CMS::TemplateService::Update.call(@template, current_account, cms_template_params)
+    Admin::Api::CMS::TemplateService::Update.call(current_account, cms_template_params, @template)
     respond_with(@template)
   end
 
