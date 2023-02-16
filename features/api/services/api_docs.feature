@@ -82,6 +82,8 @@ Feature: ActiveDocs
     And an admin wants to update the spec
     When they try to update the spec with invalid data 
     Then they should see the errors
+    When they try to update the spec with an invalid Swagger version
+    Then they should see the version is invalid
     And they try to update the spec with an invalid JSON spec 
     Then they should see the swagger is invalid
 

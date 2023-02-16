@@ -105,7 +105,7 @@ module ThreeScale
         #  - invalid paramType
         #  - ∞ other things that could go wrong ™
         def validate!
-          return if @errors.include? :base
+          return if @errors.added? :base, :invalid_json
 
           apis = @doc.fetch('apis', nil)
           unless apis.is_a?(Array)

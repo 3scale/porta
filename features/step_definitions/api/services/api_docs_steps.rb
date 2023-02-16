@@ -50,6 +50,11 @@ When "they try to update the spec with an invalid JSON spec" do
   click_on 'Update spec'
 end
 
+When "they try to update the spec with an invalid Swagger version" do
+  fill_in_api_docs_service_body('{"swagger": "5"}')
+  click_on 'Update spec'
+end
+
 When "they try to update the spec with valid data" do
   @new_service = Service.find_by!(name: 'New service')
   find('#api_docs_service_name').set('NewActiveDocsName')
@@ -64,6 +69,10 @@ end
 
 Then "they should see the errors" do
   assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_json'))
+end
+
+Then "they should see the version is invalid" do
+  assert has_css?('#api_docs_service_body ~ .pf-m-error', text: I18n.t('activemodel.errors.models.three_scale/swagger/specification.invalid_version'))
 end
 
 Then "they should see the swagger is invalid" do
