@@ -10,5 +10,6 @@ Feature: Buyer signup
   Scenario: Spam protection detects suspicious behavior
     Given the provider has spam protection set to suspicious only
     When the buyer wants to reset their password
+    Then 15 seconds pass
     Then the buyer doesn't need to pass the captcha after reset password form is filled wrong
     But the buyer will need to pass the captcha after reset password form is filled in too quickly

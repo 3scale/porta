@@ -45,15 +45,14 @@ When "the buyer wants to reset their password" do
 end
 
 Then "the buyer doesn't need to pass the captcha after reset password form is filled wrong" do
-  step %(15 seconds pass)
-  step %(I fill in "Email" with "invalid email")
-  step %(I press "Send instructions")
-  step %(I should not see the captcha)
+  fill_in("Email", with: "Invalid email")
+  click_on "Send instructions"
+  page.should_not have_selector(RECAPTCHA_SCRIPT, visible: false)
 end
 
 Then "the buyer will need to pass the captcha after reset password form is filled in too quickly" do
   find('ol').find('#account_confirmation').set(1)
-  step %(I fill in "Email" with "zed@3scale.localhost")
-  step %(I press "Send instructions")
-  step %(I should see the captcha)
+  fill_in("Email", with: "zed@3scale.localhost")
+  click_on "Send instructions"
+  page.should have_selector(RECAPTCHA_SCRIPT, visible: false)
 end
