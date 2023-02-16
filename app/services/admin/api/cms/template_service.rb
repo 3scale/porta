@@ -53,10 +53,10 @@ class Admin::Api::CMS::TemplateService
     def initialize(template, current_account, params)
       super current_account, params
       @template = template
-      @type = template.class
+      @resource_class = template.class
     end
 
-    attr_reader :template, :type
+    attr_reader :template, :resource_class
 
     def call
       attach_section_layout
@@ -68,7 +68,7 @@ class Admin::Api::CMS::TemplateService
     private
 
     def attach_section_layout
-      return unless type == CMS::Page
+      return unless resource_class == CMS::Page
 
       section = find_section
       template.section = section if section.present?
