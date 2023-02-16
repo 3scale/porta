@@ -83,6 +83,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
           systemName={systemName} 
         />
 
+        <input name="api_docs_service[published]" type="hidden" value="0" />
         <Checkbox 
           id="api_docs_service_published_input"
           isChecked={published}
@@ -97,6 +98,7 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 
         <ApiJsonSpecInput apiJsonSpec={apiJsonSpec} errors={errors.body} setApiJsonSpec={setApiJsonSpec} />
 
+        <input name="api_docs_service[skip_swagger_validations]" type="hidden" value="0" />
         <Checkbox 
           id="api_docs_service_skip_swagger_validations"
           isChecked={skipSwaggerValidations}
