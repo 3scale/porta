@@ -66,9 +66,30 @@ You need to have Docker installed and running. You also need to be able to [run 
 
 ## Run Oracle server
 
-1. From this repository, do `make oracle-database` and wait to see *DATABASE IS READY TO USE!*.
+1. From this repository, do `make oracle-database` and wait **_a little_**, or check `podman logs -f oracle-database` to see *DATABASE IS READY TO USE!* message.
 
-2. Finally initialize the database with some seed data by running: `DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG=AMERICAN_AMERICA.UTF8 USER_PASSWORD=123456 MASTER_PASSWORD=123456 MASTER_ACCESS_TOKEN=token bundle exec rake db:drop db:create db:setup`
+
+      - This will create an Oracle database container that has a "rails" user to use for development purposes.
+
+      - If you run oracle in another way, then you can create a development user manually like this:
+        ```
+        docker exec -it oracle-database sqlplus system/threescalepass@127.0.0.1:1521/systempdb
+        ```
+        ```sql
+        CREATE USER rails IDENTIFIED BY railspass;
+        GRANT unlimited tablespace TO rails;
+        GRANT create session TO rails;
+        GRANT create table TO rails;
+        GRANT create view TO rails;
+        GRANT create sequence TO rails;
+        GRANT create trigger TO rails;
+        GRANT create procedure TO rails;
+        ```
+
+2. Finally initialize the database with some seed data by running (omit `ORACLE_SYSTEM_PASSWORD` if you have already granted the necessary permissions to the user)
+    ```
+    DATABASE_URL="oracle-enhanced://rails:railspass@127.0.0.1:1521/systempdb" ORACLE_SYSTEM_PASSWORD=threescalepass NLS_LANG=AMERICAN_AMERICA.UTF8 USER_PASSWORD=123456 MASTER_PASSWORD=123456 MASTER_ACCESS_TOKEN=token bundle exec rake db:drop db:create db:setup
+    ```
 
 ## Troubleshooting
 
