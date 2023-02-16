@@ -148,22 +148,32 @@ module System
 end
 
 ActiveSupport.on_load(:active_record) do
-if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
-  ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
-    prepend(Module.new do
+  if System::Database.oracle? && defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks)
+    ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter::DatabaseTasks.class_eval do
+      prepend(Module.new do
+        # If ORACLE_SYSTEM_PASSWORD is provided, Porta impersonates Oracle's SYSTEM user to create/update a non-SYSTEM
+        # user and grants it permissions. This is a behaviour that should preferably be used during development as
+        # the usage of Oracle's SYSTEM user grants the application more power than it should have in the first place.
+        # Alternatively, Porta should be provided with a non-SYSTEM user that has been granted the necessary
+        # permissions.
+        def create
+          if ENV['ORACLE_SYSTEM_PASSWORD'].present?
+            Logger.new($stderr).warn("Oracle's SYSTEM user will create/update a non-SYSTEM user and grant it permissions")
+            super
+            connection.execute "GRANT create trigger TO #{username}"
+            connection.execute "GRANT create procedure TO #{username}"
+          else
+            # Will raise ActiveRecord::NoDatabaseError if the database doesn't exist
+            establish_connection(@config)
+          end
+        end
 
-      def create
-        super
-        connection.execute "GRANT create trigger TO #{username}"
-        connection.execute "GRANT create procedure TO #{username}"
-      end
+        protected
 
-      protected
-
-      def username
-        @config['username']
-      end
-    end)
+        def username
+          @config['username']
+        end
+      end)
+    end
   end
-end
 end

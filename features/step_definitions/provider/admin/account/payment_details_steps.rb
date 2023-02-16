@@ -22,10 +22,6 @@ When "I fill in the braintree credit card form" do
   fill_in_braintree_form
 end
 
-When "I fill in the braintree credit card iframe" do
-  find(:css, '#braintree_nonce', visible: :hidden).set('some_braintree_nonce')
-end
-
 When "(an admin is )reviewing the provider's payment details" do
   visit edit_provider_admin_account_path
   select_vertical_nav_section 'Payment Details'

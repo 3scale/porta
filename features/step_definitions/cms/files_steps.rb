@@ -13,9 +13,7 @@ When(/^the file is deleted$/) do
 end
 
 Then(/^the file should be the same as uploaded$/) do
-  steps %q{
-    And the page should be the file "test/fixtures/hypnotoad.jpg"
-  }
+  assert_page_is_file 'test/fixtures/hypnotoad.jpg'
 end
 
 When(/^I access the file on developer portal$/) do
@@ -38,9 +36,7 @@ end
 
 Then(/^the file should be updated$/) do
   visit image_source
-  steps %q{
-    And the page should be the file "test/fixtures/tinnytim.jpg"
-  }
+  assert_page_is_file 'test/fixtures/tinnytim.jpg'
 end
 
 And(/^the original file should be gone$/) do
@@ -51,7 +47,7 @@ And(/^the original file should be gone$/) do
   end
 end
 
-And(/^the page should be the file "([^"]*)"$/) do |file_name|
+def assert_page_is_file(file_name)
   file = File.read(File.expand_path(file_name), binmode: true)
 
   assert_equal file, page.source, "#{file_name} does not equal the page source"

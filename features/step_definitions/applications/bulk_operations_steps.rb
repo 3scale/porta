@@ -23,14 +23,6 @@ def check_or_uncheck_selected_row value, text = nil
   end
 end
 
-When /^I (un)?check the first select in table body$/ do |un|
-  within 'table.data tbody' do
-    value = un.present? ? false : true
-
-    first("input[type='checkbox'][name*='select']").set(value)
-  end
-end
-
 When /^I (un)?check select for "(.+?)"$/ do |un, name|
   names = name.from_sentence.map{|n| n.delete('"') }
   names.each do |name|
@@ -43,11 +35,6 @@ When /^I (un)?check select in table header$/ do |un|
     check_or_uncheck_selected_row un
   end
 end
-
-Then /^(all|none) selects should be checked$/ do |m|
-  assert all('table.data tbody tr td.select input[type=checkbox]').send(m + '?', &:checked?)
-end
-
 
 And(/^close the colorbox$/) do
   find('#cboxClose').click

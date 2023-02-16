@@ -48,14 +48,6 @@ When "I change the {metric} to show with icons and text" do |metric|
   find(:xpath, "//span[@id='metric_#{metric.id}_icons']//a").click
 end
 
-When "I {word} {string} for {method}" do |action, label, metric|
-  step %(I #{action} "#{label}" within ".child##{dom_id(metric)}")
-end
-
-When "I {word} {string} for {metric}" do |action, label, metric|
-  step %(I #{action} "#{label}" within "##{dom_id(metric)}")
-end
-
 When "I {word} {string} for {metric_on_application_plan}" do |action, label, metric|
   within "##{dom_id(metric)}" do
     click_on label, visible: true, match: :smart
@@ -111,33 +103,6 @@ Then /^I should (not )?see metric "([^"]*)"$/ do |negate, name|
   assertion.call(:xpath, selector)
 end
 
-Then "I should not see button {string} for {metric}" do |label, metric|
-  within "##{dom_id(metric)}" do
-    assert has_no_button?(label)
-  end
-end
-
-Then "I should not see button {string} for {metric_on_application_plan}" do |label, metric|
-  within "##{dom_id(metric)}" do
-    assert has_no_button?(label)
-  end
-end
-
-Then /^I should see method "([^"]*)"$/ do |name|
-  page.should have_xpath("//td[text()='#{name}']")
-end
-
-Then /^I should not see method "([^"]*)"$/ do |name|
-  page.should have_no_xpath("//td[text()='#{name}']")
-end
-
-# DEPRECATED: not really integration testing
-
-# DEPRECATED: not really integration testing
-Then "{provider} should not have method {string}" do |provider, name|
-  assert_nil provider.default_service.metrics.hits.children.find_by_name(name)
-end
-
 Then "I should see the {metric} in the plan widget" do |metric|
   assert has_xpath?("//tr[@id='metric_#{metric.id}_limits']/th/span",
                     :text => metric.name)
@@ -187,26 +152,6 @@ end
 
 def new_metric_form
   find(:css, 'form#new_metric')
-end
-
-And(/^creates metric for that plan$/) do
-  visit_edit_plan(@plan)
-
-  within metrics do
-    click_on 'New metric'
-  end
-
-  name = SecureRandom.hex(10)
-
-  within new_metric_form do
-    fill_in 'Friendly name', with: name
-    fill_in 'System name', with: name
-    fill_in 'Unit', with: 'thing'
-
-    click_on 'Create Metric'
-  end
-
-  page.should have_content 'Metric has been created'
 end
 
 Capybara::Node::Element

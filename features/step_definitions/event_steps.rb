@@ -10,10 +10,6 @@ And(/^there should be (\d+) application cancelled event$/) do |n|
   assert_equal n.to_i, cancelled.count
 end
 
-And(/^there should be (\d+) valid service contract cancelled event$/) do |count|
-  check_events_validity!(type: ServiceContracts::ServiceContractCancellationEvent.to_s, count: count)
-end
-
 And(/^there should be (\d+) valid service contract created event$/) do |count|
   check_events_validity!(type: ServiceContracts::ServiceContractCreatedEvent.to_s, count: count)
 end
@@ -28,10 +24,6 @@ end
 
 And(/^there should be (\d+) valid application created event$/) do |count|
   check_events_validity!(type: Applications::ApplicationCreatedEvent.to_s, count: count)
-end
-
-And(/^there should be (\d+) valid cinstance cancellation event$/) do |count|
-  check_events_validity!(type: Cinstances::CinstanceCancellationEvent.to_s, count: count)
 end
 
 And(/^all the events should be valid$/) do

@@ -14,7 +14,6 @@ Then /^(?:the)? (?:buyer|provider|account) "([^"]*)" should have (?:a|an)(?: (pe
   assert_not_nil contracts
 end
 
-
 When "the contract of {buyer} with {plan} is approved" do |buyer, plan|
   contract = buyer.contracts.by_plan_id(plan.id).first
   contract.accept!

@@ -56,18 +56,6 @@ Then /^I should not see the account plan is customized$/ do
   assert has_no_xpath?("//h3", :text => "Custom Account Plan")
 end
 
-Given "an Account plan {string} of {provider}" do |name, provider|
-  @plan = FactoryBot.create(:account_plan, issuer: provider)
-end
-
-And /^provider has "(.*?)" hidden$/ do |field|
-  current_account.settings.toggle!(field) # rubocop:disable Rails/SkipsModelValidations
-end
-
-And /^provider has (account|service) plans hidden from the ui$/ do |type_of_plan|
-  current_account.settings.update_attribute("#{type_of_plan}_plans_ui_visible", false) # rubocop:disable Rails/SkipsModelValidations
-end
-
 When "an admin selects the action copy of an account plan" do
   @plan = FactoryBot.create(:account_plan, provider: @provider)
 

@@ -17,7 +17,6 @@ Given "{buyer} has application {string} with plan {string}" do |buyer, name, pla
                     name:  name)
 end
 
-
 Given "{buyer} has application {string} with description {string}" do |buyer, name, description|
   plan = buyer.provider_account.first_service!.application_plans.default or raise 'Provider has no default application plan'
   FactoryBot.create(:cinstance, :user_account => buyer,
@@ -100,7 +99,6 @@ When "I follow {string} for {application}" do |label, application|
   step %(I follow "#{label}" within "#application_#{application.id}")
 end
 
-
 Then "{application} should be live" do |application|
   assert application.live?
 end
@@ -123,12 +121,6 @@ Then /^I should see the following table in the applications widget:$/ do |table|
   table.diff!(extract_table('#applications_widget table', 'tr', 'th,td'))
 end
 
-Then /^I should see application named "([^\"]*)" in the applications table$/ do |name|
-  assert_select 'table#applications' do
-    assert_select 'tr th', name
-  end
-end
-
 Then /^I should see button to "(.*?)"$/ do | text |
   #assert has_xpath? "//input[@value = '#{text}']"
   assert has_xpath?("//button[contains(text(),'#{text}')]") || has_xpath?("//input[@value = '#{text}']")
@@ -140,10 +132,6 @@ end
 
 Then /^I should see the app menu$/ do
   assert has_xpath?("//ul[@id='subsubmenu']") || has_xpath?("//ul[@class='subsubmenu']")
-end
-
-Then /^I should not see the applications widget$/ do
-  assert has_no_xpath?('//div[@id="applications_widget"]')
 end
 
 Then /^I should see a list of available plans$/ do |table|
@@ -166,7 +154,6 @@ end
 When "I follow the link to {application}" do |app|
   find(:xpath, "//a[@href='#{provider_admin_application_path(app)}']").click
 end
-
 
 And(/^has an application$/) do
   buyer_name = SecureRandom.uuid # Use Faker ? use FactoryBot.create to generate just he values?
@@ -206,10 +193,6 @@ end
 
 When 'I fill in the new application form' do
   fill_in_new_application_form
-end
-
-When /^I fill in the new application form for "([^"]*)"/ do |name|
-  fill_in_new_application_form(name: name)
 end
 
 When 'I fill in the new application form for product {string}' do |service_name|
@@ -252,11 +235,6 @@ end
 
 When "I won't be able to select an application plan" do
   assert app_plan_select.has_css?('.pf-m-disabled')
-end
-
-Then "I should select an application plan myself" do
-  assert_not app_plan_select.has_css?('.pf-m-disabled')
-  assert_not app_plan_select.find('input').value.present?
 end
 
 def fill_in_new_application_form(name: 'My App', service_name: 'API')

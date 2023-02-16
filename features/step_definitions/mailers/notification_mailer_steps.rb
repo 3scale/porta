@@ -1,17 +1,3 @@
-And(/^the users should receive the application has been deleted notification email$/) do
-  @provider.users.each do |user|
-    step %("#{user.email}" should receive an email with subject "Alexisonfire has been deleted")
-  end
-end
-
-And(/^the users should receive the service contract cancelled notification email$/) do
-  @provider.users.each do |user|
-    subject = "#{user.account.name} has cancelled their subscription"
-
-    step %("#{user.email}" should receive an email with subject "#{subject}")
-  end
-end
-
 And(/^the users should receive the application created notification email$/) do
   registered_buyer = @provider.buyers.last
   application      = registered_buyer.contracts.last

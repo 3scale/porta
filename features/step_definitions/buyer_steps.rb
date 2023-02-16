@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-Given /^a buyer "([^\"]*)" have not signed up to plan "([^\"]*)"$/ do |buyer_name, plan_name|
-  # do nothing. I should not be signed up to plan
-  # if getting too paranoid about loose assumption you could:
-  # find buyer and remove plan in case it exists :-)
-end
-
 When "(a )buyer {string} with email {string} signs up to {provider}" do |name, email, provider|
   buyer = FactoryBot.build(:buyer_account, :provider_account => provider,
                         :org_name => name, :state => :created)
@@ -26,34 +20,12 @@ Given "a buyer {string} of {provider}" do |org_name, provider|
   account.buy! provider.account_plans.default
 end
 
-Given /^a buyer "([^"]*)" signed up to plan "([^"]*)"$/ do |buyer, plan|
-  ActiveSupport::Deprecation.warn("This step is deprecated. You have to specify which plan (application, service, account) to buy.")
-  step %{a buyer "#{buyer}" signed up to application plan "#{plan}"}
-end
-
 Given "a buyer {string} signed up to {plan}" do |org_name, plan|
   account = FactoryBot.create(:buyer_account,
                     :provider_account => plan.provider_account,
                     :org_name => org_name)
   account.buy! plan.provider_account.account_plans.default unless plan.is_a? AccountPlan
   account.buy!(plan)
-end
-
-Given "a buyer without billing address {string} signed up to {plan}" do |org_name, plan|
-  account = FactoryBot.create(:buyer_account_without_billing_address,
-                    :provider_account => plan.provider_account,
-                    :org_name => org_name)
-  account.buy! plan.provider_account.account_plans.default
-  account.buy!(plan)
-end
-
-Given "a buyer {string} with application ID {string} signed up to {plan}" do |org_name, app_id, plan|
-  account = FactoryBot.create(:buyer_account, :provider_account => plan.provider_account,
-                                    :org_name => org_name)
-  account.buy! plan.provider_account.account_plans.default
-
-  Cinstance.create!(:user_account => account, :plan => plan,
-                    :application_id => app_id)
 end
 
 Given /^a buyer "([^\"]*)" signed up to provider "([^\"]*)"$/ do |account_name, provider_account_name|
@@ -91,55 +63,11 @@ Given "a rejected buyer {string} signed up to {provider}" do |account_name, prov
   account.reject!
 end
 
-Given /^a buyer "([^"]*)" signed up to plan "([^"]*)" without providing description$/ do |account_name, plan_name|
-  step %(a buyer "#{account_name}" signed up to application plan "#{plan_name}")
-
-  # The description is blank already, this is here just to protect us from the future's
-  # changes.
-
-  account = ApplicationPlan.find_by!(name: plan_name).provider_account.buyer_accounts.find_by!(org_name: account_name)
-  assert account.bought_cinstance.description.blank?
-end
-
 Given /^these buyers signed up to provider "([^"]*)"$/ do |provider_name, table|
   table.raw.each do |row|
     step %(a buyer "#{row[0]}" signed up to provider "#{provider_name}")
   end
 end
-
-Given /^these buyers signed up to plan "([^"]*)"$/ do |plan_name, table|
-  table.raw.each do |row|
-    step %(a buyer "#{row[0]}" signed up to application plan "#{plan_name}")
-  end
-end
-
-Given /^these buyers signed up to plan "([^"]*)":$/ do |plan_name, table|
-  #TODO: dry this with account_steps Given provider "([^\"]*)" has the following buyers:
-  table.hashes.each do |hash|
-    step %{a buyer "#{hash['Name']}" signed up to application plan "#{plan_name}"}
-
-    buyer = Account.buyers.find_by_org_name!(hash['Name'])
-
-    buyer.update_attribute :state, hash['State'] if hash['State']
-    if hash['Created at']
-      cr_at = Chronic.parse hash['Created at']
-      buyer.update_attribute :created_at, cr_at
-      buyer.bought_cinstance.update_attribute :created_at, cr_at
-    end
-  end
-end
-
-Given /^buyer "([^"]*)" has ([0-9\.]+) in credit$/ do |buyer_name, credit|
-  buyer_account = Account.find_by_org_name!(buyer_name)
-  buyer_account.update_attributes!(:buyerbalance => credit)
-  buyer_account.bought_cinstances.each(&:pay_fixed_cost!)
-end
-
-Given "there are no buyers of {provider}" do |provider_account|
-  provider_account.buyer_accounts.destroy_all
-end
-
-# TODO: these steps should be moved over to more appropriately named step definition files.
 
 When /^I follow the link to create a new buyer account$/ do
   click_link "Create new account"
@@ -149,62 +77,13 @@ When "{buyer} is approved" do |buyer|
   buyer.approve!
 end
 
-Then /^there should be no buyer "([^"]*)"$/ do |name|
-  assert_nil Account.buyers.find_by_org_name(name)
-end
-
-Then /^there should be a buyer "([^"]*)"$/ do |name|
-  assert_not_nil Account.buyers.find_by_org_name(name)
-end
-
 # Just an alias, to be more explicit.
 Then /^buyer "([^\"]*)" should be (pending|approved|rejected)$/ do |name, state|
   step %(account "#{name}" should be #{state})
 end
 
-Then "{buyer} should be signed up to {plan}" do |buyer, plan|
-  assert plan.bought_by?(buyer)
-end
-
 Then /^I should not see the timezone field$/ do
   assert has_no_xpath? "//*[@id='account_timezone']"
-end
-
-
-Given "a buyer signs up to the provider" do
-  step %'the current domain is #{@provider.external_domain}'
-
-  visit signup_path
-
-  user = FactoryBot.build_stubbed(:user)
-
-  within signup_form do
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: 'supersecret'
-    fill_in 'Password confirmation', with: 'supersecret'
-    fill_in 'Username', with: user.email
-
-    fill_in 'Organization/Group Name', with: 'buyer'
-
-    click_on 'Sign up'
-  end
-
-  page.should have_content('Thank you')
-  page.should have_content('We have sent you an email to confirm your email address.')
-
-  email = open_email(user.email, with_subject: "#{@provider.external_domain} API account confirmation")
-  click_first_link_in_email(email)
-
-  within login_form do
-    fill_in 'Username', with: user.email
-    fill_in 'Password', with: 'supersecret'
-
-    click_on 'Sign in'
-  end
-
-  page.should have_content(/Signed in successfully/i)
-
-  @buyer = @provider.buyers.last!
 end
 
 def signup_form
@@ -213,10 +92,6 @@ end
 
 def login_form
   find('#new_session')
-end
-
-When(/^the buyer has simple API key$/) do
-  @buyer.bought_cinstance.update_column(:user_key, 'simple-api-key')
 end
 
 And(/^has a buyer with (application|service) plan/) do |plan|

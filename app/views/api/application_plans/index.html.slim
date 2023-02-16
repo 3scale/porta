@@ -1,9 +1,11 @@
-h1 Application plans
+h1 Application Plans
 p
-  | Application plans establish rules like limits, pricing, and features for 
-  | using your API. A developer's application accesses your API 
-  | following the rules of the application plan. Configure application plans 
-  | for specific target audiences with different sets of rules.
+  | Application plans establish the rules (limits, pricing, features) for 
+  | using your API; every developer's application accessing your API 
+  | will be accessing it within the constraints of an application plan. 
+  | From a business perspective, application plans allow you to target different 
+  | audiences by using multiple plans, that is, basic, pro, premium, 
+  | with different sets of rules.
 
 - if can_create_plan? ApplicationPlan
   = pf_button_in_title 'Create application plan', new_polymorphic_path([:admin, @service, ApplicationPlan])

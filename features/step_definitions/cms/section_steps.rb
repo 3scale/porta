@@ -51,16 +51,6 @@ Given "the buyer {string} has access to the section {string} of {provider}" do |
   account.permissions.create! :group => group
 end
 
-
-When "I click the {section_of_provider}" do |section|
-  find(:xpath, "//td[@id='section_#{section.id}']").click
-end
-
-When /^I create the root section$/ do
-  visit cms_sections_path
-  click_button "Create Root Section"
-end
-
 When /^I update "(.+?)" section title to "(.+?)"$/ do |section_system_name, title|
   visit edit_provider_admin_cms_section_path(CMS::Section.find_by_system_name(section_system_name).id)
   fill_in "Title", :with => title
@@ -69,35 +59,4 @@ end
 
 Then "the {section_of_provider} should be access restricted" do |section|
   assert !section.public?
-end
-
-#TODO: dry these two steps to a helper assert method
-Then /^I should see no section$/ do
-  Section.all.each do |section|
-    assert has_no_xpath?(".//td[@id='section_#{section.id}']")
-  end
-end
-
-Then /^I should see my sections$/ do
-  current_account.provided_sections.each do |section|
-    assert has_xpath?(".//td[@id='section_#{section.id}']")
-  end
-end
-
-Then /^I should see my root section$/ do
-  root_section_id = Section.root(current_account.id).first.id
-  assert has_xpath?(".//td[@id='section_#{root_section_id}']")
-  # just to differentiate it from a normal section
-  assert has_xpath?(".//ul[@id='root_#{root_section_id}']")
-end
-
-Then /^I should see my section$/ do
-  section = current_account.provided_sections.last
-  assert has_xpath?(".//td[@id='section_#{section.id}']")
-end
-
-Then /^I should see my section changed$/ do
-  section = current_account.provided_sections.last
-  assert has_xpath?(".//td[@id='section_#{section.id}']")
-  #check that it effectively changed
 end
