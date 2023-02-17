@@ -107,14 +107,14 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         post :create, params: { section_id: 100, type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
 
       def test_create_page_section_name_unknown
         post :create, params: { section_name: 'non-existent', type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
 
       def test_create_page_layout_nil
@@ -144,14 +144,14 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         post :create, params: { layout_id: 100, type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
 
       def test_create_page_layout_name_unknown
         post :create, params: { layout_name: 'non-existent', type: 'page',
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
     end
 
@@ -188,7 +188,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         put :update, params: { id: page.id, section_id: 100,
                                title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
 
       def test_update_page_section_name_unknown
@@ -197,7 +197,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         put :update, params: { id: page.id, section_name: 'non-existent',
                                title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
 
       def test_update_page_layout_nil
@@ -240,7 +240,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         put :update, params: { id: page.id, layout_id: 100,
                                title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
 
       def test_update_page_layout_name_unknown
@@ -249,7 +249,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         put :update, params: { id: page.id, layout_name: 'non-existent',
                                title: 'About', path: '/about', format: :json, access_token: @token }
 
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
       end
     end
   end

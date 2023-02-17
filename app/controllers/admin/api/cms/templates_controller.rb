@@ -51,7 +51,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     template = Admin::Api::CMS::TemplateService::Create.call(current_account, cms_template_params)
     respond_with(template)
   rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
-    render_error exception.message, status: :not_acceptable
+    render_error exception.message, status: :unprocessable_entity
   end
 
   ##~ e = sapi.apis.add
@@ -92,7 +92,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     Admin::Api::CMS::TemplateService::Update.call(current_account, cms_template_params, @template)
     respond_with(@template)
   rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
-    render_error exception.message, status: :not_acceptable
+    render_error exception.message, status: :unprocessable_entity
   end
 
   ##~ op             = e.operations.add
