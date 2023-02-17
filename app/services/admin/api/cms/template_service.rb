@@ -73,8 +73,17 @@ class Admin::Api::CMS::TemplateService
       section = find_section
       template.section = section if section.present?
       layout = find_layout
-      template.layout = layout if layout.present?
+      if layout.present?
+        template.layout = layout
+      elsif layout_received_empty?
+        # We received the parameter, but empty. So the user explicitly want's to remove the layout
+        template.layout = nil
+      end
     end
+  end
+
+  def layout_received_empty?
+    !!layout_id.try(:empty?) || !!layout_name.try(:empty?)
   end
 
   protected
