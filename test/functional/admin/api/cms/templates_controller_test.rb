@@ -162,6 +162,14 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         assert_equal @layout, page.reload.layout
       end
 
+      def test_update_page_layout_empty
+        page = FactoryBot.create(:cms_page, provider: @provider, layout: @layout)
+
+        put :update, params: { id: page.id, layout_id: '', type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_nil page.reload.layout
+      end
+
       def test_update_page_layout_id
         page = FactoryBot.create(:cms_page, provider: @provider)
 
