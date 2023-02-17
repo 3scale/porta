@@ -159,7 +159,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_section_nil
         page = FactoryBot.create(:cms_page, provider: @provider, section: @section)
 
-        put :update, params: { id: page.id, type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
+        put :update, params: { id: page.id, title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @section, page.reload.section
       end
@@ -167,7 +167,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_section_id
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put :update, params: { id: page.id, section_id: @section.id, type: 'page',
+        put :update, params: { id: page.id, section_id: @section.id,
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @section, page.reload.section
@@ -176,7 +176,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_section_name
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put :update, params: { id: page.id, section_name: @section.system_name, type: 'page',
+        put :update, params: { id: page.id, section_name: @section.system_name,
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @section, page.reload.section
@@ -203,7 +203,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_layout_nil
         page = FactoryBot.create(:cms_page, provider: @provider, layout: @layout)
 
-        put :update, params: { id: page.id, type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
+        put :update, params: { id: page.id, title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @layout, page.reload.layout
       end
@@ -211,7 +211,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_layout_empty
         page = FactoryBot.create(:cms_page, provider: @provider, layout: @layout)
 
-        put :update, params: { id: page.id, layout_id: '', type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
+        put :update, params: { id: page.id, layout_id: '', title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_nil page.reload.layout
       end
@@ -219,7 +219,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_layout_id
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put :update, params: { id: page.id, layout_id: @layout.id, type: 'page',
+        put :update, params: { id: page.id, layout_id: @layout.id,
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @layout, page.reload.layout
@@ -228,7 +228,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       def test_update_page_layout_name
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put :update, params: { id: page.id, layout_name: @layout.system_name, type: 'page',
+        put :update, params: { id: page.id, layout_name: @layout.system_name,
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @layout, page.reload.layout
