@@ -3,7 +3,12 @@
 class Admin::Api::CMS::TemplateService
   include Callable
 
-  class UnknownTemplateTypeError < StandardError; end
+  class TemplateServiceError < StandardError; end
+  class UnknownTemplateTypeError < TemplateServiceError; end
+  class UnknownSectionError < TemplateServiceError; end
+  class UnknownLayoutError < TemplateServiceError; end
+
+
 
   def initialize(current_account, params)
     @params = params
@@ -33,7 +38,8 @@ class Admin::Api::CMS::TemplateService
       raise UnknownTemplateTypeError, "Unknown template type '#{type}'" unless type && collection
 
       template = collection.new(params)
-      attach_section_layout(template)
+      attach_section(template)
+      attach_layout(template)
       template.save
 
       template
@@ -41,11 +47,28 @@ class Admin::Api::CMS::TemplateService
 
     private
 
-    def attach_section_layout(template)
+    def attach_section(template)
       return unless type == :page
 
-      template.section ||= find_section || current_account.sections.root
-      template.layout ||= find_layout
+      section = find_section
+      if section.present?
+        template.section = section
+      elsif section_received?
+        raise UnknownSectionError, "Unknown section: '#{section_id || section_name}'"
+      else
+        template.section = current_account.sections.root
+      end
+    end
+
+    def attach_layout(template)
+      return unless type == :page
+
+      layout = find_layout
+      if layout.present?
+        template.layout = layout
+      elsif layout_received?
+        raise UnknownLayoutError, "Unknown layout: '#{layout_id || layout_name}'"
+      end
     end
   end
 
@@ -59,7 +82,8 @@ class Admin::Api::CMS::TemplateService
     attr_reader :template, :resource_class
 
     def call
-      attach_section_layout
+      attach_section
+      attach_layout
       template.update(params)
 
       template
@@ -67,23 +91,30 @@ class Admin::Api::CMS::TemplateService
 
     private
 
-    def attach_section_layout
+    def attach_section
       return unless resource_class == CMS::Page
 
       section = find_section
-      template.section = section if section.present?
+      if section.present?
+        template.section = section
+      elsif section_received?
+        raise UnknownSectionError, "Unknown section: '#{section_id || section_name}'"
+      end
+    end
+
+    def attach_layout
+      return unless resource_class == CMS::Page
+
       layout = find_layout
       if layout.present?
         template.layout = layout
       elsif layout_received_empty?
         # We received the parameter, but empty. So the user explicitly want's to remove the layout
         template.layout = nil
+      elsif layout_received?
+        raise UnknownLayoutError, "Unknown layout: '#{layout_id || layout_name}'"
       end
     end
-  end
-
-  def layout_received_empty?
-    !!layout_id.try(:empty?) || !!layout_name.try(:empty?)
   end
 
   protected
@@ -102,5 +133,17 @@ class Admin::Api::CMS::TemplateService
     return scope.find_by(id: layout_id) if layout_id.present?
 
     scope.find_by(system_name: layout_name) if layout_name.present?
+  end
+
+  def section_received?
+    !section_id.nil? || !section_name.nil?
+  end
+
+  def layout_received?
+    !layout_id.nil? || !layout_name.nil?
+  end
+
+  def layout_received_empty?
+    layout_received? && (layout_id.try(:empty?) || !!layout_name.try(:empty?))
   end
 end

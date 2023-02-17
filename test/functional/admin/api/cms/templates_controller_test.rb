@@ -103,6 +103,20 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
         assert_equal @section, page.section
       end
 
+      def test_create_page_section_id_unknown
+        post :create, params: { section_id: 100, type: 'page',
+                                title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
+      end
+
+      def test_create_page_section_name_unknown
+        post :create, params: { section_name: 'non-existent', type: 'page',
+                                title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
+      end
+
       def test_create_page_layout_nil
         post :create, params: { type: 'page', title: 'About', path: '/about', format: :json, access_token: @token }
 
@@ -124,6 +138,20 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
         page = @provider.pages.last
         assert_equal @layout, page.layout
+      end
+
+      def test_create_page_layout_id_unknown
+        post :create, params: { layout_id: 100, type: 'page',
+                                title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
+      end
+
+      def test_create_page_layout_name_unknown
+        post :create, params: { layout_name: 'non-existent', type: 'page',
+                                title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
       end
     end
 
@@ -152,6 +180,24 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @section, page.reload.section
+      end
+
+      def test_update_page_section_id_unknown
+        page = FactoryBot.create(:cms_page, provider: @provider)
+
+        put :update, params: { id: page.id, section_id: 100,
+                               title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
+      end
+
+      def test_update_page_section_name_unknown
+        page = FactoryBot.create(:cms_page, provider: @provider)
+
+        put :update, params: { id: page.id, section_name: 'non-existent',
+                               title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
       end
 
       def test_update_page_layout_nil
@@ -186,6 +232,24 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
                                 title: 'About', path: '/about', format: :json, access_token: @token }
 
         assert_equal @layout, page.reload.layout
+      end
+
+      def test_update_page_layout_id_unknown
+        page = FactoryBot.create(:cms_page, provider: @provider)
+
+        put :update, params: { id: page.id, layout_id: 100,
+                               title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
+      end
+
+      def test_update_page_layout_name_unknown
+        page = FactoryBot.create(:cms_page, provider: @provider)
+
+        put :update, params: { id: page.id, layout_name: 'non-existent',
+                               title: 'About', path: '/about', format: :json, access_token: @token }
+
+        assert_response :not_acceptable
       end
     end
   end

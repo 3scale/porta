@@ -50,7 +50,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   def create
     template = Admin::Api::CMS::TemplateService::Create.call(current_account, cms_template_params)
     respond_with(template)
-  rescue Admin::Api::CMS::TemplateService::UnknownTemplateTypeError => exception
+  rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
     render_error exception.message, status: :not_acceptable
   end
 
@@ -91,6 +91,8 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   def update
     Admin::Api::CMS::TemplateService::Update.call(current_account, cms_template_params, @template)
     respond_with(@template)
+  rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
+    render_error exception.message, status: :not_acceptable
   end
 
   ##~ op             = e.operations.add

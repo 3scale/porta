@@ -57,6 +57,34 @@ class TemplateServiceTest < ActiveSupport::TestCase
         assert_equal @section, template.section
       end
 
+      test "UnknownSectionError is raised when the given section ID doesn't exist" do
+        params = {
+          'type' => 'page',
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'section_id' => 100
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownSectionError) do
+          Admin::Api::CMS::TemplateService::Create.call(@provider, params)
+        end
+      end
+
+      test "UnknownSectionError is raised when the given section name doesn't exist" do
+        params = {
+          'type' => 'page',
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'section_name' => 'non-existent'
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownSectionError) do
+          Admin::Api::CMS::TemplateService::Create.call(@provider, params)
+        end
+      end
+
       test 'layout is not set when no layout provided' do
         params = {
           'type' => 'page',
@@ -96,6 +124,34 @@ class TemplateServiceTest < ActiveSupport::TestCase
         template = Admin::Api::CMS::TemplateService::Create.call(@provider, params)
 
         assert_equal @layout, template.layout
+      end
+
+      test "UnknownLayoutError is raised when the given layout ID doesn't exist" do
+        params = {
+          'type' => 'page',
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'layout_id' => 100
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownLayoutError) do
+          Admin::Api::CMS::TemplateService::Create.call(@provider, params)
+        end
+      end
+
+      test "UnknownLayoutError is raised when the given layout name doesn't exist" do
+        params = {
+          'type' => 'page',
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'layout_name' => 'non-existent'
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownLayoutError) do
+          Admin::Api::CMS::TemplateService::Create.call(@provider, params)
+        end
       end
     end
 
@@ -143,6 +199,32 @@ class TemplateServiceTest < ActiveSupport::TestCase
         Admin::Api::CMS::TemplateService::Update.call(@provider, params, @template)
 
         assert_equal @section2, @template.reload.section
+      end
+
+      test "UnknownSectionError is raised when the given section ID doesn't exist" do
+        params = {
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'section_id' => 100
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownSectionError) do
+          Admin::Api::CMS::TemplateService::Update.call(@provider, params, @template)
+        end
+      end
+
+      test "UnknownSectionError is raised when the given section name doesn't exist" do
+        params = {
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'section_name' => 'non-existent'
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownSectionError) do
+          Admin::Api::CMS::TemplateService::Update.call(@provider, params, @template)
+        end
       end
 
       test 'layout remains unchanged when no layout provided' do
@@ -207,6 +289,32 @@ class TemplateServiceTest < ActiveSupport::TestCase
         Admin::Api::CMS::TemplateService::Update.call(@provider, params, @template)
 
         assert_equal @layout2, @template.reload.layout
+      end
+
+      test "UnknownLayoutError is raised when the given layout ID doesn't exist" do
+        params = {
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'layout_id' => 100
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownLayoutError) {
+          Admin::Api::CMS::TemplateService::Update.call(@provider, params, @template)
+        }
+      end
+
+      test "UnknownLayoutError is raised when the given layout name doesn't exist" do
+        params = {
+          'title' => 'test API',
+          'path' => '/testAPI',
+          'system_name' => 'test_api',
+          'layout_name' => 'non-existent'
+        }
+
+        assert_raises (Admin::Api::CMS::TemplateService::UnknownLayoutError) {
+          Admin::Api::CMS::TemplateService::Update.call(@provider, params, @template)
+        }
       end
     end
   end
