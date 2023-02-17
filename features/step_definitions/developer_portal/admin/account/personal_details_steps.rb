@@ -43,4 +43,5 @@ end
 Then "they should have their password updated" do
   assert_flash 'User was successfully updated.'
   assert_current_path admin_account_personal_details_path
+  assert_equal BCrypt::Password.new(current_user.password_digest), 'ultrasecret'
 end
