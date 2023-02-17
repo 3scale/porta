@@ -75,13 +75,16 @@ module ThreeScale
       assert_equal expected_sentinels, config.sentinels
     end
 
-    test 'sets redis client id to nil when id not provided' do
+    test 'sets redis client id to nil when id is not provided' do
       config = RedisConfig.new(url: 'redis://my-redis/1')
 
       assert_nil config.id
       assert config.key? :id
     end
 
+    # The ID is forced to be nil to disable the default behavior in Sidekiq < 6
+    # which invokes CLIENT SETNAME command, which incompatible with some Redis providers
+    # see https://issues.redhat.com/browse/THREESCALE-9210
     test 'sets redis client id to nil when id is set explicitly' do
       config = RedisConfig.new(url: 'redis://my-redis/1', id: 'redis-client-name')
       assert_nil config.id
