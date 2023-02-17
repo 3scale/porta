@@ -1,6 +1,6 @@
 module InvoicesHelpers
-  def create_invoice(buyer, month, opts = {})
-    options = opts.reverse_merge(buyer_account: buyer, period: Month.new(Date.parse(month)), creation_type: :background)
+  def create_invoice(buyer, date, opts = {})
+    options = opts.reverse_merge(buyer_account: buyer, period: Month.new(date), creation_type: :background)
     buyer.provider_account.billing_strategy.create_invoice!(options)
   end
 

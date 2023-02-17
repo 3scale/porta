@@ -62,8 +62,8 @@ const BraintreeBillingAddressFields: FunctionComponent<Props> = ({
             required
             id="customer_credit_card_billing_address_street_address"
             name="customer[credit_card][billing_address][street_address]"
-            value={billingAddressData.address1}
-            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'address1') }}
+            value={billingAddressData.address}
+            onChange={(e) => { onChangeBillingAddressData(e.currentTarget.value, 'address') }}
           />
         </ListItem>
         <ListItem id="customer_credit_card_billing_address_postal_code_input">

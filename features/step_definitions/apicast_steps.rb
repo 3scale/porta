@@ -11,17 +11,7 @@ Given(/^apicast registry is stubbed$/) do
       headers: { 'Content-Type' => 'application/json' })
 end
 
-Given(/^apicast registry is undefined$/) do
-  ThreeScale.config.sandbox_proxy.stubs(:apicast_registry_url).returns(nil)
-  ThreeScale.config.sandbox_proxy.stubs(:self_managed_apicast_registry_url).returns(nil)
-  JSONClient.expects(:get).with(nil).raises(SocketError)
-end
-
 Given(/^the default proxy does not use apicast configuration driven$/) do
   proxy = @provider.default_service.proxy
   proxy.update!(apicast_configuration_driven: false, sandbox_endpoint: 'https://api-2.staging.apicast.io:4443')
-end
-
-Given(/^the default proxy uses apicast configuration driven$/) do
-  @provider.default_service.proxy.update!(apicast_configuration_driven: true)
 end

@@ -65,6 +65,26 @@ class CMS::S3Test < ActiveSupport::TestCase
     assert_not CMS::S3.options[:use_fips_endpoint]
   end
 
+  test "#hostname returns nil when CMS::S3 is not enabled" do
+    CMS::S3.stubs(:enabled?).returns(false)
+
+    assert_nil CMS::S3.hostname
+  end
+
+  test "#hostname returns nil when it's not provided" do
+    CMS::S3.stubs(:config).returns(protocol: "https", hostname: "")
+
+    assert_nil CMS::S3.hostname
+  end
+
+  test "#hostname returns the correct config data when provided" do
+    hostname = "some_hostname"
+
+    CMS::S3.stubs(:config).returns(hostname: hostname)
+
+    assert_equal CMS::S3.hostname, hostname
+  end
+
   test "#credentials returns nil when CMS::S3 is not enabled" do
     CMS::S3.stubs(:enabled?).returns(false)
 

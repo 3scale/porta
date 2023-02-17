@@ -400,9 +400,17 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
 
     test 'no N+1 problems in the index' do
       populate = ->(n) {FactoryBot.create_list(:buyer_account, n, provider_account: @provider)}
+
       assert_perform_constant_number_of_queries(populate: populate) do
-        get admin_buyers_accounts_path
+        perform
       end
     end
+
+    # needs to be a method (https://github.com/palkan/n_plus_one_control/pull/58)
+    # must be public for n_plus_one_control to detect it
+    def perform
+      get admin_buyers_accounts_path
+    end
+    alias warmup perform
   end
 end

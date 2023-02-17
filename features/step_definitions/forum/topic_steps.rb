@@ -105,25 +105,6 @@ Then /^I should see the first topic is "([^"]*)"$/ do |topic|
   assert topics.first.has_xpath?("//a[text()[contains(.,'#{topic}')]]")
 end
 
-
-When /^I leave the obligatory topic fields blank$/ do
-  fill_in "topic_title", :with => ""
-  fill_in "Body", :with => ""
-end
-
-
-Then "I should see all the topics on {forum}" do |forum|
-  step %{I should see "#{forum.topics.length} topics"}
-  forum.topics.each do |topic|
-    step %{I should see "#{topic.title}"}
-  end
-end
-
-Then /^I should see only the (\w+) topic$/ do |title|
-  step %{I should see "1 topic"}
-  step %{I should see "#{title}"}
-end
-
 Then "I should see topic(s) {list_of_strings}" do |titles|
   titles.each do |title|
     assert has_css?('tr.topic', :text => title)
@@ -134,18 +115,6 @@ Then "I should not see topic(s) {list_of_strings}" do |titles|
   titles.each do |title|
     assert has_no_css?('tr.topic', :text => title)
   end
-end
-
-Then /^the topic should not be destroyed$/ do
-  @topic.reload.should_not be_nil
-end
-
-Then /^the topic should be destroyed$/ do
-  expect { @topic.reload }.to raise_error ActiveRecord::RecordNotFound
-end
-
-Then /^I should see the link to create new topic$/ do
-  step 'I should see "Start new thread"'
 end
 
 Then /^I should not see the link to create new topic$/ do

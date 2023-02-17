@@ -1,27 +1,5 @@
 # frozen_string_literal: true
 
-Given "the following messages were sent to {provider}" do |provider, table|
-  if provider.buyer_accounts.empty?
-    step %{a buyer "messenger" signed up to application plan "#{provider.application_plans.first.name}"}
-  end
-
-  table.hashes.each do |hash|
-    msg = provider.buyer_accounts.reload.first.messages
-      .create!(:to => provider, :subject => hash['Message'], :body => hash['Message'])
-
-    if hash['Created at']
-      msg.update_attribute :created_at, Chronic.parse(hash['Created at'])
-    end
-
-    msg.deliver!
-  end
-end
-
-Given(/^the following messages were sent to provider:$/) do |table|
-  assert @provider, "@provider missing"
-  step %{the following messages were sent to provider "#{@provider.org_name}":}, table
-end
-
 Given "a message(s) sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
   message = sender.messages.create!(:to => receiver, :subject => subject, :body => body)
   message.deliver!
@@ -39,26 +17,9 @@ Given "{account} has no messages" do |account|
   account.received_messages.destroy_all
 end
 
-When /^I press a button to delete the message from "([^"]*)" with subject "([^"]*)"$/ do |from, subject|
-  find_delete_button_in_row('Delete', from, subject).click
-end
-
 When /^I press a button to restore the message from "([^"]*)" with subject "([^"]*)"$/ do |from, subject|
   find_delete_button_in_row('Restore', from, subject).click
 end
-
-
-Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body match with {string}" do |sender, receiver, subject, body|
-  message = receiver.received_messages.to_a.find do |message|
-    message.sender  == sender  &&
-    message.subject == subject &&
-    message.body    =~ /#{body}/
-  end
-
-  assert_not_nil message, %(No message from #{sender.org_name} to #{receiver.org_name} with subject "#{subject}" and body "#{body}" was sent)
-end
-
-
 
 Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} with subject {string} and body {string}" do |sender, receiver, subject, body|
   message = receiver.received_messages.to_a.find do |message|
@@ -71,7 +32,18 @@ Then "a message should be sent from {provider_or_buyer} to {provider_or_buyer} w
 end
 
 Then('a message should be sent from buyer to provider with plan change details from free to paid') do
-  step %(a message should be sent from buyer "#{@buyer.org_name}" to provider "#{@provider.internal_domain}" with subject "API System: Application plan change" and body match with "plan from #{@free_application_plan.name} to #{@paid_application_plan.name}")
+  sender = @buyer
+  receiver = @provider
+  subject = "API System: Application plan change"
+  body = "plan from #{@free_application_plan.name} to #{@paid_application_plan.name}"
+
+  message = receiver.received_messages.to_a.find do |message|
+    message.sender  == sender  &&
+    message.subject == subject &&
+    message.body    =~ /#{body}/
+  end
+
+  assert_not_nil message, %(No message from #{sender.org_name} to #{receiver.org_name} with subject "#{subject}" and body "#{body}" was sent)
 end
 
 Then('a message should be sent from buyer to provider requesting to change plan to paid') do
@@ -79,11 +51,6 @@ Then('a message should be sent from buyer to provider requesting to change plan 
   assert msg = messages.to_a.select{|m| m.subject == 'API System: Plan change request' }.last
 
   assert_match %(#{@buyer.org_name} are requesting to have their plan changed to #{@paid_application_plan.name} for application #{@application.name}. You can do this from the application page), msg.body
-end
-
-Then "a message should be sent to {provider_or_buyer} with subject {string}" do |receiver, subject|
-  message = receiver.received_messages.last
-  assert_match subject, message.subject
 end
 
 Then "there should be no message from {provider} to {buyer} with subject {string}" do |sender, receiver, subject|

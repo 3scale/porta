@@ -42,6 +42,8 @@ class SymbolizeTest < ActiveSupport::TestCase
   end
 
   test '#changes is symbolized but not #previous_changes' do
+    freeze_time # avoid updated_at in changes on some databases
+
     usage = UsageLimit.new
     usage.period = 'hour'
     assert_equal({'period' => [nil, :hour]}, usage.changes)

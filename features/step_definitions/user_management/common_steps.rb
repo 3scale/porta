@@ -11,11 +11,9 @@ When "I press {string} for {user}" do |button_text, user|
 end
 
 When /^I choose "([^"]*)" in the user role field$/ do |role|
-  step %(I choose "#{role}" within "#user_role_input")
-end
-
-When /^I check "([^"]*)" in the user permission field$/ do |permission|
-  step %(I check "#{permission}" within "#user_member_permissions_input")
+  with_scope('#user_role_input') do
+    choose(role)
+  end
 end
 
 Then /^I should not see the user role field$/ do
@@ -28,8 +26,4 @@ end
 
 Then "I should not see {string} for {user}" do |text, user|
   step %(I should not see "#{text}" within "#user_#{user.id}")
-end
-
-When /^I request the url of users of "([^\"]*)"$/ do |provider|
-  visit "http://#{provider}/account/users"
 end

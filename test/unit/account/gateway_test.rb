@@ -126,4 +126,11 @@ class Account::GatewayTest  < ActiveSupport::TestCase
     buyer.payment_detail.payment_method_id = 'pm_1I5s3n2eZvKYlo2CiO193T69'
     assert_instance_of ActiveMerchant::Billing::StripePaymentIntentsGateway, buyer.provider_payment_gateway
   end
+
+  test 'unacceptable_payment_gateway?' do
+    assert FactoryBot.create(:simple_account, payment_gateway_type: :bogus).unacceptable_payment_gateway?
+    assert FactoryBot.create(:simple_account, payment_gateway_type: nil).unacceptable_payment_gateway?
+
+    assert_not FactoryBot.create(:simple_account, payment_gateway_type: :braintree_blue).unacceptable_payment_gateway?
+  end
 end

@@ -30,19 +30,19 @@ Then /^I should see following table:$/ do |expected|
   end
 end
 
-Then /^I should see the following table:$/ do |expected|
-  table = if has_css?('.pf-c-table')
-            extract_pf4_table
-          else
-            extract_table('table', 'tr', 'th,td')
-          end
+# Then /^I should see the following table:$/ do |expected|
+#   table = if has_css?('.pf-c-table')
+#             extract_pf4_table
+#           else
+#             extract_table('table', 'tr', 'th,td')
+#           end
 
-  expected.diff! table
-rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
-  if ENV['CI']
-    puts error.message
-    puts expected.to_s
-  end
+#   expected.diff! table
+# rescue Cucumber::MultilineArgument::DataTable::Different, IndexError => error
+#   if ENV['CI']
+#     puts error.message
+#     puts expected.to_s
+#   end
 
-  raise
-end
+#   raise
+# end

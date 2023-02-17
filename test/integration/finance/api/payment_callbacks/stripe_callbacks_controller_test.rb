@@ -61,11 +61,11 @@ class Finance::Api::PaymentCallbacks::StripeCallbacksControllerTest < ActionDisp
     end
 
     test 'cannot find payment intent' do
-      stripe_event = self.stripe_event(type: 'payment_intent.requires_action', payment_intent_data: { id: 'non-existent-payment-intent-id' })
+      stripe_event = self.stripe_event(type: 'payment_intent.succeeded', payment_intent_data: { id: 'non-existent-payment-intent-id' })
       Stripe::Webhook.expects(:construct_event).returns(stripe_event)
 
       post api_payment_callbacks_stripe_callbacks_path, params: { access_token: access_token.value }
-      assert_response :not_found
+      assert_response :no_content
     end
 
     test 'fails to update payment intent' do

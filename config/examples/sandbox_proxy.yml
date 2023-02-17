@@ -3,19 +3,16 @@ base: &default
     - echo-api.3scale.net
     - hello-world-api.3scale.net
   ignore_test_failures: []
-  hosts:
-    - localhost:8091
-  backend_host: backend:3000
-  shared_secret: dev
-  backend_scheme: http
-  nginx_port: 8080
+  # Backend endpoint as visible by apicast (host.containers.internal in podman)
+  backend_endpoint: http://host.docker.internal:3001
   verify_mode: <%= OpenSSL::SSL::VERIFY_NONE %>
   debug: true
   override: 'http://localhost:8091'
   sandbox_endpoint: 'https://%{system_name}-%{account_id}.staging.%{env}apicast.io:%{port}'
   hosted_proxy_endpoint: 'https://%{system_name}-%{account_id}.%{env}apicast.io:%{port}'
-  apicast_staging_endpoint: 'http://%{system_name}-%{account_id}.staging.%{env}apicast.dev:8080'
-  apicast_production_endpoint: 'http://%{system_name}-%{account_id}.%{env}apicast.dev:8080'
+  # APIcast endpoints as visible from the client
+  apicast_staging_endpoint: 'http://%{system_name}-%{account_id}.staging.%{env}apicast.dev.localhost:8080'
+  apicast_production_endpoint: 'http://%{system_name}-%{account_id}.%{env}apicast.dev.localhost:8000'
   skip_deploy: false
   apicast_registry_url: <%= ENV['APICAST_REGISTRY_URL'] %>
   self_managed_apicast_registry_url: <%= ENV['APICAST_REGISTRY_URL'] %>
@@ -32,8 +29,6 @@ test:
   test_api_hosts:
     - echo-api.3scale.net
     - hello-world-api.3scale.net
-  hosts:
-    - 'test.proxy'
   backend_host: '127.0.0.1:4001'
   backend_scheme: 'http'
   shared_secret: 'TEST'

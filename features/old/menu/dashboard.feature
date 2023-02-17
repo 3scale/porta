@@ -23,8 +23,7 @@ Feature: Dashboard
     And I should see "API" in the first api dashboard widget
 
   Scenario: Audience widget with Finance enabled
-    Given provider "foo.3scale.localhost" is charging
-    And provider "foo.3scale.localhost" has "finance" switch allowed
+    Given the provider is charging its buyers
     When I log in as provider "foo.3scale.localhost"
     And I go to the provider dashboard
     Then I should see the link "Billing" in the audience dashboard widget

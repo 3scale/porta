@@ -5,11 +5,10 @@ Feature: Change plan
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider "foo.3scale.localhost"
-      And provider "foo.3scale.localhost" is charging
+    Given a provider exists
+      And the provider is charging its buyers in prepaid mode
       And provider "foo.3scale.localhost" has "finance" switch visible
       And all the rolling updates features are on
-      And provider "foo.3scale.localhost" has prepaid billing enabled
     Given an application plan "CheapPlan" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "ExpensivePlan" of provider "foo.3scale.localhost" for 0 monthly
     Given the current domain is foo.3scale.localhost

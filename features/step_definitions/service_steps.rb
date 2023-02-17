@@ -20,19 +20,6 @@ Given "the service {string} of {provider} has deployment option {string}" do |se
   provider.services.find_by!(name: service_name).update_attribute(:deployment_option, deployment_option)
 end
 
-Given "the service of {provider} has terms" do |account|
-  account.first_service!.update_attributes!(:terms => 'Some terms and conditions...')
-end
-
-Given "the service of {provider} requires intentions of use" do |account|
-  account.first_service!.update_attribute(:intentions_required, true)
-end
-
-Given "the service of {provider} does not require intentions of use" do |account|
-  account.first_service!.update_attribute(:intentions_required, false)
-end
-
-
 Given "{buyer} subscribed to {plan}" do |buyer, plan|
   buyer.buy!(plan)
 end
@@ -61,14 +48,6 @@ end
 
 Given "the service of {provider} has traffic" do |account|
   Service.any_instance.stubs(:has_traffic?).returns(true)
-end
-
-Given /^the service has been successfully tested$/ do
-  @provider.default_service.proxy.update_column(:api_test_success, true)
-end
-
-Given(/^the service "([^"]*)" does not have service plan$/) do |name|
-  Service.find_by(name: name).service_plans.destroy_all
 end
 
 Given /^it uses the following backends:$/ do |table|

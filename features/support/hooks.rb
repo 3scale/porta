@@ -18,6 +18,7 @@ end
 
 Before '@javascript' do
   stub_core_reset!
+  @javascript = true
 end
 
 AfterStep('@javascript') do
@@ -41,11 +42,15 @@ AfterStep('@pause') do
 end
 
 Before '@ignore-backend-alerts' do
-  step "I don't care about backend alert limits"
+  Service.any_instance.stubs(:alert_limits).returns([])
+  Service.any_instance.stubs(:create_alert_limits).returns([])
+  Service.any_instance.stubs(:delete_alert_limits).returns([])
 end
 
 After '@ignore-backend-alerts' do
-  step "I care about backend alert limits"
+  Service.any_instance.unstub(:alert_limits)
+  Service.any_instance.unstub(:create_alert_limits)
+  Service.any_instance.unstub(:delete_alert_limits)
 end
 
 Before '@recaptcha' do
@@ -64,11 +69,7 @@ Before('@saas-only') do
   raise ::Cucumber::Core::Test::Result::Skipped, 'SaaS only features do not support OracleDB' if System::Database.oracle?
 end
 
-Before '@javascript' do
-  @javascript = true
-end
-
-After do |scenario|
+After do |scenario| # rubocop:disable Metrics/BlockLength
   next unless scenario.failed? # we don't care about working scenarios
   next unless scenario.respond_to?(:feature) # example rows dont have feature
 
@@ -180,42 +181,11 @@ After do |scenario|
   end
 end
 
-Before '@braintree' do
-  stub_request(:delete, %r{@sandbox.braintreegateway.com/merchants/.+/customers/valid_code})
-      .to_return(status: 200, body: '', headers: {})
-end
-
-Before '@stripe' do
-  customer_response_body = <<~JSON.strip
-    {
-      "id": "cus_IiIMv3fS4LCHwE",
-      "object": "customer",
-      "deleted": false
-    }
-  JSON
-  stub_request(:post, 'https://api.stripe.com/v1/customers').to_return(status: 201, body: customer_response_body, headers: {})
-  stub_request(:get, 'https://api.stripe.com/v1/customers/valid_code').to_return(status: 200, body: customer_response_body, headers: {})
-
-  setup_intent_response_body = <<~JSON.strip
-    {
-      "id": "seti_1I6ggZIxGJbGz9puMkwMqBIP",
-      "object": "setup_intent",
-      "client_secret": "seti_1I6ggZIxGJbGz9puMkwMqBIP_secret_Ii6uDTQkCnWeOOONQVHxoaSkblEG8wk",
-      "customer": "cus_IiIMv3fS4LCHwE",
-      "payment_method_options": {
-        "card": {
-          "request_three_d_secure": "automatic"
-        }
-      },
-      "payment_method_types": [
-        "card"
-      ],
-      "status": "requires_payment_method",
-      "usage": "off_session"
-    }
-  JSON
-  stub_request(:post, 'https://api.stripe.com/v1/setup_intents').to_return(status: 201, body: setup_intent_response_body, headers: {})
-end
+# TODO: create hooks for Braintree and Stripe for tests requiring JS. Use a proxy to mock requests made
+# from browser (Stripe.js). We could use https://github.com/oesmith/puffing-billy or similar
+#
+# Before '@braintree' do
+# Before '@stripe' do
 
 Before '@webhook' do
   stub_request(:any, %r{google.com}).to_return(status: 200, body: '')

@@ -1,8 +1,8 @@
 /**
  * Include here any methods used in the test suite
- *
- * This is deliberately not included in utilities/index because it shouldn't be exported 'publicly' as a utility
  */
+
+import { act } from 'react-dom/test-utils'
 
 import type { ReactWrapper } from 'enzyme'
 
@@ -18,9 +18,6 @@ function openSelect (wrapper: ReactWrapper<unknown>): void {
 }
 
 function openSelectWithModal (wrapper: ReactWrapper<unknown>): void {
-  // HACK: This function should be called inside act(). However, that makes the test fail so suppress error logs instead.
-  jest.spyOn(console, 'error').mockImplementationOnce(() => '')
-
   wrapper.find('.pf-c-select__toggle-button').simulate('click')
   wrapper.find('.pf-c-select__menu li button.pf-c-select__menu-item--sticky-footer').last().simulate('click')
 }
@@ -86,13 +83,25 @@ function assertInputs (wrapper: ReactWrapper<unknown>, inputs: { id: string; pre
   return inputs.every(({ id, present }) => formGroups.exists(`[htmlFor="${id}"]`) == present)
 }
 
+/**
+ * Use when mounting a component with promises or side effects, such as BraintreeForm#onSubmit
+ */
+async function waitForPromises (wrapper: ReactWrapper<unknown>): Promise<void> {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve))
+  })
+
+  wrapper.update()
+}
+
 export {
-  selectOption,
+  assertInputs,
+  closeSelectWithModal,
+  isSubmitDisabled,
+  mockLocation,
   openSelect,
   openSelectWithModal,
-  closeSelectWithModal,
-  mockLocation,
-  isSubmitDisabled,
+  selectOption,
   updateInput,
-  assertInputs
+  waitForPromises
 }

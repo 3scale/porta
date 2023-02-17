@@ -5,8 +5,8 @@ Feature: Provider manages line items
 
 # TODO: create the invoice artificially and not by billing mechanism
 Background:
-  Given a provider "foo.3scale.localhost" with billing enabled
-    Given provider "foo.3scale.localhost" has "finance" switch allowed
+  Given a provider "foo.3scale.localhost"
+    Given provider "foo.3scale.localhost" is charging its buyers
     And an application plan "Fixed" of provider "foo.3scale.localhost" for 200 monthly
     And a buyer "zoidberg" signed up to application plan "Fixed"
     And an invoice of buyer "zoidberg" for February, 2009 with items
