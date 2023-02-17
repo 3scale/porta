@@ -76,7 +76,7 @@ const useBraintreeHostedFields = (
               locality: billingAddress.city,
               region: billingAddress.state,
               postalCode: billingAddress.zip,
-              countryCodeAlpha2: billingAddress.countryCodeAlpha2 // FIXME: not sent on first render. Pass in dataset?
+              countryCodeAlpha2: billingAddress.countryCode
             },
             challengeRequested: true
           })

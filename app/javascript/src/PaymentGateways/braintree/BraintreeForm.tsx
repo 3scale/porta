@@ -228,7 +228,11 @@ const BraintreeForm: FunctionComponent<Props> = ({
               name="customer[credit_card][billing_address][country_name]"
               value={country}
               onChange={({ currentTarget: { value, selectedIndex } }) => {
-                setBillingAddress(prev => ({ ...prev, country: value, countryCodeAlpha2: countriesList[selectedIndex - 1][1] }) )
+                setBillingAddress(prev => ({
+                  ...prev,
+                  country: value,
+                  countryCode: countriesList[selectedIndex - 1][1]
+                }))
               }}
             >
               <option disabled value="" />

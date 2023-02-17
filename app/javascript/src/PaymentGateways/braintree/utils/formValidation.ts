@@ -3,7 +3,7 @@ import validate from 'validate.js'
 import type { BillingAddress } from 'PaymentGateways/braintree/types'
 
 // TODO: use correct validation constraints
-const VALIDATION_CONSTRAINTS: Record<Exclude<keyof BillingAddress, 'countryCodeAlpha2'>, unknown> = {
+const VALIDATION_CONSTRAINTS: Record<Exclude<keyof BillingAddress, 'countryCode'>, unknown> = {
   firstName: {
     presence: { allowEmpty: false }
   },

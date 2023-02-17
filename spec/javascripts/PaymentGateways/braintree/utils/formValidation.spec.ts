@@ -36,8 +36,8 @@ describe('validateForm', () => {
     })
   })
 
-  it('should not validate countryCodeAlpha2', () => {
-    expect(formValidation.validateForm({ countryCodeAlpha2: 'This is totally wrong' }))
+  it('should not validate country code', () => {
+    expect(formValidation.validateForm({ countryCode: 'This is totally wrong' }))
       .not.toMatchObject({ countryCodeAlpha2: expect.anything() })
   })
 })

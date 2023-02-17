@@ -33,6 +33,7 @@ const defaultProps: Props = {
     address: '',
     city: '',
     country: '',
+    countryCode: '',
     firstName: '',
     lastName: '',
     company: '',
@@ -77,6 +78,7 @@ describe('before instantiating hosted fields', () => {
       company: 'Illegal Fireworks Co.',
       state: '',
       country: 'United States',
+      countryCode: 'US',
       zip: '80085'
     }
 

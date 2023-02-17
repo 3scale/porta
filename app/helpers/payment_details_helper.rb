@@ -66,16 +66,24 @@ module PaymentDetailsHelper
   end
 
   def billing_address_data # rubocop:disable Metrics/AbcSize
+    country = billing_address[:country]
     {
       firstName: current_account.billing_address_first_name,
       lastName: current_account.billing_address_last_name,
       address: billing_address[:address1],
       city: billing_address[:city],
-      country: billing_address[:country],
+      country: country,
+      countryCode: country_code_for(country),
       company: billing_address[:company],
       phone: billing_address[:phone_number],
       state: billing_address[:state],
       zip: billing_address[:zip]
     }.transform_values { |value| value.presence || '' }
+  end
+
+  def country_code_for(country_name)
+    return nil unless country_name
+
+    merchant_countries.find { |country| country[0] == country_name }&.dig(1)
   end
 end
