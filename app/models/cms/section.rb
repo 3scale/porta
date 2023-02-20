@@ -1,6 +1,7 @@
 class CMS::Section < ApplicationRecord
   include CMS::SystemName
   include CMS::Filtering
+  include CMS::DataTag
   extend System::Database::Scopes::IdOrSystemName
   include NormalizePathAttribute
   attr_accessible :provider, :parent, :title, :system_name, :public, :group, :partial_path
@@ -39,20 +40,22 @@ class CMS::Section < ApplicationRecord
 
   before_save :strip_trailing_slashes
 
+  has_data_tag :section
+
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.section do |x|
+    xml.__send__(self.class.data_tag) do |x|
       unless new_record?
         xml.id id
         xml.created_at created_at.xmlschema
         xml.updated_at updated_at.xmlschema
       end
-      x.partial_path partial_path
-      x.public public
       x.title title
-      x.parent_id parent_id
       x.system_name system_name
+      x.public public
+      x.parent_id parent_id
+      x.partial_path partial_path
     end
 
     xml.to_xml

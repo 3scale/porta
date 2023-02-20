@@ -109,10 +109,12 @@ class CMS::Builtin < CMS::BasePage
       record.errors.add attr, :is_present if value.present?
     end
 
+    has_data_tag :builtin_page
+
     def to_xml(options = {})
       xml = options[:builder] || Nokogiri::XML::Builder.new
 
-      xml.builtin_page do |x|
+      xml.__send__(self.class.data_tag) do |x|
         unless new_record?
           xml.id id
           xml.created_at created_at.xmlschema
@@ -130,23 +132,24 @@ class CMS::Builtin < CMS::BasePage
 
   # CMS::Builtin::Page
   class Page < CMS::Builtin
+
+    has_data_tag :builtin_page
+
     def to_xml(options = {})
       xml = options[:builder] || Nokogiri::XML::Builder.new
 
-      xml.builtin_page do |x|
+      xml.__send__(self.class.data_tag) do |x|
         unless new_record?
           xml.id id
           xml.created_at created_at.xmlschema
           xml.updated_at updated_at.xmlschema
         end
-
-        # x.title title
+        x.title title
         x.system_name system_name
-        x.liquid_enabled liquid_enabled
-
+        x.layout_id layout_id
         unless options[:short]
-          x.draft draft
-          x.published published
+          x.draft { |node| node.cdata draft }
+          x.published { |node| node.cdata published }
         end
       end
 
@@ -188,6 +191,8 @@ class CMS::Builtin < CMS::BasePage
     private :destroy
     attr_readonly :system_name
     attr_protected :liquid_enabled
+
+    has_data_tag :builtin_partial
 
     # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
     def liquid_enabled?
@@ -247,10 +252,6 @@ class CMS::Builtin < CMS::BasePage
 
     def title
       I18n.t("#{system_name}.title", scope: 'builtin_partials', default: (system_name || '').humanize)
-    end
-
-    def to_xml(options = {})
-      super options.merge(root: :builtin_partial)
     end
 
     protected
