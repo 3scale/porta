@@ -9,7 +9,7 @@ module CMS::SystemName
               format: { with: %r{\A\w[\w\-/ ]+\z}, allow_blank: true }, length: { maximum: 255 },
               presence: true
 
-    before_validation :set_system_name, on: :create
+    before_validation :set_system_name, on: %i[create update]
   end
 
   protected
