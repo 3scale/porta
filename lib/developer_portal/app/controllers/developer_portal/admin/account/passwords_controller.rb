@@ -47,7 +47,8 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
 
   def buyer
     @buyer ||= @provider.buyers.build.tap do |account|
-      account.unflattened_attributes = spam_protection_params
+      # We need to get all the account params to run the spam check
+      account.unflattened_attributes = account_params
     end
   end
 
@@ -55,7 +56,7 @@ class DeveloperPortal::Admin::Account::PasswordsController < ::DeveloperPortal::
     params.require(:user).permit(:password, :password_confirmation)
   end
 
-  def spam_protection_params
+  def account_params
     params.fetch(:account, {})
   end
 
