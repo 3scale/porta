@@ -215,7 +215,7 @@ module CMS
 
       test 'create with missing or invalid type fails' do
         post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, type: 'INVALID' }
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
 
         post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :bad_request
