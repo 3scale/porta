@@ -163,7 +163,7 @@ describe('after hosted fields instantiated', () => {
         const wrapper = mountWrapper()
         expect(wrapper.find('button[type="submit"]').props().disabled).toBeFalsy()
 
-        wrapper.find('button[type="submit"]').simulate('click')
+        wrapper.find('button[type="submit"]').simulate('submit')
         expect(wrapper.find('button[type="submit"]').props().disabled).toBeTruthy()
 
         await waitForPromises(wrapper)
@@ -200,9 +200,9 @@ describe('after hosted fields instantiated', () => {
           wrapper.find('select').props().onChange!({ currentTarget: { value: 'Spain', selectedIndex: 4 } as unknown as EventTarget } as FormEvent)
         })
 
-        wrapper.find('button[type="submit"]').simulate('click')
+        wrapper.find('button[type="submit"]').simulate('submit')
 
-        expect(getNonce).toHaveBeenCalledWith(expect.objectContaining({ ...billingAddress, countryCodeAlpha2: 'ES' }))
+        expect(getNonce).toHaveBeenCalledWith(expect.objectContaining({ ...billingAddress, countryCode: 'ES' }))
 
         await waitForPromises(wrapper)
       })
@@ -210,16 +210,17 @@ describe('after hosted fields instantiated', () => {
 
     describe('but card verification fails', () => {
       it('should show an inline error after submitting', async () => {
-        jest.spyOn(hostedFields, 'getNonce').mockRejectedValue('WRONG')
+        const message = 'An error occurred, please review your CC details or try later.'
+        jest.spyOn(hostedFields, 'getNonce').mockRejectedValue({ message })
         mockHostedFields([hostedFields, undefined, false, true])
         jest.spyOn(console, 'error').mockImplementation(jest.fn())
 
         const wrapper = mountWrapper()
-        wrapper.find('button[type="submit"]').simulate('click')
+        wrapper.find('button[type="submit"]').simulate('submit')
         expect(wrapper.exists('.alert.alert-danger')).toEqual(false)
 
         await waitForPromises(wrapper)
-        expect(wrapper.find('.alert.alert-danger').text()).toEqual('An error occurred, please review your CC details or try later.')
+        expect(wrapper.find('.alert.alert-danger').text()).toEqual(message)
       })
     })
   })

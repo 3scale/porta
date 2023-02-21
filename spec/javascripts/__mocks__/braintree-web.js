@@ -20,10 +20,16 @@ module.exports = {
   threeDSecure: {
     create: () => Promise.resolve({
       on: jest.fn(),
-      verifyCard: (_, cb) => {
-        cb(undefined, {
-          nonce: 'This is a 3DS verified transaction'
-        })
+      verifyCard: (_options, cb) => {
+        const payload = {
+          nonce: 'This is a 3DS verified transaction',
+          threeDSecureInfo: {
+            liabilityShifted: true,
+            liabilityShiftPossible: true,
+            status: 'authenticate_successful'
+          }
+        }
+        cb(undefined, payload)
       }
     })
   },
