@@ -6,7 +6,7 @@ module CMS::SystemName
 
   included do
     validates :system_name, uniqueness: { scope: %i[provider_id], allow_blank: true },
-              format: { with: %r{\A\w[\w\-/ ]+\z}, allow_blank: true }, length: { maximum: 255 },
+              format: { with: %r{\A\w[\w\-/]+\z}, allow_blank: true }, length: { maximum: 255 },
               presence: true
 
     before_validation :set_system_name, on: %i[create update]
