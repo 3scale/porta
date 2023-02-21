@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { CSRFToken } from 'utilities/CSRFToken'
 import { createReactWrapper } from 'utilities/createReactWrapper'
@@ -6,12 +6,9 @@ import { validateForm } from 'PaymentGateways/braintree/utils/formValidation'
 import { useBraintreeHostedFields } from 'PaymentGateways/braintree/utils/useBraintreeHostedFields'
 
 import type { FunctionComponent } from 'react'
-import type { BraintreeError } from 'braintree-web'
 import type { BillingAddress, BraintreeFormDataset as Props } from 'PaymentGateways/braintree/types'
 
 import './BraintreeCustomerForm.scss'
-
-const CC_ERROR_MESSAGE = 'An error occurred, please review your CC details or try later.'
 
 const BraintreeForm: FunctionComponent<Props> = ({
   billingAddress: defaultBillingAddress,
@@ -20,50 +17,47 @@ const BraintreeForm: FunctionComponent<Props> = ({
   formActionPath,
   threeDSecureEnabled = false
 }) => {
-  const formRef = useRef<HTMLFormElement>(null)
-
   const [billingAddress, setBillingAddress] = useState<BillingAddress>(defaultBillingAddress)
   const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<BraintreeError>()
+  const [submitError, setSubmitError] = useState<{ message: string }>()
 
   const [hostedFields, hostedFieldsError, loading, valid] = useBraintreeHostedFields(clientToken, threeDSecureEnabled)
 
   const billingAddressErrors = validateForm(billingAddress)
   const submitDisabled = (hostedFields === undefined) || !valid || (billingAddressErrors !== undefined) || loading || submitting
 
-  if (hostedFieldsError) {
-    console.error('hostedFields threw an error:', hostedFieldsError)
-  }
+  useEffect(() => {
+    if (hostedFieldsError) {
+      // TODO: do something
+    }
+  }, [hostedFieldsError])
 
-  if (submitError) {
-    console.error('onSubmit threw an error:', submitError)
-  }
-
-  const onSubmit = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault()
     event.stopPropagation()
 
-    if (!hostedFields || submitting) {
+    if (submitDisabled) {
       return
     }
+
+    const form = event.currentTarget
 
     setSubmitting(true)
     setSubmitError(undefined)
 
     hostedFields.getNonce(billingAddress)
       .then(nonce => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Form will be there
-        const form = formRef.current!
         const input = form.elements.namedItem('braintree[nonce]') as HTMLInputElement
         input.value = nonce
 
         form.submit()
       })
-      .catch((error: BraintreeError) => {
-        setSubmitError(error)
+      .catch((onSubmitError: { message: string }) => {
+        console.error({ onSubmitError })
+        setSubmitError(onSubmitError)
         setSubmitting(false)
       })
-  }, [hostedFields, submitting, billingAddress])
+  }
 
   const { firstName, lastName, phone, company, address, zip, city, state, country } = billingAddress
 
@@ -71,7 +65,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
     <form
       action={formActionPath}
       className="form-horizontal customer"
-      ref={formRef}
+      onSubmit={onSubmit}
     >
       <input name="utf8" type="hidden" value="✓" />
       <CSRFToken />
@@ -143,7 +137,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
             <div className="form-control col-md-6" data-name="customer[credit_card][expiration_date]" id="customer_credit_card_expiration_date" />
           </li>
 
-          {submitError && <p className="alert alert-danger">{CC_ERROR_MESSAGE}</p>}
+          {submitError && <p className="alert alert-danger">{submitError.message}</p>}
         </ul>
       </fieldset>
 
@@ -247,12 +241,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
       <fieldset>
         <div className="form-group">
           <div className="col-md-10 operations">
-            <button
-              className="btn btn-primary pull-right"
-              disabled={submitDisabled}
-              type="submit"
-              onClick={onSubmit}
-            >
+            <button className="btn btn-primary pull-right" disabled={submitDisabled} type="submit">
               Save details
             </button>
           </div>
