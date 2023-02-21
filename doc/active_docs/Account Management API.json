@@ -1933,15 +1933,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -1949,48 +1940,58 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of the user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "description": "Email of the user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Password of the user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+          }
+        ],
+        "requestBody": {
+          "description": "User Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "Username of the user."
+                  },
+                  "email":{
+                    "type": "string",
+                    "description": "Email of the user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password of the user."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "username",
+                  "email",
+                  "password"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2048,15 +2049,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -2073,45 +2065,55 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of the user.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "description": "Email of the user.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Password of the user.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+          }
+        ],
+        "requestBody": {
+          "description": "User Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "Username of the user."
+                  },
+                  "email":{
+                    "type": "string",
+                    "description": "Email of the user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password of the user."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2169,15 +2171,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -2196,6 +2189,41 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "User Activate",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2212,15 +2240,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -2239,6 +2258,41 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "User change Role to Admin",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2255,15 +2309,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -2282,6 +2327,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "User Change Role to Member",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2341,15 +2413,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
@@ -2368,6 +2431,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "User Unsuspend",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2430,57 +2520,53 @@
         "tags": [
           "Users"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of the user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "description": "Email of the user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Password of the user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). Additional fields are the custom fields declared for your tenant, you can find them in 'Settings >> Personal Details' for the account and in 'Settings >> Account >> Users >> Personal Details' for users. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+        "requestBody": {
+          "description": "User Create (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "Username of the user."
+                  },
+                  "email":{
+                    "type": "string",
+                    "description": "Email of the user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password of the user."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2529,61 +2615,62 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
-            "in": "path",
+            "in": "query",
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of the user.",
-            "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "description": "Email of the user.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Password of the user.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). Additional fields are the custom fields declared for your tenant, you can find them in 'Settings >> Personal Details' for the account and in 'Settings >> Account >> Users >> Personal Details' for users. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
             }
           }
         ],
+        "requestBody": {
+          "description": "User Update (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "Username of the user."
+                  },
+                  "email":{
+                    "type": "string",
+                    "description": "Email of the user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Password of the user."
+                  },
+                  "additional_fields[]": {
+                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
+                    "type": "array",
+                    "explode": false,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2632,24 +2719,42 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
+            "name": "id",
             "in": "query",
-            "description": "A personal Access Token",
+            "description": "ID of the user.",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the user.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "User Activate (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2666,24 +2771,42 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
+            "name": "id",
             "in": "query",
-            "description": "A personal Access Token",
+            "description": "ID of the user.",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the user.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "User Change Role to Admin (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2700,24 +2823,42 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
+            "name": "id",
             "in": "query",
-            "description": "A personal Access Token",
+            "description": "ID of the user.",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the user.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "User Change Role to Member (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2833,15 +2974,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the user.",
@@ -2851,6 +2983,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "User Suspend (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2867,17 +3026,8 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
-            "in": "path",
+            "in": "query",
             "description": "ID of the user.",
             "required": true,
             "schema": {
@@ -2885,6 +3035,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "User Unsuspend (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2906,51 +3083,54 @@
             "description": "ID of the user.",
             "required": true,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the access token.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "permission",
-            "in": "query",
-            "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "scopes",
-            "in": "query",
-            "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
-            "required": true,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "description": "Access Token Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the access token."
+                  },
+                  "permission": {
+                    "type": "string",
+                    "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write)."
+                  },
+                  "scopes[]": {
+                    "type": "array",
+                    "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "permission",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -2988,50 +3168,50 @@
         "tags": [
           "Account Plans"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the account plan.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "approval_required",
-            "in": "query",
-            "description": "Set the 'Accounts require approval?' to 'true' or 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "State event of the account plan. It can be 'publish' or 'hide'",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Account Plan Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the account plan."
+                  },
+                  "approval_required": {
+                    "type": "boolean",
+                    "description": "Set the 'Accounts require approval?' to 'true' or 'false'"
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  },
+                  "state_event": {
+                    "type": "string",
+                    "description": "State event of the account plan. It can be 'publish' or 'hide'"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3082,15 +3262,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "account_plan_id",
             "in": "path",
             "description": "ID of the account plan.",
@@ -3109,6 +3280,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Account Plan Features Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3198,15 +3396,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the account plan.",
@@ -3214,32 +3403,47 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the account plan.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "approval_required",
-            "in": "query",
-            "description": "Set the 'Accounts require approval?' to 'true' or 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "State event of the account plan. It can be 'publish' or 'hide'",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Account Plan Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the account plan."
+                  },
+                  "approval_required": {
+                    "type": "boolean",
+                    "description": "Set the 'Accounts require approval?' to 'true' or 'false'"
+                  },
+                  "state_event": {
+                    "type": "string",
+                    "description": "State event of the account plan. It can be 'publish' or 'hide'"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3288,15 +3492,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the account plan.",
@@ -3306,6 +3501,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Account Plan set to Default",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3343,75 +3565,63 @@
         "tags": [
           "Active Docs"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the ActiveDocs spec",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the ActiveDocs spec. Only ASCII letters, numbers, dashes and underscores are allowed. If blank, 'system_name' will be generated from the 'name' parameter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_id",
-            "in": "query",
-            "description": "Service ID of the ActiveDocs spec",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "body",
-            "in": "query",
-            "description": "ActiveDocs specification in JSON format (based on Swagger)",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the ActiveDocs spec",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "published",
-            "in": "query",
-            "description": "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it. The default value is 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "skip_swagger_validations",
-            "in": "query",
-            "description": "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec. The default value is 'false'",
-            "schema": {
-              "type": "boolean"
+        "requestBody": {
+          "description": "ActiveDocs Spec Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the account plan."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the ActiveDocs spec. Only ASCII letters, numbers, dashes and underscores are allowed. If blank, 'system_name' will be generated from the 'name' parameter"
+                  },
+                  "service_id": {
+                    "type": "integer",
+                    "description": "Service ID of the ActiveDocs spec"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "ActiveDocs specification in JSON format (based on Swagger)"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the ActiveDocs spec"
+                  },
+                  "published": {
+                    "type": "boolean",
+                    "description": "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it. The default value is 'false'"
+                  },
+                  "skip_swagger_validations": {
+                    "type": "boolean",
+                    "description": "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec. The default value is 'false'"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name",
+                  "body"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3460,15 +3670,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the ActiveDocs spec",
@@ -3476,56 +3677,59 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the ActiveDocs spec",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_id",
-            "in": "query",
-            "description": "Service ID of the ActiveDocs spec",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "body",
-            "in": "query",
-            "description": "ActiveDocs specification in JSON format (based on Swagger)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the ActiveDocs spec",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "published",
-            "in": "query",
-            "description": "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "skip_swagger_validations",
-            "in": "query",
-            "description": "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "ActiveDocs Spec Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the account plan."
+                  },
+                  "service_id": {
+                    "type": "integer",
+                    "description": "Service ID of the ActiveDocs spec"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "ActiveDocs specification in JSON format (based on Swagger)"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the ActiveDocs spec"
+                  },
+                  "published": {
+                    "type": "boolean",
+                    "description": "Set to 'true' to publish the spec on the developer portal, or 'false' to hide it. The default value is 'false'"
+                  },
+                  "skip_swagger_validations": {
+                    "type": "boolean",
+                    "description": "Set to 'true' to skip validation of the Swagger specification, or 'false' to validate the spec. The default value is 'false'"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3631,15 +3835,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "application_plan_id",
             "in": "path",
             "description": "ID of the application plan.",
@@ -3647,17 +3842,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "feature_id",
-            "in": "query",
-            "description": "ID of the feature.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Application Plan Feature Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "feature_id": {
+                    "type": "integer",
+                    "description": "ID of the feature."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "feature_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3810,15 +4028,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "application_plan_id",
             "in": "path",
             "description": "ID of the application plan.",
@@ -3835,36 +4044,55 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Period of the limit.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "minute",
-              "enum": [
-                "eternity",
-                "year",
-                "month",
-                "week",
-                "day",
-                "hour",
-                "minute"
-              ]
-            }
-          },
-          {
-            "name": "value",
-            "in": "query",
-            "description": "Value of the limit.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Limit Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "value": {
+                    "type": "integer",
+                    "description": "Value of the limit."
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Period of the limit.",
+                    "default": "minute",
+                      "enum": [
+                      "eternity",
+                      "year",
+                      "month",
+                      "week",
+                      "day",
+                      "hour",
+                      "minute"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "period",
+                  "value"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -3931,15 +4159,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "application_plan_id",
             "in": "path",
             "description": "ID of the application plan.",
@@ -3965,35 +4184,55 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Period of the limit.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "minute",
-              "enum": [
-                "eternity",
-                "year",
-                "month",
-                "week",
-                "day",
-                "hour",
-                "minute"
-              ]
-            }
-          },
-          {
-            "name": "value",
-            "in": "query",
-            "description": "Value of the limit.",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Limit Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "value": {
+                    "type": "integer",
+                    "description": "Value of the limit."
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Period of the limit.",
+                    "default": "minute",
+                      "enum": [
+                      "eternity",
+                      "year",
+                      "month",
+                      "week",
+                      "day",
+                      "hour",
+                      "minute"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "period",
+                  "value"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4101,15 +4340,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "application_plan_id",
             "in": "path",
             "description": "ID of the application plan.",
@@ -4126,33 +4356,48 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "min",
-            "in": "query",
-            "description": "From (min) hit",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "max",
-            "in": "query",
-            "description": "To (max) hit",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "cost_per_unit",
-            "in": "query",
-            "description": "Cost per unit",
-            "schema": {
-              "type": "number",
-              "format": "float"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Pricing Rule Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "min": {
+                    "type": "integer",
+                    "description": "From (min) hit"
+                  },
+                  "max": {
+                    "type": "integer",
+                    "description": "To (max) hit"
+                  },
+                  "cost_per_unit": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Cost per unit"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4287,15 +4532,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -4303,71 +4539,66 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the application plan.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "approval_required",
-            "in": "query",
-            "description": "Set the 'Applications require approval?' to 'true' or 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "cost_per_month",
-            "in": "query",
-            "description": "Cost per month",
-            "schema": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          {
-            "name": "setup_fee",
-            "in": "query",
-            "description": "Setup fee",
-            "schema": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          {
-            "name": "trial_period_days",
-            "in": "query",
-            "description": "Trial period days",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "State event of the application plan. It can be 'publish' or 'hide'",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "publish",
-                "hide"
-              ]
-            }
           }
         ],
+        "requestBody": {
+          "description": "Application Plan Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the application plan."
+                  },
+                  "approval_required": {
+                    "type": "boolean",
+                    "description": "Set the 'Applications require approval?' to 'true' or 'false'"
+                  },
+                  "cost_per_month": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Cost per month"
+                  },
+                  "setup_fee": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Setup fee"
+                  },
+                  "trial_period_days": {
+                    "type": "integer",
+                    "description": "Trial period days"
+                  },
+                  "state_event": {
+                    "type": "string",
+                    "description": "State event of the application plan. It can be 'publish' or 'hide'",
+                    "enum": [
+                      "publish",
+                      "hide"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4425,15 +4656,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -4450,58 +4672,65 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the application plan.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "approval_required",
-            "in": "query",
-            "description": "Set the 'Applications require approval?' to 'true' or 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "cost_per_month",
-            "in": "query",
-            "description": "Cost per month",
-            "schema": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          {
-            "name": "setup_fee",
-            "in": "query",
-            "description": "Setup fee",
-            "schema": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          {
-            "name": "trial_period_days",
-            "in": "query",
-            "description": "Trial period days",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "State event of the application plan. It can be 'publish' or 'hide'",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Application Plan Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the application plan."
+                  },
+                  "approval_required": {
+                    "type": "boolean",
+                    "description": "Set the 'Applications require approval?' to 'true' or 'false'"
+                  },
+                  "cost_per_month": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Cost per month"
+                  },
+                  "setup_fee": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Setup fee"
+                  },
+                  "trial_period_days": {
+                    "type": "integer",
+                    "description": "Trial period days"
+                  },
+                  "state_event": {
+                    "type": "string",
+                    "description": "State event of the application plan. It can be 'publish' or 'hide'",
+                    "enum": [
+                      "publish",
+                      "hide"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4559,15 +4788,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -4586,6 +4806,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Application Plan Set to Default",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4767,82 +5014,66 @@
         "tags": [
           "Admin Portal Authentication Providers"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "kind",
-            "in": "query",
-            "description": "The kind of authentication provider which can be either 'auth0' or 'keycloak'. Use 'keycloak' for Red Hat Single Sign-On.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "client_id",
-            "in": "query",
-            "description": "Client ID of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "client_secret",
-            "in": "query",
-            "description": "Client Secret of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "site",
-            "in": "query",
-            "description": "Site o Realm of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "skip_ssl_certificate_verification",
-            "in": "query",
-            "description": "Skip SSL certificate verification. False by default.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "published",
-            "in": "query",
-            "description": "Published authentication provider. False by default",
-            "schema": {
-              "type": "boolean"
+        "requestBody": {
+          "description": "Authentication Provider Admin Portal Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "kind": {
+                    "type": "string",
+                    "description": "The kind of authentication provider which can be either 'auth0' or 'keycloak'. Use 'keycloak' for Red Hat Single Sign-On."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the authentication provider."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the authentication provider."
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "Client ID of the authentication provider."
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "Client Secret of the authentication provider."
+                  },
+                  "site": {
+                    "type": "string",
+                    "description": "Site o Realm of the authentication provider."
+                  },
+                  "skip_ssl_certificate_verification": {
+                    "type": "boolean",
+                    "description": "Skip SSL certificate verification. False by default."
+                  },
+                  "published": {
+                    "type": "boolean",
+                    "description": "Published authentication provider. False by default"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "kind"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4891,15 +5122,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the authentication provider.",
@@ -4907,48 +5129,55 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "client_id",
-            "in": "query",
-            "description": "Client ID of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "client_secret",
-            "in": "query",
-            "description": "Client Secret of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "site",
-            "in": "query",
-            "description": "Site o Realm of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "skip_ssl_certificate_verification",
-            "in": "query",
-            "description": "Skip SSL certificate verification. False by default.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "published",
-            "in": "query",
-            "description": "Published authentication provider. False by default",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Authentication Provider Admin Portal Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "Client ID of the authentication provider."
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "Client Secret of the authentication provider."
+                  },
+                  "site": {
+                    "type": "string",
+                    "description": "Site o Realm of the authentication provider."
+                  },
+                  "skip_ssl_certificate_verification": {
+                    "type": "boolean",
+                    "description": "Skip SSL certificate verification. False by default."
+                  },
+                  "published": {
+                    "type": "boolean",
+                    "description": "Published authentication provider. False by default"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -4986,146 +5215,98 @@
         "tags": [
           "Developer Portal Authentication Providers"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "kind",
-            "in": "query",
-            "description": "The kind of authentication provider which can be either 'github', 'auth0', 'keycloak' or a custom one. Use 'keycloak' for Red Hat Single Sign-On.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "client_id",
-            "in": "query",
-            "description": "Client ID of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "client_secret",
-            "in": "query",
-            "description": "Client Secret of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "site",
-            "in": "query",
-            "description": "Site o Realm of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "token_url",
-            "in": "query",
-            "description": "Token URL of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "user_info_url",
-            "in": "query",
-            "description": "User info URL of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "authorize_url",
-            "in": "query",
-            "description": "Authorize URL of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "identifier_key",
-            "in": "query",
-            "description": "Identifier key. 'id' by default.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username_key",
-            "in": "query",
-            "description": "Username key. 'login' by default.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "trust_email",
-            "in": "query",
-            "description": "Trust emails automatically. False by default",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "published",
-            "in": "query",
-            "description": "Published authentication provider. False by default",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "branding_state_event",
-            "in": "query",
-            "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'brand_as_threescale' (the default one) or 'custom_brand'",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "skip_ssl_certificate_verification",
-            "in": "query",
-            "description": "Skip SSL certificate verification. False by default.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "automatically_approve_accounts",
-            "in": "query",
-            "description": "Automatically approve accounts. False by default.",
-            "schema": {
-              "type": "boolean"
+        "requestBody": {
+          "description": "Authentication Provider Developer Portal Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "kind": {
+                    "type": "string",
+                    "description": "The kind of authentication provider which can be either 'github', 'auth0', 'keycloak' or a custom one. Use 'keycloak' for Red Hat Single Sign-On."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the authentication provider."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the authentication provider."
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "Client ID of the authentication provider."
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "Client Secret of the authentication provider."
+                  },
+                  "site": {
+                    "type": "string",
+                    "description": "Site o Realm of the authentication provider."
+                  },
+                  "token_url": {
+                    "type": "string",
+                    "description": "Token URL of the authentication provider."
+                  },
+                  "user_info_url": {
+                    "type": "string",
+                    "description": "User info URL of the authentication provider."
+                  },
+                  "authorize_url": {
+                    "type": "string",
+                    "description": "Authorize URL of the authentication provider."
+                  },
+                  "identifier_key": {
+                    "type": "string",
+                    "description": "Identifier key. 'id' by default."
+                  },
+                  "username_key": {
+                    "type": "string",
+                    "description": "Username key. 'login' by default."
+                  },
+                  "trust_email": {
+                    "type": "boolean",
+                    "description": "Trust emails automatically. False by default"
+                  },
+                  "published": {
+                    "type": "boolean",
+                    "description": "Published authentication provider. False by default"
+                  },
+                  "branding_state_event": {
+                    "type": "string",
+                    "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'brand_as_threescale' (the default one) or 'custom_brand'"
+                  },
+                  "skip_ssl_certificate_verification": {
+                    "type": "boolean",
+                    "description": "Skip SSL certificate verification. False by default."
+                  },
+                  "automatically_approve_accounts": {
+                    "type": "boolean",
+                    "description": "Automatically approve accounts. False by default."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "kind"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -5174,15 +5355,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the authentication provider.",
@@ -5190,56 +5362,59 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "client_id",
-            "in": "query",
-            "description": "Client ID of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "client_secret",
-            "in": "query",
-            "description": "Client Secret of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "site",
-            "in": "query",
-            "description": "Site o Realm of the authentication provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "published",
-            "in": "query",
-            "description": "Published authentication provider. False by default",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "skip_ssl_certificate_verification",
-            "in": "query",
-            "description": "Skip SSL certificate verification. False by default.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "automatically_approve_accounts",
-            "in": "query",
-            "description": "Automatically approve accounts. False by default.",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Authentication Provider Developer Portal Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "description": "Client ID of the authentication provider."
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "description": "Client Secret of the authentication provider."
+                  },
+                  "site": {
+                    "type": "string",
+                    "description": "Site o Realm of the authentication provider."
+                  },
+                  "published": {
+                    "type": "boolean",
+                    "description": "Published authentication provider. False by default"
+                  },
+                  "skip_ssl_certificate_verification": {
+                    "type": "boolean",
+                    "description": "Skip SSL certificate verification. False by default."
+                  },
+                  "automatically_approve_accounts": {
+                    "type": "boolean",
+                    "description": "Automatically approve accounts. False by default."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -5295,51 +5470,51 @@
         "tags": [
           "Backend APIs"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the Backend",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the Backend",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "private_endpoint",
-            "in": "query",
-            "description": "Private Base URL (your API)",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Backend Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the Backend"
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the Backend"
+                  },
+                  "private_endpoint": {
+                    "type": "string",
+                    "description": "Private Base URL (your API)"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name",
+                  "private_endpoint"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -5388,15 +5563,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -5404,32 +5570,51 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the Backend",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the Backend",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "private_endpoint",
-            "in": "query",
-            "description": "Private Base URL (your API)",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the Backend"
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the Backend"
+                  },
+                  "private_endpoint": {
+                    "type": "string",
+                    "description": "Private Base URL (your API)"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
