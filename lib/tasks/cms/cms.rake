@@ -210,6 +210,13 @@ namespace :cms do
         puts "\t++ Fixing pagination href in #{page.id}/shared/pagination"
       end
     end
+
+    desc 'Fixes invalid system names in sections'
+    task :section_invalid_system_names => :environment do
+      CMS::Section.unscoped.find_each do |section|
+        section.update_column(:system_name, "section-#{section.id}") unless section.valid?
+      end
+    end
   end
 
   desc 'Reupload 3scale.js that were created because of #7503'
