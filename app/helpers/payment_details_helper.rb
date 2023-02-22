@@ -42,7 +42,17 @@ module PaymentDetailsHelper
     definition_list_item
   end
 
-  def stripe_billing_address_json
+  def stripe_form_data(intent)
+    {
+      stripePublishableKey: site_account.payment_gateway_options[:publishable_key],
+      setupIntentSecret: intent.client_secret,
+      billingAddress: stripe_billing_address,
+      successUrl: hosted_success_admin_account_stripe_path,
+      creditCardStored: current_account.credit_card_stored?
+    }
+  end
+
+  def stripe_billing_address
     return unless logged_in?
 
     {
@@ -52,7 +62,7 @@ module PaymentDetailsHelper
       state: billing_address.state,
       postal_code: billing_address.zip,
       country: billing_address.country
-    }.to_json
+    }.transform_values { |value| value.presence || '' }
   end
 
   def braintree_form_data

@@ -1,7 +1,7 @@
 import { StripeFormWrapper } from 'PaymentGateways/stripe/components/StripeFormWrapper'
 import { safeFromJsonString } from 'utilities/json-utils'
 
-import type { Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+import type { StripeFormDataset } from 'PaymentGateways/stripe/types'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'stripe-form-wrapper'
@@ -11,14 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
     throw new Error('The target ID was not found: ' + containerId)
   }
 
-  const containerDataset = container.dataset
+  const data = safeFromJsonString<StripeFormDataset>(container.dataset.stripeForm)
+
+  if (!data) {
+    throw new Error('Stripe data was not provided')
+  }
+
+  const { stripePublishableKey, setupIntentSecret, billingAddress, successUrl, creditCardStored } = data
 
   StripeFormWrapper({
-    stripePublishableKey: containerDataset.stripePublishableKey ?? '',
-    setupIntentSecret: containerDataset.setupIntentSecret ?? '',
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- FIXME: we can assume it's there, but that doesn't make it right
-    billingAddressDetails: safeFromJsonString<Props['billingAddressDetails']>(containerDataset.billingAddress)!,
-    successUrl: containerDataset.successUrl ?? '',
-    isCreditCardStored: containerDataset.creditCardStored === 'true'
+    stripePublishableKey: stripePublishableKey,
+    setupIntentSecret: setupIntentSecret,
+    billingAddressDetails: billingAddress,
+    successUrl: successUrl,
+    isCreditCardStored: creditCardStored
   }, containerId)
 })

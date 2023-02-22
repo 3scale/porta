@@ -3,6 +3,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
 import { CSRFToken } from 'utilities/CSRFToken'
 
+import type { BillingAddress } from 'PaymentGateways/stripe/types'
 import type { FormEventHandler, FunctionComponent, PropsWithChildren } from 'react'
 import type { PaymentMethod, StripeCardElementChangeEvent, StripeCardElementOptions } from '@stripe/stripe-js'
 
@@ -32,7 +33,7 @@ const CARD_OPTIONS: StripeCardElementOptions = {
 
 interface Props {
   setupIntentSecret: string;
-  billingAddressDetails: Record<string, unknown>;
+  billingAddressDetails: BillingAddress;
   successUrl: string;
   isCreditCardStored: boolean;
 }

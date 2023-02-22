@@ -65,23 +65,47 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
     end
   end
 
-  test '#stripe_billing_address_json' do
-    billing_address = current_account.billing_address
-    expected_response = {
-      line1: billing_address.address1,
-      line2: billing_address.address2,
-      city: billing_address.city,
-      state: billing_address.state,
-      postal_code: billing_address.zip,
-      country: billing_address.country
-    }.to_json
-    assert_equal expected_response, stripe_billing_address_json
+  test '#stripe_form_data' do
+    stubs(:current_account).returns(FactoryBot.create(:simple_account))
+    stubs(:stripe_billing_address).returns({})
+    stubs(:site_account).returns(mock(payment_gateway_options: { :publishable_key => 'publishable_key' }))
+    stubs(:hosted_success_admin_account_stripe_path).returns('/ou-yeah')
+    intent = mock(client_secret: 'super-secret')
 
-    stubs(current_account: nil)
-    assert_nil stripe_billing_address_json
+    expected = {
+      stripePublishableKey: 'publishable_key',
+      setupIntentSecret: 'super-secret',
+      billingAddress: {},
+      successUrl: '/ou-yeah',
+      creditCardStored: false
+    }
+
+    assert_equal expected, stripe_form_data(intent)
+  end
+
+  test '#stripe_billing_address' do
+    account = FactoryBot.build(:account, billing_address_address1: 'address1',
+                                         billing_address_address2: 'address2',
+                                         billing_address_city: 'city',
+                                         billing_address_state: 'state',
+                                         billing_address_zip: 'zip',
+                                         billing_address_country: 'country')
+    stubs(:current_account).returns(account)
+    stubs(:logged_in?).returns(true).once
+
+    expected_response = {
+      line1: 'address1',
+      line2: 'address2',
+      city: 'city',
+      state: 'state',
+      postal_code: 'zip',
+      country: 'country'
+    }
+    assert_equal expected_response, stripe_billing_address
   end
 
   test '#braintree_form_data without billing address' do
+    stubs(:current_account).returns(FactoryBot.build(:simple_account))
     stubs(:site_account).returns(mock(payment_gateway_options: { three_ds_enabled: true }))
     stubs(:merchant_countries).returns([])
     stubs(:braintree_authorization).returns('token')
@@ -159,13 +183,5 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
 
   def empty_billing_address_data
     %i[firstName lastName address city country countryCode company phone state zip].collect { |field| [field, ''] }.to_h
-  end
-
-  def current_account
-    FactoryBot.build(:simple_account)
-  end
-
-  def logged_in?
-    !!current_account
   end
 end
