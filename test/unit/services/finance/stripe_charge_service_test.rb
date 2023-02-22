@@ -106,12 +106,14 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     assert_equal 'requires_payment_method', payment_intent.reload.state
   end
 
-  test 'has payment intent description' do
+  test 'has payment intent description when invoice is present' do
     invoice.update({friendly_id: '2022-10-00000001'})
     invoice.issue_and_pay_if_free!
     with_invoice = build_charge_service(invoice: invoice)
     assert_equal "#{invoice.provider.name} API services 2022-10-00000001", with_invoice.send(:charge_description)
+  end
 
+  test 'has payment intent description with no invoice in charging service' do
     without_invoice = build_charge_service
     assert_equal 'API services', without_invoice.send(:charge_description)
   end
