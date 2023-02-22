@@ -4,20 +4,14 @@ import { Elements } from '@stripe/react-stripe-js'
 import { createReactWrapper } from 'utilities/createReactWrapper'
 import { StripeCardForm } from 'PaymentGateways/stripe/components/StripeCardForm'
 
+import type { BillingAddress } from 'PaymentGateways/stripe/types'
+
 import './StripeFormWrapper.scss'
 
 interface Props {
   stripePublishableKey: string;
   setupIntentSecret: string;
-  billingAddressDetails: {
-    line1: string;
-    line2: string;
-    city: string;
-    state: string;
-    // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
-    postal_code: string;
-    country: string;
-  };
+  billingAddressDetails: BillingAddress;
   successUrl: string;
   isCreditCardStored: boolean;
 }
