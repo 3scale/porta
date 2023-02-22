@@ -31,7 +31,7 @@ module Tasks
     test 'fixes invalid system names' do
       section = FactoryBot.build(:cms_section, partial_path: '/', parent: @provider.sections.root, title: 'New section',
                                  system_name: 'invalid name')
-      section.save!(validate: false)
+      section.save(validate: false)
       expected_sysname = "section-#{section.id}"
 
       execute_rake_task 'cms/cms.rake', 'cms:fix:section_invalid_system_names'
