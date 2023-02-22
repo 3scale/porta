@@ -1563,7 +1563,7 @@
       </dependency>
           <dependency>
         <packageName>@stripe/react-stripe-js</packageName>
-        <version>1.10.0</version>
+        <version>1.16.5</version>
         <licenses>
                       <license>
               <name>MIT</name>
