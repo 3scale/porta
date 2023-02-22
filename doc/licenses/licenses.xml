@@ -10455,16 +10455,6 @@
       </dependency>
           <dependency>
         <packageName>promise-polyfill</packageName>
-        <version>8.2.0</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>promise-polyfill</packageName>
         <version>8.2.3</version>
         <licenses>
                       <license>
