@@ -40,7 +40,7 @@ module Tasks
     end
 
     test "doesn't change valid system names" do
-      expected_sysname = "new-section"
+      expected_sysname = 'new-section'
       section = FactoryBot.create(:cms_section, partial_path: '/', parent: @provider.sections.root, title: 'New section',
                                  system_name: expected_sysname)
 
