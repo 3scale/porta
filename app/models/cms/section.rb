@@ -3,7 +3,6 @@ class CMS::Section < ApplicationRecord
   include CMS::DataTag
   extend System::Database::Scopes::IdOrSystemName
   include NormalizePathAttribute
-  attr_accessible :provider, :parent, :title, :system_name, :public, :group, :partial_path
 
   self.table_name = :cms_sections
 
