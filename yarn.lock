@@ -2112,17 +2112,17 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stripe/react-stripe-js@^1.10.0":
-  version "1.14.2"
-  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-1.14.2.tgz#4030f1723b4c58003bfbe38189129955f6fff764"
-  integrity sha512-8dGBdSFldq6dyiYgv3r4tOwS5PGAO/446hodegSKlmWg7NkAl0McopszXJd11A9otGi47v5OzCsljyfHJgnLhw==
+"@stripe/react-stripe-js@1.16.5":
+  version "1.16.5"
+  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-1.16.5.tgz#51cf862b50ca91ae6193c77a5bec889e81047f10"
+  integrity sha512-lVPW3IfwdacyS22pP+nBB6/GNFRRhT/4jfgAK6T2guQmtzPwJV1DogiGGaBNhiKtSY18+yS8KlHSu+PvZNclvQ==
   dependencies:
     prop-types "^15.7.2"
 
-"@stripe/stripe-js@^1.34.0":
-  version "1.42.1"
-  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.42.1.tgz#09f303fe298f81e5dc618f0df88bf929d758fa0f"
-  integrity sha512-5H7P7rVNDMdiJCUKsKXRUyr6IjZ4/9f8FB62NCa5O4rDftRfs4u2dPjjHs/tIs4OLeBB6oSzJIkE7cPr4ykPHg==
+"@stripe/stripe-js@1.37.0":
+  version "1.37.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.37.0.tgz#e7dc688122186aedb611810f30fbe89feb50af7a"
+  integrity sha512-khoaEqpvQUwEz/PyeKiiOGfzzhX8i009BJNTXjkkUpT2uCjnemo2JyFPCyHGszViqTSpDbFXeNIGIv+dtvd+9g==
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -2169,7 +2169,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/braintree-web@^3.75.22":
+"@types/braintree-web@3.75.22":
   version "3.75.22"
   resolved "https://registry.yarnpkg.com/@types/braintree-web/-/braintree-web-3.75.22.tgz#b718c1e415c03b59144dc7b8ce22d84b5583a0fa"
   integrity sha512-wvefF6OZkEg8twgEf/TMGPZ6OlLyq59eHe77D5QlQgAApUI4QkHwuK5UldVi4/6gBhwvW6snfNUdaQTfK3auRg==
@@ -11360,15 +11360,10 @@ promise-inflight@^1.0.1:
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==
 
-promise-polyfill@8.2.3:
+promise-polyfill@8.2.3, promise-polyfill@^8.1.3:
   version "8.2.3"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.3.tgz#2edc7e4b81aff781c88a0d577e5fe9da822107c6"
   integrity sha512-Og0+jCRQetV84U8wVjMNccfGCnMQ9mGs9Hv78QFe+pSDD3gWTpz0y+1QCuxy5d/vBFuZ3iwP2eycAkvqIMPmWg==
-
-promise-polyfill@^8.1.3:
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.0.tgz#367394726da7561457aba2133c9ceefbd6267da0"
-  integrity sha512-k/TC0mIcPVF6yHhUvwAp7cvL6I2fFV7TzF1DuGPI8mBh4QQazf36xCKEHKTZKRysEoTQoQdKyP25J8MPJp7j5g==
 
 promise@^7.1.1:
   version "7.3.1"

@@ -1753,7 +1753,7 @@
       </dependency>
           <dependency>
         <packageName>@stripe/react-stripe-js</packageName>
-        <version>1.14.2</version>
+        <version>1.16.5</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -1763,7 +1763,7 @@
       </dependency>
           <dependency>
         <packageName>@stripe/stripe-js</packageName>
-        <version>1.42.1</version>
+        <version>1.37.0</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -10780,16 +10780,6 @@
                       <license>
               <name>ISC</name>
               <url>http://en.wikipedia.org/wiki/ISC_license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>promise-polyfill</packageName>
-        <version>8.2.0</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
             </license>
                   </licenses>
       </dependency>

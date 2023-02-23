@@ -140,7 +140,7 @@ class Pdf::Finance::InvoiceReportData
       # read as binary file 'b'
       File.open(logo.path(LOGO_ATTACHMENT_STYLE), 'rb')
     when :s3
-      URI.open(logo.url(LOGO_ATTACHMENT_STYLE))
+      URI.parse(logo.url(LOGO_ATTACHMENT_STYLE)).open
     else
       raise "Invalid attachment type #{storage}"
     end
