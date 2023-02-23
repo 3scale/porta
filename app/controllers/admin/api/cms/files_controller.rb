@@ -11,8 +11,11 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
 
   MAX_PER_PAGE = 100
   DEFAULT_PER_PAGE = 20
+  ALLOWED_PARAMS = %i[section_id path attachment downloadable tag_list].freeze
 
   before_action :find_file, only: [:show, :edit, :update, :destroy]
+
+  wrap_parameters :file, include: ALLOWED_PARAMS
 
   representer :entity => ::CMS::FileRepresenter, :collection => ::CMS::FilesRepresenter
 
@@ -31,7 +34,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_access_token
   def index
     files = (if params[:section_id]
-      current_account.sections.find_by_id_or_system_name!(params[:section_id]).files
+      current_account.sections.find_by!(id_or_system_name: params[:section_id]).files
              else
       current_account.files
     end).paginate(page: params[:page] || 1, per_page: per_page)
@@ -53,7 +56,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
   def create
     @file = current_account.files.build(file_params)
-    @file.section = current_account.sections.find_by_id(params[:section_id]) || current_account.sections.root
+    @file.section = current_account.sections.find_by(id: params[:section_id]) || current_account.sections.root
     @file.save
 
     respond_with @file
@@ -89,7 +92,6 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "attachment", :paramType => "query"
   ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
   def update
-    @file.section = current_account.sections.find_by_id(params[:section_id]) if params[:section_id]
     @file.update_attributes(file_params)
     respond_with @file
   end
@@ -113,12 +115,8 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
     @file = current_account.files.find(params[:id])
   end
 
-  # wrap_parameters don't work with the attachment
   def file_params
-    [:path, :tag_list, :attachment, :downloadable].inject({}) do |hash, key|
-      hash[key] = params[key] unless params[key].nil?
-      hash
-    end
+    params.require(:file).permit(ALLOWED_PARAMS)
   end
 
 end

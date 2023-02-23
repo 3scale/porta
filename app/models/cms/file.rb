@@ -5,8 +5,6 @@ class CMS::File < ApplicationRecord
   acts_as_taggable
   include Tagging
 
-  attr_accessible :provider, :section, :path, :attachment, :downloadable, :tag_list
-
   delegate :s3_provider_prefix, to: :provider
 
   self.table_name = :cms_files
