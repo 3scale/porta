@@ -109,7 +109,7 @@ class Admin::Api::CMS::TemplateService
       if layout.present?
         template.layout = layout
       elsif layout_received_empty?
-        # We received the parameter, but empty. So the user explicitly want's to remove the layout
+        # We received the parameter, but empty. So the user explicitly wants to remove the layout
         template.layout = nil
       elsif layout_received?
         raise UnknownLayoutError, "Unknown layout: '#{layout_id || layout_name}'"
