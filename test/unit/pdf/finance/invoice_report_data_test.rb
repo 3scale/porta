@@ -113,12 +113,15 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
     default_options = Paperclip::Attachment.default_options
     Paperclip::Attachment.stubs(default_options: default_options.merge(storage: :s3))
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
-    URI.expects(:open).with(regexp_matches(/\Ahttps.*\/profiles\/logos\/invoice\/wide.png\z/)).returns(File.open(file_fixture('wide.jpg')))
+
+    # the extension in the request is .png, because images are converted to png in the 'invoice' style
+    stub_request(:get, %r{\Ahttps.*/profiles/logos/invoice/wide.png\z})
+        .to_return(status: 200, body: File.open(file_fixture('wide.jpg')))
 
     logo_file = nil
     @data.with_logo do |logo|
       logo_file = logo
-      assert logo.is_a? File
+      assert logo.is_a? StringIO
       assert logo.respond_to?(:read)
     end
     assert logo_file&.closed?

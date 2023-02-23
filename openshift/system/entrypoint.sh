@@ -20,9 +20,6 @@ if [ -d "${EXTRA_CONFIGS_DIR}" ]; then
     done
 fi
 
-# Exporting all bundler environment
-export ${BUNDLER_ENV}
-
 if ldconfig -p | grep jemalloc; then
   LD_PRELOAD="$LD_PRELOAD":$(ldconfig -p | grep jemalloc | head -1 | awk '{ print $1 }')
   export LD_PRELOAD

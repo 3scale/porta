@@ -1,26 +1,20 @@
-export interface BillingAddressData {
+export interface BillingAddress {
+  firstName: string;
+  lastName: string;
   address: string;
   city: string;
-  company: string;
   country: string;
-  state: string;
+  countryCode: string; // ISO-3166-2 code
+  company: string;
+  phone: string;
+  state: string; // ISO-3166-2 code
   zip: string;
 }
 
 export interface BraintreeFormDataset {
-  billingAddress: BillingAddressData;
+  billingAddress: BillingAddress;
   clientToken: string;
   countriesList: [string, string][];
-  errors: unknown;
   formActionPath: string;
   threeDSecureEnabled: boolean;
-  selectedCountryCode: string;
-}
-
-export interface HostedFieldsOptions {
-  styles: Record<string, Record<string, unknown> | string>;
-  fields: Record<string, {
-    selector: string;
-    placeholder: string;
-  }>;
 }

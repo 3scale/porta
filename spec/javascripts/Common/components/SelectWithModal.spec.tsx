@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 
-import { openSelectWithModal as openModal } from 'utilities/test-utils'
+import { openSelectWithModal as openModal, waitForPromises } from 'utilities/test-utils'
 import { SelectWithModal } from 'Common/components/SelectWithModal'
 import { TableModal } from 'Common/components/TableModal'
 
@@ -63,7 +63,7 @@ it('should be able to select an item', () => {
 })
 
 describe('with 20 items or less', () => {
-  const items: CrewMember[] = new Array(20).fill({}).map((i, j) => ({ id: j, name: `Mr. ${j}`, role: String(j) }))
+  const items: CrewMember[] = new Array(20).fill({}).map((_i, j) => ({ id: j, name: `Mr. ${j}`, role: String(j) }))
   const props = {
     items,
     itemsCount: items.length
@@ -142,13 +142,22 @@ describe('with more than 20 items', () => {
       itemsCount: 30
     }
 
-    // eslint-disable-next-line @typescript-eslint/require-await -- Component does some async process but adding await make the test actually fail
     it('should fetch more items', async () => {
-      fetchItems.mockResolvedValue({ items, count: 30 })
+      const perPage = 5
+      const fetchedItems = items.slice(0, perPage)
+      fetchItems.mockResolvedValue({ items: fetchedItems, count: props.itemsCount })
+
       const wrapper = mountWrapper(props)
       openModal(wrapper)
+
       expect(fetchItems).toHaveBeenCalledTimes(1)
-      expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage: 5 })
+      expect(fetchItems).toHaveBeenCalledWith({ page: 1, perPage })
+
+      await waitForPromises(wrapper)
+      const modal = wrapper.find('TableModal')
+      expect(modal.prop('page')).toEqual(1)
+      expect(modal.prop('itemsCount')).toEqual(props.itemsCount)
+      expect(modal.prop('pageItems')).toEqual(fetchedItems)
     })
   })
 })

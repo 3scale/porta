@@ -12,8 +12,6 @@ services:
     build:
       context: ../..
       dockerfile: openshift/system/${DOCKERFILE:-Dockerfile}
-      args:
-        - BUNDLER_ENV
     env_file:
       .env
     depends_on:

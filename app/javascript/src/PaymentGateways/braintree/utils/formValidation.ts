@@ -1,43 +1,39 @@
 import validate from 'validate.js'
 
-import type { BillingAddressData } from 'PaymentGateways/braintree/types'
+import type { BillingAddress } from 'PaymentGateways/braintree/types'
 
-const VALIDATION_CONSTRAINTS = {
-  // firstName: {
-  //   presence: true,
-  //   length: { minimum: 1 }
-  // },
-  // lastName: {
-  //   presence: true,
-  //   length: { minimum: 1 }
-  // },
-  // phone: {
-  //   presence: true,
-  //   length: { minimum: 1 }
-  // },
+// TODO: use correct validation constraints
+const VALIDATION_CONSTRAINTS: Record<Exclude<keyof BillingAddress, 'countryCode'>, unknown> = {
+  firstName: {
+    presence: { allowEmpty: false }
+  },
+  lastName: {
+    presence: { allowEmpty: false }
+  },
+  phone: {
+    presence: { allowEmpty: false }
+  },
   company: {
-    presence: true,
-    length: { minimum: 1 }
+    presence: { allowEmpty: false }
   },
   address: {
-    presence: true,
-    length: { minimum: 1 }
+    presence: { allowEmpty: false }
   },
   zip: {
-    presence: true,
-    length: { minimum: 1 }
+    presence: { allowEmpty: false }
   },
   city: {
-    presence: true,
-    length: { minimum: 1 }
+    presence: { allowEmpty: false }
+  },
+  state: {
+    presence: false
   },
   country: {
-    presence: true,
-    length: { minimum: 1 }
+    presence: { allowEmpty: false }
   }
 } as const
 
-const validateForm = (fields: BillingAddressData): Record<keyof typeof VALIDATION_CONSTRAINTS, string[]> | undefined => {
+const validateForm = (fields: Partial<BillingAddress>): Partial<Record<keyof typeof VALIDATION_CONSTRAINTS, string[]>> | undefined => {
   const formErrors = validate(fields, VALIDATION_CONSTRAINTS) as (Record<keyof typeof VALIDATION_CONSTRAINTS, string[]> | undefined)
   return formErrors
 }

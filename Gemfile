@@ -251,7 +251,7 @@ group :development, :test do
   gem 'unicorn-rails'
 end
 
-gem 'webpacker', '5.4.3'
+gem 'webpacker', '5.4.4'
 
 gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production preview]
