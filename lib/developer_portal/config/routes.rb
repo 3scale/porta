@@ -45,7 +45,7 @@ DeveloperPortal::Engine.routes.draw do
         end
       end
 
-      resource :authorize_net, :braintree_blue, :ogone, :stripe, only: [:show, :edit] do
+      resource :authorize_net, :braintree_blue, :stripe, only: [:show, :edit] do
         match 'hosted_success', via: [:get, :post], on: :member
       end
 

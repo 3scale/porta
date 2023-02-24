@@ -43,10 +43,6 @@ ActiveMerchant::Billing::StripeGateway.class_eval do
   end
 end
 
-ActiveMerchant::Billing::OgoneGateway.class_eval do
-  self.ssl_version = nil
-end
-
 class Braintree::ErrorResult
   prepend BraintreeData
 end

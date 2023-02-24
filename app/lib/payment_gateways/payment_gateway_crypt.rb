@@ -19,8 +19,6 @@ module PaymentGateways
   end
 
   class PaymentGatewayCrypt
-    include PaymentGateways::BuyerReferences
-
     attr_reader :account, :payment_gateway_options, :provider, :user
 
     def initialize(user)

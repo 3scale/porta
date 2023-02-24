@@ -175,10 +175,6 @@ World(Module.new do
       admin_account_braintree_blue_path
     when 'the braintree edit credit card details page'
       edit_admin_account_braintree_blue_path
-    when 'the ogone credit card details page'
-      admin_account_ogone_path
-    when 'the ogone edit credit card details page'
-      edit_admin_account_ogone_path
     when 'the stripe credit card details page'
       admin_account_stripe_path
     when 'the stripe edit credit card details page'

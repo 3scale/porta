@@ -10,12 +10,12 @@ class Admin::Api::CreditCardsController < Admin::Api::BaseController
   ##~ op = e.operations.add
   ##~ op.httpMethod = "PUT"
   ##~ op.summary = "Account Set Credit Card"
-  ##~ op.description = "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, ogone, braintree, payment express and merchant e solutions"
+  ##~ op.description = "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, braintree, payment express and merchant e solutions"
   ##~ op.group = "account"
   #
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add @parameter_account_id_by_id
-  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_token", :description => "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
+  ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_token", :description => "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
   ##~ op.parameters.add :dataType => "string", :required => false, :paramType => "query", :name => "credit_card_authorize_net_payment_profile_token", :description => "Additional reference provided by the payment gateway to identify a specific card under the same buyer reference. For Authorize.net, you MUST fill with the 'Payment profile token'"
   ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_expiration_year", :description => "Year of expiration of credit card. Two digit number"
   ##~ op.parameters.add :dataType => "string", :required => true, :paramType => "query", :name => "credit_card_expiration_month", :description => "Month of expiration of credit card. Two digit number"
