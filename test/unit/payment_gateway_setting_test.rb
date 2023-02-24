@@ -11,15 +11,6 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     refute @gateway_setting.configured?
   end
 
-  test '#configured? failed if any gateway_settings missing for authorize_net' do
-    @gateway_setting.gateway_type = :authorize_net
-    @gateway_setting.gateway_settings = {login: '1234'}
-    refute @gateway_setting.configured?
-
-    @gateway_setting.gateway_settings[:password] = '56789'
-    assert @gateway_setting.configured?
-  end
-
   test '#configured? failed if any gateway_settings missing for braintree_blue' do
     @gateway_setting.gateway_type = :braintree_blue
     @gateway_setting.gateway_settings = { public_key: '', merchant_id: 'Merchant ID', private_key: 'Private Key'}

@@ -57,7 +57,7 @@ class ThreeScale::Address
   end
 
   # Quacking like Hash makes BillingAddress compatible with
-  # ActiveMerchant. See AuthorizeNetCimGateway#add_address for interface.
+  # ActiveMerchant.
   #
   def [](key)
     case key
