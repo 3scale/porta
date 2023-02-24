@@ -92,6 +92,7 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
                                          billing_address_country: 'country')
     stubs(:current_account).returns(account)
     stubs(:logged_in?).returns(true).once
+    stubs(:country_code_for).with('country').returns('ES').once
 
     expected_response = {
       line1: 'address1',
@@ -99,7 +100,7 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
       city: 'city',
       state: 'state',
       postal_code: 'zip',
-      country: 'country'
+      country: 'ES'
     }
     assert_equal expected_response, stripe_billing_address
   end
