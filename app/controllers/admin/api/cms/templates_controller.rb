@@ -2,12 +2,15 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_template_id = { :name => "id", :description => "ID of the template", :dataType => "int", :required => true, :paramType => "path" }
 
-  ALLOWED_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type section_id section_name layout_id layout_name].freeze
+  AVAILABLE_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type section_id section_name layout_id layout_name].freeze
+  ALLOWED_PARAMS = {
+    page: %i[type title path content_type system_name section_id section_name layout_id layout_name liquid_enabled draft handler]
+  }.freeze
 
-  wrap_parameters :template, include: ALLOWED_PARAMS,
-                             format: [:json, :xml, :multipart_form, :url_encoded_form]
+  wrap_parameters :template, include: AVAILABLE_PARAMS,
+                             format: %i[json xml multipart_form url_encoded_form]
 
-  before_action :find_template, :except => [ :index, :create ]
+  before_action :find_template, :except => %i[index create]
 
   before_action :can_destroy, only: :destroy
 
@@ -132,10 +135,20 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   def cms_template_params
-    params.require(:template).permit(*ALLOWED_PARAMS)
+    params.require(:template).permit(*allowed_type_params)
   end
 
   private
+
+  def allowed_type_params
+    ALLOWED_PARAMS[template_type]
+  end
+
+  def template_type
+    return params[:type].parameterize.to_sym if params[:type].present?
+
+    @template&.class&.name[5..-1].parameterize.to_sym
+  end
 
   def can_destroy
     head :locked unless @template.respond_to?(:destroy)

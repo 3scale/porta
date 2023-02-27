@@ -9,7 +9,6 @@ class CMS::Template < ApplicationRecord
 
   scope :but, ->(*klasses) { where{ type.not_in klasses.map(&:to_s) } }
   scope :recents, -> { order(updated_at: :desc).where.has { updated_at != created_at } }
-  attr_accessible :provider, :draft, :liquid_enabled, :handler
 
   self.table_name = :cms_templates
 
