@@ -1,5 +1,4 @@
 production:
-  host: backend-listener:3000
-  public_url: <%= ENV.fetch("BACKEND_ROUTE") { "https://backend-#{ENV['TENANT_NAME']}.#{ENV['THREESCALE_SUPERDOMAIN']}" } %>
-  secure: false
+  url: <%= ENV.fetch('BACKEND_URL', 'http://backend-listener:3000') %>
+  public_url: <%= ENV.fetch('BACKEND_ROUTE') { "https://backend-#{ENV['TENANT_NAME']}.#{ENV['THREESCALE_SUPERDOMAIN']}" } %>
   persistent: true

@@ -48,7 +48,7 @@ base: &default
   ## defaults to 'default'
   # bulk_indexing_queue: bulk_indexing
 
-  # apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
+  # apicast_internal_host_regexp:
 
 development:
   <<: *default
