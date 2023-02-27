@@ -5713,15 +5713,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "backend_api_id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -5729,60 +5720,63 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "http_method",
-            "in": "query",
-            "description": "HTTP method.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pattern",
-            "in": "query",
-            "description": "Mapping Rule pattern.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "delta",
-            "in": "query",
-            "description": "Increase the metric by this delta.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "metric_id",
-            "in": "query",
-            "description": "Metric ID.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "position",
-            "in": "query",
-            "description": "Mapping Rule position",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "last",
-            "in": "query",
-            "description": "Last matched Mapping Rule to process",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Mapping Rule Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "http_method": {
+                    "type": "string",
+                    "description": "HTTP method."
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "description": "Mapping Rule pattern."
+                  },
+                  "delta": {
+                    "type": "integer",
+                    "description": "Increase the metric by this delta."
+                  },
+                  "metric_id": {
+                    "type": "integer",
+                    "description": "Metric ID."
+                  },
+                  "position": {
+                    "type": "integer",
+                    "description": "Mapping Rule position"
+                  },
+                  "last": {
+                    "type": "boolean",
+                    "description": "Last matched Mapping Rule to process"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "http_method",
+                  "pattern",
+                  "delta",
+                  "metric_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -5840,15 +5834,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "backend_api_id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -5865,56 +5850,59 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "http_method",
-            "in": "query",
-            "description": "HTTP method.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pattern",
-            "in": "query",
-            "description": "Mapping Rule pattern.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "delta",
-            "in": "query",
-            "description": "Increase the metric by this delta.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "metric_id",
-            "in": "query",
-            "description": "Metric ID.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "position",
-            "in": "query",
-            "description": "Mapping Rule position",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "last",
-            "in": "query",
-            "description": "Last matched Mapping Rule to process",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Mapping Rule Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "http_method": {
+                    "type": "string",
+                    "description": "HTTP method."
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "description": "Mapping Rule pattern."
+                  },
+                  "delta": {
+                    "type": "integer",
+                    "description": "Increase the metric by this delta."
+                  },
+                  "metric_id": {
+                    "type": "integer",
+                    "description": "Metric ID."
+                  },
+                  "position": {
+                    "type": "integer",
+                    "description": "Mapping Rule position"
+                  },
+                  "last": {
+                    "type": "boolean",
+                    "description": "Last matched Mapping Rule to process"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6022,15 +6010,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "backend_api_id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -6038,42 +6017,53 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Descriptive Name of the metric.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the metric.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the metric.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Metric Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                 "friendly_name": {
+                    "type": "string",
+                    "description": "Descriptive Name of the metric."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "unit",
+                  "friendly_name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6131,15 +6121,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "backend_api_id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -6156,32 +6137,47 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Name of the metric.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the metric.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the metric.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Metric Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                 "friendly_name": {
+                    "type": "string",
+                    "description": "Descriptive Name of the metric."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6298,15 +6294,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "backend_api_id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -6323,42 +6310,53 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Descriptive Name of the metric.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the metric.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the metric.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Method Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Descriptive Name of the metric."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the metric. If blank a system_name will be generated for you from the friendly_name parameter."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "friendly_name",
+                  "unit"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6425,15 +6423,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "backend_api_id",
             "in": "path",
             "description": "ID of the Backend.",
@@ -6459,32 +6448,47 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Name of the method.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the method.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the method.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Method Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Descriptive Name of the metric."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6583,15 +6587,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -6599,25 +6594,44 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "backend_api_id",
-            "in": "query",
-            "description": "Backend to be added to the Service (Product).",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "Path of the Backend for this product.",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Usage Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "backend_api_id": {
+                    "type": "string",
+                    "description": "Backend to be added to the Service (Product)."
+                  },
+                  "path": {
+                    "type": "integer",
+                    "description": "Path of the Backend for this product."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "backend_api_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6675,15 +6689,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -6700,16 +6705,39 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "Path of the Backend for this product.",
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Backend Usage Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "path": {
+                    "type": "integer",
+                    "description": "Path of the Backend for this product."
+                  } 
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6788,34 +6816,42 @@
         "tags": [
           "Account Features"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the feature.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Account Feature Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the feature."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  }    
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -6864,15 +6900,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the feature.",
@@ -6880,17 +6907,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the feature.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Account Feature Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the feature."
+                  }   
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -7268,49 +7318,51 @@
         "tags": [
           "Access Tokens"
         ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the access token.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "permission",
-            "in": "query",
-            "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "scopes",
-            "in": "query",
-            "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\", \"policy_registry\"], and for a tenant user [\"finance\", \"account_management\", \"stats\", \"policy_registry\"]",
-            "required": true,
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+        "requestBody": {
+          "description": "Personal Access Token Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the access token."
+                  },
+                  "permission": {
+                    "type": "string",
+                    "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write)."
+                  },
+                  "scopes[]": {
+                    "type": "array",
+                    "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\", \"policy_registry\"], and for a tenant user [\"finance\", \"account_management\", \"stats\", \"policy_registry\"]",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name",
+                  "permission",
+                  "scopes"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
-          },
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -7439,49 +7491,49 @@
         "tags": [
           "Provider Account"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from_email",
-            "in": "query",
-            "description": "New outgoing email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "support_email",
-            "in": "query",
-            "description": "New support email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "finance_support_email",
-            "in": "query",
-            "description": "New finance support email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "site_access_code",
-            "in": "query",
-            "description": "Developer Portal Access Code.",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Provider Account Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "from_email": {
+                    "type": "string",
+                    "description": "New outgoing email."
+                  },
+                  "support_email": {
+                    "type": "string",
+                    "description": "New support email."
+                  },
+                  "finance_support_email": {
+                    "type": "string",
+                    "description": "New finance support email."
+                  },
+                  "site_access_code": {
+                    "type": "string",
+                    "description": "Developer Portal Access Code."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -7555,15 +7607,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_plan_id",
             "in": "path",
             "description": "ID of the service plan.",
@@ -7571,17 +7614,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "feature_id",
-            "in": "query",
-            "description": "ID of the feature.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Plan Feature Add",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "feature_id": {
+                    "type": "integer",
+                    "description": "ID of the feature."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "feature_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -7680,71 +7746,62 @@
         "tags": [
           "Services"
         ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the service to be created.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the service to be created.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "deployment_option",
-            "in": "query",
-            "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "backend_version",
-            "in": "query",
-            "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": " ",
-            "in": "query",
-            "description": "Extra parameters",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+        "requestBody": {
+          "description": "Service Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the service to be created."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the service to be created."
+                  },
+                  "deployment_option": {
+                    "type": "string",
+                    "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option"
+                  },
+                  "backend_version": {
+                    "type": "string",
+                    "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect"
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  },
+                  " ": {
+                    "type": "array",
+                    "description": "Extra parameters",
+                    "explode": false,
+                    "items": {
+                      "type": "object"
+                    }       
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -7944,15 +8001,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the service.",
@@ -7960,41 +8008,52 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the service plan.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "approval_required",
-            "in": "query",
-            "description": "Set the 'Service subscriptions require approval?' to 'true' or 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "State event of the service plan. It can be 'publish' or 'hide'",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Plan Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the service plan."
+                  },
+                  "approval_required": {
+                    "type": "boolean",
+                    "description": "Set the 'Service subscriptions require approval?' to 'true' or 'false'"
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  },
+                  "state_event":{
+                    "type": "string",
+                    "description": "State event of the service plan. It can be 'publish' or 'hide'"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -8043,15 +8102,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -8059,50 +8109,57 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Descriptive Name of the metric.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank a system_name will be generated for you from the friendly_name parameter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "DEPRECATED: Please use system_name parameter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the metric.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the metric.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Metric Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Descriptive Name of the metric."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank a system_name will be generated for you from the friendly_name parameter"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "DEPRECATED: Please use system_name parameter"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "friendly_name",
+                  "unit"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -8160,12 +8217,12 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
+            "name": "id",
+            "in": "path",
+            "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -8176,41 +8233,47 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the metric.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Name of the metric.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the metric.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the metric.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Metric Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Descriptive Name of the metric."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -8309,12 +8372,12 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
+            "name": "metric_id",
+            "in": "path",
+            "description": "ID of the metric.",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -8325,51 +8388,53 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "metric_id",
-            "in": "path",
-            "description": "ID of the metric.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Name of the method.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the method.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the method.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Method Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Name of the method."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the metric. This is the name used to report API requests with the Service Management API. If blank, a system_name will be generated for you from the friendly_name parameter"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the method."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the method."
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "friendly_name",
+                  "unit"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -8436,15 +8501,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -8470,32 +8526,47 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "friendly_name",
-            "in": "query",
-            "description": "Name of the method.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "unit",
-            "in": "query",
-            "description": "Measure unit of the method.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the method.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Method Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Name of the method."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Measure unit of the metric."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the metric."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -8862,15 +8933,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -8880,6 +8942,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Proxy Deploy",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }    
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -8928,15 +9017,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -8944,60 +9024,63 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "http_method",
-            "in": "query",
-            "description": "HTTP method.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pattern",
-            "in": "query",
-            "description": "Mapping Rule pattern.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "delta",
-            "in": "query",
-            "description": "Increase the metric by this delta.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "metric_id",
-            "in": "query",
-            "description": "Metric ID.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "position",
-            "in": "query",
-            "description": "Mapping Rule position",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "last",
-            "in": "query",
-            "description": "Last matched Mapping Rule to process",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Proxy Mapping Rule Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "http_method": {
+                    "type": "string",
+                    "description": "HTTP method."
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "description": "Mapping Rule pattern."
+                  },
+                  "delta": {
+                    "type": "integer",
+                    "description": "Increase the metric by this delta."
+                  },
+                  "metric_id": {
+                    "type": "integer",
+                    "description": "Metric ID."
+                  },
+                  "position": {
+                    "type": "integer",
+                    "description": "Mapping Rule position"
+                  },
+                  "last": {
+                    "type": "boolean",
+                    "description": "Last matched Mapping Rule to process"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "http_method",
+                  "pattern",
+                  "delta",
+                  "metric_id"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9423,15 +9506,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9457,17 +9531,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "description": "the name of the destination environment",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Proxy Config Promote",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "the name of the destination environment"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "to"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9516,15 +9613,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9532,17 +9620,40 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "policies_config",
-            "in": "query",
-            "description": "Proxy policies chain",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Proxy Policies Chain Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "policies_config": {
+                    "type": "string",
+                    "description": "Proxy policies chain"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "policies_config"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9600,15 +9711,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9625,32 +9727,48 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the service plan.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "approval_required",
-            "in": "query",
-            "description": "Set the 'Service subscriptions require approval?' to 'true' or 'false'",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "State event of the service plan. It can be 'publish' or 'hide'",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Plan Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the service plan."
+                  },
+                  "approval_required": {
+                    "type": "boolean",
+                    "description": "Set the 'Service subscriptions require approval?' to 'true' or 'false'"
+                  },
+                  "state_event": {
+                    "type": "string",
+                    "description": "State event of the service plan. It can be 'publish' or 'hide'"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "policies_config"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9708,15 +9826,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9735,6 +9844,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Service Plan Set to Default",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9783,15 +9919,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9799,50 +9926,59 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the feature.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the feature.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "scope",
-            "in": "query",
-            "description": "Type of plan that the feature will be available for.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "enum": [
-                "ApplicationPlan",
-                "ServicePlan"
-              ]
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Feature Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the feature."
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the feature."
+                  },
+                  "scope": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "explode": false,
+                    "enum": [
+                      "ApplicationPlan",
+                      "ServicePlan"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "name"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9900,15 +10036,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9925,24 +10052,43 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the feature.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the feature.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Service Feature Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the feature."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the feature."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -10020,98 +10166,70 @@
         "summary": "Settings Update",
         "tags": [
           "Settings"
-        ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "useraccountarea_enabled",
-            "in": "query",
-            "description": "Allow the user to edit their submitted details, change passwords, etc",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "hide_service",
-            "in": "query",
-            "description": "Used a default service plan",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "signups_enabled",
-            "in": "query",
-            "description": "Developers are allowed sign up themselves.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "account_approval_required",
-            "in": "query",
-            "description": "Approval is required by you before developer accounts are activated.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "strong_passwords_enabled",
-            "in": "query",
-            "description": "Require strong passwords from your users: Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of -+=><_$#.:;!?@&*()~][}{|. Existing passwords will still work. ",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "public_search",
-            "in": "query",
-            "description": "Enables public search on Developer Portal",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "account_plans_ui_visible",
-            "in": "query",
-            "description": "Enables visibility of Account Plans",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "change_account_plan_permission",
-            "in": "query",
-            "description": "Account Plans changing",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_plans_ui_visible",
-            "in": "query",
-            "description": "Enables visibility of Service Plans",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "change_service_plan_permission",
-            "in": "query",
-            "description": "Service Plans changing",
-            "schema": {
-              "type": "string"
+        ],    
+        "requestBody": {
+          "description": "Settings Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "useraccountarea_enabled": {
+                    "type": "boolean",
+                    "description": "Allow the user to edit their submitted details, change passwords, etc"
+                  },
+                  "hide_service": {
+                    "type": "boolean",
+                    "description": "Used a default service plan"
+                  },
+                  "signups_enabled": {
+                    "type": "boolean",
+                    "description": "Developers are allowed sign up themselves."
+                  },
+                  "account_approval_required": {
+                    "type": "boolean",
+                    "description": "Approval is required by you before developer accounts are activated."
+                  },
+                  "strong_passwords_enabled": {
+                    "type": "boolean",
+                    "description": "Require strong passwords from your users: Password must be at least 8 characters long, and contain both upper and lowercase letters, a digit and one special character of -+=><_$#.:;!?@&*()~][}{|. Existing passwords will still work. "
+                  },
+                  "public_search": {
+                    "type": "boolean",
+                    "description": "Enables public search on Developer Portal"
+                  },
+                  "account_plans_ui_visible": {
+                    "type": "boolean",
+                    "description": "Enables visibility of Account Plans"
+                  },
+                  "change_account_plan_permission": {
+                    "type": "boolean",
+                    "description": "Enables visibility of Service Plans"
+                  },
+                  "change_service_plan_permission": {
+                    "type": "string",
+                    "description": "Service Plans changing"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -10125,154 +10243,94 @@
         "summary": "WebHooks Update",
         "tags": [
           "Webhooks"
-        ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "url",
-            "in": "query",
-            "description": "URL that will be notified about all the events",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "active",
-            "in": "query",
-            "description": "Activate/Disable WebHooks",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "provider_actions",
-            "in": "query",
-            "description": "Dashboard actions fire webhooks. If false, only user actions in the portal trigger events.",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "account_created_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "account_updated_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "account_deleted_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "user_created_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "user_updated_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "user_deleted_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_created_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_updated_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_deleted_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "account_plan_changed_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_plan_changed_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_user_key_updated_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_key_created_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_key_deleted_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_suspended_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "application_key_updated_on",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
+        ],    
+        "requestBody": {
+          "description": "WebHooks Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "URL that will be notified about all the events"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "Activate/Disable WebHooks"
+                  },
+                  "provider_actions": {
+                    "type": "boolean",
+                    "description": "Dashboard actions fire webhooks. If false, only user actions in the portal trigger events."
+                  },
+                  "account_created_on": {
+                    "type": "boolean"
+                  },
+                  "account_updated_on": {
+                    "type": "boolean"
+                  },
+                  "account_deleted_on": {
+                    "type": "boolean"
+                  },
+                  "user_created_on": {
+                    "type": "boolean"
+                  },
+                  "user_updated_on": {
+                    "type": "boolean"
+                  },
+                  "user_deleted_on": {
+                    "type": "boolean"
+                  },
+                  "application_created_on": {
+                    "type": "boolean"
+                  },
+                  "application_updated_on": {
+                    "type": "boolean"
+                  },
+                  "application_deleted_on": {
+                    "type": "boolean"
+                  },
+                  "account_plan_changed_on": {
+                    "type": "boolean"
+                  },
+                  "application_plan_changed_on": {
+                    "type": "boolean"
+                  },
+                  "application_user_key_updated_on": {
+                    "type": "boolean"
+                  },
+                  "application_key_created_on": {
+                    "type": "boolean"
+                  },
+                  "application_key_deleted_on": {
+                    "type": "boolean"
+                  },
+                  "application_suspended_on": {
+                    "type": "boolean"
+                  },
+                  "application_key_updated_on": {
+                    "type": "boolean"                  
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
