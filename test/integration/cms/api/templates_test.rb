@@ -206,7 +206,7 @@ module CMS
         page = FactoryBot.create(:cms_page, :provider => @provider)
 
         put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id,
-                                                         format: :xml, type: 'page', layout_id: new_layout.id
+                                                         format: :xml, layout_id: new_layout.id
         }
 
         assert_response :success
