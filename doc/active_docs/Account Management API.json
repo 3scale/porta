@@ -8715,15 +8715,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -8731,192 +8722,123 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "endpoint",
-            "in": "query",
-            "description": "Public Base URL for production environment.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api_backend",
-            "in": "query",
-            "description": "Private Base URL. Caution! Do not use it if the account has API as a Product enabled. It may cause API backend usages to be removed from the Product.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "credentials_location",
-            "in": "query",
-            "description": "Credentials Location. Either headers, query or authorization for the Basic Authorization.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "auth_app_key",
-            "in": "query",
-            "description": "Parameter/Header where App Key is expected.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "auth_app_id",
-            "in": "query",
-            "description": "Parameter/Header where App ID is expected.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "auth_user_key",
-            "in": "query",
-            "description": "Parameter/Header where User Key is expected.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_auth_failed",
-            "in": "query",
-            "description": "Error message on failed authentication.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_status_auth_failed",
-            "in": "query",
-            "description": "Status code on failed authentication.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "error_headers_auth_failed",
-            "in": "query",
-            "description": "Content-Type header on failed authentication.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_auth_missing",
-            "in": "query",
-            "description": "Error message on missing authentication.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_status_auth_missing",
-            "in": "query",
-            "description": "Status code on missing authentication.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "error_headers_auth_missing",
-            "in": "query",
-            "description": "Content-Type header on missing authentication.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_no_match",
-            "in": "query",
-            "description": "Error message when no mapping rule is matched.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_status_no_match",
-            "in": "query",
-            "description": "Status code when no mapping rule is matched.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "error_headers_no_match",
-            "in": "query",
-            "description": "Content-Type header when no mapping rule is matched.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_status_limits_exceeded",
-            "in": "query",
-            "description": "Status code when usage limit exceeded.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "error_headers_limits_exceeded",
-            "in": "query",
-            "description": "Content-Type header when usage limit exceeded.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "error_limits_exceeded",
-            "in": "query",
-            "description": "Error message on usage limit exceeded.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "oidc_issuer_endpoint",
-            "in": "query",
-            "description": "Location of your OpenID Provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "oidc_issuer_type",
-            "in": "query",
-            "description": "Type of your OpenID Provider.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sandbox_endpoint",
-            "in": "query",
-            "description": "Sandbox endpoint.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "jwt_claim_with_client_id",
-            "in": "query",
-            "description": "JWT Claim With ClientId Location.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "jwt_claim_with_client_id_type",
-            "in": "query",
-            "description": "JWT Claim With ClientId Type. Either `plain` or `liquid`",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Proxy Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "endpoint": {
+                    "type": "string",
+                    "description": "Public Base URL for production environment."
+                  },
+                  "api_backend": {
+                    "type": "string",
+                    "description": "Private Base URL. Caution! Do not use it if the account has API as a Product enabled. It may cause API backend usages to be removed from the Product."
+                  },
+                  "credentials_location": {
+                    "type": "string",
+                    "description": "Credentials Location. Either headers, query or authorization for the Basic Authorization."
+                  },
+                  "auth_app_key": {
+                    "type": "string",
+                    "description": "Parameter/Header where App Key is expected."
+                  },
+                  "auth_app_id": {
+                    "type": "string",
+                    "description": "Parameter/Header where App ID is expected."
+                  },
+                  "auth_user_key": {
+                    "type": "string",
+                    "description": "Parameter/Header where User Key is expected."
+                  },
+                  "error_auth_failed": {
+                    "type": "string",
+                    "description": "Error message on failed authentication."
+                  },
+                  "error_status_auth_failed": {
+                    "type": "integer",
+                    "description": "Status code on failed authentication."
+                  },
+                  "error_headers_auth_failed": {
+                    "type": "string",
+                    "description": "Content-Type header on failed authentication."
+                  },
+                  "error_auth_missing": {
+                    "type": "string",
+                    "description": "Error message on missing authentication."
+                  },
+                  "error_status_auth_missing": {
+                    "type": "integer",
+                    "description": "Status code on missing authentication."
+                  },
+                  "error_headers_auth_missing": {
+                    "type": "string",
+                    "description": "Content-Type header on missing authentication."
+                  },
+                  "error_no_match": {
+                    "type": "string",
+                    "description": "Error message when no mapping rule is matched."
+                  },
+                  "error_status_no_match": {
+                    "type": "string",
+                     "description": "Content-Type header when no mapping rule is matched."
+                  },
+                  "error_status_limits_exceeded": {
+                    "type": "integer",
+                    "description": "Status code when usage limit exceeded."
+                  },
+                  "error_headers_limits_exceeded": {
+                    "type": "string",
+                    "description": "Content-Type header when usage limit exceeded."
+                  },
+                  "error_limits_exceeded": {
+                    "type": "string",
+                    "description": "Error message on usage limit exceeded."
+                  },
+                  "oidc_issuer_endpoint": {
+                    "type": "string",
+                    "description": "Location of your OpenID Provider."
+                  },
+                  "oidc_issuer_type": {
+                    "type": "string",
+                    "description": "Type of your OpenID Provider."
+                  },
+                  "sandbox_endpoint": {
+                    "type": "string",
+                    "description": "Sandbox endpoint."
+                  },
+                  "jwt_claim_with_client_id": {
+                    "type": "string",
+                    "description": "JWT Claim With ClientId Location."
+                  },
+                  "jwt_claim_with_client_id_type": {
+                    "type": "string",
+                    "description": "JWT Claim With ClientId Type. Either `plain` or `liquid`"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9179,15 +9101,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9204,56 +9117,59 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "http_method",
-            "in": "query",
-            "description": "HTTP method.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pattern",
-            "in": "query",
-            "description": "Mapping Rule pattern.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "delta",
-            "in": "query",
-            "description": "Increase the metric by this delta.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "metric_id",
-            "in": "query",
-            "description": "Metric ID.",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "position",
-            "in": "query",
-            "description": "Mapping Rule position",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "last",
-            "in": "query",
-            "description": "Last matched Mapping Rule to process",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Proxy Mapping Rule Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "http_method": {
+                    "type": "string",
+                    "description": "HTTP method."
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "description": "Mapping Rule pattern."
+                  },
+                  "delta": {
+                    "type": "integer",
+                    "description": "Increase the metric by this delta."
+                  },
+                  "metric_id": {
+                    "type": "integer",
+                    "description": "Metric ID."
+                  },
+                  "position": {
+                    "type": "integer",
+                    "description": "Mapping Rule position"
+                  },
+                  "last": {
+                    "type": "boolean",
+                    "description": "Last matched Mapping Rule to process"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -9302,15 +9218,6 @@
         ],
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
@@ -9318,40 +9225,51 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "standard_flow_enabled",
-            "in": "query",
-            "description": "Enable Authorization Code Flow (Standard Flow)",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "implicit_flow_enabled",
-            "in": "query",
-            "description": "Enable Implicit Flow",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "service_accounts_enabled",
-            "in": "query",
-            "description": "Enable Service Account Flow (Standard Flow)",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "direct_access_grants_enabled",
-            "in": "query",
-            "description": "Enable Direct Access Grant Flow",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "OIDC Configuration Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "standard_flow_enabled": {
+                    "type": "boolean",
+                    "description": "Enable Authorization Code Flow (Standard Flow)"
+                  },
+                  "implicit_flow_enabled": {
+                    "type": "boolean",
+                    "description": "Enable Implicit Flow"
+                  },
+                  "service_accounts_enabled": {
+                    "type": "boolean",
+                    "description": "Enable Service Account Flow (Standard Flow)"
+                  },
+                  "direct_access_grants_enabled": {
+                    "type": "boolean",
+                    "description": "Enable Direct Access Grant Flow"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
