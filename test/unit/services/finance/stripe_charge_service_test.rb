@@ -8,8 +8,14 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
     @gateway = provider_account.payment_gateway(sca: true)
     @amount = ThreeScale::Money.new(150.0, 'EUR')
-    line_item = FactoryBot.create(:line_item, cost: amount.amount)
-    @invoice = FactoryBot.create(:invoice, buyer_account: buyer_account, provider_account: provider_account, line_items: [line_item])
+    @invoice = FactoryBot.create(
+      :invoice,
+      buyer_account: buyer_account,
+      provider_account: provider_account,
+      line_items: [
+        FactoryBot.create(:line_item, cost: amount.amount)
+      ]
+    )
     @service = build_charge_service(invoice: invoice)
   end
 
@@ -110,18 +116,18 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     invoice.update({friendly_id: '2022-10-00000001'})
     invoice.issue_and_pay_if_free!
     with_invoice = build_charge_service(invoice: invoice)
-    assert_equal "#{invoice.provider.name} API services 2022-10-00000001", with_invoice.send(:charge_description)
+    assert_equal "#{invoice.provider.name} API services 2022-10-00000001", with_invoice.gateway_options[:description]
   end
 
   test 'has payment intent description with no invoice in charging service' do
     without_invoice = build_charge_service
-    assert_equal 'API services', without_invoice.send(:charge_description)
+    assert_equal 'API services', without_invoice.gateway_options[:description]
   end
 
   test 'sends payment intent description to the gateway' do
     response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'new-payment-intent-id', status: 'succeeded')
     invoice.issue_and_pay_if_free!
-    gateway.expects(:purchase).with(15000, anything, has_entry(:description, "#{invoice.provider.name} API services fix")).returns(response)
+    gateway.expects(:purchase).with(15_000, anything, has_entry(:description, "#{invoice.provider.name} API services fix")).returns(response)
 
     assert service.charge(amount)
   end
