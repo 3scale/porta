@@ -537,7 +537,6 @@ Style/RedundantParentheses:
     - 'app/helpers/code_helper.rb'
     - 'app/lib/authenticated_system.rb'
     - 'app/lib/authentication/by_cookie_token.rb'
-    - 'lib/tasks/populate_cubert.rake'
 
 # Offense count: 9
 # Cop supports --auto-correct.
