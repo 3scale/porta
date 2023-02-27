@@ -1,5 +1,5 @@
 base: &default
-  enabled: true
+  enabled: false
   stub: false
   write_key: 'null'
 
@@ -8,7 +8,6 @@ development:
 
 test:
   <<: *default
-  enabled: false
   stub: true
 
 production:

@@ -1,10 +1,12 @@
-development:
+base: &default
   - :mem_cache_store
   - <%= ENV.fetch('MEMCACHE_SERVERS', 'localhost:11211') %>
+
+development:
+  <<: *default
 
 test:
   - :null_store
 
 production:
-  - :mem_cache_store
-  - localhost:11211
+  <<: *default

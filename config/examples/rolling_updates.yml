@@ -31,3 +31,4 @@ test:
   new_notification_system: true
 
 production:
+  <<: *default
