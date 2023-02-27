@@ -7,9 +7,6 @@ development:
 test:
   host: localhost:3001
 
-preview:
-  host: localhost:3001
-
 production:
   host: <%= ENV.fetch('BACKEND_HOST', 'localhost:3001') %>
   secure: <%= ENV.fetch('BACKEND_SECURE', '1') == '1' %>

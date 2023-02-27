@@ -10,10 +10,6 @@ production:
   <<: *base
   url: "<%= ENV.fetch('REDIS_URL', 'redis://localhost/3') %>"
 
-preview:
-  <<: *base
-  url: "<%= ENV.fetch('REDIS_URL', 'redis://localhost/3') %>"
-
 development:
   <<: *base
 

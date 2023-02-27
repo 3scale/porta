@@ -1,13 +1,7 @@
-base: &base
+production:
   url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://backend-redis:6379') %>"
   timeout:  1
   pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
   sentinels: "<%= ENV['BACKEND_REDIS_SENTINEL_HOSTS'] %>"
   role: <%= ENV['BACKEND_REDIS_SENTINEL_ROLE'] %>
-
-production:
-  <<: *base
-
-preview:
-  <<: *base

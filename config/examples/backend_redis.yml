@@ -18,9 +18,6 @@ base: &base
 production:
   <<: *base
 
-preview:
-  <<: *base
-
 development:
   <<: *base
 

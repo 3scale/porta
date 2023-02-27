@@ -40,8 +40,5 @@ test:
   skip_deploy: false
   apicast_registry_url: <%= ENV['APICAST_REGISTRY_URL'] %>
 
-preview:
-  <<: *default
-
 production:
   <<: *default

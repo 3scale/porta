@@ -5,9 +5,6 @@ base: &default
 production:
   <<: *default
 
-preview:
-  <<: *default
-
 test:
   <<: *default
   perform_deliveries: true

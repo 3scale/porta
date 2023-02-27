@@ -27,8 +27,3 @@ production:
   <<: *base
   server_host:
   bearer_token:
-
-preview:
-  <<: *base
-  server_host:
-  bearer_token:

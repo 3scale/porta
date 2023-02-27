@@ -5,10 +5,6 @@ development:
 test:
   - :null_store
 
-preview:
-  - :mem_cache_store
-  - localhost:11211
-
 production:
   - :mem_cache_store
   - localhost:11211

@@ -22,8 +22,5 @@ test:
   realm: http://my-keycloak-server/auth/realms/rh-customer-portal
   flow: auth_code
 
-preview:
-  <<: *default
-
 production:
   <<: *default

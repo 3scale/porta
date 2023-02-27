@@ -20,7 +20,3 @@ test:
 production:
   <<: *default
   enabled: true
-
-preview:
-  <<: *default
-  enabled: true

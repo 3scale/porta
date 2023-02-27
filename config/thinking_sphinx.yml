@@ -32,11 +32,6 @@ test: &test
   hard_retry_count: 5
   binlog_path: ''
 
-preview:
-  <<: *sphinx
-  binlog_path: ''
-  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
-
 production:
   <<: *sphinx
   binlog_path: ''

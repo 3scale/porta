@@ -62,11 +62,6 @@ test:
   force_ssl: false
   report_traffic: false
 
-preview:
-  <<: *default
-  report_traffic: false
-  access_code: <%= ENV.fetch('ACCESS_CODE', 'access_code') %>
-
 production:
   <<: *default
   report_traffic: true

@@ -1,4 +1,4 @@
-base: &default
+production:
   test_api_hosts:
    - echo-api.3scale.net
    - hello-world-api.3scale.net
@@ -12,9 +12,3 @@ base: &default
   skip_deploy: true
   apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://apicast-staging:8090/policies') %>
   self_managed_apicast_registry_url: <%= ENV.fetch('APICAST_REGISTRY_URL', 'http://apicast-staging:8090/policies') %>
-
-preview:
-  <<: *default
-
-production:
-  <<: *default
