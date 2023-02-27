@@ -214,11 +214,12 @@ module CMS
       end
 
       test 'create with missing or invalid type fails' do
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, type: 'INVALID' }
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml,
+                                                     type: 'INVALID', title: 'test template' }
         assert_response :unprocessable_entity
 
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml }
-        assert_response :bad_request
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, title: 'test template' }
+        assert_response :unprocessable_entity
       end
 
       test 'create' do

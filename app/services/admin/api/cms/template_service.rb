@@ -8,28 +8,19 @@ class Admin::Api::CMS::TemplateService
   class UnknownSectionError < TemplateServiceError; end
   class UnknownLayoutError < TemplateServiceError; end
 
-
-
-  def initialize(current_account, params)
-    @params = params
+  def initialize(current_account, params, permitted_params)
+    @permitted_params = permitted_params
     @current_account = current_account
+    @type = params.delete('type')&.to_sym
     @section_id = params.delete('section_id')
     @section_name = params.delete('section_name')
     @layout_id = params.delete('layout_id')
     @layout_name = params.delete('layout_name')
   end
 
-  attr_reader :current_account, :params, :section_id, :section_name, :layout_id, :layout_name
+  attr_reader :type, :current_account, :permitted_params, :section_id, :section_name, :layout_id, :layout_name
 
   class Create < Admin::Api::CMS::TemplateService
-
-    def initialize(current_account, params)
-      super current_account, params
-      @type = params.delete('type')&.to_sym
-    end
-
-    attr_reader :type
-
     def call
       collection = { page: current_account.pages,
                       partial: current_account.partials,
@@ -37,7 +28,7 @@ class Admin::Api::CMS::TemplateService
 
       raise UnknownTemplateTypeError, "Unknown template type '#{type}'" unless type && collection
 
-      template = collection.new(params)
+      template = collection.new(permitted_params)
       attach_section(template)
       attach_layout(template)
       template.save
@@ -73,8 +64,8 @@ class Admin::Api::CMS::TemplateService
   end
 
   class Update < Admin::Api::CMS::TemplateService
-    def initialize(current_account, params, template)
-      super current_account, params
+    def initialize(current_account, params, permitted_params, template)
+      super current_account, params, permitted_params
       @template = template
       @resource_class = template.class
     end
@@ -84,7 +75,7 @@ class Admin::Api::CMS::TemplateService
     def call
       attach_section
       attach_layout
-      template.update(params)
+      template.update(permitted_params)
 
       template
     end

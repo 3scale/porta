@@ -2,11 +2,11 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_template_id = { :name => "id", :description => "ID of the template", :dataType => "int", :required => true, :paramType => "path" }
 
-  AVAILABLE_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type section_id section_name layout_id layout_name].freeze
+  AVAILABLE_PARAMS = %i[system_name title path draft liquid_enabled handler content_type section_id layout_id].freeze
   ALLOWED_PARAMS = {
-    page: %i[type title path content_type system_name section_id section_name layout_id layout_name liquid_enabled draft handler],
-    layout: %i[type system_name draft title liquid_enabled],
-    partial: %i[type system_name draft]
+    page: %i[title path content_type system_name section_id layout_id liquid_enabled draft handler],
+    layout: %i[system_name draft title liquid_enabled],
+    partial: %i[system_name draft]
   }.freeze
 
   wrap_parameters :template, include: AVAILABLE_PARAMS,
@@ -53,7 +53,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def create
-    template = Admin::Api::CMS::TemplateService::Create.call(current_account, cms_template_params)
+    template = Admin::Api::CMS::TemplateService::Create.call(current_account, params, cms_template_params)
     respond_with(template)
   rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
     render_error exception.message, status: :unprocessable_entity
@@ -94,7 +94,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def update
-    Admin::Api::CMS::TemplateService::Update.call(current_account, cms_template_params, @template)
+    Admin::Api::CMS::TemplateService::Update.call(current_account, params, cms_template_params, @template)
     respond_with(@template)
   rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
     render_error exception.message, status: :unprocessable_entity
@@ -149,7 +149,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   def template_type
     return params[:type].parameterize.to_sym if params[:type].present?
 
-    @template&.class&.name[5..-1].parameterize.to_sym
+    @template.class.name[5..-1].parameterize.to_sym if @template.present?
   end
 
   def can_destroy
