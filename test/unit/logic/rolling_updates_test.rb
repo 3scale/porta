@@ -127,13 +127,6 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
     assert NewFeature.new(provider).enabled?, true
   end
 
-  test 'async apicast deploy' do
-    provider = Account.new
-
-    # TODO: THREESCALE-3759 remove this rolling update, no longer used?
-    refute provider.rolling_update(:async_apicast_deploy).missing_config
-  end
-
   test 'require cc on signup' do
     provider = Account.new
 
