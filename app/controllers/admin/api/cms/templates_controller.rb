@@ -5,7 +5,8 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   AVAILABLE_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type section_id section_name layout_id layout_name].freeze
   ALLOWED_PARAMS = {
     page: %i[type title path content_type system_name section_id section_name layout_id layout_name liquid_enabled draft handler],
-    layout: %i[type system_name draft title liquid_enabled]
+    layout: %i[type system_name draft title liquid_enabled],
+    partial: %i[type system_name draft]
   }.freeze
 
   wrap_parameters :template, include: AVAILABLE_PARAMS,
