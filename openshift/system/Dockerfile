@@ -70,7 +70,6 @@ RUN source /opt/app-root/etc/scl_enable \
 RUN chgrp root /opt/system/
 
 ADD . ./
-ADD config/docker/* ./config/
 ADD package.json ./
 ADD yarn.lock ./
 ADD openshift/system/config/* ./config/
@@ -107,7 +106,6 @@ USER 0
 RUN yum install -y mariadb-server \
     && setpriv --reuid 27 --regid 27 --clear-groups mysql_install_db \
     && (mysqld_safe &) \
-    && cp -v config/docker/thinking_sphinx.yml config/ \
     && ./entrypoint.sh bundle exec rake db:create db:schema:load openshift:thinking_sphinx:configure \
     && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
     && kill $(</var/run/mariadb/mariadb.pid)
