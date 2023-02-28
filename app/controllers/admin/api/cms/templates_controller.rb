@@ -7,7 +7,8 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
     page: %i[title path content_type system_name section_id layout_id liquid_enabled draft handler],
     'builtin-page': %i[layout_id draft],
     layout: %i[system_name draft title liquid_enabled],
-    partial: %i[system_name draft]
+    partial: %i[system_name draft],
+    'builtin-partial': %i[draft],
   }.freeze
 
   wrap_parameters :template, include: AVAILABLE_PARAMS,

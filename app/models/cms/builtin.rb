@@ -190,7 +190,6 @@ class CMS::Builtin < CMS::BasePage
 
     private :destroy
     attr_readonly :system_name
-    attr_protected :liquid_enabled
 
     has_data_tag :builtin_partial
 
