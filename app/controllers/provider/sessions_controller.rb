@@ -10,6 +10,11 @@ class Provider::SessionsController < FrontendController
   before_action :redirect_if_logged_in, only: %i[new]
   before_action :redirect_to_enforced_sso, only: %i[new]
 
+  def initialize
+    super
+    @auditlog = AuditLogService.new
+  end
+
   def new
     @session = Session.new
     @authentication_providers = published_authentication_providers
@@ -18,13 +23,15 @@ class Provider::SessionsController < FrontendController
   def create
     session_return_to
     logout_keeping_session!
-
     @user, strategy = authenticate_user
 
     if @user
       self.current_user = @user
       create_user_session!(strategy.authentication_provider_id)
       flash[:notice] = 'Signed in successfully'
+
+      @auditlog.log("Signed in: #{self.current_user.username} #{self.current_user.id} #{self.current_user.first_name} #{self.current_user.last_name}")
+
       redirect_back_or_default provider_admin_path
     else
       @session = Session.new
@@ -43,6 +50,9 @@ class Provider::SessionsController < FrontendController
     user = current_user
     logout_killing_session!
     destroy_user_session!
+
+    @auditlog.log("destroy_user_session: #{user.username} #{user.id} #{user.first_name} #{user.last_name}")
+
     if @provider.partner? && (logout_url = @provider.partner.logout_url)
       redirect_to logout_url + {user_id: user.id, provider_id: @provider.id}.to_query
     else
@@ -75,7 +85,7 @@ class Provider::SessionsController < FrontendController
                sso_params
              else
                request.post? ? auth_params : sso_params
-    end
+             end
 
     user = strategy.authenticate(params)
 
