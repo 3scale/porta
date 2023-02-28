@@ -54,8 +54,6 @@ class CMS::Builtin < CMS::BasePage
 
   validates :system_name, presence: true
 
-  attr_protected :liquid_enabled
-
   # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
   # in rails 4.2 use the attribute api
   def read_attribute(name)

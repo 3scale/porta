@@ -5,6 +5,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   AVAILABLE_PARAMS = %i[system_name title path draft liquid_enabled handler content_type section_id layout_id].freeze
   ALLOWED_PARAMS = {
     page: %i[title path content_type system_name section_id layout_id liquid_enabled draft handler],
+    'builtin-page': %i[layout_id draft],
     layout: %i[system_name draft title liquid_enabled],
     partial: %i[system_name draft]
   }.freeze
