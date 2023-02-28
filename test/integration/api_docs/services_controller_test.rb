@@ -71,7 +71,7 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       get api_docs_service_path(format: :json, id: 'service_management_api')
       assert_response :success
       json = JSON.parse(response.body)
-      assert_equal "https://#{backend_config[:host]}", json['basePath']
+      assert_equal "https://#{backend_config[:host]}", json["servers"][0]["url"]
     end
 
     test 'show backend_api endpoints only under rolling update enabled' do
@@ -147,21 +147,22 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
 
     def test_backend_base_host
       System::Application.config.stubs(backend_client: { url: 'example-localhost:3001', host: 'example.com' })
-      api_json = ApiFile.new('API', 'service_management_api').json
-      assert_equal 'example-localhost:3001', api_json['basePath']
+
+      api_json = ApiFile.new('Service Management API', 'service_management_api').json
+      assert_equal 'example-localhost:3001', api_json["servers"][0]["url"]
 
       System::Application.config.stubs(backend_client: { host: 'example.com' })
-      api_json = ApiFile.new('API', 'service_management_api').json
-      assert_equal 'https://example.com', api_json['basePath']
+      api_json = ApiFile.new('Service Management API', 'service_management_api').json
+      assert_equal 'https://example.com', api_json["servers"][0]["url"]
     end
 
     def test_file_path
       Rails.application.config.three_scale.stubs(onpremises_api_docs_version: false)
-      api_file = ApiFile.new('API', 'service_management_api')
+      api_file = ApiFile.new('Service Management API', 'service_management_api')
       assert_not_match '(on-premises)', api_file.file_path.to_s
 
       Rails.application.config.three_scale.stubs(onpremises_api_docs_version: true)
-      api_file = ApiFile.new('API', 'service_management_api')
+      api_file = ApiFile.new('Service Management API', 'service_management_api')
       assert_match '(on-premises)', api_file.file_path.to_s
     end
   end
