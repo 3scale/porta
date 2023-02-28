@@ -64,16 +64,16 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :credentials_location, inclusion: { in: %w[headers query authorization], allow_nil: false }
 
   validates :error_status_no_match, :error_status_auth_missing, :error_status_auth_failed, :error_status_limits_exceeded,
-                            numericality: { greater_than_or_equal_to: 200, less_than: 600 }
+            numericality: { greater_than_or_equal_to: 200, less_than: 600 }
 
   validates :auth_app_id, :auth_app_key, :auth_user_key, :secret_token,
-                      format: { with: APP_OR_USER_KEY, allow_nil: false }
+            format: { with: APP_OR_USER_KEY, allow_nil: false }
 
   validates :error_headers_auth_failed,
-                      :error_headers_auth_missing, :error_headers_no_match,
-                      :error_auth_failed, :error_auth_missing, :error_no_match,
-                      :error_headers_limits_exceeded, :error_limits_exceeded,
-                      format: { with: HTTP_HEADER }
+            :error_headers_auth_missing, :error_headers_no_match,
+            :error_auth_failed, :error_auth_missing, :error_no_match,
+            :error_headers_limits_exceeded, :error_limits_exceeded,
+            format: { with: HTTP_HEADER }
 
   validates :api_test_path, length: { maximum: 8192 }
   validates :endpoint, :auth_app_key, :auth_app_id, :auth_user_key,
@@ -113,6 +113,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   delegate :provider_can_use?, to: :account
   delegate :backend_apis, :backend_api_configs, to: :service
   delegate :scheduled_for_deletion?, to: :account, allow_nil: true
+
+  audited allow_mass_assignment: true
 
   def self.user_attribute_names
     super + %w[api_backend] + GatewayConfiguration::ATTRIBUTES
@@ -350,8 +352,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
     # {'app_id' => 'foo', 'app_key_mine' => 'bar'}
     params.keys.map do |x|
-       param_name = opts[:original_names] ? x.to_s : send(keys_to_proxy_args[x])
-       [ param_name, params[x]  ]
+      param_name = opts[:original_names] ? x.to_s : send(keys_to_proxy_args[x])
+      [ param_name, params[x]  ]
     end.to_h
   end
 
