@@ -1,666 +1,876 @@
 {
-  "basePath": "",
-  "resourcePath": "/admin/api/cms/templates",
-  "swaggerVersion": "1.1",
-  "apiVersion": "1.0",
-  "apis": [
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0"
+  },
+  "servers": [
     {
-      "path": "/admin/api/cms/files.xml",
-      "responseClass": "List[short-file]",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "File List",
-          "description": "List all files",
-          "group": "cms_files",
-          "parameters": [
-            {
-              "name": "page",
-              "description": "Current page of the list",
-              "dataType": "int",
-              "paramType": "query",
-              "default": 1
-            },
-            {
-              "name": "per_page",
-              "description": "Total number of records per one page (maximum 100)",
-              "dataType": "int",
-              "paramType": "query",
-              "default": 20
-            },
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            }
-          ]
-        },
-        {
-          "httpMethod": "POST",
-          "summary": "File Create",
-          "description": "Create file",
-          "group": "cms_files",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "path",
-              "description": "URI of the file",
-              "paramType": "query",
-              "required": true
-            },
-            {
-              "name": "section_id",
-              "description": "ID of a section (valid only for pages)",
-              "type": "int",
-              "default": "root section id",
-              "paramType": "query"
-            },
-            {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
-              "name": "attachment",
-              "paramType": "query",
-              "required": true
-            },
-            {
-              "name": "downloadable",
-              "description": "Checked sets the content-disposition to attachment",
-              "type": "boolean",
-              "paramType": "query",
-              "default": "false"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "/admin/api/cms/files/{id}.xml",
-      "responseClass": "file",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "File Read",
-          "description": "View file",
-          "group": "cms_files",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the file",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        },
-        {
-          "httpMethod": "PUT",
-          "summary": "File Update",
-          "description": "Update file",
-          "group": "cms_files",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the file",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            },
-            {
-              "name": "path",
-              "description": "URI of the file",
-              "paramType": "query"
-            },
-            {
-              "name": "section_id",
-              "description": "ID of a section (valid only for pages)",
-              "type": "int",
-              "default": "root section id",
-              "paramType": "query"
-            },
-            {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
-              "name": "attachment",
-              "paramType": "query"
-            },
-            {
-              "name": "downloadable",
-              "description": "Checked sets the content-disposition to attachment",
-              "type": "boolean",
-              "paramType": "query",
-              "default": "false"
-            }
-          ]
-        },
-        {
-          "httpMethod": "DELETE",
-          "summary": "File Delete",
-          "description": "Delete file",
-          "group": "cms_files",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the file",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "/admin/api/cms/sections.xml",
-      "responseClass": "List[short-section]",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "Section List",
-          "description": "List all sections",
-          "group": "cms_sections",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "page",
-              "description": "Current page of the list",
-              "dataType": "int",
-              "paramType": "query",
-              "default": 1
-            },
-            {
-              "name": "per_page",
-              "description": "Total number of records per one page (maximum 100)",
-              "dataType": "int",
-              "paramType": "query",
-              "default": 20
-            }
-          ]
-        },
-        {
-          "httpMethod": "POST",
-          "summary": "Section Create",
-          "description": "Create section",
-          "group": "cms_sections",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "title",
-              "description": "Title of the section",
-              "paramType": "query",
-              "required": true
-            },
-            {
-              "name": "public",
-              "description": "Public or not",
-              "default": "true",
-              "type": "boolean",
-              "paramType": "query"
-            },
-            {
-              "name": "parent_id",
-              "description": "ID of a parent section",
-              "paramType": "query",
-              "default": "root section id",
-              "type": "int"
-            },
-            {
-              "name": "partial_path",
-              "description": "Path of the section",
-              "paramType": "query"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "/admin/api/cms/sections/{id}.xml",
-      "responseClass": "template",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "Section Read",
-          "description": "View section",
-          "group": "cms_sections",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the section",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        },
-        {
-          "httpMethod": "PUT",
-          "summary": "Section Update",
-          "description": "Update section",
-          "group": "cms_sections",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the section",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            },
-            {
-              "name": "title",
-              "description": "Title of the section",
-              "paramType": "query"
-            },
-            {
-              "name": "public",
-              "description": "Public or not",
-              "default": "true",
-              "type": "boolean",
-              "paramType": "query"
-            },
-            {
-              "name": "parent_id",
-              "description": "ID of a parent section",
-              "paramType": "query",
-              "default": "root section id",
-              "type": "int"
-            },
-            {
-              "name": "partial_path",
-              "description": "Path of the section",
-              "paramType": "query"
-            }
-          ]
-        },
-        {
-          "httpMethod": "DELETE",
-          "summary": "Section Delete",
-          "description": "Delete section",
-          "group": "cms_sections",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the section",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "/admin/api/cms/templates.xml",
-      "responseClass": "List[short-template]",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "Template List",
-          "description": "List all templates",
-          "group": "cms_templates",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "page",
-              "description": "Current page of the list",
-              "dataType": "int",
-              "paramType": "query",
-              "default": 1
-            },
-            {
-              "name": "per_page",
-              "description": "Total number of records per one page (maximum 100)",
-              "dataType": "int",
-              "paramType": "query",
-              "default": 20
-            }
-          ]
-        },
-        {
-          "httpMethod": "POST",
-          "summary": "Template Create",
-          "description": "Create partial, layout or page",
-          "group": "cms_templates",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "type",
-              "paramType": "query",
-              "required": true,
-              "allowableValues": {
-                "valueType": "LIST",
-                "values": [
-                  "page",
-                  "layout",
-                  "partial"
-                ]
-              }
-            },
-            {
-              "name": "system_name",
-              "description": "Human readable and unique identifier",
-              "paramType": "query"
-            },
-            {
-              "name": "title",
-              "description": "Title of the template",
-              "paramType": "query"
-            },
-            {
-              "name": "path",
-              "description": "URI of the page",
-              "paramType": "query"
-            },
-            {
-              "name": "draft",
-              "description": "Text content of the template (you have to publish the template)",
-              "paramType": "query"
-            },
-            {
-              "name": "section_name",
-              "description": "system name of a section",
-              "paramType": "query",
-              "type": "string"
-            },
-            {
-              "name": "section_id",
-              "description": "ID of a section (valid only for pages)",
-              "paramType": "query",
-              "type": "int",
-              "default": "root section id"
-            },
-            {
-              "name": "layout_name",
-              "description": "system name of a layout (valid only for pages)",
-              "paramType": "query",
-              "type": "string"
-            },
-            {
-              "name": "layout_id",
-              "description": "ID of a layout - overrides layout_name",
-              "paramType": "query",
-              "type": "int"
-            },
-            {
-              "name": "liquid_enabled",
-              "description": "liquid processing of the template content on/off",
-              "paramType": "query",
-              "type": "boolean"
-            },
-            {
-              "name": "handler",
-              "paramType": "query",
-              "description": "text will be processed by the handler before rendering",
-              "required": false,
-              "allowableValues": {
-                "valueType": "LIST",
-                "values": [
-                  "textile",
-                  "markdown"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "/admin/api/cms/templates/{id}.xml",
-      "responseClass": "template",
-      "operations": [
-        {
-          "httpMethod": "GET",
-          "summary": "Template Read",
-          "description": "View template",
-          "group": "cms_templates",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the template",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        },
-        {
-          "httpMethod": "PUT",
-          "summary": "Template Update",
-          "description": "Update [builtin] page, partial or layout and draft content.",
-          "group": "cms_templates",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the template",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            },
-            {
-              "name": "system_name",
-              "description": "Human readable and unique identifier",
-              "paramType": "query"
-            },
-            {
-              "name": "title",
-              "description": "Title of the template",
-              "paramType": "query"
-            },
-            {
-              "name": "path",
-              "description": "URI of the page",
-              "paramType": "query"
-            },
-            {
-              "name": "draft",
-              "description": "Text content of the template (you have to publish the template)",
-              "paramType": "query"
-            },
-            {
-              "name": "section_name",
-              "description": "system name of a section",
-              "paramType": "query",
-              "type": "string"
-            },
-            {
-              "name": "section_id",
-              "description": "ID of a section (valid only for pages)",
-              "paramType": "query",
-              "type": "int",
-              "default": "root section id"
-            },
-            {
-              "name": "layout_name",
-              "description": "system name of a layout (valid only for pages)",
-              "paramType": "query",
-              "type": "string"
-            },
-            {
-              "name": "layout_id",
-              "description": "ID of a layout - overrides layout_name",
-              "paramType": "query",
-              "type": "int"
-            },
-            {
-              "name": "liquid_enabled",
-              "description": "liquid processing of the template content on/off",
-              "paramType": "query",
-              "type": "boolean"
-            },
-            {
-              "name": "handler",
-              "paramType": "query",
-              "description": "text will be processed by the handler before rendering",
-              "required": false,
-              "allowableValues": {
-                "valueType": "LIST",
-                "values": [
-                  "textile",
-                  "markdown"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "httpMethod": "DELETE",
-          "summary": "Template Delete",
-          "description": "Delete page, partial or layout.",
-          "group": "cms_templates",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the template",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "/admin/api/cms/templates/{id}/publish.xml",
-      "responseClass": "template",
-      "operations": [
-        {
-          "httpMethod": "PUT",
-          "summary": "Template Publish",
-          "description": "The current draft will be published and visible by all users.",
-          "group": "cms_templates",
-          "parameters": [
-            {
-              "name": "access_token",
-              "description": "Your access token",
-              "dataType": "string",
-              "required": true,
-              "paramType": "query",
-              "allowMultiple": false
-            },
-            {
-              "name": "id",
-              "description": "ID of the template",
-              "dataType": "int",
-              "required": true,
-              "paramType": "path"
-            }
-          ]
-        }
-      ]
+      "url": "/"
     }
-  ]
+  ],
+  "paths": {
+    "/admin/api/cms/templates/{id}/publish.xml": {
+      "put": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Template Publish",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the template",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/cms/files.xml": {
+      "get": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "File List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Current page of the list",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Total number of records per one page (maximum 100)",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "File Create",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "description": "URI of the file",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "section_id",
+            "in": "query",
+            "description": "ID of a section (valid only for pages)",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "tag_list",
+            "in": "query",
+            "description": "List of the tags",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attachment",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "downloadable",
+            "in": "query",
+            "description": "Checked sets the content-disposition to attachment",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/cms/files/{id}.xml": {
+      "get": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "File Read",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the file",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "File Update",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the file",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "description": "URI of the file",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "section_id",
+            "in": "query",
+            "description": "ID of a section (valid only for pages)",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "tag_list",
+            "in": "query",
+            "description": "List of the tags",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attachment",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "downloadable",
+            "in": "query",
+            "description": "Checked sets the content-disposition to attachment",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "File Delete",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the file",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/cms/templates.xml": {
+      "get": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Template List",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Current page of the list",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Total number of records per one page (maximum 100)",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Template Create",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "page",
+                "layout",
+                "partial"
+              ]
+            }
+          },
+          {
+            "name": "system_name",
+            "in": "query",
+            "description": "Human readable and unique identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Title of the template",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "description": "URI of the page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "draft",
+            "in": "query",
+            "description": "Text content of the template (you have to publish the template)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "section_name",
+            "in": "query",
+            "description": "system name of a section",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "section_id",
+            "in": "query",
+            "description": "ID of a section (valid only for pages)",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "layout_name",
+            "in": "query",
+            "description": "system name of a layout (valid only for pages)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "layout_id",
+            "in": "query",
+            "description": "ID of a layout - overrides layout_name",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "liquid_enabled",
+            "in": "query",
+            "description": "liquid processing of the template content on/off",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "handler",
+            "in": "query",
+            "description": "text will be processed by the handler before rendering",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "textile",
+                "markdown"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/cms/sections.xml": {
+      "get": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Section List",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Current page of the list",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Total number of records per one page (maximum 100)",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Section Create",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Title of the section",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "public",
+            "in": "query",
+            "description": "Public or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "parent_id",
+            "in": "query",
+            "description": "ID of a parent section",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "partial_path",
+            "in": "query",
+            "description": "Path of the section",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/cms/templates/{id}.xml": {
+      "get": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Template Read",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the template",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Template Update",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the template",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "system_name",
+            "in": "query",
+            "description": "Human readable and unique identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Title of the template",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "description": "URI of the page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "draft",
+            "in": "query",
+            "description": "Text content of the template (you have to publish the template)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "section_name",
+            "in": "query",
+            "description": "system name of a section",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "section_id",
+            "in": "query",
+            "description": "ID of a section (valid only for pages)",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "layout_name",
+            "in": "query",
+            "description": "system name of a layout (valid only for pages)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "layout_id",
+            "in": "query",
+            "description": "ID of a layout - overrides layout_name",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "liquid_enabled",
+            "in": "query",
+            "description": "liquid processing of the template content on/off",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "handler",
+            "in": "query",
+            "description": "text will be processed by the handler before rendering",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "textile",
+                "markdown"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Template Delete",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the template",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/cms/sections/{id}.xml": {
+      "get": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Section Read",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the section",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Section Update",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the section",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Title of the section",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "public",
+            "in": "query",
+            "description": "Public or not",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "parent_id",
+            "in": "query",
+            "description": "ID of a parent section",
+            "schema": {
+              "type": "ref"
+            }
+          },
+          {
+            "name": "partial_path",
+            "in": "query",
+            "description": "Path of the section",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "adminapicmstemplates"
+        ],
+        "summary": "Section Delete",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "Your access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the section",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {}
 }
