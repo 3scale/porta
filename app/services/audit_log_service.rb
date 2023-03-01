@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class AuditLogService
+  include Callable
 
-  def log(message)
+  def call(message)
     Rails.logger.info "[AUDIT]: #{message}"
   end
 end
+
