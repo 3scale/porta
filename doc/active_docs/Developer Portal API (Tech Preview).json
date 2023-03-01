@@ -1,6 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
+    "title": "Developer Portal API",
+    "description": "API for managing the Developer Portal.",
     "version": "1.0"
   },
   "servers": [
@@ -11,20 +13,11 @@
   "paths": {
     "/admin/api/cms/templates/{id}/publish.xml": {
       "put": {
+        "summary": "Template Publish",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "Template Publish",
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -36,6 +29,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Template Publish",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -87,62 +107,59 @@
         }
       },
       "post": {
+        "summary": "File Create",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "File Create",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "URI of the file",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_id",
-            "in": "query",
-            "description": "ID of a section (valid only for pages)",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "tag_list",
-            "in": "query",
-            "description": "List of the tags",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "attachment",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "downloadable",
-            "in": "query",
-            "description": "Checked sets the content-disposition to attachment",
-            "schema": {
-              "type": "boolean"
+        
+        "requestBody": {
+          "description": "File Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "URI of the file"
+                  },
+                  "section_id": {
+                    "type": "ref",
+                    "description": "ID of a section (valid only for pages)"
+                  },
+                  "tag_list": {
+                    "type": "string",
+                    "description": "List of the tags"
+                  },
+                  "attachment": {
+                    "type": "string"
+                  },
+                  "downloadable": {
+                    "type": "boolean",
+                    "description": "Checked sets the content-disposition to attachment"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "path",
+                  "attachment"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -186,20 +203,11 @@
         }
       },
       "put": {
+        "summary": "File Update",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "File Update",
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -209,47 +217,54 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "URI of the file",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_id",
-            "in": "query",
-            "description": "ID of a section (valid only for pages)",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "tag_list",
-            "in": "query",
-            "description": "List of the tags",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "attachment",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "downloadable",
-            "in": "query",
-            "description": "Checked sets the content-disposition to attachment",
-            "schema": {
-              "type": "boolean"
-            }
           }
         ],
+        "requestBody": {
+          "description": "File Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "URI of the file"
+                  },
+                  "section_id": {
+                    "type": "ref",
+                    "description": "ID of a section (valid only for pages)"
+                  },
+                  "tag_list": {
+                    "type": "string",
+                    "description": "List of the tags"
+                  },
+                  "attachment": {
+                    "type": "string"
+                  },
+                  "downloadable": {
+                    "type": "boolean",
+                    "description": "Checked sets the content-disposition to attachment"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -334,118 +349,90 @@
         }
       },
       "post": {
+        "summary": "Template Create",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "Template Create",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "page",
-                "layout",
-                "partial"
-              ]
-            }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "Human readable and unique identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of the template",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "URI of the page",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "draft",
-            "in": "query",
-            "description": "Text content of the template (you have to publish the template)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_name",
-            "in": "query",
-            "description": "system name of a section",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_id",
-            "in": "query",
-            "description": "ID of a section (valid only for pages)",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "layout_name",
-            "in": "query",
-            "description": "system name of a layout (valid only for pages)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "layout_id",
-            "in": "query",
-            "description": "ID of a layout - overrides layout_name",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "liquid_enabled",
-            "in": "query",
-            "description": "liquid processing of the template content on/off",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "handler",
-            "in": "query",
-            "description": "text will be processed by the handler before rendering",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "textile",
-                "markdown"
-              ]
+        "requestBody": {
+          "description": "Template Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "Your access token"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "page",
+                      "layout",
+                      "partial"
+                    ]
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "Human readable and unique identifier"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the template"
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "URI of the page"
+                  },
+                  "draft": {
+                    "type": "string",
+                    "description": "Text content of the template (you have to publish the template)"
+                  },
+                  "section_name": {
+                    "type": "string",
+                    "description": "system name of a section"
+                  },
+                  "section_id": {
+                    "type": "ref",
+                    "description": "ID of a section (valid only for pages)"
+                  },
+                  "layout_name": {
+                    "type": "string",
+                    "description": "system name of a layout (valid only for pages)"
+                  },
+                  "layout_id": {
+                    "type": "ref",
+                    "description": "ID of a layout - overrides layout_name"
+                  },
+                  "liquid_enabled": {
+                    "type": "boolean",
+                    "description": "liquid processing of the template content on/off"
+                  },
+                  "handler": {
+                    "type": "string",
+                    "description": "text will be processed by the handler before rendering",
+                    "enum": [
+                      "textile",
+                      "markdown"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "type"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -497,54 +484,54 @@
         }
       },
       "post": {
+        "summary": "Section Create",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "Section Create",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of the section",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "public",
-            "in": "query",
-            "description": "Public or not",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "parent_id",
-            "in": "query",
-            "description": "ID of a parent section",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "partial_path",
-            "in": "query",
-            "description": "Path of the section",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "description": "Section Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "Your access token"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the section"
+                  },
+                  "public": {
+                    "type": "boolean",
+                    "description": "Public or not"
+                  },
+                  "parent_id": {
+                    "type": "ref",
+                    "description": "ID of a parent section"
+                  },
+                  "partial_path": {
+                    "type": "string",
+                    "description": "Path of the section"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "title"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -588,20 +575,11 @@
         }
       },
       "put": {
+        "summary": "Template Update",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "Template Update",
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -611,92 +589,79 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "system_name",
-            "in": "query",
-            "description": "Human readable and unique identifier",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of the template",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "path",
-            "in": "query",
-            "description": "URI of the page",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "draft",
-            "in": "query",
-            "description": "Text content of the template (you have to publish the template)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_name",
-            "in": "query",
-            "description": "system name of a section",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "section_id",
-            "in": "query",
-            "description": "ID of a section (valid only for pages)",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "layout_name",
-            "in": "query",
-            "description": "system name of a layout (valid only for pages)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "layout_id",
-            "in": "query",
-            "description": "ID of a layout - overrides layout_name",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "liquid_enabled",
-            "in": "query",
-            "description": "liquid processing of the template content on/off",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "handler",
-            "in": "query",
-            "description": "text will be processed by the handler before rendering",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "textile",
-                "markdown"
-              ]
-            }
           }
         ],
+        "requestBody": {
+          "description": "Template Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "Your access token"
+                  },
+                  "system_name": {
+                    "type": "string",
+                    "description": "Human readable and unique identifier"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the template"
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "URI of the page"
+                  },
+                  "draft": {
+                    "type": "string",
+                    "description": "Text content of the template (you have to publish the template)"
+                  },
+                  "section_name": {
+                    "type": "string",
+                    "description": "system name of a section"
+                  },
+                  "section_id": {
+                    "type": "ref",
+                    "description": "ID of a section (valid only for pages)"
+                  },
+                  "layout_name": {
+                    "type": "string",
+                    "description": "system name of a layout (valid only for pages)"
+                  },
+                  "layout_id": {
+                    "type": "ref",
+                    "description": "ID of a layout - overrides layout_name"
+                  },
+                  "liquid_enabled": {
+                    "type": "boolean",
+                    "description": "liquid processing of the template content on/off"
+                  },
+                  "handler": {
+                    "type": "string",
+                    "description": "text will be processed by the handler before rendering",
+                    "enum": [
+                      "textile",
+                      "markdown"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -773,20 +738,11 @@
         }
       },
       "put": {
+        "summary": "Section Update",
         "tags": [
           "adminapicmstemplates"
         ],
-        "summary": "Section Update",
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "Your access token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -796,40 +752,51 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "title",
-            "in": "query",
-            "description": "Title of the section",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "public",
-            "in": "query",
-            "description": "Public or not",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "parent_id",
-            "in": "query",
-            "description": "ID of a parent section",
-            "schema": {
-              "type": "ref"
-            }
-          },
-          {
-            "name": "partial_path",
-            "in": "query",
-            "description": "Path of the section",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Section Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "Your access token"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the section"
+                  },
+                  "public": {
+                    "type": "boolean",
+                    "description": "Public or not" 
+                  },
+                  "parent_id": {
+                    "type": "ref",
+                    "description": "ID of a parent section"
+                  },
+                  "partial_path": {
+                    "type": "string",
+                    "description": "Path of the section"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",

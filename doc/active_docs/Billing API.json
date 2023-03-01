@@ -88,17 +88,10 @@
       },
       "post": {
         "summary": "Create Line Item for an Invoice",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+        "tags": [
+          "Invoices"
+        ],
+         "parameters": [
           {
             "name": "invoice_id",
             "in": "path",
@@ -108,72 +101,67 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the Line Item",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Description of the Line Item",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "quantity",
-            "in": "query",
-            "description": "Quantity of the Line Item",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cost",
-            "in": "query",
-            "description": "Total cost/price of the Line Item considering the quantity",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "metric_id",
-            "in": "query",
-            "description": "Metric that have generated this Line Item",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "contract_id",
-            "in": "query",
-            "description": "Contract that have generated this Line Item",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "description": "Type of cost. Can be [LineItem::PlanCost, LineItem::VariableCost]",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "plan_id",
-            "in": "query",
-            "description": "The ID of the plan.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Create Line Item for an Invoice",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the Line Item"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the Line Item"
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "description": "Quantity of the Line Item"
+                  },
+                  "cost": {
+                    "type": "string",
+                    "description": "Total cost/price of the Line Item considering the quantity"
+                  },
+                  "metric_id": {
+                    "type": "string",
+                    "description": "Metric that have generated this Line Item"
+                  },
+                  "contract_id": {
+                    "type": "string",
+                    "description": "Contract that have generated this Line Item"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Type of cost. Can be [LineItem::PlanCost, LineItem::VariableCost]"
+                  },
+                  "plan_id": {
+                    "type": "string",
+                    "description": "The ID of the plan."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -249,17 +237,10 @@
       },
       "put": {
         "summary": "Invoice Update",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+        "tags": [
+          "Invoices"
+        ],
+         "parameters": [
           {
             "name": "id",
             "in": "path",
@@ -269,24 +250,43 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Billing period of the Invoice. The format should be YYYY-MM.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "friendly_id",
-            "in": "query",
-            "description": "Friendly ID of the Invoice. The format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Invoice Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Billing period of the Invoice. The format should be YYYY-MM."
+                  },
+                  "friendly_id": {
+                    "type": "string",
+                    "description": "Friendly ID of the Invoice. The format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -298,17 +298,10 @@
     "/api/invoices/{id}/state.xml": {
       "put": {
         "summary": "Invoice Update state",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
+        "tags": [
+          "Invoices"
+        ],
+         "parameters": [
           {
             "name": "id",
             "in": "path",
@@ -318,17 +311,40 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "state",
-            "in": "query",
-            "description": "State of the Invoice to set. Values allowed (depend on the previous state): cancelled, failed, paid, unpaid, pending, finalized",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "Invoice Update state",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "State of the Invoice to set. Values allowed (depend on the previous state): cancelled, failed, paid, unpaid, pending, finalized"
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "state"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -447,36 +463,44 @@
       },
       "post": {
         "summary": "Invoice Create",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "account_id",
-            "in": "query",
-            "description": "ID of the account.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Billing period of the Invoice. The format should be YYYY-MM.",
-            "schema": {
-              "type": "string"
+        "tags": [
+          "Invoices"
+        ],
+        "requestBody": {
+          "description": "Invoice Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "account_id": {
+                    "type": "integer",
+                    "description": "ID of the account."
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Billing period of the Invoice. The format should be YYYY-MM."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -566,15 +590,6 @@
         "summary": "Invoice Charge",
         "parameters": [
           {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "description": "ID of the Invoice.",
@@ -585,6 +600,33 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Invoice Charge",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
