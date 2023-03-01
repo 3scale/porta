@@ -3,7 +3,8 @@ import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
 import 'ActiveDocs/swagger-ui-3-patch.scss'
-import { autocompleteOAS3 } from './OAS3Autocomplete'
+
+import { autocompleteOAS3 } from 'ActiveDocs/OAS3Autocomplete'
 
 const accountDataUrl = '/p/admin/api_docs/account_data.json'
 
