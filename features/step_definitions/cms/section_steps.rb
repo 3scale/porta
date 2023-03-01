@@ -21,11 +21,11 @@ Given "{provider} has a {word} section {string} with path {string}" do |provider
 end
 
 def add_section_to_provider(provider, protection, name, path = nil)
-  root = provider.sections.root || FactoryBot.create(:root_cms_section, :account => provider)
+  root = provider.sections.root || FactoryBot.create(:root_cms_section, provider: provider)
 
   options = {:title => name,
     :system_name => name,
-    :account => provider,
+    :provider => provider,
     :parent => root,
     :public => (protection == 'public')}
 
