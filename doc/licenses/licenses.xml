@@ -2032,16 +2032,6 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>Ascii85</packageName>
-        <version>1.0.3</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
         <packageName>RedCloth</packageName>
         <version>4.3.2</version>
         <licenses>
@@ -5042,8 +5032,8 @@
         <version>1.1.1</version>
         <licenses>
                       <license>
-              <name>UNKNOWN</name>
-              <url></url>
+              <name>MIT</name>
+              <url>http://opensource.org/licenses/mit-license</url>
             </license>
                   </licenses>
       </dependency>
@@ -5948,26 +5938,6 @@
                       <license>
               <name>ISC</name>
               <url>http://en.wikipedia.org/wiki/ISC_license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>fsevents</packageName>
-        <version>1.2.13</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>fsevents</packageName>
-        <version>2.3.2</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
             </license>
                   </licenses>
       </dependency>
@@ -9766,12 +9736,20 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>pdf-reader</packageName>
-        <version>0.9.3</version>
+        <packageName>pdf-core</packageName>
+        <version>0.9.0</version>
         <licenses>
                       <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
+              <name>GPL-2.0</name>
+              <url></url>
+            </license>
+                      <license>
+              <name>GPL-3.0</name>
+              <url></url>
+            </license>
+                      <license>
+              <name>PRAWN</name>
+              <url></url>
             </license>
                   </licenses>
       </dependency>
@@ -10676,8 +10654,8 @@
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>prawn-core</packageName>
-        <version>0.5.1.pre.3scale</version>
+        <packageName>prawn</packageName>
+        <version>2.4.0</version>
         <licenses>
                       <license>
               <name>GPL-2.0</name>
@@ -10688,27 +10666,25 @@
               <url></url>
             </license>
                       <license>
-              <name>ruby</name>
-              <url>http://www.ruby-lang.org/en/LICENSE.txt</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>prawn-format</packageName>
-        <version>0.2.1</version>
-        <licenses>
-                      <license>
-              <name>unknown</name>
+              <name>PRAWN</name>
               <url></url>
             </license>
                   </licenses>
       </dependency>
           <dependency>
-        <packageName>prawn-layout</packageName>
-        <version>0.2.1</version>
+        <packageName>prawn-table</packageName>
+        <version>0.2.3</version>
         <licenses>
                       <license>
-              <name>unknown</name>
+              <name>GPL-2.0</name>
+              <url></url>
+            </license>
+                      <license>
+              <name>GPL-3.0</name>
+              <url></url>
+            </license>
+                      <license>
+              <name>PRAWN</name>
               <url></url>
             </license>
                   </licenses>
@@ -13799,7 +13775,7 @@
       </dependency>
           <dependency>
         <packageName>ttfunk</packageName>
-        <version>1.5.1</version>
+        <version>1.7.0</version>
         <licenses>
                       <license>
               <name>GPL-2.0</name>
