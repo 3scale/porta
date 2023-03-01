@@ -24,6 +24,7 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
 
       unless identical?(report_path, temp_report_path)
         warn 'License report outdated. Please run "rails licenses:report"'
+        system("diff", "-u", report_path.to_s, temp_report_path.to_s)
         exit 1
       end
     end
