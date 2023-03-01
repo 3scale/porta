@@ -1,8 +1,9 @@
 // We can define the 3scale plugins here and export the modified bundle
 import SwaggerUI from 'swagger-ui'
-import { autocompleteOAS3 } from './OAS3Autocomplete'
 import 'swagger-ui/dist/swagger-ui.css'
+
 import 'ActiveDocs/swagger-ui-3-patch.scss'
+import { autocompleteOAS3 } from './OAS3Autocomplete'
 
 const accountDataUrl = '/p/admin/api_docs/account_data.json'
 
