@@ -9,8 +9,7 @@ Feature: Billing Reporting for Provider
   Background:
     Given a provider "foo.3scale.localhost"
       And all the rolling updates features are off
-      And provider "foo.3scale.localhost" is fake charging
-      And provider "foo.3scale.localhost" has valid payment gateway
+      And provider "foo.3scale.localhost" is charging its buyers
       And admin of account "foo.3scale.localhost" has email "admin@foo.3scale.localhost"
       And an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly

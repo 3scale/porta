@@ -15,7 +15,7 @@ World(Module.new do
   #
   # step definition in web_steps.rb
   #
-  def path_to(page_name, *args)
+  def path_to(page_name, *args) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     case page_name
 
     # Public

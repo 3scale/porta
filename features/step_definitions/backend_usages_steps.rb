@@ -1,17 +1,7 @@
 # frozen_string_literal: true
 
-And 'a backend used by this product' do
-  @backend = FactoryBot.create(:backend_api, name: 'My Backend', private_endpoint: 'https://foo', account: @provider)
-  FactoryBot.create(:backend_api_config, backend_api: @backend, service: @product)
-end
-
 And 'the backend is unavailable' do
   @backend.update!(state: 'deleted')
-end
-
-And "an admin is at a product's backend usages page" do
-  @product = @provider.default_service
-  visit admin_service_backend_usages_path(@product)
 end
 
 When "an admin goes to the product's backend usages page" do

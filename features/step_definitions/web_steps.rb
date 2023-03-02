@@ -6,7 +6,6 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-
 require 'uri'
 require 'cgi'
 
@@ -47,23 +46,6 @@ When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field
       ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
       fill_in(field, :with => value, visible: true)
     end
-  end
-end
-
-When /^I fill in "(.+?)" with:$/ do |field, text|
-  if page.has_css?('.pf-c-form__label', text: field)
-    input = find('.pf-c-form__label', text: field).sibling('input')
-    input.set value
-  else
-    # DEPRECATED: remove when all forms implement PF4
-    ThreeScale::Deprecation.warn "[cucumber] Detected a form not using PF4 css"
-    fill_in(field, :with => text, visible: true)
-  end
-end
-
-When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do
-    fill_in(field, :with => value, visible: true)
   end
 end
 
@@ -139,18 +121,10 @@ When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   end
 end
 
-
 When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
   with_scope(selector) do
     attach_file(field, File.join(Rails.root,path))
   end
-end
-
-Then /^(?:|I )should see JSON:$/ do |expected_json|
-  require 'json'
-  expected = JSON.pretty_generate(JSON.parse(expected_json))
-  actual   = JSON.pretty_generate(JSON.parse(response.body))
-  expected.should == actual
 end
 
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
@@ -164,16 +138,16 @@ Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   end
 end
 
-Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
-  regexp = Regexp.new(regexp, Regexp::IGNORECASE)
-  with_scope(selector) do
-    if page.respond_to? :should
-      page.should have_xpath('//*', :text => regexp)
-    else
-      assert page.has_xpath?('//*', :text => regexp)
-    end
-  end
-end
+# Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
+#   regexp = Regexp.new(regexp, Regexp::IGNORECASE)
+#   with_scope(selector) do
+#     if page.respond_to? :should
+#       page.should have_xpath('//*', :text => regexp)
+#     else
+#       assert page.has_xpath?('//*', :text => regexp)
+#     end
+#   end
+# end
 
 Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
@@ -201,18 +175,6 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |
       field_value.should =~ /#{value}/
     else
       assert_match(/#{value}/, field_value)
-    end
-  end
-end
-
-Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ do |field, selector, value|
-  with_scope(selector) do
-    field = find_field(field)
-    field_value = field.tag_name == 'textarea' ? field.text : field.value
-    if field_value.respond_to? :should_not
-      field_value.should_not =~ /#{value}/
-    else
-      refute_match(/#{value}/, field_value)
     end
   end
 end
@@ -251,16 +213,6 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   else
     assert_equal expected_params, actual_params
   end
-end
-
-When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    choose(field)
-  end
-end
-
-Then /^show me the page$/ do
-  save_and_open_page
 end
 
 When 'I change to tab {string}' do |tab|

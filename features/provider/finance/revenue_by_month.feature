@@ -4,7 +4,8 @@ Feature: Group earnings by month
   I want to see the sumatory of paid invoices by month.
 
   Background:
-    Given a provider with billing and finance enabled
+    Given a provider is logged in
+    And the provider is charging its buyers
     And the provider has one buyer
 
   Scenario: In process invoice

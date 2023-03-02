@@ -20,13 +20,15 @@ ParameterType(
 
 ParameterType(
   name: 'provider_or_buyer',
-  regexp: /(provider|buyer) "([^"]*)"/,
+  regexp: /(?:(provider|buyer) "([^"]*)"|the provider)/,
   transformer: ->(type, name) {
     case type
-    when 'provider' then
+    when 'provider'
       provider_by_name(name)
-    when 'buyer' then
+    when 'buyer'
       Account.buyers.find_by!(name: name)
+    else
+      @provider
     end
   }
 )
@@ -45,9 +47,15 @@ def provider_by_name(name)
 end
 
 ParameterType(
-  name: 'prepaid_or_postpaid',
-  regexp: /(prepaid|postpaid)?/,
-  transformer: ->(mode = nil) { mode }
+  name: 'billing_mode',
+  regexp: /(prepaid|postpaid|)/,
+  transformer: ->(mode) {
+    if mode == 'prepaid'
+      'Finance::PrepaidBillingStrategy'
+    else
+      'Finance::PostpaidBillingStrategy'
+    end
+  }
 )
 
 ParameterType(
@@ -107,19 +115,20 @@ ParameterType(
 ParameterType(
   name: 'provider',
   type: Account,
-  regexp: /provider "([^"]*)"|(master) provider|provider (master)|the provider/,
-  # TODO check this .present? condition
+  regexp: /the provider|provider "([^"]*)"|((?:the )?master )?provider/,
   transformer: ->(*args) do
-    name = args.map(&:presence).compact.first
-    name.present? ? provider_by_name(name) : @provider
+    return provider_by_name('master') if args[1].present?
+
+    name = args[0].presence
+    name ? provider_by_name(name) : @provider
   end
 )
 
 ParameterType(
   name: 'buyer',
   type: Account,
-  regexp: /buyer "([^"]*)"/,
-  transformer: ->(org_name) { Account.buyers.find_by!(org_name: org_name) }
+  regexp: /buyer "([^"]*)"|the buyer/,
+  transformer: ->(org_name) { org_name.present? ? Account.buyers.find_by!(org_name: org_name) : @buyer }
 )
 
 ParameterType(
@@ -239,12 +248,6 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'buyer_group_of_provider',
-  regexp: /buyer group "([^"]*)" of provider "([^"]*)"/,
-  transformer: ->(name, provider_name) { name }
-)
-
-ParameterType(
   name: 'service_of_provider',
   regexp: /service "([^"]*)" of provider "([^"]*)"/,
   transformer: ->(service_name, provider_name) do
@@ -260,9 +263,14 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'expiration_date',
-  regexp: /expiration date (\w+, *\d+|\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))/,
-  transformer: ->(date) { Date.parse(date) }
+  name: 'payment_gateway',
+  regexp: /braintree|stripe/,
+  transformer: ->(value) {
+    case value
+    when 'braintree' then :braintree_blue
+    when 'stripe' then :stripe
+    end
+  }
 )
 
 ParameterType(
@@ -356,13 +364,31 @@ ParameterType(
 )
 
 ParameterType(
-  name: 'month',
-  regexp: /\w+, *\d+/,
-  transformer: ->(date) { date }
+  name: 'date',
+  regexp: /(\w{3,}( \d{2,}?)?, \d{4})/,
+  transformer: ->(date) { Date.parse(date) }
 )
 
 ParameterType(
   name: 'switch',
   regexp: /"(.+?)"(?: switch)?/,
   transformer: ->(name) { name }
+)
+
+ParameterType(
+  name: 'valid',
+  regexp: /valid|invalid/,
+  transformer: ->(value) { value == 'valid' }
+)
+
+ParameterType(
+  name: 'has',
+  regexp: /has|has already|has not|has not yet|don't have/,
+  transformer: ->(value) { ['has', 'has already'].include?(value) }
+)
+
+ParameterType(
+  name: 'can',
+  regexp: /can|can't|cannot/,
+  transformer: ->(value) { value == 'can' }
 )

@@ -8,10 +8,6 @@ Given /^I don't care about application keys$/ do
   stub_backend_get_keys
 end
 
-Given /^I care about application keys$/ do
-  unstub_backend_get_keys
-end
-
 Given "{application} has the following keys:" do |application, table|
   fake_application_keys(application, table.raw.map(&:first))
 end
@@ -51,20 +47,8 @@ Given "the backend will delete key {string} for {application}" do |key, applicat
     .to_return(status: fake_status(200), body: '')
 end
 
-Given "the backend will delete all keys for {application}" do |application|
-  application.keys.each do |key|
-    step %{the backend will delete key "#{key}" for application "#{application.name}"}
-  end
-end
-
 When /^I (press|follow) "([^"]*)" for application key "([^"]*)"$/ do |action, label, key|
   step %(I #{action} "#{label}" within "#application_key_#{key}")
-end
-
-When %r{^I (press|follow) "([^"]*)" for last application key$} do |action, label|
-  within "#keys .key:last-child .key" do
-    step %{I #{action} "#{label}"}
-  end
 end
 
 When %r{^I (press|follow) "([^"]*)" for first application key$} do |action, label|
@@ -75,10 +59,6 @@ end
 
 Then /^I should see application key "([^"]*)"$/ do |key|
   step %(I should see "#{key}" within "#application_keys")
-end
-
-Then /^I should not see application key "([^"]*)"$/ do |key|
-  step %(I should not see "#{key}" within "#application_keys")
 end
 
 Then "I should see all keys of {application}" do |application|

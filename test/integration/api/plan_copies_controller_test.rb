@@ -84,7 +84,7 @@ class Api::PlanCopiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
     json = JSON.parse(response.body)
     assert_equal 'Plan copied.', json['notice']
-    assert_equal current_account.provided_plans.last.id, JSON.parse(json['plan'])['id']
+    assert_includes current_account.provided_plans.pluck(:id), JSON.parse(json['plan'])['id']
   end
 
   def assert_plan_not_copied

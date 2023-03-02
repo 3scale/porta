@@ -135,6 +135,22 @@ module CMS
         assert_equal '/cool', doc.xpath('/page/path').text
       end
 
+      {
+        HTML: '<html><body><p>This is a test</p></body></html>',
+        CDATA: '<![CDATA[<html><body><p>This is a test</p></body></html>]]>'
+      }.each do |name, published|
+        test "show a page with #{name} inside the content" do
+          page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool', published: published)
+          get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :xml }
+          assert_response :success
+
+          doc = Nokogiri::XML::Document.parse(@response.body)
+          element = doc.xpath('/page/published')
+          assert element.first.children.first.cdata?
+          assert_equal published, element.text
+        end
+      end
+
       test 'publish' do
         page = FactoryBot.create(:cms_page, provider: @provider, draft: 'new', published: 'old' )
 
@@ -190,7 +206,7 @@ module CMS
         page = FactoryBot.create(:cms_page, :provider => @provider)
 
         put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id,
-                                                         format: :xml, template: { layout_id: new_layout.id }
+                                                         format: :xml, type: 'page', layout_id: new_layout.id
         }
 
         assert_response :success
@@ -199,7 +215,7 @@ module CMS
 
       test 'create with missing or invalid type fails' do
         post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, type: 'INVALID' }
-        assert_response :not_acceptable
+        assert_response :unprocessable_entity
 
         post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml }
         assert_response :bad_request

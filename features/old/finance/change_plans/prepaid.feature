@@ -4,8 +4,8 @@ Feature: Change plan prepaid
   I want to upgrade or downgrade my plan
 
   Background:
-    Given a provider "foo.3scale.localhost" with prepaid billing enabled
-      And provider "foo.3scale.localhost" is charging
+    Given a provider exists
+      And the provider is charging its buyers in prepaid mode
       And provider "foo.3scale.localhost" has "finance" switch visible
     Given an application plan "FreeAsInBeer" of provider "foo.3scale.localhost" for 0 monthly
       And an application plan "PaidAsInLunch" of provider "foo.3scale.localhost" for 31 monthly
@@ -15,7 +15,6 @@ Feature: Change plan prepaid
   @commit-transactions
   Scenario: Paying a fee without change plan PREPAID
     Given the time is 1st May 2009
-      And provider "foo.3scale.localhost" is charging
       And a buyer "stallman" signed up to application plan "PaidAsInLunch" on 1st May 2009
     When I log in as "stallman" on foo.3scale.localhost on 3rd June 2009
      And I navigate to 1st invoice issued for me in "May, 2009"

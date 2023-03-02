@@ -47,6 +47,11 @@ ERROR_MESSAGE
       daemon.start
     end
 
+    desc 'Generate configuration file for Thinking Sphinx engine'
+    task configure: %i[environment] do
+      ThinkingSphinx::RakeInterface.new(nodetach: true).configure
+    end
+
     desc 'Cleanup pid and lock files from unclean shutdown'
     task cleanup: %i[environment] do
       indices_location = ThinkingSphinx::Configuration.instance.indices_location

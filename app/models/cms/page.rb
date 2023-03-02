@@ -12,7 +12,7 @@ class CMS::Page < CMS::BasePage
 
   include Searchable
 
-  attr_accessible :title, :section, :path, :content_type, :tag_list, :system_name
+  attr_accessible :title, :section, :layout, :path, :content_type, :tag_list, :system_name
 
   belongs_to :section, class_name: 'CMS::Section', touch: true
 
@@ -29,6 +29,8 @@ class CMS::Page < CMS::BasePage
 
   before_save :mark_for_searchability
   after_initialize :set_default_values
+
+  has_data_tag :page
 
   def self.path(chunks, format = nil)
     path = Array(chunks).compact.join('/')
@@ -91,25 +93,24 @@ class CMS::Page < CMS::BasePage
   def to_xml(options = {})
     xml = options[:builder] || Nokogiri::XML::Builder.new
 
-    xml.page do |x|
+    xml.__send__(self.class.data_tag) do |x|
       unless new_record?
         x.id id
         x.created_at created_at.xmlschema
         x.updated_at updated_at.xmlschema
       end
-
       x.title title
+      x.section_id section_id
+      x.path path
+      x.layout_id layout_id
       x.system_name system_name
-      x.path(path) if respond_to?(:path)
-      x.hidden hidden?
-      x.layout layout_name
       x.content_type content_type
+      x.liquid_enabled liquid_enabled?
       x.handler handler
-      x.liquid_enabled liquid_enabled
-
+      x.hidden hidden?
       unless options[:short]
-        x.draft draft
-        x.published published
+        x.draft { |node| node.cdata draft }
+        x.published { |node| node.cdata published }
       end
     end
 

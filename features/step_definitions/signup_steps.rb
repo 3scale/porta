@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-Given "{provider} conditions to allow signup are met" do |provider|
-  step %{provider "#{provider.org_name}" has multiple applications enabled}
-  #only one of these conditions seems to suffice, but we are using both (review!)
-  provider.first_service!.plans.create!(:name => 'Provider plan')
-end
-
 Given /^provider "([^"]*)" has plans already ready for signups$/ do |org_name|
   step %{a default service of provider "#{org_name}" has name "api"}
   step %{a account plan "account_plan" of provider "#{org_name}"}
@@ -15,14 +9,6 @@ Given /^provider "([^"]*)" has plans already ready for signups$/ do |org_name|
   step %{service plan "service_plan" is default}
   step %{account plan "account_plan" is default}
   step %{application plan "application_plan" is default}
-end
-
-When /^I fill in all required signup fields as "([^\"]*)"$/ do |buyer_name|
-  step %(I fill in "Username" with "#{buyer_name}")
-  step %(I fill in "Email" with "#{buyer_name}@example.org")
-  step %(I fill in "Password" with "supersecret")
-  step %(I fill in "Password confirmation" with "supersecret")
-  step %(I fill in "Organization/Group Name" with "#{buyer_name}")
 end
 
 When /^I fill in the invitation signup with email "([^"]*)"$/ do | email |
@@ -37,22 +23,6 @@ When /^I fill in the invitation signup as "([^"]*)"$/ do |username|
   click_button "Sign up"
 end
 
-When /^new provider "([^"]*)" signs up and activates$/ do |name|
-  step %(I go to the sign up page for the "Free" plan)
-
-  step %(I fill in "Email" with "bugs@acme.com")
-  step %(I fill in "Username" with "#{name}")
-  step %(I fill in "Organization/Group Name" with "#{name}")
-
-  step %(I fill in "Password" with "supersecret")
-  step %(I fill in "Password confirmation" with "supersecret")
-  step %(I press "Sign up")
-
-  assert_not_nil User.find_by_username(name)
-
-  step %(user "#{name}" activates himself)
-end
-
 When /^I fill in the signup fields as "([^"]*)"$/ do |name|
   fill_in('Username', with: name)
   fill_in('Email', with: "#{name}@3scale.localhost")
@@ -63,25 +33,10 @@ When /^I fill in the signup fields as "([^"]*)"$/ do |name|
   click_on 'Sign up'
 end
 
-When /^I fill in the invalid signup fields$/ do
+When /^I fill in the invalid signup fields( in a non-suspicious way)?$/ do |non_suspicious|
+  step %(15 seconds pass) if non_suspicious
   step %(I fill in "Email" with "invalid email")
   step %(I press "Sign up")
-end
-
-When /^I complete the signup process$/ do
-  step %{I fill in the signup fields as "bob"}
-end
-
-When /^I request the url of the signup page$/ do
-  visit '/signup'
-end
-
-Then /^I should see the application plans selection$/ do
-  step %{I should see "Plans"}
-end
-
-When /^I select the "([^"]*)" application plan$/ do |plan|
-  pending
 end
 
 When /^(?:I|someone) (?:signup|signs up) with the email "([^"]*)"$/ do |email|
@@ -96,16 +51,6 @@ end
 
 Then /^I should see the signup page$/ do
   assert has_xpath?("//form[@id='signup_form']")
-end
-
-Then /^I should not see the signup page$/ do
-  response.should_not have_text /Sign up/
-end
-
-#FIXME
-Then /^"([^\"]*)" should receive an email to activate the account$/ do |email_address|
-  # pending
-  # step %{"#{email_address}" should receive an email with subject "Please confirm your email"}
 end
 
 Then /^I should see the registration succeeded$/ do
@@ -149,8 +94,15 @@ module ReadonlyField
   end
 end
 
-Then(/^I should see a correct and un-editable admin portal subdomain$/) do
-  portal = ReadonlyField.readonly_field('Admin Portal')
-  should have_xpath portal
-  assert_equal 'hello-monster-admin', find(:xpath, portal).value
+Then "the buyer doesn't need to pass the captcha after signup form is filled wrong" do
+  step %(15 seconds pass)
+  step %(I fill in "Email" with "invalid email")
+  step %(I press "Sign up")
+  step %(I should not see the captcha)
+end
+
+Then "the buyer will need to pass the captcha after signup form is filled in too quickly" do
+  fill_in("confirmation", with: "1")
+  step %(I fill in the signup fields as "hugo")
+  step %(I should see the captcha)
 end

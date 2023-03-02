@@ -12,4 +12,10 @@ environment.loaders.append('eslint', {
   }
 })
 
+// HACK: this removes transpilation errors in tests during development. tsconfig includes them so
+// that VS Code can work with imports. Ideally we should have a specific config for VS Code but
+// the plugin automatically picks `tsconfig.json` and doesn't support a custom filename.
+const tsLoader = environment.loaders.get('ts')
+tsLoader.options.reportFiles = [/!(spec\/javascripts)/]
+
 module.exports = environment.toWebpackConfig()

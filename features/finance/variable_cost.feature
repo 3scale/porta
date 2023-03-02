@@ -3,7 +3,9 @@ Feature: Variable cost on automatic billing
   As a provider I want to bill for variable cost
 
   Background:
-    Given a provider with billing and finance enabled
+    Given a provider exists
+    And the provider is billing but not charging
+    And the provider has "finance" visible
     Given all the rolling updates features are off
     And the provider has one buyer
     And the provider has a paid application plan "VariableOnly" of 0 per month

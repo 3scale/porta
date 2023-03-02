@@ -5,10 +5,10 @@ Feature: Provider lists all invoices
 
   Background:
     # TODO: Create invoices directly from background
-    Given a provider "xyz.3scale.localhost" with billing enabled
-      And provider "xyz.3scale.localhost" has "finance" switch allowed
-    Given a provider "other.3scale.localhost" with billing enabled
-      And provider "other.3scale.localhost" has "finance" switch allowed
+    Given a provider "xyz.3scale.localhost"
+      And provider "xyz.3scale.localhost" is billing but not charging
+    Given a provider "other.3scale.localhost"
+      And provider "other.3scale.localhost" is billing but not charging
 
     Given an application plan "Fixed" of provider "xyz.3scale.localhost" for 200 monthly
       And an application plan "Fixed_for_other" of provider "other.3scale.localhost" for 200 monthly

@@ -29,6 +29,7 @@ When(/^the provider is logged in and visits the "(.*?)" application stats$/) do 
 end
 
 Given(/^buyer "(.*?)" made (\d+) service transactions (\d+) hours ago:$/) do |developer_name, transactions_number, hours, table|
-  step %'this happened #{hours} hours ago'
+  travel_to(hours.hours.ago)
+  access_user_sessions
   step %'buyer "#{developer_name}" makes #{transactions_number} service transactions with:', table
 end
