@@ -50,7 +50,7 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
       test '#index only returns live cinstances' do
         get :index
 
-        doc = Nokogiri::HTML.parse(response.body)
+        doc = Nokogiri::HTML4.parse(response.body)
         assert_equal [@live_app1, @live_app2], assigns(:applications)
         assert_equal @live_app1.id.to_s, doc.css('#client-name[data-client]').attr('data-client').value
       end
@@ -61,7 +61,7 @@ class DeveloperPortal::Buyer::StatsControllerTest < DeveloperPortal::ActionContr
 
         get :index
 
-        doc = Nokogiri::HTML.parse(response.body)
+        doc = Nokogiri::HTML4.parse(response.body)
         assert_equal @live_app1.id.to_s, doc.css('#client-name[data-client]').attr('data-client').value
       end
 

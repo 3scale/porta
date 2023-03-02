@@ -89,7 +89,7 @@ class Provider::Admin::BackendApisControllerTest < ActionDispatch::IntegrationTe
     backend_api = @provider.backend_apis.last
     backend_api.update_column(:description, "<script>alert('XSS')</script>")
     get provider_admin_backend_api_path(backend_api)
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     assert_equal "<script>alert('XSS')</script>", page.xpath("//dt[text() = 'Description']/following-sibling::dd").first.text
   end
 

@@ -29,7 +29,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
       get admin_buyers_account_service_contracts_path(account_id: buyer1.id)
       assert_response :success
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
 
       assert page.xpath("//a[@class='button-to action edit fancybox change_plan']").text =~ /Change\ Plan/
       assert page.xpath("//a[@data-method='delete']").text =~ /Unsubscribe/
@@ -80,7 +80,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
     test 'renders a prompt if there is no default service plan' do
       get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).include?('Please select')
     end
 
@@ -89,7 +89,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
 
       get new_admin_buyers_account_service_contract_path(account_id: buyer1.id, service_id: service.id)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       assert page.xpath("//select[@id='service_contract_plan_id']/option").map(&:text).exclude?('Please select')
     end
   end
@@ -118,7 +118,7 @@ class Buyers::ServiceContractsControllerTest < ActionDispatch::IntegrationTest
 
       get admin_buyers_service_contracts_path
       assert_response :success
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       service_contract_ids = page.xpath("//table[@class='data']/tbody/tr/@id").map { |id| id.text[/\d+/].to_i }
       assert_includes service_contract_ids, service_contract.id
       assert_not_includes service_contract_ids, forbidden_service_contract.id

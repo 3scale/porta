@@ -17,7 +17,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
   test 'index responds with a table with all the display_name of the users as the first column' do
     get provider_admin_account_users_path
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     expected_display_names = provider.reload.users.map { |u| u.decorate.display_name }
     assert_same_elements expected_display_names, page.xpath('//tbody/tr/td[1]/a').map(&:text)
   end
@@ -27,7 +27,7 @@ class Provider::Admin::Account::UsersControllerTest < ActionDispatch::Integratio
 
     get provider_admin_account_users_path
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     expected_admin_sections = [
       'Unlimited Access',                  # admin
       'Developer accounts, Applications',  # @user

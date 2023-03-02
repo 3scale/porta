@@ -294,7 +294,7 @@ class Buyers::AccountsControllerTest < ActionDispatch::IntegrationTest
     test 'index/search & show display the admin_user_display_name' do
       get admin_buyers_accounts_path
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       expected_display_names = @provider.buyer_accounts.map { |buyer| buyer.decorate.admin_user_display_name }
       assert_same_elements expected_display_names, page.xpath('//tbody/tr/td[2]/a').map(&:text)
 

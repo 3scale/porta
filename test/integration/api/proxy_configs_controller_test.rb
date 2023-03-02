@@ -43,7 +43,7 @@ class Api::ProxyConfigsControllerTest < ActionDispatch::IntegrationTest
 
     get admin_service_proxy_configs_path(service_id: service, environment: 'production')
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     expected_display_names = users.map { |user| user.decorate.display_name } | ['']
     assert_same_elements expected_display_names, page.xpath('//table/tbody/tr/td[4]').map(&:text)
   end

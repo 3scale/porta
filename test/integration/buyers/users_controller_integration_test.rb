@@ -16,7 +16,7 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
 
     get admin_buyers_account_users_path(account_id: buyer.reload.id)
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     expected_display_names = buyer.users.map { |u| u.decorate.display_name }
     assert_same_elements expected_display_names, page.xpath('//tbody/tr/td[1]/a').map(&:text)
   end
@@ -30,7 +30,7 @@ class Buyers::UsersControllerIntegrationTest < ActionDispatch::IntegrationTest
     ].each do |route|
       get route
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       assert_includes page.xpath('//main/h2').text, user.decorate.display_name
     end
   end

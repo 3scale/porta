@@ -19,7 +19,7 @@ class Admin::ApiDocs::ServiceApiDocsControllerTest < ActionDispatch::Integration
     get admin_service_api_docs_path(service)
     assert_service_active_docs_menus
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     assert_equal 1, page.xpath(".//table[@class='data']/tbody//tr").count
     assert_match api_docs_service.name, page.xpath(".//table[@class='data']/tbody").text
     assert_not_match other_api_docs_service.name, page.xpath(".//table[@class='data']/tbody").text
