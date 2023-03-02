@@ -62,7 +62,7 @@ module PaymentDetailsHelper
       state: billing_address.state,
       postal_code: billing_address.zip,
       country: country_code_for(billing_address.country)
-    }.delete_if { |key, value| value.blank? }
+    }.compact
   end
 
   def braintree_form_data
