@@ -14,6 +14,7 @@
     "/admin/api/signup.xml": {
       "post": {
         "summary": "Signup Express (Account Create)",
+        "description": "This request allows you to reproduce a developer sign-up in a single API call. It will create an Account, an Admin User for the account, and optionally an Application with its keys. If the plan_id is not passed, the default plan will be used instead. You can add additional custom parameters in Fields Definition on your Admin Portal.",
         "tags": [
           "Accounts"
         ],
@@ -23,62 +24,7 @@
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "org_name": {
-                    "type": "string",
-                    "description": "Organization Name of the developer account."
-                  },
-                  "username": {
-                    "type": "string",
-                    "description": "Username of the admin user (on the new developer account)."
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "Email of the admin user."
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of the admin user."
-                  },
-                  "account_plan_id": {
-                    "type": "integer",
-                    "description": "ID of the account plan (if not assigned default will be used instead)."
-                  },
-                  "service_plan_id": {
-                    "type": "integer",
-                    "description": "ID of the service plan (if not assigned default will be used instead)."
-                  },
-                  "application_plan_id": {
-                    "type": "integer",
-                    "description": "ID of the application plan (if not assigned default will be used instead)."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token",
-                  "org_name",
-                  "username",
-                  "email",
-                  "password"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/SignupExpressRequest"
               }
             }
           }
@@ -94,6 +40,7 @@
     "/admin/api/accounts.xml": {
       "get": {
         "summary": "Account List",
+        "description": "Returns the list of buyer accounts (the accounts that consume your API). Filters by state are available and the results can be paginated.",
         "tags": [
           "Accounts"
         ],
@@ -150,6 +97,7 @@
     "/admin/api/accounts/{id}.xml": {
       "get": {
         "summary": "Account Read",
+        "description": "Returns a buyer account.",
         "tags": [
           "Accounts"
         ],
@@ -182,6 +130,7 @@
       },
       "put": {
         "summary": "Account Update",
+        "description": "Updates a buyer account by ID. You can modify all the fields on the account, including custom fields defined in the fields definition section of your admin portal. Additional fields have to be defined by name and value (i.e &name=value).",
         "tags": [
           "Accounts"
         ],
@@ -197,47 +146,11 @@
           }
         ],
         "requestBody": {
-          "description": "Update Accounts",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "org_name": {
-                    "type": "string",
-                    "description": "Organization name of the account."
-                  },
-                  "monthly_billing_enabled": {
-                    "type": "boolean",
-                    "description": "Updates monthly billing status."
-                  },
-                  "monthly_charging_enabled": {
-                    "type": "boolean",
-                    "description": "Updates monthly charging status."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/AccountUpdateRequest"
               }
             }
           }
@@ -250,7 +163,8 @@
         }
       },
       "delete": {
-        "summary": "Account Delete ",
+        "summary": "Account Delete",
+        "description": "Deletes a buyer account. Deleting an account removes all users, applications and service subscriptions to the account.",
         "tags": [
           "Accounts"
         ],
@@ -285,6 +199,7 @@
     "/admin/api/accounts/find.xml": {
       "get": {
         "summary": "Account Find",
+        "description": "Find an account by the username or email of its users (username takes precedence over email).",
         "tags": [
           "Accounts"
         ],
@@ -350,6 +265,7 @@
     "/admin/api/accounts/{account_id}/applications.xml": {
       "get": {
         "summary": "Application List",
+        "description": "Returns the list of application of an account.",
         "tags": [
           "Account Applications"
         ],
@@ -382,10 +298,11 @@
       },
       "post": {
         "summary": "Application Create",
+        "description": "Create an application. The application object can be extended with Fields Definitions in the Admin Portal where you can add/remove fields, for instance token (string), age (int), third name (string optional), etc.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -397,79 +314,11 @@
           }
         ],
         "requestBody": {
-          "description": "Application Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "plan_id": {
-                    "type": "integer",
-                    "description": "ID of the application plan."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Name of the application to be created."
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Description of the application to be created."
-                  },
-                  "user_key": {
-                    "type": "string",
-                    "description": "User Key (API Key) of the application to be created."
-                  },
-                  "application_id": {
-                    "type": "string",
-                    "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created."
-                  },
-                  "application_key[]": {
-                    "description": "App Key(s) or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "redirect_url": {
-                    "type": "string",
-                    "description": "Redirect URL for the OAuth request."
-                  },
-                  "first_traffic_at": {
-                    "type": "string",
-                    "description": "Timestamp of the first call made by the application."
-                  },
-                  "first_daily_traffic_at": {
-                    "type": "string",
-                    "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token",
-                  "plan_id",
-                  "name",
-                  "description"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/ApplicationCreateRequest"
               }
             }
           }
@@ -485,6 +334,7 @@
     "/admin/api/accounts/{account_id}/applications/{id}.xml": {
       "get": {
         "summary": "Application Read",
+        "description": "Returns the application by id.",
         "tags": [
           "Account Applications"
         ],
@@ -526,10 +376,11 @@
       },
       "put": {
         "summary": "Application Update",
+        "description": "Updates an application. All fields of the application object can be updated except the id and the app_id (when using OAuth or app_id/app_key authentication pattern).",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -550,58 +401,11 @@
           }
         ],
         "requestBody": {
-          "description": "Application Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Name of the application"
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Description of the application"
-                  },
-                  "redirect_url": {
-                    "type": "string",
-                    "description": "Redirect URL for the OAuth request."
-                  },
-                  "first_traffic_at": {
-                    "type": "string",
-                    "description": "Timestamp of the first call made by the application."
-                  },
-                  "first_daily_traffic_at": {
-                    "type": "string",
-                    "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
-                  },
-
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token",
-                  "name"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/ApplicationUpdateRequest"
               }
             }
           }
@@ -615,6 +419,7 @@
       },
       "delete": {
         "summary": "Application Delete",
+        "description": "Deletes the application.",
         "tags": [
           "Account Applications"
         ],
@@ -658,10 +463,11 @@
     "/admin/api/accounts/{account_id}/applications/{id}/accept.xml": {
       "put": {
         "summary": "Application Accept",
+        "description": "Accepts an application (changes the state to live). Once the state is live the application can be used on API requests.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -682,7 +488,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Accept",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -697,13 +502,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -719,10 +517,11 @@
     "/admin/api/accounts/{account_id}/applications/{id}/change_plan.xml": {
       "put": {
         "summary": "Application Change Plan",
+        "description": "Changes the application plan of an application.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -743,7 +542,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Change Plan",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -753,23 +551,16 @@
                   "access_token": {
                     "type": "string",
                     "description": "A personal Access Token."
+                  },
+                  "plan_id": {
+                    "type": "integer",
+                    "description": "ID of the new application plan."
                   }
-                },
-                "plan_id": {
-                  "type": "integer",
-                  "description": "ID of the new application plan."
                 },
                 "required": [
                   "access_token",
                   "plan_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -785,10 +576,11 @@
     "/admin/api/accounts/{account_id}/applications/{id}/customize_plan.xml": {
       "put": {
         "summary": "Application Create Plan Customization",
+        "description": "Creates a customized application plan for the application.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -809,7 +601,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Create Plan Customization",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -824,13 +615,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -846,10 +630,11 @@
     "/admin/api/accounts/{account_id}/applications/{id}/decustomize_plan.xml": {
       "put": {
         "summary": "Application Delete Plan Customization",
+        "description": "Decustomizes the plan of an application.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -870,7 +655,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Delete Plan Customization",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -885,13 +669,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -907,10 +684,11 @@
     "/admin/api/accounts/{account_id}/applications/{id}/resume.xml": {
       "put": {
         "summary": "Application Resume",
+        "description": "Resume a suspended application. Once a suspended application is resumed it will be authorized on API requests.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -931,7 +709,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Resume",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -946,13 +723,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -968,10 +738,11 @@
     "/admin/api/accounts/{account_id}/applications/{id}/suspend.xml": {
       "put": {
         "summary": "Application Suspend",
+        "description": "Suspends an application (changes the state to suspended). Suspending an application will stop the application from authorizing API requests.",
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -992,7 +763,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Suspend",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -1007,13 +777,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1073,7 +836,7 @@
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -1114,13 +877,6 @@
                   "access_token",
                   "key"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1232,7 +988,7 @@
         "tags": [
           "Account Applications"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "account_id",
             "in": "path",
@@ -1273,13 +1029,6 @@
                   "access_token",
                   "referrer_filter"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1347,6 +1096,7 @@
     "/admin/api/accounts/{account_id}/messages.xml": {
       "post": {
         "summary": "Account Message",
+        "description": "Sends a message to the account.",
         "tags": [
           "Accounts"
         ],
@@ -1362,7 +1112,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Message",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -1385,13 +1134,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1441,6 +1183,7 @@
     "/admin/api/accounts/{account_id}/service_contracts.xml": {
       "get": {
         "summary": "Service Subscription List",
+        "description": "List all the service_contracts of an account",
         "tags": [
           "Accounts"
         ],
@@ -1475,6 +1218,7 @@
     "/admin/api/accounts/{account_id}/service_contracts/{id}.xml": {
       "delete": {
         "summary": "Service Subscription Delete",
+        "description": "Unsubscribe from a service. This endpoint will delete all the applications that are under the subscribed service.",
         "tags": [
           "Accounts"
         ],
@@ -1518,6 +1262,7 @@
     "/admin/api/accounts/{id}/approve.xml": {
       "put": {
         "summary": "Account Approve",
+        "description": "Approves the account (changes the state to live). Accounts need to be approved explicitly via this API after creation. The state can also be updated by PUT on /admin/api/accounts/{id}.xml",
         "tags": [
           "Accounts"
         ],
@@ -1533,7 +1278,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Approve",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -1548,13 +1292,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1570,6 +1307,7 @@
     "/admin/api/accounts/{id}/change_plan.xml": {
       "put": {
         "summary": "Account Change Plan",
+        "description": "Changes the account plan for the buyer account.",
         "tags": [
           "Accounts"
         ],
@@ -1585,7 +1323,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Change Plan",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -1596,7 +1333,7 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
-                  "plan_id":{
+                  "plan_id": {
                     "type": "integer",
                     "description": "ID of the target account plan"
                   }
@@ -1605,13 +1342,6 @@
                   "access_token",
                   "plan_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1653,7 +1383,7 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
-                  "credit_card_token":{
+                  "credit_card_token": {
                     "type": "string",
                     "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
                   },
@@ -1669,7 +1399,7 @@
                     "type": "string",
                     "description": "Month of expiration of credit card. Two digit number"
                   },
-                  "billing_address_name":{
+                  "billing_address_name": {
                     "type": "string",
                     "description": "Name of the person/company to bill"
                   },
@@ -1713,13 +1443,6 @@
                   "billing_address_city",
                   "billing_address_country"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1767,6 +1490,7 @@
     "/admin/api/accounts/{id}/make_pending.xml": {
       "put": {
         "summary": "Account Reset to Pending",
+        "description": "Resets the state of the account to pending so that it can be approved or rejected again.",
         "tags": [
           "Accounts"
         ],
@@ -1782,7 +1506,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Reset to Pending",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -1797,13 +1520,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1819,6 +1535,7 @@
     "/admin/api/accounts/{id}/reject.xml": {
       "put": {
         "summary": "Account Reject",
+        "description": "Rejects the account (changes the state to rejected). An account can be rejected after creation, the workflow for account creation can have a validation process that ends in approving or rejecting the account submission. The state can also be updated by PUT on /admin/api/accounts/{id}.xml",
         "tags": [
           "Accounts"
         ],
@@ -1834,7 +1551,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Reject",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -1849,13 +1565,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -1871,6 +1580,7 @@
     "/admin/api/accounts/{account_id}/users.xml": {
       "get": {
         "summary": "User List",
+        "description": "Returns the list of users of an account. The list can be filtered by the state or role of the users.",
         "tags": [
           "Users"
         ],
@@ -1928,6 +1638,7 @@
       },
       "post": {
         "summary": "User Create",
+        "description": "Creates a new user of the account (account_id). Do not forget to activate the user otherwise he/she will be unable to sign-in. After creation the default state is pending and the default role is member. The user object can be extended using Fields Definitions in the Admin Portal. You can add/remove fields, for instance token (string), age (int), third name (string optional), etc. ",
         "tags": [
           "Users"
         ],
@@ -1943,51 +1654,11 @@
           }
         ],
         "requestBody": {
-          "description": "User Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "username": {
-                    "type": "string",
-                    "description": "Username of the user."
-                  },
-                  "email":{
-                    "type": "string",
-                    "description": "Email of the user."
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of the user."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token",
-                  "username",
-                  "email",
-                  "password"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/UserCreateRequest"
               }
             }
           }
@@ -2003,6 +1674,7 @@
     "/admin/api/accounts/{account_id}/users/{id}.xml": {
       "get": {
         "summary": "User Read",
+        "description": "Returns the user of an account.",
         "tags": [
           "Users"
         ],
@@ -2044,6 +1716,7 @@
       },
       "put": {
         "summary": "User Update",
+        "description": "Updates the user of an account. You can update any field, not only those in the form of the ActiveDocs but all the fields that belong to the User object. Additional fields have to be defined by name and value (i.e &name=value). Remember that you can define custom fields on your Admin Portal.",
         "tags": [
           "Users"
         ],
@@ -2068,48 +1741,11 @@
           }
         ],
         "requestBody": {
-          "description": "User Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "username": {
-                    "type": "string",
-                    "description": "Username of the user."
-                  },
-                  "email":{
-                    "type": "string",
-                    "description": "Email of the user."
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of the user."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/UserUpdateRequest"
               }
             }
           }
@@ -2123,6 +1759,7 @@
       },
       "delete": {
         "summary": "User Delete",
+        "description": "Deletes a user of an account. The last user can't be deleted",
         "tags": [
           "Users"
         ],
@@ -2166,6 +1803,7 @@
     "/admin/api/accounts/{account_id}/users/{id}/activate.xml": {
       "put": {
         "summary": "User Activate",
+        "description": "Activate the user of an account. A user is created in the pending state and needs to be activated before he/she is able to sign-in.",
         "tags": [
           "Users"
         ],
@@ -2190,7 +1828,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Activate",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2204,7 +1841,6 @@
                   "additional_fields[]": {
                     "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
                     "type": "array",
-                    "explode": false,
                     "items": {
                       "type": "string"
                     }
@@ -2213,13 +1849,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2235,6 +1864,7 @@
     "/admin/api/accounts/{account_id}/users/{id}/admin.xml": {
       "put": {
         "summary": "User change Role to Admin",
+        "description": "Changes the role of the user to admin.",
         "tags": [
           "Users"
         ],
@@ -2259,7 +1889,6 @@
           }
         ],
         "requestBody": {
-          "description": "User change Role to Admin",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2269,26 +1898,11 @@
                   "access_token": {
                     "type": "string",
                     "description": "A personal Access Token."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
                   }
                 },
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2304,6 +1918,7 @@
     "/admin/api/accounts/{account_id}/users/{id}/member.xml": {
       "put": {
         "summary": "User Change Role to Member",
+        "description": "Changes the role of the user to member.",
         "tags": [
           "Users"
         ],
@@ -2328,7 +1943,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Change Role to Member",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2343,13 +1957,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2365,6 +1972,7 @@
     "/admin/api/accounts/{account_id}/users/{id}/suspend.xml": {
       "put": {
         "summary": "User Suspend",
+        "description": "Changes the state of the user to suspended. A suspended user cannot sign-in.",
         "tags": [
           "Users"
         ],
@@ -2408,6 +2016,7 @@
     "/admin/api/accounts/{account_id}/users/{id}/unsuspend.xml": {
       "put": {
         "summary": "User Unsuspend",
+        "description": "Change the state of the user back to active.",
         "tags": [
           "Users"
         ],
@@ -2432,7 +2041,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Unsuspend",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2447,13 +2055,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2469,6 +2070,7 @@
     "/admin/api/users.xml": {
       "get": {
         "summary": "User List (provider account)",
+        "description": "Lists the users of the provider account. You can apply filters by state and/or role.",
         "tags": [
           "Users"
         ],
@@ -2517,52 +2119,16 @@
       },
       "post": {
         "summary": "User Create (provider account)",
+        "description": "Creates a new user in the provider account. Do not forget to activate it, otherwise he/she will not be able to sign-in. After creation the default state is pending and the default role is member. The user object can be extended using Fields Definitions in the Admin Portal where you can add/remove fields, for instance token (string), age (int), third name (string optional), etc. Additional fields have to be defined by name and value (i.e &name=value). Additional fields are the custom fields declared in the Fields Definitions section in your API Admin Portal.",
         "tags": [
           "Users"
         ],
         "requestBody": {
-          "description": "User Create (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "username": {
-                    "type": "string",
-                    "description": "Username of the user."
-                  },
-                  "email":{
-                    "type": "string",
-                    "description": "Email of the user."
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of the user."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/UserCreateRequest"
               }
             }
           }
@@ -2578,6 +2144,7 @@
     "/admin/api/users/{id}.xml": {
       "get": {
         "summary": "User Read (provider account)",
+        "description": "Gets the user of the provider account by ID.",
         "tags": [
           "Provider Users"
         ],
@@ -2610,13 +2177,14 @@
       },
       "put": {
         "summary": "User Update (provider account)",
+        "description": "Modifies the user of the provider account by ID. You can update any field, not only those in the form of the ActiveDocs but also fields that belong to the User object. Remember that you can define custom fields on your Admin Portal.",
         "tags": [
           "Provider Users"
         ],
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "description": "ID of the user.",
             "required": true,
             "schema": {
@@ -2625,48 +2193,11 @@
           }
         ],
         "requestBody": {
-          "description": "User Update (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "username": {
-                    "type": "string",
-                    "description": "Username of the user."
-                  },
-                  "email":{
-                    "type": "string",
-                    "description": "Email of the user."
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of the user."
-                  },
-                  "additional_fields[]": {
-                    "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-                    "type": "array",
-                    "explode": false,
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/UserUpdateRequest"
               }
             }
           }
@@ -2680,6 +2211,7 @@
       },
       "delete": {
         "summary": "User Delete (provider account)",
+        "description": "Deletes the user of the provider account by ID.",
         "tags": [
           "Provider Users"
         ],
@@ -2714,13 +2246,14 @@
     "/admin/api/users/{id}/activate.xml": {
       "put": {
         "summary": "User Activate (provider account)",
+        "description": "Changes the state of the user of the provider account to active (after sign-up). You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter.",
         "tags": [
           "Users"
         ],
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "description": "ID of the user.",
             "required": true,
             "schema": {
@@ -2729,7 +2262,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Activate (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2744,13 +2276,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2766,13 +2291,14 @@
     "/admin/api/users/{id}/admin.xml": {
       "put": {
         "summary": "User Change Role to Admin (provider account)",
+        "description": "Changes the role of the provider account to admin (full rights and privileges).",
         "tags": [
           "Users"
         ],
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "description": "ID of the user.",
             "required": true,
             "schema": {
@@ -2796,13 +2322,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2818,13 +2337,14 @@
     "/admin/api/users/{id}/member.xml": {
       "put": {
         "summary": "User Change Role to Member (provider account)",
+        "description": "Changes the role of the user of the provider account to member.",
         "tags": [
           "Users"
         ],
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "description": "ID of the user.",
             "required": true,
             "schema": {
@@ -2833,7 +2353,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Change Role to Member (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2848,13 +2367,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -2870,6 +2382,7 @@
     "/admin/api/users/{id}/permissions.xml": {
       "get": {
         "summary": "User Permissions Read",
+        "description": "Shows the permissions of the user of the provider account.",
         "tags": [
           "Users"
         ],
@@ -2902,73 +2415,7 @@
       },
       "put": {
         "summary": "User Permissions Update",
-        "tags": [
-          "Users"
-        ],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the user.",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "allowed_service_ids[]",
-            "in": "query",
-            "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "$ref": "#/components/schemas/Permissions"
-            }
-          },
-          {
-            "name": "allowed_sections[]",
-            "in": "query",
-            "description": "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans), 'policy_registry'. To disable all sections, set the value to '[]'.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "enum": [
-                "portal",
-                "finance",
-                "partners",
-                "monitoring",
-                "settings",
-                "plans",
-                "policy_registry"
-
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/admin/api/users/{id}/suspend.xml": {
-      "put": {
-        "summary": "User Suspend (provider account)",
+        "description": "Updates the permissions of member user of the provider account.",
         "tags": [
           "Users"
         ],
@@ -2984,7 +2431,84 @@
           }
         ],
         "requestBody": {
-          "description": "User Suspend (provider account)",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "allowed_service_ids[]": {
+                    "type": "array",
+                    "description": "IDs of the services that need to be enabled, URL-encoded array. To disable all services, set the value to '[]'. To enable all services, add parameter 'allowed_service_ids[]' with no value to the 'curl' command (can't be done in ActiveDocs)",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "allowed_sections[]": {
+                    "type": "array",
+                    "description": "The list of sections in the admin portal that the user can access, URL-encoded array. Possible values: 'portal' (Developer Portal), 'finance' (Billing), 'settings', 'partners' (Accounts -- Applications), 'monitoring' (Analytics), 'plans' (Integration & Application Plans), 'policy_registry'. To disable all sections, set the value to '[]'.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "portal",
+                        "finance",
+                        "partners",
+                        "monitoring",
+                        "settings",
+                        "plans",
+                        "policy_registry"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "allowed_service_ids[]": {
+                  "style": "form",
+                  "explode": true
+                },
+                "allowed_sections[]": {
+                  "style": "form",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin/api/users/{id}/suspend.xml": {
+      "put": {
+        "summary": "User Suspend (provider account)",
+        "description": "Changes the state of the user of the provider account to suspended, which removes the user's ability to sign-in. You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter.",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2999,13 +2523,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3021,13 +2538,14 @@
     "/admin/api/users/{id}/unsuspend.xml": {
       "put": {
         "summary": "User Unsuspend (provider account)",
+        "description": "Revokes the suspension of a user of the provider account. You can also perform this operation with a PUT on /admin/api/users/{id}.xml to change the state parameter.",
         "tags": [
           "Users"
         ],
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "description": "ID of the user.",
             "required": true,
             "schema": {
@@ -3036,7 +2554,6 @@
           }
         ],
         "requestBody": {
-          "description": "User Unsuspend (provider account)",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3051,13 +2568,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3073,6 +2583,7 @@
     "/admin/api/users/{user_id}/access_tokens.json": {
       "post": {
         "summary": "Access Token Create",
+        "description": "[Deprecated API] Use \"Personal Access Tokens Create\". Creates an access token. Make sure to copy your new personal access token now. You will not be able to see it again as it is not stored for security reasons.",
         "tags": [
           "Access Tokens"
         ],
@@ -3088,7 +2599,6 @@
           }
         ],
         "requestBody": {
-          "description": "Access Token Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3105,26 +2615,38 @@
                   },
                   "permission": {
                     "type": "string",
-                    "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write)."
+                    "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
+                    "enum": [
+                      "ro",
+                      "rw"
+                    ]
                   },
                   "scopes[]": {
                     "type": "array",
-                    "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\"]",
+                    "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\"], and for a tenant user [\"finance\", \"account_management\", \"stats\", \"cms\", \"policy_registry\"]",
                     "items": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "account_management",
+                        "stats",
+                        "finance",
+                        "cms",
+                        "policy_registry"
+                      ]
                     }
                   }
                 },
                 "required": [
                   "access_token",
                   "permission",
-                  "name"
+                  "name",
+                  "scopes[]"
                 ]
               },
               "encoding": {
-                "field_definitions": {
+                "scopes[]": {
                   "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
+                  "style": "form",
                   "explode": true
                 }
               }
@@ -3142,6 +2664,7 @@
     "/admin/api/account_plans.xml": {
       "get": {
         "summary": "Account Plan List",
+        "description": "Returns the list of all available account plans.",
         "tags": [
           "Account Plans"
         ],
@@ -3165,11 +2688,11 @@
       },
       "post": {
         "summary": "Account Plan Create",
+        "description": "Creates an account plan.",
         "tags": [
           "Account Plans"
         ],
         "requestBody": {
-          "description": "Account Plan Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3194,20 +2717,17 @@
                   },
                   "state_event": {
                     "type": "string",
-                    "description": "State event of the account plan. It can be 'publish' or 'hide'"
+                    "description": "State event of the account plan. It can be 'publish' or 'hide'",
+                    "enum": [
+                      "publish",
+                      "hide"
+                    ]
                   }
                 },
                 "required": [
                   "access_token",
                   "name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3223,6 +2743,7 @@
     "/admin/api/account_plans/{account_plan_id}/features.xml": {
       "get": {
         "summary": "Account Plan Features List",
+        "description": "Returns the list of the features associated to an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3257,6 +2778,7 @@
     "/admin/api/account_plans/{account_plan_id}/features/{id}.xml": {
       "post": {
         "summary": "Account Plan Features Create",
+        "description": "Associate an account feature to an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3281,7 +2803,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Plan Features Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3296,13 +2817,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3316,6 +2830,7 @@
       },
       "delete": {
         "summary": "Account Plan Features Delete",
+        "description": "Deletes the association of an account feature to an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3359,6 +2874,7 @@
     "/admin/api/account_plans/{id}.xml": {
       "get": {
         "summary": "Account Plan Read",
+        "description": "Returns the account plan by ID.",
         "tags": [
           "Account Plans"
         ],
@@ -3391,6 +2907,7 @@
       },
       "put": {
         "summary": "Account Plan Update",
+        "description": "Updates an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3406,7 +2923,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Plan Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3427,19 +2943,16 @@
                   },
                   "state_event": {
                     "type": "string",
-                    "description": "State event of the account plan. It can be 'publish' or 'hide'"
+                    "description": "State event of the account plan. It can be 'publish' or 'hide'",
+                    "enum": [
+                      "publish",
+                      "hide"
+                    ]
                   }
                 },
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3453,6 +2966,7 @@
       },
       "delete": {
         "summary": "Account Plan Delete",
+        "description": "Deletes an account plan.",
         "tags": [
           "Account Plans"
         ],
@@ -3487,6 +3001,7 @@
     "/admin/api/account_plans/{id}/default.xml": {
       "put": {
         "summary": "Account Plan set to Default",
+        "description": "Set the account plan to be the default one. The default account plan is used unless another account plan is passed explicitly, for instance on the signup express.",
         "tags": [
           "Account Plans"
         ],
@@ -3502,7 +3017,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Plan set to Default",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3517,13 +3031,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3539,6 +3046,7 @@
     "/admin/api/active_docs.json": {
       "get": {
         "summary": "ActiveDocs Spec List",
+        "description": "Lists all ActiveDocs specs",
         "tags": [
           "Active Docs"
         ],
@@ -3562,11 +3070,11 @@
       },
       "post": {
         "summary": "ActiveDocs Spec Create",
+        "description": "Creates a new ActiveDocs spec",
         "tags": [
           "Active Docs"
         ],
         "requestBody": {
-          "description": "ActiveDocs Spec Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3611,13 +3119,6 @@
                   "name",
                   "body"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3633,6 +3134,7 @@
     "/admin/api/active_docs/{id}.json": {
       "get": {
         "summary": "ActiveDocs Spec Read",
+        "description": "Returns the ActiveDocs spec by ID",
         "tags": [
           "Active Docs"
         ],
@@ -3665,6 +3167,7 @@
       },
       "put": {
         "summary": "ActiveDocs Spec Update",
+        "description": "Updates the ActiveDocs spec by ID",
         "tags": [
           "Active Docs"
         ],
@@ -3680,7 +3183,6 @@
           }
         ],
         "requestBody": {
-          "description": "ActiveDocs Spec Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3719,13 +3221,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3739,6 +3234,7 @@
       },
       "delete": {
         "summary": "ActiveDocs Spec Delete",
+        "description": "Deletes the ActiveDocs spec by ID",
         "tags": [
           "Active Docs"
         ],
@@ -3798,6 +3294,7 @@
     "/admin/api/application_plans/{application_plan_id}/features.xml": {
       "get": {
         "summary": "Application Plan Feature List",
+        "description": "Returns the list of features of the application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3830,6 +3327,7 @@
       },
       "post": {
         "summary": "Application Plan Feature Create",
+        "description": "Associates a feature to an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3845,7 +3343,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Plan Feature Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -3865,13 +3362,6 @@
                   "access_token",
                   "feature_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -3887,6 +3377,7 @@
     "/admin/api/application_plans/{application_plan_id}/features/{id}.xml": {
       "delete": {
         "summary": "Application Plan Feature Delete",
+        "description": "Removes the association of a feature to an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3930,6 +3421,7 @@
     "/admin/api/application_plans/{application_plan_id}/limits.xml": {
       "get": {
         "summary": "Limits List per Application Plan",
+        "description": "Returns the list of all limits associated to an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -3982,6 +3474,7 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits.xml": {
       "get": {
         "summary": "Limit List per Metric",
+        "description": "Returns the list of all limits associated to a metric of an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4023,6 +3516,7 @@
       },
       "post": {
         "summary": "Limit Create",
+        "description": "Adds a limit to a metric of an application plan. All applications with the application plan (application_plan_id) will be constrained by this new limit on the metric (metric_id).",
         "tags": [
           "Application Plans"
         ],
@@ -4047,7 +3541,6 @@
           }
         ],
         "requestBody": {
-          "description": "Limit Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -4066,7 +3559,7 @@
                     "type": "string",
                     "description": "Period of the limit.",
                     "default": "minute",
-                      "enum": [
+                    "enum": [
                       "eternity",
                       "year",
                       "month",
@@ -4082,13 +3575,6 @@
                   "period",
                   "value"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -4104,6 +3590,7 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/limits/{id}.xml": {
       "get": {
         "summary": "Limit Read",
+        "description": "Returns a limit on a metric of an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4154,6 +3641,7 @@
       },
       "put": {
         "summary": "Limit Update",
+        "description": "Updates a limit on a metric of an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4187,7 +3675,6 @@
           }
         ],
         "requestBody": {
-          "description": "Limit Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -4206,7 +3693,7 @@
                     "type": "string",
                     "description": "Period of the limit.",
                     "default": "minute",
-                      "enum": [
+                    "enum": [
                       "eternity",
                       "year",
                       "month",
@@ -4222,13 +3709,6 @@
                   "period",
                   "value"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -4242,6 +3722,7 @@
       },
       "delete": {
         "summary": "Limit Delete",
+        "description": "Deletes a limit on a metric of an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4294,6 +3775,7 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules.xml": {
       "get": {
         "summary": "Pricing Rules List per Metric",
+        "description": "Returns the list of all pricing rules associated to a metric of an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4335,6 +3817,7 @@
       },
       "post": {
         "summary": "Pricing Rule Create",
+        "description": "Creates a pricing rule for an associated application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4359,7 +3842,6 @@
           }
         ],
         "requestBody": {
-          "description": "Pricing Rule Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -4387,13 +3869,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -4409,6 +3884,7 @@
     "/admin/api/application_plans/{application_plan_id}/metrics/{metric_id}/pricing_rules/{id}.json": {
       "delete": {
         "summary": "Pricing Rule Delete",
+        "description": "Deletes a pricing rule for a given application plan and metric.",
         "tags": [
           "Application Plans"
         ],
@@ -4461,6 +3937,7 @@
     "/admin/api/application_plans/{application_plan_id}/pricing_rules.xml": {
       "get": {
         "summary": "Pricing Rules List per Application Plan",
+        "description": "Returns the list of all pricing rules associated to an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4495,6 +3972,7 @@
     "/admin/api/services/{service_id}/application_plans.xml": {
       "get": {
         "summary": "Application Plan List",
+        "description": "Returns the list of all application plans of a service.",
         "tags": [
           "Application Plans"
         ],
@@ -4588,13 +4066,6 @@
                   "access_token",
                   "name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -4720,13 +4191,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -4822,13 +4286,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -4844,6 +4301,7 @@
     "/admin/api/applications.xml": {
       "get": {
         "summary": "Application List (all services)",
+        "description": "Returns the list of applications across all services. Note that applications are scoped by service and can be paginated.",
         "tags": [
           "Service Applications"
         ],
@@ -4988,6 +4446,7 @@
     "/admin/api/account/authentication_providers.xml": {
       "get": {
         "summary": "Authentication Providers Admin Portal List",
+        "description": "Returns the list of all the authentication providers for the admin portal.",
         "tags": [
           "Admin Portal Authentication Providers"
         ],
@@ -5011,11 +4470,11 @@
       },
       "post": {
         "summary": "Authentication Provider Admin Portal Create",
+        "description": "Creates an authentication provider for the admin portal.",
         "tags": [
           "Admin Portal Authentication Providers"
         ],
         "requestBody": {
-          "description": "Authentication Provider Admin Portal Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5028,7 +4487,11 @@
                   },
                   "kind": {
                     "type": "string",
-                    "description": "The kind of authentication provider which can be either 'auth0' or 'keycloak'. Use 'keycloak' for Red Hat Single Sign-On."
+                    "description": "The kind of authentication provider which can be either 'auth0' or 'keycloak'. Use 'keycloak' for Red Hat Single Sign-On.",
+                    "enum": [
+                      "keycloak",
+                      "auth0"
+                    ]
                   },
                   "name": {
                     "type": "string",
@@ -5063,13 +4526,6 @@
                   "access_token",
                   "kind"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5085,6 +4541,7 @@
     "/admin/api/account/authentication_providers/{id}.xml": {
       "get": {
         "summary": "Authentication Provider Admin Portal Read",
+        "description": "Read an authentication provider for the admin portal.",
         "tags": [
           "Admin Portal Authentication Providers"
         ],
@@ -5117,6 +4574,7 @@
       },
       "put": {
         "summary": "Authentication Provider Admin Portal Update",
+        "description": "Updates an authentication provider for the admin portal.",
         "tags": [
           "Admin Portal Authentication Providers"
         ],
@@ -5132,7 +4590,6 @@
           }
         ],
         "requestBody": {
-          "description": "Authentication Provider Admin Portal Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5167,13 +4624,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5189,6 +4639,7 @@
     "/admin/api/authentication_providers.xml": {
       "get": {
         "summary": "Authentication Providers Developer Portal List",
+        "description": "Returns the list of all the authentication providers for the developer portal.",
         "tags": [
           "Developer Portal Authentication Providers"
         ],
@@ -5212,11 +4663,11 @@
       },
       "post": {
         "summary": "Authentication Provider Developer Portal Create",
+        "description": "Creates an authentication provider for the developer portal.",
         "tags": [
           "Developer Portal Authentication Providers"
         ],
         "requestBody": {
-          "description": "Authentication Provider Developer Portal Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5281,7 +4732,11 @@
                   },
                   "branding_state_event": {
                     "type": "string",
-                    "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'brand_as_threescale' (the default one) or 'custom_brand'"
+                    "description": "Branding state event of the authentication provider. Only available for Github. It can be either 'brand_as_threescale' (the default one) or 'custom_brand'",
+                    "enum": [
+                      "brand_as_threescale",
+                      "custom_brand"
+                    ]
                   },
                   "skip_ssl_certificate_verification": {
                     "type": "boolean",
@@ -5296,13 +4751,6 @@
                   "access_token",
                   "kind"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5318,6 +4766,7 @@
     "/admin/api/authentication_providers/{id}.xml": {
       "get": {
         "summary": "Authentication Provider Read",
+        "description": "Returns an authentication provider.",
         "tags": [
           "Developer Portal Authentication Providers"
         ],
@@ -5350,6 +4799,7 @@
       },
       "put": {
         "summary": "Authentication Provider Developer Portal Update",
+        "description": "Updates an authentication provider for the developer portal.",
         "tags": [
           "Developer Portal Authentication Providers"
         ],
@@ -5365,7 +4815,6 @@
           }
         ],
         "requestBody": {
-          "description": "Authentication Provider Developer Portal Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5404,13 +4853,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5504,13 +4946,6 @@
                   "name",
                   "private_endpoint"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5604,13 +5039,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5766,13 +5194,6 @@
                   "delta",
                   "metric_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -5892,13 +5313,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6031,7 +5445,7 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
-                 "friendly_name": {
+                  "friendly_name": {
                     "type": "string",
                     "description": "Descriptive Name of the metric."
                   },
@@ -6053,13 +5467,6 @@
                   "unit",
                   "friendly_name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6151,7 +5558,7 @@
                     "type": "string",
                     "description": "A personal Access Token."
                   },
-                 "friendly_name": {
+                  "friendly_name": {
                     "type": "string",
                     "description": "Descriptive Name of the metric."
                   },
@@ -6167,13 +5574,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6346,13 +5746,6 @@
                   "friendly_name",
                   "unit"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6478,13 +5871,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6550,6 +5936,7 @@
     "/admin/api/services/{service_id}/backend_usages.json": {
       "get": {
         "summary": "Backend Usage List",
+        "description": "Returns the list of all Backend being used by a Service (Product) with the corresponding path.",
         "tags": [
           "Backends"
         ],
@@ -6582,6 +5969,7 @@
       },
       "post": {
         "summary": "Backend Usage Create",
+        "description": "Adds a Backend to a Service (Product).",
         "tags": [
           "Backends"
         ],
@@ -6597,7 +5985,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Usage Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -6609,11 +5996,11 @@
                     "description": "A personal Access Token."
                   },
                   "backend_api_id": {
-                    "type": "string",
+                    "type": "integer",
                     "description": "Backend to be added to the Service (Product)."
                   },
                   "path": {
-                    "type": "integer",
+                    "type": "string",
                     "description": "Path of the Backend for this product."
                   }
                 },
@@ -6621,13 +6008,6 @@
                   "access_token",
                   "backend_api_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6643,6 +6023,7 @@
     "/admin/api/services/{service_id}/backend_usages/{id}.json": {
       "get": {
         "summary": "Backend Usage Read",
+        "description": "Show the usage of a Backend within the scope of the Service (Product).",
         "tags": [
           "Backends"
         ],
@@ -6684,6 +6065,7 @@
       },
       "put": {
         "summary": "Backend Usage Update",
+        "description": "Updates the path of a Backend within the scope of the Service (Product).",
         "tags": [
           "Backends"
         ],
@@ -6708,7 +6090,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Usage Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -6722,18 +6103,11 @@
                   "path": {
                     "type": "integer",
                     "description": "Path of the Backend for this product."
-                  } 
+                  }
                 },
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6747,6 +6121,7 @@
       },
       "delete": {
         "summary": "Backend Usage Delete",
+        "description": "Removes the backend from a Service (Product).",
         "tags": [
           "Backends"
         ],
@@ -6790,6 +6165,7 @@
     "/admin/api/features.xml": {
       "get": {
         "summary": "Account Features List",
+        "description": "Returns the list of the features available to accounts. Account features are globally scoped.",
         "tags": [
           "Account Features"
         ],
@@ -6813,11 +6189,11 @@
       },
       "post": {
         "summary": "Account Feature Create",
+        "description": "Create an account feature. The features of the account are globally scoped. Creating a feature does not associate the feature with an account plan.",
         "tags": [
           "Account Features"
         ],
         "requestBody": {
-          "description": "Account Feature Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -6835,19 +6211,12 @@
                   "system_name": {
                     "type": "string",
                     "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
-                  }    
+                  }
                 },
                 "required": [
                   "access_token",
                   "name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6863,6 +6232,7 @@
     "/admin/api/features/{id}.xml": {
       "get": {
         "summary": "Account Feature Read",
+        "description": "Returns an account feature.",
         "tags": [
           "Account Features"
         ],
@@ -6895,6 +6265,7 @@
       },
       "put": {
         "summary": "Account Feature Update",
+        "description": "Updates an account feature.",
         "tags": [
           "Account Features"
         ],
@@ -6910,7 +6281,6 @@
           }
         ],
         "requestBody": {
-          "description": "Account Feature Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -6924,19 +6294,12 @@
                   "name": {
                     "type": "string",
                     "description": "Name of the feature."
-                  }   
+                  }
                 },
                 "required": [
                   "access_token",
                   "name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -6950,6 +6313,7 @@
       },
       "delete": {
         "summary": "Account Feature Delete",
+        "description": "Deletes an account feature.",
         "tags": [
           "Account Features"
         ],
@@ -6984,6 +6348,7 @@
     "/admin/api/fields_definitions.json": {
       "get": {
         "summary": "Fields Definitions List",
+        "description": "Returns the list of all fields definitions.",
         "tags": [
           "Fields Definitions"
         ],
@@ -7007,11 +6372,11 @@
       },
       "post": {
         "summary": "Fields Definition Create",
+        "description": "Creates a new fields definition.",
         "tags": [
           "Fields Definitions"
         ],
         "requestBody": {
-          "description": "Create Fields Definitions",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -7020,18 +6385,17 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token.",
-                    "required": true
+                    "description": "A personal Access Token."
                   },
-                  "target":{
+                  "target": {
                     "type": "string",
                     "description": "Target entity of fields definition (use Cinstance for Application).",
                     "default": "Account",
-                      "enum": [
-                        "Account",
-                        "User",
-                        "Cinstance"
-                      ]
+                    "enum": [
+                      "Account",
+                      "User",
+                      "Cinstance"
+                    ]
                   },
                   "name": {
                     "type": "string",
@@ -7068,9 +6432,8 @@
                 ]
               },
               "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
+                "choices[]": {
+                  "style": "form",
                   "explode": true
                 }
               }
@@ -7088,6 +6451,7 @@
     "/admin/api/fields_definitions/{id}.json": {
       "get": {
         "summary": "Fields Definition Read",
+        "description": "Returns the fields definition by id.",
         "tags": [
           "Fields Definitions"
         ],
@@ -7120,9 +6484,10 @@
       },
       "put": {
         "summary": "Fields Definition Update",
+        "description": "Updates the fields definition.",
         "tags": [
-              "Fields Definitions"
-            ],
+          "Fields Definitions"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -7132,81 +6497,80 @@
             "schema": {
               "type": "integer"
             }
-          }    
+          }
         ],
         "requestBody": {
-          "description": "Update Fields Definitions",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
-                 "properties": {
-                    "access_token": {
-                        "type": "string",
-                        "description": "A personal Access Token."
-                    },
-                    "target":{
-                      "type": "string",
-                      "description": "Target entity of fields definition (use Cinstance for Application).",
-                      "default": "Account",
-                        "enum": [
-                          "Account",
-                          "User",
-                          "Cinstance"
-                        ]
-                    },
-                    "label": {
-                      "type": "string",
-                      "description": "The field title your developers will see."
-                    },
-                    "read_only": {
-                      "type": "boolean",
-                      "description": "If 'true' the developers won't be able to change this field."
-                    },
-                    "required": {
-                      "type": "boolean",
-                      "description": "If 'true' the field will be required for developers."
-                    },
-                    "position": {
-                      "type": "integer",
-                      "description": "Position of the fields definition."
-                    },
-                    "hidden": {
-                      "type": "boolean",
-                      "description": "If 'true' the developers won't be able to see this field."
-                    },
-                    "choices[]": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "target": {
+                    "type": "string",
+                    "description": "Target entity of fields definition (use Cinstance for Application).",
+                    "default": "Account",
+                    "enum": [
+                      "Account",
+                      "User",
+                      "Cinstance"
+                    ]
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "The field title your developers will see."
+                  },
+                  "read_only": {
+                    "type": "boolean",
+                    "description": "If 'true' the developers won't be able to change this field."
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "description": "If 'true' the field will be required for developers."
+                  },
+                  "position": {
+                    "type": "integer",
+                    "description": "Position of the fields definition."
+                  },
+                  "hidden": {
+                    "type": "boolean",
+                    "description": "If 'true' the developers won't be able to see this field."
+                  },
+                  "choices[]": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
                     }
-                 },
-                 "required": [
-                    "access_token",
-                    "target"
-                  ]
-                },
-                "encoding": {
-                  "field_definitions": {
-                    "contentType": "application/x-www-form-urlencoded",
-                    "style": "deepObject",
-                    "explode": true
                   }
+                },
+                "required": [
+                  "access_token",
+                  "target"
+                ]
+              },
+              "encoding": {
+                "choices[]": {
+                  "style": "form",
+                  "explode": true
                 }
               }
             }
-          },
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
             "content": {}
           }
         }
-    },
+      },
       "delete": {
         "summary": "Fields Definition Delete",
+        "description": "Deletes the fields definition.",
         "tags": [
           "Fields Definitions"
         ],
@@ -7241,6 +6605,7 @@
     "/admin/api/objects/status.json": {
       "get": {
         "summary": "Object deletion status for objects that are deleted asynchronously",
+        "description": "Returns an object status. (200/404). Useful for those objects that deleted asynchronously in order to know if the deletion has been completed(404) or not(200)",
         "tags": [
           "Object Deletion Status"
         ],
@@ -7284,6 +6649,7 @@
     "/admin/api/personal/access_tokens.json": {
       "get": {
         "summary": "Personal Access Token List",
+        "description": "Returns the list of access tokens of the user. If the parameter name is sent, it returns only those whose name contain the string of the param",
         "tags": [
           "Access Tokens"
         ],
@@ -7315,11 +6681,11 @@
       },
       "post": {
         "summary": "Personal Access Token Create",
+        "description": "Creates an access token. Make sure to copy your new personal access token now. You will not be able to see it again as it is not stored for security reasons.",
         "tags": [
           "Access Tokens"
         ],
         "requestBody": {
-          "description": "Personal Access Token Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -7336,13 +6702,24 @@
                   },
                   "permission": {
                     "type": "string",
-                    "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write)."
+                    "description": "Permission of the access token. It must be either 'ro' (read only) or 'rw' (read and write).",
+                    "enum": [
+                      "ro",
+                      "rw"
+                    ]
                   },
                   "scopes[]": {
                     "type": "array",
-                    "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\", \"policy_registry\"], and for a tenant user [\"finance\", \"account_management\", \"stats\", \"policy_registry\"]",
+                    "description": "Scope of the access token. URL-encoded array containing one or more of the possible values. The possible values are, for a master user [\"account_management\", \"stats\", \"policy_registry\"], and for a tenant user [\"finance\", \"account_management\", \"stats\", \"policy_registry\", \"cms\"]",
                     "items": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "account_management",
+                        "stats",
+                        "finance",
+                        "cms",
+                        "policy_registry"
+                      ]
                     }
                   }
                 },
@@ -7350,13 +6727,12 @@
                   "access_token",
                   "name",
                   "permission",
-                  "scopes"
+                  "scopes[]"
                 ]
               },
               "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
+                "scopes[]": {
+                  "style": "form",
                   "explode": true
                 }
               }
@@ -7374,6 +6750,7 @@
     "/admin/api/personal/access_tokens/{id}.json": {
       "get": {
         "summary": "Personal Access Token Read",
+        "description": "Shows an access token.",
         "tags": [
           "Access Tokens"
         ],
@@ -7406,6 +6783,7 @@
       },
       "delete": {
         "summary": "Personal Access Token Delete",
+        "description": "Deletes an access token.",
         "tags": [
           "Access Tokens"
         ],
@@ -7440,6 +6818,7 @@
     "/admin/api/policies.json": {
       "get": {
         "summary": "APIcast Policy Registry",
+        "description": "Returns APIcast Policy Registry",
         "tags": [
           "APIcast Policies"
         ],
@@ -7465,6 +6844,7 @@
     "/admin/api/provider.xml": {
       "get": {
         "summary": "Provider Account Read",
+        "description": "Returns your account.",
         "tags": [
           "Provider Account"
         ],
@@ -7488,11 +6868,11 @@
       },
       "put": {
         "summary": "Provider Account Update",
+        "description": "Updates email addresses used to deliver email notifications to customers.",
         "tags": [
           "Provider Account"
         ],
         "requestBody": {
-          "description": "Provider Account Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -7523,13 +6903,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -7545,6 +6918,7 @@
     "/admin/api/service_plans.xml": {
       "get": {
         "summary": "Service Plan List (all services)",
+        "description": "Returns a list of all service plans for all services. Note that service plans are scoped by service.",
         "tags": [
           "Service Plans"
         ],
@@ -7570,6 +6944,7 @@
     "/admin/api/service_plans/{service_plan_id}/features.xml": {
       "get": {
         "summary": "Service Plan Feature List",
+        "description": "Returns the list of features of a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7602,6 +6977,7 @@
       },
       "post": {
         "summary": "Service Plan Feature Add",
+        "description": "Associates an existing feature to a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7617,7 +6993,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Plan Feature Add",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -7637,13 +7012,6 @@
                   "access_token",
                   "feature_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -7659,6 +7027,7 @@
     "/admin/api/service_plans/{service_plan_id}/features/{id}.xml": {
       "delete": {
         "summary": "Service Plan Features Delete",
+        "description": "Removes the association of a feature to a service plan.",
         "tags": [
           "Service Plans"
         ],
@@ -7702,6 +7071,7 @@
     "/admin/api/services.xml": {
       "get": {
         "summary": "Service List",
+        "description": "Returns the list of all services.",
         "tags": [
           "Services"
         ],
@@ -7743,61 +7113,16 @@
       },
       "post": {
         "summary": "Service Create",
+        "description": "Creates a new service.",
         "tags": [
           "Services"
         ],
         "requestBody": {
-          "description": "Service Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Name of the service to be created."
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "Description of the service to be created."
-                  },
-                  "deployment_option": {
-                    "type": "string",
-                    "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option"
-                  },
-                  "backend_version": {
-                    "type": "string",
-                    "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect"
-                  },
-                  "system_name": {
-                    "type": "string",
-                    "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
-                  },
-                  " ": {
-                    "type": "array",
-                    "description": "Extra parameters",
-                    "explode": false,
-                    "items": {
-                      "type": "object"
-                    }       
-                  }
-                },
-                "required": [
-                  "access_token",
-                  "name"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
+                "$ref": "#/components/schemas/ServiceCreateRequest"
               }
             }
           }
@@ -7813,6 +7138,7 @@
     "/admin/api/services/{id}.xml": {
       "get": {
         "summary": "Service Read",
+        "description": "Returns the service by id.",
         "tags": [
           "Services"
         ],
@@ -7845,19 +7171,11 @@
       },
       "put": {
         "summary": "Service Update",
+        "description": "Update the service.",
         "tags": [
           "Services"
         ],
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -7866,61 +7184,18 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "New name for the service.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "New description for the service.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "support_email",
-            "in": "query",
-            "description": "New support email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "deployment_option",
-            "in": "query",
-            "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "backend_version",
-            "in": "query",
-            "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": " ",
-            "in": "query",
-            "description": "Extra parameters",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceUpdateRequest"
               }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -7930,6 +7205,7 @@
       },
       "delete": {
         "summary": "Service Delete",
+        "description": "Delete the service. Deleting a service removes all applications and service subscriptions.",
         "tags": [
           "Services"
         ],
@@ -7964,6 +7240,7 @@
     "/admin/api/services/{id}/service_plans.xml": {
       "get": {
         "summary": "Service Plan List",
+        "description": "Returns a list of all service plans for a service.",
         "tags": [
           "Service Plans"
         ],
@@ -7996,6 +7273,7 @@
       },
       "post": {
         "summary": "Service Plan Create",
+        "description": "Creates a new service plan in a service.",
         "tags": [
           "Service Plans"
         ],
@@ -8011,7 +7289,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Plan Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8034,22 +7311,19 @@
                     "type": "string",
                     "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
                   },
-                  "state_event":{
+                  "state_event": {
                     "type": "string",
-                    "description": "State event of the service plan. It can be 'publish' or 'hide'"
+                    "description": "State event of the service plan. It can be 'publish' or 'hide'",
+                    "enum": [
+                      "publish",
+                      "hide"
+                    ]
                   }
                 },
                 "required": [
                   "access_token",
                   "name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8065,6 +7339,7 @@
     "/admin/api/services/{service_id}/metrics.xml": {
       "get": {
         "summary": "Service Metric List",
+        "description": "Returns the list of metrics of a service.",
         "tags": [
           "Services"
         ],
@@ -8097,6 +7372,7 @@
       },
       "post": {
         "summary": "Service Metric Create",
+        "description": "Creates a metric on a service.",
         "tags": [
           "Services"
         ],
@@ -8112,7 +7388,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Metric Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8149,13 +7424,6 @@
                   "friendly_name",
                   "unit"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8171,6 +7439,7 @@
     "/admin/api/services/{service_id}/metrics/{id}.xml": {
       "get": {
         "summary": "Service Metric Read",
+        "description": "Returns the metric of a service.",
         "tags": [
           "Services"
         ],
@@ -8212,6 +7481,7 @@
       },
       "put": {
         "summary": "Service Metric Update",
+        "description": "Updates the metric of a service.",
         "tags": [
           "Services"
         ],
@@ -8236,7 +7506,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Metric Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8263,13 +7532,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8283,6 +7545,7 @@
       },
       "delete": {
         "summary": "Service Metric Delete",
+        "description": "Deletes the metric of a service. When you delete a metric or a method, it will also remove all the associated limits across application plans.",
         "tags": [
           "Services"
         ],
@@ -8326,6 +7589,7 @@
     "/admin/api/services/{service_id}/metrics/{metric_id}/methods.xml": {
       "get": {
         "summary": "Service Method List",
+        "description": "List the methods of a metric that belongs to a service. Methods are metrics that are children of a parent metric.",
         "tags": [
           "Services"
         ],
@@ -8367,6 +7631,7 @@
       },
       "post": {
         "summary": "Service Method Create",
+        "description": "Creates a method under a metric that belongs to a service.",
         "tags": [
           "Services"
         ],
@@ -8391,7 +7656,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Method Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8424,13 +7688,6 @@
                   "friendly_name",
                   "unit"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8446,6 +7703,7 @@
     "/admin/api/services/{service_id}/metrics/{metric_id}/methods/{id}.xml": {
       "get": {
         "summary": "Service Method Read",
+        "description": "Returns the method of a metric that belongs to a service.",
         "tags": [
           "Services"
         ],
@@ -8496,6 +7754,7 @@
       },
       "put": {
         "summary": "Service Method Update",
+        "description": "Updates a method of a metric that belongs to a service.",
         "tags": [
           "Services"
         ],
@@ -8529,7 +7788,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Method Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8556,13 +7814,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8576,6 +7827,7 @@
       },
       "delete": {
         "summary": "Service Method Delete",
+        "description": "Deletes the method of a metric that belongs to a service.",
         "tags": [
           "Services"
         ],
@@ -8628,6 +7880,7 @@
     "/admin/api/account/proxy_configs/{environment}.json": {
       "get": {
         "summary": "Proxy Configs List (Provider)",
+        "description": "Returns the Proxy Configs of the provider",
         "tags": [
           "Proxy Configs for Provider"
         ],
@@ -8647,7 +7900,11 @@
             "description": "Gateway environment. Must be 'sandbox' or 'production'",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "sandbox",
+                "production"
+              ]
             }
           },
           {
@@ -8678,6 +7935,7 @@
     "/admin/api/services/{service_id}/proxy.xml": {
       "get": {
         "summary": "Proxy Read",
+        "description": "Returns the Proxy of a Service.",
         "tags": [
           "Gateway"
         ],
@@ -8710,6 +7968,7 @@
       },
       "patch": {
         "summary": "Proxy Update",
+        "description": "Changes the Proxy settings. This will create a new APIcast configuration version for the Staging environment with the updated settings.",
         "tags": [
           "Gateway"
         ],
@@ -8725,7 +7984,6 @@
           }
         ],
         "requestBody": {
-          "description": "Proxy Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8790,7 +8048,7 @@
                   },
                   "error_status_no_match": {
                     "type": "string",
-                     "description": "Content-Type header when no mapping rule is matched."
+                    "description": "Content-Type header when no mapping rule is matched."
                   },
                   "error_status_limits_exceeded": {
                     "type": "integer",
@@ -8828,13 +8086,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8850,6 +8101,7 @@
     "/admin/api/services/{service_id}/proxy/deploy.xml": {
       "post": {
         "summary": "Proxy Deploy",
+        "description": "Promotes the APIcast configuration to the Staging Environment (Production Environment in case of Service Mesh).",
         "tags": [
           "Gateway"
         ],
@@ -8865,7 +8117,6 @@
           }
         ],
         "requestBody": {
-          "description": "Proxy Deploy",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8875,18 +8126,11 @@
                   "access_token": {
                     "type": "string",
                     "description": "A personal Access Token."
-                  }    
+                  }
                 },
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -8902,6 +8146,7 @@
     "/admin/api/services/{service_id}/proxy/mapping_rules.xml": {
       "get": {
         "summary": "Proxy Mapping Rules List",
+        "description": "Returns the Mapping Rules of a Proxy.",
         "tags": [
           "Gateway"
         ],
@@ -8934,6 +8179,7 @@
       },
       "post": {
         "summary": "Proxy Mapping Rule Create",
+        "description": "Creates a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is added to apply the change to the APIcast configuration. If adding multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all mapping rules have been created.",
         "tags": [
           "Gateway"
         ],
@@ -8949,7 +8195,6 @@
           }
         ],
         "requestBody": {
-          "description": "Proxy Mapping Rule Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -8992,13 +8237,6 @@
                   "delta",
                   "metric_id"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9014,6 +8252,7 @@
     "/admin/api/services/{service_id}/proxy/mapping_rules/{id}.xml": {
       "get": {
         "summary": "Proxy Mapping Rules Show",
+        "description": "Returns the Mapping Rule.",
         "tags": [
           "Gateway"
         ],
@@ -9055,6 +8294,7 @@
       },
       "delete": {
         "summary": "Proxy Mapping Rule Delete",
+        "description": "Deletes a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is deleted to apply the change to the APIcast configuration. If deleting multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all desired mapping rules have been deleted.",
         "tags": [
           "Gateway"
         ],
@@ -9096,6 +8336,7 @@
       },
       "patch": {
         "summary": "Proxy Mapping Rule Update",
+        "description": "Updates a Proxy Mapping Rule. The proxy object needs to be updated after a mapping rule is updated to apply the change to the APIcast configuration. If updating multiple mapping rules then only one call to the Proxy Update endpoint is necessary after all mapping rules have been updated.",
         "tags": [
           "Gateway"
         ],
@@ -9120,7 +8361,6 @@
           }
         ],
         "requestBody": {
-          "description": "Proxy Mapping Rule Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9159,13 +8399,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9181,6 +8414,7 @@
     "/admin/api/services/{service_id}/proxy/oidc_configuration.xml": {
       "get": {
         "summary": "OIDC Configuration Show",
+        "description": "Get the Proxy OIDC configuration.",
         "tags": [
           "Gateway"
         ],
@@ -9213,6 +8447,7 @@
       },
       "patch": {
         "summary": "OIDC Configuration Update",
+        "description": "Changes the Proxy OIDC configuration.",
         "tags": [
           "Gateway"
         ],
@@ -9259,13 +8494,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9281,6 +8509,7 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}.json": {
       "get": {
         "summary": "Proxy Configs List (Service)",
+        "description": "Returns the Proxy Configs of a Service",
         "tags": [
           "Gateway"
         ],
@@ -9309,7 +8538,11 @@
             "description": "Gateway environment. Must be 'sandbox' or 'production'",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "sandbox",
+                "production"
+              ]
             }
           }
         ],
@@ -9324,6 +8557,7 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}/latest.json": {
       "get": {
         "summary": "Proxy Config Show Latest",
+        "description": "Returns the latest Proxy Config.",
         "tags": [
           "Gateway"
         ],
@@ -9352,7 +8586,11 @@
             "description": "Gateway environment. Must be 'sandbox' or 'production'",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "sandbox",
+                "production"
+              ]
             }
           }
         ],
@@ -9367,6 +8605,7 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}/{version}.json": {
       "get": {
         "summary": "Proxy Config Show",
+        "description": "Returns a Proxy Config.",
         "tags": [
           "Gateway"
         ],
@@ -9395,7 +8634,11 @@
             "description": "Gateway environment. Must be 'sandbox' or 'production'",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "sandbox",
+                "production"
+              ]
             }
           },
           {
@@ -9419,6 +8662,7 @@
     "/admin/api/services/{service_id}/proxy/configs/{environment}/{version}/promote.json": {
       "post": {
         "summary": "Proxy Config Promote",
+        "description": "Promotes a Proxy Config from one environment to another environment.",
         "tags": [
           "Gateway"
         ],
@@ -9438,7 +8682,11 @@
             "description": "Gateway environment. Must be 'sandbox' or 'production'",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "sandbox",
+                "production"
+              ]
             }
           },
           {
@@ -9452,7 +8700,6 @@
           }
         ],
         "requestBody": {
-          "description": "Proxy Config Promote",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9465,20 +8712,17 @@
                   },
                   "to": {
                     "type": "string",
-                    "description": "the name of the destination environment"
+                    "description": "The name of the destination environment",
+                    "enum": [
+                      "sandbox",
+                      "production"
+                    ]
                   }
                 },
                 "required": [
                   "access_token",
                   "to"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9494,6 +8738,7 @@
     "/admin/api/services/{service_id}/proxy/policies.json": {
       "get": {
         "summary": "Proxy Policies Chain Show",
+        "description": "Returns a Proxy Policies Chain.",
         "tags": [
           "Gateway"
         ],
@@ -9526,6 +8771,7 @@
       },
       "put": {
         "summary": "Proxy Policies Chain Update",
+        "description": "Updates a Proxy Policies Chain.",
         "tags": [
           "Gateway"
         ],
@@ -9541,7 +8787,6 @@
           }
         ],
         "requestBody": {
-          "description": "Proxy Policies Chain Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9561,13 +8806,6 @@
                   "access_token",
                   "policies_config"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9583,6 +8821,7 @@
     "/admin/api/services/{service_id}/service_plans/{id}.xml": {
       "get": {
         "summary": "Service Plan Read",
+        "description": "Returns a service plan by ID.",
         "tags": [
           "Service Plans"
         ],
@@ -9624,6 +8863,7 @@
       },
       "put": {
         "summary": "Service Plan Update",
+        "description": "Updates a service plan by ID.",
         "tags": [
           "Service Plans"
         ],
@@ -9648,7 +8888,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Plan Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9669,20 +8908,16 @@
                   },
                   "state_event": {
                     "type": "string",
-                    "description": "State event of the service plan. It can be 'publish' or 'hide'"
+                    "description": "State event of the service plan. It can be 'publish' or 'hide'",
+                    "enum": [
+                      "publish",
+                      "hide"
+                    ]
                   }
                 },
                 "required": [
-                  "access_token",
-                  "policies_config"
+                  "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9696,6 +8931,7 @@
       },
       "delete": {
         "summary": "Service Plan Delete",
+        "description": "Deletes a service plan by ID.",
         "tags": [
           "Service Plans"
         ],
@@ -9739,6 +8975,7 @@
     "/admin/api/services/{service_id}/service_plans/{id}/default.xml": {
       "put": {
         "summary": "Service Plan Set to Default",
+        "description": "Sets the service plan as default. The default service plan is used when no explicit service plan is used.",
         "tags": [
           "Service Plans"
         ],
@@ -9763,7 +9000,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Plan Set to Default",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9778,13 +9014,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9832,6 +9061,7 @@
       },
       "post": {
         "summary": "Service Feature Create",
+        "description": "Creates a feature on a service. Features are usually associated to a particular type of plan; you can associate the plan on the scope parameter. Note that account plans are not scoped by service.",
         "tags": [
           "Service Features"
         ],
@@ -9847,7 +9077,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Feature Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9871,11 +9100,7 @@
                     "description": "Description of the feature."
                   },
                   "scope": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "explode": false,
+                    "type": "string",
                     "enum": [
                       "ApplicationPlan",
                       "ServicePlan"
@@ -9886,13 +9111,6 @@
                   "access_token",
                   "name"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -9908,6 +9126,7 @@
     "/admin/api/services/{service_id}/features/{id}.xml": {
       "get": {
         "summary": "Service Feature Read",
+        "description": "Returns a feature of a service.",
         "tags": [
           "Service Features"
         ],
@@ -9949,6 +9168,7 @@
       },
       "put": {
         "summary": "Service Feature Update",
+        "description": "Updates a feature of a service.",
         "tags": [
           "Service Features"
         ],
@@ -9973,7 +9193,6 @@
           }
         ],
         "requestBody": {
-          "description": "Service Feature Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -9996,13 +9215,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -10016,6 +9228,7 @@
       },
       "delete": {
         "summary": "Service Feature Delete",
+        "description": "Deletes a feature of a service.",
         "tags": [
           "Service Features"
         ],
@@ -10059,6 +9272,7 @@
     "/admin/api/settings.json": {
       "get": {
         "summary": "Settings Read",
+        "description": "Returns the general settings of an account.",
         "tags": [
           "Settings"
         ],
@@ -10082,11 +9296,11 @@
       },
       "put": {
         "summary": "Settings Update",
+        "description": "Updates general settings.",
         "tags": [
           "Settings"
-        ],    
+        ],
         "requestBody": {
-          "description": "Settings Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -10137,13 +9351,6 @@
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -10159,11 +9366,11 @@
     "/admin/api/webhooks.json": {
       "put": {
         "summary": "WebHooks Update",
+        "description": "Updates webhooks.",
         "tags": [
           "Webhooks"
-        ],    
+        ],
         "requestBody": {
-          "description": "WebHooks Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -10232,19 +9439,12 @@
                     "type": "boolean"
                   },
                   "application_key_updated_on": {
-                    "type": "boolean"                  
+                    "type": "boolean"
                   }
                 },
                 "required": [
                   "access_token"
                 ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
               }
             }
           }
@@ -10260,6 +9460,7 @@
     "/admin/api/webhooks/failures.xml": {
       "get": {
         "summary": "Webhooks List Failed Deliveries",
+        "description": "Lists of webhooks that could not be delivered to your end-point after 5 trials. A webhook is considered delivered if your end-point responds with a 200, otherwise it retries 5 times at 60 second intervals.",
         "tags": [
           "Webhooks"
         ],
@@ -10283,6 +9484,7 @@
       },
       "delete": {
         "summary": "Webhooks Delete Failed Deliveries",
+        "description": "Deletes failed delivery records. It is advisable to delete the records past the time of the last webhook failure that was received instead of deleting them all. Between the GET and the DELETE other webhooks failures may have arrived.",
         "tags": [
           "Webhooks"
         ],
@@ -10316,9 +9518,298 @@
     }
   },
   "components": {
-    "schemas":{
-      "Permissions":{
-        "type": "array"
+    "schemas": {
+      "AccountUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "org_name": {
+            "type": "string",
+            "description": "Organization name of the account."
+          },
+          "monthly_billing_enabled": {
+            "type": "boolean",
+            "description": "Updates monthly billing status."
+          },
+          "monthly_charging_enabled": {
+            "type": "boolean",
+            "description": "Updates monthly charging status."
+          }
+        },
+        "required": [
+          "access_token"
+        ],
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "ApplicationCreateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "plan_id": {
+            "type": "integer",
+            "description": "ID of the application plan."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the application to be created."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the application to be created."
+          },
+          "user_key": {
+            "type": "string",
+            "description": "User Key (API Key) of the application to be created."
+          },
+          "application_id": {
+            "type": "string",
+            "description": "App ID or Client ID (for OAuth and OpenID Connect authentication modes) of the application to be created."
+          },
+          "application_key": {
+            "description": "App Key or Client Secret (for OAuth and OpenID Connect authentication modes) of the application to be created.",
+            "type": "string"
+          },
+          "redirect_url": {
+            "type": "string",
+            "description": "Redirect URL for the OAuth request."
+          },
+          "first_traffic_at": {
+            "type": "string",
+            "description": "Timestamp of the first call made by the application."
+          },
+          "first_daily_traffic_at": {
+            "type": "string",
+            "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
+          }
+        },
+        "required": [
+          "access_token",
+          "plan_id",
+          "name",
+          "description"
+        ],
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "ApplicationUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the application"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the application"
+          },
+          "redirect_url": {
+            "type": "string",
+            "description": "Redirect URL for the OAuth request."
+          },
+          "first_traffic_at": {
+            "type": "string",
+            "description": "Timestamp of the first call made by the application."
+          },
+          "first_daily_traffic_at": {
+            "type": "string",
+            "description": "Timestamp of the first call on the last day when traffic was registered for the application ('Traffic On')."
+          }
+        },
+        "required": [
+          "access_token",
+          "name"
+        ],
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "UserCreateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "username": {
+            "type": "string",
+            "description": "Username of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the user."
+          },
+          "password": {
+            "type": "string",
+            "description": "Password of the user."
+          }
+        },
+        "required": [
+          "access_token",
+          "username",
+          "email",
+          "password"
+        ],
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "username": {
+            "type": "string",
+            "description": "Username of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the user."
+          },
+          "password": {
+            "type": "string",
+            "description": "Password of the user."
+          }
+        },
+        "required": [
+          "access_token"
+        ],
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "ServiceCreateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the service to be created."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the service to be created."
+          },
+          "deployment_option": {
+            "type": "string",
+            "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option"
+          },
+          "backend_version": {
+            "type": "string",
+            "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect"
+          },
+          "system_name": {
+            "type": "string",
+            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "required": [
+          "access_token",
+          "name"
+        ]
+      },
+      "ServiceUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the service to be created."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the service to be created."
+          },
+          "deployment_option": {
+            "type": "string",
+            "description": "Deployment option for the gateway: 'hosted' for APIcast hosted, 'self_managed' for APIcast Self-managed, 'service_mesh_istio' for Istio service mesh option"
+          },
+          "backend_version": {
+            "type": "string",
+            "description": "Authentication mode: '1' for API key, '2' for App Id / App Key, 'oidc' for OpenID Connect"
+          },
+          "system_name": {
+            "type": "string",
+            "description": "System Name of the object to be created. System names cannot be modified after creation, they are used as the key to identify the objects."
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "SignupExpressRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "org_name": {
+            "type": "string",
+            "description": "Organization Name of the developer account."
+          },
+          "username": {
+            "type": "string",
+            "description": "Username of the admin user (on the new developer account)."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the admin user."
+          },
+          "password": {
+            "type": "string",
+            "description": "Password of the admin user."
+          },
+          "account_plan_id": {
+            "type": "integer",
+            "description": "ID of the account plan (if not assigned default will be used instead)."
+          },
+          "service_plan_id": {
+            "type": "integer",
+            "description": "ID of the service plan (if not assigned default will be used instead)."
+          },
+          "application_plan_id": {
+            "type": "integer",
+            "description": "ID of the application plan (if not assigned default will be used instead)."
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "required": [
+          "access_token",
+          "org_name",
+          "username",
+          "email",
+          "password"
+        ]
       }
     }
   }
