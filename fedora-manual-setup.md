@@ -35,7 +35,11 @@ sudo dnf install sphinx chromedriver postgresql-devel mysql-devel ImageMagick  I
 
 ### Database
 
-The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). We recommend running MySQL in a [Podman](https://podman.io/) container:
+The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). MySQL will be used by default.
+
+###### MySQL
+
+We recommend running it in a [Podman](https://podman.io/) container:
 
 ```sh
 podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
@@ -43,28 +47,28 @@ podman run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mys
 
 ### Redis
 
-[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running Redis in a [Podman](https://podman.io/) container:
+[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
 podman run -d -p 6379:6379 redis
 ```
 
-Alternatively, it can be run directly on your machine with `dnf`:
+Alternatively, Redis can be run directly on your machine with `dnf`:
 
 ```
 sudo dnf install redis
 sudo systemctl restart redis
 ```
 
-### Rails cache (Memcached)
+### Memcached
 
-If available, Rails and Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Podman](https://podman.io/) container:
+If available, Rails will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running it in a [Podman](https://podman.io/) container:
 
 ```
 podman run -d -p 11211:11211 memcached
 ```
 
-Alternatively, it can be installed directly on your machine:
+Alternatively, Memcached can be run directly on your machine with `dnf`:
 
 ```
 sudo dnf install memcached
@@ -80,7 +84,7 @@ sudo systemctl restart memcached
 
 ### Bundler
 
-We manage Ruby gems with [Bundler](https://bundler.io/). Install it by running:
+Ruby gems are managed with [Bundler](https://bundler.io/). Install it by running:
 
 ```
 gem install bundler
@@ -100,7 +104,7 @@ bundle install
 
 ### Yarn (1.x)
 
-To manage our JavaScript packages we use [Yarn](https://classic.yarnpkg.com/lang/en/). It is recommended to install it with NPM:
+JavaScript packages are managed with [Yarn](https://classic.yarnpkg.com/lang/en/). It is recommended to install it with NPM:
 
 ```
 npm install --global yarn

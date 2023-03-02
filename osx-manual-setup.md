@@ -26,8 +26,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 10](https://nodejs.org/en/download/)**.
-The recommended way to install them is with `asdf`:
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 10](https://nodejs.org/en/download/)**. To install them with `asdf` run:
 
 ```
 asdf plugin add ruby
@@ -44,7 +43,7 @@ asdf install
 
 ### Python (only macs with M1)
 
-The project requires Python 2.7.18. However, it is not included anymore in Apple macs with Silicon. We recommend to handle Python installation with `asdf`:
+The project requires Python 2.7.18. However, it is not included anymore in Apple macs with Silicon. To install it with `asdf` run:
 
 ```
 asdf plugin add python
@@ -65,60 +64,78 @@ xcode-select -—install
 ### Dependencies
 
 ```
-brew install chromedriver imagemagick@6 gs pkg-config openssl geckodriver sphinx
+brew install chromedriver imagemagick@6 gs pkg-config openssl geckodriver sphinx mysql@5.7 postgresql@14
 brew link imagemagick@6
 ```
 
-* **Macs with M1** also require de following:
+* **Macs with M1** also require the following:
 
   ```
   brew install pixman cairo pango
   ```
 
-### Database
+### Databases
 
-The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). We recommend running MySQL in a [Docker](https://www.docker.com/) container:
+The application requires a database that can either be [PostgreSQL](https://www.postgresql.org), [MySQL](https://www.mysql.com) or [Oracle database](https://www.oracle.com/database/). MySQL will be used by default.
+
+
+###### MySQL
+
+We recommend running it in a [Docker](https://www.docker.com/) container:
 
 ```sh
 docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 mysql:5.7
 ```
+* **Macs with M1** require the flag `--platform linux/x86_64`:
 
-Alternatively, both MySQL and PostgreSQL can be installed and managed by Homebrew
-```sh
-# MySQL
-brew install mysql@5.7
-brew link mysql@5.7 --force
+  ```
+  docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name mysql57 --platform linux/x86_64 mysql:5.7
+  ```
+
+Alternatively it can be run by Homebrew:
+```
 brew services start mysql@5.7
+```
 
-# PostgreSQL
-brew install postgresql@14
+###### PostgreSQL
+
+We recommend running it in a [Docker](https://www.docker.com/) container:
+
+```sh
+export DATABASE_URL=postgresql://postgres:@localhost:5433/circleci
+
+docker run -d -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=circleci --name postgres10 circleci/postgres:10.5-alpine"
+```
+
+Alternatively it can be run by Homebrew:
+```
 brew services start postgresql@14
 ```
 
 ### Redis
 
-[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running Redis in a [Docker](https://www.docker.com/) container:
+[Redis](https://redis.io) is an in-memory data store used as DB for some of the data and it has to be running for the application to work. We recommend running it in a [Docker](https://www.docker.com/) container:
 
 ```
 docker run -d -p 6379:6379 redis
 ```
 
-Alternatively, it be run directly on your machine with Homebrew:
+Alternatively, Redis can be run directly on your machine with Homebrew:
 
 ```
 brew install redis
 brew services start redis
 ```
 
-### Rails cache (Memcached)
+### Memcached
 
-If available, Redis will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running memcached in a [Docker](https://www.docker.com/) container:
+If available, Rails will use [Memcached](https://www.memcached.org) for caching. Installing it is completely optional but still recommended. We recommend running it in a [Docker](https://www.docker.com/) container:
 
 ```
 docker run -d -p 11211:11211 memcached
 ```
 
-Alternatively, it can be run directly on your machine with Homebrew:
+Alternatively, Memcached can be run directly on your machine with Homebrew:
 
 ```
 brew install memcached
@@ -134,7 +151,7 @@ brew services start memcached
 
 ### Bundler
 
-We manage Ruby gems with [Bundler](https://bundler.io/). Install it by running:
+Ruby gems are managed with [Bundler](https://bundler.io/). Install it by running:
 
 ```
 gem install bundler
@@ -170,7 +187,7 @@ bundle install
 
 ### Yarn (1.x)
 
-To manage our JavaScript packages we use [Yarn](https://classic.yarnpkg.com/lang/en/). It is recommended to install it with NPM:
+JavaScript packages are managed with [Yarn](https://classic.yarnpkg.com/lang/en/). Install it with NPM:
 
 ```
 npm install --global yarn
