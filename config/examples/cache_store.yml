@@ -1,6 +1,6 @@
 base: &default
   - :mem_cache_store
-  - <%= ENV.fetch('MEMCACHE_SERVERS', 'localhost:11211') %>
+  - <%= ENV['MEMCACHE_SERVERS'].presence || 'localhost:11211' %>
 
 development:
   <<: *default

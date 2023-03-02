@@ -1,5 +1,5 @@
 base: &default
-  url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/0') %>"
+  url: "<%= ENV.fetch('BACKEND_REDIS_URL', 'redis://localhost:6379/6') %>"
   timeout: <%= ENV.fetch('BACKEND_REDIS_TIMEOUT', 1) %>
   pool_size: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   pool_timeout: 5 # this is in seconds
@@ -15,3 +15,4 @@ test:
 
 production:
   <<: *default
+  url: "<%= ENV.fetch('BACKEND_REDIS_URL') %>"
