@@ -89,10 +89,9 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
                                          billing_address_city: 'city',
                                          billing_address_state: 'state',
                                          billing_address_zip: 'zip',
-                                         billing_address_country: 'country')
+                                         billing_address_country: 'ES')
     stubs(:current_account).returns(account)
     stubs(:logged_in?).returns(true).once
-    stubs(:country_code_for).with('country').returns('ES').once
 
     expected_response = {
       line1: 'address1',
