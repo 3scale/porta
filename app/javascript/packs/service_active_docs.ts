@@ -3,6 +3,8 @@ import 'swagger-ui/dist/swagger-ui.css'
 
 import { autocompleteOAS3 } from 'ActiveDocs/OAS3Autocomplete'
 
+import 'ActiveDocs/swagger-ui-3-provider-patch.scss'
+
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'
   const DATA_URL = 'p/admin/api_docs/account_data.json'
