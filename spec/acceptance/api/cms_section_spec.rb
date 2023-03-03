@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 resource 'CMS::Section' do
-
   let(:resource) { FactoryBot.create(:cms_section, provider: provider, parent: provider.sections.root) }
 
   api 'cms section' do
-
     get '/admin/api/cms/sections.:format', action: :index do
       let(:collection) { provider.sections.order(:id) }
       let(:serialized) { representer.public_send(serialization_format, short: true) }
@@ -29,13 +29,48 @@ resource 'CMS::Section' do
     delete '/admin/api/cms/sections/:id.:format', action: :destroy
   end
 
-  json(:resource) do
-    let(:root) { 'section' }
-    it { should have_properties('id', 'parent_id', 'system_name', 'title', 'created_at', 'updated_at').from(resource) }
-  end
+  describe 'representer' do
+    let(:expected_attributes) do
+      %w[id created_at updated_at title system_name public parent_id partial_path]
+    end
 
-  json(:collection) do
-    let(:root) { 'sections' }
+    context 'when the resource is a new record' do
+      let(:resource) { FactoryBot.build(:cms_section, provider: provider, parent: provider.sections.root) }
+      let(:root) { 'section' }
+      let(:expected_attributes) { %w[title system_name public parent_id partial_path] }
+
+      json(:resource) do
+        it { should have_properties(expected_attributes).from(resource) }
+      end
+
+      xml(:resource) do
+        it { should have_tags(expected_attributes).from(resource) }
+      end
+    end
+
+    context 'when requesting a single resource' do
+      let(:root) { 'section' }
+
+      json(:resource) do
+        it { should have_properties(expected_attributes).from(resource) }
+      end
+
+      xml(:resource) do
+        it { should have_tags(expected_attributes).from(resource) }
+      end
+    end
+
+    context 'when requesting a collection' do
+      let(:root) { 'sections' }
+
+      json(:collection)
+
+      xml(:collection) do
+        it 'should have root' do
+          expect(xml).to have_tag(root)
+        end
+      end
+    end
   end
 end
 
