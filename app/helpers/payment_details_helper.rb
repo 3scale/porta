@@ -61,8 +61,8 @@ module PaymentDetailsHelper
       city: billing_address.city,
       state: billing_address.state,
       postal_code: billing_address.zip,
-      country: billing_address.country
-    }.transform_values { |value| value.presence || '' }
+      country: country_code_for(billing_address.country)
+    }.compact
   end
 
   def braintree_form_data

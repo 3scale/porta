@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js'
 
 import type { PaymentIntent, Stripe, StripeCardElement } from '@stripe/stripe-js'
 
-import 'PaymentGateways/stripe/components/StripeFormWrapper.scss'
+import 'PaymentGateways/stripe/StripeElementsForm.scss'
 
 const style = {
   base: {
