@@ -152,9 +152,9 @@ module Pdf
         [{ text: 1.day.ago.to_date.to_s }.merge!(format)]
       else
         [
-          { text: 1.day.ago.to_date.to_s }.merge!(format),
-          { text: " - " },
           { text: 1.week.ago.to_date.to_s }.merge!(format),
+          { text: " - " },
+          { text: 1.day.ago.to_date.to_s }.merge!(format),
         ]
       end
     end
