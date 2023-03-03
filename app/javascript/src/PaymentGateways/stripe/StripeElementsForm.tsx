@@ -46,10 +46,13 @@ const StripeElementsForm: FunctionComponent<Props> = ({
   successUrl,
   isCreditCardStored
 }) => {
+  const [cardHolderName, setCardHolderName] = useState('')
   const [cardErrorMessage, setCardErrorMessage] = useState<string>()
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
-  const [formComplete, setFormComplete] = useState(false)
+  const [cardElementComplete, setCardElementComplete] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+
+  const formComplete = cardElementComplete && cardHolderName.trim().length > 0
 
   const stripe = useStripe()
   const elements = useElements()
@@ -76,7 +79,7 @@ const StripeElementsForm: FunctionComponent<Props> = ({
         billing_details: {
           address: billingAddressDetails,
           email: '',
-          name: '',
+          name: cardHolderName,
           phone: ''
         }
       }
@@ -94,7 +97,7 @@ const StripeElementsForm: FunctionComponent<Props> = ({
   }
 
   const validateCardElement = (event: StripeCardElementChangeEvent) => {
-    setFormComplete(event.complete)
+    setCardElementComplete(event.complete)
     setCardErrorMessage(event.error?.message)
   }
 
@@ -114,6 +117,14 @@ const StripeElementsForm: FunctionComponent<Props> = ({
       >
         <fieldset>
           <legend>Credit card details</legend>
+          <div className="col-md-12 StripeElement is-empty">
+            <input
+              className="fakeStripeElement col-md-12"
+              placeholder="Cardholder name"
+              value={cardHolderName}
+              onChange={(e) => { setCardHolderName(e.currentTarget.value) }}
+            />
+          </div>
           <CardElement
             className="col-md-12"
             options={CARD_OPTIONS}

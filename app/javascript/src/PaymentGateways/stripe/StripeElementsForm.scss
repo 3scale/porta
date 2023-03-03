@@ -30,6 +30,53 @@ $stripe-form-spinner-color: #5469d4;
   .cardErrors {
     margin: 1rem;
   }
+
+  .fakeStripeElement::placeholder {
+    color: rgb(63, 69, 76);
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .fakeStripeElement {
+    // HACK: The following are styles copy-pasted from the browser
+    writing-mode: horizontal-tb;
+    font-style: -webkit-small-control;
+    font-weight: -webkit-small-control;
+    font-size: -webkit-small-control;
+    font-family: -webkit-small-control;
+    font-variant-caps: -webkit-small-control;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    text-align: start;
+    -webkit-rtl-ordering: logical;
+    -webkit-user-select: text;
+    user-select: text;
+    cursor: auto;
+    background-color: transparent;
+    border: none;
+    display: block;
+    height: 1.2em;
+    line-height: 1.2em;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: auto;
+    color: black;
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 19px;
+    top: 0;
+    transform: scale(1);
+    transition: opacity .3s cubic-bezier(.25,.46,.45,.94);
+    -webkit-animation: native-autofill-out 1ms;
+    animation: native-autofill-out 1ms;
+
+    margin-bottom: 2rem;
+  }
 }
 
 .stripe-form {
