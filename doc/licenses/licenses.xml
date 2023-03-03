@@ -3883,7 +3883,7 @@
       </dependency>
           <dependency>
         <packageName>commonmarker</packageName>
-        <version>0.21.0</version>
+        <version>0.23.7</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -3973,7 +3973,7 @@
       </dependency>
           <dependency>
         <packageName>concurrent-ruby</packageName>
-        <version>1.2.0</version>
+        <version>1.2.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -12112,16 +12112,6 @@
           <dependency>
         <packageName>roar-rails</packageName>
         <version>1.0.2</version>
-        <licenses>
-                      <license>
-              <name>MIT</name>
-              <url>http://opensource.org/licenses/mit-license</url>
-            </license>
-                  </licenses>
-      </dependency>
-          <dependency>
-        <packageName>ruby-enum</packageName>
-        <version>0.7.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
