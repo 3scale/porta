@@ -100,10 +100,10 @@ class CMS::Page < CMS::BasePage
         x.updated_at updated_at.xmlschema
       end
       x.title title
+      x.system_name system_name
+      x.layout_id layout_id
       x.section_id section_id
       x.path path
-      x.layout_id layout_id
-      x.system_name system_name
       x.content_type content_type
       x.liquid_enabled liquid_enabled?
       x.handler handler

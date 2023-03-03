@@ -1,32 +1,26 @@
 module CMS::PageRepresenter
   include ThreeScale::JSONRepresenter
 
-  wraps_resource
+  wraps_resource -> (*) { self.class.data_tag }
 
   property :id
-
-  with_options(if: ->(options) { options[:short] == false }) do |p|
-    p.property :draft, render_nil: true
-    p.property :published, render_nil: true
-  end
-
-  property :system_name
-  property :liquid_enabled
-
-  with_options(if: ->(*) { is_a?(CMS::Page) }) do |p|
-    # this needs a getter
-    p.property :path, if: ->(*) { respond_to?(:path) }
-    p.property :title
-    p.property :hidden
-    p.property :layout
-    p.property :content_type
-    p.property :handler
-  end
-
   property :created_at
   property :updated_at
+  property :title
+  property :system_name
+  property :layout_id
 
-  def hidden
-    hidden?
+  with_options(if: ->(*) { is_a?(CMS::Page) }) do |p|
+    p.property :section_id
+    p.property :path, if: ->(*) { respond_to?(:path) }
+    p.property :content_type
+    p.property :liquid_enabled
+    p.property :handler
+    p.property :hidden, getter: ->(*) { hidden? }
+  end
+
+  with_options(if: ->(options) { !options[:short] }) do |p|
+    p.property :draft, render_nil: true
+    p.property :published, render_nil: true
   end
 end
