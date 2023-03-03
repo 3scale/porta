@@ -1,11 +1,13 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 
 import { CSRFToken } from 'utilities/CSRFToken'
 
+import type { FormEventHandler, FunctionComponent } from 'react'
+import type { StripeCardElementChangeEvent, StripeCardElementOptions } from '@stripe/stripe-js'
 import type { BillingAddress } from 'PaymentGateways/stripe/types'
-import type { FormEventHandler, FunctionComponent, PropsWithChildren } from 'react'
-import type { PaymentMethod, StripeCardElementChangeEvent, StripeCardElementOptions } from '@stripe/stripe-js'
+
+import './StripeElementsForm.scss'
 
 const CARD_OPTIONS: StripeCardElementOptions = {
   iconStyle: 'solid',
@@ -38,30 +40,32 @@ interface Props {
   isCreditCardStored: boolean;
 }
 
-const StripeCardForm: FunctionComponent<Props> = ({
+const StripeElementsForm: FunctionComponent<Props> = ({
   setupIntentSecret,
   billingAddressDetails,
   successUrl,
   isCreditCardStored
 }) => {
-  const formRef = useRef<HTMLFormElement | null>(null)
-  const [cardErrorMessage, setCardErrorMessage] = useState<string | undefined>(undefined)
+  const [cardErrorMessage, setCardErrorMessage] = useState<string>()
   const [isStripeFormVisible, setIsStripeFormVisible] = useState(!isCreditCardStored)
-  const [stripePaymentMethodId, setStripePaymentMethodId] = useState<PaymentMethod | string | null>('')
   const [formComplete, setFormComplete] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const stripe = useStripe()
   const elements = useElements()
 
-  const toggleVisibility = () => { setIsStripeFormVisible(!isStripeFormVisible) }
-
-  const handleSubmit: FormEventHandler = async (event) => {
+  const handleSubmit: FormEventHandler = async (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setFormComplete(false)
+    event.stopPropagation()
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || submitting || !formComplete) {
       return
     }
+
+    setSubmitting(true)
+    setCardErrorMessage(undefined)
+
+    const form = event.currentTarget
 
     const { error, setupIntent } = await stripe.confirmCardSetup(setupIntentSecret, {
       // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
@@ -70,16 +74,22 @@ const StripeCardForm: FunctionComponent<Props> = ({
         card: elements.getElement(CardElement)!,
         // eslint-disable-next-line @typescript-eslint/naming-convention -- Stripe API
         billing_details: {
-          address: billingAddressDetails
+          address: billingAddressDetails,
+          email: '',
+          name: '',
+          phone: ''
         }
       }
     })
 
     if (setupIntent && setupIntent.status === 'succeeded') {
-      setStripePaymentMethodId(setupIntent.payment_method)
-      formRef.current?.submit()
+      const input = form.elements.namedItem('stripe[payment_method_id]') as HTMLInputElement
+      input.value = setupIntent.payment_method as string
+
+      form.submit()
     } else {
       setCardErrorMessage(error?.message)
+      setSubmitting(false)
     }
   }
 
@@ -90,17 +100,16 @@ const StripeCardForm: FunctionComponent<Props> = ({
 
   return (
     <div className="well StripeElementsForm">
-      <EditCreditCardDetails
-        isStripeFormVisible={isStripeFormVisible}
-        onToogleVisibility={toggleVisibility}
-      />
+      <a className="editCardButton" onClick={() => { setIsStripeFormVisible(prev => !prev) }}>
+        <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`} />
+        <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
+      </a>
       <form
         acceptCharset="UTF-8"
         action={successUrl}
         className={isStripeFormVisible ? '' : 'hidden'}
         id="stripe-form"
         method="post"
-        ref={formRef}
         onSubmit={handleSubmit}
       >
         <fieldset>
@@ -110,14 +119,14 @@ const StripeCardForm: FunctionComponent<Props> = ({
             options={CARD_OPTIONS}
             onChange={validateCardElement}
           />
-          {!!cardErrorMessage && <CreditCardErrors>{cardErrorMessage}</CreditCardErrors>}
+          {!!cardErrorMessage && <div className="cardErrors" role="alert">{cardErrorMessage}</div>}
         </fieldset>
         <fieldset>
           <div className="form-group">
             <div className="col-md-10 operations">
               <button
                 className="btn btn-primary pull-right"
-                disabled={!formComplete}
+                disabled={!formComplete || submitting}
                 id="stripe-submit"
                 type="submit"
               >
@@ -130,7 +139,6 @@ const StripeCardForm: FunctionComponent<Props> = ({
           id="stripe_payment_method_id"
           name="stripe[payment_method_id]"
           type="hidden"
-          value={stripePaymentMethodId?.toString()}
         />
         <CSRFToken />
       </form>
@@ -138,27 +146,4 @@ const StripeCardForm: FunctionComponent<Props> = ({
   )
 }
 
-interface EditCreditCardDetailsProps {
-  onToogleVisibility: () => void;
-  isStripeFormVisible: boolean;
-}
-
-// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
-const EditCreditCardDetails: FunctionComponent<EditCreditCardDetailsProps> = ({
-  onToogleVisibility,
-  isStripeFormVisible
-}) => (
-  <a className="editCardButton" onClick={onToogleVisibility}>
-    <i className={`fa fa-${isStripeFormVisible ? 'chevron-left' : 'pencil'}`} />
-    <span>{isStripeFormVisible ? 'cancel' : 'Edit Credit Card Details'}</span>
-  </a>
-)
-
-// eslint-disable-next-line react/no-multi-comp -- FIXME: move to its own file
-const CreditCardErrors: FunctionComponent<PropsWithChildren> = ({ children }) => (
-  <div className="cardErrors" role="alert">
-    {children}
-  </div>
-)
-
-export { StripeCardForm, Props }
+export { StripeElementsForm, Props }

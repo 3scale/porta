@@ -385,7 +385,7 @@ class NotificationMailer < ActionMailer::Base
   def pdf_report_mail(report, receiver, mail_name)
     @provider_account = report.account
     @receiver         = receiver.decorate
-    report_file       = File.read(report.report.path)
+    report_file       = File.read(report.pdf_file_path)
     report_name       = report.pdf_file_name
 
     attachments[report_name] = report_file

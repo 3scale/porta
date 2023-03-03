@@ -13,7 +13,7 @@ gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 5.2.7'
-gem 'globalid', '~> 0.4.2' # remove line after we stop supporting Ruby 2.4
+gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
@@ -98,9 +98,8 @@ gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
-gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
-gem 'prawn-format', '0.2.1'
-gem 'prawn-layout', '0.2.1'
+gem 'prawn'
+gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
 gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'
@@ -147,7 +146,7 @@ gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-activerecord', '~> 0.5.0'
 
 # for liquid docs on-fly generation
-gem 'commonmarker', '~> 0.21.0'
+gem 'commonmarker', '~> 0.23.7'
 gem 'escape_utils'
 gem 'github-markdown'
 gem 'html-pipeline'

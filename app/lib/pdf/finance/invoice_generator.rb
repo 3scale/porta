@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require 'prawn/core'
-require 'prawn/format'
-require "prawn/measurement_extensions"
-require 'gruff'
-require "open-uri"
 
 module Pdf
   module Finance
@@ -23,10 +18,10 @@ module Pdf
         # TODO: accept as parameter
         @style = Pdf::Styles::BlackAndWhite.new
         @pdf = Prawn::Document.new(page_size: 'A4',
-                                   page_layout: :portrait)
+                                   page_layout: :portrait,
+                                   compress: true)
 
-        @pdf.tags(@style.tags)
-        @pdf.font(@style.font)
+        set_default_font
       end
 
       # Generates PDF content and wraps it to envelope acceptable by Paperclip
@@ -66,7 +61,7 @@ module Pdf
         @pdf.text "Invoice for #{@data.name}", size: 20, align: :center
         move_down(14)
 
-        subtitle('<b>Details</b>')
+        subtitle('Details')
         print_details
         move_down(3)
       end
@@ -78,16 +73,15 @@ module Pdf
       end
 
       def print_address_columns
-        # TODO: cleanup the constants
-        two_columns([0.mm, @pdf.cursor], height: 50.mm) do |column|
+        two_columns([0.mm, @pdf.cursor]) do |column|
           print_address(@data.provider, 'Issued by') if column == :left
           print_address(@data.buyer, 'For') if column == :right
         end
       end
 
       def print_address(person, name = nil)
-        subtitle("<b>#{name}</b>") if name
-        @pdf.table(person, @style.table_style.merge(width: TABLE_HALF_WIDTH))
+        subtitle("#{name}") if name
+        table_with_column_header(person, width: TABLE_HALF_WIDTH)
       end
 
       def print_details
@@ -97,20 +91,22 @@ module Pdf
                    ['Billing period end', @data.period_end],
                    ['Due on', @data.due_on]]
 
-        @pdf.table(details, @style.table_style)
+        table_with_column_header(details)
       end
 
       def print_line_items
-        subtitle('<b>Line items</b>')
-        opts = { width: TABLE_FULL_WIDTH, headers: InvoiceReportData::LINE_ITEMS_HEADING }
-        @pdf.table(@data.line_items, @style.table_style.merge(opts))
+        subtitle('Line items')
+        opts = { width: TABLE_FULL_WIDTH, header: true, cell_style: {align: :right} }
+        table_with_header([InvoiceReportData::LINE_ITEMS_HEADING] + @data.line_items, opts) do
+          column(0).style { |column| column.align = :left }
+        end
         move_down
         @pdf.text(@data.vat_zero_text) if @data.vat_rate&.zero?
       end
 
       def print_total
         @pdf.bounding_box([@pdf.bounds.right - 310, @pdf.cursor], width: 310) do
-          @pdf.text "<b>AMOUNT DUE: #{@coder.decode(rounded_price_tag(@data.cost))}</b>", size: 13, align: :right
+          @pdf.text "AMOUNT DUE: #{@coder.decode(rounded_price_tag(@data.cost))}", size: 13, align: :right, style: :bold
         end
       end
 
