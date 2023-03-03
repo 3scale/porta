@@ -13,7 +13,7 @@ gem 'aws-sdk-s3', '~> 1'
 
 gem 'dotenv-rails', '~> 2.7'
 gem 'rails', '~> 5.2.7'
-gem 'globalid', '~> 0.4.2' # remove line after we stop supporting Ruby 2.4
+gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 
 # Needed for XML serialization of ActiveRecord::Base
 gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"

@@ -3973,7 +3973,7 @@
       </dependency>
           <dependency>
         <packageName>concurrent-ruby</packageName>
-        <version>1.2.0</version>
+        <version>1.2.2</version>
         <licenses>
                       <license>
               <name>MIT</name>
@@ -6223,7 +6223,7 @@
       </dependency>
           <dependency>
         <packageName>globalid</packageName>
-        <version>0.4.2</version>
+        <version>1.0.1</version>
         <licenses>
                       <license>
               <name>MIT</name>
