@@ -98,9 +98,8 @@ gem 'hiredis', '~> 0.6.3'
 gem 'httpclient', github: '3scale/httpclient', branch: 'ssl-env-cert'
 gem 'json-schema', git: 'https://github.com/3scale/json-schema.git'
 gem 'paperclip', '~> 6.0'
-gem 'prawn-core', git: 'https://github.com/3scale/prawn.git', branch: '0.5.1-3scale'
-gem 'prawn-format', '0.2.1'
-gem 'prawn-layout', '0.2.1'
+gem 'prawn'
+gem 'prawn-table', git: "https://github.com/prawnpdf/prawn-table.git", branch: "38b5bdb5dd95237646675c968091706f57a7a641"
 gem 'rails_event_store', '~> 0.9.0', require: false
 gem 'ratelimit'
 gem 'recaptcha', '4.13.1', require: 'recaptcha/rails'

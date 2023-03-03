@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pdf/format'
 require 'gruff'
 
 module Pdf
@@ -52,28 +51,26 @@ module Pdf
     def top_users
       return unless @hit_metric
 
-      data_source = Stats::Service.new(@service)
       options = {:metric => @hit_metric, :period => @period, :timezone => @account.timezone,
                  :since => 1.send(@period).ago, :limit => 5}
-      apps = data_source.top_clients(options)[:applications] || []
+      apps = @source.top_clients(options)[:applications] || []
       apps.each_with_object([]) do |entry, memo|
         next if entry[:id].nil? # there are some data inconsistencies in our dbs
         cinstance = @service.cinstances.find(entry[:id])
 
-        memo << Format.prep_td([cinstance.user_account.org_name, entry[:value]])
-
+        memo << [cinstance.user_account.org_name, entry[:value]]
       end
     end
 
     def users
-      @service.published_plans.map { |plan| Format.prep_td([plan.name, plan.cinstances.count]) }
+      @service.published_plans.map { |plan| [plan.name, plan.cinstances.count] }
     end
 
     def metrics
       data = @source.usage_progress_for_all_metrics(@options)[:metrics]
       data.inject([]) do |row, (metric, stats)|
         percentage = '%0.2f %%' % metric[:data][:change]
-        row << Format.prep_td_with_negation([metric[:name], metric[:data][:total], percentage])
+        row << [metric[:name], metric[:data][:total], percentage]
       end
     end
 
