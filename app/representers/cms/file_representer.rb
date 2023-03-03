@@ -1,18 +1,22 @@
-module CMS::FileRepresenter
-  include ThreeScale::JSONRepresenter
+# frozen_string_literal: true
 
-  wraps_resource
+module CMS
+  module FileRepresenter
+    include ThreeScale::JSONRepresenter
 
-  property :id
-  property :created_at
-  property :updated_at
-  property :title
-  property :path
-  property :url
-  property :section_id
-  property :tag_list
+    wraps_resource
 
-  link :section do
-    admin_api_cms_section_path section
+    with_options(unless: :new_record?) do
+      property :id
+      property :created_at
+      property :updated_at
+    end
+
+    property :section_id
+    property :path
+    property :downloadable, getter: ->(*) { downloadable? }
+    property :url
+    property :title
+    property :content_type, getter: ->(*) { attachment.content_type }
   end
 end
