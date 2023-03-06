@@ -1,0 +1,41 @@
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions
+name: dependabot-licenses
+on: pull_request
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+  licenses-report:
+    needs: check
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:3.2-alpine
+    if:  github.actor == 'dependabot[bot]' && needs.check.steps.metadata.outputs.package-ecosystem != 'github-actions'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Generate Licenses report
+        run: |
+          gem install license_finder
+          license_finder report --format=xml --save=doc/licenses/licenses.xml --decisions-file=doc/dependency_decisions.yml
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          add: doc/licenses/licenses.xml
+          fetch: false
+          message: |
+            Update licenses report
+            [dependabot skip]
