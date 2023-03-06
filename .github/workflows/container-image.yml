@@ -35,7 +35,7 @@ jobs:
       # https://github.com/docker/metadata-action
       - name: Docker metadata
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       # Build and push Docker image with Buildx (don't push on PR)
