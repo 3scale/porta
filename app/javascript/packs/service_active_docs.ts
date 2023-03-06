@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) {
     throw new Error('The target ID was not found: ' + containerId)
   }
-  const { url, baseUrl } = container.dataset
+  const { url, baseUrl, serviceEndpoint = '' } = container.dataset
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- FIXME
   const accountDataUrl = `${baseUrl}${DATA_URL}`
 
-  const responseInterceptor: SwaggerUI.SwaggerUIOptions['responseInterceptor'] = (response) => autocompleteOAS3(response, accountDataUrl)
+  const responseInterceptor: SwaggerUI.SwaggerUIOptions['responseInterceptor'] = (response) => autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
 
   SwaggerUI({
     url,

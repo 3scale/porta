@@ -52,8 +52,14 @@ const accountData = {
 const fetchDataSpy = jest.spyOn(utils, 'fetchData')
 fetchDataSpy.mockResolvedValue(accountData)
 
+it('should inject servers to response body', () => {
+  return autocompleteOAS3(response, accountDataUrl, serviceEndpoint).then(res => {
+    expect(res.body.servers).toEqual([{ 'url': 'foo/bar/serviceEndpoint' }])
+  })
+})
+
 it('should autocomplete fields with x-data-threescale-name property', () => {
-  return autocompleteOAS3(response, accountDataUrl).then(res => {
+  return autocompleteOAS3(response, accountDataUrl, serviceEndpoint).then(res => {
     const examplesFirstParam = res.body.paths['/'].get.parameters[0].examples
     const examplesSecondParam = res.body.paths['/'].get.parameters[1].examples
 
