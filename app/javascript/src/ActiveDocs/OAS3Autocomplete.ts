@@ -76,20 +76,6 @@ const injectAutocompleteToResponseBody = (responseBody: string | { paths?: Recor
   return res
 }
 
-const injectServerToResponseBody = (responseBody: any | string, serviceEndpoint: string): any | string => {
-  if (typeof responseBody === 'string') {
-    return responseBody
-  }
-
-  const originalServers = responseBody.servers || []
-  const servers = serviceEndpoint ? [{ url: serviceEndpoint }] : originalServers
-
-  return {
-    ...responseBody,
-    servers
-  }
-}
-
 export interface Response extends SwaggerUIResponse {
   body: {
     servers: unknown;
@@ -99,18 +85,17 @@ export interface Response extends SwaggerUIResponse {
   text: string;
 }
 
-export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
-  const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
+export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string): Promise<Response> => {
   const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 
   let body = undefined
   try {
     body = data.results
-      ? injectAutocompleteToResponseBody(bodyWithServer, data.results)
-      : bodyWithServer
+      ? injectAutocompleteToResponseBody(response.body, data.results)
+      : response.body
   } catch (error: unknown) {
     console.error(error)
-    body = bodyWithServer
+    body = response.body
   }
 
   return {
