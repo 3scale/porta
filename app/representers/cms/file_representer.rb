@@ -4,7 +4,7 @@ module CMS
   module FileRepresenter
     include ThreeScale::JSONRepresenter
 
-    wraps_resource
+    wraps_resource ->(*) { self.class.data_tag }
 
     with_options(unless: :new_record?) do
       property :id
