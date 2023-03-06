@@ -11,623 +11,12 @@
     }
   ],
   "paths": {
-    "/stats/backend_apis/{backend_api_id}/usage.json": {
-      "get": {
-        "summary": "Backend Traffic by Metric",
-        "tags": ["Stats"],
-        "parameters": [
-          {
-            "name": "format",
-            "in": "path",
-            "description": "Response format.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "json",
-              "enum": [
-                "json",
-                "xml"
-              ]
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "backend_api_id",
-            "in": "path",
-            "description": "ID of the Backend.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "metric_name",
-            "in": "query",
-            "description": "System name of metric to get data for.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "since",
-            "in": "query",
-            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Period combined with since time gives stats for the time range [since .. since + period]. It is required if until time is not passed.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "year",
-                "month",
-                "week",
-                "day"
-              ]
-            }
-          },
-          {
-            "name": "until",
-            "in": "query",
-            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "granularity",
-            "in": "query",
-            "description": "Granularity of results, each period has an associated granularity.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "month",
-              "enum": [
-                "month",
-                "day",
-                "hour"
-              ]
-            }
-          },
-          {
-            "name": "timezone",
-            "in": "query",
-            "description": "Time zone for calculations.",
-            "schema": {
-              "type": "string",
-              "default": "UTC",
-              "enum": [
-                "International Date Line West",
-                "Midway Island",
-                "American Samoa",
-                "Hawaii",
-                "Alaska",
-                "Pacific Time (US & Canada)",
-                "Tijuana",
-                "Mountain Time (US & Canada)",
-                "Arizona",
-                "Chihuahua",
-                "Mazatlan",
-                "Central Time (US & Canada)",
-                "Saskatchewan",
-                "Guadalajara",
-                "Mexico City",
-                "Monterrey",
-                "Central America",
-                "Eastern Time (US & Canada)",
-                "Indiana (East)",
-                "Bogota",
-                "Lima",
-                "Quito",
-                "Atlantic Time (Canada)",
-                "Caracas",
-                "La Paz",
-                "Santiago",
-                "Newfoundland",
-                "Brasilia",
-                "Buenos Aires",
-                "Georgetown",
-                "Greenland",
-                "Mid-Atlantic",
-                "Azores",
-                "Cape Verde Is.",
-                "Dublin",
-                "Edinburgh",
-                "Lisbon",
-                "London",
-                "Casablanca",
-                "Monrovia",
-                "UTC",
-                "Belgrade",
-                "Bratislava",
-                "Budapest",
-                "Ljubljana",
-                "Prague",
-                "Sarajevo",
-                "Skopje",
-                "Warsaw",
-                "Zagreb",
-                "Brussels",
-                "Copenhagen",
-                "Madrid",
-                "Paris",
-                "Amsterdam",
-                "Berlin",
-                "Bern",
-                "Rome",
-                "Stockholm",
-                "Vienna",
-                "West Central Africa",
-                "Bucharest",
-                "Cairo",
-                "Helsinki",
-                "Kyiv",
-                "Riga",
-                "Sofia",
-                "Tallinn",
-                "Vilnius",
-                "Athens",
-                "Istanbul",
-                "Minsk",
-                "Jerusalem",
-                "Harare",
-                "Pretoria",
-                "Moscow",
-                "St. Petersburg",
-                "Volgograd",
-                "Kuwait",
-                "Riyadh",
-                "Nairobi",
-                "Baghdad",
-                "Tehran",
-                "Abu Dhabi",
-                "Muscat",
-                "Baku",
-                "Tbilisi",
-                "Yerevan",
-                "Kabul",
-                "Ekaterinburg",
-                "Islamabad",
-                "Karachi",
-                "Tashkent",
-                "Chennai",
-                "Kolkata",
-                "Mumbai",
-                "New Delhi",
-                "Kathmandu",
-                "Astana",
-                "Dhaka",
-                "Sri Jayawardenepura",
-                "Almaty",
-                "Novosibirsk",
-                "Rangoon",
-                "Bangkok",
-                "Hanoi",
-                "Jakarta",
-                "Krasnoyarsk",
-                "Beijing",
-                "Chongqing",
-                "Hong Kong",
-                "Urumqi",
-                "Kuala Lumpur",
-                "Singapore",
-                "Taipei",
-                "Perth",
-                "Irkutsk",
-                "Ulaan Bataar",
-                "Seoul",
-                "Osaka",
-                "Sapporo",
-                "Tokyo",
-                "Yakutsk",
-                "Darwin",
-                "Adelaide",
-                "Canberra",
-                "Melbourne",
-                "Sydney",
-                "Brisbane",
-                "Hobart",
-                "Vladivostok",
-                "Guam",
-                "Port Moresby",
-                "Magadan",
-                "Solomon Is.",
-                "New Caledonia",
-                "Fiji",
-                "Kamchatka",
-                "Marshall Is.",
-                "Auckland",
-                "Wellington",
-                "Nuku'alofa",
-                "Tokelau Is.",
-                "Samoa"
-              ]
-            }
-          },
-          {
-            "name": "skip_change",
-            "in": "query",
-            "description": "Skip period over period calculations (defaults to true).",
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/stats/services/{service_id}/usage.{format}": {
-      "get": {
-        "summary": "Service Traffic by Metric",
-        "tags": ["Stats"],
-        "parameters": [
-          {
-            "name": "format",
-            "in": "path",
-            "description": "Response format.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "json",
-              "enum": [
-                "json",
-                "xml"
-              ]
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_id",
-            "in": "path",
-            "description": "ID of the service.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "metric_name",
-            "in": "query",
-            "description": "System name of metric to get data for.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "hits"
-            }
-          },
-          {
-            "name": "since",
-            "in": "query",
-            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Period combined with since time gives stats for the time range [since .. since + period]. It is required if until time is not passed.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "year",
-                "month",
-                "week",
-                "day"
-              ]
-            }
-          },
-          {
-            "name": "until",
-            "in": "query",
-            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "granularity",
-            "in": "query",
-            "description": "Granularity of results, each period has an associated granularity.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "month",
-              "enum": [
-                "month",
-                "day",
-                "hour"
-              ]
-            }
-          },
-          {
-            "name": "timezone",
-            "in": "query",
-            "description": "Time zone for calculations.",
-            "schema": {
-              "type": "string",
-              "default": "UTC",
-              "enum": [
-                "International Date Line West",
-                "Midway Island",
-                "American Samoa",
-                "Hawaii",
-                "Alaska",
-                "Pacific Time (US & Canada)",
-                "Tijuana",
-                "Mountain Time (US & Canada)",
-                "Arizona",
-                "Chihuahua",
-                "Mazatlan",
-                "Central Time (US & Canada)",
-                "Saskatchewan",
-                "Guadalajara",
-                "Mexico City",
-                "Monterrey",
-                "Central America",
-                "Eastern Time (US & Canada)",
-                "Indiana (East)",
-                "Bogota",
-                "Lima",
-                "Quito",
-                "Atlantic Time (Canada)",
-                "Caracas",
-                "La Paz",
-                "Santiago",
-                "Newfoundland",
-                "Brasilia",
-                "Buenos Aires",
-                "Georgetown",
-                "Greenland",
-                "Mid-Atlantic",
-                "Azores",
-                "Cape Verde Is.",
-                "Dublin",
-                "Edinburgh",
-                "Lisbon",
-                "London",
-                "Casablanca",
-                "Monrovia",
-                "UTC",
-                "Belgrade",
-                "Bratislava",
-                "Budapest",
-                "Ljubljana",
-                "Prague",
-                "Sarajevo",
-                "Skopje",
-                "Warsaw",
-                "Zagreb",
-                "Brussels",
-                "Copenhagen",
-                "Madrid",
-                "Paris",
-                "Amsterdam",
-                "Berlin",
-                "Bern",
-                "Rome",
-                "Stockholm",
-                "Vienna",
-                "West Central Africa",
-                "Bucharest",
-                "Cairo",
-                "Helsinki",
-                "Kyiv",
-                "Riga",
-                "Sofia",
-                "Tallinn",
-                "Vilnius",
-                "Athens",
-                "Istanbul",
-                "Minsk",
-                "Jerusalem",
-                "Harare",
-                "Pretoria",
-                "Moscow",
-                "St. Petersburg",
-                "Volgograd",
-                "Kuwait",
-                "Riyadh",
-                "Nairobi",
-                "Baghdad",
-                "Tehran",
-                "Abu Dhabi",
-                "Muscat",
-                "Baku",
-                "Tbilisi",
-                "Yerevan",
-                "Kabul",
-                "Ekaterinburg",
-                "Islamabad",
-                "Karachi",
-                "Tashkent",
-                "Chennai",
-                "Kolkata",
-                "Mumbai",
-                "New Delhi",
-                "Kathmandu",
-                "Astana",
-                "Dhaka",
-                "Sri Jayawardenepura",
-                "Almaty",
-                "Novosibirsk",
-                "Rangoon",
-                "Bangkok",
-                "Hanoi",
-                "Jakarta",
-                "Krasnoyarsk",
-                "Beijing",
-                "Chongqing",
-                "Hong Kong",
-                "Urumqi",
-                "Kuala Lumpur",
-                "Singapore",
-                "Taipei",
-                "Perth",
-                "Irkutsk",
-                "Ulaan Bataar",
-                "Seoul",
-                "Osaka",
-                "Sapporo",
-                "Tokyo",
-                "Yakutsk",
-                "Darwin",
-                "Adelaide",
-                "Canberra",
-                "Melbourne",
-                "Sydney",
-                "Brisbane",
-                "Hobart",
-                "Vladivostok",
-                "Guam",
-                "Port Moresby",
-                "Magadan",
-                "Solomon Is.",
-                "New Caledonia",
-                "Fiji",
-                "Kamchatka",
-                "Marshall Is.",
-                "Auckland",
-                "Wellington",
-                "Nuku'alofa",
-                "Tokelau Is.",
-                "Samoa"
-              ]
-            }
-          },
-          {
-            "name": "skip_change",
-            "in": "query",
-            "description": "Skip period over period calculations (defaults to true).",
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/stats/services/{service_id}/top_applications.{format}": {
-      "get": {
-        "summary": "Service Top Applications",
-        "tags": ["Stats"],
-        "parameters": [
-          {
-            "name": "format",
-            "in": "path",
-            "description": "Response format.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "json",
-              "enum": [
-                "json",
-                "xml"
-              ]
-            }
-          },
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "service_id",
-            "in": "path",
-            "description": "ID of the service.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "since",
-            "in": "query",
-            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Period combined with since time gives stats for the time range [since .. since + period]. It is required if until time is not passed.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "year",
-                "month",
-                "week",
-                "day"
-              ]
-            }
-          },
-          {
-            "name": "metric_name",
-            "in": "query",
-            "description": "System name of metric to get data for.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "hits"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
     "/stats/applications/{application_id}/usage.{format}": {
       "get": {
         "summary": "Application Traffic by Metric",
-        "tags": ["Stats"],
+        "tags": [
+          "Application Analytics"
+        ],
         "parameters": [
           {
             "name": "format",
@@ -658,8 +47,7 @@
             "description": "ID of the application",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -723,154 +111,7 @@
             "in": "query",
             "description": "Time zone for calculations.",
             "schema": {
-              "type": "string",
-              "default": "UTC",
-              "enum": [
-                "International Date Line West",
-                "Midway Island",
-                "American Samoa",
-                "Hawaii",
-                "Alaska",
-                "Pacific Time (US & Canada)",
-                "Tijuana",
-                "Mountain Time (US & Canada)",
-                "Arizona",
-                "Chihuahua",
-                "Mazatlan",
-                "Central Time (US & Canada)",
-                "Saskatchewan",
-                "Guadalajara",
-                "Mexico City",
-                "Monterrey",
-                "Central America",
-                "Eastern Time (US & Canada)",
-                "Indiana (East)",
-                "Bogota",
-                "Lima",
-                "Quito",
-                "Atlantic Time (Canada)",
-                "Caracas",
-                "La Paz",
-                "Santiago",
-                "Newfoundland",
-                "Brasilia",
-                "Buenos Aires",
-                "Georgetown",
-                "Greenland",
-                "Mid-Atlantic",
-                "Azores",
-                "Cape Verde Is.",
-                "Dublin",
-                "Edinburgh",
-                "Lisbon",
-                "London",
-                "Casablanca",
-                "Monrovia",
-                "UTC",
-                "Belgrade",
-                "Bratislava",
-                "Budapest",
-                "Ljubljana",
-                "Prague",
-                "Sarajevo",
-                "Skopje",
-                "Warsaw",
-                "Zagreb",
-                "Brussels",
-                "Copenhagen",
-                "Madrid",
-                "Paris",
-                "Amsterdam",
-                "Berlin",
-                "Bern",
-                "Rome",
-                "Stockholm",
-                "Vienna",
-                "West Central Africa",
-                "Bucharest",
-                "Cairo",
-                "Helsinki",
-                "Kyiv",
-                "Riga",
-                "Sofia",
-                "Tallinn",
-                "Vilnius",
-                "Athens",
-                "Istanbul",
-                "Minsk",
-                "Jerusalem",
-                "Harare",
-                "Pretoria",
-                "Moscow",
-                "St. Petersburg",
-                "Volgograd",
-                "Kuwait",
-                "Riyadh",
-                "Nairobi",
-                "Baghdad",
-                "Tehran",
-                "Abu Dhabi",
-                "Muscat",
-                "Baku",
-                "Tbilisi",
-                "Yerevan",
-                "Kabul",
-                "Ekaterinburg",
-                "Islamabad",
-                "Karachi",
-                "Tashkent",
-                "Chennai",
-                "Kolkata",
-                "Mumbai",
-                "New Delhi",
-                "Kathmandu",
-                "Astana",
-                "Dhaka",
-                "Sri Jayawardenepura",
-                "Almaty",
-                "Novosibirsk",
-                "Rangoon",
-                "Bangkok",
-                "Hanoi",
-                "Jakarta",
-                "Krasnoyarsk",
-                "Beijing",
-                "Chongqing",
-                "Hong Kong",
-                "Urumqi",
-                "Kuala Lumpur",
-                "Singapore",
-                "Taipei",
-                "Perth",
-                "Irkutsk",
-                "Ulaan Bataar",
-                "Seoul",
-                "Osaka",
-                "Sapporo",
-                "Tokyo",
-                "Yakutsk",
-                "Darwin",
-                "Adelaide",
-                "Canberra",
-                "Melbourne",
-                "Sydney",
-                "Brisbane",
-                "Hobart",
-                "Vladivostok",
-                "Guam",
-                "Port Moresby",
-                "Magadan",
-                "Solomon Is.",
-                "New Caledonia",
-                "Fiji",
-                "Kamchatka",
-                "Marshall Is.",
-                "Auckland",
-                "Wellington",
-                "Nuku'alofa",
-                "Tokelau Is.",
-                "Samoa"
-              ]
+              "$ref": "#/components/schemas/Timezone"
             }
           },
           {
@@ -890,7 +131,468 @@
           }
         }
       }
+    },
+    "/stats/backend_apis/{backend_api_id}/usage.json": {
+      "get": {
+        "summary": "Backend Traffic by Metric",
+        "tags": [
+          "Backend Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "backend_api_id",
+            "in": "path",
+            "description": "ID of the Backend.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "metric_name",
+            "in": "query",
+            "description": "System name of metric to get data for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Period combined with since time gives stats for the time range [since .. since + period]. It is required if until time is not passed.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "year",
+                "month",
+                "week",
+                "day"
+              ]
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "description": "Granularity of results, each period has an associated granularity.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "month",
+              "enum": [
+                "month",
+                "day",
+                "hour"
+              ]
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "description": "Time zone for calculations.",
+            "schema": {
+              "$ref": "#/components/schemas/Timezone"
+            }
+          },
+          {
+            "name": "skip_change",
+            "in": "query",
+            "description": "Skip period over period calculations (defaults to true).",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/services/{service_id}/usage.{format}": {
+      "get": {
+        "summary": "Service Traffic by Metric",
+        "tags": [
+          "Service Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "path",
+            "description": "Response format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "xml"
+              ]
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "path",
+            "description": "ID of the service.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "metric_name",
+            "in": "query",
+            "description": "System name of metric to get data for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "hits"
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Period combined with since time gives stats for the time range [since .. since + period]. It is required if until time is not passed.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "year",
+                "month",
+                "week",
+                "day"
+              ]
+            }
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "description": "Time range end. Format YYYY-MM-DD HH:MM:SS",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "description": "Granularity of results, each period has an associated granularity.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "month",
+              "enum": [
+                "month",
+                "day",
+                "hour"
+              ]
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "description": "Time zone for calculations.",
+            "schema": {
+              "$ref": "#/components/schemas/Timezone"
+            }
+          },
+          {
+            "name": "skip_change",
+            "in": "query",
+            "description": "Skip period over period calculations (defaults to true).",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/services/{service_id}/top_applications.{format}": {
+      "get": {
+        "summary": "Service Top Applications",
+        "tags": [
+          "Service Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "path",
+            "description": "Response format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "xml"
+              ]
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "service_id",
+            "in": "path",
+            "description": "ID of the service.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Time range start. Format YYYY-MM-DD HH:MM:SS, '2012-02-22', '2012-02-22 23:49:00'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Period combined with since time gives stats for the time range [since .. since + period]. It is required if until time is not passed.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "year",
+                "month",
+                "week",
+                "day"
+              ]
+            }
+          },
+          {
+            "name": "metric_name",
+            "in": "query",
+            "description": "System name of metric to get data for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "hits"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
     }
   },
-  "components": {}
+  "components": {
+    "schemas": {
+      "Timezone": {
+        "type": "string",
+        "default": "UTC",
+        "enum": [
+          "International Date Line West",
+          "Midway Island",
+          "American Samoa",
+          "Hawaii",
+          "Alaska",
+          "Pacific Time (US & Canada)",
+          "Tijuana",
+          "Mountain Time (US & Canada)",
+          "Arizona",
+          "Chihuahua",
+          "Mazatlan",
+          "Central Time (US & Canada)",
+          "Saskatchewan",
+          "Guadalajara",
+          "Mexico City",
+          "Monterrey",
+          "Central America",
+          "Eastern Time (US & Canada)",
+          "Indiana (East)",
+          "Bogota",
+          "Lima",
+          "Quito",
+          "Atlantic Time (Canada)",
+          "Caracas",
+          "La Paz",
+          "Santiago",
+          "Newfoundland",
+          "Brasilia",
+          "Buenos Aires",
+          "Georgetown",
+          "Greenland",
+          "Mid-Atlantic",
+          "Azores",
+          "Cape Verde Is.",
+          "Dublin",
+          "Edinburgh",
+          "Lisbon",
+          "London",
+          "Casablanca",
+          "Monrovia",
+          "UTC",
+          "Belgrade",
+          "Bratislava",
+          "Budapest",
+          "Ljubljana",
+          "Prague",
+          "Sarajevo",
+          "Skopje",
+          "Warsaw",
+          "Zagreb",
+          "Brussels",
+          "Copenhagen",
+          "Madrid",
+          "Paris",
+          "Amsterdam",
+          "Berlin",
+          "Bern",
+          "Rome",
+          "Stockholm",
+          "Vienna",
+          "West Central Africa",
+          "Bucharest",
+          "Cairo",
+          "Helsinki",
+          "Kyiv",
+          "Riga",
+          "Sofia",
+          "Tallinn",
+          "Vilnius",
+          "Athens",
+          "Istanbul",
+          "Minsk",
+          "Jerusalem",
+          "Harare",
+          "Pretoria",
+          "Moscow",
+          "St. Petersburg",
+          "Volgograd",
+          "Kuwait",
+          "Riyadh",
+          "Nairobi",
+          "Baghdad",
+          "Tehran",
+          "Abu Dhabi",
+          "Muscat",
+          "Baku",
+          "Tbilisi",
+          "Yerevan",
+          "Kabul",
+          "Ekaterinburg",
+          "Islamabad",
+          "Karachi",
+          "Tashkent",
+          "Chennai",
+          "Kolkata",
+          "Mumbai",
+          "New Delhi",
+          "Kathmandu",
+          "Astana",
+          "Dhaka",
+          "Sri Jayawardenepura",
+          "Almaty",
+          "Novosibirsk",
+          "Rangoon",
+          "Bangkok",
+          "Hanoi",
+          "Jakarta",
+          "Krasnoyarsk",
+          "Beijing",
+          "Chongqing",
+          "Hong Kong",
+          "Urumqi",
+          "Kuala Lumpur",
+          "Singapore",
+          "Taipei",
+          "Perth",
+          "Irkutsk",
+          "Ulaan Bataar",
+          "Seoul",
+          "Osaka",
+          "Sapporo",
+          "Tokyo",
+          "Yakutsk",
+          "Darwin",
+          "Adelaide",
+          "Canberra",
+          "Melbourne",
+          "Sydney",
+          "Brisbane",
+          "Hobart",
+          "Vladivostok",
+          "Guam",
+          "Port Moresby",
+          "Magadan",
+          "Solomon Is.",
+          "New Caledonia",
+          "Fiji",
+          "Kamchatka",
+          "Marshall Is.",
+          "Auckland",
+          "Wellington",
+          "Nuku'alofa",
+          "Tokelau Is.",
+          "Samoa"
+        ]
+      }
+    }
+  }
 }

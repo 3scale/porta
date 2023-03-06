@@ -14,7 +14,9 @@
     "/api/accounts/{account_id}/invoices/{id}.xml": {
       "get": {
         "summary": "Invoice by Account",
-        "tags": ["Invoices"],
+        "tags": [
+          "Invoices by Account"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -31,8 +33,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -41,8 +42,7 @@
             "description": "ID of the Invoice.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -54,10 +54,413 @@
         }
       }
     },
-    "/api/invoices/{invoice_id}/line_items.xml": {
+    "/api/accounts/{account_id}/invoices.xml": {
       "get": {
-        "summary": "Invoice Line Items List",
-        "tags": ["Invoices"],
+        "summary": "Invoice List by Account",
+        "tags": [
+          "Invoices by Account"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter Invoices by state. 'open': line items can be added (via web interface). 'pending': the Invoice has been issued, no items can be added, the PDF has been generated and the Invoice is waiting to be charged. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the Invoice was explicitly cancelled and is out of the normal life-cycle.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "open",
+                "pending",
+                "paid",
+                "unpaid",
+                "cancelled"
+              ]
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Filter Invoices by month. Format YYYY-MM, e.g. '2012-03'.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}$"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page in the paginated list. Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Number of results per page. Default and max is 20.",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/invoices.xml": {
+      "get": {
+        "summary": "Invoice List",
+        "tags": [
+          "Invoices"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter Invoices by state. 'open': line items can be added (via web interface). 'pending': the Invoice has been issued, no items can be added, the PDF has been generated and the Invoice is waiting to be charged. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the Invoice was explicitly cancelled and is out of the normal life-cycle.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "open",
+                "pending",
+                "paid",
+                "unpaid",
+                "cancelled"
+              ]
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Filter Invoices by month. Format YYYY-MM, e.g. '2012-03'.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}$"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page in the paginated list. Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Number of results per page. Default and max is 20.",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "summary": "Invoice Create",
+        "tags": [
+          "Invoices"
+        ],
+        "requestBody": {
+          "description": "Invoice Create",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "account_id": {
+                    "type": "integer",
+                    "description": "ID of the account."
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Billing period of the Invoice. The format should be YYYY-MM."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}.xml": {
+      "get": {
+        "summary": "Invoice Read",
+        "tags": [
+          "Invoices"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Invoice.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "summary": "Invoice Update",
+        "tags": [
+          "Invoices"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Invoice.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Invoice Update",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Billing period of the Invoice. The format should be YYYY-MM.",
+                    "pattern": "^\\d{4}-\\d{2}$"
+                  },
+                  "friendly_id": {
+                    "type": "string",
+                    "description": "Friendly ID of the Invoice. The format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX",
+                    "pattern": "^\\d{4}(-\\d{2})?-\\d{8}$"
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/state.xml": {
+      "put": {
+        "summary": "Invoice Update state",
+        "tags": [
+          "Invoices"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Invoice.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Invoice Update state",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "State of the Invoice to set. Values allowed (depend on the previous state): cancelled, failed, paid, unpaid, pending, finalized",
+                    "enum": [
+                      "finalized",
+                      "pending",
+                      "paid",
+                      "unpaid",
+                      "cancelled",
+                      "failed"
+                    ]
+                  }
+                },
+                "required": [
+                  "access_token",
+                  "state"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/charge.xml": {
+      "post": {
+        "summary": "Invoice Charge",
+        "tags": [
+          "Invoices"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Invoice.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Invoice Charge",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "A personal Access Token."
+                  }
+                },
+                "required": [
+                  "access_token"
+                ]
+              },
+              "encoding": {
+                "field_definitions": {
+                  "contentType": "application/x-www-form-urlencoded",
+                  "style": "deepObject",
+                  "explode": true
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/invoices/{invoice_id}/payment_transactions.xml": {
+      "get": {
+        "summary": "Invoice Payment Transactions List",
+        "tags": [
+          "Invoices"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -74,8 +477,41 @@
             "description": "ID of the invoice.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/invoices/{invoice_id}/line_items.xml": {
+      "get": {
+        "summary": "Invoice Line Items List",
+        "tags": [
+          "Invoice Line Items"
+        ],
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "query",
+            "description": "A personal Access Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "description": "ID of the invoice.",
+            "required": true,
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -89,17 +525,16 @@
       "post": {
         "summary": "Create Line Item for an Invoice",
         "tags": [
-          "Invoices"
+          "Invoice Line Items"
         ],
-         "parameters": [
+        "parameters": [
           {
             "name": "invoice_id",
             "in": "path",
             "description": "ID of the invoice.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -170,193 +605,12 @@
         }
       }
     },
-    "/api/invoices/{invoice_id}/payment_transactions.xml": {
-      "get": {
-        "summary": "Invoice Payment Transactions List",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "invoice_id",
-            "in": "path",
-            "description": "ID of the invoice.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/invoices/{id}.xml": {
-      "get": {
-        "summary": "Invoice Read",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Invoice.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      },
-      "put": {
-        "summary": "Invoice Update",
-        "tags": [
-          "Invoices"
-        ],
-         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Invoice.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Invoice Update",
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "period": {
-                    "type": "string",
-                    "description": "Billing period of the Invoice. The format should be YYYY-MM."
-                  },
-                  "friendly_id": {
-                    "type": "string",
-                    "description": "Friendly ID of the Invoice. The format should be YYYY-MM-XXXXXXXX or YYYY-XXXXXXXX."
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/invoices/{id}/state.xml": {
-      "put": {
-        "summary": "Invoice Update state",
-        "tags": [
-          "Invoices"
-        ],
-         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Invoice.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Invoice Update state",
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "state": {
-                    "type": "string",
-                    "description": "State of the Invoice to set. Values allowed (depend on the previous state): cancelled, failed, paid, unpaid, pending, finalized"
-                  }
-                },
-                "required": [
-                  "access_token",
-                  "state"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
     "/api/invoices/{invoice_id}/line_items/{id}.xml": {
       "delete": {
         "summary": "Delete Line Item of an Invoice",
-        "tags": ["Invoices"],
+        "tags": [
+          "Invoice Line Items"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -373,8 +627,7 @@
             "description": "ID of the invoice.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -383,250 +636,10 @@
             "description": "ID of the Line Item.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/invoices.xml": {
-      "get": {
-        "summary": "Invoice List",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "state",
-            "in": "query",
-            "description": "Filter Invoices by state. 'open': line items can be added (via web interface). 'pending': the Invoice has been issued, no items can be added, the PDF has been generated and the Invoice is waiting to be charged. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the Invoice was explicitly cancelled and is out of the normal life-cycle.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "open",
-                "pending",
-                "paid",
-                "unpaid",
-                "cancelled"
-              ]
-            }
-          },
-          {
-            "name": "month",
-            "in": "query",
-            "description": "Filter Invoices by month. Format YYYY-MM, e.g. '2012-03'.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page in the paginated list. Defaults to 1.",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 1
-            }
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Number of results per page. Default and max is 20.",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      },
-      "post": {
-        "summary": "Invoice Create",
-        "tags": [
-          "Invoices"
-        ],
-        "requestBody": {
-          "description": "Invoice Create",
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  },
-                  "account_id": {
-                    "type": "integer",
-                    "description": "ID of the account."
-                  },
-                  "period": {
-                    "type": "string",
-                    "description": "Billing period of the Invoice. The format should be YYYY-MM."
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/accounts/{account_id}/invoices.xml": {
-      "get": {
-        "summary": "Invoice List by Account",
-        "tags": ["Invoices"],
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "account_id",
-            "in": "path",
-            "description": "ID of the account.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "state",
-            "in": "query",
-            "description": "Filter Invoices by state. 'open': line items can be added (via web interface). 'pending': the Invoice has been issued, no items can be added, the PDF has been generated and the Invoice is waiting to be charged. 'paid': sucessfully paid. 'unpaid': charging failed at least once. 'cancelled': the Invoice was explicitly cancelled and is out of the normal life-cycle.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "open",
-                "pending",
-                "paid",
-                "unpaid",
-                "cancelled"
-              ]
-            }
-          },
-          {
-            "name": "month",
-            "in": "query",
-            "description": "Filter Invoices by month. Format YYYY-MM, e.g. '2012-03'.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page in the paginated list. Defaults to 1.",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 1
-            }
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Number of results per page. Default and max is 20.",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/invoices/{id}/charge.xml": {
-      "post": {
-        "summary": "Invoice Charge",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the Invoice.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "Invoice Charge",
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "access_token": {
-                    "type": "string",
-                    "description": "A personal Access Token."
-                  }
-                },
-                "required": [
-                  "access_token"
-                ]
-              },
-              "encoding": {
-                "field_definitions": {
-                  "contentType": "application/x-www-form-urlencoded",
-                  "style": "deepObject",
-                  "explode": true
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "default": {
             "description": "success",
