@@ -109,8 +109,8 @@ class CMS::Page < CMS::BasePage
       x.handler handler
       x.hidden hidden?
       unless options[:short]
-        x.draft { |node| draft.present? ? node.cdata(draft) : nil }
-        x.published { |node| published.present? ? node.cdata(published) : nil }
+        x.draft { |node| node.cdata(draft) unless draft.nil? }
+        x.published { |node| node.cdata(published) unless published.nil? }
       end
     end
 
