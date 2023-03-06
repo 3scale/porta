@@ -11,50 +11,23 @@
     }
   ],
   "paths": {
-    "/master/api/providers/{provider_id}/accounts/{account_id}/billing_jobs.xml": {
+    "/master/api/providers.xml": {
       "post": {
-        "summary": "Trigger Billing by Account",
-        "operationId": "trigger_developer_billing",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "provider_id",
-            "in": "path",
-            "description": "ID of the tenant account.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "account_id",
-            "in": "path",
-            "description": "ID of the developer account.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "date",
-            "in": "query",
-            "description": "Base date for the billing process. Format YYYY-MM-DD (UTC).",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "summary": "Tenant Create",
+        "description": "This request allows you to reproduce a sign-up from a tenant in a single API call. It will create an Account, an Admin User for the account, and optionally an Application with its keys. If the plan_id is not passed, the default plan will be used instead. You can add additional custom parameters in Fields Definition on your Admin Portal.",
+        "tags": [
+          "Tenants"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantCreateRequest"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -66,6 +39,10 @@
     "/master/api/providers/{id}.xml": {
       "get": {
         "summary": "Tenant Show",
+        "description": "Show a tenant account.",
+        "tags": [
+          "Tenants"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -82,8 +59,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -96,80 +72,31 @@
       },
       "put": {
         "summary": "Tenant Update",
+        "description": "Updates email addresses used to deliver email notifications to customers.",
+        "tags": [
+          "Tenants"
+        ],
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "from_email",
-            "in": "query",
-            "description": "New outgoing email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "support_email",
-            "in": "query",
-            "description": "New support email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "finance_support_email",
-            "in": "query",
-            "description": "New finance support email.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "site_access_code",
-            "in": "query",
-            "description": "Developer Portal Access Code.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "state_event",
-            "in": "query",
-            "description": "Change the state of the tenant. It can be either 'make_pending', 'approve', 'reject', 'suspend', or 'resume' depending on the current state",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantUpdateRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -179,6 +106,10 @@
       },
       "delete": {
         "summary": "Tenant Delete",
+        "description": "Schedules a tenant account to be permanently deleted in 15 days. At that time all its users, services, plans and developer accounts subscribed to it will be deleted too. When a tenant account is scheduled for deletion it can no longer be edited (except except its state) and its admin portal and developer portal cannot be accessible. Update with 'resume' state event to unschedule a tenant for deletion.",
+        "tags": [
+          "Tenants"
+        ],
         "parameters": [
           {
             "name": "access_token",
@@ -195,79 +126,7 @@
             "description": "ID of the account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": "success",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/master/api/providers.xml": {
-      "post": {
-        "summary": "Tenant Create",
-        "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "org_name",
-            "in": "query",
-            "description": "Organization Name of the tenant account.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "description": "Username of the admin user (on the new tenant account).",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "description": "Email of the admin user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "Password of the admin user.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "additional_fields",
-            "in": "query",
-            "description": "Additional fields have to be defined by name and value (i.e &name=value). You can add as many as you want. Additional fields are the custom fields declared in 'Settings >> Fields Definitions' on your API Admin Portal. Typical examples are 'url', 'country', etc. Please check your Fields Definitions to get the list of all your custom fields.",
-            "style": "form",
-            "explode": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "type": "integer"
             }
           }
         ],
@@ -282,37 +141,76 @@
     "/master/api/providers/{provider_id}/billing_jobs.xml": {
       "post": {
         "summary": "Trigger Billing",
-        "operationId": "trigger_tenant_billing",
+        "description": "Triggers billing process for all developer accounts.",
+        "tags": [
+          "Tenant Billing"
+        ],
         "parameters": [
-          {
-            "name": "access_token",
-            "in": "query",
-            "description": "A personal Access Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "provider_id",
             "in": "path",
             "description": "ID of the tenant account.",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "date",
-            "in": "query",
-            "description": "Base date for the billing process. Format YYYY-MM-DD (UTC).",
-            "required": true,
-            "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerBillingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/master/api/providers/{provider_id}/accounts/{account_id}/billing_jobs.xml": {
+      "post": {
+        "summary": "Trigger Billing by Account",
+        "description": "Triggers billing process for a specific developer account.",
+        "tags": [
+          "Tenant Billing"
+        ],
+        "parameters": [
+          {
+            "name": "provider_id",
+            "in": "path",
+            "description": "ID of the tenant account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "path",
+            "description": "ID of the developer account.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerBillingRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "default": {
             "description": "success",
@@ -322,5 +220,102 @@
       }
     }
   },
-  "components": {}
+  "components": {
+    "schemas": {
+      "TenantCreateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "org_name": {
+            "type": "string",
+            "description": "Organization Name of the tenant account."
+          },
+          "username": {
+            "type": "string",
+            "description": "Username of the admin user (on the new tenant account)."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the admin user."
+          },
+          "password": {
+            "type": "string",
+            "description": "Password of the admin user."
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "required": [
+          "access_token",
+          "org_name",
+          "username",
+          "email",
+          "password"
+        ]
+      },
+      "TenantUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "from_email": {
+            "type": "string",
+            "description": "New outgoing email."
+          },
+          "support_email": {
+            "type": "string",
+            "description": "New support email."
+          },
+          "finance_support_email": {
+            "type": "string",
+            "description": "New finance support email."
+          },
+          "site_access_code": {
+            "type": "string",
+            "description": "Developer Portal Access Code."
+          },
+          "state_event": {
+            "type": "string",
+            "description": "Change the state of the tenant. It can be either 'make_pending', 'approve', 'reject', 'suspend', or 'resume' depending on the current state",
+            "enum": [
+              "make_pending",
+              "approve",
+              "reject",
+              "suspend",
+              "resume"
+            ]
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "TriggerBillingRequest": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "A personal Access Token."
+          },
+          "date": {
+            "type": "string",
+            "description": "Base date for the billing process. Format YYYY-MM-DD (UTC)."
+          }
+        },
+        "required": [
+          "access_token",
+          "date"
+        ]
+      }
+    }
+  }
 }
