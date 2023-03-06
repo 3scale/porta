@@ -12,10 +12,10 @@ module CMS
       property :updated_at
     end
 
-    property :title
+    property :title, render_nil: true
     property :system_name
     property :public
-    property :parent_id
-    property :partial_path
+    property :parent_id, render_nil: true
+    property :partial_path, render_nil: true
   end
 end
