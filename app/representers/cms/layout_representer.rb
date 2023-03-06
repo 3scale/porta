@@ -3,7 +3,7 @@
 module CMS::LayoutRepresenter
   include ThreeScale::JSONRepresenter
 
-  wraps_resource
+  wraps_resource ->(*) { self.class.data_tag }
 
   property :id
   property :created_at
