@@ -27,6 +27,8 @@ class CMS::File < ApplicationRecord
   validates :attachment_content_type, :attachment_file_name, :random_secret, :name,
             length: { maximum: 255 }
 
+  validate :section_same_provider
+
   before_save :generate_random_secret
 
   delegate :accessible_by?, :public?, :protected?, :to => :section, :allow_nil => true
@@ -122,5 +124,11 @@ class CMS::File < ApplicationRecord
 
   def generate_random_secret
     self.random_secret ||= SecureRandom.hex(8)
+  end
+
+  def section_same_provider
+    return if section&.provider == provider
+
+    errors.add(:section_id, "must belong to the same provider")
   end
 end
