@@ -34,6 +34,7 @@ class CMS::Section < ApplicationRecord
   before_destroy :avoid_destruction
 
   validate :not_own_child
+  validate :parent_same_provider, { unless: :root? }
 
   has_many :group_sections, :class_name => 'CMS::GroupSection'
   has_many :groups, :class_name => 'CMS::Group', :through => :group_sections
@@ -201,6 +202,12 @@ class CMS::Section < ApplicationRecord
     if child_of?(self.id)
       errors.add(:base, "cannot be it's own ancestor")
     end
+  end
+
+  def parent_same_provider
+    return if parent&.provider == provider
+
+    errors.add(:parent_id, "must belong to the same provider")
   end
 
   def strip_trailing_slashes
