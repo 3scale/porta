@@ -58,6 +58,6 @@ class Provider::Admin::CMS::BuiltinLegalTermsController < Sites::BaseController
   end
 
   def permitted_params
-    params.permit(cms_template: %i[system_name draft published])
+    params.permit(cms_template: %i[system_name draft])
   end
 end
