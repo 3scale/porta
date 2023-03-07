@@ -11,16 +11,22 @@ class Admin::Api::CMS::TemplateService
   def initialize(current_account, params, permitted_params)
     @permitted_params = permitted_params
     @current_account = current_account
-    @type = params.delete('type')&.to_sym
     @section_id = params.delete('section_id')
     @section_name = params.delete('section_name')
     @layout_id = params.delete('layout_id')
     @layout_name = params.delete('layout_name')
   end
 
-  attr_reader :type, :current_account, :permitted_params, :section_id, :section_name, :layout_id, :layout_name
+  attr_reader :current_account, :permitted_params, :section_id, :section_name, :layout_id, :layout_name
 
   class Create < Admin::Api::CMS::TemplateService
+    def initialize(current_account, params, permitted_params)
+      super current_account, params, permitted_params
+      @type = params.delete('type')&.to_sym
+    end
+
+    attr_reader :type
+
     def call
       collection = { page: current_account.pages,
                       partial: current_account.partials,
