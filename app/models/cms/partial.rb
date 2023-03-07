@@ -29,8 +29,8 @@ class CMS::Partial < CMS::Template
       end
       x.system_name system_name
       unless options[:short]
-        x.draft { |node| node.cdata(draft) unless draft.nil? }
-        x.published { |node| node.cdata(published) unless published.nil? }
+        x.draft { |node| node.cdata(draft) if draft }
+        x.published { |node| node.cdata(published) if published }
       end
     end
 

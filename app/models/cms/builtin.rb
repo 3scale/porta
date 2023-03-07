@@ -150,8 +150,8 @@ class CMS::Builtin < CMS::BasePage
         x.system_name system_name
         x.layout_id layout_id
         unless options[:short]
-          x.draft { |node| node.cdata(draft) unless draft.nil? }
-          x.published { |node| node.cdata(published) unless published.nil? }
+          x.draft { |node| node.cdata(draft) if draft }
+          x.published { |node| node.cdata(published) if published }
         end
       end
 
