@@ -19,11 +19,15 @@
 
           {% comment %} Stripe has separate forms for billing address + cc details {% endcomment %}
           {% if current_account.has_billing_address? %}
-            {% case provider.payment_gateway.type == "stripe" %}
+            {% case provider.payment_gateway.type %}
+
+            {% when "stripe" %}
               <a href="{{ current_account.edit_stripe_billing_address_url }}">
                 <i class="fa fa-pencil"></i>
                 Edit billing address
               </a>
+
+            {% endcase %}
           {% endif %}
         </div>
         <div class="clearfix"></div>
