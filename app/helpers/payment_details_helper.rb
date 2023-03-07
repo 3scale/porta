@@ -47,9 +47,10 @@ module PaymentDetailsHelper
       stripePublishableKey: site_account.payment_gateway_options[:publishable_key],
       setupIntentSecret: intent.client_secret,
       billingAddress: stripe_billing_address,
+      billingName: current_account[:billing_address_name],
       successUrl: hosted_success_admin_account_stripe_path,
       creditCardStored: current_account.credit_card_stored?
-    }
+    }.compact
   end
 
   # Must match PaymentMethod's address format https://stripe.com/docs/api/payment_methods/object#payment_method_object-billing_details-address
