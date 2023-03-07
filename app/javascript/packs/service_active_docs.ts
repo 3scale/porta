@@ -1,7 +1,7 @@
 import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
-import { autocompleteOAS3 } from 'ActiveDocs/OAS3Autocomplete'
+import { autocompleteInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
 document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'swagger-ui-container'
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- FIXME
   const accountDataUrl = `${baseUrl}${DATA_URL}`
 
-  const responseInterceptor: SwaggerUI.SwaggerUIOptions['responseInterceptor'] = (response) => autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
+  const responseInterceptor: SwaggerUI.SwaggerUIOptions['responseInterceptor'] = (response) => autocompleteInterceptor(response, url, accountDataUrl, serviceEndpoint)
 
   SwaggerUI({
     url,

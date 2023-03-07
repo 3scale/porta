@@ -99,7 +99,7 @@ export interface Response extends SwaggerUIResponse {
   text: string;
 }
 
-export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
+const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
   const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 
@@ -119,4 +119,16 @@ export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataU
     data: JSON.stringify(body),
     text: JSON.stringify(body)
   }
+}
+export const autocompleteInterceptor = async (response: SwaggerUIResponse, specUrl: string | undefined, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
+  // only process the response for Open API spec requests (not the actual API calls responses)
+  let interceptedResponse = response as Response
+  if (specUrl === response.url) {
+    try {
+      interceptedResponse = await autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
+    } catch (error: unknown) {
+      console.error(error)
+    }
+  }
+  return interceptedResponse
 }
