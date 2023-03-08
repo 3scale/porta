@@ -68,8 +68,10 @@ Feature: Searching buyer accounts
 
   Scenario: All buyer accounts show as defaults
     When I go to the buyer accounts page
-    And I should see "alice" and "bob" in the buyer accounts table
-    And I should see "bad buyer" and "pending buyer" in the buyer accounts table
+    And I should see "alice" in the buyer accounts table
+    And I should see "bob" in the buyer accounts table
+    And I should see "bad buyer" in the buyer accounts table
+    And I should see "pending buyer" in the buyer accounts table
 
   Scenario: Listing pending and rejected buyer accounts
     When I go to the buyer accounts page

@@ -3,7 +3,7 @@
 module ThreeScale
 
   # This class represents some amount of money with currency. It behaves more or
-  #   less like Numeric type, so it supports basic arithemtic operations,
+  #   less like Numeric type, so it supports basic arithmetic operations,
   #   comparisons, and so on. All operators convert both money objects to the
   #   same currency (the currency of the first operand) before performing
   #   calculations. The conversion is done using exchange rates that are fetched

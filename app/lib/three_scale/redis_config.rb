@@ -9,6 +9,12 @@ module ThreeScale
 
       @config = ActiveSupport::OrderedOptions.new.merge(raw_config)
       config.sentinels = parse_sentinels(sentinels) if sentinels
+
+      # The ID is forced to be nil to disable the default behavior in Sidekiq < 6
+      # which invokes CLIENT SETNAME command, which incompatible with some Redis providers
+      # see https://issues.redhat.com/browse/THREESCALE-9210
+      # This can be removed when Sidekiq is upgraded to a version >= 6.0.7
+      config.id = nil
     end
 
     attr_reader :config

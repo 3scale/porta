@@ -64,8 +64,8 @@ shared_context "collection", collection: true do
   let(:representer) { collection_representer.constantize.format(format).prepare(serializable) }
 end
 
-shared_context "json", json: true do
-  before { resource.save! if resource.respond_to?(:save!) }
+shared_context "json", json: true do |args|
+  before { resource.save! if resource.respond_to?(:save!) && !args[:skip_resource_save] }
 
   let(:format) { :json }
   let(:json) { JSON.parse(serialized) }

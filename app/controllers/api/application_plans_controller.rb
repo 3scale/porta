@@ -24,7 +24,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   # rubocop:enable Lint/UselessMethodDefinition
 
   def masterize
-    super(@service, :default_application_plan)
+    super(service, :default_application_plan)
   end
 
   protected
@@ -34,7 +34,7 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   end
 
   def scope
-    @service || current_account
+    service || current_account
   end
 
   def collection
@@ -42,6 +42,6 @@ class Api::ApplicationPlansController < Api::PlansBaseController
   end
 
   def presenter
-    @presenter ||= Api::ApplicationPlansPresenter.new(service: @service, collection: collection, params: params)
+    @presenter ||= Api::ApplicationPlansPresenter.new(service: service, params: params)
   end
 end

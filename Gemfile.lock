@@ -29,15 +29,6 @@ GIT
       addressable (>= 2.4)
 
 GIT
-  remote: https://github.com/3scale/prawn.git
-  revision: 88aead0d97e230d08e9f51a18711d01317965bfe
-  branch: 0.5.1-3scale
-  specs:
-    prawn-core (0.5.1.pre.3scale)
-      pdf-reader (~> 0.9.0)
-      ttfunk (~> 1.0, >= 1.5.1)
-
-GIT
   remote: https://github.com/3scale/rspec-html-matchers.git
   revision: 58b19212afcf66540da729214287d85f586fa7cd
   branch: fix/rspec-3-with-xml-document
@@ -67,6 +58,14 @@ GIT
   specs:
     swagger-ui_rails (0.1.7)
 
+GIT
+  remote: https://github.com/prawnpdf/prawn-table.git
+  revision: 38b5bdb5dd95237646675c968091706f57a7a641
+  branch: 38b5bdb5dd95237646675c968091706f57a7a641
+  specs:
+    prawn-table (0.2.3)
+      prawn (>= 1.3.0, < 3.0.0)
+
 PATH
   remote: lib/developer_portal
   specs:
@@ -87,7 +86,7 @@ GEM
       nokogiri
     3scale_time_range (0.0.6)
       activesupport (>= 3.2.19)
-    Ascii85 (1.0.3)
+    Ascii85 (1.1.0)
     RedCloth (4.3.2)
     actioncable (5.2.8)
       actionpack (= 5.2.8)
@@ -150,6 +149,7 @@ GEM
       activerecord (>= 3.0.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    afm (0.2.2)
     after_commit_queue (1.1.0)
       rails (>= 3.0)
     aggregate_root (0.3.6)
@@ -243,8 +243,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     colorize (0.8.1)
-    commonmarker (0.21.0)
-      ruby-enum (~> 0.5)
+    commonmarker (0.23.7)
     compass (1.0.3)
       chunky_png (~> 1.2)
       compass-core (~> 1.0.2)
@@ -261,7 +260,7 @@ GEM
       compass (~> 1.0.0)
       sass-rails (< 5.1)
       sprockets (< 4.0)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.2)
     connection_pool (2.2.5)
     crack (0.4.5)
       rexml
@@ -335,7 +334,7 @@ GEM
       mail (~> 2.7)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    erubi (1.10.0)
+    erubi (1.12.0)
     escape_utils (1.2.1)
     et-orbi (1.2.4)
       tzinfo
@@ -363,14 +362,15 @@ GEM
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
     github-markdown (0.6.9)
-    globalid (0.4.2)
-      activesupport (>= 4.2.0)
+    globalid (1.0.1)
+      activesupport (>= 5.0)
     gruff (0.7.0)
       rmagick (~> 2.13, >= 2.13.4)
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
     hashdiff (1.0.1)
+    hashery (2.1.2)
     hashie (3.6.0)
     hiredis (0.6.3)
     html-pipeline (2.12.3)
@@ -387,7 +387,7 @@ GEM
     http-form_data (2.3.0)
     http-parser (1.2.3)
       ffi-compiler (>= 1.0, < 2.0)
-    i18n (1.10.0)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     inherited_resources (1.12.0)
       actionpack (>= 5.2, < 6.2)
@@ -421,7 +421,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.7.0)
       launchy (~> 2.2)
-    license_finder (7.0.1)
+    license_finder (7.1.0)
       bundler
       rubyzip (>= 1, < 3)
       thor (~> 1.2)
@@ -509,19 +509,24 @@ GEM
       ast (~> 2.4.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
-    pdf-inspector (1.0.2)
-      pdf-reader (>= 0.9.0)
-    pdf-reader (0.9.3)
-      Ascii85 (>= 0.9)
+    pdf-core (0.9.0)
+    pdf-inspector (1.3.0)
+      pdf-reader (>= 1.0, < 3.0.a)
+    pdf-reader (2.11.0)
+      Ascii85 (~> 1.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (0.21.0)
     pisoni (1.29.0)
       faraday (>= 0.9.1)
       injectedlogger (>= 0.0.13)
       json (>= 1.8.1)
       net-http-persistent
-    prawn-format (0.2.1)
-      prawn-core
-    prawn-layout (0.2.1)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
     prometheus-client-mmap (0.11.0)
     protected_attributes_continued (1.8.2)
       activemodel (>= 5.0)
@@ -545,7 +550,7 @@ GEM
       pry (~> 0.13)
     public_suffix (4.0.7)
     raabro (1.4.0)
-    rack (2.1.4.1)
+    rack (2.1.4.2)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-no_animations (1.0.3)
@@ -554,10 +559,10 @@ GEM
       ruby-openid (>= 2.1.8)
     rack-protection (2.0.4)
       rack
-    rack-proxy (0.6.5)
+    rack-proxy (0.7.4)
       rack
-    rack-test (1.1.0)
-      rack (>= 1.0, < 3)
+    rack-test (2.0.2)
+      rack (>= 1.3)
     rack-utf8_sanitizer (1.6.0)
       rack (>= 1.0, < 3.0)
     rack-x_served_by (0.1.1)
@@ -704,13 +709,12 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 0.87.0)
-    ruby-enum (0.7.2)
-      i18n
     ruby-oci8 (2.2.6.1)
     ruby-openid (2.9.2)
     ruby-plsql (0.8.0)
     ruby-prof (0.17.0)
     ruby-progressbar (1.11.0)
+    ruby-rc4 (0.1.5)
     ruby_event_store (0.9.0)
     rubyzip (1.3.0)
     sass (3.4.25)
@@ -724,6 +728,7 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    semantic_range (3.0.0)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
       shoulda-matchers (~> 4.0)
@@ -811,7 +816,7 @@ GEM
     tomlrb (2.0.3)
     ts-datetime-delta (2.0.2)
       thinking-sphinx (>= 1.3.8)
-    ttfunk (1.5.1)
+    ttfunk (1.7.0)
     tty-color (0.6.0)
     tty-cursor (0.7.1)
     tty-markdown (0.7.0)
@@ -829,7 +834,7 @@ GEM
       tty-screen (~> 0.8)
       wisper (~> 2.0)
     tty-screen (0.8.1)
-    tzinfo (1.2.9)
+    tzinfo (1.2.11)
       thread_safe (~> 0.1)
     uber (0.0.15)
     uglifier (4.1.19)
@@ -850,10 +855,11 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (4.3.0)
-      activesupport (>= 4.2)
+    webpacker (5.4.4)
+      activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
-      railties (>= 4.2)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     webrick (1.7.0)
     webrobots (0.1.2)
     websocket-driver (0.7.5)
@@ -920,7 +926,7 @@ DEPENDENCIES
   codemirror-rails (~> 5.6)
   coffee-rails (~> 4.2)
   colorize
-  commonmarker (~> 0.21.0)
+  commonmarker (~> 0.23.7)
   compass-rails (~> 3.0.2)
   cucumber (~> 7.0)
   cucumber-rails (~> 2.4.0)
@@ -941,7 +947,7 @@ DEPENDENCIES
   font-awesome-rails (~> 4.7.0.5)
   formtastic (~> 2.3.1)
   github-markdown
-  globalid (~> 0.4.2)
+  globalid (~> 1.0.1)
   gruff (~> 0.3)
   has_scope (~> 0.7.2)
   hashie
@@ -959,7 +965,7 @@ DEPENDENCIES
   kubeclient
   launchy
   letter_opener
-  license_finder (~> 7.0.1)
+  license_finder (~> 7.1.0)
   listen
   mail_view (~> 2.0.4)
   mechanize
@@ -979,9 +985,8 @@ DEPENDENCIES
   pdf-inspector
   pg (~> 0.21.0)
   pisoni (~> 1.29)
-  prawn-core!
-  prawn-format (= 0.2.1)
-  prawn-layout (= 0.2.1)
+  prawn
+  prawn-table!
   protected_attributes_continued (~> 1.8.2)
   pry-byebug (>= 3.7.0)
   pry-doc (>= 0.8)
@@ -1048,7 +1053,7 @@ DEPENDENCIES
   unicorn
   unicorn-rails
   webmock (~> 3.8.0)
-  webpacker (~> 4)
+  webpacker (= 5.4.4)
   will_paginate (~> 3.3)
   with_env
   xpath (~> 3.2.0)

@@ -5,6 +5,7 @@ require 'test_helper'
 class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
   disable_transactional_fixtures!
 
+  include NPlusOneControl::MinitestHelper
   include TestHelpers::Sidekiq
 
   attr_reader :provider, :admin, :audit_class
@@ -77,6 +78,19 @@ class AuditedHacksAsyncTest < ActionDispatch::IntegrationTest
       User.with_auditing do
         put(admin_api_user_path(format: :xml, id: admin.id), params: { email: "async-audit@example.com", access_token: account_management_admin_token.value })
         assert_response :ok
+      end
+    end
+  end
+
+  # this will hopefully remind us to disable the :touch callback in audited 5.3
+  test "async audit causes no synchronous DB queries" do
+    # just a model without noise producing callbacks
+    line_item = FactoryBot.build(:line_item)
+
+    assert_number_of_queries(2, matching: /./) do
+      LineItem.with_auditing do
+        line_item.save!
+        line_item.update!(quantity: 5)
       end
     end
   end

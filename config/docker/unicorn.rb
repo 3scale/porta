@@ -60,6 +60,14 @@ before_fork do |server, _worker|
       # someone else did our job for us
     end
   end
+
+  # Allow graceful shutdown when running in a container with SIGTERM.
+  # It is mostly safe that we revert SIGQUIT to DEFAULT for short
+  # because there are still no workers spawned at this point.
+  # If you want quick shutdown, send SIGINT
+  quit_handler = trap(:QUIT, "DEFAULT")
+  trap(:QUIT, quit_handler)
+  trap(:TERM, quit_handler)
 end
 
 after_fork do |_server, _worker|

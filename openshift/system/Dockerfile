@@ -1,4 +1,4 @@
-FROM quay.io/centos7/ruby-26-centos7
+FROM quay.io/centos7/ruby-26-centos7 AS porta-base
 
 USER root
 
@@ -8,9 +8,7 @@ ENV RUBY_MAJOR_VERSION=2 \
 ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
     RUBY_SCL_NAME_VERSION="${RUBY_MAJOR_VERSION}${RUBY_MINOR_VERSION}"
 
-ARG BUNDLER_ENV
-ENV BUNDLER_ENV="${BUNDLER_ENV}" \
-    TZ=:/etc/localtime \
+ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     BUNDLE_WITHOUT=development:test \
     VARNISH_SCL=rh-varnish5 \
@@ -64,8 +62,7 @@ ENV BASH_ENV=/opt/app-root/etc/scl_enable \
     RAILS_ENV=production \
     SAFETY_ASSURED=1
 
-RUN export ${BUNDLER_ENV} >/dev/null\
-    && source /opt/app-root/etc/scl_enable \
+RUN source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
     && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
@@ -78,8 +75,7 @@ ADD package.json ./
 ADD yarn.lock ./
 ADD openshift/system/config/* ./config/
 
-RUN export ${BUNDLER_ENV} >/dev/null \
-    && source /opt/app-root/etc/scl_enable \
+RUN source /opt/app-root/etc/scl_enable \
     && bundle exec rake tmp:create \
     && mkdir -p public/assets db/sphinx \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
@@ -91,11 +87,31 @@ RUN export ${BUNDLER_ENV} >/dev/null \
     && rm log/*.log \
     && chmod g+w /opt/system/config
 
-USER 1001
 ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
+USER 1001
 EXPOSE 3000 9306
 # TODO: dumb-init!
 ENTRYPOINT ["/opt/system/entrypoint.sh"]
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
-# vim: set ft=dockerfile:
+
+FROM porta-base AS porta-sphinx-config
+ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
+    THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
+    THINKING_SPHINX_INDICES_LOCATION=/var/lib/sphinx \
+    THINKING_SPHINX_CONFIGURATION_FILE=/opt/system/config/standalone.sphinx.conf \
+    RAILS_ENV=production \
+    SECRET_KEY_BASE=dummy \
+    DATABASE_URL='mysql2://root:@localhost/porta'
+USER 0
+RUN yum install -y mariadb-server \
+    && setpriv --reuid 27 --regid 27 --clear-groups mysql_install_db \
+    && (mysqld_safe &) \
+    && cp -v config/docker/thinking_sphinx.yml config/ \
+    && ./entrypoint.sh bundle exec rake db:create db:schema:load openshift:thinking_sphinx:configure \
+    && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
+    && kill $(</var/run/mariadb/mariadb.pid)
+
+
+FROM porta-base AS porta-prod
+COPY --from=porta-sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/

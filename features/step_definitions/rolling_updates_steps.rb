@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# DEPRECATED: do not use it
-When(/^RollingUpdates is (enabled|disabled)$/) do |switch|
-  Logic::RollingUpdates.stubs(enabled?: switch == 'enabled')
-end
-
 And(/^all the rolling updates features are (on|off)$/) do |state|
   if state == 'on'
     TestHelpers::RollingUpdates.rolling_updates_on

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :licenses do  # rubocop:disable Metrics/BlockLength
-  report_path = Rails.root.join('doc/licenses/licenses.xml')
+  report_path = Rails.root.join('doc/licenses/licenses.xml').freeze
 
   desc 'Generates a report with the dependencies and their licenses'
   task :report do
@@ -14,19 +14,17 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
 
   desc 'Check license compliance of dependencies'
   task :compliance do
-    warn 'Checking license action items...'
-    unless cli.action_items
-      warn '*** License compliance test failed  ***'
-      exit 1
-    end
+    warn 'Checking action items...'
+    LicenseFinder::CLI::Main.new.action_items # Aborts if there are pending action items
 
     warn 'Checking license report is up to date...'
-    Tempfile.new(report_path.to_s) do |temp_file|
+    Tempfile.create do |temp_file|
       temp_report_path = temp_file.path
       license_finder_report(temp_report_path)
 
       unless identical?(report_path, temp_report_path)
-        warn '*** License report outdated. Please run "rails licenses:report" ***'
+        warn 'License report outdated. Please run "rails licenses:report"'
+        system("diff", "-u", report_path.to_s, temp_report_path.to_s)
         exit 1
       end
     end
@@ -37,14 +35,8 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
 
   private
 
-  def cli
-    @cli ||= begin
-               require 'license_finder'
-               LicenseFinder::CLI::Main.new
-             end
-  end
-
   def license_finder_report(path)
+    cli = LicenseFinder::CLI::Main.new
     cli.options = { "format" => "xml", "save" => path }
     cli.report
   end

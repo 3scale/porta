@@ -165,28 +165,9 @@ Given "{provider} has no published application plans" do |provider|
   provider.application_plans.each(&:hide!)
 end
 
-Given "{plan} has applications" do |plan|
-  FactoryBot.create(:cinstance, :application_id => SecureRandom.hex(8), :plan => plan)
-end
-
 When /^I change application plan to "([^"]*)"$/ do |name|
   plan = ApplicationPlan.find_by(name: name)
   current_account.bought_cinstance.change_plan!(plan)
-end
-
-Then "{plan} should be published" do |plan|
-  assert plan.published?
-end
-
-Then "{plan} should be hidden" do |plan|
-  assert plan.hidden?
-end
-
-Then /^I should see the monthly fee is "([^"]*)"$/ do |fee|
-  assert(all('tr').any? do |tr|
-    tr.has_css?('th', :text => "Monthly fee") &&
-    tr.has_css?('td', :text => fee)
-  end)
 end
 
 Then /^I should see the plan details widget$/ do
@@ -207,16 +188,6 @@ end
 
 Then /^I should be able to customize the plan$/ do
   should have_link("Convert to a Custom Plan")
-end
-
-Then "the application plan {string} should be deleted" do |name|
-  assert_content "The plan was deleted", wait: 10
-  step(%(I should not see plan "#{name}"))
-end
-
-And "an application plan that is not default" do
-  @plan = FactoryBot.create(:application_plan, name: "Magic", issuer: default_service)
-  assert_not @plan.master?
 end
 
 Given "an application plan has been deleted" do
@@ -243,27 +214,11 @@ Then /^I should not be able to pick a plan$/ do
   should_not have_link('Review/Change')
 end
 
-Then /^I should not see any plans$/ do
-  within plans_table do
-    page.should have_css('tbody tr', size: 0)
-  end
-end
-
-Then /^I should see a (published|hidden) plan "([^"]*)"$/ do |state, name|
-  within plans_table do
-    assert has_table_row_with_cells?(name, state)
-  end
-end
-
 Then /^I should (not )?see plan "([^"]*)"$/ do |negate, name|
   within plans_table do
     method = negate ? :have_no_css : :have_css
     page.should send(method, 'td', text: name)
   end
-end
-
-When "I follow {string} for {plan}" do |label, plan|
-  step %(I follow "#{label}" within "##{dom_id(plan)}")
 end
 
 def plans_table

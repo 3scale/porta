@@ -6,20 +6,22 @@ Then "they should not be able to see any invoices" do
   assert_text 'Access Denied'
 end
 
-Then "they should be able to see their invoices" do
+Then "they should be able to see an invoice for last month" do
   invoices_tab.click
   assert admin_account_invoices_path, current_path
+
+  invoices = find_all('tr.invoice')
+
+  assert_equal 1, invoices.length
+  assert invoices.first.has_text?(Time.zone.now.last_month.strftime('%B, %Y'))
 end
 
-Then /^the buyer should receive (no|some) emails after a month$/ do |amount|
-  reset_mailer
-  time_machine(1.send(:month).from_now)
+Then /^the buyer should receive (no|some) emails$/ do |amount|
   email_queue = unread_emails_for(@buyer.emails.first)
 
   case amount
   when 'no' then assert_empty(email_queue)
-  # FIXME: fix the date or something so that it's always 4
-  when 'some' then assert_includes [3, 4], email_queue.size # Invoice notice plus 3 or 4 failed charging attempts depending on date
+  when 'some' then assert_equal 4, email_queue.size # Invoice notice plus 3 failed charging attempts
   end
 end
 

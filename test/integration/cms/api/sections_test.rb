@@ -78,7 +78,7 @@ module CMS
       test 'find section by system name' do
         get admin_api_cms_section_path(id: 'root', format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
-        assert_equal 'root', JSON.parse(response.body)['section']['system_name']
+        assert_equal 'root', JSON.parse(response.body)['builtin_section']['system_name']
       end
 
       test 'invalid system name or id' do
