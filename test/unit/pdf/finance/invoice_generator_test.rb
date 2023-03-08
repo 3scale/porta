@@ -32,7 +32,7 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
     @data.stubs(:provider).returns(LONG_ADDRESS)
     items = [['Licorice', '5', '222', ''],
              ['Haribo  ', '11', '11', ''],
-             ['Chocolatte', '', '11', ''],
+             ["Chocolatte#{Prawn::Text::NBSP}", '', '11', ''],
              ['Sugar', nil, '11', '']]
 
     @data.stubs(:line_items).returns(items)
@@ -44,8 +44,9 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
     assert_equal 1, content.scan(%r{/Type /XObject}).size
 
     text = PDF::Inspector::Text.analyze(content)
-    flat_items = items.flatten.reject(&:blank?)
-    assert flat_items.all? { |item| text.strings.include? item }
+    flat_items = items.flatten.reject(&:blank?).map(&:strip)
+    flat_items.each { |item| assert_includes text.strings, item }
+    assert_includes text.strings, "Chocolatte#{Prawn::Text::NBSP}" # prawn should not strip non-braking-spaces
   ensure
     logo_file.close
   end

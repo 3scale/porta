@@ -1,13 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 resource 'CMS::File' do
-
   include ActionDispatch::TestProcess # to upload fixture files.
 
   let(:resource) { FactoryBot.create(:cms_file, provider: provider, section: provider.sections.root) }
 
   api 'cms file' do
-
     get '/admin/api/cms/files.:format', action: :index do
       let(:collection) { provider.files }
       let(:serialized) { representer.public_send(serialization_format, short: true) }
@@ -15,31 +15,74 @@ resource 'CMS::File' do
 
     get '/admin/api/cms/files/:id.:format', action: :show
 
-    #post '/admin/api/cms/files.:format', action: :create do
-    #  parameter :section_id, 'Section where this file belongs'
-    #  parameter :attachment, 'The Attachment'
-    #  parameter :path, 'The path'
+    post '/admin/api/cms/files.:format', action: :create do
+      parameter :path, 'The path'
+      parameter :section_id, 'Section where this file belongs'
+      parameter :attachment, 'The Attachment'
 
-    #  let(:path) { "/magic.foo" }
-    #  let(:section_id) { resource.section_id }
-    #  let(:attachment) { fixture_file_upload('/wide.jpg',' image/jpeg') }
-    #end
+      let(:section_id) { resource.section_id }
+      let(:attachment) { fixture_file_upload('/wide.jpg',' image/jpeg') }
+    end
 
-    #put '/admin/api/cms/files/:id.:format', action: :update do
-    #  parameter :title, 'File title'
-    #  let(:title) { 'Mushrooms' }
-    #end
+    put '/admin/api/cms/files/:id.:format', action: :update do
+      parameter :downloadable, 'Checked sets the content-disposition to attachment'
+
+      let(:downloadable) { true }
+    end
 
     delete '/admin/api/cms/files/:id.:format', action: :destroy
   end
 
-  json(:resource) do
-    let(:root) { 'file' }
-    it { should have_properties('id', 'path', 'title', 'created_at', 'updated_at').from(resource) }
-  end
+  describe 'representer' do
+    let(:expected_attributes) do
+      %w[id created_at updated_at section_id path downloadable url title content_type]
+    end
 
-  json(:collection) do
-    let(:root) { 'files' }
+    context 'when the resource is a new record' do
+      let(:resource) { FactoryBot.build(:cms_file, provider: provider, section: provider.sections.root) }
+      let(:root) { 'file' }
+      let(:expected_attributes) { %w[section_id path downloadable url title content_type] }
+
+      json(:resource, skip_resource_save: true) do
+        it 'should have the correct attributes' do
+          expect(subject.keys).to eq(expected_attributes)
+        end
+      end
+
+      xml(:resource) do
+        it 'should have the correct attributes' do
+          expect(subject.root.elements.map(&:name)).to eq(expected_attributes)
+        end
+      end
+    end
+
+    context 'when requesting a single resource' do
+      let(:root) { 'file' }
+
+      json(:resource) do
+        it 'should have the correct attributes' do
+          expect(subject.keys).to eq(expected_attributes)
+        end
+      end
+
+      xml(:resource) do
+        it 'should have the correct attributes' do
+          expect(subject.root.elements.map(&:name)).to eq(expected_attributes)
+        end
+      end
+    end
+
+    context 'when requesting a collection' do
+      let(:root) { 'files' }
+
+      json(:collection)
+
+      xml(:collection) do
+        it 'should have root' do
+          expect(xml).to have_tag(root)
+        end
+      end
+    end
   end
 end
 

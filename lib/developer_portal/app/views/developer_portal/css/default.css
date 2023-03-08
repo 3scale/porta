@@ -201,10 +201,6 @@ fieldset:first-of-type {
   padding-top: 2em;
 }
 
-.list-unstyled li.form-group input.form-control.col-md-6 {
-  width: 50%;
-}
-
 /* tables & table panels */
 .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
   border-top: none;
