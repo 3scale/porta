@@ -31,8 +31,8 @@ class CMS::Layout < CMS::Template
       x.system_name system_name
       x.liquid_enabled liquid_enabled
       unless options[:short]
-        x.draft { |node| node.cdata draft }
-        x.published { |node| node.cdata published }
+        x.draft { |node| node.cdata(draft) if draft }
+        x.published { |node| node.cdata(published) if published }
       end
     end
 
