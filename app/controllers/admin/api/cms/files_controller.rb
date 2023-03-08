@@ -11,7 +11,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
 
   MAX_PER_PAGE = 100
   DEFAULT_PER_PAGE = 20
-  ALLOWED_PARAMS = %i[section_id path attachment downloadable tag_list].freeze
+  ALLOWED_PARAMS = %i[section_id path attachment downloadable].freeze
 
   before_action :find_file, only: [:show, :edit, :update, :destroy]
 
@@ -51,7 +51,6 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "path", :description => "URI of the file", :paramType => "query", :required => true
   ##~ op.parameters.add :name => "section_id", :description => "ID of a section (valid only for pages)", :type => "int", :default => "root section id", :paramType => "query"
-  ##~ op.parameters.add :name => "tag_list", :description => "List of the tags", :paramType => "query"
   ##~ op.parameters.add :name => "attachment", :paramType => "query", :required => true
   ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
   def create
@@ -88,7 +87,6 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_file_id
   ##~ op.parameters.add :name => "path", :description => "URI of the file", :paramType => "query"
   ##~ op.parameters.add :name => "section_id", :description => "ID of a section (valid only for pages)", :type => "int", :default => "root section id", :paramType => "query"
-  ##~ op.parameters.add :name => "tag_list", :description => "List of the tags", :paramType => "query"
   ##~ op.parameters.add :name => "attachment", :paramType => "query"
   ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
   def update
