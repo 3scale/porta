@@ -5,7 +5,8 @@ require 'test_helper'
 class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
 
   LONG_ADDRESS = [%w[Name Farnsworth],
-                  ['Address', "AAA\n" * 5],
+                  ['Address', %{JOHN "GULLIBLE" DOE\nCENTER FOR FINANCIAL ASSISTANCE TO DEPOSED NIGERIAN ROYALTY\n421 E DRACHMAN
+  TUCSON AZ 85705-7598}],
                   %w[Country Patagonia]].freeze
 
   setup do
@@ -43,10 +44,14 @@ class Pdf::Finance::InvoiceGeneratorTest < ActiveSupport::TestCase
     # ensure an image is present in the PDF
     assert_equal 1, content.scan(%r{/Type /XObject}).size
 
-    text = PDF::Inspector::Text.analyze(content)
+    strings = PDF::Inspector::Text.analyze(content).strings
     flat_items = items.flatten.reject(&:blank?).map(&:strip)
-    flat_items.each { |item| assert_includes text.strings, item }
-    assert_includes text.strings, "Chocolatte#{Prawn::Text::NBSP}" # prawn should not strip non-braking-spaces
+    flat_items.each { |item| assert_includes strings, item }
+    assert_includes strings, "Chocolatte#{Prawn::Text::NBSP}" # prawn should not strip non-breaking spaces
+
+    # Address tables should not wrap header words
+    assert_equal 3, strings.count("Address")
+    assert_equal 3, strings.count("Country")
   ensure
     logo_file.close
   end
