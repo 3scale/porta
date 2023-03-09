@@ -36,6 +36,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -45,6 +46,7 @@
             "name": "application_id",
             "in": "path",
             "description": "ID of the application",
+            "x-data-threescale-name": "application_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -143,6 +145,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -263,6 +266,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -272,6 +276,7 @@
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
+            "x-data-threescale-name": "service_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -384,6 +389,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -393,6 +399,7 @@
             "name": "service_id",
             "in": "path",
             "description": "ID of the service.",
+            "x-data-threescale-name": "service_ids",
             "required": true,
             "schema": {
               "type": "integer"
