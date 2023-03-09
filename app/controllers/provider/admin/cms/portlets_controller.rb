@@ -2,7 +2,9 @@ class Provider::Admin::CMS::PortletsController < Provider::Admin::CMS::Templates
   before_action :pick_portlet_type, :only => :new
 
   def create
-    @page ||= templates.build(template_params).to_portlet
+    template ||= templates.build
+    template.portlet_type = template_params[:portlet_type]
+    @page = template.to_portlet
 
     super
   end
@@ -38,9 +40,8 @@ class Provider::Admin::CMS::PortletsController < Provider::Admin::CMS::Templates
     current_account.portlets
   end
 
-  def template_params
-    params.require(:cms_template).permit(:title, :portlet_type, :system_name,
-      :draft, :url_feed, :type)
+  def allowed_params
+    %i[title portlet_type system_name draft url_feed type section_id posts].freeze
   end
 
 end

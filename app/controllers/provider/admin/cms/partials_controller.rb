@@ -5,4 +5,8 @@ class Provider::Admin::CMS::PartialsController < Provider::Admin::CMS::Templates
     current_account.partials
   end
 
+  def allowed_params
+    %i[system_name draft].freeze
+  end
+
 end

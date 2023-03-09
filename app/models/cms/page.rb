@@ -12,8 +12,6 @@ class CMS::Page < CMS::BasePage
 
   include Searchable
 
-  attr_accessible :title, :section, :layout, :path, :content_type, :tag_list, :system_name
-
   belongs_to :section, class_name: 'CMS::Section', touch: true
 
   before_validation :strip_trailing_slashes

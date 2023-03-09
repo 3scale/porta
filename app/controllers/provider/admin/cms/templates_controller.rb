@@ -79,7 +79,7 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
     end
   end
 
-  private
+  protected
 
   def latest_update
     CMS::Sidebar.new(current_account).last_update
@@ -97,8 +97,12 @@ class Provider::Admin::CMS::TemplatesController < Provider::Admin::CMS::BaseCont
     end
   end
 
+  def allowed_params
+    raise NoMethodError, "#{__method__} not implemented in #{self.class}"
+  end
+
   def template_params
-    params.require(:cms_template).permit(:draft, :liquid_enabled, :handler, :system_name, :title)
+    params.require(:cms_template).permit(*allowed_params)
   end
 
   def templates

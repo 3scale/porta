@@ -2,7 +2,6 @@ require 'open-uri'
 
 class ExternalRssFeedPortlet < CMS::Portlet::Base
   attributes :url_feed
-  attr_accessible :url_feed
 
   validates_presence_of :url_feed
 
