@@ -48,6 +48,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -57,6 +58,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -81,6 +83,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -115,6 +118,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -124,6 +128,7 @@
             "name": "id",
             "in": "path",
             "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -195,6 +200,7 @@
             "name": "account_id",
             "in": "path",
             "description": "ID of the developer account.",
+            "x-data-threescale-name": "account_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -227,7 +233,8 @@
         "properties": {
           "access_token": {
             "type": "string",
-            "description": "A personal Access Token."
+            "description": "A personal Access Token.",
+            "x-data-threescale-name": "access_token"
           },
           "org_name": {
             "type": "string",
@@ -262,7 +269,8 @@
         "properties": {
           "access_token": {
             "type": "string",
-            "description": "A personal Access Token."
+            "description": "A personal Access Token.",
+            "x-data-threescale-name": "access_token"
           },
           "from_email": {
             "type": "string",
@@ -304,7 +312,8 @@
         "properties": {
           "access_token": {
             "type": "string",
-            "description": "A personal Access Token."
+            "description": "A personal Access Token.",
+            "x-data-threescale-name": "access_token"
           },
           "date": {
             "type": "string",
