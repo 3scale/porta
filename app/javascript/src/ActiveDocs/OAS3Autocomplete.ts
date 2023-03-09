@@ -120,15 +120,19 @@ const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: str
     text: JSON.stringify(body)
   }
 }
-export const autocompleteInterceptor = async (response: SwaggerUIResponse, specUrl: string | undefined, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
-  // only process the response for Open API spec requests (not the actual API calls responses)
-  let interceptedResponse = response as Response
-  if (specUrl === response.url) {
-    try {
-      interceptedResponse = await autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
-    } catch (error: unknown) {
-      console.error(error)
-    }
+
+/**
+ * Intercept and process the response made by Swagger UI
+ * Apply transformations (inject servers list and autocomplete data) to the response for OpenAPI spec requests, and
+ * keep the responses to the actual API calls (made through 'Try it out') untouched
+ * @param response response to the request made through Swagger UI
+ * @param specUrl URL of the OpenAPI specification
+ * @param accountDataUrl URL of the data for autocompletion
+ * @param serviceEndpoint Public Base URL of the gateway, that will replace the  URL in the "servers" object
+ */
+export const autocompleteInterceptor = (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string, specUrl?: string): Promise<Response> | SwaggerUIResponse => {
+  if (specUrl !== response.url) {
+    return response
   }
-  return interceptedResponse
+  return autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
 }

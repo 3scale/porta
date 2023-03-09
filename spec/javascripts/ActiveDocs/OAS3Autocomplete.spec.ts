@@ -62,19 +62,19 @@ const fetchDataSpy = jest.spyOn(utils, 'fetchData')
 fetchDataSpy.mockResolvedValue(accountData)
 
 it('should inject servers to OpenAPI spec', () => {
-  return autocompleteInterceptor(specResponse, specUrl, accountDataUrl, serviceEndpoint).then(res => {
+  return autocompleteInterceptor(specResponse, accountDataUrl, serviceEndpoint, specUrl).then(res => {
     expect(res.body.servers).toEqual([{ 'url': 'foo/bar/serviceEndpoint' }])
   })
 })
 
 it('should not inject servers to API calls responses', () => {
-  return autocompleteInterceptor(apiResponse, specUrl, accountDataUrl, serviceEndpoint).then(res => {
+  return autocompleteInterceptor(apiResponse, accountDataUrl, serviceEndpoint, specUrl).then(res => {
     expect(res.body.servers).toBe(undefined)
   })
 })
 
 it('should autocomplete fields of OpenAPI spec with x-data-threescale-name property', () => {
-  return autocompleteInterceptor(specResponse, specUrl, accountDataUrl, serviceEndpoint).then(res => {
+  return autocompleteInterceptor(specResponse, accountDataUrl, serviceEndpoint, specUrl).then(res => {
     const examplesFirstParam = res.body.paths['/'].get.parameters[0].examples
     const examplesSecondParam = res.body.paths['/'].get.parameters[1].examples
 

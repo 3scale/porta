@@ -9,7 +9,7 @@ import 'ActiveDocs/swagger-ui-3-patch.scss'
 const accountDataUrl = '/api_docs/account_data.json'
 
 window.SwaggerUI = (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) => {
-  const responseInterceptor = (response: SwaggerUI.Response) => autocompleteInterceptor(response, args.url, accountDataUrl, serviceEndpoint)
+  const responseInterceptor = (response: SwaggerUI.Response) => autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, args.url)
 
   SwaggerUI({
     ...args,
