@@ -22,6 +22,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -31,6 +32,7 @@
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -65,6 +67,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -74,6 +77,7 @@
             "name": "account_id",
             "in": "path",
             "description": "ID of the account.",
+            "x-data-threescale-name": "account_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -141,6 +145,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -211,11 +216,13 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   },
                   "account_id": {
                     "type": "integer",
-                    "description": "ID of the account."
+                    "description": "ID of the account.",
+                    "x-data-threescale-name": "account_ids"
                   },
                   "period": {
                     "type": "string",
@@ -255,6 +262,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -303,7 +311,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   },
                   "period": {
                     "type": "string",
@@ -365,7 +374,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   },
                   "state": {
                     "type": "string",
@@ -430,7 +440,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   }
                 },
                 "required": [
@@ -466,6 +477,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -500,6 +512,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -548,7 +561,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   },
                   "name": {
                     "type": "string",
@@ -616,6 +630,7 @@
             "name": "access_token",
             "in": "query",
             "description": "A personal Access Token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
