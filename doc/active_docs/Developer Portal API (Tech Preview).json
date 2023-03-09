@@ -23,6 +23,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -67,7 +68,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "Your access token"
+                    "description": "Your access token",
+                    "x-data-threescale-name": "access_token"
                   },
                   "type": {
                     "type": "string",
@@ -150,6 +152,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -198,7 +201,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "Your access token"
+                    "description": "Your access token",
+                    "x-data-threescale-name": "access_token"
                   },
                   "system_name": {
                     "type": "string",
@@ -270,6 +274,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -320,7 +325,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   }
                 },
                 "required": [
@@ -350,6 +356,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -394,7 +401,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "Your access token"
+                    "description": "Your access token",
+                    "x-data-threescale-name": "access_token"
                   },
                   "title": {
                     "type": "string",
@@ -441,6 +449,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -489,7 +498,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "Your access token"
+                    "description": "Your access token",
+                    "x-data-threescale-name": "access_token"
                   },
                   "title": {
                     "type": "string",
@@ -533,6 +543,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -568,6 +579,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -612,7 +624,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   },
                   "path": {
                     "type": "string",
@@ -664,6 +677,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -712,7 +726,8 @@
                 "properties": {
                   "access_token": {
                     "type": "string",
-                    "description": "A personal Access Token."
+                    "description": "A personal Access Token.",
+                    "x-data-threescale-name": "access_token"
                   },
                   "path": {
                     "type": "string",
@@ -760,6 +775,7 @@
             "name": "access_token",
             "in": "query",
             "description": "Your access token",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
