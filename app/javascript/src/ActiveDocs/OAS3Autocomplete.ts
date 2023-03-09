@@ -18,9 +18,22 @@ import type { AccountData } from 'Types/SwaggerTypes'
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
 
 const X_DATA_PARAMS_DESCRIPTIONS = {
-  user_keys: 'First user key from latest 5 applications',
+  metric_names: 'Latest 5 metrics',
+  metric_ids: 'Latest 5 metrics',
+  app_keys: 'First application key from the latest five applications',
   app_ids: 'Latest 5 applications (across all accounts and services)',
-  app_keys: 'First application key from the latest five applications'
+  application_ids: 'Latest 5 applications',
+  user_keys: 'First user key from latest 5 applications',
+  account_ids: 'Latest 5 accounts',
+  access_token: 'Access Token',
+  user_ids: 'First user (admin) of the latest 5 account',
+  service_ids: 'Latest 5 services',
+  admin_ids: 'Latest 5 users (admin) from your account',
+  service_plan_ids: 'Latest 5 service plans',
+  application_plan_ids: 'Latest 5 application plans',
+  account_plan_ids: 'Latest 5 account plans',
+  client_ids: 'Client IDs from the latest five applications',
+  client_secrets: 'Client secrets from the latest five applications'
 } as const
 
 const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
