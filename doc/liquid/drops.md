@@ -2,7 +2,7 @@
 
 
 A developer account. See `User` drop if you are looking for the email addresses or similar information.
-      
+
 
 ```liquid
 <h1>Account organization name {{ current_account.name }}</h1>
@@ -167,8 +167,6 @@ Give access to permission methods.
 ```
 
 ### edit_url
-
-### edit_ogone_billing_address_url
 
 ### edit_braintree_blue_credit_card_details_url
 
@@ -402,7 +400,7 @@ Returns true if the contract is still in the trial period.
 
 __Note__: If you change the trial period length of a plan,
 it does not affect existing contracts.
-           
+
 
 ### live?
 
@@ -412,7 +410,7 @@ There are three possible states:
         - pending
         - live
         - suspended
-      
+
 
 ### remaining_trial_period_days
 Number of days left in the trial period.
@@ -852,7 +850,7 @@ Returns true if the contract is still in the trial period.
 
 __Note__: If you change the trial period length of a plan,
 it does not affect existing contracts.
-           
+
 
 ### live?
 
@@ -862,7 +860,7 @@ There are three possible states:
         - pending
         - live
         - suspended
-      
+
 
 ### remaining_trial_period_days
 Number of days left in the trial period.
@@ -1006,7 +1004,7 @@ This method will return `true` for users using the built-in
 Developer Portal authentication mechanisms and `false` for
 those that are authenticated via Janrain, CAS or other
 single-sign-on method.
-      
+
 ```liquid
 {{ if user.password_required? }}
   <input name="account[user][password]" type="password">
@@ -1062,7 +1060,7 @@ Returns the URL to edit the user.
 ### can
 Exposes rights of current user which are dependent
  on your settings and user's role.
-        
+
  You can call these methods on the returned object:
 
  - invite_user?
@@ -1106,7 +1104,7 @@ Returns SSO Authorizations collection.
 
         When a form fails to submit because of invalid data, the `errors` array
         will be available on the related model.
-      
+
 
 
 
@@ -1286,7 +1284,7 @@ Each of the array elements responds to `id` and `label` which
 are usually just the same unless the field is a special built-in one (like `country`)
 It is recommended to use those methods rather that output the `choice` 'as is'
 for future compatibility.
-            
+
 ```liquid
 {% for choice in field.choices %}
   <select name="{{ field.input_name }}" id="{{ field.html_id }}_id"
@@ -1627,7 +1625,7 @@ Possible types of the messages are:
  - info
  - warning
  - danger
-        
+
 
 ### text
 
@@ -2258,7 +2256,7 @@ Returns the telephone number of the account.
 ### multiple_applications_allowed?
 *True* if developers can have more separate applications with
               their own keys, stats, etc. __Depends on your 3scale plan__.
-           
+
 ```liquid
 {% if provider.multiple_applications_allowed? %}
    <div>
@@ -2277,7 +2275,7 @@ Returns the telephone number of the account.
 ### multiple_services_allowed?
 *True* if your 3scale plan allows you to manage multiple APIs
                as separate [services][support-terminology-service].
-           
+
 ```liquid
 {% if provider.multiple_services_allowed? %}
   {% for service in provider.services %}
@@ -2543,7 +2541,7 @@ Returns whether the service is subscribed to.
 
 Returns subscription (`ServiceContract` drop) of the currently
 logged in user if they are subscribed to this service, Nil otherwise.
-            
+
 ```liquid
 {% if service.subscription %}
    Your applications for service {{ service.name }} are:
@@ -2609,7 +2607,7 @@ Returns the visible features of the service.
 
 Depending on the authentication mode set, returns either 'ID',
 'API key' or 'Client ID' for OAuth authentication.
-      
+
 ```liquid
 {{ service.application_key_name }}
 ```
@@ -2673,7 +2671,7 @@ Returns true if the contract is still in the trial period.
 
 __Note__: If you change the trial period length of a plan,
 it does not affect existing contracts.
-           
+
 
 ### live?
 
@@ -2683,7 +2681,7 @@ There are three possible states:
         - pending
         - live
         - suspended
-      
+
 
 ### remaining_trial_period_days
 Number of days left in the trial period.
@@ -2950,13 +2948,13 @@ But not these:
  - /admin/sent/messsages/received/2
 
 See also '#active?', '#current?'.
-      
+
 
 ### current?
 
 True if the URL's path is the the same as of the current. Parameters
 and other components are not taken into account. See also '#active?'.
-      
+
 ```liquid
 {% assign url = urls.messages_inbox %}
 <!-- => http://awesome.3scale.net/admin/messages/sent -->
@@ -2972,7 +2970,7 @@ and other components are not taken into account. See also '#active?'.
 
 True if the current page is in the same menu structure
 as this URL. See also '#current?'.
-      
+
 ```liquid
 {% assign url = urls.messages_inbox %}
 <!-- => http://awesome.3scale.net/admin/messages/sent -->
@@ -3166,7 +3164,7 @@ This method will return `true` for users using the built-in
 Developer Portal authentication mechanisms and `false` for
 those that are authenticated via Janrain, CAS or other
 single-sign-on method.
-      
+
 ```liquid
 {{ if user.password_required? }}
   <input name="account[user][password]" type="password">

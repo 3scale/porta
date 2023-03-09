@@ -122,7 +122,7 @@ module CMS
       end
 
       test 'create with errors' do
-        post admin_api_cms_files_path(format: :xml), params: { provider_key: @provider.provider_key }
+        post admin_api_cms_files_path(format: :xml), params: { provider_key: @provider.provider_key, downloadable: true }
 
         assert_response :unprocessable_entity
 

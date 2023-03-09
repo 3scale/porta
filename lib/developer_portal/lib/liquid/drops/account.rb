@@ -307,10 +307,6 @@ A developer account. See `User` drop if you are looking for the email addresses 
         edit_admin_account_path
       end
 
-      def edit_ogone_billing_address_url
-        edit_admin_account_ogone_path
-      end
-
       hidden
       def edit_payment_express_billing_address_url
         ''

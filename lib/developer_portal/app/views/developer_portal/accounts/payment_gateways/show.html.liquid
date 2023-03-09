@@ -17,15 +17,9 @@
             </a>
           {% endif %}
 
-          {% comment %} Ogone & stripe have separate forms for billing address + cc details {% endcomment %}
+          {% comment %} Stripe has separate forms for billing address + cc details {% endcomment %}
           {% if current_account.has_billing_address? %}
             {% case provider.payment_gateway.type %}
-
-            {% when "ogone" %}
-              <a href="{{ current_account.edit_ogone_billing_address_url }}">
-                <i class="fa fa-pencil"></i>
-                Edit billing address
-              </a>
 
             {% when "stripe" %}
               <a href="{{ current_account.edit_stripe_billing_address_url }}">
@@ -90,18 +84,6 @@
             {% authorize_net_form "Edit Credit Card Details" %}
           {% else %}
             {% authorize_net_form "Add Credit Card Details" %}
-          {% endif %}
-
-        {% comment %} Ogone renders a link to the external cc form once a billing address has been added {% endcomment %}
-        {% when "ogone" %}
-          {% if current_account.has_billing_address? %}
-            {% if current_account.credit_card_stored? %}
-              {% ogone_form "Edit Credit Card Details" %}
-            {% else %}
-              {% ogone_form "Add Credit Card Details" %}
-            {% endif %}
-          {% else %}
-            <p><a href="{{ current_account.edit_ogone_billing_address_url }}">First add a billing address</a></p>
           {% endif %}
 
         {% comment %} Stripe renders the form in place once a billing address has been added {% endcomment %}

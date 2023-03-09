@@ -6,6 +6,7 @@ class CMS::BasePage < CMS::Template
   belongs_to :section, :class_name => 'CMS::Section'
 
   validates :section, presence: true
+  validate :section_same_provider
 
   def layout_name
     layout.try!(:system_name)
@@ -21,4 +22,11 @@ class CMS::BasePage < CMS::Template
     sections.reverse
   end
 
+  protected
+
+  def section_same_provider
+    return if section&.provider == provider
+
+    errors.add(:section_id, "must belong to the same provider")
+  end
 end

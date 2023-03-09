@@ -2,8 +2,6 @@
 
 class CMS::EmailTemplate < CMS::Template
 
-  attr_accessible :system_name, :draft, :published, :headers # do not do drafts
-
   validates :system_name, presence: true
   validates :current, presence: true
   validates :system_name, uniqueness: { scope: %i[provider_id], allow_blank: true }
