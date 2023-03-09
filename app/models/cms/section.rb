@@ -55,7 +55,7 @@ class CMS::Section < ApplicationRecord
     end
 
     def find_or_create!(name, path, options = {})
-      system_name = name.downcase
+      system_name = name.parameterize
 
       if section = find_by_system_name(system_name)
         section
