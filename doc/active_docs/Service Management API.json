@@ -24,6 +24,7 @@
             "name": "service_token",
             "in": "query",
             "description": "Service token for the API service.",
+            "x-data-threescale-name": "access_token",
             "required": true,
             "schema": {
               "type": "string"
@@ -33,6 +34,7 @@
             "name": "service_id",
             "in": "query",
             "description": "Service ID.",
+            "x-data-threescale-name": "service_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -42,6 +44,7 @@
             "name": "user_key",
             "in": "query",
             "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key.",
+            "x-data-threescale-name": "user_keys",
             "required": false,
             "schema": {
               "type": "string"
@@ -51,6 +54,7 @@
             "name": "app_id",
             "in": "query",
             "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key).",
+            "x-data-threescale-name": "app_ids",
             "schema": {
               "type": "string"
             }
@@ -59,6 +63,7 @@
             "name": "app_key",
             "in": "query",
             "description": "App Key (shared secret of the application if the authentication pattern is App ID / App Key). The App Key is required if the application has one or more keys defined.",
+            "x-data-threescale-name": "app_keys",
             "required": false,
             "schema": {
               "type": "string"
@@ -113,6 +118,7 @@
             "name": "service_id",
             "in": "query",
             "description": "Service ID.",
+            "x-data-threescale-name": "service_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -122,6 +128,7 @@
             "name": "user_key",
             "in": "query",
             "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key.",
+            "x-data-threescale-name": "user_keys",
             "required": false,
             "schema": {
               "type": "string"
@@ -131,6 +138,7 @@
             "name": "app_id",
             "in": "query",
             "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key).",
+            "x-data-threescale-name": "app_ids",
             "schema": {
               "type": "string"
             }
@@ -139,6 +147,7 @@
             "name": "app_key",
             "in": "query",
             "description": "App Key (shared secret of the application if the authentication pattern is App ID / App Key). The App Key is required if the application has one or more keys defined.",
+            "x-data-threescale-name": "app_keys",
             "required": false,
             "schema": {
               "type": "string"
@@ -203,6 +212,7 @@
             "name": "service_id",
             "in": "query",
             "description": "Service ID.",
+            "x-data-threescale-name": "service_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -212,6 +222,7 @@
             "name": "app_id",
             "in": "query",
             "description": "Client ID (identifier of the application if the authentication pattern is OAuth, note that client_id == app_id)",
+            "x-data-threescale-name": "app_ids",
             "schema": {
               "type": "string"
             }
@@ -220,6 +231,7 @@
             "name": "app_key",
             "in": "query",
             "description": "App Key (shared secret of the application). The app key, if present, must match a key defined for the application. Note that empty values are considered invalid.",
+            "x-data-threescale-name": "app_keys",
             "schema": {
               "type": "string"
             }
@@ -289,6 +301,7 @@
             "name": "service_id",
             "in": "query",
             "description": "Service ID.",
+            "x-data-threescale-name": "service_ids",
             "required": true,
             "schema": {
               "type": "integer"
@@ -298,6 +311,7 @@
             "name": "app_id",
             "in": "query",
             "description": "Client ID (identifier of the application if the authentication pattern is OAuth, note that client_id == app_id)",
+            "x-data-threescale-name": "app_ids",
             "schema": {
               "type": "string"
             }
@@ -306,6 +320,7 @@
             "name": "app_key",
             "in": "query",
             "description": "App Key (shared secret of the application). The app key, if present, must match a key defined for the application. Note that empty values are considered invalid.",
+            "x-data-threescale-name": "app_keys",
             "schema": {
               "type": "string"
             }
@@ -386,7 +401,8 @@
                   },
                   "service_id": {
                     "type": "integer",
-                    "description": "Service ID."
+                    "description": "Service ID.",
+                    "x-data-threescale-name": "service_ids"
                   },
                   "transactions": {
                     "$ref": "#/components/schemas/Transactions"
@@ -439,11 +455,13 @@
         "properties": {
           "user_key": {
             "type": "string",
-            "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key."
+            "description": "User Key (API key) - identifier and shared secret of the application if the authentication pattern is API Key.",
+            "x-data-threescale-name": "user_keys"
           },
           "app_id": {
             "type": "string",
-            "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key)."
+            "description": "App Id (identifier of the application if the authentication pattern is App ID / App Key).",
+            "x-data-threescale-name": "app_ids"
           },
           "timestamp": {
             "type": "string",
