@@ -10,6 +10,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include GatewaySettings::ProxyExtension
   include ProxyConfigAffectingChanges::ModelExtension
 
+  audited :allow_mass_assignment => true
+
   define_proxy_config_affecting_attributes except: %i[api_test_path api_test_success lock_version]
 
   self.background_deletion = [:proxy_rules, [:proxy_configs, { action: :delete }], [:oidc_configuration, { action: :delete, has_many: false }]]
@@ -113,8 +115,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   delegate :provider_can_use?, to: :account
   delegate :backend_apis, :backend_api_configs, to: :service
   delegate :scheduled_for_deletion?, to: :account, allow_nil: true
-
-  audited allow_mass_assignment: true
 
   def self.user_attribute_names
     super + %w[api_backend] + GatewayConfiguration::ATTRIBUTES
@@ -545,6 +545,8 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     include ActiveModel::Validations
     include Enumerable
 
+    PoliciesConfig = Proxy::PoliciesConfig
+
     delegate :each, :to_json, :as_json, to: :policies_config
     alias to_s to_json
     attr_reader :policies_config
@@ -559,10 +561,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
       @policies_config = policies_normalize(parsed)
     rescue JSON::ParserError
       @policies_config = policies_config
-    end
-
-    def self.name
-      'PoliciesConfig'
     end
 
     def find_by(name:, version:)
