@@ -85,8 +85,8 @@ describe('when the request is fetching OpenAPI spec', () => {
 
 describe('when the request is fetching API call response', () => {
   const response = apiResponse
-  it('should not inject servers to the response', async () => {
-    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
+  it('should not inject servers to the response', () => {
+    const res: SwaggerUIResponse = autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
     expect(res.body.servers).toBe(undefined)
   })
 })
