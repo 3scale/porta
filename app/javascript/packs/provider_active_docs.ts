@@ -13,6 +13,7 @@ window.SwaggerUI = (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) =
 
   SwaggerUI({
     ...args,
-    responseInterceptor
+    responseInterceptor,
+    tryItOutEnabled: true
   } as SwaggerUI.SwaggerUIOptions)
 }
