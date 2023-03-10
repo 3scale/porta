@@ -1,10 +1,15 @@
-module.exports = {
-  Elements: () => null,
-  CardElement: () => null,
-  useStripe: () => ({
-    confirmCardSetup: jest.fn(),
-  }),
-  useElements: () => ({
-    getElement: jest.fn()
-  })
-}
+const confirmCardSetup = jest.fn()
+
+const Elements = () => null
+
+const CardElement = () => null
+
+const useStripe = () => ({
+  confirmCardSetup
+})
+
+const useElements = () => ({
+  getElement: jest.fn()
+})
+
+export { Elements, CardElement, useStripe, useElements }
