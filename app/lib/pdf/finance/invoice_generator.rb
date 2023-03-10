@@ -81,7 +81,11 @@ module Pdf
 
       def print_address(person, name = nil)
         subtitle("#{name}") if name
-        table_with_column_header(person, width: TABLE_HALF_WIDTH)
+        table_with_column_header(person, width: TABLE_HALF_WIDTH) do
+          # prevent long addresses from wrapping header words
+          # see https://github.com/prawnpdf/prawn-table/issues/67
+          style(column(0), width: 50)
+        end
       end
 
       def print_details
