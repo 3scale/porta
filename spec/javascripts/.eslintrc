@@ -2,7 +2,6 @@
   "plugins": ["jest"],
   "extends": ["plugin:jest/recommended"],
   "rules": {
-    "no-unsafe-member-access": "off",
     "react/jsx-key": "off",
     "react/jsx-props-no-spreading": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
