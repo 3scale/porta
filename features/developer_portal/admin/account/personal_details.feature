@@ -5,32 +5,36 @@ Feature: Dev Portal Buyer Personal Details
   Background:
     Given a buyer logged in to a provider
 
-  Scenario: Buyer wants to update information without current password
+  # This is needed, otherwise assert_flash doesn't receive the right message.
+  # Check flash-buyer.js
+  @javascript
+  Scenario: Buyer doesn't use current password
     Given the buyer wants to edit their personal details
-    When the buyer writes a new name
-    And the buyer writes a new email
-    And clicks on update personal details
-    Then they should see current password is incorrect
+    When the buyer edits their personal details
+    Then they should not be able to edit their personal details
 
-  Scenario: Buyer wants to update information adding their current password
+  @javascript
+  Scenario: Buyer uses wrong current password
     Given the buyer wants to edit their personal details
-    When the buyer writes a new name
-    And the buyer writes a new email
-    And the buyer writes their current password
-    And clicks on update personal details
-    Then they should see their information updated
+    When the buyer edits their personal details
+    And the buyer writes a wrong current password
+    Then they should not be able to edit their personal details
 
-  Scenario: Buyer wants to update their password without current password
+  @javascript
+  Scenario: Buyer uses correct current password
     Given the buyer wants to edit their personal details
-    When the buyer writes a new password
-    And the buyer confirms their new password
-    And clicks on update personal details
-    Then they should see current password is incorrect
+    When the buyer edits their personal details
+    And the buyer writes a correct current password
+    Then they should be able to edit their personal details
 
-  Scenario: Buyer wants to update their password adding their current password
+  @javascript
+  Scenario: Buyer sends an empty form
     Given the buyer wants to edit their personal details
-    When the buyer writes their current password
-    And the buyer writes a new password
-    And the buyer confirms their new password
-    And clicks on update personal details
-    Then they should have their password updated
+    When they don't provide any personal details
+    Then they should not be able to edit their personal details
+
+  Scenario: Buyer sends a wrong email
+    Given the buyer wants to edit their personal details
+    When fill in "Email" with "email"
+    And the buyer writes a correct current password
+    Then they should see email errors
