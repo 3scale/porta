@@ -1,6 +1,5 @@
 class CMS::Layout < CMS::Template
   self.search_type = 'layout'
-  attr_accessible :system_name, :draft, :title
 
   has_many :pages, :class_name => 'CMS::Page'
   validates :system_name, presence: true
@@ -29,10 +28,10 @@ class CMS::Layout < CMS::Template
       end
       x.title title
       x.system_name system_name
-      x.liquid_enabled liquid_enabled
+      x.liquid_enabled liquid_enabled?
       unless options[:short]
-        x.draft { |node| node.cdata draft }
-        x.published { |node| node.cdata published }
+        x.draft { |node| node.cdata(draft) if draft }
+        x.published { |node| node.cdata(published) if published }
       end
     end
 

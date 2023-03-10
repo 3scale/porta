@@ -64,11 +64,7 @@ class Provider::Admin::CMS::SectionsController < Provider::Admin::CMS::BaseContr
   protected
 
   def section_params
-    params[:cms_section].dup.tap do |params|
-      params[:parent] = if id = params[:parent_id]
-                          current_account.sections.find(id)
-                        end
-    end
+    params.require(:cms_section).permit(:parent_id, :title, :public, :partial_path)
   end
 
 

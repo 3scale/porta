@@ -635,10 +635,6 @@
                     "type": "integer",
                     "description": "ID of a section (valid only for pages)"
                   },
-                  "tag_list": {
-                    "type": "string",
-                    "description": "List of the tags"
-                  },
                   "attachment": {
                     "type": "string",
                     "format": "binary"
@@ -736,10 +732,6 @@
                   "section_id": {
                     "type": "integer",
                     "description": "ID of a section (valid only for pages)"
-                  },
-                  "tag_list": {
-                    "type": "string",
-                    "description": "List of the tags"
                   },
                   "attachment": {
                     "type": "string",

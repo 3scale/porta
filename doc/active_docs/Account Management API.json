@@ -829,6 +829,7 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/keys.xml": {
       "get": {
         "summary": "Application Key List",
+        "description": "Lists the Application Keys (or the Client Secret for OAuth or OpenID Connect modes) of the application.",
         "tags": [
           "Account Applications"
         ],
@@ -873,6 +874,7 @@
       },
       "post": {
         "summary": "Application Key Create",
+        "description": "Adds an application key for App Id/App Key mode (until a maximum of 5 keys) or the Client Secret for OAuth or OpenID Connect modes (only one).",
         "tags": [
           "Account Applications"
         ],
@@ -935,6 +937,7 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/keys/{key}.xml": {
       "delete": {
         "summary": "Application Key Delete",
+        "description": "Deletes an application key for App Id/App Key mode or the Client Secret for OAuth or OpenID Connect modes. An application may have to have at least one App Key (controlled by settings).",
         "tags": [
           "Account Applications"
         ],
@@ -990,6 +993,7 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/referrer_filters.xml": {
       "get": {
         "summary": "Application Referrer Filter List",
+        "description": "Lists referrer filters of the application.",
         "tags": [
           "Account Applications"
         ],
@@ -1034,6 +1038,7 @@
       },
       "post": {
         "summary": "Application Referrer Filter Create",
+        "description": "Adds a referrer filter to an application. Referrer filters limit API requests by domain or IP ranges.",
         "tags": [
           "Account Applications"
         ],
@@ -1096,6 +1101,7 @@
     "/admin/api/accounts/{account_id}/applications/{application_id}/referrer_filters/{id}.xml": {
       "delete": {
         "summary": "Application Referrer Filter Delete",
+        "description": "Deletes a referrer filter of an application. Referrer filters limit API requests by domain or IP ranges.",
         "tags": [
           "Account Applications"
         ],
@@ -1206,6 +1212,7 @@
     "/admin/api/accounts/{account_id}/plan.xml": {
       "get": {
         "summary": "Account Fetch Account Plan",
+        "description": "Returns the account plan associated to an account.",
         "tags": [
           "Accounts"
         ],
@@ -1424,6 +1431,7 @@
     "/admin/api/accounts/{id}/credit_card.xml": {
       "put": {
         "summary": "Account Set Credit Card",
+        "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, braintree, payment express and merchant e solutions",
         "tags": [
           "Accounts"
         ],
@@ -1454,7 +1462,7 @@
                   },
                   "credit_card_token": {
                     "type": "string",
-                    "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
+                    "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
                   },
                   "credit_card_authorize_net_payment_profile_token": {
                     "type": "string",
@@ -1525,6 +1533,7 @@
       },
       "delete": {
         "summary": "Account Delete Credit Card",
+        "description": "Removes all credit card info of an account.",
         "tags": [
           "Accounts"
         ],
@@ -3412,6 +3421,7 @@
     "/admin/api/application_plans.xml": {
       "get": {
         "summary": "Application Plan List (all services)",
+        "description": "Returns the list of all application plans across services. Note that application plans are scoped by service.",
         "tags": [
           "Application Plans"
         ],
@@ -4177,6 +4187,7 @@
       },
       "post": {
         "summary": "Application Plan Create",
+        "description": "Creates an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4193,7 +4204,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Plan Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -4255,6 +4265,7 @@
     "/admin/api/services/{service_id}/application_plans/{id}.xml": {
       "get": {
         "summary": "Application Plan Read",
+        "description": "Returns and application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4299,6 +4310,7 @@
       },
       "put": {
         "summary": "Application Plan Update",
+        "description": "Updates an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4325,7 +4337,6 @@
           }
         ],
         "requestBody": {
-          "description": "Application Plan Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -4384,6 +4395,7 @@
       },
       "delete": {
         "summary": "Application Plan Delete",
+        "description": "Deletes an application plan.",
         "tags": [
           "Application Plans"
         ],
@@ -4430,6 +4442,7 @@
     "/admin/api/services/{service_id}/application_plans/{id}/default.xml": {
       "put": {
         "summary": "Application Plan Set to Default",
+        "description": "Makes the application plan the default one. New applications will be assigned to the default plan unless an application_plan_id is explicity passed (e.g. on the signup express operation).",
         "tags": [
           "Application Plans"
         ],
@@ -4577,6 +4590,7 @@
     "/admin/api/applications/find.xml": {
       "get": {
         "summary": "Application Find",
+        "description": "Finds an application by keys used on the integration of your API and 3scale's Service Management API or by application ID.",
         "tags": [
           "Service Applications"
         ],
@@ -5077,6 +5091,7 @@
     "/admin/api/backend_apis.json": {
       "get": {
         "summary": "Backend List",
+        "description": "Returns the list of backend apis. The results can be paginated.",
         "tags": [
           "Backend APIs"
         ],
@@ -5119,11 +5134,11 @@
       },
       "post": {
         "summary": "Backend Create",
+        "description": "Creates a Backend.",
         "tags": [
           "Backend APIs"
         ],
         "requestBody": {
-          "description": "Backend Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5172,6 +5187,7 @@
     "/admin/api/backend_apis/{id}.json": {
       "get": {
         "summary": "Backend Read",
+        "description": "Returns a backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5205,6 +5221,7 @@
       },
       "put": {
         "summary": "Backend Update",
+        "description": "Updates a backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5220,7 +5237,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5265,6 +5281,7 @@
       },
       "delete": {
         "summary": "Backend Delete",
+        "description": "Deletes a backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5300,6 +5317,7 @@
     "/admin/api/backend_apis/{backend_api_id}/mapping_rules.json": {
       "get": {
         "summary": "Backend Mapping Rules List",
+        "description": "Returns the Mapping Rules of a Backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5351,6 +5369,7 @@
       },
       "post": {
         "summary": "Backend Mapping Rule Create",
+        "description": "Creates a Mapping Rule of a Backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5366,7 +5385,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Mapping Rule Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5425,6 +5443,7 @@
     "/admin/api/backend_apis/{backend_api_id}/mapping_rules/{id}.json": {
       "get": {
         "summary": "Backend Mapping Rules Read",
+        "description": "Returns the Mapping Rule of a Backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5467,6 +5486,7 @@
       },
       "put": {
         "summary": "Backend Mapping Rule Update",
+        "description": "Updates a Mapping Rule of a Backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5491,7 +5511,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Mapping Rule Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5544,6 +5563,7 @@
       },
       "delete": {
         "summary": "Backend Mapping Rule Delete",
+        "description": "Deletes a Mapping Rule of a Backend.",
         "tags": [
           "Backend APIs"
         ],
@@ -5588,6 +5608,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics.json": {
       "get": {
         "summary": "Backend Metric List",
+        "description": "Returns the list of metrics of a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -5639,6 +5660,7 @@
       },
       "post": {
         "summary": "Backend Metric Create",
+        "description": "Creates a metric on a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -5654,7 +5676,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Metric Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5703,6 +5724,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{id}.json": {
       "get": {
         "summary": "Backend Metric Read",
+        "description": "Returns the metric of a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -5745,6 +5767,7 @@
       },
       "put": {
         "summary": "Backend Metric Update",
+        "description": "Updates the metric of a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -5769,7 +5792,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Metric Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5810,6 +5832,7 @@
       },
       "delete": {
         "summary": "Backend Metric Delete",
+        "description": "Deletes the metric of a backend api. When you delete a metric or a method, it will also remove all the associated limits.",
         "tags": [
           "Backend APIs"
         ],
@@ -5854,6 +5877,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods.json": {
       "get": {
         "summary": "Backend Method List",
+        "description": "List the methods of a metric that belongs to a backend api. Methods are metrics that are children of a parent metric.",
         "tags": [
           "Backend APIs"
         ],
@@ -5914,6 +5938,7 @@
       },
       "post": {
         "summary": "Backend Method Create",
+        "description": "Creates a method under a metric that belongs to a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -5938,7 +5963,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Method Create",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -5987,6 +6011,7 @@
     "/admin/api/backend_apis/{backend_api_id}/metrics/{metric_id}/methods/{id}.json": {
       "get": {
         "summary": "Backend Method Read",
+        "description": "Returns the method of a metric that belongs to a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -6038,6 +6063,7 @@
       },
       "put": {
         "summary": "Backend Method Update",
+        "description": "Updates a method of a metric that belongs to a backend api.",
         "tags": [
           "Backend APIs"
         ],
@@ -6071,7 +6097,6 @@
           }
         ],
         "requestBody": {
-          "description": "Backend Method Update",
           "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
@@ -6112,6 +6137,7 @@
       },
       "delete": {
         "summary": "Backend Method Delete",
+        "description": "Deletes the method of a metric that belongs to a backend api.",
         "tags": [
           "Backend APIs"
         ],

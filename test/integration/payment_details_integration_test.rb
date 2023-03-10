@@ -12,7 +12,7 @@ class PaymentDetailsIntegrationTest < ActionDispatch::IntegrationTest
     assert !provider.settings.finance.visible?
     login_with buyer.admins.first.username, "supersecret"
 
-    get developer_portal.admin_account_ogone_path
+    get developer_portal.admin_account_stripe_path
     assert_response 403
   end
 end

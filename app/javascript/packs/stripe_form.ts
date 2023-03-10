@@ -1,4 +1,4 @@
-import { StripeFormWrapper } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+import { StripeFormWrapper } from 'PaymentGateways/stripe/StripeFormWrapper'
 import { safeFromJsonString } from 'utilities/json-utils'
 
 import type { StripeFormDataset } from 'PaymentGateways/stripe/types'
@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const { stripePublishableKey, setupIntentSecret, billingAddress, successUrl, creditCardStored } = data
 
   StripeFormWrapper({
-    stripePublishableKey: stripePublishableKey,
-    setupIntentSecret: setupIntentSecret,
+    publishableKey: stripePublishableKey,
+    setupIntentSecret,
     billingAddressDetails: billingAddress,
-    successUrl: successUrl,
+    successUrl,
     isCreditCardStored: creditCardStored
   }, containerId)
 })

@@ -1,12 +1,10 @@
-
 import { mount } from 'enzyme'
 
-import { StripeElementsForm } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+import { StripeElementsForm } from 'PaymentGateways/stripe/StripeElementsForm'
 
-import type { Props } from 'PaymentGateways/stripe/components/StripeFormWrapper'
+import type { Props } from 'PaymentGateways/stripe/StripeElementsForm'
 
 const defaultProps: Props = {
-  stripePublishableKey: 'abcd',
   setupIntentSecret: 'efgh',
   billingAddressDetails: {
     line1: '1002 Avenue de los Mexicanos',

@@ -24,7 +24,6 @@ Rails.application.config.to_prepare do
     Liquid::Tags::IncludeWithComments,
     Liquid::Tags::AuthorizeNetForm,
     Liquid::Tags::PaymentExpressForm,
-    Liquid::Tags::OgoneForm,
     Liquid::Tags::BraintreeCustomerForm,
     Liquid::Tags::StripeForm,
     Liquid::Tags::Content,

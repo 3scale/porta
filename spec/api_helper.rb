@@ -95,23 +95,21 @@ module ApiHelper
     end
   end
 
-  def format_context(format, context, &block)
+  def format_context(format, context, **options, &block)
     previous_definition = block
     new_definition = proc do
-      include_context "api"
-      include_context context.to_s
-      include_context format.to_s
+      ['api', context.to_s, format.to_s].each { |group_name| include_context(group_name, options) }
       class_exec(&previous_definition) if previous_definition
     end
     context("#{format} #{context}", :api, context.to_sym, format.to_sym, serialize: :resource, &new_definition)
   end
 
-  def json(context, &block)
-    format_context(:json, context, &block)
+  def json(context, **options, &block)
+    format_context(:json, context, options, &block)
   end
 
-  def xml(context, &block)
-    format_context(:xml, context, &block)
+  def xml(context, **options, &block)
+    format_context(:xml, context, options, &block)
   end
 end
 

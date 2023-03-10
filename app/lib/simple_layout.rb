@@ -336,7 +336,7 @@ class SimpleLayout
   end
 
   def root
-    provider.builtin_sections.root || find_or_create_section('Root', '/', root: true, parent: nil)
+    provider.builtin_sections.root || find_or_create_section('Root', '/', parent: nil)
   end
 
   def build_builtin_static_page(attributes)

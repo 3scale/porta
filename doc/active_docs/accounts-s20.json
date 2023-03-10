@@ -2925,7 +2925,7 @@
       "put": {
         "operationId": "account_set_credit_card",
         "summary": "Account Set Credit Card",
-        "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. Those tokens are the ones required by Authorize.net, ogone, braintree, payment express, merchant e solutions",
+        "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. Those tokens are the ones required by Authorize.net, braintree, payment express, merchant e solutions",
         "tags": [
           "Accounts"
         ],

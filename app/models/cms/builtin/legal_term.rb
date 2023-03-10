@@ -3,9 +3,7 @@ class CMS::Builtin::LegalTerm < CMS::Builtin::Partial
   SIGNUP_SYSTEM_NAME = 'signup_licence'
   SUBSCRIPTION_SYSTEM_NAME = 'service_subscription_licence'
   NEW_APPLICATION_SYSTEM_NAME = 'new_application_licence'
-
-  attr_accessible :published
-
+  
   validates :published, presence: true
   validates :title, uniqueness: { :scope => [:provider_id] }
 
