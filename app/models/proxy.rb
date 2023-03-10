@@ -545,8 +545,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     include ActiveModel::Validations
     include Enumerable
 
-    PoliciesConfig = Proxy::PoliciesConfig
-
     delegate :each, :to_json, :as_json, to: :policies_config
     alias to_s to_json
     attr_reader :policies_config
@@ -561,6 +559,10 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
       @policies_config = policies_normalize(parsed)
     rescue JSON::ParserError
       @policies_config = policies_config
+    end
+
+    def self.name
+      'PoliciesConfig'
     end
 
     def find_by(name:, version:)
@@ -692,3 +694,5 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
 end
+
+PoliciesConfig = Proxy::PoliciesConfig
