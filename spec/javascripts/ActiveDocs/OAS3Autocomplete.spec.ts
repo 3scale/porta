@@ -63,19 +63,15 @@ const accountData = {
 const fetchDataSpy = jest.spyOn(utils, 'fetchData')
 fetchDataSpy.mockResolvedValue(accountData)
 
-it('should inject servers to OpenAPI spec', () => {
-  return autocompleteInterceptor(specResponse, accountDataUrl, serviceEndpoint, specUrl).then((res: SwaggerUIResponse) => {
+describe('when the request is fetching OpenAPI spec', () => {
+  const response = specResponse
+  it('should inject servers to the spec', async () => {
+    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
     expect(res.body.servers).toEqual([{ 'url': 'foo/bar/serviceEndpoint' }])
-  }) as Promise<SwaggerUIResponse>
-})
+  })
 
-it('should not inject servers to API calls responses', () => {
-  const res: SwaggerUIResponse = autocompleteInterceptor(apiResponse, accountDataUrl, serviceEndpoint, specUrl)
-  expect(res.body.servers).toBe(undefined)
-})
-
-it('should autocomplete fields of OpenAPI spec with x-data-threescale-name property', () => {
-  return autocompleteInterceptor(specResponse, accountDataUrl, serviceEndpoint, specUrl).then((res: SwaggerUIResponse) => {
+  it('should autocomplete fields of OpenAPI spec with x-data-threescale-name property', async () => {
+    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
     const examplesFirstParam = res.body.paths['/'].get.parameters[0].examples
     const examplesSecondParam = res.body.paths['/'].get.parameters[1].examples
 
@@ -84,5 +80,13 @@ it('should autocomplete fields of OpenAPI spec with x-data-threescale-name prope
       { summary: 'Some App', value: '12345678' }
     ])
     expect(examplesSecondParam).toBe(undefined)
-  }) as Promise<SwaggerUIResponse>
+  })
+})
+
+describe('when the request is fetching API call response', () => {
+  const response = apiResponse
+  it('should not inject servers to the response', async () => {
+    const res: SwaggerUIResponse = await autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, specUrl)
+    expect(res.body.servers).toBe(undefined)
+  })
 })
