@@ -17,20 +17,14 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def update
-    #TODO: write tests for this
     resource.validate_fields!
-    update! do |success, failure|
-      success.html do
-        if resource.just_changed_password?
-          resource.kill_user_sessions(user_session)
-        end
-        redirect_to(redirect_path)
-      end
+    if resource.errors.empty? && resource.update(user_params)
+      resource.kill_user_sessions(user_session) if resource.just_changed_password?
 
-      failure.html do
-        assign_user_drop
-        render :action => 'show'
-      end
+      redirect_to redirect_path, notice: 'User was succesfully updated.'
+    else
+      assign_user_drop
+      render :action => 'show'
     end
   end
 
@@ -52,6 +46,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def redirect_path
+    #TODO: Test this
     if params[:origin] == "users"
       if current_account.provider?
         provider_admin_account_users_path
@@ -64,16 +59,14 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def user_params
-    params.require(:user)
+    params.require(:user).permit(:username, :email, :current_password, :password, :password_confirmation)
   end
 
   def verify_current_password
     return unless current_user.using_password?
+    return if current_user.authenticated?(user_params[:current_password])
 
-    unless current_user.authenticated?(user_params[:current_password])
-      flash.now[:error] = 'Current password is incorrect.'
-      assign_user_drop
-      render :action => 'show'
-    end
+    flash.now[:error] = 'Current password is incorrect.'
+    resource.errors.add(:current_password, 'Current password is incorrect.')
   end
 end

@@ -91,6 +91,11 @@ module Liquid
         Drops::Invitation.new(@user.invitation)
       end
 
+      desc "Returns true if user signed up with password"
+      def using_password?
+        @user.using_password?
+      end
+
       desc %{
         This method will return `true` for users using the built-in
         Developer Portal authentication mechanisms and `false` for

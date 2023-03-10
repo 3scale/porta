@@ -19,58 +19,60 @@
             {% endfor %}
           </fieldset>
 
-          <fieldset>
-            <legend>
-              <span>Provide your current password</span>
-            </legend>
-            <div class="form-group {{ user.errors.current_password | error_class: 'has-error' }}">
-              <label for="user_current_password" class="col-md-4 control-label">
-                Current Password
-              </label>
-              <div class="col-md-6">
-                <input
-                  id="user_current_password"
-                  name="user[current_password]"
-                  type="password"
-                  class="form-control">
-                {{ user.errors.current_password | inline_errors: 'help-block' }}
+          {% if user.using_password? %}
+            <fieldset>
+              <legend>
+                <span>Provide your current password</span>
+              </legend>
+              <div class="form-group {{ user.errors.current_password | error_class: 'has-error' }}">
+                <label for="user_current_password" class="col-md-4 control-label">
+                  Current Password
+                </label>
+                <div class="col-md-6">
+                  <input
+                    id="user_current_password"
+                    name="user[current_password]"
+                    type="password"
+                    class="form-control">
+                  {{ user.errors.current_password | inline_errors: 'help-block' }}
+                </div>
               </div>
-            </div>
-          </fieldset>
+            </fieldset>
 
-          <fieldset>
-            <legend>
-              <span>Change password</span>
-            </legend>
-            <div class="form-group {{ user.errors.password | error_class: 'has-error' }}">
-              <label for="user_password_confirmation" class="col-md-4 control-label">
-                Password
-              </label>
-              <div class="col-md-6">
-                <input
-                  id="user_password"
-                  name="user[password]"
-                  type="password"
-                  class="form-control">
-                {{ user.errors.password | inline_errors: 'help-block' }}
+            <fieldset>
+              <legend>
+                <span>Change password</span>
+              </legend>
+              <div class="form-group {{ user.errors.password | error_class: 'has-error' }}">
+                <label for="user_password_confirmation" class="col-md-4 control-label">
+                  Password
+                </label>
+                <div class="col-md-6">
+                  <input
+                    id="user_password"
+                    name="user[password]"
+                    type="password"
+                    class="form-control">
+                  {{ user.errors.password | inline_errors: 'help-block' }}
+                </div>
               </div>
-            </div>
 
 
-            <div class="form-group {{ user.errors.password_confirmation | error_class: 'has-error' }}">
-              <label for="user_password_confirmation" class="col-md-4 control-label">
-                Password confirmation
-              </label>
-              <div class="col-md-6">
-                <input
-                  id="user_password_confirmation"
-                  name="user[password_confirmation]"
-                  type="password"
-                  class="form-control">
-                {{ user.errors.password_confirmation | inline_errors: 'help-block' }}
+              <div class="form-group {{ user.errors.password_confirmation | error_class: 'has-error' }}">
+                <label for="user_password_confirmation" class="col-md-4 control-label">
+                  Password confirmation
+                </label>
+                <div class="col-md-6">
+                  <input
+                    id="user_password_confirmation"
+                    name="user[password_confirmation]"
+                    type="password"
+                    class="form-control">
+                  {{ user.errors.password_confirmation | inline_errors: 'help-block' }}
+                </div>
               </div>
-            </div>
-          </fieldset>
+            </fieldset>
+          {% endif %}
 
           <fieldset>
             <div class="form-group">
