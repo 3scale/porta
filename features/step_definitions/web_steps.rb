@@ -30,7 +30,7 @@ When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |inv
   end
 end
 
-When /^(?:I |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
+When /^(?:|I |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
     click_link(link, exact: true, visible: !invisible)
   end
