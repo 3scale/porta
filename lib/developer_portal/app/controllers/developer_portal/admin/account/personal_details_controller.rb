@@ -59,7 +59,8 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def user_params
-    params.require(:user).permit(:username, :email, :current_password, :password, :password_confirmation)
+    # There are extra fields customized by the provider so we can't add a permit here
+    params.require(:user)
   end
 
   def verify_current_password

@@ -6,7 +6,7 @@ Then /^fields should be required:$/ do |table|
   end
 end
 
-Then /^I should see error in fields:$/ do |table|
+Then /^(?:I|they) should see error in fields:$/ do |table|
   table.rows.each do |field|
     assert has_xpath?("//*[contains(@class,'has-error')]/label[contains(text(),'#{field.first}')]"),
            "Field '#{field.first}' with error not found"

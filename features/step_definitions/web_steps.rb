@@ -24,13 +24,13 @@ When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
+When /^(?:|I |they )press( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, button, selector|
   with_scope(selector) do
     click_button(button, visible: !invisible)
   end
 end
 
-When /^(?:|I )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
+When /^(?:I |the buyer )follow( invisible)? "([^"]*)"(?: within "([^"]*)")?$/ do |invisible, link, selector|
   with_scope(selector) do
     click_link(link, exact: true, visible: !invisible)
   end
@@ -149,7 +149,7 @@ end
 #   end
 # end
 
-Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
+Then /^(?:|I |they )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   regex = Regexp.new(Regexp.escape(text), Regexp::IGNORECASE)
   with_scope(selector) do
     refute_text :visible, regex

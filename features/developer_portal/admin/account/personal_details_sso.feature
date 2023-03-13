@@ -14,7 +14,6 @@ Feature: Dev Portal Buyer Personal Details
     Then the buyer shouldn't see any reference to password
 
   @javascript
-  @chrome
   Scenario: Buyer can edit their personal details
     Given the buyer wants to edit their personal details
     When the buyer with SSO edits their personal details

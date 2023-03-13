@@ -76,3 +76,16 @@ Then "the buyer shouldn't see any reference to password" do
   assert has_no_css?("#user_password")
   assert has_no_css?("#user_password_confirmation")
 end
+
+When "the buyer edits their custom personal details" do
+  fill_in('user[first_name]', with: 'Alfred')
+  fill_in('user[user_extra_required]', with: 'Butler')
+end
+
+Then "they should be able to edit their custom personal details" do
+  click_on 'Update Personal Details'
+  assert_flash 'USER WAS SUCCESFULLY UPDATED.'
+  assert_current_path admin_account_personal_details_path
+  assert_equal find('#user_first_name').value, current_user.first_name
+  assert_equal find('#user_user_extra_required').value, current_user.extra_fields["user_extra_required"]
+end

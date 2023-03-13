@@ -73,7 +73,7 @@ Then /^I should see field "([^\"]*)"$/ do |field|
   should have_field(field)
 end
 
-Then /^I should not see the fields:$/ do |table|
+Then /^(?:I|they) should not see the fields:$/ do |table|
   table.rows.each do |field|
     step %{I should not see field "#{field.first}"}
   end
