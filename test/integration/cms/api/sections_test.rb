@@ -116,7 +116,6 @@ module CMS
       end
 
       test 'create without title' do
-
         post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml, public: true}
 
         assert_response 422
