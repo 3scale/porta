@@ -97,4 +97,48 @@ class PageTest < ActiveSupport::TestCase
     page.expects(:tag_list).returns([]).once
     page.as_json(include: [:tag_list])
   end
+
+  test 'generates a system_name with proper format from title when creating' do
+    page = CMS::Page.new.tap do |p|
+      p.title = 'New Page'
+      p.provider = @provider
+      p.section = @provider.sections.root
+      p.path = '/new-page'
+    end
+
+    page.save!
+
+    assert_equal 'new-page', page.reload.system_name
+  end
+
+  test 'generates a system_name with proper format from title when updating' do
+    page = CMS::Page.new.tap do |p|
+      p.title = 'New Page'
+      p.system_name = 'sysname-1'
+      p.provider = @provider
+      p.section = @provider.sections.root
+      p.path = '/new-page'
+    end
+    page.save!
+
+    page.system_name = ''
+    page.save!
+
+    assert_equal 'new-page', page.reload.system_name
+  end
+
+  test "doesn't generate a system_name when one is given" do
+    sysname = 'sysname-1'
+    page = CMS::Page.new.tap do |p|
+      p.title = 'New Page'
+      p.system_name = sysname
+      p.provider = @provider
+      p.section = @provider.sections.root
+      p.path = '/new-page'
+    end
+
+    page.save!
+
+    assert_equal sysname, page.reload.system_name
+  end
 end
