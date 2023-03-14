@@ -1,3 +1,3 @@
 module.exports = {
-  loadStripe: () => Promise.resolve(null)
+  loadStripe: jest.fn(() => Promise.resolve(null))
 }

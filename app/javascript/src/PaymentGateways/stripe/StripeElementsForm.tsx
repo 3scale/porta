@@ -36,6 +36,7 @@ const CARD_OPTIONS: StripeCardElementOptions = {
 interface Props {
   setupIntentSecret: string;
   billingAddressDetails: BillingAddress;
+  billingName?: string;
   successUrl: string;
   isCreditCardStored: boolean;
 }
@@ -43,6 +44,7 @@ interface Props {
 const StripeElementsForm: FunctionComponent<Props> = ({
   setupIntentSecret,
   billingAddressDetails,
+  billingName = '',
   successUrl,
   isCreditCardStored
 }) => {
@@ -76,7 +78,7 @@ const StripeElementsForm: FunctionComponent<Props> = ({
         billing_details: {
           address: billingAddressDetails,
           email: '',
-          name: '',
+          name: billingName,
           phone: ''
         }
       }
