@@ -56,7 +56,10 @@ const apiResponse = {
 const accountData = {
   status: 200,
   results: {
-    user_keys: [{ name: 'Some App', value: '12345678' }]
+    user_keys: [
+      { name: 'Some App', value: '12345678' },
+      { name: 'Another App', value: '' }
+    ]
   }
 } as const
 
@@ -77,7 +80,8 @@ describe('when the request is fetching OpenAPI spec', () => {
 
     expect(examplesFirstParam).toEqual([
       { summary: 'First user key from latest 5 applications', value: '-' },
-      { summary: 'Some App', value: '12345678' }
+      { summary: 'Some App - 12345678', value: '12345678' },
+      { summary: 'Another App', value: '' }
     ])
     expect(examplesSecondParam).toBe(undefined)
   })

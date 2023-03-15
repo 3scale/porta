@@ -47,7 +47,7 @@ const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
     ? {
       ...param,
       examples: autocompleteData.reduce<{ summary: string; value: string }[]>((examples, item) => (
-        [...examples, { summary: `${item.name} - ${item.value}`, value: item.value }]
+        [...examples, { summary: item.value ? `${item.name} - ${item.value}` : item.name, value: item.value }]
       ), [{ summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-' }])
     }
     : param
@@ -148,5 +148,6 @@ export const autocompleteInterceptor = (response: SwaggerUIResponse, accountData
   if (specUrl !== response.url) {
     return response
   }
+  console.log(JSON.stringify(response))
   return autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
 }
