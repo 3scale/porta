@@ -27,7 +27,8 @@ const X_DATA_PARAMS_DESCRIPTIONS = {
   account_ids: 'Latest 5 accounts',
   access_token: 'Access Token',
   user_ids: 'First user (admin) of the latest 5 account',
-  service_ids: 'Latest 5 services',
+  service_ids: 'Service IDs',
+  service_tokens: 'Service tokens',
   admin_ids: 'Latest 5 users (admin) from your account',
   service_plan_ids: 'Latest 5 service plans',
   application_plan_ids: 'Latest 5 application plans',
@@ -46,7 +47,7 @@ const addAutocompleteToParam = (param: any, accountData: AccountData): any => {
     ? {
       ...param,
       examples: autocompleteData.reduce<{ summary: string; value: string }[]>((examples, item) => (
-        [...examples, { summary: item.name, value: item.value }]
+        [...examples, { summary: `${item.name} - ${item.value}`, value: item.value }]
       ), [{ summary: X_DATA_PARAMS_DESCRIPTIONS[xDataKey], value: '-' }])
     }
     : param

@@ -24,7 +24,7 @@
             "name": "service_token",
             "in": "query",
             "description": "Service token for the API service.",
-            "x-data-threescale-name": "access_token",
+            "x-data-threescale-name": "service_tokens",
             "required": true,
             "schema": {
               "type": "string"
@@ -112,7 +112,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "x-data-threescale-name": "service_tokens"
           },
           {
             "name": "service_id",
@@ -206,7 +207,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "x-data-threescale-name": "service_tokens"
           },
           {
             "name": "service_id",
@@ -295,7 +297,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "x-data-threescale-name": "service_tokens"
           },
           {
             "name": "service_id",
