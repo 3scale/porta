@@ -12,7 +12,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   }.freeze
 
   wrap_parameters :template, include: AVAILABLE_PARAMS,
-                             format: %i[json xml multipart_form url_encoded_form]
+                             format: %i[json multipart_form url_encoded_form]
 
   before_action :find_template, except: %i[index create]
 
