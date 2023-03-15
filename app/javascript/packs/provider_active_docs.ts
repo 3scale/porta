@@ -1,19 +1,20 @@
 // We can define the 3scale plugins here and export the modified bundle
-import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
-import { autocompleteInterceptor } from 'ActiveDocs/OAS3Autocomplete'
+import { renderApiDocs } from 'ActiveDocs/ThreeScaleApiDocs'
 
 import 'ActiveDocs/swagger-ui-3-provider-patch.scss'
 
-const accountDataUrl = '/p/admin/api_docs/account_data.json'
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+document.addEventListener('DOMContentLoaded', async () => {
+  const containerId = 'api-containers'
+  const container = document.getElementById(containerId)
 
-window.SwaggerUI = (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) => {
-  const responseInterceptor = (response: SwaggerUI.Response) => autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, args.url)
+  if (!container) {
+    throw new Error('The target ID was not found: ' + containerId)
+  }
 
-  SwaggerUI({
-    ...args,
-    responseInterceptor,
-    tryItOutEnabled: true
-  } as SwaggerUI.SwaggerUIOptions)
-}
+  const { baseUrl = '', apiDocsPath = '', apiDocsAccountDataPath = '' } = container.dataset
+
+  await renderApiDocs(container, apiDocsPath, baseUrl, apiDocsAccountDataPath)
+})

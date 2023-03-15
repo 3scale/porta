@@ -11,34 +11,10 @@
   <p class="InfoBox InfoBox--notice"><%= link_to 'Create an access token', provider_admin_user_access_tokens_path %> to authenticate against the Account Management API, the Analytics API and the Billing API.</p>
 <% end %>
 
-
-<div id="api-containers"></div>
-
-<script type="text/javascript">
-  $(function () {
-    let path = []
-    var response = '';
-    $.ajax({ type: "GET",
-             url: "<%= j api_docs_services_path %>",
-             async: false,
-             success : function(text)
-             {
-                 response = text.apis;
-                 var len = response.length
-                 for (var i = 0; i < len; i++)
-                  path.push(response[i].path)
-             }
-    });
-    path.forEach(function (url) {
-      var serviceEndpoint = "<%=j base_url.gsub(%r{/$}, '') %>"
-      dom_name = url.substring(url.lastIndexOf('/') + 1).replace(/\.json/g, '').replace(/\_/g, '-');
-      $('#api-containers').append($(`<div class="api-docs-wrap" id="${dom_name}" ></div>`));
-
-      if (dom_name == 'service-management-api') {
-        SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name});
-      } else {
-        SwaggerUI({ url: url, dom_id: '#' + ''+ dom_name }, serviceEndpoint);
-      }
-    });
-  });
-</script>
+<div
+  id="api-containers"
+  data-api-docs-path="<%= api_docs_services_path %>"
+  data-api-docs-account-data-path="<%= provider_admin_api_docs_account_data_path %>"
+  data-base-url="<%= base_url %>"
+>
+</div>
