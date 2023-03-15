@@ -74,6 +74,16 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal "https://#{backend_config[:host]}", json["servers"][0]["url"]
     end
 
+    test 'show the correct url for system APIs' do
+      system_apis = ApiDocs::ServicesController::API_SYSTEM_NAMES - [:service_management_api]
+      system_apis.each do |system_name|
+        get api_docs_service_path(format: :json, id: system_name)
+        assert_response :success
+        json = JSON.parse(response.body)
+        assert_equal request.base_url, json["servers"][0]["url"]
+      end
+    end
+
     test 'show backend_api endpoints only under rolling update enabled' do
       name_or_path_regex = /\A\/?admin[\/|_]api.*backend_(api|usage).*\z/
 
@@ -154,6 +164,15 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       System::Application.config.stubs(backend_client: { host: 'example.com' })
       api_json = ApiFile.new('Service Management API', 'service_management_api').json
       assert_equal 'https://example.com', api_json["servers"][0]["url"]
+    end
+
+    test 'servers url defaults to / for system apis' do
+      system_apis = ApiDocs::ServicesController::APIS.reject { |x| x[:system_name] == :service_management_api }
+
+      system_apis.each do |api|
+        api_json = ApiFile.new(api[:name], api[:system_name]).json
+        assert_equal '/', api_json["servers"][0]["url"]
+      end
     end
 
     def test_file_path
