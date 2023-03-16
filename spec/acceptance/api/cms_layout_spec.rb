@@ -16,10 +16,6 @@ resource 'CMS::Layout' do
       json(:resource) do
         it { should have_properties(expected_attributes).from(resource) }
       end
-
-      xml(:resource) do
-        it { should have_tags(expected_attributes).from(resource) }
-      end
     end
 
     context 'when requesting the shorten version' do
@@ -28,10 +24,6 @@ resource 'CMS::Layout' do
 
       json(:resource) do
         it { should have_properties(expected_attributes).from(resource) }
-      end
-
-      xml(:resource) do
-        it { should have_tags(expected_attributes).from(resource) }
       end
     end
   end

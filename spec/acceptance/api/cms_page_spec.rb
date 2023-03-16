@@ -43,12 +43,6 @@ resource 'CMS::Page' do
           expect(subject.keys).to eq(expected_attributes)
         end
       end
-
-      xml(:resource) do
-        it 'should have the correct attributes' do
-          expect(subject.root.elements.map(&:name)).to eq(expected_attributes)
-        end
-      end
     end
 
     context 'when requesting the shorten version' do
@@ -74,12 +68,6 @@ resource 'CMS::Page' do
       json(:resource, skip_resource_save: true) do
         it 'should have the correct attributes' do
           expect(subject.keys).to eq(expected_attributes)
-        end
-      end
-
-      xml(:resource) do
-        it 'should have the correct attributes' do
-          expect(subject.root.elements.map(&:name)).to eq(expected_attributes)
         end
       end
     end

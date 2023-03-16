@@ -5,7 +5,6 @@ require 'test_helper'
 module CMS
   module Api
     class TemplatesTest < ActionDispatch::IntegrationTest
-
       def setup
         @provider = FactoryBot.create(:provider_account)
         host! @provider.external_admin_domain
@@ -18,17 +17,16 @@ module CMS
         FactoryBot.create(:cms_builtin_page, provider: @provider,
                           section: @provider.sections.root)
 
-        get admin_api_cms_templates_path(format: :xml), params: { provider_key: @provider.provider_key }
+        get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
+        templates = response.parsed_body['templates']
 
-        assert_equal 4, doc.xpath('/templates/*').size
-        assert_equal 1, doc.xpath('/templates/partial').size
-        assert_equal 0, doc.xpath('/templates/partial/draft').size
-        assert_equal 1, doc.xpath('/templates/page').size
-        assert_equal 1, doc.xpath('/templates/builtin_page').size
-        assert_equal 1, doc.xpath('/templates/layout').size
+        assert_equal 4, templates.size
+        assert_equal 1, templates.find { |templ| templ['partial'] }.values.size
+        assert_equal 1, templates.find { |templ| templ['page'] }.values.size
+        assert_equal 1, templates.find { |templ| templ['builtin_page'] }.values.size
+        assert_equal 1, templates.find { |templ| templ['layout'] }.values.size
 
         get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
@@ -38,20 +36,24 @@ module CMS
         23.times { FactoryBot.create(:cms_page, provider: @provider)  }
 
         # first page
-        get admin_api_cms_templates_path(format: :xml), params: { provider_key: @provider.provider_key }
+        get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
-        doc = Nokogiri::XML::Document.parse(@response.body)
 
-        assert_equal '1', doc.xpath('/templates/@current_page').text
-        assert_equal '2', doc.xpath('/templates/@total_pages').text
-        assert_equal '23', doc.xpath('/templates/@total_entries').text
-        assert_equal 20, doc.xpath('/templates/*').size
+        assert_equal 20, response.parsed_body['templates'].size
+        assert_equal(
+          { per_page: 20, total_entries: 23, total_pages: 2, current_page: 1 },
+          response.parsed_body['metadata'].symbolize_keys
+        )
 
         # second page
-        get admin_api_cms_templates_path(format: :xml), params: { provider_key: @provider.provider_key, page: 2 }
+        get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key, page: 2 }
         assert_response :success
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        assert_equal 3, doc.xpath('/templates/*').size
+
+        assert_equal 3, response.parsed_body['templates'].size
+        assert_equal(
+          { per_page: 20, total_entries: 23, total_pages: 2, current_page: 2 },
+          response.parsed_body['metadata'].symbolize_keys
+        )
       end
 
       test 'json index' do
@@ -69,15 +71,15 @@ module CMS
       test 'explicit per_page parameter' do
         10.times { FactoryBot.create(:cms_layout, provider: @provider) }
 
-        common = { provider_key: @provider.provider_key, format: :xml }
+        common = { provider_key: @provider.provider_key, format: :json }
         get admin_api_cms_templates_path, params: common.merge(per_page: 5)
         assert_response :success
-        doc = Nokogiri::XML::Document.parse(@response.body)
 
-        assert_equal '5', doc.xpath('/templates/@per_page').text
-        assert_equal '10', doc.xpath('/templates/@total_entries').text
-        assert_equal '2', doc.xpath('/templates/@total_pages').text
-        assert_equal '1', doc.xpath('/templates/@current_page').text
+        assert_equal 5, response.parsed_body['templates'].size
+        assert_equal(
+          { per_page: 5, total_entries: 10, total_pages: 2, current_page: 1 },
+          response.parsed_body['metadata'].symbolize_keys
+        )
       end
 
       test 'index does not show email templates' do
@@ -86,29 +88,27 @@ module CMS
         FactoryBot.create(:cms_builtin_legal_term, provider: @provider)
 
         # first page
-        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml }
+        get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json }
         assert_response :success
-        doc = Nokogiri::XML::Document.parse(@response.body)
 
-        assert_equal 2, doc.xpath('/templates/*').size
+        assert_equal 2, response.parsed_body['templates'].size
       end
 
       # TODO: check XML content
       test 'show partial' do
         partial = FactoryBot.create(:cms_partial, provider: @provider)
 
-        get admin_api_cms_template_path(partial), params: { provider_key: @provider.provider_key, id: partial.id, format: :xml }
+        get admin_api_cms_template_path(partial), params: { provider_key: @provider.provider_key, id: partial.id, format: :json }
         assert_response :success
       end
 
       test 'show builtin page' do
         builtin = FactoryBot.create(:cms_builtin_page, provider: @provider)
 
-        get admin_api_cms_template_path(builtin), params: { provider_key: @provider.provider_key, id: builtin.id, format: :xml }
+        get admin_api_cms_template_path(builtin), params: { provider_key: @provider.provider_key, id: builtin.id, format: :json }
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        assert_empty doc.xpath('/page/path')
+        assert_nil response.parsed_body['builtin_page']['path']
       end
 
       test 'show static build in page' do
@@ -119,20 +119,19 @@ module CMS
         assert_response :success
         assert_equal static.system_name, JSON.parse(response.body)['builtin_page']['system_name']
 
-        get admin_api_cms_template_path(static, format: :xml), params: { provider_key: @provider.provider_key, id: static.id }
+        get admin_api_cms_template_path(static, format: :json), params: { provider_key: @provider.provider_key, id: static.id }
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(response.body)
-        assert_equal static.system_name, doc.xpath("//builtin_page/system_name").text
+        assert_equal static.system_name, response.parsed_body['builtin_page']['system_name']
       end
 
       test 'show page' do
         page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool')
-        get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :xml }
+
+        get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json }
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        assert_equal '/cool', doc.xpath('/page/path').text
+        assert_equal '/cool', response.parsed_body['page']['path']
       end
 
       {
@@ -141,20 +140,18 @@ module CMS
       }.each do |name, published|
         test "show a page with #{name} inside the content" do
           page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool', published: published)
-          get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :xml }
+          get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json }
           assert_response :success
 
-          doc = Nokogiri::XML::Document.parse(@response.body)
-          element = doc.xpath('/page/published')
-          assert element.first.children.first.cdata?
-          assert_equal published, element.text
+          page = response.parsed_body['page']
+          assert_equal published, page['published']
         end
       end
 
       test 'publish' do
         page = FactoryBot.create(:cms_page, provider: @provider, draft: 'new', published: 'old' )
 
-        put publish_admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, format: :xml }
+        put publish_admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, format: :json }
         assert_response :success
 
         assert_equal 'new', page.reload.published
@@ -162,7 +159,7 @@ module CMS
 
       test 'invalid update' do
         page = FactoryBot.create(:cms_page, provider: @provider)
-        put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, path: 'invalid-path/', format: :xml }
+        put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, path: 'invalid-path/', format: :json }
         assert_response :unprocessable_entity
       end
 
@@ -170,7 +167,7 @@ module CMS
         new_layout = FactoryBot.create(:cms_layout, system_name: 'NEW', provider: @provider)
         page = FactoryBot.create(:cms_page, provider: @provider)
 
-        put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :xml,
+        put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json,
                                                          title: 'new title', content_type: 'text/xml', layout_name: 'NEW' }
 
         assert_response :success
@@ -206,7 +203,7 @@ module CMS
         page = FactoryBot.create(:cms_page, :provider => @provider)
 
         put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id,
-                                                         format: :xml, layout_id: new_layout.id
+                                                         format: :json, layout_id: new_layout.id
         }
 
         assert_response :success
@@ -214,18 +211,18 @@ module CMS
       end
 
       test 'create with missing or invalid type fails' do
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml,
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json,
                                                      type: 'INVALID', title: 'test template' }
         assert_response :unprocessable_entity
 
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, title: 'test template' }
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json, title: 'test template' }
         assert_response :unprocessable_entity
       end
 
       test 'create' do
         layout = FactoryBot.create(:cms_layout, :system_name => 'new-layout', :provider => @provider)
 
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml,
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json,
           type: 'page',
           path: '/',
           content_type: 'text/html',
@@ -234,8 +231,7 @@ module CMS
 
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        id = doc.xpath('//id').text
+        id = response.parsed_body['page']['id']
         page = @provider.pages.find(id.to_i)
 
         assert_equal 'Rake 5000', page.title
@@ -269,11 +265,10 @@ module CMS
         assert_response :success
 
         assert_equal "The page Over 9000", response.body
-
       end
 
       test 'create a layout' do
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml,
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json,
           type: 'layout',
           system_name: 'foo',
           draft: 'bar',
@@ -282,24 +277,26 @@ module CMS
         }
 
         assert_response :success
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        assert_equal 'foo', doc.xpath('//system_name').text
-        assert_equal 'bar', doc.xpath('//draft').text
-        assert_equal 'a title', doc.xpath('//title').text
-        assert_equal 'true', doc.xpath('//liquid_enabled').text
+
+        layout = response.parsed_body['layout']
+        assert_equal 'foo', layout['system_name']
+        assert_equal 'bar', layout['draft']
+        assert_equal 'a title', layout['title']
+        assert_equal true, layout['liquid_enabled']
       end
 
       test 'create a partial' do
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml,
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json,
           type: 'partial',
           system_name: 'foo',
           draft: 'bar'
         }
-        assert_response :success
-        doc = Nokogiri::XML::Document.parse(@response.body)
 
-        assert_equal 'foo', doc.xpath('//system_name').text
-        assert_equal 'bar', doc.xpath('//draft').text
+        assert_response :success
+
+        partial = response.parsed_body['partial']
+        assert_equal 'foo', partial['system_name']
+        assert_equal 'bar', partial['draft']
       end
     end
   end
