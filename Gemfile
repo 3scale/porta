@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 # to not use insecure git protocol
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rack', '~> 2.1.4'
+gem 'rack', '~> 2.2.6'
 
 gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
