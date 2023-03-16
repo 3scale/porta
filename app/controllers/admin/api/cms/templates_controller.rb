@@ -13,6 +13,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
 
   wrap_parameters :template, include: AVAILABLE_PARAMS,
                              format: %i[json xml multipart_form url_encoded_form]
+  class_always_permitted_parameters %i[type layout_name section_name]
 
   before_action :find_template, except: %i[index create]
 
