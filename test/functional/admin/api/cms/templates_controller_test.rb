@@ -19,7 +19,7 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
       assert_response :success
       assert_equal(
         %w[id created_at updated_at system_name draft published],
-        response.parsed_body['builtin_partial'].keys
+        JSON.parse(response.body)['builtin_partial'].keys
       )
     end
 
