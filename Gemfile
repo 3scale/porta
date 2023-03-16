@@ -250,7 +250,7 @@ group :development, :test do
   gem 'unicorn-rails'
 end
 
-gem 'webpacker', '5.4.4'
+gem 'shakapacker', '= 6.6'
 
 gem 'developer_portal', path: 'lib/developer_portal'
 gem 'unicorn', require: false, group: %i[production preview]

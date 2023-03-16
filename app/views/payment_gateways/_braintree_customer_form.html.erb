@@ -1,5 +1,5 @@
 <div id="braintree-form-wrapper" data-braintree-form="<%= braintree_form_data.to_json %>"></div>
-<%= javascript_pack_tag 'braintree_customer_form'%>
+<% - append_javascript_pack_tag 'braintree_customer_form'%>
 
 <% unless @errors.blank? %>
     <div class="errorExplanation" id="errorExplanation">

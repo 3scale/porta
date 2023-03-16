@@ -1,9 +1,10 @@
 // scss-lint:disable SelectorFormat
 
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-.PolicyConfiguration {
-  @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-}
+// TODO: what is this? Can we remove it? It breaks babel
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+// .PolicyConfiguration {
+//   @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+// }
 
 $body-background: #fff;
 $color: #464646;

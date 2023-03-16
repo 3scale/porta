@@ -1,7 +1,6 @@
 - content_for :sublayout_title, 'Hourly Averages'
 
-- content_for :javascripts do
-  = javascript_pack_tag 'provider_stats'
+- append_javascript_pack_tag 'provider_stats'
 
 .Stats
   .StatsSelector-container

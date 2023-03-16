@@ -12,9 +12,12 @@
     "ci:lint": "eslint --ext .js,.jsx,.ts,.tsx . --quiet"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.14.7",
-    "@babel/preset-react": "^7.14.5",
+    "@babel/core": "7.14.8",
+    "@babel/plugin-transform-runtime": "7.14.5",
+    "@babel/preset-env": "7.14.9",
+    "@babel/preset-react": "7.14",
+    "@babel/preset-typescript": "7.14.5",
+    "@babel/runtime": "7.14.8",
     "@types/braintree-web": "3.75.22",
     "@types/c3": "^0.7.8",
     "@types/enzyme": "^3.10.12",
@@ -36,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^4",
     "@typescript-eslint/parser": "4",
     "babel-loader": "8.2.5",
+    "compression-webpack-plugin": "9",
     "css-loader": "^2.1.1",
     "empty": "^0.10.1",
     "enzyme": "^3.3.0",
@@ -46,27 +50,34 @@
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "24.7.0",
-    "eslint-plugin-react": "^7.21.0",
+    "eslint-plugin-react": "7.31.7",
     "file-loader": "^6.2.0",
     "hosted-git-info": "^2.7.1",
     "jest": "^27",
     "jest-transform-stub": "^2.0.0",
+    "mini-css-extract-plugin": "2.7.3",
     "mockdate": "^3.0.5",
     "null-loader": "^3.0.0",
+    "postcss": "8.4.21",
+    "postcss-cssnext": "3.1.1",
     "postcss-loader": "^3.0.0",
     "postcss-smart-import": "^0.7.6",
     "raf": "^3.4.1",
     "redux-immutable-state-invariant": "^2.1.0",
     "regenerator-runtime": "^0.13.1",
     "sass-loader": "^7.1.0",
+    "shakapacker": "6.6.0",
     "style-loader": "^0.23.1",
     "swagger-tools": "^0.10.4",
+    "terser-webpack-plugin": "4",
     "ts-jest": "^27",
     "ts-loader": "8.4.0",
     "typescript": "^4.8.4",
-    "webpack": "4.46.0",
-    "webpack-cli": "3.3.12",
-    "webpack-dev-server": "3.11.1",
+    "webpack": "5.76.1",
+    "webpack-assets-manifest": "5",
+    "webpack-cli": "4.10.0",
+    "webpack-dev-server": "^4.11.1",
+    "webpack-merge": "5",
     "yaml-loader": "^0.6.0"
   },
   "dependencies": {
@@ -76,7 +87,6 @@
     "@patternfly/react-icons": "^3.14.18",
     "@patternfly/react-styles": "^4.8.2",
     "@patternfly/react-table": "^4.18.14",
-    "@rails/webpacker": "5.4.4",
     "@stripe/react-stripe-js": "1.16.5",
     "@stripe/stripe-js": "1.37.0",
     "bootstrap-sass": "^3.4.1",
@@ -104,8 +114,25 @@
     "redux-api-middleware": "^3.0.1",
     "redux-thunk": "^2.3.0",
     "select2": "^4.0.6-rc.1",
-    "swagger-ui": "^3.51.1",
+    "swagger-ui": "3.51.2",
     "validate.js": "^0.13.1",
     "virtual-dom": "^2.1.1"
-  }
+  },
+  "babele": {
+    "presets": [
+      "./node_modules/shakapacker/package/babel/preset.js",
+      "@babel/preset-react"
+    ]
+  },
+  "babel": {
+    "plugins": [
+    ],
+    "presets": [
+      "@babel/preset-env",
+      "@babel/react"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }

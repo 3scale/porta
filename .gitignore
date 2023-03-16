@@ -147,3 +147,5 @@ config/cable.yml
 package-lock.json
 *.orig
 yarn-error.log
+yarn-debug.log*
+.yarn-integrity

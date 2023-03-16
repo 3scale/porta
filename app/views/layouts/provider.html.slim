@@ -7,10 +7,8 @@ html[lang="en" class="pf-m-redhat-font"]
       |  | Red Hat 3scale API Management
     = csrf_meta_tag
     = rails_asset_url_tag
-    = javascript_pack_tag 'PF4Styles/base'
     = render 'provider/theme'
     = render 'provider/analytics'
-    = javascript_pack_tag 'settings_page_styles'
     = javascript_include_tag 'provider/layout/provider'
     = yield :javascripts
 
@@ -29,3 +27,7 @@ html[lang="en" class="pf-m-redhat-font"]
             = yield
         = render partial: "/provider/footer"
     = render partial: '/shared/provider/call_to_action' if call_to_action?
+
+/ = javascript_pack_tag 'PF4Styles/base', 'settings_page_styles', 'dashboard'
+
+= javascript_pack_tag 'dashboard'

@@ -58,4 +58,4 @@ p
     = form.commit_button 'Save credit card', button_html: { disabled: true }
 
 span#braintree_data data-client-token=braintree_authorization
-  = javascript_pack_tag 'braintree_provider_form'
+  - append_javascript_pack_tag 'braintree_provider_form'

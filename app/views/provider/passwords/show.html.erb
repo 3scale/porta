@@ -1,4 +1,4 @@
-<%= javascript_pack_tag 'change_password' %>
+<% append_javascript_pack_tag 'change_password' %>
 
 <%= tag :div, id: 'pf-login-page-container',
               data: { change_password_props: @password_presenter.change_password_props_json } %>
