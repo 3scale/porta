@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Developer Portal API",
+    "title": "Developer Portal API (Tech Preview)",
     "description": "API for managing the Developer Portal.",
     "version": "1.0"
   },

@@ -56,9 +56,9 @@ class ApiDocs::ServicesController < FrontendController
 
     def file_name
       if onpremises_version? && onpremises_version_preferred?
-        "#{name} (on-premises)"
+        "#{system_name}_on_premises"
       else
-        name
+        system_name
       end
     end
 

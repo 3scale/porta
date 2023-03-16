@@ -178,11 +178,11 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
     def test_file_path
       Rails.application.config.three_scale.stubs(onpremises_api_docs_version: false)
       api_file = ApiFile.new('Service Management API', 'service_management_api')
-      assert_not_match '(on-premises)', api_file.file_path.to_s
+      assert_not_match '_on_premises', api_file.file_path.to_s
 
       Rails.application.config.three_scale.stubs(onpremises_api_docs_version: true)
       api_file = ApiFile.new('Service Management API', 'service_management_api')
-      assert_match '(on-premises)', api_file.file_path.to_s
+      assert_match '_on_premises', api_file.file_path.to_s
     end
   end
 
