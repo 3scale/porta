@@ -148,6 +148,5 @@ export const autocompleteInterceptor = (response: SwaggerUIResponse, accountData
   if (specUrl !== response.url) {
     return response
   }
-  console.log(JSON.stringify(response))
   return autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
 }

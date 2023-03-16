@@ -5,8 +5,7 @@ import { renderApiDocs } from 'ActiveDocs/ThreeScaleApiDocs'
 
 import 'ActiveDocs/swagger-ui-3-provider-patch.scss'
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   const containerId = 'api-containers'
   const container = document.getElementById(containerId)
 
@@ -16,5 +15,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const { baseUrl = '', apiDocsPath = '', apiDocsAccountDataPath = '' } = container.dataset
 
-  await renderApiDocs(container, apiDocsPath, baseUrl, apiDocsAccountDataPath)
+  void renderApiDocs(container, apiDocsPath, baseUrl, apiDocsAccountDataPath)
 })

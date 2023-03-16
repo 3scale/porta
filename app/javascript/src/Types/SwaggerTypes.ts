@@ -12,6 +12,7 @@ export interface ApiDocsService {
   path: string;
   service_endpoint: string;
 }
+
 export interface ApiDocsServices {
   host: string;
   apis: ApiDocsService[];

@@ -1,18 +1,20 @@
-import $ from 'jquery'
 import SwaggerUI from 'swagger-ui'
 
 import { fetchData } from 'utilities/fetchData'
+import { autocompleteInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
 import type { ApiDocsServices } from 'Types/SwaggerTypes'
 
-import { autocompleteInterceptor } from './OAS3Autocomplete'
-
 const getApiSpecUrl = (baseUrl: string, specPath: string): string => {
-  return `${baseUrl.replace(/\/$/, '')}/${specPath}`
+  return `${baseUrl.replace(/\/$/, '')}${specPath}`
 }
 
 const appendSwaggerDiv = (container: HTMLElement, id: string): void => {
-  $(container).append($(`<div class="api-docs-wrap" id="${id}" ></div>`))
+  const div = document.createElement('div')
+  div.setAttribute('class',  'api-docs-wrap')
+  div.setAttribute('id', id)
+
+  container.appendChild(div)
 }
 
 export const renderApiDocs = async (container: HTMLElement, apiDocsPath: string, baseUrl: string, apiDocsAccountDataPath: string): Promise<void> => {
