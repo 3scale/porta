@@ -16,7 +16,7 @@ class ApiSupport::ParamsTest < ActionDispatch::IntegrationTest
       post '/test/default' => 'api_support/params_test/class_action_on_unpermitted/default/default#create'
       post '/test/log' => 'api_support/params_test/class_action_on_unpermitted/log/log#create'
       post '/test/raise' => 'api_support/params_test/class_action_on_unpermitted/raise/raise#create'
-      post '/test/permitted_param' => 'api_support/params_test/class_action_on_unpermitted/permitted_param/permitted_param#create'
+      post '/test/permitted_param' => 'api_support/params_test/permitted_param/permitted_param#create'
     end
     yield
   ensure
