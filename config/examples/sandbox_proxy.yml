@@ -12,8 +12,6 @@ base: &default
   self_managed_apicast_registry_url: <%= ENV['APICAST_REGISTRY_URL'] %>
   sandbox_endpoint: 'https://%{system_name}-%{account_id}.staging.%{env}apicast.io:%{port}'
   hosted_proxy_endpoint: 'https://%{system_name}-%{account_id}.%{env}apicast.io:%{port}'
-  debug: true
-  override: 'http://localhost:8091'
 
 development:
   <<: *default
@@ -21,6 +19,8 @@ development:
     - hello-world-api.3scale.net
   ignore_test_failures:
     - echo-api.3scale.net
+  override: 'http://localhost:8091'
+  debug: true
 
 test:
   <<: *default

@@ -1,5 +1,5 @@
 base: &default
-  enabled: true
+  enabled: false
   allow:
   - origins: '*'
     resources:
@@ -19,4 +19,5 @@ test:
 
 production:
   <<: *default
+  enabled: true
 

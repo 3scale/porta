@@ -36,6 +36,8 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   def test_enterprise
+    # ensure `service_permissions` rolling update is not configured
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({})
     account = FactoryBot.build_stubbed(:simple_account)
     plan    = FactoryBot.build_stubbed(:simple_application_plan, system_name: 'alex')
 

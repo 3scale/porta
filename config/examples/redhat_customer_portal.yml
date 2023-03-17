@@ -13,6 +13,7 @@ development:
 
 test:
   <<: *default
+  enabled: true
   client_id: fake_id
   client_secret: fake_secret
   realm: http://my-keycloak-server/auth/realms/rh-customer-portal

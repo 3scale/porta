@@ -76,7 +76,7 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
   end
 
   test 'provider signup path excluded in example configs' do
-    ["config/docker", "config/examples"].each do |config_dir|
+    ["config/examples"].each do |config_dir|
       stub_config = YAML.load_file(Rails.root.join(config_dir, "cors.yml"))["cors"].merge({"enabled" => true})
       assert_not_empty stub_config["exclude"]
 

@@ -24,6 +24,7 @@ development:
 
 test:
   <<: *default
+  published_service_plan_signup:
 
 production:
   <<: *default
