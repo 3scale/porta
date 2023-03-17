@@ -2,11 +2,9 @@ base: &default
   - :mem_cache_store
   - <%= ENV['MEMCACHE_SERVERS'].presence || 'localhost:11211' %>
 
-development:
-  <<: *default
+development: *default
 
 test:
   - :null_store
 
-production:
-  <<: *default
+production: *default

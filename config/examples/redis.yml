@@ -15,4 +15,4 @@ test:
 
 production:
   <<: *default
-  url: "<%= ENV.fetch('REDIS_URL') %>"
+  url: "<%= ENV.fetch('REDIS_URL','redis://localhost:6379/10') %>"
