@@ -12,7 +12,7 @@ ln -s .tool-versions.sample .tool-versions
 
 ### Ruby and Node.js
 
-The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 12](https://nodejs.org/en/download/)**.
+The project supports **[ruby 2.6.x](https://www.ruby-lang.org/en/downloads/)** and **[Node.js 16](https://nodejs.org/download/release/v16.19.1/)**.
 The recommended way to install them is with `asdf`:
 
 ```
@@ -24,7 +24,7 @@ asdf install
 
 > Alternatively, Node.js can be installed as a [Module](https://developer.fedoraproject.org/tech/languages/nodejs/nodejs.html):
 > ```
-> dnf module install nodejs:12
+> dnf module install nodejs:16
 > ```
 
 ### Dependencies
