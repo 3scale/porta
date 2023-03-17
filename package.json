@@ -11,6 +11,9 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "ci:lint": "eslint --ext .js,.jsx,.ts,.tsx . --quiet"
   },
+  "engines": {
+    "node": "14"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.14.7",
