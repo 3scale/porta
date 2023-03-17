@@ -1,3 +1,20 @@
+FROM quay.io/centos/centos:stream8 as assets-builder
+WORKDIR /opt/system
+ENV RAILS_ENV=production \
+    NODE_ENV=production
+ADD . ./
+ADD openshift/system/config/* ./config/
+RUN dnf -y module enable ruby:2.7 nodejs:16 mysql:8.0 \
+    && dnf install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs shared-mime-info make automake gcc gcc-c++ redhat-rpm-config postgresql rubygem-irb rubygem-rdoc ruby-devel nodejs libpq-devel mysql-devel gd-devel git \
+    && gem install bundler --version 2.2.25 \
+    && bundle config set --local without development:test:licenses \
+    && bundle config set --local deployment true \
+    && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5 \
+    && npm install -g yarn \
+    && yarn install:safe --no-progress \
+    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear
+
+
 FROM quay.io/centos7/ruby-27-centos7 AS porta-base
 
 USER root
@@ -11,7 +28,6 @@ ENV RUBY_VERSION="${RUBY_MAJOR_VERSION}.${RUBY_MINOR_VERSION}" \
 ENV TZ=:/etc/localtime \
     BUNDLE_GEMFILE=Gemfile \
     VARNISH_SCL=rh-varnish6 \
-    NODEJS_SCL=rh-nodejs14 \
     RUBY_SCL="rh-ruby${RUBY_SCL_NAME_VERSION}" \
     GIT_SCL=rh-git227
 
@@ -30,7 +46,6 @@ RUN yum-config-manager --save --setopt=cbs.centos.org_repos_sclo7-$RUBY_SCL-rh-c
               llvm5.0-devel \
               postgresql13 postgresql13-devel postgresql13-libs \
               file \
-              $NODEJS_SCL \
               $VARNISH_SCL-jemalloc \
               $GIT_SCL \
     && yum -y clean all \
@@ -57,25 +72,23 @@ RUN source /opt/app-root/etc/scl_enable \
     && gem install bundler --version 2.2.25 \
     && bundle config build.pg --with-pg-config=/usr/pgsql-13/bin/pg_config \
     && bundle config set --local without development:test:licenses \
-    && bundle install --deployment --jobs $(grep -c processor /proc/cpuinfo) --retry=5
+    && bundle config set --local deployment true \
+    && bundle install --jobs $(grep -c processor /proc/cpuinfo) --retry=5
 
 RUN chgrp root /opt/system/
 
 ADD . ./
-ADD package.json ./
-ADD yarn.lock ./
 ADD openshift/system/config/* ./config/
+
+COPY --from=assets-builder /opt/system/public/assets public/assets
+COPY --from=assets-builder /opt/system/public/packs public/packs
 
 RUN source /opt/app-root/etc/scl_enable \
     && bundle exec rake tmp:create \
-    && mkdir -p public/assets db/sphinx tmp/prometheus-client-mmap-dir \
+    && mkdir -p db/sphinx tmp/prometheus-client-mmap-dir \
     && chmod g+w -vfR log tmp public/assets db/sphinx \
     && umask 0002 \
-    && cd /opt/system \
-    && npm install -g yarn \
-    && yarn install:safe --no-progress \
-    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
-    && rm log/*.log \
+    && rm -f log/*.log \
     && chmod g+w /opt/system/config
 
 ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
