@@ -2,8 +2,6 @@
 
 class ApiDocs::ServicesController < FrontendController
 
-  include ApplicationHelper
-
   class ApiFileDoesNotExist < StandardError; end
 
   delegate :api_files, :apis, to: 'self.class'
@@ -141,6 +139,6 @@ class ApiDocs::ServicesController < FrontendController
   end
 
   def update_base_url(api_spec)
-    api_spec['servers'] = [{ 'url' => base_url.gsub(%r{/$}, '') }] if api_spec['servers'][0]['url'] == '/'
+    api_spec['servers'] = [{ 'url' => helpers.base_url.gsub(%r{/$}, '') }] if api_spec['servers'][0]['url'] == '/'
   end
 end
