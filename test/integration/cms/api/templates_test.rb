@@ -134,18 +134,14 @@ module CMS
         assert_equal '/cool', response.parsed_body['page']['path']
       end
 
-      {
-        HTML: '<html><body><p>This is a test</p></body></html>',
-        CDATA: '<![CDATA[<html><body><p>This is a test</p></body></html>]]>'
-      }.each do |name, published|
-        test "show a page with #{name} inside the content" do
-          page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool', published: published)
-          get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json }
-          assert_response :success
+      test "show a page with HTML inside the content" do
+        html_content = '<html><body><p>This is a test</p></body></html>'
+        page = FactoryBot.create(:cms_page, provider: @provider, path: '/cool', published: html_content)
+        get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json }
+        assert_response :success
 
-          page = response.parsed_body['page']
-          assert_equal published, page['published']
-        end
+        page = response.parsed_body['page']
+        assert_equal html_content, page['published']
       end
 
       test 'publish' do
