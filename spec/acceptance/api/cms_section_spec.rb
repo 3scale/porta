@@ -36,24 +36,21 @@ resource 'CMS::Section' do
 
     context 'when the resource is a new record' do
       let(:resource) { FactoryBot.build(:cms_section, provider: provider, parent: provider.sections.root) }
-      let(:root) { 'section' }
       let(:expected_attributes) { %w[title system_name public parent_id partial_path] }
 
-      json(:resource) do
+      json(:resource, skip_root_check: true) do
         it { should have_properties(expected_attributes).from(resource) }
       end
     end
 
     context 'when requesting a single resource' do
-      let(:root) { 'section' }
-
-      json(:resource) do
+      json(:resource, skip_root_check: true) do
         it { should have_properties(expected_attributes).from(resource) }
       end
     end
 
     context 'when requesting a collection' do
-      let(:root) { 'sections' }
+      let(:root) { 'collection' }
 
       json(:collection)
     end

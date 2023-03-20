@@ -20,14 +20,14 @@ module CMS
         get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
 
-        templates = response.parsed_body['templates']
+        templates = response.parsed_body['collection']
 
         assert_equal 4, templates.size
-        assert_equal 1, templates.find { |templ| templ['partial'] }.values.size
-        assert_nil templates.find { |templ| templ['partial'] }['partial']['draft']
-        assert_equal 1, templates.find { |templ| templ['page'] }.values.size
-        assert_equal 1, templates.find { |templ| templ['builtin_page'] }.values.size
-        assert_equal 1, templates.find { |templ| templ['layout'] }.values.size
+        assert_equal 1, templates.select { |templ| templ['type'] == 'partial' }.size
+        assert_nil templates.find { |templ| templ['type'] == 'partial' }['draft']
+        assert_equal 1, templates.select { |templ| templ['type'] == 'page' }.size
+        assert_equal 1, templates.select { |templ| templ['type'] == 'builtin_page' }.size
+        assert_equal 1, templates.select { |templ| templ['type'] == 'layout' }.size
 
         get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
@@ -40,7 +40,7 @@ module CMS
         get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key }
         assert_response :success
 
-        assert_equal 20, response.parsed_body['templates'].size
+        assert_equal 20, response.parsed_body['collection'].size
         assert_equal(
           { per_page: 20, total_entries: 23, total_pages: 2, current_page: 1 },
           response.parsed_body['metadata'].symbolize_keys
@@ -50,7 +50,7 @@ module CMS
         get admin_api_cms_templates_path(format: :json), params: { provider_key: @provider.provider_key, page: 2 }
         assert_response :success
 
-        assert_equal 3, response.parsed_body['templates'].size
+        assert_equal 3, response.parsed_body['collection'].size
         assert_equal(
           { per_page: 20, total_entries: 23, total_pages: 2, current_page: 2 },
           response.parsed_body['metadata'].symbolize_keys
@@ -66,7 +66,7 @@ module CMS
         assert_response :success
 
         assert_not_match 'mushrooms', response.body
-        assert_equal 3, JSON.parse(response.body)['templates'].size
+        assert_equal 3, JSON.parse(response.body)['collection'].size
       end
 
       test 'explicit per_page parameter' do
@@ -76,7 +76,7 @@ module CMS
         get admin_api_cms_templates_path, params: common.merge(per_page: 5)
         assert_response :success
 
-        assert_equal 5, response.parsed_body['templates'].size
+        assert_equal 5, response.parsed_body['collection'].size
         assert_equal(
           { per_page: 5, total_entries: 10, total_pages: 2, current_page: 1 },
           response.parsed_body['metadata'].symbolize_keys
@@ -92,7 +92,7 @@ module CMS
         get admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :json }
         assert_response :success
 
-        assert_equal 2, response.parsed_body['templates'].size
+        assert_equal 2, response.parsed_body['collection'].size
       end
 
       # TODO: check XML content
@@ -109,7 +109,7 @@ module CMS
         get admin_api_cms_template_path(builtin), params: { provider_key: @provider.provider_key, id: builtin.id, format: :json }
         assert_response :success
 
-        assert_nil response.parsed_body['builtin_page']['path']
+        assert_nil response.parsed_body['path']
       end
 
       test 'show static build in page' do
@@ -118,12 +118,12 @@ module CMS
         get admin_api_cms_template_path(static, format: :json), params: { provider_key: @provider.provider_key, id: static.id }
 
         assert_response :success
-        assert_equal static.system_name, JSON.parse(response.body)['builtin_page']['system_name']
+        assert_equal static.system_name, JSON.parse(response.body)['system_name']
 
         get admin_api_cms_template_path(static, format: :json), params: { provider_key: @provider.provider_key, id: static.id }
         assert_response :success
 
-        assert_equal static.system_name, response.parsed_body['builtin_page']['system_name']
+        assert_equal static.system_name, response.parsed_body['system_name']
       end
 
       test 'show page' do
@@ -132,7 +132,7 @@ module CMS
         get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json }
         assert_response :success
 
-        assert_equal '/cool', response.parsed_body['page']['path']
+        assert_equal '/cool', response.parsed_body['path']
       end
 
       test "show a page with HTML inside the content" do
@@ -141,8 +141,7 @@ module CMS
         get admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id, format: :json }
         assert_response :success
 
-        page = response.parsed_body['page']
-        assert_equal html_content, page['published']
+        assert_equal html_content, response.parsed_body['published']
       end
 
       test 'publish' do
@@ -228,7 +227,7 @@ module CMS
 
         assert_response :success
 
-        id = response.parsed_body['page']['id']
+        id = response.parsed_body['id']
         page = @provider.pages.find(id.to_i)
 
         assert_equal 'Rake 5000', page.title
@@ -248,7 +247,7 @@ module CMS
 
         assert_response :success
 
-        page = CMS::Page.find JSON.parse(response.body)['page']['id']
+        page = CMS::Page.find(JSON.parse(response.body)['id'])
         assert_equal section, page.section
 
         # publish this page
@@ -275,7 +274,7 @@ module CMS
 
         assert_response :success
 
-        layout = response.parsed_body['layout']
+        layout = response.parsed_body
         assert_equal 'foo', layout['system_name']
         assert_equal 'bar', layout['draft']
         assert_equal 'a title', layout['title']
@@ -291,7 +290,7 @@ module CMS
 
         assert_response :success
 
-        partial = response.parsed_body['partial']
+        partial = response.parsed_body
         assert_equal 'foo', partial['system_name']
         assert_equal 'bar', partial['draft']
       end

@@ -11,26 +11,28 @@ resource "CMS::Partial" do
       system_name: 'some-partial',
       liquid_enabled: false,
       handler: 'markdown'
-    )
+    ).extend(CMS::PartialRepresenter)
   end
 
   describe 'representer' do
-    let(:root) { 'partial' }
-
     context 'when requesting all attributes' do
-      let(:expected_attributes) { %w[id created_at updated_at system_name draft published] }
+      let(:expected_attributes) { %w[id type created_at updated_at system_name draft published] }
 
-      json(:resource) do
-        it { should have_properties(expected_attributes).from(resource) }
+      json(:resource, skip_root_check: true) do
+        it 'should have the correct attributes' do
+          expect(subject.keys).to eq(expected_attributes)
+        end
       end
     end
 
     context 'when requesting the shorten version' do
-      let(:expected_attributes) { %w[id created_at updated_at system_name] }
+      let(:expected_attributes) { %w[id type created_at updated_at system_name] }
       let(:serialized) { representer.public_send(serialization_format, short: true) }
 
-      json(:resource) do
-        it { should have_properties(expected_attributes).from(resource) }
+      json(:resource, skip_root_check: true) do
+        it 'should have the correct attributes' do
+          expect(subject.keys).to eq(expected_attributes)
+        end
       end
     end
   end

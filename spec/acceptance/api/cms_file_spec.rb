@@ -40,10 +40,9 @@ resource 'CMS::File' do
 
     context 'when the resource is a new record' do
       let(:resource) { FactoryBot.build(:cms_file, provider: provider, section: provider.sections.root) }
-      let(:root) { 'file' }
       let(:expected_attributes) { %w[section_id path downloadable url title content_type] }
 
-      json(:resource, skip_resource_save: true) do
+      json(:resource, skip_resource_save: true, skip_root_check: true) do
         it 'should have the correct attributes' do
           expect(subject.keys).to eq(expected_attributes)
         end
@@ -51,9 +50,7 @@ resource 'CMS::File' do
     end
 
     context 'when requesting a single resource' do
-      let(:root) { 'file' }
-
-      json(:resource) do
+      json(:resource, skip_root_check: true) do
         it 'should have the correct attributes' do
           expect(subject.keys).to eq(expected_attributes)
         end
@@ -61,7 +58,7 @@ resource 'CMS::File' do
     end
 
     context 'when requesting a collection' do
-      let(:root) { 'files' }
+      let(:root) { 'collection' }
 
       json(:collection)
     end

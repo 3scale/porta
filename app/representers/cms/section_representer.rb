@@ -4,8 +4,6 @@ module CMS
   module SectionRepresenter
     include ThreeScale::JSONRepresenter
 
-    wraps_resource ->(*) { self.class.data_tag }
-
     with_options(unless: :new_record?) do
       property :id
       property :created_at
