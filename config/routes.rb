@@ -551,12 +551,8 @@ without fake Core server your after commit callbacks will crash and you might ge
       end
 
       namespace(:cms) do
-        resources :sections do
-          resources :files, only: :index
-          #resources :templates, only: :index
-          #resources :sections, only: :index
-        end
-        resources :files
+        resources :sections, except: %i[new edit]
+        resources :files, except: %i[new edit]
         resources :templates, :only => [ :index, :create, :show, :update, :destroy ] do
           member do
             put :publish

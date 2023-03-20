@@ -33,11 +33,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_per_page
   ##~ op.parameters.add @parameter_access_token
   def index
-    files = (if params[:section_id]
-      current_account.sections.find_by_id_or_system_name!(params[:section_id]).files
-             else
-      current_account.files
-    end).paginate(page: params[:page] || 1, per_page: per_page)
+    files = current_account.files.paginate(page: params[:page] || 1, per_page: per_page)
 
     respond_with files
   end
