@@ -24,6 +24,7 @@ module CMS
 
         assert_equal 4, templates.size
         assert_equal 1, templates.find { |templ| templ['partial'] }.values.size
+        assert_nil templates.find { |templ| templ['partial'] }['partial']['draft']
         assert_equal 1, templates.find { |templ| templ['page'] }.values.size
         assert_equal 1, templates.find { |templ| templ['builtin_page'] }.values.size
         assert_equal 1, templates.find { |templ| templ['layout'] }.values.size
