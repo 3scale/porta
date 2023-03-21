@@ -21,7 +21,7 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
     if resource.errors.empty? && resource.update(user_params)
       resource.kill_user_sessions(user_session) if resource.just_changed_password?
 
-      redirect_to redirect_path, notice: 'User was succesfully updated.'
+      redirect_to admin_account_users_path, notice: 'User was successfully updated.'
     else
       assign_user_drop
       render :action => 'show'
@@ -42,19 +42,6 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   def deny_unless_can_update
     unless can?(:update, current_user)
       render :plain => 'Action disabled', :status => :forbidden
-    end
-  end
-
-  def redirect_path
-    #TODO: Test this
-    if params[:origin] == "users"
-      if current_account.provider?
-        provider_admin_account_users_path
-      else
-        admin_account_users_path
-      end
-    else
-      admin_account_personal_details_path
     end
   end
 
