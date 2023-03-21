@@ -125,11 +125,13 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
   end
 
   test 'sends payment intent description to the gateway' do
+    friendly_id = '2022-10-00000001'
     response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'new-payment-intent-id', status: 'succeeded')
+    invoice.update({friendly_id: friendly_id})
     invoice.issue_and_pay_if_free!
-    gateway.expects(:purchase).with(15_000, anything, has_entry(:description, "#{invoice.provider.name} API services fix")).returns(response)
-
-    assert service.charge(amount)
+    gateway.expects(:purchase).with(15_000, anything, has_entry(:description, "#{invoice.provider.name} API services #{friendly_id}")).returns(response)
+    charge_service = build_charge_service(invoice: invoice)
+    assert charge_service.charge(amount)
   end
 
   private
