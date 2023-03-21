@@ -24,8 +24,10 @@ Feature: Dev Portal Buyer Personal Details
   Scenario: Buyer uses correct current password
     Given the buyer wants to edit their personal details
     When the buyer edits their personal details
+    And they change their password
     And the buyer writes a correct current password
     Then they should be able to edit their personal details
+    And password must have changed
 
   @javascript
   Scenario: Provider has custom personal details fields

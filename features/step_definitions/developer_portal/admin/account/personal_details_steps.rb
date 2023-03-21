@@ -5,16 +5,14 @@ Given "the buyer wants to edit their personal details" do
 end
 
 When "the buyer edits their personal details" do
-  @new_password = 'ultrasecret'
   fill_in('user[username]', with: 'Alfred')
   fill_in('user[email]', with: 'alfred@batcave.com')
-  fill_in('user[password]', with: @new_password)
-  fill_in('user[password_confirmation]', with: @new_password)
 end
 
-When "the buyer with SSO edits their personal details" do
-  fill_in('user[username]', with: 'Alfred')
-  fill_in('user[email]', with: 'alfred@batcave.com')
+And "they change their password" do
+  @new_password = 'ultrasecret'
+  fill_in('user[password]', with: @new_password)
+  fill_in('user[password_confirmation]', with: @new_password)
 end
 
 And "the buyer writes a wrong current password" do
@@ -39,10 +37,13 @@ end
 
 Then "they should be able to edit their personal details" do
   click_on 'Update Personal Details'
-  assert_flash 'USER WAS SUCCESFULLY UPDATED.'
-  assert_current_path admin_account_personal_details_path
-  assert_equal find('#user_username').value, current_user.username
-  assert_equal find('#user_email').value, current_user.email
+  assert_flash 'USER WAS SUCCESSFULLY UPDATED.'
+  assert_current_path admin_account_users_path
+  assert has_css?('tr > td:nth-child(2)', text: current_user.username)
+  assert has_css?('tr > td:nth-child(3)', text: current_user.email)
+end
+
+And "password must have changed" do
   assert_equal BCrypt::Password.new(current_user.password_digest), @new_password
 end
 
@@ -51,24 +52,10 @@ When "they don't provide any personal details" do
   fill_in('user[email]', with: '')
 end
 
-Then "with SSO they should be able to edit their personal details" do
-  click_on 'Update Personal Details'
-  assert_flash 'USER WAS SUCCESFULLY UPDATED.'
-  assert_current_path admin_account_personal_details_path
-  assert_equal find('#user_username').value, current_user.username
-  assert_equal find('#user_email').value, current_user.email
-end
-
 Then "they should see email errors" do
   click_on 'Update Personal Details'
   assert has_css?('#user_email.error')
   assert has_css?('.inline-errors', text: 'is too short (minimum is 6 characters) and should look like an email address')
-end
-
-Given "a buyer logged in with SSO" do
-  step %(
-    When I authenticate by Oauth2
-  )
 end
 
 Then "the buyer shouldn't see any reference to password" do
@@ -84,8 +71,9 @@ end
 
 Then "they should be able to edit their custom personal details" do
   click_on 'Update Personal Details'
-  assert_flash 'USER WAS SUCCESFULLY UPDATED.'
-  assert_current_path admin_account_personal_details_path
+  assert_flash 'USER WAS SUCCESSFULLY UPDATED.'
+  assert_current_path admin_account_users_path
+  click_on 'Edit user'
   assert_equal find('#user_first_name').value, current_user.first_name
   assert_equal find('#user_user_extra_required').value, current_user.extra_fields["user_extra_required"]
 end

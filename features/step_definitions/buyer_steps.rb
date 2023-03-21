@@ -155,6 +155,15 @@ Given "a buyer logged in to a provider" do
   )
 end
 
+Given "a buyer logged in to a provider using SSO" do
+  steps %(
+    Given Provider has setup RH SSO
+    And As a developer, I login through RH SSO
+    Given the Oauth2 user has all the required fields
+    When I authenticate by Oauth2
+  )
+end
+
 When "the buyer wants to sign up" do
   step 'the current domain is foo.3scale.localhost'
   step 'I go to the sign up page'

@@ -3,11 +3,7 @@ Feature: Dev Portal Buyer Personal Details
   I want to change my personal details
 
   Background:
-    Given Provider has setup RH SSO
-    And As a developer, I login through RH SSO
-    Given the Oauth2 user has all the required fields
-    When I authenticate by Oauth2
-    # And a buyer logged in with SSO
+    Given a buyer logged in to a provider using SSO
 
   Scenario: Buyer shouldn't see any password input 
     Given the buyer wants to edit their personal details
@@ -16,5 +12,5 @@ Feature: Dev Portal Buyer Personal Details
   @javascript
   Scenario: Buyer can edit their personal details
     Given the buyer wants to edit their personal details
-    When the buyer with SSO edits their personal details
-    Then with SSO they should be able to edit their personal details
+    When the buyer edits their personal details
+    Then they should be able to edit their personal details
