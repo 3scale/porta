@@ -1,5 +1,7 @@
-class Admin::Api::CMS::BaseController < Admin::Api::BaseController
+# frozen_string_literal: true
 
+class Admin::Api::CMS::BaseController < Admin::Api::BaseController
+  before_action :ensure_json_request
   before_action :deny_on_premises_for_master
   self.access_token_scopes = %i[cms account_management]
 
@@ -14,6 +16,10 @@ class Admin::Api::CMS::BaseController < Admin::Api::BaseController
     else
       DEFAULT_PER_PAGE
     end
+  end
+
+  def ensure_json_request
+    raise ActionController::UnknownFormat unless request.format.json?
   end
 end
 

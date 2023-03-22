@@ -88,33 +88,6 @@ class CMS::Page < CMS::BasePage
     super || Mime::Type.lookup(DEFAULT_CONTENT_TYPE)
   end
 
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.__send__(self.class.data_tag) do |x|
-      unless new_record?
-        x.id id
-        x.created_at created_at.xmlschema
-        x.updated_at updated_at.xmlschema
-      end
-      x.title title
-      x.system_name system_name
-      x.layout_id layout_id
-      x.section_id section_id
-      x.path path
-      x.content_type content_type
-      x.liquid_enabled liquid_enabled?
-      x.handler handler
-      x.hidden hidden?
-      unless options[:short]
-        x.draft { |node| node.cdata(draft) if draft }
-        x.published { |node| node.cdata(published) if published }
-      end
-    end
-
-    xml.to_xml
-  end
-
   private
 
   def set_default_values
