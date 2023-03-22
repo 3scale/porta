@@ -1,11 +1,30 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-resource "CMS::Layout" do
+resource 'CMS::Layout' do
+  let(:resource) { FactoryBot.create(:cms_layout, body: 'body', draft: 'draft', liquid_enabled: true) }
 
-  let(:resource) { FactoryBot.create(:cms_layout, body: 'body', draft: 'draft') }
-
-  json(:resource) do
+  describe 'representer' do
     let(:root) { 'layout' }
-    it { should have_properties('id', 'content_type', 'handler', 'system_name', 'title').from(resource) }
+
+    context 'when requesting all attributes' do
+      let(:expected_attributes) do
+        %w[id created_at updated_at title system_name liquid_enabled draft published]
+      end
+
+      json(:resource) do
+        it { should have_properties(expected_attributes).from(resource) }
+      end
+    end
+
+    context 'when requesting the shorten version' do
+      let(:expected_attributes) { %w[id created_at updated_at title system_name liquid_enabled] }
+      let(:serialized) { representer.public_send(serialization_format, short: true) }
+
+      json(:resource) do
+        it { should have_properties(expected_attributes).from(resource) }
+      end
+    end
   end
 end

@@ -36,11 +36,11 @@ module Pdf
         # because account can have multiple cinstances from multiple services, scope them by service and find last one
         cinstance = account.bought_cinstances.by_service(@service).latest.first or next
         [
-          sanitize_text(account.org_name),
+          account.org_name,
           account.created_at,
           account.users.first&.email,
           cinstance.plan.name
-        ].map {|v| "<td>#{h v}</td>"}
+        ]
       end.compact
     end
 

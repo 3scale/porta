@@ -47,11 +47,13 @@ module PaymentDetailsHelper
       stripePublishableKey: site_account.payment_gateway_options[:publishable_key],
       setupIntentSecret: intent.client_secret,
       billingAddress: stripe_billing_address,
+      billingName: current_account[:billing_address_name],
       successUrl: hosted_success_admin_account_stripe_path,
       creditCardStored: current_account.credit_card_stored?
-    }
+    }.compact
   end
 
+  # Must match PaymentMethod's address format https://stripe.com/docs/api/payment_methods/object#payment_method_object-billing_details-address
   def stripe_billing_address
     return unless logged_in?
 
@@ -61,7 +63,7 @@ module PaymentDetailsHelper
       city: billing_address.city,
       state: billing_address.state,
       postal_code: billing_address.zip,
-      country: country_code_for(billing_address.country)
+      country: billing_address.country # Contrary to Braintree, the Stripe form sends the country as an ISO code.
     }.compact
   end
 

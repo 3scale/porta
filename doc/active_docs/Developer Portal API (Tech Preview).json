@@ -5,7 +5,7 @@
   "apiVersion": "1.0",
   "apis": [
     {
-      "path": "/admin/api/cms/files.xml",
+      "path": "/admin/api/cms/files.json",
       "responseClass": "List[short-file]",
       "operations": [
         {
@@ -66,11 +66,6 @@
               "paramType": "query"
             },
             {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
               "name": "attachment",
               "paramType": "query",
               "required": true
@@ -87,7 +82,7 @@
       ]
     },
     {
-      "path": "/admin/api/cms/files/{id}.xml",
+      "path": "/admin/api/cms/files/{id}.json",
       "responseClass": "file",
       "operations": [
         {
@@ -147,11 +142,6 @@
               "paramType": "query"
             },
             {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
               "name": "attachment",
               "paramType": "query"
             },
@@ -190,7 +180,7 @@
       ]
     },
     {
-      "path": "/admin/api/cms/sections.xml",
+      "path": "/admin/api/cms/sections.json",
       "responseClass": "List[short-section]",
       "operations": [
         {
@@ -267,7 +257,7 @@
       ]
     },
     {
-      "path": "/admin/api/cms/sections/{id}.xml",
+      "path": "/admin/api/cms/sections/{id}.json",
       "responseClass": "template",
       "operations": [
         {
@@ -366,7 +356,7 @@
       ]
     },
     {
-      "path": "/admin/api/cms/templates.xml",
+      "path": "/admin/api/cms/templates.json",
       "responseClass": "List[short-template]",
       "operations": [
         {
@@ -495,7 +485,7 @@
       ]
     },
     {
-      "path": "/admin/api/cms/templates/{id}.xml",
+      "path": "/admin/api/cms/templates/{id}.json",
       "responseClass": "template",
       "operations": [
         {
@@ -634,7 +624,7 @@
       ]
     },
     {
-      "path": "/admin/api/cms/templates/{id}/publish.xml",
+      "path": "/admin/api/cms/templates/{id}/publish.json",
       "responseClass": "template",
       "operations": [
         {

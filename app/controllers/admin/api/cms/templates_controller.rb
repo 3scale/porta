@@ -2,17 +2,24 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_template_id = { :name => "id", :description => "ID of the template", :dataType => "int", :required => true, :paramType => "path" }
 
-  ALLOWED_PARAMS = %i[type system_name title path draft liquid_enabled handler content_type section_id section_name layout_id layout_name].freeze
+  AVAILABLE_PARAMS = %i[system_name title path draft liquid_enabled handler content_type section_id layout_id].freeze
+  ALLOWED_PARAMS = {
+    page: %i[title path content_type system_name section_id layout_id liquid_enabled draft handler],
+    'builtin-page': %i[layout_id draft],
+    layout: %i[system_name draft title liquid_enabled],
+    partial: %i[system_name draft],
+    'builtin-partial': %i[draft],
+  }.freeze
 
-  wrap_parameters :template, include: ALLOWED_PARAMS,
-                             format: [:json, :xml, :multipart_form, :url_encoded_form]
+  wrap_parameters :template, include: AVAILABLE_PARAMS,
+                             format: %i[json multipart_form url_encoded_form]
 
-  before_action :find_template, :except => [ :index, :create ]
+  before_action :find_template, except: %i[index create]
 
   before_action :can_destroy, only: :destroy
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates.xml"
+  ##~ e.path = "/admin/api/cms/templates.json"
   ##~ e.responseClass = "List[short-template]"
   #
   ##~ op            = e.operations.add
@@ -48,14 +55,14 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def create
-    template = Admin::Api::CMS::TemplateService::Create.call(current_account, cms_template_params)
+    template = Admin::Api::CMS::TemplateService::Create.call(current_account, params, cms_template_params)
     respond_with(template)
   rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
     render_error exception.message, status: :unprocessable_entity
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates/{id}.xml"
+  ##~ e.path = "/admin/api/cms/templates/{id}.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
@@ -89,7 +96,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def update
-    Admin::Api::CMS::TemplateService::Update.call(current_account, cms_template_params, @template)
+    Admin::Api::CMS::TemplateService::Update.call(current_account, params, cms_template_params, @template)
     respond_with(@template)
   rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
     render_error exception.message, status: :unprocessable_entity
@@ -109,7 +116,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates/{id}/publish.xml"
+  ##~ e.path = "/admin/api/cms/templates/{id}/publish.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
@@ -132,10 +139,20 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   def cms_template_params
-    params.require(:template).permit(*ALLOWED_PARAMS)
+    params.require(:template).permit(*allowed_type_params)
   end
 
   private
+
+  def allowed_type_params
+    ALLOWED_PARAMS[template_type]
+  end
+
+  def template_type
+    return params[:type].parameterize.to_sym if params[:type].present?
+
+    @template.class.name[5..-1].parameterize.to_sym if @template.present?
+  end
 
   def can_destroy
     head :locked unless @template.respond_to?(:destroy)

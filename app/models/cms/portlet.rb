@@ -1,8 +1,6 @@
 class CMS::Portlet < CMS::Partial
   self.search_type = 'portlet'
 
-  attr_accessible :title, :portlet_type
-
   after_initialize :default_values
   validate :available_types
   serialize :options, Hash

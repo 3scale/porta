@@ -11,13 +11,16 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
 
   MAX_PER_PAGE = 100
   DEFAULT_PER_PAGE = 20
+  ALLOWED_PARAMS = %i[section_id path attachment downloadable].freeze
 
   before_action :find_file, only: [:show, :edit, :update, :destroy]
+
+  wrap_parameters :file, include: ALLOWED_PARAMS
 
   representer :entity => ::CMS::FileRepresenter, :collection => ::CMS::FilesRepresenter
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/files.xml"
+  ##~ e.path = "/admin/api/cms/files.json"
   ##~ e.responseClass = "List[short-file]"
   #
   ##~ op            = e.operations.add
@@ -48,19 +51,18 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_access_token
   ##~ op.parameters.add :name => "path", :description => "URI of the file", :paramType => "query", :required => true
   ##~ op.parameters.add :name => "section_id", :description => "ID of a section (valid only for pages)", :type => "int", :default => "root section id", :paramType => "query"
-  ##~ op.parameters.add :name => "tag_list", :description => "List of the tags", :paramType => "query"
   ##~ op.parameters.add :name => "attachment", :paramType => "query", :required => true
   ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
   def create
     @file = current_account.files.build(file_params)
-    @file.section = current_account.sections.find_by_id(params[:section_id]) || current_account.sections.root
+    @file.section = current_account.sections.find_by(id: params[:section_id]) || current_account.sections.root
     @file.save
 
     respond_with @file
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/files/{id}.xml"
+  ##~ e.path = "/admin/api/cms/files/{id}.json"
   ##~ e.responseClass = "file"
   #
   ##~ op             = e.operations.add
@@ -85,11 +87,9 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_file_id
   ##~ op.parameters.add :name => "path", :description => "URI of the file", :paramType => "query"
   ##~ op.parameters.add :name => "section_id", :description => "ID of a section (valid only for pages)", :type => "int", :default => "root section id", :paramType => "query"
-  ##~ op.parameters.add :name => "tag_list", :description => "List of the tags", :paramType => "query"
   ##~ op.parameters.add :name => "attachment", :paramType => "query"
   ##~ op.parameters.add :name => "downloadable", :description => "Checked sets the content-disposition to attachment", :type => "boolean", :paramType => "query", :default => "false"
   def update
-    @file.section = current_account.sections.find_by_id(params[:section_id]) if params[:section_id]
     @file.update_attributes(file_params)
     respond_with @file
   end
@@ -113,12 +113,8 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
     @file = current_account.files.find(params[:id])
   end
 
-  # wrap_parameters don't work with the attachment
   def file_params
-    [:path, :tag_list, :attachment, :downloadable].inject({}) do |hash, key|
-      hash[key] = params[key] unless params[key].nil?
-      hash
-    end
+    params.require(:file).permit(ALLOWED_PARAMS)
   end
 
 end

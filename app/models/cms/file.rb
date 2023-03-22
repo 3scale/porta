@@ -5,8 +5,6 @@ class CMS::File < ApplicationRecord
   acts_as_taggable
   include Tagging
 
-  attr_accessible :provider, :section, :path, :attachment, :downloadable, :tag_list
-
   delegate :s3_provider_prefix, to: :provider
 
   self.table_name = :cms_files
@@ -29,6 +27,8 @@ class CMS::File < ApplicationRecord
   validates :attachment_content_type, :attachment_file_name, :random_secret, :name,
             length: { maximum: 255 }
 
+  validate :section_same_provider
+
   before_save :generate_random_secret
 
   delegate :accessible_by?, :public?, :protected?, :to => :section, :allow_nil => true
@@ -50,26 +50,6 @@ class CMS::File < ApplicationRecord
 
   alias_attribute :name, :attachment_file_name
   alias_attribute :title, :attachment_file_name
-
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.__send__(self.class.data_tag) do |x|
-      unless new_record?
-        xml.id id
-        xml.created_at created_at.xmlschema
-        xml.updated_at updated_at.xmlschema
-      end
-      x.section_id section_id
-      x.path path
-      x.downloadable downloadable?
-      x.url url.to_s
-      x.title title
-      x.content_type attachment.content_type
-    end
-
-    xml.to_xml
-  end
 
   def redirect?
     attachment.options[:storage] == :s3
@@ -124,5 +104,11 @@ class CMS::File < ApplicationRecord
 
   def generate_random_secret
     self.random_secret ||= SecureRandom.hex(8)
+  end
+
+  def section_same_provider
+    return if section&.provider == provider
+
+    errors.add(:section_id, "must belong to the same provider")
   end
 end

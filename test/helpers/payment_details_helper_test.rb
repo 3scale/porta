@@ -66,7 +66,7 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
   end
 
   test '#stripe_form_data' do
-    stubs(:current_account).returns(FactoryBot.create(:simple_account))
+    stubs(:current_account).returns(FactoryBot.create(:simple_account, billing_address_name: 'name'))
     stubs(:stripe_billing_address).returns({})
     stubs(:site_account).returns(mock(payment_gateway_options: { :publishable_key => 'publishable_key' }))
     stubs(:hosted_success_admin_account_stripe_path).returns('/ou-yeah')
@@ -76,6 +76,7 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
       stripePublishableKey: 'publishable_key',
       setupIntentSecret: 'super-secret',
       billingAddress: {},
+      billingName: 'name',
       successUrl: '/ou-yeah',
       creditCardStored: false
     }
@@ -89,10 +90,9 @@ class PaymentDetailsHelperTest < DeveloperPortal::ActionView::TestCase
                                          billing_address_city: 'city',
                                          billing_address_state: 'state',
                                          billing_address_zip: 'zip',
-                                         billing_address_country: 'country')
+                                         billing_address_country: 'ES')
     stubs(:current_account).returns(account)
     stubs(:logged_in?).returns(true).once
-    stubs(:country_code_for).with('country').returns('ES').once
 
     expected_response = {
       line1: 'address1',

@@ -6,6 +6,7 @@ export interface StripeFormDataset {
   stripePublishableKey: string;
   setupIntentSecret: string;
   billingAddress: BillingAddress;
+  billingName: string;
   successUrl: string;
   creditCardStored: boolean;
 }

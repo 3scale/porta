@@ -5,7 +5,7 @@ module Pdf::Printer
   PAGE_WIDTH = 230.mm
   TABLE_HALF_WIDTH = 90.mm
   TABLE_FULL_WIDTH = 187.5.mm
-  BREAK = 0.5.mm
+  BREAK = 1.417.mm
 
   private
 
@@ -38,7 +38,12 @@ module Pdf::Printer
   end
 
   def move_down(qty = 1)
-    @pdf.move_down((BREAK.mm * qty))
+    @pdf.move_down move_amount(qty)
+    nil
+  end
+
+  def move_amount(qty)
+    BREAK * qty
   end
 
   def subtitle(text)

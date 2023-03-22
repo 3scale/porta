@@ -2923,7 +2923,7 @@
         {
           "httpMethod": "PUT",
           "summary": "Account Set Credit Card",
-          "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, ogone, braintree, payment express and merchant e solutions",
+          "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, braintree, payment express and merchant e solutions",
           "group": "account",
           "parameters": [
             {

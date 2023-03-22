@@ -1,6 +1,5 @@
 class CMS::Layout < CMS::Template
   self.search_type = 'layout'
-  attr_accessible :system_name, :draft, :title
 
   has_many :pages, :class_name => 'CMS::Page'
   validates :system_name, presence: true
@@ -16,27 +15,6 @@ class CMS::Layout < CMS::Template
 
   def content_type
     self[:content_type] || 'text/html'
-  end
-
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.__send__(self.class.data_tag) do |x|
-      unless new_record?
-        xml.id id
-        xml.created_at created_at.xmlschema
-        xml.updated_at updated_at.xmlschema
-      end
-      x.title title
-      x.system_name system_name
-      x.liquid_enabled liquid_enabled
-      unless options[:short]
-        x.draft { |node| node.cdata draft }
-        x.published { |node| node.cdata published }
-      end
-    end
-
-    xml.to_xml
   end
 
   def can_be_destroyed?

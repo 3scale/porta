@@ -29,15 +29,6 @@ class PaymentGatewaySettingTest < ActiveSupport::TestCase
     assert @gateway_setting.configured?
   end
 
-  test '#configured? failed if any gateway_settings missing for ogone' do
-    @gateway_setting.gateway_type = :ogone
-    @gateway_setting.gateway_settings = {password: 'Password', user: 'User Id', signature: "SHA-IN Pass phrase", signature_out: "SHA-OUT Pass phrase"}
-    refute @gateway_setting.configured?
-
-    @gateway_setting.gateway_settings[:login] = 'LOGIN'
-    assert @gateway_setting.configured?
-  end
-
   test '#configured? failed if any gateway_settings missing for stripe' do
     @gateway_setting.gateway_type = :stripe
     @gateway_setting.gateway_settings = { login: 'Secret Key', publishable_key: '', endpoint_secret: 'some-secret' }
