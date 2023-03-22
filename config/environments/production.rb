@@ -110,11 +110,10 @@ Rails.application.configure do
     asset_host = config.three_scale.asset_host.presence
 
     config.asset_host = ->(source) do
-      # does it exist in /public/assets ?
       full_path = File.join(Rails.public_path, source)
-      precompiled = File.exist?(full_path)
+      exist_in_public_assets = File.exist?(full_path)
 
-      break unless precompiled
+      break unless exist_in_public_assets
 
       asset_host
     end

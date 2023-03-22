@@ -206,7 +206,7 @@ module CMS
         page = FactoryBot.create(:cms_page, :provider => @provider)
 
         put admin_api_cms_template_path(page), params: { provider_key: @provider.provider_key, id: page.id,
-                                                         format: :xml, template: { layout_id: new_layout.id }
+                                                         format: :xml, layout_id: new_layout.id
         }
 
         assert_response :success
@@ -214,11 +214,12 @@ module CMS
       end
 
       test 'create with missing or invalid type fails' do
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, type: 'INVALID' }
-        assert_response :not_acceptable
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml,
+                                                     type: 'INVALID', title: 'test template' }
+        assert_response :unprocessable_entity
 
-        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml }
-        assert_response :bad_request
+        post admin_api_cms_templates_path, params: { provider_key: @provider.provider_key, format: :xml, title: 'test template' }
+        assert_response :unprocessable_entity
       end
 
       test 'create' do

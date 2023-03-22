@@ -63,7 +63,7 @@ class Pdf::Finance::InvoiceReportData
 
   def line_items
     line_items = @invoice.line_items.map do |item|
-      [CGI.escapeHTML(item.name || ""), item.quantity || '', item.cost.round(LineItem::DECIMALS), '']
+      [item.name || "", item.quantity || '', item.cost.round(LineItem::DECIMALS), '']
     end
 
     line_items.push(*total_invoice_label)
@@ -78,26 +78,26 @@ class Pdf::Finance::InvoiceReportData
   end
 
   def invoice_footnote
-    CGI.escapeHTML(@invoice.provider_account.invoice_footnote || "")
+    @invoice.provider_account.invoice_footnote || ""
   end
 
   def vat_zero_text
-    CGI.escapeHTML(@invoice.provider_account.vat_zero_text || "")
+    @invoice.provider_account.vat_zero_text || ""
   end
 
   def po_number
-    CGI.escapeHTML(@invoice.buyer_account.po_number || "")
+    @invoice.buyer_account.po_number || ""
   end
 
   private
 
   def person_data(address, fiscal_code, vat_code, po_number)
-    pd = [['Name',    CGI.escapeHTML(address.name || '')],
-          ['Address', CGI.escapeHTML(location_text(address))],
-          ['Country', CGI.escapeHTML(address.country || '')]]
-    pd << ['Fiscal code', CGI.escapeHTML(fiscal_code)] if fiscal_code.present?
-    pd << [@invoice.buyer_account.field_label('vat_code'), CGI.escapeHTML(vat_code)] if vat_code.present?
-    pd << ['PO num', CGI.escapeHTML(po_number)] if po_number.present?
+    pd = [['Name',    address.name || ''],
+          ['Address', location_text(address)],
+          ['Country', address.country || '']]
+    pd << ['Fiscal code', fiscal_code] if fiscal_code.present?
+    pd << [@invoice.buyer_account.field_label('vat_code'), vat_code] if vat_code.present?
+    pd << ['PO num', po_number] if po_number.present?
     pd
   end
 
@@ -140,7 +140,7 @@ class Pdf::Finance::InvoiceReportData
       # read as binary file 'b'
       File.open(logo.path(LOGO_ATTACHMENT_STYLE), 'rb')
     when :s3
-      URI.open(logo.url(LOGO_ATTACHMENT_STYLE))
+      URI.parse(logo.url(LOGO_ATTACHMENT_STYLE)).open
     else
       raise "Invalid attachment type #{storage}"
     end

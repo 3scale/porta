@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Provider::Admin::CMS::BuiltinPagesController < Provider::Admin::CMS::TemplatesController
 
   def new
@@ -14,12 +16,7 @@ class Provider::Admin::CMS::BuiltinPagesController < Provider::Admin::CMS::Templ
     current_account.builtin_pages
   end
 
-  def template_params
-    params.require(:cms_template).permit(:draft, :layout_id).tap do |params|
-
-      layout_id = params.delete(:layout_id).presence
-
-      params[:layout] = current_account.layouts.find(layout_id) if layout_id
-    end
+  def allowed_params
+    %i[draft layout_id].freeze
   end
 end

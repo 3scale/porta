@@ -749,7 +749,8 @@ class UserTest < ActiveSupport::TestCase
   test '#sections users with sections should contain account sections' do
     @buyer = FactoryBot.create(:buyer_account)
     @user = @buyer.users.first
-    @section = FactoryBot.create(:cms_section, public: false, title: "protected-section", parent: @buyer.provider_account.sections.root)
+    @section = FactoryBot.create(:cms_section, public: false, title: "protected-section",
+                                 parent: @buyer.provider_account.sections.root, provider: @buyer.provider_account)
 
     grant_buyer_access_to_section @buyer, @section
     assert_equal @user.sections, [@section]

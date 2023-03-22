@@ -1,4 +1,4 @@
-FROM quay.io/centos7/ruby-26-centos7
+FROM quay.io/centos7/ruby-26-centos7 AS porta-base
 
 USER root
 
@@ -83,15 +83,41 @@ RUN source /opt/app-root/etc/scl_enable \
     && cd /opt/system \
     && npm install -g yarn \
     && yarn install:safe --no-progress \
-    && SECRET_KEY_BASE=rails/32947 bundle exec rake assets:precompile tmp:clear \
+    && SECRET_KEY_BASE=rails/32947 NODE_OPTIONS=--max-old-space-size=2560 bundle exec rake assets:precompile tmp:clear \
     && rm log/*.log \
     && chmod g+w /opt/system/config
 
-USER 1001
 ADD openshift/system/entrypoint.sh /opt/system/entrypoint.sh
+USER 1001
 EXPOSE 3000 9306
 # TODO: dumb-init!
 ENTRYPOINT ["/opt/system/entrypoint.sh"]
 CMD ["unicorn", "-c", "config/unicorn.rb", "-E", "${RAILS_ENV}", "config.ru"]
 
-# vim: set ft=dockerfile:
+
+FROM porta-base AS porta-sphinx-config
+ENV THINKING_SPHINX_ADDRESS=0.0.0.0 \
+    THINKING_SPHINX_PID_FILE=/var/run/sphinx/searchd.pid \
+    THINKING_SPHINX_INDICES_LOCATION=/var/lib/sphinx \
+    THINKING_SPHINX_CONFIGURATION_FILE=/opt/system/config/standalone.sphinx.conf \
+    RAILS_ENV=production \
+    SECRET_KEY_BASE=dummy \
+    DATABASE_URL='mysql2://root:@localhost/porta'
+USER 0
+RUN yum install -y mariadb-server \
+    && setpriv --reuid 27 --regid 27 --clear-groups mysql_install_db \
+    && (mysqld_safe &) \
+    && cp -v config/docker/thinking_sphinx.yml config/ \
+    && ./entrypoint.sh bundle exec rake db:create db:schema:load openshift:thinking_sphinx:configure \
+    && grep -q "rt_field = account_id" "$THINKING_SPHINX_CONFIGURATION_FILE" \
+    && kill $(</var/run/mariadb/mariadb.pid)
+
+FROM porta-base AS licenses-report
+RUN source /opt/app-root/etc/scl_enable \
+    && gem install license_finder \
+    && license_finder report --format=xml --save=doc/licenses/licenses.xml --decisions-file=doc/dependency_decisions.yml \
+    && [ -s doc/licenses/licenses.xml ]
+
+FROM porta-base AS porta-prod
+COPY --from=porta-sphinx-config /opt/system/config/standalone.sphinx.conf /opt/system/config/
+COPY --from=licenses-report /opt/system/doc/licenses/licenses.xml /opt/system/doc/licenses/

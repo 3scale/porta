@@ -66,11 +66,6 @@
               "paramType": "query"
             },
             {
-              "name": "tag_list",
-              "description": "List of the tags",
-              "paramType": "query"
-            },
-            {
               "name": "attachment",
               "paramType": "query",
               "required": true
@@ -144,11 +139,6 @@
               "description": "ID of a section (valid only for pages)",
               "type": "int",
               "default": "root section id",
-              "paramType": "query"
-            },
-            {
-              "name": "tag_list",
-              "description": "List of the tags",
               "paramType": "query"
             },
             {

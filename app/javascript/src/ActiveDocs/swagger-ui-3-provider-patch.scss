@@ -1,0 +1,24 @@
+// Reset some inherited styles so that Swagger UI looks good in the admin portal
+.swagger-ui {
+  table {
+    all: unset;
+  }
+
+  pre code {
+    all: unset;
+  }
+
+  select {
+    width: unset;
+    height: unset;
+  }
+
+  button {
+    min-width: unset;
+    width: unset;
+  }
+
+  .curl-command .copy-to-clipboard button {
+    padding: 0 0 0 25px;
+  }
+}

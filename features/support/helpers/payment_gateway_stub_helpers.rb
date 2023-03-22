@@ -51,6 +51,7 @@ module PaymentGatewayStubHelpers
         street_address: address[:street_address],
         locality: address[:locality],
         country_name: address[:country_name],
+        country_code_alpha2: address[:country_code],
         region: address[:region],
         postal_code: address[:postal_code]
       }],
@@ -99,24 +100,6 @@ module PaymentGatewayStubHelpers
 
   def stripe_crypt
     PaymentGateways::StripeCrypt.any_instance
-  end
-
-  def confirm_customer_info(address)
-    {
-      'first_name' => address[:first_name],
-      'last_name' => address[:last_name],
-      'phone' => address[:phone],
-      'credit_card' => {
-        'billing_address' => {
-          'company' => address[:company],
-          'street_address' => address[:street_address],
-          'postal_code' => address[:postal_code],
-          'locality' => address[:locality],
-          'region' => address[:region],
-          'country_name' => address[:country_code] # Are we sending the correct property to Braintree? Maybe we send the code but we want to send the full name?
-        }
-      }
-    }
   end
 end
 

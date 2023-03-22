@@ -5,8 +5,6 @@ class CMS::File < ApplicationRecord
   acts_as_taggable
   include Tagging
 
-  attr_accessible :provider, :section, :path, :attachment, :downloadable, :tag_list
-
   delegate :s3_provider_prefix, to: :provider
 
   self.table_name = :cms_files
@@ -28,6 +26,8 @@ class CMS::File < ApplicationRecord
   validates :path, uniqueness: { :scope => :provider_id }, length: { maximum: 255 }
   validates :attachment_content_type, :attachment_file_name, :random_secret, :name,
             length: { maximum: 255 }
+
+  validate :section_same_provider
 
   before_save :generate_random_secret
 
@@ -124,5 +124,11 @@ class CMS::File < ApplicationRecord
 
   def generate_random_secret
     self.random_secret ||= SecureRandom.hex(8)
+  end
+
+  def section_same_provider
+    return if section&.provider == provider
+
+    errors.add(:section_id, "must belong to the same provider")
   end
 end

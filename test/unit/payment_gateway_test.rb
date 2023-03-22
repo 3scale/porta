@@ -12,7 +12,7 @@ class PaymentGatewayTest < ActiveSupport::TestCase
   class ClassMethodsTest < ActiveSupport::TestCase
     test '#all contain only supported gateways' do
       PaymentGateway.stubs(:bogus_enabled?).returns(false)
-      assert_equal %i[authorize_net braintree_blue ogone stripe], PaymentGateway.all.map(&:type).sort
+      assert_equal %i[authorize_net braintree_blue stripe], PaymentGateway.all.map(&:type).sort
     end
 
     test '#all include bogus when enabled' do
@@ -63,24 +63,6 @@ class PaymentGatewayTest < ActiveSupport::TestCase
 
     test ':login and :password order in #fields' do
       assert_not_includes gateway.fields.keys, %i[login password], ":login and :password must not be fields declared in Gateway[#{type}]"
-    end
-  end
-
-  class OgoneTest < PaymentGatewayTest
-    def type
-      :ogone
-    end
-
-    test 'have display_name' do
-      assert_equal 'Ogone', gateway.display_name
-    end
-
-    test 'have homepage_url' do
-      assert_equal 'http://www.ogone.com/', gateway.homepage_url
-    end
-
-    test ':login and :password order in #fields' do
-      assert_not_includes gateway.fields.keys, %i[login password], ":login and :password must not be a field declared in Gateway[#{type}]"
     end
   end
 

@@ -15,7 +15,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
   end
 
   test 'partial_path should be normalized' do
-    @section = FactoryBot.build(:cms_section, :parent => @root, :partial_path => " do whatever / you want ")
+    @section = FactoryBot.build(:cms_section, provider: @provider, parent: @root, partial_path: " do whatever / you want ")
     assert @section.invalid?, "section should be valid"
     assert_equal "do-whatever/you-want", @section.partial_path
     assert_valid @section

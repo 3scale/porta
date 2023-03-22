@@ -1,6 +1,5 @@
 class TableOfContentsPortlet < CMS::Portlet::Base
   attributes :section_id, :section_id => :section # section_id attribute will have :as => :section in input
-  attr_accessible :section_id
   validates_presence_of :section_id
 
   def self.default_template

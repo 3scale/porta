@@ -4751,7 +4751,7 @@
         {
           "httpMethod": "PUT",
           "summary": "Account Set Credit Card",
-          "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, ogone, braintree, payment express and merchant e solutions",
+          "description": "Associates credit card tokens and billing address to an account. This operation is only required if you use your own credit card capture method. These tokens are the ones required by Authorize.net, braintree, payment express and merchant e solutions",
           "group": "account",
           "parameters": [
             {
@@ -4775,7 +4775,7 @@
               "required": true,
               "paramType": "query",
               "name": "credit_card_token",
-              "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe), customer alias (Ogone-Ingenico). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
+              "description": "Token used by the payment gateway to identify the buyer, customer profile ID (Authorize.net), customer ID (Braintree and Stripe). Some payment gateways may store more than one card under the same buyer reference and/or require an additional identifier for recurring payment. If you are using Braintree, there is no need for additional identifier -- the first credit card available will always be charged. For Authorize.net, see `credit_card_authorize_net_payment_profile_token`."
             },
             {
               "dataType": "string",

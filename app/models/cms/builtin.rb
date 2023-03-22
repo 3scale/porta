@@ -54,8 +54,6 @@ class CMS::Builtin < CMS::BasePage
 
   validates :system_name, presence: true
 
-  attr_protected :liquid_enabled
-
   # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
   # in rails 4.2 use the attribute api
   def read_attribute(name)
@@ -150,8 +148,8 @@ class CMS::Builtin < CMS::BasePage
         x.system_name system_name
         x.layout_id layout_id
         unless options[:short]
-          x.draft { |node| node.cdata draft }
-          x.published { |node| node.cdata published }
+          x.draft { |node| node.cdata(draft) if draft }
+          x.published { |node| node.cdata(published) if published }
         end
       end
 
@@ -192,7 +190,6 @@ class CMS::Builtin < CMS::BasePage
 
     private :destroy
     attr_readonly :system_name
-    attr_protected :liquid_enabled
 
     has_data_tag :builtin_partial
 
