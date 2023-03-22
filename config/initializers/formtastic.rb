@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 # Set the default text field size when input is a string. Default is nil.
 # Formtastic::FormBuilder.default_text_field_size = 50
@@ -11,7 +12,7 @@
 
 # Should all fields be considered "required" by default?
 # Defaults to true.
-# Formtastic::FormBuilder.all_fields_required_by_default = true
+Formtastic::FormBuilder.all_fields_required_by_default = false
 
 # Should select fields have a blank option/prompt by default?
 # Defaults to true.
@@ -57,6 +58,9 @@ Formtastic::FormBuilder.i18n_lookups_by_default = true
 # Specifies if I18n lookups of the default I18n Localizer should be cached to improve performance.
 # Defaults to true.
 # Formtastic::FormBuilder.i18n_cache_lookups = false
+
+# reading strings from i18n with HTML tags escapes them otherwise
+Formtastic::FormBuilder.escape_html_entities_in_hints_and_labels = false
 
 # Specifies the class to use for localization lookups. You can create your own
 # class and use it instead by subclassing Formtastic::Localizer (which is the default).
