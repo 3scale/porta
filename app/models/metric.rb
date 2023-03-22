@@ -218,6 +218,10 @@ class Metric < ApplicationRecord
     !enabled_for_plan?(plan)
   end
 
+  def service?
+    owner_type == 'Service'
+  end
+
   private
 
   def destroyable?
