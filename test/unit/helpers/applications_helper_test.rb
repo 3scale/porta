@@ -57,7 +57,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     application.expects(:first_daily_traffic_at).returns(yesterday).once
 
     travel_to(today) do
-      html = Nokogiri::HTML.parse last_traffic(application)
+      html = Nokogiri::HTML4.parse last_traffic(application)
       time = html.css('time')
 
       assert_equal '1 day ago', time.attribute('title').value
@@ -66,7 +66,7 @@ class ApplicationsHelperTest < ActionView::TestCase
   end
 
   test "time_tag_with_title" do
-    html = Nokogiri::HTML.parse time_tag_with_title(Date.new(2021, 1, 1))
+    html = Nokogiri::HTML4.parse time_tag_with_title(Date.new(2021, 1, 1))
     time = html.css('time')
 
     assert_equal 'January 01, 2021', time.attribute('title').value
@@ -77,7 +77,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     application = FactoryBot.create(:cinstance, trial_period_expires_at: nil)
     expected_text = '– trial expires in less than a minute'
 
-    html = Nokogiri::HTML.parse remaining_trial_days(application)
+    html = Nokogiri::HTML4.parse remaining_trial_days(application)
     assert_equal expected_text, html.text
   end
 
@@ -87,7 +87,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     expected_text = '– trial expires in 1 day'
 
     travel_to(today) do
-      html = Nokogiri::HTML.parse remaining_trial_days(application)
+      html = Nokogiri::HTML4.parse remaining_trial_days(application)
       assert_equal expected_text, html.text
     end
   end
@@ -98,7 +98,7 @@ class ApplicationsHelperTest < ActionView::TestCase
     expected_text = '– trial expires in 1 day'
 
     travel_to(today) do
-      html = Nokogiri::HTML.parse remaining_trial_days(application)
+      html = Nokogiri::HTML4.parse remaining_trial_days(application)
       assert_equal expected_text, html.text
     end
   end

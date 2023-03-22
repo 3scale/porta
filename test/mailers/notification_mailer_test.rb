@@ -562,7 +562,7 @@ class NotificationMailerTest < ActionMailer::TestCase
   def assert_html_email(delivery, &block)
     (delivery.parts.empty? ? [delivery] : delivery.parts).each do |part|
       if part['Content-Type'].to_s =~ /^text\/html\W/
-        root = Nokogiri::HTML::Document.parse(part.body.to_s)
+        root = Nokogiri::HTML4::Document.parse(part.body.to_s)
         assert_select root, ':root', &block
       end
     end

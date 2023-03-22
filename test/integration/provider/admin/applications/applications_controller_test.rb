@@ -16,7 +16,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       get provider_admin_applications_path
 
       assert_response :ok
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       expected_cinstances_ids = master_account.provided_cinstances.not_bought_by(master_account).pluck(:id)
       expected_cinstances_ids.each do |id|
         assert page.xpath %(//tbody[@class="cinstances"]//tr[contains(@id, "#{id}")])
@@ -58,14 +58,14 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         provider.services.create!(name: '2nd-service')
         assert provider.reload.multiservice?
         get provider_admin_applications_path
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         assert page.xpath '//thead/tr/td[text() = "Service"]'
       end
 
       test 'index does not show the services column when the provider is not multiservice' do
         assert_not provider.reload.multiservice?
         get provider_admin_applications_path
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         assert_empty page.xpath '//thead/tr/td[text() = "Service"]'
       end
 
@@ -78,7 +78,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
 
         get provider_admin_applications_path
         assert_response :success
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         assert page.xpath('//tbody[@class="cinstances"]/tr').text.include? cinstance.display_name
       end
     end
@@ -101,7 +101,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
 
         assert_response :success
 
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         assert page.xpath("//tr[@class='feature enabled']").text.include? 'ticked'
         assert page.xpath("//tr[@class='feature disabled']").text.include? 'crossed'
       end
@@ -112,7 +112,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
         get provider_admin_application_path(application)
         assert_response :success
 
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         assert page.xpath("//select[@id='cinstance_plan_id']/option").map(&:text).exclude?(application.plan.name)
       end
 
@@ -213,7 +213,7 @@ class Provider::Admin::ApplicationsTest < ActionDispatch::IntegrationTest
       test 'edit renders correctly' do
         get edit_provider_admin_application_path(application)
         assert_response :success
-        page = Nokogiri::HTML::Document.parse(response.body)
+        page = Nokogiri::HTML4::Document.parse(response.body)
         assert_equal 'example-name',  page.xpath("//input[@id='cinstance_name']").map { |node| node['value'] }.join
         assert_equal "\nexample-description", page.xpath("//textarea[@id='cinstance_description']").text
         assert_equal 1, page.xpath("//button[@type='submit']").length

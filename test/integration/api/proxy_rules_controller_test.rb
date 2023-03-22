@@ -13,7 +13,7 @@ class Api::ProxyRulesControllerTest < ActionDispatch::IntegrationTest
     proxy_rules = FactoryBot.create_list(:proxy_rule, 2, proxy: @service.proxy)
 
     get admin_service_proxy_rules_path(@service)
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     patterns = page.xpath('//*[@id="proxy-rules"]/tbody/tr/td[2]').text
 
     assert_response :ok

@@ -206,7 +206,7 @@ class ThreeScale::SpamProtectionTest < ActiveSupport::TestCase
       private
 
       def assert_output
-        html = Nokogiri::HTML(@output)
+        html = Nokogiri::HTML4(@output)
         assert html.at_css('li.boolean.required#model_confirmation_input')
         assert_equal "If you're human, leave this field empty.", html.at_css('.inline-hints').text
         assert html.at_css('input[type="hidden"][name="model[timestamp]"]')
