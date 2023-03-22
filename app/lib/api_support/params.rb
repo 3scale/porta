@@ -37,7 +37,7 @@ module ApiSupport::Params
     end
   end
 
-  protected
+  private
 
   def flat_params
     params.except(:format, :controller, :action, :provider_key, :api_key, :access_token)
