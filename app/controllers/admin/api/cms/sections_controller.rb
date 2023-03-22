@@ -10,7 +10,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   representer :entity => ::CMS::SectionRepresenter, :collection => ::CMS::SectionsRepresenter
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/sections.xml"
+  ##~ e.path = "/admin/api/cms/sections.json"
   ##~ e.responseClass = "List[short-section]"
   #
   ##~ op            = e.operations.add
@@ -47,7 +47,7 @@ class Admin::Api::CMS::SectionsController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/sections/{id}.xml"
+  ##~ e.path = "/admin/api/cms/sections/{id}.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add

@@ -550,7 +550,7 @@ without fake Core server your after commit callbacks will crash and you might ge
         resources :proxy_configs, path: 'proxy_configs/:environment', only: %i[index], defaults: { format: :json }
       end
 
-      namespace(:cms) do
+      namespace :cms, defaults: { format: :json } do
         resources :sections, except: %i[new edit]
         resources :files, except: %i[new edit]
         resources :templates, :only => [ :index, :create, :show, :update, :destroy ] do

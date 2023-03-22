@@ -12,26 +12,15 @@ class Admin::Api::CMS::TemplatesControllerTest < ActionController::TestCase
 
   class TemplatesControllerMethodsTest < Admin::Api::CMS::TemplatesControllerTest
     def test_show
-      CMS::Portlet.available.each do |portlet_type|
-        portlet = FactoryBot.create(:cms_portlet, provider: @provider,
-          portlet_type: portlet_type.to_s, type: portlet_type.to_s)
-
-        get :show, params: { id: portlet.id, format: :xml, access_token: @token }
-
-        assert_response :success
-        assert_equal 0, xml_elements_by_key(@response.body, 'builtin_partial').count
-        assert_equal 1, xml_elements_by_key(@response.body, 'partial').count
-      end
-    end
-
-    def test_show_builtin_partial
       partial = FactoryBot.create(:cms_builtin_partial, provider: @provider)
 
-      get :show, params: { id: partial.id, format: :xml, access_token: @token }
+      get :show, params: { id: partial.id, format: :json, access_token: @token }
 
       assert_response :success
-      assert_equal 1, xml_elements_by_key(@response.body, 'builtin_partial').count
-      assert_equal 0, xml_elements_by_key(@response.body, 'partial').count
+      assert_equal(
+        %w[id created_at updated_at system_name draft published],
+        JSON.parse(response.body)['builtin_partial'].keys
+      )
     end
 
     def test_create

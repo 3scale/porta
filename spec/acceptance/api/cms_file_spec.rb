@@ -7,15 +7,15 @@ resource 'CMS::File' do
 
   let(:resource) { FactoryBot.create(:cms_file, provider: provider, section: provider.sections.root) }
 
-  api 'cms file' do
-    get '/admin/api/cms/files.:format', action: :index do
+  api 'cms file', format: [:json] do
+    get '/admin/api/cms/files', action: :index do
       let(:collection) { provider.files }
       let(:serialized) { representer.public_send(serialization_format, short: true) }
     end
 
-    get '/admin/api/cms/files/:id.:format', action: :show
+    get '/admin/api/cms/files/:id', action: :show
 
-    post '/admin/api/cms/files.:format', action: :create do
+    post '/admin/api/cms/files', action: :create do
       parameter :path, 'The path'
       parameter :section_id, 'Section where this file belongs'
       parameter :attachment, 'The Attachment'
@@ -24,13 +24,13 @@ resource 'CMS::File' do
       let(:attachment) { fixture_file_upload('/wide.jpg',' image/jpeg') }
     end
 
-    put '/admin/api/cms/files/:id.:format', action: :update do
+    put '/admin/api/cms/files/:id', action: :update do
       parameter :downloadable, 'Checked sets the content-disposition to attachment'
 
       let(:downloadable) { true }
     end
 
-    delete '/admin/api/cms/files/:id.:format', action: :destroy
+    delete '/admin/api/cms/files/:id', action: :destroy
   end
 
   describe 'representer' do
@@ -48,12 +48,6 @@ resource 'CMS::File' do
           expect(subject.keys).to eq(expected_attributes)
         end
       end
-
-      xml(:resource) do
-        it 'should have the correct attributes' do
-          expect(subject.root.elements.map(&:name)).to eq(expected_attributes)
-        end
-      end
     end
 
     context 'when requesting a single resource' do
@@ -64,34 +58,22 @@ resource 'CMS::File' do
           expect(subject.keys).to eq(expected_attributes)
         end
       end
-
-      xml(:resource) do
-        it 'should have the correct attributes' do
-          expect(subject.root.elements.map(&:name)).to eq(expected_attributes)
-        end
-      end
     end
 
     context 'when requesting a collection' do
       let(:root) { 'files' }
 
       json(:collection)
-
-      xml(:collection) do
-        it 'should have root' do
-          expect(xml).to have_tag(root)
-        end
-      end
     end
   end
 end
 
 __END__
 
-admin_api_cms_files     GET      /admin/api/cms/files(.:format)          admin/api/cms/files#index {:format=>"xml"}
-                        POST     /admin/api/cms/files(.:format)          admin/api/cms/files#create {:format=>"xml"}
- new_admin_api_cms_file GET      /admin/api/cms/files/new(.:format)      admin/api/cms/files#new {:format=>"xml"}
-edit_admin_api_cms_file GET      /admin/api/cms/files/:id/edit(.:format) admin/api/cms/files#edit {:format=>"xml"}
-     admin_api_cms_file GET      /admin/api/cms/files/:id(.:format)      admin/api/cms/files#show {:format=>"xml"}
-                        PUT      /admin/api/cms/files/:id(.:format)      admin/api/cms/files#update {:format=>"xml"}
-                        DELETE   /admin/api/cms/files/:id(.:format)      admin/api/cms/files#destroy {:format=>"xml"}
+admin_api_cms_files     GET      /admin/api/cms/files(.:format)          admin/api/cms/files#index {:format=>"json"}
+                        POST     /admin/api/cms/files(.:format)          admin/api/cms/files#create {:format=>"json"}
+ new_admin_api_cms_file GET      /admin/api/cms/files/new(.:format)      admin/api/cms/files#new {:format=>"json"}
+edit_admin_api_cms_file GET      /admin/api/cms/files/:id/edit(.:format) admin/api/cms/files#edit {:format=>"json"}
+     admin_api_cms_file GET      /admin/api/cms/files/:id(.:format)      admin/api/cms/files#show {:format=>"json"}
+                        PUT      /admin/api/cms/files/:id(.:format)      admin/api/cms/files#update {:format=>"json"}
+                        DELETE   /admin/api/cms/files/:id(.:format)      admin/api/cms/files#destroy {:format=>"json"}

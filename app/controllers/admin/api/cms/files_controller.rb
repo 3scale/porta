@@ -20,7 +20,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   representer :entity => ::CMS::FileRepresenter, :collection => ::CMS::FilesRepresenter
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/files.xml"
+  ##~ e.path = "/admin/api/cms/files.json"
   ##~ e.responseClass = "List[short-file]"
   #
   ##~ op            = e.operations.add
@@ -58,7 +58,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/files/{id}.xml"
+  ##~ e.path = "/admin/api/cms/files/{id}.json"
   ##~ e.responseClass = "file"
   #
   ##~ op             = e.operations.add
