@@ -122,10 +122,9 @@ module CMS
 
         assert_response 422
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        error = doc.xpath('//error').text
+        error = JSON.parse(response.body)['errors']['title'].first
 
-        assert_match "Title can't be blank", error
+        assert_match "can't be blank", error
       end
 
       test 'create with title but without system_name' do
@@ -136,9 +135,8 @@ module CMS
 
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        title = doc.xpath('//title').text
-        sysname = doc.xpath('//system_name').text
+        title = JSON.parse(response.body)['section']['title']
+        sysname = JSON.parse(response.body)['section']['system_name']
 
         assert_equal expected_title, title
         assert_equal expected_sysname, sysname
@@ -153,9 +151,8 @@ module CMS
 
         assert_response :success
 
-        doc = Nokogiri::XML::Document.parse(@response.body)
-        title = doc.xpath('//title').text
-        sysname = doc.xpath('//system_name').text
+        title = JSON.parse(response.body)['section']['title']
+        sysname = JSON.parse(response.body)['section']['system_name']
 
         assert_equal expected_title, title
         assert_equal expected_sysname, sysname
