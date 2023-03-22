@@ -58,10 +58,10 @@ class ApiSupport::ParamsTest < ActionDispatch::IntegrationTest
 
     class Log <ClassActionOnUnpermitted
       class LogController < TestController
-        class_action_on_unpermitted_parameters :log
+        controller_action_on_unpermitted_parameters :log
       end
 
-      test 'writes on the log when class_action_on_unpermitted_parameters = log' do
+      test 'writes on the log when controller_action_on_unpermitted_parameters = log' do
         with_test_routes do
           log_output = capture_log do
             post '/test/log', params: { unpermitted: true }
@@ -74,10 +74,10 @@ class ApiSupport::ParamsTest < ActionDispatch::IntegrationTest
 
     class Raise <ClassActionOnUnpermitted
       class RaiseController < TestController
-        class_action_on_unpermitted_parameters :raise
+        controller_action_on_unpermitted_parameters :raise
       end
 
-      test 'raises an ActionController::UnpermittedParameters when class_action_on_unpermitted_parameters = :raise' do
+      test 'raises an ActionController::UnpermittedParameters when controller_action_on_unpermitted_parameters = :raise' do
         with_test_routes do
           assert_raises(ActionController::UnpermittedParameters) { post '/test/raise', params: { unpermitted: true } }
         end
@@ -87,8 +87,8 @@ class ApiSupport::ParamsTest < ActionDispatch::IntegrationTest
 
   class PermittedParam < ApiSupport::ParamsTest
     class PermittedParamController < TestController
-      class_action_on_unpermitted_parameters :raise
-      class_always_permitted_parameters :extra_permitted
+      controller_action_on_unpermitted_parameters :raise
+      controller_always_permitted_parameters :extra_permitted
     end
 
     test "doesn't raise an error for an always permitted parameter" do

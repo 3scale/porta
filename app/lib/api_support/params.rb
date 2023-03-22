@@ -7,8 +7,8 @@ module ApiSupport::Params
     wrap_parameters format: %i[url_encoded_form json multipart_form]
     before_action :wrap_parameters_check
     before_action :unpermitted_parameters_check
-    class_attribute :_class_action_on_unpermitted_parameters
-    class_attribute :_class_always_permitted_parameters, default: []
+    class_attribute :_controller_action_on_unpermitted_parameters
+    class_attribute :_controller_always_permitted_parameters, default: []
   end
 
   module ClassMethods
@@ -20,8 +20,8 @@ module ApiSupport::Params
     #   * <tt>:raise</tt> - Raises an +ActionController::UnpermittedParameters+ error.
     #   * <tt>nil</tt>, not set, any other value - Defaults to the action globally set through +ActionController::Parameters.action_on_unpermitted_parameters+
     #
-    def class_action_on_unpermitted_parameters(action)
-      self._class_action_on_unpermitted_parameters = action
+    def controller_action_on_unpermitted_parameters(action)
+      self._controller_action_on_unpermitted_parameters = action
     end
 
     # White list of parameters that won't trigger an UnpermittedParameters error.
@@ -31,9 +31,9 @@ module ApiSupport::Params
     #
     # Accepts symbols and strings
     #
-    def class_always_permitted_parameters(permitted_params)
-      self._class_always_permitted_parameters = self._class_always_permitted_parameters.dup
-      self._class_always_permitted_parameters.push(*permitted_params).uniq!
+    def controller_always_permitted_parameters(permitted_params)
+      self._controller_always_permitted_parameters = self._controller_always_permitted_parameters.dup
+      self._controller_always_permitted_parameters.push(*permitted_params).uniq!
     end
   end
 
@@ -47,12 +47,12 @@ module ApiSupport::Params
     [_wrapper_key, *_wrapper_options[:include]].map(&:to_s)
   end
 
-  def class_always_permitted_keys
-    _class_always_permitted_parameters.map(&:to_s)
+  def controller_always_permitted_keys
+    _controller_always_permitted_parameters.map(&:to_s)
   end
 
   def unpermitted_keys
-    flat_params.keys - wrapped_keys - class_always_permitted_keys
+    flat_params.keys - wrapped_keys - controller_always_permitted_keys
   end
 
   # This basically checks if the wrapped parameter is passed as a Hash, if not it will go 422
@@ -77,10 +77,10 @@ module ApiSupport::Params
   end
 
   def unpermitted_parameters_check
-    return unless _class_action_on_unpermitted_parameters
+    return unless _controller_action_on_unpermitted_parameters
     return if unpermitted_keys.blank?
 
-    case self.class._class_action_on_unpermitted_parameters
+    case self.class._controller_action_on_unpermitted_parameters
     when :log
       Rails.logger.warn("Unpermitted parameters: #{unpermitted_keys}")
     when :raise

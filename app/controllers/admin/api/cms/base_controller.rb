@@ -5,8 +5,8 @@ class Admin::Api::CMS::BaseController < Admin::Api::BaseController
   before_action :deny_on_premises_for_master
   self.access_token_scopes = %i[cms account_management]
 
-  class_action_on_unpermitted_parameters :raise
-  class_always_permitted_parameters %i[id page per_page]
+  controller_action_on_unpermitted_parameters :raise
+  controller_always_permitted_parameters %i[id page per_page]
   rescue_from ActionController::UnpermittedParameters, with: :error_unpermitted_params
 
   MAX_PER_PAGE = 100
