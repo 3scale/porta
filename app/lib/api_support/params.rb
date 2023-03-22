@@ -14,6 +14,8 @@ module ApiSupport::Params
   module ClassMethods
 
     # What to do when the client sends additional parameters not permitted by Strong Parameters
+    # Same as Rails <tt>action_on_unpermitted_parameters</tt>, but at controller level.
+    #  https://api.rubyonrails.org/classes/ActionController/Parameters.html
     #
     # === Allowed values:
     #   * <tt>:log</tt> -   Writes a warning on the logs, containing the list of unpermitted parameters.
