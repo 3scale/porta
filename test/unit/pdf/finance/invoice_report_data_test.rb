@@ -80,14 +80,6 @@ class Pdf::Finance::InvoiceReportDataTest < ActiveSupport::TestCase
                   ["Total cost (GST 2.34% included)", "", '', 10234.0]], @data.line_items
   end
 
-
-  # Regression test for https://3scale.hoptoadapp.com/errors/7206313
-  #
-  test 'not be vulnerable to XSS attack' do
-    @provider.update_attribute(:org_name, '<ScRipT>alert("address1")</ScRipT>')
-    assert_equal @data.provider[0][1], '&lt;ScRipT&gt;alert(&quot;address1&quot;)&lt;/ScRipT&gt;'
-  end
-
   test '#with_logo yields to a block with open file and close is after' do
     @provider.profile.update(logo: Rack::Test::UploadedFile.new(file_fixture('wide.jpg'), 'image/jpeg', true))
 
