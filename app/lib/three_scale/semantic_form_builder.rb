@@ -28,15 +28,6 @@ module ThreeScale
       text_field(method, opts)
     end
 
-    # Get a column object for a specified attribute method - if possible.
-    #
-    def column_for(method) #:nodoc:
-      # our old formtastic expects nil as in Rails 4, not a null object
-      # https://github.com/rails/rails/pull/15878
-      column = super
-      ActiveRecord::ConnectionAdapters::NullColumn === column ? nil : column
-    end
-
     def toggled_inputs(title, opts = {}, &block)
       # to_str because title can be SafeBuffer and parameterize blows on it
       cookie_name = opts.delete(:cookie_name) || "#{title.to_str.parameterize}-toggle-cookie"
