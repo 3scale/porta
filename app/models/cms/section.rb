@@ -43,25 +43,6 @@ class CMS::Section < ApplicationRecord
 
   has_data_tag :section
 
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.__send__(self.class.data_tag) do |x|
-      unless new_record?
-        xml.id id
-        xml.created_at created_at.xmlschema
-        xml.updated_at updated_at.xmlschema
-      end
-      x.title title
-      x.system_name system_name
-      x.public public
-      x.parent_id parent_id
-      x.partial_path partial_path
-    end
-
-    xml.to_xml
-  end
-
   module ProviderAssociationExtension
     def root
       self.find_by_system_name('root')

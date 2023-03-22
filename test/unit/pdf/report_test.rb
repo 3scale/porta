@@ -86,8 +86,8 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     assert report.generate
   end
 
-  test 'sanitize html entitites' do
-    name_with_special_chars = %q{Name's Content has ` and & Symbol}
+  test 'supports service names with special characters and tags' do
+    name_with_special_chars = "Name's with `, & and <b>tag</b>"
     account = FactoryBot.build_stubbed(:simple_provider)
     service = FactoryBot.build_stubbed(:simple_service, account: account, name: name_with_special_chars)
 
@@ -96,6 +96,42 @@ class Pdf::ReportTest < ActiveSupport::TestCase
     assert report.generate
 
     text = PDF::Inspector::Text.analyze_file(report.pdf_file_path)
-    assert_not_includes text.strings, name_with_special_chars
+    assert text.strings.any? { |str| str.include? name_with_special_chars }
+  end
+
+  test "tags and special characters rendered literally in tables" do
+    metric_name = "m<b>&`</b>foo"
+    company_name = "c<b>&`</b>foo"
+    plan_name = "p<b>&`</b>foo"
+
+    buyer = FactoryBot.create(:buyer_account, org_name: company_name)
+    provider = buyer.provider_account
+    cinstance = FactoryBot.create(:cinstance, user_account: buyer)
+    plan = cinstance.application_plan
+    plan.update!(name: plan_name)
+    plan.publish!
+    FactoryBot.create(:metric, friendly_name: metric_name, owner: cinstance.service)
+
+    zone = ActiveSupport::TimeZone.new(buyer.timezone)
+
+    set_env({
+      "CINSTANCE_ID" => cinstance.id.to_s,
+      "SINCE" => zone.today.prev_day.to_s,
+      "UNTIL" => zone.today.to_s,
+      "FREQUENCY" => "0.00005",
+    }) do
+      execute_rake_task 'backend.rake', 'backend:fake'
+    end
+
+    report = Pdf::Report.new(provider, cinstance.service, period: :day).generate
+    strings = PDF::Inspector::Text.analyze_file(report.pdf_file_path).strings.dup
+
+    assert_operator strings, :delete_at, strings.index(metric_name)
+    assert_operator strings, :delete_at, strings.index(plan_name)
+    assert_operator strings, :delete_at, strings.index(plan_name)
+    assert_operator strings, :delete_at, strings.index(company_name)
+    assert_operator strings, :delete_at, strings.index(company_name)
+    assert_operator strings, :delete_at, strings.index(buyer.emails.first)
+    assert strings.none? { |str| str.include?("<") || str.include?("&") || str.include?("\\") }
   end
 end

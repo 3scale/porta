@@ -9,7 +9,6 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
     license_finder_report(report_path)
 
     warn 'License report generated.'
-    exit 0
   end
 
   desc 'Check license compliance of dependencies'
@@ -17,20 +16,21 @@ namespace :licenses do  # rubocop:disable Metrics/BlockLength
     warn 'Checking action items...'
     LicenseFinder::CLI::Main.new.action_items # Aborts if there are pending action items
 
+    # Skip report file checks if it is not under source control.
+    next unless File.exist?(report_path)
+
     warn 'Checking license report is up to date...'
     Tempfile.create do |temp_file|
       temp_report_path = temp_file.path
       license_finder_report(temp_report_path)
 
       unless identical?(report_path, temp_report_path)
-        warn 'License report outdated. Please run "rails licenses:report"'
         system("diff", "-u", report_path.to_s, temp_report_path.to_s)
-        exit 1
+        abort 'License report outdated. Please run "rails licenses:report"'
       end
     end
 
     warn 'License report up to date.'
-    exit 0
   end
 
   private

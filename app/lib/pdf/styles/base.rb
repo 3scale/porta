@@ -34,11 +34,11 @@ module Pdf::Styles
         small: { size: 3.5.mm, color: "505050" },
         red: { text_color: 'ff0000' },
         green: { text_color: '006400' },
-        font: "Liberation Sans",
+        font: FontLiberation.family,
         font_family: {
-          "Liberation Sans" => {
-            normal: "#{liberation_dir}/LiberationSans-Regular.ttf",
-            bold: "#{liberation_dir}/LiberationSans-Bold.ttf",
+          FontLiberation.family => {
+            normal: FontLiberation.regular,
+            bold: FontLiberation.bold,
           }
         },
       }
@@ -55,15 +55,46 @@ module Pdf::Styles
       end
     end
 
-    private
+    class FontLiberation
+      FILE_REGULAR = "LiberationSans-Regular.ttf"
+      FILE_BOLD = "LiberationSans-Bold.ttf"
+      FAMILY = "Liberation Sans"
 
-    def liberation_dir
-      %w[
-      /usr/share/fonts/liberation
-      /usr/share/fonts/liberation-sans
-      ].find do |path|
-        File.directory? path
+      private_constant :FAMILY, :FILE_BOLD, :FILE_REGULAR
+
+      class << self
+        def family
+          FAMILY
+        end
+
+        def bold
+          @bold ||= find_font(FILE_BOLD)
+        end
+
+        def regular
+          @regular ||= find_font(FILE_REGULAR)
+        end
+
+        private
+
+        def find_font(file)
+          expected_locations = %w[
+            /usr/share/fonts/liberation
+            /usr/share/fonts/liberation-sans
+            ~/Library/Fonts
+            /Library/Fonts
+          ]
+
+          expected_locations.each do |path|
+            file_path = File.expand_path(file, path)
+            return file_path if File.exist? file_path
+          end
+
+          raise("cannot find location of #{file}")
+        end
       end
     end
+
+    private_constant :FontLiberation
   end
 end

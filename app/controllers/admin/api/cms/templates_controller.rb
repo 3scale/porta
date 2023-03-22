@@ -12,14 +12,14 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   }.freeze
 
   wrap_parameters :template, include: AVAILABLE_PARAMS,
-                             format: %i[json xml multipart_form url_encoded_form]
+                             format: %i[json multipart_form url_encoded_form]
 
   before_action :find_template, except: %i[index create]
 
   before_action :can_destroy, only: :destroy
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates.xml"
+  ##~ e.path = "/admin/api/cms/templates.json"
   ##~ e.responseClass = "List[short-template]"
   #
   ##~ op            = e.operations.add
@@ -62,7 +62,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates/{id}.xml"
+  ##~ e.path = "/admin/api/cms/templates/{id}.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
@@ -116,7 +116,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates/{id}/publish.xml"
+  ##~ e.path = "/admin/api/cms/templates/{id}/publish.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
