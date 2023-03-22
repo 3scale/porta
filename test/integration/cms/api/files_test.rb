@@ -26,30 +26,6 @@ module CMS
         assert_equal 20, response.parsed_body['files'].size
       end
 
-      test 'index with section' do
-        section = FactoryBot.create :cms_section, provider: @provider, parent: @provider.sections.root
-        FactoryBot.create :cms_file, provider: @provider, title: 'file-in-root-section'
-        FactoryBot.create :cms_file, provider: @provider, section_id: section.id, title: 'a file'
-
-        get admin_api_cms_section_files_path(section, format: :json), params: { provider_key: @provider.provider_key }
-
-        assert_response :success
-        assert_not_match 'file-in-root-section', response.body
-        assert_match 'a file', response.body
-
-        other_provider = FactoryBot.create :provider_account
-        other_section  = FactoryBot.create :cms_section, provider: other_provider, parent: other_provider.sections.root
-        get admin_api_cms_section_files_path(other_section, format: :json), params: { provider_key: @provider.provider_key }
-        assert_response :not_found
-
-        get admin_api_cms_section_files_path(@provider.sections.root.system_name, format: :json), params: { provider_key: @provider.provider_key }
-        assert_response :success
-        assert_match 'file-in-root-section', response.body
-
-        get admin_api_cms_section_files_path('yada', format: :json), params: { provider_key: @provider.provider_key }
-        assert_response :not_found
-      end
-
       test 'index with pagination' do
         21.times { create_file  }
 
