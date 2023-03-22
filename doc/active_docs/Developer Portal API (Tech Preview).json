@@ -234,6 +234,11 @@
               "required": true
             },
             {
+              "name": "system_name",
+              "description": "Human readable and unique identifier",
+              "paramType": "query"
+            },
+            {
               "name": "public",
               "description": "Public or not",
               "default": "true",
@@ -307,6 +312,11 @@
             {
               "name": "title",
               "description": "Title of the section",
+              "paramType": "query"
+            },
+            {
+              "name": "system_name",
+              "description": "Human readable and unique identifier",
               "paramType": "query"
             },
             {

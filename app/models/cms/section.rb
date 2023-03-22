@@ -19,7 +19,7 @@ class CMS::Section < ApplicationRecord
   alias sections children
   alias section= parent=
 
-  validates :system_name, :provider, presence: true
+  validates :title, :system_name, :provider, presence: true
   validates :parent_id, presence: { :unless => :root? }
 
   validates :title, uniqueness: { :scope => [:provider_id, :parent_id] }
