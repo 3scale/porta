@@ -60,7 +60,12 @@ resource 'CMS::File' do
     context 'when requesting a collection' do
       let(:root) { 'collection' }
 
-      json(:collection)
+      json(:collection) do
+        it 'returns a collection of cms files' do
+          expect(subject).to be_a(Array)
+          expect(subject.first.keys).to eq(expected_attributes)
+        end
+      end
     end
   end
 end

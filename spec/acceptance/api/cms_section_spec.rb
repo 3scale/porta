@@ -52,7 +52,12 @@ resource 'CMS::Section' do
     context 'when requesting a collection' do
       let(:root) { 'collection' }
 
-      json(:collection)
+      json(:collection) do
+        it 'returns a collection of cms sections' do
+          expect(subject).to be_a(Array)
+          expect(subject.first.keys).to eq(expected_attributes)
+        end
+      end
     end
   end
 end
