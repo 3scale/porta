@@ -41,8 +41,6 @@ class CMS::Section < ApplicationRecord
 
   before_save :strip_trailing_slashes
 
-  has_data_tag :section
-
   module ProviderAssociationExtension
     def root
       self.find_by_system_name('root')
