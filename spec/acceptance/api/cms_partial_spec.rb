@@ -11,7 +11,7 @@ resource "CMS::Partial" do
       system_name: 'some-partial',
       liquid_enabled: false,
       handler: 'markdown'
-    ).extend(CMS::PartialRepresenter)
+    )
   end
 
   describe 'representer' do
