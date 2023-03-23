@@ -141,4 +141,16 @@ class PageTest < ActiveSupport::TestCase
 
     assert_equal sysname, page.reload.system_name
   end
+
+  test "raises an error when an invalid system_name is given" do
+    page = CMS::Page.new.tap do |p|
+      p.title = 'New Page'
+      p.system_name = 'sysname 1'
+      p.provider = @provider
+      p.section = @provider.sections.root
+      p.path = '/new-page'
+    end
+
+    assert_raise(ActiveRecord::RecordInvalid) { page.save! }
+  end
 end
