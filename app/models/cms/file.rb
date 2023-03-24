@@ -38,8 +38,6 @@ class CMS::File < ApplicationRecord
     file.attachment.extend(UTF8Attachment) if defined?(::Encoding)
   end
 
-  has_data_tag :file
-
   module UTF8Attachment
     def original_filename
       super.tap do |filename|

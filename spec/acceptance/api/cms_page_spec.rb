@@ -16,12 +16,11 @@ resource 'CMS::Page' do
     end
 
   describe 'representer' do
-    let(:root) { 'page' }
-
     context 'when requesting all attributes' do
       let(:expected_attributes) do
         %w[
           id
+          type
           created_at
           updated_at
           title
@@ -38,7 +37,7 @@ resource 'CMS::Page' do
         ]
       end
 
-      json(:resource, skip_resource_save: true) do
+      json(:resource, skip_resource_save: true, skip_root_check: true) do
         it 'should have the correct attributes' do
           expect(subject.keys).to eq(expected_attributes)
         end
@@ -49,6 +48,7 @@ resource 'CMS::Page' do
       let(:expected_attributes) do
         %w[
           id
+          type
           created_at
           updated_at
           title
@@ -65,7 +65,7 @@ resource 'CMS::Page' do
 
       let(:serialized) { representer.public_send(serialization_format, short: true) }
 
-      json(:resource, skip_resource_save: true) do
+      json(:resource, skip_resource_save: true, skip_root_check: true) do
         it 'should have the correct attributes' do
           expect(subject.keys).to eq(expected_attributes)
         end

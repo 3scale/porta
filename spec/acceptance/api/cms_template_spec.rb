@@ -83,7 +83,7 @@ resource "CMS::Template" do
   end
 
   json(:collection) do
-    let(:root) { 'templates' }
+    let(:root) { 'collection' }
     it { should be_an(Array) }
 
     context do
