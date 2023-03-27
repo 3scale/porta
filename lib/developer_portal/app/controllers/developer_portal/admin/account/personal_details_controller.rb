@@ -46,8 +46,9 @@ class DeveloperPortal::Admin::Account::PersonalDetailsController < ::DeveloperPo
   end
 
   def user_params
-    # There are extra fields customized by the provider so we can't add a permit here
-    params.require(:user)
+    params.require(:user).permit([:current_password] +
+                                   resource.special_fields +
+                                   resource.defined_fields.map(&:name))
   end
 
   def verify_current_password
