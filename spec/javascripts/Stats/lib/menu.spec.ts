@@ -36,13 +36,13 @@ describe('StatsMenu', () => {
       }
     }
 
+    public get dateRange () {
+      return this.state
+    }
+
     public set dateRange (date) {
       this.state = date
       this.store.save(date)
-    }
-
-    public get dateRange () {
-      return this.state
     }
 
     public setState (state: typeof StatsState['state']) {

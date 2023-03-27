@@ -82,7 +82,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_first_name"
               name="customer[first_name]"
               value={firstName}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, firstName: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, firstName: value })) }}
             />
           </li>
           <li className="string optional form-group" id="customer_last_name_input">
@@ -95,7 +95,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_last_name"
               name="customer[last_name]"
               value={lastName}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, lastName: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, lastName: value })) }}
             />
           </li>
           <li className="string optional form-group" id="customer_phone_input">
@@ -107,7 +107,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_phone"
               name="customer[phone]"
               value={phone}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, phone: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, phone: value })) }}
             />
           </li>
         </ul>
@@ -154,7 +154,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_credit_card_billing_address_company"
               name="customer[credit_card][billing_address][company]"
               value={company}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, company: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, company: value })) }}
             />
           </li>
           <li className="string optional form-group" id="customer_credit_card_billing_address_street_address_input">
@@ -167,7 +167,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_credit_card_billing_address_street_address"
               name="customer[credit_card][billing_address][street_address]"
               value={address}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, address: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, address: value })) }}
             />
           </li>
           <li className="string optional form-group" id="customer_credit_card_billing_address_postal_code_input">
@@ -180,7 +180,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_credit_card_billing_address_postal_code"
               name="customer[credit_card][billing_address][postal_code]"
               value={zip}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, zip: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, zip: value })) }}
             />
           </li>
           <li className="string optional form-group" id="customer_credit_card_billing_address_locality_input">
@@ -193,7 +193,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_credit_card_billing_address_locality"
               name="customer[credit_card][billing_address][locality]"
               value={city}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, city: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, city: value })) }}
             />
           </li>
           <li className="string optional form-group" id="customer_credit_card_billing_address_region_input">
@@ -205,7 +205,7 @@ const BraintreeForm: FunctionComponent<Props> = ({
               id="customer_credit_card_billing_address_region"
               name="customer[credit_card][billing_address][region]"
               value={state}
-              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, state: value }) )}}
+              onChange={({ currentTarget: { value } }) => { setBillingAddress(prev => ({ ...prev, state: value })) }}
             />
             <div className="col-md-6 col-md-offset-4">
               The 2 letter code for US states or an ISO-3166-2 country subdivision code of up to three letters. <strong>If unsure, leave blank</strong>

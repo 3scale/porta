@@ -19,7 +19,9 @@ const AUTHENTICATION_METHOD_DEFAULTS: FieldCatalogProps & FieldGroupProps = {
   name: 'proxy_authentication_method',
   label: '',
   catalog: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     '1': 'API Key (user_key)',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     '2': 'App_ID and App_Key Pair',
     oidc: 'OpenID Connect'
   }

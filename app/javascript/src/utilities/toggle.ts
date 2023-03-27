@@ -75,7 +75,7 @@ export function setState (ident: string, className: string, value: boolean): voi
  * @param classList element.classList
  * @param className class to tbe toggled
  */
-export function toggleState (ident: string, classList: DOMTokenList, className: string): void{
+export function toggleState (ident: string, classList: DOMTokenList, className: string): void {
   // .toggle returns true/false depending if the class is there or not
   setState(ident, className, classList.toggle(className))
 }

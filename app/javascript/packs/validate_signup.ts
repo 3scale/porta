@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = document.querySelector('input[type="submit"]') as HTMLButtonElement
   const captchaInput = document.getElementById('captchaChecked') as HTMLInputElement
 
+  /* eslint-disable @typescript-eslint/naming-convention */
   // Fields 'org_name', 'username' and 'email' are always required
   const mandatoryFields = {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     'account[org_name]': {
       presence: true,
       length: { minimum: 1 }
@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       equality: 'account[user][password]'
     }
   }
+  /* eslint-enable @typescript-eslint/naming-convention */
 
   const captchaRequired: boolean = document.querySelector('.g-recaptcha') !== null
   const captchaFields = captchaRequired && {

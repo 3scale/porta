@@ -12,6 +12,7 @@ const style = {
     fontFamily: 'Arial, sans-serif',
     fontSmoothing: 'antialiased',
     fontSize: '16px',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     '::placeholder': {
       color: '#32325d'
     }

@@ -1,7 +1,7 @@
 import { toggle, moveState } from 'utilities/toggle'
 import { migrate } from 'services/migrate'
 
-export function initialize (): void{
+export function initialize (): void {
   migrate()
   const list = document.querySelectorAll('.service-widget')
 
