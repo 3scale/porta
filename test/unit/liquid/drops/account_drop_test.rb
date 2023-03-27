@@ -28,7 +28,7 @@ class Liquid::Drops::AccountDropTest < ActiveSupport::TestCase
   test 'returns vat_rate' do
     @buyer.update(vat_rate: '123.4')
     @drop_account = Drops::Account.new(@buyer)
-    assert_equal(@drop_account.vat_rate, @buyer.vat_rate)
+    assert_equal @buyer.vat_rate, @drop_account.vat_rate
   end
 
 
