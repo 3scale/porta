@@ -135,8 +135,8 @@ module CMS
 
         assert_response :success
 
-        title = JSON.parse(response.body)['section']['title']
-        sysname = JSON.parse(response.body)['section']['system_name']
+        title = response.parsed_body['title']
+        sysname = response.parsed_body['system_name']
 
         assert_equal expected_title, title
         assert_equal expected_sysname, sysname
@@ -151,8 +151,8 @@ module CMS
 
         assert_response :success
 
-        title = JSON.parse(response.body)['section']['title']
-        sysname = JSON.parse(response.body)['section']['system_name']
+        title = response.parsed_body['title']
+        sysname = response.parsed_body['system_name']
 
         assert_equal expected_title, title
         assert_equal expected_sysname, sysname
