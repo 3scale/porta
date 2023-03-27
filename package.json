@@ -78,7 +78,7 @@
     "@patternfly/react-table": "^4.18.14",
     "@rails/webpacker": "5.4.4",
     "@stripe/react-stripe-js": "1.16.5",
-    "@stripe/stripe-js": "1.37.0",
+    "@stripe/stripe-js": "1.50.0",
     "bootstrap-sass": "^3.4.1",
     "braintree-web": "3.90.0",
     "c3": "^0.4.11",
