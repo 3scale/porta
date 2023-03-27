@@ -129,7 +129,7 @@ module CMS
 
       test 'create with title but without system_name' do
         expected_title = 'New Section'
-        expected_sysname = 'New Section'
+        expected_sysname = 'new-section'
 
         post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml, title: expected_title}
 
@@ -144,7 +144,7 @@ module CMS
 
       test 'create with title and system_name' do
         expected_title = 'New Section'
-        expected_sysname = 'new_section'
+        expected_sysname = 'section-1'
 
         post admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, format: :xml,
                                                     title: expected_title, system_name: expected_sysname }
