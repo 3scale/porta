@@ -15,10 +15,6 @@ base: &default
 
 development:
   <<: *default
-  test_api_hosts:
-    - hello-world-api.3scale.net
-  ignore_test_failures:
-    - echo-api.3scale.net
   override: 'http://localhost:8091'
   debug: true
 

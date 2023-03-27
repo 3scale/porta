@@ -64,6 +64,7 @@ test:
   secure_cookie: false
   force_ssl: false
   report_traffic: false
+  janitor_worker_enabled: false
 
 production:
   <<: *default
