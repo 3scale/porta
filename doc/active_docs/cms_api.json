@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/admin/api/cms/templates.xml": {
+    "/admin/api/cms/templates.json": {
       "get": {
         "tags": [
           "Templates"
@@ -138,7 +138,7 @@
         }
       }
     },
-    "/admin/api/cms/templates/{id}.xml": {
+    "/admin/api/cms/templates/{id}.json": {
       "get": {
         "tags": [
           "Templates"
@@ -293,7 +293,7 @@
         }
       }
     },
-    "/admin/api/cms/templates/{id}/publish.xml": {
+    "/admin/api/cms/templates/{id}/publish.json": {
       "put": {
         "summary": "Template Publish",
         "description": "The current draft will be published and visible by all users.",
@@ -338,7 +338,7 @@
         }
       }
     },
-    "/admin/api/cms/sections.xml": {
+    "/admin/api/cms/sections.json": {
       "get": {
         "tags": [
           "Sections"
@@ -400,6 +400,10 @@
                     "type": "string",
                     "description": "Title of the section"
                   },
+                  "system_name": {
+                    "type": "string",
+                    "description": "Human readable and unique identifier"
+                  },
                   "public": {
                     "type": "boolean",
                     "description": "Public or not"
@@ -429,7 +433,7 @@
         }
       }
     },
-    "/admin/api/cms/sections/{id}.xml": {
+    "/admin/api/cms/sections/{id}.json": {
       "get": {
         "tags": [
           "Sections"
@@ -495,6 +499,10 @@
                     "type": "string",
                     "description": "Title of the section"
                   },
+                  "system_name": {
+                    "type": "string",
+                    "description": "Human readable and unique identifier"
+                  },
                   "public": {
                     "type": "boolean",
                     "description": "Public or not"
@@ -556,7 +564,7 @@
         }
       }
     },
-    "/admin/api/cms/files.xml": {
+    "/admin/api/cms/files.json": {
       "get": {
         "tags": [
           "Files"
@@ -648,7 +656,7 @@
         }
       }
     },
-    "/admin/api/cms/files/{id}.xml": {
+    "/admin/api/cms/files/{id}.json": {
       "get": {
         "tags": [
           "Files"
