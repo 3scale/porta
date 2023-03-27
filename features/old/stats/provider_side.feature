@@ -52,8 +52,8 @@ Feature: Provider stats
     And the backend is used by this product
     And the following metrics:
       | Metric   | system_name | owner_type    |
-      | Hits     |      hits   |   "Service"   |
       | Pizza    |      pizza  |  "BackendApi" |
+      | Hits     |      hits   |   "Service"   |
 
     When I log in as provider "foo.3scale.localhost"
     When I go to the overview page of product "My Product"
