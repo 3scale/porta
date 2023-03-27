@@ -134,8 +134,3 @@ section class="service-widget"
         = render 'stats/inlinechart', metrics: service.metrics.top_level
 
       = render 'api/services/cards/backends_table', product: service
-
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    serviceInitialize()
-  })
