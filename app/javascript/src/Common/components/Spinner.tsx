@@ -14,4 +14,5 @@ const Spinner: React.FunctionComponent<Props> = ({ size = 'md', className = '' }
   )
 }
 
-export { Spinner, Props }
+export type { Props }
+export { Spinner }

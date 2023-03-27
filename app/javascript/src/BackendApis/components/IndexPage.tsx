@@ -99,4 +99,5 @@ const IndexPage: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsIndexPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<IndexPage {...props} />, containerId) }
 
-export { IndexPage, BackendsIndexPageWrapper, Props }
+export type { Props }
+export { IndexPage, BackendsIndexPageWrapper }

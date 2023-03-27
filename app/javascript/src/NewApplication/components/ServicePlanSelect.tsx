@@ -59,4 +59,5 @@ const ServicePlanSelect: React.FunctionComponent<Props> = ({
   )
 }
 
-export { ServicePlanSelect, Props }
+export type { Props }
+export { ServicePlanSelect }

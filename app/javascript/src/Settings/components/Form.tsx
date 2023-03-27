@@ -85,4 +85,5 @@ const Form: React.FunctionComponent<Props> = ({
 // eslint-disable-next-line @typescript-eslint/default-param-last -- Why is settings even treated as optional
 const FormWrapper = (settings: Props = SETTINGS_DEFAULT, elementId: string): void => { createReactWrapper(<Form {...settings} />, elementId) }
 
-export { Form, FormWrapper, Props }
+export type { Props }
+export { Form, FormWrapper }

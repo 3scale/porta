@@ -23,4 +23,5 @@ const PolicyTile: React.FunctionComponent<Props> = ({
   )
 }
 
-export { PolicyTile, Props }
+export type { Props }
+export { PolicyTile }

@@ -36,4 +36,5 @@ const PatternInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { PatternInput, Props }
+export type { Props }
+export { PatternInput }

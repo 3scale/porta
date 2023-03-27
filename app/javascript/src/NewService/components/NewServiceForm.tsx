@@ -56,4 +56,5 @@ const NewServiceForm: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const NewServiceFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<NewServiceForm {...props} />, containerId) }
 
-export { NewServiceForm, NewServiceFormWrapper, Props }
+export type { Props }
+export { NewServiceForm, NewServiceFormWrapper }

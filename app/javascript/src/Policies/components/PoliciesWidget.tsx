@@ -83,4 +83,5 @@ const PoliciesWidget = connect(
   mapDispatchToProps
 )(PolicyList)
 
-export { PoliciesWidget as default, PolicyList, Props }
+export type { Props }
+export { PoliciesWidget as default, PolicyList }

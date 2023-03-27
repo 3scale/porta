@@ -89,4 +89,5 @@ const ContextSelector: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const ContextSelectorWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ContextSelector {...props} />, containerId) }
 
-export { ContextSelector, ContextSelectorWrapper, Props }
+export type { Props }
+export { ContextSelector, ContextSelectorWrapper }

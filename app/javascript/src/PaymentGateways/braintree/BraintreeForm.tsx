@@ -256,4 +256,5 @@ const BraintreeForm: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const BraintreeFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BraintreeForm {...props} />, containerId) }
 
-export { BraintreeForm, BraintreeFormWrapper, Props }
+export type { Props }
+export { BraintreeForm, BraintreeFormWrapper }

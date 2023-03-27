@@ -45,4 +45,5 @@ const ApplicationPlanSelect: React.FunctionComponent<Props> = ({
   )
 }
 
-export { ApplicationPlanSelect, Props }
+export type { Props }
+export { ApplicationPlanSelect }

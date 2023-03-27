@@ -37,4 +37,5 @@ const PasswordRepeatInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { PasswordRepeatInput, Props }
+export type { Props }
+export { PasswordRepeatInput }

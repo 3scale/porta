@@ -150,4 +150,5 @@ const StripeElementsForm: FunctionComponent<Props> = ({
   )
 }
 
-export { StripeElementsForm, Props }
+export type { Props }
+export { StripeElementsForm }

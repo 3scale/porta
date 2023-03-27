@@ -21,4 +21,5 @@ const PoliciesWrapper = ({ registry, chain, serviceId }: Props, elementId: strin
   createReactWrapper(<Root store={store} />, elementId)
 }
 
-export { PoliciesWrapper, Props }
+export type { Props }
+export { PoliciesWrapper }

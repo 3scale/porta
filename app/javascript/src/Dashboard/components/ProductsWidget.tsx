@@ -77,4 +77,5 @@ const ProductsWidget: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const ProductsWidgetWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ProductsWidget {...props} />, containerId) }
 
-export { ProductsWidget, ProductsWidgetWrapper, Props }
+export type { Props }
+export { ProductsWidget, ProductsWidgetWrapper }

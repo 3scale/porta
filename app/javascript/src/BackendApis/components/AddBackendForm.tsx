@@ -108,4 +108,5 @@ const AddBackendForm: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const AddBackendFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<AddBackendForm {...props} />, containerId) }
 
-export { AddBackendForm, AddBackendFormWrapper, Props }
+export type { Props }
+export { AddBackendForm, AddBackendFormWrapper }

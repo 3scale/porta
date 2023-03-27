@@ -137,4 +137,5 @@ const AllServicesCheckbox: React.FunctionComponent<AllServicesCheckboxProps> = (
   )
 }
 
-export { FeaturesFieldset, Props }
+export type { Props }
+export { FeaturesFieldset }

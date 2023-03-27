@@ -127,4 +127,5 @@ const PlansTableCard: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const PlansTableCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<PlansTableCard {...props} />, containerId) }
 
-export { PlansTableCard, PlansTableCardWrapper, Props }
+export type { Props }
+export { PlansTableCard, PlansTableCardWrapper }

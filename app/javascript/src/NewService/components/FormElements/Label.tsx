@@ -12,4 +12,5 @@ const Label: FunctionComponent<Props> = ({ htmlFor, label, required }) => (
   </label>
 )
 
-export { Label, Props }
+export type { Props }
+export { Label }

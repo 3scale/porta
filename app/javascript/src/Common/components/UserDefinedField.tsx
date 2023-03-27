@@ -67,4 +67,5 @@ const UserDefinedField: FunctionComponent<Props> = ({
   )
 }
 
-export { UserDefinedField, Props }
+export type { Props }
+export { UserDefinedField }

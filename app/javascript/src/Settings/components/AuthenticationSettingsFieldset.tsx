@@ -45,4 +45,5 @@ const AuthenticationSettingsFieldset: React.FunctionComponent<Props> = ({
   ) as React.ReactElement // Hack: Shortcircuit is not supported yet. See: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18912
 }
 
-export { AuthenticationSettingsFieldset, Props }
+export type { Props }
+export { AuthenticationSettingsFieldset }

@@ -34,4 +34,5 @@ const UserNameInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { UserNameInput, Props }
+export type { Props }
+export { UserNameInput }

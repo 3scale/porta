@@ -88,10 +88,10 @@ const PolicyChain: React.FunctionComponent<Props> = ({
   )
 }
 
+export type { Props }
 export {
   PolicyChain,
   SortableList,
   SortableItem,
-  DragHandle,
-  Props
+  DragHandle
 }
