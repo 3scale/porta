@@ -18,7 +18,7 @@ class EmailConfiguration < ApplicationRecord
   belongs_to :account, optional: false
   validate :account_is_provider
 
-  before_save :set_tenant_id, on: :create
+  before_create :set_tenant_id
 
   scope :for, ->(search_email) {
     where arel_table[:email].matches(search_email.gsub(/([_%\\])/, '\\\\\\1'), "\\", false)

@@ -24,6 +24,9 @@ Rails.application.configure do
     request.headers['host']
   }
 
+  # Match custom domains on development
+  config.hosts << /[a-z0-9-]+\.3scale\.localhost/
+
   config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
 
   config.public_file_server.enabled = true

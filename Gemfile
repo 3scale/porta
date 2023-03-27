@@ -11,8 +11,8 @@ gem 'rack', '~> 2.2.6'
 gem 'aws-sdk-rails', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 
-gem 'dotenv-rails', '~> 2.7'
-gem 'rails', '~> 5.2.8'
+gem 'dotenv-rails', '~> 2.8'
+gem 'rails', '~> 6.1'
 gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 
 # Locking mail to 2.7.x, as 2.8 has a regression related to `enable_starttls_auto` setting:
@@ -21,7 +21,7 @@ gem 'globalid', '~> 1.0.1' # remove line after we stop supporting Ruby 2.4
 gem 'mail', '~> 2.7.1'
 
 # Needed for XML serialization of ActiveRecord::Base
-gem "activejob-uniqueness", github: "3scale/activejob-uniqueness", branch: "main"
+gem "activejob-uniqueness", '~> 0.2.5'
 gem 'activemodel-serializers-xml'
 
 gem 'protected_attributes_continued', '~> 1.8.2'
@@ -36,7 +36,7 @@ group :assets do
   gem 'sprockets-rails', '3.2.2' # remove version after we stop supporting Ruby 2.4
 end
 
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0.8'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'oauth2', '~> 1.4'
@@ -72,7 +72,7 @@ gem 'stripe', '~> 5.28.0' # we need the stripe gem because activemerchant can no
 gem 'acts_as_list', '~> 0.9.17'
 gem 'braintree', '~> 2.93'
 gem 'bugsnag', '~> 6.11'
-gem 'cancancan', '~> 2.3.0'
+gem 'cancancan', '~> 3.0.2'
 gem 'formtastic', '~> 2.3.1'
 gem 'gruff', '~>0.3', require: false
 gem 'htmlentities', '~>4.3', '>= 4.3.4'
@@ -136,8 +136,10 @@ gem 'rack-utf8_sanitizer'
 gem 'jwt', '~> 1.5.2', require: false
 
 group :assets do
-  gem 'codemirror-rails', '~> 5.6'
-  gem 'font-awesome-rails', '~> 4.7.0.5'
+  # codemirror-rails is deprecated and won't be updated to be used on Rails 6+
+  # check https://github.com/fixlr/codemirror-rails/issues/61
+  gem 'codemirror-rails', git: 'https://github.com/thalesmiguel/codemirror-rails.git', branch: 'master'
+  gem 'font-awesome-rails', '~> 4.7.0.6'
   gem 'jquery-rails', '~> 4.3'
   gem 'uglifier'
 
@@ -148,7 +150,7 @@ gem 'compass-rails', '~> 3.0.2'
 
 gem 'after_commit_queue', '~> 1.1.0'
 gem 'state_machines', '~> 0.5.0'
-gem 'state_machines-activerecord', '~> 0.5.0'
+gem 'state_machines-activerecord', '~> 0.8'
 
 # for liquid docs on-fly generation
 gem 'commonmarker', '~> 0.23.7'
@@ -160,7 +162,7 @@ gem 'html-pipeline'
 gem 'ruby-openid'
 gem 'slim-rails', '~> 3.2'
 
-gem 'draper', '~> 3.0'
+gem 'draper', '~> 3.1'
 
 group :development do
   gem 'bullet', '~> 6.1.5'
@@ -188,7 +190,7 @@ group :test do
   # To remove once migrated all functional tests
   gem 'codecov', :require => false
   gem 'rack-no_animations', '~> 1.0.3'
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '~> 1.0.4'
   gem 'simplecov', '~> 0.21.2', require: false
 
   gem 'capybara', '~>3.35.3', source: 'https://rubygems.org'
@@ -263,7 +265,7 @@ gem 'unicorn', require: false, group: %i[production]
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do
   oracle = -> { (ENV['ORACLE'] == '1') || ENV.fetch('DATABASE_URL', ENV['DB'])&.start_with?('oracle') }
-  gem 'activerecord-oracle_enhanced-adapter', '~> 5.2.0', install_if: oracle
+  gem 'activerecord-oracle_enhanced-adapter', '~> 6.1', install_if: oracle
   gem 'ruby-oci8', require: false, install_if: oracle
 end
 

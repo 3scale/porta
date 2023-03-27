@@ -30,12 +30,9 @@ module System
   mattr_accessor :redis
 
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    # we do here instead of using initializers because of a Rails 5.1 vs
-    # MySQL bug where `rake db:reset` causes ActiveRecord to be loaded
-    # before initializers and causes configuration not to be respected.
-    # This is fixed in Rails 5.2
-    config.load_defaults 5.1
+    config.load_defaults 6.1
+    # To prevent configuration issues with Zeitwerk
+    config.autoloader = :classic
     config.active_record.belongs_to_required_by_default = false
     config.active_record.include_root_in_json = true
     # Make `form_with` generate non-remote forms. Defaults true in Rails 5.1 to 6.0
