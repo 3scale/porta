@@ -47,7 +47,19 @@ Feature: Provider stats
     And I follow "Top Applications"
     Then I should see "Top Applications" in a header
 
+  Scenario: Default metric is product metric
+    When I log in as provider "foo.3scale.localhost" with a product "My Product"
+    Given a backend
+    And the backend is used by this product
+    And the following metrics:
+      | Metric   | system_name | owner_type    |
+      | Hits     |      hits   |   "Service"   |
+      | Pizza    |      pizza  |  "BackendApi" |
 
+    When I go to the overview page of product "My Product"
+    And I follow "Analytics"
+    And I follow "Traffic"
+    Then I should see "Hits" as the default metric
 
   @wip
   Scenario: Signups (single application mode)
