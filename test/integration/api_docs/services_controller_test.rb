@@ -74,13 +74,13 @@ class ApiDocs::ServicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal "https://#{backend_config[:host]}", json["servers"][0]["url"]
     end
 
-    test 'show the correct url for system APIs' do
+    test 'show the relative "/" path for system APIs' do
       system_apis = ApiDocs::ServicesController::API_SYSTEM_NAMES - [:service_management_api]
       system_apis.each do |system_name|
         get api_docs_service_path(format: :json, id: system_name)
         assert_response :success
-        json = JSON.parse(response.body)
-        assert_equal request.base_url, json["servers"][0]["url"]
+        servers = JSON.parse(response.body)["servers"]
+        assert_equal [{ 'url' => '/' }], servers
       end
     end
 

@@ -2,17 +2,17 @@
 import SwaggerUI from 'swagger-ui'
 import 'swagger-ui/dist/swagger-ui.css'
 
-import { autocompleteInterceptor } from 'ActiveDocs/OAS3Autocomplete'
+import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
 import 'ActiveDocs/swagger-ui-3-patch.scss'
 
 const accountDataUrl = '/api_docs/account_data.json'
 
 window.SwaggerUI = (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) => {
-  const responseInterceptor = (response: SwaggerUI.Response) => autocompleteInterceptor(response, accountDataUrl, serviceEndpoint, args.url)
+  const requestInterceptor = (request: SwaggerUI.Request) => autocompleteRequestInterceptor(request, accountDataUrl, serviceEndpoint)
 
   SwaggerUI({
     ...args,
-    responseInterceptor
+    requestInterceptor
   } as SwaggerUI.SwaggerUIOptions)
 }

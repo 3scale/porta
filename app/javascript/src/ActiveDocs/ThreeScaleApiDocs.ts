@@ -1,7 +1,7 @@
 import SwaggerUI from 'swagger-ui'
 
 import { fetchData } from 'utilities/fetchData'
-import { autocompleteInterceptor } from 'ActiveDocs/OAS3Autocomplete'
+import { autocompleteRequestInterceptor } from 'ActiveDocs/OAS3Autocomplete'
 
 import type { ApiDocsServices } from 'Types/SwaggerTypes'
 
@@ -27,7 +27,7 @@ export const renderApiDocs = async (container: HTMLElement, apiDocsPath: string,
       url,
       // eslint-disable-next-line @typescript-eslint/naming-convention -- Swagger UI
       dom_id: `#${domId}`,
-      responseInterceptor: (response) => autocompleteInterceptor(response, apiDocsAccountDataPath, '', url),
+      requestInterceptor: (request) => autocompleteRequestInterceptor(request, apiDocsAccountDataPath, ''),
       tryItOutEnabled: true
     })
   })

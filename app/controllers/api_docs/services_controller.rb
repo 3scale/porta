@@ -41,7 +41,7 @@ class ApiDocs::ServicesController < FrontendController
 
     def json
       parsed_content = JSON.parse(file_content)
-      parsed_content['servers'] = [{ 'url' => backend_api? ? backend_base_host : '/' }]
+      parsed_content['servers'] = [{ 'url' => backend_base_host }] if backend_api?
 
       parsed_content
     end
@@ -115,7 +115,6 @@ class ApiDocs::ServicesController < FrontendController
   def show
     system_name = params[:id].to_sym
     api_file = (api_files.fetch(system_name) { raise ActiveRecord::RecordNotFound }).dup
-    update_base_url(api_file)
     api_file['paths'] = exclude_forbidden_endpoints(api_file['paths']) if master_on_premises?
 
     render json: api_file
@@ -136,9 +135,5 @@ class ApiDocs::ServicesController < FrontendController
     else
       true
     end
-  end
-
-  def update_base_url(api_spec)
-    api_spec['servers'] = [{ 'url' => helpers.base_url.gsub(%r{/$}, '') }] if api_spec['servers'][0]['url'] == '/'
   end
 end

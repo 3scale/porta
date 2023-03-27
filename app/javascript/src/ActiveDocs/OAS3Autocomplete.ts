@@ -12,7 +12,7 @@
 
 import { fetchData } from 'utilities/fetchData'
 
-import type { Response as SwaggerUIResponse } from 'swagger-ui'
+import type { Request as SwaggerUIRequest, Response as SwaggerUIResponse } from 'swagger-ui'
 import type { AccountData } from 'Types/SwaggerTypes'
 
 const X_DATA_ATTRIBUTE = 'x-data-threescale-name'
@@ -136,17 +136,16 @@ const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: str
 }
 
 /**
- * Intercept and process the response made by Swagger UI
- * Apply transformations (inject servers list and autocomplete data) to the response for OpenAPI spec requests, and
+ * Intercept the request, and if it fetches the OpenAPI specification, apply a custom responseInterceptor that applies
+ * transformations (inject servers list and autocomplete data) to the response
  * keep the responses to the actual API calls (made through 'Try it out') untouched
- * @param response response to the request made through Swagger UI
- * @param specUrl URL of the OpenAPI specification
+ * @param request request made through Swagger UI
  * @param accountDataUrl URL of the data for autocompletion
  * @param serviceEndpoint Public Base URL of the gateway, that will replace the  URL in the "servers" object
  */
-export const autocompleteInterceptor = (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string, specUrl?: string): Promise<Response> | SwaggerUIResponse => {
-  if (specUrl !== response.url) {
-    return response
+export const autocompleteRequestInterceptor = (request: SwaggerUIRequest, accountDataUrl: string, serviceEndpoint: string): Promise<SwaggerUIRequest> | SwaggerUIRequest => {
+  if (request.loadSpec) {
+    request.responseInterceptor = (response: SwaggerUIResponse) => autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
   }
-  return autocompleteOAS3(response, accountDataUrl, serviceEndpoint)
+  return request
 }
