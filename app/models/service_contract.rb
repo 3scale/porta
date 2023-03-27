@@ -1,7 +1,7 @@
 class ServiceContract < Contract
   include Logic::Contracting::ServiceContract
 
-  before_create :accept_on_create, :on => :create, :unless => :live?
+  before_create :accept_on_create, unless: :live?
 
   before_create :set_service_id
   before_validation :set_service_id
