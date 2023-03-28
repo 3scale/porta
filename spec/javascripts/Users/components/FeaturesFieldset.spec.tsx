@@ -110,5 +110,5 @@ describe('when services are visible', () => {
 
 it('should throw an error if feature is wrong', () => {
   // @ts-expect-error We need to pass a wrong feature value
-  expect(() => mountWrapper({ features: ['foo'] })).toThrowError('foo is not a known feature')
+  expect(() => mountWrapper({ features: ['foo'] })).toThrow('foo is not a known feature')
 })
