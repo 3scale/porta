@@ -56,7 +56,7 @@
     "@typescript-eslint/parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/promise-function-async": "off",
-    "@typescript-eslint/lines-around-comment": "off", // Disabled in favor of parameter-properties
+    "@typescript-eslint/lines-around-comment": "off", // Disabled in favor of lines-around-comment
 
     // Override plugin:@typescript-eslint/recommended
     "@typescript-eslint/semi": ["error", "never"],
