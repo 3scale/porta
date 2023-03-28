@@ -14,6 +14,7 @@ class CMS::Page < CMS::BasePage
 
   belongs_to :section, class_name: 'CMS::Section', touch: true
 
+  before_validation :set_system_name , on: %i[create update]
   before_validation :strip_trailing_slashes
   verify_path_format :path
 
@@ -94,6 +95,10 @@ class CMS::Page < CMS::BasePage
     unless persisted?
       self.content_type ||= DEFAULT_CONTENT_TYPE
     end
+  end
+
+  def set_system_name
+    self.system_name = title.parameterize if title.present? && system_name.blank?
   end
 
   def strip_trailing_slashes

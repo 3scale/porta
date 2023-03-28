@@ -18,6 +18,7 @@ const CARD_OPTIONS: StripeCardElementOptions = {
       fontWeight: 300,
       fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
       fontSize: '19px',
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '::placeholder': {
         color: '#3f454c'
       }
@@ -56,6 +57,7 @@ const StripeElementsForm: FunctionComponent<Props> = ({
   const stripe = useStripe()
   const elements = useElements()
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises -- FIXME
   const handleSubmit: FormEventHandler = async (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault()
     event.stopPropagation()
