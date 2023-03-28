@@ -3,6 +3,7 @@ import { client, hostedFields } from 'braintree-web'
 import type { HostedFields } from 'braintree-web'
 import type { HostedFieldFieldOptions } from 'braintree-web/modules/hosted-fields'
 
+/* eslint-disable @typescript-eslint/naming-convention */
 const styles = {
   'input': {
     'font-size': '14px'
@@ -14,6 +15,7 @@ const styles = {
     'color': 'green'
   }
 } as const
+/* eslint-enable @typescript-eslint/naming-convention */
 
 const fields: HostedFieldFieldOptions = {
   number: {
