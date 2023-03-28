@@ -26,7 +26,7 @@ class CMS::Section < ApplicationRecord
   validates :system_name, uniqueness: { :scope => [:provider_id] }, length: { maximum: 255 }
   validates :partial_path, :title, :type, length: { maximum: 255 }
 
-  before_validation :set_system_name , :on => :create
+  before_validation :set_system_name , on: %i[create update]
   before_validation :set_partial_path, :on => :create
   verify_path_format :partial_path
   before_validation :set_provider, :on => :create
@@ -55,7 +55,7 @@ class CMS::Section < ApplicationRecord
     end
 
     def find_or_create!(name, path, options = {})
-      system_name = name.downcase
+      system_name = name.parameterize
 
       if section = find_by_system_name(system_name)
         section
@@ -154,7 +154,7 @@ class CMS::Section < ApplicationRecord
   protected
 
   def set_system_name
-    self.system_name = self.title if self.title && self.system_name.blank?
+    self.system_name = title.parameterize if title.present? && system_name.blank?
   end
 
   def set_partial_path
