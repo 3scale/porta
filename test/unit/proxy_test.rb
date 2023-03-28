@@ -842,6 +842,20 @@ class ProxyTest < ActiveSupport::TestCase
         proxy.destroy
       end
     end
+
+    test 'update policies config with audit check' do
+      proxy = FactoryBot.create :proxy
+
+      Proxy.with_synchronous_auditing do
+
+        proxy.policies_config = [{name: 'cors2', version: '0.0.2', configuration: {foo: 'fofo'}}]
+        proxy.save
+
+        audit = proxy.audits.last
+        assert_equal 'update', audit.action
+
+      end
+    end
   end
 
   class StaleObjectErrorTest < ActiveSupport::TestCase
