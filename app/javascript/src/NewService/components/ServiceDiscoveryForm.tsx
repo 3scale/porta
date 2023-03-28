@@ -57,4 +57,5 @@ const ServiceDiscoveryForm: FunctionComponent<Props> = ({
   )
 }
 
-export { ServiceDiscoveryForm, Props }
+export type { Props }
+export { ServiceDiscoveryForm }

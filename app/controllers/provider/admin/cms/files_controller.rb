@@ -48,11 +48,7 @@ class Provider::Admin::CMS::FilesController < Provider::Admin::CMS::BaseControll
   private
 
   def file_params
-    params[:cms_file].dup.tap do |params|
-      if section = params[:section_id]
-        params[:section] = current_account.sections.find(section)
-      end
-    end
+    params.require(:cms_file).permit(:path, :attachment, :downloadable, :tag_list, :section_id)
   end
 
   def files

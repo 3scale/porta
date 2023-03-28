@@ -27,4 +27,5 @@ const RedirectUrlInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { RedirectUrlInput, Props }
+export type { Props }
+export { RedirectUrlInput }

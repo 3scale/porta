@@ -12,10 +12,9 @@ class CMS::Page < CMS::BasePage
 
   include Searchable
 
-  attr_accessible :title, :section, :layout, :path, :content_type, :tag_list, :system_name
-
   belongs_to :section, class_name: 'CMS::Section', touch: true
 
+  before_validation :set_system_name , on: %i[create update]
   before_validation :strip_trailing_slashes
   verify_path_format :path
 
@@ -29,6 +28,8 @@ class CMS::Page < CMS::BasePage
 
   before_save :mark_for_searchability
   after_initialize :set_default_values
+
+  has_data_tag :page
 
   def self.path(chunks, format = nil)
     path = Array(chunks).compact.join('/')
@@ -88,40 +89,16 @@ class CMS::Page < CMS::BasePage
     super || Mime::Type.lookup(DEFAULT_CONTENT_TYPE)
   end
 
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.page do |x|
-      unless new_record?
-        x.id id
-        x.created_at created_at.xmlschema
-        x.updated_at updated_at.xmlschema
-      end
-
-      x.title title
-      x.system_name system_name
-      x.path(path) if respond_to?(:path)
-      x.hidden hidden?
-      x.layout layout_name
-      x.content_type content_type
-      x.handler handler
-      x.liquid_enabled liquid_enabled
-
-      unless options[:short]
-        x.draft draft
-        x.published published
-      end
-    end
-
-    xml.to_xml
-  end
-
   private
 
   def set_default_values
     unless persisted?
       self.content_type ||= DEFAULT_CONTENT_TYPE
     end
+  end
+
+  def set_system_name
+    self.system_name = title.parameterize if title.present? && system_name.blank?
   end
 
   def strip_trailing_slashes

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PaymentDetailsHelper
-  delegate :has_billing_address?, :billing_address, to: :current_account
+  delegate :billing_address, to: :current_account
 
   attr_reader :braintree_authorization
 
@@ -42,7 +42,19 @@ module PaymentDetailsHelper
     definition_list_item
   end
 
-  def stripe_billing_address_json
+  def stripe_form_data(intent)
+    {
+      stripePublishableKey: site_account.payment_gateway_options[:publishable_key],
+      setupIntentSecret: intent.client_secret,
+      billingAddress: stripe_billing_address,
+      billingName: current_account[:billing_address_name],
+      successUrl: hosted_success_admin_account_stripe_path,
+      creditCardStored: current_account.credit_card_stored?
+    }.compact
+  end
+
+  # Must match PaymentMethod's address format https://stripe.com/docs/api/payment_methods/object#payment_method_object-billing_details-address
+  def stripe_billing_address
     return unless logged_in?
 
     {
@@ -51,8 +63,8 @@ module PaymentDetailsHelper
       city: billing_address.city,
       state: billing_address.state,
       postal_code: billing_address.zip,
-      country: billing_address.country
-    }.to_json
+      country: billing_address.country # Contrary to Braintree, the Stripe form sends the country as an ISO code.
+    }.compact
   end
 
   def braintree_form_data
@@ -61,17 +73,19 @@ module PaymentDetailsHelper
       threeDSecureEnabled: site_account.payment_gateway_options[:three_ds_enabled],
       clientToken: braintree_authorization,
       countriesList: merchant_countries,
-      billingAddress: has_billing_address? ? billing_address_data : empty_billing_address_data
+      billingAddress: billing_address_data
     }
   end
 
   def billing_address_data # rubocop:disable Metrics/AbcSize
+    country = billing_address[:country]
     {
       firstName: current_account.billing_address_first_name,
       lastName: current_account.billing_address_last_name,
       address: billing_address[:address1],
       city: billing_address[:city],
-      country: billing_address[:country],
+      country: country,
+      countryCode: country_code_for(country),
       company: billing_address[:company],
       phone: billing_address[:phone_number],
       state: billing_address[:state],
@@ -79,17 +93,9 @@ module PaymentDetailsHelper
     }.transform_values { |value| value.presence || '' }
   end
 
-  def empty_billing_address_data
-    {
-      firstName: '',
-      lastName: '',
-      address: '',
-      city: '',
-      country: '',
-      company: '',
-      phone: '',
-      state: '',
-      zip: ''
-    }
+  def country_code_for(country_name)
+    return nil unless country_name
+
+    merchant_countries.find { |country| country[0] == country_name }&.dig(1)
   end
 end

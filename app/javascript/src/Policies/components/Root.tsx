@@ -14,4 +14,5 @@ const Root: React.FunctionComponent<Props> = ({ store }) => (
   </Provider>
 )
 
-export { Root as default, Props }
+export type { Props }
+export { Root as default }

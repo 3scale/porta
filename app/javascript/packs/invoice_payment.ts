@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js'
 
 import type { PaymentIntent, Stripe, StripeCardElement } from '@stripe/stripe-js'
 
-import 'PaymentGateways/stripe/components/StripeFormWrapper.scss'
+import 'PaymentGateways/stripe/StripeElementsForm.scss'
 
 const style = {
   base: {
@@ -12,6 +12,7 @@ const style = {
     fontFamily: 'Arial, sans-serif',
     fontSmoothing: 'antialiased',
     fontSize: '16px',
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     '::placeholder': {
       color: '#32325d'
     }

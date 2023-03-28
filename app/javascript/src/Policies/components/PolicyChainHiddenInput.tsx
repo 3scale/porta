@@ -19,4 +19,5 @@ const PolicyChainHiddenInput: React.FunctionComponent<Props> = ({ policies }) =>
   )
 }
 
-export { PolicyChainHiddenInput, Props }
+export type { Props }
+export { PolicyChainHiddenInput }

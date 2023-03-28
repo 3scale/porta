@@ -69,4 +69,5 @@ const UserRole: React.FunctionComponent<UserRoleProps> = ({
   </li>
 )
 
-export { RoleRadioGroup, Props }
+export type { Props }
+export { RoleRadioGroup }

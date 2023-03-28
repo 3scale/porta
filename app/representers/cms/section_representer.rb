@@ -1,15 +1,19 @@
-module CMS::SectionRepresenter
-  include ThreeScale::JSONRepresenter
+# frozen_string_literal: true
 
-  wraps_resource
+module CMS
+  module SectionRepresenter
+    include ThreeScale::JSONRepresenter
 
-  property :id
+    with_options(unless: :new_record?) do
+      property :id
+      property :created_at
+      property :updated_at
+    end
 
-  property :created_at
-  property :updated_at
-  property :partial_path
-  property :public
-  property :title
-  property :parent_id
-  property :system_name
+    property :title, render_nil: true
+    property :system_name
+    property :public
+    property :parent_id, render_nil: true
+    property :partial_path, render_nil: true
+  end
 end

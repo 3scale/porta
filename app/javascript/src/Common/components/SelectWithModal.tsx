@@ -183,4 +183,5 @@ const SelectWithModal = <T extends IRecord>({
   )
 }
 
-export { SelectWithModal, Props }
+export type { Props }
+export { SelectWithModal }

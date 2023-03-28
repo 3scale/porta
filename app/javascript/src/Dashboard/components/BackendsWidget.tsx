@@ -77,4 +77,5 @@ const BackendsWidget: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const BackendsWidgetWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BackendsWidget {...props} />, containerId) }
 
-export { BackendsWidget, BackendsWidgetWrapper, Props }
+export type { Props }
+export { BackendsWidget, BackendsWidgetWrapper }

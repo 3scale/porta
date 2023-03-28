@@ -19,4 +19,5 @@ const CSRFToken = ({ win = window }: Props): ReactElement => {
   )
 }
 
-export { CSRFToken, Props }
+export type { Props }
+export { CSRFToken }

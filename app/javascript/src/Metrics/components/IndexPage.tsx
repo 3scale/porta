@@ -87,4 +87,5 @@ const IndexPage: FunctionComponent<Props> = ({
   )
 }
 
-export { IndexPage, Props }
+export type { Props }
+export { IndexPage }

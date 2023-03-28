@@ -95,4 +95,5 @@ const MetricsTable: FunctionComponent<Props> = ({
   )
 }
 
-export { MetricsTable, Props }
+export type { Props }
+export { MetricsTable }

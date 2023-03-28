@@ -11,7 +11,6 @@
 # end
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.uncountable << 'trash'
-  inflect.uncountable << 'ogone'
   inflect.uncountable << 'braintree_blue'
   inflect.uncountable << 'authorize_net'
   inflect.uncountable << 'stripe'

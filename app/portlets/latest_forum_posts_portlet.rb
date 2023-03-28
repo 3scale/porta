@@ -1,7 +1,5 @@
 class LatestForumPostsPortlet < CMS::Portlet::Base
   attributes :posts
-  attr_accessible :posts
-
   validates_numericality_of :posts
 
   def self.default_template

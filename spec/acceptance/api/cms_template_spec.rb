@@ -11,23 +11,23 @@ resource "CMS::Template" do
   let(:collection) { [partial, layout, page] }
 
   shared_examples "cms resource" do
-    post '/admin/api/cms/templates.:format', action: :create do
+    post '/admin/api/cms/templates', action: :create do
       let(:resource) { CMS::Template.last }
       parameter :type, 'Type of the CMS Template'
     end
-    get '/admin/api/cms/templates/:id.:format', action: :show
-    put '/admin/api/cms/templates/:id.:format', action: :update
-    put '/admin/api/cms/templates/:id.:format', action: :publish do
+    get '/admin/api/cms/templates/:id', action: :show
+    put '/admin/api/cms/templates/:id', action: :update
+    put '/admin/api/cms/templates/:id', action: :publish do
       before { resource.should be_dirty }
       after { resource.should_not be_dirty }
     end
-    delete '/admin/api/cms/templates/:id.:format', action: :destroy do
+    delete '/admin/api/cms/templates/:id', action: :destroy do
       after { expect{ resource.reload }.to raise_error(ActiveRecord::RecordNotFound) }
     end
   end
 
-  api 'cms template' do
-    get '/admin/api/cms/templates.:format', action: :index do
+  api 'cms template', format: [:json] do
+    get '/admin/api/cms/templates', action: :index do
       before { collection.each(&:save!).sort_by!(&:id) }
       let(:serialized) { representer.send(serialization_format, short: true) }
     end
@@ -83,7 +83,7 @@ resource "CMS::Template" do
   end
 
   json(:collection) do
-    let(:root) { 'templates' }
+    let(:root) { 'collection' }
     it { should be_an(Array) }
 
     context do
@@ -104,8 +104,8 @@ resource "CMS::Template" do
 end
 
 __END__
- publish_admin_api_cms_template PUT    /admin/api/cms/templates/:id/publish(.:format) admin/api/cms/templates#publish {:format=>"xml"}
-        admin_api_cms_templates GET    /admin/api/cms/templates(.:format)             admin/api/cms/templates#index {:format=>"xml"}
-                                POST   /admin/api/cms/templates(.:format)             admin/api/cms/templates#create {:format=>"xml"}
-         admin_api_cms_template GET    /admin/api/cms/templates/:id(.:format)         admin/api/cms/templates#show {:format=>"xml"}
-                                PUT    /admin/api/cms/templates/:id(.:format)         admin/api/cms/templates#update {:format=>"xml"}
+ publish_admin_api_cms_template PUT    /admin/api/cms/templates/:id/publish(.:format) admin/api/cms/templates#publish {:format=>"json"}
+        admin_api_cms_templates GET    /admin/api/cms/templates(.:format)             admin/api/cms/templates#index {:format=>"json"}
+                                POST   /admin/api/cms/templates(.:format)             admin/api/cms/templates#create {:format=>"json"}
+         admin_api_cms_template GET    /admin/api/cms/templates/:id(.:format)         admin/api/cms/templates#show {:format=>"json"}
+                                PUT    /admin/api/cms/templates/:id(.:format)         admin/api/cms/templates#update {:format=>"json"}

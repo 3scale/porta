@@ -64,6 +64,15 @@ Rails.application.configure do
 
   config.assets.compile = ENV.fetch('SKIP_ASSETS', '0') == '0'
 
+  config.asset_host = ->(source) do
+    full_path = File.join(Rails.public_path, source)
+    exist_in_public_assets = File.exist?(full_path)
+
+    break unless exist_in_public_assets
+
+    config.three_scale.asset_host.presence
+  end
+
   config.after_initialize do
     ::GATEWAY = ActiveMerchant::Billing::BogusGateway.new
   end

@@ -53,4 +53,5 @@ const BackendAPIIndexPage: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const BackendAPIIndexPageWrapper = (props: Props, containerId: string): void => { createReactWrapper(<BackendAPIIndexPage {...props} />, containerId) }
 
-export { BackendAPIIndexPage, BackendAPIIndexPageWrapper, Props }
+export type { Props }
+export { BackendAPIIndexPage, BackendAPIIndexPageWrapper }

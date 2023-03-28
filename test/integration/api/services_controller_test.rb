@@ -42,7 +42,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       get settings_admin_service_path(service)
       assert_response :success
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
 
       assert_template 'api/services/settings'
       section_titles = page.xpath("//fieldset[@class='inputs']/legend").text
@@ -67,7 +67,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # Default value
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       hosted_option = page.at_css('#service_deployment_option_hosted')
       assert hosted_option.attribute('checked').present?
 
@@ -78,7 +78,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       self_managed_option = page.at_css('#service_deployment_option_self_managed')
       assert self_managed_option.attribute('checked').present?
 
@@ -89,7 +89,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       hosted_option = page.at_css('#service_deployment_option_hosted')
       assert hosted_option.attribute('checked').present?
 
@@ -100,7 +100,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       istio_option = page.at_css('#service_deployment_option_service_mesh_istio')
       assert istio_option.attribute('checked').present?
     end
@@ -108,7 +108,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
     test 'receives proper names and values from deployment options' do
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
 
       deployment_options = page.css('[name="service[deployment_option]"]').map{|i| [i.parent.text, i[:value]]}
       expected_deployment_options = [['APIcast 3scale managed', 'hosted'], ['APIcast self-managed', 'self_managed'], ['Istio', 'service_mesh_istio']]
@@ -120,7 +120,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
       # Default value
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       default = page.at_css('#service_proxy_authentication_method_1')
       assert default.attribute('checked').present?
 
@@ -131,7 +131,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       app_id_app_key_option = page.at_css('#service_proxy_authentication_method_2')
 
       assert app_id_app_key_option.attribute('checked').present?
@@ -143,7 +143,7 @@ class Api::ServicesControllerTest < ActionDispatch::IntegrationTest
 
       get settings_admin_service_path(service)
 
-      page = Nokogiri::HTML::Document.parse(response.body)
+      page = Nokogiri::HTML4::Document.parse(response.body)
       api_key_option = page.at_css('#service_proxy_authentication_method_1')
 
       assert api_key_option.attribute('checked').present?

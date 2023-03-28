@@ -34,4 +34,5 @@ const EmailInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { EmailInput, Props }
+export type { Props }
+export { EmailInput }

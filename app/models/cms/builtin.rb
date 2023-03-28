@@ -54,8 +54,6 @@ class CMS::Builtin < CMS::BasePage
 
   validates :system_name, presence: true
 
-  attr_protected :liquid_enabled
-
   # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
   # in rails 4.2 use the attribute api
   def read_attribute(name)
@@ -111,49 +109,13 @@ class CMS::Builtin < CMS::BasePage
       record.errors.add attr, :is_present if value.present?
     end
 
-    def to_xml(options = {})
-      xml = options[:builder] || Nokogiri::XML::Builder.new
-
-      xml.builtin_page do |x|
-        unless new_record?
-          xml.id id
-          xml.created_at created_at.xmlschema
-          xml.updated_at updated_at.xmlschema
-        end
-
-        x.system_name system_name
-        x.liquid_enabled liquid_enabled
-        x.layout layout_name
-      end
-
-      xml.to_xml
-    end
+    has_data_tag :builtin_page
   end
 
   # CMS::Builtin::Page
   class Page < CMS::Builtin
-    def to_xml(options = {})
-      xml = options[:builder] || Nokogiri::XML::Builder.new
 
-      xml.builtin_page do |x|
-        unless new_record?
-          xml.id id
-          xml.created_at created_at.xmlschema
-          xml.updated_at updated_at.xmlschema
-        end
-
-        # x.title title
-        x.system_name system_name
-        x.liquid_enabled liquid_enabled
-
-        unless options[:short]
-          x.draft draft
-          x.published published
-        end
-      end
-
-      xml.to_xml
-    end
+    has_data_tag :builtin_page
 
     def content_type
       'text/html'
@@ -189,7 +151,8 @@ class CMS::Builtin < CMS::BasePage
 
     private :destroy
     attr_readonly :system_name
-    attr_protected :liquid_enabled
+
+    has_data_tag :builtin_partial
 
     # TODO: this is a quick fix: we should set the liquid enabled attribute to true when creating builtin templates
     def liquid_enabled?
@@ -249,10 +212,6 @@ class CMS::Builtin < CMS::BasePage
 
     def title
       I18n.t("#{system_name}.title", scope: 'builtin_partials', default: (system_name || '').humanize)
-    end
-
-    def to_xml(options = {})
-      super options.merge(root: :builtin_partial)
     end
 
     protected

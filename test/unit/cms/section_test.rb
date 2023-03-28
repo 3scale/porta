@@ -15,7 +15,7 @@ class CMS::SectionTest < ActiveSupport::TestCase
   end
 
   test 'partial_path should be normalized' do
-    @section = FactoryBot.build(:cms_section, :parent => @root, :partial_path => " do whatever / you want ")
+    @section = FactoryBot.build(:cms_section, provider: @provider, parent: @root, partial_path: " do whatever / you want ")
     assert @section.invalid?, "section should be valid"
     assert_equal "do-whatever/you-want", @section.partial_path
     assert_valid @section
@@ -105,5 +105,46 @@ class CMS::SectionTest < ActiveSupport::TestCase
     @provider.destroy
     assert_nil CMS::Section.find_by_provider_id(@provider.id)
     assert_not_nil CMS::Section.find_by_provider_id(@provider2.id)
+  end
+
+  test 'generates a system_name with proper format from title when creating' do
+    section = CMS::Section.new.tap do |s|
+      s.title = 'New Section'
+      s.provider = @provider
+      s.parent = @root
+    end
+
+    section.save!
+
+    assert_equal 'new-section', section.reload.system_name
+  end
+
+  test 'generates a system_name with proper format from title when updating' do
+    section = CMS::Section.new.tap do |s|
+      s.title = 'New Section'
+      s.system_name = 'sysname-1'
+      s.provider = @provider
+      s.parent = @root
+    end
+    section.save!
+
+    section.system_name = ''
+    section.save!
+
+    assert_equal 'new-section', section.reload.system_name
+  end
+
+  test "doesn't generate a system_name when one is given" do
+    sysname = 'sysname-1'
+    section = CMS::Section.new.tap do |s|
+      s.title = 'New Section'
+      s.system_name = sysname
+      s.provider = @provider
+      s.parent = @root
+    end
+
+    section.save!
+
+    assert_equal sysname, section.reload.system_name
   end
 end

@@ -70,4 +70,5 @@ const NavSection: React.FunctionComponent<NavSectionProps> = ({ title: navSectio
 // eslint-disable-next-line react/jsx-props-no-spreading
 const VerticalNavWrapper = (props: Props, containerId: string): void => { createReactWrapper(<VerticalNav {...props} />, containerId) }
 
-export { VerticalNav, VerticalNavWrapper, Props }
+export type { Props }
+export { VerticalNav, VerticalNavWrapper }

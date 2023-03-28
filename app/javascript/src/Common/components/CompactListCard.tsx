@@ -85,4 +85,5 @@ const CompactListCard: React.FunctionComponent<Props> = ({
   )
 }
 
-export { CompactListCard, Props }
+export type { Props }
+export { CompactListCard }

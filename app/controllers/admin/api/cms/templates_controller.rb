@@ -2,18 +2,24 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ sapi = source2swagger.namespace("CMS API")
   ##~ @parameter_template_id = { :name => "id", :description => "ID of the template", :dataType => "int", :required => true, :paramType => "path" }
 
-  ALLOWED_PARAMS = %i[type system_name title path draft section_id layout_name
-                      layout_id liquid_enabled handler content_type].freeze
+  AVAILABLE_PARAMS = %i[system_name title path draft liquid_enabled handler content_type section_id layout_id].freeze
+  ALLOWED_PARAMS = {
+    page: %i[title path content_type system_name section_id layout_id liquid_enabled draft handler],
+    'builtin-page': %i[layout_id draft],
+    layout: %i[system_name draft title liquid_enabled],
+    partial: %i[system_name draft],
+    'builtin-partial': %i[draft],
+  }.freeze
 
-  wrap_parameters :template, include: ALLOWED_PARAMS,
-                             format: [:json, :xml, :multipart_form, :url_encoded_form]
+  wrap_parameters :template, include: AVAILABLE_PARAMS,
+                             format: %i[json multipart_form url_encoded_form]
 
-  before_action :find_template, :except => [ :index, :create ]
+  before_action :find_template, except: %i[index create]
 
   before_action :can_destroy, only: :destroy
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates.xml"
+  ##~ e.path = "/admin/api/cms/templates.json"
   ##~ e.responseClass = "List[short-template]"
   #
   ##~ op            = e.operations.add
@@ -49,27 +55,14 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def create
-    cms_params = cms_template_params
-    type = cms_params.delete('type')
-
-    collections = { page: current_account.pages,
-                    partial: current_account.partials,
-                    layout: current_account.layouts }
-
-    if type && (collection = collections[type.to_sym])
-      template = collection.new(cms_params)
-      if template.respond_to?(:section)
-        template.section ||= find_section
-      end
-      template.save
-      respond_with(template)
-    else
-      render_error "Unknown template type '#{type}'", status: :not_acceptable
-    end
+    template = Admin::Api::CMS::TemplateService::Create.call(current_account, params, cms_template_params)
+    respond_with(template)
+  rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
+    render_error exception.message, status: :unprocessable_entity
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates/{id}.xml"
+  ##~ e.path = "/admin/api/cms/templates/{id}.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
@@ -103,11 +96,10 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add :name => "liquid_enabled", :description => "liquid processing of the template content on/off", :paramType => "query", :type => "boolean"
   ##~ op.parameters.add :name => "handler", :paramType => "query", :description => "text will be processed by the handler before rendering", :required => false, :allowableValues => { :valueType => "LIST", :values => ["textile", "markdown"]  }
   def update
-    if @template.respond_to?(:section)
-      @template.section ||= find_section
-    end
-    @template.update_attributes(cms_template_params)
+    Admin::Api::CMS::TemplateService::Update.call(current_account, params, cms_template_params, @template)
     respond_with(@template)
+  rescue Admin::Api::CMS::TemplateService::TemplateServiceError => exception
+    render_error exception.message, status: :unprocessable_entity
   end
 
   ##~ op             = e.operations.add
@@ -124,7 +116,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   ##~ e = sapi.apis.add
-  ##~ e.path = "/admin/api/cms/templates/{id}/publish.xml"
+  ##~ e.path = "/admin/api/cms/templates/{id}/publish.json"
   ##~ e.responseClass = "template"
   #
   ##~ op             = e.operations.add
@@ -147,15 +139,20 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   def cms_template_params
-    attrs = params.require(:template).permit(*ALLOWED_PARAMS)
-
-    set_layout_by(:layout_name, :find_by_system_name, attrs)
-    set_layout_by(:layout_id, :find_by_id, attrs)
-
-    attrs
+    params.require(:template).permit(*allowed_type_params)
   end
 
   private
+
+  def allowed_type_params
+    ALLOWED_PARAMS[template_type]
+  end
+
+  def template_type
+    return params[:type].parameterize.to_sym if params[:type].present?
+
+    @template.class.name[5..-1].parameterize.to_sym if @template.present?
+  end
 
   def can_destroy
     head :locked unless @template.respond_to?(:destroy)
@@ -164,18 +161,4 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   def cms_templates
     current_account.templates.but(CMS::EmailTemplate, CMS::Builtin::LegalTerm).order(:id)
   end
-
-  def find_section
-    scope = current_account.sections
-    scope.find_by_id(params[:section_id]) || scope.find_by_system_name(params[:section_name]) || scope.root
-  end
-
-  def set_layout_by(attr_name, finder, attrs)
-    if attrs.key?(attr_name)
-      attrs[:layout] = if name = attrs[attr_name].presence
-        current_account.layouts.send(finder,name)
-                       end
-    end
-  end
-
 end

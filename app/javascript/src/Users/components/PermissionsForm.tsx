@@ -85,4 +85,5 @@ const PermissionsForm: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const PermissionsFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<PermissionsForm {...props} />, containerId) }
 
-export { PermissionsForm, PermissionsFormWrapper, Props }
+export type { Props }
+export { PermissionsForm, PermissionsFormWrapper }

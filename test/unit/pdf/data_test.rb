@@ -75,11 +75,11 @@ class Pdf::DataTest < ActiveSupport::TestCase
 
     data = Pdf::Data.new(@provider_account, @service, :period => :day)
 
-    assert_equal ['<td>first</td>', '<td>second</td>', '<td>third</td>' ],
+    assert_equal ['first', 'second', 'third' ],
                  data.latest_users(3).map(&:first)
   end
 
-  test 'sanitize escape sequences' do
+  test 'does not escape special characters' do
     buyer1     = FactoryBot.create(:buyer_account, :org_name => 'fi\rst buye\r', :provider_account => @provider_account, :created_at => 1.day.ago)
     buyer2     = FactoryBot.create(:buyer_account, :org_name => 'seco\nd buyer\r\n', :provider_account => @provider_account, :created_at => 5.days.ago)
     buyer3     = FactoryBot.create(:buyer_account, :org_name => '\nthi\rd buyer', :provider_account => @provider_account, :created_at => 10.days.ago)
@@ -94,7 +94,7 @@ class Pdf::DataTest < ActiveSupport::TestCase
 
     data = Pdf::Data.new(@provider_account, @service, :period => :day)
 
-    assert_equal ['<td>fi\\\rst buye\\\r</td>', '<td>seco\\\nd buyer\\\r\\\n</td>', '<td>\\\nthi\\\rd buyer</td>' ],
+    assert_equal ['fi\rst buye\r', 'seco\nd buyer\r\n', '\nthi\rd buyer' ],
                  data.latest_users(3).map(&:first)
   end
 end

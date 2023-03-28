@@ -123,4 +123,5 @@ const ToolbarSearch: React.FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const ToolbarSearchWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ToolbarSearch {...props} />, containerId) }
 
-export { ToolbarSearch, ToolbarSearchWrapper, Props }
+export type { Props }
+export { ToolbarSearch, ToolbarSearchWrapper }

@@ -57,7 +57,7 @@ class PostOffice < ActionMailer::Base
       'X-SMTPAPI' => '{"category": "Report"}'
     )
 
-    attachments[report.pdf_file_name] = File.read(report.report.path)
+    attachments[report.pdf_file_name] = File.read(report.pdf_file_path)
 
     mail(
       :subject => "3scale: #{service_name} - #{period}",

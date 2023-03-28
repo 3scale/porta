@@ -28,4 +28,5 @@ const ServiceManualForm: FunctionComponent<Props> = (props) => {
   )
 }
 
-export { ServiceManualForm, Props }
+export type { Props }
+export { ServiceManualForm }

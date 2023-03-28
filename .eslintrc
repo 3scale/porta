@@ -37,6 +37,9 @@
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "jsx-quotes": ["error", "prefer-double"],
     "array-bracket-spacing": ["error", "never"],
+    "lines-around-comment": ["error", {
+      "allowBlockStart": true
+    }],
     // "eslint array-bracket-newline": ["error", { "multiline": true }], // TODO: requires eslint 8
 
     // Override plugin:@typescript-eslint/all
@@ -50,9 +53,10 @@
     "@typescript-eslint/no-type-alias": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-magic-numbers": "off",
-    "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/promise-function-async": "off",
+    "@typescript-eslint/lines-around-comment": "off", // Disabled in favor of lines-around-comment
 
     // Override plugin:@typescript-eslint/recommended
     "@typescript-eslint/semi": ["error", "never"],

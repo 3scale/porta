@@ -5,7 +5,7 @@ module Tasks
 
     def setup
       @page = FactoryBot.build(:cms_partial, system_name: 'shared/pagination',
-        published: '<p>Title</p><a href="{{ part.link }}">Supertramp</a>')
+                               published: '<p>Title</p><a href="{{ part.link }}">Supertramp</a>')
 
       @page.save(validate: false)
     end

@@ -54,6 +54,14 @@ before_fork do |server, worker|
       $stdout.puts "Process already killed..."
     end
   end
+
+  # Allow graceful shutdown when running in a container with SIGTERM.
+  # It is mostly safe that we revert SIGQUIT to DEFAULT for short
+  # because there are still no workers spawned at this point.
+  # If you want quick shutdown, send SIGINT
+  quit_handler = trap(:QUIT, "DEFAULT")
+  trap(:QUIT, quit_handler)
+  trap(:TERM, quit_handler)
 end
 
 

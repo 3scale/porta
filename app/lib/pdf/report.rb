@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require 'prawn/core'
-require 'prawn/format'
-require "prawn/measurement_extensions"
-require 'gruff'
-require 'pdf/format'
-require 'pdf/data'
-require 'pdf/styles/colored'
-
 # REFACTOR: extract abstract Report class, and DRY functionality with InvoiceReporter
 module Pdf
   class Report
@@ -15,26 +7,26 @@ module Pdf
 
     attr_accessor :account, :period, :pdf, :service, :report
 
-    METRIC_HEADINGS_DAY   = Format.prep_th ["Name", "Today's Total", "% Change"]
-    METRIC_HEADINGS_WEEK  = Format.prep_th ["Name", "Week's Total",  "% Change"]
-    SIGNUP_HEADINGS       = Format.prep_th ["Name", "Registered on", "Email", "Plan"]
-    TOP_USERS_HEADINGS    = Format.prep_th %w[Name Hits]
-    USERS_HEADINGS        = Format.prep_th %w[Plan Users]
+    METRIC_HEADINGS_DAY = ["Name", "Today's Total", "% Change"].freeze
+    METRIC_HEADINGS_WEEK = ["Name", "Week's Total", "% Change"].freeze
+    SIGNUP_HEADINGS = ["Name", "Registered on", "Email", "Plan"].freeze
+    TOP_USERS_HEADINGS = %w[Name Hits].freeze
+    USERS_HEADINGS = %w[Plan Users].freeze
 
     def initialize(account, service, options = {})
       @account = account
       @service = service
-      @period = options[:period] || :day
+      @period = options[:period]&.to_sym || :day
       # TODO: accept as parameter
       @style = Pdf::Styles::Colored.new
       @data = Pdf::Data.new(@account, @service, period: @period)
 
       @pdf = Prawn::Document.new(
         page_size: 'A4',
-        page_layout: :portrait)
+        page_layout: :portrait,
+        compress: true)
 
-      @pdf.tags(@style.tags)
-      @pdf.font(@style.font)
+      set_default_font
     end
 
     def generate
@@ -44,6 +36,8 @@ module Pdf
       header
 
       traffic_graph
+      move_down 3
+
       traffic_and_users
       move_down 3
 
@@ -53,7 +47,7 @@ module Pdf
       metrics
       move_down 3
 
-      @report = @pdf.render_file(pdf_file_path)
+      @pdf.render_file(pdf_file_path)
 
       self
     end
@@ -94,33 +88,42 @@ module Pdf
     end
 
     def print_period
-      return "Daily Report" if @period == :day
-      return "Weekly Report" if @period == :week
+      notification_name.to_s.split("_").map(&:capitalize).join(" ")
     end
 
     def header
-      @pdf.text "<period>#{print_period}</period> (<domain>#{account.external_domain} - #{EscapeUtils.escape_html(@service.name)}</domain>)"
-      @pdf.header @pdf.margin_box.top_left do
-        @pdf.text header_text, align: :right
+      @pdf.formatted_text([
+                            { text: print_period.to_s, **@style[:period] },
+                            { text: " (", size: @style[:period][:size] },
+                            { text: "#{account.external_domain} - #{@service.name}", **@style[:domain] },
+                            { text: ")", size: @style[:period][:size] },
+                          ])
+      header_height = @style[:date][:size] + 2.mm
+      @pdf.repeat :all do
+        pdf.formatted_text_box header_text,
+                               at: [@pdf.margin_box.left, @pdf.margin_box.top + header_height],
+                               width: @pdf.bounds.width,
+                               height: header_height,
+                               align: :right
       end
     end
 
     def latest_users(count)
       subtitle "Latest Signups"
-      print_table(@data.latest_users(count), TABLE_FULL_WIDTH, SIGNUP_HEADINGS)
+      table_if_data(@data.latest_users(count), SIGNUP_HEADINGS)
     end
 
     def traffic_and_users
-      two_columns([0.mm, 194.mm], height: 40.mm) do |column|
+      two_columns do |column|
         case column
         when :left
           if (users = @data.top_users)
             subtitle 'Top Users'
-            print_table(users, TABLE_HALF_WIDTH, TOP_USERS_HEADINGS)
+            table_if_data(users, TOP_USERS_HEADINGS, TABLE_HALF_WIDTH)
           end
         when :right
           subtitle "Users"
-          print_table(@data.users, TABLE_HALF_WIDTH, USERS_HEADINGS)
+          table_if_data(@data.users, USERS_HEADINGS, TABLE_HALF_WIDTH)
         end
       end
     end
@@ -134,34 +137,56 @@ module Pdf
 
     def metrics
       subtitle "Metrics"
-      if @period == :day
-        print_table(@data.metrics, TABLE_FULL_WIDTH, METRIC_HEADINGS_DAY)
-      elsif @period == :week
-        print_table(@data.metrics, TABLE_FULL_WIDTH, METRIC_HEADINGS_WEEK)
-      end
+      return unless %i[day week].include? @period
+
+      header = self.class.const_get("METRIC_HEADINGS_#{@period}".upcase)
+      lines = @data.metrics.map { |name, total, percent| [name, total, colorize_num(percent)] }
+      table_with_header([header, *lines])
     end
 
     private
 
     def header_text
+      format = @style[:date]
       if @period == :day
-        "<date>#{1.day.ago.to_date}</date>"
+        [{ text: 1.day.ago.to_date.to_s }.merge!(format)]
       else
-        "<date>#{1.day.ago.to_date}</date> - <date>#{1.week.ago.to_date}</date>"
+        [
+          { text: 1.week.ago.to_date.to_s }.merge!(format),
+          { text: " - " },
+          { text: 1.day.ago.to_date.to_s }.merge!(format),
+        ]
       end
     end
 
     def three_scale_logo
       logo = File.dirname(__FILE__) + "/images/logo.png"
-      @pdf.image logo, width: 100
+      image = @pdf.image logo, width: 100
+      dimensions = [
+        @pdf.bounds.absolute_left,
+        @pdf.bounds.absolute_top - image.scaled_height,
+        @pdf.bounds.absolute_left + image.scaled_width,
+        @pdf.bounds.absolute_top
+      ]
+      url = PDF::Core::LiteralString.new("https://3scale.net")
+      @pdf.link_annotation(dimensions, Border: [0,0,0], A: { Type: :Action, S: :URI, URI: url})
     end
 
-    def print_table(data, width, headings)
-      if data.present?
-        options = { headers: headings, width: width }
-        @pdf.table data, @style.table_style.merge(options)
+    def table_if_data(data, header, width = TABLE_FULL_WIDTH)
+      return @pdf.text("No current data", **@style[:small]) if data.blank?
+
+      table_with_header([header] + data, width: width)
+    end
+
+    # @param numstr [String] string representing a number
+    def colorize_num(numstr)
+      case numstr.to_f
+      when 0.0
+        numstr
+      when -Float::INFINITY...0
+        { content: numstr, **@style[:red] }
       else
-        @pdf.text "<small>No current data</small>"
+        { content: numstr, **@style[:green] }
       end
     end
   end

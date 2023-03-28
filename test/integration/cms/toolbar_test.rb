@@ -21,7 +21,7 @@ class CMS::ToolbarTest < ActionDispatch::IntegrationTest
     get '/admin'
     assert_response :success
 
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
     assert_equal 1, page.css('iframe#developer-portal').size
     [ 'Layout Main layout', 'Partial Submenu' ].each do |template|
       assert_not_empty page.css("#templates-list a:contains('#{template}')"), "could not find: #{template.inspect} in #{page.text}"

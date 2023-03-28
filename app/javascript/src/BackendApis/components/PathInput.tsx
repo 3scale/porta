@@ -28,4 +28,5 @@ const PathInput: FunctionComponent<Props> = ({ error, path, setPath }) => (
   </FormGroup>
 )
 
-export { PathInput, Props }
+export type { Props }
+export { PathInput }

@@ -50,4 +50,5 @@ const ProductSelect: React.FunctionComponent<Props> = ({
   )
 }
 
-export { ProductSelect, Props }
+export type { Props }
+export { ProductSelect }

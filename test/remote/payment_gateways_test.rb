@@ -32,21 +32,6 @@ class PaymentGatewaysTest < ActiveSupport::TestCase
 
   end
 
-  # test 'ogone gateway' do
-  #   @provider_account.payment_gateway_type = :ogone
-  #   @provider_account.payment_gateway_options = {:signature => 'Mysecretsig1875!?', :login => '3scalenetworks', :user => '3SCALEPAPI', :password => 'URIEDA33'}
-  #   @provider_account.save!
-
-  #   @buyer_account.credit_card = @credit_card
-  #   @buyer_account.billing_address = @billing_address
-  #   @buyer_account.save!
-
-  #   transaction = @buyer_account.charge! BigDecimal("1.81")
-
-  #   assert transaction.success?
-  #   assert_equal 1.81.to_has_money('EUR'), transaction.amount
-  # end
-
   # test 'braintree gateway' do
   #   @provider_account.payment_gateway_type = :braintree
   #   @provider_account.payment_gateway_options = {:login => 'testapi', :password => 'password1'}

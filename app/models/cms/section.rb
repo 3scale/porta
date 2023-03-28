@@ -1,8 +1,8 @@
 class CMS::Section < ApplicationRecord
   include CMS::Filtering
+  include CMS::DataTag
   extend System::Database::Scopes::IdOrSystemName
   include NormalizePathAttribute
-  attr_accessible :provider, :parent, :title, :system_name, :public, :group, :partial_path
 
   self.table_name = :cms_sections
 
@@ -19,14 +19,14 @@ class CMS::Section < ApplicationRecord
   alias sections children
   alias section= parent=
 
-  validates :system_name, :provider, presence: true
+  validates :title, :system_name, :provider, presence: true
   validates :parent_id, presence: { :unless => :root? }
 
   validates :title, uniqueness: { :scope => [:provider_id, :parent_id] }
   validates :system_name, uniqueness: { :scope => [:provider_id] }, length: { maximum: 255 }
   validates :partial_path, :title, :type, length: { maximum: 255 }
 
-  before_validation :set_system_name , :on => :create
+  before_validation :set_system_name , on: %i[create update]
   before_validation :set_partial_path, :on => :create
   verify_path_format :partial_path
   before_validation :set_provider, :on => :create
@@ -34,30 +34,12 @@ class CMS::Section < ApplicationRecord
   before_destroy :avoid_destruction
 
   validate :not_own_child
+  validate :parent_same_provider, { unless: :root? }
 
   has_many :group_sections, :class_name => 'CMS::GroupSection'
   has_many :groups, :class_name => 'CMS::Group', :through => :group_sections
 
   before_save :strip_trailing_slashes
-
-  def to_xml(options = {})
-    xml = options[:builder] || Nokogiri::XML::Builder.new
-
-    xml.section do |x|
-      unless new_record?
-        xml.id id
-        xml.created_at created_at.xmlschema
-        xml.updated_at updated_at.xmlschema
-      end
-      x.partial_path partial_path
-      x.public public
-      x.title title
-      x.parent_id parent_id
-      x.system_name system_name
-    end
-
-    xml.to_xml
-  end
 
   module ProviderAssociationExtension
     def root
@@ -73,7 +55,7 @@ class CMS::Section < ApplicationRecord
     end
 
     def find_or_create!(name, path, options = {})
-      system_name = name.downcase
+      system_name = name.parameterize
 
       if section = find_by_system_name(system_name)
         section
@@ -172,7 +154,7 @@ class CMS::Section < ApplicationRecord
   protected
 
   def set_system_name
-    self.system_name = self.title if self.title && self.system_name.blank?
+    self.system_name = title.parameterize if title.present? && system_name.blank?
   end
 
   def set_partial_path
@@ -199,6 +181,12 @@ class CMS::Section < ApplicationRecord
     if child_of?(self.id)
       errors.add(:base, "cannot be it's own ancestor")
     end
+  end
+
+  def parent_same_provider
+    return if parent&.provider == provider
+
+    errors.add(:parent_id, "must belong to the same provider")
   end
 
   def strip_trailing_slashes

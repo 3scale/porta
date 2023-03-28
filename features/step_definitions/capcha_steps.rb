@@ -3,7 +3,7 @@
 RECAPTCHA_SCRIPT = 'script[src^="https://www.google.com/recaptcha/api.js"]'
 
 Then /^I should not see the captcha$/ do
-  page.should_not have_selector(RECAPTCHA_SCRIPT)
+  page.should_not have_selector(RECAPTCHA_SCRIPT, visible: false)
 end
 
 Then /^I should see the captcha$/ do

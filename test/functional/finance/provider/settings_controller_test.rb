@@ -41,29 +41,47 @@ class Finance::Provider::SettingsControllerTest < ActionController::TestCase
   end
 
   test 'gateways options should contain only the supported gateways' do
+    PaymentGateway.stubs(:all).returns(payment_gateways)
+
+    @provider.gateway_setting.update(gateway_type: :supported_gateway)
+
     login_as(@provider.admins.first)
     get :show
 
     assert_response :success
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
 
     values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
-    assert_equal(['', 'braintree_blue', 'stripe', 'bogus'], values)
+    assert_equal(['', 'supported_gateway'], values)
   end
 
   test 'gateways options should contain deprecated gateway if in use' do
-    @provider.gateway_setting.gateway_type = :ogone
+    PaymentGateway.stubs(:all).returns(payment_gateways)
+
+    @provider.gateway_setting.gateway_type = :deprecated_gateway
     @provider.gateway_setting.save(validate: false)
 
     login_as(@provider.admins.first)
     get :show
 
     assert_response :success
-    page = Nokogiri::HTML::Document.parse(response.body)
+    page = Nokogiri::HTML4::Document.parse(response.body)
 
     values = page.xpath(".//select[@id='account_payment_gateway_type']/*").map { |o| o['value'] }
 
-    assert_same_elements(['', 'braintree_blue', 'ogone', 'stripe', 'bogus'], values)
+    assert_same_elements(['', 'supported_gateway', 'deprecated_gateway'], values)
+  end
+
+  def payment_gateways
+    supported_gateway = PaymentGateway.new(:supported_gateway, deprecated: false, foo: 'Bar')
+    supported_gateway.stubs(:display_name).returns('Supported Payment Gateway')
+    supported_gateway.stubs(:homepage_url).returns('')
+
+    deprecated_gateway = PaymentGateway.new(:deprecated_gateway, deprecated: true, foo: 'Bar')
+    deprecated_gateway.stubs(:display_name).returns('Deprecated Payment Gateway')
+    deprecated_gateway.stubs(:homepage_url).returns('')
+
+    [supported_gateway, deprecated_gateway]
   end
 end

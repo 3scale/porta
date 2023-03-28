@@ -3,8 +3,34 @@
 require 'test_helper'
 
 class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
-
   include ApiRouting
+
+  class RequestFormatTest < Admin::Api::CMS::BaseControllerTest
+    setup do
+      @provider = FactoryBot.create(:provider_account)
+      host! @provider.external_admin_domain
+      @token = FactoryBot.create(:access_token, owner: @provider.admin_users.first, scopes: ['cms'], permission: 'rw')
+    end
+
+    test 'responds to json' do
+      with_api_routes do
+        get '/cms_api', params: { format: :json, access_token: @token.value }
+
+        assert_response :ok
+      end
+    end
+
+    %i[xml html].each do |format|
+      test "does not respond to #{format.to_s}" do
+        with_api_routes do
+          get '/cms_api', params: { format: format, access_token: @token.value }
+
+          assert_response :not_acceptable
+        end
+      end
+    end
+  end
+
   class ProviderAccountTest < Admin::Api::CMS::BaseControllerTest
     setup do
       @provider = FactoryBot.create(:provider_account)
@@ -14,7 +40,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     test 'admin user with cms scope has permission' do
       token = FactoryBot.create(:access_token, owner: @provider.admin_users.first, scopes: ['cms'], permission: 'rw')
       with_api_routes do
-        get '/cms_api', params: { access_token: token.value }
+        get '/cms_api', params: { format: :json, access_token: token.value }
         assert_response :ok
       end
     end
@@ -22,7 +48,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
     test 'admin user without cms scope does not have permission' do
       with_api_routes do
         token = FactoryBot.create(:access_token, owner: @provider.admin_users.first)
-        get '/cms_api', params: { access_token: token.value }
+        get '/cms_api', params: { format: :json, access_token: token.value }
         assert_response :forbidden
       end
     end
@@ -31,7 +57,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider, admin_sections: ['portal'])
       token  = FactoryBot.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
       with_api_routes do
-        get '/cms_api', params: { access_token: token.value }
+        get '/cms_api', params: { format: :json, access_token: token.value }
         assert_response :ok
       end
     end
@@ -40,7 +66,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider, admin_sections: ['portal'])
       token  = FactoryBot.create(:access_token, owner: member)
       with_api_routes do
-        get '/cms_api', params: { access_token: token.value }
+        get '/cms_api', params: { format: :json, access_token: token.value }
         assert_response :forbidden
       end
     end
@@ -49,7 +75,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
       member = FactoryBot.create(:member, account: @provider)
       token  = FactoryBot.create(:access_token, owner: member, scopes: ['cms'], permission: 'rw')
       with_api_routes do
-        get '/cms_api', params: { access_token: token.value }
+        get '/cms_api', params: { format: :json, access_token: token.value }
         assert_response :forbidden
       end
     end
@@ -72,7 +98,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
           token = FactoryBot.create(:access_token, owner: user, permission: 'rw')
           token.update_column(:scopes, ['cms']) # rubocop:disable Rails/SkipsModelValidations It must be done this way because it is invalid now.
           with_api_routes do
-            get '/cms_api', params: { access_token: token.value }
+            get '/cms_api', params: { format: :json, access_token: token.value }
             assert_response :forbidden
           end
         end
@@ -84,7 +110,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         [admin, member].each do |user|
           token  = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
           with_api_routes do
-            get '/cms_api', params: { access_token: token.value }
+            get '/cms_api', params: { format: :json, access_token: token.value }
             assert_response :forbidden
           end
         end
@@ -98,7 +124,7 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         [admin, member].each do |user|
           token  = FactoryBot.create(:access_token, owner: user, scopes: ['cms'], permission: 'rw')
           with_api_routes do
-            get '/cms_api', params: { access_token: token.value }
+            get '/cms_api', params: { format: :json, access_token: token.value }
             assert_response :success
           end
         end
@@ -110,12 +136,11 @@ class Admin::Api::CMS::BaseControllerTest < ActionDispatch::IntegrationTest
         [admin, member].each do |user|
           token  = FactoryBot.create(:access_token, owner: user, scopes: ['account_management'], permission: 'rw')
           with_api_routes do
-            get '/cms_api', params: { access_token: token.value }
+            get '/cms_api', params: { format: :json, access_token: token.value }
             assert_response :success
           end
         end
       end
     end
-
   end
 end

@@ -26,4 +26,5 @@ const Select: FunctionComponent<Props> = ({
   </select>
 )
 
-export { Select, Props }
+export type { Props }
+export { Select }

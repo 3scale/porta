@@ -7,8 +7,15 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     provider_account = FactoryBot.create(:simple_provider, payment_gateway_type: :stripe, payment_gateway_options: { login: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc' })
     buyer_account = FactoryBot.create(:simple_buyer, provider_account: provider_account)
     @gateway = provider_account.payment_gateway(sca: true)
-    @invoice = FactoryBot.create(:invoice, buyer_account: buyer_account, provider_account: provider_account)
     @amount = ThreeScale::Money.new(150.0, 'EUR')
+    @invoice = FactoryBot.create(
+      :invoice,
+      buyer_account: buyer_account,
+      provider_account: provider_account,
+      line_items: [
+        FactoryBot.create(:line_item, cost: amount.amount)
+      ]
+    )
     @service = build_charge_service(invoice: invoice)
   end
 
@@ -103,6 +110,28 @@ class Finance::StripeChargeServiceTest < ActiveSupport::TestCase
     refute response.success?
     assert_equal 'Requires payment method', response.message
     assert_equal 'requires_payment_method', payment_intent.reload.state
+  end
+
+  test 'has payment intent description when invoice is present' do
+    invoice.update({friendly_id: '2022-10-00000001'})
+    invoice.issue_and_pay_if_free!
+    with_invoice = build_charge_service(invoice: invoice)
+    assert_equal "#{invoice.provider.name} API services 2022-10-00000001", with_invoice.gateway_options[:description]
+  end
+
+  test 'has payment intent description with no invoice in charging service' do
+    without_invoice = build_charge_service
+    assert_equal 'API services', without_invoice.gateway_options[:description]
+  end
+
+  test 'sends payment intent description to the gateway' do
+    friendly_id = '2022-10-00000001'
+    response = build_response(true, 'Transaction Approved', object: 'payment_intent', id: 'new-payment-intent-id', status: 'succeeded')
+    invoice.update({friendly_id: friendly_id})
+    invoice.issue_and_pay_if_free!
+    gateway.expects(:purchase).with(15_000, anything, has_entry(:description, "#{invoice.provider.name} API services #{friendly_id}")).returns(response)
+    charge_service = build_charge_service(invoice: invoice)
+    assert charge_service.charge(amount)
   end
 
   private

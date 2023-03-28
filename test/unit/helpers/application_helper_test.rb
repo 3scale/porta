@@ -22,6 +22,42 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal 'one two three', css_class('one', ['two'], three: true)
   end
 
+  class AssetHostTest < ApplicationHelperTest
+    setup do
+      @request = ActionDispatch::TestRequest.create
+      @asset_host = 'cdn.3scale.test.localhost'
+    end
+
+    attr_reader :request
+
+    test 'asset host is not configured' do
+      Rails.configuration.expects(:asset_host).returns(nil)
+      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
+
+      result = rails_asset_host_url
+
+      assert_equal '', result
+    end
+
+    test "asset host is configured but it's value is empty" do
+      Rails.configuration.expects(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.expects(:asset_host).returns('')
+
+      result = rails_asset_host_url
+
+      assert_equal '', result
+    end
+
+    test 'asset host is configured and has a proper value' do
+      Rails.configuration.expects(:asset_host).returns(-> {})
+      Rails.configuration.three_scale.expects(:asset_host).returns(@asset_host)
+
+      result = rails_asset_host_url
+
+      assert_equal "#{request.protocol}#{@asset_host}", result
+    end
+  end
+
   private
 
   def ability

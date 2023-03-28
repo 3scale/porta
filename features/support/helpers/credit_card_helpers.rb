@@ -11,7 +11,7 @@ module CreditCardHelpers
       locality: 'New New York',
       country_code: 'US',
       country_name: 'United States',
-      region: 'New New York',
+      region: 'NY',
       postal_code: '123456',
       phone: '+34666777888'
     }
