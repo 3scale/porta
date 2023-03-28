@@ -77,15 +77,18 @@ class ThreeScale::Middleware::CorsTest < ActiveSupport::TestCase
 
   test 'provider signup path excluded in example configs' do
     ["config/examples"].each do |config_dir|
-      stub_config = YAML.load_file(Rails.root.join(config_dir, "cors.yml"))["cors"].merge({"enabled" => true})
-      assert_not_empty stub_config["exclude"]
+      rails_envs = %w[development test production]
+      rails_envs.each do |rails_env|
+        stub_config = YAML.load_file(Rails.root.join(config_dir, "cors.yml"))[rails_env].merge({"enabled" => true})
+        assert_not_empty stub_config["exclude"]
 
-      Rails.configuration.three_scale.cors.stubs(stub_config)
+        Rails.configuration.three_scale.cors.stubs(stub_config)
 
-      middleware = ThreeScale::Middleware::Cors.new(app)
-      status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => provider_signup_path))
-      assert_equal 403, status
-      assert_not headers['Access-Control-Allow-Origin']
+        middleware = ThreeScale::Middleware::Cors.new(app)
+        status, headers = middleware.call(env.merge('REQUEST_METHOD' => 'OPTIONS', 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'GET', 'PATH_INFO' => provider_signup_path))
+        assert_equal 403, status
+        assert_not headers['Access-Control-Allow-Origin']
+      end
     end
   end
 

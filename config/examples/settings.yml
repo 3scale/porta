@@ -65,6 +65,7 @@ test:
   force_ssl: false
   report_traffic: false
   janitor_worker_enabled: false
+  readonly_custom_domains_settings: true
 
 production:
   <<: *default

@@ -2,7 +2,7 @@ base: &default
   url: <%= ENV.fetch('THREESCALE_CORE_INTERNAL_API', 'http://localhost:3001/internal/') %>
   # fake server is useful when you don't run a real backend apisonator
   # fake_server: 'http://localhost:3000/internal/'
-  fake_server: false
+#  fake_server: false
   username: <%= ENV.fetch('CONFIG_INTERNAL_API_USER', nil) %>
   password: <%= ENV.fetch('CONFIG_INTERNAL_API_PASSWORD', nil) %>
 
