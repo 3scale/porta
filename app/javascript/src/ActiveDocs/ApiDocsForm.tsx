@@ -120,4 +120,5 @@ const ApiDocsForm: FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const ApiDocsFormWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ApiDocsForm {...props} />, containerId) }
 
-export { ApiDocsForm, ApiDocsFormWrapper, Props }
+export type { Props }
+export { ApiDocsForm, ApiDocsFormWrapper }

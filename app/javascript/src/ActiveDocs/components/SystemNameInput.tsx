@@ -50,4 +50,5 @@ const SystemNameInput: FunctionComponent<Props> = ({ errors = [], isDisabled = f
   )
 }
 
-export { SystemNameInput, Props }
+export type { Props }
+export { SystemNameInput }

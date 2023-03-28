@@ -35,4 +35,5 @@ const DescriptionInput: FunctionComponent<Props> = ({
   )
 }
 
-export { DescriptionInput, Props }
+export type { Props }
+export { DescriptionInput }

@@ -42,4 +42,5 @@ const ApiJsonSpecInput: FunctionComponent<Props> = ({
   )
 }
 
-export { ApiJsonSpecInput, Props }
+export type { Props }
+export { ApiJsonSpecInput }

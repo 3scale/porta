@@ -22,4 +22,5 @@ const ServiceSelect: FunctionComponent<Props> = ({ service = null, services, set
   />
 )
 
-export { ServiceSelect, Props }
+export type { Props }
+export { ServiceSelect }

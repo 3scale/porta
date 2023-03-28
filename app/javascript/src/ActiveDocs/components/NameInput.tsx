@@ -33,4 +33,5 @@ const NameInput: FunctionComponent<Props> = ({ errors = [], name, setName }) => 
   )
 }
 
-export { NameInput, Props }
+export type { Props }
+export { NameInput }
