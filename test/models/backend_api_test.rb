@@ -98,6 +98,16 @@ class BackendApiTest < ActiveSupport::TestCase
     assert_equal @account.id, backend_api.reload.tenant_id
   end
 
+  test 'create backend with audit check' do
+    BackendApi.with_synchronous_auditing do
+      @backend_api.name = 'audittest'
+      @backend_api.private_endpoint = 'wss://example.org:3/path'
+      @backend_api.save!
+      audit = @backend_api.audits.last
+      assert_equal 'create', audit.action
+    end
+  end
+
   class ProxyConfigAffectingChangesTest < ActiveSupport::TestCase
     disable_transactional_fixtures!
 
