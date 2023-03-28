@@ -4,7 +4,6 @@ base: &default
   # see https://gist.github.com/pat/a7d73376dd657b4457092efc9e9c418a
   # ----------------------------------
   mysql41: 9306
-  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
 
   big_document_ids: true
 
@@ -35,10 +34,6 @@ base: &default
   # Sphinx daemon (searchd) configuration, see http://sphinxsearch.com/docs/current.html#confgroup-searchd
   # ----------------------------------
 
-  # Use standard output for logs in container environments
-  query_log: /dev/stdout
-  log: /dev/stdout
-
   pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
 
   binlog_path: ''
@@ -60,7 +55,7 @@ test: &test
   indices_location:   <%= Rails.root.join("db/sphinx/test#{ENV['TEST_ENV_NUMBER']}") %>
   pid_file:           <%= Rails.root.join("log/searchd.test#{ENV['TEST_ENV_NUMBER']}.pid") %>
   hard_retry_count: 5
-  binlog_path: ''
 
 production:
   <<: *default
+  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
