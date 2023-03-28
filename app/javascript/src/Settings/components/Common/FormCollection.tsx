@@ -24,4 +24,5 @@ const FormCollection: FunctionComponent<Props> = ({
   </FormFieldset>
 )
 
-export { FormCollection, Props }
+export type { Props }
+export { FormCollection }

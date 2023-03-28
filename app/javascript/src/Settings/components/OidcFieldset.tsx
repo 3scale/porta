@@ -62,4 +62,5 @@ const AuthorizationFlow: FunctionComponent<{ collection: FieldGroupProps[] }> = 
   <FormCollection {...props} ItemComponent={FlowItem} legend="OIDC Authorization flow" />
 )
 
-export { OidcFieldset, Props }
+export type { Props }
+export { OidcFieldset }

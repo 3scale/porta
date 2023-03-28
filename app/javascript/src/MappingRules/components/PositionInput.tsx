@@ -29,4 +29,5 @@ const PositionInput: FunctionComponent<Props> = ({
   </FormGroup>
 )
 
-export { PositionInput, Props }
+export type { Props }
+export { PositionInput }

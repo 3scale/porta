@@ -10,4 +10,5 @@ const ErrorMessage: FunctionComponent<Props> = ({ fetchErrorMessage }) => (
   </p>
 )
 
-export { ErrorMessage, Props }
+export type { Props }
+export { ErrorMessage }

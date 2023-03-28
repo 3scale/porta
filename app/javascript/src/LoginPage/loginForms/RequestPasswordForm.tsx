@@ -78,4 +78,5 @@ class RequestPasswordForm extends Component<Props, State> {
   }
 }
 
-export { RequestPasswordForm, Props }
+export type { Props }
+export { RequestPasswordForm }

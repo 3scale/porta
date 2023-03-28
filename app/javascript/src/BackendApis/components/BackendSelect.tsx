@@ -63,4 +63,5 @@ const BackendSelect: React.FunctionComponent<Props> = ({
   )
 }
 
-export { BackendSelect, Props }
+export type { Props }
+export { BackendSelect }

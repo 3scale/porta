@@ -86,4 +86,5 @@ const ServiceCheckbox: React.FunctionComponent<ServiceCheckboxProps> = ({
   )
 }
 
-export { ServicesFieldset, Props }
+export type { Props }
+export { ServicesFieldset }

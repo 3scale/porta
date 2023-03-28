@@ -114,4 +114,5 @@ const FancySelect = <T extends IRecord>({
   )
 }
 
-export { FancySelect, Props }
+export type { Props }
+export { FancySelect }

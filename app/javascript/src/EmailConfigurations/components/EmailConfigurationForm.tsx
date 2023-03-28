@@ -109,4 +109,5 @@ const EmailConfigurationForm: FunctionComponent<Props> = ({
   )
 }
 
-export { EmailConfigurationForm, Props }
+export type { Props }
+export { EmailConfigurationForm }

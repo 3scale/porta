@@ -90,4 +90,5 @@ const APIDataListItem: FunctionComponent<Props> = ({ api: { id, name, updated_at
   )
 }
 
-export { APIDataListItem, Props }
+export type { Props }
+export { APIDataListItem }

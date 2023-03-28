@@ -69,4 +69,5 @@ const ChangePlanSelectCard: React.FunctionComponent<Props> = ({
 // eslint-disable-next-line react/jsx-props-no-spreading
 const ChangePlanSelectCardWrapper = (props: Props, containerId: string): void => { createReactWrapper(<ChangePlanSelectCard {...props} />, containerId) }
 
-export { ChangePlanSelectCard, ChangePlanSelectCardWrapper, Props }
+export type { Props }
+export { ChangePlanSelectCard, ChangePlanSelectCardWrapper }

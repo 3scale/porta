@@ -40,7 +40,6 @@
     "lines-around-comment": ["error", {
       "allowBlockStart": true
     }],
-    "parameter-properties": "off", // Disabled in favor of @typescript-eslint/parameter-properties
     // "eslint array-bracket-newline": ["error", { "multiline": true }], // TODO: requires eslint 8
 
     // Override plugin:@typescript-eslint/all
@@ -57,8 +56,7 @@
     "@typescript-eslint/parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/promise-function-async": "off",
-    "@typescript-eslint/lines-around-comment": "off", // Disabled in favor of parameter-properties
-    "@typescript-eslint/consistent-type-exports": "off",
+    "@typescript-eslint/lines-around-comment": "off", // Disabled in favor of lines-around-comment
 
     // Override plugin:@typescript-eslint/recommended
     "@typescript-eslint/semi": ["error", "never"],

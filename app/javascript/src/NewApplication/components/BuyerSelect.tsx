@@ -50,4 +50,5 @@ const BuyerSelect: React.FunctionComponent<Props> = ({
   )
 }
 
-export { BuyerSelect, Props }
+export type { Props }
+export { BuyerSelect }

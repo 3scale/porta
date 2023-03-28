@@ -22,4 +22,5 @@ const IsLastCheckbox: FunctionComponent<Props> = ({ isLast }) => (
   </FormGroup>
 )
 
-export { IsLastCheckbox, Props }
+export type { Props }
+export { IsLastCheckbox }

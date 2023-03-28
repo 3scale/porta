@@ -48,4 +48,5 @@ const HttpMethodSelect: FunctionComponent<Props> = ({
   )
 }
 
-export { HttpMethodSelect, Props }
+export type { Props }
+export { HttpMethodSelect }

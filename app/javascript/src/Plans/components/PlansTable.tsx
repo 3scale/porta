@@ -91,4 +91,5 @@ const PlansTable: React.FunctionComponent<Props> = ({
   )
 }
 
-export { PlansTable, Props }
+export type { Props }
+export { PlansTable }
