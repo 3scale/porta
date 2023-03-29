@@ -39,7 +39,7 @@ const ProductsWidget: FunctionComponent<Props> = ({
   productsPath,
   products
 }) => (
-  <Card className="pf-c-card">
+  <Card>
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
         <CubesIcon />
