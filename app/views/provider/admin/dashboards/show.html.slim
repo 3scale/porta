@@ -1,5 +1,6 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'vendor/c3'
+  = stylesheet_pack_tag 'dashboard'
 
 = content_for :javascripts do
   = javascript_pack_tag 'dashboard'
@@ -32,9 +33,8 @@
       - else
         h1 APIs
         div.apiContainer
-          = render 'products_widget'
-          = render 'backends_widget'
-          = javascript_pack_tag 'PF4Styles/dashboard'
+          div#products-widget data-products-widget=products_presenter.dashboard_widget_data.to_json
+          div#backends-widget data-backends-widget=backend_apis_presenter.dashboard_widget_data.to_json
 
   div.Dashboard-events
     section.DashboardStream
