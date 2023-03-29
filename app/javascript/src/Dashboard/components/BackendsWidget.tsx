@@ -39,7 +39,7 @@ const BackendsWidget: FunctionComponent<Props> = ({
   backendsPath,
   backends
 }) => (
-  <Card className="pf-c-card">
+  <Card>
     <CardHeader>
       <div className="dashboard-list-icon-title-layout">
         <CubeIcon />
