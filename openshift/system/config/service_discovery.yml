@@ -1,4 +1,4 @@
-default: &base
+production:
   enabled: <%= cluster_token_file_exists = File.exists?(cluster_token_file_path = '/var/run/secrets/kubernetes.io/serviceaccount/token') %>
   server_scheme: 'https'
   server_host: 'kubernetes.default.svc.cluster.local'
@@ -12,10 +12,3 @@ default: &base
   open_timeout: 1
   max_retry: 5
   verify_ssl: <%= OpenSSL::SSL::VERIFY_NONE %> # 0
-
-
-production:
-  <<: *base
-
-preview:
-  <<: *base

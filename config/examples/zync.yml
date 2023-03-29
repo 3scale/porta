@@ -1,4 +1,4 @@
-default: &base
+base: &default
   endpoint: <%= ENV['ZYNC_ENDPOINT'] %>
   authentication:
     token: <%= ENV['ZYNC_AUTHENTICATION_TOKEN'] %>
@@ -7,11 +7,11 @@ default: &base
   receive_timeout: 10
 
 development:
-  <<: *base
+  <<: *default
 
 test:
-  <<: *base
+  <<: *default
   endpoint:
 
 production:
-  <<: *base
+  <<: *default

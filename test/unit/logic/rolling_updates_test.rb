@@ -36,6 +36,8 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
   end
 
   def test_enterprise
+    # ensure `service_permissions` rolling update is not configured
+    Logic::RollingUpdates::Features::Yaml.stubs(:config).returns({})
     account = FactoryBot.build_stubbed(:simple_account)
     plan    = FactoryBot.build_stubbed(:simple_application_plan, system_name: 'alex')
 
@@ -125,13 +127,6 @@ class Logic::RollingUpdatesTest < ActiveSupport::TestCase
 
     NewFeature.any_instance.expects(:missing_config).returns(true).at_least_once
     assert NewFeature.new(provider).enabled?, true
-  end
-
-  test 'async apicast deploy' do
-    provider = Account.new
-
-    # TODO: THREESCALE-3759 remove this rolling update, no longer used?
-    refute provider.rolling_update(:async_apicast_deploy).missing_config
   end
 
   test 'require cc on signup' do

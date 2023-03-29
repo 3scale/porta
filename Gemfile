@@ -253,7 +253,7 @@ end
 gem 'webpacker', '5.4.4'
 
 gem 'developer_portal', path: 'lib/developer_portal'
-gem 'unicorn', require: false, group: %i[production preview]
+gem 'unicorn', require: false, group: %i[production]
 
 # NOTE: Use ENV['DB'] only to install oracle dependencies
 group :oracle do

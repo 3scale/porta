@@ -1,4 +1,4 @@
-base: &default
+production:
 
 <% case ENV['DATABASE_URL'].to_s
    when /^oracle/ %>
@@ -16,9 +16,3 @@ base: &default
   url: <%= ENV['DATABASE_URL'] %>
   encoding: utf8
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
-
-production:
-  <<: *default
-
-preview:
-  <<: *default

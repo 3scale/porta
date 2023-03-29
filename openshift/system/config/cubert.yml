@@ -1,8 +1,0 @@
-base: &default
-  enabled: false
-
-production:
-  <<: *default
-
-preview:
-  <<: *default

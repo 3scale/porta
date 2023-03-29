@@ -1,9 +1,3 @@
-base: &default
+production:
   github:
     enabled: false
-
-production:
-  <<: *default
-
-preview:
-  <<: *default

@@ -1,23 +1,48 @@
-common: &sphinx
-  configuration_file: <%= ENV.fetch('THINKING_SPHINX_CONFIGURATION_FILE') { Rails.root.join("config/#{Rails.env}.sphinx.conf")} %>
+base: &default
+  # ----------------------------------
+  # Thinking Sphinx configuration
+  # see https://gist.github.com/pat/a7d73376dd657b4457092efc9e9c418a
+  # ----------------------------------
+  mysql41: 9306
+
   big_document_ids: true
+
+  configuration_file: <%= ENV.fetch('THINKING_SPHINX_CONFIGURATION_FILE') { Rails.root.join("config/#{Rails.env}.sphinx.conf")} %>
+  indices_location: <%= ENV.fetch('THINKING_SPHINX_INDICES_LOCATION', Rails.root.join("db/sphinx/#{Rails.env}")) %>
+
+  # Batch size for real-time index processing (via the `ts:index` and `ts:rebuild` tasks), the default is 1000
+  batch_size: <%= ENV.fetch('THINKING_SPHINX_BATCH_SIZE', 1000) %>
+
+  # ----------------------------------
+  # Sphinx index configuration, see http://sphinxsearch.com/docs/current.html#confgroup-index
+  # ----------------------------------
+  charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
+
   html_strip: 1
   html_remove_elements: "style, script"
   html_index_attrs: "img=alt,title; a=title"
   min_infix_len: 3
-  pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
-  binlog_path: ''
+
+  # ----------------------------------
+  # Data source configuration, see http://sphinxsearch.com/docs/current.html#confgroup-source
+  # ----------------------------------
 
   # This is from TS FAQ - makes reindex MUCH faster.
   sql_range_step: 2000000000
 
-  charset_table: 0..9, A..Z->a..z, a..z # strip _ from words
+  # ----------------------------------
+  # Sphinx daemon (searchd) configuration, see http://sphinxsearch.com/docs/current.html#confgroup-searchd
+  # ----------------------------------
+
+  pid_file: <%= ENV.fetch('THINKING_SPHINX_PID_FILE') { Rails.root.join('log', "searchd.#{Rails.env}.pid") } %>
+
+  binlog_path: ''
 
 development:
-  <<: *sphinx
+  <<: *default
 
 test: &test
-  <<: *sphinx
+  <<: *default
 <% case ENV['DATABASE_URL'].to_s
    when /^oracle/ %>
   sql_port: 1521
@@ -30,14 +55,7 @@ test: &test
   indices_location:   <%= Rails.root.join("db/sphinx/test#{ENV['TEST_ENV_NUMBER']}") %>
   pid_file:           <%= Rails.root.join("log/searchd.test#{ENV['TEST_ENV_NUMBER']}.pid") %>
   hard_retry_count: 5
-  binlog_path: ''
-
-preview:
-  <<: *sphinx
-  binlog_path: ''
-  address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
 
 production:
-  <<: *sphinx
-  binlog_path: ''
+  <<: *default
   address: <%= ENV['THINKING_SPHINX_ADDRESS'] || '0.0.0.0' %>
