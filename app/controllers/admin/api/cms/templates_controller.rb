@@ -159,6 +159,9 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   end
 
   def cms_templates
-    current_account.templates.but(CMS::EmailTemplate, CMS::Builtin::LegalTerm).order(:id)
+    current_account.templates
+                   .but(CMS::EmailTemplate, CMS::Builtin::LegalTerm)
+                   .scope_search(search)
+                   .order(:id)
   end
 end
