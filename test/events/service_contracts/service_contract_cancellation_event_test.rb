@@ -10,7 +10,8 @@ class ServiceContracts::ServiceContractCancellationEventTest < ActiveSupport::Te
     assert event
     assert_equal event.plan_name, plan.name
     assert_equal event.service_name, service.name
-    assert_equal event.provider, contract.provider_account
+    assert_nil contract.provider_account
+    assert_nil event.provider
     assert_equal event.service, contract.issuer
     assert_equal event.account_id, contract.buyer_account.id
     assert_equal event.account_name, contract.buyer_account.name
