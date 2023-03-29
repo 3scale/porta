@@ -32,7 +32,12 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_page
   ##~ op.parameters.add @parameter_per_page
   def index
-    templates = cms_templates.paginate(pagination_params)
+    templates = current_account.templates
+                               .but(CMS::EmailTemplate, CMS::Builtin::LegalTerm)
+                               .scope_search(search)
+                               .order(:id)
+                               .paginate(pagination_params)
+
     respond_with(templates, short: true, representer: CMS::TemplatesRepresenter)
   end
 
@@ -135,7 +140,7 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
   protected
 
   def find_template
-    @template = cms_templates.find(params[:id])
+    @template = current_account.templates.find(params[:id])
   end
 
   def cms_template_params
@@ -156,12 +161,5 @@ class Admin::Api::CMS::TemplatesController < Admin::Api::CMS::BaseController
 
   def can_destroy
     head :locked unless @template.respond_to?(:destroy)
-  end
-
-  def cms_templates
-    current_account.templates
-                   .but(CMS::EmailTemplate, CMS::Builtin::LegalTerm)
-                   .scope_search(search)
-                   .order(:id)
   end
 end

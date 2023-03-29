@@ -73,7 +73,7 @@ class CMS::Section < ApplicationRecord
   end
 
   def full_path
-    path_from_root = parent ? parent.full_path : "/"
+    path_from_root = parent ? parent.full_path : +"/"
     path_from_root.gsub!(/([^\/])$/,"\\1/")
     self.root? ? path_from_root : (path_from_root + partial_path).gsub(/\/+/,"/")
   end
