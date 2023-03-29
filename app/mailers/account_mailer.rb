@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class AccountMailer < ActionMailer::Base
-
   include Liquid::Assigns
   include CMS::EmailTemplate::MailerExtension
 
-  add_template_helper(SupportEntitlementsHelper)
-  add_template_helper(Finance::InvoicesHelper)
+  helper SupportEntitlementsHelper
+  helper Finance::InvoicesHelper
 
   def confirmed(account)
     self.provider_account = account.provider_account
