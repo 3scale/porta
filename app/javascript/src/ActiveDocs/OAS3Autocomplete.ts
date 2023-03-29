@@ -114,7 +114,7 @@ export interface Response extends SwaggerUIResponse {
   text: string;
 }
 
-const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
+export const autocompleteOAS3 = async (response: SwaggerUIResponse, accountDataUrl: string, serviceEndpoint: string): Promise<Response> => {
   const bodyWithServer = injectServerToResponseBody(response.body, serviceEndpoint)
   const data = await fetchData<{ results: AccountData }>(accountDataUrl)
 
