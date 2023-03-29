@@ -72,8 +72,7 @@ module Liquid
       end
 
       def notify?
-        env = Rails.env
-        env.enterprise? or env.production? or env.preview?
+        Rails.env.production?
       end
 
       class << self

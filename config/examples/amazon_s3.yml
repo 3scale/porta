@@ -21,8 +21,5 @@ test: &test
   bucket: test-my-s3-bucket
   region: "us-east-1"
 
-preview:
-  <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>
-
 production:
   <<: *<%= ENV['FILE_UPLOAD_STORAGE'].presence || 'default' %>

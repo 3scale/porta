@@ -54,14 +54,12 @@ C:\\nppdf32Log\\debuglog.txt
 /config/cassandra.yml
 /config/core.yml
 /config/cors.yml
-/config/cubert.yml
 /config/currencies.yml
 /config/database.yml
 /config/domain_substitution.yml
 /config/features.yml
 /config/initializers/before_filter_debug.rb
 /config/master.key
-/config/mixpanel.yml
 /config/redis.yml
 /config/oauth2.yml
 /config/paperclip.yml
@@ -79,7 +77,6 @@ C:\\nppdf32Log\\debuglog.txt
 /config/smtp.yml
 /config/tinny_tim.yml
 /config/unicorn.rb
-/config/web_analytics.yml
 /config/web_hooks.yml
 /config/zync.yml
 /db/*.sql
@@ -136,8 +133,6 @@ Gemfile.local
 
 # IDE local settings
 .vscode
-
-config/cable.yml
 
 # Yarn
 .yarn/cache

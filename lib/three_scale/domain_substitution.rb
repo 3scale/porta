@@ -12,7 +12,7 @@ module ThreeScale::DomainSubstitution
   end
 
   # == Context
-  # In any debugging environment _development_ or _preview_,
+  # In any debugging environment. e.g. _development_,
   # - database has account super domain set to *example.com*
   # - you access the UI or with another super domain like *proxied-domain.com*
   #
@@ -23,11 +23,10 @@ module ThreeScale::DomainSubstitution
   # +ThreeScale::Middleware::DevDomain+ and +ThreeScale::DevDomain+, leading to:
   # - weird behavior
   # - feature needing to know the environment.
-  #   Is it preview or development or production?
-  # - monkey patching feature to make it testable locally or in preview
-  # - library failures in preview (sidekiq-web not working well)
+  #   Is it development or production?
+  # - monkey patching feature to make it testable locally
   #
-  # === Using a prroxy as a solution?
+  # === Using a proxy as a solution?
   #
   # Why not using a proxy (e.g. nginx) to replace the URL?
   #

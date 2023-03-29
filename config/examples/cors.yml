@@ -1,4 +1,4 @@
-cors: &default
+base: &default
   enabled: false
   allow:
   - origins: '*'
@@ -9,7 +9,7 @@ cors: &default
     max_age: 3628800
     credentials: false
   exclude:
-    - path_prefix: /p/signup
+  - path_prefix: /p/signup
 
 development:
   <<: *default
@@ -21,6 +21,3 @@ production:
   <<: *default
   enabled: true
 
-preview:
-  <<: *default
-  enabled: true

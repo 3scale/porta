@@ -189,10 +189,12 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
     def generate(name)
       template = config.fetch(name.try(:to_sym)) { return }
 
+      # TODO: Remove 'env' variable from the URL templates in 'sandbox_proxy.yml',
+      # as each environment has its own configuration files
       uri = format template, {
         system_name: service.parameterized_system_name, account_id: service.account_id,
         tenant_name: provider_subdomain,
-        env: proxy.proxy_env, port: proxy.proxy_port
+        env: '', port: proxy.proxy_port
       }
 
       UriShortener.call(uri).to_s
@@ -422,15 +424,6 @@ class Proxy < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def provider
     @provider ||= self.service&.account
-  end
-
-  PROXY_ENV = {
-    preview: 'pre.',
-    production: ''
-  }.freeze
-
-  def proxy_env
-    PROXY_ENV.fetch(Rails.env.to_sym, '')
   end
 
   def proxy_port

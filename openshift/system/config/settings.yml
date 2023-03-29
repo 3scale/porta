@@ -1,12 +1,9 @@
-base: &default
+production:
   superdomain: <%= superdomain = ENV.fetch('THREESCALE_SUPERDOMAIN', 'example.com') %>
   apicast_internal_host_regexp: '\Asystem-(master|provider|developer)\Z'
   secure_cookie: true
   force_ssl: true
-  apicast_oauth: true
   apicast_custom_url: true
-  apicast_configuration_driven: true
-  active_docs_url:
   active_docs_proxy_disabled: true
   asset_host: <%= ENV.fetch('RAILS_ASSET_HOST', nil) %>
   events_shared_secret: <%= ENV['EVENTS_SHARED_SECRET'] %>
@@ -21,7 +18,6 @@ base: &default
   support_email: <%= ENV.fetch('SUPPORT_EMAIL', "#{superdomain} Support <support@#{superdomain}>") %>
   sales_email: <%= ENV.fetch('SALES_EMAIL', "sales@#{superdomain}") %>
   notification_email: <%= ENV.fetch('NOTIFICATION_EMAIL', "#{superdomain} Notification <no-reply@#{superdomain}>") %>
-  golive_email: <%= ENV.fetch('GOLIVE_EMAIL', "golive@#{superdomain}") %>
   sysadmin_email: <%= ENV.fetch('SYSADMIN_EMAIL', "sysadmin@#{superdomain}") %>
   impersonation_admin:
     username: <%= ENV.fetch('IMPERSONATION_ADMIN_USERNAME', '3scaleadmin') %>
@@ -37,7 +33,7 @@ base: &default
   zync_authentication_token: <%= ENV.fetch('ZYNC_AUTHENTICATION_TOKEN', '') %>
 
   email_sanitizer:
-    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', Rails.env.preview?) %>
+    enabled: <%= ENV.fetch('EMAIL_SANITIZER_ENABLED', false) %>
     to: <%= ENV.fetch('EMAIL_SANITIZER_TO', 'sanitizer@example.com') %>
 
   janitor_worker_enabled: true
@@ -45,9 +41,3 @@ base: &default
   # deprecated: use payments.yaml to configure payments instead
   active_merchant_logging: false
   billing_canaries:
-
-preview:
-  <<: *default
-
-production:
-  <<: *default

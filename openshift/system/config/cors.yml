@@ -1,5 +1,5 @@
-cors: &default
-  enabled: false
+production:
+  enabled: true
   allow:
   - origins: '*'
     resources:
@@ -9,18 +9,4 @@ cors: &default
     max_age: 3628800
     credentials: false
   exclude:
-    - path_prefix: /p/signup
-
-development:
-  <<: *default
-
-test:
-  <<: *default
-
-production:
-  <<: *default
-  enabled: true
-
-preview:
-  <<: *default
-  enabled: true
+  - path_prefix: /p/signup
