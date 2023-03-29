@@ -36,7 +36,7 @@ class Cinstance < Contract
 
   # this has to be before the include Backend::ModelExtensions::Cinstance
   # or callbacks order makes keys not to be saved in backend
-  after_commit :create_first_key, on: :create
+  after_create :create_first_key
 
   # before_destroy :refund_fixed_cost
   after_commit :reject_if_pending, :on => :destroy
