@@ -11,4 +11,6 @@ jQueryMock.flash = {
 // rails ujs
 jQueryMock.live = () => jQueryMock
 
+jQueryMock.on = () => jQueryMock
+
 global.$ = jQueryMock

@@ -109,7 +109,8 @@ class Admin::ApiDocs::AccountApiDocsControllerTest < ActionDispatch::Integration
 
       get new_admin_api_docs_service_path
       page = Nokogiri::HTML4::Document.parse(response.body)
-      service_ids = page.xpath(".//select[@id='api_docs_service_service_id']/option").map { |option| option.attributes['value'].value.presence }.compact.map(&:to_i)
+      collection = JSON.parse(page.xpath(".//div[@id='api-docs-container']").attr("data-service").value)["collection"]
+      service_ids = collection.map { |service| service["id"] }
       assert_includes service_ids, service.id
       assert_not_includes service_ids, forbidden_service.id
 

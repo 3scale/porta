@@ -115,7 +115,15 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
     put admin_api_active_doc_path(format: :json, id: @active_doc2.id), params: params.merge({ body: 'NOT VALID JSON' })
     assert_response :unprocessable_entity
 
-    assert_equal '{"errors":{"body":["Invalid JSON","JSON Spec is invalid"]}}', @response.body
+    assert_equal '{"errors":{"body":["Invalid JSON"]}}', @response.body
+    assert_equal @provider.api_docs_services.find_by(id: @active_doc2.id).body, '{"basePath":"http://zoo.example.net", "apis":[{"foo":"bar"}]}'
+  end
+
+  test 'not valid swagger body' do
+    put admin_api_active_doc_path(format: :json, id: @active_doc2.id), params: params.merge({ body: '{"I am JSON": "Son of Jay"}' })
+    assert_response :unprocessable_entity
+
+    assert_equal '{"errors":{"body":["JSON Spec is invalid"]}}', @response.body
     assert_equal @provider.api_docs_services.find_by(id: @active_doc2.id).body, '{"basePath":"http://zoo.example.net", "apis":[{"foo":"bar"}]}'
   end
 
@@ -123,7 +131,15 @@ class Admin::Api::ActiveDocsTest < ActionDispatch::IntegrationTest
     put admin_api_active_doc_path(format: :xml, id: @active_doc2.id), params: params.merge({ body: 'NOT VALID JSON' })
     assert_response :unprocessable_entity
 
-    assert_equal '<?xml version="1.0" encoding="UTF-8"?><errors><error>Body Invalid JSON</error><error>Body JSON Spec is invalid</error></errors>', @response.body
+    assert_equal '<?xml version="1.0" encoding="UTF-8"?><errors><error>Body Invalid JSON</error></errors>', @response.body
+    assert_equal @provider.api_docs_services.find_by(id: @active_doc2.id).body, '{"basePath":"http://zoo.example.net", "apis":[{"foo":"bar"}]}'
+  end
+
+  test 'not valid xml swagger' do
+    put admin_api_active_doc_path(format: :xml, id: @active_doc2.id), params: params.merge({ body: '{"I am JSON": "Son of Jay"}' })
+    assert_response :unprocessable_entity
+
+    assert_equal '<?xml version="1.0" encoding="UTF-8"?><errors><error>Body JSON Spec is invalid</error></errors>', @response.body
     assert_equal @provider.api_docs_services.find_by(id: @active_doc2.id).body, '{"basePath":"http://zoo.example.net", "apis":[{"foo":"bar"}]}'
   end
 
