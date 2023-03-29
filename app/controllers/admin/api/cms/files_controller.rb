@@ -33,7 +33,7 @@ class Admin::Api::CMS::FilesController < Admin::Api::CMS::BaseController
   ##~ op.parameters.add @parameter_per_page
   ##~ op.parameters.add @parameter_access_token
   def index
-    files = current_account.files.paginate(page: params[:page] || 1, per_page: per_page)
+    files = current_account.files.scope_search(search).paginate(pagination_params)
 
     respond_with files
   end

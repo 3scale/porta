@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class CMS::File < ApplicationRecord
+  include ThreeScale::Search::Scopes
   include CMS::Filtering
   include NormalizePathAttribute
   acts_as_taggable
@@ -7,6 +10,10 @@ class CMS::File < ApplicationRecord
   delegate :s3_provider_prefix, to: :provider
 
   self.table_name = :cms_files
+
+  self.allowed_search_scopes = %i[section_id]
+
+  scope :by_section_id, ->(section_id) { where(section_id: section_id) }
 
   belongs_to :section,  class_name: 'CMS::Section', touch: true
   belongs_to :provider, class_name: 'Account'
