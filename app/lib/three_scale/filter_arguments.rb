@@ -2,12 +2,9 @@
 
 module ThreeScale
   # This class is used to filter sensitive parameters from hashes inside an array of
-  # arguments. It depends on ActionDispatch::Http::ParameterFilter.
-  #
-  # ActionDispatch::Http::ParameterFilter will be removed in Rails 6.1. After we need to change to
-  # ActiveSupport::ParameterFilter
+  # arguments. It depends on ActiveSupport::ParameterFilter.
   class FilterArguments
-    FILTER = ActionDispatch::Http::ParameterFilter.new(Rails.configuration.filter_parameters)
+    FILTER = ActiveSupport::ParameterFilter.new(Rails.configuration.filter_parameters)
 
     def initialize(arguments = [])
       @arguments = arguments.dup
