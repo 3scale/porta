@@ -7,17 +7,6 @@
   z-index: 100;
 }
 
-@mixin overview-widget-accordion {
-  .title-toggle {
-    cursor: pointer;
-
-    &:before {
-      content: '▼ ';
-    }
-  }
-
-}
-
 @mixin overview-widget {
 
   .title {
@@ -176,18 +165,5 @@ table.data.notification-settings {
   .spacer {
     padding-top: line-height-times(1);
     visibility: hidden;
-  }
-}
-
-.is-closed {
-  height: line-height-times(7/2);
-  overflow: hidden;
-
-  .content-service {
-    visibility: hidden;
-  }
-
-  .title-toggle:before {
-    content: '► ';
   }
 }
