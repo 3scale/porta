@@ -47,41 +47,41 @@ it('#loadSavedPolicies should work', () => {
 
 it('#populateChainFromConfigs should fetch registry and proxy policies', () => {
   const expected = `
-    Array [
-      Array [
-        Object {
-          "@@redux-api-middleware/RSAA": Object {
+    [
+      [
+        {
+          "@@redux-api-middleware/RSAA": {
             "credentials": "same-origin",
             "endpoint": "/admin/api/policies.json",
             "method": "GET",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "type": "FETCH_REGISTRY_REQUEST",
               },
-              Object {
+              {
                 "type": "FETCH_REGISTRY_SUCCESS",
               },
-              Object {
+              {
                 "type": "FETCH_REGISTRY_ERROR",
               },
             ],
           },
         },
       ],
-      Array [
-        Object {
-          "@@redux-api-middleware/RSAA": Object {
+      [
+        {
+          "@@redux-api-middleware/RSAA": {
             "credentials": "same-origin",
             "endpoint": "/admin/api/services/serviceId/proxy/policies.json",
             "method": "GET",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "type": "FETCH_CHAIN_REQUEST",
               },
-              Object {
+              {
                 "type": "FETCH_CHAIN_SUCCESS",
               },
-              Object {
+              {
                 "type": "FETCH_CHAIN_ERROR",
               },
             ],

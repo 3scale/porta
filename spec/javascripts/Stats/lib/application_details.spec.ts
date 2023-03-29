@@ -19,13 +19,13 @@ it('should return a weird object', () => {
   })
 
   expect(details).toMatchInlineSnapshot(`
-    Object {
-      "account": Object {
+    {
+      "account": {
         "id": 33,
         "link": "/buyers/accounts/33",
         "name": "My Account",
       },
-      "application": Object {
+      "application": {
         "id": 11,
         "link": "/p/admin/applications/11",
         "name": "My Application",
