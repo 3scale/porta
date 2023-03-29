@@ -21,7 +21,7 @@ resource 'CMS::File' do
       parameter :attachment, 'The Attachment'
 
       let(:section_id) { resource.section_id }
-      let(:attachment) { fixture_file_upload('/wide.jpg',' image/jpeg') }
+      let(:attachment) { fixture_file_upload(Rails.root.join('test', 'fixtures', 'wide.jpg'),' image/jpeg') }
     end
 
     put '/admin/api/cms/files/:id', action: :update do
