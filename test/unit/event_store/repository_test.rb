@@ -1,3 +1,5 @@
+require 'test_helper'
+
 class EventStore::RepositoryTest < ActiveSupport::TestCase
   include EventStore
 
@@ -28,7 +30,7 @@ class EventStore::RepositoryTest < ActiveSupport::TestCase
   end
 
   def test_active_record_store
-    store = Repository.new(RailsEventStoreActiveRecord::EventRepository.new)
+    store = Repository.new(RailsEventStoreActiveRecord::EventRepository.new(adapter: EventStore::Event))
 
     assert_difference(RailsEventStoreActiveRecord::Event.where(
       event_type: 'EventStore::RepositoryTest::DummyEvent').method(:count), +1) do
