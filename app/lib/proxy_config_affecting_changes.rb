@@ -124,7 +124,7 @@ module ProxyConfigAffectingChanges
 
       protected
 
-      def _write_attribute(attr_name, value)
+      def write_attribute(attr_name, value)
         track_proxy_affecting_changes if proxy_config_affecting_attributes.include?(attr_name.to_s)
         super
       end

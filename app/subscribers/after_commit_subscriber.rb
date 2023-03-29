@@ -25,6 +25,10 @@ class AfterCommitSubscriber
       true
     end
 
+    def trigger_transactional_callbacks?
+      true
+    end
+
     delegate :logger, to: :Rails
 
     def before_committed!(*)
