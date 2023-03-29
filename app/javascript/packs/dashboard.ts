@@ -18,9 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const productsContainer = document.getElementById(productsContainerId)
   const backendsContainer = document.getElementById(backendsContainerId)
 
-  if (!productsContainer) {
-    console.error('The target ID was not found: ' + productsContainerId)
-  } else {
+  if (productsContainer) {
     const { newProductPath, productsPath, products } = safeFromJsonString<ProductsWidgetProps>(productsContainer.dataset.productsWidget)!
 
     ProductsWidgetWrapper({
@@ -30,9 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, productsContainerId)
   }
 
-  if (!backendsContainer) {
-    console.error('The target ID was not found: ' + backendsContainerId)
-  } else {
+  if (backendsContainer) {
     const { newBackendPath, backendsPath, backends } = safeFromJsonString<BackendsWidgetProps>(backendsContainer.dataset.backendsWidget)!
 
     BackendsWidgetWrapper({
