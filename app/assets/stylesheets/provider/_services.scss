@@ -95,7 +95,6 @@
 
 .service-widget {
   @extend .overview-widget;
-  @include overview-widget-accordion;
 
   section {
     margin-top: line-height-times(1);
