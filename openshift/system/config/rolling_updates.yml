@@ -1,18 +1,18 @@
 production:
-  new_provider_documentation: false
-  proxy_pro: false
-  instant_bill_plan_change: false
-  service_permissions: true
+  apicast_oidc: true
+  apicast_per_service: true
+  apicast_v2: true
   duplicate_application_id: true
   duplicate_user_key: true
-  plan_changes_wizard: false
-  require_cc_on_signup: false
-  apicast_per_service: true
-  new_notification_system: true
-  apicast_v2: true
   forum: false
-  published_service_plan_signup: true
-  apicast_oidc: true
+  instant_bill_plan_change: false
+  new_notification_system: true
+  new_provider_documentation: false
+  plan_changes_wizard: false
   policy_registry: true
   proxy_private_base_path: true
+  proxy_pro: false
+  published_service_plan_signup: true
+  require_cc_on_signup: false
   service_mesh_integration: true
+  service_permissions: true
