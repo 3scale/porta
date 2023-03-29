@@ -60,6 +60,17 @@ module CMS
         )
       end
 
+      test 'index filters by parent_id' do
+        parent = FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root)
+        5.times { FactoryBot.create(:cms_section, provider: @provider, parent: @provider.sections.root) }
+        2.times { FactoryBot.create(:cms_section, provider: @provider, parent: parent) }
+
+        get admin_api_cms_sections_path, params: { provider_key: @provider.provider_key, parent_id: parent.id }
+
+        assert_response :success
+        assert_equal 2, response.parsed_body['collection'].size
+      end
+
       test 'show section' do
         section = create_section
         get admin_api_cms_section_path(section), params: { provider_key: @provider.provider_key, format: :json }
