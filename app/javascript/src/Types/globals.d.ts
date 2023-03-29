@@ -13,7 +13,6 @@ declare global {
     statsResponseCodes: unknown;
     SwaggerUI: (args: SwaggerUI.SwaggerUIOptions, serviceEndpoint: string) => void;
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-    serviceInitialize: unknown;
     Stats: {
       statsApplication: unknown;
     };
