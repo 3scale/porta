@@ -36,7 +36,7 @@ const ServiceManualListItems: FunctionComponent<Props> = ({
         />
         <input id="service_system_name" maxLength={255} name="service[system_name]" type="text" value={systemName} onChange={onChange(setSystemName)} />
         <p className={`${errors.system_name ? 'inline-errors' : 'inline-hints'}`}>
-          Only ASCII letters, numbers, dashes and underscores are allowed.
+          { errors.system_name ? errors.system_name : 'Only ASCII letters, numbers, dashes and underscores are allowed.' }
         </p>
       </li>
       <li className={`text optional ${errors?.description ? 'error' : ''}`} id="service_description_input">
